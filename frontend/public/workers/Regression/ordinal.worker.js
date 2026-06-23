@@ -1,14 +1,3 @@
-/**
- * ORDINAL WORKER PAYLOAD CONTRACT
- *
- * Debug checklist:
- * 1. MAIN: cek [ORDINAL][MAIN][PAYLOAD_TO_WORKER]
- * 2. WORKER: cek [ORDINAL][WORKER][RECEIVED] & [ORDINAL][WORKER][PAYLOAD_VALID]
- * 3. RUST: cek hasil plum_validate (missing field => struct Rust belum sama)
- * 4. WORKER RESULT: cek [ORDINAL][WORKER][NORMALIZED_RESULT]
- * 5. MAIN FORMATTER: cek [ORDINAL][MAIN][FORMATTED_SECTIONS]
- */
-
 import init, { plum_fit, plum_validate } from "./Ordinal/pkg/statify_ordinal.js";
 
 let wasmReady = false;

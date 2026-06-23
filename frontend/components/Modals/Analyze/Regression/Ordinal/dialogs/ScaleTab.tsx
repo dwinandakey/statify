@@ -21,6 +21,10 @@ const getVariableIcon = (variable: Variable) => {
 
 const getDisplayName = (variable: Variable) => variable.label ?? variable.name;
 
+const scrollableListContentClass = "min-w-full w-max p-2 pr-4 pb-4";
+const scrollableItemClass = "w-full min-w-max";
+const scrollableNameClass = "whitespace-nowrap";
+
 export const ScaleTab: React.FC<Props> = ({ factors, covariates, params, onChange }) => {
     const allVars = useMemo(() => [...factors, ...covariates], [factors, covariates]);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
@@ -74,14 +78,15 @@ export const ScaleTab: React.FC<Props> = ({ factors, covariates, params, onChang
             <div className="flex min-h-0 flex-col">
                 <label className="mb-2 block text-sm font-semibold">Factors/covariates:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
-                    <ScrollArea className="h-full p-2">
+                    <ScrollArea className="h-full">
+                        <div className={scrollableListContentClass}>
                         {allVars.map((variable) => {
                             const key = getVariableKey(variable);
                             const isSelected = selectedKeys.has(key);
                             return (
                                 <div
                                     key={key}
-                                    className={`mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${
+                                    className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${
                                         isSelected
                                             ? "border-primary/50 bg-accent text-accent-foreground"
                                             : "border-transparent hover:bg-accent/50"
@@ -89,10 +94,11 @@ export const ScaleTab: React.FC<Props> = ({ factors, covariates, params, onChang
                                     onClick={(event) => handleVariableClick(event, variable)}
                                 >
                                     {getVariableIcon(variable)}
-                                    <span className="truncate">{getDisplayName(variable)}</span>
+                                    <span className={scrollableNameClass}>{getDisplayName(variable)}</span>
                                 </div>
                             );
                         })}
+                        </div>
                     </ScrollArea>
                 </div>
             </div>
@@ -112,22 +118,24 @@ export const ScaleTab: React.FC<Props> = ({ factors, covariates, params, onChang
             <div className="flex min-h-0 flex-col">
                 <label className="mb-2 block text-sm font-semibold">Scale model:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
-                    <ScrollArea className="h-full p-2">
+                    <ScrollArea className="h-full">
+                        <div className={scrollableListContentClass}>
                         {params.scaleModel.length === 0 ? (
                             <span className="text-xs italic text-muted-foreground">Select variable...</span>
                         ) : (
                             params.scaleModel.map((variable) => (
                                 <div
                                     key={getVariableKey(variable)}
-                                    className="mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive"
+                                    className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive`}
                                     onClick={() => handleRemove(variable)}
                                     title="Click to remove"
                                 >
                                     {getVariableIcon(variable)}
-                                    <span className="truncate">{getDisplayName(variable)}</span>
+                                    <span className={scrollableNameClass}>{getDisplayName(variable)}</span>
                                 </div>
                             ))
                         )}
+                        </div>
                     </ScrollArea>
                 </div>
             </div>

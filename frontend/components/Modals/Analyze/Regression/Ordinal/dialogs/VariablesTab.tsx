@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, Ruler, Shapes, BarChartHorizontal } from "lucide-react";
-import { Variable } from "@/types/Variable";
-import { OrdinalOptions, OrdinalOptionsParams } from "../types/ordinal";
+import type { Variable } from "@/types/Variable";
+import type { OrdinalOptions, OrdinalOptionsParams } from "../types/ordinal";
 
 interface Props {
   availableVariables: Variable[]; 
@@ -60,7 +60,11 @@ export const VariablesTab: React.FC<Props> = ({
   };
 
   const getDisplayName = (variable: Variable) =>
-    variable.label || variable.name;
+    variable.label ?? variable.name;
+
+  const variableListContentClass = "min-w-full w-max p-2 pr-4 pb-4";
+  const variableItemClass = "w-full min-w-max";
+  const variableNameClass = "whitespace-nowrap";
 
   const moveToDependent = () => {
     if (highlightedVariable) {
@@ -111,11 +115,12 @@ export const VariablesTab: React.FC<Props> = ({
         <div className="col-span-1 flex flex-col h-full min-h-0">
           <label className="font-semibold block mb-2 text-sm">Variables:</label>
           <div className="border border-border rounded-md flex-1 bg-background overflow-hidden">
-            <ScrollArea className="h-full p-2">
+            <ScrollArea className="h-full">
+              <div className={variableListContentClass}>
               {availableVariables.map((variable) => (
                 <div
                   key={variable.id}
-                  className={`flex items-center p-1.5 mb-1 cursor-pointer border rounded-md text-sm transition-colors ${
+                  className={`${variableItemClass} flex items-center p-1.5 mb-1 cursor-pointer border rounded-md text-sm transition-colors ${
                     highlightedVariable?.name === variable.name
                       ? "bg-accent text-accent-foreground border-primary/50"
                       : "border-transparent hover:bg-accent/50"
@@ -129,9 +134,10 @@ export const VariablesTab: React.FC<Props> = ({
                   }
                 >
                   {getVariableIcon(variable)}
-                  <span className="truncate">{getDisplayName(variable)}</span>
+                  <span className={variableNameClass}>{getDisplayName(variable)}</span>
                 </div>
               ))}
+              </div>
             </ScrollArea>
           </div>
         </div>
@@ -154,14 +160,14 @@ export const VariablesTab: React.FC<Props> = ({
                 Dependent:
               </label>
               <div
-                className="border border-border rounded-md min-h-[40px] p-2 bg-background cursor-pointer hover:border-destructive/50 transition-colors"
+                className="border border-border rounded-md min-h-[40px] p-2 bg-background cursor-pointer hover:border-destructive/50 transition-colors overflow-x-auto"
                 onClick={removeDependent}
                 title="Click to remove"
               >
                 {selectedDependent ? (
-                  <div className="flex items-center text-sm">
+                  <div className="flex w-max min-w-full items-center text-sm">
                     {getVariableIcon(selectedDependent)}
-                    <span className="truncate">
+                    <span className={variableNameClass}>
                       {getDisplayName(selectedDependent)}
                     </span>
                   </div>
@@ -190,18 +196,20 @@ export const VariablesTab: React.FC<Props> = ({
                 Covariates:
               </label>
               <div className="border border-border rounded-md h-[120px] bg-background overflow-hidden">
-                <ScrollArea className="h-full p-2">
+                <ScrollArea className="h-full">
+                  <div className={variableListContentClass}>
                   {selectedCovariates.map((v) => (
                     <div
                       key={v.id}
-                      className="flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors"
+                      className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
                       onClick={() => removeCovariate(v)}
                       title="Click to remove"
                     >
                       {getVariableIcon(v)}
-                      <span className="truncate">{getDisplayName(v)}</span>
+                      <span className={variableNameClass}>{getDisplayName(v)}</span>
                     </div>
                   ))}
+                  </div>
                 </ScrollArea>
               </div>
             </div>
@@ -223,18 +231,20 @@ export const VariablesTab: React.FC<Props> = ({
                 Factor(s):
               </label>
               <div className="border border-border rounded-md h-[120px] bg-background overflow-hidden">
-                <ScrollArea className="h-full p-2">
+                <ScrollArea className="h-full">
+                  <div className={variableListContentClass}>
                   {selectedFactors.map((v) => (
                     <div
                       key={v.id}
-                      className="flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors"
+                      className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
                       onClick={() => removeFactor(v)}
                       title="Click to remove"
                     >
                       {getVariableIcon(v)}
-                      <span className="truncate">{getDisplayName(v)}</span>
+                      <span className={variableNameClass}>{getDisplayName(v)}</span>
                     </div>
                   ))}
+                  </div>
                 </ScrollArea>
               </div>
             </div>

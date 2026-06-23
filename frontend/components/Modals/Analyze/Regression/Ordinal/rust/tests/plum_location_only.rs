@@ -40,12 +40,14 @@ fn build_input() -> PlumWorkerPayload {
         },
         location_model: PlumLocationModel {
             predictors: vec![PlumPredictor {
+                id: Some("x1".to_string()),
                 name: "x1".to_string(),
                 column_index: Some(0),
                 role: "continuous".to_string(),
                 levels: None,
                 reference_category: None,
                 variables: None,
+                encoded_column_count: Some(1),
             }],
             location_design_matrix: location_design_matrix.clone(),
             location_term_names: vec!["x1".to_string()],
