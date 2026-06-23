@@ -56,6 +56,10 @@ const getVariableIcon = (variable: Variable) => {
 
 const getDisplayName = (variable: Variable) => variable.label ?? variable.name;
 
+const scrollableListContentClass = "min-w-full w-max p-2 pr-4 pb-4";
+const scrollableItemClass = "w-full min-w-max";
+const scrollableNameClass = "whitespace-nowrap";
+
 export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onChange }) => {
     const allVars = useMemo(() => [...factors, ...covariates], [factors, covariates]);
     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
@@ -119,14 +123,15 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
             <div className="flex min-h-0 flex-col">
                 <label className="mb-2 block text-sm font-semibold">Factors/covariates:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
-                    <ScrollArea className="h-full p-2">
+                    <ScrollArea className="h-full">
+                        <div className={scrollableListContentClass}>
                         {allVars.map((variable) => {
                             const key = getVariableKey(variable);
                             const isSelected = selectedKeys.has(key);
                             return (
                                 <div
                                     key={key}
-                                    className={`mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${
+                                    className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${
                                         isSelected
                                             ? "border-primary/50 bg-accent text-accent-foreground"
                                             : "border-transparent hover:bg-accent/50"
@@ -134,10 +139,11 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                                     onClick={(event) => handleVariableClick(event, variable)}
                                 >
                                     {getVariableIcon(variable)}
-                                    <span className="truncate">{getDisplayName(variable)}</span>
+                                    <span className={scrollableNameClass}>{getDisplayName(variable)}</span>
                                 </div>
                             );
                         })}
+                        </div>
                     </ScrollArea>
                 </div>
             </div>
@@ -157,7 +163,8 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
             <div className="flex min-h-0 flex-col">
                 <label className="mb-2 block text-sm font-semibold">Location model:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
-                    <ScrollArea className="h-full p-2">
+                    <ScrollArea className="h-full">
+                        <div className={scrollableListContentClass}>
                         {params.locationModel.length === 0 ? (
                             <span className="text-xs italic text-muted-foreground">Select variable...</span>
                         ) : (
@@ -166,16 +173,17 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                                 return (
                                     <div
                                         key={isInteraction(term) ? term.id : getVariableKey(term)}
-                                        className="mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive"
+                                        className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive`}
                                         onClick={() => handleRemove(term)}
                                         title="Click to remove"
                                     >
                                         {variableTerm ? getVariableIcon(variableTerm) : null}
-                                        <span className="truncate">{term.name}</span>
+                                        <span className={scrollableNameClass}>{term.name}</span>
                                     </div>
                                 );
                             })
                         )}
+                        </div>
                     </ScrollArea>
                 </div>
             </div>
