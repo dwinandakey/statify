@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Variable } from "@/types/Variable";
 import { useResultStore } from "@/stores/useResultStore";
 import { useVariableStore } from "@/stores/useVariableStore";
-import { useDataStore } from "@/stores/useDataStore";
+import { useDataStore, type CellUpdate } from "@/stores/useDataStore";
 import { useTimeSeriesStore } from "@/stores/useTimeSeriesStore";
 import { handleBoxJenkinsModel } from "@/components/Modals/Analyze/TimeSeries/BoxJenkinsModel/analyze/analyze";
 
@@ -140,7 +140,7 @@ export function useAnalyzeHook(
 
         await addVariable(forecastingVariable);
 
-        const updates = [];
+        const updates: CellUpdate[] = [];
         for (let i = 0; i < forecast.length; i++) {
             if (forecastingVariable.columnIndex !== undefined) {
                 updates.push({

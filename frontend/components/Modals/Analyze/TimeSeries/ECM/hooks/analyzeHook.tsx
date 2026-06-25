@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Variable } from "@/types/Variable";
 import type { DataRow } from "@/types/Data";
+import type { CellUpdate } from "@/stores/useDataStore";
 import { toast } from "sonner";
 import { ChartService } from "@/services/chart/ChartService";
 import { useResultStore } from "@/stores/useResultStore";
@@ -329,8 +330,8 @@ export const useAnalyzeHook = (
                                 return maxNum + 1;
                             };
 
-                            const varsForStore = [];
-                            const aggregatedUpdates = [];
+                            const varsForStore: Partial<Variable>[] = [];
+                            const aggregatedUpdates: CellUpdate[] = [];
                             let addedVarsCount = 0;
 
                             if (saveLongRun && result.longRun?.residuals) {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { handleSmoothing } from "@/components/Modals/Analyze/TimeSeries/Smoothing/analyze/analyze";
 import { useResultStore } from "@/stores/useResultStore"; // Untuk log dan statistik
 import { useVariableStore } from "@/stores/useVariableStore"; // Untuk akses variabel
-import { useDataStore } from "@/stores/useDataStore";
+import { useDataStore, type CellUpdate } from "@/stores/useDataStore";
 import { useTimeSeriesStore } from "@/stores/useTimeSeriesStore";
 import type { Variable } from "@/types/Variable"; // Untuk tipe data variabel
 
@@ -180,7 +180,7 @@ export function useAnalyzeHook(
         await addVariable(smoothingVariable);
 
         // Update bulk cells
-        const updates = [];
+        const updates: CellUpdate[] = [];
 
         for (let rowIndex = 0; rowIndex < smoothingResult.length; rowIndex++) {
             if (smoothingVariable.columnIndex !== undefined) {
