@@ -66,13 +66,14 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
     const GAP_BETWEEN_CLUSTERS = Math.max(6, BAR_H * 1.5);
     const numClusters = clusterOrder.length;
 
+    const margin = { top: 28, right: 28, bottom: 82, left: 72 };
+    const innerH = n * BAR_H + (numClusters - 1) * GAP_BETWEEN_CLUSTERS;
+    const totalH = innerH + margin.top + margin.bottom;
+
     useEffect(() => {
         if (!svgRef.current || n === 0) return;
 
-        const margin = { top: 28, right: 28, bottom: 82, left: 72 };
         const innerW = width - margin.left - margin.right;
-        const innerH = n * BAR_H + (numClusters - 1) * GAP_BETWEEN_CLUSTERS;
-        const totalH = innerH + margin.top + margin.bottom;
 
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
