@@ -6,8 +6,6 @@ services:
       args:
         NEXT_PUBLIC_BACKEND_URL: "http://backend:5000"
     container_name: statify-frontend
-    ports:
-      - "3001:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
@@ -19,14 +17,22 @@ services:
       timeout: 10s
     depends_on:
       - backend
+    labels:
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.rule=Host(`statify-dev.student.stis.ac.id`)
+      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.entrypoints=web
+      - traefik.http.services.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.loadbalancer.server.port=3001
+      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.service=skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend
+      - traefik.enable=true
+    networks:
+      - dokploy-network
+      - default
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.backend
     container_name: statify-backend
-    ports:
-      - "5000:5000"
     volumes:
       - temp_data:/app/backend/temp
     environment:
@@ -41,3 +47,7 @@ services:
 
 volumes:
   temp_data:
+
+networks:
+  dokploy-network:
+    external: true
