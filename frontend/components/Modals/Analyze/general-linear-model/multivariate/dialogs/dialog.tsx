@@ -191,7 +191,7 @@ export const MultivariateDialog = ({
                     maxItems: 1,
                     containerId: "multivariate-wls-weight",
                 },
-            ] as TargetListConfig[],
+            ] as unknown as TargetListConfig[],
         [depVar, fixFactor, covar, wlsWeight]
     );
 

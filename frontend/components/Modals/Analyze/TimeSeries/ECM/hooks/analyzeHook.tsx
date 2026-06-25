@@ -350,7 +350,7 @@ export const useAnalyzeHook = (
                                 });
                                 
                                 const lrResids = result.longRun.residuals;
-                                lrResids.forEach((val, i) => {
+                                lrResids.forEach((val: number, i: number) => {
                                     const origRowIdx = validRowIndices[i];
                                     if (origRowIdx !== undefined) {
                                         aggregatedUpdates.push({
@@ -379,7 +379,7 @@ export const useAnalyzeHook = (
                                 });
                                 
                                 const ecmResids = result.ecm.residuals;
-                                ecmResids.forEach((val, i) => {
+                                ecmResids.forEach((val: number, i: number) => {
                                     const origRowIdx = validRowIndices[1 + i]; // short-run starts at index 1 in ECM
                                     if (origRowIdx !== undefined) {
                                         aggregatedUpdates.push({

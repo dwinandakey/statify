@@ -365,7 +365,7 @@ export const useAnalyzeHook = (
                                 });
                                 
                                 const lrResids = result.longRun.residuals;
-                                lrResids.forEach((val, i) => {
+                                lrResids.forEach((val: number, i: number) => {
                                     const origRowIdx = validRowIndices[i];
                                     if (origRowIdx !== undefined) {
                                         aggregatedUpdates.push({
@@ -397,7 +397,7 @@ export const useAnalyzeHook = (
                                 const startIdx = maxLagVal + 1;
                                 
                                 const srResids = result.shortRun.residuals;
-                                srResids.forEach((val, i) => {
+                                srResids.forEach((val: number, i: number) => {
                                     const origRowIdx = validRowIndices[startIdx + i];
                                     if (origRowIdx !== undefined) {
                                         aggregatedUpdates.push({

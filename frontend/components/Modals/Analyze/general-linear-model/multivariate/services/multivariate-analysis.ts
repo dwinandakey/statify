@@ -5,9 +5,8 @@ import type {
 import { transformMultivariateResult } from "./multivariate-analysis-formatter";
 import { resultMultivariateAnalysis } from "./multivariate-analysis-output";
 import { buildDifferenceData } from "./paired-difference";
-import init, {
-    MultivariateAnalysis,
-} from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
+// @ts-ignore
+import init, { MultivariateAnalysis } from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
 
 export async function analyzeMultivariate({
     configData,

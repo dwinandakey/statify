@@ -6,7 +6,7 @@ import { transformRepeatedMeasureResult } from "./repeated-measures-analysis-for
 import { resultRepeatedMeasures } from "./repeated-measures-analysis-output";
 import init, {
     RepeatedMeasureAnalysis,
-} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/rust/pkg";
+} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/rust/pkg/wasm";
 
 export async function analyzeRepeatedMeasures({
     configData,
