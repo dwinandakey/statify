@@ -133,6 +133,7 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .text(`Rata-rata: ${overall.toFixed(3)}`);
 
         // ── Tooltip ───────────────────────────────────────────────────────────
+        if (!svgRef.current) return;
         const parent = svgRef.current.parentElement;
         if (!parent) return;
 
@@ -188,6 +189,7 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                     .style("cursor", "pointer")
                     .on("mouseover", function (event) {
                         d3.select(this).attr("opacity", 1);
+                        if (!svgRef.current) return;
                         const parent = svgRef.current.parentElement;
                         if (!parent) return;
                         const [mx, my] = d3.pointer(event, parent);
@@ -203,6 +205,7 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                             );
                     })
                     .on("mousemove", function (event) {
+                        if (!svgRef.current) return;
                         const parent = svgRef.current.parentElement;
                         if (!parent) return;
                         const [mx, my] = d3.pointer(event, parent);

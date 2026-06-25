@@ -84,6 +84,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
         const g = svg.append("g").attr("transform", `translate(${cx},${cy})`);
 
         // Elemen tooltip
+        if (!svgRef.current) return;
         const tooltip = d3.select(svgRef.current.parentElement)
             .selectAll<HTMLDivElement, unknown>(".csd-tooltip")
             .data([null])

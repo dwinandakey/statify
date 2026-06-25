@@ -208,6 +208,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         }
 
         // ── Tooltip ───────────────────────────────────────────────────────────
+        if (!svgRef.current) return;
         const parentEl = svgRef.current.parentElement;
         if (!parentEl) return;
         const tooltip = d3.select(parentEl)
