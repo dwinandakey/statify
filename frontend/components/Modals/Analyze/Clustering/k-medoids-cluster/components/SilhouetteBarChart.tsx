@@ -204,6 +204,7 @@ export const SilhouetteBarChart: React.FC<SilhouetteBarChartProps> = ({
                             );
                     })
                     .on("mousemove", function (event) {
+                        if (!svgRef.current) return;
                         const parent = svgRef.current.parentElement;
                         if (!parent) return;
                         const [mx, my] = d3.pointer(event, parent);
