@@ -89,9 +89,8 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                // Proxy API requests to backend in production
                 source: '/api/:path*',
-                destination: process.env.NEXT_PUBLIC_BACKEND_URL + '/:path*'
+                destination: 'http://backend:5000/api/:path*'
             }
         ];
     },
