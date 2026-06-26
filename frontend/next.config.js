@@ -90,7 +90,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*',
-                destination: 'http://backend:5000/api/:path*'
+                destination: 'http://statify-backend:5000/api/:path*'
             }
         ];
     },

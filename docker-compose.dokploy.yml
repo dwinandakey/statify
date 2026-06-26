@@ -26,7 +26,7 @@ services:
       - traefik.enable=true
     networks:
       - dokploy-network
-      - default
+      - statify-net
 
   backend:
     build:
@@ -44,6 +44,8 @@ services:
       test: ["CMD", "wget", "-qO-", "http://localhost:5000/"]
       interval: 30s
       timeout: 10s
+    networks:
+      - statify-net
 
 volumes:
   temp_data:
@@ -51,3 +53,5 @@ volumes:
 networks:
   dokploy-network:
     external: true
+  statify-net:
+    driver: bridge
