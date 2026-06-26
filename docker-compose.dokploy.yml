@@ -4,12 +4,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.frontend
       args:
-        NEXT_PUBLIC_BACKEND_URL: "https://statify-dev.student.stis.ac.id"
+        NEXT_PUBLIC_BACKEND_URL: "${NEXT_PUBLIC_BACKEND_URL}"
     container_name: statify-frontend
     environment:
-      - NODE_ENV=production
-      - PORT=3001
-      - NEXT_PUBLIC_BACKEND_URL=https://statify-dev.student.stis.ac.id
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${FRONTEND_PORT:-3001}
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3001/"]
@@ -17,13 +17,6 @@ services:
       timeout: 10s
     depends_on:
       - backend
-    labels:
-      - traefik.docker.network=dokploy-network
-      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.rule=Host(`statify-dev.student.stis.ac.id`)
-      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.entrypoints=web
-      - traefik.http.services.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.loadbalancer.server.port=3001
-      - traefik.http.routers.skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend.service=skripsi-222212576-dwinanda-muhammad-keyzha-statify-ijrlje-frontend
-      - traefik.enable=true
     networks:
       - dokploy-network
       - default
@@ -36,9 +29,9 @@ services:
     volumes:
       - temp_data:/app/backend/temp
     environment:
-      - NODE_ENV=production
-      - PORT=5000
-      - NEXT_PUBLIC_FRONTEND_URL=https://statify-dev.student.stis.ac.id
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${BACKEND_PORT:-5000}
+      - NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:5000/"]
