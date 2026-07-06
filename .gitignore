@@ -105,5 +105,5 @@ frontend/.trae/rules/project_rules.md
 backend/temp/
 backend/server/temp/
 
-# Validation data (local only, not published to GitHub)
+# Validation data 
 /testing/validation_data/
