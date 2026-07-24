@@ -218,6 +218,71 @@ export const BinaryLogisticMain = () => {
     }));
   };
 
+  // --- DROP HANDLERS: Batch variable drop from drag-and-drop ---
+  const handleDropToDependent = (vars: Variable[]) => {
+    if (vars.length === 0) return;
+    const varToDrop = vars[0]; // Only first variable for dependent
+
+    // Validasi: Cek apakah variabel adalah binary (hanya 2 nilai unik)
+    const colIndex = varToDrop.columnIndex;
+    if (colIndex !== undefined && data.length > 0) {
+      const columnValues = data
+        .map((row) => row[colIndex])
+        .filter((val) => val !== null && val !== undefined && val !== "");
+
+      const uniqueValues = Array.from(new Set(columnValues));
+
+      if (uniqueValues.length !== 2) {
+        toast.error(
+          `Variable "${varToDrop.label || varToDrop.name}" has ${uniqueValues.length} unique value(s). Dependent variable must have exactly 2 unique values (binary outcome).`
+        );
+        return;
+      }
+    }
+
+    setOptions((prev) => ({ ...prev, dependent: varToDrop }));
+    setHighlightedVariable(null);
+  };
+
+  const handleDropToCovariates = (vars: Variable[]) => {
+    if (vars.length === 0) return;
+
+    setOptions((prev) => {
+      const existingIds = new Set(prev.covariates.map((v) => v.id));
+      const additions = vars.filter((v) => !existingIds.has(v.id));
+      return {
+        ...prev,
+        covariates: [...prev.covariates, ...additions],
+      };
+    });
+
+    // Auto-detect Nominal/Ordinal for categorical tab
+    vars.forEach((variable) => {
+      const measure = variable.measure?.toLowerCase();
+      if (measure === "nominal" || measure === "ordinal") {
+        setCatParams((prev) => {
+          if (!prev.covariates.includes(variable.name)) {
+            return {
+              ...prev,
+              covariates: [...prev.covariates, variable.name],
+              variableSettings: {
+                ...prev.variableSettings,
+                [variable.name]: {
+                  name: variable.name,
+                  contrast: "Indicator" as const,
+                  referenceCategory: "Last" as const,
+                },
+              },
+            };
+          }
+          return prev;
+        });
+      }
+    });
+
+    setHighlightedVariable(null);
+  };
+
   // --- WORKER HELPER ---
   const runWorkerAction = (action: string, extraConfig = {}) => {
     return new Promise((resolve, reject) => {
@@ -1126,6 +1191,8 @@ export const BinaryLogisticMain = () => {
                 onMoveToCovariates={handleMoveToCovariates}
                 onRemoveDependent={handleRemoveDependent}
                 onRemoveCovariate={handleRemoveCovariate}
+                onDropToDependent={handleDropToDependent}
+                onDropToCovariates={handleDropToCovariates}
                 method={options.method}
                 onMethodChange={(val) =>
                   setOptions((prev) => ({ ...prev, method: val }))
