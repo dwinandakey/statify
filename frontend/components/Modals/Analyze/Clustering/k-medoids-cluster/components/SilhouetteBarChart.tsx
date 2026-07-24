@@ -144,6 +144,7 @@ export const SilhouetteBarChart: React.FC<SilhouetteBarChartProps> = ({
             });
 
         // --- Tooltip ---
+        if (!svgRef.current) return;
         const parent = svgRef.current.parentElement;
         if (!parent) return;
 
