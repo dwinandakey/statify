@@ -1,34 +1,26 @@
-/// <reference lib="webworker" />
+import init, { calculate_multinomial_logistic } from "./Multinomial/pkg/statify_multinomial.js";
 
 // Store WASM instance
 let wasmInitialized = false;
-let wasmExports = null;
 
 // Load WASM module
-async function loadWasm() {
-    if (wasmInitialized) return wasmExports;
+async function ensureWasmReady() {
+    if (wasmInitialized) return;
 
     try {
         console.log("[Multinomial Worker] Loading WASM module...");
 
         // Get the base URL for the worker
         const baseUrl = new URL('.', self.location.href).href;
-        const wasmUrl = new URL('./pkg/statify_multinomial_bg.wasm', baseUrl).href;
-        const jsUrl = new URL('./pkg/statify_multinomial.js', baseUrl).href;
+        const wasmPath = new URL("./Multinomial/pkg/statify_multinomial_bg.wasm", baseUrl).href;
 
-        console.log("[Multinomial Worker] WASM URL:", wasmUrl);
-        console.log("[Multinomial Worker] JS URL:", jsUrl);
+        console.log("[Multinomial Worker] WASM Path:", wasmPath);
 
-        // Import the JS glue code
-        const wasmModule = await import(/* webpackIgnore: true */ jsUrl);
-
-        // Initialize WASM (new wasm-bindgen signature)
-        await wasmModule.default({ module_or_path: wasmUrl });
-        wasmExports = wasmModule;
+        // Initialize WASM
+        await init({ module_or_path: wasmPath });
         wasmInitialized = true;
 
         console.log("[Multinomial Worker] WASM loaded successfully");
-        return wasmExports;
     } catch (error) {
         console.error("[Multinomial Worker] Failed to load WASM:", error);
         throw new Error(`WASM loading failed: ${error}`);
@@ -40,7 +32,7 @@ self.onmessage = async (event) => {
         console.log("[Multinomial Worker] Message received");
 
         // Load WASM if not already loaded
-        const wasm = await loadWasm();
+        await ensureWasmReady();
 
         const { data, options } = event.data || {};
 
@@ -66,7 +58,7 @@ self.onmessage = async (event) => {
             options
         }));
 
-        const result = wasm.calculate_multinomial_logistic(data, options);
+        const result = calculate_multinomial_logistic(data, options);
 
         // DEBUG: Log result
         console.log("[Multinomial Worker] Result Debug:", {
