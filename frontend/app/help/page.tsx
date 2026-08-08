@@ -76,6 +76,7 @@ export default function HelpPage() {
                 { key: "explore", label: "Explore", parentKey: "statistics-guide", childContent: "explore" },
                 { key: "linear", label: "Linear Regression", parentKey: "statistics-guide", childContent: "linear" },
                 { key: "binary-logistic", label: "Binary Logistic Regression", parentKey: "statistics-guide", childContent: "binary-logistic" },
+                { key: "multinomial-logistic", label: "Multinomial Logistic Regression", parentKey: "statistics-guide", childContent: "multinomial-logistic" },
                 { key: "crosstabs", label: "Crosstabs", parentKey: "statistics-guide", childContent: "crosstabs" },
                 { key: "smoothing", label: "Smoothing", parentKey: "statistics-guide", childContent: "smoothing" },
                 { key: "decomposition", label: "Decomposition", parentKey: "statistics-guide", childContent: "decomposition" },
