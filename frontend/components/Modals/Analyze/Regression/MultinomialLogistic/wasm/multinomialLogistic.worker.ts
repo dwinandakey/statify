@@ -1,4 +1,4 @@
-import init, { calculate_multinomial_logistic } from "./Multinomial/pkg/statify_multinomial.js";
+import init, { calculate_multinomial_logistic } from "./pkg/statify_multinomial.js";
 
 // Store WASM instance
 let wasmInitialized = false;
@@ -12,7 +12,7 @@ async function ensureWasmReady() {
 
         // Get the base URL for the worker
         const baseUrl = new URL('.', self.location.href).href;
-        const wasmPath = new URL("./Multinomial/pkg/statify_multinomial_bg.wasm", baseUrl).href;
+        const wasmPath = new URL("./pkg/statify_multinomial_bg.wasm", baseUrl).href;
 
         console.log("[Multinomial Worker] WASM Path:", wasmPath);
 
