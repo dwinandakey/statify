@@ -32,7 +32,7 @@ const OverviewTab = () => (
                 <div>
                     <p className="font-semibold text-primary">Penggunaan Data dan Variabel</p>
                     <p className="text-muted-foreground mt-1">
-                        Variabel dependen diasumsikan ordinal dan dapat berupa angka atau string.
+                        Variabel dependen diasumsikan ordinal dan dapat berupa angka atau string dan wajib memiliki &lt;2 kategori.
                     </p>
                     <p className="text-muted-foreground mt-1">
                         Urutan ditentukan dengan mengurutkan nilai variabel dependen dalam urutan menaik sehingga nilai terendah mendefinisikan kategori pertama.
@@ -85,7 +85,7 @@ const VariablesHelpTab = () => (
                 <HelpStep
                     number={1}
                     title="Variabel Dependen"
-                    description="Masukkan 1 variabel ordinal (dapat berupa angka atau teks/string). Sistem secara otomatis mengurutkan nilai dari terkecil ke terbesar. Nilai terendah akan menjadi kategori dasar pertama."
+                    description="Masukkan 1 variabel ordinal (dapat berupa angka atau teks/string) dengan >2 kategori. Sistem secara otomatis mengurutkan nilai dari terkecil ke terbesar. Nilai terendah akan menjadi kategori dasar pertama."
                 />
                 <HelpStep
                     number={2}
