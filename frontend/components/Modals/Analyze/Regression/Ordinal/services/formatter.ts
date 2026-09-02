@@ -29,17 +29,22 @@ export const formatOrdinalResult = (result: any) => {
     ...formatModelFittingInformation(context),
     ...formatGoodnessOfFit(context),
     ...formatPseudoRSquare(context),
-    ...formatSavedVariables(context)
+    ...formatSavedVariables(context),
   );
 
   if (
-    context.wantParameterEstimates
-    && estimates
-    && Array.isArray(estimates)
-    && estimates.length > 0
+    context.wantParameterEstimates &&
+    estimates &&
+    Array.isArray(estimates) &&
+    estimates.length > 0
   ) {
     const param = formatParameterEstimates(estimates, {
       linkFunctionNote: context.linkFunctionNote,
+      confidenceInterval:
+        context.estimationOptions.confidenceInterval ??
+        context.estimationOptions.confidenceLevel ??
+        result.estimationOptions?.confidenceInterval ??
+        result.estimationOptions?.confidenceLevel,
     });
     if (param.sections) {
       allSections.push(...param.sections);
@@ -47,14 +52,16 @@ export const formatOrdinalResult = (result: any) => {
 
     console.log("[ORDINAL][FORMATTER]", {
       parameterRows: estimates.length,
-      hasRedundant: estimates.some((row: any) => Boolean(row.isRedundant ?? row.is_redundant)),
+      hasRedundant: estimates.some((row: any) =>
+        Boolean(row.isRedundant ?? row.is_redundant),
+      ),
     });
   }
 
   allSections.push(
     ...formatParallelLines(context),
     ...formatCollinearityDiagnostics(context),
-    ...formatIterationHistory(context)
+    ...formatIterationHistory(context),
   );
 
   return { sections: allSections };
