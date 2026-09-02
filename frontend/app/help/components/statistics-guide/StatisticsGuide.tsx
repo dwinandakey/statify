@@ -14,6 +14,7 @@ import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
 import { BinaryLogisticRegression } from "./binary-logistic";
 import { OrdinalRegression } from "./ordinal-regression";
+import { MultinomialLogisticRegression } from "./multinomial-logistic";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
 import { KMeansClustering } from "./k-means/KMeansClustering";
 import {
@@ -35,6 +36,10 @@ import {
   Decomposition,
   Smoothing,
   UnitRootTest,
+  HeteroscedasticityTest,
+  HomoscedasticityTest,
+  ARDLGuide,
+  ECMGuide,
 } from "./time-series";
 
 interface StatisticsGuideProps {
@@ -63,12 +68,22 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <Smoothing />;
       case 'unit-root-test':
         return <UnitRootTest />;
+      case 'heteroscedasticity':
+        return <HeteroscedasticityTest />;
+      case 'homoscedasticity-test':
+        return <HomoscedasticityTest />;
+      case 'ardl':
+        return <ARDLGuide />;
+      case 'ecm':
+        return <ECMGuide />;
       case "linear":
         return <LinearRegression />;
       case "binary-logistic":
         return <BinaryLogisticRegression />;
       case "ordinal-regression":
         return <OrdinalRegression />;
+      case "multinomial-logistic":
+        return <MultinomialLogisticRegression />;
       case "k-means":
         return <KMeansClustering />;
       case "univariate":

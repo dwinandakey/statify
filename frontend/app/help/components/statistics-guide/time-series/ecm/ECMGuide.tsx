@@ -5,19 +5,18 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const Autocorrelation: React.FC = () => {
+export const ECMGuide: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
     { id: 'algorithm', label: 'Algoritma', labelEn: 'Algorithm', icon: Calculator, component: AlgorithmTab },
   ];
-
   return (
     <StandardizedGuideLayout
-      title="Autocorrelation (ACF & PACF)"
-      titleEn="Autocorrelation (ACF & PACF)"
-      description="Analisis autokorelasi dan autokorelasi parsial untuk mengidentifikasi orde AR dan MA pada data runtun waktu."
-      descriptionEn="Autocorrelation and partial autocorrelation analysis to identify AR and MA lag orders in time series data."
+      title="ECM (Error Correction Model)"
+      titleEn="ECM (Error Correction Model)"
+      description="Analisis hubungan jangka panjang dan mekanisme koreksi kesalahan menggunakan prosedur dua tahap Engle-Granger untuk data runtun waktu terkointegrasi."
+      descriptionEn="Analysis of long-run relationships and error correction mechanisms using the 2-stage Engle-Granger procedure for cointegrated time series data."
       tabs={tabs}
       defaultTab="overview"
     />

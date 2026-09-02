@@ -5,19 +5,18 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const Autocorrelation: React.FC = () => {
+export const HeteroscedasticityTest: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
     { id: 'algorithm', label: 'Algoritma', labelEn: 'Algorithm', icon: Calculator, component: AlgorithmTab },
   ];
-
   return (
     <StandardizedGuideLayout
-      title="Autocorrelation (ACF & PACF)"
-      titleEn="Autocorrelation (ACF & PACF)"
-      description="Analisis autokorelasi dan autokorelasi parsial untuk mengidentifikasi orde AR dan MA pada data runtun waktu."
-      descriptionEn="Autocorrelation and partial autocorrelation analysis to identify AR and MA lag orders in time series data."
+      title="Heteroscedasticity Models (ARCH/GARCH)"
+      titleEn="Heteroscedasticity Models (ARCH/GARCH)"
+      description="Pemodelan volatilitas data runtun waktu menggunakan model ARCH, GARCH, EGARCH, TGARCH, dan IGARCH untuk menangkap klasterisasi volatilitas."
+      descriptionEn="Volatility modeling for time series data using ARCH, GARCH, EGARCH, TGARCH, and IGARCH models to capture volatility clustering."
       tabs={tabs}
       defaultTab="overview"
     />

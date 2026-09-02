@@ -1599,10 +1599,13 @@ export const MultinomialLogisticMain = () => {
 
                             // Save Pseudo R-Square (if enabled)
                             if (options.statistics.pseudoRSquare) {
+                                const coxSnell = result?.pseudoRSquare?.coxSnell ?? 0;
+                                const nagelkerke = result?.pseudoRSquare?.nagelkerke ?? 0;
+                                const mcFadden = result?.pseudoRSquare?.mcfadden ?? result?.pseudoRSquare?.mcFadden ?? 0;
                                 const pseudoRSquareDescription = generatePseudoRSquareDescription(
-                                    result?.pseudoRSquare?.coxSnell ?? 0,
-                                    result?.pseudoRSquare?.nagelkerke ?? 0,
-                                    result?.pseudoRSquare?.mcFadden ?? 0
+                                    coxSnell,
+                                    nagelkerke,
+                                    mcFadden
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Pseudo R-Square",
@@ -1615,11 +1618,31 @@ export const MultinomialLogisticMain = () => {
 
                             // Save Parameter Estimates (if enabled)
                             if (options.statistics.parameterEstimates) {
-                                const significantParams = pValues.flat().filter((p: any) => Number(p) < 0.05).length;
+                                const refCatLabel = formatDependentCategory(referenceCategoryValue);
+                                const totalEstimatedParams = coeffs.reduce((sum, row) => sum + row.length, 0);
+                                const sigParams: string[] = [];
+                                let sigCount = 0;
+
+                                nonReferenceCategories.forEach((depCategory, catIdx) => {
+                                    const depCatLabel = formatDependentCategory(depCategory);
+                                    displayPredictors.forEach((pred) => {
+                                        if (!pred.isRedundant && pred.pIdx !== undefined) {
+                                            const p = pValues[catIdx]?.[pred.pIdx];
+                                            if (p !== undefined && p < 0.05) {
+                                                sigCount += 1;
+                                                sigParams.push(`${pred.label} (${depCatLabel} vs ${refCatLabel})`);
+                                            }
+                                        }
+                                    });
+                                });
+
                                 const parameterEstimatesDescription = generateParameterEstimatesDescription(
                                     allPredictorColumns.length,
                                     dependentCategoryMap.length,
-                                    significantParams
+                                    sigCount,
+                                    totalEstimatedParams,
+                                    refCatLabel,
+                                    sigParams
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Parameter Estimates",
@@ -1631,9 +1654,11 @@ export const MultinomialLogisticMain = () => {
                             }
 
                             if (options.statistics.cellProbabilities && cellProbabilitiesTable) {
+                                const formattedCatNames = dependentCategoryMap.map((cat) => formatDependentCategory(cat));
                                 const cellProbabilitiesDescription = generateCellProbabilitiesDescription(
                                     validData.length,
-                                    dependentCategoryMap.length
+                                    dependentCategoryMap.length,
+                                    formattedCatNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Cell Probabilities",
@@ -1646,11 +1671,13 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Classification Table (if enabled)
                             if (options.statistics.classificationTable && classificationTable) {
-                                const overallAccuracy = result?.classificationTable?.overallAccuracy ?? 0;
-                                const categoryAccuracies = result?.classificationTable?.categoryAccuracies ?? [];
+                                const overallPercentage = result?.classificationTable?.overallPercentage ?? result?.classificationTable?.overallAccuracy ?? 0;
+                                const categoryPercentages = result?.classificationTable?.categoryPercentages ?? result?.classificationTable?.categoryAccuracies ?? [];
+                                const formattedCatNames = dependentCategoryMap.map((cat) => formatDependentCategory(cat));
                                 const classificationDescription = generateClassificationDescription(
-                                    overallAccuracy / 100,
-                                    categoryAccuracies.map((acc: any) => typeof acc === 'string' ? parseFloat(acc) / 100 : acc / 100)
+                                    overallPercentage,
+                                    categoryPercentages,
+                                    formattedCatNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Classification Table",
@@ -1663,15 +1690,20 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Goodness-of-Fit Tests (if enabled)
                             if (options.statistics.goodnessOfFit && goodnessOfFitTable) {
-                                const pearsonChi2 = result?.goodnessOfFit?.pearsonChi2 ?? 0;
-                                const pearsonP = result?.goodnessOfFit?.pearsonP ?? 1;
-                                const devianceChi2 = result?.goodnessOfFit?.devianceChi2 ?? 0;
-                                const devianceP = result?.goodnessOfFit?.devianceP ?? 1;
+                                const pearsonChiSquare = result?.goodnessOfFit?.pearsonChiSquare ?? result?.goodnessOfFit?.pearsonChi2 ?? 0;
+                                const pearsonDf = result?.goodnessOfFit?.pearsonDf ?? 0;
+                                const pearsonPValue = result?.goodnessOfFit?.pearsonPValue ?? result?.goodnessOfFit?.pearsonP ?? 1;
+                                const deviance = result?.goodnessOfFit?.deviance ?? result?.goodnessOfFit?.devianceChi2 ?? 0;
+                                const devianceDf = result?.goodnessOfFit?.devianceDf ?? 0;
+                                const deviancePValue = result?.goodnessOfFit?.deviancePValue ?? result?.goodnessOfFit?.devianceP ?? 1;
+
                                 const goodnessOfFitDescription = generateGoodnessOfFitDescription(
-                                    pearsonChi2,
-                                    pearsonP,
-                                    devianceChi2,
-                                    devianceP
+                                    pearsonChiSquare,
+                                    pearsonDf,
+                                    pearsonPValue,
+                                    deviance,
+                                    devianceDf,
+                                    deviancePValue
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Goodness-of-Fit Tests",
@@ -1684,12 +1716,20 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Likelihood Ratio Tests (if enabled)
                             if (options.statistics.likelihoodRatioTests && likelihoodRatioTable) {
-                                const lrTestsData = result?.likelihoodRatioTests ?? [];
-                                const significantLRTests = lrTestsData.filter((test: any) => Number(test.p) < 0.05).length;
+                                const lrTestsData: any[] = result?.likelihoodRatioTests ?? [];
+                                const sigLRNames: string[] = [];
+                                lrTestsData.forEach((test) => {
+                                    const p = test.pValue ?? test.p;
+                                    if (p !== undefined && p < 0.05) {
+                                        sigLRNames.push(test.effect);
+                                    }
+                                });
+
                                 const likelihoodRatioDescription = generateLikelihoodRatioDescription(
                                     lrTestsData.length,
-                                    significantLRTests,
-                                    result?.pValueModel ?? 1
+                                    sigLRNames.length,
+                                    result?.pValueModel ?? 1,
+                                    sigLRNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Likelihood Ratio Tests",
@@ -1701,10 +1741,27 @@ export const MultinomialLogisticMain = () => {
                             }
 
                             if (options.statistics.monotonicityMeasures && monotonicityTable) {
+                                const observed = result?.classificationTable?.observed as number[] | undefined;
+                                const predicted = result?.classificationTable?.predicted as number[] | undefined;
+                                let rho = 0;
+                                if (observed && predicted && observed.length > 0) {
+                                    const n = observed.length;
+                                    const meanObserved = observed.reduce((s: number, v: number) => s + v, 0) / n;
+                                    const meanPredicted = predicted.reduce((s: number, v: number) => s + v, 0) / n;
+                                    const covariance = observed.reduce(
+                                        (s: number, v: number, i: number) => s + (v - meanObserved) * (predicted[i] - meanPredicted),
+                                        0
+                                    );
+                                    const varObserved = observed.reduce((s: number, v: number) => s + (v - meanObserved) ** 2, 0);
+                                    const varPredicted = predicted.reduce((s: number, v: number) => s + (v - meanPredicted) ** 2, 0);
+                                    if (varObserved > 0 && varPredicted > 0) {
+                                        rho = covariance / Math.sqrt(varObserved * varPredicted);
+                                    }
+                                }
+
                                 const monotonicityDescription = generateMonotonicityDescription(
-                                    result?.monotonicityMeasures?.somersD ?? 0,
-                                    result?.monotonicityMeasures?.gamma ?? 0,
-                                    result?.monotonicityMeasures?.tau ?? 0
+                                    rho,
+                                    validData.length
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Monotonicity Measures",

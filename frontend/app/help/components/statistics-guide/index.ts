@@ -6,6 +6,7 @@ export * from './explore';
 export * from './linear';
 export * from './binary-logistic';
 export * from './ordinal-regression';
+export * from './multinomial-logistic';
 export * from './univariate';
 export * from './k-means/KMeansClustering';
 // export * from './inferential';

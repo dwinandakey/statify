@@ -12,62 +12,62 @@ export function generateCaseProcessingDescription(
     totalN: number | string,
     isWeighted: boolean
 ): string {
-    const formatNum = (n: any) => {
-        const num = typeof n === 'string' ? parseFloat(n) : n;
-        if (isNaN(num)) return '0';
-        return Math.round(num).toString();
+    const parseNum = (n: any) => {
+        const num = typeof n === 'string' ? parseFloat(n) : Number(n);
+        return Number.isFinite(num) ? num : 0;
     };
 
-    const validStr = formatNum(validN);
-    const missingStr = formatNum(missingN);
-    const totalStr = formatNum(totalN);
+    const valid = parseNum(validN);
+    const missing = parseNum(missingN);
+    const total = parseNum(totalN);
 
-    const weightText = isWeighted ? " (weighted frequency)" : "";
-    const missingText = parseInt(missingStr) > 0 ? ` Missing cases: ${missingStr}${weightText}.` : '';
+    const formatNum = (num: number) =>
+        Number.isInteger(num) ? String(num) : num.toFixed(1);
 
-    return `Analysis includes ${validStr}${weightText} valid cases from total ${totalStr}.${missingText} Data processed using listwise deletion of incomplete observations.`;
+    const validPct = total > 0 ? ((valid / total) * 100).toFixed(1) : "0.0";
+    const weightText = isWeighted ? " (weighted)" : "";
+    const missingText = missing > 0 ? ` Missing cases: ${formatNum(missing)}${weightText}.` : '';
+
+    return `Analysis includes ${formatNum(valid)}${weightText} valid cases (${validPct}%) out of total ${formatNum(total)}.${missingText} Data processed using listwise deletion of incomplete observations.`;
 }
 
 /**
  * Generate interpretation for Model Fitting Information
  */
 export function generateModelFittingDescription(
-    nullLL: number,
-    finalLL: number,
+    nullNeg2LL: number,
+    finalNeg2LL: number,
     chiSquare: number,
     pValue: number,
     df: number
 ): string {
-    if (!Number.isFinite(nullLL) || !Number.isFinite(finalLL) || !Number.isFinite(chiSquare)) {
-        return "Model fitting information comparing intercept-only to final model with predictors.";
+    if (!Number.isFinite(nullNeg2LL) || !Number.isFinite(finalNeg2LL) || !Number.isFinite(chiSquare)) {
+        return "Model fitting information comparing intercept-only baseline to final model with predictors.";
     }
 
-    const improvement = Math.abs(nullLL - finalLL);
-    const improvementText = finalLL < nullLL
-        ? `improved by ${improvement.toFixed(2)} log-likelihood units`
-        : `showed no improvement`;
+    const pText = pValue < 0.001
+        ? "p < .001"
+        : `p = ${pValue.toFixed(3)}`;
 
-    const sigText = pValue < 0.001
-        ? "highly significant (p < .001)"
-        : pValue < 0.05
-            ? `significant (p = ${pValue.toFixed(3)})`
-            : `not significant (p = ${pValue.toFixed(3)})`;
+    if (pValue < 0.05) {
+        return `The Final model significantly improves fit over the Intercept-Only baseline model (χ²(${df}) = ${chiSquare.toFixed(2)}, ${pText}), reducing -2 Log Likelihood from ${nullNeg2LL.toFixed(2)} to ${finalNeg2LL.toFixed(2)}. The set of predictors reliably predicts outcome category membership.`;
+    }
 
-    return `Final model ${improvementText} compared to intercept-only baseline (χ²(${df}) = ${chiSquare.toFixed(2)}, ${sigText}). The model explains the outcome variable better than the null model.`;
+    return `The Final model does not show a statistically significant improvement over the Intercept-Only baseline (χ²(${df}) = ${chiSquare.toFixed(2)}, ${pText}). The baseline -2 Log Likelihood was ${nullNeg2LL.toFixed(2)} compared to ${finalNeg2LL.toFixed(2)} for the full model.`;
 }
 
 /**
- * Generate interpretation for Step Summary
+ * Generate interpretation for Step Summary / Model Information
  */
 export function generateStepSummaryDescription(
     iterations: number,
     converged: boolean
 ): string {
-    const convergenceText = converged
-        ? `converged successfully after ${iterations} iteration${iterations !== 1 ? 's' : ''}`
-        : `did not converge within ${iterations} iterations (increase iteration limit if needed)`;
+    if (converged) {
+        return `Newton-Raphson parameter estimation converged successfully after ${iterations} iteration${iterations !== 1 ? 's' : ''} based on specified convergence criteria.`;
+    }
 
-    return `Newton-Raphson estimation ${convergenceText}. Model achieved convergence using the specified tolerance criteria.`;
+    return `Newton-Raphson estimation did not achieve convergence within the maximum limit of ${iterations} iterations. Results should be interpreted with caution, and increasing the iteration limit is recommended.`;
 }
 
 /**
@@ -82,14 +82,15 @@ export function generatePseudoRSquareDescription(
         return "Pseudo R-Square measures indicate the proportion of variance in the outcome explained by the model.";
     }
 
-    const nagEl = nagelkerke * 100;
     const interpretation =
-        nagEl >= 0.4 ? "substantial" :
-            nagEl >= 0.2 ? "moderate" :
-                nagEl >= 0.1 ? "small" :
+        nagelkerke >= 0.40 ? "substantial" :
+            nagelkerke >= 0.20 ? "moderate" :
+                nagelkerke >= 0.10 ? "small" :
                     "weak";
 
-    return `Nagelkerke R² = ${nagelkerke.toFixed(3)} indicates ${interpretation} effect size. The model explains approximately ${nagEl.toFixed(1)}% of the variance in category membership.`;
+    const nagPct = (nagelkerke * 100).toFixed(1);
+
+    return `Pseudo R-Square measures: Cox & Snell R² = ${coxSnell.toFixed(3)}, Nagelkerke R² = ${nagelkerke.toFixed(3)} (${interpretation} effect size), and McFadden R² = ${mcFadden.toFixed(3)}. The model explains approximately ${nagPct}% of the variance in outcome category membership.`;
 }
 
 /**
@@ -98,62 +99,86 @@ export function generatePseudoRSquareDescription(
 export function generateParameterEstimatesDescription(
     nPredictors: number,
     nCategories: number,
-    nSignificant: number
+    nSignificant: number,
+    totalParams?: number,
+    refCategoryName?: string,
+    significantParamNames?: string[]
 ): string {
-    const totalParams = nPredictors * (nCategories - 1) + (nCategories - 1);
-    const percentSig = nPredictors > 0 ? ((nSignificant / (nPredictors * (nCategories - 1))) * 100).toFixed(0) : '0';
+    const calcTotal = totalParams ?? (nPredictors * (nCategories - 1) + (nCategories - 1));
+    const percentSig = calcTotal > 0 ? ((nSignificant / calcTotal) * 100).toFixed(1) : '0.0';
+    const refText = refCategoryName ? ` (reference category: '${refCategoryName}')` : '';
 
-    return `Logit coefficients for ${nCategories} outcome categories (${nCategories - 1} non-reference) with ${nPredictors} predictor${nPredictors !== 1 ? 's' : ''}. Reference category coefficients fixed at zero. Approximately ${percentSig}% of coefficients are statistically significant at p < .05 level.`;
+    let details = `Logit coefficients for ${nCategories} outcome categories${refText} with ${nPredictors} predictor term${nPredictors !== 1 ? 's' : ''}. Out of ${calcTotal} estimated parameters, ${nSignificant} (${percentSig}%) are statistically significant at p < .05 level.`;
+
+    if (significantParamNames && significantParamNames.length > 0) {
+        details += ` Significant parameters: ${significantParamNames.join(', ')}.`;
+    }
+
+    return details;
 }
 
 /**
  * Generate interpretation for Classification Table
  */
 export function generateClassificationDescription(
-    overallAccuracy: number,
-    categoryAccuracies: number[]
+    overallPercentage: number,
+    categoryPercentages?: number[],
+    categoryNames?: string[]
 ): string {
-    if (!Number.isFinite(overallAccuracy)) {
+    if (!Number.isFinite(overallPercentage)) {
         return "Model's ability to correctly classify observations into outcome categories.";
     }
 
-    const overallPct = (overallAccuracy * 100).toFixed(1);
-    const avgCatAccuracy = categoryAccuracies.length > 0
-        ? (categoryAccuracies.reduce((a, b) => a + b, 0) / categoryAccuracies.length * 100).toFixed(1)
-        : "0.0";
+    // Accept ratio (0-1) or percentage (0-100)
+    const pct = overallPercentage > 1 ? overallPercentage : overallPercentage * 100;
+    const overallStr = pct.toFixed(1);
 
     const accuracyInterpretation =
-        overallAccuracy >= 0.9 ? "excellent" :
-            overallAccuracy >= 0.8 ? "very good" :
-                overallAccuracy >= 0.7 ? "good" :
-                    overallAccuracy >= 0.6 ? "fair" :
+        pct >= 90 ? "excellent" :
+            pct >= 80 ? "very good" :
+                pct >= 70 ? "good" :
+                    pct >= 60 ? "fair" :
                         "poor";
 
-    return `Overall classification accuracy: ${overallPct}% (${accuracyInterpretation}). Average per-category accuracy: ${avgCatAccuracy}%. Model correctly predicts outcome category membership ${overallPct}% of the time.`;
+    let text = `Overall classification accuracy: ${overallStr}% (${accuracyInterpretation}). The model correctly predicts outcome category membership ${overallStr}% of the time.`;
+
+    if (categoryPercentages && categoryPercentages.length > 0) {
+        const catBreakdown = categoryPercentages.map((cAcc, i) => {
+            const val = cAcc > 1 ? cAcc : cAcc * 100;
+            const name = categoryNames?.[i] ? `'${categoryNames[i]}'` : `Category ${i + 1}`;
+            return `${name}: ${val.toFixed(1)}%`;
+        }).join(', ');
+        text += ` Per-category accuracy breakdown: ${catBreakdown}.`;
+    }
+
+    return text;
 }
 
 /**
  * Generate interpretation for Goodness-of-Fit Tests
  */
 export function generateGoodnessOfFitDescription(
-    pearsonChi2: number,
-    pearsonP: number,
-    devianceChi2: number,
-    devianceP: number
+    pearsonChiSquare: number,
+    pearsonDf: number,
+    pearsonPValue: number,
+    deviance: number,
+    devianceDf: number,
+    deviancePValue: number
 ): string {
-    if (!Number.isFinite(pearsonChi2) || !Number.isFinite(devianceChi2)) {
+    if (!Number.isFinite(pearsonChiSquare) || !Number.isFinite(deviance)) {
         return "Goodness-of-fit tests (Pearson and Deviance) assess whether the model adequately fits the observed data.";
     }
 
-    const pearsonInterpret = pearsonP >= 0.05
-        ? "good fit (p ≥ .05)"
-        : `poor fit (p = ${pearsonP.toFixed(3)})`;
+    const formatP = (p: number) => (p < 0.001 ? "< .001" : `= ${p.toFixed(3)}`);
 
-    const devianceInterpret = devianceP >= 0.05
-        ? "good fit (p ≥ .05)"
-        : `poor fit (p = ${devianceP.toFixed(3)})`;
+    const pearsonFit = pearsonPValue >= 0.05 ? "adequate fit (p ≥ .05)" : `potential lack of fit (p ${formatP(pearsonPValue)})`;
+    const devianceFit = deviancePValue >= 0.05 ? "adequate fit (p ≥ .05)" : `potential lack of fit (p ${formatP(deviancePValue)})`;
 
-    return `Pearson χ² = ${pearsonChi2.toFixed(2)}, ${pearsonInterpret}. Deviance χ² = ${devianceChi2.toFixed(2)}, ${devianceInterpret}. Non-significant p-values (> .05) suggest the model fits the data adequately.`;
+    const overallFit = (pearsonPValue >= 0.05 && deviancePValue >= 0.05)
+        ? "Non-significant p-values (p ≥ .05) indicate that the model fits the observed data adequately."
+        : "Significant p-values (p < .05) suggest potential discrepancy between observed counts and model predictions.";
+
+    return `Goodness-of-Fit tests: Pearson χ²(${pearsonDf}) = ${pearsonChiSquare.toFixed(2)} (${pearsonFit}); Deviance χ²(${devianceDf}) = ${deviance.toFixed(2)} (${devianceFit}). ${overallFit}`;
 }
 
 /**
@@ -162,57 +187,71 @@ export function generateGoodnessOfFitDescription(
 export function generateLikelihoodRatioDescription(
     variableCount: number,
     significantCount: number,
-    testOverallP: number
+    testOverallP: number,
+    significantVariableNames?: string[]
 ): string {
     const percentSig = variableCount > 0
         ? ((significantCount / variableCount) * 100).toFixed(0)
         : "0";
 
+    const pText = testOverallP < 0.001 ? "p < .001" : `p = ${testOverallP.toFixed(3)}`;
     const overallInterpret = testOverallP < 0.05
-        ? `significant (p = ${testOverallP.toFixed(3)}), indicating the full model significantly improves fit`
-        : `not significant (p = ${testOverallP.toFixed(3)}), indicating the model does not significantly improve upon baseline`;
+        ? `significant (${pText}), indicating the predictors collectively improve model fit`
+        : `not significant (${pText}), indicating predictors do not significantly improve fit over baseline`;
 
-    return `Likelihood ratio tests show ${significantCount} of ${variableCount} predictor${variableCount !== 1 ? 's' : ''} with significant effects (${percentSig}% significant). Overall model test: ${overallInterpret}.`;
+    let text = `Likelihood ratio tests show ${significantCount} of ${variableCount} predictor term${variableCount !== 1 ? 's' : ''} with significant overall main effects (${percentSig}% significant at p < .05). Overall model test is ${overallInterpret}.`;
+
+    if (significantVariableNames && significantVariableNames.length > 0) {
+        text += ` Predictors with significant main effects: ${significantVariableNames.join(', ')}.`;
+    }
+
+    return text;
 }
 
 /**
  * Generate interpretation for Asymptotic Covariances
  */
 export function generateAsymptoticCovariancesDescription(nParams: number): string {
-    return `Asymptotic covariance matrix of ${nParams} parameter estimates. Standard errors derived from diagonal elements.`;
+    return `Asymptotic covariance matrix of ${nParams} parameter estimates. Diagonal elements represent squared standard errors of logit coefficients.`;
 }
 
 /**
  * Generate interpretation for Asymptotic Correlations
  */
 export function generateAsymptoticCorrelationsDescription(nParams: number): string {
-    return `Asymptotic correlation matrix of ${nParams} parameter estimates. Values range from -1 to +1 indicating parameter interdependence.`;
+    return `Asymptotic correlation matrix of ${nParams} parameter estimates. Values range from -1 to +1, indicating potential collinearity or interdependence among parameter estimates.`;
 }
 
 /**
  * Generate interpretation for Monotonicity Measures
  */
 export function generateMonotonicityDescription(
-    somersD: number,
-    gamma: number,
-    tau: number
+    spearmanRho: number,
+    sampleN: number
 ): string {
-    if (!Number.isFinite(somersD)) {
-        return "Monotonic association measures assess the strength of association between observed and predicted outcome categories.";
+    if (!Number.isFinite(spearmanRho)) {
+        return "Monotonic association measures assess the strength of alignment between observed and predicted outcome categories.";
     }
 
-    const somersInterpret =
-        Math.abs(somersD) >= 0.5 ? "strong" :
-            Math.abs(somersD) >= 0.3 ? "moderate" :
-                Math.abs(somersD) >= 0.1 ? "weak" :
+    const absRho = Math.abs(spearmanRho);
+    const interpretation =
+        absRho >= 0.5 ? "strong" :
+            absRho >= 0.3 ? "moderate" :
+                absRho >= 0.1 ? "weak" :
                     "negligible";
 
-    return `Somers' D = ${somersD.toFixed(3)} (${somersInterpret} association between observed and predicted categories). Gamma = ${gamma.toFixed(3)}, Tau = ${tau.toFixed(3)}.`;
+    return `Spearman rank correlation r_s = ${spearmanRho.toFixed(3)} (N = ${sampleN}) indicates a ${interpretation} monotonic association between observed and predicted outcome categories.`;
 }
 
 /**
  * Generate interpretation for Cell Probabilities
  */
-export function generateCellProbabilitiesDescription(nRows: number, nCategories: number): string {
-    return `Predicted probability of membership in each of ${nCategories} outcome categories for ${nRows} observation${nRows !== 1 ? 's' : ''}. Probabilities sum to 1.0 within each row.`;
+export function generateCellProbabilitiesDescription(
+    nRows: number,
+    nCategories: number,
+    categoryNames?: string[]
+): string {
+    const catText = categoryNames && categoryNames.length > 0 ? ` (${categoryNames.join(', ')})` : '';
+    return `Predicted cell probabilities for membership across ${nCategories} outcome categories${catText} for ${nRows} observation${nRows !== 1 ? 's' : ''}. Probabilities sum to 1.0 within each observation row.`;
 }
+

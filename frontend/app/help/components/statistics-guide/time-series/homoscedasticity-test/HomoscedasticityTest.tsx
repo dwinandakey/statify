@@ -5,19 +5,18 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const Autocorrelation: React.FC = () => {
+export const HomoscedasticityTest: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
     { id: 'algorithm', label: 'Algoritma', labelEn: 'Algorithm', icon: Calculator, component: AlgorithmTab },
   ];
-
   return (
     <StandardizedGuideLayout
-      title="Autocorrelation (ACF & PACF)"
-      titleEn="Autocorrelation (ACF & PACF)"
-      description="Analisis autokorelasi dan autokorelasi parsial untuk mengidentifikasi orde AR dan MA pada data runtun waktu."
-      descriptionEn="Autocorrelation and partial autocorrelation analysis to identify AR and MA lag orders in time series data."
+      title="Homoscedasticity Test (ARCH-LM)"
+      titleEn="Homoscedasticity Test (ARCH-LM)"
+      description="Pengujian efek ARCH pada residual data runtun waktu menggunakan uji Lagrange Multiplier (ARCH-LM) untuk mendeteksi heteroskedastisitas kondisional."
+      descriptionEn="Testing for ARCH effects in time series residuals using the Lagrange Multiplier (ARCH-LM) test to detect conditional heteroscedasticity."
       tabs={tabs}
       defaultTab="overview"
     />
