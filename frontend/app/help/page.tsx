@@ -98,6 +98,8 @@ export default function HelpPage() {
                 { key: "univariate-emmeans", label: "GLM Univariate: EM Means", parentKey: "statistics-guide", childContent: "univariate-emmeans" },
                 { key: "univariate-parameter-estimates", label: "GLM Univariate: Parameter Estimates", parentKey: "statistics-guide", childContent: "univariate-parameter-estimates" },
                 { key: "univariate-levenes-test", label: "GLM Univariate: Levene's Test", parentKey: "statistics-guide", childContent: "univariate-levenes-test" },
+                { key: "multivariate", label: "GLM Multivariate", parentKey: "statistics-guide", childContent: "multivariate" },
+                { key: "repeated-measures", label: "GLM Repeated Measures", parentKey: "statistics-guide", childContent: "repeated-measures" },
             ],
         },
         {
