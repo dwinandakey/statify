@@ -13,6 +13,7 @@ import { Explore } from "./explore";
 import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
 import { BinaryLogisticRegression } from "./binary-logistic";
+import { OrdinalRegression } from "./ordinal-regression";
 import { MultinomialLogisticRegression } from "./multinomial-logistic";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
 import { KMeansClustering } from "./k-means/KMeansClustering";
@@ -79,6 +80,8 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <LinearRegression />;
       case "binary-logistic":
         return <BinaryLogisticRegression />;
+      case "ordinal-regression":
+        return <OrdinalRegression />;
       case "multinomial-logistic":
         return <MultinomialLogisticRegression />;
       case "k-means":
