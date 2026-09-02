@@ -8,6 +8,8 @@ export * from './binary-logistic';
 export * from './ordinal-regression';
 export * from './multinomial-logistic';
 export * from './univariate';
+export * from './multivariate';
+export * from './repeated-measures';
 export * from './k-means/KMeansClustering';
 // export * from './inferential';
 // export * from './modeling';
