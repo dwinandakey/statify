@@ -35,6 +35,10 @@ import {
   Decomposition,
   Smoothing,
   UnitRootTest,
+  HeteroscedasticityTest,
+  HomoscedasticityTest,
+  ARDLGuide,
+  ECMGuide,
 } from "./time-series";
 
 interface StatisticsGuideProps {
@@ -63,6 +67,14 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <Smoothing />;
       case 'unit-root-test':
         return <UnitRootTest />;
+      case 'heteroscedasticity':
+        return <HeteroscedasticityTest />;
+      case 'homoscedasticity-test':
+        return <HomoscedasticityTest />;
+      case 'ardl':
+        return <ARDLGuide />;
+      case 'ecm':
+        return <ECMGuide />;
       case "linear":
         return <LinearRegression />;
       case "binary-logistic":

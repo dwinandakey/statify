@@ -4,6 +4,7 @@ export * from './Feedback';
 export * from './HelpContent';
 export * from './HelpSidebar';
 export * from './HelpContentWrapper';
+export * from './LanguageToggle';
 export * from './statistics-guide';
 export * from './file-guide';
 export * from './data-guide';

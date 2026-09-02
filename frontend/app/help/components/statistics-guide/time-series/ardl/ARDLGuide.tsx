@@ -5,7 +5,7 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const UnitRootTest: React.FC = () => {
+export const ARDLGuide: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
@@ -13,10 +13,10 @@ export const UnitRootTest: React.FC = () => {
   ];
   return (
     <StandardizedGuideLayout
-      title="Unit Root Test (ADF)"
-      titleEn="Unit Root Test (ADF)"
-      description="Uji stasioneritas data runtun waktu menggunakan Augmented Dickey-Fuller (ADF) dan Dickey-Fuller (DF) sebelum pemodelan lebih lanjut."
-      descriptionEn="Testing time series stationarity using Augmented Dickey-Fuller (ADF) and Dickey-Fuller (DF) tests prior to further modeling."
+      title="ARDL (Auto-Regressive Distributed Lag)"
+      titleEn="ARDL (Auto-Regressive Distributed Lag)"
+      description="Pemodelan hubungan jangka panjang dan jangka pendek antar variabel runtun waktu menggunakan pendekatan ARDL-Bounds Testing dengan ECM."
+      descriptionEn="Modeling long-run and short-run relationships between time series variables using ARDL-Bounds Testing with ECM."
       tabs={tabs}
       defaultTab="overview"
     />
