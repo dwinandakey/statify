@@ -16,6 +16,8 @@ import { BinaryLogisticRegression } from "./binary-logistic";
 import { OrdinalRegression } from "./ordinal-regression";
 import { MultinomialLogisticRegression } from "./multinomial-logistic";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
+import { Multivariate } from "./multivariate";
+import { RepeatedMeasures } from "./repeated-measures";
 import { KMeansClustering } from "./k-means/KMeansClustering";
 import {
   SumOfSquares,
@@ -104,6 +106,10 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <HeteroscedasticityTests />;
       case "univariate-lack-of-fit-tests":
         return <LackOfFitTests />;
+      case "multivariate":
+        return <Multivariate />;
+      case "repeated-measures":
+        return <RepeatedMeasures />;
       default:
         break;
     }
