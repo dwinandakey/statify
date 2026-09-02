@@ -3,3 +3,7 @@ export * from './box-jenkins-model';
 export * from './decomposition';
 export * from './smoothing';
 export * from './unit-root-test';
+export * from './heteroscedasticity';
+export * from './homoscedasticity-test';
+export * from './ardl';
+export * from './ecm';

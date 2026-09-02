@@ -5,7 +5,7 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const UnitRootTest: React.FC = () => {
+export const ECMGuide: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
@@ -13,10 +13,10 @@ export const UnitRootTest: React.FC = () => {
   ];
   return (
     <StandardizedGuideLayout
-      title="Unit Root Test (ADF)"
-      titleEn="Unit Root Test (ADF)"
-      description="Uji stasioneritas data runtun waktu menggunakan Augmented Dickey-Fuller (ADF) dan Dickey-Fuller (DF) sebelum pemodelan lebih lanjut."
-      descriptionEn="Testing time series stationarity using Augmented Dickey-Fuller (ADF) and Dickey-Fuller (DF) tests prior to further modeling."
+      title="ECM (Error Correction Model)"
+      titleEn="ECM (Error Correction Model)"
+      description="Analisis hubungan jangka panjang dan mekanisme koreksi kesalahan menggunakan prosedur dua tahap Engle-Granger untuk data runtun waktu terkointegrasi."
+      descriptionEn="Analysis of long-run relationships and error correction mechanisms using the 2-stage Engle-Granger procedure for cointegrated time series data."
       tabs={tabs}
       defaultTab="overview"
     />

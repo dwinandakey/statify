@@ -5,7 +5,7 @@ import { OverviewTab } from './tabs/OverviewTab';
 import { UsageTab } from './tabs/UsageTab';
 import { AlgorithmTab } from './tabs/AlgorithmTab';
 
-export const UnitRootTest: React.FC = () => {
+export const HeteroscedasticityTest: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
     { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
@@ -13,10 +13,10 @@ export const UnitRootTest: React.FC = () => {
   ];
   return (
     <StandardizedGuideLayout
-      title="Unit Root Test (ADF)"
-      titleEn="Unit Root Test (ADF)"
-      description="Uji stasioneritas data runtun waktu menggunakan Augmented Dickey-Fuller (ADF) dan Dickey-Fuller (DF) sebelum pemodelan lebih lanjut."
-      descriptionEn="Testing time series stationarity using Augmented Dickey-Fuller (ADF) and Dickey-Fuller (DF) tests prior to further modeling."
+      title="Heteroscedasticity Models (ARCH/GARCH)"
+      titleEn="Heteroscedasticity Models (ARCH/GARCH)"
+      description="Pemodelan volatilitas data runtun waktu menggunakan model ARCH, GARCH, EGARCH, TGARCH, dan IGARCH untuk menangkap klasterisasi volatilitas."
+      descriptionEn="Volatility modeling for time series data using ARCH, GARCH, EGARCH, TGARCH, and IGARCH models to capture volatility clustering."
       tabs={tabs}
       defaultTab="overview"
     />
