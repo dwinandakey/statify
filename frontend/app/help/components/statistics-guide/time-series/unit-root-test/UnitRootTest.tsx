@@ -7,16 +7,14 @@ import { AlgorithmTab } from './tabs/AlgorithmTab';
 
 export const UnitRootTest: React.FC = () => {
   const tabs = [
-    { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: BookOpen, component: OverviewTab },
-    { id: 'usage', label: 'Penggunaan', labelEn: 'Usage', icon: PlayCircle, component: UsageTab },
-    { id: 'algorithm', label: 'Algoritma', labelEn: 'Algorithm', icon: Calculator, component: AlgorithmTab },
+    { id: 'overview', label: 'Ringkasan', icon: BookOpen, component: OverviewTab },
+    { id: 'usage', label: 'Penggunaan', icon: PlayCircle, component: UsageTab },
+    { id: 'algorithm', label: 'Algoritma', icon: Calculator, component: AlgorithmTab },
   ];
   return (
     <StandardizedGuideLayout
       title="Unit Root Test (ADF)"
-      titleEn="Unit Root Test (ADF)"
       description="Uji stasioneritas data runtun waktu menggunakan Augmented Dickey-Fuller (ADF) dan Dickey-Fuller (DF) sebelum pemodelan lebih lanjut."
-      descriptionEn="Testing time series stationarity using Augmented Dickey-Fuller (ADF) and Dickey-Fuller (DF) tests prior to further modeling."
       tabs={tabs}
       defaultTab="overview"
     />
