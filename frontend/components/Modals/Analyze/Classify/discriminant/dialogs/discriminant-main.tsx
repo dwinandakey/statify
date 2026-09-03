@@ -1,10 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronRight, Loader2 } from "lucide-react";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { ChevronRight, HelpCircle, Loader2, X } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +38,12 @@ import { DiscriminantAssumptions } from "./assumptions";
 import type { Variable } from "@/types/Variable";
 import { useDiscriminantState } from "../hooks/useDiscriminantState";
 
+// Feature tour
+import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
+import { dialogTourSteps } from "../hooks/tourConfig";
+
 /** Boxes a variable can be moved into on the Variables tab. */
 type DropTarget = "GroupingVariable" | "IndependentVariables" | "SelectionVariable";
 
@@ -55,6 +68,26 @@ export const DiscriminantMain = () => {
   } = useDiscriminantState(variablesFromStore, data as string[][]);
 
   const [activeTab, setActiveTab] = useState("variables");
+
+  // --- Feature tour (the "?" button in the footer) ---
+  const tabControl = useMemo<TabControlProps>(
+    () => ({
+      setActiveTab: (tab: string) => setActiveTab(tab),
+      currentActiveTab: activeTab,
+    }),
+    [activeTab]
+  );
+
+  const {
+    tourActive,
+    currentStep,
+    tourSteps,
+    currentTargetElement,
+    startTour,
+    nextStep,
+    prevStep,
+    endTour,
+  } = useTourGuide(dialogTourSteps, "dialog", tabControl);
 
   // Define Range inline panel state
   const [isDefineRangeOpen, setIsDefineRangeOpen] = useState(false);
@@ -268,6 +301,10 @@ export const DiscriminantMain = () => {
 
   const hasSelection = selectedVarNames.length > 0;
 
+  const handleRemoveAllIndependents = () => {
+    updateFormData("main", "IndependentVariables", []);
+  };
+
   const handleRemoveVariable = (target: string, variable?: string) => {
     if (target === "GroupingVariable") {
       updateFormData("main", "GroupingVariable", null);
@@ -313,6 +350,22 @@ export const DiscriminantMain = () => {
   // --- RENDER ---
   return (
     <div className="flex flex-col h-full bg-background">
+      {/* Feature tour elements */}
+      <AnimatePresence>
+        {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
+          <TourPopup
+            step={tourSteps[currentStep]}
+            currentStep={currentStep}
+            totalSteps={tourSteps.length}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onClose={endTour}
+            targetElement={currentTargetElement}
+          />
+        )}
+      </AnimatePresence>
+      <ActiveElementHighlight active={tourActive} />
+
       <div className="flex flex-col flex-grow min-h-0 px-6 py-3">
         <Tabs
           value={activeTab}
@@ -352,7 +405,7 @@ export const DiscriminantMain = () => {
             <TabsContent value="variables" className="mt-0">
               <div className="flex flex-col gap-4">
                 {/* Radio: Together / Stepwise */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1" id="discriminant-method-group">
                   <Label className="font-semibold text-sm">Method</Label>
                   <RadioGroup
                     value={mainData.Together ? "Together" : "Stepwise"}
@@ -418,7 +471,10 @@ export const DiscriminantMain = () => {
                       >
                         <ChevronRight size={16} />
                       </Button>
-                      <div className="flex flex-col flex-grow gap-1">
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-grouping-variable"
+                      >
                         <Label className="font-semibold text-sm">Grouping Variable:</Label>
                         <div
                           className={cn(
@@ -471,8 +527,25 @@ export const DiscriminantMain = () => {
                       >
                         <ChevronRight size={16} />
                       </Button>
-                      <div className="flex flex-col flex-grow gap-1">
-                        <Label className="font-semibold text-sm">Independents:</Label>
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-independent-variables"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <Label className="font-semibold text-sm">Independents:</Label>
+                          {(mainData.IndependentVariables?.length ?? 0) > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-xs text-muted-foreground hover:text-destructive"
+                              onClick={handleRemoveAllIndependents}
+                              title="Remove every variable from Independents"
+                            >
+                              <X className="mr-1 h-3 w-3" />
+                              Remove All ({mainData.IndependentVariables?.length ?? 0})
+                            </Button>
+                          )}
+                        </div>
                         <div
                           className={cn(
                             "min-h-[80px] p-2 border rounded transition-colors",
@@ -528,7 +601,10 @@ export const DiscriminantMain = () => {
                       >
                         <ChevronRight size={16} />
                       </Button>
-                      <div className="flex flex-col flex-grow gap-1">
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-selection-variable"
+                      >
                         <Label className="font-semibold text-sm">Selection Variable:</Label>
                         <div className="flex gap-2">
                           <div
@@ -715,9 +791,30 @@ export const DiscriminantMain = () => {
 
       {/* Footer */}
       <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">
-        <div />
+        <div className="flex items-center text-muted-foreground">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  data-testid="discriminant-help-button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={startTour}
+                  aria-label="Start feature tour"
+                  className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p className="text-xs">Start feature tour</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <div className="flex items-center space-x-4">
           <Button
+            id="discriminant-ok-button"
             onClick={handleAnalyze}
             disabled={
               isLoading ||

@@ -58,6 +58,15 @@ const OverviewTab = () => (
       </div>
     </HelpCard>
 
+    <HelpAlert variant="tip" title="Tombol Tanda Tanya di Dalam Modal">
+      <p className="text-sm mt-2">
+        Ikon <strong>?</strong> di pojok kiri bawah modal menjalankan <strong>feature tour</strong>: panduan singkat
+        yang menyorot satu per satu bagian modal, mulai dari pemilihan metode, kotak variabel beserta cara memilih
+        banyak variabel sekaligus, tab Statistics, Classify, Save, Assumptions, sampai tombol OK. Gunakan tour ini
+        ketika baru pertama kali membuka modul, lalu kembali ke halaman panduan ini untuk penjelasan yang lebih rinci.
+      </p>
+    </HelpAlert>
+
     <HelpCard title="Syarat Data" icon={CheckCircle} variant="feature">
       <ul className="text-sm space-y-2 mt-2 list-disc list-inside">
         <li><strong>Grouping Variable</strong>: kategorikal dengan kode berupa bilangan bulat, misalnya 1, 2, 3</li>
@@ -149,6 +158,11 @@ const VariablesTab = () => (
           number={4}
           title="Pindahkan dengan Tombol Panah atau Drag"
           description="Setelah beberapa variabel terpilih, klik tombol panah di sebelah kiri kotak tujuan untuk memindahkan semuanya sekaligus, atau seret salah satu variabel yang terpilih sehingga seluruh pilihan ikut terbawa."
+        />
+        <HelpStep
+          number={5}
+          title="Remove All untuk Mengosongkan Independents"
+          description="Tombol Remove All muncul di sebelah kanan label Independents begitu kotaknya terisi, lengkap dengan jumlah variabel di dalamnya. Sekali klik, seluruh isi kotak dikosongkan dan semua variabel kembali ke daftar Available Variables."
         />
       </div>
     </HelpCard>
