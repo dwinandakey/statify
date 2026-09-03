@@ -4,8 +4,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -29,6 +30,12 @@ import { DiscriminantAssumptions } from "./assumptions";
 // Types
 import type { Variable } from "@/types/Variable";
 import { useDiscriminantState } from "../hooks/useDiscriminantState";
+
+/** Boxes a variable can be moved into on the Variables tab. */
+type DropTarget = "GroupingVariable" | "IndependentVariables" | "SelectionVariable";
+
+/** Drag payload: the names of every variable being dragged at once. */
+const DRAG_MIME = "application/statify-variable-names";
 
 
 export const DiscriminantMain = () => {
@@ -94,18 +101,47 @@ export const DiscriminantMain = () => {
 
   // --- VARIABLE SELECTION ---
   const [availableVariables, setAvailableVariables] = useState<Variable[]>([]);
-  const [highlightedVariable, setHighlightedVariable] =
-    useState<Variable | null>(null);
 
+  // Multi-select in the Available Variables list. Variables are addressed by
+  // name because that is what the form stores. Ctrl/Cmd toggles one item,
+  // Shift extends the range from the last clicked one, a plain click replaces
+  // the selection.
+  const [selectedVarNames, setSelectedVarNames] = useState<string[]>([]);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(null);
+  const [dragOverTarget, setDragOverTarget] = useState<DropTarget | null>(null);
+
+  // A variable already assigned to a box leaves the Available list, so a range
+  // selection can never sweep the grouping (or selection) variable into the
+  // independents by accident.
   useEffect(() => {
-    const usedIds = new Set([
-      ...(mainData.IndependentVariables || []),
-    ]);
+    const usedIds = new Set(
+      [
+        ...(mainData.IndependentVariables || []),
+        mainData.GroupingVariable,
+        mainData.SelectionVariable,
+      ].filter((name): name is string => !!name)
+    );
     const filtered = variablesFromStore.filter(
       (v: Variable) => !usedIds.has(v.name)
     );
     setAvailableVariables(filtered as Variable[]);
-  }, [mainData.IndependentVariables, variablesFromStore]);
+  }, [
+    mainData.IndependentVariables,
+    mainData.GroupingVariable,
+    mainData.SelectionVariable,
+    variablesFromStore,
+  ]);
+
+  // Drop anything from the selection that has just left the Available list
+  // (moved into a box, or removed from the dataset).
+  useEffect(() => {
+    setSelectedVarNames((prev) => {
+      const stillAvailable = prev.filter((name) =>
+        availableVariables.some((v) => v.name === name)
+      );
+      return stillAvailable.length === prev.length ? prev : stillAvailable;
+    });
+  }, [availableVariables]);
 
   // If the active tab gets hidden (Method/Bootstrap toggling with the method
   // choice), fall back to the Variables tab.
@@ -114,18 +150,123 @@ export const DiscriminantMain = () => {
     if (activeTab === "bootstrap" && !showBootstrap) setActiveTab("variables");
   }, [activeTab, showMethod, showBootstrap]);
 
-  const handleDrop = (target: string, variable: Variable) => {
+  // Assign a batch of variables to one of the boxes. Grouping and Selection
+  // hold a single variable, so only the first of the batch is used there.
+  const assignVariables = (target: DropTarget, names: string[]) => {
+    if (names.length === 0) return;
+
     if (target === "GroupingVariable") {
-      updateFormData("main", "GroupingVariable", variable.name);
-    } else if (target === "IndependentVariables") {
-      const current = mainData.IndependentVariables || [];
-      if (!current.includes(variable.name)) {
-        updateFormData("main", "IndependentVariables", [...current, variable.name]);
-      }
+      updateFormData("main", "GroupingVariable", names[0]);
     } else if (target === "SelectionVariable") {
-      updateFormData("main", "SelectionVariable", variable.name);
+      updateFormData("main", "SelectionVariable", names[0]);
+    } else {
+      const current = mainData.IndependentVariables || [];
+      const added = names.filter((name) => !current.includes(name));
+      if (added.length > 0) {
+        updateFormData("main", "IndependentVariables", [...current, ...added]);
+      }
     }
   };
+
+  const clearSelection = () => {
+    setSelectedVarNames([]);
+    setLastSelectedIndex(null);
+  };
+
+  // Click in the Available Variables list: plain click replaces the selection,
+  // Ctrl/Cmd toggles one item, Shift extends the range from the last click.
+  const handleSelect = (variable: Variable, e: React.MouseEvent<HTMLDivElement>) => {
+    const multiSelect = e.ctrlKey || e.metaKey;
+    const currentIndex = availableVariables.findIndex((v) => v.name === variable.name);
+    if (currentIndex < 0) return;
+
+    const rangeAnchor =
+      lastSelectedIndex !== null && lastSelectedIndex < availableVariables.length
+        ? lastSelectedIndex
+        : null;
+
+    if (e.shiftKey && rangeAnchor !== null) {
+      const start = Math.min(rangeAnchor, currentIndex);
+      const end = Math.max(rangeAnchor, currentIndex);
+      const rangeNames = availableVariables.slice(start, end + 1).map((v) => v.name);
+      setSelectedVarNames((prev) =>
+        multiSelect ? Array.from(new Set([...prev, ...rangeNames])) : rangeNames
+      );
+      setLastSelectedIndex(currentIndex);
+      return;
+    }
+
+    if (multiSelect) {
+      setSelectedVarNames((prev) =>
+        prev.includes(variable.name)
+          ? prev.filter((name) => name !== variable.name)
+          : [...prev, variable.name]
+      );
+      setLastSelectedIndex(currentIndex);
+      return;
+    }
+
+    const isOnlySelected =
+      selectedVarNames.length === 1 && selectedVarNames[0] === variable.name;
+    setSelectedVarNames(isOnlySelected ? [] : [variable.name]);
+    setLastSelectedIndex(isOnlySelected ? null : currentIndex);
+  };
+
+  // Dragging a selected variable drags the whole selection; dragging an
+  // unselected one drags just that variable (and makes it the selection).
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, variable: Variable) => {
+    const namesToDrag = selectedVarNames.includes(variable.name)
+      ? selectedVarNames
+      : [variable.name];
+
+    if (!selectedVarNames.includes(variable.name)) {
+      setSelectedVarNames([variable.name]);
+      setLastSelectedIndex(
+        availableVariables.findIndex((v) => v.name === variable.name)
+      );
+    }
+
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData(DRAG_MIME, JSON.stringify(namesToDrag));
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, target: DropTarget) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverTarget(target);
+  };
+
+  const handleDragLeave = () => setDragOverTarget(null);
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, target: DropTarget) => {
+    e.preventDefault();
+    setDragOverTarget(null);
+
+    const raw = e.dataTransfer.getData(DRAG_MIME);
+    if (!raw) return;
+
+    try {
+      const names = JSON.parse(raw) as string[];
+      const dropped = availableVariables
+        .filter((v) => names.includes(v.name))
+        .map((v) => v.name);
+      assignVariables(target, dropped);
+      clearSelection();
+    } catch {
+      // Ignore an unreadable payload.
+    }
+  };
+
+  // The "move" (chevron) buttons: send the current selection to a box.
+  const handleMoveSelected = (target: DropTarget) => {
+    const names = availableVariables
+      .filter((v) => selectedVarNames.includes(v.name))
+      .map((v) => v.name);
+    assignVariables(target, names);
+    clearSelection();
+  };
+
+  const hasSelection = selectedVarNames.length > 0;
 
   const handleRemoveVariable = (target: string, variable?: string) => {
     if (target === "GroupingVariable") {
@@ -235,156 +376,75 @@ export const DiscriminantMain = () => {
                     <Label className="font-semibold text-sm">Available Variables</Label>
                     <ScrollArea className="h-[260px] border rounded p-2">
                       <div className="flex flex-col gap-1">
-                        {availableVariables.map((variable: Variable, index: number) => (
-                          <Badge
-                            key={index}
-                            className="w-full text-start text-sm font-light p-2 cursor-pointer"
-                            variant="outline"
+                        {availableVariables.map((variable: Variable) => (
+                          <div
+                            key={variable.name}
                             draggable
-                            onDragStart={(e) => {
-                              e.dataTransfer.setData(
-                                "text",
-                                JSON.stringify(variable)
-                              );
-                            }}
-                            onClick={() =>
-                              setHighlightedVariable(
-                                highlightedVariable?.name === variable.name
-                                  ? null
-                                  : variable
-                              )
-                            }
+                            onDragStart={(e) => handleDragStart(e, variable)}
+                            onClick={(e) => handleSelect(variable, e)}
+                            title="Click to select (Ctrl/Shift for several), then drag or use the arrow button"
+                            className={cn(
+                              "w-full select-none rounded border px-2 py-1.5 text-start text-sm font-light",
+                              "cursor-pointer transition-colors",
+                              selectedVarNames.includes(variable.name)
+                                ? "border-primary bg-primary/10 text-primary"
+                                : "border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                            )}
                           >
-                            {variable.label || variable.name}
-                          </Badge>
+                            <span className="block truncate">
+                              {variable.label || variable.name}
+                            </span>
+                          </div>
                         ))}
                       </div>
                     </ScrollArea>
+                    <p className="text-xs text-muted-foreground">
+                      Ctrl+click to pick several, Shift+click for a range.
+                      {hasSelection ? ` ${selectedVarNames.length} selected.` : ""}
+                    </p>
                   </div>
 
                   {/* Center: Assignment Areas */}
                   <div className="flex flex-col flex-grow gap-3">
                     {/* Grouping Variable */}
-                    <div className="flex flex-col gap-1">
-                      <Label className="font-semibold text-sm">Grouping Variable:</Label>
-                      <div
-                        className="min-h-[40px] p-2 border rounded"
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          try {
-                            const variable = JSON.parse(
-                              e.dataTransfer.getData("text")
-                            );
-                            handleDrop("GroupingVariable", variable);
-                          } catch {}
-                        }}
-                        onDragOver={(e) => e.preventDefault()}
-                      >
-                        <ScrollArea>
-                          {mainData.GroupingVariable ? (
-                            <Badge
-                              className="text-start text-sm font-light p-2 cursor-pointer"
-                              variant="outline"
-                              onClick={() =>
-                                handleRemoveVariable("GroupingVariable")
-                              }
-                            >
-                              {mainData.GroupingVariable}
-                            </Badge>
-                          ) : (
-                            <span className="text-sm font-light text-gray-500">
-                              Drop grouping variable here.
-                            </span>
-                          )}
-                        </ScrollArea>
-                      </div>
+                    <div className="flex items-start gap-2">
                       <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={handleDefineRangeOpen}
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("GroupingVariable")}
+                        disabled={!hasSelection || !!mainData.GroupingVariable}
+                        title="Move the selected variable to Grouping Variable"
                       >
-                        Define Range...
+                        <ChevronRight size={16} />
                       </Button>
-                    </div>
-
-                    {/* Independent Variables */}
-                    <div className="flex flex-col gap-1">
-                      <Label className="font-semibold text-sm">Independents:</Label>
-                      <div
-                        className="min-h-[80px] p-2 border rounded"
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          try {
-                            const variable = JSON.parse(
-                              e.dataTransfer.getData("text")
-                            );
-                            handleDrop("IndependentVariables", variable);
-                          } catch {}
-                        }}
-                        onDragOver={(e) => e.preventDefault()}
-                      >
-                        <ScrollArea>
-                          {mainData.IndependentVariables &&
-                          mainData.IndependentVariables.length > 0 ? (
-                            <div className="flex flex-col gap-1">
-                              {mainData.IndependentVariables.map(
-                                (variable, index) => (
-                                  <Badge
-                                    key={index}
-                                    className="text-start text-sm font-light p-2 cursor-pointer"
-                                    variant="outline"
-                                    onClick={() =>
-                                      handleRemoveVariable(
-                                        "IndependentVariables",
-                                        variable
-                                      )
-                                    }
-                                  >
-                                    {variable}
-                                  </Badge>
-                                )
-                              )}
-                            </div>
-                          ) : (
-                            <span className="text-sm font-light text-gray-500">
-                              Drop independent variables here.
-                            </span>
-                          )}
-                        </ScrollArea>
-                      </div>
-                    </div>
-
-                    {/* Selection Variable */}
-                    <div className="flex flex-col gap-1">
-                      <Label className="font-semibold text-sm">Selection Variable:</Label>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col flex-grow gap-1">
+                        <Label className="font-semibold text-sm">Grouping Variable:</Label>
                         <div
-                          className="flex-grow min-h-[40px] p-2 border rounded"
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            try {
-                              const variable = JSON.parse(
-                                e.dataTransfer.getData("text")
-                              );
-                              handleDrop("SelectionVariable", variable);
-                            } catch {}
-                          }}
-                          onDragOver={(e) => e.preventDefault()}
+                          className={cn(
+                            "min-h-[40px] p-2 border rounded transition-colors",
+                            dragOverTarget === "GroupingVariable" &&
+                              "border-primary bg-primary/5 ring-1 ring-primary/30"
+                          )}
+                          onDrop={(e) => handleDrop(e, "GroupingVariable")}
+                          onDragOver={(e) => handleDragOver(e, "GroupingVariable")}
+                          onDragLeave={handleDragLeave}
                         >
                           <ScrollArea>
-                            {mainData.SelectionVariable ? (
+                            {mainData.GroupingVariable ? (
                               <Badge
                                 className="text-start text-sm font-light p-2 cursor-pointer"
                                 variant="outline"
                                 onClick={() =>
-                                  handleRemoveVariable("SelectionVariable")
+                                  handleRemoveVariable("GroupingVariable")
                                 }
+                                title="Click to remove"
                               >
-                                {mainData.SelectionVariable}
+                                {mainData.GroupingVariable}
                               </Badge>
                             ) : (
                               <span className="text-sm font-light text-gray-500">
-                                Drop selection variable here.
+                                Drop grouping variable here.
                               </span>
                             )}
                           </ScrollArea>
@@ -392,10 +452,122 @@ export const DiscriminantMain = () => {
                         <Button
                           variant="secondary"
                           size="sm"
-                          onClick={handleSetValueOpen}
+                          onClick={handleDefineRangeOpen}
                         >
-                          Value...
+                          Define Range...
                         </Button>
+                      </div>
+                    </div>
+
+                    {/* Independent Variables */}
+                    <div className="flex items-start gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("IndependentVariables")}
+                        disabled={!hasSelection}
+                        title="Move the selected variables to Independents"
+                      >
+                        <ChevronRight size={16} />
+                      </Button>
+                      <div className="flex flex-col flex-grow gap-1">
+                        <Label className="font-semibold text-sm">Independents:</Label>
+                        <div
+                          className={cn(
+                            "min-h-[80px] p-2 border rounded transition-colors",
+                            dragOverTarget === "IndependentVariables" &&
+                              "border-primary bg-primary/5 ring-1 ring-primary/30"
+                          )}
+                          onDrop={(e) => handleDrop(e, "IndependentVariables")}
+                          onDragOver={(e) => handleDragOver(e, "IndependentVariables")}
+                          onDragLeave={handleDragLeave}
+                        >
+                          <ScrollArea>
+                            {mainData.IndependentVariables &&
+                            mainData.IndependentVariables.length > 0 ? (
+                              <div className="flex flex-col gap-1">
+                                {mainData.IndependentVariables.map(
+                                  (variable, index) => (
+                                    <Badge
+                                      key={index}
+                                      className="text-start text-sm font-light p-2 cursor-pointer"
+                                      variant="outline"
+                                      onClick={() =>
+                                        handleRemoveVariable(
+                                          "IndependentVariables",
+                                          variable
+                                        )
+                                      }
+                                      title="Click to remove"
+                                    >
+                                      {variable}
+                                    </Badge>
+                                  )
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-sm font-light text-gray-500">
+                                Drop independent variables here.
+                              </span>
+                            )}
+                          </ScrollArea>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Selection Variable */}
+                    <div className="flex items-start gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("SelectionVariable")}
+                        disabled={!hasSelection || !!mainData.SelectionVariable}
+                        title="Move the selected variable to Selection Variable"
+                      >
+                        <ChevronRight size={16} />
+                      </Button>
+                      <div className="flex flex-col flex-grow gap-1">
+                        <Label className="font-semibold text-sm">Selection Variable:</Label>
+                        <div className="flex gap-2">
+                          <div
+                            className={cn(
+                              "flex-grow min-h-[40px] p-2 border rounded transition-colors",
+                              dragOverTarget === "SelectionVariable" &&
+                                "border-primary bg-primary/5 ring-1 ring-primary/30"
+                            )}
+                            onDrop={(e) => handleDrop(e, "SelectionVariable")}
+                            onDragOver={(e) => handleDragOver(e, "SelectionVariable")}
+                            onDragLeave={handleDragLeave}
+                          >
+                            <ScrollArea>
+                              {mainData.SelectionVariable ? (
+                                <Badge
+                                  className="text-start text-sm font-light p-2 cursor-pointer"
+                                  variant="outline"
+                                  onClick={() =>
+                                    handleRemoveVariable("SelectionVariable")
+                                  }
+                                  title="Click to remove"
+                                >
+                                  {mainData.SelectionVariable}
+                                </Badge>
+                              ) : (
+                                <span className="text-sm font-light text-gray-500">
+                                  Drop selection variable here.
+                                </span>
+                              )}
+                            </ScrollArea>
+                          </div>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={handleSetValueOpen}
+                          >
+                            Value...
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

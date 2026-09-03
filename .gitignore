@@ -58,7 +58,8 @@ yarn-error.log*
 **/wasm/Cargo.lock
 # typescript
 *.tsbuildinfo
-# next-env.d.ts (Keep if not moved to frontend)
+# next-env.d.ts — digenerate ulang oleh Next.js, isinya ikut distDir (.next vs .next-dev)
+/frontend/next-env.d.ts
 # wasm
 **/target/*
 **/Cargo.lock
