@@ -118,7 +118,7 @@ const VariablesTab = () => (
         <HelpStep
           number={3}
           title="Independents"
-          description="Seret variabel numerik yang akan menjadi prediktor ke kotak ini. Bisa lebih dari satu, dan urutannya tidak memengaruhi hasil pada metode Together."
+          description="Masukkan variabel numerik yang akan menjadi prediktor ke kotak ini. Bisa dipindahkan beberapa sekaligus dengan Ctrl+klik atau Shift+klik, dan urutannya tidak memengaruhi hasil pada metode Together."
         />
         <HelpStep
           number={4}
@@ -128,11 +128,38 @@ const VariablesTab = () => (
       </div>
     </HelpCard>
 
-    <HelpAlert variant="tip" title="Menambah dan Menghapus Variabel">
+    <HelpCard title="Memilih Banyak Variabel Sekaligus" icon={Table} variant="default">
+      <div className="space-y-4 mt-2">
+        <HelpStep
+          number={1}
+          title="Klik Biasa"
+          description="Klik satu variabel di daftar Available Variables untuk memilihnya. Klik lagi pada variabel yang sama untuk membatalkan pilihan."
+        />
+        <HelpStep
+          number={2}
+          title="Ctrl+Klik untuk Memilih Beberapa"
+          description="Tahan Ctrl (atau Command di Mac) lalu klik beberapa variabel yang letaknya berjauhan. Setiap klik menambah atau mengurangi satu variabel dari pilihan."
+        />
+        <HelpStep
+          number={3}
+          title="Shift+Klik untuk Memilih Rentang"
+          description="Klik variabel pertama, lalu tahan Shift dan klik variabel terakhir. Seluruh variabel di antaranya ikut terpilih sekaligus."
+        />
+        <HelpStep
+          number={4}
+          title="Pindahkan dengan Tombol Panah atau Drag"
+          description="Setelah beberapa variabel terpilih, klik tombol panah di sebelah kiri kotak tujuan untuk memindahkan semuanya sekaligus, atau seret salah satu variabel yang terpilih sehingga seluruh pilihan ikut terbawa."
+        />
+      </div>
+    </HelpCard>
+
+    <HelpAlert variant="tip" title="Menghapus Variabel dan Kotak Tujuan Bernilai Tunggal">
       <p className="text-sm mt-2">
-        Variabel dipindahkan dengan cara <strong>drag and drop</strong> dari daftar Available Variables di sebelah kiri.
-        Untuk mengeluarkan variabel dari sebuah kotak, cukup <strong>klik badge variabel</strong> tersebut. Variabel
-        yang sudah dipakai sebagai Independent otomatis hilang dari daftar Available Variables.
+        Untuk mengeluarkan variabel dari sebuah kotak, cukup <strong>klik badge variabel</strong> tersebut, dan
+        variabel itu akan kembali muncul di daftar Available Variables. Kotak <strong>Grouping Variable</strong> dan{' '}
+        <strong>Selection Variable</strong> hanya menampung satu variabel, sehingga bila pilihan Anda berisi beberapa
+        variabel, hanya variabel pertama yang dipindahkan. Variabel yang sudah dipakai di salah satu kotak otomatis
+        hilang dari daftar Available Variables agar tidak terpilih dua kali.
       </p>
     </HelpAlert>
 
@@ -617,8 +644,8 @@ const QuickStartGuide = () => (
         <p className="text-sm">Siap menjalankan Analisis Diskriminan?</p>
         <ol className="text-sm space-y-1 list-decimal list-inside">
           <li>Buka <b>Analyze &gt; Classify &gt; Discriminant</b></li>
-          <li>Seret variabel kategorikal ke <b>Grouping Variable</b>, klik <b>Define Range...</b>, lalu isi kode kelompok terkecil dan terbesar</li>
-          <li>Seret variabel numerik ke kotak <b>Independents</b></li>
+          <li>Pindahkan variabel kategorikal ke <b>Grouping Variable</b>, klik <b>Define Range...</b>, lalu isi kode kelompok terkecil dan terbesar</li>
+          <li>Pilih variabel numerik dengan <b>Ctrl+klik</b> atau <b>Shift+klik</b>, lalu pindahkan sekaligus ke kotak <b>Independents</b></li>
           <li>Pilih <b>Enter independents together</b> jika sudah yakin dengan daftar variabelnya, atau <b>Use stepwise method</b> untuk menyaring variabel</li>
           <li>Di tab <b>Statistics</b>, centang minimal <b>Means</b>, <b>Univariate ANOVAs</b>, dan <b>Box&apos;s M</b></li>
           <li>Di tab <b>Classify</b>, centang <b>Summary Table</b> dan <b>Leave-one-out Classification</b>, serta grafik yang diperlukan</li>
