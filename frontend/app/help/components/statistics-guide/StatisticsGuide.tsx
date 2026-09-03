@@ -19,6 +19,7 @@ import { UnivariateGuide } from "./univariate/UnivariateGuide";
 import { Multivariate } from "./multivariate";
 import { RepeatedMeasures } from "./repeated-measures";
 import { KMeansClustering } from "./k-means/KMeansClustering";
+import { DiscriminantAnalysis } from "./discriminant";
 import {
   SumOfSquares,
   EMMeans,
@@ -88,6 +89,8 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <MultinomialLogisticRegression />;
       case "k-means":
         return <KMeansClustering />;
+      case "discriminant":
+        return <DiscriminantAnalysis />;
       case "univariate":
         return <UnivariateGuide />;
       case "univariate-sum-of-squares":

@@ -10,6 +10,7 @@ export * from './multinomial-logistic';
 export * from './univariate';
 export * from './multivariate';
 export * from './repeated-measures';
+export * from './discriminant';
 export * from './k-means/KMeansClustering';
 // export * from './inferential';
 // export * from './modeling';

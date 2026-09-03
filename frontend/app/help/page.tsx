@@ -89,6 +89,7 @@ export default function HelpPage() {
                 { key: "ardl", label: "ARDL", parentKey: "statistics-guide", childContent: "ardl" },
                 { key: "ecm", label: "ECM (Error Correction Model)", parentKey: "statistics-guide", childContent: "ecm" },
                 { key: "k-means", label: "K-Means Clustering", parentKey: "statistics-guide", childContent: "k-means" },
+                { key: "discriminant", label: "Discriminant Analysis", parentKey: "statistics-guide", childContent: "discriminant" },
                 { key: "univariate", label: "GLM Univariate", parentKey: "statistics-guide", childContent: "univariate" },
                 { key: "univariate-design-matrix", label: "GLM Univariate: Design Matrix", parentKey: "statistics-guide", childContent: "univariate-design-matrix" },
                 { key: "univariate-contrast-factors", label: "GLM Univariate: Contrast Factors", parentKey: "statistics-guide", childContent: "univariate-contrast-factors" },
