@@ -780,8 +780,12 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
   };
 
   useEffect(() => {
-    if (parsedData?.charts && Array.isArray(parsedData.charts)) {
-      const nodes = parsedData.charts.map(
+    const rawCharts = parsedData?.charts && Array.isArray(parsedData.charts)
+      ? parsedData.charts
+      : (parsedData && parsedData.chartType ? [parsedData] : []);
+
+    if (rawCharts.length > 0) {
+      const nodes = rawCharts.map(
         (chartData: ChartData, index: number) => {
           const {
             chartType,

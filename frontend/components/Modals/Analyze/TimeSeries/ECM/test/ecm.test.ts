@@ -3,6 +3,7 @@
 import '@testing-library/jest-dom';
 import { renderHook, act } from '@testing-library/react';
 import { useAnalyzeHook } from '@/components/Modals/Analyze/TimeSeries/ECM/hooks/analyzeHook';
+import { ChartService } from '@/services/chart/ChartService';
 import type { Variable } from '@/types/Variable';
 import type { DataRow } from '@/types/Data';
 
@@ -278,5 +279,37 @@ describe('useAnalyzeHook ECM – Respons Worker Error (P7–P8)', () => {
 
         expect(result.current.errorMsg).toBe('Failed to connect to worker');
         expect(result.current.isCalculating).toBe(false);
+    });
+
+    it('TC-ECM-09: Worker mengembalikan correlogram → Correlogram table & ACF/PACF chart dimasukkan ke output_data', async () => {
+        const mockECMWithCorrelogram = {
+            ...mockECMValid,
+            correlogram: [
+                { lag: 1, ac: '0.120', pac: '0.120', qStat: '0.15', prob: '0.69' },
+                { lag: 2, ac: '-0.050', pac: '-0.065', qStat: '0.22', prob: '0.89' }
+            ]
+        };
+
+        const result = await runAndAnalyze([yVar], [xVar], makeData(15));
+        await triggerSuccess(mockECMWithCorrelogram);
+
+        expect(mockAddStatistic).toHaveBeenCalled();
+        const call = mockAddStatistic.mock.calls[0];
+        const parsed = JSON.parse(call[1].output_data);
+
+        // Verifikasi Correlogram Table
+        const correlogramTable = parsed.tables.find((t: any) => t.title.includes('Correlogram of ECM Residuals'));
+        expect(correlogramTable).toBeDefined();
+        expect(correlogramTable.rows.length).toBe(2);
+
+        // Verifikasi Correlogram Chart Service Call
+        expect(ChartService.createChartJSON).toHaveBeenCalledWith(
+            expect.objectContaining({
+                chartType: "Multiple Line Chart",
+                chartMetadata: expect.objectContaining({
+                    title: "ECM Residual Correlogram Plot (ACF & PACF)"
+                })
+            })
+        );
     });
 });
