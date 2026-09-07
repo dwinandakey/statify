@@ -1,6 +1,6 @@
 /**
  * ClusterSizeDistribution
- * Donut chart berbasis D3 yang menampilkan jumlah dan persentase kasus per klaster.
+ * D3-based donut chart showing count and percentage of cases per cluster.
  */
 
 import React, { useEffect, useRef } from "react";
@@ -38,15 +38,15 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        // Konstanta tata letak
+        // Layout constants
         const legendItemH = 22;
         const legendRows = profiles.length;
         const legendH = legendRows * legendItemH + 8;
         const chartAreaH = height - legendH;
         const radius = Math.min(width, chartAreaH) / 2 - 20;
-        const innerRadius = radius * 0.52; // lubang donut
+        const innerRadius = radius * 0.52; // donut hole
 
-        // Warna CSS yang sudah diresolvasi
+        // Resolved CSS colours
         const style = getComputedStyle(svgRef.current);
         const fgColor = style.getPropertyValue("--foreground").trim()
             ? `hsl(${style.getPropertyValue("--foreground").trim()})`
@@ -58,7 +58,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             ? `hsl(${style.getPropertyValue("--background").trim()})`
             : "#ffffff";
 
-        // --- Generator PIE / ARC ---
+        // --- PIE / ARC generators ---
         const pie = d3.pie<ClusterProfile>()
             .value(d => d.size)
             .sort(null)
@@ -78,13 +78,12 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
 
         const total = d3.sum(profiles, d => d.size);
 
-        // --- Grup root di tengah area chart ---
+        // --- Root group centred in chart area ---
         const cx = width / 2;
         const cy = chartAreaH / 2;
         const g = svg.append("g").attr("transform", `translate(${cx},${cy})`);
 
-        // Elemen tooltip
-        if (!svgRef.current) return;
+        // Tooltip element
         const tooltip = d3.select(svgRef.current.parentElement)
             .selectAll<HTMLDivElement, unknown>(".csd-tooltip")
             .data([null])
@@ -103,7 +102,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             .style("box-shadow", "0 2px 8px rgba(0,0,0,0.15)")
             .style("z-index", "50");
 
-        // --- Arc ---
+        // --- Arcs ---
         const arcs = g.selectAll(".arc")
             .data(pie(profiles))
             .join("g")
@@ -142,7 +141,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
                 tooltip.style("opacity", "0");
             });
 
-        // --- Label persentase di dalam irisan (hanya jika irisan cukup lebar) ---
+        // --- Percentage labels inside slices (only if slice is wide enough) ---
         arcs.filter(d => (d.endAngle - d.startAngle) > 0.35)
             .append("text")
             .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
@@ -157,7 +156,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
                 return `${pct.toFixed(1)}%`;
             });
 
-        // --- Label tengah ---
+        // --- Centre label ---
         g.append("text")
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
@@ -175,7 +174,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             .attr("fill", mutedColor)
             .text("total objects");
 
-        // --- Legenda ---
+        // --- Legend ---
         const legendG = svg.append("g")
             .attr("transform", `translate(${16},${chartAreaH + 4})`);
 

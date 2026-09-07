@@ -207,17 +207,25 @@ export class ClusterWorker {
         }
     }
 
-    private handleError(error: ErrorEvent) {
+    private handleError(event: ErrorEvent | Event) {
         // Reject ALL pending callbacks: we cannot tell which request caused
         // the error from an ErrorEvent (no requestId attached), and leaving
         // orphaned callbacks would permanently hang awaited cluster() calls.
         // Previously this used `this.messageId` (the last-sent ID) which
         // rejected the wrong promise when multiple requests were in-flight.
+        //
+        // Reject with a real Error (not the raw event) — string-coercing an
+        // Event yields "[object Event]", which is useless in UI error messages.
+        const message =
+            "message" in event && typeof event.message === "string" && event.message
+                ? event.message
+                : "Worker encountered an unknown error";
+        const error = new Error(message);
         this.callbacks.forEach((callbacks, id) => {
             callbacks.reject(error);
             this.callbacks.delete(id);
         });
-        console.error("Worker error:", error);
+        console.error("Worker error:", event);
     }
 
     private sendMessage(message: WorkerRequestMessage): Promise<unknown> {

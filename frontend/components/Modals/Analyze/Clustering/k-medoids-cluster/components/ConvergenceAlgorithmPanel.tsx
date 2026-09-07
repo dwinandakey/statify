@@ -1,12 +1,13 @@
 /**
  * ConvergenceAlgorithmPanel
- * Tabel iterasi gabungan (Iterasi | Medoid Aktif | Total Cost | Status)
- * diikuti line chart Total-Cost sederhana berbasis D3 — sesuai desain "Proses Iterasi
- * K-Medoids (PAM)" dengan baris Init dan badge status Berubah / Konvergen.
+ * Combined iteration table (Iterasi | Medoid Aktif | Total Cost | Status)
+ * followed by a simple D3 Total-Cost line chart — matches the "Proses Iterasi
+ * K-Medoids (PAM)" design with Init row, Berubah / Konvergen status badges.
  */
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
+import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
 import type { IterationHistory, MedoidInfo } from "../types/output";
 
 interface ConvergenceAlgorithmPanelProps {
@@ -15,7 +16,7 @@ interface ConvergenceAlgorithmPanelProps {
     converged?: boolean;
 }
 
-// ── fungsi pembantu ──────────────────────────────────────────────────────────
+// ── helpers ─────────────────────────────────────────────────────────────────
 
 function fmtCost(n: number): string {
     if (!isFinite(n)) return "—";
@@ -29,7 +30,7 @@ function medoidLabel(m: MedoidInfo): string {
     return `ID_${String(m.objectId).padStart(3, "0")}`;
 }
 
-// ── komponen ─────────────────────────────────────────────────────────────────
+// ── component ────────────────────────────────────────────────────────────────
 
 export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps> = ({
     data = [],
@@ -38,28 +39,28 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
-    // Baris 0 = state Init (improvement selalu 0 dari builder), baris 1+ = iterasi
+    // Row 0 = Init state (improvement always 0 from builder), rows 1+ = iterations
     const initEntry  = data[0];
     const iterEntries = data.slice(1);
     const numIterations = iterEntries.length;
 
-    // Pembantu: ubah array indeks medoid menjadi string "Case X, Case Y" yang mudah dibaca.
-    // Prioritaskan snapshot per-iterasi (row.medoids) daripada daftar medoid akhir.
+    // Helper: turn a medoid index array into a readable "Case X, Case Y" string.
+    // Prefers per-iteration snapshot (row.medoids) over the final medoid list.
     const medoidStr = (indices?: number[]): string => {
         if (indices && indices.length > 0) {
             return indices.map(idx => `Case ${idx + 1}`).join(", ");
         }
-        // Fallback ke info medoid akhir (untuk jalur non-PAM tanpa histori)
+        // Fallback to final medoids info (for non-PAM paths without history)
         return medoids.length > 0 ? medoids.map(medoidLabel).join(", ") : "—";
     };
 
-    // Data chart: Init + setiap iterasi
+    // Chart data: Init + each iteration
     const chartData = data.map((d, i) => ({
         label: i === 0 ? "Init" : `Iter ${i}`,
         cost: d.totalCost,
     }));
 
-    // ── Chart D3 ─────────────────────────────────────────────────────────────
+    // ── D3 chart ─────────────────────────────────────────────────────────────
     const chartW = 580;
     const chartH = 200;
 
@@ -98,7 +99,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Grid horizontal
+        // Horizontal grid
         g.append("g")
             .call(d3.axisLeft(yScale).ticks(4).tickSize(-innerW).tickFormat(() => ""))
             .call(s => s.select(".domain").remove())
@@ -106,7 +107,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .attr("stroke", borderColor)
                 .attr("stroke-opacity", 0.55));
 
-        // Pengisian area
+        // Area fill
         g.append("path")
             .datum(chartData)
             .attr("fill", "#10b981")
@@ -117,7 +118,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .y1(d => yScale(d.cost))
                 .curve(d3.curveMonotoneX));
 
-        // Garis
+        // Line
         g.append("path")
             .datum(chartData)
             .attr("fill", "none")
@@ -128,7 +129,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .y(d => yScale(d.cost))
                 .curve(d3.curveMonotoneX));
 
-        // Titik
+        // Dots
         g.selectAll(".dot")
             .data(chartData)
             .enter().append("circle")
@@ -139,7 +140,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
             .attr("stroke", "#fff")
             .attr("stroke-width", 1.5);
 
-        // Label cost di atas titik
+        // Cost labels above dots
         g.selectAll(".cost-lbl")
             .data(chartData)
             .enter().append("text")
@@ -150,7 +151,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
             .attr("fill", mutedColor)
             .text(d => fmtCost(d.cost));
 
-        // Sumbu X
+        // X axis
         g.append("g")
             .attr("transform", `translate(0,${innerH})`)
             .call(d3.axisBottom(xScale).tickSize(0))
@@ -160,7 +161,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .attr("font-size", "11px")
                 .attr("dy", "1.3em"));
 
-        // Sumbu Y
+        // Y axis
         g.append("g")
             .call(d3.axisLeft(yScale).ticks(4).tickFormat(v => fmtCost(v as number)))
             .call(s => s.select(".domain").remove())
@@ -170,6 +171,43 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .attr("font-size", "11px"));
 
     }, [chartData, chartW, chartH]);
+
+    const tableJson = useMemo(() => {
+        if (!initEntry) return "{}";
+        return JSON.stringify({
+            tables: [
+                {
+                    key: "convergence_algorithm",
+                    title: `Konvergensi Algoritma (${numIterations} Iterasi)`,
+                    columnHeaders: [
+                        { header: "Iterasi" },
+                        { header: "Medoid Aktif" },
+                        { header: "Total Cost" },
+                        { header: "Status" },
+                    ],
+                    rows: [
+                        {
+                            rowHeader: ["Init"],
+                            "Medoid Aktif": `${medoidStr(initEntry.medoids)} (BUILD)`,
+                            "Total Cost": fmtCost(initEntry.totalCost),
+                            Status: numIterations === 0 && converged ? "Konvergen" : "Inisialisasi",
+                        },
+                        ...iterEntries.map((row, i) => {
+                            const isLast = i === iterEntries.length - 1;
+                            const isKonvergen = isLast && converged;
+                            const isBerubah = row.improvement > 0.0001;
+                            return {
+                                rowHeader: [String(i + 1)],
+                                "Medoid Aktif": medoidStr(row.medoids),
+                                "Total Cost": fmtCost(row.totalCost),
+                                Status: isKonvergen ? "Konvergen" : isBerubah ? "Berubah" : "Stabil",
+                            };
+                        }),
+                    ],
+                },
+            ],
+        });
+    }, [numIterations, initEntry, iterEntries, converged]);
 
     // ── render ───────────────────────────────────────────────────────────────
     if (data.length === 0) {
@@ -182,109 +220,12 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
 
     return (
         <div className="space-y-4">
-            {/* Header (judul panel) */}
-            <div className="flex items-center gap-3">
-                <span className="text-base font-semibold">Konvergensi Algoritma</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground border">
-                    {numIterations} ITERASI
-                </span>
+            {/* Table */}
+            <div className="overflow-x-auto">
+                <DataTableRenderer data={tableJson} />
             </div>
 
-            {/* Tabel */}
-            <div className="rounded-md border overflow-hidden text-sm">
-                <table className="w-full">
-                    <thead className="bg-muted/60">
-                        <tr className="border-b">
-                            <th className="px-4 py-2.5 text-left font-medium text-muted-foreground text-xs uppercase tracking-wide w-20">
-                                Iterasi
-                            </th>
-                            <th className="px-4 py-2.5 text-left font-medium text-muted-foreground text-xs uppercase tracking-wide">
-                                Medoid Aktif
-                            </th>
-                            <th className="px-4 py-2.5 text-right font-medium text-muted-foreground text-xs uppercase tracking-wide w-32">
-                                Total Cost
-                            </th>
-                            <th className="px-4 py-2.5 text-right font-medium text-muted-foreground text-xs uppercase tracking-wide w-36">
-                                Status
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* Baris Init */}
-                        <tr className="border-b">
-                            <td className="px-4 py-2.5 font-mono font-semibold text-amber-500 dark:text-amber-400">
-                                Init
-                            </td>
-                            <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
-                                {medoidStr(initEntry.medoids)}{" "}
-                                <span className="text-muted-foreground/60">(BUILD)</span>
-                            </td>
-                            <td className="px-4 py-2.5 text-right font-mono font-medium">
-                                {fmtCost(initEntry.totalCost)}
-                            </td>
-                            <td className="px-4 py-2.5 text-right">
-                                {numIterations === 0 && converged ? (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                                        ✓ Konvergen
-                                    </span>
-                                ) : (
-                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
-                                        Inisialisasi
-                                    </span>
-                                )}
-                            </td>
-                        </tr>
-
-                        {/* Baris iterasi */}
-                        {iterEntries.map((row, i) => {
-                            const isLast    = i === iterEntries.length - 1;
-                            const isKonvergen = isLast && converged;
-                            const isBerubah = row.improvement > 0.0001;
-
-                            return (
-                                <tr
-                                    key={row.iteration}
-                                    className={[
-                                        "border-b last:border-0 transition-colors",
-                                        isKonvergen
-                                            ? "bg-green-50 dark:bg-green-950/20"
-                                            : i % 2 === 1
-                                                ? "bg-muted/20"
-                                                : "",
-                                    ].join(" ")}
-                                >
-                                    <td className="px-4 py-2.5 font-mono font-semibold">
-                                        {i + 1}
-                                    </td>
-                                    <td className="px-4 py-2.5 font-mono text-xs text-foreground/80">
-                                        {medoidStr(row.medoids)}
-                                    </td>
-                                    <td className="px-4 py-2.5 text-right font-mono font-medium">
-                                        {fmtCost(row.totalCost)}
-                                    </td>
-                                    <td className="px-4 py-2.5 text-right">
-                                        {isKonvergen ? (
-                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                                                ✓ Konvergen
-                                            </span>
-                                        ) : isBerubah ? (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">
-                                                Berubah
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-muted text-muted-foreground">
-                                                Stabil
-                                            </span>
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Line chart konvergensi */}
+            {/* Line chart */}
             <div className="w-full flex justify-center pt-2">
                 <svg
                     ref={svgRef}

@@ -19,6 +19,7 @@ import { UnivariateGuide } from "./univariate/UnivariateGuide";
 import { Multivariate } from "./multivariate";
 import { RepeatedMeasures } from "./repeated-measures";
 import { KMeansClustering } from "./k-means/KMeansClustering";
+import { KMedoidsClustering } from "./k-medoids/KMedoidsClustering";
 import { DiscriminantAnalysis } from "./discriminant";
 import {
   SumOfSquares,
@@ -89,6 +90,8 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <MultinomialLogisticRegression />;
       case "k-means":
         return <KMeansClustering />;
+      case "k-medoids":
+        return <KMedoidsClustering />;
       case "discriminant":
         return <DiscriminantAnalysis />;
       case "univariate":

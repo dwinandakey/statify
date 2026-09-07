@@ -281,7 +281,8 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", chartW).attr("height", chartH)
+        svg.attr("width", chartW)
+            .attr("height", chartH)
             .attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
