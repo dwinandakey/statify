@@ -20,14 +20,8 @@ interface AutomaticKSelection {
 }
 
 interface ClusteringConfig {
-    options?: {
-        NormalizationMethod?: "none" | "zscore" | "minmax";
-        Standardize?: boolean;
-    };
     iterate: {
         Method?: string;
-        NormalizationMethod?: "none" | "zscore" | "minmax";
-        Standardize?: boolean;
     };
     results: {
         ShowCaseCount: boolean;
@@ -37,25 +31,6 @@ interface ClusteringConfig {
         Cluster: number;
         DistanceMetric?: string;
     };
-}
-
-function resolveNormalizationLabel(config: ClusteringConfig): string | null {
-    const method = config.options?.NormalizationMethod ?? config.iterate.NormalizationMethod;
-    if (method === "zscore") return "Z-score Standardization";
-    if (method === "minmax") return "Min-Max Normalization";
-
-    const hasStandardizeFlag = config.options?.Standardize !== undefined || config.iterate.Standardize !== undefined;
-    const standardizeFlag = config.options?.Standardize ?? config.iterate.Standardize;
-
-    if (hasStandardizeFlag) {
-        return standardizeFlag ? "Z-score Standardization" : null;
-    }
-
-    return null;
-}
-
-function resolveDistanceMetricLabel(metric?: string): string {
-    return metric === "manhattan" ? "Manhattan" : "Euclidean";
 }
 
 interface KMedoidsAnalysisResult {
@@ -86,48 +61,59 @@ export async function resultKMedoidsCluster(
         const method = config.iterate.Method ?? "PAM";
         const titleMessage = `K-Medoids Cluster Analysis (${method})`;
         const logId = await addLog({ log: titleMessage });
-        const normalizationLabel = resolveNormalizationLabel(config);
-        const distanceMetricLabel = resolveDistanceMetricLabel(config.main.DistanceMetric);
 
         // Collect all tables
         const allTables: Table[] = [];
 
         // 📊 Case Processing Summary
         const validCases = dataVariables.length;
-        const missingCases = 0;
-        const outlierCases = 0;
         allTables.push({
             key: "case_processing_summary",
             title: "Case Processing Summary",
             columnHeaders: [
-                { header: "Case Status", key: "caseStatus" },
-                { header: "N", key: "count" },
-                { header: "Percentage (%)", key: "percentage" },
+                {
+                    header: "Cases",
+                    key: "cases",
+                    children: [
+                        {
+                            header: "Valid",
+                            key: "valid",
+                            children: [
+                                { header: "N", key: "valid_n" },
+                                { header: "Percent", key: "valid_percent" },
+                            ],
+                        },
+                        {
+                            header: "Missing",
+                            key: "missing",
+                            children: [
+                                { header: "N", key: "missing_n" },
+                                { header: "Percent", key: "missing_percent" },
+                            ],
+                        },
+                        {
+                            header: "Total",
+                            key: "total",
+                            children: [
+                                { header: "N", key: "total_n" },
+                                { header: "Percent", key: "total_percent" },
+                            ],
+                        },
+                    ],
+                },
             ],
             rows: [
                 {
-                    rowHeader: [],
-                    caseStatus: "Valid",
-                    count: validCases.toString(),
-                    percentage: validCases > 0 ? "100.0" : "0.0",
+                    rowHeader: [""],
+                    valid_n: validCases.toString(),
+                    valid_percent: "100.0",
+                    missing_n: "0",
+                    missing_percent: "0.0",
+                    total_n: validCases.toString(),
+                    total_percent: "100.0",
                 },
                 {
-                    rowHeader: [],
-                    caseStatus: "Missing",
-                    count: missingCases.toString(),
-                    percentage: "0.0",
-                },
-                {
-                    rowHeader: [],
-                    caseStatus: "Outlier",
-                    count: outlierCases.toString(),
-                    percentage: "0.0",
-                },
-                {
-                    rowHeader: [],
-                    caseStatus: "Total",
-                    count: validCases.toString(),
-                    percentage: "100.0",
+                    rowHeader: [`a. ${method} Method`],
                 },
             ],
         });
@@ -155,49 +141,6 @@ export async function resultKMedoidsCluster(
                 }))
             });
         }
-
-        // 📋 Cluster Profiles (always shown)
-        const clusterProfiles = Array.from({ length: config.main.Cluster }, (_, clusterIdx) => {
-            const clusterMembers = dataVariables.filter((_, rowIndex) => result.labels[rowIndex] === clusterIdx);
-            const size = clusterMembers.length;
-            const percentage = validCases > 0 ? (size / validCases) * 100 : 0;
-
-            const row: Record<string, string | number> = {
-                Cluster: `Cluster ${clusterIdx + 1}`,
-                Size: size,
-                Percentage: `${percentage.toFixed(1)}%`,
-                MedoidID: result.medoids[clusterIdx] !== undefined ? `★ ${result.medoids[clusterIdx] + 1}` : "N/A",
-            };
-
-            variables.forEach((variable) => {
-                const values = clusterMembers
-                    .map((member) => member[variable.name])
-                    .filter((value): value is number => typeof value === "number" && isFinite(value));
-
-                row[`Avg_${variable.name}`] = values.length > 0
-                    ? (values.reduce((total, value) => total + value, 0) / values.length).toFixed(4)
-                    : "N/A";
-            });
-
-            return {
-                rowHeader: [],
-                ...row,
-            };
-        });
-
-        allTables.push({
-            key: "cluster_profiles",
-            title: "Cluster Profiles",
-            columnHeaders: [
-                { header: "Cluster", key: "Cluster" },
-                { header: "Size", key: "Size" },
-                { header: "Percentage (%)", key: "Percentage" },
-                { header: "Medoid ID", key: "MedoidID" },
-                { header: "Silhouette", key: "Silhouette" },
-                ...variables.map((v) => ({ header: `Avg ${v.label ?? v.name}`, key: `Avg_${v.name}` })),
-            ],
-            rows: clusterProfiles,
-        });
 
         // 🎯 Final Cluster Centers (Medoids) - always shown
         const medoidData = result.medoids.map((medoidIdx, clusterIdx) => {
@@ -287,15 +230,9 @@ export async function resultKMedoidsCluster(
         // Create single analytic with all results
         const analyticId = await addAnalytic(logId, {
             title: `K-Medoids Cluster Analysis`,
-            note: [
-                automaticKSelection
-                    ? `Automatic k selection: k=${automaticKSelection.optimalK} (${automaticKSelection.method})`
-                    : `Manual k selection: k=${config.main.Cluster}, Algorithm: ${method}`,
-                normalizationLabel ? `Preprocessing Method: ${normalizationLabel}` : null,
-                `Distance Metric: ${distanceMetricLabel}`,
-            ]
-                .filter((part): part is string => Boolean(part))
-                .join(", "),
+            note: automaticKSelection
+                ? `Automatic k selection: k=${automaticKSelection.optimalK} (${automaticKSelection.method})`
+                : `Manual k selection: k=${config.main.Cluster}, Algorithm: ${method}`,
         });
 
         // Add single statistic containing all tables

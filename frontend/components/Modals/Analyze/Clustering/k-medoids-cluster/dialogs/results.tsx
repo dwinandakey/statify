@@ -85,7 +85,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowClusterMembership"
-                                className="text-sm font-medium leading-none cursor-pointer"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                             >
                                 Cluster Membership
                             </label>
@@ -106,7 +106,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowCaseCount"
-                                className="text-sm font-medium leading-none cursor-pointer"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                             >
                                 Number of Cases per Cluster
                             </label>
@@ -127,7 +127,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowClusterMedoids"
-                                className="text-sm font-medium leading-none cursor-pointer"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                             >
                                 Cluster Medoids
                             </label>
@@ -143,50 +143,27 @@ export const KMedoidsClusterResults = ({
                     <Label className="font-semibold">Additional Information (Optional)</Label>
 
                     {iterateData?.Method !== "CLARA" && (
-                        <>
-                            <div className="flex items-start space-x-2">
-                                <Checkbox
-                                    id="ShowConvergenceAlgorithm"
-                                    checked={resultsState.ShowConvergenceAlgorithm}
-                                    onCheckedChange={(checked) =>
-                                        handleChange("ShowConvergenceAlgorithm", checked)
-                                    }
-                                />
-                                <div className="flex-1">
-                                    <label
-                                        htmlFor="ShowConvergenceAlgorithm"
-                                        className="text-sm font-medium leading-none cursor-pointer"
-                                    >
-                                        Konvergensi Algoritma
-                                    </label>
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                        Panel status konvergensi dan tabel histori iterasi.
-                                    </p>
-                                </div>
+                        <div className="flex items-start space-x-2">
+                            <Checkbox
+                                id="ShowConvergenceAlgorithm"
+                                checked={resultsState.ShowConvergenceAlgorithm}
+                                onCheckedChange={(checked) =>
+                                    handleChange("ShowConvergenceAlgorithm", checked)
+                                }
+                            />
+                            <div className="flex-1">
+                                <label
+                                    htmlFor="ShowConvergenceAlgorithm"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                >
+                                    Konvergensi Algoritma
+                                </label>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Tampilkan output konvergensi algoritma: panel status konvergensi, grafik biaya per iterasi,
+                                    dan tabel histori iterasi.
+                                </p>
                             </div>
-
-                            <div className="flex items-start space-x-2">
-                                <Checkbox
-                                    id="ShowConvergenceChart"
-                                    checked={resultsState.ShowConvergenceChart}
-                                    onCheckedChange={(checked) =>
-                                        handleChange("ShowConvergenceChart", checked)
-                                    }
-                                />
-                                <div className="flex-1">
-                                    <label
-                                        htmlFor="ShowConvergenceChart"
-                                        className="text-sm font-medium leading-none cursor-pointer"
-                                    >
-                                        Grafik Konvergensi Algoritma
-                                    </label>
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                        Grafik biaya (cost) dan perbaikan per iterasi, sebagai section
-                                        tersendiri. Bisa diaktifkan tanpa tabel di atas, atau sebaliknya.
-                                    </p>
-                                </div>
-                            </div>
-                        </>
+                        </div>
                     )}
 
                     {iterateData?.Method === "CLARA" && (
@@ -201,7 +178,7 @@ export const KMedoidsClusterResults = ({
                             <div className="flex-1">
                                 <label
                                     htmlFor="ShowSamplingHistory"
-                                    className="text-sm font-medium leading-none cursor-pointer"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                                 >
                                     Histori Sampling (CLARA)
                                 </label>

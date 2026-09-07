@@ -7,7 +7,6 @@ import type {
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { CheckedState } from "@radix-ui/react-checkbox";
-import { Label } from "@/components/ui/label";
 
 export const KMedoidsClusterSave = ({
     updateFormData,
@@ -38,17 +37,7 @@ export const KMedoidsClusterSave = ({
     return (
         <div className="h-full overflow-y-auto p-6">
             <div className="space-y-4">
-                <div className="w-full">
-                    <Label className="font-bold text-base mb-3 block">
-                        Save New Variables to Dataset
-                    </Label>
-                    <p className="text-sm text-muted-foreground mb-4">
-                        Menambah kolom baru ke dataset aktif — berbeda dari tab Results yang
-                        hanya menampilkan hasil pada output.
-                    </p>
-                </div>
-
-                <div className="flex items-start space-x-2">
+                <div className="flex items-center space-x-2">
                     <Checkbox
                         id="ClusterMembership"
                         checked={saveState.ClusterMembership}
@@ -56,20 +45,14 @@ export const KMedoidsClusterSave = ({
                             handleChange("ClusterMembership", checked)
                         }
                     />
-                    <div className="flex-1">
-                        <label
-                            htmlFor="ClusterMembership"
-                            className="text-sm font-medium leading-none cursor-pointer"
-                        >
-                            Cluster membership
-                        </label>
-                        <p className="text-xs text-muted-foreground mt-1">
-                            Simpan nomor cluster tiap case sebagai variabel baru (CLU_1, CLU_2, ...).
-                        </p>
-                    </div>
+                    <label
+                        htmlFor="ClusterMembership"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Cluster membership
+                    </label>
                 </div>
-
-                <div className="flex items-start space-x-2">
+                <div className="flex items-center space-x-2">
                     <Checkbox
                         id="DistanceClusterCenter"
                         checked={saveState.DistanceClusterCenter}
@@ -77,17 +60,12 @@ export const KMedoidsClusterSave = ({
                             handleChange("DistanceClusterCenter", checked)
                         }
                     />
-                    <div className="flex-1">
-                        <label
-                            htmlFor="DistanceClusterCenter"
-                            className="text-sm font-medium leading-none cursor-pointer"
-                        >
-                            Distance from medoid
-                        </label>
-                        <p className="text-xs text-muted-foreground mt-1">
-                            Simpan jarak tiap case ke medoid clusternya (DIS_1, DIS_2, ...).
-                        </p>
-                    </div>
+                    <label
+                        htmlFor="DistanceClusterCenter"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Distance from medoid
+                    </label>
                 </div>
             </div>
         </div>

@@ -20,13 +20,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import type {
-    MultiSelectTargetList,
-    MultiSelection,
-} from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/components/MultiSelectVariableList";
-import MultiSelectVariableList from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/components/MultiSelectVariableList";
+import type { TargetListConfig } from "@/components/Common/VariableListManager";
+import VariableListManager from "@/components/Common/VariableListManager";
 import type { Variable } from "@/types/Variable";
-import { getVariableIcon as getCommonVariableIcon } from "@/components/Common/iconHelper";
+import {
+    getKMedoidsVariableIcon,
+    getKMedoidsVariableIconByType,
+} from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/utils/iconHelper";
 import { HelpCircle } from "lucide-react";
 import {
     TooltipProvider,
@@ -49,7 +49,10 @@ export const KMedoidsClusterDialog = ({
     const [availableVars, setAvailableVars] = useState<Variable[]>([]);
     const [targetVars, setTargetVars] = useState<Variable[]>([]);
     const [caseVars, setCaseVars] = useState<Variable[]>([]);
-    const [selection, setSelection] = useState<MultiSelection | null>(null);
+    const [highlightedVariable, setHighlightedVariable] = useState<{
+        id: string;
+        source: string;
+    } | null>(null);
 
     // Gunakan ref agar callback tidak dibuat ulang saat updateFormData berubah
     const updateFormDataRef = useRef(updateFormData);
@@ -57,20 +60,16 @@ export const KMedoidsClusterDialog = ({
         updateFormDataRef.current = updateFormData;
     }, [updateFormData]);
 
-    const variableOrder = useMemo(() => {
-        const order = new Map<string, number>();
-        (globalVariables ?? []).forEach((variable, index) => order.set(variable.name, index));
-        return order;
-    }, [globalVariables]);
-
-    // Daftar "Available Variables" selalu kembali ke urutan aslinya
-    const sortByOriginalOrder = useCallback(
-        (variables: Variable[]) =>
-            [...variables].sort(
-                (a, b) =>
-                    (variableOrder.get(a.name) ?? 0) - (variableOrder.get(b.name) ?? 0)
-            ),
-        [variableOrder]
+    const listStateSetters: Record<
+        string,
+        React.Dispatch<React.SetStateAction<Variable[]>>
+    > = useMemo(
+        () => ({
+            available: setAvailableVars,
+            TargetVar: setTargetVars,
+            CaseTarget: setCaseVars,
+        }),
+        [setAvailableVars, setTargetVars, setCaseVars]
     );
 
     const numericSampleByName = useMemo(() => {
@@ -135,14 +134,13 @@ export const KMedoidsClusterDialog = ({
     const getVariableIconWithData = useCallback((variable: Variable) => {
         const sampleStats = numericSampleByName.get(variable.name);
         if (sampleStats && sampleStats.total > 0 && sampleStats.numeric === 0) {
-            return getCommonVariableIcon({ ...variable, measure: "nominal" });
+            return getKMedoidsVariableIconByType(false);
         }
-        return getCommonVariableIcon(variable);
+        return getKMedoidsVariableIcon(variable);
     }, [numericSampleByName]);
 
     useEffect(() => {
         setMainState({ ...data });
-        setSelection(null);
         const allVariables: Variable[] = globalVariables;
 
         const initialUsedNames = new Set(
@@ -168,100 +166,123 @@ export const KMedoidsClusterDialog = ({
         );
     }, [data, globalVariables]);
 
-    const targetListsConfig: MultiSelectTargetList[] = useMemo(
+    const targetListsConfig: TargetListConfig[] = useMemo(
         () => [
             {
                 id: "TargetVar",
                 title: "Variables:",
                 variables: targetVars,
                 height: "225px",
+                containerId: "kmedoids-analysis-variables",
             },
             {
                 id: "CaseTarget",
-                title: "Label Cases by: (hanya 1 variabel)",
+                title: "Label Cases by:",
                 variables: caseVars,
                 height: "auto",
                 maxItems: 1,
+                containerId: "kmedoids-label-cases-by",
             },
         ],
         [targetVars, caseVars]
     );
 
-    // Memindahkan satu atau banyak variabel sekaligus antar daftar
-    const handleMoveVariables = useCallback(
-        (variables: Variable[], fromListId: string, toListId: string) => {
-            if (variables.length === 0 || fromListId === toListId) {
-                return;
-            }
-
-            if (
-                toListId === "TargetVar" &&
-                variables.some((variable) => !isNumericVariable(variable))
-            ) {
+    const handleMoveVariable = useCallback(
+        (variable: Variable, fromListId: string, toListId: string) => {
+            if (toListId === "TargetVar" && !isNumericVariable(variable)) {
                 toast.error("variabel harus bertipe numerik");
                 return;
             }
 
-            // "Label Cases by" hanya menampung satu variabel
-            const accepted =
-                toListId === "CaseTarget" ? variables.slice(0, 1) : variables;
-            if (accepted.length === 0) {
-                return;
-            }
-            if (toListId === "CaseTarget" && variables.length > 1) {
-                toast.info(
-                    "Label Cases by hanya menerima 1 variabel, variabel pertama yang dipakai"
-                );
-            }
-
-            const acceptedNames = new Set(accepted.map((variable) => variable.name));
-            const withoutAccepted = (list: Variable[]) =>
-                list.filter((variable) => !acceptedNames.has(variable.name));
-
-            let nextAvailableVars = withoutAccepted(availableVars);
-            let nextTargetVars = withoutAccepted(targetVars);
-            let nextCaseVars = withoutAccepted(caseVars);
-
-            if (toListId === "TargetVar") {
-                nextTargetVars = [...nextTargetVars, ...accepted];
-            } else if (toListId === "CaseTarget") {
-                // Variabel label lama dikembalikan ke daftar tersedia
-                nextAvailableVars = [...nextAvailableVars, ...nextCaseVars];
-                nextCaseVars = accepted;
-            } else {
-                nextAvailableVars = [...nextAvailableVars, ...accepted];
-            }
-
-            setAvailableVars(sortByOriginalOrder(nextAvailableVars));
-            setTargetVars(nextTargetVars);
-            setCaseVars(nextCaseVars);
-
-            updateFormDataRef.current(
-                "TargetVar",
-                nextTargetVars.map((variable) => variable.name)
+            const fromSetter = listStateSetters[fromListId];
+            const toSetter = listStateSetters[toListId];
+            const toListConfig = targetListsConfig.find(
+                (l) => l.id === toListId
             );
-            updateFormDataRef.current("CaseTarget", nextCaseVars[0]?.name ?? null);
+
+            let updatedTargetVars: Variable[] | null = null;
+            let updatedCaseTarget: string | null = null;
+            let shouldUpdateTargetVars = false;
+            let shouldUpdateCaseTarget = false;
+
+            // Hapus dari daftar sumber
+            if (fromSetter) {
+                if (fromListId === "TargetVar") {
+                    fromSetter((prev) => {
+                        const newVars = prev.filter((v) => v.name !== variable.name);
+                        updatedTargetVars = newVars;
+                        shouldUpdateTargetVars = true;
+                        return newVars;
+                    });
+                } else if (fromListId === "CaseTarget") {
+                    fromSetter((prev) => {
+                        updatedCaseTarget = null;
+                        shouldUpdateCaseTarget = true;
+                        return prev.filter((v) => v.name !== variable.name);
+                    });
+                } else {
+                    fromSetter((prev) => prev.filter((v) => v.name !== variable.name));
+                }
+            }
+
+            // Tambahkan ke daftar tujuan
+            if (toSetter) {
+                if (toListConfig?.maxItems === 1) {
+                    toSetter((prev) => {
+                        if (prev.length > 0) {
+                            const existingVar = prev[0];
+                            setAvailableVars((avail) => [
+                                ...avail,
+                                existingVar,
+                            ]);
+                        }
+                        if (toListId === "CaseTarget") {
+                            updatedCaseTarget = variable.name;
+                            shouldUpdateCaseTarget = true;
+                        }
+                        return [variable];
+                    });
+                } else {
+                    if (toListId === "TargetVar") {
+                        toSetter((prev) => {
+                            const newVars = [...prev, variable];
+                            updatedTargetVars = newVars;
+                            shouldUpdateTargetVars = true;
+                            return newVars;
+                        });
+                    } else {
+                        toSetter((prev) => [...prev, variable]);
+                    }
+                }
+            }
+
+            // Perbarui induk setelah semua pembaruan state diantrikan
+            queueMicrotask(() => {
+                if (shouldUpdateTargetVars && updatedTargetVars !== null) {
+                    updateFormDataRef.current("TargetVar", updatedTargetVars.map(v => v.name));
+                }
+                if (shouldUpdateCaseTarget) {
+                    updateFormDataRef.current("CaseTarget", updatedCaseTarget);
+                }
+            });
         },
-        [availableVars, caseVars, isNumericVariable, sortByOriginalOrder, targetVars]
+        [isNumericVariable, listStateSetters, targetListsConfig, setAvailableVars]
     );
 
     const handleReorderVariable = useCallback(
         (listId: string, newVariables: Variable[]) => {
-            if (listId === "TargetVar") {
-                setTargetVars(newVariables);
-                updateFormDataRef.current(
-                    "TargetVar",
-                    newVariables.map((variable) => variable.name)
-                );
-                return;
+            const setter = listStateSetters[listId];
+            if (setter) {
+                setter(newVariables);
+                // Perbarui induk setelah pembaruan state diantrikan
+                if (listId === "TargetVar") {
+                    queueMicrotask(() => {
+                        updateFormDataRef.current("TargetVar", newVariables.map(v => v.name));
+                    });
+                }
             }
-            if (listId === "CaseTarget") {
-                setCaseVars(newVariables);
-                return;
-            }
-            setAvailableVars(newVariables);
         },
-        []
+        [listStateSetters]
     );
 
     const handleChange = useCallback((
@@ -283,17 +304,32 @@ export const KMedoidsClusterDialog = ({
     return (
         <div className="h-full overflow-y-auto p-6">
             <div className="space-y-6">
-                {/* Data type legend removed per request */}
+                {/* Legenda Tipe Data */}
+                <div className="bg-muted/40 border rounded-md p-3">
+                    <div className="flex items-center gap-4 text-xs">
+                        <span className="font-semibold text-muted-foreground">Data Type Icons:</span>
+                        <div className="flex items-center gap-1">
+                            <span className="text-green-600 font-semibold text-xs">123</span>
+                            <span className="text-muted-foreground">Numeric</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <span className="text-blue-500 font-semibold text-xs">ABC</span>
+                            <span className="text-muted-foreground">Categorical/String</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div className="min-h-[400px]">
-                    <MultiSelectVariableList
+                    <VariableListManager
                         availableVariables={availableVars}
                         targetLists={targetListsConfig}
-                        selection={selection}
-                        setSelection={setSelection}
-                        onMoveVariables={handleMoveVariables}
+                        variableIdKey="name"
+                        highlightedVariable={highlightedVariable}
+                        setHighlightedVariable={setHighlightedVariable}
+                        onMoveVariable={handleMoveVariable}
                         onReorderVariable={handleReorderVariable}
                         getVariableIcon={getVariableIconWithData}
+                        showArrowButtons={true}
                         availableListHeight="350px"
                     />
                 </div>
@@ -323,8 +359,8 @@ export const KMedoidsClusterDialog = ({
                                 </div>
 
                                 {mainState.ClusterMode === ClusterMode.Manual && (
-                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 ml-6">
-                                        <Label className="text-sm text-muted-foreground w-16 shrink-0">k =</Label>
+                                    <div className="flex items-center gap-3 ml-6">
+                                        <Label className="text-sm text-muted-foreground w-20">k =</Label>
                                         <Input
                                             id="kmedoids-number-of-clusters"
                                             type="number"
@@ -334,7 +370,7 @@ export const KMedoidsClusterDialog = ({
                                             onChange={(e) =>
                                                 handleChange("Cluster", Number(e.target.value))
                                             }
-                                            className="w-20 shrink-0"
+                                            className="w-24"
                                         />
                                         <span className="text-xs text-muted-foreground">(min: 2)</span>
                                     </div>
@@ -351,8 +387,8 @@ export const KMedoidsClusterDialog = ({
                                 {mainState.ClusterMode === ClusterMode.Automatic && (
                                     <div className="space-y-3 ml-6 border-l-2 border-muted pl-4">
                                         {/* Rentang k */}
-                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                            <Label className="text-sm text-muted-foreground w-16 shrink-0 whitespace-nowrap">k range:</Label>
+                                        <div className="flex items-center gap-3">
+                                            <Label className="text-sm text-muted-foreground w-20">k range:</Label>
                                             <Input
                                                 id="kmedoids-auto-kmin"
                                                 type="number"
@@ -363,9 +399,9 @@ export const KMedoidsClusterDialog = ({
                                                 onChange={(e) =>
                                                     handleChange("AutoKMin", Number(e.target.value))
                                                 }
-                                                className="w-14 shrink-0"
+                                                className="w-20"
                                             />
-                                            <span className="text-xs text-muted-foreground shrink-0">to</span>
+                                            <span className="text-xs text-muted-foreground">to</span>
                                             <Input
                                                 id="kmedoids-auto-kmax"
                                                 type="number"
@@ -375,19 +411,19 @@ export const KMedoidsClusterDialog = ({
                                                 onChange={(e) =>
                                                     handleChange("AutoKMax", Number(e.target.value))
                                                 }
-                                                className="w-14 shrink-0"
+                                                className="w-20"
                                             />
                                         </div>
                                         {/* Metode */}
-                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                            <Label className="text-sm text-muted-foreground w-16 shrink-0 whitespace-nowrap">Method:</Label>
+                                        <div className="flex items-center gap-3">
+                                            <Label className="text-sm text-muted-foreground w-20">Method:</Label>
                                             <Select
                                                 value={mainState.AutoKMethod}
                                                 onValueChange={(val) =>
                                                     handleChange("AutoKMethod", val as AutoKMethod)
                                                 }
                                             >
-                                                <SelectTrigger className="w-full max-w-52">
+                                                <SelectTrigger className="w-52">
                                                     <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>

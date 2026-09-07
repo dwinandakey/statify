@@ -26,7 +26,7 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
     const avgScore = summary.averageSilhouetteScore ?? 0;
     const totalSwapCost = summary.swapCost ?? summary.totalCost;
     const averageSwapCost = summary.avgCost ?? (summary.numCases > 0 ? totalSwapCost / summary.numCases : 0);
-    const averageBuildCost = summary.buildCost != null && summary.numCases > 0
+    const averageBuildCost = summary.buildCost !== undefined && summary.buildCost !== null && summary.numCases > 0
         ? summary.buildCost / summary.numCases
         : null;
     const silhouetteQuality =
@@ -68,14 +68,14 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
                             {!isSamplingMethod && (
                                 <div className="min-w-0">
                                     <div className="text-base font-bold leading-tight tabular-nums sm:text-lg xl:text-xl">
-                                        {averageBuildCost !== null && isFinite(averageBuildCost) ? averageBuildCost.toFixed(4) : 'N/A'}
+                                        {averageBuildCost !== null && isFinite(averageBuildCost) ? averageBuildCost.toFixed(6) : 'N/A'}
                                     </div>
                                     <p className="text-xs text-muted-foreground">Average Cost (BUILD)</p>
                                 </div>
                             )}
                             <div className="min-w-0">
                                 <div className="text-base font-bold leading-tight tabular-nums sm:text-lg xl:text-xl">
-                                    {isFinite(averageSwapCost) ? averageSwapCost.toFixed(4) : 'N/A'}
+                                    {isFinite(averageSwapCost) ? averageSwapCost.toFixed(6) : 'N/A'}
                                 </div>
                                 <p className="text-xs text-muted-foreground">Average Cost (SWAP)</p>
                             </div>

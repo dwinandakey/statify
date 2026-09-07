@@ -1,4 +1,3 @@
-import type React from "react";
 import type { Variable } from "@/types/Variable";
 
 /**
@@ -223,16 +222,8 @@ export type KMedoidsClusterResultsType = {
     /** Tampilkan total cost / dissimilarity */
     ShowTotalCost: boolean;
 
-    /** Tampilkan output Konvergensi Algoritma: panel status + tabel histori iterasi.
-     *  Grafik biaya per iterasi punya checkbox sendiri (ShowConvergenceChart) di grup yang sama. */
+    /** Tampilkan output Konvergensi Algoritma (tab convergence + chart + detail iterasi) */
     ShowConvergenceAlgorithm: boolean;
-
-    /**
-     * Tampilkan grafik biaya (cost) per iterasi sebagai section terpisah pada output.
-     * Satu grup dengan "Konvergensi Algoritma" di tab Results, tetapi tetap bisa
-     * diaktifkan/dimatikan sendiri (tabel tanpa grafik, atau sebaliknya).
-     */
-    ShowConvergenceChart: boolean;
 
     /** Tampilkan output Histori Sampling (khusus CLARA) */
     ShowSamplingHistory: boolean;
@@ -260,15 +251,15 @@ export type KMedoidsClusterEvaluationType = {
     /** Tampilkan silhouette plot per case */
     ShowSilhouettePlot: boolean;
 
+    /** Tampilkan panel silhouette score ringkas per klaster */
+    ShowSilhouetteByCluster: boolean;
+
     /** Elbow Method — grafik SSE vs k untuk menentukan titik siku optimal */
     ShowElbowPlot: boolean;
 
-    /** Grafik K Optimal (kurva silhouette / elbow) pada output.
-     *  Satu grup dengan tabelnya (ShowOptimalKTable) di tab Evaluation. */
+    /** Grafik evaluasi k — menampilkan Silhouette dan/atau Elbow dalam satu panel
+     *  hanya relevan jika ClusterMode = Automatic */
     ShowOptimalKChart: boolean;
-
-    /** Tabel data K optimal — nilai cost & silhouette untuk tiap kandidat k. */
-    ShowOptimalKTable: boolean;
 
     /** Tampilkan panel ringkasan kualitas clustering (overall silhouette interpretation) */
     ShowOverallQualityAssessment: boolean;
@@ -325,19 +316,14 @@ export type KMedoidsClusterOptionsType = {
     /** Tampilkan panel Cluster Size Distribution pada tab visualisasi output */
     ShowClusterSizeDistribution: boolean;
 
+    /** Tampilkan panel Profil Atribut Klaster pada tab visualisasi output */
+    ShowClusterAttributeProfile: boolean;
+
     /** Tampilkan panel Distance Matrix Between Medoids pada tab visualisasi output */
     ShowDistanceMatrixBetweenMedoids: boolean;
 
     /** Tampilkan tabel matriks jarak pada tab Data Tables */
     ShowDistanceMatrixTable: boolean;
-
-    /** @deprecated Pindah ke tab Evaluation (KMedoidsClusterEvaluationType.ShowOptimalKChart).
-     *  Disisakan opsional agar konfigurasi lama di IndexedDB tetap terbaca. */
-    ShowOptimalKChart?: boolean;
-
-    /** @deprecated Pindah ke tab Results (KMedoidsClusterResultsType.ShowConvergenceChart).
-     *  Disisakan opsional agar konfigurasi lama di IndexedDB tetap terbaca. */
-    ShowConvergenceChart?: boolean;
 
     /** Missing value handling: exclude listwise */
     ExcludeListWise: boolean;
@@ -358,35 +344,12 @@ export type KMedoidsClusterOptionsType = {
     NormalizationMethod: NormalizationMethod;
 };
 
-/**
- * Ringkasan missing value pada variabel yang sedang dipilih, dihitung di container.
- * Dipakai untuk notice inline di atas grup Missing Values. `null` berarti tidak ada
- * missing value (atau belum ada variabel/data yang dipilih).
- */
-export type KMedoidsMissingStats = {
-    /** Jumlah baris yang punya minimal satu missing value pada variabel terpilih */
-    rowsWithMissing: number;
-
-    /** Total baris pada dataset aktif */
-    totalRows: number;
-
-    /** Persentase rowsWithMissing terhadap totalRows, sudah diformat 1 desimal */
-    missingPercent: string;
-
-    /** Maksimal 5 variabel terdampak terbanyak, format "nama (jumlah)" dipisah koma */
-    topVariables: string;
-
-    /** Sisa variabel terdampak di luar 5 teratas; 0 jika semua sudah tercantum */
-    remainingVariables: number;
-};
-
 export type KMedoidsClusterOptionsProps = {
     updateFormData: (
         field: keyof KMedoidsClusterOptionsType,
         value: string | boolean | null
     ) => void;
     data: KMedoidsClusterOptionsType;
-    missingStats?: KMedoidsMissingStats | null;
 };
 
 /**
