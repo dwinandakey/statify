@@ -233,9 +233,9 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .text("Silhouette Score");
 
         // ── Current-K reference line ──────────────────────────────────────
-        if (currentK !== null && currentK !== undefined) {
+        if (currentK !== null) {
             const cx = xScale(currentK);
-            if (cx !== undefined) {
+            if (cx !== null) {
                 g.append("line")
                     .attr("x1", cx)
                     .attr("x2", cx)

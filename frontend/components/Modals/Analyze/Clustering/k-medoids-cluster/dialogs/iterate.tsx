@@ -18,89 +18,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { HelpCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import {
     TooltipProvider,
     Tooltip,
     TooltipTrigger,
     TooltipContent,
 } from "@/components/ui/tooltip";
-import { useDataStore } from "@/stores/useDataStore";
-
-// Fungsi pembantu untuk mendapatkan rekomendasi berdasarkan metode dan ukuran dataset
-const getMethodAdvisory = (method: KMedoidsMethod, n: number) => {
-    switch (method) {
-        case KMedoidsMethod.PAM:
-            if (n < 200) {
-                return {
-                    status: "optimal",
-                    badgeText: "Sangat Cocok",
-                    badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-                    complexity: "Waktu: O(k(n-k)²), Memori: O(n²)",
-                    details: "PAM menghitung matriks dissimilarity penuh. Sangat akurat dan optimal untuk dataset kecil Anda.",
-                    recommendation: "Gunakan parameter default (n_init = 10) untuk hasil terbaik."
-                };
-            } else if (n <= 1000) {
-                return {
-                    status: "warning",
-                    badgeText: "Dapat Diterima",
-                    badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-                    complexity: "Waktu: O(k(n-k)²), Memori: O(n²)",
-                    details: `Untuk ${n} data, PAM akan menghitung sekitar ${(n * n / 1000).toFixed(0)} ribu pasang jarak. Masih sangat presisi, namun eksekusi mulai terasa melambat.`,
-                    recommendation: "Pertimbangkan mengurangi Number of Initializations menjadi 3-5."
-                };
-            } else {
-                return {
-                    status: "critical",
-                    badgeText: "Kurang Direkomendasikan",
-                    badgeClass: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
-                    complexity: "Waktu: O(k(n-k)²), Memori: O(n²)",
-                    details: `Dataset cukup besar (${n} data). Matriks jarak PAM memerlukan ${((n * n) / 1000000).toFixed(2)} juta kalkulasi, yang dapat membebani browser thread.`,
-                    recommendation: "Sangat disarankan beralih ke CLARA (Large Datasets) atau CLARANS."
-                };
-            }
-        case KMedoidsMethod.CLARA:
-            if (n < 200) {
-                return {
-                    status: "warning",
-                    badgeText: "Kurang Optimal",
-                    badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-                    complexity: "Waktu: O(k·s² + k(n-s)), Memori: O(s² + n)",
-                    details: `CLARA dirancang untuk data besar menggunakan sampling (default sample size: 40 + 2k). Untuk data kecil (${n} objek), sampling dapat menghilangkan representasi variasi data.`,
-                    recommendation: "Disarankan menggunakan PAM untuk akurasi maksimal pada data kecil."
-                };
-            } else {
-                return {
-                    status: "optimal",
-                    badgeText: "Sangat Cocok",
-                    badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-                    complexity: "Waktu: O(k·s² + k(n-s)), Memori: O(s² + n)",
-                    details: `Sangat efisien untuk dataset besar (${n} data). CLARA menarik sub-sampel kecil dan melakukan pengklasteran PAM di sub-sampel tersebut secara berulang.`,
-                    recommendation: "Parameter default (5 sample runs) sudah sangat optimal."
-                };
-            }
-        case KMedoidsMethod.CLARANS:
-            if (n < 100) {
-                return {
-                    status: "warning",
-                    badgeText: "Dapat Diterima",
-                    badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-                    complexity: "Waktu: O(n²) worst-case, Memori: O(n)",
-                    details: "CLARANS melakukan pencarian acak pada grafik medoid. Untuk data sangat kecil, PAM lebih presisi dan memiliki performa kecepatan yang sama.",
-                    recommendation: "Gunakan PAM jika ingin presisi mutlak pada dataset sangat kecil."
-                };
-            } else {
-                return {
-                    status: "optimal",
-                    badgeText: "Sangat Cocok",
-                    badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-                    complexity: "Waktu: O(n²) worst-case, Memori: O(n)",
-                    details: `Keseimbangan terbaik antara kualitas klaster dan kecepatan untuk data ukuran menengah-besar (${n} data). CLARANS tidak dibatasi oleh sub-sampel statis seperti CLARA.`,
-                    recommendation: "Gunakan parameter auto untuk Max Neighbors guna efisiensi terbaik."
-                };
-            }
-    }
-};
 
 /**
  * ========================================
@@ -118,26 +42,25 @@ export const KMedoidsClusterIterate = ({
 }: KMedoidsClusterIterateProps) => {
     const [iterateState, setIterateState] = useState<KMedoidsClusterIterateType>({
         ...data,
-        SeedMode: data.SeedMode ?? (data.RandomSeed === null ? "default" : "custom"),
+        SeedMode: data.SeedMode ?? (data.RandomSeed == null ? "default" : "custom"),
     });
     
-    const dataCount = useDataStore((state) => state.data.length);
     const normalizedMethod = String(iterateState.Method ?? "").trim().toUpperCase();
     const isPam = normalizedMethod === "PAM";
     const isClara = normalizedMethod === "CLARA";
     const isClarans = normalizedMethod === "CLARANS";
 
-    // Hitung nilai maksimum k berdasarkan mode clustering
+    // Calculate maximum k possible based on clustering mode
     const maxK = mainData.ClusterMode === "automatic" 
         ? (mainData.AutoKMax ?? 10) 
         : (mainData.Cluster ?? 2);
-    // CLARA mengharuskan sample_size > k.
+    // CLARA requires sample_size > k.
     const minSampleSize = maxK + 1;
 
     useEffect(() => {
         setIterateState({
             ...data,
-            SeedMode: data.SeedMode ?? (data.RandomSeed === null ? "default" : "custom"),
+            SeedMode: data.SeedMode ?? (data.RandomSeed == null ? "default" : "custom"),
         });
     }, [data]);
 
@@ -149,7 +72,7 @@ export const KMedoidsClusterIterate = ({
             ...prevState,
             [field]: value,
         }));
-        // Sinkronkan state form induk agar Execute menggunakan konfigurasi iterate terbaru.
+        // Keep parent form state in sync so Execute uses the latest iterate config.
         updateFormData(field, value);
     };
 
@@ -170,7 +93,7 @@ export const KMedoidsClusterIterate = ({
     return (
         <div className="h-full overflow-y-auto p-6">
             <div className="space-y-6">
-                {/* ========== METODE K-MEDOIDS ========== */}
+                {/* ========== K-MEDOIDS METHOD ========== */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <div className="flex items-center gap-2">
                         <Label className="font-bold">K-Medoids Method</Label>
@@ -210,43 +133,9 @@ export const KMedoidsClusterIterate = ({
                             </SelectItem>
                         </SelectContent>
                     </Select>
-
-                    {/* KARTU REKOMENDASI DINAMIS */}
-                    {(() => {
-                        const advice = getMethodAdvisory(iterateState.Method, dataCount);
-                        const isOptimal = advice.status === "optimal";
-                        const isWarning = advice.status === "warning";
-                        
-                        return (
-                            <div className="mt-3 rounded-lg border bg-muted/40 p-4 transition-all duration-300 animate-in slide-in-from-top-2 duration-300">
-                                <div className="flex items-start gap-3">
-                                    {isOptimal ? (
-                                        <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                                    ) : isWarning ? (
-                                        <Info className="mt-0.5 h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0" />
-                                    ) : (
-                                        <AlertTriangle className="mt-0.5 h-5 w-5 text-rose-600 dark:text-rose-400 shrink-0" />
-                                    )}
-                                    <div className="space-y-1.5 flex-1">
-                                        <div className="flex items-center justify-between gap-2 flex-wrap">
-                                            <span className="text-sm font-semibold">
-                                                Analisis Kelayakan Algoritma
-                                            </span>
-                                            <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold ${advice.badgeClass}`}>
-                                                {advice.badgeText}
-                                            </span>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">
-                                            {advice.details}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })()}
                 </div>
 
-                {/* ========== PARAMETER ITERASI UMUM ========== */}
+                {/* ========== GENERAL ITERATION PARAMETERS ========== */}
                 <div className="flex flex-col gap-3 border-b pb-4">
                     <div className="flex items-center gap-2">
                         <Label className="font-bold">Iteration Parameters</Label>
@@ -269,7 +158,7 @@ export const KMedoidsClusterIterate = ({
                             <Label>Maximum Iterations:</Label>
                             <Input
                                 type="number"
-                                value={iterateState.MaximumIterations ?? ""}
+                                value={iterateState.MaximumIterations || ""}
                                 min={1}
                                 placeholder="300"
                                 onChange={(e) =>
@@ -322,7 +211,7 @@ export const KMedoidsClusterIterate = ({
                                     placeholder="Default"
                                     onChange={(e) => {
                                         const nextValue = e.target.value === "" ? null : Number(e.target.value);
-                                        if (nextValue === null) {
+                                        if (nextValue == null) {
                                             handleSeedModeChange("default");
                                             return;
                                         }
@@ -340,7 +229,7 @@ export const KMedoidsClusterIterate = ({
                                 <Label>Number of Initializations:</Label>
                                 <Input
                                     type="number"
-                                    value={iterateState.NumberOfInitializations ?? ""}
+                                    value={iterateState.NumberOfInitializations || ""}
                                     min={1}
                                     placeholder="10"
                                     onChange={(e) =>
@@ -355,7 +244,7 @@ export const KMedoidsClusterIterate = ({
                     </div>
                 </div>
 
-                {/* ========== PARAMETER KHUSUS CLARA ========== */}
+                {/* ========== CLARA-SPECIFIC PARAMETERS ========== */}
                 {isClara && (
                     <div className="flex flex-col gap-3 border-b pb-4 bg-muted/30 p-3 rounded">
                         <Label className="font-bold">CLARA Parameters</Label>
@@ -364,7 +253,7 @@ export const KMedoidsClusterIterate = ({
                             <Label>Sample Size:</Label>
                             <Input
                                 type="number"
-                                value={iterateState.SampleSize ?? ""}
+                                value={iterateState.SampleSize || ""}
                                 min={minSampleSize}
                                 placeholder={`Auto: 40 + 2k`}
                                 onChange={(e) => {
@@ -390,7 +279,7 @@ export const KMedoidsClusterIterate = ({
                             <Label>Number of Samples:</Label>
                             <Input
                                 type="number"
-                                value={iterateState.NumSamples ?? ""}
+                                value={iterateState.NumSamples || ""}
                                 min={1}
                                 max={20}
                                 onChange={(e) =>
@@ -404,7 +293,7 @@ export const KMedoidsClusterIterate = ({
                     </div>
                 )}
 
-                {/* ========== PARAMETER KHUSUS CLARANS ========== */}
+                {/* ========== CLARANS-SPECIFIC PARAMETERS ========== */}
                 {isClarans && (
                     <div className="flex flex-col gap-3 border-b pb-4 bg-muted/30 p-3 rounded">
                         <div className="flex items-center gap-2">
@@ -428,7 +317,7 @@ export const KMedoidsClusterIterate = ({
                             <Label>Number of Local Minima:</Label>
                             <Input
                                 type="number"
-                                value={iterateState.NumLocal ?? ""}
+                                value={iterateState.NumLocal || ""}
                                 min={1}
                                 placeholder="2"
                                 onChange={(e) =>

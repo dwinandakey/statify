@@ -86,7 +86,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             });
 
         // ── Tooltip ───────────────────────────────────────────────────────────
-        if (!svgRef.current) return;
         const parent = svgRef.current.parentElement;
         if (!parent) return;
 
