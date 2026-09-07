@@ -13,9 +13,13 @@ import { Explore } from "./explore";
 import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
 import { BinaryLogisticRegression } from "./binary-logistic";
+import { OrdinalRegression } from "./ordinal-regression";
 import { MultinomialLogisticRegression } from "./multinomial-logistic";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
+import { Multivariate } from "./multivariate";
+import { RepeatedMeasures } from "./repeated-measures";
 import { KMeansClustering } from "./k-means/KMeansClustering";
+import { DiscriminantAnalysis } from "./discriminant";
 import {
   SumOfSquares,
   EMMeans,
@@ -79,10 +83,14 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <LinearRegression />;
       case "binary-logistic":
         return <BinaryLogisticRegression />;
+      case "ordinal-regression":
+        return <OrdinalRegression />;
       case "multinomial-logistic":
         return <MultinomialLogisticRegression />;
       case "k-means":
         return <KMeansClustering />;
+      case "discriminant":
+        return <DiscriminantAnalysis />;
       case "univariate":
         return <UnivariateGuide />;
       case "univariate-sum-of-squares":
@@ -101,6 +109,10 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <HeteroscedasticityTests />;
       case "univariate-lack-of-fit-tests":
         return <LackOfFitTests />;
+      case "multivariate":
+        return <Multivariate />;
+      case "repeated-measures":
+        return <RepeatedMeasures />;
       default:
         break;
     }

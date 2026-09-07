@@ -54,7 +54,7 @@ const getVariableIcon = (variable: Variable) => {
     }
 };
 
-const getDisplayName = (variable: Variable) => variable.label ?? variable.name;
+const getDisplayName = (variable: Variable) => variable.name || variable.label || "";
 
 const scrollableListContentClass = "min-w-full w-max p-2 pr-4 pb-4";
 const scrollableItemClass = "w-full min-w-max";
@@ -125,24 +125,23 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
                     <ScrollArea className="h-full">
                         <div className={scrollableListContentClass}>
-                        {allVars.map((variable) => {
-                            const key = getVariableKey(variable);
-                            const isSelected = selectedKeys.has(key);
-                            return (
-                                <div
-                                    key={key}
-                                    className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${
-                                        isSelected
-                                            ? "border-primary/50 bg-accent text-accent-foreground"
-                                            : "border-transparent hover:bg-accent/50"
-                                    }`}
-                                    onClick={(event) => handleVariableClick(event, variable)}
-                                >
-                                    {getVariableIcon(variable)}
-                                    <span className={scrollableNameClass}>{getDisplayName(variable)}</span>
-                                </div>
-                            );
-                        })}
+                            {allVars.map((variable) => {
+                                const key = getVariableKey(variable);
+                                const isSelected = selectedKeys.has(key);
+                                return (
+                                    <div
+                                        key={key}
+                                        className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${isSelected
+                                                ? "border-primary/50 bg-accent text-accent-foreground"
+                                                : "border-transparent hover:bg-accent/50"
+                                            }`}
+                                        onClick={(event) => handleVariableClick(event, variable)}
+                                    >
+                                        {getVariableIcon(variable)}
+                                        <span className={scrollableNameClass}>{getDisplayName(variable)}</span>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </ScrollArea>
                 </div>
@@ -165,24 +164,26 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
                     <ScrollArea className="h-full">
                         <div className={scrollableListContentClass}>
-                        {params.locationModel.length === 0 ? (
-                            <span className="text-xs italic text-muted-foreground">Select variable...</span>
-                        ) : (
-                            params.locationModel.map((term) => {
-                                const variableTerm = !isInteraction(term) ? term : null;
-                                return (
-                                    <div
-                                        key={isInteraction(term) ? term.id : getVariableKey(term)}
-                                        className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive`}
-                                        onClick={() => handleRemove(term)}
-                                        title="Click to remove"
-                                    >
-                                        {variableTerm ? getVariableIcon(variableTerm) : null}
-                                        <span className={scrollableNameClass}>{term.name}</span>
-                                    </div>
-                                );
-                            })
-                        )}
+                            {params.locationModel.length === 0 ? (
+                                <span className="text-xs italic text-muted-foreground">Select variable...</span>
+                            ) : (
+                                params.locationModel.map((term) => {
+                                    const variableTerm = !isInteraction(term) ? term : null;
+                                    return (
+                                        <div
+                                            key={isInteraction(term) ? term.id : getVariableKey(term)}
+                                            className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border border-transparent p-1.5 text-sm transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive`}
+                                            onClick={() => handleRemove(term)}
+                                            title="Click to remove"
+                                        >
+                                            {variableTerm ? getVariableIcon(variableTerm) : null}
+                                            <span className={scrollableNameClass}>
+                                                {variableTerm ? getDisplayName(variableTerm) : term.name}
+                                            </span>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     </ScrollArea>
                 </div>

@@ -3,9 +3,15 @@ import { AnalysisSection } from "../types/ordinal";
 
 export const formatParameterEstimates = (
   payload: any[],
-  options?: { linkFunctionNote?: string }
+  options?: { linkFunctionNote?: string; confidenceInterval?: number },
 ): { sections: AnalysisSection[] } => {
   const sections: AnalysisSection[] = [];
+  const confidenceInterval = Number.isFinite(options?.confidenceInterval)
+    ? options?.confidenceInterval
+    : 95;
+  const confidenceIntervalLabel = Number.isInteger(confidenceInterval)
+    ? `${confidenceInterval}% Confidence Interval`
+    : `${safeFixed(confidenceInterval, 2)}% Confidence Interval`;
 
   const data = {
     columnHeaders: [
@@ -22,7 +28,7 @@ export const formatParameterEstimates = (
       { header: "df", key: "df" },
       { header: "Sig.", key: "sig" },
       {
-        header: "95% Confidence Interval",
+        header: confidenceIntervalLabel,
         children: [
           { header: "Lower", key: "lower" },
           { header: "Upper", key: "upper" },
@@ -34,7 +40,7 @@ export const formatParameterEstimates = (
       const isRedundant = Boolean(
         r.isRedundant ??
         r.is_redundant ??
-        (r.degreesOfFreedom === 0 || r.df === 0)
+        (r.degreesOfFreedom === 0 || r.df === 0),
       );
       const dfValue = r.degreesOfFreedom ?? r.df;
       return {
@@ -51,23 +57,24 @@ export const formatParameterEstimates = (
   };
 
   const hasRedundant = payload.some((r: any) =>
-    Boolean(r.isRedundant ?? r.is_redundant ?? (r.degreesOfFreedom === 0 || r.df === 0))
+    Boolean(
+      r.isRedundant ??
+      r.is_redundant ??
+      (r.degreesOfFreedom === 0 || r.df === 0),
+    ),
   );
   const notes = [
     options?.linkFunctionNote,
-    hasRedundant ? "0. This parameter is set to zero because it is redundant." : undefined,
+    hasRedundant
+      ? "0. This parameter is set to zero because it is redundant."
+      : undefined,
   ].filter(Boolean);
 
   sections.push(
-    createSection(
-      "ordinal_parameter_estimates",
-      "Parameter Estimates",
-      data,
-      {
-        description: "Estimasi parameter model",
-        note: notes.length > 0 ? notes.join("\n") : undefined,
-      }
-    )
+    createSection("ordinal_parameter_estimates", "Parameter Estimates", data, {
+      description: "Estimasi parameter model",
+      note: notes.length > 0 ? notes.join("\n") : undefined,
+    }),
   );
 
   return { sections };

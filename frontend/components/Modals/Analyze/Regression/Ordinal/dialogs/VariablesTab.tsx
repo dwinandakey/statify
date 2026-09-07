@@ -6,7 +6,7 @@ import type { Variable } from "@/types/Variable";
 import type { OrdinalOptions, OrdinalOptionsParams } from "../types/ordinal";
 
 interface Props {
-  availableVariables: Variable[]; 
+  availableVariables: Variable[];
   selectedDependent: Variable | null;
   selectedFactors: Variable[];
   selectedCovariates: Variable[];
@@ -60,7 +60,7 @@ export const VariablesTab: React.FC<Props> = ({
   };
 
   const getDisplayName = (variable: Variable) =>
-    variable.label ?? variable.name;
+    variable.name || variable.label || "";
 
   const variableListContentClass = "min-w-full w-max p-2 pr-4 pb-4";
   const variableItemClass = "w-full min-w-max";
@@ -117,26 +117,25 @@ export const VariablesTab: React.FC<Props> = ({
           <div className="border border-border rounded-md flex-1 bg-background overflow-hidden">
             <ScrollArea className="h-full">
               <div className={variableListContentClass}>
-              {availableVariables.map((variable) => (
-                <div
-                  key={variable.id}
-                  className={`${variableItemClass} flex items-center p-1.5 mb-1 cursor-pointer border rounded-md text-sm transition-colors ${
-                    highlightedVariable?.name === variable.name
-                      ? "bg-accent text-accent-foreground border-primary/50"
-                      : "border-transparent hover:bg-accent/50"
-                  }`}
-                  onClick={() =>
-                    setHighlightedVariable(
-                      variable.name === highlightedVariable?.name
-                        ? null
-                        : variable
-                    )
-                  }
-                >
-                  {getVariableIcon(variable)}
-                  <span className={variableNameClass}>{getDisplayName(variable)}</span>
-                </div>
-              ))}
+                {availableVariables.map((variable) => (
+                  <div
+                    key={variable.id}
+                    className={`${variableItemClass} flex items-center p-1.5 mb-1 cursor-pointer border rounded-md text-sm transition-colors ${highlightedVariable?.name === variable.name
+                        ? "bg-accent text-accent-foreground border-primary/50"
+                        : "border-transparent hover:bg-accent/50"
+                      }`}
+                    onClick={() =>
+                      setHighlightedVariable(
+                        variable.name === highlightedVariable?.name
+                          ? null
+                          : variable
+                      )
+                    }
+                  >
+                    {getVariableIcon(variable)}
+                    <span className={variableNameClass}>{getDisplayName(variable)}</span>
+                  </div>
+                ))}
               </div>
             </ScrollArea>
           </div>
@@ -198,17 +197,17 @@ export const VariablesTab: React.FC<Props> = ({
               <div className="border border-border rounded-md h-[120px] bg-background overflow-hidden">
                 <ScrollArea className="h-full">
                   <div className={variableListContentClass}>
-                  {selectedCovariates.map((v) => (
-                    <div
-                      key={v.id}
-                      className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
-                      onClick={() => removeCovariate(v)}
-                      title="Click to remove"
-                    >
-                      {getVariableIcon(v)}
-                      <span className={variableNameClass}>{getDisplayName(v)}</span>
-                    </div>
-                  ))}
+                    {selectedCovariates.map((v) => (
+                      <div
+                        key={v.id}
+                        className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
+                        onClick={() => removeCovariate(v)}
+                        title="Click to remove"
+                      >
+                        {getVariableIcon(v)}
+                        <span className={variableNameClass}>{getDisplayName(v)}</span>
+                      </div>
+                    ))}
                   </div>
                 </ScrollArea>
               </div>
@@ -233,17 +232,17 @@ export const VariablesTab: React.FC<Props> = ({
               <div className="border border-border rounded-md h-[120px] bg-background overflow-hidden">
                 <ScrollArea className="h-full">
                   <div className={variableListContentClass}>
-                  {selectedFactors.map((v) => (
-                    <div
-                      key={v.id}
-                      className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
-                      onClick={() => removeFactor(v)}
-                      title="Click to remove"
-                    >
-                      {getVariableIcon(v)}
-                      <span className={variableNameClass}>{getDisplayName(v)}</span>
-                    </div>
-                  ))}
+                    {selectedFactors.map((v) => (
+                      <div
+                        key={v.id}
+                        className={`${variableItemClass} flex items-center p-1.5 mb-1 rounded-md cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 border border-transparent text-sm transition-colors`}
+                        onClick={() => removeFactor(v)}
+                        title="Click to remove"
+                      >
+                        {getVariableIcon(v)}
+                        <span className={variableNameClass}>{getDisplayName(v)}</span>
+                      </div>
+                    ))}
                   </div>
                 </ScrollArea>
               </div>
