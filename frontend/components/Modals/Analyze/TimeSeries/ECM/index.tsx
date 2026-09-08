@@ -15,7 +15,6 @@ import VariablesTab from "@/components/Modals/Analyze/TimeSeries/ECM/VariablesTa
 import TimeTab from "@/components/Modals/Analyze/TimeSeries/TimeSeriesTimeTab";
 import OptionTab from "@/components/Modals/Analyze/TimeSeries/ECM/OptionTab";
 import { getFormData, clearFormData } from "@/hooks/useIndexedDB";
-import type { DataRow } from "@/types/Data";
 import { toast } from "sonner";
 
 interface ECMProps {
@@ -31,8 +30,6 @@ const ECM: FC<ECMProps> = ({ onClose, containerType }) => {
     const [dependentVariable, setDependentVariable] = useState<Variable[]>([]);
     const [independentVariable, setIndependentVariable] = useState<Variable[]>([]);
     const [highlightedVariable, setHighlightedVariable] = useState<{columnIndex: number, source: string} | null>(null);
-    const [prevDataRef, setPrevDataRef] = useState<DataRow[] | null>(null);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState("variables");
     const [saveLongRun, setSaveLongRun] = useState(false);
     const [saveShortRun, setSaveShortRun] = useState(false);
@@ -65,7 +62,7 @@ const ECM: FC<ECMProps> = ({ onClose, containerType }) => {
         onClose
     );
     
-    const combinedError = errorMsg || analysisError;
+    const combinedError = analysisError;
 
     useEffect(() => {
         if (combinedError) {
@@ -80,7 +77,6 @@ const ECM: FC<ECMProps> = ({ onClose, containerType }) => {
                 const filteredVariables = variables.filter(v => v.name !== "");
 
                 if (savedData?.prevDataRef) {
-                    setPrevDataRef(savedData.prevDataRef);
                     if (JSON.stringify(savedData.prevDataRef) !== JSON.stringify(data)) {
                         await clearFormData("ECM");
                         setAvailableVariables(filteredVariables);
@@ -90,14 +86,25 @@ const ECM: FC<ECMProps> = ({ onClose, containerType }) => {
                     }
                 }
                 
-                if (savedData?.dependentVariable) {
-                    setDependentVariable(savedData.dependentVariable);
+                // Validate saved variables against current variable list to avoid stale state.
+                // A variable is valid if its columnIndex exists in the current variables and
+                // the name matches (guards against renamed/replaced variables).
+                const isVariableValid = (v: Variable) =>
+                    filteredVariables.some(
+                        fv => fv.columnIndex === v.columnIndex && fv.name === v.name
+                    );
+
+                const savedDependent: Variable[] = (savedData?.dependentVariable ?? []).filter(isVariableValid);
+                const savedIndependent: Variable[] = (savedData?.independentVariable ?? []).filter(isVariableValid);
+
+                if (savedDependent.length > 0) {
+                    setDependentVariable(savedDependent);
                 }
-                if (savedData?.independentVariable) {
-                    setIndependentVariable(savedData.independentVariable);
+                if (savedIndependent.length > 0) {
+                    setIndependentVariable(savedIndependent);
                 }
                 
-                const selectedVars = [...(savedData?.dependentVariable || []), ...(savedData?.independentVariable || [])];
+                const selectedVars = [...savedDependent, ...savedIndependent];
                 const remaining = filteredVariables.filter(
                     v => !selectedVars.some((sv: Variable) => sv.columnIndex === v.columnIndex)
                 );
@@ -159,6 +166,7 @@ const ECM: FC<ECMProps> = ({ onClose, containerType }) => {
                             setIndependentVariable={setIndependentVariable}
                             setHighlightedVariable={setHighlightedVariable}
                             containerType={containerType}
+                            data={data}
                         />
                     </TabsContent>
 
