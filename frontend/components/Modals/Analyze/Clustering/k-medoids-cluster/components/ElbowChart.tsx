@@ -124,15 +124,15 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                     .attr("stroke-opacity", 0.45);
             });
 
-        const selectedOptimalK =
-            method === "elbow"
+        const selectedOptimalK: number | null =
+            (method === "elbow"
                 ? (elbowK ?? currentK ?? bestSilhouetteK)
-                : (bestSilhouetteK ?? elbowK ?? currentK);
+                : (bestSilhouetteK ?? elbowK ?? currentK)) ?? null;
 
         // ── Optimal-K vertical band ───────────────────────────────────────────
         if (selectedOptimalK !== null) {
             const ox = xScale(selectedOptimalK);
-            if (ox !== null) {
+            if (ox !== undefined) {
                 g.append("rect")
                     .attr("x", ox - 18).attr("y", 0)
                     .attr("width", 36).attr("height", innerH)
@@ -157,7 +157,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         // ── Elbow-K annotation (when different from optimal-K) ───────────────
         if (elbowK !== null && elbowK !== selectedOptimalK && hasWCSS) {
             const ex = xScale(elbowK);
-            if (ex !== null) {
+            if (ex !== undefined) {
                 g.append("line")
                     .attr("x1", ex).attr("x2", ex)
                     .attr("y1", 0).attr("y2", innerH)
@@ -169,9 +169,9 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         }
 
         // ── Current-K vertical line ───────────────────────────────────────────
-        if (currentK !== null) {
+        if (currentK !== null && currentK !== undefined) {
             const cx2 = xScale(currentK);
-            if (cx2 !== null) {
+            if (cx2 !== undefined) {
                 g.append("line")
                     .attr("x1", cx2).attr("x2", cx2)
                     .attr("y1", 0).attr("y2", innerH)
@@ -189,7 +189,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         // ── Silhouette-Optimal-K annotation (for manual mode) ──────────────────
         if (silhouetteOptimalK !== null && silhouetteOptimalK !== undefined) {
             const sx = xScale(silhouetteOptimalK);
-            if (sx !== null && silhouetteOptimalK !== selectedOptimalK) {
+            if (sx !== undefined && silhouetteOptimalK !== selectedOptimalK) {
                 g.append("line")
                     .attr("x1", sx).attr("x2", sx)
                     .attr("y1", 0).attr("y2", innerH)
@@ -230,7 +230,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             .style("z-index", "50");
 
         const showTooltip = (event: MouseEvent, d: ElbowPoint) => {
-            const parent = svgRef.current.parentElement;
+            const parent = svgRef.current?.parentElement;
             if (!parent) return;
             const [mx, my] = d3.pointer(event, parent);
             tooltip
