@@ -6,26 +6,18 @@
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import * as XLSX from "xlsx";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download } from "lucide-react";
 import type { KMedoidsOutput } from "../types/output";
-import { KMedoidsSummaryCards } from "./SummaryCards";
-import { ClusterProfilesComponent } from "./ClusterProfiles";
-import { DistanceMatrixHeatmap, DistanceMatrixTable } from "./DistanceMatrix";
-import { formatClaraSamplingAsConvergenceData } from "./ChartFormatters";
-import { KMedoidsRadarChart } from "./RadarChart";
+import { DistanceMatrixTable } from "./DistanceMatrix";
 import { ClusterScatterPlot } from "./ClusterScatterPlot";
 import { PCAClusterPlot } from "./PCAClusterPlot";
 import { ClusterSizeDistribution } from "./ClusterSizeDistribution";
-import { SilhouetteBarChart } from "./SilhouetteBarChart";
 import { SilhouettePerObjectChart } from "./SilhouettePerObjectChart";
 import { ElbowChart } from "./ElbowChart";
 import { SilhouetteKChart } from "./SilhouetteKChart";
 import { ConvergenceChart } from "./ConvergenceChart";
-import { IterationDetailsTable } from "./IterationDetailsTable";
-import { ConvergenceAlgorithmPanel } from "./ConvergenceAlgorithmPanel";
 import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
 
 interface KMedoidsOutputRendererProps {
@@ -35,7 +27,7 @@ interface KMedoidsOutputRendererProps {
 
 // Max data points to render in SVG charts (display only – analysis uses all data)
 const MAX_DISPLAY_POINTS = 500;
-const ASSIGNMENTS_PAGE_SIZE = 100;
+const ASSIGNMENTS_PAGE_SIZE = 25;
 
 /** Stratified sample: pick up to `max` points while preserving cluster ratios. */
 function samplePoints<T extends { cluster: number }>(pts: T[], max: number): T[] {
@@ -89,14 +81,37 @@ function sanitizeFilename(value: string): string {
     return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+/**
+ * Charts style themselves with `hsl(var(--border))`-style CSS custom
+ * properties resolved against the app's :root. A downloaded/exported SVG
+ * is opened outside that context (a standalone file, or an <img> loaded
+ * from a blob URL for PNG conversion), so those vars are undefined and the
+ * strokes/text silently disappear. Bake the current computed values in
+ * before serializing so the export looks the same as on screen.
+ */
+function inlineCssVars(svgText: string): string {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const varNames = new Set<string>();
+    const varPattern = /var\((--[\w-]+)\)/g;
+    let match: RegExpExecArray | null;
+    while ((match = varPattern.exec(svgText)) !== null) {
+        varNames.add(match[1]);
+    }
+
+    let resolved = svgText;
+    varNames.forEach((name) => {
+        const value = rootStyle.getPropertyValue(name).trim();
+        if (!value) return;
+        resolved = resolved.split(`var(${name})`).join(value);
+    });
+    return resolved;
+}
+
 export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ output, variables }) => {
     const pcaChartRef = useRef<HTMLDivElement>(null);
     const scatterChartRef = useRef<HTMLDivElement>(null);
     const sizeDistChartRef = useRef<HTMLDivElement>(null);
-    const radarChartRef = useRef<HTMLDivElement>(null);
-    const distanceMatrixRef = useRef<HTMLDivElement>(null);
     const silhouetteObjRef = useRef<HTMLDivElement>(null);
-    const silhouetteClusterRef = useRef<HTMLDivElement>(null);
     const optimalKChartRef = useRef<HTMLDivElement>(null);
     const silhouetteKChartRef = useRef<HTMLDivElement>(null);
     const convergenceChartRef = useRef<HTMLDivElement>(null);
@@ -113,31 +128,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
     const [selectedXVar, setSelectedXVar] = useState(effectiveVariables[0]?.name || "");
     const [selectedYVar, setSelectedYVar] = useState(effectiveVariables[1]?.name || effectiveVariables[0]?.name || "");
     const [currentAssignmentsPage, setCurrentAssignmentsPage] = useState(1);
-    const showPCAProjection =
-        (output?.visualizationOptions?.showPCAProjection ?? true) &&
-        effectiveVariables.length > 2;
-    const showClusterScatterPlot =
-        output?.visualizationOptions?.showClusterScatterPlot ?? true;
-    const showClusterSizeDistribution =
-        output?.visualizationOptions?.showClusterSizeDistribution ?? true;
-    const showClusterAttributeProfile =
-        output?.visualizationOptions?.showClusterAttributeProfile ?? true;
-    const showDistanceMatrixBetweenMedoids =
-        output?.visualizationOptions?.showDistanceMatrixBetweenMedoids ?? true;
-    const showDistanceMatrixTable =
-        output?.visualizationOptions?.showDistanceMatrixTable ?? false;
-    const showClusterMedoids =
-        output?.visualizationOptions?.showClusterMedoids ?? true;
-    const showObjectAssignments =
-        output?.visualizationOptions?.showObjectAssignments ?? true;
-    const showCaseCount =
-        output?.visualizationOptions?.showCaseCount ?? true;
-    const showTotalCost =
-        output?.visualizationOptions?.showTotalCost ?? true;
-    const showSilhouettePerObject =
-        output?.visualizationOptions?.showSilhouettePerObject ?? false;
-    const showSilhouetteByCluster =
-        output?.visualizationOptions?.showSilhouetteByCluster ?? true;
+    const silhouetteChartHeight = Math.max(360, (output?.silhouetteScores?.perCluster?.length ?? 1) * 60 + 160);
     const showOptimalKChart = output?.visualizationOptions?.showOptimalKChart;
     const hasOptimalKChartData = Boolean(output?.elbowData && output.elbowData.length > 0);
     const shouldShowOptimalKCard =
@@ -145,17 +136,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         (hasOptimalKChartData || Boolean(output?.optimalKMethod));
     const showOverallQualityAssessment =
         output?.visualizationOptions?.showOverallQualityAssessment ?? true;
-    const showConvergenceAlgorithm =
-        output?.visualizationOptions?.showConvergenceAlgorithm ?? true;
-    const showSamplingHistory = 
-        output?.visualizationOptions?.showSamplingHistory ?? true;
-    const isClaraMethod = (output?.algorithmMethod ?? "").toUpperCase() === "CLARA";
-    const claraCosts = output?.claraConvergence?.samplingCosts ?? [];
-    const claraBestSample =
-        output?.claraConvergence?.bestSampleIndex ??
-        (claraCosts.length > 0
-            ? (claraCosts.findIndex((cost) => cost === Math.min(...claraCosts)) + 1)
-            : undefined);
 
     // Determine which charts to show based on cluster mode
     const clusterMode = output?.clusterMode ?? "automatic";
@@ -186,13 +166,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
         return best.k;
     }, [output?.elbowData]);
-
-    const hasVisualizationContent =
-        showPCAProjection ||
-        showClusterScatterPlot ||
-        showClusterSizeDistribution ||
-        showClusterAttributeProfile ||
-        showDistanceMatrixBetweenMedoids;
 
     const totalAssignmentsRows = output?.assignments?.length ?? 0;
     const totalAssignmentsPages = Math.max(
@@ -267,20 +240,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         return output.assignments.slice(start, start + ASSIGNMENTS_PAGE_SIZE);
     }, [output?.assignments, currentAssignmentsPage]);
 
-    // Keep Convergence card consistent with the convergence panel/history.
-    // History shape: [Init, Iter 1, Iter 2, ...] so visible iterations = len - 1.
-    const historyIterations = Array.isArray(output?.iterationHistory)
-        ? Math.max(output.iterationHistory.length - 1, 0)
-        : 0;
-    const normalizedIterations =
-        output?.summary?.totalIterations > 0
-            ? output.summary.totalIterations
-            : historyIterations;
-    const summaryForCards = {
-        ...output.summary,
-        totalIterations: normalizedIterations,
-    };
-
     const hasStandardizedAssignmentData = useMemo(
         () =>
             Boolean(
@@ -297,16 +256,17 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         ? "Min-Max"
         : "Standardized";
 
-    // Memoize assignments table JSON to avoid re-serializing on every render
-    const assignmentsTableJson = useMemo(() => {
+    // Builds the paginated assignments table JSON, parameterized by title so it can be
+    // reused both for the "Cluster Assignments" tab and the standalone "Cluster Membership" view.
+    const buildAssignmentsTableJson = useCallback((titleBase: string) => {
         if (!output?.assignments) return "{}";
         return JSON.stringify({
             tables: [
                 {
                     key: "assignments",
                     title: hasStandardizedAssignmentData
-                        ? `Cluster Assignments (${assignmentsNormalizationLabel})`
-                        : "Cluster Assignments",
+                        ? `${titleBase} (${assignmentsNormalizationLabel})`
+                        : titleBase,
                     columnHeaders: [
                         { header: "ID" },
                         { header: "Cluster" },
@@ -327,7 +287,10 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
                         Distance: typeof a.distanceToMedoid === 'number' ? a.distanceToMedoid.toFixed(4) : 'N/A',
                         Silhouette: typeof a.silhouetteScore === 'number' ? a.silhouetteScore.toFixed(3) : 'N/A',
                         ...Object.fromEntries(
-                            effectiveVariables.map(v => [v.name, a.attributes[v.name] ?? 'N/A'])
+                            effectiveVariables.map(v => {
+                                const value = a.attributes[v.name];
+                                return [v.name, typeof value === 'number' && isFinite(value) ? value.toFixed(4) : (value ?? 'N/A')];
+                            })
                         ),
                         ...Object.fromEntries(
                             hasStandardizedAssignmentData
@@ -348,11 +311,10 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         });
     }, [output?.assignments, pagedAssignments, effectiveVariables, hasStandardizedAssignmentData, assignmentsNormalizationLabel]);
 
-    // Memoize medoids table JSON
-    const medoidsTableJson = useMemo(() => {
-        if (!output?.tables) return "{}";
-        return JSON.stringify({ tables: output.tables.filter(t => t.key === "medoids") });
-    }, [output?.tables]);
+    const membershipTableJson = useMemo(
+        () => buildAssignmentsTableJson("Cluster Membership"),
+        [buildAssignmentsTableJson]
+    );
 
     const buildSvgFromContainer = useCallback((container: HTMLDivElement): { svgText: string; width: number; height: number } | null => {
         const svgElement = container.querySelector("svg");
@@ -379,7 +341,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
             }
 
             return {
-                svgText: new XMLSerializer().serializeToString(clonedSvg),
+                svgText: inlineCssVars(new XMLSerializer().serializeToString(clonedSvg)),
                 width,
                 height,
             };
@@ -403,7 +365,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
             `<foreignObject width="100%" height="100%">${wrapper.outerHTML}</foreignObject>` +
             `</svg>`;
 
-        return { svgText, width, height };
+        return { svgText: inlineCssVars(svgText), width, height };
     }, []);
 
     const handleDownloadVisualization = useCallback(async (
@@ -487,13 +449,16 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         const bodyRows = output.assignments.map((a) => [
             a.isMedoid ? `★ ${a.objectId}` : a.objectId,
             a.clusterLabel,
-            typeof a.distanceToMedoid === "number" ? Number(a.distanceToMedoid.toFixed(6)) : "N/A",
-            typeof a.silhouetteScore === "number" ? Number(a.silhouetteScore.toFixed(6)) : "N/A",
-            ...effectiveVariables.map((v) => a.attributes?.[v.name] ?? "N/A"),
+            typeof a.distanceToMedoid === "number" ? Number(a.distanceToMedoid.toFixed(4)) : "N/A",
+            typeof a.silhouetteScore === "number" ? Number(a.silhouetteScore.toFixed(4)) : "N/A",
+            ...effectiveVariables.map((v) => {
+                const value = a.attributes?.[v.name];
+                return typeof value === "number" && isFinite(value) ? Number(value.toFixed(4)) : (value ?? "N/A");
+            }),
             ...(hasStandardizedAssignmentData
                 ? effectiveVariables.map((v) => {
                     const z = a.standardizedAttributes?.[v.name];
-                    return typeof z === "number" && isFinite(z) ? Number(z.toFixed(6)) : "N/A";
+                    return typeof z === "number" && isFinite(z) ? Number(z.toFixed(4)) : "N/A";
                 })
                 : []),
         ]);
@@ -516,7 +481,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
             labels[rowIdx],
             `C${clusters[rowIdx]}`,
             ...row.map((value) =>
-                value !== null && isFinite(value) ? value.toFixed(6) : ""
+                value !== null && isFinite(value) ? value.toFixed(4) : ""
             ),
         ]);
 
@@ -552,7 +517,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
             labels[rowIdx],
             `C${clusters[rowIdx]}`,
             ...row.map((value) =>
-                value !== null && isFinite(value) ? Number(value.toFixed(6)) : ""
+                value !== null && isFinite(value) ? Number(value.toFixed(4)) : ""
             ),
         ]);
 
@@ -609,639 +574,337 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    return (
-        <div className="space-y-6">
-            {/* Summary Cards */}
-            <KMedoidsSummaryCards
-                summary={summaryForCards}
-                showCaseCount={showCaseCount}
-                showTotalCost={showTotalCost}
-                algorithmMethod={output?.algorithmMethod}
-            />
-
-            {/* Tabbed Content */}
-            <Tabs defaultValue={hasVisualizationContent ? "visualization" : "profiles"} className="w-full">
-                <TabsList
-                    className={`grid w-full ${hasVisualizationContent
-                        ? (showConvergenceAlgorithm && !isClaraMethod) || (showSamplingHistory && isClaraMethod)
-                            ? "grid-cols-5"
-                            : "grid-cols-4"
-                        : (showConvergenceAlgorithm && !isClaraMethod) || (showSamplingHistory && isClaraMethod)
-                            ? "grid-cols-4"
-                            : "grid-cols-3"
-                        }`}
-                >
-                    {hasVisualizationContent && <TabsTrigger value="visualization">Visualization</TabsTrigger>}
-                    <TabsTrigger value="profiles">Cluster Profiles</TabsTrigger>
-                    <TabsTrigger value="tables">Data Tables</TabsTrigger>
-                    <TabsTrigger value="evaluation">Evaluation</TabsTrigger>
-                    {((showConvergenceAlgorithm && !isClaraMethod) || (showSamplingHistory && isClaraMethod)) && (
-                        <TabsTrigger value="convergence">
-                            {isClaraMethod ? "Histori Sampling" : "Convergence"}
-                        </TabsTrigger>
-                    )}
-                </TabsList>
-
-                {/* VISUALIZATION TAB */}
-                {hasVisualizationContent && <TabsContent value="visualization" className="space-y-4">
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        {/* PCA Projection */}
-                        {showPCAProjection && <Card>
-                            <CardHeader>
-                                <CardTitle>PCA Projection</CardTitle>
-                                <CardDescription>
-                                    Seluruh variabel direduksi ke 2D menggunakan PCA.
-                                    Setiap titik diwarnai sesuai klasternya; bintang (★) menandai medoid.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(pcaChartRef, "pca-projection")}
-                                {output.assignments.length > MAX_DISPLAY_POINTS && (
-                                    <p className="text-xs text-muted-foreground mb-2">
-                                        Menampilkan sampel {MAX_DISPLAY_POINTS} dari {output.assignments.length} observasi (proporsi per klaster).
-                                    </p>
-                                )}
-                                <div ref={pcaChartRef}>
-                                    <PCAClusterPlot
-                                        points={pcaPoints}
-                                        medoids={pcaMedoids}
-                                        variableNames={effectiveVariables.map(v => v.label ?? v.name)}
-                                        title="PCA Projection of K-Medoids Clusters"
-                                        height={420}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Scatter Plot */}
-                        {showClusterScatterPlot && <Card>
-                            <CardHeader>
-                                <CardTitle>Cluster Scatter Plot</CardTitle>
-                                <CardDescription>
-                                    2D visualization of clusters. Setiap titik diwarnai sesuai klasternya; bintang (★) menandai medoid.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(scatterChartRef, "cluster-scatter-plot")}
-                                {/* Variable selectors */}
-                                <div className="flex gap-2 mb-4">
-                                    <select
-                                        value={selectedXVar}
-                                        onChange={(e) => setSelectedXVar(e.target.value)}
-                                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                                    >
-                                        {effectiveVariables.map(v => (
-                                            <option key={v.name} value={v.name}>{v.label ?? v.name}</option>
-                                        ))}
-                                    </select>
-                                    <span className="flex items-center text-muted-foreground">vs</span>
-                                    <select
-                                        value={selectedYVar}
-                                        onChange={(e) => setSelectedYVar(e.target.value)}
-                                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                                    >
-                                        {effectiveVariables.map(v => (
-                                            <option key={v.name} value={v.name}>{v.label ?? v.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {output.assignments.length > MAX_DISPLAY_POINTS && (
-                                    <p className="text-xs text-muted-foreground mb-2">
-                                        Menampilkan sampel {Math.min(MAX_DISPLAY_POINTS, scatterPoints.length)} dari {output.assignments.length} observasi.
-                                    </p>
-                                )}
-                                {/* Cluster Scatter Plot */}
-                                <div ref={scatterChartRef}>
-                                    <ClusterScatterPlot
-                                        points={scatterPoints}
-                                        medoids={scatterMedoids}
-                                        xLabel={effectiveVariables.find(v => v.name === selectedXVar)?.label ?? selectedXVar}
-                                        yLabel={effectiveVariables.find(v => v.name === selectedYVar)?.label ?? selectedYVar}
-                                        title="K-Medoids Cluster Visualization"
-                                        subtitle={`${output.summary.numClusters} cluster(s) — ${output.assignments.length} observations`}
-                                        height={420}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Cluster Size Distribution — donut chart */}
-                        {showClusterSizeDistribution && <Card>
-                            <CardHeader>
-                                <CardTitle>Cluster Size Distribution</CardTitle>
-                                <CardDescription>
-                                    Proportion of cases in each cluster
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(sizeDistChartRef, "cluster-size-distribution")}
-                                <div ref={sizeDistChartRef}>
-                                    <ClusterSizeDistribution
-                                        profiles={output.clusterProfiles}
-                                        width={480}
-                                        height={400}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Radar Chart */}
-                        {showClusterAttributeProfile && <Card>
-                            <CardHeader>
-                                <CardTitle>Profil Atribut Klaster</CardTitle>
-                                <CardDescription>
-                                    Rata-rata nilai atribut per klaster (min–max normalized)
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(radarChartRef, "profil-atribut-klaster")}
-                                <div className="flex items-center justify-center">
-                                    {effectiveVariables.length >= 2 ? (
-                                        <div ref={radarChartRef}>
-                                            <KMedoidsRadarChart
-                                                output={output}
-                                                variables={effectiveVariables}
-                                                width={520}
-                                                height={480}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="h-[400px] flex items-center justify-center text-sm text-muted-foreground">
-                                            Radar chart membutuhkan minimal 2 variabel.
-                                        </div>
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Distance Matrix */}
-                        {showDistanceMatrixBetweenMedoids && <div>
-                            <div ref={distanceMatrixRef}>
-                                <DistanceMatrixHeatmap
-                                    matrix={output.medoidDistanceMatrix}
-                                    actions={renderDownloadActions(distanceMatrixRef, "distance-matrix-between-medoids")}
-                                />
-                            </div>
-                        </div>}
-
+    // Standalone "Cluster Membership" statistic: just the paginated membership table,
+    // without the full dashboard (summary cards, tabs, visualizations).
+    if (output.viewMode === "clusterMembershipOnly") {
+        return (
+            <div>
+                <div className="mb-3 flex justify-end">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadAllAssignmentsExcel}
+                        disabled={totalAssignmentsRows === 0}
+                    >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Excel (Semua Baris)
+                    </Button>
+                </div>
+                <div className="mb-3 flex flex-col items-center gap-2 text-xs text-muted-foreground">
+                    <span className="text-center">
+                        Rows {totalAssignmentsRows === 0 ? 0 : (currentAssignmentsPage - 1) * ASSIGNMENTS_PAGE_SIZE + 1}
+                        -{Math.min(currentAssignmentsPage * ASSIGNMENTS_PAGE_SIZE, totalAssignmentsRows)} of {totalAssignmentsRows}
+                    </span>
+                    <div className="flex items-center justify-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentAssignmentsPage((p) => Math.max(1, p - 1))}
+                            disabled={currentAssignmentsPage <= 1}
+                        >
+                            Prev
+                        </Button>
+                        <span>Page {currentAssignmentsPage} / {totalAssignmentsPages}</span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                setCurrentAssignmentsPage((p) => Math.min(totalAssignmentsPages, p + 1))
+                            }
+                            disabled={currentAssignmentsPage >= totalAssignmentsPages}
+                        >
+                            Next
+                        </Button>
                     </div>
-                </TabsContent>}
+                </div>
+                <div className="overflow-x-auto">
+                    <DataTableRenderer data={membershipTableJson} />
+                </div>
+            </div>
+        );
+    }
 
-                {/* CLUSTER PROFILES TAB */}
-                <TabsContent value="profiles" className="space-y-4">
-                    <ClusterProfilesComponent profiles={output.clusterProfiles} variables={effectiveVariables} />
-                </TabsContent>
+    // Standalone "Silhouette Score" statistic: just the silhouette plot (one bar per object).
+    if (output.viewMode === "silhouettePerObjectOnly") {
+        return (
+            <div>
+                {renderDownloadActions(silhouetteObjRef, "silhouette-score")}
+                <div ref={silhouetteObjRef}>
+                    <SilhouettePerObjectChart
+                        assignments={output.assignments}
+                        overall={output.silhouetteScores?.overall ?? 0}
+                        width={700}
+                        height={silhouetteChartHeight}
+                    />
+                </div>
+            </div>
+        );
+    }
 
-                {/* DATA TABLES TAB */}
-                <TabsContent value="tables" className="space-y-4">
-                    {/* Medoids Table */}
-                    {showClusterMedoids && <Card>
-                        <CardHeader>
-                            <CardTitle>Cluster Medoids</CardTitle>
-                            <CardDescription>
-                                Representative objects (medoids) for each cluster
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex justify-center">
-                                <div className="w-fit max-w-full overflow-x-auto">
-                                    <DataTableRenderer data={medoidsTableJson} />
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>}
-
-                    {/* Assignments Table */}
-                    {showObjectAssignments && <Card>
-                        <CardHeader>
-                            <CardTitle>Object Assignments</CardTitle>
-                            <CardDescription>
-                                All objects with cluster assignments and distances. Medoids marked with ★
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="mb-3 flex justify-end">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleDownloadAllAssignmentsExcel}
-                                    disabled={totalAssignmentsRows === 0}
-                                >
-                                    <Download className="w-4 h-4 mr-2" />
-                                    Download Excel (Semua Baris)
-                                </Button>
-                            </div>
-                            <div className="mb-3 flex flex-col items-center gap-2 text-xs text-muted-foreground">
-                                <span className="text-center">
-                                    Rows {totalAssignmentsRows === 0 ? 0 : (currentAssignmentsPage - 1) * ASSIGNMENTS_PAGE_SIZE + 1}
-                                    -{Math.min(currentAssignmentsPage * ASSIGNMENTS_PAGE_SIZE, totalAssignmentsRows)} of {totalAssignmentsRows}
-                                </span>
-                                <div className="flex items-center justify-center gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentAssignmentsPage((p) => Math.max(1, p - 1))}
-                                        disabled={currentAssignmentsPage <= 1}
-                                    >
-                                        Prev
-                                    </Button>
-                                    <span>Page {currentAssignmentsPage} / {totalAssignmentsPages}</span>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() =>
-                                            setCurrentAssignmentsPage((p) => Math.min(totalAssignmentsPages, p + 1))
-                                        }
-                                        disabled={currentAssignmentsPage >= totalAssignmentsPages}
-                                    >
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="flex justify-center">
-                                <div className="w-fit max-w-full overflow-x-auto">
-                                    <DataTableRenderer data={assignmentsTableJson} />
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>}
-
-                    {/* Distance Matrix Table */}
-                    {showDistanceMatrixTable && output.distanceMatrix && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Distance Matrix</CardTitle>
-                                <CardDescription>
-                                    Sorted by cluster to highlight block patterns along the diagonal.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="mb-3 flex justify-end gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={handleDownloadDistanceMatrixExcel}
-                                    >
-                                        <Download className="w-4 h-4 mr-2" />
-                                        Download Excel
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={handleDownloadDistanceMatrixCsv}
-                                    >
-                                        <Download className="w-4 h-4 mr-2" />
-                                        Download CSV
-                                    </Button>
-                                </div>
-                                <DistanceMatrixTable matrix={output.distanceMatrix} pageSize={50} />
-                            </CardContent>
-                        </Card>
-                    )}
-                </TabsContent>
-
-                {/* EVALUATION TAB */}
-                <TabsContent value="evaluation" className="space-y-4">
-
-                    {/* Silhouette per Object — full-width */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-                        {/* Silhouette per Object */}
-                        {showSilhouettePerObject && <Card>
-                            <CardHeader>
-                                <CardTitle>Silhouette Score per Objek</CardTitle>
-                                <CardDescription>
-                                    Setiap batang mewakili satu objek, dikelompokkan per klaster dan diurutkan menurun.
-                                    Batang merah menandakan nilai negatif.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(silhouetteObjRef, "silhouette-score-per-objek")}
-                                <div ref={silhouetteObjRef}>
-                                    <SilhouettePerObjectChart
-                                        assignments={output.assignments}
-                                        overall={output.silhouetteScores?.overall ?? 0}
-                                        width={520}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Silhouette Bar Chart */}
-                        {showSilhouetteByCluster && <Card>
-                            <CardHeader>
-                                <CardTitle>Silhouette Scores by Cluster</CardTitle>
-                                <CardDescription>
-                                    Higher scores indicate better-defined clusters
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {renderDownloadActions(silhouetteClusterRef, "silhouette-scores-by-cluster")}
-                                <div ref={silhouetteClusterRef}>
-                                    <SilhouetteBarChart
-                                        perCluster={output.silhouetteScores?.perCluster ?? []}
-                                        overall={output.silhouetteScores?.overall ?? 0}
-                                        width={520}
-                                        height={Math.max(300, (output.silhouetteScores?.perCluster?.length ?? 1) * 90 + 88)}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>}
-
-                        {/* Optimal K Chart (if available) */}
-                        {shouldShowOptimalKCard && (
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Grafik K Optimal</CardTitle>
-                                    <CardDescription>
-                                        {showOnlySilhouetteKChart && "Grafik Silhouette Score terhadap jumlah klaster (K)."}
-                                        {showOnlyElbowChart && "Grafik Elbow (Total Cost) dan Silhouette terhadap jumlah klaster (K)."}
-                                        {showElbowChartWithSilhouetteAnnotation && "Grafik Elbow dengan keterangan K optimal dari metode Silhouette."}
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    {hasOptimalKChartData ? (
-                                        <>
-                                            {/* Automatic Silhouette: show only SilhouetteKChart */}
-                                            {showOnlySilhouetteKChart && (
-                                                <>
-                                                    {renderDownloadActions(silhouetteKChartRef, "grafik-k-optimal-silhouette")}
-                                                    <div ref={silhouetteKChartRef}>
-                                                        <SilhouetteKChart
-                                                            data={silhouetteKChartData}
-                                                            currentK={output.summary.numClusters}
-                                                            width={560}
-                                                            height={400}
-                                                        />
-                                                    </div>
-                                                </>
-                                            )}
-
-                                            {/* Automatic Elbow: show only ElbowChart */}
-                                            {showOnlyElbowChart && (
-                                                <>
-                                                    {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
-                                                    <div ref={optimalKChartRef}>
-                                                        <ElbowChart
-                                                            data={output.elbowData ?? []}
-                                                            currentK={output.summary.numClusters}
-                                                            method="elbow"
-                                                            width={560}
-                                                            height={400}
-                                                        />
-                                                    </div>
-                                                </>
-                                            )}
-
-                                            {/* Manual: show only ElbowChart with silhouette annotation */}
-                                            {showElbowChartWithSilhouetteAnnotation && (
-                                                <>
-                                                    {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
-                                                    <div ref={optimalKChartRef}>
-                                                        <ElbowChart
-                                                            data={output.elbowData ?? []}
-                                                            currentK={output.summary.numClusters}
-                                                            method="elbow"
-                                                            silhouetteOptimalK={silhouetteOptimalK}
-                                                            width={560}
-                                                            height={400}
-                                                        />
-                                                    </div>
-                                                </>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                                            Data grafik K optimal belum tersedia pada output ini. Jalankan ulang analisis K-Medoids mode automatic untuk menghasilkan data kurva silhouette/elbow.
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        )}
-
-                        {/* Silhouette Interpretation */}
-                        {showOverallQualityAssessment && <Card>
-                            <CardHeader>
-                                <CardTitle>Overall Quality Assessment</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-4">
-                                    <div>
-                                        <div className="text-sm text-muted-foreground">Overall Silhouette Score</div>
-                                        <div className="text-3xl font-bold">{output.silhouetteScores?.overall !== null ? output.silhouetteScores.overall.toFixed(3) : 'N/A'}</div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <div className="text-sm font-medium">Interpretation Guide:</div>
-                                        <div className="space-y-1 text-sm text-muted-foreground">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                                                <span>0.7 - 1.0: Very strong cluster structure</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-                                                <span>0.5 - 0.7: Strong cluster structure</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 rounded-full bg-yellow-600"></div>
-                                                <span>0.3 - 0.5: Moderate cluster structure</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 rounded-full bg-red-600"></div>
-                                                <span>&lt; 0.3: Weak cluster structure</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>}
-                    </div>
-                </TabsContent>
-
-                {/* CONVERGENCE / SAMPLING TAB */}
-                {((showConvergenceAlgorithm && !isClaraMethod) || (showSamplingHistory && isClaraMethod)) && (
-                    <TabsContent value="convergence" className="space-y-4">
-                        {isClaraMethod ? (
-                            <>
-                                {/* ── 1. SUMMARY METRICS ── */}
-                                {(() => {
-                                    const samples = output.claraConvergence?.samples;
-                                    const fallbackCosts = output.claraConvergence?.samplingCosts ?? [];
-                                    const hasSamples = samples && samples.length > 0;
-                                    const hasCosts = fallbackCosts.length > 0;
-                                    const bestCostVal = output.claraConvergence?.bestCost ?? 0;
-                                    const worstCost = hasSamples ? Math.max(...samples.map(s => s.cost)) : hasCosts ? Math.max(...fallbackCosts) : 0;
-                                    const bestCost = hasSamples ? Math.min(...samples.map(s => s.cost)) : hasCosts ? Math.min(...fallbackCosts) : bestCostVal;
-                                    const avgPamIter = hasSamples
-                                        ? (samples.reduce((sum, s) => sum + (s.pamIterations ?? 0), 0) / samples.length).toFixed(1)
-                                        : "—";
-                                    const costReduction = worstCost > 0 ? `${(((worstCost - bestCost) / worstCost) * 100).toFixed(0)}%` : "—";
-                                    return (
-                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                                            {[
-                                                { label: "Total Samples", value: output.claraConvergence?.numSamples ?? "—", sub: "sampling runs" },
-                                                { label: "Best Cost", value: bestCostVal > 0 ? bestCostVal.toFixed(4) : "—", sub: claraBestSample !== null ? `sample ${claraBestSample}` : "" },
-                                                { label: "Avg PAM Iterations", value: avgPamIter, sub: "per sample" },
-                                                { label: "Cost Reduction", value: costReduction, sub: "worst → best" },
-                                            ].map(({ label, value, sub }) => (
-                                                <Card key={label}>
-                                                    <CardContent className="pt-4">
-                                                        <p className="text-xs text-muted-foreground">{label}</p>
-                                                        <p className="text-2xl font-semibold">{String(value)}</p>
-                                                        {sub && <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>}
-                                                    </CardContent>
-                                                </Card>
-                                            ))}
-                                        </div>
-                                    );
-                                })()}
-
-                                {/* ── 2. COST CONVERGENCE CHART ── */}
-                                {(() => {
-                                    const samples = output.claraConvergence?.samples;
-                                    const fallbackCosts = output.claraConvergence?.samplingCosts ?? [];
-                                    const hasSamples = samples && samples.length > 0;
-                                    const hasCosts = fallbackCosts.length > 0;
-                                    if (!hasSamples && !hasCosts) return null;
-                                    const chartData = hasSamples
-                                        ? formatClaraSamplingAsConvergenceData(samples)
-                                        : fallbackCosts.map((cost, idx) => ({
-                                            iteration: idx + 1,
-                                            totalCost: cost,
-                                            improvement: idx === 0 ? 0 : fallbackCosts[idx - 1] - cost,
-                                            swapsMade: 0,
-                                        }));
-                                    return (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle>Cost per Sampling Run</CardTitle>
-                                                <CardDescription>Total cost tiap sampling — titik terbaik ditandai hijau</CardDescription>
-                                            </CardHeader>
-                                            <CardContent>
-                                                {renderDownloadActions(convergenceChartRef, "clara-cost-convergence")}
-                                                <div ref={convergenceChartRef}>
-                                                    <ConvergenceChart data={chartData} converged={true} width={580} height={340} />
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    );
-                                })()}
-
-                                {/* ── 3. SAMPLING HISTORY TABLE ── */}
-                                {(() => {
-                                    const samples = output.claraConvergence?.samples;
-                                    const fallbackCosts = output.claraConvergence?.samplingCosts ?? [];
-                                    const hasSamples = samples && samples.length > 0;
-                                    const hasCosts = fallbackCosts.length > 0;
-                                    if (!hasSamples && !hasCosts) return null;
-                                    const bestCostVal = output.claraConvergence?.bestCost ?? (hasCosts ? Math.min(...fallbackCosts) : 0);
-                                    const rows = hasSamples
-                                        ? samples.map(s => ({ idx: s.sampleIndex, size: s.sampleSize ?? "—", cost: s.cost, pamIter: s.pamIterations ?? "—" }))
-                                        : fallbackCosts.map((cost, i) => ({ idx: i + 1, size: "—", cost, pamIter: "—" }));
-                                    return (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle>Sampling History</CardTitle>
-                                                <CardDescription>Rincian tiap sampling run — baris hijau adalah solusi terbaik</CardDescription>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-sm border-collapse">
-                                                        <thead>
-                                                            <tr className="bg-muted text-muted-foreground text-xs">
-                                                                <th className="p-2 border text-left">Sample</th>
-                                                                <th className="p-2 border text-left">Sample Size</th>
-                                                                <th className="p-2 border text-left">Total Cost</th>
-                                                                <th className="p-2 border text-left">PAM Iterations</th>
-                                                                <th className="p-2 border text-left">vs Best</th>
-                                                                <th className="p-2 border text-left">Status</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {rows.map((r) => {
-                                                                const isBest = r.cost === bestCostVal;
-                                                                const delta = !isBest && bestCostVal > 0
-                                                                    ? `+${(((r.cost - bestCostVal) / bestCostVal) * 100).toFixed(1)}%`
-                                                                    : "—";
-                                                                return (
-                                                                    <tr key={r.idx} className={isBest ? "bg-green-50 font-medium" : ""}>
-                                                                        <td className={`p-2 border ${isBest ? "text-green-900" : ""}`}>{r.idx}</td>
-                                                                        <td className={`p-2 border ${isBest ? "text-green-900" : ""}`}>{r.size}</td>
-                                                                        <td className={`p-2 border font-mono ${isBest ? "text-green-900" : ""}`}>{Number(r.cost).toFixed(4)}</td>
-                                                                        <td className={`p-2 border ${isBest ? "text-green-900" : ""}`}>{r.pamIter}</td>
-                                                                        <td className="p-2 border text-muted-foreground">{delta}</td>
-                                                                        <td className="p-2 border">
-                                                                            {isBest ? (
-                                                                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded">★ Best</span>
-                                                                            ) : (
-                                                                                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">run</span>
-                                                                            )}
-                                                                        </td>
-                                                                    </tr>
-                                                                );
-                                                            })}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    );
-                                })()}
-                            </>
-                        ) : (
-                            <>
-                                <Card>
-                                    <CardContent className="pt-6">
-                                        <ConvergenceAlgorithmPanel
-                                            data={output.iterationHistory}
-                                            medoids={output.medoids}
-                                            converged={output.summary.converged}
-                                        />
-                                    </CardContent>
-                                </Card>
-
-                                {output.iterationHistory && output.iterationHistory.length > 0 && (
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Grafik Konvergensi</CardTitle>
-                                            <CardDescription>Total Cost (biru) dan Improvement per iterasi (kuning)</CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            {renderDownloadActions(convergenceChartRef, "grafik-konvergensi")}
-                                            <div ref={convergenceChartRef}>
-                                                <ConvergenceChart
-                                                    data={output.iterationHistory}
-                                                    converged={output.summary.converged}
-                                                    width={580}
-                                                    height={340}
-                                                />
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                )}
-
-                                {output.iterationHistory && output.iterationHistory.length > 0 && (
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Histori Iterasi</CardTitle>
-                                            <CardDescription>Rincian perubahan dari Init sampai konvergen</CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <IterationDetailsTable
-                                                data={output.iterationHistory}
-                                                converged={output.summary.converged}
-                                            />
-                                        </CardContent>
-                                    </Card>
-                                )}
-                            </>
-                        )}
-                    </TabsContent>
+    // Standalone "Grafik K Optimal" statistic: just the optimal-K chart (silhouette or elbow).
+    if (output.viewMode === "optimalKChartOnly") {
+        if (!hasOptimalKChartData) {
+            return (
+                <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                    Data grafik K optimal belum tersedia pada output ini. Jalankan ulang analisis K-Medoids mode automatic untuk menghasilkan data kurva silhouette/elbow.
+                </div>
+            );
+        }
+        return (
+            <div>
+                {showOnlySilhouetteKChart && (
+                    <>
+                        {renderDownloadActions(silhouetteKChartRef, "grafik-k-optimal-silhouette")}
+                        <div ref={silhouetteKChartRef}>
+                            <SilhouetteKChart
+                                data={silhouetteKChartData}
+                                currentK={output.summary.numClusters}
+                                width={560}
+                                height={400}
+                            />
+                        </div>
+                    </>
                 )}
 
-            </Tabs>
+                {showOnlyElbowChart && (
+                    <>
+                        {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
+                        <div ref={optimalKChartRef}>
+                            <ElbowChart
+                                data={output.elbowData ?? []}
+                                currentK={output.summary.numClusters}
+                                method="elbow"
+                                width={560}
+                                height={400}
+                            />
+                        </div>
+                    </>
+                )}
+
+                {showElbowChartWithSilhouetteAnnotation && (
+                    <>
+                        {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
+                        <div ref={optimalKChartRef}>
+                            <ElbowChart
+                                data={output.elbowData ?? []}
+                                currentK={output.summary.numClusters}
+                                method="elbow"
+                                silhouetteOptimalK={silhouetteOptimalK}
+                                width={560}
+                                height={400}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+        );
+    }
+
+    // Standalone "Overall Quality Assessment" statistic: just the overall silhouette score
+    // and its interpretation guide.
+    if (output.viewMode === "overallQualityOnly") {
+        return (
+            <div className="space-y-4">
+                <div>
+                    <div className="text-sm text-muted-foreground">Overall Silhouette Score</div>
+                    <div className="text-3xl font-bold">{output.silhouetteScores?.overall !== null ? output.silhouetteScores.overall.toFixed(3) : 'N/A'}</div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-sm font-medium">Interpretation Guide:</div>
+                    <div className="space-y-1 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                            <span>0.7 - 1.0: Very strong cluster structure</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+                            <span>0.5 - 0.7: Strong cluster structure</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-yellow-600"></div>
+                            <span>0.3 - 0.5: Moderate cluster structure</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-red-600"></div>
+                            <span>&lt; 0.3: Weak cluster structure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Standalone "PCA Projection" statistic: just the PCA projection scatter plot.
+    if (output.viewMode === "pcaProjectionOnly") {
+        return (
+            <div>
+                {renderDownloadActions(pcaChartRef, "pca-projection")}
+                <div ref={pcaChartRef}>
+                    <PCAClusterPlot
+                        points={pcaPoints}
+                        medoids={pcaMedoids}
+                        variableNames={effectiveVariables.map(v => v.label ?? v.name)}
+                        title="PCA Projection of K-Medoids Clusters"
+                        height={420}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    // Standalone "Cluster Scatter Plot" statistic: just the 2D cluster scatter plot
+    // with its X/Y variable selectors.
+    if (output.viewMode === "clusterScatterPlotOnly") {
+        return (
+            <div>
+                {renderDownloadActions(scatterChartRef, "cluster-scatter-plot")}
+                <div className="flex gap-2 mb-4">
+                    <select
+                        value={selectedXVar}
+                        onChange={(e) => setSelectedXVar(e.target.value)}
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground"
+                    >
+                        {effectiveVariables.map(v => (
+                            <option key={v.name} value={v.name} className="bg-background text-foreground">{v.label || v.name}</option>
+                        ))}
+                    </select>
+                    <span className="flex items-center text-muted-foreground">vs</span>
+                    <select
+                        value={selectedYVar}
+                        onChange={(e) => setSelectedYVar(e.target.value)}
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground"
+                    >
+                        {effectiveVariables.map(v => (
+                            <option key={v.name} value={v.name} className="bg-background text-foreground">{v.label || v.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div ref={scatterChartRef}>
+                    <ClusterScatterPlot
+                        points={scatterPoints}
+                        medoids={scatterMedoids}
+                        xLabel={effectiveVariables.find(v => v.name === selectedXVar)?.label || selectedXVar}
+                        yLabel={effectiveVariables.find(v => v.name === selectedYVar)?.label || selectedYVar}
+                        title="K-Medoids Cluster Visualization"
+                        subtitle={`${output.summary.numClusters} cluster(s) — ${output.assignments.length} observations`}
+                        height={420}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    // Standalone "Cluster Size Distribution" statistic: just the donut chart.
+    if (output.viewMode === "clusterSizeDistributionOnly") {
+        return (
+            <div>
+                {renderDownloadActions(sizeDistChartRef, "cluster-size-distribution")}
+                <div ref={sizeDistChartRef}>
+                    <ClusterSizeDistribution
+                        profiles={output.clusterProfiles}
+                        width={480}
+                        height={400}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    // Standalone "Grafik Konvergensi Algoritma" statistic: dual-axis total-cost/improvement
+    // line chart. Independent of the "Konvergensi Algoritma" table (see the Results tab).
+    if (output.viewMode === "convergenceChartOnly") {
+        return (
+            <div>
+                {renderDownloadActions(convergenceChartRef, "grafik-konvergensi-algoritma")}
+                <div ref={convergenceChartRef}>
+                    <ConvergenceChart
+                        data={output.iterationHistory ?? []}
+                        converged={output.summary?.converged}
+                        width={640}
+                        height={420}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    // Standalone "Tabel Matriks Jarak (Semua Objek)" statistic: just the full pairwise
+    // distance matrix table, sorted by cluster, with its Excel/CSV download buttons.
+    if (output.viewMode === "distanceMatrixTableOnly") {
+        if (!output.distanceMatrix) {
+            return (
+                <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                    Data matriks jarak belum tersedia pada output ini.
+                </div>
+            );
+        }
+        return (
+            <div>
+                <p className="mb-3 text-center text-xs text-muted-foreground">
+                    Sorted by cluster to highlight block patterns along the diagonal.
+                </p>
+                <div className="mb-3 flex justify-end gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadDistanceMatrixExcel}
+                    >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Excel
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownloadDistanceMatrixCsv}
+                    >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download CSV
+                    </Button>
+                </div>
+                <DistanceMatrixTable matrix={output.distanceMatrix} pageSize={50} />
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-6">
+            {/* Overall Quality Assessment — always last */}
+            {showOverallQualityAssessment && <Card>
+                <CardHeader>
+                    <CardTitle>Overall Quality Assessment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        <div>
+                            <div className="text-sm text-muted-foreground">Overall Silhouette Score</div>
+                            <div className="text-3xl font-bold">{output.silhouetteScores?.overall !== null ? output.silhouetteScores.overall.toFixed(3) : 'N/A'}</div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <div className="text-sm font-medium">Interpretation Guide:</div>
+                            <div className="space-y-1 text-sm text-muted-foreground">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                                    <span>0.7 - 1.0: Very strong cluster structure</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+                                    <span>0.5 - 0.7: Strong cluster structure</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-yellow-600"></div>
+                                    <span>0.3 - 0.5: Moderate cluster structure</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-600"></div>
+                                    <span>&lt; 0.3: Weak cluster structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>}
         </div>
     );
 }

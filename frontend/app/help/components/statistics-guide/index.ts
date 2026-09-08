@@ -12,6 +12,7 @@ export * from './multivariate';
 export * from './repeated-measures';
 export * from './discriminant';
 export * from './k-means/KMeansClustering';
+export * from './k-medoids/KMedoidsClustering';
 // export * from './inferential';
 // export * from './modeling';
 export * from './time-series'; 
