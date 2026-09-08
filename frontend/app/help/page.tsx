@@ -25,7 +25,7 @@ export default function HelpPage() {
     useEffect(() => {
         setMounted(true);
     }, []);
-    // -------------------- SECTIONS DATA --------------------
+    //  SECTIONS DATA
     const sectionsData: SectionItem[] = useMemo(() => ([
         {
             key: "getting-started",
@@ -84,6 +84,7 @@ export default function HelpPage() {
                 { key: "autocorrelation", label: "Autocorrelation", parentKey: "statistics-guide", childContent: "autocorrelation" },
                 { key: "unit-root-test", label: "Unit Root Test", parentKey: "statistics-guide", childContent: "unit-root-test" },
                 { key: "box-jenkins-model", label: "Box-Jenkins Model", parentKey: "statistics-guide", childContent: "box-jenkins-model" },
+                { key: "factor-analysis", label: "Factor Analysis", parentKey: "statistics-guide", childContent: "factor-analysis" },
                 { key: "homoscedasticity-test", label: "Homoscedasticity Test (ARCH-LM)", parentKey: "statistics-guide", childContent: "homoscedasticity-test" },
                 { key: "heteroscedasticity", label: "Heteroscedasticity Models (ARCH/GARCH)", parentKey: "statistics-guide", childContent: "heteroscedasticity" },
                 { key: "ardl", label: "ARDL", parentKey: "statistics-guide", childContent: "ardl" },

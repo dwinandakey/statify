@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -29,6 +30,10 @@ import { useModal } from "@/hooks/useModal";
 import { HelpCircle } from "lucide-react";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { TourPopup } from "@/components/Common/TourComponents";
+import { useTourGuide } from "../hooks/useTourGuide";
+import { factorTourSteps } from "../hooks/tourConfig";
+import { toast } from "sonner";
 
 // Import tab components
 import {
@@ -40,7 +45,7 @@ import {
     OptionsTab,
 } from "./tabs";
 
-// Extended props to include all form data
+// perluas sidebar biar semua form nampak
 interface FactorDialogExtendedProps extends Omit<FactorDialogProps, 'setIsValueOpen' | 'setIsDescriptivesOpen' | 'setIsExtractionOpen' | 'setIsRotationOpen' | 'setIsScoresOpen' | 'setIsOptionsOpen'> {
     containerType?: "dialog" | "sidebar";
     onClose?: () => void;
@@ -67,7 +72,7 @@ export const FactorDialog = ({
     const [mainState, setMainState] = useState<FactorMainType>({ ...data });
     const [availableVariables, setAvailableVariables] = useState<string[]>([]);
 
-    // Local states for each tab (synced with formData)
+    // Local states di setiap tab (sinkron sama formData)
     const [descriptivesState, setDescriptivesState] = useState<FactorDescriptivesType>({ ...formData.descriptives });
     const [extractionState, setExtractionState] = useState<FactorExtractionType>({ ...formData.extraction });
     const [rotationState, setRotationState] = useState<FactorRotationType>({ ...formData.rotation });
@@ -75,13 +80,23 @@ export const FactorDialog = ({
     const [optionsState, setOptionsState] = useState<FactorOptionsType>({ ...formData.options });
 
     const { closeModal } = useModal();
+    const {
+        tourActive,
+        currentStep,
+        tourSteps,
+        currentTargetElement,
+        startTour,
+        nextStep,
+        prevStep,
+        endTour,
+    } = useTourGuide(factorTourSteps);
 
-    // Sync mainState with data prop
+    // Sync mainState sama data Prop
     useEffect(() => {
         setMainState({ ...data });
     }, [data]);
 
-    // Sync all states with formData
+    // Sync semua states sama formData
     useEffect(() => {
         setDescriptivesState({ ...formData.descriptives });
         setExtractionState({ ...formData.extraction });
@@ -90,7 +105,7 @@ export const FactorDialog = ({
         setOptionsState({ ...formData.options });
     }, [formData]);
 
-    // Update available variables
+    // Update variabel yang tersedia
     useEffect(() => {
         const usedVariables = [
             ...(mainState.TargetVar || []),
@@ -103,8 +118,12 @@ export const FactorDialog = ({
         setAvailableVariables(updatedVariables);
     }, [mainState, globalVariables]);
 
-    // Handler for main state changes
+    // Handler untuk perubahan main state 
     const handleDrop = (target: string, variable: string) => {
+        if (target === "ValueTarget") {
+            updateFormData("value", "Selection", null);
+        }
+
         setMainState((prev) => {
             const updatedState = { ...prev };
             if (target === "TargetVar") {
@@ -120,6 +139,10 @@ export const FactorDialog = ({
     };
 
     const handleRemoveVariable = (target: string, variable?: string) => {
+        if (target === "ValueTarget") {
+            updateFormData("value", "Selection", null);
+        }
+
         setMainState((prev) => {
             const updatedState = { ...prev };
             if (target === "TargetVar") {
@@ -133,7 +156,7 @@ export const FactorDialog = ({
         });
     };
 
-    // Handlers for each tab
+    // Handlers untuk setiap tab
     const handleDescriptivesChange = (field: keyof FactorDescriptivesType, value: CheckedState) => {
         setDescriptivesState((prev) => ({ ...prev, [field]: value }));
         updateFormData("descriptives", field, value);
@@ -143,7 +166,7 @@ export const FactorDialog = ({
         setExtractionState((prev) => ({ ...prev, [field]: value }));
         updateFormData("extraction", field, value);
 
-        // Auto-enable Inverse when Covariance is selected
+        // Inverse auto aktif pas pilih Covariance 
         if (field === "Covariance" && value === true) {
             setDescriptivesState((prev) => ({ ...prev, Inverse: true }));
             updateFormData("descriptives", "Inverse", true);
@@ -166,7 +189,52 @@ export const FactorDialog = ({
     };
 
     const handleContinue = () => {
-        // Save main state
+        const variableCount = mainState.TargetVar?.length ?? 0;
+        const { Eigen, EigenVal, Factor, MaxFactors, MaxIter } = extractionState;
+        const { MaxIter: RotationMaxIter } = rotationState;
+        const { SuppressValues, SuppressValuesNum } = optionsState;
+
+        if (Factor && (!Number.isInteger(MaxFactors) || (MaxFactors ?? 0) < 1)) {
+            toast.error("The Fixed Number of Factors value cannot be less than 1");
+            setActiveTab("extraction");
+            return;
+        }
+        if (Factor && (MaxFactors ?? 0) > variableCount) {
+            toast.error("The number of factors should not exceed the dimensions of the matrix");
+            setActiveTab("extraction");
+            return;
+        }
+        if (Eigen && (EigenVal ?? 0) <= 0) {
+            toast.error("The threshold value of Eigenvalues must be greater than 0");
+            setActiveTab("extraction");
+            return;
+        }
+        if (!Number.isInteger(MaxIter) || (MaxIter ?? 0) < 1) {
+            toast.error("The Maximum Iterations for Convergence value is at least 1");
+            setActiveTab("extraction");
+            return;
+        }
+        if (
+            !rotationState.None &&
+            (!Number.isInteger(RotationMaxIter) || (RotationMaxIter ?? 0) < 1)
+        ) {
+            toast.error("The Maximum Iterations for Convergence value is at least 1");
+            setActiveTab("rotation");
+            return;
+        }
+        if (
+            SuppressValues &&
+            (SuppressValuesNum === null ||
+                !Number.isFinite(SuppressValuesNum) ||
+                SuppressValuesNum < 0 ||
+                SuppressValuesNum > 1)
+        ) {
+            toast.error("Absolute value must be in the range 0 to 1");
+            setActiveTab("options");
+            return;
+        }
+
+        // simpan state utama
         Object.entries(mainState).forEach(([key, value]) => {
             updateFormData("main", key as keyof FactorMainType, value);
         });
@@ -175,6 +243,7 @@ export const FactorDialog = ({
     };
 
     const handleDialog = () => {
+        endTour();
         setIsMainOpen(false);
         closeModal();
     };
@@ -188,12 +257,12 @@ export const FactorDialog = ({
             <div className="flex-grow px-6 overflow-y-auto">
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)} className="w-full">
                     <TabsList className="grid w-full grid-cols-6">
-                        <TabsTrigger data-testid="factor-variables-tab" value="variables">Variables</TabsTrigger>
-                        <TabsTrigger data-testid="factor-descriptive-tab" value="descriptive">Descriptive</TabsTrigger>
-                        <TabsTrigger data-testid="factor-extraction-tab" value="extraction">Extraction</TabsTrigger>
-                        <TabsTrigger data-testid="factor-rotation-tab" value="rotation">Rotation</TabsTrigger>
-                        <TabsTrigger data-testid="factor-scores-tab" value="scores">Scores</TabsTrigger>
-                        <TabsTrigger data-testid="factor-options-tab" value="options">Options</TabsTrigger>
+                        <TabsTrigger id="factor-variables-tab" data-testid="factor-variables-tab" value="variables">Variables</TabsTrigger>
+                        <TabsTrigger id="factor-descriptive-tab" data-testid="factor-descriptive-tab" value="descriptive">Descriptive</TabsTrigger>
+                        <TabsTrigger id="factor-extraction-tab" data-testid="factor-extraction-tab" value="extraction">Extraction</TabsTrigger>
+                        <TabsTrigger id="factor-rotation-tab" data-testid="factor-rotation-tab" value="rotation">Rotation</TabsTrigger>
+                        <TabsTrigger id="factor-scores-tab" data-testid="factor-scores-tab" value="scores">Scores</TabsTrigger>
+                        <TabsTrigger id="factor-options-tab" data-testid="factor-options-tab" value="options">Options</TabsTrigger>
                     </TabsList>
 
                     {/* Variables Tab */}
@@ -204,7 +273,7 @@ export const FactorDialog = ({
                             onDrop={handleDrop}
                             onRemove={handleRemoveVariable}
                             onOpenValue={() => {
-                                // Save current main state before opening value dialog
+                                // simppan main state saat ini sebelum buka dialog value 
                                 Object.entries(mainState).forEach(([key, value]) => {
                                     updateFormData("main", key as keyof FactorMainType, value);
                                 });
@@ -226,6 +295,7 @@ export const FactorDialog = ({
                         <ExtractionTab
                             data={extractionState}
                             onChange={handleExtractionChange}
+                            variableCount={mainState.TargetVar?.length ?? 0}
                         />
                     </TabsContent>
 
@@ -266,7 +336,8 @@ export const FactorDialog = ({
                                     data-testid="factor-help-button"
                                     variant="ghost"
                                     size="icon"
-                                    aria-label="Help"
+                                    onClick={startTour}
+                                    aria-label="Start feature tour"
                                     className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
                                 >
                                     <HelpCircle className="h-4 w-4" />
@@ -281,7 +352,7 @@ export const FactorDialog = ({
 
                 {/* Right: Action buttons */}
                 <div className="flex items-center space-x-4">
-                    <Button onClick={handleContinue} disabled={isAnalyzing}>
+                    <Button id="factor-ok-button" onClick={handleContinue} disabled={isAnalyzing}>
                         OK
                     </Button>
                     <Button variant="outline" onClick={onReset} disabled={isAnalyzing}>
@@ -291,6 +362,7 @@ export const FactorDialog = ({
                         variant="outline"
                         disabled={isAnalyzing}
                         onClick={() => {
+                            endTour();
                             setIsMainOpen(false);
                             if (onClose) onClose();
                         }}
@@ -306,6 +378,11 @@ export const FactorDialog = ({
         <>
             {containerType === "sidebar" ? (
                 <div className="flex flex-col overflow-hidden w-full h-full">
+                    <AnimatePresence>
+                        {tourActive && currentTargetElement && (
+                            <TourPopup step={tourSteps[currentStep]} currentStep={currentStep} totalSteps={tourSteps.length} onNext={nextStep} onPrev={prevStep} onClose={endTour} targetElement={currentTargetElement} />
+                        )}
+                    </AnimatePresence>
                     {renderContent()}
                 </div>
             ) : (
@@ -315,6 +392,11 @@ export const FactorDialog = ({
                             <DialogTitle>Factor Analysis</DialogTitle>
                         </DialogHeader>
                         <div className="flex-grow overflow-hidden flex flex-col">
+                            <AnimatePresence>
+                                {tourActive && currentTargetElement && (
+                                    <TourPopup step={tourSteps[currentStep]} currentStep={currentStep} totalSteps={tourSteps.length} onNext={nextStep} onPrev={prevStep} onClose={endTour} targetElement={currentTargetElement} />
+                                )}
+                            </AnimatePresence>
                             {renderContent()}
                         </div>
                     </DialogContent>

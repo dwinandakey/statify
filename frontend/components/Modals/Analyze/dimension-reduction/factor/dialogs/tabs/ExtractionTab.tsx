@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +22,7 @@ import { FactorExtractionType } from "@/components/Modals/Analyze/dimension-redu
 import { EXTRACTIONMETHOD } from "@/components/Modals/Analyze/dimension-reduction/factor/constants/factor-method";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
-// Methods that restrict Covariance matrix selection
+// Metode yang membatasi pemilihan matriks kovarians
 const RESTRICTED_METHODS = [
     "UnweightLeastSqr",
     "GeneralizedLeastSqr",
@@ -32,13 +32,53 @@ const RESTRICTED_METHODS = [
 interface ExtractionTabProps {
     data: FactorExtractionType;
     onChange: (field: keyof FactorExtractionType, value: CheckedState | number | string | null) => void;
+    variableCount: number;
 }
 
 export const ExtractionTab: React.FC<ExtractionTabProps> = ({
     data,
     onChange,
+    variableCount,
 }) => {
+    const [validationMessages, setValidationMessages] = useState<
+        Partial<Record<"EigenVal" | "MaxFactors" | "MaxIter", string>>
+    >({});
     const isRestrictedMethod = RESTRICTED_METHODS.includes(data.Method ?? "");
+
+    const handleNumericChange = (
+        field: "EigenVal" | "MaxFactors" | "MaxIter",
+        rawValue: string
+    ) => {
+        if (rawValue === "") {
+            setValidationMessages((previous) => ({
+                ...previous,
+                [field]: undefined,
+            }));
+            onChange(field, null);
+            return;
+        }
+
+        const value = Number(rawValue);
+        let message: string | null = null;
+
+        if (field === "MaxFactors" && data.Factor) {
+            if (!Number.isInteger(value) || value < 1) {
+                message = "The Fixed Number of Factors value cannot be less than 1";
+            } else if (value > variableCount) {
+                message = "The number of factors should not exceed the dimensions of the matrix";
+            }
+        } else if (field === "EigenVal" && data.Eigen && value <= 0) {
+            message = "The threshold value of Eigenvalues must be greater than 0";
+        } else if (field === "MaxIter" && (!Number.isInteger(value) || value < 1)) {
+            message = "The Maximum Iterations for Convergence value is at least 1";
+        }
+
+        setValidationMessages((previous) => ({
+            ...previous,
+            [field]: message ?? undefined,
+        }));
+        if (!message) onChange(field, value);
+    };
 
     const handleMethodChange = (value: string) => {
         const shouldRestrict = RESTRICTED_METHODS.includes(value);
@@ -178,8 +218,13 @@ export const ExtractionTab: React.FC<ExtractionTabProps> = ({
                                             className="w-[80px]"
                                             value={data.EigenVal ?? ""}
                                             disabled={!data.Eigen}
-                                            onChange={(e) => onChange("EigenVal", Number(e.target.value))}
+                                            onChange={(e) => handleNumericChange("EigenVal", e.target.value)}
                                         />
+                                        {validationMessages.EigenVal && (
+                                            <p role="alert" className="text-sm text-destructive">
+                                                {validationMessages.EigenVal}
+                                            </p>
+                                        )}
                                         {/* Teks tambahan hanya muncul jika Covariance dipilih */}
                                         {data.Covariance && (
                                             <span className="text-sm">times the mean eigenvalue</span>
@@ -199,8 +244,13 @@ export const ExtractionTab: React.FC<ExtractionTabProps> = ({
                                         className="w-[80px]"
                                         value={data.MaxFactors ?? ""}
                                         disabled={!data.Factor}
-                                        onChange={(e) => onChange("MaxFactors", Number(e.target.value))}
+                                        onChange={(e) => handleNumericChange("MaxFactors", e.target.value)}
                                     />
+                                    {validationMessages.MaxFactors && (
+                                        <p role="alert" className="text-sm text-destructive">
+                                            {validationMessages.MaxFactors}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </RadioGroup>
@@ -214,8 +264,13 @@ export const ExtractionTab: React.FC<ExtractionTabProps> = ({
                     type="number"
                     className="w-[80px]"
                     value={data.MaxIter ?? ""}
-                    onChange={(e) => onChange("MaxIter", Number(e.target.value))}
+                    onChange={(e) => handleNumericChange("MaxIter", e.target.value)}
                 />
+                {validationMessages.MaxIter && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {validationMessages.MaxIter}
+                    </p>
+                )}
             </div>
         </div>
     );

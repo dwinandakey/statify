@@ -12,6 +12,7 @@ import { DescriptiveAnalysis } from "./descriptive/DescriptiveAnalysis";
 import { Explore } from "./explore";
 import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
+import { FactorAnalysisGuide } from "./factor-analysis";
 import { BinaryLogisticRegression } from "./binary-logistic";
 import { OrdinalRegression } from "./ordinal-regression";
 import { MultinomialLogisticRegression } from "./multinomial-logistic";
@@ -82,6 +83,8 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <ECMGuide />;
       case "linear":
         return <LinearRegression />;
+      case "factor-analysis":
+        return <FactorAnalysisGuide />;
       case "binary-logistic":
         return <BinaryLogisticRegression />;
       case "ordinal-regression":

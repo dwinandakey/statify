@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +22,26 @@ export const RotationTab: React.FC<RotationTabProps> = ({
     data,
     onChange,
 }) => {
+    const [validationMessage, setValidationMessage] = useState<string | null>(null);
+
+    const handleMaxIterChange = (rawValue: string) => {
+        if (rawValue === "") {
+            setValidationMessage(null);
+            onChange("MaxIter", null);
+            return;
+        }
+
+        const value = Number(rawValue);
+        const isValid = Number.isInteger(value) && value >= 1;
+        setValidationMessage(
+            isValid ? null : "The Maximum Iterations for Convergence value is at least 1"
+        );
+
+        if (isValid) onChange("MaxIter", value);
+    };
+
     const handleMethodGrp = (value: string) => {
+        if (value === "None") setValidationMessage(null);
         onChange("None", value === "None");
         onChange("Quartimax", value === "Quartimax");
         onChange("Varimax", value === "Varimax");
@@ -146,14 +165,26 @@ export const RotationTab: React.FC<RotationTabProps> = ({
                 </ResizablePanel>
             </ResizablePanelGroup>
 
-            <div className="flex items-center gap-4 mt-4">
-                <Label className="w-[260px]">Maximum Iterations for Convergence:</Label>
-                <Input
-                    type="number"
-                    className="w-[80px]"
-                    value={data.MaxIter ?? ""}
-                    onChange={(e) => onChange("MaxIter", Number(e.target.value))}
-                />
+            <div className="mt-4 flex flex-col gap-2">
+                <div className="flex items-center gap-4">
+                    <Label
+                        className={`w-[260px] ${data.None ? "text-muted-foreground" : ""}`}
+                    >
+                        Maximum Iterations for Convergence:
+                    </Label>
+                    <Input
+                        type="number"
+                        className="w-[80px]"
+                        value={data.MaxIter ?? ""}
+                        disabled={data.None}
+                        onChange={(e) => handleMaxIterChange(e.target.value)}
+                    />
+                </div>
+                {validationMessage && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {validationMessage}
+                    </p>
+                )}
             </div>
         </div>
     );
