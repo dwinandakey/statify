@@ -25,7 +25,7 @@
     "frontend/**/*.tsx",
     "backend/**/*.ts",
     "testing/**/*.ts"
-  ],
+, "frontend/components/Modals/Analyze/Regression/Ordinal/worker/ordinal-worker.js"  ],
   "exclude": [
     "node_modules",
     ".next",

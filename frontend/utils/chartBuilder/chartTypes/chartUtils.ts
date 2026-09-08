@@ -4,6 +4,7 @@ import * as pieChartUtils from "./pieChartUtils";
 import * as areaChartUtils from "./areaChartUtils";
 import * as histogramUtils from "./histogramUtils";
 import * as scatterUtils from "./scatterUtils";
+import * as scatterMatrixUtils from "./scatterMatrixUtils";
 import * as boxplotUtils from "./boxplotUtils";
 import * as highLowChartUtils from "./highLowChartUtils";
 import * as dualAxesChartUtils from "./dualAxesChartUtils";
@@ -19,6 +20,7 @@ export const chartUtils: Record<string, any> = {
   ...areaChartUtils,
   ...histogramUtils,
   ...scatterUtils,
+  ...scatterMatrixUtils,
   ...boxplotUtils,
   ...highLowChartUtils,
   ...dualAxesChartUtils,

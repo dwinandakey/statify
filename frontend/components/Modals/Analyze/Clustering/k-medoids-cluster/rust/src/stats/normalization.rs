@@ -256,10 +256,99 @@ mod tests {
             vec![100.0], // Outlier
         ];
 
-        let (normalized, stats) = normalize_data(&data, NormalizationMethod::Robust);
+        let (_normalized, stats) = normalize_data(&data, NormalizationMethod::Robust);
 
         // Robust normalization should be less affected by outlier
         assert_eq!(stats[0].median, 3.0);
         assert!((stats[0].iqr - 2.0).abs() < 1e-10);
+    }
+
+    /// Setelah Z-score, simpangan baku (populasi) setiap kolom harus ≈ 1.
+    #[test]
+    fn test_zscore_std_approximately_one() {
+        let data = vec![
+            vec![2.0, 10.0],
+            vec![4.0, 20.0],
+            vec![6.0, 30.0],
+            vec![8.0, 40.0],
+            vec![10.0, 50.0],
+        ];
+        let (normalized, _) = normalize_data(&data, NormalizationMethod::ZScore);
+
+        for col in 0..2 {
+            let values: Vec<f64> = normalized.iter().map(|row| row[col]).collect();
+            let mean = values.iter().sum::<f64>() / values.len() as f64;
+            let variance = values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / values.len() as f64;
+            let std = variance.sqrt();
+            assert!(
+                (std - 1.0).abs() < 1e-10,
+                "kolom {} std harus 1.0 setelah Z-score, dapat {}",
+                col, std
+            );
+        }
+    }
+
+    /// MinMaxRange(a, b) harus memetakan nilai minimum ke a dan maksimum ke b.
+    #[test]
+    fn test_minmax_range_custom_bounds() {
+        let data = vec![vec![0.0], vec![5.0], vec![10.0]];
+        let (normalized, _) = normalize_data(&data, NormalizationMethod::MinMaxRange(0.0, 100.0));
+
+        assert!((normalized[0][0] - 0.0).abs() < 1e-10, "min harus dipetakan ke 0");
+        assert!((normalized[2][0] - 100.0).abs() < 1e-10, "max harus dipetakan ke 100");
+        assert!((normalized[1][0] - 50.0).abs() < 1e-10, "titik tengah harus dipetakan ke 50");
+    }
+
+    /// Kolom konstan (semua nilai sama) dengan MinMax harus dipetakan ke 0.5.
+    #[test]
+    fn test_normalize_constant_column_minmax() {
+        let data = vec![vec![7.0], vec![7.0], vec![7.0]];
+        let (normalized, _) = normalize_data(&data, NormalizationMethod::MinMax);
+
+        for row in &normalized {
+            assert!(
+                (row[0] - 0.5).abs() < 1e-10,
+                "kolom konstan harus dipetakan ke 0.5, dapat {}",
+                row[0]
+            );
+        }
+    }
+
+    /// Z-score normalize lalu denormalize harus mengembalikan nilai asli (round-trip).
+    #[test]
+    fn test_denormalize_zscore_roundtrip() {
+        let data = vec![
+            vec![3.0, 15.0],
+            vec![6.0, 30.0],
+            vec![9.0, 45.0],
+        ];
+        let (normalized, stats) = normalize_data(&data, NormalizationMethod::ZScore);
+
+        let original = data[0][0];
+        let roundtrip = denormalize_value(normalized[0][0], &stats[0], NormalizationMethod::ZScore);
+        assert!(
+            (roundtrip - original).abs() < 1e-10,
+            "ZScore round-trip gagal: diharapkan {}, dapat {}",
+            original, roundtrip
+        );
+    }
+
+    /// MinMax normalize lalu denormalize harus mengembalikan nilai asli (round-trip).
+    #[test]
+    fn test_denormalize_minmax_roundtrip() {
+        let data = vec![
+            vec![2.0, 100.0],
+            vec![5.0, 200.0],
+            vec![8.0, 300.0],
+        ];
+        let (normalized, stats) = normalize_data(&data, NormalizationMethod::MinMax);
+
+        let original = data[1][1];
+        let roundtrip = denormalize_value(normalized[1][1], &stats[1], NormalizationMethod::MinMax);
+        assert!(
+            (roundtrip - original).abs() < 1e-10,
+            "MinMax round-trip gagal: diharapkan {}, dapat {}",
+            original, roundtrip
+        );
     }
 }

@@ -1,4 +1,5 @@
-import type {RepeatedMeasuresType} from "./repeated-measures";
+import type { RepeatedMeasuresType } from "./repeated-measures";
+import type { ResultJson } from "@/types/Table";
 
 export type RepeatedMeasuresAnalysisType = {
     configData: RepeatedMeasuresType;
@@ -6,4 +7,6 @@ export type RepeatedMeasuresAnalysisType = {
     variables: any[];
 };
 
-export type RepeatedMeasuresFinalResultType = {};
+export type RepeatedMeasuresFinalResultType = {
+    formattedResult: ResultJson;
+};

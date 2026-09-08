@@ -10,7 +10,6 @@ import { toast } from "sonner";
 type WasmModule = {
     default: (moduleOrPath?: unknown) => Promise<unknown>;
     run_k_medoids: (input: ClusteringInput) => unknown;
-    test_connection: () => string;
     run_k_medoids_range?: (input: ClusteringRangeInput) => unknown[];
 };
 
@@ -168,9 +167,6 @@ function standardizeZScore(matrix: number[][]): ZScoreResult {
     };
 }
 
-/**
- * Normalize matrix with Min-Max scaling to [0, 1] per variable.
- */
 function normalizeMinMax(matrix: number[][]): MinMaxResult {
     if (matrix.length === 0) {
         return { matrix: [], mins: [], maxs: [] };
@@ -186,36 +182,31 @@ function normalizeMinMax(matrix: number[][]): MinMaxResult {
 
     const normalized = matrix.map(row =>
         row.map((value, col) => {
-            const range = maxs[col] - mins[col];
-            if (range > 1e-12) {
-                return (value - mins[col]) / range;
-            }
-            return 0.5;
+            const min = mins[col];
+            const max = maxs[col];
+            if (max === min) return 0;
+            return (value - min) / (max - min);
         })
     );
 
-    return {
-        matrix: normalized,
-        mins,
-        maxs,
-    };
+    return { matrix: normalized, mins, maxs };
 }
 
 type NormalizationKind = "none" | "zscore" | "minmax";
 
-function resolveNormalizationMethod(configData: KMedoidsClusterType): NormalizationKind {
-    const methodFromOptions = configData.options?.NormalizationMethod as NormalizationKind | undefined;
-    const methodFromIterate = configData.iterate?.NormalizationMethod as NormalizationKind | undefined;
+function resolveNormalizationMethod(config: any): NormalizationKind {
+    const methodFromOptions = config?.options?.NormalizationMethod as NormalizationKind | undefined;
+    const methodFromIterate = config?.iterate?.NormalizationMethod as NormalizationKind | undefined;
 
     if (methodFromOptions) return methodFromOptions;
     if (methodFromIterate) return methodFromIterate;
 
     const hasStandardizeFlag =
-        configData.options?.Standardize !== undefined ||
-        configData.iterate?.Standardize !== undefined;
+        config?.options?.Standardize !== undefined ||
+        config?.iterate?.Standardize !== undefined;
     const standardizeFlag =
-        configData.options?.Standardize ??
-        configData.iterate?.Standardize;
+        config?.options?.Standardize ??
+        config?.iterate?.Standardize;
 
     if (hasStandardizeFlag) {
         return standardizeFlag ? "zscore" : "none";
@@ -235,9 +226,6 @@ function euclideanDistance(p1: number[], p2: number[]): number {
     return Math.sqrt(sum);
 }
 
-/**
- * Calculate Manhattan distance between two points
- */
 function manhattanDistance(p1: number[], p2: number[]): number {
     let sum = 0;
     for (let i = 0; i < p1.length; i++) {
@@ -246,10 +234,16 @@ function manhattanDistance(p1: number[], p2: number[]): number {
     return sum;
 }
 
+function normalizeDistanceMetric(metric: unknown): DistanceMetric {
+    const normalized = String(metric ?? "euclidean").toLowerCase();
+    if (normalized === "manhattan" || normalized === "cityblock" || normalized === "l1") {
+        return "manhattan";
+    }
+    return "euclidean";
+}
+
 function calculateDistance(p1: number[], p2: number[], metric: DistanceMetric): number {
-    return metric === "manhattan"
-        ? manhattanDistance(p1, p2)
-        : euclideanDistance(p1, p2);
+    return metric === "manhattan" ? manhattanDistance(p1, p2) : euclideanDistance(p1, p2);
 }
 
 /**
@@ -349,7 +343,7 @@ function calculateWCSS(
         const clusterIdx = labels[i];
         const medoidIdx = medoidIndices[clusterIdx];
         const dist = calculateDistance(data[i], data[medoidIdx], metric);
-        wcss += metric === "euclidean" ? dist * dist : dist;
+        wcss += metric === "manhattan" ? dist : dist ** 2;
     }
     return wcss;
 }
@@ -393,8 +387,6 @@ async function initializeWasm() {
             const wasmModule = await loadWasmModule();
             await wasmModule.default();
             wasmInitialized = true;
-            console.log("✅ K-Medoids WASM module initialized (direct)");
-            console.log("Connection test:", wasmModule.test_connection());
         } catch (error) {
             console.error("❌ Failed to initialize WASM module:", error);
             throw error;
@@ -447,11 +439,8 @@ async function saveClusteringVariables(
         // Check if any save option is enabled
         const anySaveEnabled = saveConfig.ClusterMembership || saveConfig.DistanceClusterCenter;
         if (!anySaveEnabled) {
-            console.log("ℹ️  No save options selected");
             return;
         }
-
-        console.log("💾 Saving clustering variables...");
 
         // Prepare variables
         const saveResult = prepareKMedoidsSaveVariables(
@@ -504,7 +493,6 @@ async function saveClusteringVariables(
 
         // Report success
         const createdNames = saveResult.variablesToCreate.map(v => v.name).join(", ");
-        console.log(`✅ Clustering variables saved: ${createdNames}`);
         toast.success(`Clustering variables saved: ${createdNames}`, {
             duration: 3000,
         });
@@ -533,7 +521,6 @@ function persistComprehensiveOutputInBackground(
                 caseLabelColumnIndex,
                 finalMatrix
             );
-            console.log("✓ Comprehensive output ready (background)");
         } catch (err) {
             console.error("Failed to generate comprehensive output in background:", err);
         }
@@ -556,10 +543,8 @@ function initializeWorker(): ClusterWorker | null {
                 { type: "module" }
             );
             worker = new ClusterWorker(rawWorker);
-            console.log("✅ K-Medoids Worker initialized");
         } catch (error) {
             console.error("❌ Failed to initialize worker:", error);
-            console.log("Falling back to direct execution");
             return null;
         }
     }
@@ -653,15 +638,11 @@ export async function analyzeKMedoidsCluster({
     useWorker = true, // Default to using worker
 }: KMedoidsClusterAnalysisType) {
     const n = dataVariables.length;
-    const d = variables.length;
     const k = configData.main.Cluster ?? 2;
-    const userSeed = configData.iterate.RandomSeed ?? null;
+    const seedMode = configData.iterate.SeedMode ?? (configData.iterate.RandomSeed == null ? "default" : "custom");
+    const userSeed = seedMode === "custom" ? configData.iterate.RandomSeed ?? null : null;
+    const resolvedSeed = seedMode === "custom" ? userSeed : null;
     const userNInit = Math.max(1, configData.iterate.NumberOfInitializations ?? 1);
-    
-    console.log("K-Medoids Cluster Analysis Starting...");
-    console.log("Config:", configData);
-    console.log("Dataset:", { n: n, dimensions: d, k: k, n_init: userNInit, seed: userSeed });
-    console.log("Mode:", useWorker ? "Web Worker (non-blocking)" : "Direct (blocking)");
     
     // Performance estimation
     const complexity = n * n * k * userNInit; // Simplified estimate
@@ -696,22 +677,23 @@ export async function analyzeKMedoidsCluster({
 
         // Preprocessing flow:
         // 1) non-numeric -> NaN (already done above),
-        // 2) remove rows with any NaN/Inf (RemoveRow),
+        // 2) missing handling per Options → Missing Values:
+        //    listwise = drop rows with any NaN/Inf (RemoveRow),
+        //    pairwise = keep rows with at least one valid value, impute rest with column mean,
         // 3) optional Z-score standardization.
-        const missingHandled = applyMissingHandling(parsedRows, true, false);
+        const useListWise = configData.options?.ExcludeListWise ?? true;
+        const usePairWise = configData.options?.ExcludePairWise ?? false;
+        const missingHandled = applyMissingHandling(parsedRows, useListWise, usePairWise);
 
         const dataMatrix = missingHandled.matrix;
         const processedDataRows = missingHandled.rows;
 
         const normalizationMethod = resolveNormalizationMethod(configData);
-
-        const normalized = normalizationMethod === "zscore"
-            ? standardizeZScore(dataMatrix)
+        const standardizedMatrix = normalizationMethod === "zscore"
+            ? standardizeZScore(dataMatrix).matrix
             : normalizationMethod === "minmax"
-            ? normalizeMinMax(dataMatrix)
-            : { matrix: dataMatrix };
-
-        const standardizedMatrix = normalized.matrix;
+            ? normalizeMinMax(dataMatrix).matrix
+            : dataMatrix;
 
         const preprocessingSummary: PreprocessingSummary = {
             initialN: dataVariables.length,
@@ -734,21 +716,10 @@ export async function analyzeKMedoidsCluster({
             ? (sourceVariables.find(v => v.name === caseLabelVariableName)?.columnIndex ?? null)
             : null;
         
-        console.log("🔍 Data Matrix Prepared:", {
-            rows: finalMatrix.length,
-            cols: finalMatrix[0]?.length,
-            hasValidData: finalMatrix.length > 0 && finalMatrix[0].length > 0,
-            preprocessing:
-                normalizationMethod === "zscore"
-                    ? "RemoveRow + Z-score"
-                    : normalizationMethod === "minmax"
-                    ? "RemoveRow + Min-Max"
-                    : "RemoveRow",
-        });
-        
-        // Respect user-selected method and distance metric from dialog settings.
-        const method = (configData.iterate.Method || "PAM") as ClusteringMethod;
-        const distanceMetric = (configData.main.DistanceMetric || "euclidean") as DistanceMetric;
+        // Use the selected method for manual runs; auto-k range stays PAM-only.
+        const method: ClusteringMethod = configData.iterate.Method || "PAM";
+        const autoKMethod: ClusteringMethod = "PAM";
+        const distanceMetric = normalizeDistanceMetric(configData.main.DistanceMetric);
         
         // Check if automatic k selection is enabled
         const isAutomatic = configData.main.ClusterMode === ClusterMode.Automatic;
@@ -766,7 +737,6 @@ export async function analyzeKMedoidsCluster({
         
         if (isAutomatic) {
             // ========== AUTOMATIC K SELECTION ==========
-            console.log("🔍 Running automatic k selection...");
             
             const kMin = configData.main.AutoKMin || 2;
             const kMax = Math.min(configData.main.AutoKMax || 10, dataMatrix.length - 1);
@@ -776,160 +746,60 @@ export async function analyzeKMedoidsCluster({
                 throw new Error(`AutoKMin (${kMin}) must be less than the effective AutoKMax (${kMax}). Dataset has ${dataMatrix.length} valid data points.`);
             }
             
-            console.log(`Testing k from ${kMin} to ${kMax} using ${autoMethod} method`);
-            
             // Use Web Worker if available (non-blocking), fall back to direct WASM
             const autoWorker = useWorker ? initializeWorker() : null;
             if (autoWorker) {
                 await autoWorker.init(); // ensure WASM in worker is ready
                 // Cache data matrix in the worker once — avoids re-serializing on every k iteration
                 await autoWorker.setData(finalMatrix);
-                console.log("Using Web Worker for automatic k selection (non-blocking)");
             } else {
                 await initializeWasm(); // direct WASM fallback (blocks main thread)
-                console.log("Worker unavailable, using direct WASM for automatic k selection");
             }
             
             const results: any[] = [];
             const scores: number[] = [];
             const silhouetteScoresPerK: number[] = [];
 
-            let rangeResults: ClusteringRangeItem[];
-            const supportsRangeOptimization = method === "PAM";
+            // ── Single WASM range call — builds dist matrix once, runs PAM for all k ──
+            const rangeInput: ClusteringRangeInput = {
+                k_min: kMin,
+                k_max: kMax,
+                method: autoKMethod,
+                max_iterations: configData.iterate.MaximumIterations || 100,
+                distance_metric: distanceMetric,
+                random_seed: configData.iterate.RandomSeed ?? 42,
+                convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
+                // data omitted when using worker (cached via setData above)
+                ...(autoWorker ? {} : { data: finalMatrix }),
+            };
 
-            if (supportsRangeOptimization) {
-                // ── Single WASM range call — builds dist matrix once, runs PAM for all k ──
-                const rangeInput: ClusteringRangeInput = {
-                    k_min: kMin,
-                    k_max: kMax,
-                    method: method,
-                    max_iterations: configData.iterate.MaximumIterations || 100,
-                    distance_metric: distanceMetric,
-                    random_seed: configData.iterate.RandomSeed ?? 42,
-                    convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
-                    // data omitted when using worker (cached via setData above)
-                    ...(autoWorker ? {} : { data: finalMatrix }),
-                };
-
-                if (onProgress) {
-                    onProgress({
-                        stage: "automatic_k",
-                        progress: 10,
-                        message: `Testing k=${kMin}..${kMax} with shared distance matrix...`,
-                    });
-                }
-
-                if (autoWorker) {
-                    rangeResults = await autoWorker.clusterRange(rangeInput, onProgress);
-                } else {
-                    // Direct WASM fallback: call run_k_medoids_range if available in the current build
-                    const wasmModule = getInitializedWasmModule();
-                    if (typeof wasmModule.run_k_medoids_range !== "function") {
-                        throw new Error("run_k_medoids_range not found in WASM build — please rebuild WASM with wasm-pack.");
-                    }
-                    const rawItems = wasmModule.run_k_medoids_range(rangeInput) as any[];
-                    rangeResults = rawItems.map((item: any) => ({
-                        k: item.k,
-                        labels: item.cluster_assignments || [],
-                        medoids: item.medoids_indices || [],
-                        cost: item.total_distance || 0,
-                        iterations: item.iterations || 0,
-                        converged: item.converged || false,
-                        cost_history: item.cost_history || [],
-                        silhouetteScore: calculateSilhouetteScore(
-                            finalMatrix,
-                            item.cluster_assignments || [],
-                            item.k,
-                            distanceMetric
-                        ),
-                        wcssScore: calculateWCSS(
-                            finalMatrix,
-                            item.cluster_assignments || [],
-                            item.medoids_indices || [],
-                            distanceMetric
-                        ),
-                    }));
-                }
-            } else {
-                // CLARA/CLARANS currently do not have range API optimization.
-                // Evaluate each k sequentially using the selected method.
-                rangeResults = [];
-                for (let k = kMin; k <= kMax; k++) {
-                    if (onProgress) {
-                        const position = k - kMin + 1;
-                        const total = kMax - kMin + 1;
-                        const progress = 10 + Math.round((position / total) * 45);
-                        onProgress({
-                            stage: "automatic_k",
-                            progress,
-                            message: `Testing k=${k} with ${method}...`,
-                        });
-                    }
-
-                    const perKInput: ClusteringInput = {
-                        n_clusters: k,
-                        method: method,
-                        max_iterations: configData.iterate.MaximumIterations || 100,
-                        distance_metric: distanceMetric,
-                        random_seed: configData.iterate.RandomSeed ?? 42,
-                        n_init: configData.iterate.NumberOfInitializations || 1,
-                        convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
-                        clara_num_samples: configData.iterate.NumSamples ?? 5,
-                        ...(configData.iterate.SampleSize ? { clara_sample_size: configData.iterate.SampleSize } : {}),
-                        clarans_num_local: configData.iterate.NumLocal ?? 2,
-                        ...(configData.iterate.MaxNeighbor ? { clarans_max_neighbors: configData.iterate.MaxNeighbor } : {}),
-                        ...(autoWorker ? {} : { data: finalMatrix }),
-                    };
-
-                    try {
-                        const perKResult = autoWorker
-                            ? await autoWorker.cluster(perKInput)
-                            : mapWasmOutputToResult(getInitializedWasmModule().run_k_medoids(perKInput));
-
-                        const labels = perKResult.labels || [];
-                        const medoids = perKResult.medoids || [];
-                        const silhouetteScore = labels.length > 0
-                            ? calculateSilhouetteScore(finalMatrix, labels, k, distanceMetric)
-                            : -1;
-                        const wcssScore = labels.length > 0
-                            ? calculateWCSS(finalMatrix, labels, medoids, distanceMetric)
-                            : Infinity;
-
-                        rangeResults.push({
-                            k,
-                            labels,
-                            medoids,
-                            cost: perKResult.cost || 0,
-                            iterations: perKResult.iterations || 0,
-                            converged: perKResult.converged || false,
-                            cost_history: perKResult.cost_history || [],
-                            silhouetteScore,
-                            wcssScore,
-                        });
-                    } catch (perKError) {
-                        console.warn(`Failed automatic-k trial for k=${k} using ${method}:`, perKError);
-                        rangeResults.push({
-                            k,
-                            labels: [],
-                            medoids: [],
-                            cost: Infinity,
-                            iterations: 0,
-                            converged: false,
-                            cost_history: [],
-                            silhouetteScore: -1,
-                            wcssScore: Infinity,
-                        });
-                    }
-                }
+            if (onProgress) {
+                onProgress({ stage: "automatic_k", progress: 10,
+                    message: `Testing k=${kMin}..${kMax} with shared distance matrix...` });
             }
 
-            console.log(`[Analysis] Auto-k score details (metric=${distanceMetric}):`,
-                rangeResults.map((item) => ({
+            let rangeResults: ClusteringRangeItem[];
+            if (autoWorker) {
+                rangeResults = await autoWorker.clusterRange(rangeInput, onProgress);
+            } else {
+                // Direct WASM fallback: call run_k_medoids_range if available in the current build
+                const wasmModule = getInitializedWasmModule();
+                if (typeof wasmModule.run_k_medoids_range !== "function") {
+                    throw new Error("run_k_medoids_range not found in WASM build — please rebuild WASM with wasm-pack.");
+                }
+                const rawItems = wasmModule.run_k_medoids_range(rangeInput) as any[];
+                rangeResults = rawItems.map((item: any) => ({
                     k: item.k,
-                    silhouette: item.silhouetteScore,
-                    wcss: item.wcssScore,
-                }))
-            );
+                    labels: item.cluster_assignments || [],
+                    medoids: item.medoids_indices || [],
+                    cost: item.total_distance || 0,
+                    iterations: item.iterations || 0,
+                    converged: item.converged || false,
+                    cost_history: item.cost_history || [],
+                    silhouetteScore: calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
+                    wcssScore: calculateWCSS(finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
+                }));
+            }
 
             // Map range results into the existing arrays shapes
             for (const item of rangeResults) {
@@ -946,11 +816,9 @@ export async function analyzeKMedoidsCluster({
                 if (autoMethod === AutoKMethod.Silhouette) {
                     scores.push(sil);
                     silhouetteScoresPerK.push(sil);
-                    console.log(`  k=${item.k}: Silhouette = ${sil.toFixed(4)}`);
                 } else {
                     scores.push(wcss);
                     silhouetteScoresPerK.push(sil);
-                    console.log(`  k=${item.k}: WCSS = ${wcss.toFixed(2)}, Silhouette = ${sil.toFixed(4)}`);
                 }
             }
             
@@ -964,12 +832,10 @@ export async function analyzeKMedoidsCluster({
                 // Higher silhouette is better
                 optimalIdx = scores.indexOf(Math.max(...scores));
                 optimalK = kRange[optimalIdx];
-                console.log(`✅ Optimal k = ${optimalK} (Silhouette: ${scores[optimalIdx].toFixed(4)})`);
             } else {
                 // Elbow method - find the elbow point
                 optimalK = findOptimalKElbow(kRange, scores);
                 optimalIdx = kRange.indexOf(optimalK);
-                console.log(`✅ Optimal k = ${optimalK} (Elbow method)`);
             }
             
             if (onProgress) {
@@ -988,18 +854,12 @@ export async function analyzeKMedoidsCluster({
             const finalInput: ClusteringInput = {
                 data: finalMatrix,
                 n_clusters: optimalK,
-                method: method,
+                method: autoKMethod,
                 max_iterations: configData.iterate.MaximumIterations || 100,
                 distance_metric: distanceMetric,
                 random_seed: configData.iterate.RandomSeed || null,
-                n_init: method === "PAM"
-                    ? 1 // BUILD phase is deterministic — one run is enough
-                    : (configData.iterate.NumberOfInitializations || 1),
+                n_init: 1, // BUILD phase is deterministic — one run is enough
                 convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
-                clara_num_samples: configData.iterate.NumSamples ?? 5,
-                ...(configData.iterate.SampleSize ? { clara_sample_size: configData.iterate.SampleSize } : {}),
-                clarans_num_local: configData.iterate.NumLocal ?? 2,
-                ...(configData.iterate.MaxNeighbor ? { clarans_max_neighbors: configData.iterate.MaxNeighbor } : {}),
             };
             let finalResult: any;
             if (autoWorker) {
@@ -1007,7 +867,6 @@ export async function analyzeKMedoidsCluster({
             } else {
                 finalResult = mapWasmOutputToResult(getInitializedWasmModule().run_k_medoids(finalInput));
             }
-            console.log(`✅ Final clustering (k=${optimalK}, full dataset) complete`);
             
             if (onProgress) {
                 onProgress({
@@ -1050,7 +909,6 @@ export async function analyzeKMedoidsCluster({
             );
             
             // Persist large comprehensive output in background so the main flow can return early.
-            console.log("⏳ Scheduling comprehensive output generation in background...");
             persistComprehensiveOutputInBackground(
                 analysisResult,
                 processedDataRows,
@@ -1062,9 +920,14 @@ export async function analyzeKMedoidsCluster({
             return analysisResult;
         } else {
             // ========== MANUAL K SELECTION ==========
-            console.log("📊 Running clustering with manual k...");
             const manualK = configData.main.Cluster ?? 2;
-            const shouldBuildManualKChart = configData.evaluation?.ShowOptimalKChart === true;
+            // Manual mode still needs the k-range sweep when either "Grafik K Optimal" or
+            // "Tabel K Optimal" (keduanya di tab Evaluation) aktif. Field Options lama tetap
+            // dibaca sebagai fallback untuk konfigurasi yang tersimpan sebelum reorganisasi.
+            const shouldBuildManualKChart =
+                configData.evaluation?.ShowOptimalKChart === true ||
+                configData.options?.ShowOptimalKChart === true ||
+                configData.evaluation?.ShowOptimalKTable === true;
             
             const clusteringInput: ClusteringInput = {
                 data: finalMatrix,
@@ -1072,34 +935,15 @@ export async function analyzeKMedoidsCluster({
                 method: method,
                 max_iterations: configData.iterate.MaximumIterations || 100,
                 distance_metric: distanceMetric,
-                random_seed: userSeed,
+                random_seed: resolvedSeed,
                 n_init: userNInit,
                 convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
-                // Manual mode: enable truly seed-sensitive PAM runs.
-                use_build_phase: false,
+                // BUILD phase only for default mode; random/custom use random init.
+                use_build_phase: seedMode === "default",
                 use_r_implementation: false,
                 clara_num_samples: configData.iterate.NumSamples ?? 5,
                 ...(configData.iterate.SampleSize ? { clara_sample_size: configData.iterate.SampleSize } : {}),
-                clarans_num_local: configData.iterate.NumLocal ?? 2,
-                ...(configData.iterate.MaxNeighbor ? { clarans_max_neighbors: configData.iterate.MaxNeighbor } : {}),
             };
-
-            // ── k-pipeline verification (main thread side) ────────────────
-            console.log(`[Analysis] k-pipeline CHECK: configData.main.Cluster=${configData.main.Cluster}, ClusterMode=${configData.main.ClusterMode}, clusteringInput.n_clusters=${clusteringInput.n_clusters}`);
-            if (clusteringInput.n_clusters !== (configData.main.Cluster ?? 2)) {
-                console.error(`[Analysis] k MISMATCH: config says ${configData.main.Cluster} but clusteringInput has ${clusteringInput.n_clusters}`);
-            }
-            console.log("Clustering input prepared:", {
-                dataPoints: clusteringInput.data!.length,
-                dimensions: clusteringInput.data![0]?.length || 0,
-                clusters: clusteringInput.n_clusters,
-                method: clusteringInput.method,
-                sampleDataRow0: clusteringInput.data![0],
-                sampleDataRow1: clusteringInput.data![1],
-                maxIterations: clusteringInput.max_iterations,
-                nInit: clusteringInput.n_init,
-                distanceMetric: clusteringInput.distance_metric
-            });
 
             let result;
             let workerInstance: ClusterWorker | null = null;
@@ -1109,13 +953,10 @@ export async function analyzeKMedoidsCluster({
                 workerInstance = initializeWorker();
                 
                 if (workerInstance) {
-                    console.log("Using Web Worker for clustering...");
                     await workerInstance.init(); // ensure WASM is ready before clustering
                     result = await workerInstance.cluster(clusteringInput, onProgress);
-                    console.log("✅ Result from Worker:", result);
                 } else {
                     // Worker not available, fallback to direct execution
-                    console.log("Worker not available, using direct execution (main thread)...");
                     await initializeWasm();
                     
                     if (onProgress) {
@@ -1123,16 +964,8 @@ export async function analyzeKMedoidsCluster({
                         onProgress({ stage: "clustering", progress: 50, message: "Running algorithm..." });
                     }
                     
-                    const wasmResult = getInitializedWasmModule().run_k_medoids(clusteringInput) as Record<string, any>;
-                    console.log("⚙️ WASM Result (direct):", {
-                        hasResult: !!wasmResult,
-                        keys: wasmResult ? Object.keys(wasmResult) : [],
-                        cost: wasmResult?.cost || wasmResult?.total_cost || wasmResult?.total_distance,
-                        labelsLength: wasmResult?.labels?.length || wasmResult?.cluster_assignments?.length,
-                        medoidsLength: wasmResult?.medoids?.length || wasmResult?.medoid_indices?.length || wasmResult?.medoids_indices?.length
-                    });
+                    const wasmResult = getInitializedWasmModule().run_k_medoids(clusteringInput);
                     result = mapWasmOutputToResult(wasmResult);
-                    console.log("✅ Mapped result (direct):", result);
                     
                     if (onProgress) {
                         onProgress({ stage: "complete", progress: 100, message: "Analysis complete!" });
@@ -1140,7 +973,6 @@ export async function analyzeKMedoidsCluster({
                 }
             } else {
                 // Direct execution on main thread (explicitly requested)
-                console.log("Using direct execution (main thread)...");
                 await initializeWasm();
                 
                 if (onProgress) {
@@ -1150,8 +982,6 @@ export async function analyzeKMedoidsCluster({
                 const wasmResult = getInitializedWasmModule().run_k_medoids(clusteringInput);
                 result = mapWasmOutputToResult(wasmResult);
             }
-            
-            console.log("Clustering completed:", result);
 
             let kChartSelection: {
                 method: AutoKMethod;
@@ -1178,7 +1008,7 @@ export async function analyzeKMedoidsCluster({
                     const rangeInput: ClusteringRangeInput = {
                         k_min: kMin,
                         k_max: kMax,
-                        method: method,
+                        method: autoKMethod,
                         max_iterations: configData.iterate.MaximumIterations || 100,
                         distance_metric: distanceMetric,
                         random_seed: configData.iterate.RandomSeed ?? 42,
@@ -1204,18 +1034,8 @@ export async function analyzeKMedoidsCluster({
                             iterations: item.iterations || 0,
                             converged: item.converged || false,
                             cost_history: item.cost_history || [],
-                            silhouetteScore: calculateSilhouetteScore(
-                                finalMatrix,
-                                item.cluster_assignments || [],
-                                item.k,
-                                distanceMetric
-                            ),
-                            wcssScore: calculateWCSS(
-                                finalMatrix,
-                                item.cluster_assignments || [],
-                                item.medoids_indices || [],
-                                distanceMetric
-                            ),
+                            silhouetteScore: calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
+                            wcssScore: calculateWCSS(finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
                         }));
                     }
 
@@ -1285,7 +1105,6 @@ export async function analyzeKMedoidsCluster({
             );
             
             // Persist large comprehensive output in background so the main flow can return early.
-            console.log("⏳ Scheduling comprehensive output generation in background...");
             persistComprehensiveOutputInBackground(
                 analysisResult,
                 processedDataRows,
@@ -1299,9 +1118,10 @@ export async function analyzeKMedoidsCluster({
         
     } catch (error) {
         console.error("Error in K-Medoids analysis:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
             success: false,
-            message: `Analysis failed: ${error}`,
+            message: `Analysis failed: ${errorMessage}`,
             error: error,
         };
     }
@@ -1313,7 +1133,6 @@ export async function analyzeKMedoidsCluster({
 export function cancelClustering(): void {
     if (worker) {
         worker.cancel();
-        console.log("Clustering cancelled");
     }
 }
 
@@ -1324,6 +1143,5 @@ export function cleanupWorker(): void {
     if (worker) {
         worker.terminate();
         worker = null;
-        console.log("Worker terminated");
     }
 }

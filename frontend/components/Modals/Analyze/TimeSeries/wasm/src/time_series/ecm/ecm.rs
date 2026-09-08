@@ -6,6 +6,7 @@ pub struct ECM {
     pub(crate) x_flat: Vec<f64>,     // Independent vars, flattened (n_obs * n_x)
     pub(crate) n_x: usize,           // Number of independent variables
     pub(crate) max_lag_adf: usize,   // Lag for ADF test
+    #[allow(dead_code)]
     pub(crate) max_lag_ecm: usize,   // Lag for ECM (currently unused in basic version)
 
     // ── Long-run regression: Y = c + β₁X₁ + β₂X₂ + …

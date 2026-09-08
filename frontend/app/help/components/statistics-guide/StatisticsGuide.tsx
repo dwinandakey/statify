@@ -13,8 +13,15 @@ import { Explore } from "./explore";
 import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
 import { FactorAnalysisGuide } from "./factor-analysis";
+import { BinaryLogisticRegression } from "./binary-logistic";
+import { OrdinalRegression } from "./ordinal-regression";
+import { MultinomialLogisticRegression } from "./multinomial-logistic";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
+import { Multivariate } from "./multivariate";
+import { RepeatedMeasures } from "./repeated-measures";
 import { KMeansClustering } from "./k-means/KMeansClustering";
+import { KMedoidsClustering } from "./k-medoids/KMedoidsClustering";
+import { DiscriminantAnalysis } from "./discriminant";
 import {
   SumOfSquares,
   EMMeans,
@@ -34,6 +41,10 @@ import {
   Decomposition,
   Smoothing,
   UnitRootTest,
+  HeteroscedasticityTest,
+  HomoscedasticityTest,
+  ARDLGuide,
+  ECMGuide,
 } from "./time-series";
 
 interface StatisticsGuideProps {
@@ -62,12 +73,30 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <Smoothing />;
       case 'unit-root-test':
         return <UnitRootTest />;
+      case 'heteroscedasticity':
+        return <HeteroscedasticityTest />;
+      case 'homoscedasticity-test':
+        return <HomoscedasticityTest />;
+      case 'ardl':
+        return <ARDLGuide />;
+      case 'ecm':
+        return <ECMGuide />;
       case "linear":
         return <LinearRegression />;
       case "factor-analysis":
         return <FactorAnalysisGuide />;
+      case "binary-logistic":
+        return <BinaryLogisticRegression />;
+      case "ordinal-regression":
+        return <OrdinalRegression />;
+      case "multinomial-logistic":
+        return <MultinomialLogisticRegression />;
       case "k-means":
         return <KMeansClustering />;
+      case "k-medoids":
+        return <KMedoidsClustering />;
+      case "discriminant":
+        return <DiscriminantAnalysis />;
       case "univariate":
         return <UnivariateGuide />;
       case "univariate-sum-of-squares":
@@ -86,6 +115,10 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <HeteroscedasticityTests />;
       case "univariate-lack-of-fit-tests":
         return <LackOfFitTests />;
+      case "multivariate":
+        return <Multivariate />;
+      case "repeated-measures":
+        return <RepeatedMeasures />;
       default:
         break;
     }

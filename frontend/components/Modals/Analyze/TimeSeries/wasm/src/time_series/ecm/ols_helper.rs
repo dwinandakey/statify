@@ -121,7 +121,7 @@ fn ln_gamma(x: f64) -> f64 {
         1.5056327351493116e-7,
     ];
     let x = x - 1.0;
-    let mut t = x + g + 0.5;
+    let t = x + g + 0.5;
     let mut ser = p[0];
     for (i, &c) in p[1..].iter().enumerate() {
         ser += c / (x + (i + 1) as f64);
@@ -233,7 +233,7 @@ fn empty_ols_result(k: usize) -> OLSResult {
 }
 
 /// Invert a square matrix using Gauss-Jordan elimination
-fn invert_matrix(mat: &[Vec<f64>]) -> Option<Vec<Vec<f64>>> {
+pub fn invert_matrix(mat: &[Vec<f64>]) -> Option<Vec<Vec<f64>>> {
     let n = mat.len();
     let mut aug: Vec<Vec<f64>> = mat.iter().enumerate().map(|(i, row)| {
         let mut r = row.clone();
@@ -245,7 +245,7 @@ fn invert_matrix(mat: &[Vec<f64>]) -> Option<Vec<Vec<f64>>> {
     
     for col in 0..n {
         // Partial pivot
-        let pivot = (col..n).max_by(|&a, &b| aug[a][col].abs().partial_cmp(&aug[b][col].abs()).unwrap())?;
+        let pivot = (col..n).max_by(|&a, &b| aug[a][col].abs().partial_cmp(&aug[b][col].abs()).unwrap_or(std::cmp::Ordering::Equal))?;
         aug.swap(col, pivot);
         
         let diag = aug[col][col];

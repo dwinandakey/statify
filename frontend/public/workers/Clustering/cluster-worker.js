@@ -198,6 +198,13 @@ async function runClustering(input, requestId) {
     if (input.n_clusters > resolvedData.length) {
       throw new Error("Number of clusters cannot exceed number of data points");
     }
+    // WASM requires k < n strictly (k == n leaves no non-medoid candidates for CLARANS).
+    if (input.n_clusters >= resolvedData.length) {
+      throw new Error(
+        `Number of clusters (${input.n_clusters}) must be less than the number of data points (${resolvedData.length}). ` +
+        `Please reduce the number of clusters or add more data rows.`
+      );
+    }
     sendProgress("preparing", 20, `Processing ${resolvedData.length} data points...`);
     if (currentOperation.signal.aborted) {
       postMessage({ type: "cancelled", requestId });

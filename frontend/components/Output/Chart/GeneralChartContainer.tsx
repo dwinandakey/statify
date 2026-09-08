@@ -780,8 +780,12 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
   };
 
   useEffect(() => {
-    if (parsedData?.charts && Array.isArray(parsedData.charts)) {
-      const nodes = parsedData.charts.map(
+    const rawCharts = parsedData?.charts && Array.isArray(parsedData.charts)
+      ? parsedData.charts
+      : (parsedData && parsedData.chartType ? [parsedData] : []);
+
+    if (rawCharts.length > 0) {
+      const nodes = rawCharts.map(
         (chartData: ChartData, index: number) => {
           const {
             chartType,
@@ -863,6 +867,27 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 chartConfig?.chartColor
               );
               break;
+            case "Scatter Plot Matrix": {
+              // dimensions = [{key, label}, ...] are carried inside the
+              // chartConfig under `matrixDimensions`. The formatter packs
+              // them there so the rest of the ChartData contract stays
+              // intact (chartData is the array of value rows).
+              const matrixDimensions =
+                (chartConfig as any)?.matrixDimensions ?? [];
+              chartNode = chartUtils.createScatterPlotMatrix(
+                chartDataPoints,
+                matrixDimensions,
+                width,
+                height,
+                {
+                  title: chartMetadata?.title || "Scatter Plot Matrix",
+                  subtitle: chartMetadata?.subtitle,
+                  titleFontSize: chartMetadata?.titleFontSize || 16,
+                  subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
+                }
+              );
+              break;
+            }
             case "Scatter Plot With Fit Line":
               chartNode = chartUtils.createScatterPlotWithFitLine(
                 chartDataPoints,

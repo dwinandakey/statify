@@ -4,12 +4,22 @@ import type {
     RepeatedMeasuresMainType,
     RepeatedMeasuresType,
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/types/repeated-measures";
+import type {
+    RepeatedMeasureDefineData,
+    RepeatedMeasureDefineType,
+} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/types/repeated-measure-define";
 import {
     RepeatedMeasuresDefault
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/constants/repeated-measures-default";
 import {
+    RepeatedMeasureDefineDefault
+} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/constants/repeated-measures-define-default";
+import {
     RepeatedMeasuresDialog
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/dialogs/dialog";
+import {
+    RepeatedMeasureDefineDialog
+} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/dialogs/define/repeated-measures-dialog";
 import {RepeatedMeasuresModel} from "@/components/Modals/Analyze/general-linear-model/repeated-measures/dialogs/model";
 import {
     RepeatedMeasuresContrast
@@ -25,7 +35,6 @@ import {RepeatedMeasuresSave} from "@/components/Modals/Analyze/general-linear-m
 import {
     RepeatedMeasuresOptions
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/dialogs/options";
-import {Dialog, DialogContent, DialogTitle} from "@/components/ui/dialog";
 import {useModal} from "@/hooks/useModal";
 import {useVariableStore} from "@/stores/useVariableStore";
 import {useDataStore} from "@/stores/useDataStore";
@@ -36,8 +45,8 @@ import {clearFormData, getFormData, saveFormData} from "@/hooks/useIndexedDB";
 
 export const RepeatedMeasuresContainer = ({
     onClose,
-    combinationVars,
-    factorVars,
+    combinationVars: initialCombinationVars,
+    factorVars: initialFactorVars,
 }: RepeatedMeasuresContainerProps) => {
     const variables = useVariableStore((state) => state.variables);
     const dataVariables = useDataStore((state) => state.data);
@@ -46,10 +55,25 @@ export const RepeatedMeasuresContainer = ({
         [variables]
     );
 
+    const hasInitialDefinition =
+        !!initialCombinationVars && initialCombinationVars.length > 0;
+
     const [formData, setFormData] = useState<RepeatedMeasuresType>({
         ...RepeatedMeasuresDefault,
     });
-    const [isMainOpen, setIsMainOpen] = useState(true);
+    const [defineData, setDefineData] = useState<RepeatedMeasureDefineType>({
+        ...RepeatedMeasureDefineDefault,
+    });
+    const [combinationVars, setCombinationVars] = useState<string[]>(
+        initialCombinationVars ?? []
+    );
+    const [factorVars, setFactorVars] = useState<string[]>(
+        initialFactorVars ?? []
+    );
+
+    // Phase: "define" first (SPSS-style), then "main" once factors are defined.
+    const [isDefineOpen, setIsDefineOpen] = useState(!hasInitialDefinition);
+    const [isMainOpen, setIsMainOpen] = useState(hasInitialDefinition);
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [isContrastOpen, setIsContrastOpen] = useState(false);
     const [isPlotsOpen, setIsPlotsOpen] = useState(false);
@@ -70,6 +94,22 @@ export const RepeatedMeasuresContainer = ({
                 } else {
                     setFormData({ ...RepeatedMeasuresDefault });
                 }
+
+                const savedDefine = await getFormData("RepeatedMeasuresDefine");
+                if (savedDefine) {
+                    const { id, ...defineWithoutId } = savedDefine;
+                    setDefineData(defineWithoutId);
+                    const restoredFactorVars = (
+                        defineWithoutId.main?.factors ?? []
+                    )
+                        .map((f: { name: string | null }) => f.name || "")
+                        .filter((n: string) => n.length > 0);
+                    if (restoredFactorVars.length > 0) {
+                        setFactorVars(restoredFactorVars);
+                    }
+                } else {
+                    setDefineData({ ...RepeatedMeasureDefineDefault });
+                }
             } catch (error) {
                 console.error("Failed to load form data:", error);
             }
@@ -80,23 +120,30 @@ export const RepeatedMeasuresContainer = ({
 
     useEffect(() => {
         setFormData((prev) => {
-            // Create a copy of the previous state to modify
             const newState = { ...prev };
 
-            // Update discretize based on AnalysisVars (if it exists)
-            if (prev.main.SubVar) {
-                // newState.discretize = {
-                //     ...prev.discretize,
-                //     VariablesList: [...prev.main.AnalysisVars],
-                // };
-            }
+            // Within-subjects factors (from Define) drive the Contrast list.
+            // Format follows SPSS: "perlakuan(Repeated)".
+            const defaultContrastMethod =
+                prev.contrast.ContrastMethod ?? "Repeated";
+            const contrastMethodLabel =
+                defaultContrastMethod.charAt(0).toUpperCase() +
+                defaultContrastMethod.slice(1);
 
-            // Update missing.SupplementaryVariables based on SuppleVars (if it exists)
+            const existingContrastFactors = prev.contrast.FactorList ?? [];
+            const contrastFactorList = factorVars.map((fName) => {
+                const existing = existingContrastFactors.find(
+                    (entry) => entry.split("(")[0] === fName
+                );
+                return existing ?? `${fName}(${contrastMethodLabel})`;
+            });
+
+            newState.contrast = {
+                ...prev.contrast,
+                FactorList: contrastFactorList,
+            };
+
             if (prev.main.FactorsVar) {
-                newState.contrast = {
-                    ...prev.contrast,
-                    FactorList: [...prev.main.FactorsVar],
-                };
                 newState.plots = {
                     ...prev.plots,
                     SrcList: [...prev.main.FactorsVar],
@@ -107,44 +154,27 @@ export const RepeatedMeasuresContainer = ({
                 };
             }
 
-            // Update based on LabelingVars (if it exists)
-            if (prev.main.Covariates) {
-                // newState.output = {
-                //     ...newState.output, // Use the already updated output state
-                //     LabelingVars: [...prev.main.LabelingVars],
-                // };
-            }
-
-            // Combine AnalysisVars and SuppleVars for QuantifiedVars
-            const subVars = prev.main.SubVar ? [...prev.main.SubVar] : [];
-            const factorVars = prev.main.FactorsVar
+            const factorList = prev.main.FactorsVar
                 ? [...prev.main.FactorsVar]
                 : [];
-            const covariatesVars = prev.main.Covariates
+            const covariatesList = prev.main.Covariates
                 ? [...prev.main.Covariates]
-                : [];
-            const plotsVars = prev.plots.FixFactorVars
-                ? [...prev.plots.FixFactorVars]
                 : [];
 
             newState.model = {
                 ...prev.model,
-                BetSubVar: [...factorVars, ...covariatesVars],
+                BetSubVar: [...factorList, ...covariatesList],
             };
 
             newState.emmeans = {
                 ...prev.emmeans,
-                SrcList: [...factorVars],
+                SrcList: [...factorList],
             };
 
-            const usedVariables = [
-                ...subVars,
-                ...factorVars,
-                ...covariatesVars,
-            ];
             return newState;
         });
     }, [
+        factorVars,
         formData.main.SubVar,
         formData.main.FactorsVar,
         formData.main.Covariates,
@@ -165,6 +195,56 @@ export const RepeatedMeasuresContainer = ({
         }));
     };
 
+    const updateDefineFormData = (
+        field: keyof RepeatedMeasureDefineData,
+        value: unknown
+    ) => {
+        setDefineData((prev) => ({
+            ...prev,
+            main: {
+                ...prev.main,
+                [field]: value,
+            },
+        }));
+    };
+
+    const handleDefineContinue = async (
+        defineState: RepeatedMeasureDefineData,
+        nextCombinationVars: string[],
+        nextFactorVars: string[]
+    ) => {
+        const newDefineData = { ...defineData, main: defineState };
+        setDefineData(newDefineData);
+
+        try {
+            await saveFormData("RepeatedMeasuresDefine", newDefineData);
+        } catch (error) {
+            console.error("Failed to save define form data:", error);
+        }
+
+        setCombinationVars(nextCombinationVars);
+        setFactorVars(nextFactorVars);
+
+        // Reset SubVar to the new placeholder set so the main dialog shows the
+        // correct slots for the user to fill.
+        setFormData((prev) => ({
+            ...prev,
+            main: { ...prev.main, SubVar: nextCombinationVars },
+        }));
+
+        setIsDefineOpen(false);
+        setIsMainOpen(true);
+    };
+
+    const resetDefineFormData = async () => {
+        try {
+            await clearFormData("RepeatedMeasuresDefine");
+            setDefineData({ ...RepeatedMeasureDefineDefault });
+        } catch (error) {
+            console.error("Failed to clear define form data:", error);
+        }
+    };
+
     const executeRepeatedMeasures = async (
         mainData: RepeatedMeasuresMainType
     ) => {
@@ -172,6 +252,10 @@ export const RepeatedMeasuresContainer = ({
             const newFormData = {
                 ...formData,
                 main: mainData,
+                model: {
+                    ...formData.model,
+                    DefFactors: (factorVars ?? []).join(";"),
+                },
             };
 
             await saveFormData("RepeatedMeasures", newFormData);
@@ -198,105 +282,211 @@ export const RepeatedMeasuresContainer = ({
         }
     };
 
-    const handleClose = () => {
-        closeModal();
-        onClose();
+    const openSection = (
+        section:
+            | "define"
+            | "main"
+            | "model"
+            | "contrast"
+            | "plots"
+            | "posthoc"
+            | "emmeans"
+            | "save"
+            | "options"
+    ) => {
+        setIsDefineOpen(false);
+        setIsMainOpen(false);
+        setIsModelOpen(false);
+        setIsContrastOpen(false);
+        setIsPlotsOpen(false);
+        setIsPostHocOpen(false);
+        setIsEMMeansOpen(false);
+        setIsSaveOpen(false);
+        setIsOptionsOpen(false);
+
+        switch (section) {
+            case "define":
+                setIsDefineOpen(true);
+                break;
+            case "main":
+                setIsMainOpen(true);
+                break;
+            case "model":
+                setIsModelOpen(true);
+                break;
+            case "contrast":
+                setIsContrastOpen(true);
+                break;
+            case "plots":
+                setIsPlotsOpen(true);
+                break;
+            case "posthoc":
+                setIsPostHocOpen(true);
+                break;
+            case "emmeans":
+                setIsEMMeansOpen(true);
+                break;
+            case "save":
+                setIsSaveOpen(true);
+                break;
+            case "options":
+                setIsOptionsOpen(true);
+                break;
+        }
+    };
+
+    const handleContinue = () => {
+        openSection("main");
     };
 
     return (
-        <Dialog open={isMainOpen} onOpenChange={handleClose}>
-            <DialogTitle></DialogTitle>
-            <DialogContent>
+        <div className="flex-grow overflow-y-auto flex flex-col h-full">
+            {isDefineOpen && (
+                <RepeatedMeasureDefineDialog
+                    isDefineOpen={isDefineOpen}
+                    setIsDefineOpen={(value) =>
+                        value ? openSection("define") : setIsDefineOpen(false)
+                    }
+                    updateFormData={updateDefineFormData}
+                    data={defineData.main}
+                    onContinue={handleDefineContinue}
+                    onReset={resetDefineFormData}
+                />
+            )}
+
+            {isMainOpen && (
                 <RepeatedMeasuresDialog
                     isMainOpen={isMainOpen}
-                    setIsMainOpen={setIsMainOpen}
-                    setIsModelOpen={setIsModelOpen}
-                    setIsContrastOpen={setIsContrastOpen}
-                    setIsPlotsOpen={setIsPlotsOpen}
-                    setIsPostHocOpen={setIsPostHocOpen}
-                    setIsEMMeansOpen={setIsEMMeansOpen}
-                    setIsSaveOpen={setIsSaveOpen}
-                    setIsOptionsOpen={setIsOptionsOpen}
+                    setIsMainOpen={(value) =>
+                        value ? openSection("main") : setIsMainOpen(false)
+                    }
+                    setIsModelOpen={(value) =>
+                        value ? openSection("model") : setIsModelOpen(false)
+                    }
+                    setIsContrastOpen={(value) =>
+                        value
+                            ? openSection("contrast")
+                            : setIsContrastOpen(false)
+                    }
+                    setIsPlotsOpen={(value) =>
+                        value ? openSection("plots") : setIsPlotsOpen(false)
+                    }
+                    setIsPostHocOpen={(value) =>
+                        value
+                            ? openSection("posthoc")
+                            : setIsPostHocOpen(false)
+                    }
+                    setIsEMMeansOpen={(value) =>
+                        value ? openSection("emmeans") : setIsEMMeansOpen(false)
+                    }
+                    setIsSaveOpen={(value) =>
+                        value ? openSection("save") : setIsSaveOpen(false)
+                    }
+                    setIsOptionsOpen={(value) =>
+                        value ? openSection("options") : setIsOptionsOpen(false)
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("main", field, value)
                     }
                     data={formData.main}
                     globalVariables={tempVariables}
                     combinationVars={combinationVars}
+                    onBack={() => openSection("define")}
                     onContinue={(mainData) => executeRepeatedMeasures(mainData)}
                     onReset={resetFormData}
                 />
+            )}
 
-                {/* Model */}
+            {isModelOpen && (
                 <RepeatedMeasuresModel
                     isModelOpen={isModelOpen}
-                    setIsModelOpen={setIsModelOpen}
+                    setIsModelOpen={(value) =>
+                        value ? openSection("model") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("model", field, value)
                     }
                     data={formData.model}
                 />
+            )}
 
-                {/* Contrast */}
+            {isContrastOpen && (
                 <RepeatedMeasuresContrast
                     isContrastOpen={isContrastOpen}
-                    setIsContrastOpen={setIsContrastOpen}
+                    setIsContrastOpen={(value) =>
+                        value ? openSection("contrast") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("contrast", field, value)
                     }
                     data={formData.contrast}
                 />
+            )}
 
-                {/* Plots */}
+            {isPlotsOpen && (
                 <RepeatedMeasuresPlots
                     isPlotsOpen={isPlotsOpen}
-                    setIsPlotsOpen={setIsPlotsOpen}
+                    setIsPlotsOpen={(value) =>
+                        value ? openSection("plots") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("plots", field, value)
                     }
                     data={formData.plots}
                 />
+            )}
 
-                {/* PostHoc */}
+            {isPostHocOpen && (
                 <RepeatedMeasuresPostHoc
                     isPostHocOpen={isPostHocOpen}
-                    setIsPostHocOpen={setIsPostHocOpen}
+                    setIsPostHocOpen={(value) =>
+                        value ? openSection("posthoc") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("posthoc", field, value)
                     }
                     data={formData.posthoc}
                 />
+            )}
 
-                {/* EMMeans */}
+            {isEMMeansOpen && (
                 <RepeatedMeasuresEMMeans
                     isEMMeansOpen={isEMMeansOpen}
-                    setIsEMMeansOpen={setIsEMMeansOpen}
+                    setIsEMMeansOpen={(value) =>
+                        value ? openSection("emmeans") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("emmeans", field, value)
                     }
                     data={formData.emmeans}
                 />
+            )}
 
-                {/* Save */}
+            {isSaveOpen && (
                 <RepeatedMeasuresSave
                     isSaveOpen={isSaveOpen}
-                    setIsSaveOpen={setIsSaveOpen}
+                    setIsSaveOpen={(value) =>
+                        value ? openSection("save") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("save", field, value)
                     }
                     data={formData.save}
                 />
+            )}
 
-                {/* Options */}
+            {isOptionsOpen && (
                 <RepeatedMeasuresOptions
                     isOptionsOpen={isOptionsOpen}
-                    setIsOptionsOpen={setIsOptionsOpen}
+                    setIsOptionsOpen={(value) =>
+                        value ? openSection("options") : handleContinue()
+                    }
                     updateFormData={(field, value) =>
                         updateFormData("options", field, value)
                     }
                     data={formData.options}
                 />
-            </DialogContent>
-        </Dialog>
+            )}
+        </div>
     );
 };

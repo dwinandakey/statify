@@ -60,11 +60,28 @@ const CategoricalIcon = () => (
  * - Categorical/String types: "ABC" icon (blue) - Represents categorical/text data
  */
 export const getKMedoidsVariableIcon = (variable: Variable) => {
-    // Check if the variable type is STRING (categorical)
-    if (variable.type === "STRING") {
+    const numericTypes: Array<Variable["type"]> = [
+        "NUMERIC",
+        "COMMA",
+        "DOT",
+        "SCIENTIFIC",
+        "DOLLAR",
+        "CCA",
+        "CCB",
+        "CCC",
+        "CCD",
+        "CCE",
+        "RESTRICTED_NUMERIC",
+    ];
+    const variableType = variable.type ?? "STRING";
+
+    if (!numericTypes.includes(variableType)) {
         return <CategoricalIcon />;
     }
-    
-    // All other types (NUMERIC, COMMA, DOT, SCIENTIFIC, etc.) are considered numeric
+
     return <NumericIcon />;
+};
+
+export const getKMedoidsVariableIconByType = (isNumeric: boolean) => {
+    return isNumeric ? <NumericIcon /> : <CategoricalIcon />;
 };

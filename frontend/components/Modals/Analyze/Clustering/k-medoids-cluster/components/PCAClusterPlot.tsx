@@ -190,7 +190,7 @@ function starPath(R = 11, r = 4.8, n = 5): string {
         const a = i * step - Math.PI / 2;
         pts.push([rad * Math.cos(a), rad * Math.sin(a)]);
     }
-    return "M" + pts.map(([x, y]) => `${x.toFixed(3)},${y.toFixed(3)}`).join("L") + "Z";
+    return `M${  pts.map(([x, y]) => `${x.toFixed(3)},${y.toFixed(3)}`).join("L")  }Z`;
 }
 
 const STAR_D = starPath();
@@ -208,14 +208,14 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    const [renderWidth, setRenderWidth] = useState(width);
+    const [svgWidth, setSvgWidth] = useState(width);
 
     // Responsive width via ResizeObserver
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver((entries) => {
             const cw = entries[0]?.contentRect.width;
-            if (cw && cw > 0) setRenderWidth(Math.min(cw, width));
+            if (cw && cw > 0) setSvgWidth(Math.min(cw, width));
         });
         ro.observe(containerRef.current);
         return () => ro.disconnect();
@@ -256,10 +256,10 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         // ── Layout ────────────────────────────────────────────────────────
         const LEGEND_W = 110;
         const margin = { top: 52, right: LEGEND_W + 20, bottom: 56, left: 60 };
-        const W = renderWidth;
-        const H = height;
-        const innerW = W - margin.left - margin.right;
-        const innerH = H - margin.top - margin.bottom;
+        const chartW = svgWidth;
+        const chartH = height;
+        const innerW = chartW - margin.left - margin.right;
+        const innerH = chartH - margin.top - margin.bottom;
 
         // ── Scales ────────────────────────────────────────────────────────
         const allX = [...ptProj.map(p => p[0]), ...mdProj.map(p => p[0])];
@@ -281,8 +281,9 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", W).attr("height", H)
-            .attr("viewBox", `0 0 ${W} ${H}`)
+        svg.attr("width", chartW)
+            .attr("height", chartH)
+            .attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
         const clipId = "pca-clip";
@@ -324,10 +325,10 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         };
 
         g.append("g").attr("transform", `translate(0,${innerH})`)
-            .call(d3.axisBottom(xScale).ticks(6).tickFormat(fmt as any))
+            .call(d3.axisBottom(xScale).ticks(6).tickFormat(fmt as (n: d3.NumberValue) => string))
             .call(axisStyle);
         g.append("g")
-            .call(d3.axisLeft(yScale).ticks(6).tickFormat(fmt as any))
+            .call(d3.axisLeft(yScale).ticks(6).tickFormat(fmt as (n: d3.NumberValue) => string))
             .call(axisStyle);
 
         // Axis labels (PC1 / PC2 with variance explained)
@@ -344,13 +345,16 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .text(`PC2 (${pct(varPC2)} variance explained)`);
 
         // ── Tooltip helpers ────────────────────────────────────────────────
-        const ttip = d3.select(tooltipRef.current!);
+        const tooltipNode = tooltipRef.current;
+        const containerNode = containerRef.current;
+        if (!tooltipNode || !containerNode) return;
+        const ttip = d3.select(tooltipNode);
         const showTip = (event: MouseEvent, html: string) => {
             ttip.style("opacity", "1").html(html);
             moveTip(event);
         };
         const moveTip = (event: MouseEvent) => {
-            const rect = containerRef.current!.getBoundingClientRect();
+            const rect = containerNode.getBoundingClientRect();
             ttip.style("left", `${event.clientX - rect.left + 12}px`)
                 .style("top", `${event.clientY - rect.top - 32}px`);
         };
@@ -380,12 +384,12 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
                 showTip(event,
                     `<strong>${d.src.label ?? "Observation"}</strong><br/>` +
                     `Cluster: <strong>${d.src.cluster}</strong><br/>` +
-                    `PC1: ${d.proj[0].toFixed(3)}, PC2: ${d.proj[1].toFixed(3)}<br/>` +
-                    (d.src.features.length > 0 ? `<hr style="margin:3px 0"/>${coords}` : "")
+                    `PC1: ${d.proj[0].toFixed(3)}, PC2: ${d.proj[1].toFixed(3)}<br/>${ 
+                    d.src.features.length > 0 ? `<hr style="margin:3px 0"/>${coords}` : ""}`
                 );
             })
             .on("mousemove", (event) => moveTip(event))
-            .on("mouseleave", function (_, d) {
+            .on("mouseleave", function () {
                 d3.select(this).attr("r", 5).attr("fill-opacity", 0.70);
                 hideTip();
             });
@@ -435,7 +439,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .text(d => `C${d.src.cluster}`);
 
         // ── Legend ────────────────────────────────────────────────────────
-        const lx = W - margin.right + 18;
+        const lx = chartW - margin.right + 18;
         const lg = svg.append("g").attr("transform", `translate(${lx},${margin.top + 4})`);
 
         lg.append("text")
@@ -448,7 +452,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             const gy = 20 + i * 22;
             lg.append("circle")
                 .attr("cx", 7).attr("cy", gy).attr("r", 6)
-                .attr("fill", colorMap.get(id)!).attr("fill-opacity", 0.85);
+                .attr("fill", colorMap.get(id) ?? "#888").attr("fill-opacity", 0.85);
             lg.append("text")
                 .attr("x", 18).attr("y", gy + 4)
                 .attr("font-size", "11px").attr("fill", "hsl(var(--foreground))")
@@ -488,7 +492,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("fill", "hsl(var(--muted-foreground))")
             .text(`Dimensi direduksi ke 2D menggunakan PCA · ${points.length} observasi · ${numClusters} klaster`);
 
-    }, [pcaResult, points, medoids, variableNames, title, renderWidth, height]);
+    }, [pcaResult, points, medoids, variableNames, title, svgWidth, height]);
 
     // ── Guard: insufficient data ───────────────────────────────────────────
     if (points.length + medoids.length < 2) {

@@ -3,22 +3,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import { useHelpLanguageStore } from '@/stores/useHelpLanguageStore';
+
 /**
  * Standardized layout for all statistics guide components
  * Enhanced with modern design patterns and animations
  * Follows the design system defined in globals.css
  */
 
-interface TabConfig {
+export interface TabConfig {
   id: string;
   label: string;
+  labelEn?: string;
   icon: LucideIcon;
   component: React.ComponentType;
 }
 
 interface StandardizedGuideLayoutProps {
   title: string;
+  titleEn?: string;
   description: string;
+  descriptionEn?: string;
   tabs: TabConfig[];
   defaultTab?: string;
   className?: string;
@@ -26,16 +31,31 @@ interface StandardizedGuideLayoutProps {
   summary?: React.ReactNode;
 }
 
+const DEFAULT_TAB_LABELS: Record<string, { id: string; en: string }> = {
+  overview: { id: 'Ringkasan', en: 'Overview' },
+  usage: { id: 'Penggunaan', en: 'Usage' },
+  algorithm: { id: 'Algoritma', en: 'Algorithm' },
+  variables: { id: 'Variabel', en: 'Variables' },
+  statistics: { id: 'Statistik', en: 'Statistics' },
+  charts: { id: 'Grafik', en: 'Charts' },
+};
+
 export const StandardizedGuideLayout: React.FC<StandardizedGuideLayoutProps> = ({
   title,
+  titleEn,
   description,
+  descriptionEn,
   tabs,
   defaultTab,
   className,
   children,
   summary
 }) => {
+  const { language } = useHelpLanguageStore();
   const [activeTab, setActiveTab] = useState(defaultTab ?? tabs[0]?.id ?? 'overview');
+
+  const displayTitle = language === 'en' && titleEn ? titleEn : title;
+  const displayDescription = language === 'en' && descriptionEn ? descriptionEn : description;
 
   return (
     <div className={cn(
@@ -51,13 +71,13 @@ export const StandardizedGuideLayout: React.FC<StandardizedGuideLayoutProps> = (
             "bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent",
             "sm:text-4xl"
           )}>
-            {title}
+            {displayTitle}
           </h1>
           <p className={cn(
             "text-lg text-muted-foreground leading-relaxed",
             "max-w-3xl"
           )}>
-            {description}
+            {displayDescription}
           </p>
         </div>
       </header>
@@ -79,6 +99,9 @@ export const StandardizedGuideLayout: React.FC<StandardizedGuideLayoutProps> = (
           )}>
             {tabs.map((tab) => {
               const IconComponent = tab.icon;
+              const labelText = (language === 'en')
+                ? (tab.labelEn || DEFAULT_TAB_LABELS[tab.id]?.en || tab.label)
+                : (DEFAULT_TAB_LABELS[tab.id]?.id || tab.label);
               return (
                 <TabsTrigger 
                   key={tab.id} 
@@ -96,7 +119,7 @@ export const StandardizedGuideLayout: React.FC<StandardizedGuideLayoutProps> = (
                   )}
                 >
                   <IconComponent className="w-4 h-4 flex-shrink-0" />
-                  <span className="truncate">{tab.label}</span>
+                  <span className="truncate">{labelText}</span>
                 </TabsTrigger>
               );
             })}

@@ -1,4 +1,5 @@
-import type {MultivariateType} from "./multivariate";
+import type { MultivariateType } from "./multivariate";
+import type { ResultJson } from "@/types/Table";
 
 export type MultivariateAnalysisType = {
     configData: MultivariateType;
@@ -6,4 +7,6 @@ export type MultivariateAnalysisType = {
     variables: any[];
 };
 
-export type MultivariateFinalResultType = {};
+export type MultivariateFinalResultType = {
+    formattedResult: ResultJson;
+};

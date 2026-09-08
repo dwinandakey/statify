@@ -5,10 +5,11 @@
 
 use std::collections::HashMap;
 use rayon::prelude::*;
+use nalgebra::{DMatrix, DVector};
 
 use crate::{
     models::result::PairwiseComparison,
-    stats::core::{ calculate_p_value_from_f, AnalyzedDataset },
+    stats::core::{calculate_p_value_from_f, AnalyzedDataset, calculate_covariance},
 };
 
 /// Generate pairwise comparisons between groups
@@ -105,10 +106,6 @@ pub fn calculate_mahalanobis_distance(
     group_j: &str,
     variables: &[String]
 ) -> f64 {
-    // Optimized version for specific group pairs
-    use nalgebra::{ DVector, DMatrix };
-    use crate::stats::core::{ calculate_covariance, EPSILON };
-
     // Extract means for both groups
     let mut mean_diff = DVector::zeros(variables.len());
 
@@ -177,11 +174,6 @@ pub fn calculate_mahalanobis_distance(
     } else {
         // If no valid covariance, return a simple Euclidean distance
         return mean_diff.norm_squared();
-    }
-
-    // Add small regularization for numerical stability
-    for i in 0..variables.len() {
-        pooled_cov[(i, i)] += EPSILON;
     }
 
     // Try to invert the matrix using nalgebra

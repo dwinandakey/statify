@@ -170,6 +170,7 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
                                     <SelectItem value="GARCH">GARCH (Standard)</SelectItem>
                                     <SelectItem value="EGARCH">EGARCH (Exponential)</SelectItem>
                                     <SelectItem value="TGARCH">TGARCH (Threshold/GJR)</SelectItem>
+                                    <SelectItem value="IGARCH">IGARCH (Integrated GARCH)</SelectItem>
                                     <SelectItem value="ARCH">ARCH (Autoregressive Conditional Heteroscedasticity)</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -211,7 +212,7 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
                         <div className="pt-4 border-t">
                             <Label className="mb-2 block">Solver Options</Label>
                             <p className="text-xs text-muted-foreground">
-                                Currently using default BHHH/Newton optimization.
+                                Currently using L-BFGS optimization.
                             </p>
                              {/* Future: Add Distribution and Restriction options here */}
                         </div>

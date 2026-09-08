@@ -30,7 +30,6 @@ export interface StatisticsOptions {
 interface StatisticsTabProps {
     options: StatisticsOptions;
     onChange: (stats: StatisticsOptions) => void;
-    availableSubpopulationVariables: string[];
 }
 
 type ToggleableStatistic = Exclude<
@@ -41,7 +40,6 @@ type ToggleableStatistic = Exclude<
 export const StatisticsTab: React.FC<StatisticsTabProps> = ({
     options,
     onChange,
-    availableSubpopulationVariables,
 }) => {
     const handleToggle = (key: ToggleableStatistic) => {
         onChange({
@@ -55,23 +53,6 @@ export const StatisticsTab: React.FC<StatisticsTabProps> = ({
         onChange({
             ...options,
             confidenceInterval: isNaN(num) ? 95 : Math.max(1, Math.min(99, num)),
-        });
-    };
-
-    const handleSubpopulationChange = (value: SubpopulationMode) => {
-        onChange({
-            ...options,
-            subpopulationMode: value,
-        });
-    };
-
-    const handleSubpopulationVariableToggle = (variableName: string) => {
-        const isSelected = options.subpopulationVariables.includes(variableName);
-        onChange({
-            ...options,
-            subpopulationVariables: isSelected
-                ? options.subpopulationVariables.filter((v) => v !== variableName)
-                : [...options.subpopulationVariables, variableName],
         });
     };
 
@@ -161,55 +142,6 @@ export const StatisticsTab: React.FC<StatisticsTabProps> = ({
                         max={99}
                     />
                 </div>
-            </section>
-
-            <section className="rounded-md border p-4">
-                <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Define subpopulations
-                </Label>
-                <RadioGroup
-                    className="mt-3 space-y-3"
-                    value={options.subpopulationMode}
-                    onValueChange={(value) => handleSubpopulationChange(value as SubpopulationMode)}
-                >
-                    <div className="flex items-start space-x-3">
-                        <RadioGroupItem value="factors" id="subpop-factors" />
-                        <div>
-                            <Label htmlFor="subpop-factors" className="text-sm font-normal">
-                                Covariate patterns defined by factors and covariates
-                            </Label>
-                            <p className="text-xs text-muted-foreground">Matches SPSS default behavior.</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                        <RadioGroupItem value="variableList" id="subpop-variables" />
-                        <div className="w-full">
-                            <Label htmlFor="subpop-variables" className="text-sm font-normal">
-                                Covariate patterns defined by variable list below
-                            </Label>
-                            <p className="text-xs text-muted-foreground">
-                                Select model variables used to define subpopulation patterns (SPSS variable list mode).
-                            </p>
-                            <div className="mt-2 rounded border border-dashed border-muted-foreground/40 bg-muted/10 p-3 space-y-2">
-                                {availableSubpopulationVariables.length === 0 && (
-                                    <p className="text-[11px] text-muted-foreground">
-                                        Add factors/covariates in Model tab first.
-                                    </p>
-                                )}
-                                {availableSubpopulationVariables.map((variableName) => (
-                                    <label key={variableName} className="flex items-center space-x-2 text-sm">
-                                        <Checkbox
-                                            checked={options.subpopulationVariables.includes(variableName)}
-                                            onCheckedChange={() => handleSubpopulationVariableToggle(variableName)}
-                                            disabled={options.subpopulationMode !== "variableList"}
-                                        />
-                                        <span>{variableName}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </RadioGroup>
             </section>
         </div>
     );

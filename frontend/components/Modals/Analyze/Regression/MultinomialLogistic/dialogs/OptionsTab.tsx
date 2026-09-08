@@ -128,7 +128,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
                             </SelectTrigger>
                             <SelectContent>
                                 {(
-                                    Array.isArray(dependentVariable?.values) && dependentVariable!.values.length > 0
+                                    (Array.isArray(dependentVariable?.values) && dependentVariable!.values.length > 0
                                         ? dependentVariable!.values
                                         : (() => {
                                             // fallback: build distinct values from active data rows
@@ -139,8 +139,8 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
                                                 const items: Array<{ value: string; label: string }> = [];
                                                 for (const row of data) {
                                                     const raw = row?.[col];
-                                                    const str = raw === null || raw === undefined ? "" : String(raw);
-                                                    if (!seen.has(str)) {
+                                                    const str = raw === null || raw === undefined ? "" : String(raw).trim();
+                                                    if (str !== "" && !seen.has(str)) {
                                                         seen.add(str);
                                                         items.push({ value: str, label: str });
                                                     }
@@ -149,8 +149,10 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
                                             } catch {
                                                 return [];
                                             }
-                                        })()
-                                ).map((cat: any) => (
+                                        })()) as any[]
+                                )
+                                .filter((cat: any) => cat && cat.value !== undefined && String(cat.value).trim() !== "")
+                                .map((cat: any) => (
                                     <SelectItem key={String(cat.value)} value={String(cat.value)}>
                                         {cat.label ?? cat.value}
                                     </SelectItem>

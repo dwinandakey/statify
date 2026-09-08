@@ -37,7 +37,7 @@
     ".next/types/**/*.ts",
     "next-env.d.ts",
     ".next-dev/types/**/*.ts"
-  ],
+, "components/Modals/Analyze/Regression/Ordinal/worker/ordinal-worker.js"  ],
   "exclude": [
     "node_modules",
     "dist",

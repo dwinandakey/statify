@@ -26,6 +26,9 @@ export type DiscriminantDialogProps = {
     globalVariables: string[];
     onContinue: (mainState: DiscriminantMainType) => void;
     onReset: () => void;
+    onClose: () => void;
+    isLoading?: boolean;
+    error?: string | null;
 };
 
 export type DiscriminantDefineRangeType = {
@@ -173,6 +176,22 @@ export type DiscriminantBootstrapProps = {
     data: DiscriminantBootstrapType;
 };
 
+export type DiscriminantAssumptionsType = {
+    Multicollinearity: boolean;
+    MultivariateNormality: boolean;
+    UnivariateNormality: boolean;
+};
+
+export type DiscriminantAssumptionsProps = {
+    isAssumptionsOpen: boolean;
+    setIsAssumptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    updateFormData: (
+        field: keyof DiscriminantAssumptionsType,
+        value: boolean
+    ) => void;
+    data: DiscriminantAssumptionsType;
+};
+
 export type DiscriminantType = {
     main: DiscriminantMainType;
     defineRange: DiscriminantDefineRangeType;
@@ -182,6 +201,7 @@ export type DiscriminantType = {
     classify: DiscriminantClassifyType;
     save: DiscriminantSaveType;
     bootstrap: DiscriminantBootstrapType;
+    assumptions: DiscriminantAssumptionsType;
 };
 
 export type DiscriminantContainerProps = {

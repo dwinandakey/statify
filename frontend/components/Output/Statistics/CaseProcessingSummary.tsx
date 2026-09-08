@@ -38,7 +38,7 @@ const CaseProcessingSummary: React.FC<CaseProcessingSummaryProps> = ({ data }) =
         return header;
     };
 
-    const shouldRenderFirstHeader = (rowIndex: number): boolean => {
+    const isFirstHeaderNeeded = (rowIndex: number): boolean => {
         const current = rows[rowIndex]?.rowHeader?.[0] ?? "";
         if (current === "Overall") return true;
         if (rowIndex === 0) return true;
@@ -98,12 +98,12 @@ const CaseProcessingSummary: React.FC<CaseProcessingSummaryProps> = ({ data }) =
                         </TableHeader>
                         <TableBody>
                             {rows.map((row, idx) => {
-                                const renderFirstHeader = shouldRenderFirstHeader(idx);
-                                const firstHeaderRowSpan = renderFirstHeader ? getRowSpanForFirstHeader(idx) : 0;
+                                const displayFirstHeader = isFirstHeaderNeeded(idx);
+                                const firstHeaderRowSpan = displayFirstHeader ? getRowSpanForFirstHeader(idx) : 0;
 
                                 return (
                                     <TableRow key={idx} className="border-b border-border hover:bg-transparent">
-                                        {renderFirstHeader ? (
+                                        {displayFirstHeader ? (
                                             <TableCell
                                                 rowSpan={firstHeaderRowSpan}
                                                 className="whitespace-nowrap bg-muted/40 text-left align-middle font-medium text-foreground"

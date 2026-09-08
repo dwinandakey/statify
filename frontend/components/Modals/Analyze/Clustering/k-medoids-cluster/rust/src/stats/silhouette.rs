@@ -205,5 +205,87 @@ mod tests {
         assert!(per_cluster[0] > 0.5);
         assert!(per_cluster[1] > 0.5);
     }
+
+    /// Semua nilai silhouette harus berada dalam rentang [-1, 1].
+    #[test]
+    fn test_silhouette_values_in_range() {
+        // Penugasan berselang-seling (buruk) — pastikan nilai tetap dalam [-1, 1]
+        let data = vec![
+            vec![0.0, 0.0], vec![2.0, 0.0], vec![4.0, 0.0], vec![6.0, 0.0],
+        ];
+        let labels = vec![0, 1, 0, 1];
+        let metric = DistanceMetric::Euclidean;
+
+        let scores = calculate_all_silhouettes(&data, &labels, &metric);
+        for s in &scores {
+            assert!(*s >= -1.0 && *s <= 1.0, "silhouette {} berada di luar [-1, 1]", s);
+        }
+    }
+
+    /// Data kosong harus mengembalikan vektor kosong tanpa panic.
+    #[test]
+    fn test_silhouette_empty_data_returns_empty_vec() {
+        let data: Vec<Vec<f64>> = vec![];
+        let labels: Vec<usize> = vec![];
+        let metric = DistanceMetric::Euclidean;
+
+        let scores = calculate_all_silhouettes(&data, &labels, &metric);
+        assert!(scores.is_empty(), "data kosong harus mengembalikan vektor silhouette kosong");
+    }
+
+    /// Penugasan cluster yang buruk (berselang-seling) harus menghasilkan silhouette rata-rata negatif.
+    ///
+    /// Kalkulasi manual (1D Euclidean):
+    ///   data=[0,2,4,6], labels=[0,1,0,1]
+    ///   cluster0={0,4}, cluster1={2,6}
+    ///   s(0)=0.0, s(1)=-0.5, s(2)=-0.5, s(3)=0.0  →  avg = -0.25
+    #[test]
+    fn test_silhouette_poor_separation_negative_score() {
+        let data = vec![vec![0.0], vec![2.0], vec![4.0], vec![6.0]];
+        let labels = vec![0, 1, 0, 1];
+        let metric = DistanceMetric::Euclidean;
+
+        let avg = calculate_average_silhouette(&data, &labels, &metric);
+        assert!(
+            avg < 0.0,
+            "penugasan berselang-seling harus menghasilkan silhouette negatif, dapat {}",
+            avg
+        );
+    }
+
+    /// Verifikasi nilai silhouette dengan kalkulasi manual.
+    ///
+    /// data=[(0,0),(1,0),(10,0),(11,0)], labels=[0,0,1,1]
+    ///   s(0)=9.5/10.5, s(1)=8.5/9.5, s(2)=8.5/9.5, s(3)=9.5/10.5  →  avg ≈ 0.8997
+    #[test]
+    fn test_silhouette_known_value() {
+        let data = vec![
+            vec![0.0, 0.0], vec![1.0, 0.0], vec![10.0, 0.0], vec![11.0, 0.0],
+        ];
+        let labels = vec![0, 0, 1, 1];
+        let metric = DistanceMetric::Euclidean;
+
+        let avg = calculate_average_silhouette(&data, &labels, &metric);
+        assert!(
+            (avg - 0.8997).abs() < 0.001,
+            "diharapkan silhouette rata-rata ≈ 0.8997, dapat {}",
+            avg
+        );
+    }
+
+    /// calculate_silhouette_per_cluster harus mengembalikan satu nilai per cluster.
+    #[test]
+    fn test_silhouette_per_cluster_length() {
+        let data = vec![
+            vec![0.0, 0.0], vec![1.0, 0.0],
+            vec![10.0, 0.0], vec![11.0, 0.0],
+            vec![20.0, 0.0], vec![21.0, 0.0],
+        ];
+        let labels = vec![0, 0, 1, 1, 2, 2];
+        let metric = DistanceMetric::Euclidean;
+
+        let per_cluster = calculate_silhouette_per_cluster(&data, &labels, 3, &metric);
+        assert_eq!(per_cluster.len(), 3, "harus mengembalikan satu skor per cluster");
+    }
 }
 

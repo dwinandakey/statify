@@ -3,16 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
     TooltipProvider,
     Tooltip,
     TooltipTrigger,
@@ -25,11 +15,6 @@ import type {
     KMedoidsClusterContainerProps,
     KMedoidsClusterMainType,
     KMedoidsClusterType,
-    KMedoidsClusterIterateType,
-    KMedoidsClusterResultsType,
-    KMedoidsClusterEvaluationType,
-    KMedoidsClusterSaveType,
-    KMedoidsClusterOptionsType,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { ClusterMode } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { KMedoidsClusterDialog } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/dialog";
@@ -49,6 +34,8 @@ import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+const TAB_ORDER = ["variables", "iterate", "results", "evaluation", "save", "options"] as const;
+
 export const KMedoidsClusterContainer = ({
     onClose,
 }: KMedoidsClusterContainerProps) => {
@@ -59,13 +46,6 @@ export const KMedoidsClusterContainer = ({
         ...KMedoidsClusterDefault,
     });
     const [activeTab, setActiveTab] = useState("variables");
-    const [pendingMainData, setPendingMainData] = useState<KMedoidsClusterMainType | null>(null);
-    const [missingWarning, setMissingWarning] = useState<{
-        rowsWithMissing: number;
-        totalRows: number;
-        missingPercent: string;
-        topVariables: string;
-    } | null>(null);
 
     const { closeModal } = useModal();
     const router = useRouter();
@@ -74,7 +54,14 @@ export const KMedoidsClusterContainer = ({
         const loadFormData = async () => {
             const savedData = await getFormData("KMedoidsCluster");
             if (savedData) {
-                const { id, ...formDataWithoutId } = savedData;
+                const { id: _id, ...formDataWithoutId } = savedData;
+
+                // Migrasi konfigurasi lama: dua checkbox grafik pindah tab agar satu grup
+                // dengan tabelnya. Nilai lama di section `options` dibawa ke section barunya
+                // supaya preferensi pengguna tidak hilang begitu saja.
+                const legacyConvergenceChart = formDataWithoutId.options?.ShowConvergenceChart;
+                const legacyOptimalKChart = formDataWithoutId.options?.ShowOptimalKChart;
+
                 setFormData({
                     ...KMedoidsClusterDefault,
                     ...formDataWithoutId,
@@ -89,10 +76,18 @@ export const KMedoidsClusterContainer = ({
                     results: {
                         ...KMedoidsClusterDefault.results,
                         ...formDataWithoutId.results,
+                        ShowConvergenceChart:
+                            formDataWithoutId.results?.ShowConvergenceChart ??
+                            legacyConvergenceChart ??
+                            KMedoidsClusterDefault.results.ShowConvergenceChart,
                     },
                     evaluation: {
                         ...KMedoidsClusterDefault.evaluation,
                         ...formDataWithoutId.evaluation,
+                        ShowOptimalKChart:
+                            formDataWithoutId.evaluation?.ShowOptimalKChart ??
+                            legacyOptimalKChart ??
+                            KMedoidsClusterDefault.evaluation.ShowOptimalKChart,
                     },
                     save: {
                         ...KMedoidsClusterDefault.save,
@@ -196,8 +191,15 @@ export const KMedoidsClusterContainer = ({
         });
     };
 
-    const detectMissingWarning = (mainData: KMedoidsClusterMainType) => {
-        const selectedVarNames = new Set(mainData.TargetVar || []);
+    /**
+     * Statistik missing value untuk variabel yang sedang dipilih.
+     * Ditampilkan sebagai notice inline di tab Options (tepat di atas grup Missing Values)
+     * supaya angkanya terlihat saat pengguna memilih strategi listwise/pairwise — bukan
+     * sebagai dialog setelah klik OK. Rekap lengkapnya tetap ada di tabel Case Processing
+     * Summary pada output.
+     */
+    const missingStats = useMemo(() => {
+        const selectedVarNames = new Set(formData.main.TargetVar || []);
         const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
 
         if (selectedVariables.length === 0 || dataVariables.length === 0) {
@@ -232,9 +234,11 @@ export const KMedoidsClusterContainer = ({
             return null;
         }
 
-        const topVariables = Object.entries(missingByVariable)
+        const affected = Object.entries(missingByVariable)
             .filter(([, count]) => count > 0)
-            .sort((a, b) => b[1] - a[1])
+            .sort((a, b) => b[1] - a[1]);
+
+        const topVariables = affected
             .slice(0, 5)
             .map(([name, count]) => `${name} (${count})`)
             .join(", ");
@@ -244,17 +248,82 @@ export const KMedoidsClusterContainer = ({
             totalRows: dataVariables.length,
             missingPercent: ((rowsWithMissing / dataVariables.length) * 100).toFixed(1),
             topVariables,
+            remainingVariables: Math.max(0, affected.length - 5),
         };
+    }, [formData.main.TargetVar, variables, dataVariables]);
+
+    const getValidRowCount = (
+        rows: any[],
+        selectedVariables: typeof variables,
+        useListWise: boolean,
+        usePairWise: boolean
+    ) => {
+        if (rows.length === 0 || selectedVariables.length === 0) {
+            return 0;
+        }
+
+        let validCount = 0;
+
+        for (const row of rows) {
+            let hasAnyValid = false;
+            let hasAnyMissing = false;
+
+            for (const variable of selectedVariables) {
+                const rawValue = row[variable.columnIndex as number];
+                const parsedValue =
+                    typeof rawValue === "number" ? rawValue : parseFloat(String(rawValue));
+
+                if (Number.isFinite(parsedValue)) {
+                    hasAnyValid = true;
+                } else {
+                    hasAnyMissing = true;
+                }
+            }
+
+            if (useListWise || !usePairWise) {
+                if (!hasAnyMissing && hasAnyValid) {
+                    validCount += 1;
+                }
+            } else if (hasAnyValid) {
+                validCount += 1;
+            }
+        }
+
+        return validCount;
     };
 
-    const handleRunWithMissingCheck = () => {
-        const warning = detectMissingWarning(formData.main);
-        if (warning) {
-            setPendingMainData(formData.main);
-            setMissingWarning(warning);
+    const handleRun = () => {
+        const selectedVarNames = new Set(formData.main.TargetVar || []);
+        const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
+
+        if (dataVariables.length === 0) {
+            toast.error("Dataset is empty. Please load data before running clustering.");
             return;
         }
 
+        if (selectedVariables.length === 0) {
+            toast.error("Please select at least one numeric variable for clustering.");
+            return;
+        }
+
+        const useListWise = formData.options?.ExcludeListWise ?? true;
+        const usePairWise = formData.options?.ExcludePairWise ?? false;
+        const validRows = getValidRowCount(
+            dataVariables,
+            selectedVariables,
+            useListWise,
+            usePairWise
+        );
+
+        if (validRows < 2) {
+            toast.error(
+                "Not enough valid numeric rows for clustering. Check selected variables and missing handling settings."
+            );
+            return;
+        }
+
+        // Tidak ada dialog konfirmasi missing value di sini: dampaknya sudah ditampilkan
+        // sebagai notice inline di tab Options, dan rekapnya masuk ke Case Processing Summary.
         void executeKMedoidsCluster(formData.main);
     };
 
@@ -276,13 +345,32 @@ export const KMedoidsClusterContainer = ({
                     onValueChange={setActiveTab}
                     className="w-full h-full flex flex-col"
                 >
-                    <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
-                        <TabsTrigger value="variables">Variables</TabsTrigger>
-                        <TabsTrigger value="iterate">Iterate</TabsTrigger>
-                        <TabsTrigger value="results">Results</TabsTrigger>
-                        <TabsTrigger value="evaluation">Evaluation</TabsTrigger>
-                        <TabsTrigger value="save">Save</TabsTrigger>
-                        <TabsTrigger value="options">Options</TabsTrigger>
+                    <TabsList
+                        className="grid w-full flex-shrink-0"
+                        style={{
+                            gridTemplateColumns: TAB_ORDER.map((tab) =>
+                                tab === activeTab ? "max-content" : "minmax(0,1fr)"
+                            ).join(" "),
+                        }}
+                    >
+                        <TabsTrigger value="variables" className="min-w-0">
+                            <span className="truncate block w-full">Variables</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="iterate" className="min-w-0">
+                            <span className="truncate block w-full">Iterate</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="results" className="min-w-0">
+                            <span className="truncate block w-full">Results</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="evaluation" className="min-w-0">
+                            <span className="truncate block w-full">Evaluation</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="save" className="min-w-0">
+                            <span className="truncate block w-full">Save</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="options" className="min-w-0">
+                            <span className="truncate block w-full">Options</span>
+                        </TabsTrigger>
                     </TabsList>
 
                     <div className="flex-grow min-h-0 overflow-hidden">
@@ -355,6 +443,7 @@ export const KMedoidsClusterContainer = ({
                         >
                             <KMedoidsClusterOptions
                                 data={formData.options}
+                                missingStats={missingStats}
                                 updateFormData={(field, value) =>
                                     updateFormData("options", field, value)
                                 }
@@ -386,7 +475,7 @@ export const KMedoidsClusterContainer = ({
 
                 <div className="flex items-center space-x-4">
                     <Button
-                        onClick={handleRunWithMissingCheck}
+                        onClick={handleRun}
                         disabled={
                             !formData.main.TargetVar ||
                             formData.main.TargetVar.length === 0 ||
@@ -414,47 +503,6 @@ export const KMedoidsClusterContainer = ({
                     </Button>
                 </div>
             </div>
-
-            <AlertDialog
-                open={Boolean(missingWarning)}
-                onOpenChange={(open) => {
-                    if (!open) {
-                        setMissingWarning(null);
-                        setPendingMainData(null);
-                    }
-                }}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Warning Missing Value</AlertDialogTitle>
-                        <AlertDialogDescription className="space-y-2">
-                            <span className="block">
-                                Ditemukan missing value pada {missingWarning?.rowsWithMissing ?? 0} dari {missingWarning?.totalRows ?? 0} baris ({missingWarning?.missingPercent ?? "0.0"}%).
-                            </span>
-                            <span className="block mt-2">
-                                Jika dilanjutkan, proses clustering akan menghapus baris yang mengandung missing value.
-                            </span>
-                            {missingWarning?.topVariables ? (
-                                <span className="block mt-2">Variabel terdampak (top 5): {missingWarning.topVariables}</span>
-                            ) : null}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Kembali</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={() => {
-                                if (pendingMainData) {
-                                    void executeKMedoidsCluster(pendingMainData);
-                                }
-                                setMissingWarning(null);
-                                setPendingMainData(null);
-                            }}
-                        >
-                            Lanjut
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     );
 };

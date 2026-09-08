@@ -31,7 +31,7 @@ pub fn calculate_parameter_estimates(
         .flat_map(|defs| defs.iter().map(|def| def.name.clone()))
         .collect::<Vec<String>>();
 
-    for dep_var in &dependent_vars {
+    for (dv_idx, dep_var) in dependent_vars.iter().enumerate() {
         let (x_matrix, y_vector) = build_design_matrix_and_response(data, config, dep_var)?;
 
         // Fit the model
@@ -84,7 +84,27 @@ pub fn calculate_parameter_estimates(
         let mut param_estimates = Vec::new();
 
         for (i, param_name) in param_names.iter().enumerate() {
-            let b_value = beta[i];
+            // For One-Sample Hotelling T² with Test Values (μ₀): the
+            // Intercept row of Parameter Estimates must test H₀: μₖ = μ₀ₖ,
+            // not H₀: μₖ = 0. SPSS users achieve this by transforming the
+            // DV with `compute d_var = var - μ₀` before running GLM; we
+            // achieve the same arithmetic outcome by subtracting μ₀ₖ from
+            // the Intercept's B and recomputing t, p, CI, and ancillary
+            // statistics. SE is invariant to a DV shift by a constant, so
+            // std_error is unchanged. Non-Intercept parameters (factor
+            // effects, covariate slopes) are also invariant, so we touch
+            // them only when this is the Intercept row.
+            let intercept_shift =
+                if param_name == "Intercept" {
+                    config.main.test_values
+                        .as_ref()
+                        .and_then(|tv| tv.get(dv_idx).copied())
+                        .unwrap_or(0.0)
+                } else {
+                    0.0
+                };
+
+            let b_value = beta[i] - intercept_shift;
             let std_error = (ms_error * xtx_inv[(i, i)]).sqrt();
             let t_value = b_value / std_error;
             let significance = calculate_t_significance(df_error, t_value);

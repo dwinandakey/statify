@@ -16,7 +16,7 @@ use crate::models::{
 use super::core::parse_within_subject_factors;
 
 /// Calculate parameter estimates
-fn calculate_parameter_estimates(
+pub fn calculate_parameter_estimates(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig
 ) -> Result<ParameterEstimates, String> {
@@ -138,10 +138,10 @@ fn calculate_parameter_estimates(
                 }
             };
 
-            let beta = xtx_inv * X.transpose() * y;
+            let beta = xtx_inv.clone() * X.transpose() * y.clone();
 
             // Calculate fitted values and residuals
-            let y_hat = X * beta;
+            let y_hat = X * beta.clone();
             let residuals = y - y_hat;
 
             // Calculate standard errors
@@ -321,7 +321,29 @@ fn calculate_t_test_power(ncp: f64, df: f64, alpha: f64) -> f64 {
 
 /// Calculate t critical value
 fn t_critical_value(df: f64, alpha: f64) -> f64 {
-    // Approximation of t critical value
     let z = normal_quantile(1.0 - alpha);
     z * (1.0 + z.powi(2) / (4.0 * df))
+}
+
+fn normal_cdf(x: f64) -> f64 {
+    0.5 * (1.0 + erf(x / (2.0_f64).sqrt()))
+}
+
+fn normal_quantile(p: f64) -> f64 {
+    if p <= 0.0 { return f64::NEG_INFINITY; }
+    if p >= 1.0 { return f64::INFINITY; }
+    let q = if p < 0.5 { p } else { 1.0 - p };
+    let t = (-2.0 * q.ln()).sqrt();
+    let numer = 2.515517 + 0.802853 * t + 0.010328 * t.powi(2);
+    let denom = 1.0 + 1.432788 * t + 0.189269 * t.powi(2) + 0.001308 * t.powi(3);
+    let x = t - numer / denom;
+    if p < 0.5 { -x } else { x }
+}
+
+fn erf(x: f64) -> f64 {
+    let sign = if x < 0.0 { -1.0 } else { 1.0 };
+    let x = x.abs();
+    let t = 1.0 / (1.0 + 0.3275911 * x);
+    let y = 1.0 - ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * (-x * x).exp();
+    sign * y
 }

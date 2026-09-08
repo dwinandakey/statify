@@ -12,6 +12,12 @@ import {
 } from "lucide-react";
 import type { Variable } from "@/types/Variable";
 import { cn } from "@/lib/utils";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MultinomialOptions {
     dependent: Variable | null;
@@ -166,13 +172,24 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
     };
 
     return (
-        <div className="grid grid-cols-[1fr_auto_1fr] gap-4 h-full max-h-[440px] overflow-hidden p-1">
+        <div className="grid grid-cols-[1fr_auto_1fr] gap-4 h-full min-h-[440px] overflow-y-auto p-1">
 
             {/* 1. Source List (Kiri) */}
             <div className="flex flex-col border rounded-md bg-card overflow-hidden h-full">
                 <div className="p-2 border-b bg-muted/30 text-[10px] font-bold uppercase flex items-center justify-between shrink-0">
                     Variables
-                    <Info className="h-3 w-3 opacity-40" />
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Info className="h-3 w-3 opacity-40 hover:opacity-100 cursor-help transition-opacity" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="bg-blue-600 dark:bg-blue-700 text-white border-blue-500 shadow-md">
+                                <p className="max-w-xs text-xs normal-case font-normal">
+                                    Daftar variabel yang tersedia. Pilih variabel lalu seret (drag) ke kolom target di sebelah kanan atau gunakan tombol panah.
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
                 <div className="px-2 py-1 text-[10px] text-muted-foreground border-b bg-muted/10">
                     Ctrl/Cmd + click untuk pilih banyak, lalu drag sekali.
@@ -218,15 +235,17 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
                     onDrop={(e) => handleDropToTarget(e, "dependent")}
                 >
                     <div className="p-1.5 border-b bg-muted/20 text-[9px] font-bold uppercase">Dependent Variable</div>
-                    <div className="p-1.5 flex-1">
-                        {options.dependent && (
+                    <div className="p-1.5 flex-grow flex items-center justify-center min-h-[40px]">
+                        {options.dependent ? (
                             <div
                                 onDoubleClick={() => removeFromList(String(options.dependent!.id), "dependent")}
-                                className="flex items-center gap-2 px-2 py-1 bg-primary/10 rounded-sm text-xs border border-primary/20"
+                                className="w-full flex items-center gap-2 px-2 py-1 bg-primary/10 rounded-sm text-xs border border-primary/20"
                             >
                                 {getVariableIcon(options.dependent.measure || "")}
                                 <span className="truncate font-medium">{options.dependent.name}</span>
                             </div>
+                        ) : (
+                            <span className="text-[9px] text-muted-foreground italic text-center leading-tight">Drag var di sini<br />(Double click untuk hapus)</span>
                         )}
                     </div>
                 </div>
@@ -247,18 +266,24 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
                 >
                     <div className="p-1.5 border-b bg-muted/20 text-[9px] font-bold uppercase text-orange-600">Factors (Fixed)</div>
                     <ScrollArea className="flex-1">
-                        <div className="p-1.5 space-y-1">
-                            {options.factors.map((f) => (
-                                <div
-                                    key={f.id}
-                                    onDoubleClick={() => removeFromList(String(f.id), "factors")}
-                                    className="flex items-center gap-2 px-2 py-0.5 hover:bg-accent rounded-sm text-xs cursor-default"
-                                >
-                                    {getVariableIcon(f.measure || "")}
-                                    <span className="truncate">{f.name}</span>
-                                </div>
-                            ))}
-                        </div>
+                        {options.factors.length > 0 ? (
+                            <div className="p-1.5 space-y-1">
+                                {options.factors.map((f) => (
+                                    <div
+                                        key={f.id}
+                                        onDoubleClick={() => removeFromList(String(f.id), "factors")}
+                                        className="flex items-center gap-2 px-2 py-0.5 hover:bg-accent rounded-sm text-xs cursor-default"
+                                    >
+                                        {getVariableIcon(f.measure || "")}
+                                        <span className="truncate">{f.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="h-[105px] flex items-center justify-center p-3 text-center">
+                                <span className="text-[9px] text-muted-foreground italic leading-tight">Drag var di sini<br />(Double click untuk hapus)</span>
+                            </div>
+                        )}
                     </ScrollArea>
                 </div>
 
@@ -278,18 +303,24 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
                 >
                     <div className="p-1.5 border-b bg-muted/20 text-[9px] font-bold uppercase text-blue-600">Covariates</div>
                     <ScrollArea className="flex-1">
-                        <div className="p-1.5 space-y-1">
-                            {options.covariates.map((c) => (
-                                <div
-                                    key={c.id}
-                                    onDoubleClick={() => removeFromList(String(c.id), "covariates")}
-                                    className="flex items-center gap-2 px-2 py-0.5 hover:bg-accent rounded-sm text-xs cursor-default"
-                                >
-                                    {getVariableIcon(c.measure || "")}
-                                    <span className="truncate">{c.name}</span>
-                                </div>
-                            ))}
-                        </div>
+                        {options.covariates.length > 0 ? (
+                            <div className="p-1.5 space-y-1">
+                                {options.covariates.map((c) => (
+                                    <div
+                                        key={c.id}
+                                        onDoubleClick={() => removeFromList(String(c.id), "covariates")}
+                                        className="flex items-center gap-2 px-2 py-0.5 hover:bg-accent rounded-sm text-xs cursor-default"
+                                    >
+                                        {getVariableIcon(c.measure || "")}
+                                        <span className="truncate">{c.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="h-[105px] flex items-center justify-center p-3 text-center">
+                                <span className="text-[9px] text-muted-foreground italic leading-tight">Drag var di sini<br />(Double click untuk hapus)</span>
+                            </div>
+                        )}
                     </ScrollArea>
                 </div>
             </div>

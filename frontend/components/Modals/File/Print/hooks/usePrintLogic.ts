@@ -5,8 +5,7 @@ import type { DataRow } from "@/types/Data";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { useResultStore } from "@/stores/useResultStore";
 import { jsPDF } from "jspdf";
-// autoTable is not directly used here anymore, but jsPDF instance is extended by it.
-// import { autoTable } from "jspdf-autotable"; 
+import { toast } from "sonner";
 import type { Variable } from "@/types/Variable";
 import type {
     UsePrintLogicProps,
@@ -94,14 +93,27 @@ export const usePrintLogic = ({
                 void addResultsView(doc, currentY, logs, generateAutoTableDataFromString);
             }
 
-            // Ensure at least one section was added before saving, or save a blank PDF if that's desired.
-            // For now, it saves even if empty.
+            // Use manual blob download instead of doc.save() to avoid jsPDF v4's
+            // File System Access API (showSaveFilePicker) which requires an active
+            // user gesture. After multiple await calls, that gesture context expires,
+            // silently blocking the download.
             const trimmed = fileName.trim();
-            doc.save(`${trimmed === "" ? "statify_print_output" : trimmed}.pdf`);
-            onClose(); 
+            const outputFileName = `${trimmed === "" ? "statify_print_output" : trimmed}.pdf`;
+
+            const blob = doc.output('blob');
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = outputFileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            onClose();
         } catch (error) {
             console.error("Error generating PDF:", error);
-            // Optionally, display a user-facing error message here
+            toast.error(`Gagal membuat PDF: ${error instanceof Error ? error.message : String(error)}`);
         } finally {
             setIsGenerating(false);
         }

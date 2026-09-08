@@ -6,8 +6,6 @@ use crate::models::{
     result::GeneralEstimableFunction,
 };
 
-use super::core::generate_parameter_names;
-
 /// Calculate general estimable function
 pub fn calculate_general_estimable_function(
     data: &AnalysisData,
@@ -15,8 +13,12 @@ pub fn calculate_general_estimable_function(
 ) -> Result<GeneralEstimableFunction, String> {
     let mut matrix = HashMap::new();
 
-    // Generate parameter names
-    let param_names = generate_parameter_names(data, config)?;
+    let mut param_names = vec!["Intercept".to_string()];
+    if let Some(factors) = &config.main.factors_var {
+        for f in factors {
+            param_names.push(f.clone());
+        }
+    }
 
     // Create contrast vectors for each parameter
     for (i, param_name) in param_names.iter().enumerate() {

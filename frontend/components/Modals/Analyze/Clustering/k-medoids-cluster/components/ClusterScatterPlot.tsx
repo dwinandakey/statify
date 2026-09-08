@@ -62,7 +62,7 @@ function starPath(n = 5, R = 10, r = 4.5): string {
         const angle = i * step - Math.PI / 2;
         pts.push([rad * Math.cos(angle), rad * Math.sin(angle)]);
     }
-    return "M" + pts.map(([px, py]) => `${px},${py}`).join("L") + "Z";
+    return `M${pts.map(([px, py]) => `${px},${py}`).join("L")}Z`;
 }
 
 const STAR = starPath(5, 11, 5);
@@ -84,12 +84,12 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
     const tooltipRef = useRef<HTMLDivElement>(null);
 
     // Track responsive width
-    const [renderWidth, setRenderWidth] = useState(width);
+    const [svgWidth, setSvgWidth] = useState(width);
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver((entries) => {
             const cw = entries[0]?.contentRect.width;
-            if (cw && cw > 0) setRenderWidth(Math.min(cw, width));
+            if (cw && cw > 0) setSvgWidth(Math.min(cw, width));
         });
         ro.observe(containerRef.current);
         return () => ro.disconnect();
@@ -128,31 +128,35 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             bottom: 50,
             left: 58,
         };
-        const W = renderWidth;
-        const H = height;
-        const innerW = W - margin.left - margin.right;
-        const innerH = H - margin.top - margin.bottom;
+        const chartW = svgWidth;
+        const chartH = height;
+        const innerW = chartW - margin.left - margin.right;
+        const innerH = chartH - margin.top - margin.bottom;
 
         // ── Scales ───────────────────────────────────────────────────────────
-        const xPad = (d3.max(allX)! - d3.min(allX)!) * 0.06 || 1;
-        const yPad = (d3.max(allY)! - d3.min(allY)!) * 0.06 || 1;
+        const xMax = d3.max(allX) ?? 0;
+        const xMin = d3.min(allX) ?? 0;
+        const yMax = d3.max(allY) ?? 0;
+        const yMin = d3.min(allY) ?? 0;
+        const xPad = (xMax - xMin) * 0.06 || 1;
+        const yPad = (yMax - yMin) * 0.06 || 1;
 
         const xScale = d3
             .scaleLinear()
-            .domain([d3.min(allX)! - xPad, d3.max(allX)! + xPad])
+            .domain([xMin - xPad, xMax + xPad])
             .nice()
             .range([0, innerW]);
 
         const yScale = d3
             .scaleLinear()
-            .domain([d3.min(allY)! - yPad, d3.max(allY)! + yPad])
+            .domain([yMin - yPad, yMax + yPad])
             .nice()
             .range([innerH, 0]);
 
         // ── SVG root ─────────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", W).attr("height", H).attr("viewBox", `0 0 ${W} ${H}`)
+        svg.attr("width", chartW).attr("height", chartH).attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
         // Clip path so points don't overflow the plot area
@@ -200,7 +204,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
 
         g.append("g")
             .attr("transform", `translate(0,${innerH})`)
-            .call(d3.axisBottom(xScale).ticks(6).tickFormat(fmtTick as any))
+            .call(d3.axisBottom(xScale).ticks(6).tickFormat(fmtTick as (n: d3.NumberValue) => string))
             .call((sel) => {
                 sel.select(".domain").attr("stroke", "hsl(var(--border))");
                 sel.selectAll("text")
@@ -210,7 +214,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             });
 
         g.append("g")
-            .call(d3.axisLeft(yScale).ticks(6).tickFormat(fmtTick as any))
+            .call(d3.axisBottom(xScale).ticks(6).tickFormat(fmtTick as (n: d3.NumberValue) => string))
             .call((sel) => {
                 sel.select(".domain").attr("stroke", "hsl(var(--border))");
                 sel.selectAll("text")
@@ -238,7 +242,10 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
         // ── Data points (clipped) ─────────────────────────────────────────────
         const plotG = g.append("g").attr("clip-path", `url(#${clipId})`);
 
-        const tooltip = d3.select(tooltipRef.current!);
+        const tooltipNode = tooltipRef.current;
+        const containerNode = containerRef.current;
+        if (!tooltipNode || !containerNode) return;
+        const tooltip = d3.select(tooltipNode);
 
         const showTooltip = (
             event: MouseEvent,
@@ -252,7 +259,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
         };
 
         const moveTooltip = (event: MouseEvent) => {
-            const rect = containerRef.current!.getBoundingClientRect();
+            const rect = containerNode.getBoundingClientRect();
             const tx = event.clientX - rect.left + 12;
             const ty = event.clientY - rect.top - 28;
             tooltip.style("left", `${tx}px`).style("top", `${ty}px`);
@@ -287,7 +294,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 );
             })
             .on("mousemove", (event) => moveTooltip(event))
-            .on("mouseleave", (event, d) => {
+            .on("mouseleave", (event) => {
                 d3.select(event.currentTarget as Element)
                     .attr("r", 5)
                     .attr("fill-opacity", 0.72);
@@ -331,7 +338,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             });
 
         // ── Legend ────────────────────────────────────────────────────────────
-        const lx = W - margin.right + 16;
+        const lx = chartW - margin.right + 16;
         const legendG = svg.append("g").attr("transform", `translate(${lx},${margin.top + 4})`);
 
         legendG.append("text")
@@ -343,7 +350,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
         // Cluster entries
         clusterIds.forEach((id, i) => {
             const gy = 20 + i * 22;
-            const color = colorMap.get(id)!;
+            const color = colorMap.get(id) ?? "#888";
 
             legendG.append("circle")
                 .attr("cx", 7).attr("cy", gy)
@@ -397,7 +404,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 .attr("fill", "hsl(var(--muted-foreground))")
                 .text(subtitle);
         }
-    }, [points, medoids, xLabel, yLabel, title, subtitle, renderWidth, height]);
+    }, [points, medoids, xLabel, yLabel, title, subtitle, svgWidth, height]);
 
     return (
         <div ref={containerRef} style={{ position: "relative", width: "100%" }}>

@@ -30,8 +30,6 @@ pub struct KMedoidsInput {
 
 fn default_n_init() -> usize { 10 }
 fn default_convergence_tolerance() -> f64 { 0.0 }
-fn default_use_build_phase() -> bool { true }
-fn default_use_r_implementation() -> bool { true }
 fn default_clara_num_samples() -> usize { 5 }
 fn default_clarans_num_local() -> usize { 2 }
 

@@ -1,10 +1,26 @@
 import type React from "react";
 
+export type VarianceMode = "Pooled" | "Welch";
+
+export type PairedModeType = {
+    /** Ordered list of variable name pairs. pairs[k] = [v1, v2] meaning
+     *  the k-th difference column is computed as v1 − v2 row-wise. */
+    pairs: [string, string][];
+    /** Hypothesised vector of differences (δ₀). null = vektor nol. */
+    delta0: number[] | null;
+} | null;
+
 export type MultivariateMainType = {
     DepVar: string[] | null;
     FixFactor: string[] | null;
     Covar: string[] | null;
     WlsWeight: string | null;
+    TestValues: number[] | null;
+    VarianceMode: VarianceMode | null;
+    /** When non-null, the analysis runs in paired Hotelling T² mode: the
+     *  service synthesises difference columns d_k = v1_k − v2_k and feeds
+     *  them through the existing Test Values pipeline with μ₀ = δ₀. */
+    PairedMode: PairedModeType;
 };
 
 export type MultivariateDialogProps = {
@@ -18,9 +34,11 @@ export type MultivariateDialogProps = {
     setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsOptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsTestValuesOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsPairedOpen: React.Dispatch<React.SetStateAction<boolean>>;
     updateFormData: (
         field: keyof MultivariateMainType,
-        value: string[] | string | null
+        value: string[] | string | number[] | PairedModeType | null
     ) => void;
     data: MultivariateMainType;
     globalVariables: string[];
@@ -229,6 +247,21 @@ export type MultivariateBootstrapProps = {
         value: string[] | string | number | boolean | null
     ) => void;
     data: MultivariateBootstrapType;
+};
+
+export type MultivariateTestValuesProps = {
+    isTestValuesOpen: boolean;
+    setIsTestValuesOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    depVar: string[];
+    testValues: number[] | null;
+    onSave: (testValues: number[] | null) => void;
+};
+
+export type MultivariatePairedProps = {
+    isPairedOpen: boolean;
+    setIsPairedOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    pairedMode: PairedModeType;
+    onSave: (pairedMode: PairedModeType) => void;
 };
 
 export type MultivariateType = {

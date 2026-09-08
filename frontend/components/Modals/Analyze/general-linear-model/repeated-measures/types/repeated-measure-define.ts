@@ -27,7 +27,11 @@ export type RepeatedMeasureDefineDialogProps = {
         value: any
     ) => void;
     data: RepeatedMeasureDefineData;
-    onContinue: (mainState: RepeatedMeasureDefineData) => void;
+    onContinue: (
+        mainState: RepeatedMeasureDefineData,
+        combinationVars: string[],
+        factorVars: string[]
+    ) => void;
     onReset: () => void;
 };
 

@@ -1,117 +1,237 @@
 use wasm_bindgen::prelude::*;
 use crate::GARCH;
 use crate::time_series::helper_structs::ArchLMResult;
+use crate::time_series::ecm::ols_helper::invert_matrix;
 
 #[wasm_bindgen]
 impl GARCH {
-    /// ARCH-LM Test untuk detect ARCH effects
-    /// Test H0: No ARCH effects (α_1 = α_2 = ... = α_q = 0)
-    /// Test statistic: N * R² ~ Chi-square(q)
+    /// ARCH-LM Test (Engle 1982)
+    /// H0: No ARCH effects (α_1 = α_2 = ... = α_q = 0)
+    /// Auxiliary regression: e²_t = β_0 + β_1·e²_{t-1} + ... + β_q·e²_{t-q}
+    /// Test statistics:
+    ///   Obs*R² (LM stat) ~ Chi²(q)   [matches EViews "Obs*R-squared"]
+    ///   F-stat ~ F(q, n-q-1)          [matches EViews "F-statistic"]
     pub fn arch_lm_test(residuals: Vec<f64>, lags: usize) -> ArchLMResult {
         let n = residuals.len();
-        
-        // Calculate squared residuals
-        let e_squared: Vec<f64> = residuals.iter().map(|e| e * e).collect();
-        
-        // Mean of squared residuals
-        let mean_e_sq: f64 = e_squared.iter().sum::<f64>() / n as f64;
-        
-        // Prepare regression: e²_t on e²_{t-1}, ..., e²_{t-q}
-        let n_obs = n - lags;
-        let mut y_vec = Vec::new();
-        let mut x_matrix: Vec<Vec<f64>> = vec![vec![1.0; n_obs]]; // Constant
-        
-        // Dependent variable: e²_t
-        for t in lags..n {
-            y_vec.push(e_squared[t]);
+
+        if n <= lags + 1 || lags == 0 {
+            return ArchLMResult {
+                lm_statistic: 0.0,
+                p_value: 1.0,
+                f_statistic: 0.0,
+                f_p_value: 1.0,
+                has_arch_effect: false,
+            };
         }
-        
-        // Independent variables: lagged e²
-        for lag in 1..=lags {
-            let mut lagged = Vec::new();
-            for t in lags..n {
-                lagged.push(e_squared[t - lag]);
-            }
-            x_matrix.push(lagged);
+
+        // Squared residuals
+        let e_sq: Vec<f64> = residuals.iter().map(|e| e * e).collect();
+
+        // Effective observations and number of regressors (incl. intercept)
+        let n_obs = n - lags;       // observations in auxiliary regression
+        let k = 1 + lags;           // number of parameters (intercept + q lags)
+        let df_reg = lags;          // numerator df for F-test  (= q lag terms)
+        let df_resid = n_obs - k;   // denominator df = n_obs - q - 1
+
+        if df_resid < 1 {
+            return ArchLMResult {
+                lm_statistic: 0.0,
+                p_value: 1.0,
+                f_statistic: 0.0,
+                f_p_value: 1.0,
+                has_arch_effect: false,
+            };
         }
-        
-        // OLS regression (simplified - using basic formulas)
-        let mean_y: f64 = y_vec.iter().sum::<f64>() / n_obs as f64;
-        
-        // Calculate R²
-        let mut ssr = 0.0; // Sum of squared residuals
-        let mut sst = 0.0; // Total sum of squares
-        
+
+        // --- Build y and X ---
+        // y = e²_t  for t = lags..n
+        let y_vec: Vec<f64> = (lags..n).map(|t| e_sq[t]).collect();
+
+        // X rows = [1, e²_{t-1}, ..., e²_{t-q}]
+        let x_mat: Vec<Vec<f64>> = (0..n_obs)
+            .map(|i| {
+                let t = i + lags;
+                let mut row = vec![1.0];
+                for lag in 1..=lags {
+                    row.push(e_sq[t - lag]);
+                }
+                row
+            })
+            .collect();
+
+        // --- OLS: β = (X'X)⁻¹ X'y ---
+        let mut xtx = vec![vec![0.0f64; k]; k];
+        let mut xty = vec![0.0f64; k];
         for i in 0..n_obs {
-            // Fitted value (simplified - just use mean for now)
-            let fitted = mean_y;
-            let residual = y_vec[i] - fitted;
-            ssr += residual * residual;
-            sst += (y_vec[i] - mean_y).powi(2);
+            for j in 0..k {
+                xty[j] += x_mat[i][j] * y_vec[i];
+                for l in 0..k {
+                    xtx[j][l] += x_mat[i][j] * x_mat[i][l];
+                }
+            }
         }
-        
-        let r_squared = if sst > 0.0 {
-            1.0 - (ssr / sst)
+
+        let xtx_inv = match invert_matrix(&xtx) {
+            Some(inv) => inv,
+            None => {
+                return ArchLMResult {
+                    lm_statistic: 0.0,
+                    p_value: 1.0,
+                    f_statistic: 0.0,
+                    f_p_value: 1.0,
+                    has_arch_effect: false,
+                };
+            }
+        };
+
+        let mut beta = vec![0.0f64; k];
+        for j in 0..k {
+            for l in 0..k {
+                beta[j] += xtx_inv[j][l] * xty[l];
+            }
+        }
+
+        // --- Compute SSE, SST, R² ---
+        let mean_y: f64 = y_vec.iter().sum::<f64>() / n_obs as f64;
+        let sst: f64 = y_vec.iter().map(|&yi| (yi - mean_y).powi(2)).sum();
+
+        let mut sse = 0.0f64;
+        for i in 0..n_obs {
+            let y_hat: f64 = (0..k).map(|j| beta[j] * x_mat[i][j]).sum();
+            sse += (y_vec[i] - y_hat).powi(2);
+        }
+
+        let r_squared = if sst > 1e-30 {
+            (1.0 - sse / sst).max(0.0)
         } else {
             0.0
         };
-        
-        // ARCH-LM test statistic: N * R²
-        let lm_stat = (n_obs as f64) * r_squared;
-        
-        // P-value dari Chi-square distribution (simplified approximation)
-        // df = lags (number of lagged terms)
-        let p_value = Self::chi_square_p_value(lm_stat, lags);
-        
-        // Has ARCH effect if p_value < 0.05
-        let has_arch = p_value < 0.05;
-        
+
+        // --- Test statistics ---
+        // Obs*R² (LM) ~ Chi²(q) — matches EViews "Obs*R-squared"
+        let lm_stat = n_obs as f64 * r_squared;
+        let p_chi2  = chi_square_p_value(lm_stat, df_reg);
+
+        // F-stat = (R²/q) / ((1-R²)/(n_obs-q-1)) — matches EViews "F-statistic"
+        let ssr = sst - sse;                // regression sum of squares
+        let msr = if df_reg > 0 { ssr / df_reg as f64 } else { 0.0 };
+        let mse = sse / df_resid as f64;
+        let f_stat = if mse > 1e-30 { msr / mse } else { 0.0 };
+        let p_f = f_p_value(f_stat, df_reg, df_resid);
+
+        let has_arch = p_chi2 < 0.05;
+
         ArchLMResult {
             lm_statistic: lm_stat,
-            p_value,
+            p_value: p_chi2,
+            f_statistic: f_stat,
+            f_p_value: p_f,
             has_arch_effect: has_arch,
         }
     }
-    
-    /// Simplified Chi-square CDF untuk p-value calculation
-    fn chi_square_p_value(x: f64, df: usize) -> f64 {
-        // Very simplified approximation
-        // Seharusnya pakai statrs::distribution::ChiSquared
-        
-        if x < 0.0 {
-            return 1.0;
+}
+
+// ─── Chi-Square p-value (survival function 1-CDF) ─────────────────────────
+
+fn chi_square_p_value(x: f64, df: usize) -> f64 {
+    if x <= 0.0 { return 1.0; }
+    let p = match df {
+        0 => 1.0,
+        1 => 2.0 * (1.0 - standard_normal_cdf(x.sqrt())),
+        2 => (-x / 2.0).exp(),
+        _ => {
+            let d = df as f64;
+            let cbrt = (x / d).powf(1.0 / 3.0);
+            let mu    = 1.0 - 2.0 / (9.0 * d);
+            let sigma = (2.0 / (9.0 * d)).sqrt();
+            let z = (cbrt - mu) / sigma;
+            1.0 - standard_normal_cdf(z)
         }
-        
-        // Rough approximation using normal distribution
-        // For large df, Chi²(df) ≈ N(df, 2df)
-        let z = (x - df as f64) / (2.0 * df as f64).sqrt();
-        
-        // P-value ≈ 1 - Φ(z)
-        let p = 1.0 - Self::normal_cdf(z);
-        
-        p.max(0.0).min(1.0)
+    };
+    p.max(0.0).min(1.0)
+}
+
+// ─── F-distribution p-value using regularised incomplete Beta ────────────
+// P(F(d1,d2) > f) = I_{d2/(d2+d1·f)}(d2/2, d1/2)
+
+fn f_p_value(f: f64, d1: usize, d2: usize) -> f64 {
+    if f <= 0.0 { return 1.0; }
+    let d1 = d1 as f64;
+    let d2 = d2 as f64;
+    let x = d2 / (d2 + d1 * f);
+    regularized_incomplete_beta(d2 / 2.0, d1 / 2.0, x)
+        .max(0.0)
+        .min(1.0)
+}
+
+// ─── Regularised incomplete Beta I_x(a, b) via Lentz continued fraction ──
+
+fn regularized_incomplete_beta(a: f64, b: f64, x: f64) -> f64 {
+    if x <= 0.0 { return 0.0; }
+    if x >= 1.0 { return 1.0; }
+    if x > (a + 1.0) / (a + b + 2.0) {
+        return 1.0 - regularized_incomplete_beta(b, a, 1.0 - x);
     }
-    
-    /// Standard normal CDF
-    fn normal_cdf(x: f64) -> f64 {
-        0.5 * (1.0 + Self::erf(x / 2.0_f64.sqrt()))
+    let lbeta = ln_gamma(a) + ln_gamma(b) - ln_gamma(a + b);
+    let front  = (x.ln() * a + (1.0 - x).ln() * b - lbeta).exp() / a;
+    (front * beta_cf(a, b, x)).min(1.0)
+}
+
+fn beta_cf(a: f64, b: f64, x: f64) -> f64 {
+    let fpmin = 1e-30;
+    let eps   = 3e-7;
+    let qab = a + b;
+    let qap = a + 1.0;
+    let qam = a - 1.0;
+    let mut c = 1.0;
+    let mut d = (1.0 - qab * x / qap).abs().max(fpmin);
+    d = 1.0 / d;
+    let mut h = d;
+    for m in 1..=200usize {
+        let mf = m as f64;
+        let m2 = 2.0 * mf;
+        let mut aa = mf * (b - mf) * x / ((qam + m2) * (a + m2));
+        d = (1.0 + aa * d).abs().max(fpmin);
+        c = (1.0 + aa / c).abs().max(fpmin);
+        d = 1.0 / d;
+        h *= d * c;
+        aa = -(a + mf) * (qab + mf) * x / ((a + m2) * (qap + m2));
+        d = (1.0 + aa * d).abs().max(fpmin);
+        c = (1.0 + aa / c).abs().max(fpmin);
+        d = 1.0 / d;
+        let del = d * c;
+        h *= del;
+        if (del - 1.0).abs() < eps { break; }
     }
-    
-    /// Error function (erf) - approximation
-    fn erf(x: f64) -> f64 {
-        let a1 = 0.254829592;
-        let a2 = -0.284496736;
-        let a3 = 1.421413741;
-        let a4 = -1.453152027;
-        let a5 = 1.061405429;
-        let p = 0.3275911;
-        
-        let sign = if x < 0.0 { -1.0 } else { 1.0 };
-        let x = x.abs();
-        
-        let t = 1.0 / (1.0 + p * x);
-        let y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * (-x * x).exp();
-        
-        sign * y
+    h
+}
+
+fn ln_gamma(x: f64) -> f64 {
+    if x <= 0.0 { return f64::INFINITY; }
+    let g = 7.0;
+    let p = [
+        0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+        771.32342877765313, -176.61502916214059, 12.507343278686905,
+        -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7,
+    ];
+    let x1 = x - 1.0;
+    let t  = x1 + g + 0.5;
+    let mut ser = p[0];
+    for (i, &c) in p[1..].iter().enumerate() {
+        ser += c / (x1 + (i + 1) as f64);
     }
+    0.5 * (2.0 * core::f64::consts::PI).ln() + ser.ln() + (x1 + 0.5) * t.ln() - t
+}
+
+// ─── Standard normal CDF (Abramowitz & Stegun §26.2.17) ──────────────────
+
+fn standard_normal_cdf(x: f64) -> f64 {
+    let t = 1.0 / (1.0 + 0.2316419 * x.abs());
+    let poly = t * (0.319_381_530
+        + t * (-0.356_563_782
+        + t * (1.781_477_937
+        + t * (-1.821_255_978
+        + t * 1.330_274_429))));
+    let pdf = (-x * x / 2.0).exp() / (2.0 * core::f64::consts::PI).sqrt();
+    if x >= 0.0 { 1.0 - pdf * poly } else { pdf * poly }
 }

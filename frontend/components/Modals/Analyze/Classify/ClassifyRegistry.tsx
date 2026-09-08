@@ -46,7 +46,7 @@ const TreeModal = lazy(() =>
 const DiscriminantModal = lazy(() =>
     import(
         "@/components/Modals/Analyze/Classify/discriminant/dialogs/discriminant-main"
-    ).then((module) => ({ default: module.DiscriminantContainer }))
+    ).then((module) => ({ default: module.DiscriminantMain }))
 );
 const NearestNeighborModal = lazy(() =>
     import(

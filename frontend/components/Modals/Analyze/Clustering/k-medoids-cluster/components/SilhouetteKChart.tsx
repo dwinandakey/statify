@@ -40,6 +40,8 @@ const ZONES = [
     { lo: -1.0, hi: 0.30, color: "#dc2626", label: "Lemah (< 0.30)" },
 ] as const;
 
+type AxisStyleSelection = d3.Selection<SVGGElement, unknown, null, undefined>;
+
 function zoneColor(score: number): string {
     if (score >= 0.70) return "#16a34a";
     if (score >= 0.50) return "#2563eb";
@@ -58,13 +60,13 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-    const [renderWidth, setRenderWidth] = useState(width);
+    const [svgWidth, setSvgWidth] = useState(width);
 
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver((entries) => {
             const cw = entries[0]?.contentRect.width;
-            if (cw && cw > 0) setRenderWidth(Math.min(cw, width));
+            if (cw && cw > 0) setSvgWidth(Math.min(cw, width));
         });
         ro.observe(containerRef.current);
         return () => ro.disconnect();
@@ -81,10 +83,10 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
 
         // ── Layout ────────────────────────────────────────────────────────
         const margin = { top: 52, right: 32, bottom: 58, left: 62 };
-        const W = renderWidth;
-        const H = height;
-        const innerW = W - margin.left - margin.right;
-        const innerH = H - margin.top - margin.bottom;
+        const chartW = svgWidth;
+        const chartH = height;
+        const innerW = chartW - margin.left - margin.right;
+        const innerH = chartH - margin.top - margin.bottom;
 
         // ── Scales ────────────────────────────────────────────────────────
         const kValues = sorted.map((d) => d.k);
@@ -107,9 +109,9 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
         // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", W)
-            .attr("height", H)
-            .attr("viewBox", `0 0 ${W} ${H}`)
+        svg.attr("width", chartW)
+            .attr("height", chartH)
+            .attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
         const g = svg
@@ -179,14 +181,12 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             });
 
         // ── Axes ──────────────────────────────────────────────────────────
-        const axisStyle = (
-            sel: d3.Selection<SVGGElement, unknown, null, undefined>
-        ) => {
+        const axisStyle = (sel: AxisStyleSelection) => {
             sel.select(".domain").attr("stroke", "hsl(var(--border))");
-            sel.selectAll<SVGTextElement, unknown>("text")
+            sel.selectAll("text")
                 .attr("fill", "hsl(var(--muted-foreground))")
                 .attr("font-size", "11px");
-            sel.selectAll<SVGLineElement, unknown>("line").attr(
+            sel.selectAll("line").attr(
                 "stroke",
                 "hsl(var(--border))"
             );
@@ -233,30 +233,32 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .text("Silhouette Score");
 
         // ── Current-K reference line ──────────────────────────────────────
-        if (currentK != null && xScale(currentK) != null) {
-            const cx = xScale(currentK)!;
-            g.append("line")
-                .attr("x1", cx)
-                .attr("x2", cx)
-                .attr("y1", 0)
-                .attr("y2", innerH)
-                .attr("stroke", "hsl(var(--foreground))")
-                .attr("stroke-opacity", 0.35)
-                .attr("stroke-width", 1.5)
-                .attr("stroke-dasharray", "6,4");
+        if (currentK !== null && currentK !== undefined) {
+            const cx = xScale(currentK);
+            if (cx !== undefined) {
+                g.append("line")
+                    .attr("x1", cx)
+                    .attr("x2", cx)
+                    .attr("y1", 0)
+                    .attr("y2", innerH)
+                    .attr("stroke", "hsl(var(--foreground))")
+                    .attr("stroke-opacity", 0.35)
+                    .attr("stroke-width", 1.5)
+                    .attr("stroke-dasharray", "6,4");
 
-            g.append("text")
-                .attr("x", cx + 5)
-                .attr("y", 10)
-                .attr("font-size", "9px")
-                .attr("fill", "hsl(var(--muted-foreground))")
-                .text(`K aktif = ${currentK}`);
+                g.append("text")
+                    .attr("x", cx + 5)
+                    .attr("y", 10)
+                    .attr("font-size", "9px")
+                    .attr("fill", "hsl(var(--muted-foreground))")
+                    .text(`K aktif = ${currentK}`);
+            }
         }
 
         // ── Area fill under line ──────────────────────────────────────────
         const area = d3
             .area<SilhouetteKPoint>()
-            .x((d) => xScale(d.k)!)
+            .x((d) => xScale(d.k) ?? 0)
             .y0(innerH)
             .y1((d) => yScale(d.silhouetteScore))
             .curve(d3.curveMonotoneX);
@@ -271,7 +273,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
         // ── Line ──────────────────────────────────────────────────────────
         const line = d3
             .line<SilhouetteKPoint>()
-            .x((d) => xScale(d.k)!)
+            .x((d) => xScale(d.k) ?? 0)
             .y((d) => yScale(d.silhouetteScore))
             .curve(d3.curveMonotoneX);
 
@@ -286,10 +288,13 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("stroke-linecap", "round");
 
         // ── Tooltip helpers ───────────────────────────────────────────────
-        const ttip = d3.select(tooltipRef.current!);
+        const tooltipNode = tooltipRef.current;
+        const containerNode = containerRef.current;
+        if (!tooltipNode || !containerNode) return;
+        const ttip = d3.select(tooltipNode);
         const showTip = (event: MouseEvent, html: string) => {
             ttip.style("opacity", "1").html(html);
-            const rect = containerRef.current!.getBoundingClientRect();
+            const rect = containerNode.getBoundingClientRect();
             ttip
                 .style("left", `${event.clientX - rect.left + 14}px`)
                 .style("top", `${event.clientY - rect.top - 36}px`);
@@ -297,11 +302,11 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
         const hideTip = () => ttip.style("opacity", "0");
 
         // ── Data points ───────────────────────────────────────────────────
-        g.selectAll<SVGCircleElement, SilhouetteKPoint>("circle.pt")
+        g.selectAll("circle.pt")
             .data(sorted)
             .join("circle")
             .attr("class", "pt")
-            .attr("cx", (d) => xScale(d.k)!)
+            .attr("cx", (d) => xScale(d.k) ?? 0)
             .attr("cy", (d) => yScale(d.silhouetteScore))
             .attr("r", (d) => (d.k === optimalPoint.k ? 7 : 5))
             .attr("fill", (d) =>
@@ -326,14 +331,16 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                     event,
                     `<strong>K = ${d.k}</strong><br/>` +
                         `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong><br/>` +
-                        `Kualitas: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>` +
-                        (d.k === optimalPoint.k
+                        `Kualitas: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>${ 
+                        d.k === optimalPoint.k
                             ? `<br/><strong style="color:${zoneColor(d.silhouetteScore)}">★ K Optimal</strong>`
-                            : "")
+                            : ""}`
                 );
             })
             .on("mousemove", (event) => {
-                const rect = containerRef.current!.getBoundingClientRect();
+                const container = containerRef.current;
+                if (!container) return;
+                const rect = container.getBoundingClientRect();
                 ttip
                     .style("left", `${event.clientX - rect.left + 14}px`)
                     .style("top", `${event.clientY - rect.top - 36}px`);
@@ -346,11 +353,11 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             });
 
         // Score label above each point
-        g.selectAll<SVGTextElement, SilhouetteKPoint>("text.score-lbl")
+        g.selectAll("text.score-lbl")
             .data(sorted)
             .join("text")
             .attr("class", "score-lbl")
-            .attr("x", (d) => xScale(d.k)!)
+            .attr("x", (d) => xScale(d.k) ?? 0)
             .attr("y", (d) => yScale(d.silhouetteScore) - 10)
             .attr("text-anchor", "middle")
             .attr("font-size", (d) => (d.k === optimalPoint.k ? "11px" : "9px"))
@@ -364,7 +371,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .text((d) => d.silhouetteScore.toFixed(3));
 
         // Optimal K annotation
-        const ox = xScale(optimalPoint.k)!;
+        const ox = xScale(optimalPoint.k) ?? 0;
         const oy = yScale(optimalPoint.silhouetteScore);
         g.append("text")
             .attr("x", ox)
@@ -392,7 +399,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("font-size", "10px")
             .attr("fill", "hsl(var(--muted-foreground))")
             .text("Nilai silhouette lebih tinggi menunjukkan struktur klaster yang lebih baik");
-    }, [data, currentK, renderWidth, height]);
+    }, [data, currentK, svgWidth, height]);
 
     if (data.length === 0) {
         return (

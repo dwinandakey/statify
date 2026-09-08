@@ -139,8 +139,8 @@ export class ClusterWorker {
     private worker: Worker | null = null;
     private messageId = 0;
     private callbacks = new Map<number, {
-        resolve: (value: any) => void;
-        reject: (error: any) => void;
+        resolve: (value: unknown) => void;
+        reject: (error: unknown) => void;
     }>();
     private progressCallback?: (progress: ProgressUpdate) => void;
     /** Called immediately after the PAM BUILD phase with initial medoid indices. */
@@ -207,20 +207,28 @@ export class ClusterWorker {
         }
     }
 
-    private handleError(error: ErrorEvent) {
+    private handleError(event: ErrorEvent | Event) {
         // Reject ALL pending callbacks: we cannot tell which request caused
         // the error from an ErrorEvent (no requestId attached), and leaving
         // orphaned callbacks would permanently hang awaited cluster() calls.
         // Previously this used `this.messageId` (the last-sent ID) which
         // rejected the wrong promise when multiple requests were in-flight.
+        //
+        // Reject with a real Error (not the raw event) — string-coercing an
+        // Event yields "[object Event]", which is useless in UI error messages.
+        const message =
+            "message" in event && typeof event.message === "string" && event.message
+                ? event.message
+                : "Worker encountered an unknown error";
+        const error = new Error(message);
         this.callbacks.forEach((callbacks, id) => {
             callbacks.reject(error);
             this.callbacks.delete(id);
         });
-        console.error("Worker error:", error);
+        console.error("Worker error:", event);
     }
 
-    private sendMessage(message: WorkerRequestMessage): Promise<any> {
+    private sendMessage(message: WorkerRequestMessage): Promise<unknown> {
         return new Promise((resolve, reject) => {
             if (!this.worker) {
                 reject(new Error("Worker not initialized"));
@@ -260,7 +268,7 @@ export class ClusterWorker {
         onProgress?: (progress: ProgressUpdate) => void
     ): Promise<ClusteringResult> {
         this.progressCallback = onProgress;
-        return this.sendMessage({ type: "cluster", input });
+        return this.sendMessage({ type: "cluster", input }) as Promise<ClusteringResult>;
     }
 
     /**
@@ -273,7 +281,7 @@ export class ClusterWorker {
         onProgress?: (progress: ProgressUpdate) => void
     ): Promise<ClusteringRangeItem[]> {
         this.progressCallback = onProgress;
-        return this.sendMessage({ type: "cluster_range", input });
+        return this.sendMessage({ type: "cluster_range", input }) as Promise<ClusteringRangeItem[]>;
     }
 
     /**

@@ -1,0 +1,15 @@
+{
+  "name": "statify-logistic",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "statify_logistic_bg.wasm",
+    "statify_logistic.js",
+    "statify_logistic.d.ts"
+  ],
+  "main": "statify_logistic.js",
+  "types": "statify_logistic.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

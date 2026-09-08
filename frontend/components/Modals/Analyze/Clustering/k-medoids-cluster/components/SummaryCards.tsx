@@ -21,7 +21,8 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
     showTotalCost = true,
     algorithmMethod,
 }) => {
-    const isClaraMethod = (algorithmMethod || "").toUpperCase() === "CLARA";
+    const normalizedMethod = (algorithmMethod ?? "").toUpperCase();
+    const isSamplingMethod = normalizedMethod === "CLARA" || normalizedMethod === "CLARANS";
     const avgScore = summary.averageSilhouetteScore ?? 0;
     const totalSwapCost = summary.swapCost ?? summary.totalCost;
     const averageSwapCost = summary.avgCost ?? (summary.numCases > 0 ? totalSwapCost / summary.numCases : 0);
@@ -64,15 +65,17 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
                                 </div>
                                 <p className="text-xs text-muted-foreground">Total Cost (SWAP)</p>
                             </div>
-                            <div className="min-w-0">
-                                <div className="text-base font-bold leading-tight tabular-nums sm:text-lg xl:text-xl">
-                                    {averageBuildCost != null && isFinite(averageBuildCost) ? averageBuildCost.toFixed(6) : 'N/A'}
+                            {!isSamplingMethod && (
+                                <div className="min-w-0">
+                                    <div className="text-base font-bold leading-tight tabular-nums sm:text-lg xl:text-xl">
+                                        {averageBuildCost !== null && isFinite(averageBuildCost) ? averageBuildCost.toFixed(4) : 'N/A'}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">Average Cost (BUILD)</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">Average Cost (BUILD)</p>
-                            </div>
+                            )}
                             <div className="min-w-0">
                                 <div className="text-base font-bold leading-tight tabular-nums sm:text-lg xl:text-xl">
-                                    {isFinite(averageSwapCost) ? averageSwapCost.toFixed(6) : 'N/A'}
+                                    {isFinite(averageSwapCost) ? averageSwapCost.toFixed(4) : 'N/A'}
                                 </div>
                                 <p className="text-xs text-muted-foreground">Average Cost (SWAP)</p>
                             </div>
@@ -103,9 +106,9 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                        {isClaraMethod ? "Jumlah Sampling" : "Convergence"}
+                        {isSamplingMethod ? "Jumlah Sampling" : "Convergence"}
                     </CardTitle>
-                    {!isClaraMethod && (summary.converged ? (
+                    {!isSamplingMethod && (summary.converged ? (
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
                     ) : (
                         <XCircle className="h-4 w-4 text-yellow-600" />
@@ -114,7 +117,7 @@ export const KMedoidsSummaryCards: React.FC<SummaryCardsProps> = ({
                 <CardContent>
                     <div className="text-2xl font-bold">{summary.totalIterations}</div>
                     <p className="text-xs text-muted-foreground">
-                        {isClaraMethod ? "Jumlah kali sampling dilakukan" : (summary.converged ? "Converged successfully" : "Max iterations reached")}
+                        {isSamplingMethod ? "Jumlah kali sampling dilakukan" : (summary.converged ? "Converged successfully" : "Max iterations reached")}
                     </p>
                 </CardContent>
             </Card>

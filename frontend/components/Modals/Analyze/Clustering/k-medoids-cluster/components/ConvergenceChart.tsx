@@ -86,7 +86,10 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             });
 
         // ── Tooltip ───────────────────────────────────────────────────────────
-        const tooltip = d3.select(svgRef.current.parentElement!)
+        const parent = svgRef.current.parentElement;
+        if (!parent) return;
+
+        const tooltip = d3.select(parent)
             .selectAll<HTMLDivElement, unknown>(".cc-tooltip")
             .data([null])
             .join("div")
@@ -105,7 +108,9 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .style("z-index", "50");
 
         const showTip = (event: MouseEvent, d: IterationHistory) => {
-            const [mx, my] = d3.pointer(event, svgRef.current!.parentElement!);
+            const parent = svgRef.current?.parentElement;
+            if (!parent) return;
+            const [mx, my] = d3.pointer(event, parent as HTMLElement);
             tooltip
                 .style("opacity", "1")
                 .style("left", `${mx + 14}px`)
@@ -171,9 +176,9 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("stroke", costColor)
             .attr("stroke-width", 2)
             .style("cursor", "pointer")
-            .on("mouseover", (e, d) => showTip(e as MouseEvent, d))
-            .on("mousemove", (e, d) => showTip(e as MouseEvent, d))
-            .on("mouseleave", hideTip);
+            .on("mouseover", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
+            .on("mousemove", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
+            .on("mouseleave", () => hideTip());
 
         // ── Improvement line (dashed) ─────────────────────────────────────────
         const impLineFn = d3.line<IterationHistory>()
@@ -201,9 +206,9 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("stroke", impColor)
             .attr("stroke-width", 2)
             .style("cursor", "pointer")
-            .on("mouseover", (e, d) => showTip(e as MouseEvent, d))
-            .on("mousemove", (e, d) => showTip(e as MouseEvent, d))
-            .on("mouseleave", hideTip);
+            .on("mouseover", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
+            .on("mousemove", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
+            .on("mouseleave", () => hideTip());
 
         // ── Converged annotation ──────────────────────────────────────────────
         if (converged && data.length > 0) {

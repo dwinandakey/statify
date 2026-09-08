@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {Separator} from "@/components/ui/separator";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {ScrollArea} from "@/components/ui/scroll-area";
@@ -29,7 +27,7 @@ export const RepeatedMeasureDefineDialog = ({
     const [dialogState, setDialogState] = useState<RepeatedMeasureDefineData>({
         ...data,
     });
-    const { closeModal, openModal } = useModal();
+    const { closeModal } = useModal();
 
     useEffect(() => {
         if (isDefineOpen) {
@@ -343,14 +341,12 @@ export const RepeatedMeasureDefineDialog = ({
             return `?_(${levelPart},${combo.measure})`;
         });
 
-        setIsDefineOpen(false);
-        closeModal();
-        // openModal(ModalType.RepeatedMeasuresDialog, {
-        //     combinationVars: formattedCombinations,
-        //     factorVars: dialogState.factors.map((factor) => factor.name || ""),
-        // });
+        const factorVars = dialogState.factors.map(
+            (factor) => factor.name || ""
+        );
 
-        onContinue(dialogState);
+        setIsDefineOpen(false);
+        onContinue(dialogState, formattedCombinations, factorVars);
     };
 
     const handleReset = () => {
@@ -358,23 +354,19 @@ export const RepeatedMeasureDefineDialog = ({
         setDialogState({ ...data });
     };
 
-    const handleDialog = () => {
+    const handleCancel = () => {
         setIsDefineOpen(false);
         closeModal();
     };
 
+    if (!isDefineOpen) return null;
+
     return (
-        <Dialog open={isDefineOpen} onOpenChange={handleDialog}>
-            <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle>
-                        Repeated Measures: Define Factor(s)
-                    </DialogTitle>
-                </DialogHeader>
-                <Separator />
+        <div className="flex flex-col h-full">
+            <div className="p-4 flex-grow">
                 <ResizablePanelGroup
                     direction="vertical"
-                    className="min-h-[450px] max-w-md rounded-lg border md:min-w-[200px]"
+                    className="min-h-[450px] rounded-lg border"
                 >
                     <ResizablePanel defaultSize={55}>
                         <div className="flex flex-col gap-2 p-2">
@@ -551,27 +543,28 @@ export const RepeatedMeasureDefineDialog = ({
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>
-                <DialogFooter className="sm:justify-start">
-                    <Button type="button" onClick={handleContinue}>
-                        OK
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={handleReset}
-                    >
-                        Reset
-                    </Button>
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            Cancel
-                        </Button>
-                    </DialogClose>
-                    <Button type="button" variant="secondary">
-                        Help
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+            </div>
+            <div className="px-6 py-3 border-t border-border flex items-center justify-end bg-secondary flex-shrink-0">
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleReset}
+                    className="mr-2"
+                >
+                    Reset
+                </Button>
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleCancel}
+                    className="mr-2"
+                >
+                    Cancel
+                </Button>
+                <Button type="button" onClick={handleContinue}>
+                    Define
+                </Button>
+            </div>
+        </div>
     );
 };

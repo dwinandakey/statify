@@ -33,7 +33,7 @@ pub fn calculate_prior_probabilities(
     let mut total_cases = 0;
     let mut group_sizes = Vec::with_capacity(num_groups);
 
-    for (i, group) in dataset.group_labels.iter().enumerate() {
+    for group in dataset.group_labels.iter() {
         let group_size = dataset.group_data
             .get(dataset.group_data.keys().next().unwrap_or(&String::new()))
             .and_then(|g| g.get(group))
@@ -41,7 +41,8 @@ pub fn calculate_prior_probabilities(
 
         total_cases += group_size;
         group_sizes.push(group_size);
-        groups.push(i + 1); // 1-based group indices
+        // Use the actual group value (e.g. "1", "2") so the output matches SPSS.
+        groups.push(group.clone());
     }
 
     // Calculate prior probabilities
@@ -69,8 +70,11 @@ pub fn calculate_prior_probabilities(
         }
     }
 
-    // Populate cases_used
-    cases_used.insert("Numbers".to_string(), group_sizes);
+    // Populate "Cases Used in Analysis". Without case weighting, the weighted
+    // count equals the unweighted count (n_g). Keys must match the
+    // "Unweighted"/"Weighted" columns rendered in the output table.
+    cases_used.insert("Unweighted".to_string(), group_sizes.clone());
+    cases_used.insert("Weighted".to_string(), group_sizes);
 
     Ok(PriorProbabilities {
         groups,

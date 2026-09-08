@@ -122,8 +122,11 @@ fn parents_of(group_name: &str, all_names: &[String]) -> Vec<String> {
                 return false;
             }
             let other_tokens = split_name_tokens(other);
-            // parent if other is one of the tokens of group_name OR group_name contains other as separate token
-            tokens.iter().any(|t| other_tokens.iter().any(|ot| ot == t))
+            if other_tokens.is_empty() {
+                return false;
+            }
+            // A term other is a parent if all its component tokens are present in group_name
+            other_tokens.iter().all(|ot| tokens.contains(ot))
         })
         .cloned()
         .collect()

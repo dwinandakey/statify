@@ -1,4 +1,3 @@
-use wasm_bindgen::prelude::*;
 use crate::ARDL;
 
 // Note: generate_lags is NOT #[wasm_bindgen] because it returns tuple (internal use only)

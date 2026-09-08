@@ -61,43 +61,103 @@ export const useAnalyzeHook = (
                         // 1. Prepare Tables
                         const tables = [];
                         
-                        // Parameter Table
+                        // Parameter Tables
                         if (result.coefficients) {
-                            const rows = [];
+                            // --- MEAN EQUATION TABLE ---
+                            const meanRows = [];
+                            meanRows.push({
+                                rowHeader: ["C"],
+                                coefficient: result.coefficients.mu,
+                                stdError: result.coefficients.mu_se || "-",
+                                tStat: result.coefficients.mu_z || "-",
+                                pValue: result.coefficients.mu_p || "-"
+                            });
                             
-                            // Omega
+                            tables.push({
+                                title: "Mean Equation",
+                                columnHeaders: [
+                                    { header: "Variable", key: "rowHeader" },
+                                    { header: "Coefficient", key: "coefficient" },
+                                    { header: "Std. Error", key: "stdError" },
+                                    { header: "z-Statistic", key: "tStat" },
+                                    { header: "Prob.", key: "pValue" }
+                                ],
+                                rows: meanRows,
+                            });
+
+                            // --- VARIANCE EQUATION TABLE ---
+                            const varRows = [];
+                            
+                            // Omega (Variance Equation Constant)
                             if (result.coefficients.omega !== undefined) {
-                                rows.push({
-                                    rowHeader: ["Omega (ω)"],
+                                varRows.push({
+                                    rowHeader: ["C"],
                                     coefficient: result.coefficients.omega,
-                                    stdError: "-", 
-                                    tStat: "-",
-                                    pValue: "-" 
+                                    stdError: result.coefficients.omega_se || "-", 
+                                    tStat: result.coefficients.omega_z || "-",
+                                    pValue: result.coefficients.omega_p || "-" 
                                 });
                             }
 
-                            // Alpha terms
+                            // Alpha terms (ARCH terms)
                             if (Array.isArray(result.coefficients.alpha)) {
                                 result.coefficients.alpha.forEach((val: any, idx: number) => {
-                                    rows.push({
-                                        rowHeader: [`Alpha (${idx + 1})`],
+                                    const seVal = Array.isArray(result.coefficients.alpha_se) ? result.coefficients.alpha_se[idx] : "-";
+                                    const zVal = Array.isArray(result.coefficients.alpha_z) ? result.coefficients.alpha_z[idx] : "-";
+                                    const pVal = Array.isArray(result.coefficients.alpha_p) ? result.coefficients.alpha_p[idx] : "-";
+                                    
+                                    let label = `RESID(-${idx + 1})^2`;
+                                    if (modelType === "EGARCH") {
+                                        label = `|RESID(-${idx + 1})|/@SQRT(GARCH(-${idx + 1}))`;
+                                    }
+                                    
+                                    varRows.push({
+                                        rowHeader: [label],
                                         coefficient: val,
-                                        stdError: "-",
-                                        tStat: "-",
-                                        pValue: "-"
+                                        stdError: seVal,
+                                        tStat: zVal,
+                                        pValue: pVal
                                     });
                                 });
                             }
 
-                            // Beta terms (not for ARCH)
+                            // Gamma terms (Asymmetry terms for EGARCH/TGARCH)
+                            if (Array.isArray(result.coefficients.gamma)) {
+                                result.coefficients.gamma.forEach((val: any, idx: number) => {
+                                    const seVal = Array.isArray(result.coefficients.gamma_se) ? result.coefficients.gamma_se[idx] : "-";
+                                    const zVal = Array.isArray(result.coefficients.gamma_z) ? result.coefficients.gamma_z[idx] : "-";
+                                    const pVal = Array.isArray(result.coefficients.gamma_p) ? result.coefficients.gamma_p[idx] : "-";
+                                    
+                                    let label = `Gamma (${idx + 1})`;
+                                    if (modelType === "EGARCH") {
+                                        label = `RESID(-${idx + 1})/@SQRT(GARCH(-${idx + 1}))`;
+                                    } else if (modelType === "TGARCH") {
+                                        label = `RESID(-${idx + 1})^2 * (RESID(-${idx + 1})<0)`;
+                                    }
+                                    
+                                    varRows.push({
+                                        rowHeader: [label],
+                                        coefficient: val,
+                                        stdError: seVal,
+                                        tStat: zVal,
+                                        pValue: pVal
+                                    });
+                                });
+                            }
+
+                            // Beta terms (GARCH terms)
                             if (Array.isArray(result.coefficients.beta)) {
                                 result.coefficients.beta.forEach((val: any, idx: number) => {
-                                    rows.push({
-                                        rowHeader: [`Beta (${idx + 1})`],
+                                    const seVal = Array.isArray(result.coefficients.beta_se) ? result.coefficients.beta_se[idx] : "-";
+                                    const zVal = Array.isArray(result.coefficients.beta_z) ? result.coefficients.beta_z[idx] : "-";
+                                    const pVal = Array.isArray(result.coefficients.beta_p) ? result.coefficients.beta_p[idx] : "-";
+                                    
+                                    varRows.push({
+                                        rowHeader: [`GARCH(-${idx + 1})`],
                                         coefficient: val,
-                                        stdError: "-",
-                                        tStat: "-",
-                                        pValue: "-"
+                                        stdError: seVal,
+                                        tStat: zVal,
+                                        pValue: pVal
                                     });
                                 });
                             }
@@ -105,13 +165,13 @@ export const useAnalyzeHook = (
                             tables.push({
                                 title: "Variance Equation",
                                 columnHeaders: [
-                                    { header: "Parameter", key: "rowHeader" },
+                                    { header: "Variable", key: "rowHeader" },
                                     { header: "Coefficient", key: "coefficient" },
                                     { header: "Std. Error", key: "stdError" },
-                                    { header: "t-Statistic", key: "tStat" },
+                                    { header: "z-Statistic", key: "tStat" },
                                     { header: "Prob.", key: "pValue" }
                                 ],
-                                rows: rows,
+                                rows: varRows,
                             });
                         }
 
@@ -124,9 +184,17 @@ export const useAnalyzeHook = (
                                     { header: "Value", key: "value" }
                                 ],
                                 rows: [
-                                    { rowHeader: ["AIC"], value: result.diagnostics.aic },
-                                    { rowHeader: ["BIC"], value: result.diagnostics.bic },
-                                    { rowHeader: ["Log Likelihood"], value: result.diagnostics.logLikelihood }
+                                    { rowHeader: ["R-squared"], value: result.diagnostics.rSquared },
+                                    { rowHeader: ["Adjusted R-squared"], value: result.diagnostics.adjRSquared },
+                                    { rowHeader: ["S.E. of regression"], value: result.diagnostics.seRegression },
+                                    { rowHeader: ["Sum squared resid"], value: result.diagnostics.sumSquaredResid },
+                                    { rowHeader: ["Log likelihood"], value: result.diagnostics.logLikelihood },
+                                    { rowHeader: ["Durbin-Watson stat"], value: result.diagnostics.durbinWatson },
+                                    { rowHeader: ["Mean dependent var"], value: result.diagnostics.meanDependentVar },
+                                    { rowHeader: ["S.D. dependent var"], value: result.diagnostics.sdDependentVar },
+                                    { rowHeader: ["Akaike info criterion"], value: result.diagnostics.aic },
+                                    { rowHeader: ["Schwarz criterion"], value: result.diagnostics.bic },
+                                    { rowHeader: ["Hannan-Quinn criter."], value: result.diagnostics.hq }
                                 ]
                             });
                         }

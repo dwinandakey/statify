@@ -8,6 +8,8 @@ pub struct ArchLMResult {
     pub lm_statistic: f64,
     pub p_value: f64,
     pub has_arch_effect: bool,
+    pub f_statistic: f64,
+    pub f_p_value: f64,
 }
 
 #[wasm_bindgen]

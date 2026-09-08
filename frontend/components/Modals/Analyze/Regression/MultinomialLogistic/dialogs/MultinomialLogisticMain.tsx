@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
     TooltipProvider,
@@ -11,12 +11,20 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, HelpCircle, RotateCcw } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Stores & Hooks
 import { useVariableStore } from "@/stores/useVariableStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { useResultStore } from "@/stores/useResultStore";
 import { useAnalysisData } from "@/hooks/useAnalysisData";
+
+// Tour Guide
+import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { baseTourSteps } from "../hooks/tourConfig";
+import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
+import { AnimatePresence } from "framer-motion";
 
 // Komponen Tab (Pastikan Anda membuat file-file ini di folder yang sama)
 import { VariablesTab } from "./VariablesTab";
@@ -68,8 +76,31 @@ export const MultinomialLogisticMain = () => {
     const { closeModal } = useModalStore();
     const variables = useVariableStore((state) => state.variables);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const { data, weights, weightVariable } = useAnalysisData();
     const { addLog, addAnalytic, addStatistic, loadResults } = useResultStore();
+
+    // --- STATE & TOUR ---
+    const [activeTab, setActiveTab] = useState("variables");
+
+    const tabControl = useMemo<TabControlProps>(
+        () => ({
+            setActiveTab: (tab: string) => setActiveTab(tab),
+            currentActiveTab: activeTab,
+        }),
+        [activeTab]
+    );
+
+    const {
+        tourActive,
+        currentStep,
+        tourSteps,
+        currentTargetElement,
+        startTour,
+        nextStep,
+        prevStep,
+        endTour,
+    } = useTourGuide(baseTourSteps, "dialog", tabControl);
 
 
     // State untuk opsi Multinomial Logistic (Sesuai SPSS)
@@ -127,8 +158,26 @@ export const MultinomialLogisticMain = () => {
         // 1. Gunakan 'data' dari store dan pastikan tidak kosong
         if (!options.dependent || !data || data.length === 0) return;
         setIsLoading(true);
+        setErrorMsg(null);
 
         try {
+            // Validasi criteria
+            if (options.criteria.iterations <= 0 || !Number.isInteger(options.criteria.iterations)) {
+                throw new Error("Batas maksimum perulangan (Maximum iterations) harus berupa bilangan bulat positif.");
+            }
+            if (options.criteria.pconverge <= 0) {
+                throw new Error("Konvergensi parameter (Parameter convergence) harus berupa bilangan positif.");
+            }
+            if (options.criteria.lconverge < 0) {
+                throw new Error("Konvergensi log-likelihood (Log-likelihood convergence) tidak boleh negatif.");
+            }
+            if (options.criteria.singularity <= 0) {
+                throw new Error("Kriteria singularitas (Singularity criterion) harus berupa bilangan positif.");
+            }
+            if (options.criteria.delta < 0) {
+                throw new Error("Nilai penyesuaian sel kosong (Added to empty cells / Delta) tidak boleh negatif.");
+            }
+
             console.log("Struktur Baris Data:", data[0]);
             console.log("ID Variabel Dependen:", options.dependent.id);
             console.log("Nama Variabel Dependen:", options.dependent.name);
@@ -226,10 +275,18 @@ export const MultinomialLogisticMain = () => {
                 });
             });
 
-            const covariateColumns = covariateIndices.map((idx, covIdx) => ({
-                name: covariateVars[covIdx]?.name ?? `X${covIdx + 1}`,
-                values: validData.map((row: any[]) => parseFloat(String(row[idx]))),
-            }));
+            const covariateColumns = covariateIndices.map((idx, covIdx) => {
+                const name = covariateVars[covIdx]?.name ?? `X${covIdx + 1}`;
+                const values = validData.map((row: any[], rowIdx) => {
+                    const rawVal = row[idx];
+                    const val = parseFloat(String(rawVal));
+                    if (Number.isNaN(val)) {
+                        throw new Error(`Variabel covariate '${name}' mengandung nilai non-numerik '${rawVal}' pada baris ${validRowIndices[rowIdx] + 1}.`);
+                    }
+                    return val;
+                });
+                return { name, values };
+            });
 
             const allPredictorColumns = [...covariateColumns, ...encodedFactorColumns];
 
@@ -276,7 +333,7 @@ export const MultinomialLogisticMain = () => {
                 independent1Sample: formattedData.independent[1]?.slice(0, 5)
             });
 
-            const worker = new Worker('/workers/Regression/multinomialLogistic.worker.js', { type: 'module' });
+            const worker = new Worker(`/workers/Regression/multinomialLogistic.worker.js?cb=${Date.now()}`, { type: 'module' });
 
             const encodedReferenceCategory = (() => {
                 const encodedCategories = dependentCategories
@@ -324,6 +381,7 @@ export const MultinomialLogisticMain = () => {
                         })
                         .map(({ idx }) => idx);
                 })(),
+                subpopulationVariables: options.statistics.subpopulationVariables,
                 referenceCategory: ["first", "last"].includes(options.referenceCategory)
                     ? options.referenceCategory
                     : String(encodedReferenceCategory ?? "last"),
@@ -532,6 +590,7 @@ export const MultinomialLogisticMain = () => {
                             value: dependentCategories[predictedIndex] ?? "",
                         });
                     });
+                    nextColumnIndex += 1;
                 }
 
                 if (options.save.actualCategoryProbability) {
@@ -849,27 +908,100 @@ export const MultinomialLogisticMain = () => {
 
                             const formatExpValueForDisplay = (value: number | undefined) => formatSpssNumber(value, 3);
 
-                            // Parameter table with Exp(B) confidence intervals
-                            const parameterRows = coeffs.flatMap((row, catIdx) =>
-                                row.map((coef, pIdx) => ({
-                                    rowHeader: [
-                                        formatDependentCategory(nonReferenceCategories[catIdx]),
-                                        usedParamNames[pIdx]?.includes("=")
-                                            ? `[${usedParamNames[pIdx]}]`
-                                            : (usedParamNames[pIdx] ?? `Param ${pIdx + 1}`),
-                                    ],
-                                    "B": formatSpssNumber(coef),
-                                    "Std. Error": formatSpssNumber(stdErrors[catIdx]?.[pIdx]),
-                                    "Wald": formatSpssNumber(waldStats[catIdx]?.[pIdx]),
-                                    "df": "1",
-                                    "Sig.": (() => {
-                                        const p = pValues[catIdx]?.[pIdx];
-                                        return p !== undefined ? formatPValue(p) : "";
-                                    })(),
-                                    "Exp(B)": formatExpValueForDisplay(expBeta[catIdx]?.[pIdx]),
-                                    "Lower Bound": formatSpssNumber(expCiLower[catIdx]?.[pIdx]),
-                                    "Upper Bound": formatSpssNumber(expCiUpper[catIdx]?.[pIdx]),
-                                }))
+                            // Construct list of display predictors including redundant factor categories
+                            interface DisplayPredictor {
+                                label: string;
+                                isRedundant: boolean;
+                                pIdx?: number;
+                            }
+
+                            const displayPredictors: DisplayPredictor[] = [];
+                            // 1. Intercept
+                            displayPredictors.push({
+                                label: "Intercept",
+                                isRedundant: false,
+                                pIdx: 0,
+                            });
+
+                            // 2. Covariates
+                            let nextPIdx = 1;
+                            covariateVars.forEach((cov) => {
+                                displayPredictors.push({
+                                    label: cov.name,
+                                    isRedundant: false,
+                                    pIdx: nextPIdx,
+                                });
+                                nextPIdx += 1;
+                            });
+
+                            // 3. Factors
+                            factorVars.forEach((factorVar) => {
+                                const idx = factorVar.columnIndex;
+                                const categories = Array.from(
+                                    new Set(validData.map((row: any[]) => normalizeCategory(row[idx])))
+                                ).sort(compareCategory);
+
+                                if (categories.length <= 1) {
+                                    return;
+                                }
+
+                                const referenceCategory = categories[categories.length - 1];
+                                const nonReferenceCategoriesFactor = categories.filter((cat) => cat !== referenceCategory);
+
+                                nonReferenceCategoriesFactor.forEach((category) => {
+                                    displayPredictors.push({
+                                        label: `[${factorVar.name}=${formatCategoryWithLabel(factorVar, category)}]`,
+                                        isRedundant: false,
+                                        pIdx: nextPIdx,
+                                    });
+                                    nextPIdx += 1;
+                                });
+
+                                displayPredictors.push({
+                                    label: `[${factorVar.name}=${formatCategoryWithLabel(factorVar, referenceCategory)}]`,
+                                    isRedundant: true,
+                                });
+                            });
+
+                            // Parameter table with Exp(B) confidence intervals including redundant factor categories
+                            const parameterRows = nonReferenceCategories.flatMap((depCategory, catIdx) =>
+                                displayPredictors.map((pred) => {
+                                    if (pred.isRedundant) {
+                                        return {
+                                            rowHeader: [
+                                                formatDependentCategory(depCategory),
+                                                pred.label,
+                                            ],
+                                            "B": ".000<sup>b</sup>",
+                                            "Std. Error": ".",
+                                            "Wald": ".",
+                                            "df": ".",
+                                            "Sig.": ".",
+                                            "Exp(B)": ".",
+                                            "Lower Bound": ".",
+                                            "Upper Bound": ".",
+                                        };
+                                    } else {
+                                        const pIdx = pred.pIdx!;
+                                        return {
+                                            rowHeader: [
+                                                formatDependentCategory(depCategory),
+                                                pred.label,
+                                            ],
+                                            "B": formatSpssNumber(coeffs[catIdx]?.[pIdx]),
+                                            "Std. Error": formatSpssNumber(stdErrors[catIdx]?.[pIdx]),
+                                            "Wald": formatSpssNumber(waldStats[catIdx]?.[pIdx]),
+                                            "df": "1",
+                                            "Sig.": (() => {
+                                                const p = pValues[catIdx]?.[pIdx];
+                                                return p !== undefined ? formatPValue(p) : "";
+                                            })(),
+                                            "Exp(B)": formatExpValueForDisplay(expBeta[catIdx]?.[pIdx]),
+                                            "Lower Bound": formatSpssNumber(expCiLower[catIdx]?.[pIdx]),
+                                            "Upper Bound": formatSpssNumber(expCiUpper[catIdx]?.[pIdx]),
+                                        };
+                                    }
+                                })
                             );
 
                             const nullNeg2LL = result?.nullLogLikelihood !== undefined
@@ -992,9 +1124,13 @@ export const MultinomialLogisticMain = () => {
                                 },
                                 {
                                     rowHeader: ["Overall", "Subpopulation"],
-                                    N: formatCaseN(validBaseN),
+                                    N: result?.goodnessOfFit?.subpopulationsCount !== undefined 
+                                        ? String(result.goodnessOfFit.subpopulationsCount)
+                                        : formatCaseN(validBaseN),
                                     Percent: "",
-                                    n: formatCaseN(validBaseN),
+                                    n: result?.goodnessOfFit?.subpopulationsCount !== undefined 
+                                        ? String(result.goodnessOfFit.subpopulationsCount)
+                                        : formatCaseN(validBaseN),
                                     percent: "",
                                 },
                             ];
@@ -1028,83 +1164,58 @@ export const MultinomialLogisticMain = () => {
                                 selectedEffects?: string[];
                             }> = Array.isArray(result?.stepwiseTrace) ? result.stepwiseTrace : [];
 
-                            const stepSummaryRows = stepwiseTrace.length > 0
-                                ? stepwiseTrace.map((entry: any) => ({
-                                    rowHeader: [String(entry.step ?? "")],
-                                    Step: String(entry.step ?? ""),
-                                    Action: entry.action ?? "",
-                                    Effect: entry.effect ?? "",
-                                    Test: entry.test ?? "",
-                                    "Chi-Square": Number.isFinite(entry.chiSquare) ? formatSpssNumber(entry.chiSquare, 3) : "",
-                                    "Sig.": Number.isFinite(entry.pValue) ? formatSpssNumber(entry.pValue, 3) : "",
-                                    "Selected Effects": Array.isArray(entry.selectedEffects) ? entry.selectedEffects.join(", ") : "",
-                                }))
-                                : [
-                                    {
-                                        rowHeader: ["Iterations"],
-                                        Step: "",
-                                        Action: "",
-                                        Effect: "",
-                                        Test: "",
-                                        "Chi-Square": "",
-                                        "Sig.": "",
-                                        "Selected Effects": String(result?.iterations ?? ""),
-                                    },
-                                    {
-                                        rowHeader: ["Converged"],
-                                        Step: "",
-                                        Action: "",
-                                        Effect: "",
-                                        Test: "",
-                                        "Chi-Square": "",
-                                        "Sig.": "",
-                                        "Selected Effects": result?.converged ? "Yes" : "No",
-                                    },
-                                    {
-                                        rowHeader: ["Weight Variable"],
-                                        Step: "",
-                                        Action: "",
-                                        Effect: "",
-                                        Test: "",
-                                        "Chi-Square": "",
-                                        "Sig.": "",
-                                        "Selected Effects": weightVariable?.name || "(None)",
-                                    },
-                                    {
-                                        rowHeader: ["Effective N (Model)"],
-                                        Step: "",
-                                        Action: "",
-                                        Effect: "",
-                                        Test: "",
-                                        "Chi-Square": "",
-                                        "Sig.": "",
-                                        "Selected Effects": Number.isFinite(sampleSize) ? sampleSize.toFixed(3) : "",
-                                    },
-                                    {
-                                        rowHeader: ["Final -2 Log Likelihood"],
-                                        Step: "",
-                                        Action: "",
-                                        Effect: "",
-                                        Test: "",
-                                        "Chi-Square": "",
-                                        "Sig.": "",
-                                        "Selected Effects": Number.isFinite(displayFinalNeg2LL) ? displayFinalNeg2LL.toFixed(3) : "",
-                                    },
-                                ];
-
-                            const stepSummaryTable = {
-                                title: "Step Summary",
-                                columnHeaders: [
-                                    { header: "Step" },
-                                    { header: "Action" },
-                                    { header: "Effect" },
-                                    { header: "Test" },
-                                    { header: "Chi-Square" },
-                                    { header: "Sig." },
-                                    { header: "Selected Effects" },
-                                ],
-                                rows: stepSummaryRows,
-                            };
+                            const stepSummaryTable = stepwiseTrace.length > 0
+                                ? {
+                                    title: "Step Summary",
+                                    columnHeaders: [
+                                        { header: "Step" },
+                                        { header: "Action" },
+                                        { header: "Effect" },
+                                        { header: "Test" },
+                                        { header: "Chi-Square" },
+                                        { header: "Sig." },
+                                        { header: "Selected Effects" },
+                                    ],
+                                    rows: stepwiseTrace.map((entry: any) => ({
+                                        rowHeader: [String(entry.step ?? "")],
+                                        Step: String(entry.step ?? ""),
+                                        Action: entry.action ?? "",
+                                        Effect: entry.effect ?? "",
+                                        Test: entry.test ?? "",
+                                        "Chi-Square": Number.isFinite(entry.chiSquare) ? formatSpssNumber(entry.chiSquare, 3) : "",
+                                        "Sig.": Number.isFinite(entry.pValue) ? formatSpssNumber(entry.pValue, 3) : "",
+                                        "Selected Effects": Array.isArray(entry.selectedEffects) ? entry.selectedEffects.join(", ") : "",
+                                    })),
+                                }
+                                : {
+                                    title: "Model Information",
+                                    columnHeaders: [
+                                        { header: "" },
+                                        { header: "Value" },
+                                    ],
+                                    rows: [
+                                        {
+                                            rowHeader: ["Iterations"],
+                                            "Value": String(result?.iterations ?? ""),
+                                        },
+                                        {
+                                            rowHeader: ["Converged"],
+                                            "Value": result?.converged ? "Yes" : "No",
+                                        },
+                                        {
+                                            rowHeader: ["Weight Variable"],
+                                            "Value": weightVariable?.name || "(None)",
+                                        },
+                                        {
+                                            rowHeader: ["Effective N (Model)"],
+                                            "Value": Number.isFinite(sampleSize) ? sampleSize.toFixed(3) : "",
+                                        },
+                                        {
+                                            rowHeader: ["Final -2 Log Likelihood"],
+                                            "Value": Number.isFinite(displayFinalNeg2LL) ? displayFinalNeg2LL.toFixed(3) : "",
+                                        },
+                                    ],
+                                };
 
                             const pseudoRSquareTable = {
                                 title: "Pseudo R-Square",
@@ -1458,13 +1569,14 @@ export const MultinomialLogisticMain = () => {
                                     result?.iterations ?? options.criteria.iterations,
                                     result?.converged ?? true
                                 );
+                                const tableTitle = stepwiseTrace.length > 0 ? "Step Summary" : "Model Information";
                                 await addStatistic(analyticId, {
-                                    title: "Step Summary",
+                                    title: tableTitle,
                                     description: stepSummaryDescription,
                                     output_data: JSON.stringify({ tables: [stepSummaryTable] }),
-                                    components: "Step Summary",
+                                    components: tableTitle,
                                 });
-                                console.log("[Multinomial UI] Step Summary statistic added");
+                                console.log(`[Multinomial UI] ${tableTitle} statistic added`);
                             }
 
                             const saveMergedModelFitting = options.statistics.modelFitting || options.statistics.informationCriteria;
@@ -1487,10 +1599,13 @@ export const MultinomialLogisticMain = () => {
 
                             // Save Pseudo R-Square (if enabled)
                             if (options.statistics.pseudoRSquare) {
+                                const coxSnell = result?.pseudoRSquare?.coxSnell ?? 0;
+                                const nagelkerke = result?.pseudoRSquare?.nagelkerke ?? 0;
+                                const mcFadden = result?.pseudoRSquare?.mcfadden ?? result?.pseudoRSquare?.mcFadden ?? 0;
                                 const pseudoRSquareDescription = generatePseudoRSquareDescription(
-                                    result?.pseudoRSquare?.coxSnell ?? 0,
-                                    result?.pseudoRSquare?.nagelkerke ?? 0,
-                                    result?.pseudoRSquare?.mcFadden ?? 0
+                                    coxSnell,
+                                    nagelkerke,
+                                    mcFadden
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Pseudo R-Square",
@@ -1503,11 +1618,31 @@ export const MultinomialLogisticMain = () => {
 
                             // Save Parameter Estimates (if enabled)
                             if (options.statistics.parameterEstimates) {
-                                const significantParams = pValues.flat().filter((p: any) => Number(p) < 0.05).length;
+                                const refCatLabel = formatDependentCategory(referenceCategoryValue);
+                                const totalEstimatedParams = coeffs.reduce((sum, row) => sum + row.length, 0);
+                                const sigParams: string[] = [];
+                                let sigCount = 0;
+
+                                nonReferenceCategories.forEach((depCategory, catIdx) => {
+                                    const depCatLabel = formatDependentCategory(depCategory);
+                                    displayPredictors.forEach((pred) => {
+                                        if (!pred.isRedundant && pred.pIdx !== undefined) {
+                                            const p = pValues[catIdx]?.[pred.pIdx];
+                                            if (p !== undefined && p < 0.05) {
+                                                sigCount += 1;
+                                                sigParams.push(`${pred.label} (${depCatLabel} vs ${refCatLabel})`);
+                                            }
+                                        }
+                                    });
+                                });
+
                                 const parameterEstimatesDescription = generateParameterEstimatesDescription(
                                     allPredictorColumns.length,
                                     dependentCategoryMap.length,
-                                    significantParams
+                                    sigCount,
+                                    totalEstimatedParams,
+                                    refCatLabel,
+                                    sigParams
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Parameter Estimates",
@@ -1519,9 +1654,11 @@ export const MultinomialLogisticMain = () => {
                             }
 
                             if (options.statistics.cellProbabilities && cellProbabilitiesTable) {
+                                const formattedCatNames = dependentCategoryMap.map((cat) => formatDependentCategory(cat));
                                 const cellProbabilitiesDescription = generateCellProbabilitiesDescription(
                                     validData.length,
-                                    dependentCategoryMap.length
+                                    dependentCategoryMap.length,
+                                    formattedCatNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Cell Probabilities",
@@ -1534,11 +1671,13 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Classification Table (if enabled)
                             if (options.statistics.classificationTable && classificationTable) {
-                                const overallAccuracy = result?.classificationTable?.overallAccuracy ?? 0;
-                                const categoryAccuracies = result?.classificationTable?.categoryAccuracies ?? [];
+                                const overallPercentage = result?.classificationTable?.overallPercentage ?? result?.classificationTable?.overallAccuracy ?? 0;
+                                const categoryPercentages = result?.classificationTable?.categoryPercentages ?? result?.classificationTable?.categoryAccuracies ?? [];
+                                const formattedCatNames = dependentCategoryMap.map((cat) => formatDependentCategory(cat));
                                 const classificationDescription = generateClassificationDescription(
-                                    overallAccuracy / 100,
-                                    categoryAccuracies.map((acc: any) => typeof acc === 'string' ? parseFloat(acc) / 100 : acc / 100)
+                                    overallPercentage,
+                                    categoryPercentages,
+                                    formattedCatNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Classification Table",
@@ -1551,15 +1690,20 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Goodness-of-Fit Tests (if enabled)
                             if (options.statistics.goodnessOfFit && goodnessOfFitTable) {
-                                const pearsonChi2 = result?.goodnessOfFit?.pearsonChi2 ?? 0;
-                                const pearsonP = result?.goodnessOfFit?.pearsonP ?? 1;
-                                const devianceChi2 = result?.goodnessOfFit?.devianceChi2 ?? 0;
-                                const devianceP = result?.goodnessOfFit?.devianceP ?? 1;
+                                const pearsonChiSquare = result?.goodnessOfFit?.pearsonChiSquare ?? result?.goodnessOfFit?.pearsonChi2 ?? 0;
+                                const pearsonDf = result?.goodnessOfFit?.pearsonDf ?? 0;
+                                const pearsonPValue = result?.goodnessOfFit?.pearsonPValue ?? result?.goodnessOfFit?.pearsonP ?? 1;
+                                const deviance = result?.goodnessOfFit?.deviance ?? result?.goodnessOfFit?.devianceChi2 ?? 0;
+                                const devianceDf = result?.goodnessOfFit?.devianceDf ?? 0;
+                                const deviancePValue = result?.goodnessOfFit?.deviancePValue ?? result?.goodnessOfFit?.devianceP ?? 1;
+
                                 const goodnessOfFitDescription = generateGoodnessOfFitDescription(
-                                    pearsonChi2,
-                                    pearsonP,
-                                    devianceChi2,
-                                    devianceP
+                                    pearsonChiSquare,
+                                    pearsonDf,
+                                    pearsonPValue,
+                                    deviance,
+                                    devianceDf,
+                                    deviancePValue
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Goodness-of-Fit Tests",
@@ -1572,12 +1716,20 @@ export const MultinomialLogisticMain = () => {
 
                             // NEW: Save Likelihood Ratio Tests (if enabled)
                             if (options.statistics.likelihoodRatioTests && likelihoodRatioTable) {
-                                const lrTestsData = result?.likelihoodRatioTests ?? [];
-                                const significantLRTests = lrTestsData.filter((test: any) => Number(test.p) < 0.05).length;
+                                const lrTestsData: any[] = result?.likelihoodRatioTests ?? [];
+                                const sigLRNames: string[] = [];
+                                lrTestsData.forEach((test) => {
+                                    const p = test.pValue ?? test.p;
+                                    if (p !== undefined && p < 0.05) {
+                                        sigLRNames.push(test.effect);
+                                    }
+                                });
+
                                 const likelihoodRatioDescription = generateLikelihoodRatioDescription(
                                     lrTestsData.length,
-                                    significantLRTests,
-                                    result?.pValueModel ?? 1
+                                    sigLRNames.length,
+                                    result?.pValueModel ?? 1,
+                                    sigLRNames
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Likelihood Ratio Tests",
@@ -1589,10 +1741,27 @@ export const MultinomialLogisticMain = () => {
                             }
 
                             if (options.statistics.monotonicityMeasures && monotonicityTable) {
+                                const observed = result?.classificationTable?.observed as number[] | undefined;
+                                const predicted = result?.classificationTable?.predicted as number[] | undefined;
+                                let rho = 0;
+                                if (observed && predicted && observed.length > 0) {
+                                    const n = observed.length;
+                                    const meanObserved = observed.reduce((s: number, v: number) => s + v, 0) / n;
+                                    const meanPredicted = predicted.reduce((s: number, v: number) => s + v, 0) / n;
+                                    const covariance = observed.reduce(
+                                        (s: number, v: number, i: number) => s + (v - meanObserved) * (predicted[i] - meanPredicted),
+                                        0
+                                    );
+                                    const varObserved = observed.reduce((s: number, v: number) => s + (v - meanObserved) ** 2, 0);
+                                    const varPredicted = predicted.reduce((s: number, v: number) => s + (v - meanPredicted) ** 2, 0);
+                                    if (varObserved > 0 && varPredicted > 0) {
+                                        rho = covariance / Math.sqrt(varObserved * varPredicted);
+                                    }
+                                }
+
                                 const monotonicityDescription = generateMonotonicityDescription(
-                                    result?.monotonicityMeasures?.somersD ?? 0,
-                                    result?.monotonicityMeasures?.gamma ?? 0,
-                                    result?.monotonicityMeasures?.tau ?? 0
+                                    rho,
+                                    validData.length
                                 );
                                 await addStatistic(analyticId, {
                                     title: "Monotonicity Measures",
@@ -1638,14 +1807,14 @@ export const MultinomialLogisticMain = () => {
                             setIsLoading(false);
                         } catch (saveError: any) {
                             console.error("[Multinomial UI] Failed to save result:", saveError);
-                            alert("Gagal menyimpan hasil: " + saveError.message);
+                            setErrorMsg("Gagal menyimpan hasil: " + saveError.message);
                             setIsLoading(false);
                             worker.terminate();
                         }
                     })();
                 } else {
                     console.error("[Multinomial UI] Analysis Error:", error);
-                    alert(`Analysis Error: ${error || "Unknown error"}`);
+                    setErrorMsg(`Analysis Error: ${error || "Unknown error"}`);
                     setIsLoading(false);
                     worker.terminate();
                 }
@@ -1656,19 +1825,20 @@ export const MultinomialLogisticMain = () => {
                 const detail = err.message
                     ? `${err.message} (${err.filename || "unknown"}:${err.lineno || 0}:${err.colno || 0})`
                     : `${String(err)} (${err.filename || "unknown"}:${err.lineno || 0}:${err.colno || 0})`;
-                alert(`Worker Error: ${detail}`);
+                setErrorMsg(`Worker Error: ${detail}`);
                 setIsLoading(false);
                 worker.terminate();
             };
 
         } catch (error: any) {
             console.error("[Multinomial UI] Exception in handleAnalyze:", error);
-            alert(error.message || String(error));
+            setErrorMsg(error.message || String(error));
             setIsLoading(false);
         }
     };
 
     const resetOptions = () => {
+        setErrorMsg(null);
         setOptions({
             dependent: null,
             factors: [],
@@ -1721,18 +1891,33 @@ export const MultinomialLogisticMain = () => {
     };
 
     return (
-        <div className="flex flex-col max-h-[85vh] min-w-0 w-full bg-background">
-            <div className="flex-grow px-6 py-3 overflow-y-auto min-h-0">
-                <Tabs defaultValue="variables" className="w-full h-full flex flex-col">
-                    <TabsList className="grid w-full grid-cols-5 flex-shrink-0 sticky top-0 z-10 bg-secondary">
-                        <TabsTrigger value="variables">Model</TabsTrigger>
-                        <TabsTrigger value="statistics">Statistics</TabsTrigger>
-                        <TabsTrigger value="criteria">Criteria</TabsTrigger>
-                        <TabsTrigger value="options">Options</TabsTrigger>
-                        <TabsTrigger value="save">Save</TabsTrigger>
+        <div className="flex flex-col h-full bg-background">
+            <AnimatePresence>
+                {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
+                    <TourPopup
+                        step={tourSteps[currentStep]}
+                        currentStep={currentStep}
+                        totalSteps={tourSteps.length}
+                        onNext={nextStep}
+                        onPrev={prevStep}
+                        onClose={endTour}
+                        targetElement={currentTargetElement}
+                    />
+                )}
+            </AnimatePresence>
+            <ActiveElementHighlight active={tourActive} />
+
+            <div className="flex-grow px-6 py-3 overflow-hidden min-h-0 flex flex-col">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col min-h-0 overflow-hidden">
+                    <TabsList className="grid w-full grid-cols-5 flex-shrink-0">
+                        <TabsTrigger value="variables" id="multinomial-logistic-variables-tab-trigger">Model</TabsTrigger>
+                        <TabsTrigger value="statistics" id="multinomial-logistic-statistics-tab-trigger">Statistics</TabsTrigger>
+                        <TabsTrigger value="criteria" id="multinomial-logistic-criteria-tab-trigger">Criteria</TabsTrigger>
+                        <TabsTrigger value="options" id="multinomial-logistic-options-tab-trigger">Options</TabsTrigger>
+                        <TabsTrigger value="save" id="multinomial-logistic-save-tab-trigger">Save</TabsTrigger>
                     </TabsList>
 
-                    <div className="flex-grow min-h-0 overflow-hidden">
+                    <div className="flex-grow min-h-0 overflow-y-auto mt-4 pr-1">
                         <TabsContent value="variables" className="h-full mt-0">
                             <VariablesTab
                                 variables={variables}
@@ -1745,10 +1930,6 @@ export const MultinomialLogisticMain = () => {
                             <StatisticsTab
                                 options={options.statistics}
                                 onChange={(stats) => setOptions({ ...options, statistics: stats })}
-                                availableSubpopulationVariables={[
-                                    ...options.factors.map((v) => v.name),
-                                    ...options.covariates.map((v) => v.name),
-                                ]}
                             />
                         </TabsContent>
 
@@ -1777,6 +1958,15 @@ export const MultinomialLogisticMain = () => {
                         </TabsContent>
                     </div>
                 </Tabs>
+
+                {errorMsg && (
+                    <div className="mt-4">
+                        <Alert variant="destructive">
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>{errorMsg}</AlertDescription>
+                        </Alert>
+                    </div>
+                )}
             </div>
 
             <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">
@@ -1786,8 +1976,11 @@ export const MultinomialLogisticMain = () => {
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button
+                                        data-testid="multinomial-logistic-help-button"
                                         variant="ghost"
                                         size="icon"
+                                        onClick={startTour}
+                                        aria-label="Start feature tour"
                                         className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
                                     >
                                         <HelpCircle className="h-4 w-4" />

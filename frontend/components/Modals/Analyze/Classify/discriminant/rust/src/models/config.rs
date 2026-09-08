@@ -12,6 +12,10 @@ pub struct DiscriminantConfig {
     pub classify: ClassifyConfig,
     pub save: SaveConfig,
     pub bootstrap: BootstrapConfig,
+    /// Optional so older saved configs (without an Assumptions section) still
+    /// deserialize; absent → all checks off.
+    #[serde(default)]
+    pub assumptions: AssumptionsConfig,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -64,35 +68,35 @@ pub struct StatisticsConfig {
     pub total_covariance: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct MethodConfig {
-    #[serde(rename = "Wilks")]
+    #[serde(rename = "Wilks", default)]
     pub wilks: bool,
-    #[serde(rename = "Unexplained")]
+    #[serde(rename = "Unexplained", default)]
     pub unexplained: bool,
-    #[serde(rename = "Mahalonobis")]
+    #[serde(rename = "Mahalonobis", default)]
     pub mahalonobis: bool,
-    #[serde(rename = "FRatio")]
+    #[serde(rename = "FRatio", default)]
     pub f_ratio: bool,
-    #[serde(rename = "Raos")]
+    #[serde(rename = "Raos", default)]
     pub raos: bool,
-    #[serde(rename = "FValue")]
+    #[serde(rename = "FValue", default)]
     pub f_value: bool,
-    #[serde(rename = "FProbability")]
+    #[serde(rename = "FProbability", default)]
     pub f_probability: bool,
-    #[serde(rename = "Summary")]
+    #[serde(rename = "Summary", default)]
     pub summary: bool,
-    #[serde(rename = "Pairwise")]
+    #[serde(rename = "Pairwise", default)]
     pub pairwise: bool,
-    #[serde(rename = "VEnter")]
+    #[serde(rename = "VEnter", default)]
     pub v_enter: f64,
-    #[serde(rename = "FEntry")]
+    #[serde(rename = "FEntry", default)]
     pub f_entry: f64,
-    #[serde(rename = "FRemoval")]
+    #[serde(rename = "FRemoval", default)]
     pub f_removal: f64,
-    #[serde(rename = "PEntry")]
+    #[serde(rename = "PEntry", default)]
     pub p_entry: f64,
-    #[serde(rename = "PRemoval")]
+    #[serde(rename = "PRemoval", default)]
     pub p_removal: f64,
 }
 
@@ -136,6 +140,16 @@ pub struct SaveConfig {
     pub probabilities: bool,
     #[serde(rename = "XmlFile")]
     pub xml_file: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct AssumptionsConfig {
+    #[serde(rename = "Multicollinearity", default)]
+    pub multicollinearity: bool,
+    #[serde(rename = "MultivariateNormality", default)]
+    pub multivariate_normality: bool,
+    #[serde(rename = "UnivariateNormality", default)]
+    pub univariate_normality: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

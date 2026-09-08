@@ -5,105 +5,44 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
 import type { DistanceMatrix, MedoidDistanceMatrix } from "../types/output";
 
 interface DistanceMatrixProps {
     matrix: MedoidDistanceMatrix;
-    actions?: React.ReactNode;
 }
 
-export const DistanceMatrixHeatmap: React.FC<DistanceMatrixProps> = ({ matrix, actions }) => {
-    // Find min and max values for color scaling
-    const flatDistances = matrix.distances
-        .flat()
-        .filter(d => d != null && isFinite(d) && d > 0);
-    
-    const minDist = flatDistances.length > 0 ? flatDistances.reduce((a, b) => a < b ? a : b) : 0;
-    const maxDist = flatDistances.length > 0 ? flatDistances.reduce((a, b) => a > b ? a : b) : 0;
-
-    // Color scale function
-    const getColor = (value: number): string => {
-        if (value === 0) return "bg-gray-200 dark:bg-gray-800";
-        
-        const normalized = (value - minDist) / (maxDist - minDist);
-        
-        if (normalized < 0.33) return "bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-100";
-        if (normalized < 0.67) return "bg-yellow-200 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100";
-        return "bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-100";
-    };
-
-    const getInterpretation = (value: number): string => {
-        if (value === 0) return "Same cluster";
-        
-        const normalized = (value - minDist) / (maxDist - minDist);
-        
-        if (normalized < 0.33) return "Very similar";
-        if (normalized < 0.67) return "Moderately separated";
-        return "Well separated";
-    };
+export const DistanceMatrixHeatmap: React.FC<DistanceMatrixProps> = ({ matrix }) => {
+    const tableJson = useMemo(() => {
+        return JSON.stringify({
+            tables: [
+                {
+                    key: "distance_matrix_medoids",
+                    title: "Distance Matrix Between Medoids",
+                    columnHeaders: [
+                        { header: "" },
+                        ...matrix.clusterLabels.map(label => ({ header: `C${label}`, key: `c${label}` })),
+                    ],
+                    rows: matrix.clusterLabels.map((rowLabel, i) => ({
+                        rowHeader: [`C${rowLabel}`],
+                        ...Object.fromEntries(
+                            matrix.clusterLabels.map((colLabel, j) => {
+                                const distance = matrix.distances[i]?.[j];
+                                const safeDistance = distance !== null && isFinite(distance) ? distance : 0;
+                                return [`c${colLabel}`, safeDistance.toFixed(2)];
+                            })
+                        ),
+                    })),
+                    footer: "Lower values indicate more similar clusters. Higher values indicate better separation.",
+                },
+            ],
+        });
+    }, [matrix]);
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Distance Matrix Between Medoids</CardTitle>
-                <CardDescription>
-                    Lower values indicate more similar clusters. Higher values indicate better separation.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                {actions && <div className="mb-3 flex items-center justify-end gap-2">{actions}</div>}
-                <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                        <thead>
-                            <tr>
-                                <th className="border border-border p-2 bg-muted"></th>
-                                {matrix.clusterLabels.map(label => (
-                                    <th key={label} className="border border-border p-2 bg-muted font-semibold">
-                                        C{label}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {matrix.clusterLabels.map((rowLabel, i) => (
-                                <tr key={rowLabel}>
-                                    <td className="border border-border p-2 bg-muted font-semibold">
-                                        C{rowLabel}
-                                    </td>
-                                    {matrix.clusterLabels.map((colLabel, j) => {
-                                        const distance = matrix.distances[i]?.[j];
-                                        const safeDistance = distance != null && isFinite(distance) ? distance : 0;
-                                        
-                                        return (
-                                            <td
-                                                key={colLabel}
-                                                className={`border border-border p-3 text-center font-mono text-sm ${getColor(safeDistance)}`}
-                                                title={getInterpretation(safeDistance)}
-                                            >
-                                                {safeDistance.toFixed(2)}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div className="mt-4 flex items-center justify-center gap-6 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-green-200 dark:bg-green-900 border border-border"></div>
-                        <span>Similar</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-yellow-200 dark:bg-yellow-900 border border-border"></div>
-                        <span>Moderate</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-red-200 dark:bg-red-900 border border-border"></div>
-                        <span>Separated</span>
-                    </div>
-                </div>
+            <CardContent className="pt-6">
+                <DataTableRenderer data={tableJson} />
             </CardContent>
         </Card>
     );
@@ -130,7 +69,7 @@ export const FullDistanceMatrixHeatmap: React.FC<FullDistanceMatrixProps> = ({ m
             const row = matrix.distances[i] || [];
             for (let j = 0; j < n; j += strideValue) {
                 const value = row[j];
-                if (value == null || !isFinite(value)) continue;
+                if (value === null || !isFinite(value)) continue;
                 if (value < minValue) minValue = value;
                 if (value > maxValue) maxValue = value;
             }
@@ -167,7 +106,7 @@ export const FullDistanceMatrixHeatmap: React.FC<FullDistanceMatrixProps> = ({ m
             const sourceRow = matrix.distances[i * stride] || [];
             for (let j = 0; j < sampledSize; j++) {
                 const value = sourceRow[j * stride];
-                const safeValue = value != null && isFinite(value) ? value : minDist;
+                const safeValue = value !== null && isFinite(value) ? value : minDist;
                 const normalized = Math.min(1, Math.max(0, (safeValue - minDist) / range));
                 const r = Math.round(start.r + (end.r - start.r) * normalized);
                 const g = Math.round(start.g + (end.g - start.g) * normalized);
@@ -260,6 +199,35 @@ export const DistanceMatrixTable: React.FC<DistanceMatrixTableProps> = ({
 
     const rowLabel = (idx: number) => `C${matrix.clusters[idx]} · ${matrix.labels[idx]}`;
 
+    const tableJson = useMemo(() => {
+        const colIndices = Array.from({ length: colEnd - colStart }, (_, offset) => colStart + offset);
+        return JSON.stringify({
+            tables: [
+                {
+                    key: "distance_matrix_all_cases",
+                    title: "Distance Matrix",
+                    columnHeaders: [
+                        { header: "" },
+                        ...colIndices.map((idx) => ({ header: rowLabel(idx), key: `col_${idx}` })),
+                    ],
+                    rows: Array.from({ length: rowEnd - rowStart }, (_, rowOffset) => {
+                        const rowIdx = rowStart + rowOffset;
+                        const row = matrix.distances[rowIdx] || [];
+                        return {
+                            rowHeader: [rowLabel(rowIdx)],
+                            ...Object.fromEntries(
+                                colIndices.map((colIdx) => {
+                                    const value = row[colIdx];
+                                    return [`col_${colIdx}`, value !== null && isFinite(value) ? value.toFixed(4) : "N/A"];
+                                })
+                            ),
+                        };
+                    }),
+                },
+            ],
+        });
+    }, [matrix, rowStart, rowEnd, colStart, colEnd]);
+
     return (
         <div className="space-y-3">
             <div className="mb-3 flex flex-col items-center gap-2 text-xs text-muted-foreground">
@@ -287,44 +255,8 @@ export const DistanceMatrixTable: React.FC<DistanceMatrixTableProps> = ({
                     </button>
                 </div>
             </div>
-            <div className="overflow-auto border border-border rounded">
-                <table className="w-full border-collapse text-xs">
-                    <thead>
-                        <tr>
-                            <th className="border border-border bg-muted p-2"></th>
-                            {Array.from({ length: colEnd - colStart }, (_, offset) => {
-                                const idx = colStart + offset;
-                                return (
-                                    <th key={idx} className="border border-border bg-muted p-2 text-left">
-                                        {rowLabel(idx)}
-                                    </th>
-                                );
-                            })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Array.from({ length: rowEnd - rowStart }, (_, rowOffset) => {
-                            const rowIdx = rowStart + rowOffset;
-                            const row = matrix.distances[rowIdx] || [];
-                            return (
-                                <tr key={rowIdx}>
-                                    <td className="border border-border bg-muted p-2 font-semibold">
-                                        {rowLabel(rowIdx)}
-                                    </td>
-                                    {Array.from({ length: colEnd - colStart }, (_, colOffset) => {
-                                        const colIdx = colStart + colOffset;
-                                        const value = row[colIdx];
-                                        return (
-                                            <td key={colIdx} className="border border-border p-2 text-right">
-                                                {value != null && isFinite(value) ? value.toFixed(4) : "N/A"}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+            <div className="overflow-auto">
+                <DataTableRenderer data={tableJson} />
             </div>
         </div>
     );

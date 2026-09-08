@@ -6,7 +6,7 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { KMedoidsOutput, ClusterProfile, IterationHistory } from "../types/output";
+import type { KMedoidsOutput, IterationHistory } from "../types/output";
 
 /**
  * Format K-Medoids data for scatter plot visualization
@@ -22,8 +22,8 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
             const yVal = obj.attributes?.[yVar];
             
             return {
-                x: xVal != null && isFinite(xVal as number) ? (xVal as number) : 0,
-                y: yVal != null && isFinite(yVal as number) ? (yVal as number) : 0,
+                x: xVal !== null && isFinite(xVal as number) ? (xVal as number) : 0,
+                y: yVal !== null && isFinite(yVal as number) ? (yVal as number) : 0,
                 category: `cluster ${obj.clusterLabel}`,
                 label: `Case ${obj.objectId}`,
                 clusterNum: obj.clusterLabel
@@ -38,8 +38,8 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
             const yVal = obj.attributes?.[yVar];
             
             return {
-                x: xVal != null && isFinite(xVal as number) ? (xVal as number) : 0,
-                y: yVal != null && isFinite(yVal as number) ? (yVal as number) : 0,
+                x: xVal !== null && isFinite(xVal as number) ? (xVal as number) : 0,
+                y: yVal !== null && isFinite(yVal as number) ? (yVal as number) : 0,
                 category: "centroide",
                 label: `Medoid C${obj.clusterLabel}`,
                 clusterNum: obj.clusterLabel
@@ -109,7 +109,7 @@ export function formatDonutChartData(output: KMedoidsOutput) {
     const labels = output.clusterProfiles.map(p => `Cluster ${p.clusterLabel}`);
     const data = output.clusterProfiles.map(p => p.size);
     const percentages = output.clusterProfiles.map(p => 
-        p.percentage != null ? p.percentage.toFixed(1) : '0'
+        p.percentage !== null ? p.percentage.toFixed(1) : '0'
     );
 
     return {
@@ -141,55 +141,13 @@ export function formatDonutChartData(output: KMedoidsOutput) {
                 },
                 tooltip: {
                     callbacks: {
-                        label: (context: any) => {
-                            const label = context.label || '';
+                        label: (context: {label?: string; parsed: number; dataIndex: number}) => {
+                            const label = context.label ?? '';
                             const value = context.parsed;
                             const percentage = percentages[context.dataIndex];
                             return `${label}: ${value} cases (${percentage}%)`;
                         }
                     }
-                }
-            }
-        }
-    };
-}
-
-/**
- * Format data for radar chart (cluster profiles)
- */
-export function formatRadarChartData(output: KMedoidsOutput, variables: string[]) {
-    const datasets = output.clusterProfiles.map((profile, idx) => ({
-        label: `Cluster ${profile.clusterLabel}`,
-        data: variables.map(v => {
-            const val = profile.meanAttributes?.[v];
-            return val != null && isFinite(val) ? val : 0;
-        }),
-        backgroundColor: `hsla(${(idx * 360) / output.clusterProfiles.length}, 70%, 50%, 0.2)`,
-        borderColor: `hsl(${(idx * 360) / output.clusterProfiles.length}, 70%, 50%)`,
-        borderWidth: 2
-    }));
-
-    return {
-        type: "radar",
-        data: {
-            labels: variables,
-            datasets
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Cluster Attribute Profiles"
-                },
-                legend: {
-                    display: true,
-                    position: "top" as const
-                }
-            },
-            scales: {
-                r: {
-                    beginAtZero: true
                 }
             }
         }
@@ -287,7 +245,7 @@ export function formatSilhouetteBarChartData(output: KMedoidsOutput) {
                 },
                 tooltip: {
                     callbacks: {
-                        afterLabel: (context: any) => {
+                        afterLabel: (context: {parsed: {x: number}}) => {
                             const score = context.parsed.x;
                             if (score >= 0.7) return "Quality: Very Strong";
                             if (score >= 0.5) return "Quality: Strong";
@@ -372,7 +330,7 @@ export function formatElbowChartData(output: KMedoidsOutput) {
 interface ChartCardProps {
     title: string;
     description?: string;
-    chartData: any;
+    chartData: {type?: string; data?: unknown; options?: unknown};
     height?: number;
 }
 

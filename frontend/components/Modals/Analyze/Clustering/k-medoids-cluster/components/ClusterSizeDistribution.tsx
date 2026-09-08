@@ -109,13 +109,13 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             .attr("class", "arc");
 
         arcs.append("path")
-            .attr("d", arc as any)
+            .attr("d", d => arc(d) as string)
             .attr("fill", (_, i) => clusterColor(i, profiles.length))
             .attr("stroke", bgColor)
             .attr("stroke-width", 2)
             .style("cursor", "pointer")
-            .on("mouseover", function (event, d) {
-                d3.select(this)
+            .on("mouseover", function (event: MouseEvent, d: d3.PieArcDatum<ClusterProfile>) {
+                d3.select(this as SVGPathElement)
                     .transition().duration(120)
                     .attr("d", arcHover(d) as string);
                 tooltip
@@ -123,17 +123,19 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
                     .html(
                         `<strong>Cluster ${d.data.clusterLabel}</strong><br/>` +
                         `Count: <strong>${d.data.size}</strong> objects<br/>` +
-                        `Share: <strong>${d.data.percentage != null ? d.data.percentage.toFixed(1) : ((d.data.size / total) * 100).toFixed(1)}%</strong>`
+                        `Share: <strong>${(d.data.percentage ?? (d.data.size / total) * 100).toFixed(1)}%</strong>`
                     );
             })
-            .on("mousemove", function (event) {
-                const [mx, my] = d3.pointer(event, svgRef.current!.parentElement!);
+            .on("mousemove", function (event: MouseEvent) {
+                const parent = svgRef.current?.parentElement;
+                if (!parent) return;
+                const [mx, my] = d3.pointer(event, parent as HTMLElement);
                 tooltip
                     .style("left", `${mx + 14}px`)
                     .style("top", `${my - 10}px`);
             })
-            .on("mouseleave", function (_, d) {
-                d3.select(this)
+            .on("mouseleave", function (_event: MouseEvent, d: d3.PieArcDatum<ClusterProfile>) {
+                d3.select(this as SVGPathElement)
                     .transition().duration(120)
                     .attr("d", arc(d) as string);
                 tooltip.style("opacity", "0");
@@ -150,9 +152,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             .attr("fill", "#fff")
             .attr("pointer-events", "none")
             .text(d => {
-                const pct = d.data.percentage != null
-                    ? d.data.percentage
-                    : (d.data.size / total) * 100;
+                const pct = d.data.percentage ?? (d.data.size / total) * 100;
                 return `${pct.toFixed(1)}%`;
             });
 
@@ -196,9 +196,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
                 .attr("rx", 3)
                 .attr("fill", color);
 
-            const pct = p.percentage != null
-                ? p.percentage.toFixed(1)
-                : ((p.size / total) * 100).toFixed(1);
+            const pct = (p.percentage ?? (p.size / total) * 100).toFixed(1);
 
             legendG.append("text")
                 .attr("x", lx + 19)
@@ -217,12 +215,6 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
             </div>
         );
     }
-
-    // dynamic height: grow legend if many clusters
-    const legendH = profiles.length > 6
-        ? Math.ceil(profiles.length / 2) * 22 + 8
-        : profiles.length * 22 + 8;
-    const totalH = height + legendH - (Math.min(width, height) / 2 - 20) * 0 /* already accounted */;
 
     return (
         <div className="relative w-full flex justify-center">

@@ -104,12 +104,18 @@ const BoxJenkinsModelModal = lazy(() =>
     default: mod.default as React.ComponentType<BaseModalProps>,
   }))
 );
+const ModalOrdinal = lazy(() =>
+  import("@/components/Modals/Analyze/Regression/Ordinal/dialogs/OrdinalMain").then((mod) => ({
+    default: mod.default as React.ComponentType<BaseModalProps>,
+  }))
+);
 const ModalBinaryLogistic = lazy(() =>
   import("@/components/Modals/Analyze/Regression/BinaryLogistic/dialogs/BinaryLogisticMain").then((mod) => ({
     // Pastikan Anda meng-export component sebagai 'BinaryLogisticMain' di file aslinya
     default: mod.BinaryLogisticMain as React.ComponentType<BaseModalProps>,
   }))
 );
+
 
 const ModalMultinomialLogistic = lazy(() =>
   import("@/components/Modals/Analyze/Regression/MultinomialLogistic/dialogs/MultinomialLogisticMain").then((mod) => ({
@@ -188,6 +194,7 @@ export const MODAL_COMPONENTS: ModalComponentRegistry = {
   [ModalType.OptionsLinear]: withSuspense(OptionsLinear),
   [ModalType.PlotsLinear]: withSuspense(PlotsLinear),
   [ModalType.ModalCurveEstimation]: withSuspense(ModalCurveEstimation),
+  [ModalType.ModalOrdinal]: withSuspense(ModalOrdinal),
   [ModalType.ModalBinaryLogistic]: withSuspense(ModalBinaryLogistic),
   [ModalType.ModalMultinomialLogistic]: withSuspense(ModalMultinomialLogistic),
 
@@ -258,6 +265,8 @@ export const MODAL_CONTAINER_PREFERENCES: Partial<
   [ModalType.ModalLinear]: "sidebar",
   [ModalType.ModalCurveEstimation]: "sidebar",
   [ModalType.ModalBinaryLogistic]: "sidebar",
+  [ModalType.ModalOrdinal]: "sidebar",
+  [ModalType.ModalMultinomialLogistic]: "sidebar",
 };
 
 /**
@@ -270,7 +279,7 @@ export const MODAL_CONTAINER_PREFERENCES: Partial<
  */
 export function getModalContainerType(
   type: ModalType,
-  fallback: "dialog" | "sidebar" = "dialog",
+  fallback: "dialog" | "sidebar" = "sidebar",
   isMobile = false
 ): "dialog" | "sidebar" {
   // Mobile devices always use dialog

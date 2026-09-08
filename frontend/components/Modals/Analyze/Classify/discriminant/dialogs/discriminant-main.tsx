@@ -1,244 +1,854 @@
-import {useEffect, useMemo, useState} from "react";
-import {DiscriminantDialog} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/dialog";
-import {DiscriminantDefineRange} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/define-range";
-import {DiscriminantSetValue} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/set-value";
-import {DiscriminantStatistics} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/statistics";
-import {DiscriminantMethod} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/method";
-import {DiscriminantClassify} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/classify";
-import {DiscriminantSave} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/save";
-import {DiscriminantBootstrap} from "@/components/Modals/Analyze/Classify/discriminant/dialogs/bootstrap";
-import type {
-    DiscriminantContainerProps,
-    DiscriminantMainType,
-    DiscriminantType,
-} from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant";
-import {DiscriminantDefault} from "@/components/Modals/Analyze/Classify/discriminant/constants/discriminant-default";
-import {Dialog, DialogContent, DialogTitle} from "@/components/ui/dialog";
-import {useModal} from "@/hooks/useModal";
-import {useVariableStore} from "@/stores/useVariableStore";
-import {useDataStore} from "@/stores/useDataStore";
-import {analyzeDiscriminant} from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-analysis";
-import {clearFormData, getFormData, saveFormData} from "@/hooks/useIndexedDB";
+"use client";
 
-export const DiscriminantContainer = ({
-    onClose,
-}: DiscriminantContainerProps) => {
-    const variables = useVariableStore((state) => state.variables);
-    const dataVariables = useDataStore((state) => state.data);
-    const tempVariables = useMemo(
-        () => variables.map((variable) => variable.name),
-        [variables]
+import React, { useState, useEffect, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { ChevronRight, HelpCircle, Loader2, X } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+
+// Stores & Hooks
+import { useVariableStore } from "@/stores/useVariableStore";
+import { useModalStore } from "@/stores/useModalStore";
+import { useDataStore } from "@/stores/useDataStore";
+import { useResultStore } from "@/stores/useResultStore";
+
+// Tab panels & sub-dialogs
+import { DiscriminantStatistics } from "./statistics";
+import { DiscriminantMethod } from "./method";
+import { DiscriminantClassify } from "./classify";
+import { DiscriminantSave } from "./save";
+import { DiscriminantBootstrap } from "./bootstrap";
+import { Input } from "@/components/ui/input";
+import { DiscriminantAssumptions } from "./assumptions";
+
+// Types
+import type { Variable } from "@/types/Variable";
+import { useDiscriminantState } from "../hooks/useDiscriminantState";
+
+// Feature tour
+import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
+import { dialogTourSteps } from "../hooks/tourConfig";
+
+/** Boxes a variable can be moved into on the Variables tab. */
+type DropTarget = "GroupingVariable" | "IndependentVariables" | "SelectionVariable";
+
+/** Drag payload: the names of every variable being dragged at once. */
+const DRAG_MIME = "application/statify-variable-names";
+
+
+export const DiscriminantMain = () => {
+  const { closeModal } = useModalStore();
+  const variablesFromStore = useVariableStore((state) => state.variables);
+  const { data } = useDataStore();
+  const { addLog, addAnalytic, addStatistic } = useResultStore();
+
+  const {
+    formData,
+    updateFormData,
+    executeAnalysis,
+    runAssumptions,
+    resetFormData,
+    isLoading,
+    error,
+  } = useDiscriminantState(variablesFromStore, data as string[][]);
+
+  const [activeTab, setActiveTab] = useState("variables");
+
+  // --- Feature tour (the "?" button in the footer) ---
+  const tabControl = useMemo<TabControlProps>(
+    () => ({
+      setActiveTab: (tab: string) => setActiveTab(tab),
+      currentActiveTab: activeTab,
+    }),
+    [activeTab]
+  );
+
+  const {
+    tourActive,
+    currentStep,
+    tourSteps,
+    currentTargetElement,
+    startTour,
+    nextStep,
+    prevStep,
+    endTour,
+  } = useTourGuide(dialogTourSteps, "dialog", tabControl);
+
+  // Define Range inline panel state
+  const [isDefineRangeOpen, setIsDefineRangeOpen] = useState(false);
+  const [pendingMinRange, setPendingMinRange] = useState<number | string>("");
+  const [pendingMaxRange, setPendingMaxRange] = useState<number | string>("");
+
+  const handleDefineRangeOpen = () => {
+    setPendingMinRange(formData.defineRange?.minRange ?? "");
+    setPendingMaxRange(formData.defineRange?.maxRange ?? "");
+    setIsSetValueOpen(false);
+    setIsDefineRangeOpen(true);
+  };
+
+  const handleDefineRangeContinue = () => {
+    updateFormData("defineRange", "minRange", Number(pendingMinRange) || 0);
+    updateFormData("defineRange", "maxRange", Number(pendingMaxRange) || 0);
+    setIsDefineRangeOpen(false);
+  };
+
+  // Set Value inline panel state
+  const [isSetValueOpen, setIsSetValueOpen] = useState(false);
+  const [pendingValue, setPendingValue] = useState<number | string>("");
+
+  const handleSetValueOpen = () => {
+    setPendingValue(formData.setValue?.Value ?? "");
+    setIsDefineRangeOpen(false);
+    setIsSetValueOpen(true);
+  };
+
+  const handleSetValueContinue = () => {
+    updateFormData("setValue", "Value", Number(pendingValue) || 0);
+    setIsSetValueOpen(false);
+  };
+
+  const variables = useVariableStore((state) => state.variables);
+
+  const mainData = formData.main;
+
+  // Method applies only to the stepwise method; Bootstrap only to "enter
+  // independents together". They are mutually exclusive, so we show just the
+  // relevant one to keep the single tab row from getting crowded.
+  const showMethod = mainData.Stepwise;
+  const showBootstrap = !mainData.Stepwise;
+
+  // --- VARIABLE SELECTION ---
+  const [availableVariables, setAvailableVariables] = useState<Variable[]>([]);
+
+  // Multi-select in the Available Variables list. Variables are addressed by
+  // name because that is what the form stores. Ctrl/Cmd toggles one item,
+  // Shift extends the range from the last clicked one, a plain click replaces
+  // the selection.
+  const [selectedVarNames, setSelectedVarNames] = useState<string[]>([]);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(null);
+  const [dragOverTarget, setDragOverTarget] = useState<DropTarget | null>(null);
+
+  // A variable already assigned to a box leaves the Available list, so a range
+  // selection can never sweep the grouping (or selection) variable into the
+  // independents by accident.
+  useEffect(() => {
+    const usedIds = new Set(
+      [
+        ...(mainData.IndependentVariables || []),
+        mainData.GroupingVariable,
+        mainData.SelectionVariable,
+      ].filter((name): name is string => !!name)
     );
+    const filtered = variablesFromStore.filter(
+      (v: Variable) => !usedIds.has(v.name)
+    );
+    setAvailableVariables(filtered as Variable[]);
+  }, [
+    mainData.IndependentVariables,
+    mainData.GroupingVariable,
+    mainData.SelectionVariable,
+    variablesFromStore,
+  ]);
 
-    const [formData, setFormData] = useState<DiscriminantType>({
-        ...DiscriminantDefault,
+  // Drop anything from the selection that has just left the Available list
+  // (moved into a box, or removed from the dataset).
+  useEffect(() => {
+    setSelectedVarNames((prev) => {
+      const stillAvailable = prev.filter((name) =>
+        availableVariables.some((v) => v.name === name)
+      );
+      return stillAvailable.length === prev.length ? prev : stillAvailable;
     });
-    const [isMainOpen, setIsMainOpen] = useState(true);
-    const [isDefineRangeOpen, setIsDefineRangeOpen] = useState(false);
-    const [isSetValueOpen, setIsSetValueOpen] = useState(false);
-    const [isStatisticsOpen, setIsStatisticsOpen] = useState(false);
-    const [isMethodOpen, setIsMethodOpen] = useState(false);
-    const [isClassifyOpen, setIsClassifyOpen] = useState(false);
-    const [isSaveOpen, setIsSaveOpen] = useState(false);
-    const [isBootstrapOpen, setIsBootstrapOpen] = useState(false);
+  }, [availableVariables]);
 
-    const { closeModal } = useModal();
+  // If the active tab gets hidden (Method/Bootstrap toggling with the method
+  // choice), fall back to the Variables tab.
+  useEffect(() => {
+    if (activeTab === "method" && !showMethod) setActiveTab("variables");
+    if (activeTab === "bootstrap" && !showBootstrap) setActiveTab("variables");
+  }, [activeTab, showMethod, showBootstrap]);
 
-    useEffect(() => {
-        const loadFormData = async () => {
-            try {
-                const savedData = await getFormData("Discriminant");
-                if (savedData) {
-                    const { id, ...formDataWithoutId } = savedData;
-                    setFormData(formDataWithoutId);
-                } else {
-                    setFormData({ ...DiscriminantDefault });
+  // Assign a batch of variables to one of the boxes. Grouping and Selection
+  // hold a single variable, so only the first of the batch is used there.
+  const assignVariables = (target: DropTarget, names: string[]) => {
+    if (names.length === 0) return;
+
+    if (target === "GroupingVariable") {
+      updateFormData("main", "GroupingVariable", names[0]);
+    } else if (target === "SelectionVariable") {
+      updateFormData("main", "SelectionVariable", names[0]);
+    } else {
+      const current = mainData.IndependentVariables || [];
+      const added = names.filter((name) => !current.includes(name));
+      if (added.length > 0) {
+        updateFormData("main", "IndependentVariables", [...current, ...added]);
+      }
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedVarNames([]);
+    setLastSelectedIndex(null);
+  };
+
+  // Click in the Available Variables list: plain click replaces the selection,
+  // Ctrl/Cmd toggles one item, Shift extends the range from the last click.
+  const handleSelect = (variable: Variable, e: React.MouseEvent<HTMLDivElement>) => {
+    const multiSelect = e.ctrlKey || e.metaKey;
+    const currentIndex = availableVariables.findIndex((v) => v.name === variable.name);
+    if (currentIndex < 0) return;
+
+    const rangeAnchor =
+      lastSelectedIndex !== null && lastSelectedIndex < availableVariables.length
+        ? lastSelectedIndex
+        : null;
+
+    if (e.shiftKey && rangeAnchor !== null) {
+      const start = Math.min(rangeAnchor, currentIndex);
+      const end = Math.max(rangeAnchor, currentIndex);
+      const rangeNames = availableVariables.slice(start, end + 1).map((v) => v.name);
+      setSelectedVarNames((prev) =>
+        multiSelect ? Array.from(new Set([...prev, ...rangeNames])) : rangeNames
+      );
+      setLastSelectedIndex(currentIndex);
+      return;
+    }
+
+    if (multiSelect) {
+      setSelectedVarNames((prev) =>
+        prev.includes(variable.name)
+          ? prev.filter((name) => name !== variable.name)
+          : [...prev, variable.name]
+      );
+      setLastSelectedIndex(currentIndex);
+      return;
+    }
+
+    const isOnlySelected =
+      selectedVarNames.length === 1 && selectedVarNames[0] === variable.name;
+    setSelectedVarNames(isOnlySelected ? [] : [variable.name]);
+    setLastSelectedIndex(isOnlySelected ? null : currentIndex);
+  };
+
+  // Dragging a selected variable drags the whole selection; dragging an
+  // unselected one drags just that variable (and makes it the selection).
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, variable: Variable) => {
+    const namesToDrag = selectedVarNames.includes(variable.name)
+      ? selectedVarNames
+      : [variable.name];
+
+    if (!selectedVarNames.includes(variable.name)) {
+      setSelectedVarNames([variable.name]);
+      setLastSelectedIndex(
+        availableVariables.findIndex((v) => v.name === variable.name)
+      );
+    }
+
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData(DRAG_MIME, JSON.stringify(namesToDrag));
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, target: DropTarget) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverTarget(target);
+  };
+
+  const handleDragLeave = () => setDragOverTarget(null);
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, target: DropTarget) => {
+    e.preventDefault();
+    setDragOverTarget(null);
+
+    const raw = e.dataTransfer.getData(DRAG_MIME);
+    if (!raw) return;
+
+    try {
+      const names = JSON.parse(raw) as string[];
+      const dropped = availableVariables
+        .filter((v) => names.includes(v.name))
+        .map((v) => v.name);
+      assignVariables(target, dropped);
+      clearSelection();
+    } catch {
+      // Ignore an unreadable payload.
+    }
+  };
+
+  // The "move" (chevron) buttons: send the current selection to a box.
+  const handleMoveSelected = (target: DropTarget) => {
+    const names = availableVariables
+      .filter((v) => selectedVarNames.includes(v.name))
+      .map((v) => v.name);
+    assignVariables(target, names);
+    clearSelection();
+  };
+
+  const hasSelection = selectedVarNames.length > 0;
+
+  const handleRemoveAllIndependents = () => {
+    updateFormData("main", "IndependentVariables", []);
+  };
+
+  const handleRemoveVariable = (target: string, variable?: string) => {
+    if (target === "GroupingVariable") {
+      updateFormData("main", "GroupingVariable", null);
+    } else if (target === "IndependentVariables" && variable) {
+      const current = mainData.IndependentVariables || [];
+      updateFormData("main", "IndependentVariables", current.filter((v) => v !== variable));
+    } else if (target === "SelectionVariable") {
+      updateFormData("main", "SelectionVariable", null);
+    }
+  };
+
+  const handleMethodGrp = (value: string) => {
+    const isStepwise = value === "Stepwise";
+    updateFormData("main", "Together", !isStepwise);
+    updateFormData("main", "Stepwise", isStepwise);
+    // Bootstrap only applies to "enter independents together". Switching to the
+    // stepwise method clears any previously-checked bootstrap so it doesn't keep
+    // running silently (its tab is hidden under stepwise).
+    if (isStepwise && formData.bootstrap?.PerformBootStrapping) {
+      updateFormData("bootstrap", "PerformBootStrapping", false);
+    }
+  };
+
+  // --- ANALYZE ---
+  const handleAnalyze = async () => {
+    if (!mainData.GroupingVariable) {
+      toast.error("Please select a Grouping Variable.");
+      return;
+    }
+    if (!mainData.IndependentVariables || mainData.IndependentVariables.length === 0) {
+      toast.error("Please select at least one Independent Variable.");
+      return;
+    }
+
+    try {
+      await executeAnalysis(mainData);
+      closeModal("ModalDiscriminant");
+    } catch (err: any) {
+      console.error("Discriminant analysis failed:", err);
+    }
+  };
+
+  // --- RENDER ---
+  return (
+    <div className="flex flex-col h-full bg-background">
+      {/* Feature tour elements */}
+      <AnimatePresence>
+        {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
+          <TourPopup
+            step={tourSteps[currentStep]}
+            currentStep={currentStep}
+            totalSteps={tourSteps.length}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onClose={endTour}
+            targetElement={currentTargetElement}
+          />
+        )}
+      </AnimatePresence>
+      <ActiveElementHighlight active={tourActive} />
+
+      <div className="flex flex-col flex-grow min-h-0 px-6 py-3">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full flex flex-col flex-grow min-h-0"
+        >
+          <TabsList className="w-full justify-center gap-1 flex-shrink-0">
+            <TabsTrigger value="variables" id="discriminant-variables-tab-trigger">
+              Variables
+            </TabsTrigger>
+            <TabsTrigger value="statistics" id="discriminant-statistics-tab-trigger">
+              Statistics
+            </TabsTrigger>
+            {showMethod && (
+              <TabsTrigger value="method" id="discriminant-method-tab-trigger">
+                Method
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="classify" id="discriminant-classify-tab-trigger">
+              Classify
+            </TabsTrigger>
+            <TabsTrigger value="save" id="discriminant-save-tab-trigger">
+              Save
+            </TabsTrigger>
+            {showBootstrap && (
+              <TabsTrigger value="bootstrap" id="discriminant-bootstrap-tab-trigger">
+                Bootstrap
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="assumptions" id="discriminant-assumptions-tab-trigger">
+              Assumptions
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex-grow min-h-0 overflow-y-auto">
+            {/* === Variables Tab === */}
+            <TabsContent value="variables" className="mt-0">
+              <div className="flex flex-col gap-4">
+                {/* Radio: Together / Stepwise */}
+                <div className="flex flex-col gap-1" id="discriminant-method-group">
+                  <Label className="font-semibold text-sm">Method</Label>
+                  <RadioGroup
+                    value={mainData.Together ? "Together" : "Stepwise"}
+                    onValueChange={handleMethodGrp}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Together" id="Together" />
+                      <Label htmlFor="Together">Enter independents together</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Stepwise" id="Stepwise" />
+                      <Label htmlFor="Stepwise">Use stepwise method</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                {/* Variable Assignment Areas */}
+                <div className="flex gap-4 items-start">
+                  {/* Left: Available Variables */}
+                  <div className="flex flex-col w-1/4 gap-1">
+                    <Label className="font-semibold text-sm">Available Variables</Label>
+                    <ScrollArea className="h-[260px] border rounded p-2">
+                      <div className="flex flex-col gap-1">
+                        {availableVariables.map((variable: Variable) => (
+                          <div
+                            key={variable.name}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, variable)}
+                            onClick={(e) => handleSelect(variable, e)}
+                            title="Click to select (Ctrl/Shift for several), then drag or use the arrow button"
+                            className={cn(
+                              "w-full select-none rounded border px-2 py-1.5 text-start text-sm font-light",
+                              "cursor-pointer transition-colors",
+                              selectedVarNames.includes(variable.name)
+                                ? "border-primary bg-primary/10 text-primary"
+                                : "border-muted-foreground/30 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                            )}
+                          >
+                            <span className="block truncate">
+                              {variable.label || variable.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                    <p className="text-xs text-muted-foreground">
+                      Ctrl+click to pick several, Shift+click for a range.
+                      {hasSelection ? ` ${selectedVarNames.length} selected.` : ""}
+                    </p>
+                  </div>
+
+                  {/* Center: Assignment Areas */}
+                  <div className="flex flex-col flex-grow gap-3">
+                    {/* Grouping Variable */}
+                    <div className="flex items-start gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("GroupingVariable")}
+                        disabled={!hasSelection || !!mainData.GroupingVariable}
+                        title="Move the selected variable to Grouping Variable"
+                      >
+                        <ChevronRight size={16} />
+                      </Button>
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-grouping-variable"
+                      >
+                        <Label className="font-semibold text-sm">Grouping Variable:</Label>
+                        <div
+                          className={cn(
+                            "min-h-[40px] p-2 border rounded transition-colors",
+                            dragOverTarget === "GroupingVariable" &&
+                              "border-primary bg-primary/5 ring-1 ring-primary/30"
+                          )}
+                          onDrop={(e) => handleDrop(e, "GroupingVariable")}
+                          onDragOver={(e) => handleDragOver(e, "GroupingVariable")}
+                          onDragLeave={handleDragLeave}
+                        >
+                          <ScrollArea>
+                            {mainData.GroupingVariable ? (
+                              <Badge
+                                className="text-start text-sm font-light p-2 cursor-pointer"
+                                variant="outline"
+                                onClick={() =>
+                                  handleRemoveVariable("GroupingVariable")
+                                }
+                                title="Click to remove"
+                              >
+                                {mainData.GroupingVariable}
+                              </Badge>
+                            ) : (
+                              <span className="text-sm font-light text-gray-500">
+                                Drop grouping variable here.
+                              </span>
+                            )}
+                          </ScrollArea>
+                        </div>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={handleDefineRangeOpen}
+                        >
+                          Define Range...
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Independent Variables */}
+                    <div className="flex items-start gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("IndependentVariables")}
+                        disabled={!hasSelection}
+                        title="Move the selected variables to Independents"
+                      >
+                        <ChevronRight size={16} />
+                      </Button>
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-independent-variables"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <Label className="font-semibold text-sm">Independents:</Label>
+                          {(mainData.IndependentVariables?.length ?? 0) > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-xs text-muted-foreground hover:text-destructive"
+                              onClick={handleRemoveAllIndependents}
+                              title="Remove every variable from Independents"
+                            >
+                              <X className="mr-1 h-3 w-3" />
+                              Remove All ({mainData.IndependentVariables?.length ?? 0})
+                            </Button>
+                          )}
+                        </div>
+                        <div
+                          className={cn(
+                            "min-h-[80px] p-2 border rounded transition-colors",
+                            dragOverTarget === "IndependentVariables" &&
+                              "border-primary bg-primary/5 ring-1 ring-primary/30"
+                          )}
+                          onDrop={(e) => handleDrop(e, "IndependentVariables")}
+                          onDragOver={(e) => handleDragOver(e, "IndependentVariables")}
+                          onDragLeave={handleDragLeave}
+                        >
+                          <ScrollArea>
+                            {mainData.IndependentVariables &&
+                            mainData.IndependentVariables.length > 0 ? (
+                              <div className="flex flex-col gap-1">
+                                {mainData.IndependentVariables.map(
+                                  (variable, index) => (
+                                    <Badge
+                                      key={index}
+                                      className="text-start text-sm font-light p-2 cursor-pointer"
+                                      variant="outline"
+                                      onClick={() =>
+                                        handleRemoveVariable(
+                                          "IndependentVariables",
+                                          variable
+                                        )
+                                      }
+                                      title="Click to remove"
+                                    >
+                                      {variable}
+                                    </Badge>
+                                  )
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-sm font-light text-gray-500">
+                                Drop independent variables here.
+                              </span>
+                            )}
+                          </ScrollArea>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Selection Variable */}
+                    <div className="flex items-start gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="mt-6 h-8 w-8 shrink-0"
+                        onClick={() => handleMoveSelected("SelectionVariable")}
+                        disabled={!hasSelection || !!mainData.SelectionVariable}
+                        title="Move the selected variable to Selection Variable"
+                      >
+                        <ChevronRight size={16} />
+                      </Button>
+                      <div
+                        className="flex flex-col flex-grow gap-1"
+                        id="discriminant-selection-variable"
+                      >
+                        <Label className="font-semibold text-sm">Selection Variable:</Label>
+                        <div className="flex gap-2">
+                          <div
+                            className={cn(
+                              "flex-grow min-h-[40px] p-2 border rounded transition-colors",
+                              dragOverTarget === "SelectionVariable" &&
+                                "border-primary bg-primary/5 ring-1 ring-primary/30"
+                            )}
+                            onDrop={(e) => handleDrop(e, "SelectionVariable")}
+                            onDragOver={(e) => handleDragOver(e, "SelectionVariable")}
+                            onDragLeave={handleDragLeave}
+                          >
+                            <ScrollArea>
+                              {mainData.SelectionVariable ? (
+                                <Badge
+                                  className="text-start text-sm font-light p-2 cursor-pointer"
+                                  variant="outline"
+                                  onClick={() =>
+                                    handleRemoveVariable("SelectionVariable")
+                                  }
+                                  title="Click to remove"
+                                >
+                                  {mainData.SelectionVariable}
+                                </Badge>
+                              ) : (
+                                <span className="text-sm font-light text-gray-500">
+                                  Drop selection variable here.
+                                </span>
+                              )}
+                            </ScrollArea>
+                          </div>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={handleSetValueOpen}
+                          >
+                            Value...
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: inline panel (Define Range or Set Value) */}
+                  {(isDefineRangeOpen || isSetValueOpen) && (
+                    <div className="flex flex-col gap-3 w-44 flex-shrink-0 rounded-lg border p-3">
+                      {isDefineRangeOpen ? (
+                        <>
+                          <Label className="font-semibold text-sm">Define Range</Label>
+                          <div className="flex flex-col gap-1">
+                            <Label className="text-xs text-muted-foreground">Minimum</Label>
+                            <Input
+                              type="number"
+                              value={pendingMinRange}
+                              onChange={(e) => setPendingMinRange(e.target.value)}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <Label className="text-xs text-muted-foreground">Maximum</Label>
+                            <Input
+                              type="number"
+                              value={pendingMaxRange}
+                              onChange={(e) => setPendingMaxRange(e.target.value)}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2 pt-1">
+                            <Button size="sm" onClick={handleDefineRangeContinue}>
+                              Continue
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => setIsDefineRangeOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <Label className="font-semibold text-sm">Set Value</Label>
+                          <div className="flex flex-col gap-1">
+                            <Label className="text-xs text-muted-foreground">Value</Label>
+                            <Input
+                              type="number"
+                              value={pendingValue}
+                              onChange={(e) => setPendingValue(e.target.value)}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2 pt-1">
+                            <Button
+                              size="sm"
+                              disabled={pendingValue === "" || pendingValue === 0}
+                              onClick={handleSetValueContinue}
+                            >
+                              Continue
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => setIsSetValueOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* === Statistics Tab === */}
+            <TabsContent value="statistics" className="mt-0">
+              <DiscriminantStatistics
+                updateFormData={(field, value) =>
+                  updateFormData("statistics", field, value)
                 }
-            } catch (error) {
-                console.error("Failed to load form data:", error);
+                data={formData.statistics}
+              />
+            </TabsContent>
+
+            {/* === Method Tab (stepwise only) === */}
+            <TabsContent value="method" className="mt-0">
+              <DiscriminantMethod
+                updateFormData={(field, value) =>
+                  updateFormData("method", field, value)
+                }
+                data={formData.method}
+              />
+            </TabsContent>
+
+            {/* === Classify Tab === */}
+            <TabsContent value="classify" className="mt-0">
+              <DiscriminantClassify
+                updateFormData={(field, value) =>
+                  updateFormData("classify", field, value)
+                }
+                data={formData.classify}
+              />
+            </TabsContent>
+
+            {/* === Save Tab === */}
+            <TabsContent value="save" className="mt-0">
+              <DiscriminantSave
+                updateFormData={(field, value) =>
+                  updateFormData("save", field, value)
+                }
+                data={formData.save}
+              />
+            </TabsContent>
+
+            {/* === Bootstrap Tab (together only) === */}
+            <TabsContent value="bootstrap" className="mt-0">
+              <DiscriminantBootstrap
+                updateFormData={(field, value) =>
+                  updateFormData("bootstrap", field, value)
+                }
+                data={formData.bootstrap}
+              />
+            </TabsContent>
+
+            {/* === Assumptions Tab === */}
+            <TabsContent value="assumptions" className="mt-0">
+              <DiscriminantAssumptions
+                onRunAssumptions={() => runAssumptions(mainData)}
+                hasGrouping={!!mainData.GroupingVariable}
+                independentCount={mainData.IndependentVariables?.length ?? 0}
+              />
+            </TabsContent>
+          </div>
+        </Tabs>
+
+        {error && (
+          <div className="mt-4">
+            <Alert variant="destructive">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">
+        <div className="flex items-center text-muted-foreground">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  data-testid="discriminant-help-button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={startTour}
+                  aria-label="Start feature tour"
+                  className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p className="text-xs">Start feature tour</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="flex items-center space-x-4">
+          <Button
+            id="discriminant-ok-button"
+            onClick={handleAnalyze}
+            disabled={
+              isLoading ||
+              !mainData.GroupingVariable ||
+              !mainData.IndependentVariables ||
+              mainData.IndependentVariables.length === 0
             }
-        };
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Analyzing...
+              </>
+            ) : (
+              "OK"
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={resetFormData}
+            disabled={isLoading}
+          >
+            Reset
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => closeModal("ModalDiscriminant")}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
 
-        loadFormData();
-    }, []);
-
-    useEffect(() => {
-        setFormData((prev) => {
-            // Create a copy of the previous state to modify
-            const newState = { ...prev };
-
-            // Combine AnalysisVars and SuppleVars for QuantifiedVars
-            const independentVars = prev.main.IndependentVariables
-                ? [...prev.main.IndependentVariables]
-                : [];
-
-            const usedVariables = [
-                prev.main.GroupingVariable,
-                ...independentVars,
-                prev.main.SelectionVariable,
-            ];
-
-            const updatedVariables = tempVariables.filter(
-                (variable) => !usedVariables.includes(variable)
-            );
-
-            newState.bootstrap = {
-                ...prev.bootstrap,
-                Variables: updatedVariables,
-            };
-
-            return newState;
-        });
-    }, [
-        formData.main.IndependentVariables,
-        formData.main.GroupingVariable,
-        formData.main.SelectionVariable,
-        tempVariables,
-    ]);
-
-    const updateFormData = <T extends keyof typeof formData>(
-        section: T,
-        field: keyof (typeof formData)[T],
-        value: unknown
-    ) => {
-        setFormData((prev) => ({
-            ...prev,
-            [section]: {
-                ...prev[section],
-                [field]: value,
-            },
-        }));
-    };
-
-    const executeDiscriminant = async (mainData: DiscriminantMainType) => {
-        try {
-            const newFormData = {
-                ...formData,
-                main: mainData,
-            };
-
-            await saveFormData("Discriminant", newFormData);
-
-            await analyzeDiscriminant({
-                configData: newFormData,
-                dataVariables,
-                variables,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-
-        closeModal();
-        onClose();
-    };
-
-    const resetFormData = async () => {
-        try {
-            await clearFormData("Discriminant");
-            setFormData({ ...DiscriminantDefault });
-        } catch (error) {
-            console.error("Failed to clear form data:", error);
-        }
-    };
-
-    const handleClose = () => {
-        closeModal();
-        onClose();
-    };
-
-    return (
-        <Dialog open={isMainOpen} onOpenChange={handleClose}>
-            <DialogTitle></DialogTitle>
-            <DialogContent>
-                <DiscriminantDialog
-                    isMainOpen={isMainOpen}
-                    setIsMainOpen={setIsMainOpen}
-                    setIsDefineRangeOpen={setIsDefineRangeOpen}
-                    setIsSetValueOpen={setIsSetValueOpen}
-                    setIsStatisticsOpen={setIsStatisticsOpen}
-                    setIsMethodOpen={setIsMethodOpen}
-                    setIsClassifyOpen={setIsClassifyOpen}
-                    setIsSaveOpen={setIsSaveOpen}
-                    setIsBootstrapOpen={setIsBootstrapOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("main", field, value)
-                    }
-                    data={formData.main}
-                    globalVariables={tempVariables}
-                    onContinue={(mainData) => executeDiscriminant(mainData)}
-                    onReset={resetFormData}
-                />
-
-                {/* Define Range */}
-                <DiscriminantDefineRange
-                    isDefineRangeOpen={isDefineRangeOpen}
-                    setIsDefineRangeOpen={setIsDefineRangeOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("defineRange", field, value)
-                    }
-                    data={formData.defineRange}
-                />
-
-                {/* Define Range */}
-                <DiscriminantSetValue
-                    isSetValueOpen={isSetValueOpen}
-                    setIsSetValueOpen={setIsSetValueOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("setValue", field, value)
-                    }
-                    data={formData.setValue}
-                />
-
-                {/* Statistics */}
-                <DiscriminantStatistics
-                    isStatisticsOpen={isStatisticsOpen}
-                    setIsStatisticsOpen={setIsStatisticsOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("statistics", field, value)
-                    }
-                    data={formData.statistics}
-                />
-
-                {/* Method */}
-                <DiscriminantMethod
-                    isMethodOpen={isMethodOpen}
-                    setIsMethodOpen={setIsMethodOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("method", field, value)
-                    }
-                    data={formData.method}
-                />
-
-                {/* Classify */}
-                <DiscriminantClassify
-                    isClassifyOpen={isClassifyOpen}
-                    setIsClassifyOpen={setIsClassifyOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("classify", field, value)
-                    }
-                    data={formData.classify}
-                />
-
-                {/* Save */}
-                <DiscriminantSave
-                    isSaveOpen={isSaveOpen}
-                    setIsSaveOpen={setIsSaveOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("save", field, value)
-                    }
-                    data={formData.save}
-                />
-
-                {/* Bootstrap */}
-                <DiscriminantBootstrap
-                    isBootstrapOpen={isBootstrapOpen}
-                    setIsBootstrapOpen={setIsBootstrapOpen}
-                    updateFormData={(field, value) =>
-                        updateFormData("bootstrap", field, value)
-                    }
-                    data={formData.bootstrap}
-                />
-            </DialogContent>
-        </Dialog>
-    );
+    </div>
+  );
 };

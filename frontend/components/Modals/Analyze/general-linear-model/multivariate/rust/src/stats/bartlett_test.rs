@@ -6,7 +6,7 @@ use crate::models::{
     result::BartlettTest,
 };
 
-use super::core::{ extract_dependent_value, matrix_determinant, chi_square_cdf, from_dmatrix };
+use super::core::{ extract_dependent_value, matrix_determinant, chi_square_cdf, from_dmatrix, merge_records };
 
 /// Calculate Bartlett's test of sphericity
 ///
@@ -24,26 +24,27 @@ pub fn calculate_bartlett_test(
 
     let dependent_vars = config.main.dep_var.as_ref().unwrap();
 
-    // Step 2: Extract data for the dependent variables
+    // Step 2: Extract data for the dependent variables.
+    // Use merge_records so each merged row contains ALL variable keys,
+    // allowing multi-DV rows to be built correctly from aligned per-row records.
+    let merged = merge_records(data);
     let mut raw_data: Vec<Vec<f64>> = Vec::new();
 
-    for records in &data.dependent_data {
-        for record in records {
-            let mut values = Vec::new();
-            let mut has_missing = false;
+    for record in &merged {
+        let mut values = Vec::new();
+        let mut has_missing = false;
 
-            for dep_var in dependent_vars {
-                if let Some(value) = extract_dependent_value(record, dep_var) {
-                    values.push(value);
-                } else {
-                    has_missing = true;
-                    break;
-                }
+        for dep_var in dependent_vars {
+            if let Some(value) = extract_dependent_value(record, dep_var) {
+                values.push(value);
+            } else {
+                has_missing = true;
+                break;
             }
+        }
 
-            if !has_missing && values.len() == dependent_vars.len() {
-                raw_data.push(values);
-            }
+        if !has_missing && values.len() == dependent_vars.len() {
+            raw_data.push(values);
         }
     }
 

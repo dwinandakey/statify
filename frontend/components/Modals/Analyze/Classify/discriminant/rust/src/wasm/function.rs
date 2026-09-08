@@ -6,7 +6,7 @@ use crate::models::{
     result::DiscriminantResult,
 };
 use crate::stats::core;
-use crate::utils::format_result;
+use crate::utils::converter::format_result;
 use crate::utils::log::FunctionLogger;
 use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
 
@@ -17,6 +17,10 @@ pub fn run_analysis(
     logger: &mut FunctionLogger
 ) -> Result<Option<DiscriminantResult>, JsValue> {
     web_sys::console::log_1(&"Starting discriminant analysis".into());
+
+    // Reset the per-analysis stepwise-selection cache so this run never reuses a
+    // selection from a previous analysis in the same worker instance.
+    core::clear_selected_vars_cache();
 
     // Log configuration to track which methods will be executed
     web_sys::console::log_1(&format!("Config: {:?}", config).into());
@@ -151,6 +155,10 @@ pub fn run_analysis(
         logger.add_log("calculate_stepwise_statistics");
         match core::calculate_stepwise_statistics(&filtered_data, config) {
             Ok(statistics) => {
+                // Prime the cache from this single stepwise run so eigen/canonical/
+                // structure/wilks/casewise/classification reuse the selection instead
+                // of recomputing the whole procedure.
+                core::prime_selected_vars_cache(core::select_final_variables(&statistics, config));
                 stepwise_statistics = Some(statistics);
                 web_sys::console::log_1(
                     &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
@@ -218,7 +226,9 @@ pub fn run_analysis(
     // Step 11: Classification results if requested
     let mut classification_function_coefficients = None;
     let mut prior_probabilities = None;
-    if config.classify.summary {
+    // Prior Probabilities for Groups accompany any classification output, so
+    // compute them whenever a summary, casewise, or leave-one-out table is asked for.
+    if config.classify.summary || config.classify.case || config.classify.leave {
         logger.add_log("calculate_prior_probabilities");
         match core::calculate_prior_probabilities(&filtered_data, config) {
             Ok(probabilities) => {
@@ -232,6 +242,8 @@ pub fn run_analysis(
                 // Continue execution despite errors for non-critical functions
             }
         }
+    }
+    if config.classify.summary {
         logger.add_log("calculate_summary_classification");
         match core::calculate_summary_classification(&filtered_data, config) {
             Ok(functions) => {
@@ -265,6 +277,57 @@ pub fn run_analysis(
                 // Continue execution despite errors for non-critical functions
             }
         };
+    }
+
+    // Compute lightweight scatter data for plot rendering when case==false
+    // but the user wants scatter plots (combine or sep_grp checked).
+    let mut scatter_data = None;
+    if !config.classify.case && (config.classify.combine || config.classify.sep_grp) {
+        match core::calculate_scatter_data(&filtered_data, config) {
+            Ok(sd) => {
+                scatter_data = Some(sd);
+            }
+            Err(e) => {
+                error_collector.add_error("calculate_scatter_data", &e);
+            }
+        }
+    }
+
+    // Bootstrap resampling. Holds the selected model fixed (reuses the cached
+    // selection) and refits the canonical coefficients directly on each resample,
+    // so it neither re-runs stepwise nor disturbs the cache.
+    // Bootstrap applies only to "enter independents together"; it is never run
+    // under the stepwise method even if a stale config flag lingers.
+    let mut bootstrap_results = None;
+    if config.bootstrap.perform_boot_strapping && !config.main.stepwise {
+        logger.add_log("calculate_bootstrap");
+        match core::calculate_bootstrap(&filtered_data, config) {
+            Ok(b) => {
+                bootstrap_results = Some(b);
+            }
+            Err(e) => {
+                error_collector.add_error("calculate_bootstrap", &e);
+            }
+        }
+    }
+
+    // Pre-results assumption checks (multicollinearity, multivariate &
+    // univariate normality). Computed once from the filtered data;
+    // each table carries its own PASS/VIOLATED warning to the output.
+    let mut assumption_results = None;
+    let want_assumptions = config.assumptions.multicollinearity
+        || config.assumptions.multivariate_normality
+        || config.assumptions.univariate_normality;
+    if want_assumptions {
+        logger.add_log("calculate_assumptions");
+        match core::calculate_assumptions(&filtered_data, config) {
+            Ok(a) => {
+                assumption_results = Some(a);
+            }
+            Err(e) => {
+                error_collector.add_error("calculate_assumptions", &e);
+            }
+        }
     }
 
     let mut classification_results = None;
@@ -301,6 +364,10 @@ pub fn run_analysis(
         prior_probabilities,
         classification_function_coefficients,
         discriminant_histograms: None,
+        scatter_data,
+        bootstrap_results,
+        assumption_results,
+        territorial_map: config.classify.terr,
     };
 
     Ok(Some(result))
@@ -308,7 +375,18 @@ pub fn run_analysis(
 
 pub fn get_results(result: &Option<DiscriminantResult>) -> Result<JsValue, JsValue> {
     match result {
-        Some(result) => Ok(serde_wasm_bindgen::to_value(result).unwrap()),
+        Some(result) => {
+            if let Some(ref step_stats) = result.stepwise_statistics {
+                web_sys::console::log_1(&format!(
+                    "[get_results] min_d_squared: {:?}, len={}",
+                    step_stats.min_d_squared,
+                    step_stats.min_d_squared.len()
+                ).into());
+            }
+            let js_val = serde_wasm_bindgen::to_value(result).unwrap();
+            web_sys::console::log_1(&format!("[get_results] serialized").into());
+            Ok(js_val)
+        }
         None => Err(string_to_js_error("No analysis results available".to_string())),
     }
 }

@@ -1,127 +1,146 @@
 use std::collections::HashMap;
 
-use crate::models::{ config::MultivariateConfig, data::AnalysisData };
+use crate::models::{
+    config::MultivariateConfig,
+    data::AnalysisData,
+    result::ResidualPlotData,
+};
 
-use super::core::{ build_design_matrix_and_response, calculate_mean, to_dmatrix, to_dvector };
+use super::core::{
+    build_design_matrix_and_response,
+    generate_interaction_terms,
+    to_dmatrix,
+    to_dvector,
+};
 
-/// Calculate residual plots data
+/// Compute per-row residual diagnostic data (Observed, Predicted,
+/// Standardised Residual) for every Dependent Variable in the model.
+///
+/// The frontend turns the returned map into the three scatter plots SPSS
+/// shows under the GLM Multivariate Options dialog's "Residual plot"
+/// checkbox: Observed × Predicted, Predicted × Std. Residual, and
+/// Observed × Std. Residual.
+///
+/// Standardised residual = rᵢ / √(MSE · (1 − hᵢᵢ)) where hᵢᵢ is the
+/// i-th leverage (diagonal of the hat matrix X(X'X)⁻¹X').
 pub fn calculate_residual_plots(
     data: &AnalysisData,
-    config: &MultivariateConfig
-) -> Result<(), String> {
-    // Check if residual plots are requested
+    config: &MultivariateConfig,
+) -> Result<HashMap<String, ResidualPlotData>, String> {
     if !config.options.res_plot {
-        return Ok(());
+        return Err("Residual plots not requested.".to_string());
     }
 
-    // Get dependent variables
-    let dependent_vars = data.dependent_data_defs
+    let dependent_vars: Vec<String> = data
+        .dependent_data_defs
         .iter()
         .flat_map(|defs| defs.iter().map(|def| def.name.clone()))
-        .collect::<Vec<String>>();
+        .collect();
 
+    if dependent_vars.is_empty() {
+        return Err("No dependent variables available for residual plots.".to_string());
+    }
+
+    let model_str = build_model_string(config);
+
+    let mut result: HashMap<String, ResidualPlotData> = HashMap::new();
     for dep_var in &dependent_vars {
-        // Build design matrix and response vector
-        let (x_matrix, y_vector) = build_design_matrix_and_response(data, config, dep_var)?;
+        let (x_matrix, y_vector) =
+            build_design_matrix_and_response(data, config, dep_var)?;
+        if x_matrix.is_empty() || y_vector.is_empty() {
+            continue;
+        }
 
-        // Fit the model
         let x_mat = to_dmatrix(&x_matrix);
         let y_vec = to_dvector(&y_vector);
 
-        let x_transpose_x = &x_mat.transpose() * &x_mat;
-        let x_transpose_y = &x_mat.transpose() * &y_vec;
-
-        // Get parameter estimates
-        let beta = match x_transpose_x.clone().try_inverse() {
-            Some(inv) => inv * x_transpose_y,
-            None => {
-                return Err(
-                    "Could not invert X'X matrix - possibly due to multicollinearity".to_string()
-                );
-            }
+        let xtx = &x_mat.transpose() * &x_mat;
+        let xty = &x_mat.transpose() * &y_vec;
+        let xtx_inv = match xtx.clone().try_inverse() {
+            Some(inv) => inv,
+            None => continue, // Skip DV when X'X is singular.
         };
+        let beta = &xtx_inv * &xty;
 
-        // Calculate fitted values and residuals
         let y_hat = &x_mat * &beta;
         let residuals = &y_vec - &y_hat;
 
-        // Calculate hat matrix diagonal elements (leverage values)
-        let xtx_inv = x_transpose_x.try_inverse().unwrap();
-        let hat_diag = (0..x_mat.nrows())
-            .map(|i| {
-                let x_i = x_mat.row(i);
-                let h_ii = x_i * &xtx_inv * x_i.transpose();
-                h_ii[0]
-            })
-            .collect::<Vec<f64>>();
-
-        // Calculate standardized residuals
         let n = y_vector.len();
-        let p = x_matrix[0].len();
-        let df_error = n - p;
+        let p_cols = x_matrix[0].len();
+        if n <= p_cols {
+            continue;
+        }
+        let df_error = n - p_cols;
 
-        let ss_error = residuals
-            .iter()
-            .map(|r| r.powi(2))
-            .sum::<f64>();
+        let ss_error: f64 = residuals.iter().map(|r| r.powi(2)).sum();
         let ms_error = ss_error / (df_error as f64);
+        if ms_error <= 0.0 || !ms_error.is_finite() {
+            continue;
+        }
 
-        let standardized_residuals = residuals
-            .iter()
-            .enumerate()
-            .map(|(i, r)| r / (ms_error * (1.0 - hat_diag[i])).sqrt())
-            .collect::<Vec<f64>>();
-
-        // Generate residual plot data
-        let mut residual_plot_data = Vec::new();
-
+        // h_ii = x_i (X'X)⁻¹ x_iᵀ
+        let mut std_residuals = Vec::with_capacity(n);
         for i in 0..n {
-            residual_plot_data.push((
-                y_hat[i], // Predicted value
-                residuals[i], // Unstandardized residual
-                standardized_residuals[i], // Standardized residual
-                hat_diag[i], // Leverage
-            ));
+            let x_i = x_mat.row(i);
+            let h_ii = (x_i * &xtx_inv * x_i.transpose())[(0, 0)];
+            let var_resid_i = ms_error * (1.0 - h_ii).max(0.0);
+            let std_r = if var_resid_i > 0.0 {
+                residuals[i] / var_resid_i.sqrt()
+            } else {
+                0.0
+            };
+            std_residuals.push(std_r);
         }
 
-        // Store plot data for further use
-        // ...
+        let observed: Vec<f64> = y_vector.iter().copied().collect();
+        let predicted: Vec<f64> = y_hat.iter().copied().collect();
 
-        // Add spread vs level plot data
-
-        // Group by predicted values (rounded to nearest 0.5 for binning)
-        // Use i64 as the key instead of f64 to avoid HashMap key trait bound issues
-        let mut level_groups: HashMap<i64, Vec<f64>> = HashMap::new();
-
-        for i in 0..n {
-            let level = (y_hat[i] * 2.0).round() / 2.0; // Round to nearest 0.5
-            let spread = residuals[i].abs();
-
-            // Convert the f64 level to an i64 with a scaling factor to maintain precision
-            let level_key = (level * 1000.0).round() as i64;
-
-            level_groups.entry(level_key).or_insert_with(Vec::new).push(spread);
-        }
-
-        // Calculate mean spread for each level
-        let mut spread_level_points = Vec::new();
-
-        for (level_key, spreads) in level_groups {
-            // Convert the i64 key back to f64
-            let level = (level_key as f64) / 1000.0;
-            let mean_spread = calculate_mean(&spreads);
-
-            spread_level_points.push((level, mean_spread));
-        }
-
-        // Sort points by level for proper plotting
-        spread_level_points.sort_by(|a, b|
-            a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal)
+        result.insert(
+            dep_var.clone(),
+            ResidualPlotData {
+                dependent_variable: dep_var.clone(),
+                model: model_str.clone(),
+                observed,
+                predicted,
+                std_residual: std_residuals,
+            },
         );
-
-        // Store spread vs level plot data
-        // ...
     }
 
-    Ok(())
+    if result.is_empty() {
+        Err(
+            "Failed to compute residual plots for any dependent variable.".to_string(),
+        )
+    } else {
+        Ok(result)
+    }
+}
+
+/// Build the "Model: Intercept + faktorA + faktorB + faktorA * faktorB"
+/// line that SPSS prints at the bottom of each residual plot panel.
+fn build_model_string(config: &MultivariateConfig) -> String {
+    let mut terms: Vec<String> = Vec::new();
+    if config.model.intercept {
+        terms.push("Intercept".to_string());
+    }
+    let factors = config
+        .main
+        .fix_factor
+        .as_ref()
+        .cloned()
+        .unwrap_or_default();
+    for f in &factors {
+        terms.push(f.clone());
+    }
+    if let Some(covars) = &config.main.covar {
+        for c in covars {
+            terms.push(c.clone());
+        }
+    }
+    if factors.len() > 1 {
+        for term in generate_interaction_terms(&factors) {
+            terms.push(term);
+        }
+    }
+    format!("Model: {}", terms.join(" + "))
 }

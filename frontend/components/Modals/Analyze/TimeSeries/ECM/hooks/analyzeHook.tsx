@@ -1,9 +1,11 @@
 import { useState } from "react";
 import type { Variable } from "@/types/Variable";
 import type { DataRow } from "@/types/Data";
+import type { CellUpdate } from "@/stores/useDataStore";
 import { toast } from "sonner";
 import { ChartService } from "@/services/chart/ChartService";
 import { useResultStore } from "@/stores/useResultStore";
+import { useVariableStore } from "@/stores/useVariableStore";
 import { getTimeSeriesWorker } from "@/utils/timeseriesWorkerPool";
 
 export const useAnalyzeHook = (
@@ -13,6 +15,8 @@ export const useAnalyzeHook = (
     selectedPeriod: any,
     maxLagADF: number,
     maxLagECM: number,
+    saveLongRun: boolean,
+    saveShortRun: boolean,
     onClose: () => void
 ) => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -35,10 +39,13 @@ export const useAnalyzeHook = (
             const yData: number[] = [];
             const xData: number[] = [];
             const n_vars = independentVariable.length;
+            const validRowIndices: number[] = [];
 
+            let rIdx = 0;
             for (const row of data) {
                 const yValue = row[yVar.columnIndex];
                 if (yValue === null || yValue === undefined || isNaN(Number(yValue))) {
+                    rIdx++;
                     continue; // Skip rows with missing Y
                 }
 
@@ -56,7 +63,9 @@ export const useAnalyzeHook = (
                 if (xRowValid) {
                     yData.push(Number(yValue));
                     xData.push(...xRowValues);
+                    validRowIndices.push(rIdx);
                 }
+                rIdx++;
             }
 
             if (yData.length < 10) {
@@ -120,6 +129,28 @@ export const useAnalyzeHook = (
                             footer: `R-squared: ${result.longRun.rSquared} | Adjusted R-squared: ${result.longRun.adjRSquared} | F-statistic: ${result.longRun.fStat}`
                         });
 
+                        if (result.longRun?.diagnostics) {
+                            const d = result.longRun.diagnostics;
+                            tables.push({
+                                title: "Long Run Fit & Diagnostics",
+                                columnHeaders: [
+                                    { header: "Statistic", key: "col1" },
+                                    { header: "Value", key: "val1" },
+                                    { header: "Statistic", key: "col2" },
+                                    { header: "Value", key: "val2" }
+                                ],
+                                rows: [
+                                    { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                    { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                    { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                    { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                    { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                    { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson },
+                                    { col1: "Prob(F-statistic)", val1: d.probFStatistic, col2: "", val2: "" }
+                                ]
+                            });
+                        }
+
                         // 2. Cointegration Test Table
                         tables.push({
                             title: "Cointegration Test (ADF on Residuals)",
@@ -173,6 +204,28 @@ export const useAnalyzeHook = (
                             footer: `R-squared: ${result.ecm.rSquared} | Adjusted R-squared: ${result.ecm.adjRSquared} | F-statistic: ${result.ecm.fStat}`
                         });
 
+                        if (result.ecm?.diagnostics) {
+                            const d = result.ecm.diagnostics;
+                            tables.push({
+                                title: "Short Run ECM Fit & Diagnostics",
+                                columnHeaders: [
+                                    { header: "Statistic", key: "col1" },
+                                    { header: "Value", key: "val1" },
+                                    { header: "Statistic", key: "col2" },
+                                    { header: "Value", key: "val2" }
+                                ],
+                                rows: [
+                                    { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                    { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                    { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                    { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                    { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                    { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson },
+                                    { col1: "Prob(F-statistic)", val1: d.probFStatistic, col2: "", val2: "" }
+                                ]
+                            });
+                        }
+
                         // 4. Classical Assumptions Table
                         tables.push({
                             title: "Classical Assumptions (Residual Diagnostics)",
@@ -204,7 +257,29 @@ export const useAnalyzeHook = (
                             ]
                         });
 
-                        // 5. Interpretations Summary
+                        // 5. Correlogram of ECM Residuals Table
+                        if (result.correlogram && result.correlogram.length > 0) {
+                            tables.push({
+                                title: "Correlogram of ECM Residuals (ACF & PACF)",
+                                columnHeaders: [
+                                    { header: "Lag", key: "lag" },
+                                    { header: "Autocorrelation (AC)", key: "ac" },
+                                    { header: "Partial Correlation (PAC)", key: "pac" },
+                                    { header: "Q-Stat", key: "qStat" },
+                                    { header: "Prob.", key: "pValue" }
+                                ],
+                                rows: result.correlogram.map((item: any) => ({
+                                    lag: item.lag,
+                                    ac: item.ac,
+                                    pac: item.pac,
+                                    qStat: item.qStat,
+                                    pValue: item.prob
+                                })),
+                                footer: "Ljung-Box Q-statistic tests for null hypothesis of zero autocorrelation up to lag k."
+                            });
+                        }
+
+                        // 6. Interpretations Summary
                         const ectCoef = parseFloat(result.ecm.coefficients[1]);
                         const ectProb = parseFloat(result.ecm.pValues[1]);
                         
@@ -257,6 +332,124 @@ export const useAnalyzeHook = (
                                 chartConfig: { axisLabels: { x: "Time", y: "Residual" } }
                             });
                             charts.push(ecmResidualsChart);
+                        }
+
+                        // ACF & PACF Correlogram Chart for ECM
+                        if (result.correlogram && result.correlogram.length > 0) {
+                            const acfPacfData: Array<{ category: string; subcategory: string; value: number }> = [];
+                            result.correlogram.forEach((item: any) => {
+                                acfPacfData.push({
+                                    category: String(item.lag),
+                                    subcategory: "ACF",
+                                    value: parseFloat(item.ac)
+                                });
+                                acfPacfData.push({
+                                    category: String(item.lag),
+                                    subcategory: "PACF",
+                                    value: parseFloat(item.pac)
+                                });
+                            });
+
+                            const correlogramChart = ChartService.createChartJSON({
+                                chartType: "Multiple Line Chart",
+                                chartData: acfPacfData,
+                                chartVariables: { x: ["lag"], y: ["ACF", "PACF"] },
+                                chartMetadata: { 
+                                    title: "ECM Residual Correlogram Plot (ACF & PACF)", 
+                                    subtitle: "Autocorrelation & Partial Correlation by Lag" 
+                                },
+                                chartConfig: { 
+                                    axisLabels: { x: "Lag", y: "Correlation" },
+                                    chartColor: ["#2563eb", "#dc2626"]
+                                }
+                            });
+                            charts.push(correlogramChart);
+                        }
+
+                        // Save residuals if requested
+                        if (saveLongRun || saveShortRun) {
+                            const currentVarCount = useVariableStore.getState().variables.length;
+                            const existingVars = useVariableStore.getState().variables.map(v => v.name);
+                            
+                            const findNextNumber = (prefix: string) => {
+                                const pattern = new RegExp(`^${prefix}_(\\d+)$`);
+                                let maxNum = 0;
+                                existingVars.forEach(name => {
+                                    const match = name.match(pattern);
+                                    if (match) {
+                                        const num = parseInt(match[1], 10);
+                                        if (num > maxNum) maxNum = num;
+                                    }
+                                });
+                                return maxNum + 1;
+                            };
+
+                            const varsForStore: Partial<Variable>[] = [];
+                            const aggregatedUpdates: CellUpdate[] = [];
+                            let addedVarsCount = 0;
+
+                            if (saveLongRun && result.longRun?.residuals) {
+                                const resNumber = findNextNumber("RES_LR");
+                                const varIndex = currentVarCount + addedVarsCount;
+                                
+                                varsForStore.push({
+                                    name: `RES_LR_${resNumber}`,
+                                    label: `Long-Run Residuals - ECM`,
+                                    type: "NUMERIC" as const,
+                                    width: 12,
+                                    decimals: 5,
+                                    measure: "scale" as const,
+                                    columnIndex: varIndex,
+                                    values: []
+                                });
+                                
+                                const lrResids = result.longRun.residuals;
+                                lrResids.forEach((val: number, i: number) => {
+                                    const origRowIdx = validRowIndices[i];
+                                    if (origRowIdx !== undefined) {
+                                        aggregatedUpdates.push({
+                                            row: origRowIdx,
+                                            col: varIndex,
+                                            value: Number(val.toFixed(5)),
+                                        });
+                                    }
+                                });
+                                addedVarsCount++;
+                            }
+
+                            if (saveShortRun && result.ecm?.residuals) {
+                                const resNumber = findNextNumber("RES_SR");
+                                const varIndex = currentVarCount + addedVarsCount;
+                                
+                                varsForStore.push({
+                                    name: `RES_SR_${resNumber}`,
+                                    label: `Short-Run ECM Residuals - ECM`,
+                                    type: "NUMERIC" as const,
+                                    width: 12,
+                                    decimals: 5,
+                                    measure: "scale" as const,
+                                    columnIndex: varIndex,
+                                    values: []
+                                });
+                                
+                                const ecmResids = result.ecm.residuals;
+                                ecmResids.forEach((val: number, i: number) => {
+                                    const origRowIdx = validRowIndices[1 + i]; // short-run starts at index 1 in ECM
+                                    if (origRowIdx !== undefined) {
+                                        aggregatedUpdates.push({
+                                            row: origRowIdx,
+                                            col: varIndex,
+                                            value: Number(val.toFixed(5)),
+                                        });
+                                    }
+                                });
+                                addedVarsCount++;
+                            }
+
+                            if (varsForStore.length > 0) {
+                                await useVariableStore.getState().addVariables(varsForStore, aggregatedUpdates);
+                                toast.success("Residuals saved to dataset successfully!");
+                            }
                         }
 
                         // Dispatch

@@ -1,17 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import type {
     KMedoidsClusterIterateProps,
     KMedoidsClusterIterateType,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import {
     KMedoidsMethod,
+    type SeedMode,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { 
     Select,
     SelectContent,
@@ -19,16 +18,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { toast } from "sonner";
-import { HelpCircle, AlertTriangle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import {
     TooltipProvider,
     Tooltip,
     TooltipTrigger,
     TooltipContent,
 } from "@/components/ui/tooltip";
-import { useDataStore } from "@/stores/useDataStore";
 
 /**
  * ========================================
@@ -46,16 +42,13 @@ export const KMedoidsClusterIterate = ({
 }: KMedoidsClusterIterateProps) => {
     const [iterateState, setIterateState] = useState<KMedoidsClusterIterateType>({
         ...data,
+        SeedMode: data.SeedMode ?? (data.RandomSeed == null ? "default" : "custom"),
     });
     
-    const dataCount = useDataStore((state) => state.data.length);
-    
-    // Performance warning logic
-    const n_init = iterateState.NumberOfInitializations || 10;
-    const showPerformanceWarning = 
-        (dataCount > 500 && n_init > 5) || 
-        (dataCount > 1000 && n_init > 3) ||
-        (dataCount > 2000);
+    const normalizedMethod = String(iterateState.Method ?? "").trim().toUpperCase();
+    const isPam = normalizedMethod === "PAM";
+    const isClara = normalizedMethod === "CLARA";
+    const isClarans = normalizedMethod === "CLARANS";
 
     // Calculate maximum k possible based on clustering mode
     const maxK = mainData.ClusterMode === "automatic" 
@@ -65,7 +58,10 @@ export const KMedoidsClusterIterate = ({
     const minSampleSize = maxK + 1;
 
     useEffect(() => {
-        setIterateState({ ...data });
+        setIterateState({
+            ...data,
+            SeedMode: data.SeedMode ?? (data.RandomSeed == null ? "default" : "custom"),
+        });
     }, [data]);
 
     const handleChange = (
@@ -80,27 +76,23 @@ export const KMedoidsClusterIterate = ({
         updateFormData(field, value);
     };
 
+    const handleSeedModeChange = (value: SeedMode) => {
+        setIterateState((prevState) => {
+            const nextSeed = value === "custom" ? prevState.RandomSeed : null;
+            return {
+                ...prevState,
+                SeedMode: value,
+                RandomSeed: nextSeed,
+            };
+        });
+
+        updateFormData("SeedMode", value);
+        updateFormData("RandomSeed", value === "custom" ? iterateState.RandomSeed : null);
+    };
+
     return (
         <div className="h-full overflow-y-auto p-6">
             <div className="space-y-6">
-                {/* ========== PERFORMANCE WARNING ========== */}
-                {showPerformanceWarning && (
-                    <Alert variant="default" className="border-yellow-500/50 bg-yellow-50 dark:bg-yellow-950/20">
-                        <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-500" />
-                        <AlertDescription className="text-sm text-yellow-800 dark:text-yellow-300">
-                            <strong>Performance Notice:</strong> Large dataset detected ({dataCount} cases).
-                            {dataCount > 1000 && n_init > 3 ? (
-                                <span> Consider reducing <strong>Number of Initializations</strong> to 1-3 for faster execution.</span>
-                            ) : (
-                                <span> Clustering may take several seconds. Algorithm runs in background (UI stays responsive).</span>
-                            )}
-                            {iterateState.Method === KMedoidsMethod.PAM && dataCount > 1000 && (
-                                <span> For n &gt; 1000, consider using <strong>CLARA</strong> method instead.</span>
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                )}
-                
                 {/* ========== K-MEDOIDS METHOD ========== */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <div className="flex items-center gap-2">
@@ -178,58 +170,82 @@ export const KMedoidsClusterIterate = ({
                             </p>
                         </div>
 
+                        {isPam && (
+                            <div className="flex flex-col gap-2">
+                                <Label>Convergence Tolerance:</Label>
+                                <Input
+                                    type="number"
+                                    value={iterateState.ConvergenceCriterion ?? ""}
+                                    min={0}
+                                    step={0.0001}
+                                    placeholder="0"
+                                    onChange={(e) =>
+                                        handleChange("ConvergenceCriterion", Number(e.target.value))
+                                    }
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Stop if cost change &lt; threshold (default: 0)
+                                </p>
+                            </div>
+                        )}
+
                         <div className="flex flex-col gap-2">
-                            <Label>Convergence Tolerance:</Label>
-                            <Input
-                                type="number"
-                                value={iterateState.ConvergenceCriterion ?? ""}
-                                min={0}
-                                step={0.0001}
-                                placeholder="0"
-                                onChange={(e) =>
-                                    handleChange("ConvergenceCriterion", Number(e.target.value))
-                                }
-                            />
+                            <Label>Seed Mode:</Label>
+                            <Select
+                                value={iterateState.SeedMode}
+                                onValueChange={(value) => handleSeedModeChange(value as SeedMode)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Default" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="default">Default</SelectItem>
+                                    <SelectItem value="random">Random</SelectItem>
+                                    <SelectItem value="custom">Custom</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            {iterateState.SeedMode === "custom" && (
+                                <Input
+                                    type="number"
+                                    value={iterateState.RandomSeed ?? ""}
+                                    placeholder="Default"
+                                    onChange={(e) => {
+                                        const nextValue = e.target.value === "" ? null : Number(e.target.value);
+                                        if (nextValue == null) {
+                                            handleSeedModeChange("default");
+                                            return;
+                                        }
+                                        handleChange("RandomSeed", nextValue);
+                                    }}
+                                />
+                            )}
                             <p className="text-xs text-muted-foreground">
-                                Stop if cost change &lt; threshold (default: 0)
+                                Default: gunakan BUILD phase (deterministik). Random: inisialisasi acak setiap run. Custom: gunakan seed agar hasil konsisten.
                             </p>
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                            <Label>Random Seed:</Label>
-                            <Input
-                                type="number"
-                                value={iterateState.RandomSeed ?? ""}
-                                placeholder="Random"
-                                onChange={(e) =>
-                                    handleChange("RandomSeed", e.target.value === "" ? null : Number(e.target.value))
-                                }
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                For reproducibility (leave empty for random)
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <Label>Number of Initializations:</Label>
-                            <Input
-                                type="number"
-                                value={iterateState.NumberOfInitializations || ""}
-                                min={1}
-                                placeholder="10"
-                                onChange={(e) =>
-                                    handleChange("NumberOfInitializations", Number(e.target.value))
-                                }
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Run multiple times, keep best result (default: 10). Higher values = better results but slower. Use 1-3 for large datasets.
-                            </p>
-                        </div>
+                        {isPam && (
+                            <div className="flex flex-col gap-2">
+                                <Label>Number of Initializations:</Label>
+                                <Input
+                                    type="number"
+                                    value={iterateState.NumberOfInitializations || ""}
+                                    min={1}
+                                    placeholder="10"
+                                    onChange={(e) =>
+                                        handleChange("NumberOfInitializations", Number(e.target.value))
+                                    }
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Run multiple times, keep best result (default: 10). Higher values = better results but slower. Use 1-3 for large datasets.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* ========== CLARA-SPECIFIC PARAMETERS ========== */}
-                {iterateState.Method === KMedoidsMethod.CLARA && (
+                {isClara && (
                     <div className="flex flex-col gap-3 border-b pb-4 bg-muted/30 p-3 rounded">
                         <Label className="font-bold">CLARA Parameters</Label>
                         
@@ -278,7 +294,7 @@ export const KMedoidsClusterIterate = ({
                 )}
 
                 {/* ========== CLARANS-SPECIFIC PARAMETERS ========== */}
-                {iterateState.Method === KMedoidsMethod.CLARANS && (
+                {isClarans && (
                     <div className="flex flex-col gap-3 border-b pb-4 bg-muted/30 p-3 rounded">
                         <div className="flex items-center gap-2">
                             <Label className="font-bold">CLARANS Parameters</Label>

@@ -125,7 +125,8 @@ export const formatSaveDataForStore = (
     let currentColIndex = startColumnIndex;
     
     for (const variable of variables) {
-        const varName = variable.name!;
+        const varName = variable.name;
+        if (!varName) continue;
         const data = variableData[varName];
         
         if (!data) continue;

@@ -73,17 +73,24 @@ export const useAnalyzeHook = (
                                 title: `ARCH-LM Test: ${variable.name} (Lags = ${lags})`,
                                 columnHeaders: [
                                     { header: "Test", key: "test" },
-                                    { header: "LM Statistic", key: "stat" },
-                                    { header: "Prob. Chi-Square", key: "prob" },
-                                    { header: "Lags", key: "lags" },
+                                    { header: "Statistic", key: "stat" },
+                                    { header: "Prob.", key: "prob" },
+                                    { header: "df1 / df2", key: "df" },
                                     { header: "Result", key: "result" }
                                 ],
                                 rows: [
                                     {
-                                        test: "ARCH-LM Test",
+                                        test: "F-statistic",
+                                        stat: result.fStatistic,
+                                        prob: result.fPValue,
+                                        df: `F(${lags}, ${residuals.length - 2 * lags - 1})`,
+                                        result: isHomo ? "Homoscedastic" : "Heteroscedastic (ARCH effects present)"
+                                    },
+                                    {
+                                        test: "Obs*R-squared",
                                         stat: result.statistic,
                                         prob: result.pValue,
-                                        lags: lags,
+                                        df: `Chi-Square(${lags})`,
                                         result: isHomo ? "Homoscedastic" : "Heteroscedastic (ARCH effects present)"
                                     }
                                 ]

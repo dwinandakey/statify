@@ -37,7 +37,7 @@ pub fn euclidean_distance(point1: &[f64], point2: &[f64]) -> f64 {
         .sum::<f64>()
         .sqrt();
     
-    if d.is_finite() { d } else { 1e10 } // Safeguard against NaN/Inf
+    if d.is_finite() { d } else { 1e10 } 
 }
 
 /// Menghitung Manhattan distance antara dua titik

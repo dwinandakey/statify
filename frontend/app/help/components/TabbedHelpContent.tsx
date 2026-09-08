@@ -176,6 +176,7 @@ export const TabbedHelpContent: React.FC<TabbedHelpContentProps> = ({
 						{ key: "linear", label: "Regresi Linear", component: <StatisticsGuide section="linear" /> },
 						{ key: "factor-analysis", label: "Analisis Faktor", component: <StatisticsGuide section="factor-analysis" /> },
 						{ key: "k-means", label: "K-Means Clustering", component: <StatisticsGuide section="k-means" /> },
+						{ key: "k-medoids", label: "K-Medoids Clustering", component: <StatisticsGuide section="k-medoids" /> },
 						{ key: "univariate", label: "GLM Univariate", component: <StatisticsGuide section="univariate" /> },
 					]
 				};

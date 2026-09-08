@@ -52,7 +52,8 @@ export const KMedoidsClusterIterateDefault: KMedoidsClusterIterateType = {
     InitialStrategy: InitialMedoidsStrategy.Random, // Random initialization
     MaximumIterations: 300, // PAM biasanya konvergen cepat
     ConvergenceCriterion: 0, // Stop jika tidak ada improvement
-    RandomSeed: 123, // fixed seed for reproducible PAM result
+    SeedMode: "default",
+    RandomSeed: null, // value used only when SeedMode = custom
     NumberOfInitializations: 10, // 10 initializations untuk hasil optimal
     SampleSize: null, // Only for CLARA: akan di-set auto = 40 + 2*k
     NumSamples: 5, // Only for CLARA: jumlah sampling iterations
@@ -72,7 +73,8 @@ export const KMedoidsClusterResultsDefault: KMedoidsClusterResultsType = {
     ShowCaseCount: true, // Wajib tampilkan (Number of Cases)
     ShowIterationHistory: false, // Optional detail
     ShowTotalCost: true, // Transparency metric
-    ShowConvergenceAlgorithm: true, // Default on: tampilkan tab & panel konvergensi algoritma
+    ShowConvergenceAlgorithm: true, // Default on: panel status + tabel histori iterasi
+    ShowConvergenceChart: false, // Default off: grafik biaya per iterasi (opsional)
     ShowSamplingHistory: true, // Default on: tampilkan histori sampling khusus untuk CLARA
 };
 
@@ -81,10 +83,10 @@ export const KMedoidsClusterResultsDefault: KMedoidsClusterResultsType = {
  */
 export const KMedoidsClusterEvaluationDefault: KMedoidsClusterEvaluationType = {
     ComputeSilhouette: true,   // Wajib (pengganti ANOVA untuk clustering)
-    ShowSilhouettePlot: false, // Optional: visualisasi bar-chart silhouette per case
-    ShowSilhouetteByCluster: true, // Optional: panel ringkas silhouette per klaster
+    ShowSilhouettePlot: true,  // Optional: silhouette plot (satu bar per objek, gaya R)
     ShowElbowPlot: false,      // Optional: grafik SSE vs k (Elbow Method)
-    ShowOptimalKChart: false,  // Optional: gabungan Silhouette + Elbow chart
+    ShowOptimalKChart: false,  // Optional: grafik K optimal (kurva silhouette / elbow)
+    ShowOptimalKTable: false,  // Optional: tabel data K optimal (cost & silhouette per k)
     ShowOverallQualityAssessment: true, // Optional: ringkasan kualitas clustering (overall)
 };
 
@@ -99,9 +101,10 @@ export const KMedoidsClusterOptionsDefault: KMedoidsClusterOptionsType = {
     ShowPCAProjection: true, // Tampilkan PCA Projection di hasil visualisasi
     ShowClusterScatterPlot: false, // Default off: tampilkan hanya jika dipilih user
     ShowClusterSizeDistribution: false, // Default off: tampilkan hanya jika dipilih user
-    ShowClusterAttributeProfile: false, // Default off: tampilkan hanya jika dipilih user
     ShowDistanceMatrixBetweenMedoids: false, // Default off: tampilkan hanya jika dipilih user
     ShowDistanceMatrixTable: false, // Default off: tampilkan hanya jika dipilih user
+    // ShowOptimalKChart pindah ke tab Evaluation, ShowConvergenceChart pindah ke tab Results
+    // agar grafik satu grup dengan tabelnya.
     ExcludeListWise: true, // Default: listwise deletion
     ExcludePairWise: false,
     Standardize: false, // Default: no normalization unless user selects

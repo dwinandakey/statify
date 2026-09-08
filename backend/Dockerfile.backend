@@ -16,6 +16,8 @@ RUN NODE_ENV=development npm install
 # Copy source code backend
 COPY tsconfig.json ./
 COPY server ./server
+COPY docs ./docs
+COPY docs ./docs
 
 # Tambahkan .env file
 RUN touch .env
@@ -43,6 +45,7 @@ RUN npm install --omit=dev
 
 # Copy build artifacts dari builder stage
 COPY --from=builder /app/backend/dist ./dist
+COPY --from=builder /app/backend/docs ./docs
 COPY --from=builder /app/backend/.env ./.env
 
 # Create temp directory

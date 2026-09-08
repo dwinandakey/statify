@@ -12,6 +12,7 @@ use super::core::{
     extract_dependent_value,
     get_factor_combinations,
     matches_combination,
+    merge_records,
 };
 
 /// Calculate median of a list of values
@@ -33,30 +34,57 @@ fn calculate_median(values: &[f64]) -> f64 {
     }
 }
 
-/// Calculate trimmed mean (removing 5% from both extremes)
+/// Interpolated 5% trimmed mean for Levene's "Based on trimmed mean"
+/// variant — matches SPSS / R `mean(x, trim=0.05)` semantics.
+///
+/// For a sample of size `n`, the algorithm "removes" `n·p` observations
+/// from each tail. When `n·p` is not an integer (e.g. n=4, p=0.05 ⇒
+/// trim = 0.2), the boundary observations are PARTIALLY trimmed:
+///
+///   trimmed_mean = [(1−f)·x_{(k)} + Σ x_{(k+1..n−k−2)} + (1−f)·x_{(n−k−1)}]
+///                  / [n · (1 − 2p)]
+///
+/// where k = floor(n·p) and f = n·p − k.
+///
+/// The previous implementation used integer `floor(n·p)`, which for
+/// n ≤ 19 collapses to 0 and silently reverts to the regular mean —
+/// producing a "Based on trimmed mean" row identical to "Based on Mean".
+/// The Posten 2×4 design (n=4 per cell) tripped exactly that path, so
+/// Statify reported 1.638 instead of SPSS's 1.493.
 fn calculate_trimmed_mean(values: &[f64]) -> f64 {
+    const TRIM_FRACTION: f64 = 0.05;
     if values.is_empty() {
         return 0.0;
     }
 
-    let mut sorted_values = values.to_vec();
-    sorted_values.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    let mut sorted = values.to_vec();
+    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
 
-    let n = sorted_values.len();
+    let n = sorted.len();
+    let np = (n as f64) * TRIM_FRACTION;
+    let k = np.floor() as usize;
+    let f = np - (k as f64);
 
-    // Calculate how many elements to trim (5% from each end)
-    let trim_count = ((n as f64) * 0.05).floor() as usize;
-
-    // If too few elements for trimming, return regular mean
-    if trim_count == 0 || n <= trim_count * 2 {
+    // Guard against degenerate sizes where there's nothing left after
+    // trimming. The interpolated formula needs at least the two boundary
+    // observations and a non-zero effective denominator.
+    if n <= 2 * k + 1 || (1.0 - 2.0 * TRIM_FRACTION) <= 0.0 {
         return calculate_mean(values);
     }
 
-    // Calculate mean of the remaining elements
-    let sum: f64 = sorted_values[trim_count..n - trim_count].iter().sum();
-    let count = n - trim_count * 2;
+    let lower_boundary = sorted[k];
+    let upper_boundary = sorted[n - k - 1];
+    let mut sum = (1.0 - f) * (lower_boundary + upper_boundary);
 
-    sum / (count as f64)
+    // Indices [k+1 .. n-k-2] are fully retained.
+    if k + 1 <= n - k - 2 {
+        for v in &sorted[k + 1..=n - k - 2] {
+            sum += v;
+        }
+    }
+
+    let denom = (n as f64) * (1.0 - 2.0 * TRIM_FRACTION);
+    sum / denom
 }
 
 /// Calculate Levene's Test for homogeneity of variances
@@ -138,13 +166,12 @@ pub fn calculate_levene_test(
                         .collect::<Vec<String>>()
                         .join(", ");
 
+                    let merged = merge_records(data);
                     let mut values = Vec::new();
-                    for records in &data.dependent_data {
-                        for record in records {
-                            if matches_combination(record, combo, data, config) {
-                                if let Some(value) = extract_dependent_value(record, &dep_var) {
-                                    values.push(value);
-                                }
+                    for record in &merged {
+                        if matches_combination(record, combo, data, config) {
+                            if let Some(value) = extract_dependent_value(record, &dep_var) {
+                                values.push(value);
                             }
                         }
                     }
@@ -252,30 +279,50 @@ pub fn calculate_levene_test(
 
             // Calculate degrees of freedom
             let df1 = k - 1;
-            let df2 = if test_idx == 2 {
-                // For "Based on Median and with adjusted df", use modified df2
-                // This calculation is based on adjusting df to account for the median estimation
-                let mut adjusted_df2 = 0;
-                for count in group_counts.iter() {
-                    if *count > 1 {
-                        adjusted_df2 += count - 1;
-                    }
-                }
-                adjusted_df2
-            } else {
-                n_total - k
-            };
+            let df2_std = (n_total - k) as f64;
 
-            // Calculate mean squares
+            // Calculate mean squares (always use standard df2 for ms_within and F)
             let ms_between = ss_between / (df1 as f64);
-            let ms_within = ss_within / (df2 as f64);
+            let ms_within = ss_within / df2_std;
 
             // Calculate F-statistic
             let f_statistic = ms_between / ms_within;
 
-            // Calculate significance (p-value)
-            let f_dist = FisherSnedecor::new(df1 as f64, df2 as f64).unwrap();
-            let significance = 1.0 - f_dist.cdf(f_statistic);
+            // df2 for p-value:
+            // test_idx==2 ("Based on Median and with adjusted df") uses the
+            // Welch-Satterthwaite approximation — df2_adj can be fractional.
+            // All other variants use the standard residual df2 = N - k.
+            let df2: f64 = if test_idx == 2 {
+                // Welch-Satterthwaite: df2_adj = (Σᵢ s²ᵢ/nᵢ)² / Σᵢ[(s²ᵢ/nᵢ)²/(nᵢ-1)]
+                // where s²ᵢ is within-group variance of the absolute deviations.
+                let mut sum_term = 0.0_f64;
+                let mut sum_term_sq_over_df = 0.0_f64;
+                for gi in 0..k {
+                    let ni = group_counts[gi] as f64;
+                    if ni <= 1.0 { continue; }
+                    let zi_mean = group_abs_means[gi];
+                    let ss_i: f64 = (0..abs_deviations.len())
+                        .filter(|&j| group_indices[j] == gi)
+                        .map(|j| (abs_deviations[j] - zi_mean).powi(2))
+                        .sum();
+                    let s2_i = ss_i / (ni - 1.0);
+                    let term = s2_i / ni;
+                    sum_term += term;
+                    sum_term_sq_over_df += term * term / (ni - 1.0);
+                }
+                if sum_term_sq_over_df > 0.0 {
+                    sum_term * sum_term / sum_term_sq_over_df
+                } else {
+                    df2_std
+                }
+            } else {
+                df2_std
+            };
+
+            // Calculate significance (p-value) using the appropriate df2
+            let significance = FisherSnedecor::new(df1 as f64, df2)
+                .map(|dist| 1.0 - dist.cdf(f_statistic))
+                .unwrap_or(0.0);
 
             levene_results.push(LeveneResult {
                 levene_statistic: f_statistic,

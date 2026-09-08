@@ -3,62 +3,50 @@
 //! This module implements functions to calculate classification results,
 //! including original and cross-validated classifications.
 
-use std::collections::HashMap;
 use nalgebra::DVector;
 use rayon::prelude::*;
+use std::collections::HashMap;
 
 use crate::models::result::{
-    CanonicalFunctions,
-    ClassificationFunctionCoefficients,
-    EigenDescription,
+    CanonicalFunctions, ClassificationFunctionCoefficients, EigenDescription,
 };
-use crate::models::{
-    data::DataValue,
-    result::ClassificationResults,
-    AnalysisData,
-    DiscriminantConfig,
-};
+use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantConfig};
 
 use super::core::{
-    calculate_canonical_functions,
-    calculate_eigen_statistics,
-    calculate_pooled_within_matrix,
-    extract_analyzed_dataset,
-    extract_case_values,
-    AnalyzedDataset,
+    calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
+    extract_analyzed_dataset, get_stepwise_selected_variables, AnalyzedDataset, EPSILON,
 };
 
+use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
+
 /// Calculate classification results for discriminant analysis
-///
-/// This function calculates the classification results for both original
-/// and cross-validated (leave-one-out) classifications.
-///
-/// # Parameters
-/// * `data` - The analysis data
-/// * `config` - The discriminant analysis configuration
-///
-/// # Returns
-/// A ClassificationResults object with classification matrices and percentages
 pub fn calculate_classification_results(
     data: &AnalysisData,
-    config: &DiscriminantConfig
+    config: &DiscriminantConfig,
 ) -> Result<ClassificationResults, String> {
-    web_sys::console::log_1(&"Executing calculate_classification_results".into());
-
-    // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;
-    let independent_variables = &config.main.independent_variables;
+    let grouping_var = &config.main.grouping_variable;
 
-    // Extract record groups mapping
-    let record_groups = extract_record_groups(data, &config.main.grouping_variable);
+    // Pastikan kita HANYA menggunakan variabel yang lolos stepwise!
+    let variables_to_use: Vec<String> = if config.main.stepwise {
+        get_stepwise_selected_variables(data, config)?
+    } else {
+        config
+            .main
+            .independent_variables
+            .iter()
+            .filter(|v| *v != grouping_var)
+            .cloned()
+            .collect()
+    };
 
-    // Get eigenvalues
+    if variables_to_use.is_empty() {
+        return Err("No independent variables available for classification.".into());
+    }
+
     let eigen_stats = calculate_eigen_statistics(data, config)?;
-
-    // Calculate discriminant functions
     let canonical_functions = calculate_canonical_functions(data, config)?;
 
-    // Initialize classification matrices
     let mut original_classification = HashMap::new();
     let mut original_percentage = HashMap::new();
 
@@ -67,55 +55,44 @@ pub fn calculate_classification_results(
         original_percentage.insert(group.clone(), vec![0.0; dataset.group_labels.len()]);
     }
 
-    // Clone required data for parallel processing
-    let canonical_functions_clone = canonical_functions.clone();
-    let eigen_stats_clone = eigen_stats.clone();
-    let dataset_clone = dataset.clone();
+    // --- MENGHITUNG ORIGINAL CLASSIFICATION (Bebas Bug Indexing) ---
+    for group_name in &dataset.group_labels {
+        let n_cases = dataset
+            .group_data
+            .get(&variables_to_use[0])
+            .and_then(|g| g.get(group_name))
+            .map_or(0, |v| v.len());
 
-    // Classify each case and populate the matrices - parallel processing
-    let classifications: Vec<(String, usize)> = data.group_data
-        .par_iter()
-        .enumerate()
-        .flat_map(|(group_idx, group_data)| {
-            if let Some(group_name) = record_groups.get(&group_idx) {
-                if !dataset_clone.group_labels.contains(group_name) {
-                    return vec![];
-                }
-
-                let cf = canonical_functions_clone.clone();
-                let es = eigen_stats_clone.clone();
-                let ds = dataset_clone.clone();
-
-                group_data
-                    .par_iter()
-                    .filter_map(move |case| {
-                        let case_values = extract_case_values(case, independent_variables);
-
-                        if case_values.len() == independent_variables.len() {
-                            let predicted_idx = classify_case(&case_values, &cf, &es, &ds, config);
-
-                            Some((group_name.clone(), predicted_idx))
-                        } else {
-                            None
-                        }
-                    })
-                    .collect::<Vec<_>>()
-            } else {
-                vec![]
+        for i in 0..n_cases {
+            // Tarik data per-case dengan aman
+            let mut case_values = Vec::with_capacity(variables_to_use.len());
+            for var in &variables_to_use {
+                let val = dataset
+                    .group_data
+                    .get(var)
+                    .unwrap()
+                    .get(group_name)
+                    .unwrap()[i];
+                case_values.push(val);
             }
-        })
-        .collect();
 
-    // Update classification counts
-    for (group_name, predicted_idx) in classifications {
-        if let Some(counts) = original_classification.get_mut(&group_name) {
-            if predicted_idx < counts.len() {
+            // Klasifikasikan menggunakan logika anti-underflow yang sama dengan Casewise
+            let predicted_idx = classify_case_safe(
+                &case_values,
+                &canonical_functions,
+                &eigen_stats,
+                &dataset,
+                &variables_to_use,
+                config,
+            );
+
+            if let Some(counts) = original_classification.get_mut(group_name) {
                 counts[predicted_idx] += 1;
             }
         }
     }
 
-    // Calculate percentages
+    // Kalkulasi Persentase Original
     for group in &dataset.group_labels {
         if let Some(counts) = original_classification.get(group) {
             let total_cases = counts.iter().sum::<i32>() as f64;
@@ -129,9 +106,9 @@ pub fn calculate_classification_results(
         }
     }
 
-    // Cross-validation results only if requested
+    // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     let (cross_validated_classification, cross_validated_percentage) = if config.classify.leave {
-        calculate_cross_validation(data, config, &dataset, &record_groups)?
+        calculate_cross_validation(config, &dataset, &variables_to_use)?
     } else {
         (None, None)
     };
@@ -144,171 +121,146 @@ pub fn calculate_classification_results(
     })
 }
 
-/// Extract record groups mapping
-///
-/// This function maps record indices to group names.
-///
-/// # Parameters
-/// * `data` - The analysis data
-/// * `grouping_variable` - Name of the grouping variable
-///
-/// # Returns
-/// A HashMap mapping record indices to group names
-pub fn extract_record_groups(
-    data: &AnalysisData,
-    grouping_variable: &str
-) -> HashMap<usize, String> {
-    let mut case_groups = HashMap::new();
-    let mut case_idx = 0;
+/// Calculate cross-validation results using leave-one-out method
+fn calculate_cross_validation(
+    config: &DiscriminantConfig,
+    dataset: &AnalyzedDataset,
+    variables_to_use: &[String],
+) -> Result<
+    (
+        Option<HashMap<String, Vec<i32>>>,
+        Option<HashMap<String, Vec<f64>>>,
+    ),
+    String,
+> {
+    let mut cv_classification = HashMap::new();
+    let mut cv_percentage = HashMap::new();
 
-    for group_data in &data.group_data {
-        for record in group_data {
-            if let Some(value) = record.values.get(grouping_variable) {
-                let group_label = match value {
-                    DataValue::Number(num) => num.to_string(),
-                    DataValue::Text(text) => text.clone(),
-                    _ => {
-                        continue;
-                    }
-                };
+    for group in &dataset.group_labels {
+        cv_classification.insert(group.clone(), vec![0; dataset.group_labels.len()]);
+        cv_percentage.insert(group.clone(), vec![0.0; dataset.group_labels.len()]);
+    }
 
-                case_groups.insert(case_idx, group_label);
-            }
-            case_idx += 1;
+    let p_vars = variables_to_use.len();
+
+    // Kumpulkan semua case
+    let mut all_cases: Vec<(String, usize, Vec<f64>)> = Vec::new();
+    for group_name in &dataset.group_labels {
+        let n_cases = dataset
+            .group_data
+            .get(&variables_to_use[0])
+            .and_then(|g| g.get(group_name))
+            .map_or(0, |v| v.len());
+        for i in 0..n_cases {
+            let case_values: Vec<f64> = variables_to_use
+                .iter()
+                .map(|var| {
+                    dataset
+                        .group_data
+                        .get(var)
+                        .unwrap()
+                        .get(group_name)
+                        .unwrap()[i]
+                })
+                .collect();
+            all_cases.push((group_name.clone(), i, case_values));
         }
     }
 
-    case_groups
-}
-
-/// Calculate cross-validation results using leave-one-out method
-///
-/// This function performs leave-one-out cross-validation, where each case
-/// is classified using discriminant functions derived from all other cases.
-///
-/// # Parameters
-/// * `data` - The analysis data
-/// * `config` - The discriminant analysis configuration
-/// * `dataset` - The analyzed dataset
-/// * `record_groups` - Mapping of record indices to group names
-///
-/// # Returns
-/// A tuple of (cross-validated classification, cross-validated percentages)
-fn calculate_cross_validation(
-    data: &AnalysisData,
-    config: &DiscriminantConfig,
-    dataset: &AnalyzedDataset,
-    record_groups: &HashMap<usize, String>
-) -> Result<(Option<HashMap<String, Vec<i32>>>, Option<HashMap<String, Vec<f64>>>), String> {
-    let independent_variables = &config.main.independent_variables;
-    let mut cross_validated_classification = HashMap::new();
-    let mut cross_validated_percentage = HashMap::new();
-
-    // Initialize with zeros for all possible combinations
-    for group in &dataset.group_labels {
-        cross_validated_classification.insert(group.clone(), vec![0; dataset.group_labels.len()]);
-        cross_validated_percentage.insert(group.clone(), vec![0.0; dataset.group_labels.len()]);
-    }
-
-    // Clone dataset for parallel processing
-    let dataset_clone = dataset.clone();
-
-    // Use parallel processing for cross-validation
-    let cv_results: Vec<(String, usize)> = data.group_data
+    let cv_results: Vec<(String, usize)> = all_cases
         .par_iter()
-        .enumerate()
-        .flat_map(|(group_idx, group_data)| {
-            let group_name = match record_groups.get(&group_idx) {
-                Some(name) if dataset_clone.group_labels.contains(name) => name.clone(),
-                _ => {
-                    return vec![];
+        .filter_map(|(group_name, case_idx, case_values)| {
+            let group_cases = all_cases.iter().filter(|(g, _, _)| g == group_name).count();
+            if group_cases <= 1 {
+                return None;
+            } // Skip grup yang hanya punya 1 anggota
+
+            // Clone dataset asli dan buang 1 case ini (Sangat efisien!)
+            let mut leave_dataset = dataset.clone();
+            leave_dataset.total_cases -= 1;
+
+            for var in variables_to_use {
+                if let Some(g_data) = leave_dataset.group_data.get_mut(var) {
+                    if let Some(v_data) = g_data.get_mut(group_name) {
+                        v_data.remove(*case_idx);
+                    }
                 }
+
+                // Update ulang Rata-rata Grup (Group Means)
+                let mut sum = 0.0;
+                let mut count = 0;
+                if let Some(v_data) = leave_dataset.group_data.get(var).unwrap().get(group_name) {
+                    for &val in v_data {
+                        sum += val;
+                        count += 1;
+                    }
+                }
+                let new_mean = if count > 0 { sum / count as f64 } else { 0.0 };
+                leave_dataset
+                    .group_means
+                    .get_mut(group_name)
+                    .unwrap()
+                    .insert(var.clone(), new_mean);
+            }
+
+            // Hitung jarak Mahalanobis menggunakan Observation Space (Seperti SPSS)
+            let pooled_cov =
+                calculate_pooled_within_matrix_no_epsilon(&leave_dataset, variables_to_use);
+            let mut reg_cov = pooled_cov.clone();
+            for i in 0..p_vars {
+                reg_cov[(i, i)] += EPSILON;
+            }
+            let inv_cov = reg_cov
+                .try_inverse()
+                .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
+
+            let priors = if config.classify.all_group_equal {
+                vec![1.0 / (leave_dataset.num_groups as f64); leave_dataset.num_groups]
+            } else {
+                calculate_group_priors(&leave_dataset)
             };
 
-            (0..group_data.len())
-                .into_par_iter()
-                .filter_map(|case_idx| {
-                    // Skip if we don't have enough data
-                    if group_data.len() <= 1 {
-                        return None;
-                    }
+            let mut group_probs = Vec::new();
+            let x_vec = nalgebra::DVector::from_vec(case_values.clone());
 
-                    let case = &group_data[case_idx];
-                    let case_values = extract_case_values(case, independent_variables);
+            for (g_idx, target_group) in leave_dataset.group_labels.iter().enumerate() {
+                let mut diff = nalgebra::DVector::zeros(p_vars);
+                for (v_idx, var_name) in variables_to_use.iter().enumerate() {
+                    let g_mean = leave_dataset
+                        .group_means
+                        .get(target_group)
+                        .unwrap()
+                        .get(var_name)
+                        .copied()
+                        .unwrap_or(0.0);
+                    diff[v_idx] = x_vec[v_idx] - g_mean;
+                }
 
-                    if case_values.len() != independent_variables.len() {
-                        return None;
-                    }
+                let d2 = (diff.transpose() * &inv_cov * &diff)[0];
 
-                    // Create a temporary dataset excluding this case
-                    let mut temp_data = data.clone();
+                // Menggunakan properti Logaritma Natural agar bebas dari Underflow!
+                let log_prob = priors[g_idx].ln() - 0.5 * d2;
+                group_probs.push((g_idx, log_prob));
+            }
 
-                    // Only remove if index is valid
-                    if case_idx < temp_data.group_data[group_idx].len() {
-                        // Remove the case from the temporary dataset
-                        temp_data.group_data[group_idx].remove(case_idx);
-
-                        // Calculate new eigen statistics for leave-one-out
-                        let leave_one_out_eigen_stats = match
-                            calculate_eigen_statistics(&temp_data, config)
-                        {
-                            Ok(eigen_stats) => eigen_stats,
-                            Err(_) => {
-                                return None;
-                            }
-                        };
-
-                        // Calculate new discriminant functions for leave-one-out
-                        let leave_one_out_functions = match
-                            calculate_canonical_functions(&temp_data, config)
-                        {
-                            Ok(functions) => functions,
-                            Err(_) => {
-                                return None;
-                            }
-                        };
-
-                        // Get temporary dataset
-                        let temp_dataset = match extract_analyzed_dataset(&temp_data, config) {
-                            Ok(ds) => ds,
-                            Err(_) => {
-                                return None;
-                            }
-                        };
-
-                        // Classify the case using leave-one-out functions
-                        let predicted_idx = classify_case(
-                            &case_values,
-                            &leave_one_out_functions,
-                            &leave_one_out_eigen_stats,
-                            &temp_dataset,
-                            config
-                        );
-
-                        Some((group_name.clone(), predicted_idx))
-                    } else {
-                        None
-                    }
-                })
-                .collect::<Vec<_>>()
+            // Urutkan dan ambil yang probabilitasnya paling tinggi
+            group_probs
+                .sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
+            Some((group_name.clone(), group_probs[0].0))
         })
         .collect();
 
-    // Update cross-validation counts
+    // Rekapitulasi jumlah
     for (group_name, predicted_idx) in cv_results {
-        if let Some(counts) = cross_validated_classification.get_mut(&group_name) {
-            if predicted_idx < counts.len() {
-                counts[predicted_idx] += 1;
-            }
-        }
+        cv_classification.get_mut(&group_name).unwrap()[predicted_idx] += 1;
     }
 
-    // Calculate percentages
+    // Rekapitulasi persentase
     for group in &dataset.group_labels {
-        if let Some(counts) = cross_validated_classification.get(group) {
+        if let Some(counts) = cv_classification.get(group) {
             let total_cases = counts.iter().sum::<i32>() as f64;
             if total_cases > 0.0 {
-                if let Some(percentages) = cross_validated_percentage.get_mut(group) {
+                if let Some(percentages) = cv_percentage.get_mut(group) {
                     for (i, &count) in counts.iter().enumerate() {
                         percentages[i] = ((count as f64) * 100.0) / total_cases;
                     }
@@ -317,190 +269,129 @@ fn calculate_cross_validation(
         }
     }
 
-    Ok((Some(cross_validated_classification), Some(cross_validated_percentage)))
+    Ok((Some(cv_classification), Some(cv_percentage)))
 }
 
-/// Classify a case using discriminant functions
-///
-/// This function assigns a case to a group based on its discriminant scores
-/// and the posterior probabilities of group membership.
-///
-/// # Parameters
-/// * `case_values` - Values of the independent variables for the case
-/// * `canonical_functions` - Canonical discriminant functions
-/// * `eigen_stats` - Eigenvalues and related statistics
-/// * `dataset` - The analyzed dataset
-/// * `config` - The discriminant analysis configuration
-///
-/// # Returns
-/// The index of the predicted group
-fn classify_case(
+/// Classify a case securely (Anti-Underflow)
+fn classify_case_safe(
     case_values: &[f64],
     canonical_functions: &CanonicalFunctions,
     eigen_stats: &EigenDescription,
     dataset: &AnalyzedDataset,
-    config: &DiscriminantConfig
+    variables_to_use: &[String],
+    config: &DiscriminantConfig,
 ) -> usize {
-    let variables = &config.main.independent_variables;
     let num_functions = eigen_stats.eigenvalue.len();
     let num_groups = dataset.group_labels.len();
 
-    // Calculate discriminant scores
-    let mut discriminant_scores = variables
-        .iter()
-        .enumerate()
-        .fold(vec![0.0; num_functions], |mut scores, (var_idx, var_name)| {
-            if let Some(coefs) = canonical_functions.coefficients.get(var_name) {
-                for func_idx in 0..num_functions {
-                    if func_idx < coefs.len() && var_idx < case_values.len() {
-                        scores[func_idx] += case_values[var_idx] * coefs[func_idx];
-                    }
+    let mut disc_scores = vec![0.0; num_functions];
+    for (var_idx, var_name) in variables_to_use.iter().enumerate() {
+        if let Some(coefs) = canonical_functions.coefficients.get(var_name) {
+            for func_idx in 0..num_functions {
+                if func_idx < coefs.len() && var_idx < case_values.len() {
+                    disc_scores[func_idx] += case_values[var_idx] * coefs[func_idx];
                 }
             }
-            scores
-        });
+        }
+    }
 
-    // Add constants
     if let Some(constants) = canonical_functions.coefficients.get("(Constant)") {
         for func_idx in 0..num_functions.min(constants.len()) {
-            discriminant_scores[func_idx] += constants[func_idx];
+            disc_scores[func_idx] += constants[func_idx];
         }
     }
 
-    // Calculate squared distances to each group centroid
-    let mut distances = Vec::with_capacity(num_groups);
-
-    for group_name in &dataset.group_labels {
-        if let Some(centroid) = canonical_functions.function_at_centroids.get(group_name) {
-            let distance = discriminant_scores
-                .iter()
-                .enumerate()
-                .fold(0.0, |sum, (i, &score)| {
-                    if i < centroid.len() { sum + (score - centroid[i]).powi(2) } else { sum }
-                });
-            distances.push(distance);
-        } else {
-            distances.push(f64::MAX);
-        }
-    }
-
-    // Calculate prior probabilities
     let priors = if config.classify.all_group_equal {
         vec![1.0 / (num_groups as f64); num_groups]
     } else {
         calculate_group_priors(dataset)
     };
 
-    // Calculate posterior probabilities
-    let mut posteriors = Vec::with_capacity(num_groups);
-    let mut sum_exp = 0.0;
+    let mut group_probs = Vec::with_capacity(num_groups);
 
-    for i in 0..num_groups {
-        let scaled_dist = -0.5 * distances[i];
-        let exp_val = scaled_dist.exp() * priors[i];
-        posteriors.push(exp_val);
-        sum_exp += exp_val;
-    }
-
-    // Normalize posteriors
-    if sum_exp > 0.0 {
-        for i in 0..num_groups {
-            posteriors[i] /= sum_exp;
+    for (g_idx, target_group) in dataset.group_labels.iter().enumerate() {
+        let mut d2 = 0.0;
+        if let Some(centroid) = canonical_functions.function_at_centroids.get(target_group) {
+            for (fi, &score) in disc_scores.iter().enumerate() {
+                if fi < centroid.len() {
+                    d2 += (score - centroid[fi]).powi(2);
+                }
+            }
         }
+        if d2.is_nan() {
+            d2 = f64::MAX;
+        }
+
+        let log_prior = priors[g_idx].ln();
+        let log_prob = log_prior - 0.5 * d2;
+        group_probs.push((g_idx, log_prob));
     }
 
-    // Find group with maximum posterior probability
-    posteriors
-        .iter()
-        .enumerate()
-        .max_by(|a, b| a.1.partial_cmp(b.1).unwrap_or(std::cmp::Ordering::Equal))
-        .map(|(idx, _)| idx)
-        .unwrap_or(0)
+    group_probs.sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
+    group_probs[0].0
 }
 
 /// Calculate group prior probabilities
-///
-/// This function calculates prior probabilities for groups based on
-/// either equal probabilities or group sizes.
-///
-/// # Parameters
-/// * `dataset` - The analyzed dataset
-///
-/// # Returns
-/// A vector of prior probabilities for each group
 fn calculate_group_priors(dataset: &AnalyzedDataset) -> Vec<f64> {
-    let num_groups = dataset.group_labels.len();
+    let mut priors = Vec::new();
+    let total = dataset.total_cases as f64;
 
-    // Count cases in each group
-    let group_sizes: Vec<usize> = dataset.group_labels
-        .iter()
-        .map(|group| {
-            dataset.group_data
-                .get(dataset.group_data.keys().next().unwrap_or(&String::new()))
-                .and_then(|g| g.get(group))
-                .map_or(0, |v| v.len())
-        })
-        .collect();
-
-    let total_cases: usize = group_sizes.iter().sum();
-
-    if total_cases == 0 {
-        return vec![1.0 / (num_groups as f64); num_groups];
+    if total == 0.0 {
+        return vec![1.0 / dataset.num_groups as f64; dataset.num_groups];
     }
 
-    // Calculate priors based on group sizes
-    group_sizes
-        .into_iter()
-        .map(|size| (size as f64) / (total_cases as f64))
-        .collect()
+    for group in &dataset.group_labels {
+        let count = dataset
+            .group_data
+            .values()
+            .next()
+            .unwrap()
+            .get(group)
+            .map_or(0, |v| v.len());
+        priors.push(count as f64 / total);
+    }
+    priors
 }
 
 /// Calculate Fisher's linear discriminant function coefficients
-///
-/// This function calculates the classification function coefficients (Fisher's linear
-/// discriminant functions) that can be used directly for classification.
-///
-/// # Parameters
-/// * `data` - The analysis data
-/// * `config` - The discriminant analysis configuration
-///
-/// # Returns
-/// A ClassificationFunctionCoefficients object with coefficients for each group
 pub fn calculate_summary_classification(
     data: &AnalysisData,
-    config: &DiscriminantConfig
+    config: &DiscriminantConfig,
 ) -> Result<ClassificationFunctionCoefficients, String> {
-    web_sys::console::log_1(&"Executing calculate_classification_function_coefficients".into());
-
-    // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;
-    let variables = &config.main.independent_variables;
+    let grouping_var = &config.main.grouping_variable;
 
-    // Calculate pooled within-groups covariance matrix
-    let pooled_within = calculate_pooled_within_matrix(&dataset, variables);
-
-    // Get pooled within-groups inverse matrix
-    let pooled_within_inv = match pooled_within.try_inverse() {
-        Some(inv) => inv,
-        None => {
-            return Err("Failed to invert pooled within-groups matrix".to_string());
-        }
+    // Pastikan tabel "Classification Function Coefficients" juga difilter dari stepwise!
+    let variables: Vec<String> = if config.main.stepwise {
+        get_stepwise_selected_variables(data, config)?
+    } else {
+        config
+            .main
+            .independent_variables
+            .iter()
+            .filter(|v| *v != grouping_var)
+            .cloned()
+            .collect()
     };
 
-    // Initialize coefficient structure
+    let pooled_within = calculate_pooled_within_matrix(&dataset, &variables);
+
+    let pooled_within_inv = match pooled_within.try_inverse() {
+        Some(inv) => inv,
+        None => return Err("Failed to invert pooled within-groups matrix".to_string()),
+    };
+
     let mut coefficients: HashMap<String, Vec<f64>> = HashMap::new();
     let mut constant_terms: Vec<f64> = Vec::with_capacity(dataset.group_labels.len());
     let mut groups: Vec<usize> = Vec::with_capacity(dataset.group_labels.len());
 
-    // Calculate classification function coefficients for each group
     for (group_idx, group) in dataset.group_labels.iter().enumerate() {
-        // Add to groups vector (1-based indexing for output)
         groups.push(group_idx + 1);
 
-        // Get group means as vector
         let mut group_means = DVector::zeros(variables.len());
         for (var_idx, var_name) in variables.iter().enumerate() {
-            let mean = dataset.group_means
+            let mean = dataset
+                .group_means
                 .get(group)
                 .and_then(|m| m.get(var_name))
                 .copied()
@@ -508,31 +399,22 @@ pub fn calculate_summary_classification(
             group_means[var_idx] = mean;
         }
 
-        // Calculate b_ij = (n-g) * sum_l(w_il^* * x_lj)
-        // where w_il^* is the (i,l)th element of the inverse of the pooled within-groups matrix
-        // and x_lj is the mean of the lth variable in the jth group
         for (var_idx, var_name) in variables.iter().enumerate() {
-            // Calculate coefficient for this variable for this group
-            let coef =
-                ((dataset.total_cases - dataset.num_groups) as f64) *
-                (0..variables.len())
+            let coef = ((dataset.total_cases - dataset.num_groups) as f64)
+                * (0..variables.len())
                     .map(|l| pooled_within_inv[(var_idx, l)] * group_means[l])
                     .sum::<f64>();
 
-            // Add coefficient to the map
             coefficients
                 .entry(var_name.clone())
                 .or_insert_with(|| vec![0.0; dataset.group_labels.len()])[group_idx] = coef;
         }
 
-        // Calculate constant term a_j = log p_j - 0.5 * sum_i(b_ij * x_ij)
-        // where p_j is the prior probability of group j
-        let prior = 1.0 / (dataset.group_labels.len() as f64); // Equal priors by default
+        let prior = 1.0 / (dataset.group_labels.len() as f64);
         let log_prior = prior.ln();
 
-        let half_sum =
-            0.5 *
-            variables
+        let half_sum = 0.5
+            * variables
                 .iter()
                 .enumerate()
                 .map(|(var_idx, var_name)| {
@@ -540,8 +422,7 @@ pub fn calculate_summary_classification(
                         .get(var_name)
                         .map(|c| c[group_idx])
                         .unwrap_or(0.0);
-                    let mean = group_means[var_idx];
-                    coef * mean
+                    coef * group_means[var_idx]
                 })
                 .sum::<f64>();
 

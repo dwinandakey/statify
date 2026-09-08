@@ -5,6 +5,7 @@
 /// Referensi:
 /// - Kaufman, L. and Rousseeuw, P.J. (1990)
 ///    "Finding Groups in Data: An Introduction to Cluster Analysis"
+/// - https://github.com/cran/cluster/blob/master/src/pam.c
 
 use crate::models::ClusteringResult;
 use crate::utils::distance::{calculate_distance, DistanceMetric};
@@ -219,9 +220,9 @@ fn cl_pam(
             n * p
         ));
     }
-    if diss_kind != 1 {
+    if diss_kind != 1 && diss_kind != 2 {
         return Err(format!(
-            "Unsupported diss_kind {}. Only Euclidean (1) is currently supported",
+            "Unsupported diss_kind {}. Only Euclidean (1) and Manhattan (2) are supported",
             diss_kind
         ));
     }
@@ -234,9 +235,14 @@ fn cl_pam(
         }
     }
 
+    let metric = match diss_kind {
+        1 => DistanceMetric::Euclidean,
+        _ => DistanceMetric::Manhattan,
+    };
+
     let config = PAMConfig {
         k,
-        metric: DistanceMetric::Euclidean,
+        metric: metric.clone(),
         max_iterations: 100,
         random_seed: None,
         use_build_phase: true,
@@ -245,7 +251,7 @@ fn cl_pam(
         use_r_implementation: false,
     };
 
-    let dist = build_distance_matrix(&data, &DistanceMetric::Euclidean);
+    let dist = build_distance_matrix(&data, &metric);
     let result = run_pam_with_dist(&dist, n, &config, None, None)?;
 
     // Sesuai alur BUILD/SWAP ala R pam.c pada request integrasi ini:
@@ -277,6 +283,11 @@ pub fn run_pam_r_style(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResul
 
     let x = to_column_major(data);
 
+    let diss_kind = match config.metric {
+        DistanceMetric::Euclidean => 1,
+        DistanceMetric::Manhattan => 2,
+    };
+
     let raw = cl_pam(
         config.k,
         n,
@@ -289,7 +300,7 @@ pub fn run_pam_r_style(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResul
         0,
         false,
         0,
-        1,
+        diss_kind,
     )?;
 
     if raw.obj.len() < 2 {
@@ -358,7 +369,7 @@ pub fn run_pam_r_style(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResul
             Ok(calculate_distance(
                 &data[i],
                 &data[medoid_idx],
-                &DistanceMetric::Euclidean,
+                &config.metric,
             ))
         })
         .collect::<Result<Vec<_>, String>>()?;
@@ -741,7 +752,7 @@ fn evaluate_swap_delta_exact(
     candidate: usize,
     d_nearest: &[f64],
     d_second: &[f64],
-    nearest_pos: &[usize],
+    _nearest_pos: &[usize],
 ) -> f64 {
     let mut t_ih = 0.0_f64;
     let debug = pam_debug_enabled();
@@ -769,7 +780,7 @@ fn evaluate_swap_delta_exact(
                     "[PAM DEBUG] j={} remove_pos={} nearest_pos={} D_j={:.12} E_j={:.12} d(j,i)={:.12} d(j,h)={:.12} C_jih={:.12}",
                     j,
                     remove_pos,
-                    nearest_pos[j],
+                    _nearest_pos[j],
                     d_j,
                     d_second[j],
                     d_ji,

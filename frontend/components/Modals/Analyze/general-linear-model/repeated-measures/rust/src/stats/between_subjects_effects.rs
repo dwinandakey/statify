@@ -11,7 +11,7 @@ use crate::models::{
 use super::core::{ calculate_observed_power, parse_within_subject_factors };
 
 /// Calculate tests of between-subjects effects
-fn calculate_between_subjects_effects(
+pub fn calculate_between_subjects_effects(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig
 ) -> Result<TestsBetweenSubjectsEffects, String> {
@@ -22,119 +22,82 @@ fn calculate_between_subjects_effects(
     // Get within-subjects factors
     let within_factors = parse_within_subject_factors(data, config)?;
 
-    // Check if we have between-subjects factors
-    let between_factors = if let Some(factors) = &config.model.bet_sub_var {
-        factors
-    } else {
-        // No between-subjects factors, just intercept
+    // No between-subjects factors: compute the Average transform per measure
+    if config.model.bet_sub_var.is_none() || config.model.bet_sub_var.as_ref().map_or(true, |v| v.is_empty()) {
         let mut intercept_effects = HashMap::new();
 
-        // Process each dependent variable
-        for (factor_name, factors) in &within_factors.measures {
+        for (measure_name, factors) in &within_factors.measures {
             let var_names: Vec<String> = factors
                 .iter()
                 .map(|f| f.dependent_variable.clone())
                 .collect();
+            let k = var_names.len();
+            if k == 0 { continue; }
 
-            // We'll average across all variables for this factor
-            for var_name in &var_names {
-                let mut effect_entries = HashMap::new();
-
-                // Extract data values
-                let mut values = Vec::new();
-                for record_group in &data.subject_data {
+            // Compute per-subject average across all time points
+            let mut avg_values: Vec<f64> = Vec::new();
+            for record_group in &data.subject_data {
+                let mut sum = 0.0;
+                let mut count = 0usize;
+                for var_name in &var_names {
                     for record in record_group {
-                        if let Some(data_value) = record.values.get(var_name) {
-                            match data_value {
-                                DataValue::Number(val) => values.push(*val),
-                                _ => {
-                                    continue;
-                                }
-                            }
+                        if let Some(DataValue::Number(val)) = record.values.get(var_name) {
+                            sum += val;
+                            count += 1;
+                            break;
                         }
                     }
                 }
-
-                if values.is_empty() {
-                    continue;
+                if count == k {
+                    avg_values.push(sum / (k as f64));
                 }
-
-                // Calculate intercept (grand mean) statistics
-                let n = values.len();
-                let mean = values.iter().sum::<f64>() / (n as f64);
-
-                let ss_total = values
-                    .iter()
-                    .map(|&val| (val - mean).powi(2))
-                    .sum::<f64>();
-
-                let ss_intercept = (n as f64) * mean.powi(2);
-                let ss_error = ss_total;
-
-                let df_intercept = 1;
-                let df_error = n - 1;
-
-                let ms_intercept = ss_intercept / (df_intercept as f64);
-                let ms_error = ss_error / (df_error as f64);
-
-                let f_value = ms_intercept / ms_error;
-
-                // Calculate significance (p-value)
-                let f_dist = FisherSnedecor::new(df_intercept as f64, df_error as f64).map_err(|e|
-                    e.to_string()
-                )?;
-                let significance = 1.0 - f_dist.cdf(f_value);
-
-                // Calculate effect size
-                let partial_eta_squared = ss_intercept / (ss_intercept + ss_error);
-
-                // Calculate noncentrality parameter
-                let noncent_parameter = ss_intercept / ms_error;
-
-                // Calculate observed power
-                let observed_power = calculate_observed_power(
-                    f_value,
-                    df_intercept as f64,
-                    df_error as f64,
-                    0.05
-                );
-
-                // Create effect entry for intercept
-                let intercept_entry = TestEffectEntry {
-                    sum_of_squares: ss_intercept,
-                    df: df_intercept,
-                    mean_square: ms_intercept,
-                    f_value,
-                    significance,
-                    partial_eta_squared,
-                    noncent_parameter,
-                    observed_power,
-                };
-
-                effect_entries.insert("Intercept".to_string(), intercept_entry);
-
-                // Create effect entry for error
-                let error_entry = TestEffectEntry {
-                    sum_of_squares: ss_error,
-                    df: df_error,
-                    mean_square: ms_error,
-                    f_value: 0.0,
-                    significance: 1.0,
-                    partial_eta_squared: 0.0,
-                    noncent_parameter: 0.0,
-                    observed_power: 0.0,
-                };
-
-                effect_entries.insert("Error".to_string(), error_entry);
-
-                // Add to effects
-                intercept_effects.insert(var_name.clone(), effect_entries);
-
-                // Calculate R-squared and adjusted R-squared
-                // For intercept-only model, R-squared is 0
-                r_squared.insert(var_name.clone(), 0.0);
-                adjusted_r_squared.insert(var_name.clone(), 0.0);
             }
+
+            let n = avg_values.len();
+            if n < 2 { continue; }
+
+            let grand_mean = avg_values.iter().sum::<f64>() / (n as f64);
+            let ss_intercept = (n as f64) * grand_mean * grand_mean;
+            let ss_error: f64 = avg_values.iter().map(|&a| (a - grand_mean).powi(2)).sum();
+
+            let df_intercept = 1usize;
+            let df_error = n - 1;
+            let ms_intercept = ss_intercept;
+            let ms_error = ss_error / (df_error as f64);
+
+            let f_value = if ms_error > 0.0 { ms_intercept / ms_error } else { 0.0 };
+            let f_dist = FisherSnedecor::new(1.0, df_error as f64).map_err(|e| e.to_string())?;
+            let significance = 1.0 - f_dist.cdf(f_value);
+
+            let partial_eta_squared = ss_intercept / (ss_intercept + ss_error);
+            let noncent_parameter = f_value;
+            let observed_power = calculate_observed_power(df_intercept, df_error, f_value, 0.05);
+
+            let mut effect_entries = HashMap::new();
+            effect_entries.insert("Intercept".to_string(), TestEffectEntry {
+                sum_of_squares: ss_intercept,
+                df: df_intercept,
+                mean_square: ms_intercept,
+                f_value,
+                significance,
+                partial_eta_squared,
+                noncent_parameter,
+                observed_power,
+            });
+            effect_entries.insert("Error".to_string(), TestEffectEntry {
+                sum_of_squares: ss_error,
+                df: df_error,
+                mean_square: ms_error,
+                f_value: 0.0,
+                significance: 1.0,
+                partial_eta_squared: 0.0,
+                noncent_parameter: 0.0,
+                observed_power: 0.0,
+            });
+
+            intercept_effects.insert(measure_name.clone(), effect_entries);
+            r_squared.insert(measure_name.clone(), 0.0);
+            adjusted_r_squared.insert(measure_name.clone(), 0.0);
         }
 
         return Ok(TestsBetweenSubjectsEffects {
@@ -142,7 +105,9 @@ fn calculate_between_subjects_effects(
             r_squared,
             adjusted_r_squared,
         });
-    };
+    }
+
+    let between_factors = config.model.bet_sub_var.as_ref().unwrap();
 
     // If we have between-subjects factors
     for (factor_name, factors) in &within_factors.measures {
@@ -250,11 +215,11 @@ fn calculate_between_subjects_effects(
                 }
             };
 
-            let beta = xtx_inv * X.transpose() * y;
+            let beta = xtx_inv * X.transpose() * y.clone();
 
             // Calculate fitted values and residuals
             let y_hat = X * beta;
-            let residuals = y - y_hat;
+            let residuals = y.clone() - y_hat.clone();
 
             // Calculate sums of squares
             let y_mean = y.sum() / (n as f64);
@@ -294,9 +259,9 @@ fn calculate_between_subjects_effects(
 
             // Calculate observed power
             let observed_power = calculate_observed_power(
+                df_model,
+                df_error,
                 f_value,
-                df_model as f64,
-                df_error as f64,
                 0.05
             );
 
