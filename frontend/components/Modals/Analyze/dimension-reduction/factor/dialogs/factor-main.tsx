@@ -157,6 +157,11 @@ export const FactorContainer = ({ onClose, containerType = "dialog" }: FactorCon
     const executeFactor = async (mainData: FactorMainType) => {
         if (isAnalyzing) return;
 
+        if (mainData.ValueTarget && !formData.value.Selection?.trim()) {
+            toast.error("Please specify a value for the selection variable.");
+            return;
+        }
+
         setIsAnalyzing(true);
 
         const promise = (async () => {

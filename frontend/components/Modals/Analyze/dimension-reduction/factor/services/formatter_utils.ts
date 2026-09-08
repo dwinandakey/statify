@@ -3,9 +3,6 @@
  * 
  * Inspired by Binary Logistic Regression formatter_utils.ts
  * Provides helper functions for creating sections with descriptions,
- * formatting numbers, and generating SPSS-style interpretations.
- * 
- * Philosophy: Keep descriptions concise and actionable, following SPSS conventions.
  */
 
 import { Table, ResultJson } from "@/types/Table";
@@ -46,7 +43,7 @@ const mergeNoteAndDescription = (
     parts.push(description.trim());
   }
   
-  // Gabungkan dengan <br><br> agar ada spasi antara note dan interpretasi
+  // Gabungkan dengan <br><br> biar ada spasi antara note dan interpretasi
   return parts.length > 0 ? parts.join("<br><br>") : undefined;
 };
 
@@ -178,7 +175,7 @@ export const generateKMODescription = (
   if (isCovariance) {
     return "KMO and Bartlett's Test are calculated based on correlations.";
   }
-  return "KMO and Bartlett's Test";
+  return "KMO and Bartlett's Test.";
 };
 
 
@@ -420,7 +417,7 @@ export const generateDescriptiveDescription = (
 ): string => {
   // const varInfo = numVariables ? ` for the ${numVariables} variables` : "";
   // const nInfo = n ? ` based on a valid sample size of N = ${n}` : "";
-  return 'Descriptive Statistics';
+  return 'Descriptive Statistics.';
 };
 
 /**
@@ -500,7 +497,7 @@ export const generateCovarianceMatrixDescription = (
  * Fokus pada nilai diagonal yang bertindak sebagai pengukur multikolinearitas.
  */
 export const generateInverseCorrelationDescription = (): string => {
-  return "Inverse Correlation Matrix";
+  return "Inverse Correlation Matrix.";
 };
 
 /**
@@ -508,7 +505,7 @@ export const generateInverseCorrelationDescription = (): string => {
  * Fokus pada MSA values untuk individual variable adequacy
  */
 export const generateAntiImageRefinedDescription = (): string => {
-return "a. Measures of Sampling Adequacy(MSA)";
+return "a. Measures of Sampling Adequacy (MSA).";
 };
 
 /**

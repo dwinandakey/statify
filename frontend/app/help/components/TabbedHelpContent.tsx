@@ -6,7 +6,7 @@ import { HelpCircle, BookOpen } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-// Import all guide components
+// Import semua komponen guide 
 import { GettingStarted } from "./GettingStarted";
 
 import { 
@@ -174,6 +174,7 @@ export const TabbedHelpContent: React.FC<TabbedHelpContentProps> = ({
 						{ key: "explore", label: "Analisis Eksplorasi", component: <StatisticsGuide section="explore" /> },
 						{ key: "crosstabs", label: "Analisis Crosstabs", component: <StatisticsGuide section="crosstabs" /> },
 						{ key: "linear", label: "Regresi Linear", component: <StatisticsGuide section="linear" /> },
+						{ key: "factor-analysis", label: "Analisis Faktor", component: <StatisticsGuide section="factor-analysis" /> },
 						{ key: "k-means", label: "K-Means Clustering", component: <StatisticsGuide section="k-means" /> },
 						{ key: "univariate", label: "GLM Univariate", component: <StatisticsGuide section="univariate" /> },
 					]

@@ -4,6 +4,7 @@ export * from './frequencies';
 export * from './crosstabs';
 export * from './explore';
 export * from './linear';
+export * from './factor-analysis';
 export * from './univariate';
 export * from './k-means/KMeansClustering';
 // export * from './inferential';

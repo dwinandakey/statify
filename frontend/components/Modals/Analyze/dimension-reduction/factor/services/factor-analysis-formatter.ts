@@ -38,7 +38,23 @@ function getExtractionMethodDisplayName(methodValue: string): string {
     return EXTRACTION_METHOD_MAP[methodValue] || methodValue;
 }
 
-// Helper format KHUSUS untuk Score Coefficient (hilangkan scientific notation, paksa 3 desimal)
+function appendSelectionDescription(result: ResultJson, configData?: FactorType): void {
+    const selectionVariable = configData?.main?.ValueTarget?.trim();
+    const selectionValue = configData?.value?.Selection?.trim();
+
+    if (!selectionVariable || !selectionValue) return;
+
+    const selectionDescription =
+        `This analysis stage processes only data with a ${selectionVariable} value of "${selectionValue}".`;
+
+    result.tables.forEach((table) => {
+        table.interpretation = table.interpretation?.trim()
+            ? `${table.interpretation.trim()} ${selectionDescription}`
+            : selectionDescription;
+    });
+}
+
+// Helper format KHUSUS untuk Score Coefficient
 function formatScoreCoefficientValue(value: number | undefined | null): string {
     if (value === undefined || value === null || isNaN(value)) return ".";
     if (!isFinite(value)) return value > 0 ? "Infinity" : "-Infinity";
@@ -51,14 +67,14 @@ function formatScoreCoefficientValue(value: number | undefined | null): string {
         normalized = 0;
     }
 
-    // Kunci ketat ke 4 desimal (sehingga 1 menjadi 1.000)
+    // Kunci ke 4 desimal (standar kesepakatan tim jadi 4 desimal, 1 jadi 1.000)
     const fixed = normalized.toFixed(4);
 
     // Hapus angka nol di depan desimal (contoh: "0.453" -> ".453", "0.000" -> ".000")
     if (Math.abs(normalized) < 1) {
         let result = fixed.replace(/^(-?)0\./, "$1.");
         
-        // Pengaman lapis kedua: pastikan benar-benar tidak ada minus nol yang lolos
+        // Pengaman biar benar-benar tidak ada minus nol yang lolos
         if (result === "-.000") {
             return ".000";
         }
@@ -79,10 +95,10 @@ function formatCommunalityValue(value: number | undefined | null): string {
 }
 
 /**
- * formatting for Component/Factor Score Covariance Matrix.
- * - Always 4 decimals
+ * formatting Score Covariance Matrix.
+ * - selalu 4 decimals
  * - Suppress scientific notation
- * - Avoid negative zero from floating-point precision noise
+ * - hindari 0 tapi negatif dari floating-point precision noise
  */
 function formatScoreCovarianceMatrixValue(value: number | undefined | null): string {
     if (value === undefined || value === null || isNaN(value)) return ".";
@@ -219,7 +235,7 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
 
     resultJson.analysisStatus = analysisStatus;
 
-    // Deteksi cerdas dari backend: Jika backend meminta suppress, berarti ekstraksi gagal/diterminasi
+    // Deteksi klo backend meminta suppress, berarti ekstraksi gagal/diterminasi
     const suppressExtraction = data.communalities?.suppress_extraction ?? false;
     const hasSuccessfulExtraction = !suppressExtraction;
     const shouldDisplayScoreMatrices = configData?.scores?.DisplayFactor ?? true;
@@ -2215,5 +2231,6 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
         }
     }
   
+    appendSelectionDescription(resultJson, configData);
     return resultJson;
 }

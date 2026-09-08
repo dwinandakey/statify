@@ -10,16 +10,30 @@ use crate::models::{
     data::{ AnalysisData, DataRecord, DataValue },
 };
 
+fn data_value_matches_selection(value: &DataValue, selection: &str) -> bool {
+    let selection = selection.trim();
+
+    match value {
+        DataValue::Number(number) => selection
+            .parse::<f64>()
+            .map(|expected| number.is_finite() && expected.is_finite() && *number == expected)
+            .unwrap_or(false),
+        DataValue::Text(text) => text == selection,
+        DataValue::Boolean(boolean) => selection.eq_ignore_ascii_case(&boolean.to_string()),
+        DataValue::Null => false,
+    }
+}
+
 pub fn extract_data_matrix(
     data: &AnalysisData,
     config: &FactorAnalysisConfig
 ) -> Result<(DMatrix<f64>, Vec<String>), String> {
-    // Get the target variables
+    // ambil variables target
     let var_names = if let Some(vars) = &config.main.target_var {
-        // If specific variables are provided, use them in the exact order specified
+        // klo variabel spesifik disediakan, pake variabel itu sesuai urutan yang ditentukan
         vars.clone()
     } else {
-        // Collect all numeric variables from all datasets while preserving order
+        // Kumpulkan semua variabel numerik dari semua dataset sambil mempertahankan urutannya
         let mut seen = std::collections::HashSet::new();
         let mut ordered_vars = Vec::new();
 
@@ -41,8 +55,8 @@ pub fn extract_data_matrix(
         return Err("No valid variables found".to_string());
     }
 
-    // Process all records from all datasets
-    // Get max number of cases across all datasets
+    // Proses semua records dari semua dataset
+    // ambil jumlah kasus maksimum di semua dataset
     let num_cases = data.target_data
         .iter()
         .map(|dataset| dataset.len())
@@ -68,57 +82,32 @@ pub fn extract_data_matrix(
         }
     }
 
-    // Convert to DataRecords
+    // Convert ke DataRecords
     let records: Vec<DataRecord> = collected_records
         .into_iter()
         .map(|values| DataRecord { values })
         .collect();
 
-    // Apply filtering based on value_target and selection if specified
+    // menerapkan filter variabel seleksi sebelum menangani nilai yang hilang
     let filtered_records = if let Some(value_target) = &config.main.value_target {
         if let Some(selection) = &config.value.selection {
-            // Both value_target and selection are specified
-            if !data.value_target_data.is_empty() {
-                // Prepare to match each case with its value target
-                let mut filtered = Vec::new();
+            let mut filtered = Vec::new();
 
-                // For each case, check if the value target matches the selection
-                for (case_idx, record) in records.iter().enumerate() {
-                    let mut matches_selection = false;
+            for (case_idx, record) in records.iter().enumerate() {
+                let matches_selection = data.value_target_data.iter().any(|value_dataset| {
+                    value_dataset
+                        .get(case_idx)
+                        .and_then(|value_record| value_record.values.get(value_target))
+                        .map(|value| data_value_matches_selection(value, selection))
+                        .unwrap_or(false)
+                });
 
-                    // Check across all value target datasets
-                    for value_dataset in &data.value_target_data {
-                        if case_idx < value_dataset.len() {
-                            let value_record = &value_dataset[case_idx];
-
-                            match value_record.values.get(value_target) {
-                                Some(DataValue::Text(text)) => {
-                                    if text.as_str() == selection.as_str() {
-                                        matches_selection = true;
-                                        break;
-                                    }
-                                }
-                                Some(DataValue::Number(num)) => {
-                                    if num.to_string() == *selection {
-                                        matches_selection = true;
-                                        break;
-                                    }
-                                }
-                                _ => {}
-                            }
-                        }
-                    }
-
-                    if matches_selection {
-                        filtered.push(record.clone());
-                    }
+                if matches_selection {
+                    filtered.push(record.clone());
                 }
-
-                filtered
-            } else {
-                // Value target data is not available, use all records
-                records.clone()
             }
+
+            filtered
         } else {
             // No selection specified, use all records
             records.clone()
@@ -190,6 +179,26 @@ pub fn extract_data_matrix(
     }
 
     Ok((data_matrix, var_names))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::data_value_matches_selection;
+    use crate::models::data::DataValue;
+
+    #[test]
+    fn numeric_selection_matches_equivalent_text_representations() {
+        assert!(data_value_matches_selection(&DataValue::Number(1.0), "1"));
+        assert!(data_value_matches_selection(&DataValue::Number(1.0), " 1.0 "));
+        assert!(!data_value_matches_selection(&DataValue::Number(1.0), "2"));
+    }
+
+    #[test]
+    fn text_and_boolean_selection_values_match_exactly() {
+        assert!(data_value_matches_selection(&DataValue::Text("Active".into()), "Active"));
+        assert!(!data_value_matches_selection(&DataValue::Text("Active".into()), "active"));
+        assert!(data_value_matches_selection(&DataValue::Boolean(true), "TRUE"));
+    }
 }
 
 // Replace missing values (NaN) with column means

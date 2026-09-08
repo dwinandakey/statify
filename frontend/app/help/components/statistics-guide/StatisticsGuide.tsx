@@ -12,6 +12,7 @@ import { DescriptiveAnalysis } from "./descriptive/DescriptiveAnalysis";
 import { Explore } from "./explore";
 import { Crosstabs } from "./crosstabs";
 import { LinearRegression } from "./linear";
+import { FactorAnalysisGuide } from "./factor-analysis";
 import { UnivariateGuide } from "./univariate/UnivariateGuide";
 import { KMeansClustering } from "./k-means/KMeansClustering";
 import {
@@ -63,6 +64,8 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <UnitRootTest />;
       case "linear":
         return <LinearRegression />;
+      case "factor-analysis":
+        return <FactorAnalysisGuide />;
       case "k-means":
         return <KMeansClustering />;
       case "univariate":
