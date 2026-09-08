@@ -6,4 +6,4 @@ export type VarianceCompsAnalysisType = {
     variables: any[];
 };
 
-export type VarianceCompsFinalResultType = {};
+export type VarianceCompsFinalResultType = Record<string, unknown>;
