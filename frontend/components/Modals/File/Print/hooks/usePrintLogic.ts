@@ -54,9 +54,9 @@ export const usePrintLogic = ({
             await useVariableStore.getState().loadVariables();
             await useResultStore.getState().loadResults();
 
-            const availableData = useDataStore.getState().data;
-            const availableVariables = useVariableStore.getState().variables;
-            const logs = useResultStore.getState().logs;
+            const availableData = useDataStore.getState().data ?? [];
+            const availableVariables = useVariableStore.getState().variables ?? [];
+            const logs = useResultStore.getState().logs ?? [];
             
             const doc = new jsPDF({ format: paperSize }); 
 
@@ -64,19 +64,19 @@ export const usePrintLogic = ({
 
             // Determine active columns and filtered data once
             const namedVariables = availableVariables.filter(
-                (v: Variable) => String(v.name ?? "").trim() !== ""
+                (v: Variable) => v && String(v.name ?? "").trim() !== ""
             );
             const activeColumns = namedVariables
                 .filter((v: Variable) =>
                     availableData.some((row: DataRow) =>
-                        String(row[v.columnIndex] ?? "").trim() !== ""
+                        row && String(row[v.columnIndex] ?? "").trim() !== ""
                     )
                 )
                 .map((v: Variable) => v.columnIndex)
                 .sort((a: number, b: number) => a - b);
 
             const filteredData = availableData.filter((row: DataRow) =>
-                activeColumns.some((col) =>
+                row && activeColumns.some((col) =>
                     String(row[col] ?? "").trim() !== ""
                 )
             );
@@ -90,25 +90,13 @@ export const usePrintLogic = ({
             }
 
             if (selectedOptions.result) {
-                void addResultsView(doc, currentY, logs, generateAutoTableDataFromString);
+                addResultsView(doc, currentY, logs, generateAutoTableDataFromString);
             }
 
-            // Use manual blob download instead of doc.save() to avoid jsPDF v4's
-            // File System Access API (showSaveFilePicker) which requires an active
-            // user gesture. After multiple await calls, that gesture context expires,
-            // silently blocking the download.
             const trimmed = fileName.trim();
             const outputFileName = `${trimmed === "" ? "statify_print_output" : trimmed}.pdf`;
 
-            const blob = doc.output('blob');
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = outputFileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            doc.save(outputFileName);
 
             onClose();
         } catch (error) {
