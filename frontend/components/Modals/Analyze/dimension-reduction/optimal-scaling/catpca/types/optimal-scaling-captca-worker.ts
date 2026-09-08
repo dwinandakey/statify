@@ -6,4 +6,4 @@ export type OptScaCatpcaAnalysisType = {
     variables: any[];
 };
 
-export type OptScaCatpcaFinalResultType = {};
+export type OptScaCatpcaFinalResultType = Record<string, unknown>;

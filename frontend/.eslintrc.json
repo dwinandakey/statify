@@ -8,7 +8,14 @@
   "ignorePatterns": [
     "public/workers/**/*",
     "**/__tests__/**/*",
-    "**/*.{spec,test}.[jt]s?(x)"
+    "**/*.{spec,test}.[jt]s?(x)",
+    "**/pkg/**/*",
+    "**/wasm/**/*",
+    "**/wasm-output/**/*",
+    "**/rust/pkg/**/*",
+    "*.js",
+    "__mocks__/**/*",
+    "next-env.d.ts"
   ],
   "extends": [
     "next/core-web-vitals",

@@ -28,7 +28,7 @@ const VariablesTab: FC<VariablesTabProps> = ({
     setDependentVariable,
     setIndependentVariable,
     setHighlightedVariable,
-    _containerType,
+    containerType: _containerType,
     data,
 }) => {
     const variableIdKeyToUse: keyof Variable = 'columnIndex';
