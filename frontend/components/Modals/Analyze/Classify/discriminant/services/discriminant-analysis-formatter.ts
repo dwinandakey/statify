@@ -2020,8 +2020,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
           (item: { group: string; counts: number[] }) => item.group === group,
         );
 
-      if (classification && classification.counts[i] > 0) {
-        originalCorrect += classification.counts[i];
+      // Every classified case belongs in the denominator, including the rows of
+      // a group that got none of its own cases right. Gating on counts[i] > 0
+      // dropped that group's whole row and inflated the reported hit ratio.
+      if (classification) {
+        originalCorrect += classification.counts[i] ?? 0;
         classifiedCount += classification.counts.reduce(
           (sum: number, val: number) => sum + val,
           0,
@@ -2055,8 +2058,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
             (item: { group: string; counts: number[] }) => item.group === group,
           );
 
-        if (classification && classification.counts[i] > 0) {
-          crossValidatedCorrect += classification.counts[i];
+        if (classification) {
+          crossValidatedCorrect += classification.counts[i] ?? 0;
           crossValidatedCount += classification.counts.reduce(
             (sum: number, val: number) => sum + val,
             0,
