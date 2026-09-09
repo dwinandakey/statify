@@ -5,6 +5,9 @@ import type { DiscriminantType, DiscriminantMainType } from "@/components/Modals
 import { DiscriminantDefault } from "@/components/Modals/Analyze/Classify/discriminant/constants/discriminant-default";
 import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { saveDiscriminantResult, saveDiscriminantAssumptions } from "@/components/Modals/Analyze/Classify/discriminant/services/store";
+import { saveDiscriminantVariables } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-save";
+import { exportDiscriminantModelXml } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-xml-export";
+import { toast } from "sonner";
 import { Variable } from "@/types/Variable";
 
 export type DiscriminantValueUnion = string | number | boolean | string[] | null;
@@ -185,6 +188,43 @@ export const useDiscriminantState = (
                         }
 
                         await saveDiscriminantResult(formattedResults);
+
+                        // Save-dialog side effects. These run after the output is
+                        // stored so a failure here still leaves the user with their
+                        // results; each reports its own problem and does not abort
+                        // the other.
+                        try {
+                            const created = await saveDiscriminantVariables(
+                                dataVariables,
+                                variables,
+                                formattedResults,
+                                configData
+                            );
+                            if (created.length > 0) {
+                                toast.success(`Saved to dataset: ${created.join(", ")}`);
+                            }
+                        } catch (saveErr) {
+                            console.error("[Discriminant] Failed to save variables:", saveErr);
+                            const detail =
+                                saveErr instanceof Error ? saveErr.message : String(saveErr);
+                            toast.error(`Failed to save variables: ${detail}`);
+                        }
+
+                        if (configData.save.ExportXml) {
+                            try {
+                                const fileName = exportDiscriminantModelXml(
+                                    formattedResults,
+                                    configData
+                                );
+                                toast.success(`Model information exported to ${fileName}`);
+                            } catch (xmlErr) {
+                                console.error("[Discriminant] Failed to export model XML:", xmlErr);
+                                const detail =
+                                    xmlErr instanceof Error ? xmlErr.message : String(xmlErr);
+                                toast.error(`Failed to export model XML: ${detail}`);
+                            }
+                        }
+
                         setIsLoading(false);
                         worker.terminate();
                     } else {

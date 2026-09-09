@@ -139,6 +139,9 @@ export type DiscriminantSaveType = {
     Predicted: boolean;
     Discriminant: boolean;
     Probabilities: boolean;
+    /** Whether to write the model-information XML file on OK. */
+    ExportXml: boolean;
+    /** Target file name for that export (SPSS asks for a path; a browser can only name the download). */
     XmlFile: string | null;
 };
 
