@@ -104,3 +104,15 @@ frontend/.trae/rules/project_rules.md
 # Backend temp dirs (hasil sementara .sav)
 backend/temp/
 backend/server/temp/
+docs/knn-usability-guide.md
+docs/knn-sequence-diagrams/02-mengatur-variabel-analisis.png
+docs/knn-sequence-diagrams/01-mengakses-menu-knn.png
+docs/knn-sequence-diagrams/03-mengatur-parameter-model.png
+docs/knn-sequence-diagrams/04-mengatur-partisi-data.png
+docs/knn-sequence-diagrams/05-menyimpan-konfigurasi.png
+docs/knn-sequence-diagrams/06-menjalankan-analisis-knn.png
+docs/knn-sequence-diagrams/07-menampilkan-hasil-analisis.png
+docs/knn-sequence-diagrams/08-penanganan-error-analisis.png
+docs/knn-use-case-diagram/use-case-diagram-knn.png
+scripts/generate-knn-sequence-diagrams.ps1
+scripts/generate-knn-use-case-diagram.ps1

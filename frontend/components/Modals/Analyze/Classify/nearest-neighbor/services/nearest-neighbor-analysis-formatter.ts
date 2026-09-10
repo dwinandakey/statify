@@ -238,7 +238,7 @@ function buildConfusionMatrix(table: any): Table {
 
   return {
     key: "confusion_matrix",
-    title: "Classification Tablee",
+    title: "Classification Table",
     columnHeaders: [
       { header: "Partition", key: "partition" },
       { header: "Observed", key: "observed" },
