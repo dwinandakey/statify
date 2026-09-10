@@ -17,6 +17,7 @@ import {useDataStore} from "@/stores/useDataStore";
 import {analyzeFactor, warmupFactorAnalysisWorker} from "@/components/Modals/Analyze/dimension-reduction/factor/services/factor-analysis";
 import {clearFormData, getFormData, saveFormData} from "@/hooks/useIndexedDB";
 import {toast} from "sonner";
+import type { Variable } from "@/types/Variable";
 
 interface FactorContentProps {
     isMainOpen: boolean;
@@ -29,7 +30,7 @@ interface FactorContentProps {
         value: unknown
     ) => void;
     formData: FactorType;
-    tempVariables: string[];
+    tempVariables: Variable[];
     onContinue: (mainData: FactorMainType) => Promise<void>;
     onReset: () => void;
     onClose: () => void;
@@ -54,7 +55,7 @@ const FactorContent = ({
     
     return (
         <>
-            {/* Main Dialog with Tabs - only hide when Value dialog is open */}
+            {/* Main Dialog dengan Tabs - hanya sembunyikan saat dialog Value terbuka */}
             <div className={isValueOpen ? "hidden" : "block h-full"}>
                 <FactorDialog
                     isMainOpen={isMainOpen}
@@ -89,7 +90,7 @@ export const FactorContainer = ({ onClose, containerType = "dialog" }: FactorCon
     const variables = useVariableStore((state) => state.variables);
     const dataVariables = useDataStore((state) => state.data);
     const tempVariables = useMemo(
-        () => variables.map((variable) => variable.name),
+        () => variables,
         [variables]
     );
 
