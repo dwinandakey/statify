@@ -123,53 +123,61 @@ export const mergeHeaderRowCells = (headerRow: HeaderCell[]): HeaderCell[] => {
 
 export const propagateHeaders = (row: TableRowData, accumulated: (string | null)[]): TableRowData[] => {
     const combined: (string | null)[] = [];
-    const length = Math.max(accumulated.length, row.rowHeader.length);
+    const rowHeader = row?.rowHeader ?? [];
+    const length = Math.max(accumulated.length, rowHeader.length);
     for (let i = 0; i < length; i++) {
-        combined[i] = row.rowHeader[i] ?? accumulated[i] ?? null;
+        combined[i] = rowHeader[i] ?? accumulated[i] ?? null;
     }
-    if (row.children?.length) {
+    if (row?.children?.length) {
         return row.children.flatMap(child => propagateHeaders(child, combined));
     } else {
-        return [{ ...row, rowHeader: combined }];
+        return [{ ...(row ?? { rowHeader: [] }), rowHeader: combined }];
     }
 };
 
 export const flattenRows = (rows: TableRowData[]): TableRowData[] => {
+    if (!Array.isArray(rows)) return [];
     return rows.flatMap(row => propagateHeaders(row, []));
 };
 
 export const computeMaxRowHeaderDepth = (rows: TableRowData[]): number => {
-    return rows.reduce((max, row) => Math.max(max, row.rowHeader.length), 0);
+    if (!Array.isArray(rows)) return 0;
+    return rows.reduce((max, row) => Math.max(max, (row?.rowHeader ?? []).length), 0);
 };
 
 export const generateMergedRowHeaders = (flatRows: TableRowData[], rowHeaderCount: number): MergedRowHeaders => {
     const merged: MergedRowHeaders = [];
+    if (!Array.isArray(flatRows)) return merged;
     for (let rowIndex = 0; rowIndex < flatRows.length; rowIndex++) {
         const row = flatRows[rowIndex];
+        const rowHeader = row?.rowHeader ?? [];
+        const prevRowHeader = rowIndex > 0 ? (flatRows[rowIndex - 1]?.rowHeader ?? []) : [];
         const mergedRow: (MergedCell | null)[] = [];
-        if (rowHeaderCount === 2 && row.rowHeader.filter(h => h !== "").length === 1) {
+        if (rowHeaderCount === 2 && rowHeader.filter(h => h !== "" && h !== null).length === 1) {
             const colIdx = 0;
-            const current = row.rowHeader[colIdx] ?? "";
-            const prev = rowIndex > 0 ? (flatRows[rowIndex - 1].rowHeader[colIdx] ?? "") : null;
+            const current = rowHeader[colIdx] ?? "";
+            const prev = rowIndex > 0 ? (prevRowHeader[colIdx] ?? "") : null;
             if (rowIndex === 0 || current !== prev) {
                 let rowSpan = 1;
                 for (let next = rowIndex + 1; next < flatRows.length; next++) {
-                    if (flatRows[next].rowHeader[colIdx] === current) rowSpan++; else break;
+                    const nextRowHeader = flatRows[next]?.rowHeader ?? [];
+                    if (nextRowHeader[colIdx] === current) rowSpan++; else break;
                 }
-                mergedRow.push({ content: current, rowSpan, colSpan: 2, styles: { halign: "left", valign: "middle" } });
+                mergedRow.push({ content: String(current), rowSpan, colSpan: 2, styles: { halign: "left", valign: "middle" } });
             } else {
                 mergedRow.push(null);
             }
         } else {
             for (let colIdx = 0; colIdx < rowHeaderCount; colIdx++) {
-                const current = row.rowHeader[colIdx] ?? "";
-                const prev = rowIndex > 0 ? (flatRows[rowIndex - 1].rowHeader[colIdx] ?? "") : null;
+                const current = rowHeader[colIdx] ?? "";
+                const prev = rowIndex > 0 ? (prevRowHeader[colIdx] ?? "") : null;
                 if (rowIndex === 0 || current !== prev) {
                     let rowSpan = 1;
                     for (let next = rowIndex + 1; next < flatRows.length; next++) {
-                        if (flatRows[next].rowHeader[colIdx] === current) rowSpan++; else break;
+                        const nextRowHeader = flatRows[next]?.rowHeader ?? [];
+                        if (nextRowHeader[colIdx] === current) rowSpan++; else break;
                     }
-                    mergedRow.push({ content: current, rowSpan, colSpan: 1, styles: { halign: "center", valign: "middle" } });
+                    mergedRow.push({ content: String(current), rowSpan, colSpan: 1, styles: { halign: "center", valign: "middle" } });
                 } else {
                     mergedRow.push(null);
                 }
@@ -181,22 +189,25 @@ export const generateMergedRowHeaders = (flatRows: TableRowData[], rowHeaderCoun
 };
 
 export const generateAutoTableDataFromString = (jsonData: string): AutoTableResult => {
+    if (!jsonData || typeof jsonData !== "string") return { tables: [] };
     let parsedData: { tables: TableData[] };
     try {
         parsedData = JSON.parse(jsonData);
     } catch { return { tables: [] }; }
-    if (!parsedData.tables || !Array.isArray(parsedData.tables)) return { tables: [] };
+    if (!parsedData?.tables || !Array.isArray(parsedData.tables)) return { tables: [] };
 
     const resultTables: AutoTableResult['tables'] = [];
     parsedData.tables.forEach((table) => {
-        const { title, columnHeaders, rows } = table;
+        if (!table) return;
+        const { title = "", columnHeaders = [], rows = [] } = table;
+        if (!Array.isArray(columnHeaders) || !Array.isArray(rows)) return;
         const levels = buildColumnLevels(columnHeaders);
         const maxLevel = levels.length;
         let headerRows = levels.map((cols, level) =>
             cols.map((col) => ({
-                content: col.header ?? "",
+                content: col?.header ?? "",
                 colSpan: getLeafColumnCount(col),
-                rowSpan: col.children?.length ? 1 : maxLevel - level,
+                rowSpan: col?.children?.length ? 1 : maxLevel - level,
                 styles: { halign: "center", valign: "middle" }
             } as HeaderCell))
         );
@@ -211,18 +222,22 @@ export const generateAutoTableDataFromString = (jsonData: string): AutoTableResu
         const body: CellDef[][] = [];
         for (let i = 0; i < flatRows_internal.length; i++) {
             const row = flatRows_internal[i];
+            if (!row) continue;
+            const rowHeader = row.rowHeader ?? [];
             const allDataNull = dataColKeys.every(k => row[k] === null || row[k] === undefined || String(row[k]).trim() === "");
-            if (allDataNull && row.rowHeader.every(h => h === null || h.trim() === "")) continue;
+            if (allDataNull && rowHeader.every(h => h === null || h === undefined || String(h).trim() === "")) continue;
 
             const rowCells: CellDef[] = [];
-            mergedRowHeaders_internal[i].forEach(cell => { if (cell) rowCells.push(cell); });
+            if (mergedRowHeaders_internal[i]) {
+                mergedRowHeaders_internal[i].forEach(cell => { if (cell) rowCells.push(cell); });
+            }
             dataColKeys.forEach(key => {
                 rowCells.push({ content: String(row[key] ?? ""), styles: { halign: "center", valign: "middle" } });
             });
             body.push(rowCells);
         }
-        if(body.length > 0 || headerRows.some(hr => hr.length > 0)){
-            resultTables.push({ title, head: headerRows as CellDef[][], body });
+        if (body.length > 0 || headerRows.some(hr => hr.length > 0)) {
+            resultTables.push({ title: title ?? "", head: headerRows as CellDef[][], body });
         }
     });
     return { tables: resultTables };
