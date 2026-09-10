@@ -34,6 +34,7 @@ import { TourPopup } from "@/components/Common/TourComponents";
 import { useTourGuide } from "../hooks/useTourGuide";
 import { factorTourSteps } from "../hooks/tourConfig";
 import { toast } from "sonner";
+import type { Variable } from "@/types/Variable";
 
 // Import tab components
 import {
@@ -112,14 +113,23 @@ export const FactorDialog = ({
             mainState.ValueTarget,
         ].filter(Boolean);
 
-        const updatedVariables = globalVariables.filter(
-            (variable) => !usedVariables.includes(variable)
-        );
+        const updatedVariables = globalVariables
+            .filter((variable) => !usedVariables.includes(variable.name))
+            .map((variable) => variable.name);
         setAvailableVariables(updatedVariables);
     }, [mainState, globalVariables]);
 
     // Handler untuk perubahan main state 
     const handleDrop = (target: string, variable: string) => {
+        const variableDefinition = globalVariables.find(
+            (item) => item.name === variable
+        );
+
+        if (target === "TargetVar" && variableDefinition?.type === "STRING") {
+            toast.error("Invalid data type. Factor analysis requires numeric variables.");
+            return;
+        }
+
         if (target === "ValueTarget") {
             updateFormData("value", "Selection", null);
         }
