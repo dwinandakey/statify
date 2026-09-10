@@ -40,11 +40,6 @@ const KMedoidsClusterModal = lazy(() =>
         "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/k-medoids-cluster-main"
     )
 );
-const HierarchicalClusterModal = lazy(() =>
-    import(
-        "@/components/Modals/Analyze/Classify/hierarchical-cluster/dialogs/hierarchical-cluster-main"
-    ).then((module) => ({ default: module.HierClusContainer }))
-);
 
 /**
  * CLUSTERING_MODAL_COMPONENTS - Registry for clustering modal components
@@ -58,9 +53,6 @@ export const CLUSTERING_MODAL_COMPONENTS: Record<
     ) as React.ComponentType<BaseModalProps>,
     [ModalType.ModalKMedoidsCluster]: withSuspense(
         KMedoidsClusterModal as any
-    ) as React.ComponentType<BaseModalProps>,
-    [ModalType.ModalHierarchicalCluster]: withSuspense(
-        HierarchicalClusterModal as any
     ) as React.ComponentType<BaseModalProps>,
 };
 
@@ -88,5 +80,4 @@ export const CLUSTERING_MODAL_CONTAINER_PREFERENCES: Partial<
 > = {
     [ModalType.ModalKMeansCluster]: "sidebar",
     [ModalType.ModalKMedoidsCluster]: "sidebar",
-    [ModalType.ModalHierarchicalCluster]: "sidebar",
 };

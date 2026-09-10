@@ -23,11 +23,6 @@ const ClusteringMenu: React.FC = () => {
           K-Medoids Cluster
         </MenubarItem>
         <MenubarItem
-          onClick={() => openModal(ModalType.ModalHierarchicalCluster)}
-        >
-          Hierarchical Cluster
-        </MenubarItem>
-        <MenubarItem
           disabled={true}
           onClick={() => openModal(ModalType.ModalTwoStepCluster)}
         >

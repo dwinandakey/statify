@@ -428,9 +428,6 @@ const HamburgerMenu: React.FC = () => {
                     <AccordionItem value="clustering" className="border-0">
                       <NestedAccordionTrigger>Clustering</NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem onClick={() => openModal(ModalType.ModalHierarchicalCluster)}>
-                          Hierarchical Cluster...
-                        </DrawerMenuItem>
                         <DrawerMenuItem onClick={() => openModal(ModalType.ModalKMeansCluster)}>
                           K-Means Cluster...
                         </DrawerMenuItem>
