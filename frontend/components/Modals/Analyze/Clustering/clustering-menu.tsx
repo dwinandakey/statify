@@ -26,6 +26,12 @@ const ClusteringMenu: React.FC = () => {
           disabled={true}
           onClick={() => openModal(ModalType.ModalTwoStepCluster)}
         >
+          Hierarchical Cluster
+        </MenubarItem>
+        <MenubarItem
+          disabled={true}
+          onClick={() => openModal(ModalType.ModalTwoStepCluster)}
+        >
           TwoStep Cluster
         </MenubarItem>
         <MenubarItem
