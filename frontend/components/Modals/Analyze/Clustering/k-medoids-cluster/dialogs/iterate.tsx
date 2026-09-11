@@ -220,7 +220,7 @@ export const KMedoidsClusterIterate = ({
                                 />
                             )}
                             <p className="text-xs text-muted-foreground">
-                                Default: gunakan BUILD phase (deterministik). Random: inisialisasi acak setiap run. Custom: gunakan seed agar hasil konsisten.
+                                Default: use the BUILD phase (deterministic). Random: random initialization on every run. Custom: use a seed for consistent results.
                             </p>
                         </div>
 

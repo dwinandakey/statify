@@ -40,7 +40,7 @@ describe("K-Medoids variable selection", () => {
         });
 
         expect(screen.getByTestId("kmedoids-multiselect-help")).toHaveTextContent(
-            "3 variabel terpilih"
+            "3 variable(s) selected"
         );
 
         fireEvent.click(screen.getByTestId("arrow-move-button-TargetVar"));

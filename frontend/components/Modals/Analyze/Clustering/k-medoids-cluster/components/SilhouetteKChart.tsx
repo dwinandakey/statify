@@ -1,14 +1,14 @@
 /**
- * Silhouette Score vs Jumlah Klaster K
+ * Silhouette Score vs Number of Clusters K
  *
  * Line chart that helps select the optimal number of clusters by plotting the
  * average silhouette score for each tested K value.
  *
  * Zones (background bands):
- *   ≥ 0.70  → green   "Sangat Baik"
- *   0.50–0.70 → blue  "Baik"
- *   0.30–0.50 → amber "Cukup"
- *   < 0.30  → red     "Lemah"
+ *   ≥ 0.70  → green   "Very Strong"
+ *   0.50–0.70 → blue  "Strong"
+ *   0.30–0.50 → amber "Moderate"
+ *   < 0.30  → red     "Weak"
  */
 
 "use client";
@@ -34,10 +34,10 @@ export interface SilhouetteKChartProps {
 // ─── Interpretation zones ─────────────────────────────────────────────────────
 
 const ZONES = [
-    { lo: 0.70, hi: 1.00, color: "#16a34a", label: "Sangat Baik (≥ 0.70)" },
-    { lo: 0.50, hi: 0.70, color: "#2563eb", label: "Baik (0.50 – 0.70)" },
-    { lo: 0.30, hi: 0.50, color: "#d97706", label: "Cukup (0.30 – 0.50)" },
-    { lo: -1.0, hi: 0.30, color: "#dc2626", label: "Lemah (< 0.30)" },
+    { lo: 0.70, hi: 1.00, color: "#16a34a", label: "Very Strong (≥ 0.70)" },
+    { lo: 0.50, hi: 0.70, color: "#2563eb", label: "Strong (0.50 – 0.70)" },
+    { lo: 0.30, hi: 0.50, color: "#d97706", label: "Moderate (0.30 – 0.50)" },
+    { lo: -1.0, hi: 0.30, color: "#dc2626", label: "Weak (< 0.30)" },
 ] as const;
 
 type AxisStyleSelection = d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -220,7 +220,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("y", innerH + 46)
             .attr("font-size", "12px")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Jumlah Klaster (K)");
+            .text("Number of Clusters (K)");
 
         g.append("text")
             .attr("text-anchor", "middle")
@@ -251,7 +251,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                     .attr("y", 10)
                     .attr("font-size", "9px")
                     .attr("fill", "hsl(var(--muted-foreground))")
-                    .text(`K aktif = ${currentK}`);
+                    .text(`Current K = ${currentK}`);
             }
         }
 
@@ -321,17 +321,17 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                 d3.select(this).attr("r", 8).attr("stroke-width", 3);
                 const qual =
                     d.silhouetteScore >= 0.7
-                        ? "Sangat Baik"
+                        ? "Very Strong"
                         : d.silhouetteScore >= 0.5
-                        ? "Baik"
+                        ? "Strong"
                         : d.silhouetteScore >= 0.3
-                        ? "Cukup"
-                        : "Lemah";
+                        ? "Moderate"
+                        : "Weak";
                 showTip(
                     event,
                     `<strong>K = ${d.k}</strong><br/>` +
                         `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong><br/>` +
-                        `Kualitas: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>${ 
+                        `Quality: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>${ 
                         d.k === optimalPoint.k
                             ? `<br/><strong style="color:${zoneColor(d.silhouetteScore)}">★ K Optimal</strong>`
                             : ""}`
@@ -390,7 +390,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("font-size", "14px")
             .attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Silhouette Score vs Jumlah Klaster K");
+            .text("Silhouette Score vs Number of Clusters K");
 
         svg.append("text")
             .attr("x", margin.left + innerW / 2)
@@ -398,15 +398,15 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("text-anchor", "middle")
             .attr("font-size", "10px")
             .attr("fill", "hsl(var(--muted-foreground))")
-            .text("Nilai silhouette lebih tinggi menunjukkan struktur klaster yang lebih baik");
+            .text("Higher silhouette values indicate a better cluster structure");
     }, [data, currentK, svgWidth, height]);
 
     if (data.length === 0) {
         return (
             <div className="flex items-center justify-center h-[200px] text-sm text-muted-foreground">
-                Data silhouette per K tidak tersedia.
+                Silhouette data per K is not available.
                 <br />
-                Jalankan analisis dengan pemilihan K otomatis untuk melihat grafik ini.
+                Run the analysis with automatic K selection to see this chart.
             </div>
         );
     }

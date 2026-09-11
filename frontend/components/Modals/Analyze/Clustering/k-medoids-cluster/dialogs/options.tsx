@@ -123,9 +123,9 @@ export const KMedoidsClusterOptions = ({
                     </div>
                 </div>
 
-                {/* ========== MATRIKS JARAK ========== */}
+                {/* ========== DISTANCE MATRIX ========== */}
                 <div className="flex flex-col gap-2 border-t pt-4">
-                    <Label className="font-bold">Matriks Jarak</Label>
+                    <Label className="font-bold">Distance Matrix</Label>
                     <div className="flex items-center space-x-2">
                         <Checkbox
                             id="ShowDistanceMatrixBetweenMedoids"
@@ -138,7 +138,7 @@ export const KMedoidsClusterOptions = ({
                             htmlFor="ShowDistanceMatrixBetweenMedoids"
                             className="text-sm font-medium leading-none cursor-pointer"
                         >
-                            Matriks Jarak Antar Medoid
+                            Distance Matrix Between Medoids
                         </label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -153,11 +153,11 @@ export const KMedoidsClusterOptions = ({
                             htmlFor="ShowDistanceMatrixTable"
                             className="text-sm font-medium leading-none cursor-pointer"
                         >
-                            Matriks Jarak Semua Objek
+                            Distance Matrix of All Objects
                         </label>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        Tabel semua objek dipaginasi untuk menjaga performa.
+                        The all-objects table is paginated to maintain performance.
                     </p>
                 </div>
 
@@ -175,7 +175,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationNone"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Tanpa Normalisasi
+                                No Normalization
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -184,7 +184,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationZScore"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Standarisasi Data (Z-score)
+                                Standardize Data (Z-score)
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -193,7 +193,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationMinMax"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Normalisasi Min-Max (0-1)
+                                Min-Max Normalization (0-1)
                             </Label>
                         </div>
                     </RadioGroup>
@@ -203,19 +203,19 @@ export const KMedoidsClusterOptions = ({
                 <div className="flex flex-col gap-2 border-t pt-4">
                     <Label className="font-bold">Missing Values</Label>
 
-                    {/* Dampak nyata pada data yang dipilih, ditampilkan tepat di tempat
-                        strateginya dipilih. Rekap lengkap tetap ada di Case Processing Summary. */}
+                    {/* Real impact on the selected data, shown right where the strategy is
+                        chosen. The full recap remains in the Case Processing Summary. */}
                     {missingStats && (
                         <div className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2">
                             <p className="text-xs text-foreground">
                                 <span className="font-medium">
-                                    {missingStats.rowsWithMissing} dari {missingStats.totalRows} baris
+                                    {missingStats.rowsWithMissing} of {missingStats.totalRows} rows
                                     ({missingStats.missingPercent}%)
                                 </span>{" "}
-                                mengandung missing value
+                                contain missing values
                                 {missingStats.topVariables ? ` — ${missingStats.topVariables}` : ""}
                                 {missingStats.remainingVariables > 0
-                                    ? `, +${missingStats.remainingVariables} variabel lain`
+                                    ? `, +${missingStats.remainingVariables} more variable(s)`
                                     : ""}
                             </p>
                         </div>
@@ -244,8 +244,8 @@ export const KMedoidsClusterOptions = ({
                                     Exclude Cases Listwise
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Baris yang punya missing value pada variabel mana pun dihapus
-                                    dari analisis.
+                                    Rows with a missing value on any variable are removed from
+                                    the analysis.
                                 </p>
                             </div>
                         </div>
@@ -263,8 +263,8 @@ export const KMedoidsClusterOptions = ({
                                     Exclude Cases Pairwise
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Baris dipertahankan selama ada minimal satu nilai valid; sel yang
-                                    kosong diisi rata-rata variabelnya agar matriks jarak tetap numerik.
+                                    Rows are kept as long as at least one valid value exists; empty
+                                    cells are filled with the variable mean so the distance matrix stays numeric.
                                 </p>
                             </div>
                         </div>

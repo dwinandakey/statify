@@ -178,7 +178,7 @@ export const KMedoidsClusterDialog = ({
             },
             {
                 id: "CaseTarget",
-                title: "Label Cases by: (hanya 1 variabel)",
+                title: "Label Cases by: (1 variable only)",
                 variables: caseVars,
                 height: "auto",
                 maxItems: 1,
@@ -198,7 +198,7 @@ export const KMedoidsClusterDialog = ({
                 toListId === "TargetVar" &&
                 variables.some((variable) => !isNumericVariable(variable))
             ) {
-                toast.error("variabel harus bertipe numerik");
+                toast.error("Variables must be numeric");
                 return;
             }
 
@@ -210,7 +210,7 @@ export const KMedoidsClusterDialog = ({
             }
             if (toListId === "CaseTarget" && variables.length > 1) {
                 toast.info(
-                    "Label Cases by hanya menerima 1 variabel, variabel pertama yang dipakai"
+                    "Label Cases by accepts only 1 variable; the first one will be used"
                 );
             }
 
@@ -304,7 +304,7 @@ export const KMedoidsClusterDialog = ({
                     </div>
                     <div className="space-y-4 p-4">
 
-                        {/* ===== PEMILIH MODE ===== */}
+                        {/* ===== MODE SELECTOR ===== */}
                         <div className="space-y-2">
                             <Label className="font-semibold text-sm">Number of Clusters (k)</Label>
                             <RadioGroup
@@ -340,7 +340,7 @@ export const KMedoidsClusterDialog = ({
                                     </div>
                                 )}
 
-                                {/* --- OTOMATIS --- */}
+                                {/* --- AUTOMATIC --- */}
                                 <div className="flex items-center space-x-2">
                                     <RadioGroupItem value={ClusterMode.Automatic} id="mode-auto" />
                                     <Label htmlFor="mode-auto" className="cursor-pointer font-normal">
@@ -350,7 +350,7 @@ export const KMedoidsClusterDialog = ({
 
                                 {mainState.ClusterMode === ClusterMode.Automatic && (
                                     <div className="space-y-3 ml-6 border-l-2 border-muted pl-4">
-                                        {/* Rentang k */}
+                                        {/* k range */}
                                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                             <Label className="text-sm text-muted-foreground w-16 shrink-0 whitespace-nowrap">k range:</Label>
                                             <Input
@@ -378,7 +378,7 @@ export const KMedoidsClusterDialog = ({
                                                 className="w-14 shrink-0"
                                             />
                                         </div>
-                                        {/* Metode */}
+                                        {/* Method */}
                                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                             <Label className="text-sm text-muted-foreground w-16 shrink-0 whitespace-nowrap">Method:</Label>
                                             <Select
@@ -401,15 +401,15 @@ export const KMedoidsClusterDialog = ({
                                             </Select>
                                         </div>
                                         <p className="text-xs text-muted-foreground">
-                                            Sistem akan mengevaluasi setiap k dari kMin
-                                            hingga kMax dan memilih k dengan skor terbaik.
+                                            The system will evaluate every k from kMin
+                                            to kMax and pick the k with the best score.
                                         </p>
                                     </div>
                                 )}
                             </RadioGroup>
                         </div>
 
-                        {/* ===== UKURAN JARAK ===== */}
+                        {/* ===== DISTANCE MEASURE ===== */}
                         <div className="space-y-2 border-t pt-4">
                             <div className="flex items-center gap-2">
                                 <Label className="font-semibold text-sm">Distance Measure</Label>
