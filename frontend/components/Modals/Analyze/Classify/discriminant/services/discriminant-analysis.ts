@@ -1,6 +1,6 @@
 import {getSlicedData, getVarDefs} from "@/hooks/useVariable";
 import type {DiscriminantAnalysisType} from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant-worker";
-import init, { DiscriminantAnalysis } from "../rust/pkg/wasm";
+import init, { DiscriminantAnalysis } from "@/public/workers/Classify/Discriminant/pkg/wasm";
 
 export async function analyzeDiscriminant({
     configData,

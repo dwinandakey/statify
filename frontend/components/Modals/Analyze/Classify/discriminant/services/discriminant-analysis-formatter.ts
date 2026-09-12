@@ -1,5 +1,11 @@
 // discriminant-analysis-formatter.ts
 import { formatDisplayNumber } from "@/hooks/useFormatter";
+import {
+  formatCount,
+  formatPercent,
+  formatSig,
+  formatStat,
+} from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-number-format";
 import type { ResultJson, Table } from "@/types/Table";
 import type { Chart } from "@/types/Chart";
 
@@ -25,16 +31,16 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Valid row
     table.rows.push({
       rowHeader: ["Valid"],
-      n: formatDisplayNumber(data.processing_summary.valid_count),
-      percent: formatDisplayNumber(data.processing_summary.valid_percent),
+      n: formatCount(data.processing_summary.valid_count),
+      percent: formatPercent(data.processing_summary.valid_percent),
     });
 
     // Excluded rows - only add if defined
     if (data.processing_summary.missing_group_codes !== undefined) {
       table.rows.push({
         rowHeader: ["Excluded", "Missing or out-of-range group codes"],
-        n: formatDisplayNumber(data.processing_summary.missing_group_codes),
-        percent: formatDisplayNumber(
+        n: formatCount(data.processing_summary.missing_group_codes),
+        percent: formatPercent(
           data.processing_summary.missing_group_percent,
         ),
       });
@@ -43,8 +49,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
     if (data.processing_summary.missing_disc_vars !== undefined) {
       table.rows.push({
         rowHeader: ["", "At least one missing discriminating variable"],
-        n: formatDisplayNumber(data.processing_summary.missing_disc_vars),
-        percent: formatDisplayNumber(
+        n: formatCount(data.processing_summary.missing_disc_vars),
+        percent: formatPercent(
           data.processing_summary.missing_disc_percent,
         ),
       });
@@ -56,8 +62,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
           "",
           "Both missing or out-of-range group codes and at least one missing discriminating variable",
         ],
-        n: formatDisplayNumber(data.processing_summary.both_missing),
-        percent: formatDisplayNumber(
+        n: formatCount(data.processing_summary.both_missing),
+        percent: formatPercent(
           data.processing_summary.both_missing_percent,
         ),
       });
@@ -66,8 +72,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Total excluded
     table.rows.push({
       rowHeader: ["", "Total"],
-      n: formatDisplayNumber(data.processing_summary.excluded_count),
-      percent: formatDisplayNumber(
+      n: formatCount(data.processing_summary.excluded_count),
+      percent: formatPercent(
         data.processing_summary.total_excluded_percent,
       ),
     });
@@ -75,8 +81,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Grand total
     table.rows.push({
       rowHeader: ["Total"],
-      n: formatDisplayNumber(data.processing_summary.total_count),
-      percent: formatDisplayNumber(100.0),
+      n: formatCount(data.processing_summary.total_count),
+      percent: formatPercent(100.0),
     });
 
     resultJson.tables.push(table);
@@ -98,28 +104,28 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Processed
     table.rows.push({
       rowHeader: ["Processed"],
-      value: formatDisplayNumber(data.processing_summary.valid_count),
+      value: formatCount(data.processing_summary.valid_count),
     });
 
     // Excluded rows
     if (data.processing_summary.missing_group_codes !== undefined) {
       table.rows.push({
         rowHeader: ["Excluded", "Missing or out-of-range group codes"],
-        value: formatDisplayNumber(data.processing_summary.missing_group_codes),
+        value: formatCount(data.processing_summary.missing_group_codes),
       });
     }
 
     if (data.processing_summary.missing_disc_vars !== undefined) {
       table.rows.push({
         rowHeader: ["", "At least one missing discriminating variable"],
-        value: formatDisplayNumber(data.processing_summary.missing_disc_vars),
+        value: formatCount(data.processing_summary.missing_disc_vars),
       });
     }
 
     // Used in Output
     table.rows.push({
       rowHeader: ["Used in Output"],
-      value: formatDisplayNumber(data.processing_summary.valid_count),
+      value: formatCount(data.processing_summary.valid_count),
     });
 
     resultJson.tables.push(table);
@@ -172,15 +178,15 @@ export function transformDiscriminantResult(data: any): ResultJson {
           if (stdDevEntry) {
             table.rows.push({
               rowHeader: [group, variableName],
-              mean: formatDisplayNumber(meanEntry.values[groupIndex]),
-              std_deviation: formatDisplayNumber(
+              mean: formatStat(meanEntry.values[groupIndex]),
+              std_deviation: formatStat(
                 stdDevEntry.values[groupIndex],
               ),
               unweighted: unweightedNEntry
-                ? formatDisplayNumber(unweightedNEntry.values[groupIndex])
+                ? formatCount(unweightedNEntry.values[groupIndex])
                 : "Invalid",
               weighted: weightedNEntry
-                ? formatDisplayNumber(weightedNEntry.values[groupIndex])
+                ? formatStat(weightedNEntry.values[groupIndex])
                 : "Invalid",
             });
           }
@@ -211,11 +217,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
     for (let i = 0; i < data.equality_tests.variables.length; i++) {
       table.rows.push({
         rowHeader: [data.equality_tests.variables[i]],
-        wilks_lambda: formatDisplayNumber(data.equality_tests.wilks_lambda[i]),
-        f: formatDisplayNumber(data.equality_tests.f_values[i]),
-        df1: formatDisplayNumber(data.equality_tests.df1[i]),
-        df2: formatDisplayNumber(data.equality_tests.df2[i]),
-        sig: formatDisplayNumber(data.equality_tests.significance[i]),
+        wilks_lambda: formatStat(data.equality_tests.wilks_lambda[i]),
+        f: formatStat(data.equality_tests.f_values[i]),
+        df1: formatCount(data.equality_tests.df1[i]),
+        df2: formatCount(data.equality_tests.df2[i]),
+        sig: formatSig(data.equality_tests.significance[i]),
       });
     }
 
@@ -246,7 +252,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
 
       for (let j = 0; j < entry.values.length; j++) {
-        rowData[`var_${j}`] = formatDisplayNumber(entry.values[j].value);
+        rowData[`var_${j}`] = formatStat(entry.values[j].value);
       }
 
       table.rows.push(rowData);
@@ -279,7 +285,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
 
       for (let j = 0; j < entry.values.length; j++) {
-        rowData[`var_${j}`] = formatDisplayNumber(entry.values[j].value);
+        rowData[`var_${j}`] = formatStat(entry.values[j].value);
       }
 
       table.rows.push(rowData);
@@ -320,7 +326,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
         // For each value in the variable's row
         for (let i = 0; i < entry.values.length; i++) {
-          rowData[`var_${i}`] = formatDisplayNumber(entry.values[i].value);
+          rowData[`var_${i}`] = formatStat(entry.values[i].value);
         }
 
         table.rows.push(rowData);
@@ -355,8 +361,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
     for (let i = 0; i < data.log_determinants.groups.length; i++) {
       table.rows.push({
         rowHeader: [data.log_determinants.groups[i]],
-        rank: formatDisplayNumber(data.log_determinants.ranks[i]),
-        log_determinant: formatDisplayNumber(
+        rank: formatCount(data.log_determinants.ranks[i]),
+        log_determinant: formatStat(
           data.log_determinants.log_determinants[i],
         ),
       });
@@ -365,8 +371,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Pooled within-groups
     table.rows.push({
       rowHeader: ["Pooled within-groups"],
-      rank: formatDisplayNumber(data.log_determinants.rank_pooled),
-      log_determinant: formatDisplayNumber(
+      rank: formatCount(data.log_determinants.rank_pooled),
+      log_determinant: formatStat(
         data.log_determinants.pooled_log_determinant,
       ),
     });
@@ -394,23 +400,23 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rows: [
         {
           rowHeader: ["Box's M"],
-          value: formatDisplayNumber(data.box_m_test.box_m),
+          value: formatStat(data.box_m_test.box_m),
         },
         {
           rowHeader: ["F", "Approx."],
-          value: formatDisplayNumber(data.box_m_test.f_approx),
+          value: formatStat(data.box_m_test.f_approx),
         },
         {
           rowHeader: ["", "df1"],
-          value: formatDisplayNumber(data.box_m_test.df1),
+          value: formatCount(data.box_m_test.df1),
         },
         {
           rowHeader: ["", "df2"],
-          value: formatDisplayNumber(data.box_m_test.df2),
+          value: formatCount(data.box_m_test.df2),
         },
         {
           rowHeader: ["", "Sig."],
-          value: formatDisplayNumber(data.box_m_test.p_value),
+          value: formatSig(data.box_m_test.p_value),
         },
         {
           rowHeader: [
@@ -466,11 +472,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
       table.rows.push({
         rowHeader: [data.prior_probabilities.groups[i].toString()],
-        prior: formatDisplayNumber(
+        prior: formatStat(
           data.prior_probabilities.prior_probabilities[i],
         ),
-        unweighted: formatDisplayNumber(unweightedCount),
-        weighted: formatDisplayNumber(weightedCount),
+        unweighted: formatCount(unweightedCount),
+        weighted: formatStat(weightedCount),
       });
     }
 
@@ -488,14 +494,14 @@ export function transformDiscriminantResult(data: any): ResultJson {
     table.rows.push({
       rowHeader: ["Total"],
       // Priors always sum to 1; the count columns sum to the total N.
-      prior: formatDisplayNumber(
+      prior: formatStat(
         data.prior_probabilities.prior_probabilities.reduce(
           (sum: number, val: number) => sum + val,
           0,
         ),
       ),
-      unweighted: formatDisplayNumber(totalUnweighted),
-      weighted: formatDisplayNumber(totalWeighted),
+      unweighted: formatCount(totalUnweighted),
+      weighted: formatStat(totalWeighted),
     });
 
     resultJson.tables.push(table);
@@ -540,7 +546,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
           g++
         ) {
           const group = data.classification_function_coefficients.groups[g];
-          rowData[`group_${group}`] = formatDisplayNumber(coeff.values[g]);
+          rowData[`group_${group}`] = formatStat(coeff.values[g]);
         }
       }
 
@@ -558,7 +564,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       g++
     ) {
       const group = data.classification_function_coefficients.groups[g];
-      constantRow[`group_${group}`] = formatDisplayNumber(
+      constantRow[`group_${group}`] = formatStat(
         data.classification_function_coefficients.constant_terms[g],
       );
     }
@@ -614,7 +620,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
         // Add each function value dynamically
         for (let j = 0; j < numFunctions; j++) {
-          rowData[`function_${j + 1}`] = formatDisplayNumber(coeff.values[j]);
+          rowData[`function_${j + 1}`] = formatStat(coeff.values[j]);
         }
 
         table.rows.push(rowData);
@@ -674,7 +680,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
       // Add each function value dynamically
       for (let j = 0; j < numFunctions; j++) {
-        rowData[`function_${j + 1}`] = formatDisplayNumber(coeff.values[j]);
+        rowData[`function_${j + 1}`] = formatStat(coeff.values[j]);
       }
 
       table.rows.push(rowData);
@@ -728,7 +734,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
       // Add each function value dynamically
       for (let j = 0; j < numFunctions; j++) {
-        rowData[`function_${j + 1}`] = formatDisplayNumber(centroid.values[j]);
+        rowData[`function_${j + 1}`] = formatStat(centroid.values[j]);
       }
 
       table.rows.push(rowData);
@@ -795,7 +801,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       // Add each function value dynamically, marking the largest with superscript
       for (let j = 0; j < numFunctions; j++) {
         rowData[`function_${j + 1}`] =
-          formatDisplayNumber(corr.values[j]) +
+          formatStat(corr.values[j]) +
           (j === maxAbsValueIndex ? "ᵃ" : "");
       }
 
@@ -992,40 +998,40 @@ export function transformDiscriminantResult(data: any): ResultJson {
       if (isRaosVMethod) {
         table.rows.push({
           rowHeader: [""],
-          step: formatDisplayNumber(stepNum),
+          step: formatCount(stepNum),
           entered: data.stepwise_statistics.variables_entered[i] || "",
-          raos_v_statistic: formatDisplayNumber(
+          raos_v_statistic: formatStat(
             data.stepwise_statistics.raos_v?.[i] ?? 0,
           ),
-          raos_v_df: formatDisplayNumber(raosVdf * stepNum),
-          raos_v_sig: formatDisplayNumber(
+          raos_v_df: formatCount(raosVdf * stepNum),
+          raos_v_sig: formatSig(
             data.stepwise_statistics.raos_v_sig?.[i] ?? 1,
           ),
-          change_statistic: formatDisplayNumber(
+          change_statistic: formatStat(
             data.stepwise_statistics.change_in_v?.[i] ?? 0,
           ),
-          change_sig: formatDisplayNumber(
+          change_sig: formatSig(
             data.stepwise_statistics.change_sig?.[i] ?? 1,
           ),
         });
       } else if (isFRatio) {
         table.rows.push({
           rowHeader: [""],
-          step: formatDisplayNumber(stepNum),
+          step: formatCount(stepNum),
           entered: data.stepwise_statistics.variables_entered[i] || "",
           removed: data.stepwise_statistics.variables_removed[i]
             ? data.stepwise_statistics.variables_removed[i]
             : "",
-          f_statistic: formatDisplayNumber(
+          f_statistic: formatStat(
             data.stepwise_statistics.min_d_squared?.[i] ?? 0,
           ),
-          f_df1: formatDisplayNumber(
+          f_df1: formatCount(
             data.stepwise_statistics.f_to_enter_df1?.[i] ?? 0,
           ),
-          f_df2: formatDisplayNumber(
+          f_df2: formatCount(
             data.stepwise_statistics.f_to_enter_df2?.[i] ?? 0,
           ),
-          sig: formatDisplayNumber(
+          sig: formatSig(
             data.stepwise_statistics.significance?.[i] ?? 1,
           ),
           between_groups: data.stepwise_statistics.between_groups?.[i] ?? "",
@@ -1033,37 +1039,37 @@ export function transformDiscriminantResult(data: any): ResultJson {
       } else if (isUnexplained) {
         table.rows.push({
           rowHeader: [""],
-          step: formatDisplayNumber(stepNum),
+          step: formatCount(stepNum),
           entered: data.stepwise_statistics.variables_entered[i] || "",
           removed: data.stepwise_statistics.variables_removed[i]
             ? data.stepwise_statistics.variables_removed[i]
             : "",
-          residual_variance: formatDisplayNumber(
+          residual_variance: formatStat(
             data.stepwise_statistics.min_d_squared?.[i] ?? 0,
           ),
         });
       } else if (isMahalanobis) {
         table.rows.push({
           rowHeader: [""],
-          step: formatDisplayNumber(stepNum),
+          step: formatCount(stepNum),
           entered: data.stepwise_statistics.variables_entered[i] || "",
           removed: data.stepwise_statistics.variables_removed[i]
             ? data.stepwise_statistics.variables_removed[i]
             : "",
-          d_statistic: formatDisplayNumber(
+          d_statistic: formatStat(
             data.stepwise_statistics.min_d_squared?.[i] ?? 0,
           ),
           between_groups: data.stepwise_statistics.between_groups?.[i] ?? "",
-          f_statistic: formatDisplayNumber(
+          f_statistic: formatStat(
             data.stepwise_statistics.f_to_enter?.[i] ?? 0,
           ),
-          f_df1: formatDisplayNumber(
+          f_df1: formatCount(
             data.stepwise_statistics.f_to_enter_df1?.[i] ?? 0,
           ),
-          f_df2: formatDisplayNumber(
+          f_df2: formatCount(
             data.stepwise_statistics.f_to_enter_df2?.[i] ?? 0,
           ),
-          sig: formatDisplayNumber(
+          sig: formatSig(
             data.stepwise_statistics.significance?.[i] ?? 1,
           ),
         });
@@ -1072,27 +1078,27 @@ export function transformDiscriminantResult(data: any): ResultJson {
         if (data.stepwise_statistics.variables_removed?.[i]) wilksNumVars--;
         table.rows.push({
           rowHeader: [""],
-          step: formatDisplayNumber(stepNum),
+          step: formatCount(stepNum),
           entered: data.stepwise_statistics.variables_entered[i] || "",
           removed: data.stepwise_statistics.variables_removed[i]
             ? data.stepwise_statistics.variables_removed[i]
             : "",
-          lambda_statistic: formatDisplayNumber(
+          lambda_statistic: formatStat(
             data.stepwise_statistics.wilks_lambda?.[i] ?? 1,
           ),
-          lambda_df1: formatDisplayNumber(wilksNumVars),
-          lambda_df2: formatDisplayNumber(numGroups - 1),
-          lambda_df3: formatDisplayNumber(wilksN - numGroups),
-          exact_f_statistic: formatDisplayNumber(
+          lambda_df1: formatCount(wilksNumVars),
+          lambda_df2: formatCount(numGroups - 1),
+          lambda_df3: formatCount(wilksN - numGroups),
+          exact_f_statistic: formatStat(
             data.stepwise_statistics.wilks_exact_f?.[i] ?? 0,
           ),
-          exact_f_df1: formatDisplayNumber(
+          exact_f_df1: formatCount(
             data.stepwise_statistics.wilks_exact_df1?.[i] ?? 0,
           ),
-          exact_f_df2: formatDisplayNumber(
+          exact_f_df2: formatCount(
             data.stepwise_statistics.wilks_exact_df2?.[i] ?? 0,
           ),
-          exact_f_sig: formatDisplayNumber(
+          exact_f_sig: formatSig(
             data.stepwise_statistics.wilks_exact_sig?.[i] ?? 1,
           ),
         });
@@ -1280,15 +1286,15 @@ export function transformDiscriminantResult(data: any): ResultJson {
         swTable.rows.push({
           rowHeader: [String(i + 1)],
           sw_step: String(i + 1),
-          num_vars: formatDisplayNumber(numVarsInModel),
-          lambda: formatDisplayNumber(swWilks[i] ?? 1),
-          lambda_df1: formatDisplayNumber(numVarsInModel),
-          lambda_df2: formatDisplayNumber(lambdaDf2),
-          lambda_df3: formatDisplayNumber(lambdaDf3),
-          f_stat: formatDisplayNumber(swF[i] ?? 0),
-          f_df1: formatDisplayNumber(swFdf1[i] ?? 0),
-          f_df2: formatDisplayNumber(swFdf2[i] ?? 0),
-          f_sig: formatDisplayNumber(swSig[i] ?? 1),
+          num_vars: formatCount(numVarsInModel),
+          lambda: formatStat(swWilks[i] ?? 1),
+          lambda_df1: formatCount(numVarsInModel),
+          lambda_df2: formatCount(lambdaDf2),
+          lambda_df3: formatCount(lambdaDf3),
+          f_stat: formatStat(swF[i] ?? 0),
+          f_df1: formatCount(swFdf1[i] ?? 0),
+          f_df2: formatCount(swFdf2[i] ?? 0),
+          f_sig: formatSig(swSig[i] ?? 1),
         });
       }
 
@@ -1385,51 +1391,51 @@ export function transformDiscriminantResult(data: any): ResultJson {
           if (isRaosVMethod) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_remove: formatDisplayNumber(variable.f_to_remove),
-              raos_v: formatDisplayNumber(raosVFromProxy(variable.wilks_lambda)),
+              f_to_remove: formatStat(variable.f_to_remove),
+              raos_v: formatStat(raosVFromProxy(variable.wilks_lambda)),
             });
           } else if (isFRatio) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              f_to_remove: formatDisplayNumber(variable.f_to_remove),
-              min_f: formatDisplayNumber(variable.min_d_squared || 0),
+              tolerance: formatStat(variable.tolerance),
+              f_to_remove: formatStat(variable.f_to_remove),
+              min_f: formatStat(variable.min_d_squared || 0),
               between_groups: variable.between_groups || "",
             });
           } else if (isUnexplained) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              f_to_remove: formatDisplayNumber(variable.f_to_remove),
+              tolerance: formatStat(variable.tolerance),
+              f_to_remove: formatStat(variable.f_to_remove),
               residual_variance:
                 modelSize <= 1
                   ? ""
-                  : formatDisplayNumber(variable.min_d_squared || 0),
+                  : formatStat(variable.min_d_squared || 0),
             });
           } else if (isMahalanobis) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_remove: formatDisplayNumber(variable.f_to_remove),
-              min_d_squared: formatDisplayNumber(variable.min_d_squared || 0),
+              f_to_remove: formatStat(variable.f_to_remove),
+              min_d_squared: formatStat(variable.min_d_squared || 0),
               between_groups: variable.between_groups || "",
             });
           } else {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_remove: formatDisplayNumber(variable.f_to_remove),
-              wilks_lambda: formatDisplayNumber(variable.wilks_lambda),
+              f_to_remove: formatStat(variable.f_to_remove),
+              wilks_lambda: formatStat(variable.wilks_lambda),
             });
           }
         }
@@ -1532,54 +1538,54 @@ export function transformDiscriminantResult(data: any): ResultJson {
           if (isRaosVMethod) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_enter: formatDisplayNumber(variable.f_to_enter),
-              raos_v: formatDisplayNumber(raosVFromProxy(variable.wilks_lambda)),
+              f_to_enter: formatStat(variable.f_to_enter),
+              raos_v: formatStat(raosVFromProxy(variable.wilks_lambda)),
             });
           } else if (isFRatio) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_enter: formatDisplayNumber(variable.f_to_enter),
-              min_f: formatDisplayNumber(variable.min_d_squared || 0),
+              f_to_enter: formatStat(variable.f_to_enter),
+              min_f: formatStat(variable.min_d_squared || 0),
               between_groups: variable.between_groups || "",
             });
           } else if (isUnexplained) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_enter: formatDisplayNumber(variable.f_to_enter),
-              residual_variance: formatDisplayNumber(variable.min_d_squared || 0),
+              f_to_enter: formatStat(variable.f_to_enter),
+              residual_variance: formatStat(variable.min_d_squared || 0),
             });
           } else if (isMahalanobis) {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_enter: formatDisplayNumber(variable.f_to_enter),
-              min_d_squared: formatDisplayNumber(variable.min_d_squared || 0),
+              f_to_enter: formatStat(variable.f_to_enter),
+              min_d_squared: formatStat(variable.min_d_squared || 0),
               between_groups: variable.between_groups || "",
             });
           } else {
             table.rows.push({
               rowHeader: [step, variable.variable],
-              tolerance: formatDisplayNumber(variable.tolerance),
-              min_tolerance: formatDisplayNumber(
+              tolerance: formatStat(variable.tolerance),
+              min_tolerance: formatStat(
                 variable.min_tolerance ?? variable.tolerance,
               ),
-              f_to_enter: formatDisplayNumber(variable.f_to_enter),
-              wilks_lambda: formatDisplayNumber(variable.wilks_lambda),
+              f_to_enter: formatStat(variable.f_to_enter),
+              wilks_lambda: formatStat(variable.wilks_lambda),
             });
           }
         }
@@ -1611,12 +1617,12 @@ export function transformDiscriminantResult(data: any): ResultJson {
     for (let i = 0; i < data.wilks_lambda_test.test_of_functions.length; i++) {
       testTable.rows.push({
         rowHeader: [data.wilks_lambda_test.test_of_functions[i]],
-        wilks_lambda: formatDisplayNumber(
+        wilks_lambda: formatStat(
           data.wilks_lambda_test.wilks_lambda[i],
         ),
-        chi_square: formatDisplayNumber(data.wilks_lambda_test.chi_square[i]),
-        df: formatDisplayNumber(data.wilks_lambda_test.df[i]),
-        sig: formatDisplayNumber(data.wilks_lambda_test.significance[i]),
+        chi_square: formatStat(data.wilks_lambda_test.chi_square[i]),
+        df: formatCount(data.wilks_lambda_test.df[i]),
+        sig: formatSig(data.wilks_lambda_test.significance[i]),
       });
     }
 
@@ -1646,15 +1652,15 @@ export function transformDiscriminantResult(data: any): ResultJson {
       table.rows.push({
         rowHeader: [data.eigen_description.functions[i]],
         eigenvalue:
-          formatDisplayNumber(data.eigen_description.eigenvalue[i]) +
+          formatStat(data.eigen_description.eigenvalue[i]) +
           (i === 0 ? "ᵃ" : ""), // Add superscript for the first function
-        variance_percent: formatDisplayNumber(
+        variance_percent: formatPercent(
           data.eigen_description.variance_percentage[i],
         ),
-        cumulative_percent: formatDisplayNumber(
+        cumulative_percent: formatPercent(
           data.eigen_description.cumulative_percentage[i],
         ),
-        canonical_correlation: formatDisplayNumber(
+        canonical_correlation: formatStat(
           data.eigen_description.canonical_correlation[i],
         ),
       });
@@ -1776,37 +1782,37 @@ export function transformDiscriminantResult(data: any): ResultJson {
       // `values` array (NOT by indexing the entry object itself).
       const scoreData: any = {};
       for (let j = 0; j < discriminantScoreEntries.length; j++) {
-        scoreData[`function_${j + 1}`] = formatDisplayNumber(
+        scoreData[`function_${j + 1}`] = formatStat(
           discriminantScoreEntries[j].values[i],
         );
       }
 
       table.rows.push({
         rowHeader: ["Original"],
-        case_number: formatDisplayNumber(
+        case_number: formatCount(
           data.casewise_statistics.case_number[i],
         ),
         actual_group: data.casewise_statistics.actual_group[i],
         predicted_group:
           data.casewise_statistics.predicted_group[i] +
           (isMisclassified ? "**" : ""),
-        p: formatDisplayNumber(
+        p: formatStat(
           data.casewise_statistics.highest_group.p_value[i],
         ),
-        df: formatDisplayNumber(data.casewise_statistics.highest_group.df[i]),
-        p_d_g: formatDisplayNumber(
+        df: formatCount(data.casewise_statistics.highest_group.df[i]),
+        p_d_g: formatStat(
           data.casewise_statistics.highest_group.p_g_equals_d[i],
         ),
-        mahalanobis: formatDisplayNumber(
+        mahalanobis: formatStat(
           data.casewise_statistics.highest_group.squared_mahalanobis_distance[
             i
           ],
         ),
         group: data.casewise_statistics.highest_group.group[i],
-        p_g_d: formatDisplayNumber(
+        p_g_d: formatStat(
           data.casewise_statistics.second_highest_group.p_value[i],
         ),
-        second_mahalanobis: formatDisplayNumber(
+        second_mahalanobis: formatStat(
           data.casewise_statistics.second_highest_group
             .squared_mahalanobis_distance[i],
         ),
@@ -1833,19 +1839,19 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
         table.rows.push({
           rowHeader: ["Cross-validated"],
-          case_number: formatDisplayNumber(cvData.case_number[i]),
+          case_number: formatCount(cvData.case_number[i]),
           actual_group: cvData.actual_group[i],
           predicted_group:
             cvData.predicted_group[i] + (isMisclassifiedCV ? "**" : ""),
-          p: formatDisplayNumber(cvData.highest_group.p_value[i]),
-          df: formatDisplayNumber(cvData.highest_group.df[i]),
-          p_d_g: formatDisplayNumber(cvData.highest_group.p_g_equals_d[i]),
-          mahalanobis: formatDisplayNumber(
+          p: formatStat(cvData.highest_group.p_value[i]),
+          df: formatCount(cvData.highest_group.df[i]),
+          p_d_g: formatStat(cvData.highest_group.p_g_equals_d[i]),
+          mahalanobis: formatStat(
             cvData.highest_group.squared_mahalanobis_distance[i],
           ),
           group: cvData.highest_group.group[i],
-          p_g_d: formatDisplayNumber(cvData.second_highest_group.p_value[i]),
-          second_mahalanobis: formatDisplayNumber(
+          p_g_d: formatStat(cvData.second_highest_group.p_value[i]),
+          second_mahalanobis: formatStat(
             cvData.second_highest_group.squared_mahalanobis_distance[i],
           ),
           second_group: cvData.second_highest_group.group[i],
@@ -1913,7 +1919,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
           i === 0 ? "Count" : "",
           classification.group,
         ],
-        total: formatDisplayNumber(
+        total: formatCount(
           classification.counts.reduce(
             (sum: number, count: number) => sum + count,
             0,
@@ -1922,7 +1928,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
 
       for (let j = 0; j < classification.counts.length; j++) {
-        rowData[`group_${j}`] = formatDisplayNumber(classification.counts[j]);
+        rowData[`group_${j}`] = formatCount(classification.counts[j]);
       }
       table.rows.push(rowData);
     }
@@ -1947,7 +1953,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
 
       for (let j = 0; j < percentage.percentages.length; j++) {
-        rowData[`group_${j}`] = formatDisplayNumber(percentage.percentages[j]);
+        rowData[`group_${j}`] = formatPercent(percentage.percentages[j]);
       }
       table.rows.push(rowData);
     }
@@ -1970,7 +1976,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
             i === 0 ? "Count" : "",
             classification.group,
           ],
-          total: formatDisplayNumber(
+          total: formatCount(
             classification.counts.reduce(
               (sum: number, count: number) => sum + count,
               0,
@@ -1979,7 +1985,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
         };
 
         for (let j = 0; j < classification.counts.length; j++) {
-          rowData[`group_${j}`] = formatDisplayNumber(classification.counts[j]);
+          rowData[`group_${j}`] = formatCount(classification.counts[j]);
         }
         table.rows.push(rowData);
       }
@@ -2001,7 +2007,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
         };
 
         for (let j = 0; j < percentage.percentages.length; j++) {
-          rowData[`group_${j}`] = formatDisplayNumber(
+          rowData[`group_${j}`] = formatPercent(
             percentage.percentages[j],
           );
         }
@@ -2037,7 +2043,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
     table.rows.push({
       rowHeader: [
-        `a. ${formatDisplayNumber(originalCorrectPct)}% of original grouped cases correctly classified.`,
+        `a. ${formatPercent(originalCorrectPct)}% of original grouped cases correctly classified.`,
       ],
     });
 
@@ -2074,7 +2080,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
       table.rows.push({
         rowHeader: [
-          `c. ${formatDisplayNumber(crossValidatedCorrectPct)}% of cross-validated grouped cases correctly classified.`,
+          `c. ${formatPercent(crossValidatedCorrectPct)}% of cross-validated grouped cases correctly classified.`,
         ],
       });
     }
@@ -2338,11 +2344,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
       for (let f = 0; f < numF; f++) {
         table.rows.push({
           rowHeader: [entry.variable, funcs[f] ?? `Function ${f + 1}`],
-          coefficient: formatDisplayNumber(entry.original[f]),
-          bias: formatDisplayNumber(entry.bias[f]),
-          std_error: formatDisplayNumber(entry.std_error[f]),
-          ci_lower: formatDisplayNumber(entry.ci_lower[f]),
-          ci_upper: formatDisplayNumber(entry.ci_upper[f]),
+          coefficient: formatStat(entry.original[f]),
+          bias: formatStat(entry.bias[f]),
+          std_error: formatStat(entry.std_error[f]),
+          ci_lower: formatStat(entry.ci_lower[f]),
+          ci_upper: formatStat(entry.ci_upper[f]),
         });
       }
     }
