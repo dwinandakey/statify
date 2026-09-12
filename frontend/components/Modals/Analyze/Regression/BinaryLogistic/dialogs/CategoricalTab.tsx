@@ -151,6 +151,7 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
                         : "hover:bg-accent"
                     }`}
                     onClick={() => handleRowClick(v.name)}
+                    data-testid={`binary-logistic-categorical-row-${v.name}`}
                   >
                     <Checkbox
                       checked={isChecked}

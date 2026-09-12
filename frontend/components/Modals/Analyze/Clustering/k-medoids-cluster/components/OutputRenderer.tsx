@@ -587,7 +587,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
                         disabled={totalAssignmentsRows === 0}
                     >
                         <Download className="w-4 h-4 mr-2" />
-                        Download Excel (Semua Baris)
+                        Download Excel (All Rows)
                     </Button>
                 </div>
                 <div className="mb-3 flex flex-col items-center gap-2 text-xs text-muted-foreground">
@@ -641,12 +641,12 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Grafik K Optimal" statistic: just the optimal-K chart (silhouette or elbow).
+    // Standalone "Optimal K Chart" statistic: just the optimal-K chart (silhouette or elbow).
     if (output.viewMode === "optimalKChartOnly") {
         if (!hasOptimalKChartData) {
             return (
                 <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                    Data grafik K optimal belum tersedia pada output ini. Jalankan ulang analisis K-Medoids mode automatic untuk menghasilkan data kurva silhouette/elbow.
+                    Optimal K chart data is not available in this output. Re-run the K-Medoids analysis in automatic mode to generate the silhouette/elbow curve data.
                 </div>
             );
         }
@@ -654,7 +654,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
             <div>
                 {showOnlySilhouetteKChart && (
                     <>
-                        {renderDownloadActions(silhouetteKChartRef, "grafik-k-optimal-silhouette")}
+                        {renderDownloadActions(silhouetteKChartRef, "optimal-k-chart-silhouette")}
                         <div ref={silhouetteKChartRef}>
                             <SilhouetteKChart
                                 data={silhouetteKChartData}
@@ -668,7 +668,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
 
                 {showOnlyElbowChart && (
                     <>
-                        {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
+                        {renderDownloadActions(optimalKChartRef, "optimal-k-chart-elbow")}
                         <div ref={optimalKChartRef}>
                             <ElbowChart
                                 data={output.elbowData ?? []}
@@ -683,7 +683,7 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
 
                 {showElbowChartWithSilhouetteAnnotation && (
                     <>
-                        {renderDownloadActions(optimalKChartRef, "grafik-k-optimal-elbow")}
+                        {renderDownloadActions(optimalKChartRef, "optimal-k-chart-elbow")}
                         <div ref={optimalKChartRef}>
                             <ElbowChart
                                 data={output.elbowData ?? []}
@@ -811,12 +811,12 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Grafik Konvergensi Algoritma" statistic: dual-axis total-cost/improvement
-    // line chart. Independent of the "Konvergensi Algoritma" table (see the Results tab).
+    // Standalone "Algorithm Convergence Chart" statistic: dual-axis total-cost/improvement
+    // line chart. Independent of the "Algorithm Convergence" table (see the Results tab).
     if (output.viewMode === "convergenceChartOnly") {
         return (
             <div>
-                {renderDownloadActions(convergenceChartRef, "grafik-konvergensi-algoritma")}
+                {renderDownloadActions(convergenceChartRef, "algorithm-convergence-chart")}
                 <div ref={convergenceChartRef}>
                     <ConvergenceChart
                         data={output.iterationHistory ?? []}
@@ -829,13 +829,13 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Tabel Matriks Jarak (Semua Objek)" statistic: just the full pairwise
+    // Standalone "Distance Matrix Table (All Objects)" statistic: just the full pairwise
     // distance matrix table, sorted by cluster, with its Excel/CSV download buttons.
     if (output.viewMode === "distanceMatrixTableOnly") {
         if (!output.distanceMatrix) {
             return (
                 <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                    Data matriks jarak belum tersedia pada output ini.
+                    Distance matrix data is not available in this output.
                 </div>
             );
         }

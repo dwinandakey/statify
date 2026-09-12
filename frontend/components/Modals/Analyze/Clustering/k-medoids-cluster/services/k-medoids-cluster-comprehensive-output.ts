@@ -954,7 +954,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 // Total Cost is always shown in output.
                 showTotalCost: true,
                 showSilhouettePerObject: config?.evaluation?.ShowSilhouettePlot ?? false,
-                // "Grafik K Optimal" and its companion table both live in the Evaluation tab.
+                // "Optimal K Chart" and its companion table both live in the Evaluation tab.
                 // Falls back to the pre-reorg Options field so saved configs keep working.
                 showOptimalKChart:
                     config?.evaluation?.ShowOptimalKChart ??
@@ -1031,9 +1031,9 @@ export async function generateComprehensiveKMedoidsOutput(
                 { rowHeader: [], Setting: "Method", Value: `${method} Method` },
                 { rowHeader: [], Setting: "Distance Measure", Value: config.main.DistanceMetric || "Euclidean" },
                 { rowHeader: [], Setting: "Normalization Method", Value: normalizationLabel },
-                { rowHeader: [], Setting: "Data awal", Value: caseSummary.initialN.toString() },
-                { rowHeader: [], Setting: "Setelah preprocessing", Value: caseSummary.preprocessedN.toString() },
-                { rowHeader: [], Setting: "Missing rows dibuang", Value: caseSummary.missingRowsRemoved.toString() },
+                { rowHeader: [], Setting: "Initial data", Value: caseSummary.initialN.toString() },
+                { rowHeader: [], Setting: "After preprocessing", Value: caseSummary.preprocessedN.toString() },
+                { rowHeader: [], Setting: "Missing rows removed", Value: caseSummary.missingRowsRemoved.toString() },
                 { rowHeader: [], Setting: "Missing Variables", Value: caseSummary.missingVariablesText },
             ],
         });
@@ -1200,12 +1200,12 @@ export async function generateComprehensiveKMedoidsOutput(
                         ...(allMedoidZScoresNearZero && normalizationMethod === "zscore"
                 ? {
                       footer:
-                          "Semua nilai Z-score medoid ~0. Ini biasanya terjadi ketika variabel yang dipakai memiliki variansi sangat kecil/konstan pada data valid setelah preprocessing.",
+                          "All medoid Z-scores are ~0. This usually happens when the variables used have very small or constant variance on the valid data after preprocessing.",
                   }
                 : {}),
         });
 
-        // Convergence Algorithm table (Konvergensi Algoritma) — same shape as the table
+        // Convergence Algorithm table — same shape as the table
         // rendered by ConvergenceAlgorithmPanel in the Convergence tab. Not applicable to
         // CLARA, which shows a Sampling History table instead.
         if (normalizedMethod !== "CLARA" && iterationHistory.length > 0) {
@@ -1230,29 +1230,29 @@ export async function generateComprehensiveKMedoidsOutput(
 
             allTables.push({
                 key: "convergence_algorithm",
-                title: `Konvergensi Algoritma (${numIterations} Iterasi)`,
+                title: `Algorithm Convergence (${numIterations} Iterations)`,
                 columnHeaders: [
-                    { header: "Iterasi" },
-                    { header: "Medoid Aktif" },
+                    { header: "Iteration" },
+                    { header: "Active Medoids" },
                     { header: "Total Cost" },
                     { header: "Status" },
                 ],
                 rows: [
                     {
                         rowHeader: ["Init"],
-                        "Medoid Aktif": `${medoidStr(initEntry.medoids)} (BUILD)`,
+                        "Active Medoids": `${medoidStr(initEntry.medoids)} (BUILD)`,
                         "Total Cost": fmtConvergenceCost(initEntry.totalCost),
-                        Status: numIterations === 0 && result.converged ? "Konvergen" : "Inisialisasi",
+                        Status: numIterations === 0 && result.converged ? "Converged" : "Initialization",
                     },
                     ...iterEntries.map((row, i) => {
                         const isLast = i === iterEntries.length - 1;
-                        const isKonvergen = isLast && result.converged;
-                        const isBerubah = row.improvement > 0.0001;
+                        const isConverged = isLast && result.converged;
+                        const isChanged = row.improvement > 0.0001;
                         return {
                             rowHeader: [String(i + 1)],
-                            "Medoid Aktif": medoidStr(row.medoids),
+                            "Active Medoids": medoidStr(row.medoids),
                             "Total Cost": fmtConvergenceCost(row.totalCost),
-                            Status: isKonvergen ? "Konvergen" : isBerubah ? "Berubah" : "Stabil",
+                            Status: isConverged ? "Converged" : isChanged ? "Changed" : "Stable",
                         };
                     }),
                 ],
@@ -1422,7 +1422,7 @@ export async function generateComprehensiveKMedoidsOutput(
             console.log("✅ Distance Matrix Between Medoids saved:", statId1m);
         }
 
-        // Save Tabel Matriks Jarak (Semua Objek) as separate statistic (own titled section, like
+        // Save Distance Matrix Table (All Objects) as separate statistic (own titled section, like
         // Case Processing Summary). Uses the same customRenderer hook so the section renders the
         // actual full pairwise distance matrix table (paginated, sorted by cluster) with its
         // Excel/CSV download buttons, instead of a flat data table. Only saved when the matrix
@@ -1436,38 +1436,38 @@ export async function generateComprehensiveKMedoidsOutput(
                 viewMode: "distanceMatrixTableOnly",
             };
             const statId1n = await addStatistic(analyticId, {
-                title: `Tabel Matriks Jarak (Semua Objek)`,
-                description: `Tabel Matriks Jarak (Semua Objek)`,
+                title: `Distance Matrix Table (All Objects)`,
+                description: `Distance Matrix Table (All Objects)`,
                 output_data: JSON.stringify({
                     customRenderer: "KMedoidsOutputRenderer",
                     data: distanceMatrixTableOutput,
                 }),
-                components: `K-Medoids Tabel Matriks Jarak`,
+                components: `K-Medoids Distance Matrix Table`,
             });
-            console.log("✅ Tabel Matriks Jarak (Semua Objek) saved:", statId1n);
+            console.log("✅ Distance Matrix Table (All Objects) saved:", statId1n);
         }
 
-        // Save Konvergensi Algoritma (table) as separate statistic (own titled section, like Case
-        // Processing Summary). Gated by the "Konvergensi Algoritma" checkbox in the Results tab.
+        // Save Algorithm Convergence (table) as separate statistic (own titled section, like Case
+        // Processing Summary). Gated by the "Algorithm Convergence" checkbox in the Results tab.
         // Plain table only — the cost-per-iteration chart is a separate, independently-toggled
-        // section below (see "Grafik Konvergensi Algoritma"), controlled by its own checkbox in
+        // section below (see "Algorithm Convergence Chart"), controlled by its own checkbox in
         // the Options/Visualization tab so users can opt into the table without the chart or vice versa.
         const convergenceAlgorithmTable = allTables.find(t => t.key === "convergence_algorithm");
         if (convergenceAlgorithmTable && (comprehensiveOutput.visualizationOptions?.showConvergenceAlgorithm ?? true)) {
             const statId1e = await addStatistic(analyticId, {
-                title: `Konvergensi Algoritma`,
-                description: `Konvergensi Algoritma`,
+                title: `Algorithm Convergence`,
+                description: `Algorithm Convergence`,
                 output_data: JSON.stringify({ tables: [convergenceAlgorithmTable] }),
                 // Distinct components value (not the shared registry key) so ResultOutput
                 // falls back to the generic DataTableRenderer path, matching the standard
                 // table template (title + Copy/SVG buttons) — same approach as above.
-                components: `K-Medoids Konvergensi Algoritma`,
+                components: `K-Medoids Algorithm Convergence`,
             });
-            console.log("✅ Konvergensi Algoritma saved:", statId1e);
+            console.log("✅ Algorithm Convergence saved:", statId1e);
         }
 
-        // Save Grafik Konvergensi Algoritma as a separate, independently-toggled statistic.
-        // Gated by the "Grafik Konvergensi Algoritma" checkbox in the Options/Visualization tab
+        // Save Algorithm Convergence Chart as a separate, independently-toggled statistic.
+        // Gated by the "Algorithm Convergence Chart" checkbox in the Options/Visualization tab
         // (not the Results-tab table checkbox above) so the chart can be shown/hidden on its own.
         // Uses the same customRenderer hook so the section renders the actual ConvergenceChart
         // (dual-axis: total cost + improvement per iteration) instead of a flat data table.
@@ -1483,20 +1483,20 @@ export async function generateComprehensiveKMedoidsOutput(
                 viewMode: "convergenceChartOnly",
             };
             const statId1eChart = await addStatistic(analyticId, {
-                title: `Grafik Konvergensi Algoritma`,
-                description: `Grafik Konvergensi Algoritma`,
+                title: `Algorithm Convergence Chart`,
+                description: `Algorithm Convergence Chart`,
                 output_data: JSON.stringify({
                     customRenderer: "KMedoidsOutputRenderer",
                     data: convergenceChartOutput,
                 }),
-                components: `K-Medoids Grafik Konvergensi Algoritma`,
+                components: `K-Medoids Algorithm Convergence Chart`,
             });
-            console.log("✅ Grafik Konvergensi Algoritma saved:", statId1eChart);
+            console.log("✅ Algorithm Convergence Chart saved:", statId1eChart);
         }
 
-        // Save Histori Sampling (CLARA) as separate statistic (own titled section, like Case
-        // Processing Summary). Only applicable to the CLARA method, and gated by the "Histori
-        // Sampling (CLARA)" checkbox in the Results tab.
+        // Save Sampling History (CLARA) as separate statistic (own titled section, like Case
+        // Processing Summary). Only applicable to the CLARA method, and gated by the
+        // "Sampling History (CLARA)" checkbox in the Results tab.
         if (
             normalizedMethod === "CLARA" &&
             claraSamplingCosts &&
@@ -1505,13 +1505,13 @@ export async function generateComprehensiveKMedoidsOutput(
         ) {
             const samplingHistoryTable: Table = {
                 key: "sampling_history",
-                title: "Histori Sampling (CLARA)",
+                title: "Sampling History (CLARA)",
                 columnHeaders: [
                     { header: "Sample" },
                     { header: "Sample Size", key: "SampleSize" },
                     { header: "PAM Iterations", key: "PamIterations" },
                     { header: "Cost", key: "Cost" },
-                    { header: "Terbaik", key: "Best" },
+                    { header: "Best", key: "Best" },
                 ],
                 rows: claraSamplingCosts.map((cost, idx) => {
                     const sampleIndex = idx + 1;
@@ -1528,12 +1528,12 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
             };
             const statId1sh = await addStatistic(analyticId, {
-                title: `Histori Sampling (CLARA)`,
-                description: `Histori Sampling (CLARA)`,
+                title: `Sampling History (CLARA)`,
+                description: `Sampling History (CLARA)`,
                 output_data: JSON.stringify({ tables: [samplingHistoryTable] }),
-                components: `K-Medoids Histori Sampling`,
+                components: `K-Medoids Sampling History`,
             });
-            console.log("✅ Histori Sampling (CLARA) saved:", statId1sh);
+            console.log("✅ Sampling History (CLARA) saved:", statId1sh);
         }
 
         // Save Silhouette Score as separate statistic (own titled section, like Case Processing
@@ -1578,18 +1578,18 @@ export async function generateComprehensiveKMedoidsOutput(
                 })),
             };
             const statId1fTable = await addStatistic(analyticId, {
-                title: `Silhouette Score (Tabel)`,
-                description: `Tabel ringkasan nilai silhouette per klaster, digunakan untuk pencetakan PDF.`,
+                title: `Silhouette Score (Table)`,
+                description: `Summary table of silhouette values per cluster, used for PDF printing.`,
                 output_data: JSON.stringify({ tables: [silhouettePrintTable] }),
                 components: `K-Medoids Silhouette Score Table`,
             });
             console.log("✅ Silhouette Score (print table) saved:", statId1fTable);
         }
 
-        // Save Grafik K Optimal as separate statistic (own titled section, like Case Processing
+        // Save Optimal K Chart as separate statistic (own titled section, like Case Processing
         // Summary). Uses the same customRenderer hook so the section renders the actual optimal-K
         // chart (silhouette curve, elbow curve, or elbow with silhouette annotation) instead of a
-        // flat data table. Gated by the "Grafik K Optimal" checkbox in the Options tab
+        // flat data table. Gated by the "Optimal K Chart" checkbox in the Options tab
         // (Visualization); the data table below has its own checkbox in the Evaluation tab.
         const hasOptimalKData =
             Boolean(comprehensiveOutput.elbowData && comprehensiveOutput.elbowData.length > 0) ||
@@ -1604,25 +1604,25 @@ export async function generateComprehensiveKMedoidsOutput(
                 viewMode: "optimalKChartOnly",
             };
             const statId1h = await addStatistic(analyticId, {
-                title: `Grafik K Optimal`,
-                description: `Grafik K Optimal`,
+                title: `Optimal K Chart`,
+                description: `Optimal K Chart`,
                 output_data: JSON.stringify({
                     customRenderer: "KMedoidsOutputRenderer",
                     data: optimalKChartOutput,
                 }),
-                components: `K-Medoids Grafik K Optimal`,
+                components: `K-Medoids Optimal K Chart`,
             });
-            console.log("✅ Grafik K Optimal saved:", statId1h);
+            console.log("✅ Optimal K Chart saved:", statId1h);
         }
 
-        // Save Tabel K Optimal as its own statistic — gated by the "Tabel K Optimal" checkbox
+        // Save Optimal K Table as its own statistic — gated by the "Optimal K Table" checkbox
         // in the Evaluation tab, independent of the chart above.
         const shouldShowOptimalKTable =
             comprehensiveOutput.visualizationOptions?.showOptimalKTable ?? false;
         if (shouldShowOptimalKTable && elbowData && elbowData.length > 0) {
             const optimalKPrintTable: Table = {
                 key: "optimal_k_print",
-                title: "Tabel K Optimal",
+                title: "Optimal K Table",
                 columnHeaders: [
                     { header: "K" },
                     { header: "Total Cost", key: "TotalCost" },
@@ -1635,12 +1635,12 @@ export async function generateComprehensiveKMedoidsOutput(
                 })),
             };
             const statId1hTable = await addStatistic(analyticId, {
-                title: `Tabel K Optimal`,
-                description: `Tabel data K optimal (cost & silhouette untuk tiap kandidat k).`,
+                title: `Optimal K Table`,
+                description: `Optimal K data table (cost & silhouette for each candidate k).`,
                 output_data: JSON.stringify({ tables: [optimalKPrintTable] }),
-                components: `K-Medoids Tabel K Optimal`,
+                components: `K-Medoids Optimal K Table`,
             });
-            console.log("✅ Tabel K Optimal saved:", statId1hTable);
+            console.log("✅ Optimal K Table saved:", statId1hTable);
         }
 
         // Save PCA Projection as separate statistic (own titled section, like Case Processing
