@@ -234,6 +234,11 @@ pub struct EigenDescription {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CanonicalFunctions {
+    /// Variables in the model, in analysis order. The coefficient maps below are
+    /// unordered, so this is what fixes the row order of the output tables to match
+    /// SPSS. Defaulted so older serialised results still deserialise.
+    #[serde(default)]
+    pub variables: Vec<String>,
     pub coefficients: HashMap<String, Vec<f64>>,
     #[serde(rename = "standardized_coefficients")]
     pub standardized_coefficients: HashMap<String, Vec<f64>>,
