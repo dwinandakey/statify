@@ -252,6 +252,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
                   )}
                   onClick={(e) => handleSelect(variable, e)}
                   title="Click to select, drag to move"
+                  data-testid={`binary-logistic-variable-item-${variable.name}`}
                 >
                   {getVariableIcon(variable)}
                   <span className="truncate">{getDisplayName(variable)}</span>
@@ -271,6 +272,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
               className="mt-6 shrink-0 h-8 w-8"
               onClick={handleButtonMoveToDependent}
               disabled={!hasSelection || !!selectedDependent}
+              data-testid="binary-logistic-move-to-dependent"
             >
               <ChevronRight size={16} />
             </Button>
@@ -316,6 +318,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
               className="mt-6 shrink-0 h-8 w-8"
               onClick={handleButtonMoveToCovariates}
               disabled={!hasSelection}
+              data-testid="binary-logistic-move-to-covariates"
             >
               <ChevronRight size={16} />
             </Button>
