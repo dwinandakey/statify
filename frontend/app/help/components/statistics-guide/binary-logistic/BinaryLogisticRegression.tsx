@@ -13,17 +13,17 @@ export const BinaryLogisticRegression: React.FC = () => {
     { id: 'overview', label: 'Ringkasan', labelEn: 'Overview', icon: HelpCircle, component: OverviewTab },
     { id: 'variables', label: 'Variabel', labelEn: 'Variables', icon: Table, component: VariablesTab },
     { id: 'categorical', label: 'Kategorikal', labelEn: 'Categorical', icon: BarChart3, component: CategoricalTab },
+    { id: 'save', label: 'Simpan', labelEn: 'Save', icon: Save, component: SaveTab },
     { id: 'options', label: 'Opsi', labelEn: 'Options', icon: SlidersHorizontal, component: OptionsTab },
     { id: 'assumption', label: 'Asumsi', labelEn: 'Assumptions', icon: Shield, component: AssumptionTab },
-    { id: 'save', label: 'Simpan', labelEn: 'Save', icon: Save, component: SaveTab },
   ];
 
   return (
     <StandardizedGuideLayout
       title="Regresi Logistik Biner"
       titleEn="Binary Logistic Regression"
-      description="Memprediksi probabilitas kejadian biner (ya/tidak) menggunakan satu atau lebih variabel prediktor, dengan estimasi Maximum Likelihood, uji asumsi, dan diagnostik model setara SPSS/R."
-      descriptionEn="Predict the probability of a binary event (yes/no) from one or more predictor variables, with Maximum Likelihood estimation, assumption checks, and model diagnostics on par with SPSS/R."
+      description="Memprediksi probabilitas kejadian biner (ya/tidak) menggunakan satu atau lebih variabel prediktor, dengan estimasi Maximum Likelihood, uji asumsi, dan diagnostik model."
+      descriptionEn="Predict the probability of a binary event (yes/no) from one or more predictor variables, with Maximum Likelihood estimation, assumption checks, and model diagnostics."
       tabs={tabs}
       defaultTab="overview"
     />

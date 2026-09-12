@@ -368,3 +368,19 @@ table:not(.data-table-modern table) {
   overscroll-behavior: contain;
   pointer-events: auto !important;
 }
+
+/* ============================================================
+   TEMPORARY - thesis "rancangan" mockup styling for the Binary
+   Logistic Regression dialog only. Local-only, not for commit.
+   Delete this whole block to restore the normal look.
+   ============================================================ */
+#binary-logistic-draft-mockup {
+  --radius: 0px;
+  filter: grayscale(1) contrast(0.9) brightness(1.04);
+}
+#binary-logistic-draft-mockup [class*="shadow"] {
+  box-shadow: none !important;
+}
+#binary-logistic-draft-mockup [class*="rounded"] {
+  border-radius: 1px !important;
+}
