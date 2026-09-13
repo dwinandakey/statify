@@ -11,6 +11,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Shapes, SlidersHorizontal } from "lucide-react";
 import type { Variable } from "@/types/Variable";
 import type {
   BinaryLogisticCategoricalParams,
@@ -131,10 +132,11 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
     <div className="grid grid-cols-2 gap-6 py-4 h-full min-h-0">
       {/* Kiri: List Covariates */}
       <div className="flex flex-col h-full min-h-0">
-        <Label className="mb-2 font-semibold">
+        <Label className="mb-2 font-semibold flex items-center gap-1.5">
+          <Shapes className="h-4 w-4 text-primary" />
           Categorical Covariates:
         </Label>
-        <div className="border rounded-md flex-1 bg-background min-h-0 relative">
+        <div id="binary-logistic-categorical-list-box" className="border rounded-md flex-1 bg-background min-h-0 relative shadow-sm">
           <ScrollArea className="h-full p-2 w-full">
             <div className="pr-3">
               {allVariables.map((v) => {
@@ -202,10 +204,15 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
               )}
             </div>
 
-            <div className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
+            <div
+              id="binary-logistic-contrast-method-box"
+              className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
               !selectedVarName ? "opacity-50 pointer-events-none" : ""
             }`}>
-              <Label className="font-semibold">Contrast Method</Label>
+              <Label className="font-semibold flex items-center gap-1.5">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-primary" />
+                Contrast Method
+              </Label>
               <Select
                 value={editContrast}
                 onValueChange={(val) => setEditContrast(val as ContrastMethodType)}
@@ -227,6 +234,7 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
             </div>
 
             <div
+              id="binary-logistic-reference-category-box"
               className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
                 !selectedVarName || isReferenceDisabled
                   ? "opacity-50 pointer-events-none grayscale"

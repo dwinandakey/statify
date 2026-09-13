@@ -1186,7 +1186,7 @@ export const BinaryLogisticMain = () => {
 
   // --- RENDER ---
   return (
-    <div id="binary-logistic-draft-mockup" className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-background">
       {/* Feature Tour elements */}
       <AnimatePresence>
         {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
