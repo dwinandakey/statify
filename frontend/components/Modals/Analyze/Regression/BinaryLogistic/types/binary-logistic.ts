@@ -100,37 +100,37 @@ export function validateOptionsParams(
     !Number.isInteger(params.maxIterations)
   ) {
     errors.push(
-      `Maximum Iterations harus berupa bilangan bulat antara ${r.maxIterations.min} dan ${r.maxIterations.max}.`
+      `Maximum Iterations must be a whole number between ${r.maxIterations.min} and ${r.maxIterations.max}.`
     );
   }
 
   if (!inRange(params.ciLevel, r.ciLevel)) {
     errors.push(
-      `CI for exp(B) harus di antara ${r.ciLevel.min}% dan ${r.ciLevel.max}%.`
+      `CI for exp(B) must be between ${r.ciLevel.min}% and ${r.ciLevel.max}%.`
     );
   }
 
   if (!inRange(params.probEntry, r.probEntry)) {
     errors.push(
-      `Probability for Stepwise (Entry) harus di antara ${r.probEntry.min} dan ${r.probEntry.max}.`
+      `Probability for Stepwise (Entry) must be between ${r.probEntry.min} and ${r.probEntry.max}.`
     );
   }
 
   if (!inRange(params.probRemoval, r.probRemoval)) {
     errors.push(
-      `Probability for Stepwise (Removal) harus di antara ${r.probRemoval.min} dan ${r.probRemoval.max}.`
+      `Probability for Stepwise (Removal) must be between ${r.probRemoval.min} and ${r.probRemoval.max}.`
     );
   }
 
   if (!inRange(params.classificationCutoff, r.classificationCutoff)) {
     errors.push(
-      `Classification Cutoff harus di antara ${r.classificationCutoff.min} dan ${r.classificationCutoff.max}.`
+      `Classification Cutoff must be between ${r.classificationCutoff.min} and ${r.classificationCutoff.max}.`
     );
   }
 
   if (!inRange(params.casewiseOutliers, r.casewiseOutliers)) {
     errors.push(
-      `Outliers outside (std. dev.) harus di antara ${r.casewiseOutliers.min} dan ${r.casewiseOutliers.max}.`
+      `Outliers outside (std. dev.) must be between ${r.casewiseOutliers.min} and ${r.casewiseOutliers.max}.`
     );
   }
 

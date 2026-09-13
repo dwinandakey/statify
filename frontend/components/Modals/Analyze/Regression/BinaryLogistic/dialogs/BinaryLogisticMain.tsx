@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
@@ -101,7 +100,6 @@ export const BinaryLogisticMain = () => {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("variables");
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // --- Help Tour ---
   const tabControl = useMemo<TabControlProps>(
@@ -823,25 +821,24 @@ export const BinaryLogisticMain = () => {
   const handleAnalyze = async () => {
     // 1. Validasi Input
     if (!options.dependent || options.covariates.length === 0) {
-      setErrorMsg(
-        "Mohon pilih satu variabel dependen dan setidaknya satu kovariat."
-      );
+      toast.error("Please select a dependent variable and at least one covariate.");
       return;
     }
 
     if (!data || data.length === 0) {
-      setErrorMsg("Dataset kosong atau tidak tersedia.");
+      toast.error("Dataset is empty or unavailable.");
       return;
     }
 
     const optionsValidationErrors = validateOptionsParams(optParams);
     if (optionsValidationErrors.length > 0) {
-      setErrorMsg(optionsValidationErrors.join(" "));
+      toast.error(
+        "Some values on the Options tab are out of range. Fix the highlighted fields before running the analysis."
+      );
       return;
     }
 
     setIsLoading(true);
-    setErrorMsg(null);
 
     try {
       const worker = new Worker(
@@ -1002,16 +999,16 @@ export const BinaryLogisticMain = () => {
             closeModal("BINARY_LOGISTIC");
           } catch (saveError: any) {
             console.error("[Main] Error inside SUCCESS block:", saveError);
-            setErrorMsg(`Gagal menyimpan hasil: ${  saveError.message}`);
+            toast.error(`Failed to save results: ${saveError.message}`);
             setIsLoading(false);
             worker.terminate();
           }
         } else if (type === "ERROR") {
           console.error("[Main] Worker reported ERROR:", payload);
-          setErrorMsg(
+          toast.error(
             typeof payload === "string"
               ? payload
-              : "Terjadi kesalahan perhitungan."
+              : "An unexpected error occurred during computation."
           );
           setIsLoading(false);
           worker.terminate();
@@ -1021,7 +1018,7 @@ export const BinaryLogisticMain = () => {
       worker.onerror = (event) => {
         event.preventDefault();
         console.error("[Main] Worker System Error:", event);
-        setErrorMsg("Gagal menjalankan modul kalkulasi (WASM Error).");
+        toast.error("Failed to run the calculation module (WASM error).");
         setIsLoading(false);
         worker.terminate();
       };
@@ -1061,15 +1058,15 @@ export const BinaryLogisticMain = () => {
         console.error("[Main] Variable IDs in store:", storeIds);
         console.error("[Main] Looking for dependent ID:", options.dependent?.id);
         throw new Error(
-          `Variabel dependen "${options.dependent?.name}" tidak ditemukan di dataset. ` +
-          `Silakan pilih ulang variabel dari daftar yang tersedia.`
+          `Dependent variable "${options.dependent?.name}" was not found in the dataset. ` +
+          `Please reselect it from the available list.`
         );
       }
 
       if (indepIndices.length === 0) {
         throw new Error(
-          `Tidak ada variabel independen yang ditemukan di dataset. ` +
-          `Covariates yang dipilih: ${options.covariates.map(c => c.name).join(", ")}`
+          `No independent variables were found in the dataset. ` +
+          `Selected covariates: ${options.covariates.map(c => c.name).join(", ")}`
         );
       }
 
@@ -1186,7 +1183,7 @@ export const BinaryLogisticMain = () => {
       });
     } catch (err: any) {
       console.error("Main Thread Error:", err);
-      setErrorMsg(`Gagal memulai analisis: ${  err.message}`);
+      toast.error(`Failed to start analysis: ${err.message}`);
       setIsLoading(false);
     }
   };
@@ -1281,15 +1278,6 @@ export const BinaryLogisticMain = () => {
             </TabsContent>
           </div>
         </Tabs>
-
-        {errorMsg && (
-          <div className="mt-4">
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{errorMsg}</AlertDescription>
-            </Alert>
-          </div>
-        )}
       </div>
 
       <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">
