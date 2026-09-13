@@ -70,21 +70,21 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
             </Label>
           </div>
 
-          <div className="pl-6 pt-1.5 ml-1 border-l-2 border-border">
+          <div className="pl-6 pt-1.5">
             <RadioGroup
               disabled={!params.casewiseListing}
               value={params.casewiseType}
               onValueChange={(val: any) => onChange({ casewiseType: val })}
-              className="space-y-1.5 pl-3"
+              className="space-y-1.5"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center flex-wrap gap-x-1.5 gap-y-1">
                 <RadioGroupItem value="outliers" id="cw_outliers" />
-                <Label htmlFor="cw_outliers" className="text-xs font-normal">
+                <Label htmlFor="cw_outliers" className="text-xs font-normal whitespace-nowrap">
                   Outliers outside
                 </Label>
                 <Input
                   type="number"
-                  className="w-12 h-6 text-xs px-1"
+                  className="w-12 h-6 text-xs px-1 shrink-0"
                   value={params.casewiseOutliers}
                   onChange={(e) =>
                     onChange({ casewiseOutliers: Number(e.target.value) })
@@ -95,7 +95,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
                   }
                   aria-label="Outliers Standard Deviations"
                 />
-                <span className="text-xs text-muted-foreground">std. dev.</span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">std. dev.</span>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all" id="cw_all" />

@@ -11,15 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  Loader2,
-  HelpCircle,
-  Columns3,
-  Shapes,
-  Save,
-  SlidersHorizontal,
-  ShieldCheck,
-} from "lucide-react";
+import { Loader2, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
 // Stores & Hooks
@@ -1218,26 +1210,11 @@ export const BinaryLogisticMain = () => {
           className="w-full h-full flex flex-col"
         >
           <TabsList className="grid w-full grid-cols-5 flex-shrink-0">
-            <TabsTrigger value="variables" id="binary-logistic-variables-tab-trigger" className="gap-1.5">
-              <Columns3 className="h-3.5 w-3.5" />
-              Variables
-            </TabsTrigger>
-            <TabsTrigger value="categorical" id="binary-logistic-categorical-tab-trigger" className="gap-1.5">
-              <Shapes className="h-3.5 w-3.5" />
-              Categorical
-            </TabsTrigger>
-            <TabsTrigger value="save" id="binary-logistic-save-tab-trigger" className="gap-1.5">
-              <Save className="h-3.5 w-3.5" />
-              Save
-            </TabsTrigger>
-            <TabsTrigger value="options" id="binary-logistic-options-tab-trigger" className="gap-1.5">
-              <SlidersHorizontal className="h-3.5 w-3.5" />
-              Options
-            </TabsTrigger>
-            <TabsTrigger value="assumption" id="binary-logistic-assumption-tab-trigger" className="gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              Assumption
-            </TabsTrigger>
+            <TabsTrigger value="variables" id="binary-logistic-variables-tab-trigger">Variables</TabsTrigger>
+            <TabsTrigger value="categorical" id="binary-logistic-categorical-tab-trigger">Categorical</TabsTrigger>
+            <TabsTrigger value="save" id="binary-logistic-save-tab-trigger">Save</TabsTrigger>
+            <TabsTrigger value="options" id="binary-logistic-options-tab-trigger">Options</TabsTrigger>
+            <TabsTrigger value="assumption" id="binary-logistic-assumption-tab-trigger">Assumption</TabsTrigger>
           </TabsList>
 
           <div className="flex-grow min-h-0 overflow-hidden">

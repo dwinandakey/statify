@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Activity, LineChart } from "lucide-react";
 import type { BinaryLogisticSaveParams } from "../types/binary-logistic";
 
@@ -50,9 +50,6 @@ export const SaveTab = ({
             <TrendingUp className="h-4 w-4 text-primary" />
             Predicted Values
           </CardTitle>
-          <CardDescription className="text-xs">
-            Saves model-based predictions as new dataset variables.
-          </CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-1 space-y-1">
           <SaveCheckboxRow
@@ -76,9 +73,6 @@ export const SaveTab = ({
             <Activity className="h-4 w-4 text-primary" />
             Influence
           </CardTitle>
-          <CardDescription className="text-xs">
-            Diagnostics that flag cases with disproportionate effect on the model.
-          </CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-1 space-y-1">
           <SaveCheckboxRow
@@ -111,9 +105,6 @@ export const SaveTab = ({
             <LineChart className="h-4 w-4 text-primary" />
             Residuals
           </CardTitle>
-          <CardDescription className="text-xs">
-            Difference between observed and predicted outcomes, in several scalings.
-          </CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-1 space-y-1">
           <SaveCheckboxRow
