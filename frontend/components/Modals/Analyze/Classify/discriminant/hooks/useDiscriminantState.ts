@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { getSlicedData, getVarDefs } from "@/hooks/useVariable";
-import type { DiscriminantAnalysisType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant-worker";
 import type { DiscriminantType, DiscriminantMainType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant";
 import { DiscriminantDefault } from "@/components/Modals/Analyze/Classify/discriminant/constants/discriminant-default";
 import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";

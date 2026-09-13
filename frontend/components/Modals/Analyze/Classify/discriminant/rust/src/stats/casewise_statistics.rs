@@ -452,7 +452,10 @@ fn calculate_cross_validated_casewise(
                     .unwrap()
                     .1;
 
-                // SPSS menggunakan df = p (jumlah variabel) untuk jarak di observation space!
+                // df = p (jumlah variabel), bukan jumlah fungsi: D² di atas dihitung di
+                // ruang observasi (x - mean)' S_loo^-1 (x - mean), sehingga di bawah asumsi
+                // model berdistribusi chi-square dengan p derajat bebas. Jalur Original
+                // memakai df = jumlah fungsi karena jaraknya dihitung di ruang kanonik.
                 let df_cv = p_vars;
 
                 let p_val_highest = calculate_p_value_from_chi_square(highest_dist, df_cv);
