@@ -58,6 +58,7 @@ import {
   DEFAULT_BINARY_LOGISTIC_SAVE_PARAMS,
   DEFAULT_BINARY_LOGISTIC_OPTIONS_PARAMS,
   DEFAULT_BINARY_LOGISTIC_ASSUMPTION_PARAMS,
+  validateOptionsParams,
 } from "../types/binary-logistic";
 
 /**
@@ -830,6 +831,12 @@ export const BinaryLogisticMain = () => {
 
     if (!data || data.length === 0) {
       setErrorMsg("Dataset kosong atau tidak tersedia.");
+      return;
+    }
+
+    const optionsValidationErrors = validateOptionsParams(optParams);
+    if (optionsValidationErrors.length > 0) {
+      setErrorMsg(optionsValidationErrors.join(" "));
       return;
     }
 
