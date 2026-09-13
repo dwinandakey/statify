@@ -55,6 +55,8 @@ fn build_extraction_result(
 
     let mut result = ExtractionResult {
         loadings,
+        standardized_loadings: None,
+        standard_deviations: None,
         eigenvalues,
         communalities,
         explained_variance,
@@ -174,7 +176,7 @@ pub fn extract_principal_components(
     let has_heywood_case = communalities.iter().any(|&x| x >= 0.999);
     let improper_solution = communalities.iter().any(|&x| x.is_nan());
 
-    Ok(build_extraction_result(
+    let mut result = build_extraction_result(
         loadings,
         eigenvalues, // PCA mem-pass semua eigenvalues untuk scree plot/report
         communalities,
@@ -186,7 +188,22 @@ pub fn extract_principal_components(
         converged,
         false, // singular matrix check bisa ditambahkan di luar jika perlu
         improper_solution,
-    ))
+    );
+
+    let mut standardized_loadings = result.loadings.clone();
+    if config.extraction.covariance {
+        let mut standard_deviations = Vec::with_capacity(n_vars);
+        for i in 0..n_vars {
+            let std_dev = matrix[(i, i)].abs().sqrt().max(1e-12);
+            standard_deviations.push(std_dev);
+            for j in 0..n_factors {
+                standardized_loadings[(i, j)] /= std_dev;
+            }
+        }
+        result.standard_deviations = Some(standard_deviations);
+    }
+    result.standardized_loadings = Some(standardized_loadings);
+    Ok(result)
 }
 
 // --------------------------------------------------------------------------------

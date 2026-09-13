@@ -86,7 +86,7 @@ export const RotationTab: React.FC<RotationTabProps> = ({
                                         <Label htmlFor="Varimax">Varimax</Label>
                                     </div>
 
-                                    <div className="flex items-center space-x-2">
+                                    {/* <div className="flex items-center space-x-2">
                                         <RadioGroupItem value="Oblimin" id="Oblimin" />
                                         <Label htmlFor="Oblimin">Direct Oblimin</Label>
                                     </div>
@@ -100,7 +100,7 @@ export const RotationTab: React.FC<RotationTabProps> = ({
                                             disabled={!data.Oblimin}
                                             onChange={(e) => onChange("Delta", Number(e.target.value))}
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className="flex flex-col gap-2">
@@ -114,7 +114,7 @@ export const RotationTab: React.FC<RotationTabProps> = ({
                                         <Label htmlFor="Equimax">Equimax</Label>
                                     </div>
 
-                                    <div className="flex items-center space-x-2">
+                                    {/* <div className="flex items-center space-x-2">
                                         <RadioGroupItem value="Promax" id="Promax" />
                                         <Label htmlFor="Promax">Promax</Label>
                                     </div>
@@ -128,7 +128,7 @@ export const RotationTab: React.FC<RotationTabProps> = ({
                                             disabled={!data.Promax}
                                             onChange={(e) => onChange("Kappa", Number(e.target.value))}
                                         />
-                                    </div>                                
+                                    </div>                                 */}
                                 </div>
                             </div>
                         </RadioGroup>

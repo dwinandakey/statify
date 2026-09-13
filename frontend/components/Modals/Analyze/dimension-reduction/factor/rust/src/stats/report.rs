@@ -830,10 +830,33 @@ pub fn calculate_component_score_coefficient_matrix(
     let n_cols = extraction_result.loadings.ncols();
     let mut coefficients = DMatrix::zeros(n_rows, n_cols);
 
-    // AMBIL RAW VARIANCES: Mutlak diperlukan untuk Rescaling pada mode Covariance (Dari File Terlampir)
     let raw_variances = calculate_raw_variances(&data_matrix)?;
 
     if is_pca {
+        if config.rotation.oblimin || config.rotation.promax {
+            let r_matrix = calculate_matrix(&data_matrix, "correlation")?;
+            let r_inverse = match r_matrix.clone().try_inverse() {
+                Some(inv) => inv,
+                None => compute_pseudoinverse(&r_matrix)?,
+            };
+            let mut standardized_pattern = rotation_result.rotated_loadings.clone();
+
+            if config.extraction.covariance {
+                for i in 0..n_rows {
+                    let std_dev = raw_variances[i].sqrt().max(1e-12);
+                    for j in 0..n_cols {
+                        standardized_pattern[(i, j)] /= std_dev;
+                    }
+                }
+            }
+
+            let structure_matrix = if let Some(phi) = &rotation_result.factor_correlations {
+                &standardized_pattern * phi
+            } else {
+                standardized_pattern
+            };
+            coefficients = &r_inverse * &structure_matrix;
+        } else {
         // EXACT SPSS ALGORITHM FOR PCA: W = A * D^(-1) * (T^T)^(-1)
         let t_mat = &rotation_result.transformation_matrix;
         
@@ -864,9 +887,9 @@ pub fn calculate_component_score_coefficient_matrix(
                     let ad_ik = if d_k.abs() > 1e-12 { a_ik / d_k } else { 0.0 };
                     sum += ad_ik * t_inv_t[(k, j)];
                 }
-                // Kalikan dengan std_dev mereplikasi "standardized score coefficients"
                 coefficients[(i, j)] = sum * std_dev;
             }
+        }
         }
     } else {
         // REGRESSION METHOD FOR NON-PCA (PAF, ML, GLS)
