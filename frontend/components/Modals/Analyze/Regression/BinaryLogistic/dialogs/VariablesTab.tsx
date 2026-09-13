@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronRight, Ruler, Shapes, BarChartHorizontal } from "lucide-react";
+import { ChevronRight, Ruler, Shapes, BarChartHorizontal, ListTree, Target, Layers } from "lucide-react";
 import type { Variable } from "@/types/Variable";
 import type { BinaryLogisticOptions } from "../types/binary-logistic";
 import { cn } from "@/lib/utils";
@@ -234,8 +234,11 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
       <div className="grid grid-cols-2 gap-6 py-4 flex-grow min-h-0">
         {/* KOLOM KIRI: Available Variables */}
         <div className="col-span-1 flex flex-col h-full min-h-0">
-          <label className="font-semibold block mb-2 text-sm">Variables:</label>
-          <div className="border border-border rounded-md flex-1 bg-background overflow-hidden">
+          <label className="font-semibold mb-2 text-sm flex items-center gap-1.5">
+            <ListTree className="h-4 w-4 text-primary" />
+            Variables:
+          </label>
+          <div id="binary-logistic-available-variables-box" className="border border-border rounded-md flex-1 bg-background overflow-hidden shadow-sm">
             <ScrollArea className="h-full p-2 pr-3">
               {availableVariables.map((variable) => (
                 <div
@@ -277,12 +280,14 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
               <ChevronRight size={16} />
             </Button>
             <div className="flex-1">
-              <label className="font-semibold block mb-2 text-sm">
+              <label className="font-semibold mb-2 text-sm flex items-center gap-1.5">
+                <Target className="h-4 w-4 text-primary" />
                 Dependent:
               </label>
               <div
+                id="binary-logistic-dependent-box"
                 className={cn(
-                  "border border-border rounded-md min-h-[40px] p-2 bg-background transition-colors",
+                  "border border-border rounded-md min-h-[40px] p-2 bg-background transition-colors shadow-sm",
                   dragOverTarget === "dependent" &&
                     "border-primary bg-primary/5 ring-1 ring-primary/30"
                 )}
@@ -324,13 +329,15 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
             </Button>
 
             <div className="flex-1">
-              <label className="font-semibold block mb-2 text-sm">
+              <label className="font-semibold mb-2 text-sm flex items-center gap-1.5">
+                <Layers className="h-4 w-4 text-primary" />
                 Covariates:
               </label>
 
               <div
+                id="binary-logistic-covariates-box"
                 className={cn(
-                  "border border-border rounded-md bg-background min-h-[200px] h-auto p-2 transition-colors",
+                  "border border-border rounded-md bg-background min-h-[200px] h-auto p-2 transition-colors shadow-sm",
                   dragOverTarget === "covariates" &&
                     "border-primary bg-primary/5 ring-1 ring-primary/30"
                 )}

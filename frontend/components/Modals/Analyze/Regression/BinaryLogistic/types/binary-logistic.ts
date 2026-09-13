@@ -67,6 +67,76 @@ export const DEFAULT_BINARY_LOGISTIC_OPTIONS_PARAMS: BinaryLogisticOptionsParams
     includeConstant: true,
   };
 
+/**
+ * Valid input ranges for the Options tab's numeric fields. These mirror what
+ * the Rust worker can actually accept - e.g. max_iterations is a Rust
+ * `usize`, so a negative value fails JSON deserialization outright rather
+ * than producing a normal validation error.
+ */
+export const OPTIONS_PARAM_RANGES = {
+  casewiseOutliers: { min: 0.1, max: 100 },
+  ciLevel: { min: 1, max: 99.99 },
+  probEntry: { min: 0.001, max: 0.999 },
+  probRemoval: { min: 0.001, max: 0.999 },
+  classificationCutoff: { min: 0.01, max: 0.99 },
+  maxIterations: { min: 1, max: 1000 },
+} as const;
+
+/**
+ * Validates the Options tab's numeric fields against OPTIONS_PARAM_RANGES.
+ * Returns a list of human-readable error messages (empty if all valid).
+ */
+export function validateOptionsParams(
+  params: BinaryLogisticOptionsParams
+): string[] {
+  const errors: string[] = [];
+  const r = OPTIONS_PARAM_RANGES;
+
+  const inRange = (value: number, range: { min: number; max: number }) =>
+    !Number.isNaN(value) && value >= range.min && value <= range.max;
+
+  if (
+    !inRange(params.maxIterations, r.maxIterations) ||
+    !Number.isInteger(params.maxIterations)
+  ) {
+    errors.push(
+      `Maximum Iterations must be a whole number between ${r.maxIterations.min} and ${r.maxIterations.max}.`
+    );
+  }
+
+  if (!inRange(params.ciLevel, r.ciLevel)) {
+    errors.push(
+      `CI for exp(B) must be between ${r.ciLevel.min}% and ${r.ciLevel.max}%.`
+    );
+  }
+
+  if (!inRange(params.probEntry, r.probEntry)) {
+    errors.push(
+      `Probability for Stepwise (Entry) must be between ${r.probEntry.min} and ${r.probEntry.max}.`
+    );
+  }
+
+  if (!inRange(params.probRemoval, r.probRemoval)) {
+    errors.push(
+      `Probability for Stepwise (Removal) must be between ${r.probRemoval.min} and ${r.probRemoval.max}.`
+    );
+  }
+
+  if (!inRange(params.classificationCutoff, r.classificationCutoff)) {
+    errors.push(
+      `Classification Cutoff must be between ${r.classificationCutoff.min} and ${r.classificationCutoff.max}.`
+    );
+  }
+
+  if (!inRange(params.casewiseOutliers, r.casewiseOutliers)) {
+    errors.push(
+      `Outliers outside (std. dev.) must be between ${r.casewiseOutliers.min} and ${r.casewiseOutliers.max}.`
+    );
+  }
+
+  return errors;
+}
+
 export type ContrastMethodType =
   | "Indicator"
   | "Simple"
