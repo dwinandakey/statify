@@ -93,12 +93,18 @@ fn calculate_f_to_enter_wilks(
     new_variables.push(variable.to_string());
     let new_wilks = calculate_overall_wilks_lambda(dataset, &new_variables);
 
-    let df1 = dataset.num_groups - 1;
-    let df2 = dataset.total_cases - (current_variables.len() + 1) - dataset.num_groups;
+    // Partial F for adding one variable to a model with q variables:
+    // F = ((Λ_q - Λ_{q+1}) / Λ_{q+1}) × (n - g - q) / (g - 1), df = (g - 1, n - g - q),
+    // where q = current_variables.len() (candidate excluded). At q = 0 this is the
+    // univariate F (df2 = n - g). Computed in f64 so a small n cannot underflow usize.
+    let df1 = dataset.num_groups as f64 - 1.0;
+    let df2 = dataset.total_cases as f64
+        - dataset.num_groups as f64
+        - current_variables.len() as f64;
 
     // [PERBAIKAN KRUSIAL]: Pembagi harus new_wilks!
-    let f_value = if df2 > 0 && new_wilks < current_wilks && new_wilks > 0.0 {
-        (((current_wilks - new_wilks) / new_wilks) * (df2 as f64)) / (df1 as f64)
+    let f_value = if df1 > 0.0 && df2 > 0.0 && new_wilks < current_wilks && new_wilks > 0.0 {
+        (((current_wilks - new_wilks) / new_wilks) * df2) / df1
     } else {
         0.0
     };
@@ -139,12 +145,17 @@ fn calculate_f_to_remove_wilks(
     // F-to-remove formula: F = ((Λ_R - Λ_C) / Λ_C) × (df2 / df1)
     // where Λ_R = Wilks' lambda of reduced model (var removed)
     //       Λ_C = Wilks' lambda of current model (var included)
-    // df1 = g - 1, df2 = n - p - g (same as F-to-enter for symmetry)
-    let df1 = dataset.num_groups - 1;
-    let df2 = dataset.total_cases - current_variables.len() - dataset.num_groups + 1;
+    // df1 = g - 1, df2 = n - g - p + 1 with p = current_variables.len() (variable included).
+    // Removing from a p-variable model is entering into a (p - 1)-variable model, so this
+    // equals the F-to-enter df2 = n - g - q with q = p - 1.
+    let df1 = dataset.num_groups as f64 - 1.0;
+    let df2 = dataset.total_cases as f64
+        - dataset.num_groups as f64
+        - current_variables.len() as f64
+        + 1.0;
 
-    let f_value = if df2 > 0 && reduced_wilks > current_wilks && current_wilks > 0.0 {
-        (((reduced_wilks - current_wilks) / current_wilks) * (df2 as f64)) / (df1 as f64)
+    let f_value = if df1 > 0.0 && df2 > 0.0 && reduced_wilks > current_wilks && current_wilks > 0.0 {
+        (((reduced_wilks - current_wilks) / current_wilks) * df2) / df1
     } else {
         0.0
     };
