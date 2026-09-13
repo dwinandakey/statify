@@ -128,7 +128,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
               </div>
               <FieldError
                 show={casewiseOutliersInvalid && params.casewiseListing && params.casewiseType === "outliers"}
-                message={`Harus di antara ${r.casewiseOutliers.min} dan ${r.casewiseOutliers.max}.`}
+                message={`Must be between ${r.casewiseOutliers.min} and ${r.casewiseOutliers.max}.`}
               />
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all" id="cw_all" />
@@ -190,7 +190,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
           </div>
           <FieldError
             show={ciLevelInvalid && params.ciForExpB}
-            message={`Harus di antara ${r.ciLevel.min}% dan ${r.ciLevel.max}%.`}
+            message={`Must be between ${r.ciLevel.min}% and ${r.ciLevel.max}%.`}
           />
         </div>
       </SectionCard>
@@ -241,7 +241,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
             aria-invalid={probEntryInvalid}
           />
           <div className="col-span-2 -mt-1.5">
-            <FieldError show={probEntryInvalid} message={`Entry harus di antara ${r.probEntry.min} dan ${r.probEntry.max}.`} />
+            <FieldError show={probEntryInvalid} message={`Entry must be between ${r.probEntry.min} and ${r.probEntry.max}.`} />
           </div>
           <Label htmlFor="prob_rem" className="font-normal text-sm">
             Removal:
@@ -260,7 +260,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
             aria-invalid={probRemovalInvalid}
           />
           <div className="col-span-2 -mt-1.5">
-            <FieldError show={probRemovalInvalid} message={`Removal harus di antara ${r.probRemoval.min} dan ${r.probRemoval.max}.`} />
+            <FieldError show={probRemovalInvalid} message={`Removal must be between ${r.probRemoval.min} and ${r.probRemoval.max}.`} />
           </div>
         </div>
       </SectionCard>
@@ -290,7 +290,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
               aria-invalid={cutoffInvalid}
             />
           </div>
-          <FieldError show={cutoffInvalid} message={`Harus di antara ${r.classificationCutoff.min} dan ${r.classificationCutoff.max}.`} />
+          <FieldError show={cutoffInvalid} message={`Must be between ${r.classificationCutoff.min} and ${r.classificationCutoff.max}.`} />
         </div>
       </SectionCard>
 
@@ -319,7 +319,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
               aria-invalid={maxIterInvalid}
             />
           </div>
-          <FieldError show={maxIterInvalid} message={`Harus bilangan bulat antara ${r.maxIterations.min} dan ${r.maxIterations.max}.`} />
+          <FieldError show={maxIterInvalid} message={`Must be a whole number between ${r.maxIterations.min} and ${r.maxIterations.max}.`} />
         </div>
       </SectionCard>
 
