@@ -238,7 +238,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
             <ListTree className="h-4 w-4 text-primary" />
             Variables:
           </label>
-          <div className="border border-border rounded-md flex-1 bg-background overflow-hidden shadow-sm">
+          <div id="binary-logistic-available-variables-box" className="border border-border rounded-md flex-1 bg-background overflow-hidden shadow-sm">
             <ScrollArea className="h-full p-2 pr-3">
               {availableVariables.map((variable) => (
                 <div
@@ -285,6 +285,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
                 Dependent:
               </label>
               <div
+                id="binary-logistic-dependent-box"
                 className={cn(
                   "border border-border rounded-md min-h-[40px] p-2 bg-background transition-colors shadow-sm",
                   dragOverTarget === "dependent" &&
@@ -334,6 +335,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
               </label>
 
               <div
+                id="binary-logistic-covariates-box"
                 className={cn(
                   "border border-border rounded-md bg-background min-h-[200px] h-auto p-2 transition-colors shadow-sm",
                   dragOverTarget === "covariates" &&

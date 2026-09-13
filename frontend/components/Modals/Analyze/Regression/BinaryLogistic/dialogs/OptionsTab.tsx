@@ -13,11 +13,12 @@ interface OptionsTabProps {
 }
 
 const SectionCard: React.FC<{
+  id?: string;
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
-}> = ({ icon, title, children }) => (
-  <Card className="shadow-sm">
+}> = ({ id, icon, title, children }) => (
+  <Card id={id} className="shadow-sm">
     <CardHeader className="p-4 pb-2">
       <CardTitle className="flex items-center gap-2 text-sm">
         {icon}
@@ -33,6 +34,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
     {/* KOLOM KIRI: Statistics and Plots */}
     <div className="space-y-5">
       <SectionCard
+        id="binary-logistic-options-stats-card"
         icon={<BarChart3 className="h-4 w-4 text-primary" />}
         title="Statistics and Plots"
       >
@@ -153,7 +155,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
 
     {/* KOLOM KANAN */}
     <div className="space-y-5">
-      <SectionCard icon={<LayoutList className="h-4 w-4 text-primary" />} title="Display">
+      <SectionCard id="binary-logistic-options-display-card" icon={<LayoutList className="h-4 w-4 text-primary" />} title="Display">
         <RadioGroup
           value={params.displayAtEachStep ? "each" : "last"}
           onValueChange={(val) =>
@@ -176,6 +178,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
       </SectionCard>
 
       <SectionCard
+        id="binary-logistic-options-stepwise-card"
         icon={<GitCompareArrows className="h-4 w-4 text-primary" />}
         title="Probability for Stepwise"
       >
@@ -208,6 +211,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
       </SectionCard>
 
       <SectionCard
+        id="binary-logistic-options-cutoff-card"
         icon={<Target className="h-4 w-4 text-primary" />}
         title="Classification Cutoff"
       >
@@ -230,6 +234,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
       </SectionCard>
 
       <SectionCard
+        id="binary-logistic-options-maxiter-card"
         icon={<Repeat className="h-4 w-4 text-primary" />}
         title="Maximum Iterations"
       >
@@ -251,7 +256,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
         </div>
       </SectionCard>
 
-      <SectionCard icon={<Sigma className="h-4 w-4 text-primary" />} title="Model">
+      <SectionCard id="binary-logistic-options-model-card" icon={<Sigma className="h-4 w-4 text-primary" />} title="Model">
         <div className="flex items-center space-x-2">
           <Checkbox
             id="constant"

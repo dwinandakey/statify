@@ -44,7 +44,7 @@ export const SaveTab = ({
   <div className="grid grid-cols-2 gap-5 py-4 h-full overflow-y-auto pr-1">
     {/* KOLOM KIRI */}
     <div className="space-y-5">
-      <Card className="shadow-sm">
+      <Card id="binary-logistic-save-predicted-card" className="shadow-sm">
         <CardHeader className="p-4 pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
             <TrendingUp className="h-4 w-4 text-primary" />
@@ -67,7 +67,7 @@ export const SaveTab = ({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm">
+      <Card id="binary-logistic-save-influence-card" className="shadow-sm">
         <CardHeader className="p-4 pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
             <Activity className="h-4 w-4 text-primary" />
@@ -99,7 +99,7 @@ export const SaveTab = ({
 
     {/* KOLOM KANAN */}
     <div className="space-y-5">
-      <Card className="shadow-sm">
+      <Card id="binary-logistic-save-residuals-card" className="shadow-sm">
         <CardHeader className="p-4 pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
             <LineChart className="h-4 w-4 text-primary" />

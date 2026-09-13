@@ -90,7 +90,7 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
           <ListChecks className="h-4 w-4 text-primary" />
           Selected Variables
         </Label>
-        <Card className="border rounded-md shadow-sm">
+        <Card id="binary-logistic-assumption-summary-card" className="border rounded-md shadow-sm">
           <CardContent className="p-4">
             <div className="space-y-2">
               {/* Dependent Variable */}
@@ -148,7 +148,7 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
         <Card className="border rounded-md shadow-sm">
           <CardContent className="p-4 space-y-6">
             {/* 1. Multicollinearity (VIF) */}
-            <div className="space-y-3">
+            <div id="binary-logistic-assumption-vif-section" className="space-y-3">
               <div className="flex justify-between items-center">
                 <div>
                   <Label className="font-semibold text-base flex items-center gap-1.5">
@@ -205,7 +205,7 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
             <Separator />
 
             {/* 2. Linearity of Logit (Box-Tidwell) */}
-            <div className="space-y-3">
+            <div id="binary-logistic-assumption-boxtidwell-section" className="space-y-3">
               <div className="flex justify-between items-center">
                 <div>
                   <Label className="font-semibold text-base flex items-center gap-1.5">

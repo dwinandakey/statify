@@ -136,7 +136,7 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
           <Shapes className="h-4 w-4 text-primary" />
           Categorical Covariates:
         </Label>
-        <div className="border rounded-md flex-1 bg-background min-h-0 relative shadow-sm">
+        <div id="binary-logistic-categorical-list-box" className="border rounded-md flex-1 bg-background min-h-0 relative shadow-sm">
           <ScrollArea className="h-full p-2 w-full">
             <div className="pr-3">
               {allVariables.map((v) => {
@@ -204,7 +204,9 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
               )}
             </div>
 
-            <div className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
+            <div
+              id="binary-logistic-contrast-method-box"
+              className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
               !selectedVarName ? "opacity-50 pointer-events-none" : ""
             }`}>
               <Label className="font-semibold flex items-center gap-1.5">
@@ -232,6 +234,7 @@ export const CategoricalTab: React.FC<CategoricalTabProps> = ({
             </div>
 
             <div
+              id="binary-logistic-reference-category-box"
               className={`space-y-4 border p-4 rounded-md bg-card shadow-sm transition-all duration-200 ${
                 !selectedVarName || isReferenceDisabled
                   ? "opacity-50 pointer-events-none grayscale"
