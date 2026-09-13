@@ -89,7 +89,9 @@ export const OverviewTab = () => {
           },
           {
             title: "Odds Ratio — Exp(B)",
-            formula: "Exp(Bi) = perubahan odds untuk setiap kenaikan 1 unit Xi",
+            formula: isEn
+              ? "Exp(Bi) = change in odds for each 1-unit increase in Xi"
+              : "Exp(Bi) = perubahan odds untuk setiap kenaikan 1 unit Xi",
             description: isEn
               ? "Exp(B) greater than 1 indicates a predictor that increases the odds of the event; less than 1 indicates a predictor that decreases it."
               : "Exp(B) lebih besar dari 1 menunjukkan prediktor yang meningkatkan odds kejadian; kurang dari 1 menunjukkan prediktor yang menurunkannya.",
