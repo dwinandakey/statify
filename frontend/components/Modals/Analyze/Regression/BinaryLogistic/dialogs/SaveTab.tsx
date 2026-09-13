@@ -18,15 +18,11 @@ const SaveCheckboxRow: React.FC<SaveCheckboxRowProps> = ({
   checked,
   onCheckedChange,
 }) => (
-  <div
-    className="flex items-center space-x-2.5 rounded-md px-2 py-1.5 -mx-2 transition-colors hover:bg-accent/60 cursor-pointer"
-    onClick={() => onCheckedChange(!checked)}
-  >
+  <div className="flex items-center space-x-2.5 rounded-md px-2 py-1.5 -mx-2 transition-colors hover:bg-accent/60">
     <Checkbox
       id={id}
       checked={checked}
       onCheckedChange={(c) => onCheckedChange(!!c)}
-      onClick={(e) => e.stopPropagation()}
     />
     <Label htmlFor={id} className="font-normal cursor-pointer select-none">
       {label}
