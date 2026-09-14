@@ -20,9 +20,9 @@ import { HelpCircle } from "lucide-react";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { useResultStore } from "@/stores/useResultStore";
 import type { BaseModalProps } from "@/types/modalTypes";
-import type { 
+import type {
     CrosstabsAnalysisParams,
-    VariableHighlight, 
+    VariableHighlight,
 } from "./types";
 import type { TabType, TabControlProps } from "./hooks/useTourGuide";
 import { useTourGuide } from "./hooks/useTourGuide";
@@ -33,6 +33,7 @@ import { AnimatePresence } from "framer-motion";
 // Import tab components
 import VariablesTab from "./VariablesTab";
 import CellsTab from "./CellsTab";
+import StatisticsTab from "@/components/Modals/Analyze/Descriptive/Crosstabs/StatisticsTab";
 
 // Types
 import type { Variable } from "@/types/Variable";
@@ -44,26 +45,29 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
     const [rowVariables, setRowVariables] = useState<Variable[]>([]);
     const [columnVariables, setColumnVariables] = useState<Variable[]>([]);
     const [highlightedVariable, setHighlightedVariable] = useState<VariableHighlight>(null);
-  
+
   const tabControl = useMemo((): TabControlProps => ({
       setActiveTab,
       currentActiveTab: activeTab,
   }), [activeTab]);
 
 
-    const { 
-        tourActive, 
-        currentStep, 
+    const {
+        tourActive,
+        currentStep,
         tourSteps,
-        currentTargetElement, 
-        startTour, 
-        nextStep, 
-        prevStep, 
-        endTour 
+        currentTargetElement,
+        startTour,
+        nextStep,
+        prevStep,
+        endTour
     } = useTourGuide(containerType, tabControl);
 
     // State for all options, structured as needed by the analysis hook
     const [options, setOptions] = useState<CrosstabsAnalysisParams['options']>({
+        statistics: {
+            chiSquare: false,
+        },
         cells: {
             observed: true,
             expected: false,
@@ -80,7 +84,7 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
         },
         nonintegerWeights: 'noAdjustment',
     });
-    
+
     const { variables } = useVariableStore();
 
     // Helper to compute a robust identity key for variables across different contexts
@@ -156,6 +160,9 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
         setColumnVariables([]);
         setHighlightedVariable(null);
         setOptions({
+            statistics: {
+                chiSquare: false,
+            },
             cells: {
                 observed: true,
                 expected: false,
@@ -229,6 +236,7 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
                 <div className="border-b border-border flex-shrink-0">
                     <TabsList data-testid="crosstabs-tabs-list">
                         <TabsTrigger value="variables" id="crosstabs-variables-tab-trigger" data-testid="crosstabs-variables-tab">Variables</TabsTrigger>
+                        <TabsTrigger value="statistics" id="crosstabs-statistics-tab-trigger" data-testid="crosstabs-statistics-tab">Statistics</TabsTrigger>
                         <TabsTrigger value="cells" id="crosstabs-cells-tab-trigger" data-testid="crosstabs-cells-tab">Cells</TabsTrigger>
                     </TabsList>
                 </div>
@@ -245,6 +253,16 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
                             reorderVariables={reorderVariables}
                             highlightedVariable={highlightedVariable}
                             setHighlightedVariable={setHighlightedVariable}
+                            containerType={containerType}
+                            tourActive={tourActive}
+                            currentStep={currentStep}
+                            tourSteps={tourSteps}
+                        />
+                    </TabsContent>
+                    <TabsContent value="statistics" data-testid="crosstabs-statistics-content">
+                        <StatisticsTab
+                            options={options}
+                            setOptions={setOptions}
                             containerType={containerType}
                             tourActive={tourActive}
                             currentStep={currentStep}
@@ -303,7 +321,7 @@ const CrosstabsContent: FC<BaseModalProps> = ({ onClose, containerType = "dialog
                     </Button>
                 </div>
             </div>
-            
+
             <AnimatePresence>
                 {tourActive && currentTargetElement && (
                     <TourPopup

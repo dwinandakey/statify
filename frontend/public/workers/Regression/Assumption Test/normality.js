@@ -1,8 +1,21 @@
+/**
+ * Regression Normality Tests (Assumption Testing)
+ * 
+ * Note: This is a separate implementation optimized for regression residuals.
+ * For general-purpose normality testing (Descriptive Statistics), see:
+ * public/workers/DescriptiveStatistics/libs/normality/normalityTests.js
+ * 
+ * Key differences:
+ * - Includes Jarque-Bera test
+ * - Uses asymptotic KS p-values
+ * - Tailored for residual analysis context
+ */
+
 // Worker for normality test in linear regression
-self.onmessage = function(e) {
+self.onmessage = function (e) {
   try {
     const { dependentData, independentData, independentVariableInfos } = e.data;
-    
+
     console.log("Normality test worker received data:", {
       hasDependent: !!dependentData,
       hasIndependent: !!independentData,
@@ -11,47 +24,47 @@ self.onmessage = function(e) {
       independentLength: independentData?.length || 0,
       infoLength: independentVariableInfos?.length || 0
     });
-    
+
     // Make sure we have data to analyze
     if (!dependentData || !independentData) {
       self.postMessage({ error: "Missing data: dependent or independent variable data not provided" });
       return;
     }
-    
+
     if (dependentData.length === 0 || independentData.length === 0) {
       self.postMessage({ error: "Empty data arrays provided for normality test" });
       return;
     }
-    
+
     // Prepare independent data as a matrix of observations × variables
     const X = prepareIndependentData(independentData);
-    
+
     // Run the regression
     const regression = multipleLinearRegression(dependentData, X);
     const { residuals } = regression;
-    
+
     // Perform normality tests (Shapiro-Wilk removed)
     const kolmogorovSmirnov = calculateKolmogorovSmirnov(residuals);
     const jarqueBera = calculateJarqueBera(residuals);
-    
+
     // Calculate mean and standard deviation of residuals
     const residualsMean = mean(residuals);
     const residualsStdDev = standardDeviation(residuals, residualsMean);
-    
+
     // Generate histogram data
     const histogramData = generateHistogramData(residuals, 10);
-    
+
     // Generate QQ plot data
     const qqPlotData = generateQQPlotData(residuals);
-    
+
     // Determine overall normality based on tests (using KS only)
     const isNormal = kolmogorovSmirnov.isNormal;
-    
+
     // Create more focused interpretation that focuses on the assumption status and recommendations
     let detailedInterpretation = isNormal
       ? "The tests indicate that the residuals follow a normal distribution, which is a key assumption for linear regression."
       : "Some tests suggest the residuals may not follow a normal distribution. This could affect the validity of statistical inferences from the model.";
-      
+
     // Format results for the data-table component
     const tableData = {
       tables: [
@@ -63,7 +76,7 @@ self.onmessage = function(e) {
             { header: "P-Value" },
             { header: "Status" }
           ],
-                      rows: [
+          rows: [
             {
               rowHeader: ["Kolmogorov-Smirnov"],
               "Statistic": kolmogorovSmirnov.statistic.toFixed(4),
@@ -117,7 +130,7 @@ self.onmessage = function(e) {
         }
       ]
     };
-    
+
     // Prepare final results
     const result = {
       title: "Normality Test Results",
@@ -141,7 +154,7 @@ self.onmessage = function(e) {
         qqPlot: qqPlotData
       }
     };
-    
+
     self.postMessage(result);
   } catch (error) {
     self.postMessage({
@@ -162,17 +175,17 @@ function prepareIndependentData(independentData) {
       if (independentData.length === 1 && independentData[0].length > 1) {
         return independentData[0].map(val => [val]);
       }
-      
+
       // If independentData is an array of arrays where each inner array represents one variable
       if (independentData.length > 1 && independentData[0].length > 1) {
         // Transpose the data to get observations as rows
-        return independentData[0].map((_, colIndex) => 
+        return independentData[0].map((_, colIndex) =>
           independentData.map(row => row[colIndex])
         );
       }
     }
   }
-  
+
   return independentData;
 }
 
@@ -180,7 +193,7 @@ function prepareIndependentData(independentData) {
 function multipleLinearRegression(y, X) {
   const n = y.length;
   let p;
-  
+
   // Ensure X is properly formatted
   let xMatrix;
   if (Array.isArray(X[0])) {
@@ -192,36 +205,36 @@ function multipleLinearRegression(y, X) {
     xMatrix = X.map(val => [val]);
     p = 1;
   }
-  
+
   // Add column of 1s for intercept
   const XWithIntercept = xMatrix.map(row => [1, ...(Array.isArray(row) ? row : [row])]);
-  
+
   // Matrix operations for OLS (X'X)^(-1)X'y
   const XTranspose = transpose(XWithIntercept);
   const XTX = matrixMultiply(XTranspose, XWithIntercept);
   const XTXInv = matrixInverse(XTX);
   const XTY = matrixMultiplyVector(XTranspose, y);
   const beta = matrixMultiplyVector(XTXInv, XTY);
-  
+
   // Calculate fitted values
-  const yHat = XWithIntercept.map(row => 
+  const yHat = XWithIntercept.map(row =>
     row.reduce((sum, val, idx) => sum + val * beta[idx], 0)
   );
-  
+
   // Calculate residuals
   const residuals = y.map((val, i) => val - yHat[i]);
-  
+
   // Calculate SSE
   const sse = residuals.reduce((sum, val) => sum + val * val, 0);
-  
+
   // Calculate SST and R^2
   const yMean = mean(y);
   const sst = y.reduce((sum, val) => sum + Math.pow(val - yMean, 2), 0);
   const r2 = 1 - (sse / sst);
-  
+
   // Calculate adjusted R^2
   const adjR2 = 1 - ((1 - r2) * (n - 1) / (n - p - 1));
-  
+
   return { beta, yHat, residuals, sse, r2, adjR2 };
 }
 
@@ -233,7 +246,7 @@ function transpose(matrix) {
 // Matrix multiplication
 function matrixMultiply(A, B) {
   const result = Array(A.length).fill().map(() => Array(B[0].length).fill(0));
-  
+
   for (let i = 0; i < A.length; i++) {
     for (let j = 0; j < B[0].length; j++) {
       for (let k = 0; k < A[0].length; k++) {
@@ -241,30 +254,30 @@ function matrixMultiply(A, B) {
       }
     }
   }
-  
+
   return result;
 }
 
 // Matrix-vector multiplication
 function matrixMultiplyVector(A, v) {
   const result = Array(A.length).fill(0);
-  
+
   for (let i = 0; i < A.length; i++) {
     for (let j = 0; j < v.length; j++) {
       result[i] += A[i][j] * v[j];
     }
   }
-  
+
   return result;
 }
 
 function matrixInverse(A) {
   const n = A.length;
-  
+
   if (n === 1) {
     return [[1 / A[0][0]]];
   }
-  
+
   if (n === 2) {
     const det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
     return [
@@ -272,14 +285,14 @@ function matrixInverse(A) {
       [-A[1][0] / det, A[0][0] / det]
     ];
   }
-  
+
   if (n === 3) {
     // For 3x3, use adjugate matrix method
-    const det = 
+    const det =
       A[0][0] * (A[1][1] * A[2][2] - A[1][2] * A[2][1]) -
       A[0][1] * (A[1][0] * A[2][2] - A[1][2] * A[2][0]) +
       A[0][2] * (A[1][0] * A[2][1] - A[1][1] * A[2][0]);
-    
+
     const adjugate = [
       [
         (A[1][1] * A[2][2] - A[1][2] * A[2][1]),
@@ -297,10 +310,10 @@ function matrixInverse(A) {
         (A[0][0] * A[1][1] - A[0][1] * A[1][0])
       ]
     ];
-    
+
     return adjugate.map(row => row.map(val => val / det));
   }
-  
+
   // For larger matrices, use a numerical method like Gaussian elimination
   return gaussianElimination(A);
 }
@@ -313,10 +326,10 @@ function gaussianElimination(A) {
     row[i] = 1;
     return row;
   });
-  
+
   // Create a copy of A to avoid modifying the original
   const augmented = A.map((row, i) => [...row, ...result[i]]);
-  
+
   // Forward elimination
   for (let i = 0; i < n; i++) {
     // Find pivot
@@ -326,21 +339,21 @@ function gaussianElimination(A) {
         max = j;
       }
     }
-    
+
     // Swap rows
     [augmented[i], augmented[max]] = [augmented[max], augmented[i]];
-    
+
     // Singular matrix check
     if (Math.abs(augmented[i][i]) < 1e-10) {
       throw new Error("Matrix is singular and cannot be inverted");
     }
-    
+
     // Divide row by pivot
     const pivot = augmented[i][i];
     for (let j = i; j < 2 * n; j++) {
       augmented[i][j] /= pivot;
     }
-    
+
     // Eliminate other rows
     for (let j = 0; j < n; j++) {
       if (j !== i) {
@@ -351,7 +364,7 @@ function gaussianElimination(A) {
       }
     }
   }
-  
+
   // Extract the inverse
   return augmented.map(row => row.slice(n));
 }
@@ -386,7 +399,7 @@ function calculateShapiroWilk(data) {
   const m = new Array(n).fill(0).map((_, i) => normalQuantile((i + 1 - 0.375) / (n + 0.25)));
   const mSumSq = m.reduce((s, v) => s + v * v, 0);
 
-    // pre-compute ‘c’ vector (normalized expected order stats)
+  // pre-compute ‘c’ vector (normalized expected order stats)
   const normFactor = Math.sqrt(mSumSq);
   const cVec = m.map(v => v / normFactor);
 
@@ -419,10 +432,10 @@ function calculateShapiroWilk(data) {
     let phi;
     if (n >= 6) {
       phi = (mSumSq - 2 * m[n - 1] ** 2 - 2 * m[n - 2] ** 2) /
-            (1 - 2 * a[n - 1] ** 2 - 2 * a[n - 2] ** 2);
+        (1 - 2 * a[n - 1] ** 2 - 2 * a[n - 2] ** 2);
     } else {
       phi = (mSumSq - 2 * m[n - 1] ** 2) /
-            (1 - 2 * a[n - 1] ** 2);
+        (1 - 2 * a[n - 1] ** 2);
     }
 
     const constDen = Math.sqrt(phi);
@@ -498,13 +511,13 @@ function normalQuantile(p) {
 
   const y = Math.sqrt(-2 * Math.log(1 - p));
   return y - (2.515517 + 0.802853 * y + 0.010328 * y * y) /
-         (1 + 1.432788 * y + 0.189269 * y * y + 0.001308 * y * y * y);
+    (1 + 1.432788 * y + 0.189269 * y * y + 0.001308 * y * y * y);
 }
 
 function approxNormalQuantile(p) {
   const y = Math.sqrt(-2 * Math.log(p));
   return y - (2.515517 + 0.802853 * y + 0.010328 * y * y) /
-         (1 + 1.432788 * y + 0.189269 * y * y + 0.001308 * y * y * y);
+    (1 + 1.432788 * y + 0.189269 * y * y + 0.001308 * y * y * y);
 }
 
 // Pearson correlation coefficient
@@ -512,20 +525,20 @@ function pearsonCorrelation(x, y) {
   const n = x.length;
   const xMean = mean(x);
   const yMean = mean(y);
-  
+
   let numerator = 0;
   let xDenom = 0;
   let yDenom = 0;
-  
+
   for (let i = 0; i < n; i++) {
     const xDiff = x[i] - xMean;
     const yDiff = y[i] - yMean;
-    
+
     numerator += xDiff * yDiff;
     xDenom += xDiff * xDiff;
     yDenom += yDiff * yDiff;
   }
-  
+
   return numerator / Math.sqrt(xDenom * yDenom);
 }
 
@@ -541,49 +554,49 @@ function approximateShapiroWilkPValue(w, n) {
 function normalCDF(x) {
   if (x < -10) return 0;
   if (x > 10) return 1;
-  
+
   // Approximation
   const t = 1 / (1 + 0.2316419 * Math.abs(x));
   const d = 0.3989423 * Math.exp(-x * x / 2);
   let p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
-  
+
   if (x > 0) {
     p = 1 - p;
   }
-  
+
   return p;
 }
 
 // Calculate Kolmogorov-Smirnov test for normality
 function calculateKolmogorovSmirnov(data) {
   const n = data.length;
-  
+
   // Sort the data
   const sortedData = [...data].sort((a, b) => a - b);
-  
+
   // Calculate mean and standard deviation
   const dataMean = mean(sortedData);
   const dataStdDev = standardDeviation(sortedData, dataMean);
-  
+
   // Calculate empirical CDF and theoretical normal CDF
   let maxDifference = 0;
-  
+
   for (let i = 0; i < n; i++) {
     const value = sortedData[i];
     const empiricalCDF = (i + 1) / n;
     const theoreticalCDF = normalCDF((value - dataMean) / dataStdDev);
-    
+
     // Find maximum difference
     const difference = Math.abs(empiricalCDF - theoreticalCDF);
     if (difference > maxDifference) {
       maxDifference = difference;
     }
   }
-  
+
   // Calculate p-value (simplified approximation)
   // Lilliefors correction for normality test
   const pValue = approximateKSPValue(maxDifference, n);
-  
+
   return {
     testName: "Kolmogorov-Smirnov",
     statistic: maxDifference,
@@ -634,7 +647,7 @@ function calculateJarqueBera(data) {
   }
   const skewSample = (n / ((n - 1) * (n - 2))) * m3;
   const kurtExcessSample = ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * m4 -
-                           (3 * Math.pow(n - 1, 2)) / ((n - 2) * (n - 3));
+    (3 * Math.pow(n - 1, 2)) / ((n - 2) * (n - 3));
 
   // ----- 2. Biased (population) estimators for Jarque–Bera statistic -----
   const sdPop = Math.sqrt(data.reduce((sum, v) => sum + Math.pow(v - meanVal, 2), 0) / n);
@@ -665,7 +678,7 @@ function calculateJarqueBera(data) {
 // Chi-squared cumulative distribution function
 function chiSquareCDF(x, df) {
   if (x <= 0) return 0;
-  
+
   // Approximation for chi-squared CDF
   // This is simplified - more accurate implementations exist
   const p = Math.exp(-0.5 * x) * Math.pow(x, df / 2 - 1) / (Math.pow(2, df / 2) * gamma(df / 2));
@@ -683,14 +696,14 @@ function gamma(z) {
     }
     return result;
   }
-  
+
   // For half-integer values
   if (Math.floor(2 * z) === 2 * z) {
     const n = Math.floor(z);
     if (z === 0.5) return Math.sqrt(Math.PI);
     return Math.sqrt(Math.PI) * factorialProduct(1, n - 0.5) / Math.pow(2, n - 0.5);
   }
-  
+
   // For other values (more complex approximation would be needed)
   return Math.sqrt(2 * Math.PI / z) * Math.pow(z / Math.E, z);
 }
@@ -710,31 +723,31 @@ function generateHistogramData(data, bins = 10) {
   const max = Math.max(...data);
   const range = max - min;
   const binWidth = range / bins;
-  
+
   // Initialize bins
   const histogram = Array(bins).fill(0);
   const binLabels = Array(bins).fill(0).map((_, i) => min + i * binWidth);
-  
+
   // Count values in each bin
   for (let i = 0; i < data.length; i++) {
     const value = data[i];
     const binIndex = Math.min(Math.floor((value - min) / binWidth), bins - 1);
     histogram[binIndex]++;
   }
-  
+
   // Calculate density for normal curve
   const mean = data.reduce((sum, val) => sum + val, 0) / data.length;
   const stdDev = Math.sqrt(data.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / data.length);
-  
+
   const normalCurve = binLabels.map(x => ({
     x: x + binWidth / 2, // Center of bin
     y: (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2))
   }));
-  
+
   // Normalize histogram to have same area as normal curve
   const histTotal = histogram.reduce((sum, val) => sum + val, 0) * binWidth;
   const normalizedHistogram = histogram.map(count => count / histTotal);
-  
+
   return {
     bins: binLabels.map((binStart, i) => ({
       x: binStart + binWidth / 2, // Center of bin
@@ -753,16 +766,16 @@ function generateHistogramData(data, bins = 10) {
 // Generate QQ plot data from residuals
 function generateQQPlotData(data) {
   const n = data.length;
-  
+
   // Sort the data
   const sortedData = [...data].sort((a, b) => a - b);
-  
+
   // Calculate theoretical quantiles
   const qqPoints = sortedData.map((value, i) => {
     const p = (i + 0.5) / n; // Midpoint plotting position
     const z = normalQuantile(p);
     return { observed: value, theoretical: z };
   });
-  
+
   return qqPoints;
-} 
+}

@@ -25,11 +25,12 @@ const nextConfig = {
         return config;
     },
     async rewrites() {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
         return [
             {
-                // Proxy API requests to backend in production
+                // Proxy API requests to backend
                 source: '/api/:path*',
-                destination: process.env.NEXT_PUBLIC_BACKEND_URL + '/:path*'
+                destination: `${backendUrl}/:path*`
             }
         ];
     },

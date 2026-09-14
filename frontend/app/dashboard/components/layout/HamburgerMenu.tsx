@@ -397,6 +397,9 @@ const HamburgerMenu: React.FC = () => {
                         <DrawerMenuItem disabled>
                           One-Way ANOVA...
                         </DrawerMenuItem>
+                        <DrawerMenuItem onClick={() => openModal(ModalType.BartlettTest)}>
+                          Bartlett&apos;s Test of Homogeneity...
+                        </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="glm" className="border-0">

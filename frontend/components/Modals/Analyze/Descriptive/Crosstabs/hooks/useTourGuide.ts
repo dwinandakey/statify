@@ -4,12 +4,13 @@ import type { TourStep as BaseTourStep, HorizontalPosition } from '@/types/tourT
 // Constants
 const TABS = {
   VARIABLES: 'variables' as const,
+  STATISTICS: 'statistics' as const,
   CELLS: 'cells' as const,
 };
 
 const TIMEOUT_DELAY = 200;
 
-export type TabType = typeof TABS.VARIABLES | typeof TABS.CELLS;
+export type TabType = typeof TABS.VARIABLES | typeof TABS.STATISTICS | typeof TABS.CELLS;
 
 // Extended TourStep with required tab property
 export type TourStep = BaseTourStep & {
@@ -149,7 +150,7 @@ export const useTourGuide = (
       timeoutRef.current = undefined;
     }
   }, []);
-  
+
   const refreshTargetElements = useCallback(() => {
     if (!tourActive) return;
     try {
@@ -258,4 +259,4 @@ export const useTourGuide = (
     prevStep,
     endTour
   };
-}; 
+};

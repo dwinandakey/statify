@@ -113,6 +113,11 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
     const computeMaxRowHeaderDepth = (rows: TableRowData[]): number => {
         let max = 0;
         rows.forEach(r => {
+            // Defensive check: ensure rowHeader exists and is an array
+            if (!r.rowHeader || !Array.isArray(r.rowHeader)) {
+                console.error('❌ DataTableRenderer: Row missing rowHeader in computeMaxRowHeaderDepth:', r);
+                r.rowHeader = [];
+            }
             if (r.rowHeader.length > max) max = r.rowHeader.length;
         });
         return max;
@@ -122,6 +127,13 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
         row: TableRowData,
         accumulated: (string | null)[]
     ): TableRowData[] => {
+        // Defensive check: ensure rowHeader exists and is an array
+        if (!row.rowHeader || !Array.isArray(row.rowHeader)) {
+            console.error('❌ DataTableRenderer: Row missing rowHeader array:', row);
+            // Provide default empty array to prevent crash
+            row.rowHeader = [];
+        }
+
         const combined: (string | null)[] = [];
         const length = Math.max(accumulated.length, row.rowHeader.length);
         for (let i = 0; i < length; i++) {
@@ -140,8 +152,17 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
     };
 
     const flattenRows = (rows: TableRowData[]): TableRowData[] => {
+        if (!rows || !Array.isArray(rows)) {
+            console.error('❌ DataTableRenderer: Invalid rows array:', rows);
+            return [];
+        }
+
         const result: TableRowData[] = [];
         for (const row of rows) {
+            if (!row) {
+                console.error('❌ DataTableRenderer: Null/undefined row in rows array');
+                continue;
+            }
             result.push(...propagateHeaders(row, []));
         }
         return result;
@@ -324,6 +345,17 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
         <div>
             {parsedData.tables.map((table, tableIndex) => {
                 const { title, columnHeaders, rows } = table;
+                console.log(`📊 DataTableRenderer: Rendering table ${tableIndex}:`, title);
+                console.log(`📊 DataTableRenderer: Table has ${rows?.length || 0} rows`);
+                if (rows && rows.length > 0) {
+                    console.log(`📊 DataTableRenderer: First row:`, rows[0]);
+                    // Check if all rows have rowHeader
+                    const rowsWithoutHeader = rows.filter(r => !r.rowHeader || !Array.isArray(r.rowHeader));
+                    if (rowsWithoutHeader.length > 0) {
+                        console.error(`❌ DataTableRenderer: Found ${rowsWithoutHeader.length} rows without rowHeader:`, rowsWithoutHeader);
+                    }
+                }
+
                 const levels = buildColumnLevels(columnHeaders);
                 const maxDepth = getMaxDepth(columnHeaders);
                 const flatRows = flattenRows(rows);

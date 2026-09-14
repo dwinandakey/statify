@@ -97,11 +97,15 @@ export enum ModalType {
     PPPlots = "PPPlots",
     QQPlots = "QQPlots",
 
+    // Normality Tests modals
+    JarqueBeraTest = "JarqueBeraTest",
+
     // Compare Means modals
     OneSampleTTest = "OneSampleTTest",
     IndependentSamplesTTest = "IndependentSamplesTTest",
     PairedSamplesTTest = "PairedSamplesTTest",
     OneWayANOVA = "OneWayANOVA",
+    BartlettTest = "BartlettTest",
 
     // Correlate modals
     Bivariate = "Bivariate",
@@ -290,11 +294,15 @@ export const MODAL_CATEGORIES: Record<ModalType, ModalCategory> = {
     [ModalType.PPPlots]: ModalCategory.Analyze,
     [ModalType.QQPlots]: ModalCategory.Analyze,
 
+    // Normality Tests modals
+    [ModalType.JarqueBeraTest]: ModalCategory.Analyze,
+
     // Compare Means modals
     [ModalType.IndependentSamplesTTest]: ModalCategory.Analyze,
     [ModalType.OneSampleTTest]: ModalCategory.Analyze,
     [ModalType.PairedSamplesTTest]: ModalCategory.Analyze,
     [ModalType.OneWayANOVA]: ModalCategory.Analyze,
+    [ModalType.BartlettTest]: ModalCategory.Analyze,
 
     // Correlate modals
     [ModalType.Bivariate]: ModalCategory.Analyze,

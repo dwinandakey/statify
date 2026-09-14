@@ -121,9 +121,10 @@ const ResultOutput: React.FC = () => {
               className="space-y-6 scroll-mt-20"
               data-testid={`result-log-${log.id}`}
             >
-              <div className="text-sm font-medium text-muted-foreground px-1" data-testid={`log-header-${log.id}`}>
-                Log {log.id}: {log.log}
-              </div>
+              {/* Log command header - hidden for cleaner UI, but kept in DOM for navigation/testing */}
+              {/* <div className="text-xs font-mono text-muted-foreground/40 px-2 py-1" data-testid={`log-header-${log.id}`}>
+                {log.log}
+              </div> */}
               {log.analytics?.map((analytic) => (
                 <Card
                   key={analytic.id}

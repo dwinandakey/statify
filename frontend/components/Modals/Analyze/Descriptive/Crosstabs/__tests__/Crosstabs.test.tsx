@@ -37,7 +37,7 @@ const mockVariables: Variable[] = [
 describe('Crosstabs Modal', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        
+
         mockedUseCrosstabsAnalysis.mockReturnValue({
             runAnalysis: mockRunAnalysis,
             isCalculating: false,
@@ -52,7 +52,7 @@ describe('Crosstabs Modal', () => {
         (useVariableStore as unknown as jest.Mock).mockReturnValue({
             variables: mockVariables,
         });
-        
+
         mockedUseMetaStore.mockReturnValue({ meta: { weight: null }});
     });
 
@@ -71,6 +71,7 @@ describe('Crosstabs Modal', () => {
         renderComponent();
         expect(screen.getByText('Crosstabs')).toBeInTheDocument();
         expect(screen.getByText('Variables')).toBeInTheDocument();
+        expect(screen.getByText('Statistics')).toBeInTheDocument();
         expect(screen.getByText('Cells')).toBeInTheDocument();
     });
 
@@ -92,13 +93,13 @@ describe('Crosstabs Modal', () => {
         renderComponent();
         const user = userEvent.setup();
         const cellsTab = screen.getByText('Cells');
-        
+
         // Check initial state (Controls should not be visible)
         expect(screen.queryByLabelText('Observed')).not.toBeInTheDocument();
         expect(screen.queryByLabelText('Unstandardized')).not.toBeInTheDocument();
-        
+
         await user.click(cellsTab);
-        
+
         // After clicking, the Cells tab content should be visible
         expect(screen.getByLabelText('Observed')).toBeInTheDocument();
         expect(screen.getByLabelText('Unstandardized')).toBeInTheDocument();
@@ -116,31 +117,31 @@ describe('Crosstabs Modal', () => {
     it('should move a variable to Row(s) on double click and Reset should move it back', async () => {
         renderComponent();
         const user = userEvent.setup();
-        
+
         const variable = mockVariables[0];
         const variableDisplayName = `${variable.label} [${variable.name}]`;
         if (!variable.label) throw new Error("Variable label is not defined");
 
         const variableItem = screen.getByText(variableDisplayName);
-    
+
         const availableList = screen.getByRole('group', { name: /Available Variables/i });
         const rowList = screen.getByRole('group', { name: /Row\(s\)/i });
-    
+
         expect(within(availableList).getByText(variableDisplayName)).toBeInTheDocument();
         expect(within(rowList).queryByText(variableDisplayName)).not.toBeInTheDocument();
-    
+
         await user.dblClick(variableItem);
-    
+
         expect(within(availableList).queryByText(variableDisplayName)).not.toBeInTheDocument();
         expect(within(rowList).getByText(variableDisplayName)).toBeInTheDocument();
-    
+
         const resetButton = screen.getByRole('button', { name: 'Reset' });
         await user.click(resetButton);
-        
+
         expect(within(availableList).getByText(variableDisplayName)).toBeInTheDocument();
         expect(within(rowList).queryByText(variableDisplayName)).not.toBeInTheDocument();
     });
-    
+
 
     it('should start the tour when help button is clicked', async () => {
         renderComponent();

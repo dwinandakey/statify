@@ -25,12 +25,13 @@ describe('PlotsTab Component', () => {
 
     it('should render all options correctly', () => {
         render(<PlotsTab {...mockProps} />);
-        
+
         expect(screen.getByText('Boxplots')).toBeInTheDocument();
         expect(screen.getByLabelText('Factor levels together')).toBeInTheDocument();
         expect(screen.getByLabelText('Dependents together')).toBeInTheDocument();
         expect(screen.getByLabelText('Stem-and-leaf')).toBeInTheDocument();
         expect(screen.getByLabelText('Histogram')).toBeInTheDocument();
+        expect(screen.getByLabelText('Normality plots with tests')).toBeInTheDocument();
     });
 
     it('should call setBoxplotType when a boxplot option is selected', async () => {
@@ -46,21 +47,31 @@ describe('PlotsTab Component', () => {
     it('should call setShowStemAndLeaf when the stem-and-leaf checkbox is clicked', async () => {
         render(<PlotsTab {...mockProps} />);
         const user = userEvent.setup();
-        
+
         const checkbox = screen.getByLabelText('Stem-and-leaf');
         await user.click(checkbox);
-        
+
         expect(mockProps.setShowStemAndLeaf).toHaveBeenCalledWith(true);
     });
 
     it('should call setShowHistogram when the histogram checkbox is clicked', async () => {
         render(<PlotsTab {...mockProps} />);
         const user = userEvent.setup();
-        
+
         const checkbox = screen.getByLabelText('Histogram');
         await user.click(checkbox);
-        
+
         expect(mockProps.setShowHistogram).toHaveBeenCalledWith(true);
     });
 
-}); 
+    it('should call setShowNormalityPlots when normality checkbox is clicked', async () => {
+        render(<PlotsTab {...mockProps} />);
+        const user = userEvent.setup();
+
+        const checkbox = screen.getByLabelText('Normality plots with tests');
+        await user.click(checkbox);
+
+        expect(mockProps.setShowNormalityPlots).toHaveBeenCalledWith(true);
+    });
+
+});

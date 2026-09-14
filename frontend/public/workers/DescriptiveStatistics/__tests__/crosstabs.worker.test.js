@@ -44,6 +44,10 @@ describe('crosstabs.worker', () => {
     expect(payload.status).toBe('success');
     expect(payload.variableName).toBe('Gender * Vote');
     expect(payload.results).toBeDefined();
+    expect(payload.results.chiSquare).toBeDefined();
+    expect(payload.results.chiSquare.pearson).toBeDefined();
+    expect(typeof payload.results.chiSquare.pearson.value).toBe('number');
+    expect(payload.results.chiSquare.pearson.df).toBe(1);
   });
 
   test('supports date strings (dd-mm-yyyy) in row/col and preserves labels in summary', () => {

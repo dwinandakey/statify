@@ -11,6 +11,9 @@ if (typeof self !== 'undefined' && typeof self.importScripts === 'function') {
     if (typeof FrequencyCalculator === 'undefined') {
         importScripts('../frequency/frequency.js');
     }
+    if (typeof calculateKolmogorovSmirnov === 'undefined' || typeof calculateShapiroWilk === 'undefined') {
+        importScripts('/workers/DescriptiveStatistics/libs/normality/normalityTests.js');
+    }
     // No external CDN dependencies are imported here to keep workers and tests self-contained.
 }
 
@@ -35,6 +38,9 @@ class ExamineCalculator {
         // Numeric-like measures: scale and ordinal. Exclude date core type from numeric
         // computations here to avoid rendering raw seconds in UI tables.
         this.isNumeric = (this.effMeasure === 'scale' || this.effMeasure === 'ordinal') && this.coreType !== 'date';
+    // Normality tests (KS/SW) should run for any numeric-core variable values,
+    // regardless of measurement metadata, as long as data are numeric and not date.
+    this.isNormalityEligible = this.coreType === 'numeric';
 
         this.freqCalc = new FrequencyCalculator({ variable, data, weights, caseNumbers, options });
         if (this.isNumeric) {
@@ -103,6 +109,12 @@ class ExamineCalculator {
             // M-Estimators (simple robust summaries) – compute by default for numeric variables
             // to align with library tests and expected EXAMINE output
             results.mEstimators = this.getMEstimators();
+
+        }
+
+        // SPSS Explore: "Normality plots with tests"
+        if (this.options.showNormalityPlots) {
+            results.normalityTests = this.getNormalityTests();
         }
 
         return results;
@@ -292,6 +304,44 @@ class ExamineCalculator {
         };
     }
 
+    getNormalityTests() {
+        if (!this.isNormalityEligible) return null;
+
+        const values = this.#getExpandedNumericValues();
+        if (typeof runNormalityTests === 'function') {
+            return runNormalityTests(values, {
+                alpha: this.options.significanceLevel || 0.05,
+            });
+        }
+
+        // Fallback for environments where normality orchestrator is unavailable.
+        if (!values || values.length < 3) {
+            return {
+                sampleSize: values ? values.length : 0,
+                kolmogorovSmirnov: null,
+                shapiroWilk: null,
+                notes: ['Normality tests require at least 3 valid observations.']
+            };
+        }
+
+        const notes = [];
+        const ks = calculateKolmogorovSmirnov(values);
+
+        let sw = null;
+        if (values.length <= 5000) {
+            sw = calculateShapiroWilk(values);
+        } else {
+            notes.push('Shapiro-Wilk is only reported for sample sizes up to 5000.');
+        }
+
+        return {
+            sampleSize: values.length,
+            kolmogorovSmirnov: ks,
+            shapiroWilk: sw,
+            notes: notes.length ? notes : undefined,
+        };
+    }
+
     // Build sorted numeric-weighted entries for computations
     #getNumericWeightedEntries() {
         const out = [];
@@ -319,6 +369,20 @@ class ExamineCalculator {
         out.sort((a, b) => a.value - b.value);
         return out;
     }
+
+    #getExpandedNumericValues() {
+        const entries = this.#getNumericWeightedEntries();
+        if (!entries || entries.length === 0) return [];
+
+        const expanded = [];
+        for (const entry of entries) {
+            const count = Math.max(1, Math.round(entry.weight));
+            for (let i = 0; i < count; i++) {
+                expanded.push(entry.value);
+            }
+        }
+        return expanded;
+    }
 }
 
 self.ExamineCalculator = ExamineCalculator;
@@ -326,7 +390,7 @@ self.ExamineCalculator = ExamineCalculator;
 
 function getTCriticalApproximation(df, alpha = 0.05) {
     const p = 1 - alpha / 2;
-    
+
     const tTables = {
         // Alpha = 0.01 (99% confidence interval)
         0.01: {
@@ -356,50 +420,51 @@ function getTCriticalApproximation(df, alpha = 0.05) {
             26: 1.706, 27: 1.703, 28: 1.701, 29: 1.699, 30: 1.697
         }
     };
-    
+
     // Find the closest alpha level we have tables for
     const availableAlphas = Object.keys(tTables).map(Number);
-    const closestAlpha = availableAlphas.reduce((prev, curr) => 
+    const closestAlpha = availableAlphas.reduce((prev, curr) =>
         Math.abs(curr - alpha) < Math.abs(prev - alpha) ? curr : prev);
-    
+
     const tTable = tTables[closestAlpha];
-    
+
     // If exact df is in table, return it
     if (tTable[df]) {
         return tTable[df];
     }
-    
+
     // For df > 30, use approximation that approaches z values
     if (df > 30) {
         const zValues = {
             0.01: 2.576,  // 99% CI
-            0.05: 1.96,   // 95% CI  
+            0.05: 1.96,   // 95% CI
             0.1: 1.645    // 90% CI
         };
         const z = zValues[closestAlpha] || 1.96;
         const t30 = tTable[30] || z;
         return z + (t30 - z) * Math.exp(-0.1 * (df - 30));
     }
-    
+
     // For other cases, interpolate or use closest value
     if (df < 1) return tTable[1] || 12.706; // Use df=1 as minimum
-    
+
     // Find closest values for interpolation
     const lowerDf = Math.floor(df);
     const upperDf = Math.ceil(df);
-    
+
     if (lowerDf === upperDf) {
         // Integer df, find closest in table
         const keys = Object.keys(tTable).map(Number).sort((a, b) => a - b);
-        const closest = keys.reduce((prev, curr) => 
+        const closest = keys.reduce((prev, curr) =>
             Math.abs(curr - df) < Math.abs(prev - df) ? curr : prev);
         return tTable[closest];
     }
-    
+
     // Linear interpolation
     const lowerT = tTable[lowerDf] || (closestAlpha === 0.05 ? 2.0 : (closestAlpha === 0.01 ? 2.8 : 1.7));
     const upperT = tTable[upperDf] || (closestAlpha === 0.05 ? 2.0 : (closestAlpha === 0.01 ? 2.8 : 1.7));
     const fraction = df - lowerDf;
-    
+
     return lowerT + fraction * (upperT - lowerT);
 }
+

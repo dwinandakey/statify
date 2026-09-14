@@ -3,7 +3,7 @@ import { useResultStore } from '@/stores/useResultStore';
 import type { Variable } from '@/types/Variable';
 import type { ExploreAnalysisParams } from '../types';
 import { createWorkerClient } from '@/utils/workerClient';
-import { formatCaseProcessingSummary, formatDescriptivesTable, formatMEstimatorsTable, formatPercentilesTable, formatExtremeValuesTable } from '../utils';
+import { formatCaseProcessingSummary, formatDescriptivesTable, formatMEstimatorsTable, formatPercentilesTable, formatExtremeValuesTable, formatTestsOfNormalityTable } from '../utils';
 import { processAndAddPlots } from '../utils/plotProcessor';
 import { useAnalysisData } from '@/hooks/useAnalysisData';
 
@@ -17,7 +17,7 @@ interface GroupedData {
 export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () => void) => {
     const [isCalculating, setIsCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    
+
     const { data: analysisData, weights } = useAnalysisData();
     const { addLog, addAnalytic, addStatistic } = useResultStore();
 
@@ -155,7 +155,7 @@ export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () =>
                 const group = groupedData[groupKey];
                 for (const depVar of localParams.dependentVariables) {
                     const promise = new Promise((resolve, reject) => {
-                        const workerClient = createWorkerClient('/workers/DescriptiveStatistics/examine.worker.js');
+                        const workerClient = createWorkerClient('/workers/DescriptiveStatistics/examine.worker.js?v=20260424-normality');
 
                         workerClient.onMessage((eventData: any) => {
                             if (eventData.status === 'success') {
@@ -185,6 +185,7 @@ export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () =>
                                 showMEstimators: localParams.showMEstimators,
                                 showPercentiles: localParams.showPercentiles,
                                 showOutliers: localParams.showOutliers,
+                                showNormalityPlots: localParams.showNormalityPlots,
                             },
                         });
                     });
@@ -220,6 +221,7 @@ export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () =>
                     { formatter: formatMEstimatorsTable, componentName: 'M-Estimators', condition: localParams.showMEstimators },
                     { formatter: formatPercentilesTable, componentName: 'Percentiles', condition: localParams.showPercentiles },
                     { formatter: formatExtremeValuesTable, componentName: 'Extreme Values', condition: localParams.showOutliers },
+                    { formatter: formatTestsOfNormalityTable, componentName: 'Tests of Normality', condition: localParams.showNormalityPlots },
                 ];
 
                 for (const section of outputSections) {
@@ -237,7 +239,7 @@ export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () =>
                 }
 
 
-                
+
                 try {
                     await processAndAddPlots(analyticId!, groupedData as any, localParams);
 
@@ -280,7 +282,7 @@ export const useExploreAnalysis = (params: ExploreAnalysisParams, onClose: () =>
             const err = e instanceof Error ? e.message : String(e);
             console.error('Explore Analysis Error:', err);
             setError(`An unexpected error occurred: ${err}`);
-            
+
             // === Performance Monitoring: Error ===
             const endTime = performance.now();
             const executionTime = endTime - startTime;
