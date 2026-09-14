@@ -12,9 +12,9 @@ use crate::types::{
 use crate::utils::EPS;
 
 #[allow(non_upper_case_globals)]
-pub const excluding_log_likelihood: &str = "excluding_log_likelihood";
+pub const excluding_log_likelihood: &str = "KERNEL";
 #[allow(non_upper_case_globals)]
-pub const including_log_likelihood: &str = "including_log_likelihood";
+pub const including_log_likelihood: &str = "SPSS_COMPATIBLE";
 
 pub fn multinomial_log_likelihood_constant(data: &AggregatedData) -> f64 {
     let mut constant = 0.0;

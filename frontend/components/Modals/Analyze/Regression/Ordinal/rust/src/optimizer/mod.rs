@@ -33,7 +33,6 @@ pub fn fit_location_only(
     let mut history = Vec::new();
     let warnings = Vec::new();
     let mut converged = false;
-    let mut info_matrix: Option<DMatrix<f64>> = None;
     let mut iterations_run = 0;
     let mut last_abs_change_minus2_log_likelihood = None;
     let mut last_max_abs_change_parameters = None;
@@ -55,8 +54,6 @@ pub fn fit_location_only(
             EstimationMethod::FisherScoring => expected_information(&params, data, spec),
             EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
         };
-
-        info_matrix = Some(information.clone());
 
         let delta = solve_linear_system(&information, &grad)
             .ok_or_else(|| PlumError::OptimizationError("Matrix singular".to_string()))?;
@@ -97,6 +94,11 @@ pub fn fit_location_only(
     }
 
     let final_ll = log_likelihood(&params, data, spec);
+    let final_information = match options.method {
+        EstimationMethod::FisherScoring => expected_information(&params, data, spec),
+        EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
+    };
+    let info_matrix = Some(final_information);
 
     if history_options.enabled {
         let final_iteration = iterations_run;
@@ -142,7 +144,6 @@ pub fn fit_general(
     let mut history = Vec::new();
     let warnings = Vec::new();
     let mut converged = false;
-    let mut info_matrix: Option<DMatrix<f64>> = None;
     let mut prev_state: Option<IterationState> = None;
     let mut iterations_run = 0;
     let mut last_abs_change_minus2_log_likelihood = None;
@@ -163,8 +164,6 @@ pub fn fit_general(
             EstimationMethod::FisherScoring => expected_information(&params, data, spec),
             EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
         };
-
-        info_matrix = Some(information.clone());
 
         let delta = solve_linear_system(&information, &grad)
             .ok_or_else(|| PlumError::OptimizationError("Matrix singular".to_string()))?;
@@ -205,6 +204,11 @@ pub fn fit_general(
     }
 
     let final_ll = log_likelihood(&params, data, spec);
+    let final_information = match options.method {
+        EstimationMethod::FisherScoring => expected_information(&params, data, spec),
+        EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
+    };
+    let info_matrix = Some(final_information);
 
     if history_options.enabled {
         let final_iteration = iterations_run;
