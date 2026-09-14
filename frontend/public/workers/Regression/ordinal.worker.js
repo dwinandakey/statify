@@ -359,6 +359,40 @@ function normalizeParallelLinesTest(test) {
 
 function normalizeCollinearityDiagnostics(diagnostics) {
   if (!diagnostics || typeof diagnostics !== "object") return null;
+
+  // 1. Normalize VIF rows (Binary Logistic style)
+  const rawVif = Array.isArray(diagnostics.vif) ? diagnostics.vif : [];
+  const vif = rawVif
+    .map((item) => {
+      const tolerance = pickNumber(item.tolerance);
+      const vifVal = pickNumber(item.vif);
+      const variable = String(item.variable ?? item.predictor ?? "");
+      if (tolerance === null || vifVal === null || !variable) return null;
+      return {
+        variable,
+        tolerance,
+        vif: vifVal,
+      };
+    })
+    .filter(Boolean);
+
+  // 2. Normalize Correlation Matrix (Binary Logistic style)
+  const rawCorr = Array.isArray(diagnostics.correlationMatrix)
+    ? diagnostics.correlationMatrix
+    : (Array.isArray(diagnostics.correlation_matrix) ? diagnostics.correlation_matrix : []);
+  const correlationMatrix = rawCorr
+    .map((item) => {
+      const variable = String(item.variable ?? "");
+      const values = Array.isArray(item.values) ? item.values.map(Number) : [];
+      if (!variable) return null;
+      return {
+        variable,
+        values,
+      };
+    })
+    .filter(Boolean);
+
+  // 3. Normalize legacy GVIF rows if present
   const rawRows = Array.isArray(diagnostics.rows) ? diagnostics.rows : [];
   const rows = rawRows
     .map((row) => {
@@ -381,6 +415,9 @@ function normalizeCollinearityDiagnostics(diagnostics) {
 
   return {
     ...diagnostics,
+    vif,
+    correlationMatrix,
+    correlation_matrix: correlationMatrix,
     rows,
     warnings: Array.isArray(diagnostics.warnings) ? diagnostics.warnings : [],
   };
