@@ -14,7 +14,7 @@ use super::core::{
     calculate_min_f_ratio_with_groups, calculate_min_mahalanobis_distance_with_groups,
     calculate_raos_v, calculate_tolerance, calculate_total_unexplained_variation,
     calculate_variable_f_to_enter, calculate_variable_f_to_remove,
-    AnalyzedDataset, MethodType, TOLERANCE_THRESHOLD, EPSILON,
+    AnalyzedDataset, MethodType, TOLERANCE_THRESHOLD,
 };
 
 /// Determine the method type from configuration
@@ -64,13 +64,12 @@ pub fn analyze_variables_not_in_model(
             let (tolerance, min_tolerance) =
                 calculate_tolerance(var_name, dataset, current_variables);
 
-            // Tolerance check: reject if tolerance < 0.001 (SPSS default)
+            // Tolerance check: reject if tolerance < 0.001 (SPSS default). This is the
+            // only collinearity gate SPSS applies to stepwise candidates. (SPSS's "VIN"
+            // is the minimum increase in Rao's V, not a variance inflation factor, so no
+            // VIF threshold belongs here; multicollinearity diagnostics are reported
+            // separately by the assumption checks.)
             if tolerance < TOLERANCE_THRESHOLD || min_tolerance < TOLERANCE_THRESHOLD {
-                return Ok(None);
-            }
-            let vin = if tolerance > EPSILON { 1.0 / tolerance } else { f64::MAX };
-            if vin > 10.0 {
-                // VIN > 10 indicates severe multicollinearity — reject variable
                 return Ok(None);
             }
 

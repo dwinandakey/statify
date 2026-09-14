@@ -56,6 +56,12 @@ pub struct DiscriminantResult {
     /// The map itself is built on the frontend from the group centroids.
     #[serde(rename = "territorial_map")]
     pub territorial_map: bool,
+    /// True when the Combined-Groups plot was requested (Classify → Plots).
+    #[serde(rename = "combined_groups_plot")]
+    pub combined_groups_plot: bool,
+    /// True when the Separate-Groups plots were requested (Classify → Plots).
+    #[serde(rename = "separate_groups_plot")]
+    pub separate_groups_plot: bool,
 }
 
 /// Bundle of all requested assumption checks plus an at-a-glance summary used to
@@ -429,6 +435,10 @@ pub struct PairwiseComparison {
     pub group_name: String,
     pub f_value: f64,
     pub significance: f64,
+    /// Numerator degrees of freedom of F: p, the number of variables in the model.
+    pub df1: i32,
+    /// Denominator degrees of freedom of F: n − g − p + 1.
+    pub df2: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

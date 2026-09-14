@@ -28,6 +28,8 @@ const TABLE_INTERPRETATIONS: Record<string, string> = {
         "Statistics for the variables not yet in the model, showing which could enter next.",
     stepwise_wilks_lambda:
         "Wilks' Lambda after each step; smaller values mean better group separation.",
+    pairwise_group_comparisons:
+        "F test of the distance between each pair of group centroids at each step. A small Sig. (< 0.05) means the two groups are significantly separated.",
     eigenvalues:
         "Each discriminant function's eigenvalue and the share of between-group variance it explains.",
     wilks_lambda_test:
@@ -169,6 +171,7 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         { key: "variables_in_analysis", title: "Variables in the Analysis" },
         { key: "variables_not_in_analysis", title: "Variables Not in the Analysis" },
         { key: "stepwise_wilks_lambda", title: "Wilks' Lambda (Stepwise)" },
+        { key: "pairwise_group_comparisons", title: "Pairwise Group Comparisons" },
 
         // ── 4. Discriminant functions (the fitted model) ──
         { key: "eigenvalues", title: "Eigenvalues" },

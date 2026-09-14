@@ -1302,16 +1302,96 @@ export function transformDiscriminantResult(data: any): ResultJson {
         resultJson.tables.push(swTable);
       }
     }
+
+    // Pairwise Group Comparisons (Method → Display → F for pairwise distances).
+    // Rust sends one entry per (step, group) with that group's F and Sig. against
+    // every other group, already ordered by step then group. SPSS lays it out as a
+    // Step × Group matrix with an F row and a Sig. row per group; the diagonal is
+    // blank, and a footnote per step gives the F degrees of freedom.
+    const pairwiseEntries: Array<{
+      step: string;
+      group: string;
+      comparisons: Array<{
+        group_name: string;
+        f_value: number;
+        significance: number;
+        df1: number;
+        df2: number;
+      }>;
+    }> = Array.isArray(data.stepwise_statistics.pairwise_comparisons)
+      ? data.stepwise_statistics.pairwise_comparisons
+      : [];
+
+    if (pairwiseEntries.length > 0) {
+      const pairGroups = [
+        ...new Set(
+          pairwiseEntries.flatMap((e) => [
+            e.group,
+            ...e.comparisons.map((c) => c.group_name),
+          ]),
+        ),
+      ].sort();
+      const pairSteps = [...new Set(pairwiseEntries.map((e) => e.step))];
+      const stepMarks = "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ";
+
+      const pairTable: Table = {
+        key: "pairwise_group_comparisons",
+        title: "Pairwise Group Comparisons",
+        columnHeaders: [
+          { header: "Step", key: "step" },
+          { header: "Group", key: "group" },
+          { header: "", key: "stat" },
+          ...pairGroups.map((g, i) => ({ header: g, key: `pair_g_${i}` })),
+        ],
+        rows: [],
+      };
+
+      const pairFootnotes: string[] = [];
+      pairSteps.forEach((step, stepIdx) => {
+        const stepLabel = `${step}${stepMarks[stepIdx] ?? ""}`;
+        let stepDf: { df1: number; df2: number } | null = null;
+
+        for (const entry of pairwiseEntries.filter((e) => e.step === step)) {
+          const fRow: any = { rowHeader: [stepLabel, entry.group, "F"] };
+          const sigRow: any = { rowHeader: [stepLabel, entry.group, "Sig."] };
+          pairGroups.forEach((_, i) => {
+            fRow[`pair_g_${i}`] = "";
+            sigRow[`pair_g_${i}`] = "";
+          });
+          for (const c of entry.comparisons) {
+            const idx = pairGroups.indexOf(c.group_name);
+            if (idx === -1) continue;
+            fRow[`pair_g_${idx}`] = formatStat(c.f_value);
+            sigRow[`pair_g_${idx}`] = formatSig(c.significance);
+            stepDf = { df1: c.df1, df2: c.df2 };
+          }
+          pairTable.rows.push(fRow, sigRow);
+        }
+
+        if (stepDf) {
+          pairFootnotes.push(
+            `${String.fromCharCode(97 + stepIdx)}. ${stepDf.df1}, ${stepDf.df2} degrees of freedom for step ${step}.`,
+          );
+        }
+      });
+
+      for (const note of pairFootnotes) {
+        pairTable.rows.push({ rowHeader: [note] });
+      }
+
+      resultJson.tables.push(pairTable);
+    }
   }
 
   // 16. Variables in the Analysis
+  // SPSS shows Min. Tolerance only in "Variables Not in the Analysis"; the in-model
+  // table has Tolerance, F to Remove and the method statistic, for every method.
   if (data.stepwise_statistics?.variables_in_analysis) {
     const columnHeaders = isRaosVMethod
       ? [
           { header: "Step", key: "step" },
           { header: "", key: "var" },
           { header: "Tolerance", key: "tolerance" },
-          { header: "Min. Tolerance", key: "min_tolerance" },
           { header: "F to Remove", key: "f_to_remove" },
           { header: "Rao's V", key: "raos_v" },
         ]
@@ -1337,7 +1417,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
             { header: "Step", key: "step" },
             { header: "", key: "var" },
             { header: "Tolerance", key: "tolerance" },
-            { header: "Min. Tolerance", key: "min_tolerance" },
             { header: "F to Remove", key: "f_to_remove" },
             { header: "Min. D Squared", key: "min_d_squared" },
             { header: "Between Groups", key: "between_groups" },
@@ -1346,7 +1425,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
             { header: "Step", key: "step" },
             { header: "", key: "var" },
             { header: "Tolerance", key: "tolerance" },
-            { header: "Min. Tolerance", key: "min_tolerance" },
             { header: "F to Remove", key: "f_to_remove" },
             { header: "Wilks' Lambda", key: "wilks_lambda" },
           ];
@@ -1392,9 +1470,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
             table.rows.push({
               rowHeader: [step, variable.variable],
               tolerance: formatStat(variable.tolerance),
-              min_tolerance: formatStat(
-                variable.min_tolerance ?? variable.tolerance,
-              ),
               f_to_remove: formatStat(variable.f_to_remove),
               raos_v: formatStat(raosVFromProxy(variable.wilks_lambda)),
             });
@@ -1420,9 +1495,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
             table.rows.push({
               rowHeader: [step, variable.variable],
               tolerance: formatStat(variable.tolerance),
-              min_tolerance: formatStat(
-                variable.min_tolerance ?? variable.tolerance,
-              ),
               f_to_remove: formatStat(variable.f_to_remove),
               min_d_squared: formatStat(variable.min_d_squared || 0),
               between_groups: variable.between_groups || "",
@@ -1431,9 +1503,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
             table.rows.push({
               rowHeader: [step, variable.variable],
               tolerance: formatStat(variable.tolerance),
-              min_tolerance: formatStat(
-                variable.min_tolerance ?? variable.tolerance,
-              ),
               f_to_remove: formatStat(variable.f_to_remove),
               wilks_lambda: formatStat(variable.wilks_lambda),
             });
@@ -2090,7 +2159,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
   // ── Scatter plots (Combined-Groups + Separate-Groups) ──────────────────────
   // scatter_data is populated when combine||sep_grp and case==false.
-  // casewise_statistics has the same fields when case==true.
+  // casewise_statistics has the same fields when case==true, so the scores are
+  // available whenever Casewise is on — each plot is therefore gated on its own
+  // Classify → Plots checkbox, not on the presence of the scores.
+  const wantCombinedPlot = data?.combined_groups_plot === true;
+  const wantSeparatePlots = data?.separate_groups_plot === true;
   const scatterSrc = data?.scatter_data ?? data?.casewise_statistics;
   // discriminant_scores is Vec<ScoreValue> = [{function, values}], not a keyed object
   const scoreArr: Array<{ function: string; values: number[] }> | undefined =
@@ -2108,7 +2181,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
     Array.isArray(caseGroups) &&
     f1Scores.length > 0;
 
-  if (hasScatterData) {
+  if (hasScatterData && (wantCombinedPlot || wantSeparatePlots)) {
     const f1 = f1Scores as number[];
     const f2 = f2Scores as number[];
     const grps = caseGroups as string[];
@@ -2212,7 +2285,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
     });
 
-    resultJson.charts = [combinedChart, ...separateCharts];
+    resultJson.charts = [
+      ...(wantCombinedPlot ? [combinedChart] : []),
+      ...(wantSeparatePlots ? separateCharts : []),
+    ];
   }
 
   // ── Territorial Map (Classify → Plots → Territorial Map) ───────────────────

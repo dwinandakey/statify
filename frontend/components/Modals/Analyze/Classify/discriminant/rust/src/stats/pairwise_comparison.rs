@@ -1,21 +1,29 @@
 //! Pairwise comparisons between groups for discriminant analysis.
 //!
-//! This module implements functions to generate pairwise comparisons
-//! between groups and calculate Mahalanobis distances.
+//! This module implements SPSS's "Pairwise Group Comparisons" table
+//! (Method → Display → F for pairwise distances): for every pair of groups, an
+//! F statistic testing the squared Mahalanobis distance between their centroids.
 
 use std::collections::HashMap;
 use rayon::prelude::*;
-use nalgebra::{DMatrix, DVector};
 
 use crate::{
     models::result::PairwiseComparison,
-    stats::core::{calculate_p_value_from_f, AnalyzedDataset, calculate_covariance},
+    stats::core::{calculate_p_value_from_f, AnalyzedDataset},
+    stats::matrix_calculation::{group_mahalanobis_with_inv, pooled_within_inverse},
 };
 
 /// Generate pairwise comparisons between groups
 ///
-/// This function calculates F values and significance levels for
-/// all pairs of groups, based on the Mahalanobis distance between them.
+/// For groups i and j, using the variables currently in the model:
+///
+///   D²_ij = (x̄_i − x̄_j)' S_pooled⁻¹ (x̄_i − x̄_j)
+///   F_ij  = (n − g − p + 1) · n_i · n_j · D²_ij / (p · (n − g) · (n_i + n_j)),
+///           with df = (p, n − g − p + 1)
+///
+/// S_pooled is the within-groups covariance pooled over ALL g groups (df = n − g),
+/// which is what the (n − g) term in F assumes. This is the same D² and F that the
+/// Smallest F Ratio method uses (calculate_min_f_ratio_with_groups).
 ///
 /// # Parameters
 /// * `dataset` - The analyzed dataset
@@ -23,170 +31,70 @@ use crate::{
 /// * `step` - Current step in the stepwise procedure
 ///
 /// # Returns
-/// A HashMap mapping group names to vectors of pairwise comparisons
+/// A HashMap mapping each group to its comparisons with every other group
 pub fn generate_pairwise_comparisons(
     dataset: &AnalyzedDataset,
     variables: &[String],
     step: i32
 ) -> HashMap<String, Vec<PairwiseComparison>> {
-    if variables.is_empty() {
+    if variables.is_empty() || dataset.group_labels.len() < 2 {
         return HashMap::new();
     }
 
-    // Use parallel processing for group comparisons
-    let results: HashMap<String, Vec<PairwiseComparison>> = dataset.group_labels
+    let p = variables.len() as f64;
+    let n = dataset.total_cases as f64;
+    let g = dataset.num_groups as f64;
+    let df2 = n - g - p + 1.0;
+
+    if (n - g) <= 0.0 || df2 <= 0.0 {
+        return HashMap::new();
+    }
+
+    // The pooled inverse depends only on the variable set, so it is computed once.
+    let inv = pooled_within_inverse(dataset, variables);
+
+    let group_size = |group: &str| -> f64 {
+        dataset.group_data
+            .get(&variables[0])
+            .and_then(|gd| gd.get(group))
+            .map_or(0.0, |v| v.len() as f64)
+    };
+
+    dataset.group_labels
         .par_iter()
         .map(|group_i| {
-            let group_comparisons = dataset.group_labels
+            let n_i = group_size(group_i);
+            let comparisons = dataset.group_labels
                 .iter()
-                .filter(|&group_j| group_i != group_j)
+                .filter(|&group_j| group_j != group_i)
                 .filter_map(|group_j| {
-                    // Calculate Mahalanobis distance between groups
-                    let d2 = calculate_mahalanobis_distance(dataset, group_i, group_j, variables);
-
-                    // Get group sizes
-                    let n_i = dataset.group_data
-                        .get(&variables[0])
-                        .and_then(|g| g.get(group_i))
-                        .map_or(0, |v| v.len());
-
-                    let n_j = dataset.group_data
-                        .get(&variables[0])
-                        .and_then(|g| g.get(group_j))
-                        .map_or(0, |v| v.len());
-
-                    if n_i > 0 && n_j > 0 {
-                        let p = variables.len() as f64;
-                        let n = dataset.total_cases as f64;
-                        let g = dataset.num_groups as f64;
-
-                        let f_value =
-                            (d2 * (n - g - p + 1.0) * ((n_i * n_j) as f64)) /
-                            (p * (n - g) * ((n_i + n_j) as f64));
-
-                        // Calculate significance
-                        let p_value = calculate_p_value_from_f(f_value, p, n - g - p + 1.0);
-
-                        Some(PairwiseComparison {
-                            step,
-                            group_name: group_j.clone(),
-                            f_value,
-                            significance: p_value,
-                        })
-                    } else {
-                        None
+                    let n_j = group_size(group_j);
+                    if n_i <= 0.0 || n_j <= 0.0 {
+                        return None;
                     }
+
+                    let d2 = group_mahalanobis_with_inv(
+                        dataset,
+                        group_i,
+                        group_j,
+                        variables,
+                        inv.as_ref()
+                    );
+                    let f_value = (d2 * df2 * n_i * n_j) / (p * (n - g) * (n_i + n_j));
+
+                    Some(PairwiseComparison {
+                        step,
+                        group_name: group_j.clone(),
+                        f_value,
+                        significance: calculate_p_value_from_f(f_value, p, df2),
+                        df1: variables.len() as i32,
+                        df2: df2 as i32,
+                    })
                 })
                 .collect::<Vec<_>>();
 
-            (group_i.clone(), group_comparisons)
+            (group_i.clone(), comparisons)
         })
         .filter(|(_, comparisons)| !comparisons.is_empty())
-        .collect();
-
-    results
-}
-
-/// Calculate Mahalanobis distance between two specific groups
-///
-/// The Mahalanobis distance accounts for the correlation between variables
-/// and is scale-invariant. It measures the separation between group means.
-///
-/// # Parameters
-/// * `dataset` - The analyzed dataset
-/// * `group_i` - First group name
-/// * `group_j` - Second group name
-/// * `variables` - Variables to use in the calculation
-///
-/// # Returns
-/// The squared Mahalanobis distance between the groups
-pub fn calculate_mahalanobis_distance(
-    dataset: &AnalyzedDataset,
-    group_i: &str,
-    group_j: &str,
-    variables: &[String]
-) -> f64 {
-    // Extract means for both groups
-    let mut mean_diff = DVector::zeros(variables.len());
-
-    for (idx, var) in variables.iter().enumerate() {
-        let mean_i = dataset.group_means
-            .get(group_i)
-            .and_then(|m| m.get(var))
-            .copied()
-            .unwrap_or(0.0);
-        let mean_j = dataset.group_means
-            .get(group_j)
-            .and_then(|m| m.get(var))
-            .copied()
-            .unwrap_or(0.0);
-        mean_diff[idx] = mean_i - mean_j;
-    }
-
-    // Calculate pooled covariance matrix for these two groups
-    let mut pooled_cov = DMatrix::zeros(variables.len(), variables.len());
-    let mut total_df = 0;
-
-    for group_label in [group_i, group_j] {
-        let n_g = dataset.group_data
-            .get(&variables[0])
-            .and_then(|g| g.get(group_label))
-            .map_or(0, |v| v.len());
-
-        if n_g <= 1 {
-            continue;
-        }
-
-        let df = n_g - 1;
-        total_df += df;
-
-        // Calculate covariance contribution for this group
-        for (i, var_i) in variables.iter().enumerate() {
-            for (j, var_j) in variables.iter().enumerate() {
-                if
-                    let (Some(values_i), Some(values_j)) = (
-                        dataset.group_data.get(var_i).and_then(|g| g.get(group_label)),
-                        dataset.group_data.get(var_j).and_then(|g| g.get(group_label)),
-                    )
-                {
-                    if values_i.len() == values_j.len() && values_i.len() > 1 {
-                        let mean_i = dataset.group_means[group_label][var_i];
-                        let mean_j = dataset.group_means[group_label][var_j];
-
-                        // Calculate covariance
-                        let cov = calculate_covariance(
-                            values_i,
-                            values_j,
-                            Some(mean_i),
-                            Some(mean_j)
-                        );
-
-                        pooled_cov[(i, j)] += (df as f64) * cov;
-                    }
-                }
-            }
-        }
-    }
-
-    // Normalize pooled covariance
-    if total_df > 0 {
-        pooled_cov /= total_df as f64;
-    } else {
-        // If no valid covariance, return a simple Euclidean distance
-        return mean_diff.norm_squared();
-    }
-
-    // Try to invert the matrix using nalgebra
-    match pooled_cov.try_inverse() {
-        Some(inv_cov) => {
-            // Calculate Mahalanobis distance squared
-            let d2 = (mean_diff.transpose() * (inv_cov * mean_diff))[0];
-            d2
-        }
-        None => {
-            // If matrix is singular, use a simplified approach
-            let d2 = mean_diff.norm_squared();
-            d2
-        }
-    }
+        .collect()
 }

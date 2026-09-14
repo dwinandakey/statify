@@ -14,7 +14,8 @@ use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantCon
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
-    extract_analyzed_dataset, get_stepwise_selected_variables, AnalyzedDataset, EPSILON,
+    calculate_prior_probabilities, extract_analyzed_dataset, get_stepwise_selected_variables,
+    AnalyzedDataset, EPSILON,
 };
 
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
@@ -46,6 +47,7 @@ pub fn calculate_classification_results(
 
     let eigen_stats = calculate_eigen_statistics(data, config)?;
     let canonical_functions = calculate_canonical_functions(data, config)?;
+    let priors = resolve_priors(data, config, &dataset)?;
 
     let mut original_classification = HashMap::new();
     let mut original_percentage = HashMap::new();
@@ -83,7 +85,7 @@ pub fn calculate_classification_results(
                 &eigen_stats,
                 &dataset,
                 &variables_to_use,
-                config,
+                &priors,
             );
 
             if let Some(counts) = original_classification.get_mut(group_name) {
@@ -108,7 +110,7 @@ pub fn calculate_classification_results(
 
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     let (cross_validated_classification, cross_validated_percentage) = if config.classify.leave {
-        calculate_cross_validation(config, &dataset, &variables_to_use)?
+        calculate_cross_validation(&dataset, &variables_to_use, &priors)?
     } else {
         (None, None)
     };
@@ -122,10 +124,14 @@ pub fn calculate_classification_results(
 }
 
 /// Calculate cross-validation results using leave-one-out method
+///
+/// `priors` are the full-sample priors (same as the Prior Probabilities table and the
+/// cross-validated casewise statistics); they are not re-estimated per held-out case,
+/// so the cross-validated classification table and casewise rows always agree.
 fn calculate_cross_validation(
-    config: &DiscriminantConfig,
     dataset: &AnalyzedDataset,
     variables_to_use: &[String],
+    priors: &[f64],
 ) -> Result<
     (
         Option<HashMap<String, Vec<i32>>>,
@@ -214,12 +220,6 @@ fn calculate_cross_validation(
                 .try_inverse()
                 .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
 
-            let priors = if config.classify.all_group_equal {
-                vec![1.0 / (leave_dataset.num_groups as f64); leave_dataset.num_groups]
-            } else {
-                calculate_group_priors(&leave_dataset)
-            };
-
             let mut group_probs = Vec::new();
             let x_vec = nalgebra::DVector::from_vec(case_values.clone());
 
@@ -279,7 +279,7 @@ fn classify_case_safe(
     eigen_stats: &EigenDescription,
     dataset: &AnalyzedDataset,
     variables_to_use: &[String],
-    config: &DiscriminantConfig,
+    priors: &[f64],
 ) -> usize {
     let num_functions = eigen_stats.eigenvalue.len();
     let num_groups = dataset.group_labels.len();
@@ -300,12 +300,6 @@ fn classify_case_safe(
             disc_scores[func_idx] += constants[func_idx];
         }
     }
-
-    let priors = if config.classify.all_group_equal {
-        vec![1.0 / (num_groups as f64); num_groups]
-    } else {
-        calculate_group_priors(dataset)
-    };
 
     let mut group_probs = Vec::with_capacity(num_groups);
 
@@ -331,26 +325,25 @@ fn classify_case_safe(
     group_probs[0].0
 }
 
-/// Calculate group prior probabilities
-fn calculate_group_priors(dataset: &AnalyzedDataset) -> Vec<f64> {
-    let mut priors = Vec::new();
-    let total = dataset.total_cases as f64;
-
-    if total == 0.0 {
-        return vec![1.0 / dataset.num_groups as f64; dataset.num_groups];
+/// Prior probabilities in `dataset.group_labels` order.
+///
+/// Taken from `calculate_prior_probabilities` — the same source as the Prior
+/// Probabilities table and the casewise statistics — so every classification output
+/// uses exactly the priors the output reports, instead of re-deriving them here.
+fn resolve_priors(
+    data: &AnalysisData,
+    config: &DiscriminantConfig,
+    dataset: &AnalyzedDataset,
+) -> Result<Vec<f64>, String> {
+    let prior_table = calculate_prior_probabilities(data, config)?;
+    if prior_table.groups != dataset.group_labels
+        || prior_table.prior_probabilities.len() != dataset.group_labels.len()
+    {
+        return Err(
+            "Prior probabilities do not line up with the analysis groups".to_string(),
+        );
     }
-
-    for group in &dataset.group_labels {
-        let count = dataset
-            .group_data
-            .values()
-            .next()
-            .unwrap()
-            .get(group)
-            .map_or(0, |v| v.len());
-        priors.push(count as f64 / total);
-    }
-    priors
+    Ok(prior_table.prior_probabilities)
 }
 
 /// Calculate Fisher's linear discriminant function coefficients
@@ -381,13 +374,9 @@ pub fn calculate_summary_classification(
         None => return Err("Failed to invert pooled within-groups matrix".to_string()),
     };
 
-    // Same prior choice as case classification (classify_case), so the constant
-    // term reflects "All groups equal" vs "Compute from group sizes".
-    let priors = if config.classify.all_group_equal {
-        vec![1.0 / (dataset.group_labels.len() as f64); dataset.group_labels.len()]
-    } else {
-        calculate_group_priors(&dataset)
-    };
+    // Same priors as the Prior Probabilities table and case classification, so the
+    // constant term reflects "All groups equal" vs "Compute from group sizes".
+    let priors = resolve_priors(data, config, &dataset)?;
 
     let mut coefficients: HashMap<String, Vec<f64>> = HashMap::new();
     let mut constant_terms: Vec<f64> = Vec::with_capacity(dataset.group_labels.len());

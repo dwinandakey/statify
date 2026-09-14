@@ -376,6 +376,8 @@ pub fn run_analysis(
         bootstrap_results,
         assumption_results,
         territorial_map: config.classify.terr,
+        combined_groups_plot: config.classify.combine,
+        separate_groups_plot: config.classify.sep_grp,
     };
 
     Ok(Some(result))

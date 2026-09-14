@@ -120,8 +120,26 @@ export function computeDiscriminantCaseResults(
 
     const { minRange, maxRange } = config.defineRange;
 
+    // Selection variable, applied exactly like filter_valid_cases in common.rs: only
+    // when both a selection variable and a value are set; a numeric cell matches
+    // within 1e-10, a text cell matches the value's string form, a blank never
+    // matches. Unselected rows are still classified (as SPSS does), but only selected
+    // rows count toward "Compute from group sizes" priors, because Rust estimates
+    // those priors from the analysis sample.
+    const selectionName = config.main.SelectionVariable;
+    const selectionValue = config.setValue.Value;
+    const selectionColumn =
+        selectionName && selectionValue !== null ? columnOf.get(selectionName) : undefined;
+    const isSelected = (row: string[]): boolean => {
+        if (selectionColumn === undefined || selectionValue === null) return true;
+        const cell = parseCell(row[selectionColumn]);
+        if (typeof cell === "number") return Math.abs(cell - selectionValue) < 1e-10;
+        if (typeof cell === "string") return cell === String(selectionValue);
+        return false;
+    };
+
     // Pass 1 — decide which rows are in the analysis and score them.
-    type Scored = { rowIndex: number; label: string; scores: number[] };
+    type Scored = { rowIndex: number; label: string; scores: number[]; selected: boolean };
     const scored: Scored[] = [];
 
     for (let rowIndex = 0; rowIndex < dataVariables.length; rowIndex++) {
@@ -159,19 +177,30 @@ export function computeDiscriminantCaseResults(
             scores[f] = s;
         }
 
-        scored.push({ rowIndex, label, scores });
+        scored.push({ rowIndex, label, scores, selected: isSelected(row) });
     }
 
     if (scored.length === 0) return null;
 
-    // Priors, following classify_case_safe.
+    // Priors, following the Prior Probabilities table (prior_probabilities.rs), which
+    // every Rust classification path now uses: group sizes are counted over the
+    // analysis sample, i.e. selected rows only, with equal priors if it is empty.
     const priors: number[] = [];
     if (config.classify.AllGroupEqual) {
         priors.push(...new Array<number>(groupLabels.length).fill(1 / groupLabels.length));
     } else {
         const counts = new Map<string, number>(groupLabels.map((g) => [g, 0]));
-        for (const c of scored) counts.set(c.label, (counts.get(c.label) ?? 0) + 1);
-        for (const g of groupLabels) priors.push((counts.get(g) ?? 0) / scored.length);
+        let analysisCases = 0;
+        for (const c of scored) {
+            if (!c.selected) continue;
+            counts.set(c.label, (counts.get(c.label) ?? 0) + 1);
+            analysisCases++;
+        }
+        for (const g of groupLabels) {
+            priors.push(
+                analysisCases > 0 ? (counts.get(g) ?? 0) / analysisCases : 1 / groupLabels.length
+            );
+        }
     }
 
     // Pass 2 — distances, posterior probabilities, predicted group.

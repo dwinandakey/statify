@@ -57,6 +57,29 @@ struct FormatResult {
     // Already display-shaped (Vec-based), so passed straight through.
     assumption_results: Option<crate::models::result::AssumptionResults>,
     territorial_map: bool,
+    combined_groups_plot: bool,
+    separate_groups_plot: bool,
+}
+
+/// Convert a `"Function k" → scores` map into a Vec ordered Function 1, 2, …
+/// HashMap iteration order is arbitrary, and the formatter lays out the casewise
+/// "Discriminant Scores" columns in Vec order, so the order must be fixed here.
+fn scores_in_function_order(scores: &HashMap<String, Vec<f64>>) -> Vec<ScoreValue> {
+    let mut ordered: Vec<ScoreValue> = scores
+        .iter()
+        .map(|(function, values)| ScoreValue {
+            function: function.clone(),
+            values: values.clone(),
+        })
+        .collect();
+    ordered.sort_by_key(|s| {
+        s.function
+            .rsplit(' ')
+            .next()
+            .and_then(|n| n.parse::<usize>().ok())
+            .unwrap_or(usize::MAX)
+    });
+    ordered
 }
 
 #[derive(Serialize)]
@@ -290,11 +313,12 @@ struct StepVariables {
     variables: Vec<VariableInAnalysis>,
 }
 
+/// One row block of the Pairwise Group Comparisons table: a group at a step and its
+/// F / Sig. against every other group (each comparison names the other group).
 #[derive(Serialize)]
 struct GroupPairComparison {
     step: String,
-    group1: String,
-    group2: String,
+    group: String,
     comparisons: Vec<PairwiseComparison>,
 }
 
@@ -700,22 +724,23 @@ impl FormatResult {
                 })
                 .collect();
 
-            let pairwise_comparisons = stats.pairwise_comparisons
+            // One entry per (step, group), ordered by step then group. Both levels come
+            // from HashMaps with arbitrary iteration order, so sort explicitly.
+            let mut pairwise_comparisons: Vec<GroupPairComparison> = stats.pairwise_comparisons
                 .iter()
                 .flat_map(|(step, group_comps)| {
-                    group_comps
-                        .iter()
-                        .map(|(group1, comps)| {
-                            GroupPairComparison {
-                                step: step.clone(),
-                                group1: group1.clone(),
-                                group2: "".to_string(), // Would need actual group2 info
-                                comparisons: comps.clone(),
-                            }
-                        })
-                        .collect::<Vec<GroupPairComparison>>()
+                    group_comps.iter().map(move |(group, comps)| GroupPairComparison {
+                        step: step.clone(),
+                        group: group.clone(),
+                        comparisons: comps.clone(),
+                    })
                 })
                 .collect();
+            pairwise_comparisons.sort_by(|a, b| {
+                let step_a = a.step.parse::<i32>().unwrap_or(i32::MAX);
+                let step_b = b.step.parse::<i32>().unwrap_or(i32::MAX);
+                step_a.cmp(&step_b).then_with(|| a.group.cmp(&b.group))
+            });
 
             FormattedStepwiseStatistics {
                 method: stats.method.clone(),
@@ -745,15 +770,7 @@ impl FormatResult {
 
         // Transform CasewiseStatistics
         let casewise_statistics = result.casewise_statistics.as_ref().map(|stats| {
-            let discriminant_scores = stats.discriminant_scores
-                .iter()
-                .map(|(func, values)| {
-                    ScoreValue {
-                        function: func.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&stats.discriminant_scores);
 
             // Transform cross-validated casewise statistics if present
             let cross_validated = stats.cross_validated.as_ref().map(|cv| {
@@ -854,13 +871,7 @@ impl FormatResult {
 
         // Transform ScatterData
         let scatter_data = result.scatter_data.as_ref().map(|sd| {
-            let discriminant_scores = sd.discriminant_scores
-                .iter()
-                .map(|(func, values)| ScoreValue {
-                    function: func.clone(),
-                    values: values.clone(),
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&sd.discriminant_scores);
             FormattedScatterData {
                 actual_group: sd.actual_group.clone(),
                 discriminant_scores,
@@ -889,6 +900,8 @@ impl FormatResult {
             bootstrap_results: result.bootstrap_results.clone(),
             assumption_results: result.assumption_results.clone(),
             territorial_map: result.territorial_map,
+            combined_groups_plot: result.combined_groups_plot,
+            separate_groups_plot: result.separate_groups_plot,
         }
     }
 }
