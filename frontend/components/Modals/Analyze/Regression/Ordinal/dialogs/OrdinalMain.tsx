@@ -101,7 +101,6 @@ const OrdinalMain: React.FC = () => {
       asymptoticCorrelation: false,
       cellInformation: false,
       testOfParallelLines: false,
-      test_of_multicolinearity: false,
       iterationHistory: false,
       iterationHistoryStep: 1,
       printIterationHistory: false,
@@ -756,10 +755,6 @@ const OrdinalMain: React.FC = () => {
           asymptoticCorrelation: outputParams.display.asymptoticCorrelation,
           cellInformation: outputParams.display.cellInformation,
           testOfParallelLines: outputParams.display.testOfParallelLines,
-          test_of_multicolinearity: Boolean(
-            outputParams.display.test_of_multicolinearity
-            ?? (outputParams.display as any).multicolinearity
-          ),
           iterationHistory: printIterationHistory,
           iterationHistoryStep: iterationHistoryEvery,
           printIterationHistory,

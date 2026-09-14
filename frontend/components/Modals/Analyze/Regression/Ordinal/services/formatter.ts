@@ -1,6 +1,5 @@
 import { AnalysisSection } from "../types/ordinal";
 import { buildOrdinalFormatterContext } from "./formatter_context";
-import { formatCollinearityDiagnostics } from "./formatter_collinearity";
 import { formatIterationHistory } from "./formatter_iteration_history";
 import {
   formatCaseProcessingSummary,
@@ -60,7 +59,6 @@ export const formatOrdinalResult = (result: any) => {
 
   allSections.push(
     ...formatParallelLines(context),
-    ...formatCollinearityDiagnostics(context),
     ...formatIterationHistory(context),
   );
 

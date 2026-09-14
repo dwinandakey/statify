@@ -165,12 +165,6 @@ pub struct PlumOutputOptions {
     pub asymptotic_correlation: Option<bool>,
     pub cell_information: Option<bool>,
     pub test_of_parallel_lines: Option<bool>,
-    #[serde(
-        rename = "test_of_multicolinearity",
-        alias = "testOfMulticolinearity",
-        alias = "multicolinearity"
-    )]
-    pub test_of_multicolinearity: Option<bool>,
     pub iteration_history: Option<bool>,
     pub iteration_history_step: Option<usize>,
     pub print_iteration_history: Option<bool>,
@@ -752,7 +746,6 @@ pub struct PlumFitOutput {
     pub goodness_of_fit: Option<GoodnessOfFit>,
     pub summary_statistics: Option<SummaryStatistics>,
     pub test_of_parallel_lines: Option<ParallelLinesTest>,
-    pub collinearity_diagnostics: Option<CollinearityDiagnosticsResult>,
     pub cell_information: Option<Vec<CellInfo>>,
     pub predicted_category: Option<Vec<PredictedCategoryRow>>,
     pub predicted_probability: Option<Vec<ProbabilityRow>>,

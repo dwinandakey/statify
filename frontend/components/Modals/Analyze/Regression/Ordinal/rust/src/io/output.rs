@@ -3,7 +3,7 @@ use crate::optimizer::fit_location_only;
 use crate::parallel::fit_non_parallel_location_only;
 use crate::statistics::{
     actual_probabilities, correlation_matrix, covariance_matrix, displayed_log_likelihood,
-    compute_collinearity_diagnostics, goodness_of_fit, model_fit_statistics,
+    goodness_of_fit, model_fit_statistics,
     multinomial_log_likelihood_constant,
     parameter_statistics, predicted_categories, predicted_cell_counts, predicted_probabilities,
     excluding_log_likelihood, including_log_likelihood,
@@ -63,10 +63,6 @@ pub fn build_plum_output(
     let want_parallel = output_options
         .as_ref()
         .and_then(|opt| opt.test_of_parallel_lines)
-        .unwrap_or(false);
-    let want_collinearity = output_options
-        .as_ref()
-        .and_then(|opt| opt.test_of_multicolinearity)
         .unwrap_or(false);
     let iteration_history_every = output_options
         .as_ref()
@@ -325,27 +321,6 @@ pub fn build_plum_output(
         None
     };
 
-    let collinearity_diagnostics = if want_collinearity {
-        println!("[ORDINAL][MULTICOLLINEARITY][START]");
-        let x = design_matrix_to_dmatrix(&input.location_model.location_design_matrix)?;
-        let feature_names = &input.location_model.location_term_names;
-        println!(
-            "[ORDINAL][MULTICOLLINEARITY][PAYLOAD] {{\"rows\":{},\"columns\":{}}}",
-            x.nrows(),
-            x.ncols()
-        );
-        let diagnostics = compute_collinearity_diagnostics(&x, feature_names);
-        println!(
-            "[ORDINAL][MULTICOLLINEARITY][RUST_RESULT] {{\"vif\":{},\"corr\":{},\"warnings\":{}}}",
-            diagnostics.vif.len(),
-            diagnostics.correlation_matrix.len(),
-            diagnostics.warnings.len()
-        );
-        Some(diagnostics)
-    } else {
-        None
-    };
-
     let metadata = PlumOutputMetadata {
         model_type: input.metadata.model_type.clone(),
         total_rows: input.metadata.total_rows,
@@ -378,7 +353,6 @@ pub fn build_plum_output(
         goodness_of_fit: goodness,
         summary_statistics: summary,
         test_of_parallel_lines,
-        collinearity_diagnostics,
         cell_information,
         predicted_category,
         predicted_probability,
@@ -388,24 +362,6 @@ pub fn build_plum_output(
         correlation_matrix: correlation.map(|m| matrix_to_vec(&m)),
         errors: Vec::new(),
     })
-}
-
-fn design_matrix_to_dmatrix(matrix: &[Vec<f64>]) -> Result<nalgebra::DMatrix<f64>, PlumError> {
-    let rows = matrix.len();
-    let cols = matrix.first().map(|row| row.len()).unwrap_or(0);
-    if rows == 0 || cols == 0 {
-        return Ok(nalgebra::DMatrix::zeros(rows, cols));
-    }
-    let mut values = Vec::with_capacity(rows * cols);
-    for row in matrix {
-        if row.len() != cols {
-            return Err(PlumError::InvalidInput(
-                "Location design matrix row length mismatch.".to_string(),
-            ));
-        }
-        values.extend_from_slice(row);
-    }
-    Ok(nalgebra::DMatrix::from_row_slice(rows, cols, &values))
 }
 
 fn intercept_only_spec(spec: &PlumSpec) -> PlumSpec {
