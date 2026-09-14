@@ -87,25 +87,27 @@ pub fn calculate_box_m_test(
         box_m -= ((group_sizes[i] - 1) as f64) * log_det;
     }
 
-    // Compute correction factors ρ and τ (named c1 and c2 in code)
-    let c1 = compute_c1_factor(p, k, &group_sizes, total_sample_size); // ρ calculation
-    let c2 = compute_c2_factor(p, k, &group_sizes, total_sample_size); // τ calculation
+    // Compute correction factors A₁ and A₂ (named c1 and c2 in code)
+    let c1 = compute_c1_factor(p, k, &group_sizes, total_sample_size); // A₁
+    let c2 = compute_c2_factor(p, k, &group_sizes, total_sample_size); // A₂
 
     // Compute F approximation
     let v1 = ((p * (p + 1) * (k - 1)) as f64) / 2.0; // f₁ = (g-1)p(p+1)/2
 
-    // Calculate f₂ = (f₁+2)/(|ρ-τ/ρ|)
+    // Calculate f₂ = (f₁+2)/|A₂ − A₁²|
     let v2 = compute_df2(c1, c2, v1);
 
-    // γM where γ = (1-ρ-f₂/f₁)/f₁
+    // b factor of the F approximation (branches on A₂ vs A₁², see compute_b_factor)
     let b = compute_b_factor(c1, c2, v1, v2);
 
-    // f approximation
+    // F approximation:
+    //   A₂ > A₁²:  F = M / b
+    //   A₂ < A₁²:  F = f₂·M / (f₁·(b − M))
     let f_approx = if box_m > EPSILON {
         if c2 > c1 * c1 {
             box_m / b
         } else {
-            // F = (f2 * M) / (f1 * (b - M))
+            // F = (f₂ · M) / (f₁ · (b − M))
             if b > box_m {
                 (v2 * box_m) / (v1 * (b - box_m))
             } else {
@@ -325,9 +327,11 @@ fn compute_pooled_covariance_matrix(
     pooled_cov
 }
 
-/// Computes the c1 (rho) correction factor for Box's M test.
+/// Computes the A₁ correction factor for Box's M test (named c1 in code).
 ///
-/// ρ = 1 - (2p²+3p-1)/(6(p+1)(g-1)) * [Σ1/(nᵢ-1) - 1/(n-g)]
+/// A₁ = (2p²+3p-1)/(6(p+1)(g-1)) * [Σ1/(nᵢ-1) - 1/(n-g)]
+///
+/// This returns A₁ itself, not ρ = 1 − A₁: the F approximation uses A₁ directly.
 ///
 /// # Parameters
 /// * `p` - Number of variables
@@ -336,7 +340,7 @@ fn compute_pooled_covariance_matrix(
 /// * `total_sample_size` - Total sample size
 ///
 /// # Returns
-/// The c1 (rho) correction factor
+/// The A₁ correction factor
 fn compute_c1_factor(p: usize, k: usize, group_sizes: &[usize], total_sample_size: usize) -> f64 {
     let p_f64 = p as f64;
     let k_f64 = k as f64;
@@ -357,15 +361,15 @@ fn compute_c1_factor(p: usize, k: usize, group_sizes: &[usize], total_sample_siz
     let denominator = 6.0 * (p_f64 + 1.0) * (k_f64 - 1.0);
 
     if denominator > EPSILON {
-        numerator / denominator // Karena aproksimasi F, langsung dibagi dan tidak dikurangi 1 di awal
+        numerator / denominator // A₁, bukan ρ = 1 − A₁: aproksimasi F memakai A₁ langsung
     } else {
         0.0
     }
 }
 
-/// Computes the c2 (tau) correction factor for Box's M test.
+/// Computes the A₂ correction factor for Box's M test (named c2 in code).
 ///
-/// τ = (p-1)(p+2)/(6(g-1)) * [Σ1/(nᵢ-1)² - 1/(n-g)²]
+/// A₂ = (p-1)(p+2)/(6(g-1)) * [Σ1/(nᵢ-1)² - 1/(n-g)²]
 ///
 /// # Parameters
 /// * `p` - Number of variables
@@ -374,7 +378,7 @@ fn compute_c1_factor(p: usize, k: usize, group_sizes: &[usize], total_sample_siz
 /// * `total_sample_size` - Total sample size
 ///
 /// # Returns
-/// The c2 (tau) correction factor
+/// The A₂ correction factor
 fn compute_c2_factor(p: usize, k: usize, group_sizes: &[usize], total_sample_size: usize) -> f64 {
     let p_f64 = p as f64;
     let k_f64 = k as f64;
@@ -395,16 +399,16 @@ fn compute_c2_factor(p: usize, k: usize, group_sizes: &[usize], total_sample_siz
     ((p_f64 - 1.0) * (p_f64 + 2.0) * sum2) / (6.0 * (k_f64 - 1.0))
 }
 
-/// Computes the b-factor for F approximation.
+/// Computes the b factor for the F approximation.
 ///
-/// b = f₁/(1-ρ-f₁/f₂)  if e₂ > e₁²
-/// b = f₂/(1-ρ-2/f₂)  if e₂ < e₁²
+/// b = f₁/(1 − A₁ − f₁/f₂)   if A₂ > A₁²
+/// b = f₂/(1 − A₁ + 2/f₂)    if A₂ < A₁²
 ///
 /// # Parameters
-/// * `c1` - The c1 (rho) correction factor
-/// * `c2` - The c2 (tau) correction factor
-/// * `v1` - The first degrees of freedom
-/// * `v2` - The second degrees of freedom
+/// * `c1` - The A₁ correction factor
+/// * `c2` - The A₂ correction factor
+/// * `v1` - f₁, the first degrees of freedom
+/// * `v2` - f₂, the second degrees of freedom
 ///
 /// # Returns
 /// The b-factor
@@ -418,12 +422,12 @@ fn compute_b_factor(c1: f64, c2: f64, v1: f64, v2: f64) -> f64 {
 
 /// Computes the second degrees of freedom (df2) for F approximation.
 ///
-/// f₂ = (f₁+2)/(|ρ-τ/ρ|)
+/// f₂ = (f₁+2)/|A₂ − A₁²|
 ///
 /// # Parameters
-/// * `c1` - The c1 (rho) correction factor
-/// * `c2` - The c2 (tau) correction factor
-/// * `df1` - The first degrees of freedom
+/// * `c1` - The A₁ correction factor
+/// * `c2` - The A₂ correction factor
+/// * `df1` - f₁, the first degrees of freedom
 ///
 /// # Returns
 /// The second degrees of freedom (df2)

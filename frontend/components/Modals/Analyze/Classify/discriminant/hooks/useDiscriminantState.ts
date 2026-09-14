@@ -182,8 +182,14 @@ export const useDiscriminantState = (
                         console.log("errors", errors);
                         console.log("results", formattedResults);
 
-                        if (errors && errors.length > 0) {
+                        // The WASM error collector always returns a summary string;
+                        // "No errors occurred." is its empty state. Anything else means
+                        // some tables could not be computed, which the user must see.
+                        if (typeof errors === "string" && errors.trim() !== "No errors occurred.") {
                             console.warn("Analysis warnings:", errors);
+                            toast.warning("Some discriminant output could not be computed", {
+                                description: errors,
+                            });
                         }
 
                         await saveDiscriminantResult(formattedResults);
@@ -228,6 +234,9 @@ export const useDiscriminantState = (
                         worker.terminate();
                     } else {
                         console.error("[Discriminant] Worker Error:", workerError);
+                        // The dialog may already be closed when the worker replies, so
+                        // the inline Alert alone is not enough — surface it as a toast.
+                        toast.error(`Discriminant analysis failed: ${workerError || "Unknown worker error"}`);
                         setError(workerError || "Unknown worker error");
                         setIsLoading(false);
                         worker.terminate();
@@ -240,6 +249,7 @@ export const useDiscriminantState = (
                     const detail = err.message
                         ? `${err.message} (${err.filename || "unknown"}:${err.lineno || 0}:${err.colno || 0})`
                         : String(err);
+                    toast.error(`Discriminant analysis failed: ${detail}`);
                     setError(`Worker Error: ${detail}`);
                     setIsLoading(false);
                     worker.terminate();
