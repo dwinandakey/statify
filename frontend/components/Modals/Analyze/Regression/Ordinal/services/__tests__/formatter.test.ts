@@ -265,42 +265,92 @@ describe("formatOrdinalResult", () => {
     expect(formatted.sections).toEqual([]);
   });
 
-  it("should render GVIF collinearity diagnostics when requested", () => {
+  it("should render multicollinearity diagnostics (Correlation Matrix and Collinearity Statistics VIF) when requested", () => {
     const formatted = formatOrdinalResult({
       outputOptions: {
         test_of_multicolinearity: true,
       },
       collinearityDiagnostics: {
-        rows: [
+        vif: [
           {
-            predictor: "Education",
-            predictorType: "Factor",
-            df: 3,
-            gvif: 40.1,
-            adjustedGvif: 1.85,
-            interpretation: "Safe",
+            variable: "Education",
+            tolerance: 0.825,
+            vif: 1.212,
           },
           {
-            predictor: "Income",
-            predictorType: "Covariate",
-            df: 1,
-            gvif: 4.55,
-            adjustedGvif: 2.1334,
-            interpretation: "Attention",
+            variable: "Income",
+            tolerance: 0.825,
+            vif: 1.212,
+          },
+        ],
+        correlationMatrix: [
+          {
+            variable: "Education",
+            values: [1.0, 0.418],
+          },
+          {
+            variable: "Income",
+            values: [0.418, 1.0],
           },
         ],
         warnings: ["Correlation matrix was near-singular; a small ridge regularization was applied."],
       },
     });
 
-    const section = formatted.sections.find(s => s.id === "ordinal_collinearity_diagnostics");
-    expect(section).toBeDefined();
-    expect(section?.title).toBe("Collinearity Diagnostics");
-    expect(section?.data.rows[0].df).toBe("3");
-    expect(section?.data.rows[0].gvif).toBe("40.100");
-    expect(section?.data.rows[1].adjustedGvif).toBe("2.133");
-    expect(section?.note).toContain("GVIF is independent of the selected link function.");
-    expect(section?.note).toContain("Warning: Correlation matrix was near-singular");
+    // 1. Check Correlation Matrix Table
+    const corrSection = formatted.sections.find(s => s.id === "ordinal_correlation_matrix");
+    expect(corrSection).toBeDefined();
+    expect(corrSection?.title).toBe("Correlation Matrix");
+    expect(corrSection?.data.columnHeaders).toEqual([
+      { header: "Variable", key: "row_var" },
+      { header: "Education", key: "col_0" },
+      { header: "Income", key: "col_1" },
+    ]);
+    expect(corrSection?.data.rows[0].row_var).toBe("Education");
+    expect(corrSection?.data.rows[0].col_0).toBe("1.000");
+    expect(corrSection?.data.rows[0].col_1).toBe("0.418");
+
+    // 2. Check Collinearity Statistics (VIF) Table
+    const vifSection = formatted.sections.find(s => s.id === "ordinal_collinearity_diagnostics");
+    expect(vifSection).toBeDefined();
+    expect(vifSection?.title).toBe("Collinearity Statistics (VIF)");
+    expect(vifSection?.data.columnHeaders).toEqual([
+      { header: "Variable", key: "var" },
+      { header: "Tolerance", key: "tol" },
+      { header: "VIF", key: "vif" },
+      { header: "Concern Level", key: "concern" },
+    ]);
+    expect(vifSection?.data.rows[0].var).toBe("Education");
+    expect(vifSection?.data.rows[0].tol).toBe("0.825");
+    expect(vifSection?.data.rows[0].vif).toBe("1.212");
+    expect(vifSection?.data.rows[0].concern).toBe("Low");
+    expect(vifSection?.description).toContain("No significant multicollinearity detected based on VIF values");
+    expect(vifSection?.note).toContain("Warning: Correlation matrix was near-singular");
+  });
+
+  it("should format multicollinearity warning correctly when VIF >= 5 and high correlation exists", () => {
+    const formatted = formatOrdinalResult({
+      outputOptions: {
+        test_of_multicolinearity: true,
+      },
+      collinearityDiagnostics: {
+        vif: [
+          { variable: "X1", tolerance: 0.15, vif: 6.67 },
+          { variable: "X2", tolerance: 0.15, vif: 6.67 },
+        ],
+        correlationMatrix: [
+          { variable: "X1", values: [1.0, 0.92] },
+          { variable: "X2", values: [0.92, 1.0] },
+        ],
+      },
+    });
+
+    const vifSection = formatted.sections.find(s => s.id === "ordinal_collinearity_diagnostics");
+    expect(vifSection).toBeDefined();
+    expect(vifSection?.data.rows[0].concern).toBe("High");
+    expect(vifSection?.description).toContain("Potential multicollinearity detected");
+    expect(vifSection?.description).toContain("X1 (VIF=6.670)");
+    expect(vifSection?.description).toContain("strong correlations (|r| > 0.8)");
   });
 
   it("should include factor level counts in case processing summary", () => {

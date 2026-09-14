@@ -5,8 +5,9 @@ use statrs::function::gamma::ln_gamma;
 use crate::model::{cell_probabilities, cumulative_probabilities};
 use crate::types::{
     AggregatedData, CellInfo, FitResult, FitStat, GoodnessOfFit, ModelChiSquare, ModelSummaryRow,
-    CollinearityDiagnosticsResult, EncodedPredictorBlock, GvifOptions, GvifRow,
+    CollinearityDiagnosticsResult, CorrelationRow, EncodedPredictorBlock, GvifOptions, GvifRow,
     ParameterEstimateRow, PlumError, PlumSpec, ProbabilityRow, PseudoRSquare, SummaryStatistics,
+    VifRow,
 };
 use crate::utils::EPS;
 
@@ -60,6 +61,181 @@ pub fn correlation_matrix(covariance: &DMatrix<f64>) -> DMatrix<f64> {
     corr
 }
 
+/// Menghitung VIF (Variance Inflation Factor) dengan OLS auxiliary regression
+/// Sesuai logika binary logistic regression:
+/// VIF_j = 1 / (1 - R_j^2), Tolerance_j = 1 - R_j^2
+pub fn calculate_vif(
+    x: &DMatrix<f64>,
+    feature_names: &[String],
+) -> (Vec<VifRow>, Vec<String>) {
+    let (rows, cols) = x.shape();
+    let mut warnings = Vec::new();
+
+    if cols < 2 {
+        warnings.push("VIF requires at least two independent variables.".to_string());
+        return (vec![], warnings);
+    }
+
+    let mut results = Vec::with_capacity(cols);
+
+    for i in 0..cols {
+        let y_curr = x.column(i).into_owned();
+
+        // 1. Matriks desain auxiliary: Intercept (1.0) + semua kolom selain i
+        let mut predictors_vec = Vec::with_capacity(rows * cols);
+        for _ in 0..rows {
+            predictors_vec.push(1.0);
+        }
+        for j in 0..cols {
+            if i == j {
+                continue;
+            }
+            predictors_vec.extend(x.column(j).iter());
+        }
+
+        let x_design = DMatrix::from_vec(rows, cols, predictors_vec);
+        let xt = x_design.transpose();
+        let xtx = &xt * &x_design;
+
+        let var_name = if i < feature_names.len() {
+            feature_names[i].clone()
+        } else {
+            format!("Var_{}", i + 1)
+        };
+
+        let (tolerance, vif) = match xtx.try_inverse() {
+            Some(xtx_inv) => {
+                let xty = &xt * &y_curr;
+                let b = &xtx_inv * &xty;
+
+                let y_pred = &x_design * b;
+                let y_mean = y_curr.mean();
+
+                let sst: f64 = y_curr.iter().map(|&v| (v - y_mean).powi(2)).sum();
+                let sse: f64 = (y_curr - y_pred).iter().map(|&v| v.powi(2)).sum();
+
+                let r_sq = if sst.abs() < 1e-9 {
+                    1.0
+                } else {
+                    1.0 - (sse / sst)
+                };
+
+                let r_sq = r_sq.max(0.0).min(1.0);
+                let tol = 1.0 - r_sq;
+                let v = if tol < 1e-9 { 1000.0 } else { 1.0 / tol };
+
+                (tol, v)
+            }
+            None => {
+                warnings.push(format!(
+                    "Singular matrix detected for {}; perfect multicollinearity exists.",
+                    var_name
+                ));
+                (0.0, 999.9)
+            }
+        };
+
+        results.push(VifRow {
+            variable: var_name,
+            tolerance,
+            vif,
+        });
+    }
+
+    (results, warnings)
+}
+
+/// Menghitung Pearson Correlation Matrix antar-variabel prediktor
+pub fn calculate_correlation_matrix(
+    x: &DMatrix<f64>,
+    feature_names: &[String],
+) -> Result<Vec<CorrelationRow>, String> {
+    let (rows, cols) = x.shape();
+    if rows < 2 {
+        return Err("Not enough data points".to_string());
+    }
+
+    let mut result_rows = Vec::with_capacity(cols);
+    let mut means = Vec::with_capacity(cols);
+    let mut std_devs = Vec::with_capacity(cols);
+
+    for j in 0..cols {
+        let col = x.column(j);
+        let mean = col.mean();
+        let variance = col.iter().map(|&v| (v - mean).powi(2)).sum::<f64>() / ((rows - 1) as f64);
+        let std_dev = variance.sqrt();
+        means.push(mean);
+        std_devs.push(std_dev);
+    }
+
+    for i in 0..cols {
+        let mut row_values = Vec::with_capacity(cols);
+        for j in 0..cols {
+            if i == j {
+                row_values.push(1.0);
+            } else {
+                let col_i = x.column(i);
+                let col_j = x.column(j);
+
+                let mean_i = means[i];
+                let mean_j = means[j];
+                let sd_i = std_devs[i];
+                let sd_j = std_devs[j];
+
+                let covariance: f64 = col_i
+                    .iter()
+                    .zip(col_j.iter())
+                    .map(|(&val_i, &val_j)| (val_i - mean_i) * (val_j - mean_j))
+                    .sum::<f64>()
+                    / ((rows - 1) as f64);
+
+                let corr = if sd_i.abs() < 1e-9 || sd_j.abs() < 1e-9 {
+                    0.0
+                } else {
+                    covariance / (sd_i * sd_j)
+                };
+
+                row_values.push(corr.max(-1.0).min(1.0));
+            }
+        }
+
+        let var_name = if i < feature_names.len() {
+            feature_names[i].clone()
+        } else {
+            format!("Var_{}", i + 1)
+        };
+
+        result_rows.push(CorrelationRow {
+            variable: var_name,
+            values: row_values,
+        });
+    }
+
+    Ok(result_rows)
+}
+
+/// Menghitung diagnostik multikolinearitas lengkap sesuai binary logistic (VIF + Correlation Matrix)
+pub fn compute_collinearity_diagnostics(
+    x: &DMatrix<f64>,
+    feature_names: &[String],
+) -> CollinearityDiagnosticsResult {
+    let (vif_rows, mut warnings) = calculate_vif(x, feature_names);
+    let corr_matrix = match calculate_correlation_matrix(x, feature_names) {
+        Ok(matrix) => matrix,
+        Err(err) => {
+            warnings.push(err);
+            Vec::new()
+        }
+    };
+
+    CollinearityDiagnosticsResult {
+        vif: vif_rows,
+        correlation_matrix: corr_matrix,
+        warnings,
+        rows: Vec::new(),
+    }
+}
+
 pub fn compute_gvif_diagnostics(
     x: &DMatrix<f64>,
     blocks: Vec<EncodedPredictorBlock>,
@@ -73,7 +249,7 @@ pub fn compute_gvif_diagnostics(
             "GVIF cannot be computed because at least two encoded predictor columns are required."
                 .to_string(),
         );
-        return CollinearityDiagnosticsResult { rows, warnings };
+        return CollinearityDiagnosticsResult { rows, warnings, ..Default::default() };
     }
 
     let mut kept_columns = Vec::new();
@@ -104,7 +280,7 @@ pub fn compute_gvif_diagnostics(
             "GVIF cannot be computed because at least two encoded predictor columns are required."
                 .to_string(),
         );
-        return CollinearityDiagnosticsResult { rows, warnings };
+        return CollinearityDiagnosticsResult { rows, warnings, ..Default::default() };
     }
 
     let filtered_blocks: Vec<EncodedPredictorBlock> = blocks
@@ -131,7 +307,7 @@ pub fn compute_gvif_diagnostics(
             "GVIF cannot be computed because at least two encoded predictor columns are required."
                 .to_string(),
         );
-        return CollinearityDiagnosticsResult { rows, warnings };
+        return CollinearityDiagnosticsResult { rows, warnings, ..Default::default() };
     }
 
     let filtered_x = DMatrix::from_fn(x.nrows(), kept_columns.len(), |row, col| {
@@ -141,7 +317,7 @@ pub fn compute_gvif_diagnostics(
     let mut ridge_warning_added = false;
     let logdet_r = match stable_logdet(&r, options.ridge_lambda, &mut ridge_warning_added) {
         Some(value) => value,
-        None => return CollinearityDiagnosticsResult { rows, warnings },
+        None => return CollinearityDiagnosticsResult { rows, warnings, ..Default::default() },
     };
 
     for block in filtered_blocks {
@@ -201,7 +377,7 @@ pub fn compute_gvif_diagnostics(
         );
     }
 
-    CollinearityDiagnosticsResult { rows, warnings }
+    CollinearityDiagnosticsResult { rows, warnings, ..Default::default() }
 }
 
 fn design_correlation_matrix(x: &DMatrix<f64>) -> DMatrix<f64> {
@@ -626,5 +802,63 @@ pub fn predicted_categories(
         });
     }
     rows
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nalgebra::DMatrix;
+
+    #[test]
+    fn test_calculate_vif_and_correlation() {
+        // Create 2 independent variables that are moderately correlated
+        let x = DMatrix::from_row_slice(
+            6,
+            2,
+            &[
+                1.0, 2.0,
+                2.0, 3.0,
+                3.0, 5.0,
+                4.0, 7.0,
+                5.0, 8.0,
+                6.0, 10.0,
+            ],
+        );
+        let names = vec!["X1".to_string(), "X2".to_string()];
+        let diag = compute_collinearity_diagnostics(&x, &names);
+
+        assert_eq!(diag.vif.len(), 2);
+        assert_eq!(diag.vif[0].variable, "X1");
+        assert_eq!(diag.vif[1].variable, "X2");
+        assert!(diag.vif[0].vif >= 1.0);
+        assert!(diag.vif[0].tolerance <= 1.0 && diag.vif[0].tolerance > 0.0);
+
+        assert_eq!(diag.correlation_matrix.len(), 2);
+        assert_eq!(diag.correlation_matrix[0].variable, "X1");
+        assert!((diag.correlation_matrix[0].values[0] - 1.0).abs() < 1e-9);
+        assert!((diag.correlation_matrix[1].values[1] - 1.0).abs() < 1e-9);
+        assert!(diag.correlation_matrix[0].values[1] > 0.9);
+    }
+
+    #[test]
+    fn test_perfect_multicollinearity_handling() {
+        // Perfectly correlated: X2 = 2 * X1
+        let x = DMatrix::from_row_slice(
+            4,
+            2,
+            &[
+                1.0, 2.0,
+                2.0, 4.0,
+                3.0, 6.0,
+                4.0, 8.0,
+            ],
+        );
+        let names = vec!["A".to_string(), "B".to_string()];
+        let diag = compute_collinearity_diagnostics(&x, &names);
+
+        assert_eq!(diag.vif.len(), 2);
+        assert_eq!(diag.vif[0].tolerance, 0.0);
+        assert_eq!(diag.vif[0].vif, 1000.0);
+    }
 }
 

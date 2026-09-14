@@ -3,13 +3,13 @@ use crate::optimizer::fit_location_only;
 use crate::parallel::fit_non_parallel_location_only;
 use crate::statistics::{
     actual_probabilities, correlation_matrix, covariance_matrix, displayed_log_likelihood,
-    compute_gvif_diagnostics, goodness_of_fit, model_fit_statistics,
+    compute_collinearity_diagnostics, goodness_of_fit, model_fit_statistics,
     multinomial_log_likelihood_constant,
     parameter_statistics, predicted_categories, predicted_cell_counts, predicted_probabilities,
     excluding_log_likelihood, including_log_likelihood,
 };
 use crate::types::{
-    EncodedPredictorBlock, EstimationOptions, FitResult, GvifOptions, IterationHistoryMeta,
+    EstimationOptions, FitResult, IterationHistoryMeta,
     IterationHistoryOptions, ModelType, PlumError, PlumFitOutput, PlumOutputMetadata,
     PlumOutputOptions, PlumSavedVariableOptions, PlumSpec, PlumWorkerPayload, SavedVariableColumn,
     SavedVariablesResult, Subpopulation,
@@ -328,17 +328,17 @@ pub fn build_plum_output(
     let collinearity_diagnostics = if want_collinearity {
         println!("[ORDINAL][MULTICOLLINEARITY][START]");
         let x = design_matrix_to_dmatrix(&input.location_model.location_design_matrix)?;
-        let blocks = build_encoded_predictor_blocks(input);
+        let feature_names = &input.location_model.location_term_names;
         println!(
-            "[ORDINAL][MULTICOLLINEARITY][PAYLOAD] {{\"rows\":{},\"columns\":{},\"blocks\":{}}}",
+            "[ORDINAL][MULTICOLLINEARITY][PAYLOAD] {{\"rows\":{},\"columns\":{}}}",
             x.nrows(),
-            x.ncols(),
-            blocks.len()
+            x.ncols()
         );
-        let diagnostics = compute_gvif_diagnostics(&x, blocks, GvifOptions::default());
+        let diagnostics = compute_collinearity_diagnostics(&x, feature_names);
         println!(
-            "[ORDINAL][MULTICOLLINEARITY][RUST_RESULT] {{\"rows\":{},\"warnings\":{}}}",
-            diagnostics.rows.len(),
+            "[ORDINAL][MULTICOLLINEARITY][RUST_RESULT] {{\"vif\":{},\"corr\":{},\"warnings\":{}}}",
+            diagnostics.vif.len(),
+            diagnostics.correlation_matrix.len(),
             diagnostics.warnings.len()
         );
         Some(diagnostics)
@@ -406,75 +406,6 @@ fn design_matrix_to_dmatrix(matrix: &[Vec<f64>]) -> Result<nalgebra::DMatrix<f64
         values.extend_from_slice(row);
     }
     Ok(nalgebra::DMatrix::from_row_slice(rows, cols, &values))
-}
-
-fn build_encoded_predictor_blocks(input: &PlumWorkerPayload) -> Vec<EncodedPredictorBlock> {
-    let mut blocks = Vec::new();
-    let mut next_column = 0usize;
-    let total_columns = input.location_model.location_term_names.len();
-    let factor_metadata = if input.location_model.factor_level_metadata.is_empty() {
-        &input.factor_level_metadata
-    } else {
-        &input.location_model.factor_level_metadata
-    };
-
-    for predictor in &input.location_model.predictors {
-        match predictor.role.as_str() {
-            "factor" => {
-                let mut indices = factor_metadata
-                    .iter()
-                    .filter(|meta| meta.variable_name == predictor.name)
-                    .filter_map(|meta| meta.active_column_index)
-                    .filter(|idx| *idx < total_columns)
-                    .collect::<Vec<_>>();
-                indices.sort_unstable();
-                indices.dedup();
-
-                if indices.is_empty() {
-                    let level_count = predictor
-                        .levels
-                        .as_ref()
-                        .map(|levels| levels.len().saturating_sub(1))
-                        .unwrap_or(1);
-                    indices = (next_column..(next_column + level_count).min(total_columns))
-                        .collect();
-                }
-
-                if let Some(max_idx) = indices.iter().max() {
-                    next_column = (*max_idx + 1).max(next_column);
-                }
-                blocks.push(EncodedPredictorBlock {
-                    predictor_name: predictor.name.clone(),
-                    predictor_type: "Factor".to_string(),
-                    column_indices: indices,
-                });
-            }
-            "interaction" => {
-                let width = predictor.encoded_column_count.unwrap_or(1).max(1);
-                let end_column = (next_column + width).min(total_columns);
-                if next_column < end_column {
-                    blocks.push(EncodedPredictorBlock {
-                        predictor_name: predictor.name.clone(),
-                        predictor_type: "Interaction".to_string(),
-                        column_indices: (next_column..end_column).collect(),
-                    });
-                    next_column = end_column;
-                }
-            }
-            _ => {
-                if next_column < total_columns {
-                    blocks.push(EncodedPredictorBlock {
-                        predictor_name: predictor.name.clone(),
-                        predictor_type: "Covariate".to_string(),
-                        column_indices: vec![next_column],
-                    });
-                    next_column += 1;
-                }
-            }
-        }
-    }
-
-    blocks
 }
 
 fn intercept_only_spec(spec: &PlumSpec) -> PlumSpec {

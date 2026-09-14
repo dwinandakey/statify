@@ -618,7 +618,22 @@ pub struct ParallelLinesTest {
     pub converged: bool,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VifRow {
+    pub variable: String,
+    pub tolerance: f64,
+    pub vif: f64,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CorrelationRow {
+    pub variable: String,
+    pub values: Vec<f64>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GvifRow {
     pub predictor: String,
@@ -629,11 +644,17 @@ pub struct GvifRow {
     pub interpretation: String,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CollinearityDiagnosticsResult {
-    pub rows: Vec<GvifRow>,
+    #[serde(default)]
+    pub vif: Vec<VifRow>,
+    #[serde(default, rename = "correlationMatrix")]
+    pub correlation_matrix: Vec<CorrelationRow>,
+    #[serde(default)]
     pub warnings: Vec<String>,
+    #[serde(default)]
+    pub rows: Vec<GvifRow>,
 }
 
 #[derive(Clone, Debug)]
