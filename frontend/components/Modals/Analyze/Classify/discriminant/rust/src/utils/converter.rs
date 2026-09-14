@@ -305,6 +305,9 @@ struct FormattedStepwiseStatistics {
     variables_in_analysis: Vec<StepVariables>,
     variables_not_in_analysis: Vec<StepVariables>,
     pairwise_comparisons: Vec<GroupPairComparison>,
+    /// Footnotes of the Variables Entered/Removed table, built from the thresholds
+    /// the procedure actually applied.
+    note: crate::models::result::StepwiseNote,
 }
 
 #[derive(Serialize)]
@@ -765,6 +768,7 @@ impl FormatResult {
                 variables_in_analysis,
                 variables_not_in_analysis,
                 pairwise_comparisons,
+                note: stats.note.clone(),
             }
         });
 

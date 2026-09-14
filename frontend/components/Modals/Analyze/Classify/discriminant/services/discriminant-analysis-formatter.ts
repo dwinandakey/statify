@@ -101,31 +101,36 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rows: [],
     };
 
-    // Processed
+    // Processed = every case; Used in Output = Processed − Excluded. With "Replace
+    // missing values with mean", cases missing only a predictor are still classified,
+    // so Rust reports 0 for that exclusion (classification_missing_disc_vars).
+    const ps = data.processing_summary;
+    const missingGroupExcluded =
+      (ps.missing_group_codes ?? 0) + (ps.both_missing ?? 0);
+    const missingDiscExcluded =
+      ps.classification_missing_disc_vars ?? ps.missing_disc_vars ?? 0;
+
     table.rows.push({
       rowHeader: ["Processed"],
-      value: formatCount(data.processing_summary.valid_count),
+      value: formatCount(ps.total_count),
     });
 
-    // Excluded rows
-    if (data.processing_summary.missing_group_codes !== undefined) {
-      table.rows.push({
-        rowHeader: ["Excluded", "Missing or out-of-range group codes"],
-        value: formatCount(data.processing_summary.missing_group_codes),
-      });
-    }
+    table.rows.push({
+      rowHeader: ["Excluded", "Missing or out-of-range group codes"],
+      value: formatCount(missingGroupExcluded),
+    });
 
-    if (data.processing_summary.missing_disc_vars !== undefined) {
-      table.rows.push({
-        rowHeader: ["", "At least one missing discriminating variable"],
-        value: formatCount(data.processing_summary.missing_disc_vars),
-      });
-    }
+    table.rows.push({
+      rowHeader: ["", "At least one missing discriminating variable"],
+      value: formatCount(missingDiscExcluded),
+    });
 
-    // Used in Output
     table.rows.push({
       rowHeader: ["Used in Output"],
-      value: formatCount(data.processing_summary.valid_count),
+      value: formatCount(
+        ps.classification_used_count ??
+          ps.total_count - missingGroupExcluded - missingDiscExcluded,
+      ),
     });
 
     resultJson.tables.push(table);
@@ -1105,97 +1110,31 @@ export function transformDiscriminantResult(data: any): ResultJson {
       }
     }
 
-    if (isRaosVMethod) {
-      table.rows.push({
-        rowHeader: [
-          "At each step, the variable that produces the largest increase in Rao's V is entered.",
-        ],
-      });
-      table.rows.push({ rowHeader: ["a. Maximum number of steps is 18."] });
-      table.rows.push({
-        rowHeader: ["b. Minimum partial F to enter is 3.84."],
-      });
-      table.rows.push({
-        rowHeader: ["c. Maximum partial F to remove is 2.71."],
-      });
-      table.rows.push({ rowHeader: ["d. Minimum Rao's V to enter is 1."] });
-      table.rows.push({
-        rowHeader: [
-          "e. F level, tolerance, or VIN insufficient for further computation.",
-        ],
-      });
-    } else if (isFRatio) {
-      table.rows.push({
-        rowHeader: [
-          "At each step, the variable that maximizes the smallest F ratio between pairs of groups is entered.",
-        ],
-      });
-      table.rows.push({ rowHeader: ["a. Maximum number of steps is 18."] });
-      table.rows.push({
-        rowHeader: ["b. Minimum partial F to enter is 3.84."],
-      });
-      table.rows.push({
-        rowHeader: ["c. Maximum partial F to remove is 2.71."],
-      });
-      table.rows.push({
-        rowHeader: [
-          "d. F level, tolerance, or VIN insufficient for further computation.",
-        ],
-      });
-    } else if (isUnexplained) {
-      table.rows.push({
-        rowHeader: [
-          "At each step, the variable that minimizes the sum of the unexplained variation for all pairs of groups is entered.",
-        ],
-      });
-      table.rows.push({ rowHeader: ["a. Maximum number of steps is 18."] });
-      table.rows.push({
-        rowHeader: ["b. Minimum partial F to enter is 3.84."],
-      });
-      table.rows.push({
-        rowHeader: ["c. Maximum partial F to remove is 2.71."],
-      });
-      table.rows.push({
-        rowHeader: [
-          "d. F level, tolerance, or VIN insufficient for further computation.",
-        ],
-      });
-    } else if (isMahalanobis) {
-      table.rows.push({
-        rowHeader: [
-          "At each step, the variable that maximizes the Mahalanobis distance between the two closest groups is entered.",
-        ],
-      });
-      table.rows.push({ rowHeader: ["a. Maximum number of steps is 18."] });
-      table.rows.push({
-        rowHeader: ["b. Minimum partial F to enter is 3.84."],
-      });
-      table.rows.push({
-        rowHeader: ["c. Maximum partial F to remove is 2.71."],
-      });
-      table.rows.push({
-        rowHeader: [
-          "d. F level, tolerance, or VIN insufficient for further computation.",
-        ],
-      });
-    } else {
-      table.rows.push({
-        rowHeader: [
-          "At each step, the variable that minimizes the overall Wilks' Lambda is entered.",
-        ],
-      });
-      table.rows.push({ rowHeader: ["a. Maximum number of steps is 18."] });
-      table.rows.push({
-        rowHeader: ["b. Minimum partial F to enter is 3.84."],
-      });
-      table.rows.push({
-        rowHeader: ["c. Maximum partial F to remove is 2.71."],
-      });
-      table.rows.push({
-        rowHeader: [
-          "d. F level, tolerance, or VIN insufficient for further computation.",
-        ],
-      });
+    const methodDescription = isRaosVMethod
+      ? "At each step, the variable that produces the largest increase in Rao's V is entered."
+      : isFRatio
+        ? "At each step, the variable that maximizes the smallest F ratio between pairs of groups is entered."
+        : isUnexplained
+          ? "At each step, the variable that minimizes the sum of the unexplained variation for all pairs of groups is entered."
+          : isMahalanobis
+            ? "At each step, the variable that maximizes the Mahalanobis distance between the two closest groups is entered."
+            : "At each step, the variable that minimizes the overall Wilks' Lambda is entered.";
+    table.rows.push({ rowHeader: [methodDescription] });
+
+    // Footnotes come from Rust (create_stepwise_note), which builds them from the
+    // thresholds the procedure actually applied: max steps = 2 × predictors, the
+    // user's F / probability criteria, and V-to-enter for Rao's V (empty otherwise).
+    const swNote = data.stepwise_statistics.note;
+    for (const text of [
+      swNote?.max_steps,
+      swNote?.min_f_to_enter,
+      swNote?.max_f_to_remove,
+      swNote?.min_v_to_enter,
+      swNote?.note,
+    ]) {
+      if (typeof text === "string" && text.length > 0) {
+        table.rows.push({ rowHeader: [text] });
+      }
     }
 
     resultJson.tables.push(table);

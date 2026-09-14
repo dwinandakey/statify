@@ -197,6 +197,14 @@ pub struct ProcessingSummary {
     pub both_missing_percent: Option<f64>,
     #[serde(rename = "total_excluded_percent")]
     pub total_excluded_percent: Option<f64>,
+    /// Classification Processing Summary: cases excluded for a missing predictor.
+    /// 0 when "Replace missing values with mean" is on, because those cases are still
+    /// classified with the predictor means substituted.
+    #[serde(rename = "classification_missing_disc_vars")]
+    pub classification_missing_disc_vars: Option<usize>,
+    /// Classification Processing Summary: cases used in the classification output.
+    #[serde(rename = "classification_used_count")]
+    pub classification_used_cases: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -392,6 +400,8 @@ pub struct StepwiseNote {
     pub max_steps: String,
     pub min_f_to_enter: String,
     pub max_f_to_remove: String,
+    /// "Minimum Rao's V to enter is …" — empty for every method except Rao's V.
+    pub min_v_to_enter: String,
     pub note: String,
 }
 

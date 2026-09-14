@@ -14,8 +14,8 @@ use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantCon
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
-    calculate_prior_probabilities, extract_analyzed_dataset, get_stepwise_selected_variables,
-    AnalyzedDataset, EPSILON,
+    calculate_prior_probabilities, classification_case_values, extract_analyzed_dataset,
+    get_stepwise_selected_variables, AnalyzedDataset, MeanSubstitutedCase, EPSILON,
 };
 
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
@@ -24,6 +24,7 @@ use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
 pub fn calculate_classification_results(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<ClassificationResults, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -57,26 +58,14 @@ pub fn calculate_classification_results(
         original_percentage.insert(group.clone(), vec![0.0; dataset.group_labels.len()]);
     }
 
-    // --- MENGHITUNG ORIGINAL CLASSIFICATION (Bebas Bug Indexing) ---
+    // --- ORIGINAL CLASSIFICATION ---
+    // Analysis cases plus, with "Replace missing values with mean", the
+    // mean-substituted cases (classified, but not used to estimate the functions).
+    // Cross-validation below covers only the analysis cases.
     for group_name in &dataset.group_labels {
-        let n_cases = dataset
-            .group_data
-            .get(&variables_to_use[0])
-            .and_then(|g| g.get(group_name))
-            .map_or(0, |v| v.len());
-
-        for i in 0..n_cases {
-            // Tarik data per-case dengan aman
-            let mut case_values = Vec::with_capacity(variables_to_use.len());
-            for var in &variables_to_use {
-                let val = dataset
-                    .group_data
-                    .get(var)
-                    .unwrap()
-                    .get(group_name)
-                    .unwrap()[i];
-                case_values.push(val);
-            }
+        for case_values in
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted)
+        {
 
             // Klasifikasikan menggunakan logika anti-underflow yang sama dengan Casewise
             let predicted_idx = classify_case_safe(

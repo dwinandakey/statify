@@ -280,31 +280,17 @@ fn should_enter_variable(
     let total_cases = dataset.total_cases;
     let num_current_vars = current_variables.len();
 
-    // Use SPSS defaults if thresholds are 0 or not set.
-    // Default F-to-enter = 3.84, P-to-enter = 0.05.
-    let f_entry_threshold = if config.method.f_entry > 0.0 {
-        config.method.f_entry
-    } else {
-        3.84
-    };
-    let p_entry_threshold = if config.method.p_entry > 0.0 {
-        config.method.p_entry
-    } else {
-        0.05
-    };
+    let thresholds = stepwise_thresholds(config);
+    let f_entry_threshold = thresholds.f_entry;
+    let p_entry_threshold = thresholds.p_entry;
 
-    // Rao's V: f_to_enter now holds the partial Wilks F (for display), and
+    // Rao's V: f_to_enter holds the partial Wilks F (for display), and
     // min_d_squared holds ΔV (for selection and the VIN gate).
-    // Both gates must pass: VIN (ΔV ≥ 1.0) and FIN (partial F ≥ 3.84).
+    // Both gates must pass: VIN (ΔV ≥ V-to-enter) and FIN (partial F ≥ F-to-enter).
     let method_type = determine_method_type(config);
     if method_type == MethodType::Raos {
-        let v_enter_threshold = if config.method.v_enter > 0.0 {
-            config.method.v_enter
-        } else {
-            1.0
-        };
         // VIN gate: ΔV is in stats.min_d_squared
-        if stats.min_d_squared < v_enter_threshold {
+        if stats.min_d_squared < thresholds.v_enter {
             return false;
         }
         // FIN gate: partial Wilks F is in stats.f_to_enter
@@ -343,18 +329,9 @@ fn should_remove_variable(
     let total_cases = dataset.total_cases;
     let num_current_vars = current_variables.len();
 
-    // Use SPSS defaults if thresholds are 0 or not set.
-    // Default F-to-remove = 2.71, P-to-remove = 0.10
-    let f_removal_threshold = if config.method.f_removal > 0.0 {
-        config.method.f_removal
-    } else {
-        2.71
-    };
-    let p_removal_threshold = if config.method.p_removal > 0.0 {
-        config.method.p_removal
-    } else {
-        0.10
-    };
+    let thresholds = stepwise_thresholds(config);
+    let f_removal_threshold = thresholds.f_removal;
+    let p_removal_threshold = thresholds.p_removal;
 
     // Rao's V: f_to_remove now holds the partial Wilks F directly.
     let method_type = determine_method_type(config);
@@ -667,48 +644,63 @@ fn convert_steps_to_output(
     Ok(result)
 }
 
+/// Entry/removal thresholds the stepwise procedure actually applies.
+///
+/// A blank dialog field reaches Rust as 0, so F-to-enter, F-to-remove and the two
+/// probabilities fall back to the SPSS defaults (3.84, 2.71, 0.05, 0.10) when not
+/// positive. V-to-enter is different: its SPSS default is 0 itself, so the value is
+/// used exactly as given (negative values are treated as 0). The selection rules and
+/// the output footnotes both read from here, so they can never disagree.
+struct StepwiseThresholds {
+    f_entry: f64,
+    f_removal: f64,
+    p_entry: f64,
+    p_removal: f64,
+    v_enter: f64,
+}
+
+fn stepwise_thresholds(config: &DiscriminantConfig) -> StepwiseThresholds {
+    let positive_or = |value: f64, default: f64| if value > 0.0 { value } else { default };
+    StepwiseThresholds {
+        f_entry: positive_or(config.method.f_entry, 3.84),
+        f_removal: positive_or(config.method.f_removal, 2.71),
+        p_entry: positive_or(config.method.p_entry, 0.05),
+        p_removal: positive_or(config.method.p_removal, 0.10),
+        v_enter: config.method.v_enter.max(0.0),
+    }
+}
+
 fn create_stepwise_note(config: &DiscriminantConfig) -> StepwiseNote {
     let max_steps = config.main.independent_variables.len() * 2;
+    let thresholds = stepwise_thresholds(config);
 
-    let (entry_msg, removal_msg) = if config.method.f_value {
+    let (entry_msg, removal_msg) = if !config.method.f_value && config.method.f_probability {
         (
-            format!(
-                "b. Minimum partial F to enter is {}.",
-                config.method.f_entry
-            ),
-            format!(
-                "c. Maximum partial F to remove is {}.",
-                config.method.f_removal
-            ),
-        )
-    } else if config.method.f_probability {
-        (
-            format!(
-                "b. Maximum probability of F to enter is {}.",
-                config.method.p_entry
-            ),
-            format!(
-                "c. Minimum probability of F to remove is {}.",
-                config.method.p_removal
-            ),
+            format!("b. Maximum probability of F to enter is {}.", thresholds.p_entry),
+            format!("c. Minimum probability of F to remove is {}.", thresholds.p_removal),
         )
     } else {
         (
-            format!(
-                "b. Minimum partial F to enter is {}.",
-                config.method.f_entry
-            ),
-            format!(
-                "c. Maximum partial F to remove is {}.",
-                config.method.f_removal
-            ),
+            format!("b. Minimum partial F to enter is {}.", thresholds.f_entry),
+            format!("c. Maximum partial F to remove is {}.", thresholds.f_removal),
         )
+    };
+
+    // Rao's V adds its own V-to-enter footnote, which moves the last one to "e".
+    let (min_v_to_enter, last_letter) = if determine_method_type(config) == MethodType::Raos {
+        (format!("d. Minimum Rao's V to enter is {}.", thresholds.v_enter), "e")
+    } else {
+        (String::new(), "d")
     };
 
     StepwiseNote {
         max_steps: format!("a. Maximum number of steps is {}.", max_steps),
         min_f_to_enter: entry_msg,
         max_f_to_remove: removal_msg,
-        note: "d. F level, tolerance, or VIN insufficient for further computation.".to_string(),
+        min_v_to_enter,
+        note: format!(
+            "{}. F level, tolerance, or VIN insufficient for further computation.",
+            last_letter
+        ),
     }
 }
