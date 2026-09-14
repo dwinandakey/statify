@@ -9,7 +9,6 @@ export interface OrdinalFormatterContext {
   wantSummaryStatistics: boolean;
   wantParameterEstimates: boolean;
   wantTestOfParallelLines: boolean;
-  wantTestOfMulticollinearity: boolean;
   wantIterationHistory: boolean;
   savedVariableColumns: any[];
   hasSavedVariableRequest: boolean;
@@ -36,38 +35,47 @@ export const normalizeLinkFunctionLabel = (value: any): string => {
   }
 };
 
-export const buildOrdinalFormatterContext = (result: any): OrdinalFormatterContext => {
+export const buildOrdinalFormatterContext = (
+  result: any,
+): OrdinalFormatterContext => {
   const outputOptions = result.outputOptions || result.output_options || {};
-  const estimationOptions = result.estimationOptions || result.estimation_options || {};
-  const readOutputFlag = (camelKey: string, snakeKey: string, defaultValue = true) =>
-    outputOptions[camelKey] ?? outputOptions[snakeKey] ?? defaultValue;
+  const estimationOptions =
+    result.estimationOptions || result.estimation_options || {};
+  const readOutputFlag = (
+    camelKey: string,
+    snakeKey: string,
+    defaultValue = true,
+  ) => outputOptions[camelKey] ?? outputOptions[snakeKey] ?? defaultValue;
 
   const linkFunctionLabel = normalizeLinkFunctionLabel(
-    estimationOptions.linkFunction
-    ?? estimationOptions.link_function
-    ?? result.iterationHistoryMeta?.linkFunction
-    ?? result.iteration_history_meta?.link_function
+    estimationOptions.linkFunction ??
+      estimationOptions.link_function ??
+      result.iterationHistoryMeta?.linkFunction ??
+      result.iteration_history_meta?.link_function,
   );
   const linkFunctionNote = `Link function: ${linkFunctionLabel}.`;
-  const savedVariableOptions = result.savedVariableOptions
-    || result.saved_variable_options
-    || result.savedVariables?.options
-    || result.saved_variables?.options
-    || {};
+  const savedVariableOptions =
+    result.savedVariableOptions ||
+    result.saved_variable_options ||
+    result.savedVariables?.options ||
+    result.saved_variables?.options ||
+    {};
   const savedVariableColumns = Array.isArray(result.savedVariables?.columns)
     ? result.savedVariables.columns.filter((column: any) => column?.name)
     : [];
   const hasSavedVariableResult = savedVariableColumns.length > 0;
-  const hasSavedVariableRequest = hasSavedVariableResult || [
-    savedVariableOptions.predictedResponseCategory,
-    savedVariableOptions.estimatedResponseProbabilities,
-    savedVariableOptions.predictedCategoryProbability,
-    savedVariableOptions.actualCategoryProbability,
-    outputOptions.predictedResponseCategory,
-    outputOptions.estimatedResponseProbabilities,
-    outputOptions.predictedCategoryProbability,
-    outputOptions.actualCategoryProbability,
-  ].some(Boolean);
+  const hasSavedVariableRequest =
+    hasSavedVariableResult ||
+    [
+      savedVariableOptions.predictedResponseCategory,
+      savedVariableOptions.estimatedResponseProbabilities,
+      savedVariableOptions.predictedCategoryProbability,
+      savedVariableOptions.actualCategoryProbability,
+      outputOptions.predictedResponseCategory,
+      outputOptions.estimatedResponseProbabilities,
+      outputOptions.predictedCategoryProbability,
+      outputOptions.actualCategoryProbability,
+    ].some(Boolean);
 
   return {
     result,
@@ -76,19 +84,24 @@ export const buildOrdinalFormatterContext = (result: any): OrdinalFormatterConte
     savedVariableOptions,
     linkFunctionLabel,
     linkFunctionNote,
-    wantGoodnessOfFit: Boolean(readOutputFlag("goodnessOfFit", "goodness_of_fit")),
-    wantSummaryStatistics: Boolean(readOutputFlag("summaryStatistics", "summary_statistics")),
-    wantParameterEstimates: Boolean(readOutputFlag("parameterEstimates", "parameter_estimates")),
-    wantTestOfParallelLines: Boolean(readOutputFlag("testOfParallelLines", "test_of_parallel_lines")),
-    wantTestOfMulticollinearity: Boolean(
-      outputOptions.test_of_multicolinearity
-      ?? outputOptions.testOfMulticolinearity
-      ?? outputOptions.multicolinearity
-      ?? false
+    wantGoodnessOfFit: Boolean(
+      readOutputFlag("goodnessOfFit", "goodness_of_fit"),
+    ),
+    wantSummaryStatistics: Boolean(
+      readOutputFlag("summaryStatistics", "summary_statistics"),
+    ),
+    wantParameterEstimates: Boolean(
+      readOutputFlag("parameterEstimates", "parameter_estimates"),
+    ),
+    wantTestOfParallelLines: Boolean(
+      readOutputFlag("testOfParallelLines", "test_of_parallel_lines"),
     ),
     wantIterationHistory: Boolean(
-      readOutputFlag("printIterationHistory", "print_iteration_history", false)
-      || readOutputFlag("iterationHistory", "iteration_history", true)
+      readOutputFlag(
+        "printIterationHistory",
+        "print_iteration_history",
+        false,
+      ) || readOutputFlag("iterationHistory", "iteration_history", true),
     ),
     savedVariableColumns,
     hasSavedVariableRequest,
