@@ -256,8 +256,22 @@ pub fn calculate_canonical_functions(
         num_functions,
     );
 
+    // Row order for the coefficient tables. `variables_to_use` carries the stepwise
+    // table's own order (most recently entered first), which is not the order SPSS
+    // prints these two tables in — SPSS follows the analysis variable list. So order
+    // by the user's independent-variable list, restricted to the variables that made
+    // it into the final model.
+    let variables: Vec<String> = config
+        .main
+        .independent_variables
+        .iter()
+        .filter(|v| *v != grouping_var && variables_to_use.contains(v))
+        .cloned()
+        .collect();
+
     // Return only the fields defined in the CanonicalFunctions struct from result.rs
     Ok(CanonicalFunctions {
+        variables,
         coefficients,
         standardized_coefficients,
         function_at_centroids,

@@ -54,6 +54,17 @@ function getAnalysisMatrixSyntax(extractionConfig: FactorType["extraction"]): st
     return "COR"; // Default: Correlation
 }
 
+function getSelectionSyntax(mainConfig: FactorType["main"], valueConfig: FactorType["value"]): string | null {
+    const selectionVariable = mainConfig.ValueTarget?.trim();
+    const selectionValue = valueConfig.Selection?.trim();
+
+    if (!selectionVariable || !selectionValue) return null;
+
+    // Escape a single quote using SPSS string-literal syntax.
+    const escapedValue = selectionValue.replace(/'/g, "''");
+    return `/SELECT=${selectionVariable}('${escapedValue}')`;
+}
+
 /**
  * Gets the extraction criteria syntax
  */
@@ -158,6 +169,12 @@ export function generateFactorAnalysisLog(configData: FactorType): string {
     
     // Analysis variables (same as VARIABLES in most cases)
     logParts.push(`  /ANALYSIS ${variablesList}`);
+
+    // Optional selection-variable filter
+    const selectionSyntax = getSelectionSyntax(configData.main, configData.value);
+    if (selectionSyntax) {
+        logParts.push(`  ${selectionSyntax}`);
+    }
     
     // Print options
     const printOptions = getPrintOptionsSyntax(configData.descriptives);
@@ -224,6 +241,7 @@ export function generateFactorAnalysisLogCompact(configData: FactorType): string
     const rotationMethod = getRotationMethodSyntax(configData.rotation);
     const missingMethod = getMissingValueSyntax(configData.options);
     const analysisMatrix = getAnalysisMatrixSyntax(configData.extraction);
+    const selectionSyntax = getSelectionSyntax(configData.main, configData.value);
     
     const extractionCriteria = getExtractionCriteriaSyntax(configData.extraction).join(" ");
     const rotationCriteria = getRotationCriteriaSyntax(configData.rotation).join(" ");
@@ -233,5 +251,6 @@ export function generateFactorAnalysisLogCompact(configData: FactorType): string
         ? ` /CRITERIA ${rotationCriteria}`
         : "";
 
-    return `FACTOR /VARIABLES ${variablesList} /MISSING ${missingMethod}${extractionCriteriaPart} /EXTRACTION ${extractionMethod}${rotationCriteriaPart} /ROTATION ${rotationMethod} /METHOD=${analysisMatrix}.`;
+    const selectionPart = selectionSyntax ? ` ${selectionSyntax}` : "";
+    return `FACTOR /VARIABLES ${variablesList} /MISSING ${missingMethod}${selectionPart}${extractionCriteriaPart} /EXTRACTION ${extractionMethod}${rotationCriteriaPart} /ROTATION ${rotationMethod} /METHOD=${analysisMatrix}.`;
 }

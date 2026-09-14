@@ -381,6 +381,14 @@ pub fn calculate_summary_classification(
         None => return Err("Failed to invert pooled within-groups matrix".to_string()),
     };
 
+    // Same prior choice as case classification (classify_case), so the constant
+    // term reflects "All groups equal" vs "Compute from group sizes".
+    let priors = if config.classify.all_group_equal {
+        vec![1.0 / (dataset.group_labels.len() as f64); dataset.group_labels.len()]
+    } else {
+        calculate_group_priors(&dataset)
+    };
+
     let mut coefficients: HashMap<String, Vec<f64>> = HashMap::new();
     let mut constant_terms: Vec<f64> = Vec::with_capacity(dataset.group_labels.len());
     let mut groups: Vec<usize> = Vec::with_capacity(dataset.group_labels.len());
@@ -399,19 +407,20 @@ pub fn calculate_summary_classification(
             group_means[var_idx] = mean;
         }
 
+        // b_g = S_pooled^-1 * mean_g (Johnson & Wichern 11-51). pooled_within is
+        // already the covariance matrix (SSCP / (n - G)), so SPSS's (n - G)
+        // factor, which applies to the inverse of the SSCP matrix, is not needed.
         for (var_idx, var_name) in variables.iter().enumerate() {
-            let coef = ((dataset.total_cases - dataset.num_groups) as f64)
-                * (0..variables.len())
-                    .map(|l| pooled_within_inv[(var_idx, l)] * group_means[l])
-                    .sum::<f64>();
+            let coef = (0..variables.len())
+                .map(|l| pooled_within_inv[(var_idx, l)] * group_means[l])
+                .sum::<f64>();
 
             coefficients
                 .entry(var_name.clone())
                 .or_insert_with(|| vec![0.0; dataset.group_labels.len()])[group_idx] = coef;
         }
 
-        let prior = 1.0 / (dataset.group_labels.len() as f64);
-        let log_prior = prior.ln();
+        let log_prior = priors[group_idx].ln();
 
         let half_sum = 0.5
             * variables

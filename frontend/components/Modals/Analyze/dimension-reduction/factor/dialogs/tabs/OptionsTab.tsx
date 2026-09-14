@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +22,39 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
     data,
     onChange,
 }) => {
+    const [validationMessage, setValidationMessage] = useState<string | null>(null);
+    const [suppressValuesInput, setSuppressValuesInput] = useState(
+        String(data.SuppressValuesNum ?? "")
+    );
+
+    useEffect(() => {
+        setSuppressValuesInput(String(data.SuppressValuesNum ?? ""));
+    }, [data.SuppressValuesNum]);
+
+    const handleSuppressValuesNumChange = (rawValue: string) => {
+        setSuppressValuesInput(rawValue);
+
+        if (rawValue === "") {
+            setValidationMessage(null);
+            onChange("SuppressValuesNum", null);
+            return;
+        }
+
+        const normalizedValue = rawValue.replace(",", ".");
+
+        // Kalau pengguna input koma akan tetap terbaca sebagai titik di sistem
+        if (normalizedValue.endsWith(".")) {
+            setValidationMessage(null);
+            return;
+        }
+
+        const value = Number(normalizedValue);
+        const isValid = Number.isFinite(value) && value >= 0 && value <= 1;
+        setValidationMessage(isValid ? null : "Absolute value must be in the range 0 to 1");
+
+        if (isValid) onChange("SuppressValuesNum", value);
+    };
+
     const handleMissGrp = (value: string) => {
         onChange("ExcludeListWise", value === "ExcludeListWise");
         onChange("ExcludePairWise", value === "ExcludePairWise");
@@ -101,16 +134,22 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
                             <Label className="w-[150px]">Absolute Value below:</Label>
                             <Input
                                 id="SuppressValuesNum"
-                                type="number"
+                                type="text"
+                                inputMode="decimal"
                                 className="w-[75px]"
-                                value={data.SuppressValuesNum ?? ""}
+                                value={suppressValuesInput}
                                 disabled={!data.SuppressValues}
-                                onChange={(e) => onChange("SuppressValuesNum", Number(e.target.value))}
+                                onChange={(e) => handleSuppressValuesNumChange(e.target.value)}
                             />
                         </div>
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
+            {validationMessage && (
+                <p role="alert" className="mt-2 px-3 text-sm text-destructive">
+                    {validationMessage}
+                </p>
+            )}
         </div>
     );
 };

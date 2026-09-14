@@ -23,6 +23,16 @@ interface Props {
   data: LoadingPlotData | LoadingPlotWrapper | string;
 }
 
+const getSymmetricAxisRange = (values: number[]): { min: string; max: string } => {
+  const maximumAbsoluteValue = Math.max(...values.map(value => Math.abs(value)), 0);
+  const limit = Math.max(1.1, maximumAbsoluteValue * 1.1);
+
+  return {
+    min: String(-limit),
+    max: String(limit),
+  };
+};
+
 export default function FactorLoadingChart({ data }: Props) {
   // Parse data if it's a JSON string and handle wrapped format
   const parsedData = useMemo<LoadingPlotData | null>(() => {
@@ -58,12 +68,21 @@ export default function FactorLoadingChart({ data }: Props) {
     if (is3D) {
       // Transform to Grouped 3D Scatter Plot (ECharts) format
       // Each variable becomes its own group so it appears in the legend
-      const chartData = parsedData.points.map(point => ({
+      const chartData = parsedData.points.filter(point =>
+        point.coordinates.length >= 3 &&
+        point.coordinates.slice(0, 3).every(Number.isFinite)
+      ).map(point => ({
         x: point.coordinates[0],
         y: point.coordinates[1],
         z: point.coordinates[2],
         group: point.label,
       }));
+
+      if (chartData.length === 0) return null;
+
+      const xRange = getSymmetricAxisRange(chartData.map(point => point.x));
+      const yRange = getSymmetricAxisRange(chartData.map(point => point.y));
+      const zRange = getSymmetricAxisRange(chartData.map(point => point.z));
 
       return {
         charts: [{
@@ -79,9 +98,9 @@ export default function FactorLoadingChart({ data }: Props) {
               z: parsedData.axis_labels[2] || 'Component 3',
             },
             axisScaleOptions: {
-              x: { min: "-1.1", max: "1.1" },
-              y: { min: "-1.1", max: "1.1" },
-              z: { min: "-1.1", max: "1.1" },
+              x: xRange,
+              y: yRange,
+              z: zRange,
             },
           },
           chartMetadata: {
@@ -98,11 +117,19 @@ export default function FactorLoadingChart({ data }: Props) {
     } else {
       // Transform to Grouped Scatter Plot format
       // Each variable becomes a category so it appears in the legend
-      const chartData = parsedData.points.map(point => ({
+      const chartData = parsedData.points.filter(point =>
+        point.coordinates.length >= 2 &&
+        point.coordinates.slice(0, 2).every(Number.isFinite)
+      ).map(point => ({
         category: point.label,
         x: point.coordinates[0],
         y: point.coordinates[1],
       }));
+
+      if (chartData.length === 0) return null;
+
+      const xRange = getSymmetricAxisRange(chartData.map(point => point.x));
+      const yRange = getSymmetricAxisRange(chartData.map(point => point.y));
 
       return {
         charts: [{
@@ -117,8 +144,8 @@ export default function FactorLoadingChart({ data }: Props) {
               y: parsedData.axis_labels[1] || 'Component 2',
             },
             axisScaleOptions: {
-              x: { min: "-1.1", max: "1.1" },
-              y: { min: "-1.1", max: "1.1" },
+              x: xRange,
+              y: yRange,
             },
           },
           chartMetadata: {

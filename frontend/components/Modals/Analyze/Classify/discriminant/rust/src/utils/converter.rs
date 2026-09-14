@@ -1,5 +1,7 @@
 use wasm_bindgen::JsValue;
 use serde::Serialize;
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use crate::models::result::{
     DiscriminantResult,
@@ -96,6 +98,105 @@ struct FunctionValue {
 struct GroupCentroid {
     group: String,
     values: Vec<f64>,
+}
+
+/// Row label SPSS always prints last in the unstandardized coefficients table.
+const CONSTANT_ROW: &str = "(Constant)";
+
+/// Turn an unordered coefficient map into table rows in `order`.
+///
+/// The result structs store these keyed by variable name in a `HashMap`, whose
+/// iteration order is arbitrary and differs between builds of the binary. Every
+/// table below therefore has to impose its own order explicitly, or the rows come
+/// out shuffled relative to SPSS.
+///
+/// Keys missing from `order` are appended afterwards — `(Constant)` last, as SPSS
+/// prints it, and anything else by name so the output stays deterministic.
+fn ordered_function_values(
+    map: &HashMap<String, Vec<f64>>,
+    order: &[String]
+) -> Vec<FunctionValue> {
+    let mut rows: Vec<FunctionValue> = Vec::with_capacity(map.len());
+
+    for name in order {
+        if let Some(values) = map.get(name) {
+            rows.push(FunctionValue { variable: name.clone(), values: values.clone() });
+        }
+    }
+
+    let mut leftover: Vec<&String> = map
+        .keys()
+        .filter(|k| !order.iter().any(|o| o == *k))
+        .collect();
+    leftover.sort_by(|a, b| {
+        let key = |s: &str| (s == CONSTANT_ROW, s.to_string());
+        key(a).cmp(&key(b))
+    });
+    for name in leftover {
+        rows.push(FunctionValue { variable: name.clone(), values: map[name].clone() });
+    }
+
+    rows
+}
+
+/// Index of the function a variable correlates most strongly with, and that
+/// correlation's absolute value. Mirrors the superscript the formatter puts on the
+/// largest absolute correlation in each row of the Structure Matrix.
+fn dominant_function(values: &[f64]) -> (usize, f64) {
+    let mut index = 0;
+    let mut largest = 0.0_f64;
+    for (i, value) in values.iter().enumerate() {
+        if value.abs() > largest {
+            largest = value.abs();
+            index = i;
+        }
+    }
+    (index, largest)
+}
+
+/// Structure Matrix row order: "Variables ordered by absolute size of correlation
+/// within function" — the footnote the table already prints. Variables are grouped
+/// by the function they correlate most strongly with, functions in order, and within
+/// each group sorted by descending absolute correlation.
+fn ordered_structure_rows(
+    map: &HashMap<String, Vec<f64>>,
+    variables: &[String]
+) -> Vec<FunctionValue> {
+    // Seed from the analysis variable order so ties below break deterministically
+    // (`sort_by` is stable).
+    let mut rows = ordered_function_values(map, variables);
+    rows.sort_by(|a, b| {
+        let (fa, va) = dominant_function(&a.values);
+        let (fb, vb) = dominant_function(&b.values);
+        fa.cmp(&fb).then(vb.partial_cmp(&va).unwrap_or(Ordering::Equal))
+    });
+    rows
+}
+
+/// Group centroid rows, by group code ascending — numerically when the codes are
+/// numeric (so 10 sorts after 2), otherwise as text.
+fn ordered_group_centroids(map: &HashMap<String, Vec<f64>>) -> Vec<GroupCentroid> {
+    let mut rows: Vec<GroupCentroid> = map
+        .iter()
+        .map(|(group, values)| GroupCentroid {
+            group: group.clone(),
+            values: values.clone(),
+        })
+        .collect();
+
+    // (is_non_numeric, numeric value, text) — non-numeric codes sort after numeric ones.
+    let key = |g: &str| match g.parse::<f64>() {
+        Ok(n) if n.is_finite() => (0_u8, n, String::new()),
+        _ => (1_u8, 0.0, g.to_string()),
+    };
+    rows.sort_by(|a, b| {
+        let (ka, kb) = (key(&a.group), key(&b.group));
+        ka.0
+            .cmp(&kb.0)
+            .then(ka.1.partial_cmp(&kb.1).unwrap_or(Ordering::Equal))
+            .then(ka.2.cmp(&kb.2))
+    });
+    rows
 }
 
 #[derive(Serialize)]
@@ -373,60 +474,25 @@ impl FormatResult {
             }
         });
 
-        // Transform CanonicalFunctions
+        // Transform CanonicalFunctions.
+        // Both coefficient tables follow the analysis variable order, with
+        // "(Constant)" last in the unstandardized one; centroids follow group code.
         let canonical_functions = result.canonical_functions.as_ref().map(|funcs| {
-            let coefficients = funcs.coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let standardized_coefficients = funcs.standardized_coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let function_at_centroids = funcs.function_at_centroids
-                .iter()
-                .map(|(group, values)| {
-                    GroupCentroid {
-                        group: group.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedCanonicalFunctions {
-                coefficients,
-                standardized_coefficients,
-                function_at_centroids,
+                coefficients: ordered_function_values(&funcs.coefficients, &funcs.variables),
+                standardized_coefficients: ordered_function_values(
+                    &funcs.standardized_coefficients,
+                    &funcs.variables
+                ),
+                function_at_centroids: ordered_group_centroids(&funcs.function_at_centroids),
             }
         });
 
         // Transform StructureMatrix
         let structure_matrix = result.structure_matrix.as_ref().map(|matrix| {
-            let correlations = matrix.correlations
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedStructureMatrix {
                 variables: matrix.variables.clone(),
-                correlations,
+                correlations: ordered_structure_rows(&matrix.correlations, &matrix.variables),
             }
         });
 

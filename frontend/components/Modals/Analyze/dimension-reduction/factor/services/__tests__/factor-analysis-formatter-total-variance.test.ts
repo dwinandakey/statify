@@ -61,4 +61,32 @@ describe("transformFactorAnalysisResult - total variance visibility", () => {
         expect(table?.rows[0].extraction_0).toBeDefined();
         expect(table?.rows[0].rotation_0).toBeDefined();
     });
+
+    it("adds the selection filter description to every output table", () => {
+        const result = transformFactorAnalysisResult(makeResult(true), {
+            ...baseConfig,
+            main: { ValueTarget: "Attrition" },
+            value: { Selection: "Yes" },
+        } as any);
+
+        expect(result.tables.length).toBeGreaterThan(0);
+        result.tables.forEach((table) => {
+            expect(table.interpretation).toContain(
+                'This analysis stage processes only data with a Attrition value of "Yes".'
+            );
+            expect(table.interpretation).not.toContain(
+                '<br><br>This analysis stage processes only data'
+            );
+        });
+    });
+
+    it("does not add a selection description when no filter is configured", () => {
+        const result = transformFactorAnalysisResult(makeResult(true), baseConfig as any);
+
+        result.tables.forEach((table) => {
+            expect(table.interpretation ?? "").not.toContain(
+                "This analysis stage processes only data"
+            );
+        });
+    });
 });

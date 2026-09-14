@@ -257,7 +257,29 @@ export const useAnalyzeHook = (
                             ]
                         });
 
-                        // 5. Interpretations Summary
+                        // 5. Correlogram of ECM Residuals Table
+                        if (result.correlogram && result.correlogram.length > 0) {
+                            tables.push({
+                                title: "Correlogram of ECM Residuals (ACF & PACF)",
+                                columnHeaders: [
+                                    { header: "Lag", key: "lag" },
+                                    { header: "Autocorrelation (AC)", key: "ac" },
+                                    { header: "Partial Correlation (PAC)", key: "pac" },
+                                    { header: "Q-Stat", key: "qStat" },
+                                    { header: "Prob.", key: "pValue" }
+                                ],
+                                rows: result.correlogram.map((item: any) => ({
+                                    lag: item.lag,
+                                    ac: item.ac,
+                                    pac: item.pac,
+                                    qStat: item.qStat,
+                                    pValue: item.prob
+                                })),
+                                footer: "Ljung-Box Q-statistic tests for null hypothesis of zero autocorrelation up to lag k."
+                            });
+                        }
+
+                        // 6. Interpretations Summary
                         const ectCoef = parseFloat(result.ecm.coefficients[1]);
                         const ectProb = parseFloat(result.ecm.pValues[1]);
                         
@@ -310,6 +332,38 @@ export const useAnalyzeHook = (
                                 chartConfig: { axisLabels: { x: "Time", y: "Residual" } }
                             });
                             charts.push(ecmResidualsChart);
+                        }
+
+                        // ACF & PACF Correlogram Chart for ECM
+                        if (result.correlogram && result.correlogram.length > 0) {
+                            const acfPacfData: Array<{ category: string; subcategory: string; value: number }> = [];
+                            result.correlogram.forEach((item: any) => {
+                                acfPacfData.push({
+                                    category: String(item.lag),
+                                    subcategory: "ACF",
+                                    value: parseFloat(item.ac)
+                                });
+                                acfPacfData.push({
+                                    category: String(item.lag),
+                                    subcategory: "PACF",
+                                    value: parseFloat(item.pac)
+                                });
+                            });
+
+                            const correlogramChart = ChartService.createChartJSON({
+                                chartType: "Multiple Line Chart",
+                                chartData: acfPacfData,
+                                chartVariables: { x: ["lag"], y: ["ACF", "PACF"] },
+                                chartMetadata: { 
+                                    title: "ECM Residual Correlogram Plot (ACF & PACF)", 
+                                    subtitle: "Autocorrelation & Partial Correlation by Lag" 
+                                },
+                                chartConfig: { 
+                                    axisLabels: { x: "Lag", y: "Correlation" },
+                                    chartColor: ["#2563eb", "#dc2626"]
+                                }
+                            });
+                            charts.push(correlogramChart);
                         }
 
                         // Save residuals if requested

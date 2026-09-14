@@ -212,7 +212,6 @@ export interface KMedoidsOutput {
         showPCAProjection: boolean;
         showClusterScatterPlot: boolean;
         showClusterSizeDistribution: boolean;
-        showClusterAttributeProfile: boolean;
         showDistanceMatrixBetweenMedoids: boolean;
         showDistanceMatrixTable: boolean;
         showClusterMedoids: boolean;
@@ -221,15 +220,39 @@ export interface KMedoidsOutput {
         showTotalCost: boolean;
         showIterationHistory: boolean;
         showSilhouettePerObject: boolean;
-        showSilhouetteByCluster: boolean;
         showOptimalKChart: boolean;
+        showOptimalKTable: boolean;
         showOverallQualityAssessment: boolean;
         showConvergenceAlgorithm: boolean;
         showSamplingHistory: boolean;
+        showConvergenceChart: boolean;
     };
     
     // Variable information (for rendering)
     variables?: Array<{ name: string; label?: string }>;
+
+    // When "clusterMembershipOnly", the renderer shows just the paginated
+    // membership table instead of the full dashboard (summary cards, tabs, charts).
+    // When "silhouettePerObjectOnly", it shows just the silhouette plot (one bar per object).
+    // When "optimalKChartOnly", it shows just the optimal-K chart (silhouette or elbow).
+    // When "overallQualityOnly", it shows just the overall silhouette score + interpretation guide.
+    // When "pcaProjectionOnly", it shows just the PCA projection scatter plot.
+    // When "clusterScatterPlotOnly", it shows just the 2D cluster scatter plot with variable selectors.
+    // When "clusterSizeDistributionOnly", it shows just the cluster size distribution donut chart.
+    // When "distanceMatrixTableOnly", it shows just the full pairwise distance matrix table
+    // (all objects, sorted by cluster) with its Excel/CSV download buttons.
+    viewMode?:
+        | "full"
+        | "clusterMembershipOnly"
+        | "clusterSizeDistributionOnly"
+        | "silhouettePerObjectOnly"
+        | "optimalKChartOnly"
+        | "overallQualityOnly"
+        | "pcaProjectionOnly"
+        | "clusterScatterPlotOnly"
+        | "distanceMatrixTableOnly"
+        | "convergenceAlgorithmOnly"
+        | "convergenceChartOnly";
 }
 
 /**
@@ -247,11 +270,6 @@ export interface ClusterDonutData {
     cluster: string;
     count: number;
     percentage: number;
-}
-
-export interface ClusterRadarData {
-    attribute: string;
-    [clusterKey: string]: number | string; // cluster_1, cluster_2, etc.
 }
 
 export interface ConvergenceLineData {

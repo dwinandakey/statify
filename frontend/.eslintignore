@@ -16,6 +16,17 @@ node_modules/
 # Public assets (not source)
 public/
 
+# Generated Wasm / PKG
+**/pkg/
+**/wasm/
+**/wasm-output/
+**/rust/pkg/
+next-env.d.ts
+
+# JS Configs & Mocks
+*.js
+__mocks__/
+
 # Logs and reports
 *.log
 

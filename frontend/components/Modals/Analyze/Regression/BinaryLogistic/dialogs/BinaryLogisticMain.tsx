@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
@@ -58,7 +57,38 @@ import {
   DEFAULT_BINARY_LOGISTIC_SAVE_PARAMS,
   DEFAULT_BINARY_LOGISTIC_OPTIONS_PARAMS,
   DEFAULT_BINARY_LOGISTIC_ASSUMPTION_PARAMS,
+  validateOptionsParams,
 } from "../types/binary-logistic";
+
+/**
+ * Resolves a possibly-stale Variable reference (captured earlier in `options`)
+ * against the CURRENT list of variables from the store.
+ *
+ * IDs can change after the dataset round-trips through the backend (e.g. after
+ * saving predictions/residuals via addVariables), so selections made before
+ * that point can no longer be found by `id` alone.
+ *
+ * 1. Try to find by ID (exact match)
+ * 2. Fallback to columnIndex if ID not found
+ * 3. Fallback to name if columnIndex not found
+ */
+const findActualVariable = (
+  currentVariables: Variable[],
+  targetVar: Variable
+): Variable | null => {
+  let found = currentVariables.find((v) => v.id === targetVar.id);
+  if (found) return found;
+
+  if (targetVar.columnIndex !== undefined) {
+    found = currentVariables.find((v) => v.columnIndex === targetVar.columnIndex);
+    if (found) return found;
+  }
+
+  found = currentVariables.find((v) => v.name === targetVar.name);
+  if (found) return found;
+
+  return null;
+};
 
 export const BinaryLogisticMain = () => {
   const { closeModal } = useModalStore();
@@ -70,7 +100,6 @@ export const BinaryLogisticMain = () => {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("variables");
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // --- Help Tour ---
   const tabControl = useMemo<TabControlProps>(
@@ -320,17 +349,58 @@ export const BinaryLogisticMain = () => {
         reject(error);
       };
 
+      // Refresh variables from store: IDs may have shifted since `options` was
+      // set (e.g. after a prior run saved predictions/residuals to the dataset).
+      // Without this, stale IDs miss `variableDetails` entirely and every row
+      // gets filtered out as "missing", see findActualVariable() above.
+      const currentVariables = useVariableStore.getState().variables;
+
+      const actualDependent = options.dependent
+        ? findActualVariable(currentVariables, options.dependent)
+        : null;
+      const actualCovariates = options.covariates
+        .map((c) => findActualVariable(currentVariables, c))
+        .filter((v): v is Variable => v !== null);
+      const actualFactors = options.factors
+        .map((f) => findActualVariable(currentVariables, f))
+        .filter((v): v is Variable => v !== null);
+
+      if (options.dependent && !actualDependent) {
+        reject(
+          new Error(
+            `Dependent variable "${options.dependent.name}" was not found in the dataset. Please reselect it.`
+          )
+        );
+        return;
+      }
+
+      if (options.covariates.length > 0 && actualCovariates.length === 0) {
+        reject(
+          new Error(
+            "None of the selected covariates were found in the dataset. Please reselect them."
+          )
+        );
+        return;
+      }
+
+      const currentVariableDetails: Record<number, Variable> = {};
+      currentVariables.forEach((v) => {
+        if (v.id !== undefined) {
+          currentVariableDetails[v.id] = v;
+        }
+      });
+
       // Prepare basic indices
-      const depIndex = options.dependent
-        ? variables.findIndex((v) => v.id === options.dependent!.id)
+      const depIndex = actualDependent
+        ? currentVariables.findIndex((v) => v.id === actualDependent.id)
         : -1;
 
       const indepIndices = [
-        ...options.covariates.map((c) =>
-          variables.findIndex((v) => v.id === c.id)
+        ...actualCovariates.map((c) =>
+          currentVariables.findIndex((v) => v.id === c.id)
         ),
-        ...options.factors.map((f) =>
-          variables.findIndex((v) => v.id === f.id)
+        ...actualFactors.map((f) =>
+          currentVariables.findIndex((v) => v.id === f.id)
         ),
       ].filter((idx) => idx !== -1);
 
@@ -339,20 +409,20 @@ export const BinaryLogisticMain = () => {
         dependent_index: depIndex,
         independent_indices: indepIndices,
         rows: data.length,
-        cols: variables.length,
+        cols: currentVariables.length,
         // ... (config lain tidak relevan untuk VIF/BT raw calc, tapi dikirim saja)
         ...extraConfig,
       };
 
       worker.postMessage({
         action,
-        dependentId: options.dependent?.id, // Bisa null untuk VIF (tergantung worker)
+        dependentId: actualDependent?.id, // Bisa null untuk VIF (tergantung worker)
         independentIds: [
-          ...options.covariates.map((v) => v.id),
-          ...options.factors.map((v) => v.id),
+          ...actualCovariates.map((v) => v.id),
+          ...actualFactors.map((v) => v.id),
         ],
         data,
-        variableDetails,
+        variableDetails: currentVariableDetails,
         config: JSON.stringify(analysisConfig),
       });
     });
@@ -751,19 +821,24 @@ export const BinaryLogisticMain = () => {
   const handleAnalyze = async () => {
     // 1. Validasi Input
     if (!options.dependent || options.covariates.length === 0) {
-      setErrorMsg(
-        "Mohon pilih satu variabel dependen dan setidaknya satu kovariat."
-      );
+      toast.error("Please select a dependent variable and at least one covariate.");
       return;
     }
 
     if (!data || data.length === 0) {
-      setErrorMsg("Dataset kosong atau tidak tersedia.");
+      toast.error("Dataset is empty or unavailable.");
+      return;
+    }
+
+    const optionsValidationErrors = validateOptionsParams(optParams);
+    if (optionsValidationErrors.length > 0) {
+      toast.error(
+        "Some values on the Options tab are out of range. Fix the highlighted fields before running the analysis."
+      );
       return;
     }
 
     setIsLoading(true);
-    setErrorMsg(null);
 
     try {
       const worker = new Worker(
@@ -924,16 +999,16 @@ export const BinaryLogisticMain = () => {
             closeModal("BINARY_LOGISTIC");
           } catch (saveError: any) {
             console.error("[Main] Error inside SUCCESS block:", saveError);
-            setErrorMsg(`Gagal menyimpan hasil: ${  saveError.message}`);
+            toast.error(`Failed to save results: ${saveError.message}`);
             setIsLoading(false);
             worker.terminate();
           }
         } else if (type === "ERROR") {
           console.error("[Main] Worker reported ERROR:", payload);
-          setErrorMsg(
+          toast.error(
             typeof payload === "string"
               ? payload
-              : "Terjadi kesalahan perhitungan."
+              : "An unexpected error occurred during computation."
           );
           setIsLoading(false);
           worker.terminate();
@@ -943,56 +1018,23 @@ export const BinaryLogisticMain = () => {
       worker.onerror = (event) => {
         event.preventDefault();
         console.error("[Main] Worker System Error:", event);
-        setErrorMsg("Gagal menjalankan modul kalkulasi (WASM Error).");
+        toast.error("Failed to run the calculation module (WASM error).");
         setIsLoading(false);
         worker.terminate();
       };
 
       // --- PERSIAPAN DATA INDEX & CONFIG ---
       // Refresh variables from store to ensure we have the latest state
+      // (handles cases where the dataset was reloaded/saved and IDs changed)
       const currentVariables = useVariableStore.getState().variables;
 
-      /**
-       * Helper: Find actual variable in store with fallback strategies
-       * Returns the ACTUAL variable from currentVariables (with correct ID)
-       * 
-       * 1. Try to find by ID (exact match)
-       * 2. Fallback to columnIndex if ID not found
-       * 3. Fallback to name if columnIndex not found
-       * 
-       * This handles cases where dataset was reloaded and IDs changed
-       */
-      const findActualVariable = (targetVar: Variable): Variable | null => {
-        // Strategy 1: Find by ID
-        let found = currentVariables.find((v) => v.id === targetVar.id);
-        if (found) return found;
-
-        // Strategy 2: Find by columnIndex (more reliable after reload)
-        if (targetVar.columnIndex !== undefined) {
-          found = currentVariables.find((v) => v.columnIndex === targetVar.columnIndex);
-          if (found) {
-            console.log(`[Main] Variable "${targetVar.name}" found by columnIndex (${targetVar.columnIndex}), new ID: ${found.id}`);
-            return found;
-          }
-        }
-
-        // Strategy 3: Find by name (last resort)
-        found = currentVariables.find((v) => v.name === targetVar.name);
-        if (found) {
-          console.log(`[Main] Variable "${targetVar.name}" found by name, new ID: ${found.id}`);
-          return found;
-        }
-
-        return null;
-      };
-
       // Find actual variables in store (with correct IDs)
-      const actualDependent = findActualVariable(options.dependent!);
+      const actualDependent = findActualVariable(currentVariables, options.dependent!);
       const actualCovariates = options.covariates
-        .map(c => findActualVariable(c))
+        .map(c => findActualVariable(currentVariables, c))
         .filter((v): v is Variable => v !== null);
       const actualFactors = options.factors
-        .map(f => findActualVariable(f))
+        .map(f => findActualVariable(currentVariables, f))
         .filter((v): v is Variable => v !== null);
 
       // Get indices in currentVariables array
@@ -1016,15 +1058,15 @@ export const BinaryLogisticMain = () => {
         console.error("[Main] Variable IDs in store:", storeIds);
         console.error("[Main] Looking for dependent ID:", options.dependent?.id);
         throw new Error(
-          `Variabel dependen "${options.dependent?.name}" tidak ditemukan di dataset. ` +
-          `Silakan pilih ulang variabel dari daftar yang tersedia.`
+          `Dependent variable "${options.dependent?.name}" was not found in the dataset. ` +
+          `Please reselect it from the available list.`
         );
       }
 
       if (indepIndices.length === 0) {
         throw new Error(
-          `Tidak ada variabel independen yang ditemukan di dataset. ` +
-          `Covariates yang dipilih: ${options.covariates.map(c => c.name).join(", ")}`
+          `No independent variables were found in the dataset. ` +
+          `Selected covariates: ${options.covariates.map(c => c.name).join(", ")}`
         );
       }
 
@@ -1141,7 +1183,7 @@ export const BinaryLogisticMain = () => {
       });
     } catch (err: any) {
       console.error("Main Thread Error:", err);
-      setErrorMsg(`Gagal memulai analisis: ${  err.message}`);
+      toast.error(`Failed to start analysis: ${err.message}`);
       setIsLoading(false);
     }
   };
@@ -1236,15 +1278,6 @@ export const BinaryLogisticMain = () => {
             </TabsContent>
           </div>
         </Tabs>
-
-        {errorMsg && (
-          <div className="mt-4">
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{errorMsg}</AlertDescription>
-            </Alert>
-          </div>
-        )}
       </div>
 
       <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">

@@ -13,8 +13,8 @@ import { Label } from "@/components/ui/label";
  * ========================================
  * RESULTS DIALOG
  * ========================================
- * Konfigurasi output hasil clustering:
- * - Final medoids (setara Final Cluster Centers SPSS)
+ * Clustering result output configuration:
+ * - Final medoids (equivalent to SPSS Final Cluster Centers)
  * - Cluster membership
  * - Case count per cluster
  * - Iteration history
@@ -85,7 +85,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowClusterMembership"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                className="text-sm font-medium leading-none cursor-pointer"
                             >
                                 Cluster Membership
                             </label>
@@ -106,7 +106,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowCaseCount"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                className="text-sm font-medium leading-none cursor-pointer"
                             >
                                 Number of Cases per Cluster
                             </label>
@@ -127,7 +127,7 @@ export const KMedoidsClusterResults = ({
                         <div className="flex-1">
                             <label
                                 htmlFor="ShowClusterMedoids"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                className="text-sm font-medium leading-none cursor-pointer"
                             >
                                 Cluster Medoids
                             </label>
@@ -138,32 +138,55 @@ export const KMedoidsClusterResults = ({
                     </div>
                 </div>
 
-                {/* ========== OUTPUT TAMBAHAN ========== */}
+                {/* ========== ADDITIONAL OUTPUT ========== */}
                 <div className="flex flex-col gap-3 w-full">
                     <Label className="font-semibold">Additional Information (Optional)</Label>
 
                     {iterateData?.Method !== "CLARA" && (
-                        <div className="flex items-start space-x-2">
-                            <Checkbox
-                                id="ShowConvergenceAlgorithm"
-                                checked={resultsState.ShowConvergenceAlgorithm}
-                                onCheckedChange={(checked) =>
-                                    handleChange("ShowConvergenceAlgorithm", checked)
-                                }
-                            />
-                            <div className="flex-1">
-                                <label
-                                    htmlFor="ShowConvergenceAlgorithm"
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                >
-                                    Konvergensi Algoritma
-                                </label>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Tampilkan output konvergensi algoritma: panel status konvergensi, grafik biaya per iterasi,
-                                    dan tabel histori iterasi.
-                                </p>
+                        <>
+                            <div className="flex items-start space-x-2">
+                                <Checkbox
+                                    id="ShowConvergenceAlgorithm"
+                                    checked={resultsState.ShowConvergenceAlgorithm}
+                                    onCheckedChange={(checked) =>
+                                        handleChange("ShowConvergenceAlgorithm", checked)
+                                    }
+                                />
+                                <div className="flex-1">
+                                    <label
+                                        htmlFor="ShowConvergenceAlgorithm"
+                                        className="text-sm font-medium leading-none cursor-pointer"
+                                    >
+                                        Algorithm Convergence
+                                    </label>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        Convergence status panel and iteration history table.
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+
+                            <div className="flex items-start space-x-2">
+                                <Checkbox
+                                    id="ShowConvergenceChart"
+                                    checked={resultsState.ShowConvergenceChart}
+                                    onCheckedChange={(checked) =>
+                                        handleChange("ShowConvergenceChart", checked)
+                                    }
+                                />
+                                <div className="flex-1">
+                                    <label
+                                        htmlFor="ShowConvergenceChart"
+                                        className="text-sm font-medium leading-none cursor-pointer"
+                                    >
+                                        Algorithm Convergence Chart
+                                    </label>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        Cost and improvement chart per iteration, as its own section.
+                                        Can be enabled without the table above, or vice versa.
+                                    </p>
+                                </div>
+                            </div>
+                        </>
                     )}
 
                     {iterateData?.Method === "CLARA" && (
@@ -178,12 +201,12 @@ export const KMedoidsClusterResults = ({
                             <div className="flex-1">
                                 <label
                                     htmlFor="ShowSamplingHistory"
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                    className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Histori Sampling (CLARA)
+                                    Sampling History (CLARA)
                                 </label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Tampilkan grafik dan tabel histori biaya (cost) untuk setiap sampel yang diambil pada metode CLARA.
+                                    Show the cost history chart and table for every sample drawn by the CLARA method.
                                 </p>
                             </div>
                         </div>

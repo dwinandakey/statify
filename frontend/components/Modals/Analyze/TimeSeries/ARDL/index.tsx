@@ -31,8 +31,6 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
     const [dependentVariable, setDependentVariable] = useState<Variable[]>([]);
     const [independentVariables, setIndependentVariables] = useState<Variable[]>([]);
     const [highlightedVariable, setHighlightedVariable] = useState<{columnIndex: number, source: string} | null>(null);
-    const [prevDataRef, setPrevDataRef] = useState<DataRow[] | null>(null);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState("variables");
     const [saveLongRun, setSaveLongRun] = useState(false);
     const [saveShortRun, setSaveShortRun] = useState(false);
@@ -46,6 +44,14 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
     } = useTimeHook();
 
     const {
+        autoSelect,
+        setAutoSelect,
+        maxP,
+        setMaxP,
+        maxQ,
+        setMaxQ,
+        selectionCriterion,
+        setSelectionCriterion,
         pOrder,
         qOrders,
         handlePOrder,
@@ -58,6 +64,10 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
         independentVariables,
         data,
         selectedPeriod,
+        autoSelect,
+        maxP,
+        maxQ,
+        selectionCriterion,
         pOrder,
         qOrders,
         saveLongRun,
@@ -65,7 +75,7 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
         onClose
     );
     
-    const combinedError = errorMsg || analysisError;
+    const combinedError = analysisError;
 
     useEffect(() => {
         if (combinedError) {
@@ -80,7 +90,6 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
                 const filteredVariables = variables.filter(v => v.name !== "");
 
                 if (savedData?.prevDataRef) {
-                    setPrevDataRef(savedData.prevDataRef);
                     if (JSON.stringify(savedData.prevDataRef) !== JSON.stringify(data)) {
                         await clearFormData("ARDL");
                         setAvailableVariables(filteredVariables);
@@ -173,6 +182,14 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
 
                     <TabsContent value="options" className="h-full">
                         <OptionTab
+                            autoSelect={autoSelect}
+                            setAutoSelect={setAutoSelect}
+                            maxP={maxP}
+                            setMaxP={setMaxP}
+                            maxQ={maxQ}
+                            setMaxQ={setMaxQ}
+                            selectionCriterion={selectionCriterion}
+                            setSelectionCriterion={setSelectionCriterion}
                             pOrder={pOrder}
                             qOrders={qOrders}
                             independentVariables={independentVariables}

@@ -281,7 +281,8 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", chartW).attr("height", chartH)
+        svg.attr("width", chartW)
+            .attr("height", chartH)
             .attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
@@ -445,7 +446,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("x", 0).attr("y", 0)
             .attr("font-size", "11px").attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Klaster");
+            .text("Cluster");
 
         clusterIds.forEach((id, i) => {
             const gy = 20 + i * 22;
@@ -489,7 +490,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("text-anchor", "middle")
             .attr("font-size", "10px")
             .attr("fill", "hsl(var(--muted-foreground))")
-            .text(`Dimensi direduksi ke 2D menggunakan PCA · ${points.length} observasi · ${numClusters} klaster`);
+            .text(`Dimensions reduced to 2D using PCA · ${points.length} observations · ${numClusters} clusters`);
 
     }, [pcaResult, points, medoids, variableNames, title, svgWidth, height]);
 
@@ -497,14 +498,14 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
     if (points.length + medoids.length < 2) {
         return (
             <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
-                PCA membutuhkan minimal 2 observasi.
+                PCA requires at least 2 observations.
             </div>
         );
     }
     if ((points[0]?.features.length ?? 0) === 0) {
         return (
             <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
-                Tidak ada data fitur untuk diproyeksikan.
+                No feature data to project.
             </div>
         );
     }

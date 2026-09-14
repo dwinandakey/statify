@@ -1,5 +1,5 @@
 /**
- * Unit tests for Factor Analysis SPSS-Style Log Generator
+ * Unit test analisi faktor (log generator) 
  */
 
 import { generateFactorAnalysisLog, generateFactorAnalysisLogCompact } from "../factor-log-generator";
@@ -24,6 +24,35 @@ describe("Factor Analysis Log Generator", () => {
             expect(log).toContain("/EXTRACTION PC");
             expect(log).toContain("/ROTATION NOROTATE");
             expect(log).toContain("/METHOD=COR.");
+            expect(log).not.toContain("/SELECT=");
+        });
+
+        it("should include the optional selection variable and value", () => {
+            const configData: FactorType = {
+                ...FactorDefault,
+                main: {
+                    TargetVar: ["YearsAtCompany"],
+                    ValueTarget: "Attrition",
+                },
+                value: { Selection: "Yes" },
+            };
+
+            const log = generateFactorAnalysisLog(configData);
+
+            expect(log).toContain("  /ANALYSIS YearsAtCompany\n  /SELECT=Attrition('Yes')");
+        });
+
+        it("should omit selection syntax when the value is empty", () => {
+            const configData: FactorType = {
+                ...FactorDefault,
+                main: {
+                    TargetVar: ["VAR1"],
+                    ValueTarget: "Attrition",
+                },
+                value: { Selection: "   " },
+            };
+
+            expect(generateFactorAnalysisLog(configData)).not.toContain("/SELECT=");
         });
 
         it("should generate log with Principal Axis Factoring extraction method", () => {

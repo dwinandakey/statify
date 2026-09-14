@@ -226,7 +226,9 @@ const VariableListManager: FC<VariableListManagerProps> = ({
             if (!dataString) throw new Error("No drag data found");
 
             const { variableId, sourceListId } = JSON.parse(dataString);
-            if (!variableId || !sourceListId) throw new Error("Invalid drag data structure");
+            // NOTE: variableId can be 0 (first column), so we must NOT use !variableId (falsy check).
+            // Use explicit null/undefined check instead.
+            if (variableId === undefined || variableId === null || !sourceListId) throw new Error("Invalid drag data structure");
 
             const sourceList = allLists.find(l => l.id === sourceListId)?.variables;
             if (!sourceList) throw new Error(`Source list ${sourceListId} not found`);

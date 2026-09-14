@@ -5,7 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, ListChecks, GitBranch, Waves, ShieldCheck } from "lucide-react";
 import type { Variable } from "@/types/Variable";
 
 interface AssumptionChecksTabProps {
@@ -86,8 +86,11 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
     <div className="space-y-4 p-4 h-full overflow-y-auto">
       {/* SECTION 1: SELECTED VARIABLES SUMMARY */}
       <div className="space-y-2">
-        <Label className="font-bold">Selected Variables</Label>
-        <Card className="border rounded-md shadow-sm">
+        <Label className="font-bold flex items-center gap-1.5">
+          <ListChecks className="h-4 w-4 text-primary" />
+          Selected Variables
+        </Label>
+        <Card id="binary-logistic-assumption-summary-card" className="border rounded-md shadow-sm">
           <CardContent className="p-4">
             <div className="space-y-2">
               {/* Dependent Variable */}
@@ -138,14 +141,18 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
 
       {/* SECTION 2: ASSUMPTION TESTS */}
       <div className="space-y-2">
-        <Label className="font-bold">Assumption Tests</Label>
+        <Label className="font-bold flex items-center gap-1.5">
+          <ShieldCheck className="h-4 w-4 text-primary" />
+          Assumption Tests
+        </Label>
         <Card className="border rounded-md shadow-sm">
           <CardContent className="p-4 space-y-6">
             {/* 1. Multicollinearity (VIF) */}
-            <div className="space-y-3">
+            <div id="binary-logistic-assumption-vif-section" className="space-y-3">
               <div className="flex justify-between items-center">
                 <div>
-                  <Label className="font-semibold text-base">
+                  <Label className="font-semibold text-base flex items-center gap-1.5">
+                    <GitBranch className="h-4 w-4 text-primary" />
                     Multicollinearity Checking (VIF)
                   </Label>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -198,10 +205,11 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
             <Separator />
 
             {/* 2. Linearity of Logit (Box-Tidwell) */}
-            <div className="space-y-3">
+            <div id="binary-logistic-assumption-boxtidwell-section" className="space-y-3">
               <div className="flex justify-between items-center">
                 <div>
-                  <Label className="font-semibold text-base">
+                  <Label className="font-semibold text-base flex items-center gap-1.5">
+                    <Waves className="h-4 w-4 text-primary" />
                     Linearity of Logit (Box-Tidwell)
                   </Label>
                   <p className="text-xs text-muted-foreground mt-0.5">
