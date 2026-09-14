@@ -153,22 +153,30 @@ pub fn run_analysis(
     if config.main.stepwise {
         // Stepwise statistics
         logger.add_log("calculate_stepwise_statistics");
-        match core::calculate_stepwise_statistics(&filtered_data, config) {
-            Ok(statistics) => {
-                // Prime the cache from this single stepwise run so eigen/canonical/
-                // structure/wilks/casewise/classification reuse the selection instead
-                // of recomputing the whole procedure.
-                core::prime_selected_vars_cache(core::select_final_variables(&statistics, config));
-                stepwise_statistics = Some(statistics);
-                web_sys::console::log_1(
-                    &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
-                );
-            }
+        // A stepwise failure is fatal: every downstream table depends on the selected
+        // variables, and continuing would silently report "enter together" results
+        // under a stepwise analysis.
+        let statistics = match core::calculate_stepwise_statistics(&filtered_data, config) {
+            Ok(statistics) => statistics,
             Err(e) => {
                 error_collector.add_error("calculate_stepwise_statistics", &e);
-                // Continue execution despite errors for non-critical functions
+                return Err(string_to_js_error(format!("Stepwise selection failed: {}", e)));
+            }
+        };
+        // Prime the cache from this single stepwise run so eigen/canonical/
+        // structure/wilks/casewise/classification reuse the selection instead
+        // of recomputing the whole procedure.
+        match core::select_final_variables(&statistics) {
+            Ok(selected) => core::prime_selected_vars_cache(selected),
+            Err(e) => {
+                error_collector.add_error("select_final_variables", &e);
+                return Err(string_to_js_error(e));
             }
         }
+        stepwise_statistics = Some(statistics);
+        web_sys::console::log_1(
+            &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
+        );
     }
 
     // Eigen Values

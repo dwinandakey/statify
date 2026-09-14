@@ -105,7 +105,7 @@ pub fn calculate_stepwise_statistics(
             }
         }
     } else {
-        vec![create_initial_step(&dataset, variables, config)]
+        vec![create_initial_step(&dataset, variables, config)?]
     };
 
     // Convert step data to output format
@@ -141,7 +141,7 @@ fn perform_stepwise_analysis(
     seen_states.insert(String::new());
 
     // Add initial step (Step 0)
-    let initial_step = create_initial_step(dataset, variables, config);
+    let initial_step = create_initial_step(dataset, variables, config)?;
     steps_data.push(initial_step.clone());
 
     let method_type = determine_method_type(config);
@@ -155,7 +155,7 @@ fn perform_stepwise_analysis(
         // PRIORITAS 1: Cek apakah ada variabel yang harus di-REMOVE
         if current_variables.len() > 1 {
             let (worst_var_to_remove, worst_stats) =
-                find_worst_variable_to_remove(&current_variables, dataset, method_type, config);
+                find_worst_variable_to_remove(&current_variables, dataset, method_type, config)?;
 
             let should_remove = should_remove_variable(
                 &worst_var_to_remove,
@@ -192,7 +192,7 @@ fn perform_stepwise_analysis(
                         method_type,
                         config,
                         prev_raos_v,
-                    );
+                    )?;
                     prev_raos_v = step_data.raos_v;
                     steps_data.push(step_data);
 
@@ -210,7 +210,7 @@ fn perform_stepwise_analysis(
                 &current_variables,
                 method_type,
                 config,
-            );
+            )?;
 
             let should_enter = should_enter_variable(
                 &best_var_to_enter,
@@ -248,7 +248,7 @@ fn perform_stepwise_analysis(
                         method_type,
                         config,
                         prev_raos_v,
-                    );
+                    )?;
                     prev_raos_v = step_data.raos_v;
                     steps_data.push(step_data);
                 }
@@ -383,12 +383,12 @@ fn create_initial_step(
     dataset: &AnalyzedDataset,
     variables: &[String],
     config: &DiscriminantConfig,
-) -> StepData {
-    let initial_variables_not_in = analyze_variables_not_in_model(variables, dataset, &[], config);
+) -> Result<StepData, String> {
+    let initial_variables_not_in = analyze_variables_not_in_model(variables, dataset, &[], config)?;
     let _k = dataset.num_groups as i32;
     let _n = dataset.total_cases as i32;
 
-    StepData {
+    Ok(StepData {
         variable_entered: None,
         variable_removed: None,
         min_d_squared: 0.0,
@@ -408,7 +408,7 @@ fn create_initial_step(
         variables_in_analysis: Vec::new(),
         variables_not_in_analysis: initial_variables_not_in,
         pairwise_comparisons: HashMap::new(),
-    }
+    })
 }
 
 /// Create data for a step in the stepwise procedure
@@ -422,12 +422,12 @@ fn create_step_data(
     method_type: MethodType,
     config: &DiscriminantConfig,
     prev_raos_v: f64,
-) -> StepData {
+) -> Result<StepData, String> {
     let vars_in_analysis =
-        analyze_variables_in_model(current_variables, dataset, method_type, config);
+        analyze_variables_in_model(current_variables, dataset, method_type, config)?;
 
     let vars_not_in_analysis =
-        analyze_variables_not_in_model(remaining_variables, dataset, current_variables, config);
+        analyze_variables_not_in_model(remaining_variables, dataset, current_variables, config)?;
 
     // SPSS displays ALL variables not in the model in this table (not just the
     // top 4), so we keep the full ranked list.
@@ -441,7 +441,7 @@ fn create_step_data(
     let wilks_lambda = if combined_vars.is_empty() {
         1.0
     } else {
-        calculate_overall_wilks_lambda(dataset, &combined_vars)
+        calculate_overall_wilks_lambda(dataset, &combined_vars)?
     };
 
     // Method statistic of the current model, shown in the Variables Entered/Removed
@@ -551,7 +551,7 @@ fn create_step_data(
 
     let significance = calculate_p_value_from_f(exact_f, exact_df1 as f64, exact_df2 as f64);
 
-    StepData {
+    Ok(StepData {
         variable_entered,
         variable_removed,
         min_d_squared,
@@ -571,7 +571,7 @@ fn create_step_data(
         variables_in_analysis: vars_in_analysis,
         variables_not_in_analysis: vars_not_in_analysis,
         pairwise_comparisons,
-    }
+    })
 }
 
 /// Convert internal step data to the output format

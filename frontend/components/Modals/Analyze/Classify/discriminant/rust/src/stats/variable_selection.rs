@@ -53,30 +53,31 @@ pub fn analyze_variables_not_in_model(
     dataset: &AnalyzedDataset,
     current_variables: &[String],
     config: &DiscriminantConfig,
-) -> Vec<VariableNotInAnalysis> {
+) -> Result<Vec<VariableNotInAnalysis>, String> {
     let method_type = determine_method_type(config);
 
     // Parallel analysis of variables
     let results: Vec<Option<VariableNotInAnalysis>> = variables
         .par_iter()
-        .map(|var_name| {
+        .map(|var_name| -> Result<Option<VariableNotInAnalysis>, String> {
             // Calculate tolerance
             let (tolerance, min_tolerance) =
                 calculate_tolerance(var_name, dataset, current_variables);
 
             // Tolerance check: reject if tolerance < 0.001 (SPSS default)
             if tolerance < TOLERANCE_THRESHOLD || min_tolerance < TOLERANCE_THRESHOLD {
-                return None;
+                return Ok(None);
             }
             let vin = if tolerance > EPSILON { 1.0 / tolerance } else { f64::MAX };
             if vin > 10.0 {
                 // VIN > 10 indicates severe multicollinearity — reject variable
-                return None;
+                return Ok(None);
             }
 
-            // Calculate F-to-enter
+            // Calculate F-to-enter. Candidates reaching this point passed the tolerance
+            // gate, so a failure here is a genuine numerical error and is propagated.
             let (f_to_enter, wilks_lambda) =
-                calculate_variable_f_to_enter(var_name, dataset, current_variables, method_type);
+                calculate_variable_f_to_enter(var_name, dataset, current_variables, method_type)?;
 
             // The method-specific statistic used to RANK candidates (f_to_enter is the
             // partial Wilks F that gates entry; min_d_squared holds the ranking stat):
@@ -116,7 +117,7 @@ pub fn analyze_variables_not_in_model(
                 _ => (0.0, String::new()),
             };
 
-            Some(VariableNotInAnalysis {
+            Ok(Some(VariableNotInAnalysis {
                 variable: var_name.clone(),
                 tolerance,
                 min_tolerance,
@@ -124,9 +125,9 @@ pub fn analyze_variables_not_in_model(
                 wilks_lambda,
                 min_d_squared,
                 between_groups,
-            })
+            }))
         })
-        .collect();
+        .collect::<Result<Vec<_>, String>>()?;
 
     // Filter out None values and collect results
     let mut variables_not_in_analysis: Vec<VariableNotInAnalysis> =
@@ -175,7 +176,7 @@ pub fn analyze_variables_not_in_model(
     // the full ranked list and let display callers (create_step_data) slice
     // the top 4 — the selection routines (find_best_variable_to_enter) need
     // the full list.
-    variables_not_in_analysis
+    Ok(variables_not_in_analysis)
 }
 
 /// Analyze variables in the model
@@ -196,11 +197,11 @@ pub fn analyze_variables_in_model(
     dataset: &AnalyzedDataset,
     method_type: MethodType,
     _config: &DiscriminantConfig,
-) -> Vec<VariableInAnalysis> {
+) -> Result<Vec<VariableInAnalysis>, String> {
     // Parallel analysis of variables
     let results: Vec<VariableInAnalysis> = variables
         .par_iter()
-        .map(|var_name| {
+        .map(|var_name| -> Result<VariableInAnalysis, String> {
             // Create a set of variables excluding the current one
             let other_variables: Vec<String> = variables
                 .iter()
@@ -213,7 +214,7 @@ pub fn analyze_variables_in_model(
 
             // Calculate F-to-remove
             let (f_to_remove, wilks_lambda) =
-                calculate_variable_f_to_remove(var_name, dataset, variables, method_type);
+                calculate_variable_f_to_remove(var_name, dataset, variables, method_type)?;
 
             // Method-specific statistic for the model with this variable EXCLUDED
             // (the reduced model) — what SPSS shows in the "Min. D Squared" /
@@ -239,7 +240,7 @@ pub fn analyze_variables_in_model(
                 _ => (0.0, String::new()),
             };
 
-            VariableInAnalysis {
+            Ok(VariableInAnalysis {
                 variable: var_name.clone(),
                 tolerance,
                 min_tolerance,
@@ -248,9 +249,9 @@ pub fn analyze_variables_in_model(
                 wilks_lambda,
                 min_d_squared,
                 between_groups,
-            }
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>, String>>()?;
 
     let mut variables_in_analysis = results;
 
@@ -275,7 +276,7 @@ pub fn analyze_variables_in_model(
         }
     }
 
-    variables_in_analysis
+    Ok(variables_in_analysis)
 }
 
 /// Find the best variable to enter the model
@@ -298,7 +299,7 @@ pub fn find_best_variable_to_enter(
     current_variables: &[String],
     method_type: MethodType,
     config: &DiscriminantConfig,
-) -> (Option<String>, VariableNotInAnalysis) {
+) -> Result<(Option<String>, VariableNotInAnalysis), String> {
     // Default empty result
     let default_result = VariableNotInAnalysis {
         variable: String::new(),
@@ -311,14 +312,14 @@ pub fn find_best_variable_to_enter(
     };
 
     if variables.is_empty() {
-        return (None, default_result);
+        return Ok((None, default_result));
     }
 
     // Analyze all candidate variables
-    let candidates = analyze_variables_not_in_model(variables, dataset, current_variables, config);
+    let candidates = analyze_variables_not_in_model(variables, dataset, current_variables, config)?;
 
     if candidates.is_empty() {
-        return (None, default_result);
+        return Ok((None, default_result));
     }
 
     // For Mahalanobis method: rank by new_min_d2 directly (stored as -new_min_d2 in wilks_lambda).
@@ -349,9 +350,9 @@ pub fn find_best_variable_to_enter(
         }
     };
 
-    best_candidate
+    Ok(best_candidate
         .map(|best| (Some(best.variable.clone()), best))
-        .unwrap_or((None, default_result))
+        .unwrap_or((None, default_result)))
 }
 
 /// Find the worst variable to remove from the model
@@ -372,7 +373,7 @@ pub fn find_worst_variable_to_remove(
     dataset: &AnalyzedDataset,
     method_type: MethodType,
     config: &DiscriminantConfig,
-) -> (Option<String>, VariableInAnalysis) {
+) -> Result<(Option<String>, VariableInAnalysis), String> {
     // Default empty result
     let default_result = VariableInAnalysis {
         variable: String::new(),
@@ -386,14 +387,14 @@ pub fn find_worst_variable_to_remove(
     };
 
     if variables.is_empty() {
-        return (None, default_result);
+        return Ok((None, default_result));
     }
 
     // Analyze all variables in the model
-    let candidates = analyze_variables_in_model(variables, dataset, method_type, config);
+    let candidates = analyze_variables_in_model(variables, dataset, method_type, config)?;
 
     if candidates.is_empty() {
-        return (None, default_result);
+        return Ok((None, default_result));
     }
 
     // [PERBAIKAN 2]: Hapus logika eksekusi (should_remove).
@@ -403,8 +404,8 @@ pub fn find_worst_variable_to_remove(
     let worst_candidate = candidates.first().cloned();
 
     if let Some(worst) = worst_candidate {
-        (Some(worst.variable.clone()), worst)
+        Ok((Some(worst.variable.clone()), worst))
     } else {
-        (None, default_result)
+        Ok((None, default_result))
     }
 }
