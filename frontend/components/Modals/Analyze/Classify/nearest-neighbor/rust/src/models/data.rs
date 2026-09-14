@@ -1,4 +1,4 @@
-use serde::{ Deserialize, Serialize };
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -120,9 +120,35 @@ pub struct AnalysisData {
 pub struct KnnData {
     pub features: Vec<String>,
     pub data_matrix: Vec<Vec<f64>>,
+    pub display_matrix: Vec<Vec<f64>>,
     pub target_values: Vec<DataValue>,
+    pub target_measure: VariableMeasure,
     pub case_identifiers: Vec<i32>,
+    pub case_labels: Vec<String>,
+    pub processed_case_indices: Vec<usize>,
     pub training_indices: Vec<usize>,
     pub holdout_indices: Vec<usize>,
+    pub excluded_indices: Vec<usize>,
+    pub cross_validation_folds: Vec<usize>,
     pub focal_indices: Vec<usize>,
+}
+
+impl KnnData {
+    pub fn target_is_categorical(&self) -> bool {
+        matches!(
+            self.target_measure,
+            VariableMeasure::Nominal | VariableMeasure::Ordinal
+        ) || self
+            .target_values
+            .iter()
+            .all(|value| matches!(value, DataValue::Text(_) | DataValue::Boolean(_)))
+    }
+
+    pub fn target_is_numeric_scale(&self) -> bool {
+        !self.target_is_categorical()
+            && self
+                .target_values
+                .iter()
+                .any(|value| matches!(value, DataValue::Number(value) if value.is_finite()))
+    }
 }

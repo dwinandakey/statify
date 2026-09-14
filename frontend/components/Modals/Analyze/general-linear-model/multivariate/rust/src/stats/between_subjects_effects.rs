@@ -11,8 +11,11 @@ use super::core::{
     calculate_f_significance,
     calculate_mean,
     calculate_observed_power,
+    data_value_to_string,
+    extract_dependent_value,
     generate_interaction_terms,
     get_factor_levels,
+    merge_records,
     parse_interaction_term,
     to_dmatrix,
     to_dvector,
@@ -34,8 +37,18 @@ pub fn calculate_tests_between_subjects_effects(
         .collect::<Vec<String>>();
 
     // Prepare design matrix (X) and dependent variable vectors (Y)
-    for dep_var in &dependent_vars {
+    for (dv_idx, dep_var) in dependent_vars.iter().enumerate() {
         let mut effect_results: HashMap<String, TestEffectEntry> = HashMap::new();
+
+        // For One-Sample Hotelling T² with Test Values (μ₀): the Intercept
+        // effect's Sum of Squares must reflect deviation from μ₀ₖ, not from
+        // 0. Mirrors the parameter_estimates.rs shift and the SPSS workaround
+        // of computing `d_var = var − μ₀` before running GLM. Defaults to 0
+        // (current behavior) when test_values is None.
+        let mu0_k: f64 = config.main.test_values
+            .as_ref()
+            .and_then(|tv| tv.get(dv_idx).copied())
+            .unwrap_or(0.0);
 
         // Build design matrix and response vector
         let (x_matrix, y_vector) = build_design_matrix_and_response(data, config, dep_var)?;
@@ -113,8 +126,52 @@ pub fn calculate_tests_between_subjects_effects(
 
         // Add "Intercept" effect if included
         if config.model.intercept {
-            // Calculate intercept statistics
-            let intercept_ss = (n as f64) * mean_y.powi(2);
+            // Type III SS for Intercept in unbalanced designs:
+            //   SS = (Σᵢ ȳᵢ)² / Σᵢ(1/nᵢ)
+            // This equals N * grand_mean² only for balanced designs.
+            // Fall back to N * ȳ² when no factors are present (one-pop T² case).
+            //
+            // When μ₀ₖ ≠ 0 (Test Values mode) we shift every group mean (or
+            // the grand mean in the no-factor fallback) by μ₀ₖ, which is
+            // arithmetically identical to running GLM on `d_var = var − μ₀`
+            // and matches the reference SPSS output.
+            let intercept_ss = if config.main.fix_factor
+                .as_ref()
+                .map_or(false, |f| !f.is_empty())
+            {
+                let factor = &config.main.fix_factor.as_ref().unwrap()[0];
+                let merged_rows = merge_records(data);
+                let mut sum_group_means = 0.0_f64;
+                let mut sum_inv_n = 0.0_f64;
+                if let Ok(levels) = get_factor_levels(data, factor) {
+                    for level in &levels {
+                        let group_vals: Vec<f64> = merged_rows
+                            .iter()
+                            .filter_map(|rec| {
+                                let fv = rec.values
+                                    .get(factor.as_str())
+                                    .map(|v| data_value_to_string(v));
+                                if fv.as_deref() == Some(level.as_str()) {
+                                    extract_dependent_value(rec, dep_var)
+                                } else {
+                                    None
+                                }
+                            })
+                            .collect();
+                        if !group_vals.is_empty() {
+                            sum_group_means += calculate_mean(&group_vals) - mu0_k;
+                            sum_inv_n += 1.0 / (group_vals.len() as f64);
+                        }
+                    }
+                }
+                if sum_inv_n > 0.0 {
+                    sum_group_means * sum_group_means / sum_inv_n
+                } else {
+                    (n as f64) * (mean_y - mu0_k).powi(2)
+                }
+            } else {
+                (n as f64) * (mean_y - mu0_k).powi(2)
+            };
             let intercept_df = 1;
             let intercept_ms = intercept_ss;
             let intercept_f = intercept_ms / ms_error;
@@ -167,11 +224,9 @@ pub fn calculate_tests_between_subjects_effects(
         // If there are factors, calculate Type I, II, III, or IV SS for each
         if let Some(factors) = &config.main.fix_factor {
             for factor in factors {
-                // This would be a more complex calculation based on the SS type
-                // For simplicity, we're using a placeholder approach here
-                // In a real implementation, you'd need to compute the appropriate SS based on the model
                 let factor_cols = get_factor_columns(&x_matrix, factor, data, config)?;
-                let factor_df = factor_cols.len() - 1; // Degrees of freedom for the factor
+                // Each encoded column contributes one numerator df.
+                let factor_df = factor_cols.len();
 
                 if factor_df > 0 {
                     // Calculate factor SS based on the SS type
@@ -247,7 +302,7 @@ pub fn calculate_tests_between_subjects_effects(
                 for term in &interaction_terms {
                     // Determine columns for this interaction
                     let interaction_cols = get_interaction_columns(&x_matrix, term, data, config)?;
-                    let interaction_df = interaction_cols.len() - 1;
+                    let interaction_df = interaction_cols.len();
 
                     if interaction_df > 0 {
                         // Calculate interaction SS based on the SS type
@@ -353,27 +408,50 @@ pub fn calculate_type_i_ss(
     _data: &AnalysisData,
     _config: &MultivariateConfig
 ) -> Result<f64, String> {
-    // Type I SS (sequential) calculation
-    // Simplified implementation - compute SS by fitting models with and without the factor
-    let n = y_vector.len();
-    let full_model_ss = fit_model_and_get_ss(&x_matrix, &y_vector)?;
-
-    // Create reduced model without the factor columns
-    let mut reduced_x = Vec::new();
-    for row in x_matrix {
-        let mut new_row = Vec::new();
-        for (j, val) in row.iter().enumerate() {
-            if !factor_cols.contains(&j) {
-                new_row.push(*val);
-            }
-        }
-        reduced_x.push(new_row);
+    // True Type I SS — sequential / hierarchical decomposition:
+    //   SS(effect | preceding effects) = SSR(model with cols [0..min_col])
+    //                                  − SSR(model with cols [0..=max_col])
+    //
+    // build_design_matrix places columns in canonical SPSS order:
+    //   [intercept] [factor_1 dummies] [factor_2 dummies] … [interactions]
+    // so the column index naturally encodes the "order of entry" and the
+    // sequential Type I formula reduces to: fit two models that differ by
+    // the contiguous block of columns belonging to this effect.
+    //
+    // The previous implementation removed `factor_cols` while keeping
+    // every other column (including later interactions). That is the
+    // Type III "drop this factor from the full model" formula, which
+    // gives different values from Type I whenever the dummy-coded design
+    // is non-orthogonal — e.g. dummy-coded main effects vs. their
+    // cross-product interaction in a balanced Two-Way design.
+    if factor_cols.is_empty() {
+        return Ok(0.0);
     }
+    let min_col = *factor_cols.iter().min().unwrap();
+    let max_col = *factor_cols.iter().max().unwrap();
 
-    let reduced_model_ss = fit_model_and_get_ss(&reduced_x, &y_vector)?;
+    // Reduced model: every column with index < min_col.
+    let reduced_x: Vec<Vec<f64>> = x_matrix
+        .iter()
+        .map(|row| row[..min_col].to_vec())
+        .collect();
+    // Extended model: every column with index ≤ max_col.
+    let extended_x: Vec<Vec<f64>> = x_matrix
+        .iter()
+        .map(|row| row[..=max_col].to_vec())
+        .collect();
 
-    // Type I SS is the difference between full and reduced model SS
-    Ok(reduced_model_ss - full_model_ss)
+    // When the reduced model has no columns (very first effect entering
+    // before the intercept), fall back to SST.
+    let reduced_ssr = if reduced_x.first().map_or(0, |r| r.len()) == 0 {
+        let mean_y = y_vector.iter().sum::<f64>() / (y_vector.len() as f64);
+        y_vector.iter().map(|y| (y - mean_y).powi(2)).sum::<f64>()
+    } else {
+        fit_model_and_get_ss(&reduced_x, y_vector)?
+    };
+    let extended_ssr = fit_model_and_get_ss(&extended_x, y_vector)?;
+
+    Ok(reduced_ssr - extended_ssr)
 }
 
 pub fn calculate_type_ii_ss(
@@ -381,21 +459,11 @@ pub fn calculate_type_ii_ss(
     y_vector: &Vec<f64>,
     factor: &str,
     factor_cols: &Vec<usize>,
-    data: &AnalysisData,
+    _data: &AnalysisData,
     config: &MultivariateConfig
 ) -> Result<f64, String> {
     // Type II SS calculation
     // Adjusted for all other appropriate effects
-
-    // Get all other main effects
-    let mut other_effects = Vec::new();
-    if let Some(factors) = &config.main.fix_factor {
-        for other_factor in factors {
-            if other_factor != factor {
-                other_effects.push(other_factor.clone());
-            }
-        }
-    }
 
     // Create a model with all main effects except the current factor
     let mut reduced_x = Vec::new();
@@ -419,7 +487,7 @@ pub fn calculate_type_ii_ss(
 pub fn calculate_type_iii_ss(
     x_matrix: &Vec<Vec<f64>>,
     y_vector: &Vec<f64>,
-    effect: &str,
+    _effect: &str,
     effect_cols: &Vec<usize>,
     _data: &AnalysisData,
     _config: &MultivariateConfig
@@ -523,11 +591,6 @@ pub fn get_factor_columns(
         }
     }
 
-    // Skip covariates
-    if let Some(covariates) = &config.main.covar {
-        col_start += covariates.len();
-    }
-
     // If no columns found, this could mean it's an interaction term
     if factor_cols.is_empty() && factor.contains('*') {
         factor_cols = get_interaction_columns(x_matrix, factor, data, config)?;
@@ -543,9 +606,11 @@ pub fn get_interaction_columns(
     data: &AnalysisData,
     config: &MultivariateConfig
 ) -> Result<Vec<usize>, String> {
-    // For simplicity, return a subset of columns based on a heuristic
-    // In a real implementation, this would need to be more sophisticated
     let mut interaction_cols = Vec::new();
+
+    if x_matrix.is_empty() || x_matrix[0].is_empty() {
+        return Ok(interaction_cols);
+    }
 
     // Start after all main effects
     let mut col_start = 0;
@@ -569,32 +634,35 @@ pub fn get_interaction_columns(
         col_start += covariates.len();
     }
 
-    // Now we should be at the interaction columns
-    // This is a simplified approach - in reality you'd need to know the exact design matrix structure
-    let interaction_factors = parse_interaction_term(interaction_term);
-    let num_factors = interaction_factors.len();
-
-    // Assume 3 columns per 2-way interaction, 7 columns per 3-way interaction, etc.
-    // This is just a placeholder logic - real implementation would depend on actual design matrix construction
-    let estimated_cols = match num_factors {
-        2 => 3,
-        3 => 7,
-        _ => 15,
-    };
-
-    // Find columns for this specific interaction
+    // Interaction columns are appended in the same order as generate_interaction_terms.
+    // Each interaction term occupies (a-1)·(b-1)·... columns (Cartesian product
+    // of factor dummies), NOT a single column. The previous code only returned
+    // one column index per term, collapsing the interaction df to 1.
     if let Some(factors) = &config.main.fix_factor {
         if factors.len() > 1 {
             let interaction_terms = generate_interaction_terms(factors);
-            let pos = interaction_terms.iter().position(|t| t == interaction_term);
-
-            if let Some(idx) = pos {
-                let interaction_start = col_start + idx * estimated_cols;
-                for i in 0..estimated_cols {
-                    if interaction_start + i < x_matrix[0].len() {
-                        interaction_cols.push(interaction_start + i);
+            let mut offset = 0usize;
+            for term in &interaction_terms {
+                let term_factors = parse_interaction_term(term);
+                let mut term_width = 1usize;
+                for f in &term_factors {
+                    if let Ok(levels) = get_factor_levels(data, f) {
+                        term_width *= levels.len().saturating_sub(1);
                     }
                 }
+                if term_width == 0 {
+                    continue;
+                }
+                if term == interaction_term {
+                    for k in 0..term_width {
+                        let c = col_start + offset + k;
+                        if c < x_matrix[0].len() {
+                            interaction_cols.push(c);
+                        }
+                    }
+                    return Ok(interaction_cols);
+                }
+                offset += term_width;
             }
         }
     }

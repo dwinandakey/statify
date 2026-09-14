@@ -149,12 +149,6 @@ Mendefinisikan struktur konfigurasi untuk operasi statistik:
 pub struct Config {
     pub method: String,           // Metode statistik ("mean", "median", dll)
     pub params: Vec<String>,      // Parameter opsional
-    pub options: ConfigOptions,   // Opsi tambahan
-}
-
-pub struct ConfigOptions {
-    pub confidence_level: Option<f64>,  // Tingkat kepercayaan untuk interval
-    pub exclude_outliers: Option<bool>, // Apakah mengecualikan outlier
 }
 ```
 
@@ -312,10 +306,7 @@ const inputData = {
   },
   config: {
     method: "mean",
-    params: [],
-    options: {
-      exclude_outliers: true
-    }
+    params: []
   }
 };
 
@@ -326,7 +317,7 @@ const calculator = new StatCalculator(JSON.stringify(inputData));
 const resultJson = calculator.process();
 const result = JSON.parse(resultJson);
 
-console.log("Hasil analisis:", result);
+// Gunakan result sesuai kebutuhan aplikasi.
 ```
 
 ### Pendekatan Fungsional
@@ -342,10 +333,7 @@ const inputData = {
   },
   config: {
     method: "std_dev",
-    params: [],
-    options: {
-      confidence_level: 0.95
-    }
+    params: []
   }
 };
 
@@ -353,7 +341,7 @@ const inputData = {
 const resultJson = calculate_stats(JSON.stringify(inputData));
 const result = JSON.parse(resultJson);
 
-console.log("Hasil analisis:", result);
+// Gunakan result sesuai kebutuhan aplikasi.
 ```
 
 ## Pengembangan

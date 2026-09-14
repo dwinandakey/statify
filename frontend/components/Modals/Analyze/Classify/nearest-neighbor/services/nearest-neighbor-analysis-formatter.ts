@@ -1,547 +1,460 @@
-import {formatDisplayNumber} from "@/hooks/useFormatter";
-import type {ResultJson, Table} from "@/types/Table";
-
-// Define an interface for the setting object
-interface SystemSetting {
-    keyword?: string;
-    description?: string;
-    setting?: string;
-}
+/* eslint-disable @typescript-eslint/no-explicit-any -- WASM result payloads are validated while formatting. */
+import { formatDisplayNumber } from "@/hooks/useFormatter";
+import type { ResultJson, Row, Table } from "@/types/Table";
 
 export function transformNearestNeighborResult(data: any): ResultJson {
-    const resultJson: ResultJson = {
-        tables: [],
+  const tables: Table[] = [];
+
+  if (data.system_settings) {
+    tables.push(buildSystemSettings(data.system_settings));
+  }
+
+  if (data.case_processing_summary) {
+    tables.push(buildCaseProcessingSummary(data.case_processing_summary));
+  }
+
+  if (data.predictor_importance) {
+    tables.push(buildPredictorImportance(data.predictor_importance));
+  }
+
+  if (data.predictor_space) {
+    tables.push(buildPredictorSpaceSummary(data.predictor_space));
+  }
+
+  if (data.nearest_neighbors) {
+    tables.push(buildNeighborDetails(data.nearest_neighbors));
+  }
+
+  if (data.classification_table) {
+    tables.push(buildConfusionMatrix(data.classification_table));
+  }
+
+  if (data.error_summary) {
+    tables.push(buildErrorSummary(data.error_summary));
+  }
+
+  return { tables };
+}
+
+function buildCaseProcessingSummary(summary: any): Table {
+  const trainingN = Number(summary.training?.n ?? 0);
+  const holdoutN = Number(summary.holdout?.n ?? 0);
+  const validN = trainingN + holdoutN;
+  const excludedN = Number(summary.excluded?.n ?? 0);
+  const totalN = validN + excludedN;
+
+  return {
+    key: "case_processing_summary",
+    title: "Case Processing Summary",
+    columnHeaders: [
+      { header: "", key: "group" },
+      { header: "", key: "label" },
+      { header: "N", key: "n" },
+      { header: "Percent", key: "percent" },
+    ],
+    rows: [
+      {
+        rowHeader: ["Sample", "Training"],
+        n: formatDisplayNumber(trainingN),
+        percent: percent(trainingN, validN),
+      },
+      {
+        rowHeader: ["Sample", "Holdout"],
+        n: formatDisplayNumber(holdoutN),
+        percent: percent(holdoutN, validN),
+      },
+      {
+        rowHeader: ["Valid"],
+        n: formatDisplayNumber(validN),
+        percent: "100.0%",
+      },
+      {
+        rowHeader: ["Excluded"],
+        n: formatDisplayNumber(excludedN),
+        percent: totalN > 0 ? percent(excludedN, totalN) : "",
+      },
+      {
+        rowHeader: ["Total"],
+        n: formatDisplayNumber(totalN),
+        percent: "",
+      },
+    ],
+  };
+}
+
+function buildSystemSettings(settings: any): Table {
+  return {
+    key: "system_settings",
+    title: "System Settings",
+    columnHeaders: [
+      { header: "Setting", key: "setting" },
+      { header: "Value", key: "value" },
+      { header: "Description", key: "description" },
+    ],
+    rows: settings.rng
+      ? [
+          {
+            rowHeader: [settings.rng.keyword ?? "RNG"],
+            setting: settings.rng.keyword ?? "RNG",
+            value: settings.rng.setting ?? "",
+            description: settings.rng.description ?? "",
+          },
+        ]
+      : [],
+  };
+}
+
+function buildPredictorImportance(importance: any): Table {
+  const entries =
+    Array.isArray(importance.entries) && importance.entries.length
+      ? importance.entries
+      : normalizePredictorImportanceEntries(importance.predictors);
+
+  return {
+    key: "predictor_importance",
+    title: "Feature Importance",
+    columnHeaders: [
+      { header: "Rank", key: "rank" },
+      { header: "Feature", key: "predictor" },
+      { header: "Base Error", key: "base_error" },
+      { header: "Error Without Feature", key: "error_without_feature" },
+      { header: "Delta Error", key: "delta_error" },
+      { header: "Raw Feature Importance", key: "raw_feature_importance" },
+      { header: "Normalized Importance", key: "importance" },
+    ],
+    rows: entries.map((entry: any, index: number) => ({
+      rowHeader: [
+        String(
+          entry.featureName ?? entry.feature_name ?? entry.name ?? index + 1,
+        ),
+      ],
+      rank: formatDisplayNumber(entry.rank ?? index + 1),
+      predictor: entry.featureName ?? entry.feature_name ?? entry.name ?? "",
+      base_error: optionalNumber(entry.baseError ?? entry.base_error),
+      error_without_feature: optionalNumber(
+        entry.errorWithoutFeature ?? entry.error_without_feature,
+      ),
+      delta_error: optionalNumber(entry.deltaError ?? entry.delta_error),
+      raw_feature_importance: optionalNumber(
+        entry.rawFeatureImportance ??
+          entry.raw_feature_importance ??
+          entry.rawImportance ??
+          entry.raw_importance,
+      ),
+      importance: optionalNumber(
+        entry.normalizedImportance ??
+          entry.normalized_importance ??
+          entry.value,
+      ),
+    })),
+    note: `Target: ${importance.target ?? ""}; K = ${importance.k ?? ""}`,
+  };
+}
+
+function buildPredictorSpaceSummary(space: any): Table {
+  const dimension = space.dimensions?.[0];
+  return {
+    key: "predictor_space",
+    title: "Predictor Space",
+    columnHeaders: [
+      { header: "Property", key: "property" },
+      { header: "Value", key: "value" },
+    ],
+    rows: [
+      { rowHeader: ["K"], value: formatDisplayNumber(space.k_value) },
+      {
+        rowHeader: ["Model Predictors"],
+        value: formatDisplayNumber(space.model_predictors),
+      },
+      {
+        rowHeader: ["Actual Predictors"],
+        value: formatDisplayNumber(
+          space.actual_predictors ?? space.model_predictors,
+        ),
+      },
+      { rowHeader: ["Displayed Space"], value: dimension?.name ?? "" },
+      {
+        rowHeader: ["Cases Plotted"],
+        value: formatDisplayNumber(dimension?.points?.length ?? 0),
+      },
+    ],
+    note: "Rendered as a scatter plot in the output viewer.",
+  };
+}
+
+export function buildNeighborDetails(nearestNeighbors: any): Table {
+  const focalNeighborSets = Array.isArray(nearestNeighbors?.focal_neighbor_sets)
+    ? nearestNeighbors.focal_neighbor_sets
+    : [];
+  const configuredK = Number(nearestNeighbors?.k_value ?? 0);
+  const kValue = Math.max(
+    0,
+    Number.isFinite(configuredK) ? configuredK : 0,
+    ...focalNeighborSets.map((set: any) =>
+      Array.isArray(set?.neighbors) ? set.neighbors.length : 0,
+    ),
+  );
+  const neighborColumns = Array.from({ length: kValue }, (_, index) => ({
+    header: String(index + 1),
+    key: neighborColumnKey(index),
+  }));
+  const distanceColumns = Array.from({ length: kValue }, (_, index) => ({
+    header: String(index + 1),
+    key: distanceColumnKey(index),
+  }));
+
+  return {
+    key: "neighbor_details",
+    title: "Neighbor Details",
+    columnHeaders: [
+      { header: "Focal Record", key: "focal_record" },
+      {
+        header: "Nearest Neighbor",
+        children: neighborColumns,
+      },
+      {
+        header: "Nearest Distance",
+        children: distanceColumns,
+      },
+    ],
+    rows: focalNeighborSets.map((set: any) => {
+      const focalRecord = recordLabel(
+        set?.focal_label,
+        set?.focal_row_number,
+        set?.focal_record,
+      );
+      const row: Row = {
+        rowHeader: [focalRecord],
+        focal_record: focalRecord,
+      };
+      const neighbors = Array.isArray(set?.neighbors) ? set.neighbors : [];
+
+      for (let index = 0; index < kValue; index += 1) {
+        const neighbor = neighbors[index];
+        row[neighborColumnKey(index)] = neighbor
+          ? recordLabel(neighbor.label, neighbor.row_number, neighbor.id)
+          : "";
+        row[distanceColumnKey(index)] =
+          neighbor && Number.isFinite(Number(neighbor.distance))
+            ? formatDistance3(Number(neighbor.distance))
+            : "";
+      }
+
+      return row;
+    }),
+  };
+}
+
+function buildConfusionMatrix(table: any): Table {
+  const categories = normalizeCategories(table);
+  const predictedColumns = categories.map((category, index) => ({
+    header: category,
+    key: predictedColumnKey(index),
+  }));
+
+  return {
+    key: "confusion_matrix",
+    title: "Classification Table",
+    columnHeaders: [
+      { header: "Partition", key: "partition" },
+      { header: "Observed", key: "observed" },
+      {
+        header: "Predicted",
+        children: [
+          ...predictedColumns,
+          { header: "Percent Correct", key: "percent_correct" },
+        ],
+      },
+    ],
+    rows: [
+      ...partitionRows("Training", table.training, categories),
+      ...partitionRows("Holdout", table.holdout, categories),
+    ],
+  };
+}
+
+function buildErrorSummary(summary: any): Table {
+  return {
+    key: "error_summary",
+    title: "Error Summary",
+    columnHeaders: [
+      { header: "Partition", key: "partition" },
+      {
+        header: "Percent of Records in Incorrectly Classified",
+        key: "percent_incorrectly_classified",
+      },
+    ],
+    rows: [
+      {
+        rowHeader: ["Training"],
+        partition: "Training",
+        percent_incorrectly_classified: optionalPercent3Decimals(
+          summary.training,
+        ),
+      },
+      {
+        rowHeader: ["Holdout"],
+        partition: "Holdout",
+        percent_incorrectly_classified: optionalPercent3Decimals(
+          summary.holdout,
+        ),
+      },
+    ],
+  };
+}
+
+function partitionRows(
+  partitionName: string,
+  partition: any,
+  categories: string[],
+): Row[] {
+  const categoryRows: Row[] = categories.map((category, rowIndex) => {
+    const row: Row = {
+      rowHeader: [partitionName, category],
+      percent_correct: optionalPercent1Decimal(
+        partition?.percent_correct?.[rowIndex],
+      ),
     };
 
-    // 1. Case Processing Summary
-    if (data.case_processing_summary) {
-        const table: Table = {
-            key: "case_processing_summary",
-            title: "Case Processing Summary",
-            columnHeaders: [
-                { header: "", key: "category" },
-                { header: "N", key: "n" },
-                { header: "Percent", key: "percent" },
-            ],
-            rows: [],
-        };
+    categories.forEach((_, columnIndex) => {
+      row[predictedColumnKey(columnIndex)] = String(
+        formatDisplayNumber(
+          Number(partition?.confusion_matrix?.[rowIndex]?.[columnIndex] ?? 0),
+        ),
+      );
+    });
 
-        // Training sample
-        if (data.case_processing_summary.training) {
-            table.rows.push({
-                rowHeader: ["Sample", "Training"],
-                n: formatDisplayNumber(data.case_processing_summary.training.n),
-                percent: formatDisplayNumber(
-                    data.case_processing_summary.training.percent
-                ),
-            });
-        }
+    return row;
+  });
 
-        // Holdout sample
-        if (data.case_processing_summary.holdout) {
-            table.rows.push({
-                rowHeader: ["", "Holdout"],
-                n: formatDisplayNumber(data.case_processing_summary.holdout.n),
-                percent: formatDisplayNumber(
-                    data.case_processing_summary.holdout.percent
-                ),
-            });
-        }
+  const overallPercentRow: Row = {
+    rowHeader: [partitionName, "Overall Percent"],
+    percent_correct: "",
+  };
 
-        // Valid
-        if (data.case_processing_summary.valid) {
-            table.rows.push({
-                rowHeader: ["Valid"],
-                n: formatDisplayNumber(data.case_processing_summary.valid.n),
-                percent: formatDisplayNumber(
-                    data.case_processing_summary.valid.percent
-                ),
-            });
-        }
+  categories.forEach((_, index) => {
+    overallPercentRow[predictedColumnKey(index)] = optionalPercent1Decimal(
+      partition?.overall_percent?.[index],
+    );
+  });
 
-        // Excluded
-        if (data.case_processing_summary.excluded) {
-            table.rows.push({
-                rowHeader: ["Excluded"],
-                n: formatDisplayNumber(
-                    data.case_processing_summary.excluded.n || 0
-                ),
-                percent: formatDisplayNumber(
-                    data.case_processing_summary.excluded.percent || 0
-                ),
-            });
-        }
+  return [...categoryRows, overallPercentRow];
+}
 
-        // Total
-        if (data.case_processing_summary.total) {
-            table.rows.push({
-                rowHeader: ["Total"],
-                n: formatDisplayNumber(
-                    data.case_processing_summary.total.n || 0
-                ),
-                percent: formatDisplayNumber(
-                    data.case_processing_summary.total.percent || 100
-                ),
-            });
-        }
+function normalizeCategories(table: any): string[] {
+  const categories = Array.isArray(table?.categories) ? table.categories : [];
+  const fallbackLength = Math.max(
+    Number(table?.training?.observed?.length ?? 0),
+    Number(table?.holdout?.observed?.length ?? 0),
+  );
 
-        resultJson.tables.push(table);
-    }
+  const labels = categories.length
+    ? categories
+    : Array.from({ length: fallbackLength }, (_, index) => String(index));
 
-    // 2. System Settings
-    if (data.system_settings) {
-        const table: Table = {
-            key: "system_settings",
-            title: "System Settings",
-            columnHeaders: [
-                { header: "Keyword", key: "keyword" },
-                { header: "Description", key: "description" },
-                { header: "Setting", key: "setting" },
-            ],
-            rows: [],
-        };
+  return labels.map((category: unknown) => String(category));
+}
 
-        // Process each system setting as a row
-        for (const [key, settingValue] of Object.entries(data.system_settings)) {
-            // Type assertion to ensure settingValue is treated as SystemSetting
-            const setting = settingValue as SystemSetting;
-            if (setting && typeof setting === "object") {
-                table.rows.push({
-                    rowHeader: [setting.keyword || key],
-                    description: setting.description || "",
-                    setting: setting.setting || "",
-                });
-            }
-        }
+function predictedColumnKey(index: number) {
+  return `predicted_${index}`;
+}
 
-        resultJson.tables.push(table);
-    }
+function neighborColumnKey(index: number) {
+  return `neighbor_${index + 1}`;
+}
 
-    // 3. Predictor Importance (if present)
-    if (data.predictor_importance) {
-        const table: Table = {
-            key: "predictor_importance",
-            title: "Predictor Importance",
-            columnHeaders: [
-                { header: "Predictor", key: "predictor" },
-                { header: "Importance", key: "importance" },
-            ],
-            rows: [],
-        };
+function distanceColumnKey(index: number) {
+  return `distance_${index + 1}`;
+}
 
-        // Add each predictor importance as a row
-        if (data.predictor_importance.predictors) {
-            data.predictor_importance.predictors.forEach((item: any) => {
-                if (item.predictor && item.importance !== undefined) {
-                    table.rows.push({
-                        rowHeader: [item.predictor],
-                        importance: formatDisplayNumber(item.importance),
-                    });
-                }
-            });
-        }
+function recordLabel(label: unknown, rowNumber: unknown, fallback: unknown) {
+  const stringLabel = String(label ?? "").trim();
+  if (stringLabel) return stringLabel;
 
-        resultJson.tables.push(table);
-    }
+  const numericRowNumber = Number(rowNumber);
+  if (Number.isFinite(numericRowNumber)) return String(numericRowNumber);
 
-    // 4. Classification Table
-    if (data.classification_table) {
-        const table: Table = {
-            key: "classification_table",
-            title: "Classification Table",
-            columnHeaders: [
-                { header: "Partition", key: "partition" },
-                { header: "Observed", key: "observed" },
-                {
-                    header: "Predicted",
-                    key: "predicted",
-                    children: [
-                        // Create column headers for categories (0, 1, etc.)
-                        { header: "0", key: "category_0" },
-                        { header: "1", key: "category_1" },
-                        { header: "Percent Correct", key: "percent_correct" },
-                    ],
-                },
-            ],
-            rows: [],
-        };
+  return String(fallback ?? "");
+}
 
-        // Process Training data
-        if (data.classification_table.training) {
-            // For each observed category (usually 0 and 1 for binary classification)
-            for (
-                let i = 0;
-                i < data.classification_table.training.observed.length;
-                i++
-            ) {
-                table.rows.push({
-                    rowHeader: ["Training", i.toString()],
-                    [`category_${  i}`]: formatDisplayNumber(
-                        data.classification_table.training.predicted[i]
-                    ),
-                    percent_correct: formatDisplayNumber(
-                        data.classification_table.training.percent_correct[i]
-                    ),
-                });
-            }
+function formatDistance3(value: number) {
+  if (!Number.isFinite(value)) return "";
 
-            // Add overall percent row for training
-            table.rows.push({
-                rowHeader: ["", "Overall Percent"],
-                category_0: formatDisplayNumber(
-                    data.classification_table.training.overall_percent[0]
-                ),
-                category_1: formatDisplayNumber(
-                    data.classification_table.training.overall_percent[1]
-                ),
-                percent_correct: "100.0%", // Based on the example data
-            });
-        }
+  const sign = value < 0 ? -1 : 1;
+  const absolute = Math.abs(value);
+  const scaledToThousands = Math.floor(absolute * 1000 + Number.EPSILON);
+  const fourthDecimalDigit = Math.floor(absolute * 10000 + Number.EPSILON) % 10;
+  const rounded =
+    fourthDecimalDigit >= 5 ? scaledToThousands + 1 : scaledToThousands;
 
-        // Process Holdout data if available
-        if (data.classification_table.holdout) {
-            // For each observed category in holdout
-            for (
-                let i = 0;
-                i < data.classification_table.holdout.observed.length;
-                i++
-            ) {
-                table.rows.push({
-                    rowHeader: ["Holdout", i.toString()],
-                    [`category_${  i}`]: formatDisplayNumber(
-                        data.classification_table.holdout.predicted[i]
-                    ),
-                    percent_correct: formatDisplayNumber(
-                        data.classification_table.holdout.percent_correct[i]
-                    ),
-                });
-            }
+  return ((sign * rounded) / 1000).toFixed(3);
+}
 
-            // Add missing row if available
-            if (data.classification_table.holdout.missing) {
-                table.rows.push({
-                    rowHeader: ["", "Missing"],
-                    category_0: formatDisplayNumber(
-                        data.classification_table.holdout.missing[0]
-                    ),
-                    category_1: formatDisplayNumber(
-                        data.classification_table.holdout.missing[1]
-                    ),
-                });
-            }
+function percent(numerator: number, denominator: number) {
+  if (denominator <= 0) return "";
+  return `${formatDisplayNumber((numerator / denominator) * 100)}%`;
+}
 
-            // Add overall percent row for holdout
-            table.rows.push({
-                rowHeader: ["", "Overall Percent"],
-                category_0: formatDisplayNumber(
-                    data.classification_table.holdout.overall_percent[0]
-                ),
-                category_1: formatDisplayNumber(
-                    data.classification_table.holdout.overall_percent[1]
-                ),
-                percent_correct: "100.0%", // Based on the example data
-            });
-        }
+function optionalNumber(value: any) {
+  if (value === null || value === undefined || !Number.isFinite(Number(value)))
+    return "";
+  return formatDisplayNumber(Number(value));
+}
 
-        resultJson.tables.push(table);
-    }
+function optionalPercent1Decimal(value: any) {
+  if (
+    value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+  ) {
+    return "";
+  }
 
-    // 5. Error Summary
-    if (data.error_summary) {
-        const table: Table = {
-            key: "error_summary",
-            title: "Error Summary",
-            columnHeaders: [
-                { header: "Partition", key: "partition" },
-                {
-                    header: "Percent of Records Incorrectly Classified",
-                    key: "error_percent",
-                },
-            ],
-            rows: [],
-        };
+  const numericValue = Number(value);
+  const sign = numericValue < 0 ? -1 : 1;
+  const absolute = Math.abs(numericValue);
+  const scaledToTenths = Math.floor(absolute * 10 + Number.EPSILON);
+  const firstDecimalDigit = scaledToTenths % 10;
+  const secondDecimalDigit = Math.floor(absolute * 100 + Number.EPSILON) % 10;
+  const rounded =
+    secondDecimalDigit >= 6 && firstDecimalDigit !== 9
+      ? scaledToTenths + 1
+      : scaledToTenths;
 
-        // Training error
-        if (data.error_summary.training !== undefined) {
-            table.rows.push({
-                rowHeader: ["Training"],
-                error_percent: formatDisplayNumber(data.error_summary.training),
-            });
-        }
+  return `${((sign * rounded) / 10).toFixed(1)}%`;
+}
 
-        // Holdout error
-        if (data.error_summary.holdout !== undefined) {
-            table.rows.push({
-                rowHeader: ["Holdout"],
-                error_percent: formatDisplayNumber(data.error_summary.holdout),
-            });
-        }
+function optionalPercent3Decimals(value: any) {
+  if (
+    value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+  ) {
+    return "";
+  }
 
-        resultJson.tables.push(table);
-    }
+  return `${Number(value).toFixed(3)}%`;
+}
 
-    // 6. Predictor Space
-    if (data.predictor_space) {
-        const table: Table = {
-            key: "predictor_space",
-            title: "Predictor Space",
-            columnHeaders: [
-                { header: "Property", key: "property" },
-                { header: "Value", key: "value" },
-            ],
-            rows: [],
-        };
+function normalizePredictorImportanceEntries(predictors: any) {
+  const rows = Array.isArray(predictors)
+    ? predictors.map((entry: any) => ({
+        name: entry.name,
+        value: entry.value,
+      }))
+    : Object.entries(predictors ?? {}).map(([name, value]) => ({
+        name,
+        value,
+      }));
 
-        // Add K value - handle different naming in the JSON
-        if (data.predictor_space.k_value !== undefined) {
-            table.rows.push({
-                rowHeader: ["K"],
-                value: formatDisplayNumber(data.predictor_space.k_value),
-            });
-        } else if (data.predictor_space.k !== undefined) {
-            table.rows.push({
-                rowHeader: ["K"],
-                value: formatDisplayNumber(data.predictor_space.k),
-            });
-        }
-
-        // Add model predictors count
-        if (data.predictor_space.model_predictors !== undefined) {
-            table.rows.push({
-                rowHeader: ["Model Predictors"],
-                value: formatDisplayNumber(
-                    data.predictor_space.model_predictors
-                ),
-            });
-        }
-
-        // Add selected predictors if available
-        if (
-            data.predictor_space.predictors &&
-            data.predictor_space.predictors.length > 0
-        ) {
-            table.rows.push({
-                rowHeader: ["Selected Predictors"],
-                value: data.predictor_space.predictors.join(", "),
-            });
-        }
-
-        // Add dimensions info if available
-        if (
-            data.predictor_space.dimensions &&
-            data.predictor_space.dimensions.length > 0
-        ) {
-            table.rows.push({
-                rowHeader: ["Dimensions"],
-                value: data.predictor_space.dimensions
-                    .map((dim: any) => dim.name)
-                    .join(", "),
-            });
-        }
-
-        // Add target variable if available
-        if (data.predictor_space.target) {
-            table.rows.push({
-                rowHeader: ["Target"],
-                value: data.predictor_space.target,
-            });
-        }
-
-        resultJson.tables.push(table);
-    }
-
-    // 7. Nearest Neighbors
-    if (data.nearest_neighbors?.focal_neighbor_sets) {
-        const table: Table = {
-            key: "nearest_neighbors",
-            title: "k Nearest Neighbors and Distances",
-            columnHeaders: [
-                { header: "Focal Record", key: "focal_record" },
-                {
-                    header: "Nearest Neighbors",
-                    key: "neighbors",
-                    children: Array.from(
-                        { length: 3 }, // Use 3 for k value since that's what's in the data
-                        (_, i) => ({
-                            header: (i + 1).toString(),
-                            key: `neighbor_${i + 1}`,
-                        })
-                    ),
-                },
-                {
-                    header: "Nearest Distances",
-                    key: "distances",
-                    children: Array.from(
-                        { length: 3 }, // Use 3 for k value
-                        (_, i) => ({
-                            header: (i + 1).toString(),
-                            key: `distance_${i + 1}`,
-                        })
-                    ),
-                },
-            ],
-            rows: [],
-        };
-
-        // Add each focal record and its neighbors
-        data.nearest_neighbors.focal_neighbor_sets.forEach((record: any) => {
-            if (
-                record.focal_record !== undefined &&
-                record.neighbors &&
-                record.distances
-            ) {
-                const rowData: any = {
-                    rowHeader: [record.focal_record.toString()],
-                };
-
-                // Add neighbors
-                record.neighbors.forEach((neighbor: any, index: number) => {
-                    rowData[`neighbor_${index + 1}`] = neighbor.id
-                        ? neighbor.id.toString()
-                        : "";
-                });
-
-                // Add distances
-                record.distances.forEach((distance: any, index: number) => {
-                    rowData[`distance_${index + 1}`] =
-                        formatDisplayNumber(distance);
-                });
-
-                table.rows.push(rowData);
-            }
-        });
-
-        resultJson.tables.push(table);
-    }
-
-    // 8. Peers Chart Data
-    if (data.peers_chart?.focal_neighbor_sets) {
-        const table: Table = {
-            key: "peers_chart",
-            title: "Peers Chart Data",
-            columnHeaders: [
-                { header: "Feature", key: "feature" },
-                { header: "Record ID", key: "record_id" },
-                { header: "Value", key: "value" },
-                { header: "Is Focal", key: "is_focal" },
-            ],
-            rows: [],
-        };
-
-        // Process each feature
-        if (data.peers_chart.features) {
-            data.peers_chart.features.forEach((feature: any) => {
-                if (feature.feature && feature.values) {
-                    // Get focal neighbor sets to determine which records are focal
-                    const focalRecords = new Set(
-                        data.peers_chart.focal_neighbor_sets.map(
-                            (set: any) => set.focal_record
-                        )
-                    );
-
-                    // Create a row for each record ID and value pair
-                    for (let i = 0; i < feature.values.length; i++) {
-                        const recordId = i + 1; // Assuming record IDs start at 1
-
-                        if (feature.values[i] !== undefined) {
-                            table.rows.push({
-                                rowHeader: [
-                                    feature.feature,
-                                    recordId.toString(),
-                                ],
-                                value: formatDisplayNumber(feature.values[i]),
-                                is_focal: focalRecords.has(recordId)
-                                    ? "Yes"
-                                    : "No",
-                            });
-                        }
-                    }
-                }
-            });
-        }
-
-        resultJson.tables.push(table);
-    }
-
-    // 9. Quadrant Map Data
-    if (data.quadrant_map?.focal_neighbor_sets) {
-        const table: Table = {
-            key: "quadrant_map",
-            title: "Quadrant Map Data",
-            columnHeaders: [
-                { header: "Feature X", key: "feature_x" },
-                { header: "Feature Y", key: "feature_y" },
-                { header: "Record ID", key: "record_id" },
-                { header: "X Value", key: "x_value" },
-                { header: "Y Value", key: "y_value" },
-                { header: "Is Focal", key: "is_focal" },
-            ],
-            rows: [],
-        };
-
-        // Process feature pairs for quadrant map
-        if (
-            data.quadrant_map.features &&
-            data.quadrant_map.features.length >= 2
-        ) {
-            // Get focal records set
-            const focalRecords = new Set(
-                data.quadrant_map.focal_neighbor_sets.map(
-                    (set: any) => set.focal_record
-                )
-            );
-
-            // We need to pair features for the quadrant map
-            for (let i = 0; i < data.quadrant_map.features.length; i++) {
-                for (
-                    let j = i + 1;
-                    j < data.quadrant_map.features.length;
-                    j++
-                ) {
-                    const featureX = data.quadrant_map.features[i];
-                    const featureY = data.quadrant_map.features[j];
-
-                    if (
-                        featureX &&
-                        featureY &&
-                        featureX.feature &&
-                        featureY.feature &&
-                        featureX.values &&
-                        featureY.values
-                    ) {
-                        // Create a row for each record with both X and Y values
-                        const minLength = Math.min(
-                            featureX.values.length,
-                            featureY.values.length
-                        );
-
-                        for (let k = 0; k < minLength; k++) {
-                            const recordId = k + 1; // Assuming record IDs start at 1
-
-                            table.rows.push({
-                                rowHeader: [
-                                    featureX.feature,
-                                    featureY.feature,
-                                    recordId.toString(),
-                                ],
-                                x_value: formatDisplayNumber(
-                                    featureX.values[k]
-                                ),
-                                y_value: formatDisplayNumber(
-                                    featureY.values[k]
-                                ),
-                                is_focal: focalRecords.has(recordId)
-                                    ? "Yes"
-                                    : "No",
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-        resultJson.tables.push(table);
-    }
-
-    return resultJson;
+  return rows
+    .sort(
+      (left: any, right: any) =>
+        Number(right.value ?? 0) - Number(left.value ?? 0),
+    )
+    .map((entry: any, index: number) => ({
+      ...entry,
+      rank: index + 1,
+      normalizedImportance: Number(entry.value ?? 0),
+    }));
 }

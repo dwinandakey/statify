@@ -9,17 +9,17 @@
 const MathPrecision = require('../../public/workers/shared/mathPrecision');
 
 describe('MathPrecision Utilities', () => {
-    
+
     // ========================================================================
     // FLOATING POINT FIX TESTS
     // ========================================================================
-    
+
     describe('Floating Point Fixes', () => {
         test('0.1 + 0.2 should equal 0.3', () => {
             // JavaScript standard: 0.1 + 0.2 = 0.30000000000000004
             const standardResult = 0.1 + 0.2;
             expect(standardResult).not.toBe(0.3);
-            
+
             // MathPrecision fix
             const fixedResult = MathPrecision.add(0.1, 0.2);
             expect(fixedResult).toBe(0.3);
@@ -28,7 +28,7 @@ describe('MathPrecision Utilities', () => {
         test('0.7 + 0.1 should equal 0.8', () => {
             const standardResult = 0.7 + 0.1;
             expect(standardResult).not.toBe(0.8);
-            
+
             const fixedResult = MathPrecision.add(0.7, 0.1);
             expect(fixedResult).toBe(0.8);
         });
@@ -36,7 +36,7 @@ describe('MathPrecision Utilities', () => {
         test('1.0 - 0.9 should equal 0.1', () => {
             const standardResult = 1.0 - 0.9;
             expect(standardResult).not.toBe(0.1);
-            
+
             const fixedResult = MathPrecision.subtract(1.0, 0.9);
             expect(fixedResult).toBeCloseTo(0.1, 10);
         });
@@ -52,7 +52,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // COMPARISON FUNCTIONS
     // ========================================================================
-    
+
     describe('Comparison Functions', () => {
         test('isEqual should compare with tolerance', () => {
             expect(MathPrecision.isEqual(0.1 + 0.2, 0.3)).toBe(true);
@@ -83,7 +83,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // ROUNDING FUNCTIONS
     // ========================================================================
-    
+
     describe('Rounding Functions', () => {
         test('round should handle precision correctly', () => {
             expect(MathPrecision.round(1.234567890123456, 6)).toBe(1.234568);
@@ -105,7 +105,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // SAFE ARITHMETIC
     // ========================================================================
-    
+
     describe('Safe Arithmetic', () => {
         test('divide should handle division by zero', () => {
             expect(MathPrecision.divide(10, 0, NaN)).toBeNaN();
@@ -128,18 +128,18 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // KAHAN SUMMATION
     // ========================================================================
-    
+
     describe('Kahan Summation', () => {
         test('kahanSum should reduce accumulation error', () => {
             // Create array where standard sum would accumulate error
             const arr = new Array(1000).fill(0.1);
-            
+
             const standardSum = arr.reduce((a, b) => a + b, 0);
             const kahanSumResult = MathPrecision.kahanSum(arr);
-            
+
             // Standard sum will have error
             expect(standardSum).not.toBe(100);
-            
+
             // Kahan sum should be much closer to 100
             expect(kahanSumResult).toBeCloseTo(100, 10);
         });
@@ -158,15 +158,15 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // VARIANCE CALCULATIONS
     // ========================================================================
-    
+
     describe('Variance Calculations', () => {
         // Known dataset: [2, 4, 4, 4, 5, 5, 7, 9]
         // Mean = 5, Sample Variance = 4.571428...
         const testData = [2, 4, 4, 4, 5, 5, 7, 9];
-        
+
         test('welfordVariance should calculate correctly', () => {
             const result = MathPrecision.welfordVariance(testData, true);
-            
+
             expect(result.n).toBe(8);
             expect(result.mean).toBe(5);
             expect(result.variance).toBeCloseTo(4.571428, 4);
@@ -175,7 +175,7 @@ describe('MathPrecision Utilities', () => {
 
         test('twoPassVariance should calculate correctly', () => {
             const result = MathPrecision.twoPassVariance(testData, true);
-            
+
             expect(result.n).toBe(8);
             expect(result.mean).toBe(5);
             expect(result.variance).toBeCloseTo(4.571428, 4);
@@ -198,10 +198,10 @@ describe('MathPrecision Utilities', () => {
 
         test('population variance (n) vs sample variance (n-1)', () => {
             const data = [2, 4, 6, 8, 10];
-            
+
             const sampleVar = MathPrecision.welfordVariance(data, true);
             const popVar = MathPrecision.welfordVariance(data, false);
-            
+
             // Sample variance should be larger (n-1 divisor)
             expect(sampleVar.variance).toBeGreaterThan(popVar.variance);
             expect(sampleVar.variance).toBeCloseTo(10, 5); // (n-1) = 4
@@ -212,7 +212,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // PRECISE MEAN
     // ========================================================================
-    
+
     describe('Precise Mean', () => {
         test('preciseMean should calculate with Kahan summation', () => {
             const arr = new Array(1000).fill(0.1);
@@ -233,7 +233,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // SAFE LOG/EXP
     // ========================================================================
-    
+
     describe('Safe Logarithm and Exponential', () => {
         test('safeLog should handle zero and negative', () => {
             expect(MathPrecision.safeLog(0)).toBe(Math.log(Number.MIN_VALUE));
@@ -256,15 +256,15 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // CHI-SQUARE FUNCTIONS
     // ========================================================================
-    
+
     describe('Chi-Square Functions', () => {
         test('chiSquareCDF should match expected values', () => {
             // χ²(3.84, df=1) ≈ 0.95
             expect(MathPrecision.chiSquareCDF(3.841, 1)).toBeCloseTo(0.95, 2);
-            
+
             // χ²(5.99, df=2) ≈ 0.95
             expect(MathPrecision.chiSquareCDF(5.991, 2)).toBeCloseTo(0.95, 2);
-            
+
             // χ²(7.81, df=3) ≈ 0.95
             expect(MathPrecision.chiSquareCDF(7.815, 3)).toBeCloseTo(0.95, 2);
         });
@@ -272,10 +272,10 @@ describe('MathPrecision Utilities', () => {
         test('chiSquarePValue should be 1 - CDF', () => {
             const x = 10;
             const df = 5;
-            
+
             const cdf = MathPrecision.chiSquareCDF(x, df);
             const pValue = MathPrecision.chiSquarePValue(x, df);
-            
+
             expect(pValue).toBeCloseTo(1 - cdf, 10);
         });
 
@@ -288,21 +288,21 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // GAMMA FUNCTIONS
     // ========================================================================
-    
+
     describe('Gamma Functions', () => {
         test('gammaFunction should match known values', () => {
             // Γ(1) = 1
             expect(MathPrecision.gammaFunction(1)).toBeCloseTo(1, 5);
-            
+
             // Γ(2) = 1! = 1
             expect(MathPrecision.gammaFunction(2)).toBeCloseTo(1, 5);
-            
+
             // Γ(3) = 2! = 2
             expect(MathPrecision.gammaFunction(3)).toBeCloseTo(2, 5);
-            
+
             // Γ(4) = 3! = 6
             expect(MathPrecision.gammaFunction(4)).toBeCloseTo(6, 5);
-            
+
             // Γ(0.5) = √π ≈ 1.772
             expect(MathPrecision.gammaFunction(0.5)).toBeCloseTo(Math.sqrt(Math.PI), 4);
         });
@@ -316,7 +316,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // UTILITIES
     // ========================================================================
-    
+
     describe('Utility Functions', () => {
         test('clamp should restrict to range', () => {
             expect(MathPrecision.clamp(5, 0, 10)).toBe(5);
@@ -342,7 +342,7 @@ describe('MathPrecision Utilities', () => {
         test('toFloat64Array should convert correctly', () => {
             const arr = [1, 2, NaN, 3];
             const f64 = MathPrecision.toFloat64Array(arr);
-            
+
             expect(f64).toBeInstanceOf(Float64Array);
             expect(Array.from(f64)).toEqual([1, 2, 3]);
         });
@@ -351,7 +351,7 @@ describe('MathPrecision Utilities', () => {
     // ========================================================================
     // PERFORMANCE COMPARISON
     // ========================================================================
-    
+
     describe('Performance Benchmarks', () => {
         const largeArray = new Float64Array(100000);
         for (let i = 0; i < largeArray.length; i++) {
@@ -360,7 +360,7 @@ describe('MathPrecision Utilities', () => {
 
         test('Kahan sum vs standard sum performance', () => {
             const iterations = 10;
-            
+
             // Standard sum
             const standardStart = performance.now();
             for (let i = 0; i < iterations; i++) {
@@ -388,7 +388,7 @@ describe('MathPrecision Utilities', () => {
 
         test('Welford variance vs two-pass performance', () => {
             const iterations = 10;
-            
+
             // Welford
             const welfordStart = performance.now();
             for (let i = 0; i < iterations; i++) {

@@ -241,8 +241,8 @@ npx jest --verbose normalityTests
 
 Property-based testing (PBT) generates many random inputs and verifies that **mathematical invariants** hold for all of them — not just hand-picked examples. This catches edge cases that manual tests miss.
 
-**Framework**: [fast-check](https://fast-check.dev/)  
-**Iterations**: 100 runs per property test (900+ total generated cases across all 9 properties)  
+**Framework**: [fast-check](https://fast-check.dev/)
+**Iterations**: 100 runs per property test (900+ total generated cases across all 9 properties)
 **Timeout**: 10 seconds per property test
 
 ### When a Property Test Fails
@@ -618,25 +618,25 @@ calculateShapiroWilk([1, 2, 3, 4, 5]);
 
 1. **Shapiro, S. S. & Wilk, M. B. (1965).** "An analysis of variance test for normality (complete samples)". *Biometrika*, 52(3/4): 591-611.
 
-2. **Royston, P. (1993).** "A toolkit for testing for non-normality in complete and censored samples". *The Statistician*, 42: 37-43.  
+2. **Royston, P. (1993).** "A toolkit for testing for non-normality in complete and censored samples". *The Statistician*, 42: 37-43.
    *(Small sample p-value approximation for 4 ≤ n ≤ 11)*
 
-3. **Royston, P. (1995).** "Remark AS R94: A remark on Algorithm AS 181". *Applied Statistics*, 44(4): 547-551.  
+3. **Royston, P. (1995).** "Remark AS R94: A remark on Algorithm AS 181". *Applied Statistics*, 44(4): 547-551.
    *(Large sample coefficient polynomials p1, p2 and p-value approximation for n > 11)*
 
-4. **Blom, G. (1958).** *Statistical Estimates and Transformed Beta-Variables*. Wiley.  
+4. **Blom, G. (1958).** *Statistical Estimates and Transformed Beta-Variables*. Wiley.
    *(Plotting position formula: pᵢ = (i − 0.375)/(n + 0.25) for expected normal order statistics)*
 
-5. **Abramowitz, M. & Stegun, I. A. (1964).** *Handbook of Mathematical Functions*. Formula 26.2.17.  
+5. **Abramowitz, M. & Stegun, I. A. (1964).** *Handbook of Mathematical Functions*. Formula 26.2.17.
    *(Normal CDF polynomial approximation: |error| < 7.5 × 10⁻⁸)*
 
-6. **Dallal, G. E. & Wilkinson, L. (1986).** "An analytic approximation to the distribution of Lilliefors's test statistic for normality". *The American Statistician*, 40(4): 294-296.  
+6. **Dallal, G. E. & Wilkinson, L. (1986).** "An analytic approximation to the distribution of Lilliefors's test statistic for normality". *The American Statistician*, 40(4): 294-296.
    *(KS p-value with Lilliefors correction, used in `approximateKSPValue`)*
 
 7. **Lilliefors, H. W. (1967).** "On the Kolmogorov-Smirnov test for normality with mean and variance unknown". *Journal of the American Statistical Association*, 62(318): 399-402.
 
 ---
 
-*Last updated: 2025*  
-*Maintained by: Statify Development Team*  
+*Last updated: 2025*
+*Maintained by: Statify Development Team*
 *Implements: Requirement 7.7 — Developer guide covering algorithm, testing, and debugging*

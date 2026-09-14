@@ -77,6 +77,18 @@ pub enum CIMethod {
     Sidak,
 }
 
+/// Selects the covariance assumption for two-sample Hotelling T².
+/// Pooled (default) preserves the original MANOVA pipeline; Welch
+/// activates the Krishnamoorthy-Yu Welch-Satterthwaite approximation.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum VarianceMode {
+    #[default]
+    #[serde(rename = "Pooled")]
+    Pooled,
+    #[serde(rename = "Welch")]
+    Welch,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MainConfig {
     #[serde(rename = "DepVar")]
@@ -87,6 +99,16 @@ pub struct MainConfig {
     pub covar: Option<Vec<String>>,
     #[serde(rename = "WlsWeight")]
     pub wls_weight: Option<String>,
+    // μ₀ vector for Hotelling T² one-population test. When present, the
+    // MANOVA Intercept H matrix is built from (x̄ − μ₀) instead of x̄.
+    // None preserves the original behavior (μ₀ = 0).
+    #[serde(rename = "TestValues", default)]
+    pub test_values: Option<Vec<f64>>,
+    // Covariance assumption for two-sample Hotelling T². Defaults to
+    // Pooled (existing MANOVA behavior); Welch only activates when the
+    // design has exactly one Fixed Factor with two levels.
+    #[serde(rename = "VarianceMode", default)]
+    pub variance_mode: VarianceMode,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

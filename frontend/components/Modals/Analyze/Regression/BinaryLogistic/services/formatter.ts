@@ -1,433 +1,217 @@
-import { LogisticResult, BinaryLogisticOutput } from "../types/binary-logistic";
+import type {
+  LogisticResult,
+  BinaryLogisticOutput,
+  AnalysisSection,
+} from "../types/binary-logistic";
+import { formatSummaryTables } from "./formatter_summary";
+import { formatBlock0 } from "./formatter_block0";
+import { formatBlock1 } from "./formatter_block1";
+import { formatAssumptionTests } from "./formatter_assumptions";
+import { formatHosmerLemeshow } from "./formatter_hosmer";
+import { formatCasewiseListing } from "./formatter_casewise";
+import { formatCorrelationOfEstimates } from "./formatter_correlation_estimates";
+import { formatIterationHistory, hasIterationHistory } from "./formatter_iteration_history";
+import { formatStepSummary, hasStepSummary } from "./formatter_step_summary";
+import { formatClassificationPlot, hasClassificationPlot } from "./formatter_classification_plot";
+import { formatFittingWarnings, hasFittingWarnings } from "./formatter_warnings";
+import type { Variable } from "@/types/Variable";
 
-// Helper formats
-const safeFixed = (val: number | undefined | null, digits = 3): string => {
-  if (val === undefined || val === null || isNaN(val)) return ".";
-  if (val === 0) return ".000";
-  if (Math.abs(val) < 1e-9) return ".000";
-  return val.toFixed(digits);
-};
-
-const fmtSig = (num: number | undefined | null) => {
-  if (num === undefined || num === null || isNaN(num)) return ".";
-  return num < 0.001 ? "< .001" : num.toFixed(3);
-};
-
-// FIX UTAMA: Jangan dikali 100 lagi jika input sudah skala 0-100.
-// Berdasarkan screenshot "10000.0", inputnya adalah 100.0.
-const fmtPct = (num: number | undefined | null) => {
-  if (num === undefined || num === null || isNaN(num)) return ".";
-  // Logic: Jika angka > 1 (misal 75.0), asumsikan sudah persen.
-  // Jika angka <= 1 (misal 0.75), baru kali 100.
-  // Tapi demi konsistensi dengan log SPSS biasanya backend kirim 0-100.
-  // Kita hapus pengalian 100-nya agar aman.
-  return num.toFixed(1);
-};
+/**
+ * Options for formatting the result
+ */
+interface FormatOptions {
+  displayAtLastStep?: boolean;
+  ciForExpB?: boolean;      // Whether to show CI columns for Exp(B)
+  ciLevel?: number;         // Confidence level percentage (e.g., 95)
+  cutoff?: number;          // Classification cutoff value (e.g., 0.5)
+  casewiseOutliers?: number; // Threshold for casewise outlier detection (default 2.0)
+}
 
 export const formatBinaryLogisticResult = (
   result: LogisticResult,
-  dependentName: string
+  dependentVariable: Variable,
+  independentVariables: Variable[] = [],
+  options?: FormatOptions
 ): BinaryLogisticOutput => {
-  // ----------------------------------------------------------------------
-  // 1. DATA PREPARATION
-  // ----------------------------------------------------------------------
+  const allSections: AnalysisSection[] = [];
+  const displayAtLastStep = options?.displayAtLastStep ?? false;
+  const ciForExpB = options?.ciForExpB ?? false;
+  const ciLevel = options?.ciLevel ?? 95;
+  const cutoff = options?.cutoff ?? 0.5;
+  const casewiseOutliers = options?.casewiseOutliers ?? 2.0;
 
-  const ct = result.classification_table;
-
-  // Pastikan angka valid (handle undefined/null dari backend)
-  const obs0_pred0 = ct.observed_0_predicted_0 || 0;
-  const obs0_pred1 = ct.observed_0_predicted_1 || 0;
-  const obs1_pred0 = ct.observed_1_predicted_0 || 0;
-  const obs1_pred1 = ct.observed_1_predicted_1 || 0;
-
-  const count_0 = obs0_pred0 + obs0_pred1;
-  const count_1 = obs1_pred0 + obs1_pred1;
-  const totalN = count_0 + count_1;
-
-  // Logika Block 0 (Baseline/Null Model)
-  const predict_0 = count_0 >= count_1;
-  const b0_obs0_pred0 = predict_0 ? count_0 : 0;
-  const b0_obs0_pred1 = predict_0 ? 0 : count_0;
-  const b0_obs1_pred0 = predict_0 ? count_1 : 0;
-  const b0_obs1_pred1 = predict_0 ? 0 : count_1;
-
-  // Hitung persen Block 0 (skala 0-100)
-  const b0_pct_0 = count_0 > 0 ? (b0_obs0_pred0 / count_0) * 100 : 0;
-  const b0_pct_1 = count_1 > 0 ? (b0_obs1_pred1 / count_1) * 100 : 0;
-  const b0_overall = ((b0_obs0_pred0 + b0_obs1_pred1) / totalN) * 100;
-
-  // Hitung konstanta Block 0
-  let b0_B = 0;
-  if (count_0 > 0 && count_1 > 0) {
-    b0_B = Math.log(count_1 / count_0);
+  // 0. Fitting Warnings (SPSS displays warnings at the very top of output)
+  // Jika ada warning kritis (singular Hessian, separation, dll),
+  // hanya tampilkan tabel Warnings saja — hasil selanjutnya tidak relevan.
+  if (hasFittingWarnings(result)) {
+    const warningsOutput = formatFittingWarnings(result);
+    if (warningsOutput.sections && warningsOutput.sections.length > 0) {
+      allSections.push(...warningsOutput.sections);
+      return { sections: allSections };
+    }
   }
-  const b0_ExpB = Math.exp(b0_B);
 
-  const const0 = result.block_0_constant;
-  const val_B0 = const0?.b !== undefined ? const0.b : b0_B;
-  const val_ExpB0 = const0?.exp_b !== undefined ? const0.exp_b : b0_ExpB;
+  // 1. Case Processing & Encoding
+  const summaryOutput = formatSummaryTables(
+    result,
+    dependentVariable,
+    independentVariables
+  );
+  if (summaryOutput.sections) {
+    allSections.push(...summaryOutput.sections);
+  }
 
-  // --- C. Table 5 Preparation (Variables Not in Equation) ---
-  const varsNotIn = result.variables_not_in_equation || [];
+  // 2. Iteration History (SPSS shows this before Block 0)
+  // Check if iteration history is available and format it
+  if (hasIterationHistory(result)) {
+    const iterHistoryOutput = formatIterationHistory(result, dependentVariable.name, { displayAtLastStep });
+    if (iterHistoryOutput.sections && iterHistoryOutput.sections.length > 0) {
+      // Find Block 0 iteration history and add it before Block 0 stats
+      const block0IterHistory = iterHistoryOutput.sections.find(
+        (s) => s.id === "block0_iteration_history"
+      );
+      if (block0IterHistory) {
+        allSections.push(block0IterHistory);
+      }
+    }
+  }
 
-  // Agregasi Score (Summation adalah operasi standar formatter tabel)
-  const totalScore = varsNotIn.reduce((acc, curr) => acc + curr.score, 0);
-  const totalDf = varsNotIn.length;
+  // 3. Block 0: Beginning Block
+  const block0Output = formatBlock0(result, dependentVariable.name, { cutoff });
+  if (block0Output.sections) {
+    allSections.push(...block0Output.sections);
+  }
 
-  const backendOverallSig = (result as any).overall_remainder_test?.sig;
+  // 4. Block 1 Iteration History (before Block 1 stats)
+  if (hasIterationHistory(result)) {
+    const iterHistoryOutput = formatIterationHistory(result, dependentVariable.name, { displayAtLastStep });
+    if (iterHistoryOutput.sections && iterHistoryOutput.sections.length > 0) {
+      const block1IterHistory = iterHistoryOutput.sections.find(
+        (s) => s.id === "block1_iteration_history"
+      );
+      if (block1IterHistory) {
+        allSections.push(block1IterHistory);
+      }
+    }
+  }
 
-  const overallSig =
-    backendOverallSig !== undefined
-      ? backendOverallSig
-      : totalDf === 1
-      ? varsNotIn[0].sig
-      : null; // Akan render "." jika backend tidak kirim data untuk N > 1
+  // 5. Block 1: Method = Enter/Stepwise
+  // Format standard Block 1 (Omnibus, Summary, Classification, Vars)
+  const block1Output = formatBlock1(result, dependentVariable.name, { 
+    displayAtLastStep, 
+    ciForExpB, 
+    ciLevel,
+    cutoff 
+  });
 
-  return {
-    tables: [
-      // ============================================================
-      // TABLE 1: CASE PROCESSING SUMMARY
-      // ============================================================
-      {
-        title: "Case Processing Summary",
-        note: "a. If weight is in effect, see classification table for the total number of cases.",
-        columnHeaders: [
-          {
-            header: "Unweighted Cases",
-            children: [
-              { header: "", key: "rh1" }, // Tempat untuk "Selected Cases"
-              { header: "", key: "rh2" }, // Tempat untuk "Included in Analysis"
-            ],
-          },
-          { header: "N", key: "n", align: "right" },
-          { header: "Percent", key: "percent", align: "right" },
-        ],
-        rows: [
-          {
-            rowHeader: ["Selected Cases", "Included in Analysis"],
-            // Mengubah ke String eksplisit agar tidak dianggap objek oleh tabel komponen
-            n: totalN.toString(),
-            percent: "100.0%",
-          },
-          {
-            rowHeader: ["Selected Cases", "Missing Cases"],
-            n: "0",
-            percent: ".0%",
-          },
-          {
-            rowHeader: ["Selected Cases", "Total"],
-            n: totalN.toString(),
-            percent: "100.0%",
-          },
-          {
-            rowHeader: ["Unselected Cases", null],
-            n: "0",
-            percent: ".0%",
-          },
-          {
-            rowHeader: ["Total", null],
-            n: totalN.toString(),
-            percent: "100.0%",
-          },
-        ],
-      },
+  if (block1Output.sections) {
+    // Cari index Model Summary
+    const summaryIndex = block1Output.sections.findIndex(
+      (s) => s.id === "block1_summary"
+    );
 
-      // ============================================================
-      // TABLE 2: DEPENDENT VARIABLE ENCODING
-      // ============================================================
-      {
-        title: "Dependent Variable Encoding",
-        columnHeaders: [
-          { header: "Original Value", key: "rowHeader" },
-          { header: "Internal Value", key: "val" },
-        ],
-        rows: [
-          { rowHeader: ["0"], val: "0" },
-          { rowHeader: ["1"], val: "1" },
-        ],
-      },
+    // Generate Hosmer Tables
+    const hosmerOutput = formatHosmerLemeshow(result, dependentVariable.name, { displayAtLastStep });
 
-      // ============================================================
-      // TABLE 3: BLOCK 0 - CLASSIFICATION TABLE
-      // ============================================================
-      {
-        title:
-          "Block 0: Beginning Block<br/>Classification Table<sup style='display:none'>a,b</sup>",
-        note: "a. Constant is included in the model.\nb. The cut value is .500",
-        columnHeaders: [
-          {
-            header: "Observed",
-            // SOLUSI: Menggunakan pola children seperti contoh Omnibus Anda
-            // Membagi kolom Observed menjadi 3 sub-kolom untuk: [Step] - [VarName] - [Value]
-            children: [
-              { header: "", key: "rh1" }, // Slot untuk "Step 0"
-              { header: "", key: "rh2" }, // Slot untuk Dependent Name / Overall Pct
-              { header: "", key: "rh3" }, // Slot untuk Value (0/1)
-            ],
-          },
-          {
-            header: "Predicted",
-            children: [
-              {
-                header: dependentName,
-                children: [
-                  { header: "0", key: "pred_0" },
-                  { header: "1", key: "pred_1" },
-                ],
-              },
-              { header: "Percentage Correct", key: "pct" },
-            ],
-          },
-        ],
-        rows: [
-          {
-            // Baris 1: Step 0 -> Nama Variabel -> 0
-            rowHeader: ["Step 0", dependentName, "0"],
-            pred_0: b0_obs0_pred0,
-            pred_1: b0_obs0_pred1,
-            pct: fmtPct(b0_pct_0),
-          },
-          {
-            // Baris 2: Step 0 -> Nama Variabel -> 1
-            // (Komponen tabel biasanya akan menggabungkan "Step 0" dan "VarName" jika sama persis dengan atasnya)
-            rowHeader: ["Step 0", dependentName, "1"],
-            pred_0: b0_obs1_pred0,
-            pred_1: b0_obs1_pred1,
-            pct: fmtPct(b0_pct_1),
-          },
-          {
-            // Baris 3: Step 0 -> Overall Percentage -> (Kosong)
-            rowHeader: ["Step 0", "Overall Percentage", ""],
-            pred_0: "",
-            pred_1: "",
-            pct: fmtPct(b0_overall),
-          },
-        ],
-      },
+    // Generate Correlation of Estimates Tables
+    const corrEstOutput = formatCorrelationOfEstimates(
+      result,
+      dependentVariable.name,
+      { displayAtLastStep }
+    );
 
-      // ============================================================
-      // TABLE 4: BLOCK 0 - VARIABLES IN EQUATION
-      // ============================================================
-      {
-        title: "Variables in the Equation",
-        columnHeaders: [
-          {
-            header: "",
-            children: [
-              { header: "", key: "rh1" },
-              { header: "", key: "rh2" },
-            ],
-          },
-          { header: "B", key: "b" },
-          { header: "S.E.", key: "se" },
-          { header: "Wald", key: "wald" },
-          { header: "df", key: "df" },
-          { header: "Sig.", key: "sig" },
-          { header: "Exp(B)", key: "expb" },
-        ],
-        rows: [
-          {
-            rowHeader: ["Step 0", "Constant"],
-            b: safeFixed(val_B0),
-            se: safeFixed(const0?.error),
-            wald: safeFixed(const0?.wald),
-            df: "1",
-            sig: fmtSig(const0?.sig),
-            expb: safeFixed(val_ExpB0),
-          },
-        ],
-      },
+    if (summaryIndex !== -1 && hosmerOutput.sections.length > 0) {
+      // Masukkan Block 1 bagian awal (sampai summary)
+      allSections.push(...block1Output.sections.slice(0, summaryIndex + 1));
 
-      // ============================================================
-      // TABLE 5: BLOCK 0 - VARIABLES NOT IN EQUATION
-      // ============================================================
-      {
-        title: "Variables not in the Equation",
-        columnHeaders: [
-          {
-            header: "",
-            children: [
-              { header: "", key: "rh1" },
-              { header: "", key: "rh2" },
-            ],
-          },
-          { header: "Score", key: "score" },
-          { header: "df", key: "df" },
-          { header: "Sig.", key: "sig" },
-        ],
-        rows: [
-          ...(result.variables_not_in_equation || []).map((v) => ({
-            rowHeader: ["Step 0", v.label],
-            score: safeFixed(v.score),
-            df: v.df,
-            sig: fmtSig(v.sig),
-          })),
-          {
-            rowHeader: ["Step 0", "Overall Statistics"],
-            score: safeFixed(totalScore),
-            df: totalDf,
-            sig: fmtSig(overallSig), // Benar (0.329) jika N=1, atau "." jika N>1 & backend null
-          },
-        ],
-      },
+      // Masukkan Hosmer Lemeshow (Tepat di tengah Block 1)
+      allSections.push(...hosmerOutput.sections);
 
-      // ============================================================
-      // TABLE 6: BLOCK 1 - OMNIBUS TESTS (Fix Column Mapping)
-      // ============================================================
-      {
-        title:
-          "Block 1: Method = Enter<br/>Omnibus Tests of Model Coefficients<sup style='display:none'>a,b</sup>",
-        columnHeaders: [
-          {
-            header: "", // Header utama kosong
-            // SOLUSI: Kita buat 2 kolom anak untuk menampung Hirarki Baris
-            children: [
-              { header: "", key: "rh1" },
-              { header: "", key: "rh2" },
-            ],
-          },
-          { header: "Chi-square", key: "chi" },
-          { header: "df", key: "df" },
-          { header: "Sig.", key: "sig" },
-        ],
-        rows: [
-          {
-            // Row Header diperjelas, pastikan komponen tabel membaca 'rh' ini
-            rowHeader: ["Step 1", "Step"],
-            rh: "Step", // Kadang tabel butuh key spesifik
-            chi: safeFixed(result.omni_tests?.chi_square),
-            df: result.omni_tests?.df,
-            sig: fmtSig(result.omni_tests?.sig),
-          },
-          {
-            rowHeader: ["Step 1", "Block"],
-            rh: "Block",
-            chi: safeFixed(result.omni_tests?.chi_square),
-            df: result.omni_tests?.df,
-            sig: fmtSig(result.omni_tests?.sig),
-          },
-          {
-            rowHeader: ["Step 1", "Model"],
-            rh: "Model",
-            chi: safeFixed(result.omni_tests?.chi_square),
-            df: result.omni_tests?.df,
-            sig: fmtSig(result.omni_tests?.sig),
-          },
-        ],
-      },
+      // Cari index Variables in Equation dari sisa sections
+      const remainingSections = block1Output.sections.slice(summaryIndex + 1);
+      const varsInIndex = remainingSections.findIndex(
+        (s) => s.id === "block1_vars_in"
+      );
 
-      // ============================================================
-      // TABLE 7: MODEL SUMMARY
-      // ============================================================
-      {
-        title: "Model Summary",
-        columnHeaders: [
-          { header: "Step", key: "step" },
-          { header: "-2 Log likelihood", key: "ll" },
-          { header: "Cox & Snell R Square", key: "cox" },
-          { header: "Nagelkerke R Square", key: "nagel" },
-        ],
-        rows: [
-          {
-            rowHeader: ["1"],
-            ll: safeFixed(result.model_summary?.log_likelihood),
-            cox: safeFixed(result.model_summary?.cox_snell_r_square),
-            nagel: safeFixed(result.model_summary?.nagelkerke_r_square),
-          },
-        ],
-      },
+      if (varsInIndex !== -1) {
+        // Masukkan sections sampai vars_in (termasuk vars_in)
+        allSections.push(...remainingSections.slice(0, varsInIndex + 1));
 
-      // ============================================================
-      // TABLE 8: CLASSIFICATION TABLE (FULL MODEL)
-      // ============================================================
-      {
-        title: "Classification Table<sup style='display:none'>a</sup>",
-        note: "a. The cut value is .500",
-        columnHeaders: [
-          {
-            header: "Observed",
-            children: [
-              { header: "", key: "rh1" },
-              { header: "", key: "rh2" },
-              { header: "", key: "rh3" },
-            ],
-          },
-          {
-            header: "Predicted",
-            children: [
-              {
-                header: dependentName,
-                children: [
-                  { header: "0", key: "pred_0" },
-                  { header: "1", key: "pred_1" },
-                ],
-              },
-              { header: "Percentage Correct", key: "pct" },
-            ],
-          },
-        ],
-        rows: [
-          {
-            rowHeader: ["Step 1", dependentName, "0"],
-            pred_0: obs0_pred0,
-            pred_1: obs0_pred1,
-            // fmtPct sekarang aman (tidak dikali 100 lagi)
-            pct: fmtPct(ct.percentage_correct_0),
-          },
-          {
-            rowHeader: ["Step 1", dependentName, "1"],
-            pred_0: obs1_pred0,
-            pred_1: obs1_pred1,
-            pct: fmtPct(ct.percentage_correct_1),
-          },
-          {
-            rowHeader: ["Step 1", "Overall Percentage", ""],
-            pred_0: "",
-            pred_1: "",
-            pct: fmtPct(ct.overall_percentage),
-          },
-        ],
-      },
+        // Masukkan Correlation Matrix tepat setelah Variables in Equation
+        if (corrEstOutput.sections && corrEstOutput.sections.length > 0) {
+          allSections.push(...corrEstOutput.sections);
+        }
 
-      // ============================================================
-      // TABLE 9: VARIABLES IN THE EQUATION (FULL)
-      // ============================================================
-      {
-        title: "Variables in the Equation",
-        columnHeaders: [
-          {
-            header: "",
-            children: [
-              { header: "", key: "rh1" },
-              { header: "", key: "rh2" },
-            ],
-          },
-          { header: "B", key: "b" },
-          { header: "S.E.", key: "se" },
-          { header: "Wald", key: "wald" },
-          { header: "df", key: "df" },
-          { header: "Sig.", key: "sig" },
-          { header: "Exp(B)", key: "expb" },
-          {
-            header: "95% C.I.for EXP(B)",
-            children: [
-              { header: "Lower", key: "lo" },
-              { header: "Upper", key: "up" },
-            ],
-          },
-        ],
-        rows: (result.variables_in_equation || []).map((row) => ({
-          rowHeader: ["Step 1", row.label],
-          b: safeFixed(row.b),
-          se: safeFixed(row.error),
-          wald: safeFixed(row.wald),
-          df: row.df,
-          sig: fmtSig(row.sig),
-          expb: safeFixed(row.exp_b),
-          lo: safeFixed(row.lower_ci),
-          up: safeFixed(row.upper_ci),
-        })),
-      },
-    ],
-  };
+        // Masukkan sisa sections setelah vars_in
+        allSections.push(...remainingSections.slice(varsInIndex + 1));
+      } else {
+        // Jika tidak ketemu vars_in, masukkan normal
+        allSections.push(...remainingSections);
+        if (corrEstOutput.sections && corrEstOutput.sections.length > 0) {
+          allSections.push(...corrEstOutput.sections);
+        }
+      }
+    } else {
+      // Jika tidak ketemu summary atau tidak ada Hosmer
+      // Cari index Variables in Equation
+      const varsInIndex = block1Output.sections.findIndex(
+        (s) => s.id === "block1_vars_in"
+      );
+
+      if (varsInIndex !== -1) {
+        // Masukkan sections sampai vars_in (termasuk vars_in)
+        allSections.push(...block1Output.sections.slice(0, varsInIndex + 1));
+
+        // Masukkan Correlation Matrix tepat setelah Variables in Equation
+        if (corrEstOutput.sections && corrEstOutput.sections.length > 0) {
+          allSections.push(...corrEstOutput.sections);
+        }
+
+        // Masukkan sisa sections setelah vars_in
+        allSections.push(...block1Output.sections.slice(varsInIndex + 1));
+      } else {
+        // Fallback - masukkan semua normal
+        allSections.push(...block1Output.sections);
+        if (corrEstOutput.sections && corrEstOutput.sections.length > 0) {
+          allSections.push(...corrEstOutput.sections);
+        }
+      }
+
+      // Jika Hosmer ada tapi summary tidak ketemu, taruh setelah correlation
+      if (hosmerOutput.sections.length > 0) {
+        // Perlu reorder - tidak ideal, tapi fallback
+      }
+    }
+
+    // 5b. Step Summary (SPSS Style)
+    // Display only if "Display at last step" is selected, effectively summarizing the steps hidden from view.
+    if (displayAtLastStep && hasStepSummary(result)) {
+      const stepSummaryOutput = formatStepSummary(result, dependentVariable.name);
+      if (stepSummaryOutput.sections && stepSummaryOutput.sections.length > 0) {
+        allSections.push(...stepSummaryOutput.sections);
+      }
+    }
+
+    // 5c. Classification Plot (last item in Block 1, after Step Summary)
+    if (hasClassificationPlot(result)) {
+      const classificationPlotOutput = formatClassificationPlot(result, dependentVariable.name, { displayAtLastStep });
+      if (classificationPlotOutput.sections && classificationPlotOutput.sections.length > 0) {
+        allSections.push(...classificationPlotOutput.sections);
+      }
+    }
+  }
+
+  // 6. Casewise Listing of Residuals (terpisah dari Block 1)
+  const casewiseOutput = formatCasewiseListing(result, dependentVariable.name, casewiseOutliers);
+  if (casewiseOutput.sections && casewiseOutput.sections.length > 0) {
+    allSections.push(...casewiseOutput.sections);
+  }
+
+  // 7. Assumption Tests (VIF/Box-Tidwell) - Biasanya tabel terpisah di paling bawah
+  const assumptionOutput = formatAssumptionTests(result);
+  if (assumptionOutput.sections) {
+    allSections.push(...assumptionOutput.sections);
+  }
+
+  return { sections: allSections };
 };

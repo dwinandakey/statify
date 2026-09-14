@@ -1,4 +1,4 @@
-use serde::{ Deserialize, Serialize };
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct KnnConfig {
@@ -8,13 +8,12 @@ pub struct KnnConfig {
     pub partition: PartitionConfig,
     pub save: SaveConfig,
     pub output: OutputConfig,
-    pub options: OptionsConfig,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MainConfig {
-    #[serde(rename = "DepVar")]
-    pub dep_var: Option<String>,
+    #[serde(rename = "TargetVar")]
+    pub target_var: Option<String>,
     #[serde(rename = "FeatureVar")]
     pub feature_var: Option<Vec<String>>,
     #[serde(rename = "CaseIdenVar")]
@@ -34,9 +33,9 @@ pub struct NeighborsConfig {
     #[serde(rename = "SpecifyK")]
     pub specify_k: i32,
     #[serde(rename = "MinK")]
-    pub min_k: i32,
+    pub min_k: Option<i32>,
     #[serde(rename = "MaxK")]
-    pub max_k: i32,
+    pub max_k: Option<i32>,
     #[serde(rename = "MetricEucli")]
     pub metric_eucli: bool,
     #[serde(rename = "MetricManhattan")]
@@ -119,28 +118,36 @@ pub struct SaveConfig {
 pub struct OutputConfig {
     #[serde(rename = "CaseSummary")]
     pub case_summary: bool,
+    #[serde(rename = "FeatureSelectionSummary", default = "default_true")]
+    pub feature_selection_summary: bool,
+    #[serde(rename = "KSelectionChart", default)]
+    pub k_selection_chart: bool,
+    #[serde(rename = "PredictorSpace", default = "default_true")]
+    pub predictor_space: bool,
+    #[serde(rename = "PredictionResults", default = "default_true")]
+    pub prediction_results: bool,
+    #[serde(rename = "ConfusionMatrix", default = "default_true")]
+    pub confusion_matrix: bool,
+    #[serde(rename = "ShowNeighborDetail", default)]
+    pub show_neighbor_detail: bool,
     #[serde(rename = "ChartAndTable")]
     pub chart_and_table: bool,
-    #[serde(rename = "ExportModelXML")]
+    #[serde(rename = "ExportModelXML", default)]
     pub export_model_xml: bool,
-    #[serde(rename = "XMLFilePath")]
+    #[serde(rename = "XMLFilePath", default)]
     pub xml_file_path: Option<String>,
-    #[serde(rename = "ExportDistance")]
+    #[serde(rename = "ExportDistance", default)]
     pub export_distance: bool,
-    #[serde(rename = "CreateDataset")]
+    #[serde(rename = "CreateDataset", default)]
     pub create_dataset: bool,
-    #[serde(rename = "WriteDataFile")]
+    #[serde(rename = "WriteDataFile", default)]
     pub write_data_file: bool,
-    #[serde(rename = "NewDataFilePath")]
+    #[serde(rename = "NewDataFilePath", default)]
     pub new_data_file_path: Option<String>,
-    #[serde(rename = "DatasetName")]
+    #[serde(rename = "DatasetName", default)]
     pub dataset_name: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct OptionsConfig {
-    #[serde(rename = "Exclude")]
-    pub exclude: bool,
-    #[serde(rename = "Include")]
-    pub include: bool,
+fn default_true() -> bool {
+    true
 }

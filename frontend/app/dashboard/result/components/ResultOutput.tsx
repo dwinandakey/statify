@@ -5,6 +5,23 @@ import { Card } from "@/components/ui/card";
 import dynamic from "next/dynamic";
 import { useResultStore } from "@/stores/useResultStore";
 import GeneralChartContainer from "@/components/Output/Chart/GeneralChartContainer";
+import KNNKPredictorSelectionChart from "@/components/Modals/Analyze/Classify/nearest-neighbor/components/KNNKPredictorSelectionChart";
+// KNN predictor space chart is a bit heavy to load, so we dynamically import it with a loading state
+const KNNPredictorSpaceChart = dynamic(
+  () => import("@/components/Modals/Analyze/Classify/nearest-neighbor/components/KNNPredictorSpaceChart"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-4 text-sm text-muted-foreground">
+        Loading predictor space...
+      </div>
+    ),
+  },
+);
+const KMedoidsOutputRenderer = dynamic(
+  () => import("@/components/Modals/Analyze/Clustering/k-medoids-cluster/components/OutputRenderer").then(m => ({ default: m.KMedoidsOutputRenderer })),
+  { ssr: false, loading: () => <div className="p-4 text-sm text-muted-foreground">Loading...</div> }
+);
 const TiptapEditor = dynamic(
   () => import("@/components/Output/Editor/TiptapEditor"),
   {
@@ -16,6 +33,7 @@ const TiptapEditor = dynamic(
 );
 import { Edit, ChevronDown, ChevronUp } from "lucide-react";
 import TextRenderer from "@/components/Output/text/text-renderer";
+import { getStatisticsComponent } from "@/components/Output/Statistics";
 
 const ResultOutput: React.FC = () => {
   const { logs, updateStatistic } = useResultStore();
@@ -152,22 +170,44 @@ const ResultOutput: React.FC = () => {
                         const statId = stat.id ?? 0;
                         const isEditing = editingDescriptionId === statId;
                         const status = saveStatus[statId] ?? "";
+                        const isFactorAnalysisChart = (stat.components === 'ScreePlot' || stat.components === 'LoadingPlot') && 
+                          analytic.title?.toLowerCase().includes('factor analysis');
+                        
                         return (
-                          <div key={stat.id} className="space-y-4">
+                          <div key={stat.id} className={`space-y-4 ${
+                            isFactorAnalysisChart ? 'mt-16' : ''
+                          }`}>
                             {isFirstAppearance && (
-                              <div className="text-base font-semibold text-card-foreground mt-8 mb-3 flex items-center" data-testid={`component-header-${stat.components.replace(/\s+/g, '-').toLowerCase()}`}>
+                              <div className={`text-base font-semibold text-card-foreground mb-3 flex items-center ${
+                                isFactorAnalysisChart ? 'mt-8' : 'mt-8'
+                              }`} data-testid={`component-header-${stat.components.replace(/\s+/g, '-').toLowerCase()}`}>
                                 <div className="h-4 w-1 bg-primary rounded-full mr-2"></div>
                                 {stat.components}
                               </div>
                             )}
                             <div
                               id={`output-${analytic.id}-${stat.id}`}
-                              className={`mb-6 rounded-md ${
+                              className={`${
+                                isFactorAnalysisChart ? 'mb-16' : 'mb-6'
+                              } rounded-md ${
                                 !isFirstAppearance ? "mt-8" : ""
                               }`}
+                              style={{
+                                marginBottom: isFactorAnalysisChart ? '4rem' : undefined
+                              }}
                               data-testid={`result-output-${analytic.id}-${stat.id}`}
                             >
                               {(() => {
+                                // Check if there is a specific component for this statistic
+                                const SpecificComponent = getStatisticsComponent(stat.components);
+                                if (SpecificComponent) {
+                                  return (
+                                    <div data-testid={`result-component-${stat.id}`}>
+                                      <SpecificComponent data={stat.output_data} />
+                                    </div>
+                                  );
+                                }
+
                                 let parsedData;
                                 try {
                                   parsedData =
@@ -228,9 +268,37 @@ const ResultOutput: React.FC = () => {
                                       )}
                                     </div>
                                   );
-                                } else if (parsedData.charts) {
+                                } else if (
+                                  parsedData.charts?.[0]?.chartType ===
+                                  "KNN Predictor Space"
+                                ) {
                                   return (
                                     <div data-testid={`result-chart-${stat.id}`}>
+                                      <KNNPredictorSpaceChart
+                                        data={stat.output_data}
+                                      />
+                                    </div>
+                                  );
+                                } else if (
+                                  parsedData.charts?.[0]?.chartType ===
+                                  "KNN k and Predictor Selection" ||
+                                  parsedData.charts?.[0]?.chartType ===
+                                  "KNN k Selection Error Log"
+                                ) {
+                                  return (
+                                    <div data-testid={`result-chart-${stat.id}`}>
+                                      <KNNKPredictorSelectionChart
+                                        data={stat.output_data}
+                                      />
+                                    </div>
+                                  );
+                                } else if (parsedData.charts) {
+                                  return (
+                                    <div 
+                                      data-testid={`result-chart-${stat.id}`}
+                                      className="w-full min-h-[500px] pb-12 mb-12 overflow-visible"
+                                      style={{ display: 'block', marginBottom: '3rem' }}
+                                    >
                                       <GeneralChartContainer
                                         data={stat.output_data}
                                       />
@@ -242,6 +310,15 @@ const ResultOutput: React.FC = () => {
                                       <TextRenderer textData={parsedData.text} />
                                     </div>
                                   );
+                                } else if (parsedData.customRenderer === "KMedoidsOutputRenderer" && parsedData.data) {
+                                  return (
+                                    <div data-testid={`result-kmedoids-${stat.id}`}>
+                                      <KMedoidsOutputRenderer
+                                        output={parsedData.data}
+                                        variables={parsedData.data.variables ?? []}
+                                      />
+                                    </div>
+                                  );
                                 } else {
                                   return (
                                     <div className="text-sm text-destructive p-2 bg-destructive/10 rounded-md">
@@ -251,23 +328,24 @@ const ResultOutput: React.FC = () => {
                                 }
                               })()}
                             </div>
-                            <div className="mt-4 mb-10 relative">
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="text-xs font-medium text-muted-foreground" data-testid={`description-label-${stat.id}`}>
-                                  Description
-                                </div>
-                                {!isEditing ? (
-                                  <button
-                                    className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-muted/50"
-                                    onClick={() =>
-                                      handleEditClick(
-                                        statId,
-                                        stat.description || ""
-                                      )
-                                    }
-                                    type="button"
-                                    data-testid={`edit-description-button-${stat.id}`}
-                                  >
+                            {!isFactorAnalysisChart && (
+                              <div className="mt-4 mb-10 relative">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="text-xs font-medium text-muted-foreground" data-testid={`description-label-${stat.id}`}>
+                                    Description
+                                  </div>
+                                  {!isEditing ? (
+                                    <button
+                                      className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-muted/50"
+                                      onClick={() =>
+                                        handleEditClick(
+                                          statId,
+                                          stat.description || ""
+                                        )
+                                      }
+                                      type="button"
+                                      data-testid={`edit-description-button-${stat.id}`}
+                                    >
                                     <Edit className="h-3 w-3" />
                                     Edit
                                   </button>
@@ -311,6 +389,7 @@ const ResultOutput: React.FC = () => {
                                 data-testid={`description-editor-${stat.id}`}
                               />
                             </div>
+                            )}
                           </div>
                         );
                       }) ?? null

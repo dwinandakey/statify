@@ -1,5 +1,5 @@
 [package]
-name = "wasm"
+name = "timeseries"
 version = "0.1.0"
 edition = "2021"
 description = "Project Rust-WASM untuk analisis statistik menggunakan statrs dan wasm-bindgen."

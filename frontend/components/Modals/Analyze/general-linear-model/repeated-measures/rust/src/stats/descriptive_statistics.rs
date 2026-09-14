@@ -1,4 +1,3 @@
-use statrs::statistics::{ Data, Statistics };
 use std::collections::HashMap;
 
 use crate::models::{
@@ -10,7 +9,7 @@ use crate::models::{
 use super::core::parse_within_subject_factors;
 
 /// Calculate descriptive statistics for repeated measures data
-fn calculate_descriptive_statistics(
+pub fn calculate_descriptive_statistics(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig
 ) -> Result<HashMap<String, DescriptiveStatistics>, String> {
@@ -49,14 +48,17 @@ fn calculate_descriptive_statistics(
                     }
                 }
 
-                // Calculate statistics using statrs
+                // Calculate statistics
                 if !values.is_empty() {
-                    let data_obj = Data::new(&values);
-
+                    let n = values.len();
+                    let mean = values.iter().sum::<f64>() / (n as f64);
+                    let variance = if n > 1 {
+                        values.iter().map(|x| (x - mean).powi(2)).sum::<f64>() / ((n - 1) as f64)
+                    } else { 0.0 };
                     let stats_entry = StatsEntry {
-                        mean: data_obj.mean(),
-                        std_deviation: data_obj.std_dev(),
-                        n: values.len(),
+                        mean,
+                        std_deviation: variance.sqrt(),
+                        n,
                     };
 
                     // Create factor group
@@ -131,14 +133,17 @@ fn add_between_subjects_groups(
                     }
                 }
 
-                // Calculate statistics using statrs
+                // Calculate statistics
                 if !values.is_empty() {
-                    let data_obj = Data::new(&values);
-
+                    let n = values.len();
+                    let mean = values.iter().sum::<f64>() / (n as f64);
+                    let variance = if n > 1 {
+                        values.iter().map(|x| (x - mean).powi(2)).sum::<f64>() / ((n - 1) as f64)
+                    } else { 0.0 };
                     let stats_entry = StatsEntry {
-                        mean: data_obj.mean(),
-                        std_deviation: data_obj.std_dev(),
-                        n: values.len(),
+                        mean,
+                        std_deviation: variance.sqrt(),
+                        n,
                     };
 
                     // Create subgroup

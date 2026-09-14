@@ -1,5 +1,7 @@
 use wasm_bindgen::JsValue;
 use serde::Serialize;
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use crate::models::result::{
     DiscriminantResult,
@@ -10,10 +12,10 @@ use crate::models::result::{
     EigenDescription,
     WilksLambdaTest,
     VariableInAnalysis,
-    VariableNotInAnalysis,
     PairwiseComparison,
     HighestGroupStatistics,
     GroupHistogram,
+    ScoreValue,
 };
 
 // Konversi dari String error ke JsValue untuk interaksi WASM
@@ -50,6 +52,17 @@ struct FormatResult {
     prior_probabilities: Option<FormattedPriorProbabilities>,
     classification_function_coefficients: Option<FormattedClassificationFunctionCoefficients>,
     discriminant_histograms: Option<FormattedDiscriminantHistograms>,
+    scatter_data: Option<FormattedScatterData>,
+    bootstrap_results: Option<crate::models::result::BootstrapResults>,
+    // Already display-shaped (Vec-based), so passed straight through.
+    assumption_results: Option<crate::models::result::AssumptionResults>,
+    territorial_map: bool,
+}
+
+#[derive(Serialize)]
+struct FormattedScatterData {
+    actual_group: Vec<String>,
+    discriminant_scores: Vec<ScoreValue>,
 }
 
 #[derive(Serialize)]
@@ -58,6 +71,8 @@ struct FormattedGroupStatistics {
     variables: Vec<String>,
     means: Vec<GroupValue>,
     std_deviations: Vec<GroupValue>,
+    unweighted_n: Vec<GroupValue>,
+    weighted_n: Vec<GroupValue>,
 }
 
 #[derive(Serialize)]
@@ -83,6 +98,105 @@ struct FunctionValue {
 struct GroupCentroid {
     group: String,
     values: Vec<f64>,
+}
+
+/// Row label SPSS always prints last in the unstandardized coefficients table.
+const CONSTANT_ROW: &str = "(Constant)";
+
+/// Turn an unordered coefficient map into table rows in `order`.
+///
+/// The result structs store these keyed by variable name in a `HashMap`, whose
+/// iteration order is arbitrary and differs between builds of the binary. Every
+/// table below therefore has to impose its own order explicitly, or the rows come
+/// out shuffled relative to SPSS.
+///
+/// Keys missing from `order` are appended afterwards — `(Constant)` last, as SPSS
+/// prints it, and anything else by name so the output stays deterministic.
+fn ordered_function_values(
+    map: &HashMap<String, Vec<f64>>,
+    order: &[String]
+) -> Vec<FunctionValue> {
+    let mut rows: Vec<FunctionValue> = Vec::with_capacity(map.len());
+
+    for name in order {
+        if let Some(values) = map.get(name) {
+            rows.push(FunctionValue { variable: name.clone(), values: values.clone() });
+        }
+    }
+
+    let mut leftover: Vec<&String> = map
+        .keys()
+        .filter(|k| !order.iter().any(|o| o == *k))
+        .collect();
+    leftover.sort_by(|a, b| {
+        let key = |s: &str| (s == CONSTANT_ROW, s.to_string());
+        key(a).cmp(&key(b))
+    });
+    for name in leftover {
+        rows.push(FunctionValue { variable: name.clone(), values: map[name].clone() });
+    }
+
+    rows
+}
+
+/// Index of the function a variable correlates most strongly with, and that
+/// correlation's absolute value. Mirrors the superscript the formatter puts on the
+/// largest absolute correlation in each row of the Structure Matrix.
+fn dominant_function(values: &[f64]) -> (usize, f64) {
+    let mut index = 0;
+    let mut largest = 0.0_f64;
+    for (i, value) in values.iter().enumerate() {
+        if value.abs() > largest {
+            largest = value.abs();
+            index = i;
+        }
+    }
+    (index, largest)
+}
+
+/// Structure Matrix row order: "Variables ordered by absolute size of correlation
+/// within function" — the footnote the table already prints. Variables are grouped
+/// by the function they correlate most strongly with, functions in order, and within
+/// each group sorted by descending absolute correlation.
+fn ordered_structure_rows(
+    map: &HashMap<String, Vec<f64>>,
+    variables: &[String]
+) -> Vec<FunctionValue> {
+    // Seed from the analysis variable order so ties below break deterministically
+    // (`sort_by` is stable).
+    let mut rows = ordered_function_values(map, variables);
+    rows.sort_by(|a, b| {
+        let (fa, va) = dominant_function(&a.values);
+        let (fb, vb) = dominant_function(&b.values);
+        fa.cmp(&fb).then(vb.partial_cmp(&va).unwrap_or(Ordering::Equal))
+    });
+    rows
+}
+
+/// Group centroid rows, by group code ascending — numerically when the codes are
+/// numeric (so 10 sorts after 2), otherwise as text.
+fn ordered_group_centroids(map: &HashMap<String, Vec<f64>>) -> Vec<GroupCentroid> {
+    let mut rows: Vec<GroupCentroid> = map
+        .iter()
+        .map(|(group, values)| GroupCentroid {
+            group: group.clone(),
+            values: values.clone(),
+        })
+        .collect();
+
+    // (is_non_numeric, numeric value, text) — non-numeric codes sort after numeric ones.
+    let key = |g: &str| match g.parse::<f64>() {
+        Ok(n) if n.is_finite() => (0_u8, n, String::new()),
+        _ => (1_u8, 0.0, g.to_string()),
+    };
+    rows.sort_by(|a, b| {
+        let (ka, kb) = (key(&a.group), key(&b.group));
+        ka.0
+            .cmp(&kb.0)
+            .then(ka.1.partial_cmp(&kb.1).unwrap_or(Ordering::Equal))
+            .then(ka.2.cmp(&kb.2))
+    });
+    rows
 }
 
 #[derive(Serialize)]
@@ -135,6 +249,7 @@ struct FormattedCovarianceMatrices {
     groups: Vec<String>,
     variables: Vec<String>,
     matrices: Vec<GroupMatrixEntry>,
+    note_df: String,
 }
 
 #[derive(Serialize)]
@@ -145,17 +260,25 @@ struct GroupMatrixEntry {
 
 #[derive(Serialize)]
 struct FormattedStepwiseStatistics {
+    method: String,
+    num_groups: usize,
     variables_entered: Vec<String>,
     variables_removed: Vec<Option<String>>,
+    min_d_squared: Vec<f64>,
+    between_groups: Vec<String>,
     wilks_lambda: Vec<f64>,
-    f_values: Vec<f64>,
-    df1: Vec<i32>,
-    df2: Vec<i32>,
-    df3: Vec<i32>,
-    exact_f: Vec<f64>,
-    exact_df1: Vec<i32>,
-    exact_df2: Vec<i32>,
+    f_to_enter: Vec<f64>,
+    f_to_enter_df1: Vec<i32>,
+    f_to_enter_df2: Vec<i32>,
     significance: Vec<f64>,
+    wilks_exact_f: Vec<f64>,
+    wilks_exact_df1: Vec<i32>,
+    wilks_exact_df2: Vec<i32>,
+    wilks_exact_sig: Vec<f64>,
+    raos_v: Vec<f64>,
+    raos_v_sig: Vec<f64>,
+    change_in_v: Vec<f64>,
+    change_sig: Vec<f64>,
     variables_in_analysis: Vec<StepVariables>,
     variables_not_in_analysis: Vec<StepVariables>,
     pairwise_comparisons: Vec<GroupPairComparison>,
@@ -165,12 +288,6 @@ struct FormattedStepwiseStatistics {
 struct StepVariables {
     step: String,
     variables: Vec<VariableInAnalysis>,
-}
-
-#[derive(Serialize)]
-struct StepNotInVariables {
-    step: String,
-    variables: Vec<VariableNotInAnalysis>,
 }
 
 #[derive(Serialize)]
@@ -189,17 +306,22 @@ struct FormattedCasewiseStatistics {
     highest_group: HighestGroupStatistics,
     second_highest_group: HighestGroupStatistics,
     discriminant_scores: Vec<ScoreValue>,
+    cross_validated: Option<FormattedCrossValidatedCasewiseStatistics>,
 }
 
 #[derive(Serialize)]
-struct ScoreValue {
-    function: String,
-    values: Vec<f64>,
+struct FormattedCrossValidatedCasewiseStatistics {
+    case_number: Vec<usize>,
+    actual_group: Vec<String>,
+    predicted_group: Vec<String>,
+    highest_group: HighestGroupStatistics,
+    second_highest_group: HighestGroupStatistics,
+    discriminant_scores: Option<Vec<ScoreValue>>,
 }
 
 #[derive(Serialize)]
 struct FormattedPriorProbabilities {
-    groups: Vec<usize>,
+    groups: Vec<String>,
     prior_probabilities: Vec<f64>,
     cases_used: Vec<GroupCases>,
     total: f64,
@@ -243,13 +365,33 @@ impl FormatResult {
     fn from_analysis_result(result: &DiscriminantResult) -> Self {
         // Transform GroupStatistics
         let group_statistics = result.group_statistics.as_ref().map(|stats| {
+            // Debug: log raw stats to see if unweighted_n/weighted_n are populated
+            web_sys::console::log_1(&format!("Raw GroupStatistics - groups: {:?}", stats.groups).into());
+            web_sys::console::log_1(&format!("Raw GroupStatistics - variables: {:?}", stats.variables).into());
+            web_sys::console::log_1(&format!("Raw GroupStatistics - unweighted_n keys: {:?}", stats.unweighted_n.keys().collect::<Vec<_>>()).into());
+            web_sys::console::log_1(&format!("Raw GroupStatistics - weighted_n keys: {:?}", stats.weighted_n.keys().collect::<Vec<_>>()).into());
+
+            for var in &stats.variables {
+                if let Some(n_values) = stats.unweighted_n.get(var) {
+                    web_sys::console::log_1(&format!("  {} unweighted_n: {:?}", var, n_values).into());
+                }
+                if let Some(n_values) = stats.weighted_n.get(var) {
+                    web_sys::console::log_1(&format!("  {} weighted_n: {:?}", var, n_values).into());
+                }
+            }
+
             let means = stats.variables
                 .iter()
-                .enumerate()
-                .map(|(i, var)| {
+                .map(|var| {
                     let values = stats.groups
                         .iter()
-                        .map(|group| { stats.means.get(var).unwrap_or(&vec![0.0])[i] })
+                        .enumerate()
+                        .map(|(j, _group)| {
+                            stats.means.get(var)
+                                .and_then(|v| v.get(j))
+                                .copied()
+                                .unwrap_or(0.0)
+                        })
                         .collect();
 
                     GroupValue {
@@ -261,11 +403,58 @@ impl FormatResult {
 
             let std_deviations = stats.variables
                 .iter()
-                .enumerate()
-                .map(|(i, var)| {
+                .map(|var| {
                     let values = stats.groups
                         .iter()
-                        .map(|group| { stats.std_deviations.get(var).unwrap_or(&vec![0.0])[i] })
+                        .enumerate()
+                        .map(|(j, _group)| {
+                            stats.std_deviations.get(var)
+                                .and_then(|v| v.get(j))
+                                .copied()
+                                .unwrap_or(0.0)
+                        })
+                        .collect();
+
+                    GroupValue {
+                        variable: var.clone(),
+                        values,
+                    }
+                })
+                .collect();
+
+            let unweighted_n = stats.variables
+                .iter()
+                .map(|var| {
+                    let values = stats.groups
+                        .iter()
+                        .enumerate()
+                        .map(|(j, _group)| {
+                            stats.unweighted_n.get(var)
+                                .and_then(|v| v.get(j))
+                                .copied()
+                                .unwrap_or(0.0)
+                        })
+                        .collect();
+
+                    GroupValue {
+                        variable: var.clone(),
+                        values,
+                    }
+                })
+                .collect();
+
+            let weighted_n = stats.variables
+                .iter()
+                .map(|var| {
+                    let values = stats.groups
+                        .iter()
+                        .enumerate()
+                        .map(|(j, _group)| {
+                            stats.weighted_n.get(var)
+                                .and_then(|v| v.get(j))
+                                .copied()
+                                .unwrap_or(0.0)
+                        })
                         .collect();
 
                     GroupValue {
@@ -280,63 +469,30 @@ impl FormatResult {
                 variables: stats.variables.clone(),
                 means,
                 std_deviations,
+                unweighted_n,
+                weighted_n,
             }
         });
 
-        // Transform CanonicalFunctions
+        // Transform CanonicalFunctions.
+        // Both coefficient tables follow the analysis variable order, with
+        // "(Constant)" last in the unstandardized one; centroids follow group code.
         let canonical_functions = result.canonical_functions.as_ref().map(|funcs| {
-            let coefficients = funcs.coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let standardized_coefficients = funcs.standardized_coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let function_at_centroids = funcs.function_at_centroids
-                .iter()
-                .map(|(group, values)| {
-                    GroupCentroid {
-                        group: group.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedCanonicalFunctions {
-                coefficients,
-                standardized_coefficients,
-                function_at_centroids,
+                coefficients: ordered_function_values(&funcs.coefficients, &funcs.variables),
+                standardized_coefficients: ordered_function_values(
+                    &funcs.standardized_coefficients,
+                    &funcs.variables
+                ),
+                function_at_centroids: ordered_group_centroids(&funcs.function_at_centroids),
             }
         });
 
         // Transform StructureMatrix
         let structure_matrix = result.structure_matrix.as_ref().map(|matrix| {
-            let correlations = matrix.correlations
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedStructureMatrix {
                 variables: matrix.variables.clone(),
-                correlations,
+                correlations: ordered_structure_rows(&matrix.correlations, &matrix.variables),
             }
         });
 
@@ -502,6 +658,7 @@ impl FormatResult {
                 groups: matrices.groups.clone(),
                 variables: matrices.variables.clone(),
                 matrices: matrices_entries,
+                note_df: matrices.note_df.clone(),
             }
         });
 
@@ -530,8 +687,12 @@ impl FormatResult {
                                 VariableInAnalysis {
                                     variable: v.variable.clone(),
                                     tolerance: v.tolerance,
+                                    min_tolerance: v.min_tolerance,
+                                    f_to_enter: v.f_to_enter,
                                     f_to_remove: v.f_to_enter,
                                     wilks_lambda: v.wilks_lambda,
+                                    min_d_squared: v.min_d_squared,
+                                    between_groups: v.between_groups.clone(),
                                 }
                             })
                             .collect(),
@@ -557,17 +718,25 @@ impl FormatResult {
                 .collect();
 
             FormattedStepwiseStatistics {
+                method: stats.method.clone(),
+                num_groups: stats.num_groups,
                 variables_entered: stats.variables_entered.clone(),
                 variables_removed: stats.variables_removed.clone(),
+                min_d_squared: stats.min_d_squared.clone(),
+                between_groups: stats.between_groups.clone(),
                 wilks_lambda: stats.wilks_lambda.clone(),
-                f_values: stats.f_values.clone(),
-                df1: stats.df1.clone(),
-                df2: stats.df2.clone(),
-                df3: stats.df3.clone(),
-                exact_f: stats.exact_f.clone(),
-                exact_df1: stats.exact_df1.clone(),
-                exact_df2: stats.exact_df2.clone(),
+                f_to_enter: stats.f_to_enter.clone(),
+                f_to_enter_df1: stats.f_to_enter_df1.clone(),
+                f_to_enter_df2: stats.f_to_enter_df2.clone(),
                 significance: stats.significance.clone(),
+                wilks_exact_f: stats.wilks_exact_f.clone(),
+                wilks_exact_df1: stats.wilks_exact_df1.clone(),
+                wilks_exact_df2: stats.wilks_exact_df2.clone(),
+                wilks_exact_sig: stats.wilks_exact_sig.clone(),
+                raos_v: stats.raos_v.clone(),
+                raos_v_sig: stats.raos_v_sig.clone(),
+                change_in_v: stats.change_in_v.clone(),
+                change_sig: stats.change_sig.clone(),
                 variables_in_analysis,
                 variables_not_in_analysis,
                 pairwise_comparisons,
@@ -586,6 +755,18 @@ impl FormatResult {
                 })
                 .collect();
 
+            // Transform cross-validated casewise statistics if present
+            let cross_validated = stats.cross_validated.as_ref().map(|cv| {
+                FormattedCrossValidatedCasewiseStatistics {
+                    case_number: cv.case_number.clone(),
+                    actual_group: cv.actual_group.clone(),
+                    predicted_group: cv.predicted_group.clone(),
+                    highest_group: cv.highest_group.clone(),
+                    second_highest_group: cv.second_highest_group.clone(),
+                    discriminant_scores: None, // Always None; SPSS leaves this blank
+                }
+            });
+
             FormattedCasewiseStatistics {
                 case_number: stats.case_number.clone(),
                 actual_group: stats.actual_group.clone(),
@@ -593,6 +774,7 @@ impl FormatResult {
                 highest_group: stats.highest_group.clone(),
                 second_highest_group: stats.second_highest_group.clone(),
                 discriminant_scores,
+                cross_validated,
             }
         });
 
@@ -670,6 +852,21 @@ impl FormatResult {
             }
         });
 
+        // Transform ScatterData
+        let scatter_data = result.scatter_data.as_ref().map(|sd| {
+            let discriminant_scores = sd.discriminant_scores
+                .iter()
+                .map(|(func, values)| ScoreValue {
+                    function: func.clone(),
+                    values: values.clone(),
+                })
+                .collect();
+            FormattedScatterData {
+                actual_group: sd.actual_group.clone(),
+                discriminant_scores,
+            }
+        });
+
         FormatResult {
             processing_summary: Some(result.processing_summary.clone()),
             group_statistics,
@@ -688,6 +885,10 @@ impl FormatResult {
             prior_probabilities,
             classification_function_coefficients,
             discriminant_histograms,
+            scatter_data,
+            bootstrap_results: result.bootstrap_results.clone(),
+            assumption_results: result.assumption_results.clone(),
+            territorial_map: result.territorial_map,
         }
     }
 }

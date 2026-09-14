@@ -3,7 +3,7 @@ import { handleDecomposition } from "@/components/Modals/Analyze/TimeSeries/Deco
 import type { Variable } from "@/types/Variable";
 import { useResultStore } from "@/stores/useResultStore";
 import { useVariableStore } from "@/stores/useVariableStore";
-import { useDataStore } from "@/stores/useDataStore";
+import { useDataStore, type CellUpdate } from "@/stores/useDataStore";
 import { useTimeSeriesStore } from "@/stores/useTimeSeriesStore";
 
 export function useAnalyzeHook(
@@ -140,8 +140,8 @@ export function useAnalyzeHook(
             await addVariable(newVariable);
             
             // Prepare updates array
-            const updates = [];
-            
+            const updates: CellUpdate[] = [];
+
             // Add each value to the updates array
             for (let rowIndex = 0; rowIndex < componentValues.length; rowIndex++) {
                 if (newVariable.columnIndex !== undefined) {

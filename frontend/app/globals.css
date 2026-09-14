@@ -113,6 +113,24 @@
   height: 0; /* Ensure no space is taken */
 }
 
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-available-scrollbar #available-variables-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-available-scrollbar #available-variables-list::-webkit-scrollbar {
+  display: none;
+}
+
 /* resize-content class untuk memastikan konten sidebar menyesuaikan ukuran */
 .resize-content {
   width: 100%;

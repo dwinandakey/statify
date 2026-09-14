@@ -12,3 +12,18 @@ declare module 'react-katex' {
   export const BlockMath: React.FC<MathProps>;
   export const InlineMath: React.FC<MathProps>;
 }
+
+// Worker-loader typings
+declare module '*.worker' {
+  class WebpackWorker extends Worker {
+    constructor();
+  }
+  export default WebpackWorker;
+}
+
+declare module '*.worker.ts' {
+  class WebpackWorker extends Worker {
+    constructor();
+  }
+  export default WebpackWorker;
+}

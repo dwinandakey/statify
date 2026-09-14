@@ -18,12 +18,14 @@ pub fn parse_within_subject_factors(
     // Create regex for parsing variable format
     let var_pattern = Regex::new(r"(\w+)_\((\d+(?:,\d+)*),(\w+)\)").map_err(|e| e.to_string())?;
 
-    // Get the variable definitions
-    let var_defs = &data.subject_data_defs[0];
-
-    // Process each variable
-    for var_def in var_defs {
-        let var_name = &var_def.name;
+    // Process each variable across all subject_data_defs entries.
+    // `subject_data_defs` is Vec<Vec<VariableDefinition>>; the outer Vec has
+    // one entry per dependent variable selected by the user (each inner Vec
+    // typically holds a single VariableDefinition). Iterating only [0] would
+    // miss every dependent variable except the first.
+    for var_defs in &data.subject_data_defs {
+        for var_def in var_defs {
+            let var_name = &var_def.name;
 
         if let Some(captures) = var_pattern.captures(var_name) {
             let factor_name = captures.get(1).unwrap().as_str().to_string();
@@ -66,8 +68,9 @@ pub fn parse_within_subject_factors(
                 dependent_variable: var_name.clone(),
             };
 
-            // Add to measures map
-            measures.entry(factor_name).or_insert_with(Vec::new).push(factor);
+            // Add to measures map (keyed by measure name, e.g. "perlakuan_anjing")
+            measures.entry(measure_name).or_insert_with(Vec::new).push(factor);
+            }
         }
     }
 

@@ -1,11 +1,11 @@
 /**
  * Manual verification script for Task 1.6 logging enhancements
- * 
+ *
  * This script demonstrates the comprehensive debugging logging added to:
  * - calculateShapiroWilk: n, Σmᵢ², numerator, S², W, aₙ, aₙ₋₁, φ
  * - shapiroWilkPValue: Which p-value formula used (n=3, n≤11, n>11)
  * - printNormalityLog: Execution time with performance ratings
- * 
+ *
  * Run this with: node verify_logging.js
  */
 

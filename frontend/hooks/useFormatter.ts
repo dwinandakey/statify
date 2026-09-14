@@ -1,8 +1,13 @@
 import { Table } from "@/types/Table";
 
 export function formatSig(value: any) {
+    // If already a formatted string (from WASM output), return as-is
+    if (typeof value === "string") {
+        return value;
+    }
+
     if (value === null || typeof value === "undefined" || isNaN(value)) {
-        return null;
+        return "";
     }
     if (value < 0.001) {
         return "<.001";
@@ -10,12 +15,56 @@ export function formatSig(value: any) {
     return formatDisplayNumber(value);
 }
 
-export function formatDisplayNumber(
-    num: number | undefined | null
-): string | null {
-    if (typeof num === "undefined") return "undefined";
+/**
+ * Format correlation matrix values with 4 decimal places
+ * Very small values (< 1e-4) are shown as "0.0000" not scientific notation
+ */
+export function formatCorrelationValue(num: number | string | undefined | null): string | null {
+    // If already a formatted string (from WASM output), return as-is
+    if (typeof num === "string") {
+        return num;
+    }
+
+    if (typeof num === "undefined") return "";
     if (num === null || typeof num === "undefined" || isNaN(num)) {
-        return null;
+        return "";
+    }
+    if (!isFinite(num)) return num > 0 ? "Infinity" : "-Infinity";
+
+    // exact zero
+    if (num === 0) {
+        return "0.0000";
+    }
+
+    // Treat values very close to zero as 0.0000 (NOT scientific notation)
+    if (Math.abs(num) < 1e-4) {
+        return "0.0000";
+    }
+
+    // Handle integers
+    if (Number.isInteger(num)) {
+        // Special case for 100
+        if (num === 100) {
+            return "100.0";
+        }
+        return num.toString();
+    }
+
+    // For regular decimal numbers - format with 4 decimals for correlation
+    return num.toFixed(4).replace(/\.?0+$/, "");
+}
+
+export function formatDisplayNumber(
+    num: number | string | undefined | null
+): string | null {
+    // If already a formatted string (from WASM output), return as-is
+    if (typeof num === "string") {
+        return num;
+    }
+
+    if (typeof num === "undefined") return "";
+    if (num === null || typeof num === "undefined" || isNaN(num)) {
+        return "";
     }
     if (!isFinite(num)) return num > 0 ? "Infinity" : "-Infinity";
 

@@ -1,3 +1,6 @@
+
+// perbaikan bisa (9/1/2026)
+
 use std::collections::HashMap;
 
 use nalgebra::DMatrix;
@@ -7,52 +10,53 @@ use crate::models::{
     data::{ AnalysisData, DataRecord, DataValue },
 };
 
+fn data_value_matches_selection(value: &DataValue, selection: &str) -> bool {
+    let selection = selection.trim();
+
+    match value {
+        DataValue::Number(number) => selection
+            .parse::<f64>()
+            .map(|expected| number.is_finite() && expected.is_finite() && *number == expected)
+            .unwrap_or(false),
+        DataValue::Text(text) => text == selection,
+        DataValue::Boolean(boolean) => selection.eq_ignore_ascii_case(&boolean.to_string()),
+        DataValue::Null => false,
+    }
+}
+
 pub fn extract_data_matrix(
     data: &AnalysisData,
     config: &FactorAnalysisConfig
 ) -> Result<(DMatrix<f64>, Vec<String>), String> {
-    // Get the target variables
+    // ambil variables target
     let var_names = if let Some(vars) = &config.main.target_var {
-        // If specific variables are provided, use them
-        let var_defs = if !data.target_data_defs.is_empty() && !data.target_data_defs[0].is_empty() {
-            &data.target_data_defs[0]
-        } else {
-            return Err("No variable definitions found".to_string());
-        };
-
-        // Map variable names (might be index-based in configs)
-        vars.iter()
-            .map(|v| {
-                if let Ok(idx) = v.parse::<usize>() {
-                    if idx < var_defs.len() { var_defs[idx].name.clone() } else { v.clone() }
-                } else {
-                    v.clone()
-                }
-            })
-            .collect::<Vec<String>>()
+        // klo variabel spesifik disediakan, pake variabel itu sesuai urutan yang ditentukan
+        vars.clone()
     } else {
-        // Collect all numeric variables from all datasets
-        data.target_data
-            .iter()
-            .flat_map(|dataset| {
-                dataset.iter().flat_map(|record| {
-                    record.values
-                        .iter()
-                        .filter(|(_, value)| matches!(value, DataValue::Number(_)))
-                        .map(|(key, _)| key.clone())
-                })
-            })
-            .collect::<std::collections::HashSet<String>>()
-            .into_iter()
-            .collect::<Vec<String>>()
+        // Kumpulkan semua variabel numerik dari semua dataset sambil mempertahankan urutannya
+        let mut seen = std::collections::HashSet::new();
+        let mut ordered_vars = Vec::new();
+
+        for dataset in &data.target_data {
+            for record in dataset {
+                for (key, value) in &record.values {
+                    if matches!(value, DataValue::Number(_)) && !seen.contains(key) {
+                        seen.insert(key.clone());
+                        ordered_vars.push(key.clone());
+                    }
+                }
+            }
+        }
+
+        ordered_vars
     };
 
     if var_names.is_empty() {
         return Err("No valid variables found".to_string());
     }
 
-    // Process all records from all datasets
-    // Get max number of cases across all datasets
+    // Proses semua records dari semua dataset
+    // ambil jumlah kasus maksimum di semua dataset
     let num_cases = data.target_data
         .iter()
         .map(|dataset| dataset.len())
@@ -78,57 +82,32 @@ pub fn extract_data_matrix(
         }
     }
 
-    // Convert to DataRecords
+    // Convert ke DataRecords
     let records: Vec<DataRecord> = collected_records
         .into_iter()
         .map(|values| DataRecord { values })
         .collect();
 
-    // Apply filtering based on value_target and selection if specified
+    // menerapkan filter variabel seleksi sebelum menangani nilai yang hilang
     let filtered_records = if let Some(value_target) = &config.main.value_target {
         if let Some(selection) = &config.value.selection {
-            // Both value_target and selection are specified
-            if !data.value_target_data.is_empty() {
-                // Prepare to match each case with its value target
-                let mut filtered = Vec::new();
+            let mut filtered = Vec::new();
 
-                // For each case, check if the value target matches the selection
-                for (case_idx, record) in records.iter().enumerate() {
-                    let mut matches_selection = false;
+            for (case_idx, record) in records.iter().enumerate() {
+                let matches_selection = data.value_target_data.iter().any(|value_dataset| {
+                    value_dataset
+                        .get(case_idx)
+                        .and_then(|value_record| value_record.values.get(value_target))
+                        .map(|value| data_value_matches_selection(value, selection))
+                        .unwrap_or(false)
+                });
 
-                    // Check across all value target datasets
-                    for value_dataset in &data.value_target_data {
-                        if case_idx < value_dataset.len() {
-                            let value_record = &value_dataset[case_idx];
-
-                            match value_record.values.get(value_target) {
-                                Some(DataValue::Text(text)) => {
-                                    if text.as_str() == selection.as_str() {
-                                        matches_selection = true;
-                                        break;
-                                    }
-                                }
-                                Some(DataValue::Number(num)) => {
-                                    if num.to_string() == *selection {
-                                        matches_selection = true;
-                                        break;
-                                    }
-                                }
-                                _ => {}
-                            }
-                        }
-                    }
-
-                    if matches_selection {
-                        filtered.push(record.clone());
-                    }
+                if matches_selection {
+                    filtered.push(record.clone());
                 }
-
-                filtered
-            } else {
-                // Value target data is not available, use all records
-                records.clone()
             }
+
+            filtered
         } else {
             // No selection specified, use all records
             records.clone()
@@ -149,21 +128,30 @@ pub fn extract_data_matrix(
         let mut row = Vec::new();
         let mut has_missing = false;
 
+        // mulai perbaikan 21.1.2026
         for var_name in &var_names {
             match record.values.get(var_name) {
                 Some(DataValue::Number(value)) => row.push(*value),
                 _ => {
                     has_missing = true;
                     if config.options.replace_mean {
-                        row.push(f64::NAN); // Will replace with mean later
+                        row.push(f64::NAN); // Nanti diganti mean
+                    } else if config.options.exclude_pair_wise {
+                        
+                        // Jika Pair-wise, kita JANGAN break. Kita masukkan NaN.
+                        // Nanti perhitungan matriks Korelasi harus pintar mengabaikan NaN ini.
+                        row.push(f64::NAN); 
                     } else {
-                        break; // Skip this record
+                        // Jika List-wise (default), kita skip row ini
+                        break; 
                     }
                 }
             }
         }
 
-        if !has_missing || (has_missing && !config.options.exclude_list_wise) {
+        // Update logika validasi row
+        // Jika Pair-wise, kita terima row meskipun has_missing (selama row length lengkap dengan NaN)
+        if !has_missing || config.options.exclude_pair_wise || (has_missing && config.options.replace_mean) {
             if row.len() == var_names.len() {
                 valid_records.push(row);
             }
@@ -191,6 +179,26 @@ pub fn extract_data_matrix(
     }
 
     Ok((data_matrix, var_names))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::data_value_matches_selection;
+    use crate::models::data::DataValue;
+
+    #[test]
+    fn numeric_selection_matches_equivalent_text_representations() {
+        assert!(data_value_matches_selection(&DataValue::Number(1.0), "1"));
+        assert!(data_value_matches_selection(&DataValue::Number(1.0), " 1.0 "));
+        assert!(!data_value_matches_selection(&DataValue::Number(1.0), "2"));
+    }
+
+    #[test]
+    fn text_and_boolean_selection_values_match_exactly() {
+        assert!(data_value_matches_selection(&DataValue::Text("Active".into()), "Active"));
+        assert!(!data_value_matches_selection(&DataValue::Text("Active".into()), "active"));
+        assert!(data_value_matches_selection(&DataValue::Boolean(true), "TRUE"));
+    }
 }
 
 // Replace missing values (NaN) with column means
@@ -243,5 +251,8 @@ pub fn filter_valid_cases(
         value_target_data: data.value_target_data.clone(),
         target_data_defs: data.target_data_defs.clone(),
         value_target_data_defs: data.value_target_data_defs.clone(),
+        eigenvalues: None,
+        total_variance: None,
+        n_variables: 0,
     })
 }

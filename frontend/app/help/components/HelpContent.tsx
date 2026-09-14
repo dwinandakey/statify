@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Button } from "@/components/ui/button";
 import { HelpLayout } from "../ui/HelpLayout";
 import { HelpSidebar } from "./HelpSidebar";
+import { LanguageToggle } from "./LanguageToggle";
 
 // Recursive type for nested sections
 export type SectionItem = {
@@ -162,8 +163,9 @@ export const HelpContent: React.FC<HelpContentProps> = ({
 			{/* Main Content - compact modern design matching sidebar */}
 			<main className="flex-1 overflow-y-auto bg-background/50 animate-fadeIn">
 				{/* Top navigation bar - compact design */}
-				<div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border/50 py-2 px-4">
-					{renderBreadcrumbs()}
+				<div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border/50 py-2 px-4 flex items-center justify-between">
+					<div className="flex-1">{renderBreadcrumbs()}</div>
+					<LanguageToggle />
 				</div>
 
 				{/* Content container - more compact spacing */}

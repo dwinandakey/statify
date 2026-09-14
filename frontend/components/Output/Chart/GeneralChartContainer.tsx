@@ -28,6 +28,7 @@ interface ChartData {
       parameters?: Record<string, number>; // Store coefficients: {a: 2, b: 3}
     }>; // For Scatter Plot With Multiple Fit Line
     showNormalCurve?: boolean; // For Histogram - show normal curve overlay
+    showValueTooltip?: boolean;
     axisLabels: {
       x: string;
       y: string;
@@ -47,6 +48,9 @@ interface ChartData {
       };
     };
     chartColor?: string[];
+    // Classification Plot specific options
+    cutoff?: number;
+    groups?: string[];
   };
   chartMetadata: {
     axisInfo: {
@@ -776,8 +780,12 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
   };
 
   useEffect(() => {
-    if (parsedData?.charts && Array.isArray(parsedData.charts)) {
-      const nodes = parsedData.charts.map(
+    const rawCharts = parsedData?.charts && Array.isArray(parsedData.charts)
+      ? parsedData.charts
+      : (parsedData && parsedData.chartType ? [parsedData] : []);
+
+    if (rawCharts.length > 0) {
+      const nodes = rawCharts.map(
         (chartData: ChartData, index: number) => {
           const {
             chartType,
@@ -822,7 +830,9 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                   subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
                 },
                 chartConfig?.axisLabels,
-                chartConfig?.axisScaleOptions
+                chartConfig?.axisScaleOptions,
+                undefined,
+                chartConfig?.showValueTooltip
               );
               break;
             case "Pie Chart":
@@ -857,6 +867,27 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 chartConfig?.chartColor
               );
               break;
+            case "Scatter Plot Matrix": {
+              // dimensions = [{key, label}, ...] are carried inside the
+              // chartConfig under `matrixDimensions`. The formatter packs
+              // them there so the rest of the ChartData contract stays
+              // intact (chartData is the array of value rows).
+              const matrixDimensions =
+                (chartConfig as any)?.matrixDimensions ?? [];
+              chartNode = chartUtils.createScatterPlotMatrix(
+                chartDataPoints,
+                matrixDimensions,
+                width,
+                height,
+                {
+                  title: chartMetadata?.title || "Scatter Plot Matrix",
+                  subtitle: chartMetadata?.subtitle,
+                  titleFontSize: chartMetadata?.titleFontSize || 16,
+                  subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
+                }
+              );
+              break;
+            }
             case "Scatter Plot With Fit Line":
               chartNode = chartUtils.createScatterPlotWithFitLine(
                 chartDataPoints,
@@ -908,7 +939,8 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 },
                 chartConfig?.axisLabels,
                 chartConfig?.axisScaleOptions,
-                chartConfig?.chartColor
+                chartConfig?.chartColor,
+                chartConfig?.showValueTooltip
               );
               break;
             case "Area Chart":
@@ -1535,6 +1567,26 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 chartConfig?.axisLabels,
                 chartConfig?.axisScaleOptions,
                 chartConfig?.chartColor
+              );
+              break;
+            case "Classification Plot":
+              chartNode = chartUtils.createClassificationPlot(
+                chartDataPoints,
+                width,
+                height,
+                useAxis,
+                {
+                  title: chartMetadata?.title || "Classification Plot",
+                  subtitle: chartMetadata?.subtitle,
+                  titleFontSize: chartMetadata?.titleFontSize || 16,
+                  subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
+                },
+                chartConfig?.axisLabels,
+                chartConfig?.chartColor,
+                {
+                  cutoff: chartConfig?.cutoff ?? 0.5,
+                  groups: chartConfig?.groups,
+                }
               );
               break;
             default:

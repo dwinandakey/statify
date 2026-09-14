@@ -177,6 +177,22 @@ interface VariableStoreState {
     updateMultipleVariables: (batch: { identifier: number | string; changes: Partial<Variable> }[]) => Promise<void>;
     sortVariables: (direction: 'asc' | 'desc', columnIndex: number) => Promise<void>;
     saveVariables: () => Promise<void>;
+    
+    // Register variable metadata (for factor scores - updates metadata without shifting columns)
+    registerVariableMetadata: (newVariablesData: Array<{
+        columnIndex: number;
+        name: string;
+        type: 'NUMERIC' | 'STRING' | 'DATE' | 'ADATE' | 'EDATE' | 'SDATE' | 'JDATE' | 'COMMA' | 'DOT' | 'SCIENTIFIC';
+        width: number;
+        decimals: number;
+        label: string;
+        values: any[];
+        missing: any;
+        columns: number;
+        align: 'left' | 'right' | 'center';
+        measure: 'nominal' | 'ordinal' | 'scale' | 'unknown';
+        role: 'input' | 'target' | 'both' | 'none' | 'partition' | 'split';
+    }>) => Promise<void>;
 }
 
 // Helper to enforce measure constraint
@@ -503,6 +519,56 @@ export const useVariableStore = create<VariableStoreState>()(
 
             getVariableByColumnIndex: (columnIndex: number) => {
                 return get().variables.find(v => v.columnIndex === columnIndex);
+            },
+
+            registerVariableMetadata: async (newVariablesData) => {
+                set(draft => { draft.isLoading = true; draft.error = null; });
+                try {
+                    const currentVariables = get().variables;
+                    
+                    // Create new Variable objects from the metadata
+                    const newVariables: Variable[] = newVariablesData.map(data => ({
+                        tempId: uuidv4(),
+                        columnIndex: data.columnIndex,
+                        name: data.name,
+                        type: data.type,
+                        width: data.width,
+                        decimals: data.decimals,
+                        label: data.label,
+                        values: data.values,
+                        missing: data.missing,
+                        columns: data.columns,
+                        align: data.align,
+                        measure: data.measure,
+                        role: data.role,
+                    }));
+                    
+                    // Merge with existing variables (add new ones, don't modify existing)
+                    const mergedVariables = [...currentVariables];
+                    for (const newVar of newVariables) {
+                        const existingIndex = mergedVariables.findIndex(v => v.columnIndex === newVar.columnIndex);
+                        if (existingIndex >= 0) {
+                            // Update existing variable metadata
+                            mergedVariables[existingIndex] = { ...mergedVariables[existingIndex], ...newVar };
+                        } else {
+                            // Add new variable
+                            mergedVariables.push(newVar);
+                        }
+                    }
+                    
+                    // Sort by column index
+                    mergedVariables.sort((a, b) => a.columnIndex - b.columnIndex);
+                    
+                    // Save to service
+                    await variableService.importVariables(mergedVariables);
+                    
+                    // Update state
+                    updateStateAfterSuccess(set, mergedVariables);
+                    
+                    console.log(`[registerVariableMetadata] Registered ${newVariablesData.length} new variable(s)`);
+                } catch (error: any) {
+                    handleError(set, 'registerVariableMetadata')(error);
+                }
             },
         }))
     )

@@ -11,6 +11,13 @@ import { DataRow } from "@/types/Data";
 export type SyncStatusType = 'idle' | 'syncing' | 'error';
 
 export type CellUpdate = { row: number; col: number; value: string | number };
+
+// ColumnData type for adding variable columns (e.g., factor scores)
+export type ColumnData = {
+    variable_name: string;
+    values: (string | number | null)[];
+};
+
 export type DataStoreError = {
     message: string;
     source: string;
@@ -54,9 +61,12 @@ export interface DataStoreState {
 
     ensureColumns: (targetColIndex: number) => Promise<void>;
     checkAndSave: () => Promise<void>;
+    
+    // Add variable columns for factor scores and other computed variables
+    addVariableColumns: (columnDataList: ColumnData[]) => Promise<{ startColumnIndex: number; endColumnIndex: number }>;
 }
 
-const initialState: Omit<DataStoreState, 'loadData' | 'resetData' | 'updateCell' | 'updateCells' | 'setData' | 'saveData' | 'addRow' | 'addRows' | 'deleteRow' | 'deleteRows' | 'sortData' | 'getVariableData' | 'validateVariableData' | 'ensureColumns' | 'checkAndSave'> = {
+const initialState: Omit<DataStoreState, 'loadData' | 'resetData' | 'updateCell' | 'updateCells' | 'setData' | 'saveData' | 'addRow' | 'addRows' | 'deleteRow' | 'deleteRows' | 'sortData' | 'getVariableData' | 'validateVariableData' | 'ensureColumns' | 'checkAndSave' | 'addVariableColumns'> = {
     data: [],
     isLoading: false,
     error: null,
@@ -426,6 +436,51 @@ export const useDataStore = create<DataStoreState>()(
                             throw new Error("Failed to save pending changes. Please check for errors and try again.");
                         }
                     }
+                },
+
+                addVariableColumns: async (columnDataList: ColumnData[]) => {
+                    if (!columnDataList || columnDataList.length === 0) {
+                        return { startColumnIndex: -1, endColumnIndex: -1 };
+                    }
+
+                    const currentData = get().data;
+                    const currentColCount = currentData.length > 0 ? (currentData[0]?.length ?? 0) : 0;
+                    const startColumnIndex = currentColCount;
+                    const endColumnIndex = startColumnIndex + columnDataList.length - 1;
+
+                    // Determine the number of rows needed
+                    const maxRowsNeeded = Math.max(
+                        currentData.length,
+                        ...columnDataList.map(col => col.values?.length ?? 0)
+                    );
+
+                    set((state) => {
+                        // Ensure we have enough rows
+                        while (state.data.length < maxRowsNeeded) {
+                            state.data.push(Array(currentColCount).fill(""));
+                        }
+
+                        // Add new columns to each row
+                        for (let rowIndex = 0; rowIndex < state.data.length; rowIndex++) {
+                            for (let colIdx = 0; colIdx < columnDataList.length; colIdx++) {
+                                const colData = columnDataList[colIdx];
+                                const value = colData.values?.[rowIndex] ?? "";
+                                state.data[rowIndex].push(value as string | number);
+                            }
+                        }
+
+                        state.hasUnsavedChanges = true;
+                        state.lastUpdated = new Date();
+                    });
+
+                    // Save the data
+                    try {
+                        await get().saveData();
+                    } catch (error) {
+                        console.error("Failed to save after adding variable columns:", error);
+                    }
+
+                    return { startColumnIndex, endColumnIndex };
                 },
             };
         })

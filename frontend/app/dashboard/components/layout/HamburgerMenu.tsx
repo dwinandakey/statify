@@ -71,10 +71,18 @@ const HamburgerMenu: React.FC = () => {
   const { handleAction: handleEditAction } = useEditMenuActions();
 
   return (
-    <div className="flex items-center justify-between px-3 py-1.5 border-b border-border bg-background" data-testid="mobile-header">
+    <div
+      className="flex items-center justify-between px-3 py-1.5 border-b border-border bg-background"
+      data-testid="mobile-header"
+    >
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="sm" className="px-1.5 hover:bg-accent" data-testid="hamburger-menu-trigger">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-1.5 hover:bg-accent"
+            data-testid="hamburger-menu-trigger"
+          >
             <MenuIcon className="h-5 w-5 text-foreground" />
             <span className="sr-only">Open Menu</span>
           </Button>
@@ -93,9 +101,17 @@ const HamburgerMenu: React.FC = () => {
             </SheetDescription>
           </SheetHeader>
           <div className="py-1 overflow-y-auto">
-            <Accordion type="multiple" className="w-full" data-testid="mobile-menu-accordion">
+            <Accordion
+              type="multiple"
+              className="w-full"
+              data-testid="mobile-menu-accordion"
+            >
               {/* --- File Accordion Item --- */}
-              <AccordionItem value="file" className="border-b border-border" data-testid="mobile-file-menu">
+              <AccordionItem
+                value="file"
+                className="border-b border-border"
+                data-testid="mobile-file-menu"
+              >
                 <AccordionTrigger className="px-4 py-2 text-sm font-medium text-foreground hover:text-foreground hover:bg-accent bg-background">
                   <div className="flex items-center">
                     <FileIcon className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -284,7 +300,11 @@ const HamburgerMenu: React.FC = () => {
                     Sort Variables...
                   </DrawerMenuItem>
                   {/* <DrawerMenuItem onClick={() => openModal(ModalType.Transpose)}>Transpose...</DrawerMenuItem> */}
-                  <DrawerMenuItem onClick={() => openModal(ModalType.Aggregate)}>Aggregate...</DrawerMenuItem>
+                  <DrawerMenuItem
+                    onClick={() => openModal(ModalType.Aggregate)}
+                  >
+                    Aggregate...
+                  </DrawerMenuItem>
                   <DrawerMenuSeparator />
                   {/* <DrawerMenuItem onClick={() => openModal(ModalType.WeightCases)}>Weight Cases...</DrawerMenuItem> */}
                 </AccordionContent>
@@ -333,7 +353,11 @@ const HamburgerMenu: React.FC = () => {
                     Prepare Data for Modeling
                   </DrawerMenuItem>
                   <DrawerMenuSeparator />
-                  <DrawerMenuItem disabled>Rank Cases...</DrawerMenuItem>
+                  <DrawerMenuItem
+                    onClick={() => openModal(ModalType.RankCases)}
+                  >
+                    Rank Case...
+                  </DrawerMenuItem>
                   <DrawerMenuSeparator />
                   <DrawerMenuItem disabled>
                     Date and Time Wizard...
@@ -426,11 +450,26 @@ const HamburgerMenu: React.FC = () => {
                         <DrawerMenuItem disabled>
                           Discriminant...
                         </DrawerMenuItem>
-                        <DrawerMenuItem disabled>
-                          Cluster (Hierarchical)...
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="clustering" className="border-0">
+                      <NestedAccordionTrigger>
+                        Clustering
+                      </NestedAccordionTrigger>
+                      <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalKMeansCluster)
+                          }
+                        >
+                          K-Means Cluster...
                         </DrawerMenuItem>
-                        <DrawerMenuItem disabled>
-                          Cluster (K-Means)...
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalKMedoidsCluster)
+                          }
+                        >
+                          K-Medoids Cluster...
                         </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>
@@ -615,6 +654,30 @@ const HamburgerMenu: React.FC = () => {
                           onClick={() => openModal(ModalType.BoxJenkinsModel)}
                         >
                           Box-Jenkins Model
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ARDL)}
+                        >
+                          Autoregressive Distributed Lag
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ECM)}
+                        >
+                          Error Correction Model
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.HomoscedasticityTest)
+                          }
+                        >
+                          Homoscedasticity Test (ARCH-LM)
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.HeteroskedasticityModels)
+                          }
+                        >
+                          Heteroscedasticity Models (ARCH/GARCH)
                         </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>

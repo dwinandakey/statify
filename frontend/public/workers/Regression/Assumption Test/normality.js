@@ -1,10 +1,10 @@
 /**
  * Regression Normality Tests (Assumption Testing)
- * 
+ *
  * Note: This is a separate implementation optimized for regression residuals.
  * For general-purpose normality testing (Descriptive Statistics), see:
  * public/workers/DescriptiveStatistics/libs/normality/normalityTests.js
- * 
+ *
  * Key differences:
  * - Includes Jarque-Bera test
  * - Uses asymptotic KS p-values

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,7 +20,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -38,9 +37,12 @@
     ".next/types/**/*.ts",
     "next-env.d.ts",
     ".next-dev/types/**/*.ts"
-  ],
+, "components/Modals/Analyze/Regression/Ordinal/worker/ordinal-worker.js"  ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    ".next",
+    ".next-dev",
+    "**/target/**"
   ]
 }

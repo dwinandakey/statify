@@ -25,6 +25,7 @@ rand_mt = { version = "5.0.0", features = ["rand-traits"] }
 nalgebra = { version = "0.33.2", features = ["std"] }
 ndarray = "0.16.1"
 statrs = { version = "0.18.0" }
+regex = { version = "1", features = ["std"] }
 
 [profile.dev]
 opt-level = 0

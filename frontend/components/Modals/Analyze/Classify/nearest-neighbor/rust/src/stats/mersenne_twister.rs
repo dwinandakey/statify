@@ -1,13 +1,13 @@
 use crate::models::{
     config::KnnConfig,
     data::AnalysisData,
-    result::{ RngSetting, SystemSettings },
+    result::{RngSetting, SystemSettings},
 };
 
 // Generates Mersenne Twister RNG settings
 pub fn generate_mersenne_twister(
     _data: &AnalysisData,
-    config: &KnnConfig
+    config: &KnnConfig,
 ) -> Result<SystemSettings, String> {
     let _seed = match config.partition.seed {
         Some(seed) => seed,

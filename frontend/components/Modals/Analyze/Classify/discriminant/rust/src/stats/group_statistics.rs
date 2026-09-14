@@ -82,15 +82,18 @@ pub fn calculate_group_statistics(
         })
         .collect();
 
-    // Combine results
-    if config.statistics.means {
-        for (group_idx, (group, var_stats)) in statistics.iter().enumerate() {
-            for (variable, mean, std_dev, unweighted, weighted) in var_stats {
+    // Combine results — always populate N counts regardless of means flag
+    // Group Statistics table always shows Valid N, even when Means option is off
+    let has_means = config.statistics.means;
+    for (_group_idx, (_group, var_stats)) in statistics.iter().enumerate() {
+        for (variable, mean, std_dev, unweighted, weighted) in var_stats {
+            if has_means {
                 result.means.get_mut(variable).unwrap().push(*mean);
                 result.std_deviations.get_mut(variable).unwrap().push(*std_dev);
-                result.unweighted_n.get_mut(variable).unwrap().push(*unweighted);
-                result.weighted_n.get_mut(variable).unwrap().push(*weighted);
             }
+            // N counts are always populated — they are independent of the Means statistic option
+            result.unweighted_n.get_mut(variable).unwrap().push(*unweighted);
+            result.weighted_n.get_mut(variable).unwrap().push(*weighted);
         }
     }
 

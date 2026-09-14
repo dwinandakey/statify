@@ -7,7 +7,10 @@ use crate::models::{
     data::{ AnalysisData, DataValue },
     result::{
         MauchlyTest,
+        TestsWithinSubjectsContrasts,
         TestsWithinSubjectsEffects,
+        WithinSubjectsContrastSource,
+        WithinSubjectsContrastsResult,
         WithinSubjectsEffectSource,
         WithinSubjectsEffectsResult,
     },
@@ -16,7 +19,7 @@ use crate::models::{
 use super::core::parse_within_subject_factors;
 
 /// Calculate tests of within-subjects effects
-fn calculate_within_subjects_effects(
+pub fn calculate_tests_within_subjects_effects(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig,
     mauchly_test: &Option<MauchlyTest>
@@ -26,8 +29,15 @@ fn calculate_within_subjects_effects(
     // Get within-subjects factors
     let within_factors = parse_within_subject_factors(data, config)?;
 
-    // Process each within-subjects factor
-    for (factor_name, factors) in &within_factors.measures {
+    // Process each within-subjects factor.
+    // `measure_name` is the HashMap key (e.g. "perlakuan_anjing"); the within-
+    // subjects factor name (e.g. "perlakuan") lives in factor_values keys and
+    // is what SPSS prints in the Source column.
+    for (measure_name, factors) in &within_factors.measures {
+        let factor_name = factors
+            .first()
+            .and_then(|f| f.factor_values.keys().next().cloned())
+            .unwrap_or_else(|| measure_name.clone());
         let mut sources = Vec::new();
 
         // Extract variable names for this factor
@@ -104,11 +114,23 @@ fn calculate_within_subjects_effects(
                 .map(|&mean| (mean - grand_mean).powi(2))
                 .sum::<f64>();
 
-        // Calculate sum of squares for error
+        // Per-subject means (across levels) — needed to remove between-subject
+        // variation from the error term.
+        let subject_means: Vec<f64> = (0..n_subjects)
+            .map(|i| {
+                (0..n_vars).map(|j| matrix[(i, j)]).sum::<f64>() / (n_vars as f64)
+            })
+            .collect();
+
+        // Repeated-measures error: SS_error = Σ_{i,j} (y_ij − row_mean_i − col_mean_j + grand_mean)².
+        // The previous formula Σ(y_ij − col_mean_j)² conflated SS_error with
+        // SS_subjects, inflating the error term.
         let mut ss_error = 0.0;
         for i in 0..n_subjects {
             for j in 0..n_vars {
-                ss_error += (matrix[(i, j)] - means[j]).powi(2);
+                let resid =
+                    matrix[(i, j)] - subject_means[i] - means[j] + grand_mean;
+                ss_error += resid * resid;
             }
         }
 
@@ -154,7 +176,7 @@ fn calculate_within_subjects_effects(
 
         // Apply corrections if Mauchly's test is available
         if let Some(mauchly) = mauchly_test {
-            if let Some(test) = mauchly.tests.get(factor_name) {
+            if let Some(test) = mauchly.tests.get(&factor_name) {
                 // Greenhouse-Geisser correction
                 let gg_df_factor = df_factor * test.greenhouse_geisser_epsilon;
                 let gg_df_error = df_error * test.greenhouse_geisser_epsilon;
@@ -241,12 +263,58 @@ fn calculate_within_subjects_effects(
                 };
 
                 sources.push(lower_bound);
+
+                // Error rows with corrections
+                sources.push(WithinSubjectsEffectSource {
+                    source: format!("Error({})", factor_name),
+                    assumption_type: "Greenhouse-Geisser".to_string(),
+                    sum_of_squares: ss_error,
+                    df: df_error * test.greenhouse_geisser_epsilon,
+                    mean_square: ss_error / (df_error * test.greenhouse_geisser_epsilon),
+                    f: 0.0, significance: 0.0, partial_eta_squared: 0.0,
+                    noncent_parameter: 0.0, observed_power: 0.0,
+                });
+                sources.push(WithinSubjectsEffectSource {
+                    source: format!("Error({})", factor_name),
+                    assumption_type: "Huynh-Feldt".to_string(),
+                    sum_of_squares: ss_error,
+                    df: df_error * test.huynh_feldt_epsilon,
+                    mean_square: ss_error / (df_error * test.huynh_feldt_epsilon),
+                    f: 0.0, significance: 0.0, partial_eta_squared: 0.0,
+                    noncent_parameter: 0.0, observed_power: 0.0,
+                });
+                sources.push(WithinSubjectsEffectSource {
+                    source: format!("Error({})", factor_name),
+                    assumption_type: "Lower-bound".to_string(),
+                    sum_of_squares: ss_error,
+                    df: df_error * test.lower_bound_epsilon,
+                    mean_square: ss_error / (df_error * test.lower_bound_epsilon),
+                    f: 0.0, significance: 0.0, partial_eta_squared: 0.0,
+                    noncent_parameter: 0.0, observed_power: 0.0,
+                });
             }
         }
 
-        // Add to results
+        // Always add SA Error row (after all effect+corrected rows)
+        // Insert SA error before any corrected error rows
+        let error_sa = WithinSubjectsEffectSource {
+            source: format!("Error({})", factor_name),
+            assumption_type: "Sphericity Assumed".to_string(),
+            sum_of_squares: ss_error,
+            df: df_error,
+            mean_square: ms_error,
+            f: 0.0, significance: 0.0, partial_eta_squared: 0.0,
+            noncent_parameter: 0.0, observed_power: 0.0,
+        };
+        // Find position to insert SA error (after last non-error source for this factor)
+        let insert_pos = sources.iter().position(|s| s.source.starts_with("Error("))
+            .unwrap_or(sources.len());
+        sources.insert(insert_pos, error_sa);
+
+        // Add to results — keyed by measure name so the formatter renders one
+        // table per measure (matches SPSS layout).
         let result = WithinSubjectsEffectsResult { sources };
-        measures.insert(factor_name.clone(), result);
+        measures.insert(measure_name.clone(), result);
     }
 
     Ok(TestsWithinSubjectsEffects { measures })
@@ -313,19 +381,115 @@ fn normal_quantile(p: f64) -> f64 {
 
 /// Error function approximation
 fn erf(x: f64) -> f64 {
-    // Abramowitz and Stegun approximation
-    let a1 = 0.254829592;
-    let a2 = -0.284496736;
-    let a3 = 1.421413741;
-    let a4 = -1.453152027;
-    let a5 = 1.061405429;
-    let p = 0.3275911;
-
     let sign = if x < 0.0 { -1.0 } else { 1.0 };
     let x = x.abs();
-
-    let t = 1.0 / (1.0 + p * x);
-    let y = 1.0 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * (-x * x).exp();
-
+    let t = 1.0 / (1.0 + 0.3275911 * x);
+    let y = 1.0 - ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * (-x * x).exp();
     sign * y
+}
+
+/// Calculate tests of within-subjects contrasts using repeated (adjacent) contrasts
+pub fn calculate_tests_within_subjects_contrasts(
+    data: &AnalysisData,
+    config: &RepeatedMeasuresConfig
+) -> Result<TestsWithinSubjectsContrasts, String> {
+    use statrs::distribution::{ FisherSnedecor, ContinuousCDF };
+
+    let within_factors = parse_within_subject_factors(data, config)?;
+    let mut measures = HashMap::new();
+
+    for (factor_name, factors) in &within_factors.measures {
+        let k = factors.len();
+        if k < 2 {
+            continue;
+        }
+
+        let var_names: Vec<String> = factors.iter().map(|f| f.dependent_variable.clone()).collect();
+
+        // Build data matrix (subjects × levels)
+        let mut data_matrix: Vec<Vec<f64>> = Vec::new();
+        for record_group in &data.subject_data {
+            let mut row = Vec::new();
+            for var_name in &var_names {
+                let mut val = 0.0;
+                for record in record_group {
+                    if let Some(DataValue::Number(v)) = record.values.get(var_name) {
+                        val = *v;
+                        break;
+                    }
+                }
+                row.push(val);
+            }
+            if row.len() == k { data_matrix.push(row); }
+        }
+
+        let n = data_matrix.len();
+        if n < 2 { continue; }
+
+        let mut sources = Vec::new();
+
+        // Repeated (adjacent) contrasts: level j vs level j+1
+        for j in 0..(k - 1) {
+            let label = format!("Level {} vs. Level {}", j + 1, j + 2);
+
+            // Contrast scores D_i = y_i[j+1] - y_i[j]
+            let d_scores: Vec<f64> = data_matrix.iter().map(|row| row[j + 1] - row[j]).collect();
+            let d_mean = d_scores.iter().sum::<f64>() / (n as f64);
+
+            let ss_effect = (n as f64) * d_mean * d_mean;
+            let ss_error: f64 = d_scores.iter().map(|&d| (d - d_mean).powi(2)).sum();
+
+            let df_effect = 1usize;
+            let df_error = n - 1;
+            let ms_effect = ss_effect;
+            let ms_error = ss_error / (df_error as f64);
+
+            let f_val = if ms_error > 0.0 { ms_effect / ms_error } else { 0.0 };
+            let significance = if ms_error > 0.0 {
+                let f_dist = FisherSnedecor::new(1.0, df_error as f64).map_err(|e| e.to_string())?;
+                1.0 - f_dist.cdf(f_val)
+            } else { 1.0 };
+
+            let partial_eta_squared = ss_effect / (ss_effect + ss_error);
+            let noncent_parameter = f_val * (df_effect as f64);
+            let observed_power = calculate_observed_power(f_val, 1.0, df_error as f64, 0.05);
+
+            let mut factor_values = HashMap::new();
+            factor_values.insert(factor_name.clone(), label.clone());
+
+            // Effect source
+            sources.push(WithinSubjectsContrastSource {
+                source: factor_name.clone(),
+                factor_values: factor_values.clone(),
+                sum_of_squares: ss_effect,
+                df: df_effect,
+                mean_square: ms_effect,
+                f: f_val,
+                significance,
+                partial_eta_squared,
+                noncent_parameter,
+                observed_power,
+            });
+
+            // Error source
+            let mut err_factor_values = HashMap::new();
+            err_factor_values.insert(format!("Error({})", factor_name), label.clone());
+            sources.push(WithinSubjectsContrastSource {
+                source: format!("Error({})", factor_name),
+                factor_values: err_factor_values,
+                sum_of_squares: ss_error,
+                df: df_error,
+                mean_square: ms_error,
+                f: 0.0,
+                significance: 0.0,
+                partial_eta_squared: 0.0,
+                noncent_parameter: 0.0,
+                observed_power: 0.0,
+            });
+        }
+
+        measures.insert(factor_name.clone(), WithinSubjectsContrastsResult { sources });
+    }
+
+    Ok(TestsWithinSubjectsContrasts { measures })
 }

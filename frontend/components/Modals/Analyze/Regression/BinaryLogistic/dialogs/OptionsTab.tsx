@@ -3,22 +3,61 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BinaryLogisticOptionsParams } from "../types/binary-logistic";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3, LayoutList, GitCompareArrows, Target, Repeat, Sigma } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  OPTIONS_PARAM_RANGES,
+  type BinaryLogisticOptionsParams,
+} from "../types/binary-logistic";
 
 interface OptionsTabProps {
   params: BinaryLogisticOptionsParams;
   onChange: (p: Partial<BinaryLogisticOptionsParams>) => void;
 }
 
-export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
-  <div className="grid grid-cols-2 gap-8 py-4 h-full overflow-y-auto">
-    {/* KOLOM KIRI: Statistics and Plots */}
-    <div className="space-y-6">
-      <div className="space-y-3">
-        <h4 className="font-semibold text-sm border-b pb-1 mb-2">
-          Statistics and Plots
-        </h4>
+const FieldError: React.FC<{ show: boolean; message: string }> = ({ show, message }) =>
+  show ? <p className="text-xs text-destructive mt-1">{message}</p> : null;
 
+const SectionCard: React.FC<{
+  id?: string;
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+}> = ({ id, icon, title, children }) => (
+  <Card id={id} className="shadow-sm">
+    <CardHeader className="p-4 pb-2">
+      <CardTitle className="flex items-center gap-2 text-sm">
+        {icon}
+        {title}
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="p-4 pt-1 space-y-2.5">{children}</CardContent>
+  </Card>
+);
+
+export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => {
+  const r = OPTIONS_PARAM_RANGES;
+  const inRange = (value: number, range: { min: number; max: number }) =>
+    !Number.isNaN(value) && value >= range.min && value <= range.max;
+
+  const casewiseOutliersInvalid = !inRange(params.casewiseOutliers, r.casewiseOutliers);
+  const ciLevelInvalid = !inRange(params.ciLevel, r.ciLevel);
+  const probEntryInvalid = !inRange(params.probEntry, r.probEntry);
+  const probRemovalInvalid = !inRange(params.probRemoval, r.probRemoval);
+  const cutoffInvalid = !inRange(params.classificationCutoff, r.classificationCutoff);
+  const maxIterInvalid =
+    !inRange(params.maxIterations, r.maxIterations) || !Number.isInteger(params.maxIterations);
+
+  return (
+  <div className="grid grid-cols-2 gap-5 py-4 h-full overflow-y-auto pr-1">
+    {/* KOLOM KIRI: Statistics and Plots */}
+    <div className="space-y-5">
+      <SectionCard
+        id="binary-logistic-options-stats-card"
+        icon={<BarChart3 className="h-4 w-4 text-primary" />}
+        title="Statistics and Plots"
+      >
         <div className="flex items-center space-x-2">
           <Checkbox
             id="class_plot"
@@ -53,21 +92,27 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
             </Label>
           </div>
 
-          <div className="pl-6 pt-1">
+          <div className="pl-6 pt-1.5">
             <RadioGroup
               disabled={!params.casewiseListing}
               value={params.casewiseType}
               onValueChange={(val: any) => onChange({ casewiseType: val })}
-              className="space-y-1"
+              className="space-y-1.5"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center flex-wrap gap-x-1.5 gap-y-1">
                 <RadioGroupItem value="outliers" id="cw_outliers" />
-                <Label htmlFor="cw_outliers" className="text-xs font-normal">
+                <Label htmlFor="cw_outliers" className="text-xs font-normal whitespace-nowrap">
                   Outliers outside
                 </Label>
                 <Input
                   type="number"
-                  className="w-12 h-6 text-xs px-1"
+                  min={r.casewiseOutliers.min}
+                  max={r.casewiseOutliers.max}
+                  step="0.1"
+                  className={cn(
+                    "w-12 h-6 text-xs px-1 shrink-0",
+                    casewiseOutliersInvalid && "border-destructive focus-visible:ring-destructive"
+                  )}
                   value={params.casewiseOutliers}
                   onChange={(e) =>
                     onChange({ casewiseOutliers: Number(e.target.value) })
@@ -77,9 +122,14 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
                     params.casewiseType !== "outliers"
                   }
                   aria-label="Outliers Standard Deviations"
+                  aria-invalid={casewiseOutliersInvalid}
                 />
-                <span className="text-xs text-muted-foreground">std. dev.</span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">std. dev.</span>
               </div>
+              <FieldError
+                show={casewiseOutliersInvalid && params.casewiseListing && params.casewiseType === "outliers"}
+                message={`Must be between ${r.casewiseOutliers.min} and ${r.casewiseOutliers.max}.`}
+              />
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all" id="cw_all" />
                 <Label htmlFor="cw_all" className="text-xs font-normal">
@@ -112,33 +162,43 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
           </Label>
         </div>
 
-        <div className="flex items-center space-x-2 pt-1">
-          <Checkbox
-            id="ci_exp"
-            checked={params.ciForExpB}
-            onCheckedChange={(c) => onChange({ ciForExpB: !!c })}
+        <div className="pt-1 border-t border-border/60 mt-1">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="ci_exp"
+              checked={params.ciForExpB}
+              onCheckedChange={(c) => onChange({ ciForExpB: !!c })}
+            />
+            <Label htmlFor="ci_exp" className="font-normal">
+              CI for exp(B):
+            </Label>
+            <Input
+              type="number"
+              min={r.ciLevel.min}
+              max={r.ciLevel.max}
+              className={cn(
+                "w-14 h-7 px-2",
+                ciLevelInvalid && "border-destructive focus-visible:ring-destructive"
+              )}
+              value={params.ciLevel}
+              onChange={(e) => onChange({ ciLevel: Number(e.target.value) })}
+              disabled={!params.ciForExpB}
+              aria-label="Confidence Interval Level"
+              aria-invalid={ciLevelInvalid}
+            />
+            <span className="text-sm text-muted-foreground">%</span>
+          </div>
+          <FieldError
+            show={ciLevelInvalid && params.ciForExpB}
+            message={`Must be between ${r.ciLevel.min}% and ${r.ciLevel.max}%.`}
           />
-          <Label htmlFor="ci_exp" className="font-normal">
-            CI for exp(B):
-          </Label>
-          <Input
-            type="number"
-            className="w-14 h-7 px-2"
-            value={params.ciLevel}
-            onChange={(e) => onChange({ ciLevel: Number(e.target.value) })}
-            disabled={!params.ciForExpB}
-            aria-label="Confidence Interval Level"
-          />
-          <span className="text-sm">%</span>
         </div>
-      </div>
+      </SectionCard>
     </div>
 
     {/* KOLOM KANAN */}
-    <div className="space-y-6">
-      {/* Display */}
-      <div className="space-y-3">
-        <h4 className="font-semibold text-sm border-b pb-1 mb-2">Display</h4>
+    <div className="space-y-5">
+      <SectionCard id="binary-logistic-options-display-card" icon={<LayoutList className="h-4 w-4 text-primary" />} title="Display">
         <RadioGroup
           value={params.displayAtEachStep ? "each" : "last"}
           onValueChange={(val) =>
@@ -158,93 +218,112 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
             </Label>
           </div>
         </RadioGroup>
-      </div>
+      </SectionCard>
 
-      {/* Probability for Stepwise */}
-      <div className="space-y-3">
-        <h4 className="font-semibold text-sm border-b pb-1 mb-2">
-          Probability for Stepwise
-        </h4>
-        <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-[65px_1fr] gap-y-2 items-center">
-            <Label htmlFor="prob_entry" className="font-normal text-sm">
-              Entry:
-            </Label>
-            <Input
-              id="prob_entry"
-              type="number"
-              step="0.01"
-              className="w-20 h-8"
-              value={params.probEntry}
-              onChange={(e) => onChange({ probEntry: Number(e.target.value) })}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="prob_rem" className="font-normal text-sm">
-              Removal:
-            </Label>
-            <Input
-              id="prob_rem"
-              type="number"
-              step="0.01"
-              className="w-20 h-8"
-              value={params.probRemoval}
-              onChange={(e) =>
-                onChange({ probRemoval: Number(e.target.value) })
-              }
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Classification Cutoff */}
-      <div className="space-y-3">
-        <h4 className="font-semibold text-sm border-b pb-1 mb-2">
-          Classification Cutoff
-        </h4>
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="cutoff_input" className="font-normal text-sm">
-            Value:
+      <SectionCard
+        id="binary-logistic-options-stepwise-card"
+        icon={<GitCompareArrows className="h-4 w-4 text-primary" />}
+        title="Probability for Stepwise"
+      >
+        <div className="grid grid-cols-[65px_1fr] gap-y-2.5 items-center">
+          <Label htmlFor="prob_entry" className="font-normal text-sm">
+            Entry:
           </Label>
           <Input
-            id="cutoff_input"
+            id="prob_entry"
             type="number"
+            min={r.probEntry.min}
+            max={r.probEntry.max}
             step="0.01"
-            className="w-20 h-8"
-            value={params.classificationCutoff}
-            onChange={(e) =>
-              onChange({ classificationCutoff: Number(e.target.value) })
-            }
-            aria-label="Classification Cutoff Value"
+            className={cn("w-20 h-8", probEntryInvalid && "border-destructive focus-visible:ring-destructive")}
+            value={params.probEntry}
+            onChange={(e) => onChange({ probEntry: Number(e.target.value) })}
+            aria-invalid={probEntryInvalid}
           />
-        </div>
-      </div>
-
-      {/* Maximum Iterations */}
-      <div className="space-y-3">
-        <h4 className="font-semibold text-sm border-b pb-1 mb-2">
-          Maximum Iterations
-        </h4>
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="max_iter" className="font-normal text-sm">
-            Value:
+          <div className="col-span-2 -mt-1.5">
+            <FieldError show={probEntryInvalid} message={`Entry must be between ${r.probEntry.min} and ${r.probEntry.max}.`} />
+          </div>
+          <Label htmlFor="prob_rem" className="font-normal text-sm">
+            Removal:
           </Label>
           <Input
-            id="max_iter"
+            id="prob_rem"
             type="number"
-            step="1"
-            className="w-20 h-8"
-            value={params.maxIterations}
+            min={r.probRemoval.min}
+            max={r.probRemoval.max}
+            step="0.01"
+            className={cn("w-20 h-8", probRemovalInvalid && "border-destructive focus-visible:ring-destructive")}
+            value={params.probRemoval}
             onChange={(e) =>
-              onChange({ maxIterations: Number(e.target.value) })
+              onChange({ probRemoval: Number(e.target.value) })
             }
-            aria-label="Maximum Iterations"
+            aria-invalid={probRemovalInvalid}
           />
+          <div className="col-span-2 -mt-1.5">
+            <FieldError show={probRemovalInvalid} message={`Removal must be between ${r.probRemoval.min} and ${r.probRemoval.max}.`} />
+          </div>
         </div>
-      </div>
+      </SectionCard>
 
-      {/* Constant */}
-      <div className="pt-2">
+      <SectionCard
+        id="binary-logistic-options-cutoff-card"
+        icon={<Target className="h-4 w-4 text-primary" />}
+        title="Classification Cutoff"
+      >
+        <div>
+          <div className="flex items-center space-x-2">
+            <Label htmlFor="cutoff_input" className="font-normal text-sm">
+              Value:
+            </Label>
+            <Input
+              id="cutoff_input"
+              type="number"
+              min={r.classificationCutoff.min}
+              max={r.classificationCutoff.max}
+              step="0.01"
+              className={cn("w-20 h-8", cutoffInvalid && "border-destructive focus-visible:ring-destructive")}
+              value={params.classificationCutoff}
+              onChange={(e) =>
+                onChange({ classificationCutoff: Number(e.target.value) })
+              }
+              aria-label="Classification Cutoff Value"
+              aria-invalid={cutoffInvalid}
+            />
+          </div>
+          <FieldError show={cutoffInvalid} message={`Must be between ${r.classificationCutoff.min} and ${r.classificationCutoff.max}.`} />
+        </div>
+      </SectionCard>
+
+      <SectionCard
+        id="binary-logistic-options-maxiter-card"
+        icon={<Repeat className="h-4 w-4 text-primary" />}
+        title="Maximum Iterations"
+      >
+        <div>
+          <div className="flex items-center space-x-2">
+            <Label htmlFor="max_iter" className="font-normal text-sm">
+              Value:
+            </Label>
+            <Input
+              id="max_iter"
+              type="number"
+              min={r.maxIterations.min}
+              max={r.maxIterations.max}
+              step="1"
+              className={cn("w-20 h-8", maxIterInvalid && "border-destructive focus-visible:ring-destructive")}
+              value={params.maxIterations}
+              onChange={(e) =>
+                onChange({ maxIterations: Number(e.target.value) })
+              }
+              aria-label="Maximum Iterations"
+              aria-invalid={maxIterInvalid}
+            />
+          </div>
+          <FieldError show={maxIterInvalid} message={`Must be a whole number between ${r.maxIterations.min} and ${r.maxIterations.max}.`} />
+        </div>
+      </SectionCard>
+
+      <SectionCard id="binary-logistic-options-model-card" icon={<Sigma className="h-4 w-4 text-primary" />} title="Model">
         <div className="flex items-center space-x-2">
           <Checkbox
             id="constant"
@@ -255,7 +334,8 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({ params, onChange }) => (
             Include constant in model
           </Label>
         </div>
-      </div>
+      </SectionCard>
     </div>
   </div>
-);
+  );
+};

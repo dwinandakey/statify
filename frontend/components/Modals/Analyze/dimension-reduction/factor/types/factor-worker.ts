@@ -1,5 +1,5 @@
-import type {FactorType} from "./factor";
-import type {ResultJson} from "@/types/Table";
+import {FactorType} from "./factor";
+import {ResultJson} from "@/types/Table";
 
 export type FactorAnalysisType = {
     configData: FactorType;
@@ -8,5 +8,6 @@ export type FactorAnalysisType = {
 };
 
 export type FactorFinalResultType = {
-    formattedResult: ResultJson;
+    formattedResult: ResultJson & { factorScores?: any[] };
+    configData: FactorType;
 };

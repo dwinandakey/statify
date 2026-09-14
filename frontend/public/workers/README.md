@@ -17,7 +17,7 @@ export class ExampleCalculator {
   constructor() {
     // initialization
   }
-  
+
   calculate(data) {
     // implementation
     return result;
@@ -34,7 +34,7 @@ const calculators = {
 self.onmessage = function(e) {
   const { type, data } = e.data;
   const calculator = calculators[type];
-  
+
   if (calculator) {
     const result = calculator.calculate(data);
     self.postMessage(result);
@@ -147,7 +147,7 @@ const calculators = {
 - **Pure Functions** (like normality tests in descriptive stats)
   - When functions need to be imported dynamically via `importScripts()`
   - When class overhead is not needed
-  
+
 - **Standalone Workers** (temporary, for legacy code)
   - Only during migration period
   - Should be refactored to standard pattern when possible

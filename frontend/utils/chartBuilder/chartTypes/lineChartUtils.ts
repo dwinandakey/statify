@@ -45,13 +45,27 @@ export const createLineChart = (
       origin?: string;
     };
   },
-  chartColors?: string[]
+  chartColors?: string[],
+  showValueTooltip: boolean = false
 ) => {
   console.log("Creating chart with data:", data);
 
+  // Pre-process and validate data
+  const validData = data.filter((d) => {
+    // Check if value is a valid number
+    const isValidValue = d.value !== null && d.value !== undefined && !isNaN(Number(d.value));
+    return isValidValue;
+  });
+
+  if (validData.length === 0) {
+    console.warn("No valid data for line chart");
+    // Return empty SVG or handle placeholder? 
+    // For now, let's proceed but with empty data which might result in empty chart but no crash
+  }
+
   // Filter data sesuai axis min/max
   const filteredData = filterDataByAxisRange(
-    data,
+    validData,
     { y: { min: axisScaleOptions?.y?.min, max: axisScaleOptions?.y?.max } },
     { x: "category", y: "value" }
   );
@@ -59,8 +73,10 @@ export const createLineChart = (
   // Tambahkan uniqueId ke setiap data point
   const processedData = filteredData.map((d, i) => ({
     ...d,
-    uniqueId: `${d.category}_${i}`,
-    displayLabel: d.category,
+    value: Number(d.value), // Ensure it's a number
+    category: d.category !== null && d.category !== undefined ? String(d.category) : `Item ${i}`,
+    uniqueId: `${d.category !== null && d.category !== undefined ? d.category : i}_${i}`,
+    displayLabel: d.category !== null && d.category !== undefined ? String(d.category) : `Item ${i}`,
   }));
 
   // Mengukur panjang label secara dinamis
@@ -103,22 +119,42 @@ export const createLineChart = (
   // X pakai uniqueId
   const x = d3
     .scaleBand()
-    .domain(processedData.map((d) => d.uniqueId))
+    .domain(processedData.map((d) => d.uniqueId || ""))
     .range([marginLeft, width - marginRight])
     .padding(0.1);
 
   // Y axis min/max/majorIncrement
   let yMin = d3.min(processedData, (d) => d.value) ?? 0;
   let yMax = d3.max(processedData, (d) => d.value) ?? 1;
-  let majorIncrement = axisScaleOptions?.y?.majorIncrement
-    ? Number(axisScaleOptions.y.majorIncrement)
-    : undefined;
+  let majorIncrement: number | undefined;
+  
   if (axisScaleOptions?.y) {
-    if (axisScaleOptions.y.min !== undefined && axisScaleOptions.y.min !== "")
-      yMin = Number(axisScaleOptions.y.min);
-    if (axisScaleOptions.y.max !== undefined && axisScaleOptions.y.max !== "")
-      yMax = Number(axisScaleOptions.y.max);
+    if (axisScaleOptions.y.min !== undefined && axisScaleOptions.y.min !== "") {
+      const parsedMin = Number(axisScaleOptions.y.min);
+      if (!isNaN(parsedMin)) yMin = parsedMin;
+    }
+    if (axisScaleOptions.y.max !== undefined && axisScaleOptions.y.max !== "") {
+      const parsedMax = Number(axisScaleOptions.y.max);
+      if (!isNaN(parsedMax)) yMax = parsedMax;
+    }
+    if (axisScaleOptions.y.majorIncrement !== undefined && axisScaleOptions.y.majorIncrement !== "") {
+      const parsedInc = Number(axisScaleOptions.y.majorIncrement);
+      if (!isNaN(parsedInc)) majorIncrement = parsedInc;
+    }
   }
+
+  // Final safety check for NaN
+  if (isNaN(yMin)) yMin = 0;
+  if (isNaN(yMax)) yMax = 1;
+  if (yMin === yMax) {
+      // Avoid flat domain (min == max) unless 0, then 0-1
+      if(yMin === 0) yMax = 1;
+      else {
+          yMin = yMin - (Math.abs(yMin) * 0.1 || 1);
+          yMax = yMax + (Math.abs(yMax) * 0.1 || 1);
+      }
+  }
+
   const y = d3
     .scaleLinear()
     .domain([yMin, yMax])
@@ -146,8 +182,8 @@ export const createLineChart = (
   // Mendeklarasikan generator garis
   const line = d3
     .line<{ uniqueId: string; value: number }>()
-    .x((d, i) => x(d.uniqueId)! + x.bandwidth() / 2)
-    .y((d) => y(d.value)!)
+    .x((d) => (x(d.uniqueId) ?? 0) + x.bandwidth() / 2)
+    .y((d) => y(d.value) ?? 0)
     .curve(d3.curveLinear);
 
   // Menambahkan path untuk garis
@@ -162,6 +198,25 @@ export const createLineChart = (
     )
     .attr("stroke-width", 1.5)
     .attr("d", line(processedData));
+
+  if (showValueTooltip) {
+    svg
+      .append("g")
+      .selectAll("circle")
+      .data(processedData)
+      .join("circle")
+      .attr("cx", (d) => (x(d.uniqueId) ?? 0) + x.bandwidth() / 2)
+      .attr("cy", (d) => y(d.value) ?? 0)
+      .attr("r", 4)
+      .attr(
+        "fill",
+        chartColors && chartColors.length > 0
+          ? chartColors[0]
+          : defaultChartColors[0],
+      )
+      .append("title")
+      .text((d) => `Error: ${formatAxisNumber(d.value)}`);
+  }
 
   if (useAxis) {
     // Use standardized axis functions for line chart
@@ -178,7 +233,6 @@ export const createLineChart = (
       marginLeft,
       categories,
       axisLabels,
-      majorIncrement,
       yMin,
       yMax,
       chartType: "vertical",
@@ -196,6 +250,9 @@ export const createLineChart = (
         customFormat: formatAxisNumber,
         showGridLines: true,
         maxValueLength: 6, // Control Y-axis number label length
+        tickValues: majorIncrement
+          ? generateAxisTicks(yMin, yMax, majorIncrement)
+          : undefined,
       },
     });
   }

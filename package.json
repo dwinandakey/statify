@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev": "npx concurrently \"npm:dev:frontend\" \"npm:dev:backend\"",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "build:frontend": "npm run build --workspace=frontend",
@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "jstat": "^1.9.6",
-    "react-dropzone": "^14.3.8"
+    "react-dropzone": "^14.3.8",
+    "recharts": "^3.8.0"
   }
 }

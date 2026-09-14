@@ -1,10 +1,10 @@
 # Peer Code Review — Shapiro-Wilks Validation Fix
 
-**File under review:** `frontend/public/workers/DescriptiveStatistics/libs/normality/normalityTests.js`  
-**Review scope:** Algorithm correctness (Royston AS R94), numerical stability, test coverage, code quality  
-**Requirement:** 6.9 — Peer code review with documented findings  
-**Reviewer:** Kiro AI Code Review  
-**Date:** 2025  
+**File under review:** `frontend/public/workers/DescriptiveStatistics/libs/normality/normalityTests.js`
+**Review scope:** Algorithm correctness (Royston AS R94), numerical stability, test coverage, code quality
+**Requirement:** 6.9 — Peer code review with documented findings
+**Reviewer:** Kiro AI Code Review
+**Date:** 2025
 **Test run summary (post-remediation):** 267 passed / 267 total (all passing); Statement coverage 79.2%, Branch 71.4%, Function 95.5%
 
 ---
@@ -286,7 +286,7 @@ One observation: `new Array(n).fill(0).map((_, i) => normalityQuantile(...))` cr
 
 ### R1 — Dead code in n=5 coefficient path (Cosmetic)
 
-**Severity:** Low  
+**Severity:** Low
 **Location:** `calculateShapiroWilk`, coefficient calculation, `else if (n === 5)` block
 
 The `phi` normalization factor is computed for n=5 (it falls into the `else` branch of `if (n >= 6)`), but `constDen` is never used because `a[1]` is 0. Add a comment clarifying that `phi`/`constDen` are intentionally unused for n=5.
@@ -301,8 +301,8 @@ The `phi` normalization factor is computed for n=5 (it falls into the `else` bra
 
 ### R2 — Missing console.warn when φ < 0 (Minor gap vs Requirement 10.6)
 
-**Severity:** Low  
-**Location:** `calculateShapiroWilk`, after `phi` computation  
+**Severity:** Low
+**Location:** `calculateShapiroWilk`, after `phi` computation
 
 Requirement 10.6 says: "WHERE numerical issues detected (W > 1 before clamping, negative φ), THE Shapiro_Wilks_Module SHALL log warning to console."
 
@@ -317,7 +317,7 @@ const constDen = Math.sqrt(Math.abs(phi));
 
 ### R3 — Add explicit tests for uncovered KS edge cases (Coverage gap)
 
-**Severity:** Medium  
+**Severity:** Medium
 **Location:** `normalityTests.unit.test.js`
 
 The following KS paths have no explicit test:
@@ -342,7 +342,7 @@ describe('calculateKolmogorovSmirnov edge cases', () => {
 
 ### R4 — Fix flaky timing test (Test Infrastructure)
 
-**Severity:** Medium (blocks clean CI green)  
+**Severity:** Medium (blocks clean CI green)
 **Location:** `normalityTests.worker.integration.test.js`, line ~360
 
 The assertion `expect(elapsed).toBeLessThan(50)` for n=100 is a wall-clock assertion that is inherently flaky on loaded systems. Options:
@@ -370,18 +370,18 @@ expect(minTime).toBeLessThan(50); // best-of-3 eliminates scheduling jitter
 
 ### R5 — normalityPearsonCorrelation is dead code in production path
 
-**Severity:** Low (informational)  
+**Severity:** Low (informational)
 **Location:** `normalityPearsonCorrelation` function (~line 230)
 
 This function is defined and documented but never called by the production code path (W uses the `(Σaᵢxᵢ)²/S²` formulation directly). The JSDoc notes this correctly. Consider either:
-- Adding a `// eslint-disable-next-line no-unused-vars` annotation, or  
+- Adding a `// eslint-disable-next-line no-unused-vars` annotation, or
 - Removing the function if it serves no utility purpose beyond documentation
 
 Keeping it as-is is acceptable given it's well-documented, but it contributes ~20 uncovered lines to the coverage metric.
 
 ### R6 — SPSS p-value clamping at 1.000 in large normal datasets (Observation)
 
-**Severity:** Informational  
+**Severity:** Informational
 **Location:** `shapiroWilkPValue`, n>11 branch
 
 Several SPSS benchmark datasets report p-value=1.0000 from Statify when SPSS also reports 1.000. This occurs because for large, perfectly normal datasets (n≥30), `ln(1-W)` with W very close to 1 gives a deeply negative z-score, causing `1 - Φ(z)` to round to 1.0 in double precision. This is expected behavior, not a bug. The `Math.min(1, pValue)` clamp handles any overshoot. No action needed; documented here for clarity.

@@ -2,11 +2,11 @@
  * ============================================================================
  * NORMALITY TESTS CORE UTILITIES
  * ============================================================================
- * 
+ *
  * General-Purpose Normality Tests (SPSS-Compatible)
- * 
+ *
  * For regression residual normality testing, see Regression/Assumption Test/normality.js
- * 
+ *
  * This implementation follows Royston (1995) with:
  * - SPSS-compatible KS p-values (Dallal-Wilkinson + Lilliefors)
  * - Enhanced numerical stability
@@ -123,54 +123,54 @@
 function cleanNumericData(values) {
     if (!Array.isArray(values)) return [];
     const cleaned = [];
-    
+
     // Track counts for each type of invalid value
     let nullCount = 0;
     let undefinedCount = 0;
     let nanCount = 0;
     let infinityCount = 0;
     let negInfinityCount = 0;
-    
+
     for (let i = 0; i < values.length; i++) {
         const v = values[i];
-        
+
         // Check for null
         if (v === null) {
             nullCount++;
             continue;
         }
-        
+
         // Check for undefined
         if (v === undefined) {
             undefinedCount++;
             continue;
         }
-        
+
         // Convert to number and check validity
         const num = Number(v);
-        
+
         // Check for NaN (includes non-numeric strings, objects, etc.)
         if (isNaN(num)) {
             nanCount++;
             continue;
         }
-        
+
         // Check for Infinity
         if (num === Infinity) {
             infinityCount++;
             continue;
         }
-        
+
         // Check for -Infinity
         if (num === -Infinity) {
             negInfinityCount++;
             continue;
         }
-        
+
         // Valid finite number
         cleaned.push(num);
     }
-    
+
     // Log detailed breakdown if any values were filtered
     const totalSkipped = nullCount + undefinedCount + nanCount + infinityCount + negInfinityCount;
     if (totalSkipped > 0) {
@@ -180,11 +180,11 @@ function cleanNumericData(values) {
         if (undefinedCount > 0) parts.push(`${undefinedCount} undefined`);
         if (infinityCount > 0) parts.push(`${infinityCount} Infinity`);
         if (negInfinityCount > 0) parts.push(`${negInfinityCount} -Infinity`);
-        
+
         const breakdown = parts.join(', ');
         console.log(`[DEBUG] Normality - cleanNumericData: ${totalSkipped} nilai tidak valid dibuang dari ${values.length} total (${breakdown})`);
     }
-    
+
     return cleaned;
 }
 
@@ -780,18 +780,18 @@ function calculateShapiroWilk(values) {
     console.log('[SW] ============================================================');
     console.log('[SW] Starting Shapiro-Wilk calculation');
     console.log('[SW] ============================================================');
-    
+
     try {
         // LANGKAH 1: Validasi dan bersihkan data
         const cleaned = cleanNumericData(values);
         const n = cleaned.length;
-        
+
         // LANGKAH 1a: Sample size boundary checks (Requirements 3.1, 3.2)
         if (n < 3) {
             console.log(`[SW] Sample size n=${n} is below minimum. Shapiro-Wilk requires at least 3 observations.`);
             return null;
         }
-        
+
         if (n > 5000) {
             console.log(`[SW] Sample size n=${n} exceeds maximum. Shapiro-Wilk is only valid for n ≤ 5000 (SPSS convention).`);
             return null;
@@ -905,7 +905,7 @@ function calculateShapiroWilk(values) {
         const aN = polyVal(p1, u);
         a[n - 1] = Math.abs(aN);    // pastikan positif
         a[0] = -Math.abs(aN);       // ujung kiri negatif
-        
+
         console.log(`[SW-DEBUG] Calculated aₙ (end coefficient) = ${a[n-1]}`);
 
         if (n >= 6) {
@@ -914,7 +914,7 @@ function calculateShapiroWilk(values) {
             const aN1 = polyVal(p2, u);
             a[n - 2] = Math.abs(aN1);   // pastikan positif
             a[1] = -Math.abs(aN1);       // ke-2 dari kiri negatif
-            
+
             console.log(`[SW-DEBUG] Calculated aₙ₋₁ (second-to-end coefficient) = ${a[n-2]}`);
         }
 
@@ -1001,7 +1001,7 @@ function calculateShapiroWilk(values) {
     console.log('[SW-DEBUG] --------------------------------------------------------');
     console.log('[SW-DEBUG] Statistic W calculation');
     console.log('[SW-DEBUG] --------------------------------------------------------');
-    
+
     // NUMERICAL STABILITY: Two-pass method for S² calculation.
     // (Requirement 4.2)
     //
@@ -1065,7 +1065,7 @@ function calculateShapiroWilk(values) {
     console.log('[SW-DEBUG] --------------------------------------------------------');
     console.log('[SW-DEBUG] P-value calculation');
     console.log('[SW-DEBUG] --------------------------------------------------------');
-    
+
     const pValue = shapiroWilkPValue(W, n);
 
         console.log(`[SW] Result: W = ${W}, p-value = ${pValue}`);
@@ -1084,7 +1084,7 @@ function calculateShapiroWilk(values) {
         console.error('[SW] Stack trace:', error.stack);
         console.log('[SW] Returning null due to exception');
         console.log('[SW] ============================================================');
-        
+
         // Return null instead of crashing
         return null;
     }
@@ -1414,7 +1414,7 @@ function printNormalityLog(sampleSize, alpha, ksResult, swResult, executionTime)
     // ========== WAKTU EKSEKUSI ==========
     console.log('\n[WAKTU EKSEKUSI]');
     console.log(`  Total Time: ${formatNormalityNumber(executionTime, 3)} ms`);
-    
+
     if (executionTime < 10) {
         console.log('  Performance: EXCELLENT (< 10 ms)');
     } else if (executionTime < 50) {

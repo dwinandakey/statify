@@ -1,3 +1,6 @@
+
+// perbaikan bisa (9/1/2026)
+
 use serde::{ Deserialize, Serialize };
 use std::collections::HashMap;
 
@@ -110,4 +113,13 @@ pub struct AnalysisData {
     pub value_target_data: Vec<Vec<DataRecord>>,
     pub target_data_defs: Vec<Vec<VariableDefinition>>,
     pub value_target_data_defs: Vec<Vec<VariableDefinition>>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eigenvalues: Option<Vec<f64>>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_variance: Option<f64>, // khusus covariance
+
+    pub n_variables: usize,
 }
+

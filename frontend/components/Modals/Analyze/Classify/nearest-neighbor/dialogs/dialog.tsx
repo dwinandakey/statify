@@ -1,488 +1,245 @@
-import React, {useEffect, useState} from "react";
-import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
-import {Button} from "@/components/ui/button";
-import {ResizableHandle, ResizablePanel, ResizablePanelGroup,} from "@/components/ui/resizable";
-import {Separator} from "@/components/ui/separator";
-import type {
-    KNNDialogProps,
-    KNNMainType,
-} from "@/components/Modals/Analyze/Classify/nearest-neighbor/types/nearest-neighbor";
-import {Label} from "@/components/ui/label";
-import {Checkbox} from "@/components/ui/checkbox";
-import type {CheckedState} from "@radix-ui/react-checkbox";
-import {Badge} from "@/components/ui/badge";
-import {ScrollArea} from "@/components/ui/scroll-area";
-import {useModal} from "@/hooks/useModal";
+import React, { useMemo, useState } from "react";
+import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { useVariableStore } from "@/stores/useVariableStore";
+import type { KNNDialogProps } from "@/components/Modals/Analyze/Classify/nearest-neighbor/types/nearest-neighbor";
+
+import type { Variable } from "@/types/Variable";
+
+import VariableListManager from "@/components/Common/VariableListManager";
+import type { TargetListConfig } from "@/components/Common/VariableListManager";
+import { HelperIcon } from "./helper-icon";
+
+const helperText = {
+  target: "Select the variable that the KNN model will predict.",
+  features: "Select the predictor variables used to find the nearest neighbors.",
+  focalCaseIdentifier:
+    "Optional variable used to mark specific cases of interest. Cases with positive values will be treated as focal cases.",
+  caseLabel:
+    "Optional variable used as a readable label for identifying cases in tables and charts.",
+};
 
 export const KNNDialog = ({
-    isMainOpen,
-    setIsMainOpen,
-    setIsNeighborsOpen,
-    setIsFeaturesOpen,
-    setIsPartitionOpen,
-    setIsSaveOpen,
-    setIsOutputOpen,
-    setIsOptionsOpen,
-    updateFormData,
-    data,
-    globalVariables,
-    onContinue,
-    onReset,
+  updateFormData,
+  data,
+  externalErrors,
+  showFieldHelp = false,
 }: KNNDialogProps) => {
-    const [mainState, setMainState] = useState<KNNMainType>({ ...data });
-    const [availableVariables, setAvailableVariables] = useState<string[]>([]);
+  const [highlightedVariable, setHighlightedVariable] = useState<{
+    id: string;
+    source: string;
+  } | null>(null);
 
-    const { closeModal } = useModal();
+  const variables = useVariableStore((state) => state.variables);
 
-    useEffect(() => {
-        setMainState({ ...data });
-    }, [data]);
+  const allVariables = variables;
 
-    useEffect(() => {
-        const usedVariables = [
-            mainState.DepVar,
-            ...(mainState.FeatureVar || []),
-            mainState.FocalCaseIdenVar,
-            mainState.CaseIdenVar,
-        ].filter(Boolean);
+  const targetVar = useMemo(() => data.TargetVar ? [data.TargetVar] : [], [data.TargetVar]);
+  const featureVars = useMemo(() => data.FeatureVar ?? [], [data.FeatureVar]);
+  const focalVars = useMemo(
+    () => data.FocalCaseIdenVar ? [data.FocalCaseIdenVar] : [],
+    [data.FocalCaseIdenVar],
+  );
+  const caseLabelVars = useMemo(
+    () => data.CaseIdenVar ? [data.CaseIdenVar] : [],
+    [data.CaseIdenVar],
+  );
 
-        const updatedVariables = globalVariables.filter(
-            (variable) => !usedVariables.includes(variable)
-        );
-        setAvailableVariables(updatedVariables);
-    }, [mainState, globalVariables]);
+  const variableMap = useMemo(() => {
+    return new Map(allVariables.map((v) => [v.name, v]));
+  }, [allVariables]);
 
-    const handleChange = (
-        field: keyof KNNMainType,
-        value: CheckedState | number | boolean | string | null
-    ) => {
-        setMainState((prevState) => ({
-            ...prevState,
-            [field]: value,
-        }));
-    };
+  const availableVars = useMemo(() => {
+    const used = new Set([
+      data.TargetVar,
+      ...(data.FeatureVar ?? []),
+      data.FocalCaseIdenVar,
+      data.CaseIdenVar,
+    ]);
 
-    const handleDrop = (target: string, variable: string) => {
-        setMainState((prev) => {
-            const updatedState = { ...prev };
-            if (target === "DepVar") {
-                updatedState.DepVar = variable;
-            } else if (target === "FeatureVar") {
-                updatedState.FeatureVar = [
-                    ...(updatedState.FeatureVar || []),
-                    variable,
-                ];
-            } else if (target === "FocalCaseIdenVar") {
-                updatedState.FocalCaseIdenVar = variable;
-            } else if (target === "CaseIdenVar") {
-                updatedState.CaseIdenVar = variable;
-            }
-            return updatedState;
-        });
-    };
+    return allVariables.filter((v) => !used.has(v.name));
+  }, [allVariables, data]);
 
-    const handleRemoveVariable = (target: string, variable?: string) => {
-        setMainState((prev) => {
-            const updatedState = { ...prev };
-            if (target === "DepVar") {
-                updatedState.DepVar = "";
-            } else if (target === "FeatureVar") {
-                updatedState.FeatureVar = (
-                    updatedState.FeatureVar || []
-                ).filter((item) => item !== variable);
-            } else if (target === "FocalCaseIdenVar") {
-                updatedState.FocalCaseIdenVar = "";
-            } else if (target === "CaseIdenVar") {
-                updatedState.CaseIdenVar = "";
-            }
-            return updatedState;
-        });
-    };
+  const isNumericVariable = (v: Variable) =>
+    [
+      "NUMERIC",
+      "COMMA",
+      "DOT",
+      "SCIENTIFIC",
+      "DOLLAR",
+      "RESTRICTED_NUMERIC",
+    ].includes(v.type ?? "");
 
-    const handleContinue = () => {
-        Object.entries(mainState).forEach(([key, value]) => {
-            updateFormData(key as keyof KNNMainType, value);
-        });
+  const handleMoveVariable = (
+    variable: Variable,
+    fromListId: string,
+    toListId: string,
+  ) => {
+    if (toListId === "TargetVar") {
+      updateFormData("TargetVar", variable.name);
+    }
 
-        setIsMainOpen(false);
+    if (toListId === "FeatureVar") {
+      if (!featureVars.includes(variable.name)) {
+        updateFormData("FeatureVar", [...featureVars, variable.name]);
+      }
+    }
 
-        onContinue(mainState);
-    };
+    if (toListId === "FocalCaseIdenVar") {
+      if (isNumericVariable(variable)) {
+        updateFormData("FocalCaseIdenVar", variable.name);
+      }
+    }
 
-    const openDialog =
-        (setter: React.Dispatch<React.SetStateAction<boolean>>) => () => {
-            Object.entries(mainState).forEach(([key, value]) => {
-                updateFormData(key as keyof KNNMainType, value);
-            });
-            setter(true);
-        };
+    if (toListId === "CaseIdenVar") {
+      updateFormData("CaseIdenVar", variable.name);
+    }
 
-    const handleDialog = () => {
-        setIsMainOpen(false);
-        closeModal();
-    };
+    // =========================
+    // REMOVE
+    // =========================
+    if (fromListId === "FeatureVar") {
+      updateFormData(
+        "FeatureVar",
+        featureVars.filter((v) => v !== variable.name),
+      );
+    }
 
-    return (
-        <>
-            {/* Main Dialog */}
-            <Dialog open={isMainOpen} onOpenChange={handleDialog}>
-                {/* <DialogTrigger asChild>
-                    <Button variant="outline">Nearest Neighbor</Button>
-                </DialogTrigger> */}
-                <DialogContent className="sm:max-w-3xl">
-                    <DialogHeader>
-                        <DialogTitle>Nearest Neighbor Analysis</DialogTitle>
-                    </DialogHeader>
-                    <Separator />
-                    <div className="flex items-center space-x-2">
-                        <ResizablePanelGroup
-                            direction="horizontal"
-                            className="min-h-[400px] rounded-lg border md:min-w-[200px]"
-                        >
-                            {/* Variable List */}
-                            <ResizablePanel defaultSize={25}>
-                                <ScrollArea>
-                                    <div className="flex flex-col gap-1 justify-start items-start h-[450px] w-full p-2">
-                                        {availableVariables.map(
-                                            (
-                                                variable: string,
-                                                index: number
-                                            ) => (
-                                                <Badge
-                                                    key={index}
-                                                    className="w-full text-start text-sm font-light p-2 cursor-pointer"
-                                                    variant="outline"
-                                                    draggable
-                                                    onDragStart={(e) =>
-                                                        e.dataTransfer.setData(
-                                                            "text",
-                                                            variable
-                                                        )
-                                                    }
-                                                >
-                                                    {variable}
-                                                </Badge>
-                                            )
-                                        )}
-                                    </div>
-                                </ScrollArea>
-                            </ResizablePanel>
-                            <ResizableHandle withHandle />
+    if (fromListId === "TargetVar") {
+      updateFormData("TargetVar", null);
+    }
 
-                            {/* Defining Variable */}
-                            <ResizablePanel defaultSize={55}>
-                                <div className="flex flex-col h-full w-full items-start justify-start gap-3 p-2">
-                                    <div className="flex flex-col w-full gap-1">
-                                        <Label className="font-bold">
-                                            Target (Optional):
-                                        </Label>
-                                        <div className="flex items-center space-x-2">
-                                            <div
-                                                className="w-full min-h-[40px] p-2 border rounded"
-                                                onDrop={(e) => {
-                                                    handleDrop(
-                                                        "DepVar",
-                                                        e.dataTransfer.getData(
-                                                            "text"
-                                                        )
-                                                    );
-                                                }}
-                                                onDragOver={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                {mainState.DepVar ? (
-                                                    <Badge
-                                                        className="text-start text-sm font-light p-2 cursor-pointer"
-                                                        variant="outline"
-                                                        onClick={() =>
-                                                            handleRemoveVariable(
-                                                                "DepVar"
-                                                            )
-                                                        }
-                                                    >
-                                                        {mainState.DepVar}
-                                                    </Badge>
-                                                ) : (
-                                                    <span className="text-sm font-light text-gray-500">
-                                                        Drop variables here.
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <input
-                                                type="hidden"
-                                                value={mainState.DepVar ?? ""}
-                                                name="DepVar"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col w-full gap-1">
-                                        <div
-                                            className="flex flex-col w-full gap-2"
-                                            onDragOver={(e) =>
-                                                e.preventDefault()
-                                            }
-                                            onDrop={(e) => {
-                                                const variable =
-                                                    e.dataTransfer.getData(
-                                                        "text"
-                                                    );
-                                                handleDrop(
-                                                    "FeatureVar",
-                                                    variable
-                                                );
-                                            }}
-                                        >
-                                            <Label className="font-bold">
-                                                Features:
-                                            </Label>
-                                            <div className="w-full h-[175px] p-2 border rounded overflow-hidden">
-                                                <ScrollArea>
-                                                    <div className="w-full h-[155px]">
-                                                        {mainState.FeatureVar &&
-                                                        mainState.FeatureVar
-                                                            .length > 0 ? (
-                                                            <div className="flex flex-col gap-1">
-                                                                {mainState.FeatureVar.map(
-                                                                    (
-                                                                        variable,
-                                                                        index
-                                                                    ) => (
-                                                                        <Badge
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            className="text-start text-sm font-light p-2 cursor-pointer"
-                                                                            variant="outline"
-                                                                            onClick={() =>
-                                                                                handleRemoveVariable(
-                                                                                    "FeatureVar",
-                                                                                    variable
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                variable
-                                                                            }
-                                                                        </Badge>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        ) : (
-                                                            <span className="text-sm font-light text-gray-500">
-                                                                Drop variables
-                                                                here.
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </ScrollArea>
-                                            </div>
-                                            <input
-                                                type="hidden"
-                                                value={
-                                                    mainState.FeatureVar ?? ""
-                                                }
-                                                name="Independents"
-                                            />
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id="NormCovar"
-                                                checked={mainState.NormCovar}
-                                                onCheckedChange={(checked) =>
-                                                    handleChange(
-                                                        "NormCovar",
-                                                        checked
-                                                    )
-                                                }
-                                            />
-                                            <label
-                                                htmlFor="NormCovar"
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                            >
-                                                Normalize Scale Features
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col w-full gap-1">
-                                        <Label className="font-bold">
-                                            Focal Case Identifier (Optional):
-                                        </Label>
-                                        <div className="flex items-center space-x-2">
-                                            <div
-                                                className="w-full min-h-[40px] p-2 border rounded"
-                                                onDrop={(e) => {
-                                                    handleDrop(
-                                                        "FocalCaseIdenVar",
-                                                        e.dataTransfer.getData(
-                                                            "text"
-                                                        )
-                                                    );
-                                                }}
-                                                onDragOver={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                {mainState.FocalCaseIdenVar ? (
-                                                    <Badge
-                                                        className="text-start text-sm font-light p-2 cursor-pointer"
-                                                        variant="outline"
-                                                        onClick={() =>
-                                                            handleRemoveVariable(
-                                                                "FocalCaseIdenVar"
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            mainState.FocalCaseIdenVar
-                                                        }
-                                                    </Badge>
-                                                ) : (
-                                                    <span className="text-sm font-light text-gray-500">
-                                                        Drop variables here.
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <input
-                                                type="hidden"
-                                                value={
-                                                    mainState.FocalCaseIdenVar ??
-                                                    ""
-                                                }
-                                                name="FocalCaseIdenVar"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col w-full gap-1">
-                                        <Label className="font-bold">
-                                            Case Label (Optional):
-                                        </Label>
-                                        <div className="flex items-center space-x-2">
-                                            <div
-                                                className="w-full min-h-[40px] p-2 border rounded"
-                                                onDrop={(e) => {
-                                                    handleDrop(
-                                                        "CaseIdenVar",
-                                                        e.dataTransfer.getData(
-                                                            "text"
-                                                        )
-                                                    );
-                                                }}
-                                                onDragOver={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                {mainState.CaseIdenVar ? (
-                                                    <Badge
-                                                        className="text-start text-sm font-light p-2 cursor-pointer"
-                                                        variant="outline"
-                                                        onClick={() =>
-                                                            handleRemoveVariable(
-                                                                "CaseIdenVar"
-                                                            )
-                                                        }
-                                                    >
-                                                        {mainState.CaseIdenVar}
-                                                    </Badge>
-                                                ) : (
-                                                    <span className="text-sm font-light text-gray-500">
-                                                        Drop variables here.
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <input
-                                                type="hidden"
-                                                value={
-                                                    mainState.CaseIdenVar ?? ""
-                                                }
-                                                name="CaseIdenVar"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </ResizablePanel>
+    if (fromListId === "FocalCaseIdenVar") {
+      updateFormData("FocalCaseIdenVar", null);
+    }
 
-                            {/* Tools Area */}
-                            <ResizablePanel defaultSize={20}>
-                                <div className="flex flex-col h-full items-start justify-start gap-1 p-2">
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={openDialog(setIsNeighborsOpen)}
-                                    >
-                                        Neighbors...
-                                    </Button>
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        disabled={
-                                            mainState.DepVar === "" ||
-                                            mainState.DepVar === null
-                                        }
-                                        onClick={openDialog(setIsFeaturesOpen)}
-                                    >
-                                        Features...
-                                    </Button>
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={openDialog(setIsPartitionOpen)}
-                                    >
-                                        Partitions...
-                                    </Button>
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={openDialog(setIsSaveOpen)}
-                                    >
-                                        Save...
-                                    </Button>
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={openDialog(setIsOutputOpen)}
-                                    >
-                                        Output...
-                                    </Button>
-                                    <Button
-                                        className="w-full"
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={openDialog(setIsOptionsOpen)}
-                                    >
-                                        Options...
-                                    </Button>
-                                </div>
-                            </ResizablePanel>
-                        </ResizablePanelGroup>
+    if (fromListId === "CaseIdenVar") {
+      updateFormData("CaseIdenVar", null);
+    }
+  };
+
+  const handleReorderVariable = (listId: string, newVariables: Variable[]) => {
+    if (listId === "FeatureVar") {
+      updateFormData(
+        "FeatureVar",
+        newVariables.map((v) => v.name),
+      );
+    }
+  };
+
+  const errors = externalErrors ?? [];
+
+  const targetListsConfig: TargetListConfig[] = useMemo(
+    () => {
+      const mapToVariables = (names: string[]) =>
+        names
+          .map((name) => variableMap.get(name))
+          .filter((v): v is Variable => Boolean(v));
+
+      return [
+      {
+        id: "TargetVar",
+        title: "Target:",
+        titleAction: showFieldHelp ? <HelperIcon text={helperText.target} /> : null,
+        variables: mapToVariables(targetVar),
+        maxItems: 1,
+        height: "80px",
+      },
+      {
+        id: "FeatureVar",
+        title: "Features:",
+        titleAction: showFieldHelp ? <HelperIcon text={helperText.features} /> : null,
+        variables: mapToVariables(featureVars),
+        height: "200px",
+      },
+      {
+        id: "FocalCaseIdenVar",
+        title: "Focal Case Identifier (Optional):",
+        titleAction: showFieldHelp ? (
+          <HelperIcon text={helperText.focalCaseIdentifier} />
+        ) : null,
+        variables: mapToVariables(focalVars),
+        maxItems: 1,
+        height: "80px",
+        allowedTypes: [
+          "NUMERIC",
+          "COMMA",
+          "DOT",
+          "SCIENTIFIC",
+          "DOLLAR",
+          "RESTRICTED_NUMERIC",
+        ],
+      },
+      {
+        id: "CaseIdenVar",
+        title: "Case Label (Optional):",
+        titleAction: showFieldHelp ? <HelperIcon text={helperText.caseLabel} /> : null,
+        variables: mapToVariables(caseLabelVars),
+        maxItems: 1,
+        height: "80px",
+      },
+      ];
+    },
+    [targetVar, featureVars, focalVars, caseLabelVars, variableMap, showFieldHelp],
+  );
+
+  return (
+    <div className="flex flex-col h-full min-h-0 w-full">
+      <div className="flex flex-col flex-1 min-h-0 w-full p-4 space-y-3">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="flex-1 min-h-0 w-full max-w-2xl rounded-lg border"
+        >
+          <ResizablePanel defaultSize={100}>
+            <div className="p-2 h-full min-h-0 overflow-y-auto hide-available-scrollbar">
+              <VariableListManager
+                availableVariables={availableVars}
+                targetLists={targetListsConfig}
+                variableIdKey="name"
+                highlightedVariable={highlightedVariable}
+                setHighlightedVariable={setHighlightedVariable}
+                onMoveVariable={handleMoveVariable}
+                onReorderVariable={handleReorderVariable}
+                showArrowButtons
+                availableListHeight="300px"
+                renderListFooter={(listId) => {
+                  if (listId !== "FeatureVar") return null;
+
+                  return (
+                    <div className="mt-2 px-1">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="normalize"
+                          checked={data.NormCovar ?? true}
+                          onChange={(e) =>
+                            updateFormData("NormCovar", e.target.checked)
+                          }
+                        />
+                        <label htmlFor="normalize" className="text-sm">
+                          Normalize scale features
+                        </label>
+                      </div>
                     </div>
-                    <DialogFooter className="sm:justify-start">
-                        <Button type="button" onClick={handleContinue}>
-                            OK
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={onReset}
-                        >
-                            Reset
-                        </Button>
-                        <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                                Cancel
-                            </Button>
-                        </DialogClose>
-                        <Button type="button" variant="secondary">
-                            Help
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </>
-    );
+                  );
+                }}
+              />
+              <div className="mt-3 space-y-1">
+                {errors.map((err, i) => (
+                  <div key={i} className="text-xs text-red-500">
+                    {err}
+                  </div>
+                ))}
+
+                {errors.length === 0 && (
+                  <div className="text-xs text-muted-foreground">
+                    Select variables for analysis.
+                  </div>
+                )}
+              </div>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+    </div>
+  );
 };

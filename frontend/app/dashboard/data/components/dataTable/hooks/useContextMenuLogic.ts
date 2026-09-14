@@ -15,7 +15,7 @@ export interface ContextMenuLogicProps {
 /**
  * Custom hook to manage Handsontable context menu logic, including item configuration and actions.
  */
-export const useContextMenuLogic = ({ hotTableRef, actualNumRows: _actualNumRows, actualNumCols }: ContextMenuLogicProps) => {
+export const useContextMenuLogic = ({ hotTableRef, actualNumRows, actualNumCols }: ContextMenuLogicProps) => {
     const isDataLoading = useDataStore(state => state.isLoading);
     const isVarLoading = useVariableStore(state => state.isLoading);
     const isLoading = isDataLoading || isVarLoading;
@@ -62,16 +62,18 @@ export const useContextMenuLogic = ({ hotTableRef, actualNumRows: _actualNumRows
     const handleRemoveRow = useCallback(async () => {
         const range = getSelectedRange();
         if (!range) return;
-        const indices = Array.from({ length: range.rows[1] - range.rows[0] + 1 }, (_, i) => range.rows[0] + i);
+        const indices = Array.from({ length: range.rows[1] - range.rows[0] + 1 }, (_, i) => range.rows[0] + i)
+            .filter(index => index >= 0 && index < actualNumRows);
         if (indices.length > 0) await useDataStore.getState().deleteRows(indices);
-    }, [getSelectedRange]);
+    }, [actualNumRows, getSelectedRange]);
 
     const handleRemoveColumn = useCallback(async () => {
         const range = getSelectedRange();
         if (!range) return;
-        const indices = Array.from({ length: range.cols[1] - range.cols[0] + 1 }, (_, i) => range.cols[0] + i);
+        const indices = Array.from({ length: range.cols[1] - range.cols[0] + 1 }, (_, i) => range.cols[0] + i)
+            .filter(index => index >= 0 && index < actualNumCols);
         if (indices.length > 0) await useVariableStore.getState().deleteVariables(indices);
-    }, [getSelectedRange]);
+    }, [actualNumCols, getSelectedRange]);
 
     const applyAlignment = useCallback(async (alignment: VariableAlign) => {
         const range = getSelectedRange();

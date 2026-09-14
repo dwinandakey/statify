@@ -6,4 +6,4 @@ export type OptScaOveralsAnalysisType = {
     variables: any[];
 };
 
-export type OptScaOveralsFinalResultType = {};
+export type OptScaOveralsFinalResultType = Record<string, unknown>;

@@ -6,10 +6,11 @@ use crate::models::{ result::LogDeterminants, AnalysisData, DiscriminantConfig }
 
 use super::core::{
     calculate_covariance,
-    calculate_pooled_within_matrix,
     calculate_rank_and_log_det,
     extract_analyzed_dataset,
+    get_stepwise_selected_variables,
 };
+use super::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
 
 /// Calculate log determinants of covariance matrices
 ///
@@ -33,7 +34,24 @@ pub fn calculate_log_determinants(
 
     // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;
-    let variables = &config.main.independent_variables;
+
+    // Determine variables to use: stepwise-selected or all (enter)
+    let grouping_var = &config.main.grouping_variable;
+    let variables: Vec<String> = if config.main.stepwise {
+        get_stepwise_selected_variables(data, config)?
+    } else {
+        config.main.independent_variables
+            .iter()
+            .filter(|v| *v != grouping_var)
+            .cloned()
+            .collect()
+    };
+
+    web_sys::console::log_1(&format!(
+        "Log Determinants: using {} variables: {:?}",
+        variables.len(),
+        variables
+    ).into());
 
     let mut groups = Vec::new();
     let mut ranks = Vec::new();
@@ -42,12 +60,12 @@ pub fn calculate_log_determinants(
     // Process each group
     for group in &dataset.group_labels {
         // Create a single-group subset for analysis
-        let single_group_vars: Vec<String> = vec![group.clone()];
+        let _single_group_vars: Vec<String> = vec![group.clone()];
 
         // Get variables values for this group
         let mut group_data = HashMap::new();
-        for var in variables {
-            if let Some(group_values) = dataset.group_data.get(var).and_then(|g| g.get(group)) {
+        for var in &variables {
+            if let Some(group_values) = dataset.group_data.get(var.as_str()).and_then(|g| g.get(group)) {
                 if group_values.len() > 1 {
                     // We only need values for one group to construct its covariance matrix
                     let mut var_data = HashMap::new();
@@ -73,8 +91,8 @@ pub fn calculate_log_determinants(
             for (j, var_j) in variables.iter().enumerate() {
                 if
                     let (Some(values_i), Some(values_j)) = (
-                        dataset.group_data.get(var_i).and_then(|g| g.get(group)),
-                        dataset.group_data.get(var_j).and_then(|g| g.get(group)),
+                        dataset.group_data.get(var_i.as_str()).and_then(|g| g.get(group)),
+                        dataset.group_data.get(var_j.as_str()).and_then(|g| g.get(group)),
                     )
                 {
                     if values_i.len() > 1 && values_i.len() == values_j.len() {
@@ -102,8 +120,8 @@ pub fn calculate_log_determinants(
         log_determinants.push(log_det);
     }
 
-    // Calculate pooled within-groups covariance matrix
-    let pooled_cov = calculate_pooled_within_matrix(&dataset, variables);
+    // Calculate pooled within-groups covariance matrix (no EPSILON — must match Box's M)
+    let pooled_cov = calculate_pooled_within_matrix_no_epsilon(&dataset, &variables);
 
     // Calculate rank and log determinant of pooled matrix
     let (rank_pooled, pooled_log_det) = calculate_rank_and_log_det(&pooled_cov);
@@ -113,6 +131,11 @@ pub fn calculate_log_determinants(
         "Note: Log determinants are used in Box's M test to evaluate the homogeneity of covariance matrices. \
                 The test compares individual group determinants with the pooled determinant.".to_string();
 
+    web_sys::console::log_1(&format!(
+        "Log Determinants Result: groups={:?}, ranks={:?}, log_dets={:?}, pooled_rank={}, pooled_log_det={}",
+        groups, ranks, log_determinants, rank_pooled, pooled_log_det
+    ).into());
+
     Ok(LogDeterminants {
         groups,
         ranks,
@@ -120,5 +143,6 @@ pub fn calculate_log_determinants(
         rank_pooled,
         pooled_log_determinant: pooled_log_det,
         note,
+        debug_variables: variables,
     })
 }

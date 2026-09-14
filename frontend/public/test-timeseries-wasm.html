@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSeries WASM Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .result {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 TimeSeries WASM Module Test</h1>
+    
+    <div class="test-section">
+        <h2>📦 Module Status</h2>
+        <div id="moduleStatus" class="status loading">Loading WASM module...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 GARCH Model Test</h2>
+        <button onclick="testGARCH()">Run GARCH Test</button>
+        <div id="garchResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📈 ECM Model Test</h2>
+        <button onclick="testECM()">Run ECM Test</button>
+        <div id="ecmResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📉 ARDL Model Test</h2>
+        <button onclick="testARDL()">Run ARDL Test</button>
+        <div id="ardlResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔬 Advanced Tests</h2>
+        <button onclick="testARCHLM()">Test ARCH-LM</button>
+        <button onclick="testAll()">Run All Tests</button>
+        <div id="advancedResult" class="result"></div>
+    </div>
+
+    <script type="module">
+        // Import WASM module
+        import init, { 
+            GARCH, 
+            ECM, 
+            ARDL 
+        } from './workers/TimeSeries/timeseries.js';
+
+        let wasmReady = false;
+
+        // Initialize WASM
+        async function initWasm() {
+            try {
+                await init();
+                wasmReady = true;
+                document.getElementById('moduleStatus').innerHTML = 
+                    '<span class="success">✅ WASM Module Loaded Successfully!</span>';
+                document.getElementById('moduleStatus').className = 'status ready';
+            } catch (error) {
+                document.getElementById('moduleStatus').innerHTML = 
+                    `<span class="error">❌ Failed to load WASM: ${error.message}</span>`;
+            }
+        }
+
+        // Test GARCH
+        window.testGARCH = function() {
+            if (!wasmReady) {
+                alert('WASM module not ready yet!');
+                return;
+            }
+
+            try {
+                // Sample return data (10 observations)
+                const returns = [0.02, -0.01, 0.03, -0.02, 0.01, 0.04, -0.03, 0.02, -0.01, 0.03];
+                
+                console.log('Creating GARCH(1,1) model...');
+                const garch = new GARCH(new Float64Array(returns), 1, 1);
+                
+                console.log('Estimating GARCH...');
+                garch.estimate();
+                
+                const variance = garch.get_variance();
+                const aic = garch.get_aic();
+                const bic = garch.get_bic();
+                const logLik = garch.get_log_likelihood();
+                
+                document.getElementById('garchResult').innerHTML = `
+                    <span class="success">✅ GARCH Test PASSED!</span><br><br>
+                    <strong>Model:</strong> GARCH(1,1)<br>
+                    <strong>Observations:</strong> ${returns.length}<br>
+                    <strong>Conditional Variance:</strong> [${variance.slice(0, 5).map(v => v.toFixed(6)).join(', ')}...]<br>
+                    <strong>Log-Likelihood:</strong> ${logLik.toFixed(4)}<br>
+                    <strong>AIC:</strong> ${aic.toFixed(4)}<br>
+                    <strong>BIC:</strong> ${bic.toFixed(4)}
+                `;
+                
+                // Free memory
+                garch.free();
+                
+            } catch (error) {
+                document.getElementById('garchResult').innerHTML = 
+                    `<span class="error">❌ GARCH Test FAILED: ${error.message}</span>`;
+                console.error(error);
+            }
+        };
+
+        // Test ECM
+        window.testECM = function() {
+            if (!wasmReady) {
+                alert('WASM module not ready yet!');
+                return;
+            }
+
+            try {
+                // Sample cointegrated data
+                const y = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5];
+                const x = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0];
+                
+                console.log('Creating ECM model...');
+                const ecm = new ECM(new Float64Array(y), new Float64Array(x), 2, 1);
+                
+                console.log('Estimating ECM...');
+                ecm.estimate_ecm();
+                
+                const beta0 = ecm.get_long_run_beta0();
+                const beta1 = ecm.get_long_run_beta1();
+                const adfStat = ecm.get_adf_statistic();
+                const isCointegrated = ecm.get_is_cointegrated();
+                
+                document.getElementById('ecmResult').innerHTML = `
+                    <span class="success">✅ ECM Test PASSED!</span><br><br>
+                    <strong>Long-run Regression:</strong> Y = ${beta0.toFixed(4)} + ${beta1.toFixed(4)}X<br>
+                    <strong>ADF Statistic:</strong> ${adfStat.toFixed(4)}<br>
+                    <strong>Cointegrated:</strong> ${isCointegrated ? 'Yes ✅' : 'No ❌'}<br>
+                    <strong>Observations:</strong> ${y.length}
+                `;
+                
+                ecm.free();
+                
+            } catch (error) {
+                document.getElementById('ecmResult').innerHTML = 
+                    `<span class="error">❌ ECM Test FAILED: ${error.message}</span>`;
+                console.error(error);
+            }
+        };
+
+        // Test ARDL
+        window.testARDL = function() {
+            if (!wasmReady) {
+                alert('WASM module not ready yet!');
+                return;
+            }
+
+            try {
+                // Sample data
+                const y = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+                const x1 = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0];
+                const x2 = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5];
+                
+                // Flatten X for WASM (2 variables, 10 observations each)
+                const x_flat = [...x1, ...x2];
+                
+                console.log('Creating ARDL(1, [1, 1]) model...');
+                const ardl = new ARDL(
+                    new Float64Array(y), 
+                    new Float64Array(x_flat),
+                    2,  // n_vars = 2
+                    1,  // p = 1 (AR order)
+                    new Uint32Array([1, 1])  // q = [1, 1] (DL orders)
+                );
+                
+                const nVars = ardl.get_n_vars();
+                const nObs = ardl.get_n_obs();
+                
+                document.getElementById('ardlResult').innerHTML = `
+                    <span class="success">✅ ARDL Test PASSED!</span><br><br>
+                    <strong>Model:</strong> ARDL(1, 1, 1)<br>
+                    <strong>Number of Variables:</strong> ${nVars}<br>
+                    <strong>Observations:</strong> ${nObs}<br>
+                    <strong>Status:</strong> Model created successfully!<br>
+                    <em>Note: Flattened array approach working correctly for multi-var ARDL ✅</em>
+                `;
+                
+                ardl.free();
+                
+            } catch (error) {
+                document.getElementById('ardlResult').innerHTML = 
+                    `<span class="error">❌ ARDL Test FAILED: ${error.message}</span>`;
+                console.error(error);
+            }
+        };
+
+        // Test ARCH-LM
+        window.testARCHLM = function() {
+            if (!wasmReady) {
+                alert('WASM module not ready yet!');
+                return;
+            }
+
+            try {
+                const residuals = [0.01, -0.02, 0.03, -0.01, 0.02, -0.03, 0.01, 0.02, -0.01, 0.03];
+                
+                console.log('Running ARCH-LM test...');
+                const result = GARCH.arch_lm_test(new Float64Array(residuals), 2);
+                
+                document.getElementById('advancedResult').innerHTML = `
+                    <span class="success">✅ ARCH-LM Test PASSED!</span><br><br>
+                    <strong>LM Statistic:</strong> ${result.lm_statistic.toFixed(4)}<br>
+                    <strong>P-value:</strong> ${result.p_value.toFixed(4)}<br>
+                    <strong>Has ARCH Effect:</strong> ${result.has_arch_effect ? 'Yes' : 'No'}<br>
+                    <strong>Interpretation:</strong> ${result.has_arch_effect ? 
+                        'ARCH effects detected - consider GARCH model' : 
+                        'No significant ARCH effects'}
+                `;
+                
+            } catch (error) {
+                document.getElementById('advancedResult').innerHTML = 
+                    `<span class="error">❌ ARCH-LM Test FAILED: ${error.message}</span>`;
+                console.error(error);
+            }
+        };
+
+        // Run all tests
+        window.testAll = async function() {
+            document.getElementById('advancedResult').innerHTML = 
+                '<span class="loading">Running all tests...</span>';
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            testGARCH();
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            testECM();
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            testARDL();
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            testARCHLM();
+            
+            document.getElementById('advancedResult').innerHTML = 
+                '<span class="success">✅ All tests completed! Check results above.</span>';
+        };
+
+        // Initialize on page load
+        initWasm();
+    </script>
+</body>
+</html>

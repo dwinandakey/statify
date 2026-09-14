@@ -168,22 +168,17 @@ pub fn extract_grouped_data(
     for var_name in independent_variables {
         let mut group_values: HashMap<String, Vec<f64>> = HashMap::new();
 
-        // Find this variable in independent_data
-        if
-            let Some((var_idx, _)) = data.independent_data
-                .iter()
-                .enumerate()
-                .find(
-                    |(idx, _)|
-                        *idx < independent_variables.len() &&
-                        &independent_variables[*idx] == var_name
-                )
-        {
-            let var_data = &data.independent_data[var_idx];
+        // FIX: Find the correct variable in independent_data by checking if the variable name exists in records
+        // Previously, the code used index matching which could be wrong if variable order differs
+        let var_data_opt = data.independent_data.iter().find(|records| {
+            // Check if this record group contains the variable we're looking for
+            records.iter().any(|record| record.values.contains_key(var_name))
+        });
 
+        if let Some(var_data) = var_data_opt {
             for group_label in &group_labels {
-                let values = if let Some(indices) = group_mappings.get(group_label) {
-                    indices
+                if let Some(indices) = group_mappings.get(group_label) {
+                    let values: Vec<f64> = indices
                         .iter()
                         .filter_map(|&idx| {
                             if idx < var_data.len() {
@@ -196,12 +191,39 @@ pub fn extract_grouped_data(
                             }
                             None
                         })
-                        .collect()
-                } else {
-                    Vec::new()
-                };
+                        .collect();
 
-                group_values.insert(group_label.clone(), values);
+                    group_values.insert(group_label.clone(), values);
+                }
+            }
+        } else {
+            // Fallback: try to find by index if variable not found by name
+            // This handles the case where independent_data is organized by variable position
+            if let Some(var_idx) = independent_variables.iter().position(|v| v == var_name) {
+                if var_idx < data.independent_data.len() {
+                    let var_data = &data.independent_data[var_idx];
+
+                    for group_label in &group_labels {
+                        if let Some(indices) = group_mappings.get(group_label) {
+                            let values: Vec<f64> = indices
+                                .iter()
+                                .filter_map(|&idx| {
+                                    if idx < var_data.len() {
+                                        if
+                                            let Some(DataValue::Number(val)) =
+                                                var_data[idx].values.get(var_name)
+                                        {
+                                            return Some(*val);
+                                        }
+                                    }
+                                    None
+                                })
+                                .collect();
+
+                            group_values.insert(group_label.clone(), values);
+                        }
+                    }
+                }
             }
         }
 
@@ -308,16 +330,32 @@ pub fn extract_values_by_name(records: &[DataRecord], field_name: &str) -> Vec<f
 
 /// Extract all variable values from a single case
 pub fn extract_case_values(record: &DataRecord, variables: &[String]) -> Vec<f64> {
-    variables
+    let values: Vec<f64> = variables
         .iter()
         .filter_map(|var_name| {
             if let Some(DataValue::Number(value)) = record.values.get(var_name) {
                 Some(*value)
             } else {
+                // Log missing variables for debugging
+                web_sys::console::log_1(&format!(
+                    "[extract_case_values] Variable '{}' not found or not numeric in record. Available keys: {:?}",
+                    var_name,
+                    record.values.keys().collect::<Vec<_>>()
+                ).into());
                 None
             }
         })
-        .collect()
+        .collect();
+
+    if values.len() != variables.len() {
+        web_sys::console::log_1(&format!(
+            "[extract_case_values] Length mismatch! Expected {} variables, got {} values",
+            variables.len(),
+            values.len()
+        ).into());
+    }
+
+    values
 }
 
 /// Calculate mean of values
@@ -389,10 +427,15 @@ pub fn calculate_correlation(values1: &[f64], values2: &[f64]) -> f64 {
 /// Calculate log determinant of a matrix
 pub fn calculate_log_determinant(matrix: &DMatrix<f64>) -> f64 {
     let svd = SVD::new(matrix.clone(), false, false);
+    let singular_values = &svd.singular_values;
 
-    svd.singular_values
+    // Use scaled threshold (same as calculate_rank_and_log_det) for consistency
+    let max_val = singular_values.iter().fold(0.0_f64, |max, &v| max.max(v));
+    let threshold = EPSILON * max_val;
+
+    singular_values
         .iter()
-        .filter(|&v| *v > EPSILON)
+        .filter(|&v| *v > threshold)
         .map(|v| v.ln())
         .sum()
 }
@@ -402,7 +445,7 @@ pub fn calculate_rank_and_log_det(matrix: &DMatrix<f64>) -> (i32, f64) {
     let svd = SVD::new(matrix.clone(), false, false);
     let singular_values = &svd.singular_values;
 
-    let max_val = singular_values.iter().fold(0.0, |max, &v| (max as f64).max(v));
+    let max_val = singular_values.iter().fold(0.0_f64, |max, &v| max.max(v));
     let threshold = EPSILON * max_val;
 
     let rank = singular_values
@@ -464,7 +507,7 @@ pub fn calculate_p_value_from_f(f_value: f64, df1: f64, df2: f64) -> f64 {
                 p_value.max(0.0).min(1.0)
             }
         }
-        Err(e) => { 1.0 }
+        Err(_) => 1.0,
     }
 }
 
@@ -475,6 +518,19 @@ pub fn calculate_p_value_from_chi_square(chi_square: f64, df: usize) -> f64 {
     }
 
     match ChiSquared::new(df as f64) {
+        Ok(dist) => dist.sf(chi_square),
+        Err(_) => 1.0,
+    }
+}
+
+/// Calculate upper tail CDF (p-value) for chi-square distribution
+/// This is the same as calculate_p_value_from_chi_square but accepts f64 df
+pub fn chi_squared_cdf_upper(chi_square: f64, df: f64) -> f64 {
+    if chi_square <= 0.0 || df <= 0.0 {
+        return 1.0;
+    }
+
+    match ChiSquared::new(df) {
         Ok(dist) => dist.sf(chi_square),
         Err(_) => 1.0,
     }
@@ -616,7 +672,7 @@ pub fn filter_valid_cases(
     for var_idx in 0..data.independent_data.len() {
         let mut filtered_var_data = Vec::new();
 
-        for (group_idx, group_valid_indices) in valid_indices.iter().enumerate() {
+        for (_group_idx, group_valid_indices) in valid_indices.iter().enumerate() {
             for &idx in group_valid_indices {
                 if idx < data.independent_data[var_idx].len() {
                     filtered_var_data.push(data.independent_data[var_idx][idx].clone());

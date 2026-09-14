@@ -3,6 +3,15 @@ import { Chart } from "./Chart";
 export interface ResultJson {
     tables: Table[];
     charts?: Chart[];
+    analysisStatus?: AnalysisStatus;
+}
+
+export interface AnalysisStatus {
+    isConverged: boolean;
+    extractedFactors: number;
+    terminatedEarly: boolean;
+    terminationReason?: string | null;
+    hasHeywoodCase?: boolean;
 }
 
 export interface Table {
@@ -18,6 +27,7 @@ export interface ColumnHeader {
     header: string;
     key?: string;
     children?: ColumnHeader[];
+    width?: string | number;
 }
 
 export interface Row {

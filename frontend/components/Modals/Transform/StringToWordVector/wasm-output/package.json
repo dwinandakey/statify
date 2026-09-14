@@ -1,0 +1,15 @@
+{
+  "name": "statify-string-to-word",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "statify_string_to_word_bg.wasm",
+    "statify_string_to_word.js",
+    "statify_string_to_word.d.ts"
+  ],
+  "main": "statify_string_to_word.js",
+  "types": "statify_string_to_word.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

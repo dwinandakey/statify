@@ -1,27 +1,35 @@
 use crate::models::{
     config::KnnConfig,
     data::AnalysisData,
-    result::{ CaseProcessingSummary, ProcessingSummaryDetail },
+    result::{CaseProcessingSummary, ProcessingSummaryDetail},
 };
+
+use super::preprocess_data::preprocess_knn_data;
 
 pub fn basic_processing_summary(
     data: &AnalysisData,
-    config: &KnnConfig
+    config: &KnnConfig,
 ) -> Result<CaseProcessingSummary, String> {
-    // Calculate the number of cases in each partition
-    let total_cases = if !data.features_data.is_empty() {
-        data.features_data[0].len()
-    } else {
+    let total_cases = data
+        .features_data
+        .iter()
+        .map(|ds| ds.len())
+        .chain(data.target_data.iter().map(|ds| ds.len()))
+        .max()
+        .unwrap_or(0);
+
+    if total_cases == 0 {
         return Err("No data available for processing".to_string());
-    };
+    }
 
-    // Calculate training/holdout split
-    let training_percent = config.partition.training_number as f64;
-    let holdout_percent = 100.0 - training_percent;
-    let training_n = (((total_cases as f64) * training_percent) / 100.0).round() as usize;
-    let holdout_n = total_cases - training_n;
+    let knn_data = preprocess_knn_data(data, config)?;
+    let valid_cases = knn_data.training_indices.len() + knn_data.holdout_indices.len();
+    let excluded_cases = total_cases - valid_cases;
+    let training_n = knn_data.training_indices.len();
+    let holdout_n = knn_data.holdout_indices.len();
+    let training_percent = (training_n as f64 / valid_cases as f64) * 100.0;
+    let holdout_percent = (holdout_n as f64 / valid_cases as f64) * 100.0;
 
-    // Create summary
     Ok(CaseProcessingSummary {
         training: ProcessingSummaryDetail {
             n: Some(training_n),
@@ -32,12 +40,12 @@ pub fn basic_processing_summary(
             percent: Some(holdout_percent),
         },
         valid: ProcessingSummaryDetail {
-            n: Some(total_cases),
-            percent: Some(100.0),
+            n: Some(valid_cases),
+            percent: Some((valid_cases as f64 / total_cases as f64) * 100.0),
         },
         excluded: ProcessingSummaryDetail {
-            n: Some(0),
-            percent: None,
+            n: Some(excluded_cases),
+            percent: Some((excluded_cases as f64 / total_cases as f64) * 100.0),
         },
         total: ProcessingSummaryDetail {
             n: Some(total_cases),

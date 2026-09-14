@@ -20,7 +20,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <head />
-            <body className="h-full w-full m-0 p-0 grid grid-rows-[auto_1fr_auto] overflow-y-auto">
+            <body suppressHydrationWarning className="h-full w-full m-0 p-0 grid grid-rows-[auto_1fr_auto] overflow-y-auto">
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="light"

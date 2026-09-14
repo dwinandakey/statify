@@ -92,10 +92,25 @@ pub fn calculate_kmo_bartletts_test(
     // Calculate significance (p-value) using chi-square distribution
     let significance = chi_square_cdf(chi_square, df as f64);
 
+    // Untuk menangani NaN ketika terjadi overflow pada Chi-Square yang sangat besar
+    let mut p_value = 1.0 - significance;
+    
+    if p_value.is_nan() {
+        if chi_square > 0.0 {
+            // Jika chi-square besar tapi p-value NaN, dipastikan nilainya mendekati 0 mutlak
+            p_value = 0.0; 
+        } else {
+            p_value = 1.0;
+        }
+    } else {
+        // Pastikan tidak ada nilai minus akibat floating point precision noise
+        p_value = p_value.max(0.0);
+    }
+
     Ok(KMOBartlettsTest {
         kaiser_meyer_olkin: kmo,
         bartletts_test_chi_square: chi_square,
         df,
-        significance: 1.0 - significance,
+        significance: p_value,
     })
 }

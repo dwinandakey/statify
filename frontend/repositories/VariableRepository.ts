@@ -35,8 +35,29 @@ export class VariableRepository {
 
   async saveVariable(variable: Variable): Promise<number> {
     try {
+      let variableToSave: Variable = variable;
+
+      // When id is missing, resolve existing records by unique keys first.
+      // This avoids ConstraintError on unique indexes (&columnIndex, &name).
+      if (variable.id === undefined) {
+        const existingByColumnIndex = await db.variables
+          .where('columnIndex')
+          .equals(variable.columnIndex)
+          .first();
+
+        const existingByName = await db.variables
+          .where('name')
+          .equals(variable.name)
+          .first();
+
+        const existing = existingByColumnIndex ?? existingByName;
+        if (existing?.id !== undefined) {
+          variableToSave = { ...variable, id: existing.id };
+        }
+      }
+
       // Insert or update variable in one step
-      const id = await db.variables.put(variable);
+      const id = await db.variables.put(variableToSave);
       return id;
     } catch (error) {
       const repoError = new RepositoryError("Failed to save variable", "VariableRepository.saveVariable", error);

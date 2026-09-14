@@ -15,6 +15,7 @@ type AnalysisType =
     // Clustering & Classification
     | "TwoStepCluster"
     | "KMeansCluster"
+    | "KMedoidsCluster"
     | "HierarchicalCluster"
     | "ClusterSilhouettes"
     // Predictive Models & Evaluation
@@ -30,6 +31,11 @@ type AnalysisType =
     | "Autocorrelation"
     | "UnitRootTest"
     | "BoxJenkinsModel"
+    | "GARCH"
+    | "ARCH"
+    | "ECM"
+    | "ARDL"
+    | "HeteroskedasticityModels"
     // Descriptive Statistics
     | "Frequencies"
     | "Descriptive"

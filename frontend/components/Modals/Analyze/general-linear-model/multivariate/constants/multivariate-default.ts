@@ -16,6 +16,9 @@ export const MultivariateMainDefault: MultivariateMainType = {
     FixFactor: null,
     Covar: null,
     WlsWeight: null,
+    TestValues: null,
+    VarianceMode: null,
+    PairedMode: null,
 };
 
 export const MultivariateModelDefault: MultivariateModelType = {

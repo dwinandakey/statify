@@ -10,6 +10,7 @@ import { useMobile } from "@/hooks/useMobile";
 import { useModal } from "@/hooks/useModal";
 import dynamic from 'next/dynamic';
 import { OnbordaProvider } from "onborda";
+import { ModalType } from "@/types/modalTypes";
 
 import ResultNavigationObserver from "@/components/Common/ResultNavigationObserver";
 const SyncStatusClient = dynamic(() => import('@/components/ui/SyncStatus'), { ssr: false });
@@ -28,6 +29,7 @@ const ModalLoading = () => (
 
 // Pengaturan lebar sidebar
 const DEFAULT_SIDEBAR_WIDTH = 30; // Persentase default lebar sidebar
+const KNN_SIDEBAR_WIDTH = 40;     // 2/5 layar, khusus Nearest Neighbor
 const MIN_SIDEBAR_WIDTH = 0;      // Tidak ada lebar minimum sidebar
 const MAX_SIDEBAR_WIDTH = 60;     // Persentase maksimum lebar sidebar
 
@@ -54,12 +56,20 @@ export default function DashboardLayout({
     // State untuk mengingat lebar sidebar ketika terbuka
     const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
 
+    // ID dan tipe modal teratas untuk filter tampilan dan konfigurasi sidebar
+    const topModalId = modals.length > 0 ? modals[modals.length - 1].id : null;
+    const topModalType =
+        modals.length > 0 ? modals[modals.length - 1].type : null;
+    const isKNNModalOpen = topModalType === ModalType.ModalNearestNeighbor;
+    const activeSidebarWidth = isKNNModalOpen ? KNN_SIDEBAR_WIDTH : sidebarWidth;
+
     // Key untuk memaksa ResizablePanelGroup re-mount saat perubahan state
     // Ini memastikan defaultSize diterapkan dengan benar selama transisi
-    const desktopPanelGroupKey = isMobile ? 'mobile' : (hasOpenModal ? 'desktop-sidebar-open' : 'desktop-sidebar-closed');
-
-    // ID modal teratas untuk filter tampilan
-    const topModalId = modals.length > 0 ? modals[modals.length - 1].id : null;
+    const desktopPanelGroupKey = isMobile
+        ? 'mobile'
+        : hasOpenModal
+            ? `desktop-sidebar-open-${topModalId}-${isKNNModalOpen ? 'knn' : 'default'}`
+            : 'desktop-sidebar-closed';
 
     // Filter untuk hanya menampilkan modal teratas
     const showOnlyTopModal = (modalId: string) => {
@@ -139,7 +149,7 @@ export default function DashboardLayout({
                                 data-testid="desktop-resizable-panels"
                             >
                                 <ResizablePanel 
-                                    defaultSize={hasOpenModal ? (100 - sidebarWidth) : 100}
+                                    defaultSize={hasOpenModal ? (100 - activeSidebarWidth) : 100}
                                     minSize={hasOpenModal ? (100 - MAX_SIDEBAR_WIDTH) : 100} 
                                     maxSize={hasOpenModal ? (100 - MIN_SIDEBAR_WIDTH) : 100}
                                     order={1}
@@ -157,12 +167,12 @@ export default function DashboardLayout({
                                 {hasOpenModal && <ResizableHandle withHandle className="bg-border" />}
                                 
                                 <ResizablePanel 
-                                    defaultSize={hasOpenModal ? sidebarWidth : 0} // Collapse jika tidak ada modal
+                                    defaultSize={hasOpenModal ? activeSidebarWidth : 0} // Collapse jika tidak ada modal
                                     minSize={hasOpenModal ? MIN_SIDEBAR_WIDTH : 0} 
                                     maxSize={hasOpenModal ? MAX_SIDEBAR_WIDTH : 0}
                                     onResize={(size) => {
-                                        // Hanya izinkan resize dan update state jika sidebar seharusnya terbuka
-                                        if (hasOpenModal) {
+                                        // Simpan preferensi resize untuk modul lain; KNN selalu mulai dari 2/5 layar.
+                                        if (hasOpenModal && !isKNNModalOpen) {
                                             setSidebarWidth(size);
                                         }
                                     }}

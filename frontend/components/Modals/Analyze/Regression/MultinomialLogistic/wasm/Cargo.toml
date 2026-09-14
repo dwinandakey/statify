@@ -1,0 +1,27 @@
+[package]
+name = "statify-multinomial"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+wasm = []
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.4"
+serde_json = "1.0"
+getrandom = { version = "0.2", features = ["js"] }
+
+# Matematika & Statistik
+nalgebra = "0.32"  # Untuk operasi matriks (Invers, Perkalian)
+statrs = "0.16"    # Untuk menghitung P-Value (Distribusi Chi-Square)
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "console",
+]

@@ -21,6 +21,7 @@ pub fn basic_processing_summary(
             if let Ok(levels) = get_factor_levels(data, factor) {
                 let mut factor_summary = BetweenSubjectFactors {
                     value_counts: HashMap::new(),
+                    value_labels: HashMap::new(),
                     n: None,
                 };
 
@@ -38,6 +39,19 @@ pub fn basic_processing_summary(
                         .count();
 
                     factor_summary.value_counts.insert(level.clone(), count);
+                }
+
+                // Look up user-defined value labels from the variable definition.
+                'defs: for defs in &data.fix_factor_data_defs {
+                    for def in defs {
+                        if def.name == *factor {
+                            for vl in &def.values {
+                                let key = data_value_to_string(&vl.value);
+                                factor_summary.value_labels.insert(key, vl.label.clone());
+                            }
+                            break 'defs;
+                        }
+                    }
                 }
 
                 // Set total count

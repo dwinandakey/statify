@@ -1,12 +1,14 @@
 use std::collections::HashMap;
+use nalgebra::{ DMatrix, DVector };
+use statrs::distribution::{ ContinuousCDF, FisherSnedecor };
 
 use crate::{
     models::{
         config::RepeatedMeasuresConfig,
-        data::AnalysisData,
+        data::{ AnalysisData, DataValue },
         result::{ MultivariateTestEntry, MultivariateTests },
     },
-    stats::core::get_factor_levels,
+    stats::core::{ get_factor_levels, parse_within_subject_factors },
 };
 
 use super::{
@@ -21,12 +23,211 @@ use super::{
     core::{ data_value_to_string, extract_dependent_value, parse_interaction_term },
 };
 
+/// Build an orthonormal Helmert contrast matrix M of shape (k-1) × k.
+/// Each row sums to zero and M·Mᵀ = I_{k-1}.
+fn build_orthonormal_contrast(k: usize) -> DMatrix<f64> {
+    let mut m = DMatrix::<f64>::zeros(k - 1, k);
+    for i in 1..k {
+        let scale = ((i * (i + 1)) as f64).sqrt();
+        for j in 0..i {
+            m[(i - 1, j)] = -1.0 / scale;
+        }
+        m[(i - 1, i)] = (i as f64) / scale;
+    }
+    m
+}
+
 /// Calculate multivariate tests for each effect in the model
 /// Multivariate tests examine effects across all dependent variables simultaneously
 pub fn calculate_multivariate_tests(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig
 ) -> Result<MultivariateTests, String> {
+    // Default alpha value
+    let alpha = config.options.sig_level.unwrap_or(0.05);
+
+    // Repeated-measures path: apply a within-subjects orthonormal contrast,
+    // then test H0: E[Y M'] = 0 (i.e. all level means are equal). With
+    // rank-1 H this gives the SPSS-style p×(n-p) F-test that is exact and
+    // identical for Pillai/Wilks/Hotelling/Roy.
+    let within_factors = parse_within_subject_factors(data, config)?;
+    let has_between = config
+        .main
+        .factors_var
+        .as_ref()
+        .map_or(false, |f| !f.is_empty());
+
+    if !has_between && !within_factors.measures.is_empty() {
+        let mut effects: HashMap<String, HashMap<String, MultivariateTestEntry>> =
+            HashMap::new();
+
+        for (_measure_name, factors) in &within_factors.measures {
+            let k = factors.len();
+            if k < 2 {
+                continue;
+            }
+
+            // Within-subjects factor name (e.g. "perlakuan") — comes from the
+            // factor_values map populated by parse_within_subject_factors.
+            let ws_factor_name = factors[0]
+                .factor_values
+                .keys()
+                .next()
+                .cloned()
+                .unwrap_or_else(|| "Factor".to_string());
+
+            // Variable order = level order
+            let var_names: Vec<String> = factors
+                .iter()
+                .map(|f| f.dependent_variable.clone())
+                .collect();
+
+            // Build Y matrix (n × k)
+            let mut rows: Vec<Vec<f64>> = Vec::new();
+            for record_group in &data.subject_data {
+                let mut row = Vec::with_capacity(k);
+                for var_name in &var_names {
+                    let mut val: Option<f64> = None;
+                    for record in record_group {
+                        if let Some(DataValue::Number(v)) = record.values.get(var_name) {
+                            val = Some(*v);
+                            break;
+                        }
+                    }
+                    row.push(val.unwrap_or(0.0));
+                }
+                if row.len() == k {
+                    rows.push(row);
+                }
+            }
+
+            let n = rows.len();
+            let p = k - 1; // hypothesis dimension after contrast
+            if n <= p {
+                continue;
+            }
+
+            let y = DMatrix::from_row_slice(
+                n,
+                k,
+                &rows.iter().flatten().copied().collect::<Vec<f64>>(),
+            );
+
+            // Apply orthonormal within-subjects contrast: Z = Y · Mᵀ (n × p)
+            let m_contrast = build_orthonormal_contrast(k);
+            let z = &y * m_contrast.transpose();
+
+            // Column means of Z
+            let z_bar: DVector<f64> = DVector::from_iterator(
+                p,
+                (0..p).map(|j| {
+                    (0..n).map(|i| z[(i, j)]).sum::<f64>() / (n as f64)
+                }),
+            );
+
+            // Centered Z and error SSCP E = (Z - 1·z̄')'(Z - 1·z̄')
+            let mut z_centered = z.clone();
+            for i in 0..n {
+                for j in 0..p {
+                    z_centered[(i, j)] -= z_bar[j];
+                }
+            }
+            let e_matrix = z_centered.transpose() * &z_centered;
+
+            let e_inv = match e_matrix.clone().try_inverse() {
+                Some(inv) => inv,
+                None => continue,
+            };
+
+            // Hotelling's T² = n·(n-1)·z̄'·E⁻¹·z̄
+            let n_f = n as f64;
+            let p_f = p as f64;
+            let quad = (z_bar.transpose() * &e_inv * &z_bar)[(0, 0)];
+            let t_squared = n_f * (n_f - 1.0) * quad;
+
+            // For rank-1 H, all four statistics share the same exact F.
+            let lambda = t_squared / (n_f - 1.0); // = trace(H E⁻¹)
+            let pillai = lambda / (1.0 + lambda); // = T² / (n-1 + T²)
+            let wilks = 1.0 / (1.0 + lambda); // = (n-1)/(n-1 + T²)
+            let hotelling = lambda;
+            let roy = lambda;
+
+            let hyp_df = p_f;
+            let err_df = n_f - p_f;
+            let f_value = ((n_f - p_f) / p_f) * lambda;
+
+            let f_dist =
+                FisherSnedecor::new(hyp_df, err_df).map_err(|e| e.to_string())?;
+            let significance = 1.0 - f_dist.cdf(f_value);
+
+            // Partial η² = 1 − Wilks (equivalent to λ/(1+λ) for rank-1)
+            let partial_eta_sq = 1.0 - wilks;
+            let noncent = f_value * hyp_df;
+            let observed_power = if f_value > 1.0 {
+                1.0 - 0.1 / f_value
+            } else {
+                0.5
+            };
+
+            let mut tests: HashMap<String, MultivariateTestEntry> = HashMap::new();
+            tests.insert("Pillai's Trace".to_string(), MultivariateTestEntry {
+                value: pillai,
+                f: f_value,
+                hypothesis_df: hyp_df,
+                error_df: err_df,
+                significance,
+                partial_eta_squared: partial_eta_sq,
+                noncent_parameter: noncent,
+                observed_power,
+                is_exact_statistic: true,
+            });
+            tests.insert("Wilks' Lambda".to_string(), MultivariateTestEntry {
+                value: wilks,
+                f: f_value,
+                hypothesis_df: hyp_df,
+                error_df: err_df,
+                significance,
+                partial_eta_squared: partial_eta_sq,
+                noncent_parameter: noncent,
+                observed_power,
+                is_exact_statistic: true,
+            });
+            tests.insert("Hotelling's Trace".to_string(), MultivariateTestEntry {
+                value: hotelling,
+                f: f_value,
+                hypothesis_df: hyp_df,
+                error_df: err_df,
+                significance,
+                partial_eta_squared: partial_eta_sq,
+                noncent_parameter: noncent,
+                observed_power,
+                is_exact_statistic: true,
+            });
+            tests.insert("Roy's Largest Root".to_string(), MultivariateTestEntry {
+                value: roy,
+                f: f_value,
+                hypothesis_df: hyp_df,
+                error_df: err_df,
+                significance,
+                partial_eta_squared: partial_eta_sq,
+                noncent_parameter: noncent,
+                observed_power,
+                is_exact_statistic: true,
+            });
+
+            effects.insert(ws_factor_name, tests);
+        }
+
+        return Ok(MultivariateTests {
+            effects,
+            design: Some(format!(
+                "Type {:?} sum of squares",
+                &config.model.sum_of_square_method
+            )),
+            alpha: Some(alpha),
+        });
+    }
+
     // Need at least 2 dependent variables for multivariate tests
     let dependent_vars = config.main.sub_var.as_ref().unwrap();
     if dependent_vars.len() < 2 {
@@ -36,9 +237,6 @@ pub fn calculate_multivariate_tests(
     // Get factors and initialize effects HashMap
     let factors = config.main.factors_var.as_ref().map_or(Vec::new(), |f| f.clone());
     let mut effects = HashMap::new();
-
-    // Default alpha value
-    let alpha = config.options.sig_level.unwrap_or(0.05);
 
     // Extract values for all dependent variables
     let mut all_values: Vec<Vec<f64>> = Vec::new();

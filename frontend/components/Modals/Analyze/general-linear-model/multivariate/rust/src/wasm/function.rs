@@ -8,7 +8,7 @@ use crate::models::{
 };
 use crate::stats::core;
 use crate::utils::log::FunctionLogger;
-use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
+use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
 
 pub fn run_analysis(
     data: &AnalysisData,
@@ -16,14 +16,6 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector,
     logger: &mut FunctionLogger
 ) -> Result<Option<MultivariateResult>, JsValue> {
-    web_sys::console::log_1(&"Starting multivariate analysis".into());
-
-    // Log configuration to track which methods will be executed
-    web_sys::console::log_1(&format!("Config: {:?}", config).into());
-
-    // Log data to track the data being processed
-    web_sys::console::log_1(&format!("Data: {:?}", data).into());
-
     // Step 1: Basic processing summary (always executed)
     logger.add_log("basic_processing_summary");
     let mut processing_summary = None;
@@ -139,7 +131,7 @@ pub fn run_analysis(
 
     let mut residual_matrix = None;
     if config.options.res_sscp_mat {
-        executed_functions.push("calculate_residual_matrix".to_string());
+        logger.add_log("calculate_residual_matrix");
         match core::calculate_residual_matrix(data, config) {
             Ok(matrix) => {
                 residual_matrix = Some(matrix);
@@ -152,7 +144,7 @@ pub fn run_analysis(
     }
 
     let mut multivariate_tests = None;
-    executed_functions.push("calculate_multivariate_tests".to_string());
+    logger.add_log("calculate_multivariate_tests");
     match core::calculate_multivariate_tests(data, config) {
         Ok(tests) => {
             multivariate_tests = Some(tests);
@@ -164,7 +156,7 @@ pub fn run_analysis(
     }
 
     let mut univariate_tests = None;
-    executed_functions.push("calculate_univariate_tests".to_string());
+    logger.add_log("calculate_univariate_tests");
     match core::calculate_univariate_tests(data, config) {
         Ok(tests) => {
             univariate_tests = Some(tests);
@@ -177,7 +169,7 @@ pub fn run_analysis(
 
     let mut sscp_matrix = None;
     if config.options.sscp_mat {
-        executed_functions.push("calculate_sscp_matrix".to_string());
+        logger.add_log("calculate_sscp_matrix");
         match core::calculate_sscp_matrix(data, config) {
             Ok(matrix) => {
                 sscp_matrix = Some(matrix);
@@ -192,7 +184,7 @@ pub fn run_analysis(
     // Step 7: Spread-vs-Level Plots if requested
     let mut spread_vs_level_plots = None;
     if config.options.spr_vs_level {
-        executed_functions.push("calculate_spread_vs_level_plots".to_string());
+        logger.add_log("calculate_spread_vs_level_plots");
         match core::calculate_spread_vs_level_plots(data, config) {
             Ok(plots) => {
                 spread_vs_level_plots = Some(plots);
@@ -206,7 +198,7 @@ pub fn run_analysis(
 
     // Step 8: Bootstrap analysis if requested
     if config.bootstrap.perform_boot_strapping {
-        executed_functions.push("perform_bootstrap_analysis".to_string());
+        logger.add_log("perform_bootstrap_analysis");
         match core::perform_bootstrap_analysis(data, config) {
             Ok(_) => {}
             Err(e) => {
@@ -219,7 +211,7 @@ pub fn run_analysis(
     // Step 9: Post-hoc tests if requested
     let mut posthoc_tests = None;
     if config.posthoc.src_list.is_some() && !config.posthoc.src_list.as_ref().unwrap().is_empty() {
-        executed_functions.push("calculate_posthoc_tests".to_string());
+        logger.add_log("calculate_posthoc_tests");
         match core::calculate_posthoc_tests(data, config) {
             Ok(tests) => {
                 posthoc_tests = Some(tests);
@@ -232,7 +224,7 @@ pub fn run_analysis(
     }
 
     let mut homogeneous_subsets = None;
-    executed_functions.push("calculate_homogeneous_subsets".to_string());
+    logger.add_log("calculate_homogeneous_subsets");
     match core::calculate_homogeneous_subsets(data, config) {
         Ok(subsets) => {
             homogeneous_subsets = Some(subsets);
@@ -246,7 +238,7 @@ pub fn run_analysis(
     // Step 10: Estimated Marginal Means if requested
     let mut emmeans = None;
     if config.emmeans.target_list.as_ref().map_or(false, |v| !v.is_empty()) {
-        executed_functions.push("calculate_emmeans".to_string());
+        logger.add_log("calculate_emmeans");
         match core::calculate_emmeans(data, config) {
             Ok(means) => {
                 emmeans = Some(means);
@@ -260,7 +252,7 @@ pub fn run_analysis(
     // Step 12: Generate plots if requested
     let mut plots = None;
     if config.plots.line_chart_type || config.plots.bar_chart_type {
-        executed_functions.push("generate_plots".to_string());
+        logger.add_log("generate_plots");
         match core::generate_plots(data, config) {
             Ok(plot_data) => {
                 plots = Some(plot_data);
@@ -281,7 +273,7 @@ pub fn run_analysis(
         config.save.leverage ||
         config.save.cooks_d
     {
-        executed_functions.push("save_variables".to_string());
+        logger.add_log("save_variables");
         match core::save_variables(data, config) {
             Ok(vars) => {
                 saved_variables = Some(vars);
@@ -296,7 +288,7 @@ pub fn run_analysis(
     // Step 14: Calculate general estimable function if requested
     let mut general_estimable_function = None;
     if config.options.general_fun {
-        executed_functions.push("calculate_general_estimable_function".to_string());
+        logger.add_log("calculate_general_estimable_function");
         match core::calculate_general_estimable_function(data, config) {
             Ok(gef) => {
                 general_estimable_function = Some(gef);
@@ -311,7 +303,7 @@ pub fn run_analysis(
     // Step 15: Calculate contrast coefficients if requested
     let mut contrast_coefficients = None;
     if config.contrast.contrast_method != ContrastMethod::None {
-        executed_functions.push("calculate_contrast_coefficients".to_string());
+        logger.add_log("calculate_contrast_coefficients");
         match core::calculate_contrast_coefficients(data, config) {
             Ok(coefs) => {
                 contrast_coefficients = Some(coefs);
@@ -324,10 +316,13 @@ pub fn run_analysis(
     }
 
     // Step 19: Calculate residual plots if requested
+    let mut residual_plots = None;
     if config.options.res_plot {
-        executed_functions.push("calculate_residual_plots".to_string());
+        logger.add_log("calculate_residual_plots");
         match core::calculate_residual_plots(data, config) {
-            Ok(_) => {}
+            Ok(plots) => {
+                residual_plots = Some(plots);
+            }
             Err(e) => {
                 error_collector.add_error("calculate_residual_plots", &e);
                 // Continue execution despite errors
@@ -360,6 +355,7 @@ pub fn run_analysis(
         homogeneous_subsets,
         scatter_plot_matrices: None,
         profile_plots: None,
+        residual_plots,
     };
 
     Ok(Some(result))
@@ -373,13 +369,7 @@ pub fn get_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsVal
 }
 
 pub fn get_formatted_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue> {
-    match result {
-        Some(result) => {
-            let formatted_results = serde_wasm_bindgen::to_value(result).unwrap();
-            Ok(formatted_results)
-        }
-        None => Err(string_to_js_error("No analysis results available".to_string())),
-    }
+    format_result(result)
 }
 
 pub fn get_executed_functions(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue> {

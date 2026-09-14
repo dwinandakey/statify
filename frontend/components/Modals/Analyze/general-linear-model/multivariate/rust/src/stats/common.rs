@@ -23,10 +23,11 @@ pub fn calculate_variance(values: &[f64], mean: Option<f64>) -> f64 {
     }
 
     let mean_val = mean.unwrap_or_else(|| calculate_mean(values));
+    // Bessel's correction (N-1): sample variance, matching SPSS descriptive output.
     values
         .iter()
         .map(|x| (x - mean_val).powi(2))
-        .sum::<f64>() / (values.len() as f64)
+        .sum::<f64>() / ((values.len() - 1) as f64)
 }
 
 /// Calculate standard deviation of values
@@ -185,6 +186,75 @@ pub fn extract_dependent_value(record: &DataRecord, dep_var_name: &str) -> Optio
             _ => None,
         }
     })
+}
+
+/// Merge per-variable record slots into one record-per-row by row index.
+///
+/// `getSlicedData` on the JS side produces `Vec<Vec<DataRecord>>` where the
+/// outer Vec is per-variable and each record contains a single variable's
+/// value. Statistical code expects a single record-per-row containing all
+/// variables (DV, factors, covariates, WLS), so we zip the slots by row
+/// index and union their `values` HashMaps.
+pub fn merge_records(data: &AnalysisData) -> Vec<DataRecord> {
+    let mut max_rows = 0;
+
+    let count_rows = |slots: &Vec<Vec<DataRecord>>, max: &mut usize| {
+        for slot in slots {
+            if slot.len() > *max {
+                *max = slot.len();
+            }
+        }
+    };
+
+    count_rows(&data.dependent_data, &mut max_rows);
+    count_rows(&data.fix_factor_data, &mut max_rows);
+    if let Some(covariate_data) = &data.covariate_data {
+        count_rows(covariate_data, &mut max_rows);
+    }
+    if let Some(wls_data) = &data.wls_data {
+        count_rows(wls_data, &mut max_rows);
+    }
+
+    let mut merged = Vec::with_capacity(max_rows);
+    for i in 0..max_rows {
+        let mut values: HashMap<String, DataValue> = HashMap::new();
+
+        for slot in &data.dependent_data {
+            if let Some(record) = slot.get(i) {
+                for (k, v) in &record.values {
+                    values.insert(k.clone(), v.clone());
+                }
+            }
+        }
+        for slot in &data.fix_factor_data {
+            if let Some(record) = slot.get(i) {
+                for (k, v) in &record.values {
+                    values.insert(k.clone(), v.clone());
+                }
+            }
+        }
+        if let Some(covariate_data) = &data.covariate_data {
+            for slot in covariate_data {
+                if let Some(record) = slot.get(i) {
+                    for (k, v) in &record.values {
+                        values.insert(k.clone(), v.clone());
+                    }
+                }
+            }
+        }
+        if let Some(wls_data) = &data.wls_data {
+            for slot in wls_data {
+                if let Some(record) = slot.get(i) {
+                    for (k, v) in &record.values {
+                        values.insert(k.clone(), v.clone());
+                    }
+                }
+            }
+        }
+
+        merged.push(DataRecord { values });
+    }
+    merged
 }
 
 /// Convert DataValue to String representation
@@ -484,16 +554,21 @@ pub fn get_level_values(
     level: &str,
     dep_var_name: &str
 ) -> Result<Vec<f64>, String> {
+    // Dependent records only carry DV columns; factor columns live in
+    // fix_factor_data. Merge them by row so each record holds both the DV
+    // value and its factor level. Without this, the lookup
+    // `record.values.get(factor)` always returns None and the loop emits an
+    // empty vector — which made post-hoc, homogeneous-subsets, and plots
+    // silently produce no results.
+    let merged = merge_records(data);
     let mut values = Vec::new();
 
-    for records in &data.dependent_data {
-        for record in records {
-            let factor_level = record.values.get(factor).map(data_value_to_string);
+    for record in &merged {
+        let factor_level = record.values.get(factor).map(data_value_to_string);
 
-            if factor_level.as_deref() == Some(level) {
-                if let Some(value) = extract_dependent_value(record, dep_var_name) {
-                    values.push(value);
-                }
+        if factor_level.as_deref() == Some(level) {
+            if let Some(value) = extract_dependent_value(record, dep_var_name) {
+                values.push(value);
             }
         }
     }
@@ -719,12 +794,14 @@ pub fn build_design_matrix_and_response(
     let mut x_matrix = Vec::new();
     let mut y_vector = Vec::new();
 
-    // Collect all records
-    for records in &data.dependent_data {
-        for record in records {
-            if let Some(y_value) = extract_dependent_value(record, dependent_var) {
-                // Build design matrix row for this record
-                let mut x_row = Vec::new();
+    // Build merged per-row records so factor/covariate values align with the
+    // dependent value at the same row index.
+    let merged = merge_records(data);
+
+    for record in &merged {
+        if let Some(y_value) = extract_dependent_value(record, dependent_var) {
+            // Build design matrix row for this record
+            let mut x_row = Vec::new();
 
                 // Add intercept if included in the model
                 if config.model.intercept {
@@ -784,62 +861,234 @@ pub fn build_design_matrix_and_response(
                     }
                 }
 
-                // Add interaction terms
+                // Add interaction terms.
+                //
+                // Proper dummy-coded encoding: for an interaction A×B with
+                // (a-1) and (b-1) main-effect dummies, the interaction is
+                // encoded with (a-1)·(b-1) cross-product dummies (Cartesian
+                // product of factor dummy vectors). The previous code pushed
+                // a SINGLE column per interaction term, which collapsed
+                // interaction df from (a-1)(b-1) down to 1 — causing the
+                // wrong error df (n − k) and wrong SS distribution for every
+                // effect in multi-level Two-Way (and higher) designs.
                 if let Some(factors) = &config.main.fix_factor {
                     if factors.len() > 1 {
                         let interaction_terms = generate_interaction_terms(factors);
                         for term in &interaction_terms {
-                            let factor_levels = parse_interaction_term(term);
-                            let mut interaction_value = 1.0;
-                            let mut valid = true;
+                            let term_factors = parse_interaction_term(term);
 
-                            for factor in &factor_levels {
-                                if let Some(factor_value) = record.values.get(factor) {
-                                    // For simplicity, we use the product of factor dummy variables
-                                    // This needs to be refined based on the actual coding scheme
-                                    if let Ok(levels) = get_factor_levels(data, factor) {
-                                        let level_value = data_value_to_string(factor_value);
-                                        let level_index = levels
-                                            .iter()
-                                            .position(|l| l == &level_value);
-
-                                        if let Some(idx) = level_index {
-                                            // The interaction term encodes as 1 only if all factors match
-                                            // specific levels, otherwise 0
-                                            if idx != levels.len() - 1 {
-                                                // Not the reference level
-                                                interaction_value *= 1.0;
-                                            } else {
-                                                // Reference level
-                                                valid = false;
-                                                break;
-                                            }
-                                        } else {
-                                            valid = false;
-                                            break;
-                                        }
+                            // Per-factor dummy vector for this row (length = levels-1
+                            // for each factor in the interaction).
+                            let mut per_factor_dummies: Vec<Vec<f64>> =
+                                Vec::with_capacity(term_factors.len());
+                            let mut all_present = true;
+                            for factor in &term_factors {
+                                let levels = match get_factor_levels(data, factor) {
+                                    Ok(l) => l,
+                                    Err(_) => {
+                                        all_present = false;
+                                        break;
                                     }
-                                } else {
-                                    valid = false;
-                                    break;
+                                };
+                                let n_dummies = levels.len().saturating_sub(1);
+                                if n_dummies == 0 {
+                                    per_factor_dummies.push(Vec::new());
+                                    continue;
                                 }
+                                let factor_value = match record.values.get(factor) {
+                                    Some(v) => data_value_to_string(v),
+                                    None => {
+                                        all_present = false;
+                                        break;
+                                    }
+                                };
+                                let mut dummies = vec![0.0; n_dummies];
+                                for (i, level) in levels[..n_dummies].iter().enumerate() {
+                                    if &factor_value == level {
+                                        dummies[i] = 1.0;
+                                        break;
+                                    }
+                                }
+                                per_factor_dummies.push(dummies);
                             }
 
-                            if valid {
-                                x_row.push(interaction_value);
-                            } else {
-                                x_row.push(0.0);
+                            // Number of interaction columns = product of dummy counts.
+                            let total_cols: usize = per_factor_dummies
+                                .iter()
+                                .map(|v| v.len())
+                                .product();
+                            if total_cols == 0 {
+                                continue;
+                            }
+
+                            if !all_present {
+                                for _ in 0..total_cols {
+                                    x_row.push(0.0);
+                                }
+                                continue;
+                            }
+
+                            // Row-major Cartesian product: column `c` corresponds
+                            // to indices (i_0, i_1, ..., i_{n-1}) where
+                            //   i_k = (c / stride_k) % dim_k
+                            //   stride_{n-1} = 1
+                            //   stride_k = dim_{k+1} * stride_{k+1}
+                            let dims: Vec<usize> =
+                                per_factor_dummies.iter().map(|v| v.len()).collect();
+                            let mut strides = vec![1usize; dims.len()];
+                            for k in (0..dims.len().saturating_sub(1)).rev() {
+                                strides[k] = strides[k + 1] * dims[k + 1];
+                            }
+                            for c in 0..total_cols {
+                                let mut value = 1.0;
+                                for f_idx in 0..dims.len() {
+                                    let i = (c / strides[f_idx]) % dims[f_idx];
+                                    value *= per_factor_dummies[f_idx][i];
+                                }
+                                x_row.push(value);
                             }
                         }
                     }
                 }
 
-                // Add this record to the design matrix and response vector
-                x_matrix.push(x_row);
-                y_vector.push(y_value);
-            }
+            // Add this record to the design matrix and response vector
+            x_matrix.push(x_row);
+            y_vector.push(y_value);
         }
     }
 
     Ok((x_matrix, y_vector))
 }
+
+/// Per-group summary used by Box's M and Welch-Satterthwaite Hotelling T²:
+/// sample covariance (unbiased, n-1 divisor), mean vector, and sample size,
+/// all keyed by the factor-level combination that defines the group.
+#[derive(Debug, Clone)]
+pub struct GroupCovariance {
+    pub label: HashMap<String, String>,
+    pub covariance: DMatrix<f64>,
+    pub mean: DVector<f64>,
+    pub n: usize,
+}
+
+/// Compute (S_i, x̄_i, n_i) for each level combination of the requested
+/// factors. When `factors` is the full Fixed Factor list this matches
+/// Box's M's grouping; when callers pass a single factor it yields the
+/// per-level groups needed for two-sample Hotelling T².
+///
+/// Groups whose sample size does not exceed `p` (number of DVs) are
+/// dropped — a covariance matrix needs n > p to be defined.
+pub fn compute_per_group_covariances(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+    factors: &[String],
+) -> Result<Vec<GroupCovariance>, String> {
+    if config.main.dep_var.is_none() || config.main.dep_var.as_ref().unwrap().is_empty() {
+        return Err("No dependent variables specified".to_string());
+    }
+    let dependent_vars = config.main.dep_var.as_ref().unwrap();
+    let p = dependent_vars.len();
+
+    // Build the requested-factor combinations. Reuse the existing
+    // generator by constructing a scoped config view: we can't mutate
+    // `config` so we just generate combinations from the factor list.
+    let mut factor_levels: Vec<(String, Vec<String>)> = Vec::with_capacity(factors.len());
+    for factor in factors {
+        let levels = get_factor_levels(data, factor)?;
+        factor_levels.push((factor.clone(), levels));
+    }
+
+    let mut combinations: Vec<HashMap<String, String>> = Vec::new();
+    if factor_levels.is_empty() {
+        combinations.push(HashMap::new());
+    } else {
+        let mut current: HashMap<String, String> = HashMap::new();
+        fn recurse(
+            levels: &[(String, Vec<String>)],
+            current: &mut HashMap<String, String>,
+            idx: usize,
+            out: &mut Vec<HashMap<String, String>>,
+        ) {
+            if idx == levels.len() {
+                out.push(current.clone());
+                return;
+            }
+            let (name, vals) = &levels[idx];
+            for v in vals {
+                current.insert(name.clone(), v.clone());
+                recurse(levels, current, idx + 1, out);
+            }
+        }
+        recurse(&factor_levels, &mut current, 0, &mut combinations);
+    }
+
+    let merged = merge_records(data);
+    let mut groups: Vec<GroupCovariance> = Vec::new();
+
+    for combo in &combinations {
+        let mut group_rows: Vec<Vec<f64>> = Vec::new();
+        for record in &merged {
+            // Match: every factor in combo must equal the record's value.
+            let matches = combo.iter().all(|(f, expected)| {
+                record
+                    .values
+                    .get(f)
+                    .map(data_value_to_string)
+                    .map_or(false, |v| &v == expected)
+            });
+            if !matches {
+                continue;
+            }
+            let mut row = Vec::with_capacity(p);
+            let mut all_present = true;
+            for dep_var in dependent_vars {
+                match extract_dependent_value(record, dep_var) {
+                    Some(v) => row.push(v),
+                    None => {
+                        all_present = false;
+                        break;
+                    }
+                }
+            }
+            if all_present && row.len() == p {
+                group_rows.push(row);
+            }
+        }
+
+        if group_rows.len() <= p {
+            continue;
+        }
+
+        let n = group_rows.len();
+        let mut means = vec![0.0f64; p];
+        for row in &group_rows {
+            for (j, v) in row.iter().enumerate() {
+                means[j] += v;
+            }
+        }
+        for m in &mut means {
+            *m /= n as f64;
+        }
+
+        let mut cov = DMatrix::<f64>::zeros(p, p);
+        for row in &group_rows {
+            for i in 0..p {
+                for j in 0..p {
+                    cov[(i, j)] += (row[i] - means[i]) * (row[j] - means[j]);
+                }
+            }
+        }
+        cov /= (n - 1) as f64;
+
+        let mean_vec = DVector::from_vec(means);
+        groups.push(GroupCovariance {
+            label: combo.clone(),
+            covariance: cov,
+            mean: mean_vec,
+            n,
+        });
+    }
+
+    Ok(groups)
+}
+

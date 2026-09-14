@@ -12,7 +12,7 @@ describe('dateTimeService', () => {
             const currentVariables: Variable[] = [];
             const existingRowCount = 3;
 
-            const { variablesToCreate: _variablesToCreate, cellUpdates } = prepareDateVariables(
+            const { variablesToCreate, cellUpdates } = prepareDateVariables(
                 timeComponents,
                 currentVariables,
                 existingRowCount

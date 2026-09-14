@@ -115,7 +115,7 @@ npx jest normalityTests.spss
 - P-value: |p_statify − p_spss| < 0.001
 - Decision agreement: identical reject/accept at α = 0.05
 
-**Benchmark datasets:** Stored in `__tests__/spss-benchmark-datasets.json`  
+**Benchmark datasets:** Stored in `__tests__/spss-benchmark-datasets.json`
 Includes normal, uniform, and exponential distributions at n = 3, 10, 30, 50, 100, 500.
 
 **File:** `__tests__/normalityTests.spss.test.js`

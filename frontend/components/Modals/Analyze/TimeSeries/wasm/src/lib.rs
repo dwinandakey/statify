@@ -43,3 +43,12 @@ pub use regression::no_intercept_linear_regression::no_intercept_linear_regressi
 pub use regression::simple_exponential_regression::simple_exponential_regression::SimpleExponentialRegression;
 pub use regression::multiple_linear_regression::multiple_linear_regression::MultipleLinearRegression;
 pub use regression::multiple_linear_regression::calculate_matrix::*;
+
+//1.8 GARCH Models
+pub use time_series::garch::garch::GARCH;
+
+//1.9 ECM - Error Correction Model
+pub use time_series::ecm::ecm::ECM;
+
+//1.10 ARDL - Autoregressive Distributed Lag
+pub use time_series::ardl::ardl::ARDL;

@@ -817,25 +817,22 @@ fn calculate_waller_duncan_subsets(
 /// Approximate the studentized range critical value
 /// This is a complex distribution not directly available in statrs
 fn approximate_studentized_range(alpha: f64, k: usize, df: usize) -> f64 {
-    // Use an approximation based on the relationship between
-    // studentized range (q) and the t-distribution
-    let p = 1.0 - alpha;
+    // Use the relationship q ~= sqrt(2) * t with per-comparison alpha correction.
+    if k <= 1 {
+        return 0.0;
+    }
 
     // For k=2, q-distribution is related to t-distribution by q = t * sqrt(2)
     if k == 2 {
         return calculate_t_critical(df, alpha / 2.0) * (2.0_f64).sqrt();
     }
 
-    // For k>2, we use an approximation based on Bonferroni
-    // This is not exact, but provides a reasonable approximation
-    // TODO: Implement a more accurate approximation method
-    let bonferroni_alpha = alpha / (((k * (k - 1)) / 2) as f64);
-    let t_crit = calculate_t_critical(df, bonferroni_alpha / 2.0);
+    // For k>2, use Sidak adjustment for m pairwise comparisons.
+    let m = ((k * (k - 1)) / 2) as f64;
+    let sidak_alpha = 1.0 - (1.0 - alpha).powf(1.0 / m);
+    let t_crit = calculate_t_critical(df, sidak_alpha / 2.0);
 
-    // Scale factor for approximating q from t
-    let scale = 1.0 + 0.2 * ((k as f64) - 2.0).sqrt();
-
-    t_crit * scale
+    (2.0_f64).sqrt() * t_crit
 }
 
 /// Get critical F value for a given alpha and degrees of freedom

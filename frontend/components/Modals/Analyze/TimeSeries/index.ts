@@ -8,6 +8,12 @@ import Decomposition from '@/components/Modals/Analyze/TimeSeries/Decomposition'
 import Autocorrelation from '@/components/Modals/Analyze/TimeSeries/Autocorrelation';
 import UnitRootTest from '@/components/Modals/Analyze/TimeSeries/UnitRootTest';
 import BoxJenkinsModel from '@/components/Modals/Analyze/TimeSeries/BoxJenkinsModel';
+import ARDL from '@/components/Modals/Analyze/TimeSeries/ARDL';
+import ECM from '@/components/Modals/Analyze/TimeSeries/ECM';
+import ARCH from '@/components/Modals/Analyze/TimeSeries/HeteroskedasticityModels';
+import GARCH from '@/components/Modals/Analyze/TimeSeries/HeteroskedasticityModels';
+import HomoscedasticityTest from '@/components/Modals/Analyze/TimeSeries/HomoscedasticityTest';
+import HeteroskedasticityModels from '@/components/Modals/Analyze/TimeSeries/HeteroskedasticityModels';
 
 /**
  * TIME_SERIES_MODAL_COMPONENTS - Registry for time series modal components
@@ -21,6 +27,12 @@ export const TIME_SERIES_MODAL_COMPONENTS: Record<string, React.ComponentType<Ba
   [ModalType.Autocorrelation]: Autocorrelation as React.ComponentType<BaseModalProps>,
   [ModalType.UnitRootTest]: UnitRootTest as React.ComponentType<BaseModalProps>,
   [ModalType.BoxJenkinsModel]: BoxJenkinsModel as React.ComponentType<BaseModalProps>,
+  [ModalType.ARDL]: ARDL as React.ComponentType<BaseModalProps>,
+  [ModalType.ECM]: ECM as React.ComponentType<BaseModalProps>,
+  [ModalType.ARCH]: ARCH as React.ComponentType<BaseModalProps>,
+  [ModalType.GARCH]: GARCH as React.ComponentType<BaseModalProps>,
+  [ModalType.HomoscedasticityTest]: HomoscedasticityTest as React.ComponentType<BaseModalProps>,
+  [ModalType.HeteroskedasticityModels]: HeteroskedasticityModels as React.ComponentType<BaseModalProps>
 };
 
 /**
@@ -36,10 +48,16 @@ export const TIME_SERIES_MODAL_CONTAINER_PREFERENCES: Partial<Record<ModalType, 
   [ModalType.Autocorrelation]: "sidebar",
   [ModalType.UnitRootTest]: "sidebar", 
   [ModalType.BoxJenkinsModel]: "sidebar",
+  [ModalType.ARDL]: "sidebar",
+  [ModalType.ECM]: "sidebar",
+  [ModalType.ARCH]: "sidebar",
+  [ModalType.GARCH]: "sidebar",
+  [ModalType.HomoscedasticityTest]: "sidebar",
+  [ModalType.HeteroskedasticityModels]: "sidebar"
 };
 
 // Re-export the imported components for convenience
-export { Smoothing, Decomposition, Autocorrelation, UnitRootTest, BoxJenkinsModel };
+export { Smoothing, Decomposition, Autocorrelation, UnitRootTest, BoxJenkinsModel, ARDL, ECM, ARCH, GARCH, HomoscedasticityTest, HeteroskedasticityModels };
 
 // Re-export isTimeSeriesModal for convenience
 export { isTimeSeriesModal }; 

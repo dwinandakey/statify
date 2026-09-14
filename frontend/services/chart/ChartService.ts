@@ -839,6 +839,7 @@ interface ChartInput {
     useLegend?: boolean;
     statistic?: "mean" | "median" | "mode" | "min" | "max"; // For Summary Point Plot
     showNormalCurve?: boolean; // For Histogram - show normal curve overlay
+    showValueTooltip?: boolean;
     fitFunctions?: Array<{
       fn: string; // String representation of function: "x => a + b * x"
       equation?: string;
@@ -909,6 +910,7 @@ export interface ChartJSON {
       useLegend?: boolean;
       statistic?: "mean" | "median" | "mode" | "min" | "max"; // For Summary Point Plot
       showNormalCurve?: boolean; // For Histogram - show normal curve overlay
+      showValueTooltip?: boolean;
       fitFunctions?: Array<{
         fn: string; // String representation of function: "x => a + b * x"
         equation?: string;
@@ -1105,6 +1107,7 @@ export class ChartService {
       useLegend = true,
       statistic,
       showNormalCurve,
+      showValueTooltip,
       fitFunctions,
       axisLabels = {},
       axisScaleOptions = DEFAULT_CONFIG.axisOptions,
@@ -1137,6 +1140,7 @@ export class ChartService {
       useAxis: useAxis,
       useLegend: useLegend,
       statistic: statistic,
+      showValueTooltip,
       axisLabels: finalAxisLabels,
       axisScaleOptions: axisScaleOptions,
     };

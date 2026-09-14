@@ -22,7 +22,8 @@ export type RepeatedMeasuresDialogProps = {
     ) => void;
     data: RepeatedMeasuresMainType;
     globalVariables: string[];
-    combinationVars: string[];
+    combinationVars?: string[];
+    onBack?: () => void;
     onContinue: (mainState: RepeatedMeasuresMainType) => void;
     onReset: () => void;
 };
@@ -220,6 +221,6 @@ export type RepeatedMeasuresType = {
 
 export type RepeatedMeasuresContainerProps = {
     onClose: () => void;
-    combinationVars: string[];
-    factorVars: string[];
+    combinationVars?: string[];
+    factorVars?: string[];
 };

@@ -141,7 +141,7 @@ describe('Bartlett Test Worker', () => {
       const factorData = [1, 1, 1, 1, 2, 2, 2, 2];
 
       // Worker should filter out invalid values
-      const validCount = testData.filter(v => 
+      const validCount = testData.filter(v =>
         v !== null && v !== undefined && !isNaN(v)
       ).length;
 
@@ -221,7 +221,7 @@ describe('Bartlett Test Worker', () => {
 
     test('matches SPSS EXAMINE output', () => {
       // Reference data from SPSS EXAMINE command
-      // 
+      //
       // SPSS syntax:
       // EXAMINE VARIABLES=testvar BY factor
       //   /PLOT=NONE
@@ -329,7 +329,7 @@ describe('Bartlett Test Worker', () => {
 
 /**
  * Integration tests that would run the actual worker
- * 
+ *
  * These require a worker test harness and are skipped in basic unit tests
  */
 describe.skip('Bartlett Test Worker Integration', () => {

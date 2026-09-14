@@ -38,17 +38,6 @@ const TwoStepClusterModal = lazy(() =>
         "@/components/Modals/Analyze/Classify/two-step-cluster/dialogs/two-step-cluster-main"
     ).then((module) => ({ default: module.TwoStepClusterContainer }))
 );
-const KMeansClusterModal = lazy(
-    () =>
-        import(
-            "@/components/Modals/Analyze/Classify/k-means-cluster/dialogs/k-means-cluster-main"
-        )
-);
-const HierarchicalClusterModal = lazy(() =>
-    import(
-        "@/components/Modals/Analyze/Classify/hierarchical-cluster/dialogs/hierarchical-cluster-main"
-    ).then((module) => ({ default: module.HierClusContainer }))
-);
 const TreeModal = lazy(() =>
     import("@/components/Modals/Analyze/Classify/tree/dialogs/tree-main").then(
         (module) => ({ default: module.TreeContainer })
@@ -57,7 +46,7 @@ const TreeModal = lazy(() =>
 const DiscriminantModal = lazy(() =>
     import(
         "@/components/Modals/Analyze/Classify/discriminant/dialogs/discriminant-main"
-    ).then((module) => ({ default: module.DiscriminantContainer }))
+    ).then((module) => ({ default: module.DiscriminantMain }))
 );
 const NearestNeighborModal = lazy(() =>
     import(
@@ -86,12 +75,6 @@ export const CLASSIFY_MODAL_COMPONENTS: Record<
 > = {
     [ModalType.ModalTwoStepCluster]: withSuspense(
         TwoStepClusterModal as any
-    ) as React.ComponentType<BaseModalProps>,
-    [ModalType.ModalKMeansCluster]: withSuspense(
-        KMeansClusterModal as any
-    ) as React.ComponentType<BaseModalProps>,
-    [ModalType.ModalHierarchicalCluster]: withSuspense(
-        HierarchicalClusterModal as any
     ) as React.ComponentType<BaseModalProps>,
     [ModalType.ModalTree]: withSuspense(
         TreeModal as any
@@ -141,8 +124,6 @@ export const CLASSIFY_MODAL_CONTAINER_PREFERENCES: Partial<
     Record<ModalType, "dialog" | "sidebar">
 > = {
     [ModalType.ModalTwoStepCluster]: "sidebar",
-    [ModalType.ModalKMeansCluster]: "sidebar",
-    [ModalType.ModalHierarchicalCluster]: "sidebar",
     [ModalType.ModalTree]: "sidebar",
     [ModalType.ModalDiscriminant]: "sidebar",
     [ModalType.ModalNearestNeighbor]: "sidebar",

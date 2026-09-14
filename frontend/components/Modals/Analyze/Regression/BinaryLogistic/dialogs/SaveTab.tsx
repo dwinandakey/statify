@@ -1,7 +1,49 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { BinaryLogisticSaveParams } from "../types/binary-logistic";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp, Activity, LineChart } from "lucide-react";
+import type { BinaryLogisticSaveParams } from "../types/binary-logistic";
+
+interface SaveCheckboxRowProps {
+  id: string;
+  label: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}
+
+const SaveCheckboxRow: React.FC<SaveCheckboxRowProps> = ({
+  id,
+  label,
+  checked,
+  onCheckedChange,
+}) => {
+  // Clicking the checkbox or the label already toggles it on their own
+  // (native label->input forwarding + Radix's own click handling).
+  // Only handle clicks that land on the row's empty space so we don't
+  // double-fire onCheckedChange for a single click.
+  const handleRowClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('[role="checkbox"], label')) return;
+    onCheckedChange(!checked);
+  };
+
+  return (
+    <div
+      className="flex items-center space-x-2.5 rounded-md px-2 py-1.5 -mx-2 transition-colors hover:bg-accent/60 cursor-pointer"
+      onClick={handleRowClick}
+    >
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={(c) => onCheckedChange(!!c)}
+      />
+      <Label htmlFor={id} className="font-normal cursor-pointer select-none">
+        {label}
+      </Label>
+    </div>
+  );
+};
 
 export const SaveTab = ({
   params,
@@ -10,101 +52,104 @@ export const SaveTab = ({
   params: BinaryLogisticSaveParams;
   onChange: (p: Partial<BinaryLogisticSaveParams>) => void;
 }) => (
-  <div className="grid grid-cols-2 gap-8 py-4">
-    <div className="space-y-4">
-      <h4 className="font-semibold text-sm">Predicted Values</h4>
-      <div className="space-y-2 pl-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
+  <div className="grid grid-cols-2 gap-5 py-4 h-full overflow-y-auto pr-1">
+    {/* KOLOM KIRI */}
+    <div className="space-y-5">
+      <Card id="binary-logistic-save-predicted-card" className="shadow-sm">
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <TrendingUp className="h-4 w-4 text-primary" />
+            Predicted Values
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-1 space-y-1">
+          <SaveCheckboxRow
             id="prob"
+            label="Probabilities"
             checked={params.predictedProbabilities}
-            onCheckedChange={(c) => onChange({ predictedProbabilities: !!c })}
+            onCheckedChange={(c) => onChange({ predictedProbabilities: c })}
           />
-          <Label htmlFor="prob">Probabilities</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="group"
+            label="Group membership"
             checked={params.predictedGroup}
-            onCheckedChange={(c) => onChange({ predictedGroup: !!c })}
+            onCheckedChange={(c) => onChange({ predictedGroup: c })}
           />
-          <Label htmlFor="group">Group membership</Label>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <h4 className="font-semibold text-sm pt-4">Influence</h4>
-      <div className="space-y-2 pl-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
+      <Card id="binary-logistic-save-influence-card" className="shadow-sm">
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <Activity className="h-4 w-4 text-primary" />
+            Influence
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-1 space-y-1">
+          <SaveCheckboxRow
             id="cook"
+            label="Cook's distance"
             checked={params.influenceCooks}
-            onCheckedChange={(c) => onChange({ influenceCooks: !!c })}
+            onCheckedChange={(c) => onChange({ influenceCooks: c })}
           />
-          <Label htmlFor="cook">Cook's</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="leverage"
+            label="Leverage values"
             checked={params.influenceLeverage}
-            onCheckedChange={(c) => onChange({ influenceLeverage: !!c })}
+            onCheckedChange={(c) => onChange({ influenceLeverage: c })}
           />
-          <Label htmlFor="leverage">Leverage values</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="dfbeta"
+            label="DfBeta(s)"
             checked={params.influenceDfBeta}
-            onCheckedChange={(c) => onChange({ influenceDfBeta: !!c })}
+            onCheckedChange={(c) => onChange({ influenceDfBeta: c })}
           />
-          <Label htmlFor="dfbeta">DfBeta(s)</Label>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
 
-    <div className="space-y-4">
-      <h4 className="font-semibold text-sm">Residuals</h4>
-      <div className="space-y-2 pl-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
+    {/* KOLOM KANAN */}
+    <div className="space-y-5">
+      <Card id="binary-logistic-save-residuals-card" className="shadow-sm">
+        <CardHeader className="p-4 pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <LineChart className="h-4 w-4 text-primary" />
+            Residuals
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-1 space-y-1">
+          <SaveCheckboxRow
             id="res_un"
+            label="Unstandardized"
             checked={params.residualsUnstandardized}
-            onCheckedChange={(c) => onChange({ residualsUnstandardized: !!c })}
+            onCheckedChange={(c) => onChange({ residualsUnstandardized: c })}
           />
-          <Label htmlFor="res_un">Unstandardized</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="res_logit"
+            label="Logit"
             checked={params.residualsLogit}
-            onCheckedChange={(c) => onChange({ residualsLogit: !!c })}
+            onCheckedChange={(c) => onChange({ residualsLogit: c })}
           />
-          <Label htmlFor="res_logit">Logit</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="res_stud"
+            label="Studentized"
             checked={params.residualsStudentized}
-            onCheckedChange={(c) => onChange({ residualsStudentized: !!c })}
+            onCheckedChange={(c) => onChange({ residualsStudentized: c })}
           />
-          <Label htmlFor="res_stud">Studentized</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="res_std"
+            label="Standardized"
             checked={params.residualsStandardized}
-            onCheckedChange={(c) => onChange({ residualsStandardized: !!c })}
+            onCheckedChange={(c) => onChange({ residualsStandardized: c })}
           />
-          <Label htmlFor="res_std">Standardized</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
+          <SaveCheckboxRow
             id="res_dev"
+            label="Deviance"
             checked={params.residualsDeviance}
-            onCheckedChange={(c) => onChange({ residualsDeviance: !!c })}
+            onCheckedChange={(c) => onChange({ residualsDeviance: c })}
           />
-          <Label htmlFor="res_dev">Deviance</Label>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   </div>
 );

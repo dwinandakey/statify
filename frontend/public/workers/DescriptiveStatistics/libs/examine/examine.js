@@ -467,4 +467,3 @@ function getTCriticalApproximation(df, alpha = 0.05) {
 
     return lowerT + fraction * (upperT - lowerT);
 }
-

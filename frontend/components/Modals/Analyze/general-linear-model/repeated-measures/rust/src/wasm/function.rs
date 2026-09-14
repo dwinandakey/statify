@@ -1,31 +1,24 @@
 use wasm_bindgen::prelude::*;
 
-use crate::models::config::ContrastMethod;
 use crate::models::{
     config::RepeatedMeasuresConfig,
     data::AnalysisData,
     result::RepeatedMeasureResult,
 };
 use crate::stats::core;
-use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
+use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
 
 pub fn run_analysis(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig,
     error_collector: &mut ErrorCollector
 ) -> Result<Option<RepeatedMeasureResult>, JsValue> {
-    web_sys::console::log_1(&"Starting repeated measures analysis".into());
-
-    // Initialize result with executed functions tracking
     let mut executed_functions = Vec::new();
 
-    // Log configuration to track which methods will be executed
-    web_sys::console::log_1(&format!("Config: {:?}", config).into());
-
     // Step 1: Calculate within-subjects factors (always executed)
-    executed_functions.push("calculate_within_subjects_factors".to_string());
+    executed_functions.push("parse_within_subject_factors".to_string());
     let mut within_subjects_factors = None;
-    match core::calculate_within_subjects_factors(data, config) {
+    match core::parse_within_subject_factors(data, config) {
         Ok(factors) => {
             within_subjects_factors = Some(factors);
         }
@@ -89,7 +82,7 @@ pub fn run_analysis(
     // Step 6: Tests of within-subjects effects
     let mut tests_of_within_subjects_effects = None;
     executed_functions.push("calculate_tests_within_subjects_effects".to_string());
-    match core::calculate_tests_within_subjects_effects(data, config) {
+    match core::calculate_tests_within_subjects_effects(data, config, &mauchly_test) {
         Ok(tests) => {
             tests_of_within_subjects_effects = Some(tests);
         }
@@ -112,8 +105,8 @@ pub fn run_analysis(
 
     // Step 8: Tests of between-subjects effects
     let mut tests_of_between_subjects_effects = None;
-    executed_functions.push("calculate_tests_between_subjects_effects".to_string());
-    match core::calculate_tests_between_subjects_effects(data, config) {
+    executed_functions.push("calculate_between_subjects_effects".to_string());
+    match core::calculate_between_subjects_effects(data, config) {
         Ok(tests) => {
             tests_of_between_subjects_effects = Some(tests);
         }
@@ -150,19 +143,8 @@ pub fn run_analysis(
         }
     }
 
-    // Step 11: Within-subjects SSCP Matrix if requested in options
-    let mut within_subjects_sscp = None;
-    if config.options.sscp_mat {
-        executed_functions.push("calculate_within_subjects_sscp".to_string());
-        match core::calculate_within_subjects_sscp(data, config) {
-            Ok(sscp) => {
-                within_subjects_sscp = Some(sscp);
-            }
-            Err(e) => {
-                error_collector.add_error("calculate_within_subjects_sscp", &e);
-            }
-        }
-    }
+    // Step 11: Within-subjects SSCP Matrix (not yet implemented)
+    let within_subjects_sscp = None;
 
     // Step 12: Between-subjects SSCP Matrix if requested in options
     let mut between_subjects_sscp = None;
@@ -206,15 +188,29 @@ pub fn run_analysis(
         }
     }
 
-    // Step 15: Univariate tests
+    // Step 15: Univariate tests — only meaningful when between-subjects
+    // predictors exist. For a purely within-subjects design the function
+    // tries to invert an empty X'X (no factors, no covariates) and fails.
     let mut univariate_tests = None;
-    executed_functions.push("calculate_univariate_tests".to_string());
-    match core::calculate_univariate_tests(data, config) {
-        Ok(tests) => {
-            univariate_tests = Some(tests);
-        }
-        Err(e) => {
-            error_collector.add_error("calculate_univariate_tests", &e);
+    let has_between_factors = config
+        .main
+        .factors_var
+        .as_ref()
+        .map_or(false, |f| !f.is_empty());
+    let has_covariates = config
+        .main
+        .covariates
+        .as_ref()
+        .map_or(false, |c| !c.is_empty());
+    if has_between_factors || has_covariates {
+        executed_functions.push("calculate_univariate_tests".to_string());
+        match core::calculate_univariate_tests(data, config) {
+            Ok(tests) => {
+                univariate_tests = Some(tests);
+            }
+            Err(e) => {
+                error_collector.add_error("calculate_univariate_tests", &e);
+            }
         }
     }
 
@@ -246,27 +242,6 @@ pub fn run_analysis(
                 Err(e) => {
                     error_collector.add_error("calculate_emmeans", &e);
                 }
-            }
-        }
-    }
-
-    // Step 19: Save variables if requested
-    if
-        config.save.res_weighted ||
-        config.save.pre_weighted ||
-        config.save.unstandardized_res ||
-        config.save.weighted_res ||
-        config.save.standardized_res ||
-        config.save.studentized_res ||
-        config.save.deleted_res ||
-        config.save.leverage ||
-        config.save.cooks_d
-    {
-        executed_functions.push("save_variables".to_string());
-        match core::save_variables(data, config) {
-            Ok(_) => {}
-            Err(e) => {
-                error_collector.add_error("save_variables", &e);
             }
         }
     }
@@ -304,13 +279,7 @@ pub fn get_results(result: &Option<RepeatedMeasureResult>) -> Result<JsValue, Js
 }
 
 pub fn get_formatted_results(result: &Option<RepeatedMeasureResult>) -> Result<JsValue, JsValue> {
-    match result {
-        Some(result) => {
-            let formatted_results = serde_wasm_bindgen::to_value(result).unwrap();
-            Ok(formatted_results)
-        }
-        None => Err(string_to_js_error("No analysis results available".to_string())),
-    }
+    format_result(result)
 }
 
 pub fn get_executed_functions(result: &Option<RepeatedMeasureResult>) -> Result<JsValue, JsValue> {

@@ -18,7 +18,7 @@ const DimensionReductionMenu: React.FC = () => {
             <MenubarSubTrigger>Dimension Reduction</MenubarSubTrigger>
             <MenubarSubContent>
                 <MenubarItem
-                    disabled={true}
+                    disabled={false}
                     onClick={() => openModal(ModalType.ModalFactor)}
                 >
                     Factor

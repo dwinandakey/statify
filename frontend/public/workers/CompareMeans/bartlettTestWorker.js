@@ -2,9 +2,9 @@
  * ============================================================================
  * BARTLETT TEST WEB WORKER
  * ============================================================================
- * 
+ *
  * Bartlett Test Worker (Standalone Pattern - Legacy)
- * 
+ *
  * TODO: Consider refactoring to BartlettCalculator class pattern
  * to match project architecture (see CompareMeans/libs/oneWayAnova.js)
  *

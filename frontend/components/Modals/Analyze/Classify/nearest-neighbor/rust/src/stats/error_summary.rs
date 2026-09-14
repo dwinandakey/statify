@@ -1,15 +1,17 @@
 // error_summary.rs
-use crate::models::result::{ ClassificationTable, ErrorSummary };
+use crate::models::result::{ClassificationTable, ErrorSummary};
 
 /// Calculate error summary based on classification table results
 pub fn calculate_error_summary(
-    classification_table: &Option<ClassificationTable>
+    classification_table: &Option<ClassificationTable>,
 ) -> Result<ErrorSummary, String> {
     match classification_table {
         Some(table) => {
             // Calculate overall accuracy for training set
             let training_total: usize = table.training.observed.iter().sum();
-            let training_correct: f64 = table.training.observed
+            let training_correct: f64 = table
+                .training
+                .observed
                 .iter()
                 .zip(table.training.percent_correct.iter())
                 .map(|(&obs, &pct)| ((obs as f64) * pct) / 100.0)
@@ -22,7 +24,9 @@ pub fn calculate_error_summary(
 
             // Calculate overall accuracy for holdout set
             let holdout_total: usize = table.holdout.observed.iter().sum();
-            let holdout_correct: f64 = table.holdout.observed
+            let holdout_correct: f64 = table
+                .holdout
+                .observed
                 .iter()
                 .zip(table.holdout.percent_correct.iter())
                 .map(|(&obs, &pct)| ((obs as f64) * pct) / 100.0)

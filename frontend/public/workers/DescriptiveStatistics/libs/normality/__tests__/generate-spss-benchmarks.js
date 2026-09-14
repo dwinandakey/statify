@@ -1,6 +1,6 @@
 /**
  * SPSS Benchmark Dataset Generator
- * 
+ *
  * Generates diverse datasets with known statistical properties for SPSS compatibility validation.
  * Since actual SPSS Statistics 28.0 may not be available, this script generates datasets
  * with expected Shapiro-Wilk values based on:
@@ -50,7 +50,7 @@ function generateExponential(n, lambda = 1) {
 // Generate specific test datasets
 function generateBenchmarkDatasets() {
     const datasets = [];
-    
+
     // Dataset 1: Small normal sample (n=3)
     datasets.push({
         id: 'ds01_normal_n3',
@@ -62,7 +62,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Tests n=3 special case with exact p-value formula'
     });
-    
+
     // Dataset 2: Small normal sample (n=10)
     datasets.push({
         id: 'ds02_normal_n10',
@@ -74,7 +74,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Tests small sample approximation (n≤11)'
     });
-    
+
     // Dataset 3: Medium normal sample (n=30)
     datasets.push({
         id: 'ds03_normal_n30',
@@ -86,7 +86,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Common sample size for normality testing'
     });
-    
+
     // Dataset 4: Large normal sample (n=50)
     datasets.push({
         id: 'ds04_normal_n50',
@@ -98,7 +98,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Moderate sample size, should show high W and high p-value'
     });
-    
+
     // Dataset 5: Large normal sample (n=100)
     datasets.push({
         id: 'ds05_normal_n100',
@@ -110,7 +110,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Large sample normality test'
     });
-    
+
     // Dataset 6: Very large normal sample (n=500)
     datasets.push({
         id: 'ds06_normal_n500',
@@ -122,7 +122,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Very large sample, tests Royston 1995 approximation'
     });
-    
+
     // Dataset 7: Uniform distribution (n=30)
     datasets.push({
         id: 'ds07_uniform_n30',
@@ -134,7 +134,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Non-normal distribution, should reject normality'
     });
-    
+
     // Dataset 8: Uniform distribution (n=50)
     datasets.push({
         id: 'ds08_uniform_n50',
@@ -146,7 +146,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Moderate uniform sample, low W expected'
     });
-    
+
     // Dataset 9: Exponential distribution (n=30)
     datasets.push({
         id: 'ds09_exponential_n30',
@@ -158,7 +158,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Right-skewed distribution, should reject normality'
     });
-    
+
     // Dataset 10: Exponential distribution (n=100)
     datasets.push({
         id: 'ds10_exponential_n100',
@@ -170,7 +170,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Large exponential sample, very low p-value expected'
     });
-    
+
     // Dataset 11: Perfect normal (constructed, n=10)
     datasets.push({
         id: 'ds11_perfect_normal_n10',
@@ -182,7 +182,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Approximate standard normal quantiles, high W expected'
     });
-    
+
     // Dataset 12: Small uniform (n=10)
     datasets.push({
         id: 'ds12_uniform_n10',
@@ -194,7 +194,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Small uniform sample for small-n approximation test'
     });
-    
+
     // Dataset 13: Bimodal distribution (n=50)
     const bimodal = [
         ...generateNormal(25, 10, 2),
@@ -210,7 +210,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Two normal distributions mixed, should reject normality'
     });
-    
+
     // Dataset 14: Normal with outlier (n=30)
     const normalWithOutlier = generateNormal(29, 50, 10);
     normalWithOutlier.push(150); // Extreme outlier
@@ -224,7 +224,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Tests robustness to outliers'
     });
-    
+
     // Dataset 15: Large sample at boundary (n=5000)
     datasets.push({
         id: 'ds15_normal_n5000',
@@ -236,7 +236,7 @@ function generateBenchmarkDatasets() {
         expectedP: null,
         notes: 'Maximum supported sample size boundary test'
     });
-    
+
     return datasets;
 }
 
@@ -244,7 +244,7 @@ function generateBenchmarkDatasets() {
 function computeShapiroWilkValues(datasets) {
     // Import the actual implementation
     const normalityTests = require('../normalityTests.js');
-    
+
     for (const dataset of datasets) {
         try {
             const result = normalityTests.calculateShapiroWilk(dataset.data);
@@ -261,7 +261,7 @@ function computeShapiroWilkValues(datasets) {
             dataset.computeError = error.message;
         }
     }
-    
+
     return datasets;
 }
 
@@ -304,7 +304,7 @@ function createJSONFixture(datasets, outputPath) {
             computedSuccessfully: ds.computedSuccessfully
         }))
     };
-    
+
     fs.writeFileSync(outputPath, JSON.stringify(fixture, null, 2), 'utf8');
     console.log(`\n✓ Created JSON fixture: ${outputPath}`);
 }
@@ -312,35 +312,35 @@ function createJSONFixture(datasets, outputPath) {
 // Main execution
 function main() {
     console.log('=== SPSS Benchmark Dataset Generator ===\n');
-    
+
     // Output directory
     const outputDir = __dirname;
     const csvDir = path.join(outputDir, 'spss-benchmark-csv');
-    
+
     // Create CSV directory if it doesn't exist
     if (!fs.existsSync(csvDir)) {
         fs.mkdirSync(csvDir, { recursive: true });
     }
-    
+
     console.log('Step 1: Generating 15 benchmark datasets...');
     let datasets = generateBenchmarkDatasets();
     console.log(`✓ Generated ${datasets.length} datasets\n`);
-    
+
     console.log('Step 2: Computing Shapiro-Wilk values using Statify implementation...');
     datasets = computeShapiroWilkValues(datasets);
-    
+
     const successCount = datasets.filter(ds => ds.computedSuccessfully).length;
     console.log(`✓ Computed W and p-values for ${successCount}/${datasets.length} datasets\n`);
-    
+
     console.log('Step 3: Exporting datasets to CSV...');
     for (const dataset of datasets) {
         exportToCSV(dataset, csvDir);
     }
-    
+
     console.log('\nStep 4: Creating JSON fixture file...');
     const fixturePath = path.join(outputDir, 'spss-benchmark-datasets.json');
     createJSONFixture(datasets, fixturePath);
-    
+
     console.log('\n=== Generation Complete ===');
     console.log(`\nSummary:`);
     console.log(`- Total datasets: ${datasets.length}`);

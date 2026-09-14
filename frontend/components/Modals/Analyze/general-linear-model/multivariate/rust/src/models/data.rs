@@ -20,6 +20,7 @@ pub enum DataValue {
 pub struct ValueLabel {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<i32>,
+    #[serde(default)]
     pub variable_name: String,
     pub value: DataValue,
     pub label: String,

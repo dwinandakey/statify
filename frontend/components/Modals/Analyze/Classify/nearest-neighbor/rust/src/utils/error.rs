@@ -12,7 +12,10 @@ pub struct ErrorCollector {
 impl ErrorCollector {
     // Menambahkan error baru ke collector
     pub fn add_error(&mut self, context: &str, message: &str) {
-        let entry = self.errors.entry(context.to_string()).or_insert_with(Vec::new);
+        let entry = self
+            .errors
+            .entry(context.to_string())
+            .or_default();
         entry.push(message.to_string());
     }
 

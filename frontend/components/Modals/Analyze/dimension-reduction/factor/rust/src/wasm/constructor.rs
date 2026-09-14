@@ -1,3 +1,5 @@
+// perbaikan bisa (9/1/2026)
+
 use wasm_bindgen::prelude::*;
 
 use crate::models::{
@@ -111,7 +113,11 @@ impl FactorAnalysis {
             value_target_data,
             target_data_defs,
             value_target_data_defs,
+            eigenvalues: None,
+            total_variance: None,
+            n_variables: 0,
         };
+
 
         // Create the analysis instance
         let mut analysis = FactorAnalysis {
@@ -139,7 +145,7 @@ impl FactorAnalysis {
     }
 
     pub fn get_formatted_results(&self) -> Result<JsValue, JsValue> {
-        function::get_formatted_results(&self.result)
+        function::get_formatted_results(&self.result, &self.config)
     }
 
     // Function to get all errors

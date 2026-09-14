@@ -1,17 +1,17 @@
 use std::f64::consts::PI;
 
+use statrs::distribution::{ChiSquared, ContinuousCDF};
+
 // Chi-square cumulative distribution function
 pub fn chi_square_cdf(x: f64, df: f64) -> f64 {
-    if x <= 0.0 {
+    if x.is_nan() || df.is_nan() || x <= 0.0 || df <= 0.0 {
         return 0.0;
     }
 
-    // For chi-square, we use the relationship with gamma distribution
-    // CDF(x; df) = P(df/2, x/2) where P is the regularized gamma function
-    let a = df / 2.0;
-    let y = x / 2.0;
-
-    gamma_p(a, y)
+    match ChiSquared::new(df) {
+        Ok(distribution) => distribution.cdf(x),
+        Err(_) => 0.0,
+    }
 }
 
 // Regularized gamma function P(a,x)
@@ -78,7 +78,7 @@ pub fn gamma_function(x: f64) -> f64 {
         12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7,
     ];
 
-    let mut y = x;
+    let y = x;
     let mut result = 0.99999999999980993;
 
     for i in 0..8 {
@@ -137,7 +137,7 @@ pub fn ln_gamma(x: f64) -> f64 {
         12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7,
     ];
 
-    let mut y = x;
+    let y = x;
     let mut result = 0.99999999999980993;
 
     for i in 0..8 {

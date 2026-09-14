@@ -228,7 +228,8 @@ export const createHorizontalBarChart = (
       origin?: string;
     };
   },
-  chartColors?: string[]
+  chartColors?: string[],
+  showValueTooltip: boolean = false
 ) => {
   // Filter data sesuai axis min/max
   const filteredData = filterDataByAxisRange(
@@ -325,8 +326,24 @@ export const createHorizontalBarChart = (
     addChartTitle(svg, titleOptions);
   }
 
+  const tooltip = showValueTooltip
+    ? d3
+        .select("body")
+        .append("div")
+        .attr("class", "horizontal-bar-tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background", "#f9f9f9")
+        .style("padding", "8px")
+        .style("border", "1px solid #d3d3d3")
+        .style("border-radius", "4px")
+        .style("pointer-events", "none")
+        .style("font-size", "12px")
+        .style("box-shadow", "0px 0px 6px #aaa")
+    : null;
+
   // Bars
-  svg
+  const bars = svg
     .append("g")
     .attr("fill", (d, i) =>
       Array.isArray(chartColors) && chartColors.length > 0
@@ -340,6 +357,25 @@ export const createHorizontalBarChart = (
     .attr("y", (d) => y(d.uniqueId) ?? 0)
     .attr("width", (d) => x(d.value) - x(xMin))
     .attr("height", y.bandwidth());
+
+  if (tooltip) {
+    bars
+      .on("mouseover", (event, d) => {
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .html(`<strong>Value:</strong> ${formatAxisNumber(d.value)}`)
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY - 28}px`);
+      })
+      .on("mousemove", (event) => {
+        tooltip
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY - 28}px`);
+      })
+      .on("mouseout", () => {
+        tooltip.transition().duration(500).style("opacity", 0);
+      });
+  }
 
   // Axis with standardized functions
   if (useAxis) {

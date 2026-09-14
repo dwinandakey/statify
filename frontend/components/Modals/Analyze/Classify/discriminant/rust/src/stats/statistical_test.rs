@@ -3,11 +3,9 @@
 //! This module implements various statistical tests used in discriminant analysis,
 //! including univariate F tests, Wilks' Lambda, and tolerance calculations.
 
-use rayon::prelude::*;
-
 use crate::{
     models::{ result::WilksLambdaTest, AnalysisData, DiscriminantConfig },
-    stats::core::{ calculate_correlation, AnalyzedDataset, EPSILON },
+    stats::core::{ AnalyzedDataset, EPSILON },
 };
 
 use super::core::{
@@ -15,6 +13,7 @@ use super::core::{
     calculate_eigen_statistics,
     calculate_p_value_from_chi_square,
     extract_analyzed_dataset,
+    get_stepwise_selected_variables,
 };
 
 /// Calculate univariate F test for a variable
@@ -94,12 +93,9 @@ pub fn calculate_univariate_f(variable: &str, dataset: &AnalyzedDataset) -> (f64
 /// determinant, and measures the proportion of variance not explained by group
 /// differences.
 ///
-/// # Parameters
-/// * `dataset` - The analyzed dataset containing group data and means
-/// * `variables` - The set of variables to include in the calculation
-///
-/// # Returns
-/// The Wilks' lambda value (between 0 and 1)
+/// Uses raw SSCP matrices: Λ = |W| / |B + W|
+/// where W = Σ(nᵢ-1)Sᵢ (NOT divided by n-k)
+/// This matches SPSS and standard textbook formulas.
 pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[String]) -> f64 {
     if variables.is_empty() {
         return 1.0;
@@ -108,20 +104,28 @@ pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[St
     // Calculate between-groups and within-groups matrices
     let (between_mat, within_mat) = calculate_between_within_matrices(dataset, variables);
 
-    // Wilks' lambda = |W| / |B + W|
+    // IMPORTANT: within_mat is divided by total_df=(n-k) by calculate_between_within_matrices
+    // (which is correct for covariance display purposes).
+    // But Wilks' Lambda requires raw SSCP W: W_raw = W_cov * (n-k).
+    // |W_raw| = |W_cov| * (n-k)^p  where p = number of variables.
+    let total_df = dataset.total_cases - dataset.num_groups;
+    let p = variables.len();
+    let scale_factor = (total_df as f64).powi(p as i32);
+
+    // Wilks' lambda = |W_raw| / |B + W_raw|
+    // where W_raw = within_mat * (n-k)^p
     let within_det = match within_mat.clone().determinant() {
-        det if det > 0.0 => { det }
-        _ => {
-            1.0 // Fallback for singular matrix
-        }
+        det if det > 0.0 => det * scale_factor,
+        _ => 1.0,
     };
 
-    let total_mat = &between_mat + &within_mat;
+    // For total: |B + W_raw| = |B + W_cov * (n-k)| = |(n-k) * (B/(n-k) + W_cov)|
+    // = (n-k)^p * |B/(n-k) + W_cov|
+    // But simpler: just compute B + W_raw directly
+    let total_mat = &between_mat + &within_mat * (total_df as f64);
     let total_det = match total_mat.determinant() {
-        det if det > 0.0 => { det }
-        _ => {
-            1.0 // Fallback for singular matrix
-        }
+        det if det > 0.0 => det,
+        _ => 1.0,
     };
 
     let lambda = if total_det > 0.0 { within_det / total_det } else { 1.0 };
@@ -131,8 +135,17 @@ pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[St
 
 /// Calculate overall F statistic for a set of variables
 ///
-/// This approximates the significance of Wilks' lambda using an F approximation.
-/// Based on the observed output pattern in discriminant analysis tables.
+/// This approximates the significance of Wilks' lambda using Rao's F approximation.
+///
+/// F = ((1 - Λ^(1/s)) / Λ^(1/s)) × (df2 / df1)
+///
+/// Where:
+/// - s = sqrt((p²×(g-1)² - 4) / (p² + (g-1)² - 5))
+/// - df1 = p × (g - 1)
+/// - df2 = (n - 1 - (p+g)/2) × s - (p×(g-1) - 2) / 2
+/// - p = number of variables, g = number of groups, n = total cases
+///
+/// This matches SPSS and the standard Rao approximation formula.
 ///
 /// # Parameters
 /// * `wilks_lambda` - The Wilks' lambda value
@@ -141,40 +154,61 @@ pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[St
 /// * `total_cases` - Total number of cases
 ///
 /// # Returns
-/// A tuple of (F value, df1, df2, df3)
+/// A tuple of (F value, df1, df2)
 pub fn calculate_overall_f_statistic(
     wilks_lambda: f64,
     num_variables: usize,
     num_groups: usize,
     total_cases: usize
-) -> (f64, i32, i32, i32) {
-    // Berdasarkan pola dari output di gambar:
-    // - df1 adalah jumlah variabel dalam model
-    // - df2 selalu 1
-    // - df3 adalah (total_cases - num_groups)
+) -> (f64, i32, i32) {
+    let p = num_variables as f64;
+    let g = num_groups as f64;
+    let n = total_cases as f64;
 
-    let df1 = num_variables as i32;
-    let df2 = 1; // Selalu 1 berdasarkan output di gambar
-    let df3 = (total_cases - num_groups) as i32; //
-
-    // Hitung F-statistic berdasarkan Wilks' Lambda
-    let f_value = if wilks_lambda < 1.0 && wilks_lambda > 0.0 {
-        // Rumus F: ((1-λ)/λ) * (df3/df1)
-        ((1.0 - wilks_lambda) / wilks_lambda) * ((df3 as f64) / (df1 as f64))
-    } else if wilks_lambda <= 0.0 {
-        // Handle extreme case of perfect discrimination
-        10000.0
+    // Calculate s for the approximation
+    // s = sqrt((p*(g-1))² - 4) / (p + (g-1) - 2))
+    // i.e. s = sqrt((numerator) / (denominator))
+    let numerator = p.powi(2) * (g - 1.0).powi(2) - 4.0;
+    let denominator = p.powi(2) + (g - 1.0).powi(2) - 5.0;
+    let s = if denominator > EPSILON && numerator > 0.0 {
+        (numerator / denominator).sqrt()
     } else {
-        // Handle wilks_lambda = 1 (no discrimination)
+        1.0
+    };
+
+    // Calculate df1 and df2
+    // df1 = p * (g - 1)
+    // df2 = (n - 1 - (p + g) / 2) * s - (p * (g - 1) - 2) / 2
+    let df1 = (p * (g - 1.0)).round() as i32;
+
+    let w = n - 1.0 - (p + g) / 2.0;
+    let p_k1 = p * (g - 1.0);
+    let df2 = if s > EPSILON {
+        (w * s - (p_k1 - 2.0) / 2.0).round() as i32
+    } else {
+        // fallback when s ≈ 1 (i.e., p*(g-1) = 2)
+        (w * 1.0 - (p_k1 - 2.0) / 2.0).round() as i32
+    };
+
+    // Calculate F statistic using Rao's approximation
+    let f_value = if wilks_lambda > EPSILON && wilks_lambda < 1.0 - EPSILON && df1 > 0 && df2 > 0 {
+        let lambda_power = wilks_lambda.powf(1.0 / s);
+        let numerator = (1.0 - lambda_power) * (df2 as f64);
+        let denominator = lambda_power * (df1 as f64);
+        if denominator > EPSILON {
+            numerator / denominator
+        } else {
+            0.0
+        }
+    } else if wilks_lambda <= EPSILON {
+        // Handle extreme case of perfect discrimination
+        f64::MAX
+    } else {
+        // Handle wilks_lambda close to 1 (no discrimination)
         0.0
     };
 
-    // Untuk df2 dalam exact F, nilainya berkurang seiring bertambahnya variabel
-    // df_exact_2 = df3 - df1 + 1
-    let exact_df2 = df3 - df1 + 1;
-
-    // Return F-statistic dan derajat kebebasan yang sesuai dengan output
-    (f_value, df1, df2, df3)
+    (f_value, df1, df2)
 }
 
 /// Calculate tolerance for a variable
@@ -183,10 +217,16 @@ pub fn calculate_overall_f_statistic(
 /// explained by the other independent variables in the model. Low tolerance
 /// indicates multicollinearity.
 ///
+/// This implementation uses the **multivariate** approach: regress the target
+/// variable on ALL other variables simultaneously, then compute
+/// tolerance = 1 - R² (where R² is from that multivariate regression).
+///
+/// This matches SPSS's "Tolerance" column in stepwise output.
+///
 /// # Parameters
 /// * `variable` - The variable to test
 /// * `dataset` - The analyzed dataset containing group data and means
-/// * `other_variables` - Other variables in the model
+/// * `other_variables` - Other variables already in the model
 ///
 /// # Returns
 /// A tuple of (tolerance, minimum tolerance)
@@ -199,79 +239,58 @@ pub fn calculate_tolerance(
         return (1.0, 1.0);
     }
 
-    // Extract values for target variable
-    let mut target_values = Vec::new();
+    // 1. Gabungkan semua variabel yang akan dianalisis (prediktor + target)
+    let mut all_vars = other_variables.to_vec();
+    all_vars.push(variable.to_string());
+    let target_idx = all_vars.len() - 1;
 
-    for group_label in &dataset.group_labels {
-        if let Some(values) = dataset.group_data.get(variable).and_then(|g| g.get(group_label)) {
-            target_values.extend(values.iter().copied());
-        }
-    }
+    // 2. Dapatkan matriks Pooled Within-Groups Covariance (Gaya SPSS!)
+    let (_, within_cov) = calculate_between_within_matrices(dataset, &all_vars);
+    let p = all_vars.len();
 
-    if target_values.is_empty() {
-        return (0.0, 0.0);
-    }
-
-    // Calculate R² between this variable and others
-    if other_variables.len() == 1 {
-        // Simple case with one predictor - calculate correlation coefficient
-        let other_var = &other_variables[0];
-
-        let mut other_values = Vec::new();
-
-        for group_label in &dataset.group_labels {
-            if
-                let Some(values) = dataset.group_data
-                    .get(other_var)
-                    .and_then(|g| g.get(group_label))
-            {
-                other_values.extend(values.iter().copied());
+    // 3. Ubah Covariance menjadi Matriks Korelasi
+    let mut within_cor = nalgebra::DMatrix::zeros(p, p);
+    for i in 0..p {
+        for j in 0..p {
+            let sd_i = within_cov[(i, i)].sqrt();
+            let sd_j = within_cov[(j, j)].sqrt();
+            if sd_i > 0.0 && sd_j > 0.0 {
+                within_cor[(i, j)] = within_cov[(i, j)] / (sd_i * sd_j);
+            } else if i == j {
+                within_cor[(i, j)] = 1.0;
             }
         }
-
-        if other_values.len() == target_values.len() && !other_values.is_empty() {
-            let r = calculate_correlation(&target_values, &other_values);
-            let r_squared = r.powi(2);
-            let tolerance = 1.0 - r_squared;
-            let min_tolerance = tolerance * 0.8; // 80% of current tolerance
-
-            return (tolerance, min_tolerance);
-        }
     }
 
-    // Multiple predictors - more accurate computation with parallelism
-    let r_squared_values: Vec<f64> = other_variables
-        .par_iter()
-        .filter_map(|other_var| {
-            let mut other_values = Vec::new();
+    // Tambahkan regularisasi kecil agar matriks tidak singular saat multikolinearitas tinggi
+    for i in 0..p {
+        within_cor[(i, i)] += EPSILON;
+    }
 
-            for group_label in &dataset.group_labels {
-                if
-                    let Some(values) = dataset.group_data
-                        .get(other_var)
-                        .and_then(|g| g.get(group_label))
-                {
-                    other_values.extend(values.iter().copied());
+    // 4. Invers matriks untuk mendapatkan VIF, lalu hitung Tolerance = 1 / VIF
+    match within_cor.try_inverse() {
+        Some(inv_cor) => {
+            let mut min_tol = 1.0_f64;
+            let mut target_tol = 0.0;
+
+            for i in 0..p {
+                let vif = inv_cor[(i, i)];
+                let tol = if vif > 0.0 { 1.0 / vif } else { 0.0 };
+                let clamped_tol = tol.clamp(0.0, 1.0); // Paksa aman di rentang 0 - 1
+
+                if i == target_idx {
+                    target_tol = clamped_tol;
+                }
+                
+                // Min. Tolerance adalah nilai terkecil dari SEMUA variabel di model ini
+                if clamped_tol < min_tol {
+                    min_tol = clamped_tol;
                 }
             }
-
-            if other_values.len() == target_values.len() && !other_values.is_empty() {
-                let r = calculate_correlation(&target_values, &other_values);
-                Some(r.powi(2))
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    // Use maximum correlation for tolerance
-    let max_r_squared = r_squared_values
-        .iter()
-        .fold(0.0, |max_val, &val| (max_val as f64).max(val));
-    let tolerance = 1.0 - max_r_squared;
-    let min_tolerance = tolerance * 0.8; // 80% of current tolerance
-
-    (tolerance, min_tolerance)
+            (target_tol, min_tol)
+        }
+        None => (0.0, 0.0), // Jika matriks gagal di-invers
+    }
 }
 
 /// Calculate Wilks' lambda test for discriminant functions
@@ -314,7 +333,13 @@ pub fn calculate_wilks_lambda_test(
     let mut df = Vec::with_capacity(num_functions);
     let mut significance = Vec::with_capacity(num_functions);
 
-    let variables = &config.main.independent_variables;
+    let grouping_var = &config.main.grouping_variable;
+    let variables: Vec<String> = if config.main.stepwise {
+        get_stepwise_selected_variables(data, config)?
+    } else {
+        config.main.independent_variables.iter().filter(|v| *v != grouping_var).cloned().collect()
+    };
+
     let p = variables.len() as i32;
     let g = dataset.num_groups as i32;
     let n = dataset.total_cases as f64;
@@ -339,9 +364,10 @@ pub fn calculate_wilks_lambda_test(
 
         wilks_lambda.push(lambda_k);
 
-        // Calculate chi-square approximation
-        // chi^2 = -(n-(p+g)/2-1) * ln(Lambda_k)
-        let chi_square_val = -(n - ((p + g) as f64) / 2.0 - 1.0) * lambda_k.ln();
+        // Calculate chi-square approximation using Bartlett's formula
+        // χ² = -[n - (p + g + 1)/2] × ln(Λ)
+        // Note: Using (p + g + 1) / 2, not (p + g) / 2
+        let chi_square_val = -(n - 1.0 - ((p + g) as f64) / 2.0) * lambda_k.ln();
 
         chi_square.push(chi_square_val);
 

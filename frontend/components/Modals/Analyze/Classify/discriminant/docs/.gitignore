@@ -1,0 +1,2 @@
+# Keep design/planning docs local — do not push them to git.
+*.md

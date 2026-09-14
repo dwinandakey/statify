@@ -144,3 +144,16 @@ pub struct OptionsConfig {
     #[serde(rename = "SuppressValuesNum")]
     pub suppress_values_num: f64,
 }
+
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum ExtractionStatus {
+    Success,
+    HeywoodWarning,
+    NonConvergence,
+    NoLocalMinimum,
+    SingularMatrix,
+    ImproperSolution,
+    FailedExtraction,
+}
+

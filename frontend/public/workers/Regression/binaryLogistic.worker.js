@@ -1,252 +1,367 @@
-import init, { calculate_binary_logistic } from "./pkg/statify_logistic.js";
+import init, {
+  calculate_binary_logistic,
+  calculate_vif,
+  calculate_box_tidwell,
+  calculate_correlation_matrix,
+} from "./Binary/pkg/statify_logistic.js";
 
 self.onmessage = async (event) => {
-  // Kita kembalikan ke struktur input lama yang menggunakan ID
-  const { dependentId, independentIds, data, variableDetails, config } =
+  const { action, data, config, dependentId, independentIds, variableDetails } =
     event.data;
 
-  // Cek action jika ada, atau langsung jalan jika format lama
-  if (event.data.action && event.data.action !== "run_binary_logistic") return;
+  // Logging
+  console.log("Worker: Processing action", action);
+
+  const validActions = ["run_binary_logistic", "run_vif", "run_box_tidwell"];
+  if (!action || !validActions.includes(action)) return;
 
   try {
     await init();
 
     // =================================================================
-    // 1. DATA PREPARATION (LOGIKA LAMA ANDA - KARENA LEBIH ROBUST)
+    // 1. DATA PREPARATION
     // =================================================================
 
-    // Helper: Ambil Value by ID (Ini kunci agar data terbaca benar)
+    let configObj = config;
+    if (typeof config === "string") {
+      try {
+        configObj = JSON.parse(config);
+      } catch (e) {
+        throw new Error("Invalid configuration JSON.");
+      }
+    }
+
     const getValue = (row, varId) => {
       const colIdx = variableDetails[varId]?.columnIndex;
       if (colIdx === undefined) return undefined;
       return row[colIdx];
     };
 
-    // Filter Missing Values (Listwise Deletion)
-    const allIds = [dependentId, ...independentIds];
+    // Filter Missing Values
+    const allIds = dependentId
+      ? [dependentId, ...independentIds]
+      : [...independentIds];
+
     const cleanData = data.filter((row) => {
       return allIds.every((id) => {
         const val = getValue(row, id);
-        return (
-          val !== null &&
-          val !== undefined &&
-          val !== "" &&
-          // Cek NaN hanya jika valenya number
-          (typeof val === "string" ? true : !Number.isNaN(Number(val)))
-        );
+        return val !== null && val !== undefined && val !== "";
       });
     });
 
     if (cleanData.length === 0) {
-      throw new Error(`Tidak ada data valid setelah filter missing values.`);
+      throw new Error("No valid cases remaining after missing value handling.");
     }
 
-    // Persiapan Y (Auto Encode 0/1)
-    const rawY = cleanData.map((row) => getValue(row, dependentId));
-    const { yVector, yMap } = processDependentVariable(rawY);
+    const nIncluded = cleanData.length;
+    const nMissing = data.length - nIncluded;
 
-    // Persiapan X (Handle Categorical / Dummy Coding)
-    const { xMatrix, xFeatureNames } = processCovariates(
-      cleanData,
-      independentIds,
-      variableDetails,
-      getValue
-    );
-
-    // =================================================================
-    // 2. CONVERSION TO WASM FORMAT (FLATTENING)
-    // =================================================================
-    // Rust (nalgebra) butuh array 1 dimensi (flat), bukan array of arrays.
+    // --- PROSES X ---
+    const { xMatrix, xFeatureNames, categoricalConfigForRust, xEncodings } =
+      processCovariates(
+        cleanData,
+        independentIds,
+        variableDetails,
+        configObj,
+        getValue
+      );
 
     const rows = xMatrix.length;
-    const cols = xMatrix[0].length; // Jumlah kolom setelah dummy coding
+    const cols = xMatrix[0].length;
 
+    // Flatten X Matrix
     const xFlat = new Float64Array(rows * cols);
-    const yFlat = new Float64Array(rows);
-
-    // Flatten X Matrix (Row-Major)
     for (let i = 0; i < rows; i++) {
-      yFlat[i] = yVector[i]; // Isi Y sekalian
       for (let j = 0; j < cols; j++) {
         xFlat[i * cols + j] = xMatrix[i][j];
       }
     }
 
     // =================================================================
-    // 3. EXECUTE RUST WASM
+    // 2. ACTION HANDLING
     // =================================================================
 
-    // Mapping config React -> Rust Config (Snake Case)
-    const rustConfig = {
-      max_iterations: config.maxIterations || 20,
-      convergence_threshold: 1e-6,
-      include_constant: config.includeConstant !== false,
-      confidence_level: (config.ciLevel || 95) / 100.0,
-      cutoff: config.cutoff || 0.5,
-      method: config.method || "Enter", // Kirim metode
-      // Parameter Stepwise (jika ada)
-      p_entry: config.probEntry || 0.05,
-      p_removal: config.probRemoval || 0.1,
-    };
+    switch (action) {
+      case "run_binary_logistic": {
+        // Persiapan Y
+        const rawY = cleanData.map((row) => getValue(row, dependentId));
+        const { yVector, yMap } = processDependentVariable(rawY);
 
-    // Panggil Fungsi Rust Baru
-    const result = calculate_binary_logistic(
-      xFlat, // Data X Flat
-      rows,
-      cols,
-      yFlat, // Data Y Flat
-      JSON.stringify(rustConfig)
-    );
+        const yFlat = new Float64Array(rows);
+        for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
 
-    // =================================================================
-    // 4. POST PROCESSING (LABEL MAPPING)
-    // =================================================================
+        // --- UPDATE PENTING DI SINI ---
+        // Menambahkan parameter opsi tambahan ke rustConfig
+        const rustConfig = {
+          dependent_index: 0,
+          independent_indices: [],
+          categoricalVariables: categoricalConfigForRust,
 
-    // Mapping Label Variables in Equation
-    const variablesRaw = result.variables_in_equation || [];
-    const enrichedVariables = variablesRaw.map((stat, index) => {
-      let finalLabel = stat.label;
+          // Algoritma Core
+          max_iterations: configObj.max_iterations ?? 20,
+          convergence_threshold: configObj.convergence_threshold ?? 0.001,
+          include_constant: configObj.include_constant !== false,
+          // confidence_level: value like 95 or 0.95. Rust handles both.
+          confidence_level: configObj.confidence_level ?? 95,
+          cutoff: configObj.cutoff ?? 0.5,
+          method: configObj.method || "Enter",
+          p_entry: configObj.p_entry ?? 0.05,
+          p_removal: configObj.p_removal ?? 0.1,
 
-      // Logika Index Rust:
-      // Jika Constant ada: Index 0 = Constant, Index 1 = Var 1
-      // Jika Constant tidak ada: Index 0 = Var 1
+          // Opsi Statistik & Plot (Pastikan diteruskan ke Rust!)
+          hosmer_lemeshow: configObj.hosmer_lemeshow || false,
+          classification_plots: configObj.classification_plots || false,
+          casewise_listing: configObj.casewise_listing || false,
+          casewise_type: configObj.casewise_type || "outliers", // BARU: "outliers" atau "all"
+          casewise_outliers: configObj.casewise_outliers ?? 2.0,
+          iteration_history: configObj.iteration_history || false,
+          correlations: configObj.correlations || false,
 
-      // Array xFeatureNames TIDAK punya Constant
-      let featureIndex = -1;
+          // Display options
+          display_at_last_step: configObj.display_at_last_step || false,
 
-      if (stat.label === "Constant") {
-        return stat;
+          // --- BARU: Save Options (Tab Save di UI) ---
+          save_predicted_probabilities: configObj.save_predicted_probabilities || false,
+          save_predicted_group: configObj.save_predicted_group || false,
+          save_residuals_unstandardized: configObj.save_residuals_unstandardized || false,
+          save_residuals_logit: configObj.save_residuals_logit || false,
+          save_residuals_studentized: configObj.save_residuals_studentized || false,
+          save_residuals_standardized: configObj.save_residuals_standardized || false,
+          save_residuals_deviance: configObj.save_residuals_deviance || false,
+          save_influence_cooks: configObj.save_influence_cooks || false,
+          save_influence_leverage: configObj.save_influence_leverage || false,
+          save_influence_dfbeta: configObj.save_influence_dfbeta || false,
+
+          assumptions: configObj.assumptions || {},
+        };
+
+        const resultJson = await calculate_binary_logistic(
+          xFlat,
+          rows,
+          cols,
+          yFlat,
+          JSON.stringify(rustConfig),
+          JSON.stringify(xFeatureNames)
+        );
+
+        let result = resultJson;
+        if (typeof result === "string") {
+          result = JSON.parse(result);
+        }
+
+        if (!result || !result.classification_table) {
+          throw new Error("Calculation failed in backend.");
+        }
+
+        const finalResult = {
+          ...result,
+          method_used: rustConfig.method,
+          model_info: {
+            y_encoding: yMap,
+            x_encodings: xEncodings,
+            n_samples: rows,
+            n_missing: nMissing,
+            variables: xFeatureNames,
+            include_constant: rustConfig.include_constant,
+            step_number:
+              result.step_history && result.step_history.length > 0
+                ? result.step_history[result.step_history.length - 1].step
+                : 0,
+          },
+        };
+
+        self.postMessage({ type: "SUCCESS", payload: finalResult, action });
+        break;
       }
 
-      // Parse "Var X" dari Rust untuk dapat index aslinya jika perlu,
-      // Tapi biasanya urutan output Rust = urutan input kolom.
-      // Mari kita asumsikan urutannya linear.
+      case "run_vif": {
+        let vifResult = await calculate_vif(xFlat, rows, cols);
+        if (typeof vifResult === "string") vifResult = JSON.parse(vifResult);
 
-      if (rustConfig.include_constant) {
-        featureIndex = index - 1;
-      } else {
-        featureIndex = index;
+        const formattedVif = vifResult.map((item, idx) => ({
+          ...item,
+          variable: xFeatureNames[idx] || item.variable || `Var ${idx + 1}`,
+        }));
+
+        let corrResult = await calculate_correlation_matrix(xFlat, rows, cols);
+        if (typeof corrResult === "string") corrResult = JSON.parse(corrResult);
+
+        const formattedCorr = corrResult.map((item, idx) => ({
+          variable: xFeatureNames[idx] || `Var ${idx + 1}`,
+          values: item.values,
+        }));
+
+        const payload = {
+          assumption_tests: {
+            vif: formattedVif,
+            correlation_matrix: formattedCorr,
+          },
+        };
+        self.postMessage({ type: "SUCCESS", payload: payload, action });
+        break;
       }
 
-      if (featureIndex >= 0 && featureIndex < xFeatureNames.length) {
-        finalLabel = xFeatureNames[featureIndex];
+      case "run_box_tidwell": {
+        const rawY = cleanData.map((row) => getValue(row, dependentId));
+        const { yVector } = processDependentVariable(rawY);
+        const yFlat = new Float64Array(rows);
+        for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
+
+        const btConfig = { feature_names: xFeatureNames };
+        let btResult = await calculate_box_tidwell(
+          xFlat,
+          rows,
+          cols,
+          yFlat,
+          JSON.stringify(btConfig)
+        );
+        if (typeof btResult === "string") btResult = JSON.parse(btResult);
+        self.postMessage({ type: "SUCCESS", payload: btResult, action });
+        break;
       }
-
-      return { ...stat, label: finalLabel };
-    });
-
-    // Mapping Label Block 0 Variables (Not in Equation)
-    // Urutan ini murni berdasarkan input kolom X
-    const notInEqRaw = result.variables_not_in_equation || [];
-    const enrichedNotInEq = notInEqRaw.map((stat, index) => {
-      return {
-        ...stat,
-        label: xFeatureNames[index] || stat.label,
-      };
-    });
-
-    const finalResult = {
-      ...result,
-      variables_in_equation: enrichedVariables,
-      variables_not_in_equation: enrichedNotInEq,
-      model_info: {
-        y_encoding: yMap,
-        n_samples: rows,
-      },
-    };
-
-    self.postMessage({ type: "SUCCESS", payload: finalResult });
+    }
   } catch (error) {
     console.error("Worker Error:", error);
     self.postMessage({
       type: "ERROR",
-      payload: error.message || "Terjadi kesalahan perhitungan.",
+      payload: error.message || "An unexpected error occurred in the worker.",
+      action,
     });
   }
 };
 
-// --- HELPER FUNCTIONS (DARI KODE LAMA ANDA) ---
+// =================================================================
+// HELPER FUNCTIONS
+// =================================================================
 
 function processDependentVariable(rawY) {
-  const uniqueVals = [...new Set(rawY)]
-    .filter((v) => v !== undefined && v !== null && v !== "")
-    .sort();
-  if (uniqueVals.length < 2)
+  const uniqueVals = [...new Set(rawY)].sort();
+  if (uniqueVals.length !== 2) {
     throw new Error(
-      `Variabel dependen 'Y' hanya memiliki ${
+      `Binary Logistic Regression requires exactly 2 levels for Y. Found: ${
         uniqueVals.length
-      } kategori valid: [${uniqueVals.join(", ")}]. Dibutuhkan minimal 2.`
+      } (${uniqueVals.join(", ")})`
     );
-
-  // Mapping: 0 = Nilai Pertama, 1 = Nilai Kedua
-  const map = {
-    [uniqueVals[0]]: 0.0,
-    [uniqueVals[1]]: 1.0,
-  };
-
+  }
+  const map = { [uniqueVals[0]]: 0.0, [uniqueVals[1]]: 1.0 };
   const yVector = rawY.map((v) => map[v]);
   return { yVector, yMap: map };
 }
 
-function processCovariates(data, ids, details, getValueFn) {
+function processCovariates(data, ids, details, configObj, getValueFn) {
   let xFeatureNames = [];
+  let categoricalConfigForRust = [];
+  let xEncodings = {};
 
-  // 1. Tentukan Schema (Mana Numeric, mana Kategori)
-  const schema = ids.map((id) => {
+  const uiCatSettings = configObj.categoricalVariables || [];
+  const getCatSetting = (id) => {
+    if (Array.isArray(uiCatSettings)) {
+      if (uiCatSettings.length > 0 && typeof uiCatSettings[0] === "string") {
+        return uiCatSettings.includes(id)
+          ? { method: "Indicator", reference: "Last" }
+          : null;
+      }
+      return uiCatSettings.find((s) => s.id === id) || null;
+    }
+    return null;
+  };
+
+  // 1. Fase Scanning
+  const columnProcessors = ids.map((id, idx) => {
     const detail = details[id];
-    // Cek tipe measure.
-    const isCategorical =
+    const isNominalOrOrdinal =
       detail?.measure === "nominal" || detail?.measure === "ordinal";
+    const uiSetting = getCatSetting(id);
+    const isCategorical = isNominalOrOrdinal || uiSetting !== null;
+
+    const codeMap = new Map();
 
     if (isCategorical) {
-      const rawValues = data.map((row) => getValueFn(row, id));
-      const categories = [...new Set(rawValues)]
-        .filter((v) => v !== null && v !== undefined && v !== "")
-        .sort();
+      // Kumpulkan nilai unik
+      const uniqueSet = new Set();
+      data.forEach((row) => {
+        const rawVal = getValueFn(row, id);
+        if (rawVal !== null && rawVal !== undefined) {
+          uniqueSet.add(rawVal);
+        }
+      });
 
-      // Dummy Coding (Reference = Last)
-      const refCategory = categories[categories.length - 1];
-      const dummyCategories = categories.filter((c) => c !== refCategory);
+      // Sorting
+      const sortedValues = Array.from(uniqueSet).sort((a, b) => {
+        const numA = Number(a);
+        const numB = Number(b);
+        if (!isNaN(numA) && !isNaN(numB)) {
+          return numA - numB;
+        }
+        return String(a).localeCompare(String(b));
+      });
 
-      return {
-        type: "categorical",
-        id: id,
-        dummyCols: dummyCategories.map((cat) => ({
-          val: cat,
-          name: `${detail.name}(${cat})`,
-        })),
-      };
-    } else {
-      return { type: "numeric", id: id, name: detail?.name || `Var_${id}` };
+      // Cek apakah angka
+      const isAllNumeric = sortedValues.every(
+        (val) => !isNaN(Number(val)) && val !== ""
+      );
+
+      // Assign Code
+      const varName = detail?.name || `Var_${id}`;
+      xEncodings[varName] = {}; // Init map untuk variabel ini
+
+      sortedValues.forEach((val, index) => {
+        if (isAllNumeric) {
+          // Jika angka, gunakan angka aslinya
+          const numVal = Number(val);
+          codeMap.set(String(val), numVal);
+          // Simpan ke encoding map (Original -> Internal)
+          xEncodings[varName][String(val)] = numVal;
+        } else {
+          // Jika teks, gunakan index (0.0, 1.0, ...)
+          const internalVal = index + 0.0;
+          codeMap.set(String(val), internalVal);
+          // Simpan ke encoding map: "Male" -> 0
+          xEncodings[varName][String(val)] = internalVal;
+        }
+      });
+    }
+
+    return {
+      id,
+      name: detail?.name || `Var_${id}`,
+      isCategorical,
+      uiSetting,
+      codeMap,
+
+      encode: function (val) {
+        if (!this.isCategorical) {
+          const num = Number(val);
+          return isNaN(num) ? 0.0 : num;
+        }
+        const strVal = String(val);
+        return this.codeMap.has(strVal) ? this.codeMap.get(strVal) : 0.0;
+      },
+    };
+  });
+
+  // 2. Build Config
+  columnProcessors.forEach((col, idx) => {
+    xFeatureNames.push(col.name);
+    if (col.isCategorical) {
+      const refType = col.uiSetting?.reference || "Last";
+      const method = col.uiSetting?.method || "Indicator";
+      categoricalConfigForRust.push({
+        columnIndex: idx,
+        method: method,
+        reference: refType === "First" ? "First" : "Last",
+      });
     }
   });
 
-  // 2. Generate Header Names
-  schema.forEach((col) => {
-    if (col.type === "numeric") {
-      xFeatureNames.push(col.name);
-    } else {
-      col.dummyCols.forEach((d) => xFeatureNames.push(d.name));
-    }
-  });
-
-  // 3. Buat Matrix (Array of Arrays)
+  // 3. Generate Matrix
   const xMatrix = data.map((row) => {
-    let rowData = [];
-    schema.forEach((col) => {
+    return columnProcessors.map((col) => {
       const rawVal = getValueFn(row, col.id);
-
-      if (col.type === "numeric") {
-        rowData.push(Number(rawVal));
-      } else {
-        // Logic One-Hot
-        col.dummyCols.forEach((dummy) => {
-          rowData.push(rawVal == dummy.val ? 1.0 : 0.0);
-        });
-      }
+      return col.encode(rawVal);
     });
-    return rowData;
   });
 
-  return { xMatrix, xFeatureNames };
+  // KEMBALIKAN xEncodings
+  return { xMatrix, xFeatureNames, categoricalConfigForRust, xEncodings };
 }

@@ -7,7 +7,7 @@
  *
  * PURPOSE:
  * Tests that verify the structured output from runNormalityTests and
- * createNormalityTestEntry contains properly formatted values ready for 
+ * createNormalityTestEntry contains properly formatted values ready for
  * display in the Descriptive Statistics modal UI table.
  *
  * TEST COVERAGE:
@@ -323,7 +323,7 @@ describe('UI Table Rendering and Formatting', () => {
         test('should handle custom alpha for significance determination', () => {
             // Data that might be borderline at alpha=0.05
             const data = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
-            
+
             const result01 = runNormalityTests(data, { alpha: 0.01 });
             const result10 = runNormalityTests(data, { alpha: 0.10 });
 

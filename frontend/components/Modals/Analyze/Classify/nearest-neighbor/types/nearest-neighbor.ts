@@ -1,7 +1,10 @@
-import type React from "react";
+/* =========================
+   MAIN TAB
+========================= */
 
 export type KNNMainType = {
-    DepVar: string | null;
+    TargetVar: string | null;
+    // DepVar: string | null;
     FeatureVar: string[] | null;
     CaseIdenVar: string | null;
     FocalCaseIdenVar: string | null;
@@ -9,23 +12,18 @@ export type KNNMainType = {
 };
 
 export type KNNDialogProps = {
-    isMainOpen: boolean;
-    setIsMainOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsNeighborsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsFeaturesOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsPartitionOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsOutputOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsOptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNMainType;
     updateFormData: (
         field: keyof KNNMainType,
         value: string[] | string | boolean | null
     ) => void;
-    data: KNNMainType;
-    globalVariables: string[];
-    onContinue: (mainState: KNNMainType) => void;
-    onReset: () => void;
+    externalErrors?: string[];
+    showFieldHelp?: boolean;
 };
+
+/* =========================
+   NEIGHBORS TAB
+========================= */
 
 export type KNNNeighborsType = {
     Specify: boolean;
@@ -41,14 +39,19 @@ export type KNNNeighborsType = {
 };
 
 export type KNNNeighborsProps = {
-    isNeighborsOpen: boolean;
-    setIsNeighborsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNNeighborsType;
     updateFormData: (
         field: keyof KNNNeighborsType,
         value: number | boolean | null
     ) => void;
-    data: KNNNeighborsType;
+    hasTarget: boolean;
+    targetType: "scale" | "nominal" | "ordinal" | null;
+    showFieldHelp?: boolean;
 };
+
+/* =========================
+   FEATURES TAB
+========================= */
 
 export type KNNFeaturesType = {
     ForwardSelection: string[] | null;
@@ -63,17 +66,20 @@ export type KNNFeaturesType = {
 };
 
 export type KNNFeaturesProps = {
-    isFeaturesOpen: boolean;
-    setIsFeaturesOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNFeaturesType;
     updateFormData: (
         field: keyof KNNFeaturesType,
         value: string[] | number | string | boolean | null
     ) => void;
-    data: KNNFeaturesType;
+    hasTarget: boolean;
+    showFieldHelp?: boolean;
 };
 
+/* =========================
+   PARTITION TAB
+========================= */
+
 export type KNNPartitionType = {
-    SrcVar: string[] | null;
     PartitioningVariable: string | null;
     UseRandomly: boolean;
     UseVariable: boolean;
@@ -87,14 +93,20 @@ export type KNNPartitionType = {
 };
 
 export type KNNPartitionProps = {
-    isPartitionOpen: boolean;
-    setIsPartitionOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNPartitionType;
     updateFormData: (
         field: keyof KNNPartitionType,
         value: string[] | number | string | boolean | null
     ) => void;
-    data: KNNPartitionType;
+    availableVariables: string[];
+    isAutoK: boolean;
+    isFeatureSelectionActive: boolean;
+    showFieldHelp?: boolean;
 };
+
+/* =========================
+   SAVE TAB
+========================= */
 
 export type KNNSaveType = {
     AutoName: boolean;
@@ -107,50 +119,46 @@ export type KNNSaveType = {
 };
 
 export type KNNSaveProps = {
-    isSaveOpen: boolean;
-    setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNSaveType;
     updateFormData: (
         field: keyof KNNSaveType,
         value: number | boolean | null
     ) => void;
-    data: KNNSaveType;
+    hasTarget: boolean;
+    targetType: "scale" | "nominal" | "ordinal" | null;
+    featureCount: number;
+    isAutoK: boolean;
+    isFeatureSelectionActive: boolean;
+    isUsingPartitionVariable: boolean;
+    isUsingFoldVariable: boolean;
+    showFieldHelp?: boolean;
 };
+
+/* =========================
+   OUTPUT TAB
+========================= */
 
 export type KNNOutputType = {
     CaseSummary: boolean;
+    FeatureSelectionSummary: boolean;
+    KSelectionChart: boolean;
+    PredictorSpace: boolean;
+    PredictionResults: boolean;
+    ShowNeighborDetail: boolean;
+    PeersChart: boolean;
+    QuadrantMap: boolean;
     ChartAndTable: boolean;
-    ExportModelXML: boolean;
-    XMLFilePath: string | null;
-    ExportDistance: boolean;
-    CreateDataset: boolean;
-    WriteDataFile: boolean;
-    NewDataFilePath: string | null;
-    DatasetName: string | null;
 };
 
 export type KNNOutputProps = {
-    isOutputOpen: boolean;
-    setIsOutputOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    data: KNNOutputType;
     updateFormData: (
         field: keyof KNNOutputType,
         value: string | boolean | null
     ) => void;
-    data: KNNOutputType;
-};
-
-export type KNNOptionsType = {
-    Exclude: boolean;
-    Include: boolean;
-};
-
-export type KNNOptionsProps = {
-    isOptionsOpen: boolean;
-    setIsOptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof KNNOptionsType,
-        value: string | boolean | null
-    ) => void;
-    data: KNNOptionsType;
+    isAutoK: boolean;
+    isFeatureSelectionActive: boolean;
+    showFieldHelp?: boolean;
 };
 
 export type KNNType = {
@@ -160,8 +168,11 @@ export type KNNType = {
     partition: KNNPartitionType;
     save: KNNSaveType;
     output: KNNOutputType;
-    options: KNNOptionsType;
 };
+
+/* =========================
+   CONTAINER
+========================= */
 
 export type KNNContainerProps = {
     onClose: () => void;

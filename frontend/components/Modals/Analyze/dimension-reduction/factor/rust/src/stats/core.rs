@@ -6,3 +6,4 @@ pub use crate::stats::matrix::*;
 pub use crate::stats::prepare_data::*;
 pub use crate::stats::report::*;
 pub use crate::stats::rotation::*;
+pub use crate::stats::extraction_rules::*;
