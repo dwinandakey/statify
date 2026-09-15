@@ -60,18 +60,6 @@ import {
   validateOptionsParams,
 } from "../types/binary-logistic";
 
-/**
- * Resolves a possibly-stale Variable reference (captured earlier in `options`)
- * against the CURRENT list of variables from the store.
- *
- * IDs can change after the dataset round-trips through the backend (e.g. after
- * saving predictions/residuals via addVariables), so selections made before
- * that point can no longer be found by `id` alone.
- *
- * 1. Try to find by ID (exact match)
- * 2. Fallback to columnIndex if ID not found
- * 3. Fallback to name if columnIndex not found
- */
 const findActualVariable = (
   currentVariables: Variable[],
   targetVar: Variable
