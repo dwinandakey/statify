@@ -2,7 +2,6 @@ import init, {
   calculate_binary_logistic,
   calculate_vif,
   calculate_box_tidwell,
-  calculate_correlation_matrix,
 } from "./Binary/pkg/statify_logistic.js";
 
 self.onmessage = async (event) => {
@@ -201,7 +200,21 @@ self.onmessage = async (event) => {
       }
 
       case "run_vif": {
-        let vifResult = await calculate_vif(xFlat, rows, cols);
+        // Same categorical config as the main regression, so VIF is
+        // computed on the actual dummy-coded design matrix (Rust expands
+        // it via design_matrix::build) instead of raw ordinal category
+        // codes - matches R's car::vif(), which uses Generalized VIF for
+        // multi-category (3+ level) predictors.
+        const vifConfig = {
+          feature_names: xFeatureNames,
+          categorical_variables: categoricalConfigForRust,
+        };
+        let vifResult = await calculate_vif(
+          xFlat,
+          rows,
+          cols,
+          JSON.stringify(vifConfig)
+        );
         if (typeof vifResult === "string") vifResult = JSON.parse(vifResult);
 
         const formattedVif = vifResult.map((item, idx) => ({
@@ -209,18 +222,9 @@ self.onmessage = async (event) => {
           variable: xFeatureNames[idx] || item.variable || `Var ${idx + 1}`,
         }));
 
-        let corrResult = await calculate_correlation_matrix(xFlat, rows, cols);
-        if (typeof corrResult === "string") corrResult = JSON.parse(corrResult);
-
-        const formattedCorr = corrResult.map((item, idx) => ({
-          variable: xFeatureNames[idx] || `Var ${idx + 1}`,
-          values: item.values,
-        }));
-
         const payload = {
           assumption_tests: {
             vif: formattedVif,
-            correlation_matrix: formattedCorr,
           },
         };
         self.postMessage({ type: "SUCCESS", payload: payload, action });
@@ -233,7 +237,20 @@ self.onmessage = async (event) => {
         const yFlat = new Float64Array(rows);
         for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
 
-        const btConfig = { feature_names: xFeatureNames };
+        // Reuse the SAME categorical config already computed above for the
+        // main regression (measure = nominal/ordinal, or explicitly added
+        // in the Categorical tab). Rust needs the full config, not just
+        // the column indices, so it can (1) skip categoricals as ln(X)
+        // candidates - a nominal variable with 5+ categories would
+        // otherwise slip past a "<=4 unique values" heuristic and get
+        // tested as if continuous - and (2) dummy-code them properly when
+        // they're used as CONTROL variables in the augmented regression,
+        // instead of feeding in raw ordinal integers that would distort
+        // the fit for every variable in the model.
+        const btConfig = {
+          feature_names: xFeatureNames,
+          categorical_variables: categoricalConfigForRust,
+        };
         let btResult = await calculate_box_tidwell(
           xFlat,
           rows,

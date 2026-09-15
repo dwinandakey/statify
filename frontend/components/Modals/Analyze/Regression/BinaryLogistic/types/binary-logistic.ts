@@ -251,7 +251,12 @@ export interface VariableRow {
 export interface VifRow {
   variable: string;
   tolerance: number;
+  /** VIF, or GVIF^(1/(2*Df)) when any term in the model has df > 1 (see is_gvif). */
   vif: number;
+  /** Degrees of freedom (design-matrix columns) for this term. */
+  df?: number;
+  /** True when `vif` is GVIF^(1/(2*Df)) rather than plain VIF (matches R's car::vif() convention). */
+  is_gvif?: boolean;
 }
 
 export interface BoxTidwellRow {
@@ -276,7 +281,6 @@ export interface BoxTidwellRow {
 export interface AssumptionResult {
   vif?: VifRow[];
   box_tidwell?: BoxTidwellRow[];
-  correlation_matrix?: number[][];
   feature_names?: string[];
 }
 

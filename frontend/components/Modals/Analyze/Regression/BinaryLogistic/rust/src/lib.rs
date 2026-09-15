@@ -138,46 +138,58 @@ pub fn calculate_binary_logistic(
 }
 
 // ========================================================================
-// 2. MULTICOLLINEARITY (VIF) - (TODO: Update jika VIF perlu handle kategorik juga)
+// 2. MULTICOLLINEARITY (VIF)
 // ========================================================================
+#[derive(serde::Deserialize)]
+struct VifConfig {
+    #[serde(default)]
+    feature_names: Vec<String>,
+    // Same categorical config the main regression uses (column_index/
+    // method/reference). Needed so VIF is computed on the ACTUAL
+    // dummy-coded model matrix instead of raw ordinal category codes -
+    // otherwise a nominal variable with 3+ categories gets treated as one
+    // continuous column, which is not a meaningful VIF/GVIF input and
+    // won't match R's car::vif() (which uses Fox & Monette's Generalized
+    // VIF for multi-df terms).
+    #[serde(default, alias = "categoricalVariables")]
+    categorical_variables: Vec<models::config::CategoricalVarConfig>,
+}
+
 #[wasm_bindgen]
-pub fn calculate_vif(data_x: &[f64], rows: usize, cols: usize) -> Result<JsValue, JsValue> {
-    // Saat ini VIF masih menerima flat matrix dari JS.
-    // Idealnya nanti VIF juga menggunakan design_matrix::build,
-    // tapi untuk sekarang kita biarkan apa adanya (JS yang handle encoding untuk VIF sementara).
+pub fn calculate_vif(
+    data_x: &[f64],
+    rows: usize,
+    cols: usize,
+    config_json: String,
+) -> Result<JsValue, JsValue> {
     if rows == 0 || cols == 0 {
         return Err(api_error("Data kosong untuk VIF."));
     }
 
-    let x_matrix = DMatrix::from_row_slice(rows, cols, data_x);
-    let dummy_labels: Vec<String> = (0..cols).map(|i| format!("Var_{}", i)).collect();
+    let vif_config: VifConfig = serde_json::from_str(&config_json).unwrap_or(VifConfig {
+        feature_names: (0..cols).map(|i| format!("Var_{}", i)).collect(),
+        categorical_variables: Vec::new(),
+    });
 
-    match stats::assumptions::calculate_vif(&x_matrix, &dummy_labels) {
+    let x_raw = DMatrix::from_row_slice(rows, cols, data_x);
+
+    // Expand categorical predictors into the same dummy-coded columns used
+    // by the main regression, so VIF reflects the actual model matrix.
+    let mut design_cfg = LogisticConfig::default();
+    design_cfg.categorical_variables = vif_config.categorical_variables;
+
+    let design = stats::design_matrix::build(&x_raw, &vif_config.feature_names, &design_cfg)
+        .map_err(|e| api_error(&format!("Gagal membangun design matrix: {}", e)))?;
+
+    let variable_groups: Vec<(String, Vec<usize>)> = design
+        .variable_groups
+        .into_iter()
+        .map(|g| (g.name, g.column_indices))
+        .collect();
+
+    match stats::assumptions::calculate_vif(&design.matrix, &variable_groups) {
         Ok(vif_results) => {
             let json = serde_json::to_string(&vif_results)
-                .map_err(|e| api_error(&format!("JSON Error: {}", e)))?;
-            Ok(JsValue::from_str(&json))
-        }
-        Err(e) => Err(api_error(&e)),
-    }
-}
-
-#[wasm_bindgen]
-pub fn calculate_correlation_matrix(
-    data_x: &[f64],
-    rows: usize,
-    cols: usize,
-) -> Result<JsValue, JsValue> {
-    if rows == 0 || cols == 0 {
-        return Err(api_error("Data kosong untuk Correlation Matrix."));
-    }
-
-    let x_matrix = DMatrix::from_row_slice(rows, cols, data_x);
-    let dummy_labels: Vec<String> = (0..cols).map(|i| format!("Var_{}", i)).collect();
-
-    match stats::assumptions::calculate_correlation_matrix(&x_matrix, &dummy_labels) {
-        Ok(corr_results) => {
-            let json = serde_json::to_string(&corr_results)
                 .map_err(|e| api_error(&format!("JSON Error: {}", e)))?;
             Ok(JsValue::from_str(&json))
         }
@@ -192,6 +204,16 @@ pub fn calculate_correlation_matrix(
 struct BoxTidwellConfig {
     #[serde(default)]
     feature_names: Vec<String>,
+    // Same categorical config the main regression uses. Needed for two
+    // reasons: (1) to know which ORIGINAL variables are categorical (skip
+    // them as ln(X) candidates - a unique-value count alone can't tell a
+    // 5+ category nominal from a genuine continuous variable), and (2) so
+    // categorical variables used as CONTROLS in the augmented regression
+    // (R's `other.x`) are properly dummy-coded rather than fed in as raw
+    // ordinal integers, which would distort the fit for every variable in
+    // the model, not just the categorical ones.
+    #[serde(default, alias = "categoricalVariables")]
+    categorical_variables: Vec<models::config::CategoricalVarConfig>,
 }
 
 #[wasm_bindgen]
@@ -205,13 +227,25 @@ pub fn calculate_box_tidwell(
     let bt_config: BoxTidwellConfig =
         serde_json::from_str(&config_json).unwrap_or(BoxTidwellConfig {
             feature_names: (0..cols).map(|i| format!("Var_{}", i)).collect(),
+            categorical_variables: Vec::new(),
         });
 
-    let x_matrix = DMatrix::from_row_slice(rows, cols, data_x);
+    let x_raw = DMatrix::from_row_slice(rows, cols, data_x);
     let y_vector = DVector::from_column_slice(data_y);
 
-    match stats::assumptions::calculate_box_tidwell(&x_matrix, &y_vector, &bt_config.feature_names)
-    {
+    let mut design_cfg = LogisticConfig::default();
+    design_cfg.categorical_variables = bt_config.categorical_variables;
+
+    let design = stats::design_matrix::build(&x_raw, &bt_config.feature_names, &design_cfg)
+        .map_err(|e| api_error(&format!("Gagal membangun design matrix: {}", e)))?;
+
+    let variable_groups: Vec<(String, Vec<usize>, bool)> = design
+        .variable_groups
+        .into_iter()
+        .map(|g| (g.name, g.column_indices, g.is_categorical))
+        .collect();
+
+    match stats::assumptions::calculate_box_tidwell(&design.matrix, &y_vector, &variable_groups) {
         Ok(bt_results) => {
             let json = serde_json::to_string(&bt_results)
                 .map_err(|e| api_error(&format!("JSON Error: {}", e)))?;
