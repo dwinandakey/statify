@@ -152,6 +152,23 @@ export const generateHosmerDescription = (sig: number): string => {
 };
 
 /**
+ * Menghasilkan teks footnote SPSS untuk status terminasi estimasi IRLS
+ * (dipakai oleh tabel Model Summary & Iteration History).
+ *
+ * Tidak menyertakan prefix huruf (a./b./dst) - itu ditentukan oleh caller,
+ * karena posisi footnote ini berbeda-beda di tiap tabel.
+ */
+export const generateConvergenceNote = (
+  iterations: number | undefined,
+  converged: boolean | undefined
+): string => {
+  const n = iterations ?? "?";
+  return converged
+    ? `Estimation terminated at iteration number ${n} because parameter estimates changed by less than .001.`
+    : `Estimation terminated at iteration number ${n} because maximum iterations has been reached. Final solution cannot be found.`;
+};
+
+/**
  * Menghasilkan deskripsi singkat untuk Variables in the Equation.
  * Fokus pada variabel yang signifikan (p < 0.05).
  */

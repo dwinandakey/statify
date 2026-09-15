@@ -13,6 +13,7 @@ import {
   generateModelSummaryDescription,
   generateClassificationDescription,
   generateVarsInEquationDescription,
+  generateConvergenceNote,
 } from "./formatter_utils";
 
 /**
@@ -163,10 +164,7 @@ export const formatBlock1 = (
     sections.push(
       createSection("block1_summary", "Model Summary", modelSummaryData, {
         description: summaryDesc,
-        note:
-          `a. Estimation terminated at iteration number ${ 
-          summary?.iterations || "?" 
-          } because parameter estimates changed by less than .001.`,
+        note: `a. ${generateConvergenceNote(summary?.iterations, summary?.converged)}`,
       })
     );
 
@@ -558,6 +556,9 @@ export const formatBlock1 = (
             },
             {
               description: `Model summary statistics for each step. Final step: ${sumDesc}`,
+              note: summary
+                ? `a. ${generateConvergenceNote(summary.iterations, summary.converged)}`
+                : undefined,
             }
           )
         );
