@@ -721,6 +721,8 @@ export const BinaryLogisticMain = () => {
   // --- ASSUMPTION HANDLERS (UPDATED TO USE FORMATTER) ---
   const handleRunVIF = async () => {
     try {
+      if (!options.dependent)
+        throw new Error("Dependent variable is required.");
       if (options.covariates.length < 2) {
         throw new Error("VIF requires at least two independent variables.");
       }

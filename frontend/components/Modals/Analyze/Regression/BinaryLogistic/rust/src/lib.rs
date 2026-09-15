@@ -160,10 +160,16 @@ pub fn calculate_vif(
     data_x: &[f64],
     rows: usize,
     cols: usize,
+    data_y: &[f64],
     config_json: String,
 ) -> Result<JsValue, JsValue> {
     if rows == 0 || cols == 0 {
         return Err(api_error("Data kosong untuk VIF."));
+    }
+    if data_y.len() != rows {
+        return Err(api_error(
+            "Dimensi data Y tidak sesuai dengan jumlah baris X",
+        ));
     }
 
     let vif_config: VifConfig = serde_json::from_str(&config_json).unwrap_or(VifConfig {
@@ -172,6 +178,7 @@ pub fn calculate_vif(
     });
 
     let x_raw = DMatrix::from_row_slice(rows, cols, data_x);
+    let y_vector = DVector::from_column_slice(data_y);
 
     // Expand categorical predictors into the same dummy-coded columns used
     // by the main regression, so VIF reflects the actual model matrix.
@@ -187,7 +194,7 @@ pub fn calculate_vif(
         .map(|g| (g.name, g.column_indices))
         .collect();
 
-    match stats::assumptions::calculate_vif(&design.matrix, &variable_groups) {
+    match stats::assumptions::calculate_vif(&design.matrix, &y_vector, &variable_groups) {
         Ok(vif_results) => {
             let json = serde_json::to_string(&vif_results)
                 .map_err(|e| api_error(&format!("JSON Error: {}", e)))?;

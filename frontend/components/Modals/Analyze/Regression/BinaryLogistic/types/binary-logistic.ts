@@ -251,6 +251,8 @@ export interface VariableRow {
 export interface VifRow {
   variable: string;
   tolerance: number;
+  /** Raw GVIF (== VIF when df == 1). */
+  gvif?: number;
   /** VIF, or GVIF^(1/(2*Df)) when any term in the model has df > 1 (see is_gvif). */
   vif: number;
   /** Degrees of freedom (design-matrix columns) for this term. */
@@ -262,7 +264,6 @@ export interface VifRow {
 export interface BoxTidwellRow {
   variable: string;
   // R-style output fields (Fox & Weisberg 2011)
-  mle_lambda?: number;       // MLE of power transformation λ
   score_z?: number;          // Score Statistic z = γ̂ / SE(γ̂)
   df?: number;               // Degrees of freedom (always 1)
   sig: number;               // Pr(>|z|)
