@@ -1,5 +1,5 @@
 /**
- * Factor Analysis SPSS-Style Log Generator
+ * Factor Analysis Log Generator
  dibuat: 29/1/2026
  */
 
