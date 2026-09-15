@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export function calculate_binary_logistic(data_x: Float64Array, rows: number, cols: number, data_y: Float64Array, config_json: string, feature_names_json: string): any;
-export function calculate_vif(data_x: Float64Array, rows: number, cols: number, config_json: string): any;
+export function calculate_vif(data_x: Float64Array, rows: number, cols: number, data_y: Float64Array, config_json: string): any;
 export function calculate_box_tidwell(data_x: Float64Array, rows: number, cols: number, data_y: Float64Array, config_json: string): any;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -10,7 +10,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly calculate_binary_logistic: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => [number, number, number];
   readonly calculate_box_tidwell: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
-  readonly calculate_vif: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
+  readonly calculate_vif: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_externrefs: WebAssembly.Table;

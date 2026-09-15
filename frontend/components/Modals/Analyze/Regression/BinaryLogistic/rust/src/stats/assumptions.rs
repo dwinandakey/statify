@@ -38,41 +38,68 @@ fn correlation_matrix_raw(x: &DMatrix<f64>) -> DMatrix<f64> {
     })
 }
 
-/// Menghitung (Generalized) Variance Inflation Factor.
-///
-/// Uses Fox & Monette's (1992) determinant-ratio Generalized VIF, which is
-/// what R's `car::vif()` computes:
+/// Convert a covariance matrix to a correlation matrix (R's `cov2cor()`):
+/// divide each entry by the geometric mean of its row/column variances.
+fn cov_to_cor(v: &DMatrix<f64>) -> DMatrix<f64> {
+    let n = v.nrows();
+    let sd: Vec<f64> = (0..n).map(|i| v[(i, i)].max(0.0).sqrt()).collect();
+    DMatrix::from_fn(n, n, |i, j| {
+        if i == j {
+            return 1.0;
+        }
+        if sd[i].abs() < 1e-12 || sd[j].abs() < 1e-12 {
+            return 0.0;
+        }
+        (v[(i, j)] / (sd[i] * sd[j])).clamp(-1.0, 1.0)
+    })
+}
+
+/// Build the weighted correlation matrix R's `car::vif()` actually uses for
+/// a fitted GLM: `cov2cor(vcov(model)[-intercept, -intercept])`, where
+/// `vcov(model) = (X'WX)^-1` and W = diag(p̂ᵢ(1-p̂ᵢ)) comes from THIS
+/// logistic fit (Fox & Monette 1992's Generalized VIF, generalized to GLMs
+/// via the model's own Fisher information - not the plain correlation of
+/// X, which is only equivalent to this for an OLS/lm fit where W = I).
+fn weighted_correlation_from_fit(
+    x: &DMatrix<f64>,
+    y: &DVector<f64>,
+) -> Result<DMatrix<f64>, String> {
+    let (rows, cols) = x.shape();
+    let mut x_design = DMatrix::zeros(rows, 1 + cols);
+    for r in 0..rows {
+        x_design[(r, 0)] = 1.0;
+        for c in 0..cols {
+            x_design[(r, 1 + c)] = x[(r, c)];
+        }
+    }
+
+    let fit = fit_logit_augmented(&x_design, y)?;
+    // Drop the intercept row/col, same as car::vif()'s `v[-1, -1]`.
+    let v = fit.vcov.view((1, 1), (cols, cols)).into_owned();
+    Ok(cov_to_cor(&v))
+}
+
+/// Given a (possibly weighted) correlation matrix `r` of the regressor
+/// columns, compute the Fox & Monette (1992) determinant-ratio Generalized
+/// VIF for each term:
 ///
 ///   GVIF_j = det(R_jj) * det(R_(-j),(-j)) / det(R)
 ///
-/// where R is the correlation matrix of ALL regressor columns (no
-/// intercept), R_jj is the submatrix for term j's own columns, and
-/// R_(-j),(-j) is the submatrix for every other term's columns.
-///
 /// `variable_groups` maps each ORIGINAL variable (term) to the column
-/// indices it occupies in `x` - a single column for numeric/binary
-/// predictors, or (k-1) dummy columns for a k-category categorical
-/// predictor (same grouping used to build the regression's design matrix).
-/// For a single-column term this reduces exactly to ordinary VIF =
-/// 1 / (1 - R_j^2).
+/// indices it occupies - a single column for numeric/binary predictors, or
+/// (k-1) dummy columns for a k-category categorical predictor. For a
+/// single-column term this reduces exactly to ordinary VIF = 1/(1-R_j^2).
 ///
-/// When any term has df > 1, R reports `GVIF^(1/(2*Df))` for EVERY term
-/// (continuous ones included) so the values stay comparable - this matches
+/// When any term has df > 1, `GVIF^(1/(2*Df))` is reported for EVERY term
+/// (continuous ones included) so the values stay comparable - matches
 /// `car::vif()`'s own convention of switching the whole table's scale
 /// rather than mixing raw VIF and GVIF units.
-pub fn calculate_vif(
-    x: &DMatrix<f64>,
+fn gvif_from_correlation(
+    r: &DMatrix<f64>,
     variable_groups: &[(String, Vec<usize>)],
 ) -> Result<Vec<VifRow>, String> {
-    let total_cols = x.ncols();
-
-    // Minimal 2 variabel untuk mendeteksi multikolinearitas antar variabel
-    if variable_groups.len() < 2 || total_cols < 2 {
-        return Ok(vec![]);
-    }
-
+    let total_cols = r.nrows();
     let has_multi_df = variable_groups.iter().any(|(_, idx)| idx.len() > 1);
-    let r = correlation_matrix_raw(x);
     let det_r = r.clone().determinant();
 
     // Fully singular (perfect collinearity across the whole predictor set):
@@ -83,6 +110,7 @@ pub fn calculate_vif(
             .map(|(name, idx)| VifRow {
                 variable: name.clone(),
                 tolerance: 0.0,
+                gvif: 999.9,
                 vif: 999.9,
                 df: idx.len(),
                 is_gvif: has_multi_df,
@@ -119,6 +147,7 @@ pub fn calculate_vif(
         results.push(VifRow {
             variable: name.clone(),
             tolerance,
+            gvif,
             vif: display_vif,
             df: p_j,
             is_gvif: has_multi_df,
@@ -126,6 +155,40 @@ pub fn calculate_vif(
     }
 
     Ok(results)
+}
+
+/// Menghitung (Generalized) Variance Inflation Factor untuk model regresi
+/// logistik yang sesungguhnya di-fit (bukan aproksimasi linear/unweighted).
+///
+/// This now genuinely matches R's `car::vif()` applied to the actual fitted
+/// `glm(family=binomial)` object: the correlation matrix is derived from
+/// `vcov(model) = (X'WX)^-1`, W = diag(p̂ᵢ(1-p̂ᵢ)) from THIS logistic fit -
+/// not from the plain correlation of X (that older approach is only
+/// equivalent to `car::vif()` for an `lm`, where W = I; for a `glm` the two
+/// diverge because W varies per observation).
+///
+/// `x` must be the FULLY EXPANDED design matrix (categorical predictors
+/// already dummy-coded), matching the main regression. `variable_groups`
+/// maps each ORIGINAL variable to its column indices in `x`, same grouping
+/// used to build the regression's design matrix.
+///
+/// If the weighted fit fails to converge (e.g. near-perfect separation),
+/// falls back to the plain correlation-of-X approximation rather than
+/// failing the whole request - collinearity among predictors is still a
+/// meaningful (if less precise) diagnostic even when the logistic fit
+/// itself is unstable.
+pub fn calculate_vif(
+    x: &DMatrix<f64>,
+    y: &DVector<f64>,
+    variable_groups: &[(String, Vec<usize>)],
+) -> Result<Vec<VifRow>, String> {
+    // Minimal 2 variabel untuk mendeteksi multikolinearitas antar variabel
+    if variable_groups.len() < 2 || x.ncols() < 2 {
+        return Ok(vec![]);
+    }
+
+    let r = weighted_correlation_from_fit(x, y).unwrap_or_else(|_| correlation_matrix_raw(x));
+    gvif_from_correlation(&r, variable_groups)
 }
 
 /// Box-Tidwell Test for Linearity of the Logit
@@ -148,14 +211,16 @@ pub fn calculate_vif(
 ///    score test of H₀: λ=1 from THIS λ=1 fit:
 ///    - Score z = γ̂ⱼ / SE(γ̂ⱼ)
 ///    - p-value = 2·Φ(−|z|)   (two-tailed)
-/// 4. Separately, refine the MLE of λⱼ by iterating the Newton update
-///    λ ← λ + γ̂/β̂ with the constructed variable recomputed at each trial λ
-///    (see `refine_lambda_iteratively`), matching R's `car::boxTidwell()`
-///    (its `max.iter`/`tol` parameters) - a single step from λ=1 is only a
-///    first-order approximation of this converged estimate.
-/// 5. If the score test is significant (p < α) → the linearity-in-the-logit
-///    assumption is violated for Xⱼ and the power transformation X^λ̂ should
-///    be considered.
+/// 4. If the score test is significant (p < α) → the linearity-in-the-logit
+///    assumption is violated for Xⱼ and a power/log transformation (or
+///    treating Xⱼ as categorical) should be considered.
+///
+/// Only the λ=1 score test is reported (Score Statistic, df, Sig.) - not a
+/// separately-refined MLE of λ. That iterative estimate is only weakly
+/// identified whenever the score test itself is non-significant (the data
+/// can't distinguish λ=1 from nearby values), and is numerically unstable
+/// near degenerate λ (X^λ → constant as λ→0), so it was dropped rather than
+/// shown alongside a test that already answers the "linear or not" question.
 ///
 /// **Simultaneous vs per-variable:**
 /// R's `car::boxTidwell()` adds ALL constructed variables at once so that the
@@ -330,15 +395,6 @@ pub fn calculate_box_tidwell(
         return Ok(reassemble_results(&order, &skipped_results, &[]));
     }
 
-    // Iteratively refine the MLE of λ for each eligible variable (separate
-    // from the λ=1 score test computed below) - see
-    // refine_lambda_iteratively's doc comment for why these are distinct.
-    let eligible_for_refinement: Vec<(usize, f64)> = eligible_vars
-        .iter()
-        .map(|evar| (evar.col_idx, evar.shift))
-        .collect();
-    let refined_lambdas = refine_lambda_iteratively(x, y, cols, rows, &eligible_for_refinement);
-
     // ================================================================
     // PHASE 2: Build augmented design matrix (SIMULTANEOUS approach)
     //
@@ -389,10 +445,6 @@ pub fn calculate_box_tidwell(
                 let z_score = if se_gamma > 1e-12 { gamma / se_gamma } else { 0.0 };
                 let p_value = 2.0 * standard_normal_cdf(-z_score.abs());
 
-                // MLE of λ from the iterative refinement above, not the
-                // single Newton step from this λ=1 score-test fit.
-                let mle_lambda = refined_lambdas[eidx];
-
                 let interaction_label = if evar.shift > 0.0 {
                     format!("{} by ln({}+{:.1})", evar.name, evar.name, evar.shift)
                 } else {
@@ -401,7 +453,6 @@ pub fn calculate_box_tidwell(
 
                 eligible_results.push(BoxTidwellRow {
                     variable: evar.name.clone(),
-                    mle_lambda,
                     score_z: z_score,
                     df: 1,
                     sig: p_value,
@@ -423,12 +474,11 @@ pub fn calculate_box_tidwell(
             // Simultaneous model failed → fall back to per-variable testing
             let mut eligible_results = Vec::with_capacity(n_eligible);
 
-            for (eidx, evar) in eligible_vars.iter().enumerate() {
+            for evar in eligible_vars.iter() {
                 match fit_per_variable(x, y, cols, rows, &evar.interaction_col, evar.col_idx) {
                     Ok(pvr) => {
                         let z_score = if pvr.se_gamma > 1e-12 { pvr.gamma / pvr.se_gamma } else { 0.0 };
                         let p_value = 2.0 * standard_normal_cdf(-z_score.abs());
-                        let mle_lambda = refined_lambdas[eidx];
 
                         let interaction_label = if evar.shift > 0.0 {
                             format!("{} by ln({}+{:.1})", evar.name, evar.name, evar.shift)
@@ -438,7 +488,6 @@ pub fn calculate_box_tidwell(
 
                         eligible_results.push(BoxTidwellRow {
                             variable: evar.name.clone(),
-                            mle_lambda,
                             score_z: z_score,
                             df: 1,
                             sig: p_value,
@@ -460,7 +509,6 @@ pub fn calculate_box_tidwell(
                     Err(e) => {
                         eligible_results.push(BoxTidwellRow {
                             variable: evar.name.clone(),
-                            mle_lambda: f64::NAN,
                             score_z: 0.0,
                             df: 1,
                             sig: 1.0,
@@ -516,7 +564,6 @@ fn pearson_correlation(a: &[f64], b: &[f64]) -> f64 {
 fn make_skipped_row(name: &str, reason: &str, note: &str) -> BoxTidwellRow {
     BoxTidwellRow {
         variable: name.to_string(),
-        mle_lambda: f64::NAN,
         score_z: 0.0,
         df: 1,
         sig: 1.0,
@@ -555,6 +602,7 @@ fn reassemble_results(
 struct AugmentedFitResult {
     beta: DVector<f64>,
     se: DVector<f64>,
+    vcov: DMatrix<f64>,
 }
 
 struct PerVariableFitResult {
@@ -626,7 +674,7 @@ fn fit_logit_augmented(
                             if v > 0.0 { v.sqrt() } else { f64::NAN }
                         }),
                     );
-                    return Ok(AugmentedFitResult { beta, se });
+                    return Ok(AugmentedFitResult { beta, se, vcov: inv_hessian });
                 }
             }
             None => {
@@ -677,103 +725,6 @@ fn fit_per_variable(
 }
 
 // ============================================================================
-// ITERATIVE REFINEMENT OF THE MLE OF LAMBDA (Box & Tidwell 1962)
-// ============================================================================
-//
-// The single augmented regression at λ=1 (PHASE 2/3 above) gives a valid
-// SCORE TEST of H0: λ=1 - that hypothesis is evaluated at λ=1 by
-// construction, so it needs no iteration. But treating that same
-// regression's `1 + γ/β` as "the MLE of λ" is only the FIRST Newton step
-// toward it. R's car::boxTidwell() iterates this update (its `max.iter`/
-// `tol` parameters, defaulting to 25 and 0.001) until λ stabilizes:
-//
-//   at trial λ₀: fit Y ~ ... + β·(X+shift)^λ₀ + γ·[(X+shift)^λ₀ · ln(X+shift)] + ...
-//   λ_new = λ₀ + γ/β
-//   repeat with the newly re-transformed (X+shift)^λ_new until |Δλ| < tol
-//
-// This refines ONLY the point estimate reported as "MLE of λ"; the
-// significance test above is left untouched.
-const BOX_TIDWELL_MAX_ITER: usize = 25;
-const BOX_TIDWELL_TOL: f64 = 0.001;
-const BOX_TIDWELL_LAMBDA_BOUND: f64 = 5.0; // safety clamp against runaway steps
-
-fn refine_lambda_iteratively(
-    x: &DMatrix<f64>,
-    y: &DVector<f64>,
-    cols: usize,
-    rows: usize,
-    eligible: &[(usize, f64)], // (column index, shift) per eligible variable
-) -> Vec<f64> {
-    let n_elig = eligible.len();
-    let mut lambdas = vec![1.0_f64; n_elig];
-    if n_elig == 0 {
-        return lambdas;
-    }
-
-    let total_cols = 1 + cols + n_elig;
-
-    for _ in 0..BOX_TIDWELL_MAX_ITER {
-        let mut x_design = DMatrix::zeros(rows, total_cols);
-        for r in 0..rows {
-            x_design[(r, 0)] = 1.0;
-        }
-
-        // Original columns: eligible ones raised to their CURRENT lambda,
-        // everything else (control variables) left untransformed.
-        for j in 0..cols {
-            if let Some(eidx) = eligible.iter().position(|&(ci, _)| ci == j) {
-                let (_, shift) = eligible[eidx];
-                let lambda = lambdas[eidx];
-                for r in 0..rows {
-                    let val = (x[(r, j)] + shift).max(1e-10);
-                    x_design[(r, 1 + j)] = val.powf(lambda);
-                }
-            } else {
-                for r in 0..rows {
-                    x_design[(r, 1 + j)] = x[(r, j)];
-                }
-            }
-        }
-
-        // Constructed variables: (X+shift)^λ · ln(X+shift) at current λ.
-        for (eidx, &(col_idx, shift)) in eligible.iter().enumerate() {
-            let lambda = lambdas[eidx];
-            let col_offset = 1 + cols + eidx;
-            for r in 0..rows {
-                let val = (x[(r, col_idx)] + shift).max(1e-10);
-                x_design[(r, col_offset)] = val.powf(lambda) * val.ln();
-            }
-        }
-
-        let fit = match fit_logit_augmented(&x_design, y) {
-            Ok(f) => f,
-            // Augmented model failed to converge at this trial lambda -
-            // keep the last stable estimate rather than propagate NaN.
-            Err(_) => break,
-        };
-
-        let mut max_abs_step: f64 = 0.0;
-        for (eidx, &(col_idx, _)) in eligible.iter().enumerate() {
-            let beta = fit.beta[1 + col_idx];
-            let gamma = fit.beta[1 + cols + eidx];
-            let step = if beta.abs() > 1e-8 {
-                (gamma / beta).clamp(-1.0, 1.0)
-            } else {
-                0.0
-            };
-            lambdas[eidx] = (lambdas[eidx] + step).clamp(-BOX_TIDWELL_LAMBDA_BOUND, BOX_TIDWELL_LAMBDA_BOUND);
-            max_abs_step = max_abs_step.max(step.abs());
-        }
-
-        if max_abs_step < BOX_TIDWELL_TOL {
-            break;
-        }
-    }
-
-    lambdas
-}
-
-// ============================================================================
 // Standard Normal CDF (Abramowitz & Stegun approximation)
 // ============================================================================
 fn standard_normal_cdf(x: f64) -> f64 {
@@ -799,6 +750,10 @@ mod vif_tests {
     fn test_vif_orthogonal_design_is_one() {
         // 2^2 factorial design: x1 and x2 are exactly orthogonal (dot
         // product = 0, both mean 0), so each should have VIF = 1 exactly.
+        //
+        // Exercises the GVIF determinant-ratio math (gvif_from_correlation)
+        // directly on the unweighted X correlation - the weighted-fit path
+        // (calculate_vif with a y) is covered separately below.
         let x = DMatrix::from_row_slice(
             4,
             2,
@@ -809,7 +764,8 @@ mod vif_tests {
             ("x2".to_string(), vec![1usize]),
         ];
 
-        let result = calculate_vif(&x, &groups).unwrap();
+        let r = correlation_matrix_raw(&x);
+        let result = gvif_from_correlation(&r, &groups).unwrap();
         assert_eq!(result.len(), 2);
         for row in &result {
             assert!(
@@ -829,6 +785,7 @@ mod vif_tests {
         // simple Pearson correlation between them - a well-known identity,
         // computed independently here (not via correlation_matrix_raw) as
         // a cross-check on the GVIF determinant-ratio implementation.
+        // Exercises gvif_from_correlation directly - see note above.
         let x1 = [1.0, 2.0, 3.0, 4.0, 5.0];
         let x2 = [2.0, 1.0, 4.0, 3.0, 5.0];
 
@@ -851,7 +808,8 @@ mod vif_tests {
             ("x2".to_string(), vec![1usize]),
         ];
 
-        let result = calculate_vif(&x, &groups).unwrap();
+        let r = correlation_matrix_raw(&x);
+        let result = gvif_from_correlation(&r, &groups).unwrap();
         for row in &result {
             assert!(
                 (row.vif - expected_vif).abs() < 1e-6,
@@ -884,13 +842,15 @@ mod vif_tests {
             ],
         );
 
+        let r = correlation_matrix_raw(&x);
+
         // Ungrouped: every column is its own term -> plain VIF, no df>1.
         let ungrouped = vec![
             ("continuous".to_string(), vec![0usize]),
             ("dummyA".to_string(), vec![1usize]),
             ("dummyB".to_string(), vec![2usize]),
         ];
-        let ungrouped_result = calculate_vif(&x, &ungrouped).unwrap();
+        let ungrouped_result = gvif_from_correlation(&r, &ungrouped).unwrap();
         let plain_vif_continuous = ungrouped_result
             .iter()
             .find(|r| r.variable == "continuous")
@@ -902,7 +862,7 @@ mod vif_tests {
             ("continuous".to_string(), vec![0usize]),
             ("category".to_string(), vec![1usize, 2usize]),
         ];
-        let grouped_result = calculate_vif(&x, &grouped).unwrap();
+        let grouped_result = gvif_from_correlation(&r, &grouped).unwrap();
         let continuous_row = grouped_result
             .iter()
             .find(|r| r.variable == "continuous")
@@ -923,99 +883,52 @@ mod vif_tests {
         );
         assert!(category_row.vif >= 1.0 && category_row.vif.is_finite());
     }
+
+    #[test]
+    fn test_calculate_vif_uses_weighted_fit_from_y() {
+        // End-to-end: calculate_vif(x, y, groups) should fit a logistic
+        // model internally and derive GVIF from ITS weighted vcov, not
+        // from the plain correlation of x. With two strongly correlated
+        // continuous predictors, both terms should still come back
+        // finite, >= 1, and clearly above 1 (real collinearity present)
+        // regardless of the exact weighting - this is a sanity check on
+        // the new code path, not a hand-derived reference value (unlike
+        // the determinant-ratio tests above, which pin down the algebra
+        // independently of any fitting).
+        let x1 = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
+        let x2 = [1.1, 1.9, 3.2, 3.8, 5.3, 5.7, 7.1, 8.2]; // ~ x1, r > 0.99
+        let y_vals = [0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0];
+
+        let mut flat = Vec::with_capacity(16);
+        for i in 0..8 {
+            flat.push(x1[i]);
+            flat.push(x2[i]);
+        }
+        let x = DMatrix::from_row_slice(8, 2, &flat);
+        let y = DVector::from_row_slice(&y_vals);
+        let groups = vec![
+            ("x1".to_string(), vec![0usize]),
+            ("x2".to_string(), vec![1usize]),
+        ];
+
+        let result = calculate_vif(&x, &y, &groups).unwrap();
+        assert_eq!(result.len(), 2);
+        for row in &result {
+            assert!(row.vif.is_finite() && row.vif >= 1.0);
+            assert!(row.tolerance > 0.0 && row.tolerance <= 1.0);
+            assert!(
+                row.vif > 2.0,
+                "expected clear collinearity signal for {}, got VIF={}",
+                row.variable,
+                row.vif
+            );
+        }
+    }
 }
 
 #[cfg(test)]
-mod box_tidwell_lambda_tests {
+mod box_tidwell_tests {
     use super::*;
-
-    #[test]
-    fn test_lambda_refinement_reaches_a_fixed_point() {
-        // X positive with a general (imperfect, non-separating) upward
-        // trend in Y, so the augmented IRLS fit is well-behaved.
-        let x_vals: Vec<f64> = (1..=20).map(|v| v as f64).collect();
-        let y_vals: Vec<f64> = vec![
-            0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-            1.0, 1.0, 1.0,
-        ];
-        let rows = x_vals.len();
-        let cols = 1;
-        let x = DMatrix::from_row_slice(rows, cols, &x_vals);
-        let y = DVector::from_vec(y_vals);
-
-        let eligible = vec![(0usize, 0.0f64)];
-        let lambdas = refine_lambda_iteratively(&x, &y, cols, rows, &eligible);
-        assert_eq!(lambdas.len(), 1);
-        let lambda_hat = lambdas[0];
-        assert!(lambda_hat.is_finite());
-
-        // Fixed-point check: one MORE Newton step from the returned lambda
-        // should be negligible - confirms the iteration actually settled
-        // rather than just running out of iterations mid-flight.
-        let total_cols = 1 + cols + 1;
-        let mut x_design = DMatrix::zeros(rows, total_cols);
-        for r in 0..rows {
-            x_design[(r, 0)] = 1.0;
-            let val = x[(r, 0)].max(1e-10);
-            x_design[(r, 1)] = val.powf(lambda_hat);
-            x_design[(r, 2)] = val.powf(lambda_hat) * val.ln();
-        }
-        let fit = fit_logit_augmented(&x_design, &y).expect("augmented fit should converge");
-        let beta = fit.beta[1];
-        let gamma = fit.beta[2];
-        let next_step = if beta.abs() > 1e-8 { (gamma / beta).abs() } else { 0.0 };
-        assert!(
-            next_step < BOX_TIDWELL_TOL * 2.0,
-            "refined lambda ({}) is not at a fixed point: next Newton step would be {}",
-            lambda_hat,
-            next_step
-        );
-    }
-
-    #[test]
-    fn test_lambda_refinement_does_not_diverge() {
-        // Even with a weaker/noisier signal, the refined lambda must stay
-        // finite and within the safety bound (no runaway Newton steps).
-        let x_vals: Vec<f64> = (1..=15).map(|v| v as f64).collect();
-        let y_vals: Vec<f64> = vec![
-            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-        ];
-        let rows = x_vals.len();
-        let cols = 1;
-        let x = DMatrix::from_row_slice(rows, cols, &x_vals);
-        let y = DVector::from_vec(y_vals);
-
-        let eligible = vec![(0usize, 0.0f64)];
-        let lambdas = refine_lambda_iteratively(&x, &y, cols, rows, &eligible);
-
-        assert_eq!(lambdas.len(), 1);
-        assert!(lambdas[0].is_finite());
-        assert!(lambdas[0].abs() <= BOX_TIDWELL_LAMBDA_BOUND);
-    }
-
-    #[test]
-    fn test_calculate_box_tidwell_uses_refined_lambda_not_one_step() {
-        // End-to-end: the public API's reported mle_lambda should come
-        // from the iterative refinement, which for a clearly non-linear
-        // signal should differ from the naive one-step `1 + gamma/beta`
-        // approximation whenever more than one iteration actually moves
-        // lambda (verified by construction: a fixed point rarely lands
-        // exactly on the first Newton step for a real, noisy signal).
-        let x_vals: Vec<f64> = (1..=20).map(|v| v as f64).collect();
-        let y_vals: Vec<f64> = vec![
-            0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
-            1.0, 1.0, 1.0,
-        ];
-        let rows = x_vals.len();
-        let x = DMatrix::from_row_slice(rows, 1, &x_vals);
-        let y = DVector::from_vec(y_vals);
-        let variable_groups = vec![("x".to_string(), vec![0usize], false)];
-
-        let result = calculate_box_tidwell(&x, &y, &variable_groups).unwrap();
-        assert_eq!(result.len(), 1);
-        assert!(!result[0].skipped);
-        assert!(result[0].mle_lambda.is_finite());
-    }
 
     #[test]
     fn test_categorical_group_uses_all_dummy_columns_as_controls() {
@@ -1048,7 +961,6 @@ mod box_tidwell_lambda_tests {
 
         let cont_row = result.iter().find(|r| r.variable == "continuous").unwrap();
         assert!(!cont_row.skipped, "continuous variable should be eligible");
-        assert!(cont_row.mle_lambda.is_finite());
         assert!(cont_row.score_z.is_finite());
 
         let cat_row = result.iter().find(|r| r.variable == "category").unwrap();

@@ -39,7 +39,9 @@ pub struct FittingWarnings {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VifRow {
     pub variable: String,
-    pub tolerance: f64, // 1 / VIF (or 1 / GVIF for multi-df terms)
+    pub tolerance: f64, // 1 / GVIF
+    #[serde(default)]
+    pub gvif: f64,       // Raw GVIF (== VIF when df == 1)
     pub vif: f64,        // VIF, or GVIF^(1/(2*Df)) when any term has df > 1
     #[serde(default = "default_df")]
     pub df: usize,       // Degrees of freedom (columns) for this term
@@ -59,8 +61,6 @@ pub struct BoxTidwellRow {
     pub variable: String,         // Nama variabel asli
 
     // --- Kolom utama (sesuai R output) ---
-    #[serde(default)]
-    pub mle_lambda: f64,          // MLE of λ (power transformation): λ̂ = 1 + γ̂/β̂
     #[serde(default)]
     pub score_z: f64,             // Score Statistic z = γ̂ / SE(γ̂)
     #[serde(default)]

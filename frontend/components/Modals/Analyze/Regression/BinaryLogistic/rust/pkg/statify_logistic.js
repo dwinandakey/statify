@@ -208,15 +208,18 @@ export function calculate_binary_logistic(data_x, rows, cols, data_y, config_jso
  * @param {Float64Array} data_x
  * @param {number} rows
  * @param {number} cols
+ * @param {Float64Array} data_y
  * @param {string} config_json
  * @returns {any}
  */
-export function calculate_vif(data_x, rows, cols, config_json) {
+export function calculate_vif(data_x, rows, cols, data_y, config_json) {
     const ptr0 = passArrayF64ToWasm0(data_x, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passStringToWasm0(config_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr1 = passArrayF64ToWasm0(data_y, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
-    const ret = wasm.calculate_vif(ptr0, len0, rows, cols, ptr1, len1);
+    const ptr2 = passStringToWasm0(config_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ret = wasm.calculate_vif(ptr0, len0, rows, cols, ptr1, len1, ptr2, len2);
     if (ret[2]) {
         throw takeFromExternrefTable0(ret[1]);
     }

@@ -19,7 +19,7 @@ const getConcernLevel = (vif: number, isGvif?: boolean): string => {
 const generateAssumptionDescription = (vifData: any[]): string => {
   // Analisis VIF (GVIF^(1/(2*Df)) scale uses sqrt-adjusted thresholds - see getConcernLevel)
   const isGvif = vifData.some((r) => r.is_gvif);
-  const metricLabel = isGvif ? "GVIF^(1/(2*Df))" : "VIF";
+  const metricLabel = isGvif ? "GVIF^(1/2Df)" : "VIF";
   const threshold = isGvif ? Math.sqrt(5) : 5;
   const highVif = vifData.filter((r) => r.vif >= threshold);
   if (highVif.length > 0) {
@@ -45,23 +45,17 @@ const generateBoxTidwellDescription = (boxTidwellData: any[]): string => {
     const violatedVars = testedVars.filter((row: any) => row.is_significant);
     if (violatedVars.length > 0) {
       const details = violatedVars
-        .map((v: any) => {
-          const lambdaStr =
-            v.mle_lambda != null && isFinite(v.mle_lambda)
-              ? `λ̂=${safeFixed(v.mle_lambda, 3)}`
-              : "";
-          return `${v.variable} (${lambdaStr}, p=${fmtSig(v.sig)})`;
-        })
+        .map((v: any) => `${v.variable} (z=${safeFixed(v.score_z ?? 0, 3)}, p=${fmtSig(v.sig)})`)
         .join(", ");
       parts.push(
         `Linearity assumption violated for: ${details}. ` +
-          `The MLE of λ indicates the estimated power transformation; λ=1 implies linearity. ` +
-          `Consider applying a power transformation or treating these variables as categorical.`
+          `A significant interaction term (X·ln(X)) indicates the relationship between this predictor and the logit is not linear. ` +
+          `Consider applying a power/log transformation or treating these variables as categorical.`
       );
     } else {
       parts.push(
-        "Linearity assumption met for all tested continuous predictors (all p > 0.05). " +
-          "The MLE of λ is close to 1 for all variables, consistent with a linear relationship in the logit."
+        "Linearity assumption met for all tested continuous predictors (all p > 0.05), " +
+          "consistent with a linear relationship in the logit."
       );
     }
   }
@@ -96,20 +90,26 @@ export const formatAssumptionTests = (
   // the Correlation of Estimates table already shown in Block 1, and VIF/
   // GVIF already covers multicollinearity more directly.)
   if (assumptions.vif && assumptions.vif.length > 0) {
-    // When any predictor has df > 1 (a 3+ category factor), values are
-    // GVIF^(1/(2*Df)) for every row - R's car::vif() convention when the
-    // model mixes single- and multi-df terms - so the column is relabeled
-    // and a Df column is shown to make that scale explicit.
+    // When any predictor has df > 1 (a 3+ category factor), R's car::vif()
+    // switches its WHOLE table to 3 columns - GVIF, Df, GVIF^(1/(2*Df)) -
+    // for every row, single-df terms included, so the scale stays
+    // comparable across the table rather than mixing raw VIF and GVIF
+    // units. Mirrored here, in that column order.
     const isGvif = assumptions.vif.some((row) => row.is_gvif);
-    const vifHeader = isGvif ? "GVIF^(1/(2*Df))" : "VIF";
+    const adjHeader = "GVIF^(1/2Df)"; // cleaner than R's literal "GVIF^(1/(2*Df))"
 
     const vifColumnHeaders: any[] = [
       { header: "Variable", key: "var" },
       { header: "Tolerance", key: "tol" },
-      { header: vifHeader, key: "vif" },
     ];
     if (isGvif) {
-      vifColumnHeaders.push({ header: "df", key: "df" });
+      vifColumnHeaders.push(
+        { header: "GVIF", key: "gvif" },
+        { header: "Df", key: "df" },
+        { header: adjHeader, key: "vif" },
+      );
+    } else {
+      vifColumnHeaders.push({ header: "VIF", key: "vif" });
     }
     vifColumnHeaders.push({ header: "Concern Level", key: "concern" });
 
@@ -119,6 +119,7 @@ export const formatAssumptionTests = (
         rowHeader: [row.variable],
         var: row.variable,
         tol: safeFixed(row.tolerance),
+        gvif: safeFixed(row.gvif ?? row.vif),
         vif: safeFixed(row.vif),
         df: (row.df ?? 1).toString(),
         concern: getConcernLevel(row.vif, row.is_gvif),
@@ -135,14 +136,14 @@ export const formatAssumptionTests = (
         vifData,
         {
           description: isGvif
-            ? `${dynamicDesc} Note: one or more predictors are categorical with 3+ categories, so values are reported as Generalized VIF adjusted for degrees of freedom (GVIF^(1/(2*Df))) rather than plain VIF - matching R's car::vif() convention - and are comparable across variables on that scale.`
+            ? `${dynamicDesc} Note: one or more predictors are categorical with 3+ categories, so this table reports Generalized VIF (GVIF) adjusted for degrees of freedom (${adjHeader}) alongside the raw GVIF - matching R's car::vif() convention - with the adjusted column comparable across all variables regardless of df.`
             : dynamicDesc,
         },
       ),
     );
 
     // --- 2. Legend VIF ---
-    // Ranges are sqrt-adjusted to match the GVIF^(1/(2*Df)) scale when applicable.
+    // Ranges are sqrt-adjusted to match the GVIF^(1/2Df) scale when applicable.
     const fmtRange = (n: number) => safeFixed(isGvif ? Math.sqrt(n) : n, isGvif ? 2 : 0);
     const legendData = {
       columnHeaders: [
@@ -207,7 +208,8 @@ export const formatAssumptionTests = (
         columnHeaders: [
           { header: "Variable", key: "var" },
           { header: "Interaction Term", key: "interaction" },
-          { header: "MLE of λ", key: "lambda" },
+          { header: "B", key: "b" },
+          { header: "S.E.", key: "se" },
           { header: "Score Statistic (z)", key: "score_z" },
           { header: "df", key: "df" },
           { header: "Sig.", key: "sig" },
@@ -215,16 +217,12 @@ export const formatAssumptionTests = (
         rows: testedRows.map((row: any) => {
           const sig = row.sig ?? 1.0;
 
-          const lambdaVal =
-            row.mle_lambda != null && isFinite(row.mle_lambda)
-              ? safeFixed(row.mle_lambda, 5)
-              : "—";
-
           return {
             rowHeader: [row.variable],
             var: row.variable,
             interaction: row.interaction_term || `${row.variable} × ln(${row.variable})`,
-            lambda: lambdaVal,
+            b: safeFixed(row.b_interaction ?? 0, 5),
+            se: safeFixed(row.se_interaction ?? 0, 5),
             score_z: safeFixed(row.score_z ?? 0, 4),
             df: String(row.df ?? 1),
             sig: fmtSig(sig),

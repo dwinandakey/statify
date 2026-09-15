@@ -205,6 +205,16 @@ self.onmessage = async (event) => {
         // it via design_matrix::build) instead of raw ordinal category
         // codes - matches R's car::vif(), which uses Generalized VIF for
         // multi-category (3+ level) predictors.
+        //
+        // Y is now required too: VIF is computed from the actual fitted
+        // logistic model's weighted vcov (X'WX)^-1, W = p̂(1-p̂) - matching
+        // car::vif() on a real glm object - not from the plain correlation
+        // of X alone (which only matches car::vif() for an lm).
+        const rawY = cleanData.map((row) => getValue(row, dependentId));
+        const { yVector } = processDependentVariable(rawY);
+        const yFlat = new Float64Array(rows);
+        for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
+
         const vifConfig = {
           feature_names: xFeatureNames,
           categorical_variables: categoricalConfigForRust,
@@ -213,6 +223,7 @@ self.onmessage = async (event) => {
           xFlat,
           rows,
           cols,
+          yFlat,
           JSON.stringify(vifConfig)
         );
         if (typeof vifResult === "string") vifResult = JSON.parse(vifResult);
