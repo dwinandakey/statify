@@ -58,8 +58,13 @@ pub fn rotate_varimax(
 
     let is_pca = matches!(config.extraction.method, ExtractionMethod::PrincipalComponents);
 
-    // COPY data loadings agar bisa kita modifikasi (Pre-processing)
-    let mut processed_loadings = extraction_result.loadings.clone();
+    // Varimax is defined on standardized loadings. For covariance extraction,
+    // convert the rotated solution back to raw units only after rotation.
+    let mut processed_loadings = extraction_result
+        .standardized_loadings
+        .as_ref()
+        .unwrap_or(&extraction_result.loadings)
+        .clone();
     let n_rows = processed_loadings.nrows(); 
     let n_cols = processed_loadings.ncols(); 
 
@@ -214,12 +219,21 @@ pub fn rotate_varimax(
 
 
     // =========================================================
-    // 4. De-normalize rotated loadings
+    // 4. De-normalize rotated standardized loadings
     // =========================================================
-    let mut rotated_loadings = normalized_loadings.clone();
+    let mut standardized_rotated_loadings = normalized_loadings.clone();
     for i in 0..n_rows {
         for j in 0..n_cols {
-            rotated_loadings[(i, j)] *= h[i];
+            standardized_rotated_loadings[(i, j)] *= h[i];
+        }
+    }
+
+    let mut rotated_loadings = standardized_rotated_loadings.clone();
+    if let Some(standard_deviations) = &extraction_result.standard_deviations {
+        for i in 0..n_rows {
+            for j in 0..n_cols {
+                rotated_loadings[(i, j)] *= standard_deviations[i];
+            }
         }
     }
 
@@ -227,13 +241,10 @@ pub fn rotate_varimax(
     // 5. SPSS-style sign reflection (Fix Rotated Columns)
     // =========================================================
     for j in 0..n_cols {
-        let mut sum = 0.0;
-        for i in 0..n_rows {
-            sum += rotated_loadings[(i, j)];
-        }
-        if sum < 0.0 {
+        if standardized_rotated_loadings[(0, j)] < 0.0 {
             for i in 0..n_rows {
                 rotated_loadings[(i, j)] *= -1.0;
+                standardized_rotated_loadings[(i, j)] *= -1.0;
             }
             for i in 0..n_cols {
                 transformation_matrix[(i, j)] *= -1.0;
@@ -246,10 +257,9 @@ pub fn rotate_varimax(
     // =========================================================
     let mut col_variances: Vec<(usize, f64)> = (0..n_cols)
         .map(|j| {
-            let mut ssl = 0.0;
-            for i in 0..n_rows {
-                ssl += rotated_loadings[(i, j)].powi(2);
-            }
+            let ssl: f64 = (0..n_rows)
+                .map(|i| standardized_rotated_loadings[(i, j)].powi(2))
+                .sum();
             (j, ssl)
         })
         .collect();
@@ -536,9 +546,44 @@ pub fn rotate_equimax(
         }
     }
 
+    // SPSS orders covariance-based rotated components by the rescaled
+    // (standardized) sums of squared loadings, not by raw-unit magnitudes.
+    // Keep the transformation matrix aligned with that same permutation.
+    let mut column_order: Vec<(usize, f64)> = (0..n_cols)
+        .map(|j| {
+            let sum_of_squared_loadings = (0..n_rows)
+                .map(|i| {
+                    let loading = if let Some(standard_deviations) = &extraction_result.standard_deviations {
+                        rotated_loadings[(i, j)] / standard_deviations[i].max(1e-12)
+                    } else {
+                        rotated_loadings[(i, j)]
+                    };
+                    loading.powi(2)
+                })
+                .sum();
+            (j, sum_of_squared_loadings)
+        })
+        .collect();
+    column_order.sort_by(|a, b| {
+        b.1.partial_cmp(&a.1)
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
+
+    let mut sorted_loadings = DMatrix::<f64>::zeros(n_rows, n_cols);
+    let mut sorted_transformation = DMatrix::<f64>::zeros(n_cols, n_cols);
+    for (new_column, (old_column, _)) in column_order.iter().enumerate() {
+        for i in 0..n_rows {
+            sorted_loadings[(i, new_column)] = rotated_loadings[(i, *old_column)];
+        }
+        for i in 0..n_cols {
+            sorted_transformation[(i, new_column)] =
+                transformation_matrix[(i, *old_column)];
+        }
+    }
+
     Ok(RotationResult {
-        rotated_loadings,
-        transformation_matrix,
+        rotated_loadings: sorted_loadings,
+        transformation_matrix: sorted_transformation,
         factor_correlations: None,
         iterations_required,
         is_converged,
@@ -599,14 +644,17 @@ fn compute_oblimin_obj_grad_l(
 }
 
 // =========================================================
-// Direct Oblimin Rotation (Exact SPSS GPA Algorithm)
+// Direct Oblimin Rotation 
 // =========================================================
 pub fn rotate_oblimin(
     extraction_result: &ExtractionResult,
     config: &FactorAnalysisConfig
 ) -> Result<RotationResult, String> {
     
-    let unrotated_loadings = &extraction_result.loadings;
+    let unrotated_loadings = extraction_result
+        .standardized_loadings
+        .as_ref()
+        .unwrap_or(&extraction_result.loadings);
     let n_rows = unrotated_loadings.nrows();
     let n_cols = unrotated_loadings.ncols();
     let gamma = config.rotation.delta; 
@@ -732,39 +780,33 @@ pub fn rotate_oblimin(
     }
 
     let t_inv_final = t_mat.clone().try_inverse().unwrap_or_else(|| DMatrix::identity(n_cols, n_cols));
-    let mut t_spss = t_inv_final.transpose();
+    let t_spss = t_inv_final.transpose();
 
     let l_final = &a_mat * &t_spss;
-    let mut pattern = DMatrix::<f64>::zeros(n_rows, n_cols);
+    let mut standardized_pattern = DMatrix::<f64>::zeros(n_rows, n_cols);
     for i in 0..n_rows {
         for j in 0..n_cols {
-            pattern[(i, j)] = l_final[(i, j)] * h[i];
+            standardized_pattern[(i, j)] = l_final[(i, j)] * h[i];
+        }
+    }
+
+    let mut pattern = standardized_pattern.clone();
+    if let Some(standard_deviations) = &extraction_result.standard_deviations {
+        for i in 0..n_rows {
+            for j in 0..n_cols {
+                pattern[(i, j)] *= standard_deviations[i];
+            }
         }
     }
 
     let mut phi = t_mat.transpose() * &t_mat;
     for i in 0..n_cols { phi[(i, i)] = 1.0; } 
 
-    for j in 0..n_cols {
-        let mut col_sum = 0.0;
-        for i in 0..n_rows {
-            col_sum += pattern[(i, j)];
-        }
-        if col_sum < 0.0 {
-            for i in 0..n_rows { pattern[(i, j)] *= -1.0; }
-            for k in 0..n_cols { t_spss[(k, j)] *= -1.0; }
-            for k in 0..n_cols {
-                if k != j {
-                    phi[(j, k)] *= -1.0;
-                    phi[(k, j)] *= -1.0;
-                }
-            }
-        }
-    }
-
     let mut col_stats: Vec<(usize, f64)> = (0..n_cols)
         .map(|j| {
-            let ssl: f64 = (0..n_rows).map(|i| pattern[(i, j)].powi(2)).sum();
+            let ssl: f64 = (0..n_rows)
+                .map(|i| standardized_pattern[(i, j)].powi(2))
+                .sum();
             (j, ssl)
         })
         .collect();
@@ -774,16 +816,51 @@ pub fn rotate_oblimin(
 
     let mut sorted_pattern = DMatrix::<f64>::zeros(n_rows, n_cols);
     let mut sorted_t = DMatrix::<f64>::zeros(n_cols, n_cols);
+    let mut sorted_standardized_pattern = DMatrix::<f64>::zeros(n_rows, n_cols);
     
     for (new_idx, &old_idx) in new_indices.iter().enumerate() {
         for i in 0..n_rows { sorted_pattern[(i, new_idx)] = pattern[(i, old_idx)]; }
         for i in 0..n_cols { sorted_t[(i, new_idx)] = t_spss[(i, old_idx)]; }
+        for i in 0..n_rows { sorted_standardized_pattern[(i, new_idx)] = standardized_pattern[(i, old_idx)]; }
     }
 
     let mut sorted_phi = DMatrix::<f64>::zeros(n_cols, n_cols);
     for (new_row, &old_row) in new_indices.iter().enumerate() {
         for (new_col, &old_col) in new_indices.iter().enumerate() {
             sorted_phi[(new_row, new_col)] = phi[(old_row, old_col)];
+        }
+    }
+
+    for j in 0..n_cols {
+        let sign_reference = if config.extraction.covariance {
+            // For covariance extraction, retain the established SPSS
+            // orientation based on the first variable in each component.
+            0
+        } else {
+            // Correlation extraction uses the dominant standardized loading
+            // to reproduce SPSS's component sign convention.
+            (0..n_rows)
+                .max_by(|&left, &right| {
+                    sorted_standardized_pattern[(left, j)]
+                        .abs()
+                        .partial_cmp(&sorted_standardized_pattern[(right, j)].abs())
+                        .unwrap_or(std::cmp::Ordering::Equal)
+                })
+                .unwrap_or(0)
+        };
+
+        if sorted_standardized_pattern[(sign_reference, j)] < 0.0 {
+            for i in 0..n_rows {
+                sorted_pattern[(i, j)] *= -1.0;
+                sorted_standardized_pattern[(i, j)] *= -1.0;
+            }
+            for i in 0..n_cols { sorted_t[(i, j)] *= -1.0; }
+            for k in 0..n_cols {
+                if k != j {
+                    sorted_phi[(j, k)] *= -1.0;
+                    sorted_phi[(k, j)] *= -1.0;
+                }
+            }
         }
     }
 
@@ -796,6 +873,9 @@ pub fn rotate_oblimin(
         convergence_value: final_convergence,
     })
 }
+
+
+
 
 // =========================================================
 // Promax Rotation

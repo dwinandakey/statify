@@ -17,13 +17,13 @@ use super::core::{
 /// * `method_type` - The method to use
 ///
 /// # Returns
-/// A tuple of (F-to-enter, Wilks' lambda)
+/// A tuple of (F-to-enter, Wilks' lambda), or an error if Wilks' lambda cannot be computed
 pub fn calculate_variable_f_to_enter(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
     method_type: MethodType,
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     match method_type {
         MethodType::Wilks => calculate_f_to_enter_wilks(variable, dataset, current_variables),
         MethodType::Unexplained => {
@@ -46,13 +46,13 @@ pub fn calculate_variable_f_to_enter(
 /// * `method_type` - The method to use
 ///
 /// # Returns
-/// A tuple of (F-to-remove, Wilks' lambda)
+/// A tuple of (F-to-remove, Wilks' lambda), or an error if Wilks' lambda cannot be computed
 pub fn calculate_variable_f_to_remove(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
     method_type: MethodType,
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     match method_type {
         MethodType::Wilks => calculate_f_to_remove_wilks(variable, dataset, current_variables),
         MethodType::Unexplained => {
@@ -82,28 +82,34 @@ fn calculate_f_to_enter_wilks(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     if current_variables.is_empty() {
-        return calculate_univariate_f(variable, dataset);
+        return Ok(calculate_univariate_f(variable, dataset));
     }
 
-    let current_wilks = calculate_overall_wilks_lambda(dataset, current_variables);
+    let current_wilks = calculate_overall_wilks_lambda(dataset, current_variables)?;
 
     let mut new_variables = current_variables.to_vec();
     new_variables.push(variable.to_string());
-    let new_wilks = calculate_overall_wilks_lambda(dataset, &new_variables);
+    let new_wilks = calculate_overall_wilks_lambda(dataset, &new_variables)?;
 
-    let df1 = dataset.num_groups - 1;
-    let df2 = dataset.total_cases - (current_variables.len() + 1) - dataset.num_groups;
+    // Partial F for adding one variable to a model with q variables:
+    // F = ((Λ_q - Λ_{q+1}) / Λ_{q+1}) × (n - g - q) / (g - 1), df = (g - 1, n - g - q),
+    // where q = current_variables.len() (candidate excluded). At q = 0 this is the
+    // univariate F (df2 = n - g). Computed in f64 so a small n cannot underflow usize.
+    let df1 = dataset.num_groups as f64 - 1.0;
+    let df2 = dataset.total_cases as f64
+        - dataset.num_groups as f64
+        - current_variables.len() as f64;
 
     // [PERBAIKAN KRUSIAL]: Pembagi harus new_wilks!
-    let f_value = if df2 > 0 && new_wilks < current_wilks && new_wilks > 0.0 {
-        (((current_wilks - new_wilks) / new_wilks) * (df2 as f64)) / (df1 as f64)
+    let f_value = if df1 > 0.0 && df2 > 0.0 && new_wilks < current_wilks && new_wilks > 0.0 {
+        (((current_wilks - new_wilks) / new_wilks) * df2) / df1
     } else {
         0.0
     };
 
-    (f_value, new_wilks)
+    Ok((f_value, new_wilks))
 }
 
 /// Calculate F-to-remove using Wilks' lambda method
@@ -119,9 +125,9 @@ fn calculate_f_to_remove_wilks(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // Calculate Wilks' lambda for current model
-    let current_wilks = calculate_overall_wilks_lambda(dataset, current_variables);
+    let current_wilks = calculate_overall_wilks_lambda(dataset, current_variables)?;
 
     // Calculate Wilks' lambda with variable removed
     let reduced_variables: Vec<String> = current_variables
@@ -133,23 +139,28 @@ fn calculate_f_to_remove_wilks(
     let reduced_wilks = if reduced_variables.is_empty() {
         1.0
     } else {
-        calculate_overall_wilks_lambda(dataset, &reduced_variables)
+        calculate_overall_wilks_lambda(dataset, &reduced_variables)?
     };
 
     // F-to-remove formula: F = ((Λ_R - Λ_C) / Λ_C) × (df2 / df1)
     // where Λ_R = Wilks' lambda of reduced model (var removed)
     //       Λ_C = Wilks' lambda of current model (var included)
-    // df1 = g - 1, df2 = n - p - g (same as F-to-enter for symmetry)
-    let df1 = dataset.num_groups - 1;
-    let df2 = dataset.total_cases - current_variables.len() - dataset.num_groups + 1;
+    // df1 = g - 1, df2 = n - g - p + 1 with p = current_variables.len() (variable included).
+    // Removing from a p-variable model is entering into a (p - 1)-variable model, so this
+    // equals the F-to-enter df2 = n - g - q with q = p - 1.
+    let df1 = dataset.num_groups as f64 - 1.0;
+    let df2 = dataset.total_cases as f64
+        - dataset.num_groups as f64
+        - current_variables.len() as f64
+        + 1.0;
 
-    let f_value = if df2 > 0 && reduced_wilks > current_wilks && current_wilks > 0.0 {
-        (((reduced_wilks - current_wilks) / current_wilks) * (df2 as f64)) / (df1 as f64)
+    let f_value = if df1 > 0.0 && df2 > 0.0 && reduced_wilks > current_wilks && current_wilks > 0.0 {
+        (((reduced_wilks - current_wilks) / current_wilks) * df2) / df1
     } else {
         0.0
     };
 
-    (f_value, reduced_wilks)
+    Ok((f_value, reduced_wilks))
 }
 
 /// Calculate F-to-enter using Unexplained Variance method
@@ -176,7 +187,7 @@ fn calculate_f_to_enter_unexplained(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // SPSS shows the standard partial Wilks F in the "F to Enter" column for the
     // Unexplained Variance method, and gates entry on it (FIN = 3.84). The method
     // statistic ("Residual Variance") only ranks candidates and is computed in
@@ -201,7 +212,7 @@ fn calculate_f_to_remove_unexplained(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // Standard partial Wilks F-to-remove (FOUT = 2.71 gate). The "Residual
     // Variance" column for variables in the model is computed separately.
     calculate_f_to_remove_wilks(variable, dataset, current_variables)
@@ -223,10 +234,10 @@ fn calculate_f_to_enter_mahalanobis(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // 1. Gatekeeper: Dapatkan F-to-enter murni dengan mendelegasikan tugas ke Wilks
     // (Ini otomatis menangani df1, df2, dan pengecekan saat array kosong)
-    let (f_value, _) = calculate_f_to_enter_wilks(variable, dataset, current_variables);
+    let (f_value, _) = calculate_f_to_enter_wilks(variable, dataset, current_variables)?;
 
     // 2. Ranking: Hitung Mahalanobis D² dengan simulasi penambahan variabel ini
     let mut new_variables = current_variables.to_vec();
@@ -237,7 +248,7 @@ fn calculate_f_to_enter_mahalanobis(
     // 3. Kembalikan F-to-enter standar, dan proxy -min_d2 agar sorting Mahalanobis bekerja benar
     let wilks_lambda = -new_min_d2;
 
-    (f_value, wilks_lambda)
+    Ok((f_value, wilks_lambda))
 }
 
 /// Calculate F-to-remove using Mahalanobis Distance method
@@ -256,9 +267,9 @@ fn calculate_f_to_remove_mahalanobis(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // 1. Dapatkan nilai Standard Partial F (sebagai Gatekeeper)
-    let (f_value, _) = calculate_f_to_remove_wilks(variable, dataset, current_variables);
+    let (f_value, _) = calculate_f_to_remove_wilks(variable, dataset, current_variables)?;
 
     // 2. Dapatkan nilai Mahalanobis D² (sebagai Ranking)
     let reduced_variables: Vec<String> = current_variables
@@ -279,7 +290,7 @@ fn calculate_f_to_remove_mahalanobis(
         -reduced_min_d2
     };
 
-    (f_value, wilks_lambda)
+    Ok((f_value, wilks_lambda))
 }
 
 /// Calculate F-to-enter using Smallest F Ratio method
@@ -297,7 +308,7 @@ fn calculate_f_to_enter_fratio(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // SPSS shows the standard partial Wilks F in the "F to Enter" column for the
     // Smallest F Ratio method, and gates entry on it (FIN = 3.84). The method
     // statistic ("Min. F" + Between Groups) only ranks candidates and is computed
@@ -322,7 +333,7 @@ fn calculate_f_to_remove_fratio(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // Standard partial Wilks F-to-remove (FOUT = 2.71 gate). The "Min. F" column
     // for variables in the model is computed separately.
     calculate_f_to_remove_wilks(variable, dataset, current_variables)
@@ -342,14 +353,14 @@ fn calculate_f_to_enter_raos(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // V_with for the proxy (displayed as "Rao's V" column via raosVFromProxy in formatter)
     let mut new_variables = current_variables.to_vec();
     new_variables.push(variable.to_string());
     let new_v = calculate_raos_v(dataset, &new_variables);
 
     // "F to Enter" column: partial Wilks F — same as every other stepwise method
-    let (partial_f, _) = calculate_f_to_enter_wilks(variable, dataset, current_variables);
+    let (partial_f, _) = calculate_f_to_enter_wilks(variable, dataset, current_variables)?;
 
     let wilks_lambda = if new_v > 0.0 {
         1.0 / (1.0 + new_v / (dataset.total_cases as f64))
@@ -357,7 +368,7 @@ fn calculate_f_to_enter_raos(
         1.0
     };
 
-    (partial_f, wilks_lambda)
+    Ok((partial_f, wilks_lambda))
 }
 
 /// Calculate F-to-remove using Rao's V method
@@ -373,9 +384,9 @@ fn calculate_f_to_remove_raos(
     variable: &str,
     dataset: &AnalyzedDataset,
     current_variables: &[String],
-) -> (f64, f64) {
+) -> Result<(f64, f64), String> {
     // "F to Remove" column: partial Wilks F
-    let (partial_f, _) = calculate_f_to_remove_wilks(variable, dataset, current_variables);
+    let (partial_f, _) = calculate_f_to_remove_wilks(variable, dataset, current_variables)?;
 
     // V of reduced model: for the "Rao's V" column via raosVFromProxy
     let reduced_variables: Vec<String> = current_variables
@@ -396,5 +407,5 @@ fn calculate_f_to_remove_raos(
         1.0
     };
 
-    (partial_f, wilks_lambda)
+    Ok((partial_f, wilks_lambda))
 }

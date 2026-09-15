@@ -14,7 +14,8 @@ use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantCon
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
-    extract_analyzed_dataset, get_stepwise_selected_variables, AnalyzedDataset, EPSILON,
+    calculate_prior_probabilities, classification_case_values, extract_analyzed_dataset,
+    get_stepwise_selected_variables, AnalyzedDataset, MeanSubstitutedCase, EPSILON,
 };
 
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
@@ -23,6 +24,7 @@ use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
 pub fn calculate_classification_results(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<ClassificationResults, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -46,6 +48,7 @@ pub fn calculate_classification_results(
 
     let eigen_stats = calculate_eigen_statistics(data, config)?;
     let canonical_functions = calculate_canonical_functions(data, config)?;
+    let priors = resolve_priors(data, config, &dataset)?;
 
     let mut original_classification = HashMap::new();
     let mut original_percentage = HashMap::new();
@@ -55,26 +58,14 @@ pub fn calculate_classification_results(
         original_percentage.insert(group.clone(), vec![0.0; dataset.group_labels.len()]);
     }
 
-    // --- MENGHITUNG ORIGINAL CLASSIFICATION (Bebas Bug Indexing) ---
+    // --- ORIGINAL CLASSIFICATION ---
+    // Analysis cases plus, with "Replace missing values with mean", the
+    // mean-substituted cases (classified, but not used to estimate the functions).
+    // Cross-validation below covers only the analysis cases.
     for group_name in &dataset.group_labels {
-        let n_cases = dataset
-            .group_data
-            .get(&variables_to_use[0])
-            .and_then(|g| g.get(group_name))
-            .map_or(0, |v| v.len());
-
-        for i in 0..n_cases {
-            // Tarik data per-case dengan aman
-            let mut case_values = Vec::with_capacity(variables_to_use.len());
-            for var in &variables_to_use {
-                let val = dataset
-                    .group_data
-                    .get(var)
-                    .unwrap()
-                    .get(group_name)
-                    .unwrap()[i];
-                case_values.push(val);
-            }
+        for case_values in
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted)
+        {
 
             // Klasifikasikan menggunakan logika anti-underflow yang sama dengan Casewise
             let predicted_idx = classify_case_safe(
@@ -83,7 +74,7 @@ pub fn calculate_classification_results(
                 &eigen_stats,
                 &dataset,
                 &variables_to_use,
-                config,
+                &priors,
             );
 
             if let Some(counts) = original_classification.get_mut(group_name) {
@@ -108,7 +99,7 @@ pub fn calculate_classification_results(
 
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     let (cross_validated_classification, cross_validated_percentage) = if config.classify.leave {
-        calculate_cross_validation(config, &dataset, &variables_to_use)?
+        calculate_cross_validation(&dataset, &variables_to_use, &priors)?
     } else {
         (None, None)
     };
@@ -122,10 +113,14 @@ pub fn calculate_classification_results(
 }
 
 /// Calculate cross-validation results using leave-one-out method
+///
+/// `priors` are the full-sample priors (same as the Prior Probabilities table and the
+/// cross-validated casewise statistics); they are not re-estimated per held-out case,
+/// so the cross-validated classification table and casewise rows always agree.
 fn calculate_cross_validation(
-    config: &DiscriminantConfig,
     dataset: &AnalyzedDataset,
     variables_to_use: &[String],
+    priors: &[f64],
 ) -> Result<
     (
         Option<HashMap<String, Vec<i32>>>,
@@ -214,12 +209,6 @@ fn calculate_cross_validation(
                 .try_inverse()
                 .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
 
-            let priors = if config.classify.all_group_equal {
-                vec![1.0 / (leave_dataset.num_groups as f64); leave_dataset.num_groups]
-            } else {
-                calculate_group_priors(&leave_dataset)
-            };
-
             let mut group_probs = Vec::new();
             let x_vec = nalgebra::DVector::from_vec(case_values.clone());
 
@@ -279,7 +268,7 @@ fn classify_case_safe(
     eigen_stats: &EigenDescription,
     dataset: &AnalyzedDataset,
     variables_to_use: &[String],
-    config: &DiscriminantConfig,
+    priors: &[f64],
 ) -> usize {
     let num_functions = eigen_stats.eigenvalue.len();
     let num_groups = dataset.group_labels.len();
@@ -300,12 +289,6 @@ fn classify_case_safe(
             disc_scores[func_idx] += constants[func_idx];
         }
     }
-
-    let priors = if config.classify.all_group_equal {
-        vec![1.0 / (num_groups as f64); num_groups]
-    } else {
-        calculate_group_priors(dataset)
-    };
 
     let mut group_probs = Vec::with_capacity(num_groups);
 
@@ -331,26 +314,25 @@ fn classify_case_safe(
     group_probs[0].0
 }
 
-/// Calculate group prior probabilities
-fn calculate_group_priors(dataset: &AnalyzedDataset) -> Vec<f64> {
-    let mut priors = Vec::new();
-    let total = dataset.total_cases as f64;
-
-    if total == 0.0 {
-        return vec![1.0 / dataset.num_groups as f64; dataset.num_groups];
+/// Prior probabilities in `dataset.group_labels` order.
+///
+/// Taken from `calculate_prior_probabilities` — the same source as the Prior
+/// Probabilities table and the casewise statistics — so every classification output
+/// uses exactly the priors the output reports, instead of re-deriving them here.
+fn resolve_priors(
+    data: &AnalysisData,
+    config: &DiscriminantConfig,
+    dataset: &AnalyzedDataset,
+) -> Result<Vec<f64>, String> {
+    let prior_table = calculate_prior_probabilities(data, config)?;
+    if prior_table.groups != dataset.group_labels
+        || prior_table.prior_probabilities.len() != dataset.group_labels.len()
+    {
+        return Err(
+            "Prior probabilities do not line up with the analysis groups".to_string(),
+        );
     }
-
-    for group in &dataset.group_labels {
-        let count = dataset
-            .group_data
-            .values()
-            .next()
-            .unwrap()
-            .get(group)
-            .map_or(0, |v| v.len());
-        priors.push(count as f64 / total);
-    }
-    priors
+    Ok(prior_table.prior_probabilities)
 }
 
 /// Calculate Fisher's linear discriminant function coefficients
@@ -381,6 +363,10 @@ pub fn calculate_summary_classification(
         None => return Err("Failed to invert pooled within-groups matrix".to_string()),
     };
 
+    // Same priors as the Prior Probabilities table and case classification, so the
+    // constant term reflects "All groups equal" vs "Compute from group sizes".
+    let priors = resolve_priors(data, config, &dataset)?;
+
     let mut coefficients: HashMap<String, Vec<f64>> = HashMap::new();
     let mut constant_terms: Vec<f64> = Vec::with_capacity(dataset.group_labels.len());
     let mut groups: Vec<usize> = Vec::with_capacity(dataset.group_labels.len());
@@ -399,19 +385,20 @@ pub fn calculate_summary_classification(
             group_means[var_idx] = mean;
         }
 
+        // b_g = S_pooled^-1 * mean_g (Johnson & Wichern 11-51). pooled_within is
+        // already the covariance matrix (SSCP / (n - G)), so SPSS's (n - G)
+        // factor, which applies to the inverse of the SSCP matrix, is not needed.
         for (var_idx, var_name) in variables.iter().enumerate() {
-            let coef = ((dataset.total_cases - dataset.num_groups) as f64)
-                * (0..variables.len())
-                    .map(|l| pooled_within_inv[(var_idx, l)] * group_means[l])
-                    .sum::<f64>();
+            let coef = (0..variables.len())
+                .map(|l| pooled_within_inv[(var_idx, l)] * group_means[l])
+                .sum::<f64>();
 
             coefficients
                 .entry(var_name.clone())
                 .or_insert_with(|| vec![0.0; dataset.group_labels.len()])[group_idx] = coef;
         }
 
-        let prior = 1.0 / (dataset.group_labels.len() as f64);
-        let log_prior = prior.ln();
+        let log_prior = priors[group_idx].ln();
 
         let half_sum = 0.5
             * variables

@@ -11,6 +11,7 @@ use crate::models::{
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_p_value_from_chi_square,
+    classification_case_values, MeanSubstitutedCase,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
     extract_analyzed_dataset, get_stepwise_selected_variables,
     EPSILON,
@@ -20,6 +21,7 @@ use super::core::{
 pub fn calculate_casewise_statistics(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<CasewiseStatistics, String> {
 
     if !config.classify.case {
@@ -85,32 +87,19 @@ pub fn calculate_casewise_statistics(
     // [PERBAIKAN UTAMA]: Ekstrak data langsung dari `dataset` yang sudah terjamin matang (f64).
     // Loop langsung berdasarkan grup yang ada di dataset untuk mencegah mismatch data.
     for group_name in &dataset.group_labels {
-        let n_cases = dataset
-            .group_data
-            .get(&variables_to_use[0])
-            .and_then(|g| g.get(group_name))
-            .map(|v| v.len())
-            .unwrap_or(0);
+        // Cases of this group to classify: the analysis cases, then any
+        // mean-substituted cases ("Replace missing values with mean"), which are
+        // classified but were not used to estimate the functions.
+        let group_cases =
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted);
 
-        for i in 0..n_cases {
+        for case_values in group_cases {
             if processed_cases >= limit {
                 break;
             }
 
             case_idx += 1;
             processed_cases += 1;
-
-            // Pasti terisi angka aslinya, tidak akan lagi bernilai 0.0 semua!
-            let mut case_values = Vec::with_capacity(variables_to_use.len());
-            for var in &variables_to_use {
-                let val = dataset
-                    .group_data
-                    .get(var)
-                    .and_then(|g| g.get(group_name))
-                    .map(|v| v[i])
-                    .unwrap_or(0.0);
-                case_values.push(val);
-            }
 
             let disc_scores = calculate_discriminant_scores(
                 &case_values,
@@ -452,7 +441,10 @@ fn calculate_cross_validated_casewise(
                     .unwrap()
                     .1;
 
-                // SPSS menggunakan df = p (jumlah variabel) untuk jarak di observation space!
+                // df = p (jumlah variabel), bukan jumlah fungsi: D² di atas dihitung di
+                // ruang observasi (x - mean)' S_loo^-1 (x - mean), sehingga di bawah asumsi
+                // model berdistribusi chi-square dengan p derajat bebas. Jalur Original
+                // memakai df = jumlah fungsi karena jaraknya dihitung di ruang kanonik.
                 let df_cv = p_vars;
 
                 let p_val_highest = calculate_p_value_from_chi_square(highest_dist, df_cv);
@@ -575,6 +567,7 @@ struct CrossValidatedCaseResult {
 pub fn calculate_scatter_data(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<ScatterData, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -601,29 +594,11 @@ pub fn calculate_scatter_data(
         .collect();
 
     for group_name in &dataset.group_labels {
-        let n = if variables_to_use.is_empty() {
-            0
-        } else {
-            dataset.group_data
-                .get(&variables_to_use[0])
-                .and_then(|g| g.get(group_name))
-                .map(|v| v.len())
-                .unwrap_or(0)
-        };
-
-        for i in 0..n {
+        // Same cases as the casewise table: analysis cases, then mean-substituted ones.
+        for case_values in
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted)
+        {
             actual_group.push(group_name.clone());
-
-            let case_values: Vec<f64> = variables_to_use
-                .iter()
-                .map(|var| {
-                    dataset.group_data
-                        .get(var)
-                        .and_then(|g| g.get(group_name))
-                        .map(|v| v[i])
-                        .unwrap_or(0.0)
-                })
-                .collect();
 
             let scores = calculate_discriminant_scores(
                 &case_values,

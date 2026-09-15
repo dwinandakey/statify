@@ -105,7 +105,7 @@ pub fn calculate_stepwise_statistics(
             }
         }
     } else {
-        vec![create_initial_step(&dataset, variables, config)]
+        vec![create_initial_step(&dataset, variables, config)?]
     };
 
     // Convert step data to output format
@@ -141,7 +141,7 @@ fn perform_stepwise_analysis(
     seen_states.insert(String::new());
 
     // Add initial step (Step 0)
-    let initial_step = create_initial_step(dataset, variables, config);
+    let initial_step = create_initial_step(dataset, variables, config)?;
     steps_data.push(initial_step.clone());
 
     let method_type = determine_method_type(config);
@@ -155,7 +155,7 @@ fn perform_stepwise_analysis(
         // PRIORITAS 1: Cek apakah ada variabel yang harus di-REMOVE
         if current_variables.len() > 1 {
             let (worst_var_to_remove, worst_stats) =
-                find_worst_variable_to_remove(&current_variables, dataset, method_type, config);
+                find_worst_variable_to_remove(&current_variables, dataset, method_type, config)?;
 
             let should_remove = should_remove_variable(
                 &worst_var_to_remove,
@@ -192,7 +192,7 @@ fn perform_stepwise_analysis(
                         method_type,
                         config,
                         prev_raos_v,
-                    );
+                    )?;
                     prev_raos_v = step_data.raos_v;
                     steps_data.push(step_data);
 
@@ -210,7 +210,7 @@ fn perform_stepwise_analysis(
                 &current_variables,
                 method_type,
                 config,
-            );
+            )?;
 
             let should_enter = should_enter_variable(
                 &best_var_to_enter,
@@ -248,7 +248,7 @@ fn perform_stepwise_analysis(
                         method_type,
                         config,
                         prev_raos_v,
-                    );
+                    )?;
                     prev_raos_v = step_data.raos_v;
                     steps_data.push(step_data);
                 }
@@ -280,31 +280,17 @@ fn should_enter_variable(
     let total_cases = dataset.total_cases;
     let num_current_vars = current_variables.len();
 
-    // Use SPSS defaults if thresholds are 0 or not set.
-    // Default F-to-enter = 3.84, P-to-enter = 0.05.
-    let f_entry_threshold = if config.method.f_entry > 0.0 {
-        config.method.f_entry
-    } else {
-        3.84
-    };
-    let p_entry_threshold = if config.method.p_entry > 0.0 {
-        config.method.p_entry
-    } else {
-        0.05
-    };
+    let thresholds = stepwise_thresholds(config);
+    let f_entry_threshold = thresholds.f_entry;
+    let p_entry_threshold = thresholds.p_entry;
 
-    // Rao's V: f_to_enter now holds the partial Wilks F (for display), and
+    // Rao's V: f_to_enter holds the partial Wilks F (for display), and
     // min_d_squared holds ΔV (for selection and the VIN gate).
-    // Both gates must pass: VIN (ΔV ≥ 1.0) and FIN (partial F ≥ 3.84).
+    // Both gates must pass: VIN (ΔV ≥ V-to-enter) and FIN (partial F ≥ F-to-enter).
     let method_type = determine_method_type(config);
     if method_type == MethodType::Raos {
-        let v_enter_threshold = if config.method.v_enter > 0.0 {
-            config.method.v_enter
-        } else {
-            1.0
-        };
         // VIN gate: ΔV is in stats.min_d_squared
-        if stats.min_d_squared < v_enter_threshold {
+        if stats.min_d_squared < thresholds.v_enter {
             return false;
         }
         // FIN gate: partial Wilks F is in stats.f_to_enter
@@ -314,8 +300,13 @@ fn should_enter_variable(
     if config.method.f_value {
         stats.f_to_enter >= f_entry_threshold
     } else if config.method.f_probability {
-        let df1 = (num_groups - 1) as f64;
-        let df2 = (total_cases - num_groups - num_current_vars + 1) as f64;
+        // df must match calculate_f_to_enter_wilks: (g - 1, n - g - q),
+        // q = variables already in the model (candidate excluded).
+        let df1 = num_groups as f64 - 1.0;
+        let df2 = total_cases as f64 - num_groups as f64 - num_current_vars as f64;
+        if df1 <= 0.0 || df2 <= 0.0 {
+            return false;
+        }
         let p_value = calculate_p_value_from_f(stats.f_to_enter, df1, df2);
         p_value <= p_entry_threshold
     } else {
@@ -338,18 +329,9 @@ fn should_remove_variable(
     let total_cases = dataset.total_cases;
     let num_current_vars = current_variables.len();
 
-    // Use SPSS defaults if thresholds are 0 or not set.
-    // Default F-to-remove = 2.71, P-to-remove = 0.10
-    let f_removal_threshold = if config.method.f_removal > 0.0 {
-        config.method.f_removal
-    } else {
-        2.71
-    };
-    let p_removal_threshold = if config.method.p_removal > 0.0 {
-        config.method.p_removal
-    } else {
-        0.10
-    };
+    let thresholds = stepwise_thresholds(config);
+    let f_removal_threshold = thresholds.f_removal;
+    let p_removal_threshold = thresholds.p_removal;
 
     // Rao's V: f_to_remove now holds the partial Wilks F directly.
     let method_type = determine_method_type(config);
@@ -360,8 +342,8 @@ fn should_remove_variable(
     if config.method.f_value || config.method.f_probability {
         // df2 must match how F-to-remove was computed in calculate_f_to_remove_wilks:
         // df2 = n - p - g + 1 (where p = num_current_vars)
-        let df2 = (total_cases - num_groups - num_current_vars + 1) as f64;
-        let p_value = calculate_p_value_from_f(stats.f_to_remove, (num_groups - 1) as f64, df2);
+        let df2 = total_cases as f64 - num_groups as f64 - num_current_vars as f64 + 1.0;
+        let p_value = calculate_p_value_from_f(stats.f_to_remove, num_groups as f64 - 1.0, df2);
 
         if config.method.f_value {
             stats.f_to_remove <= f_removal_threshold
@@ -378,12 +360,12 @@ fn create_initial_step(
     dataset: &AnalyzedDataset,
     variables: &[String],
     config: &DiscriminantConfig,
-) -> StepData {
-    let initial_variables_not_in = analyze_variables_not_in_model(variables, dataset, &[], config);
+) -> Result<StepData, String> {
+    let initial_variables_not_in = analyze_variables_not_in_model(variables, dataset, &[], config)?;
     let _k = dataset.num_groups as i32;
     let _n = dataset.total_cases as i32;
 
-    StepData {
+    Ok(StepData {
         variable_entered: None,
         variable_removed: None,
         min_d_squared: 0.0,
@@ -403,7 +385,7 @@ fn create_initial_step(
         variables_in_analysis: Vec::new(),
         variables_not_in_analysis: initial_variables_not_in,
         pairwise_comparisons: HashMap::new(),
-    }
+    })
 }
 
 /// Create data for a step in the stepwise procedure
@@ -417,12 +399,12 @@ fn create_step_data(
     method_type: MethodType,
     config: &DiscriminantConfig,
     prev_raos_v: f64,
-) -> StepData {
+) -> Result<StepData, String> {
     let vars_in_analysis =
-        analyze_variables_in_model(current_variables, dataset, method_type, config);
+        analyze_variables_in_model(current_variables, dataset, method_type, config)?;
 
     let vars_not_in_analysis =
-        analyze_variables_not_in_model(remaining_variables, dataset, current_variables, config);
+        analyze_variables_not_in_model(remaining_variables, dataset, current_variables, config)?;
 
     // SPSS displays ALL variables not in the model in this table (not just the
     // top 4), so we keep the full ranked list.
@@ -436,7 +418,7 @@ fn create_step_data(
     let wilks_lambda = if combined_vars.is_empty() {
         1.0
     } else {
-        calculate_overall_wilks_lambda(dataset, &combined_vars)
+        calculate_overall_wilks_lambda(dataset, &combined_vars)?
     };
 
     // Method statistic of the current model, shown in the Variables Entered/Removed
@@ -546,7 +528,7 @@ fn create_step_data(
 
     let significance = calculate_p_value_from_f(exact_f, exact_df1 as f64, exact_df2 as f64);
 
-    StepData {
+    Ok(StepData {
         variable_entered,
         variable_removed,
         min_d_squared,
@@ -566,7 +548,7 @@ fn create_step_data(
         variables_in_analysis: vars_in_analysis,
         variables_not_in_analysis: vars_not_in_analysis,
         pairwise_comparisons,
-    }
+    })
 }
 
 /// Convert internal step data to the output format
@@ -662,48 +644,63 @@ fn convert_steps_to_output(
     Ok(result)
 }
 
+/// Entry/removal thresholds the stepwise procedure actually applies.
+///
+/// A blank dialog field reaches Rust as 0, so F-to-enter, F-to-remove and the two
+/// probabilities fall back to the SPSS defaults (3.84, 2.71, 0.05, 0.10) when not
+/// positive. V-to-enter is different: its SPSS default is 0 itself, so the value is
+/// used exactly as given (negative values are treated as 0). The selection rules and
+/// the output footnotes both read from here, so they can never disagree.
+struct StepwiseThresholds {
+    f_entry: f64,
+    f_removal: f64,
+    p_entry: f64,
+    p_removal: f64,
+    v_enter: f64,
+}
+
+fn stepwise_thresholds(config: &DiscriminantConfig) -> StepwiseThresholds {
+    let positive_or = |value: f64, default: f64| if value > 0.0 { value } else { default };
+    StepwiseThresholds {
+        f_entry: positive_or(config.method.f_entry, 3.84),
+        f_removal: positive_or(config.method.f_removal, 2.71),
+        p_entry: positive_or(config.method.p_entry, 0.05),
+        p_removal: positive_or(config.method.p_removal, 0.10),
+        v_enter: config.method.v_enter.max(0.0),
+    }
+}
+
 fn create_stepwise_note(config: &DiscriminantConfig) -> StepwiseNote {
     let max_steps = config.main.independent_variables.len() * 2;
+    let thresholds = stepwise_thresholds(config);
 
-    let (entry_msg, removal_msg) = if config.method.f_value {
+    let (entry_msg, removal_msg) = if !config.method.f_value && config.method.f_probability {
         (
-            format!(
-                "b. Minimum partial F to enter is {}.",
-                config.method.f_entry
-            ),
-            format!(
-                "c. Maximum partial F to remove is {}.",
-                config.method.f_removal
-            ),
-        )
-    } else if config.method.f_probability {
-        (
-            format!(
-                "b. Maximum probability of F to enter is {}.",
-                config.method.p_entry
-            ),
-            format!(
-                "c. Minimum probability of F to remove is {}.",
-                config.method.p_removal
-            ),
+            format!("b. Maximum probability of F to enter is {}.", thresholds.p_entry),
+            format!("c. Minimum probability of F to remove is {}.", thresholds.p_removal),
         )
     } else {
         (
-            format!(
-                "b. Minimum partial F to enter is {}.",
-                config.method.f_entry
-            ),
-            format!(
-                "c. Maximum partial F to remove is {}.",
-                config.method.f_removal
-            ),
+            format!("b. Minimum partial F to enter is {}.", thresholds.f_entry),
+            format!("c. Maximum partial F to remove is {}.", thresholds.f_removal),
         )
+    };
+
+    // Rao's V adds its own V-to-enter footnote, which moves the last one to "e".
+    let (min_v_to_enter, last_letter) = if determine_method_type(config) == MethodType::Raos {
+        (format!("d. Minimum Rao's V to enter is {}.", thresholds.v_enter), "e")
+    } else {
+        (String::new(), "d")
     };
 
     StepwiseNote {
         max_steps: format!("a. Maximum number of steps is {}.", max_steps),
         min_f_to_enter: entry_msg,
         max_f_to_remove: removal_msg,
-        note: "d. F level, tolerance, or VIN insufficient for further computation.".to_string(),
+        min_v_to_enter,
+        note: format!(
+            "{}. F level, tolerance, or VIN insufficient for further computation.",
+            last_letter
+        ),
     }
 }

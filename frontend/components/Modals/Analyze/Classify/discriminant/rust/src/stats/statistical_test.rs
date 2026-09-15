@@ -3,6 +3,8 @@
 //! This module implements various statistical tests used in discriminant analysis,
 //! including univariate F tests, Wilks' Lambda, and tolerance calculations.
 
+use nalgebra::DMatrix;
+
 use crate::{
     models::{ result::WilksLambdaTest, AnalysisData, DiscriminantConfig },
     stats::core::{ AnalyzedDataset, EPSILON },
@@ -96,41 +98,67 @@ pub fn calculate_univariate_f(variable: &str, dataset: &AnalyzedDataset) -> (f64
 /// Uses raw SSCP matrices: Λ = |W| / |B + W|
 /// where W = Σ(nᵢ-1)Sᵢ (NOT divided by n-k)
 /// This matches SPSS and standard textbook formulas.
-pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[String]) -> f64 {
+///
+/// The ratio is computed on the log scale, ln Λ = ln|W| − ln|T|, with each log
+/// determinant taken from a Cholesky factorization. This avoids overflow of the raw
+/// determinants on large-scale data, and Cholesky fails exactly when a matrix is not
+/// positive definite — that case is returned as an error rather than being replaced
+/// by a plausible-looking value.
+pub fn calculate_overall_wilks_lambda(
+    dataset: &AnalyzedDataset,
+    variables: &[String]
+) -> Result<f64, String> {
     if variables.is_empty() {
-        return 1.0;
+        return Ok(1.0);
     }
 
     // Calculate between-groups and within-groups matrices
     let (between_mat, within_mat) = calculate_between_within_matrices(dataset, variables);
 
-    // IMPORTANT: within_mat is divided by total_df=(n-k) by calculate_between_within_matrices
-    // (which is correct for covariance display purposes).
-    // But Wilks' Lambda requires raw SSCP W: W_raw = W_cov * (n-k).
-    // |W_raw| = |W_cov| * (n-k)^p  where p = number of variables.
-    let total_df = dataset.total_cases - dataset.num_groups;
-    let p = variables.len();
-    let scale_factor = (total_df as f64).powi(p as i32);
+    // within_mat is the pooled covariance W_cov = W_raw / (n-k), as returned by
+    // calculate_between_within_matrices (correct for covariance display).
+    // Wilks' Lambda requires the raw SSCP: W_raw = W_cov * (n-k), T = B + W_raw.
+    let total_df = (dataset.total_cases as f64) - (dataset.num_groups as f64);
+    if total_df <= 0.0 {
+        return Err(
+            format!(
+                "Wilks' lambda is undefined: total cases minus groups is {} (must be positive)",
+                total_df
+            )
+        );
+    }
+    let within_raw = &within_mat * total_df;
+    let total_mat = &between_mat + &within_raw;
 
-    // Wilks' lambda = |W_raw| / |B + W_raw|
-    // where W_raw = within_mat * (n-k)^p
-    let within_det = match within_mat.clone().determinant() {
-        det if det > 0.0 => det * scale_factor,
-        _ => 1.0,
-    };
+    let log_det_within = cholesky_log_determinant(&within_raw).ok_or_else(|| {
+        format!(
+            "Within-groups SSCP matrix is not positive definite for variables [{}]; Wilks' lambda cannot be computed",
+            variables.join(", ")
+        )
+    })?;
+    let log_det_total = cholesky_log_determinant(&total_mat).ok_or_else(|| {
+        format!(
+            "Total SSCP matrix is not positive definite for variables [{}]; Wilks' lambda cannot be computed",
+            variables.join(", ")
+        )
+    })?;
 
-    // For total: |B + W_raw| = |B + W_cov * (n-k)| = |(n-k) * (B/(n-k) + W_cov)|
-    // = (n-k)^p * |B/(n-k) + W_cov|
-    // But simpler: just compute B + W_raw directly
-    let total_mat = &between_mat + &within_mat * (total_df as f64);
-    let total_det = match total_mat.determinant() {
-        det if det > 0.0 => det,
-        _ => 1.0,
-    };
+    Ok((log_det_within - log_det_total).exp())
+}
 
-    let lambda = if total_det > 0.0 { within_det / total_det } else { 1.0 };
-
-    lambda
+/// ln|A| of a symmetric positive-definite matrix via Cholesky, A = LLᵀ:
+/// ln|A| = 2 · Σ ln(Lᵢᵢ). Returns None when A is not positive definite.
+fn cholesky_log_determinant(matrix: &DMatrix<f64>) -> Option<f64> {
+    let cholesky = matrix.clone().cholesky()?;
+    let l = cholesky.l();
+    Some(
+        2.0 *
+            l
+                .diagonal()
+                .iter()
+                .map(|v| v.ln())
+                .sum::<f64>()
+    )
 }
 
 /// Calculate overall F statistic for a set of variables
@@ -365,8 +393,7 @@ pub fn calculate_wilks_lambda_test(
         wilks_lambda.push(lambda_k);
 
         // Calculate chi-square approximation using Bartlett's formula
-        // χ² = -[n - (p + g + 1)/2] × ln(Λ)
-        // Note: Using (p + g + 1) / 2, not (p + g) / 2
+        // χ² = -[n - 1 - (p + g)/2] × ln(Λ)
         let chi_square_val = -(n - 1.0 - ((p + g) as f64) / 2.0) * lambda_k.ln();
 
         chi_square.push(chi_square_val);

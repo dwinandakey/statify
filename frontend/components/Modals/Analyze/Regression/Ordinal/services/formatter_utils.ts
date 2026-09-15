@@ -17,7 +17,7 @@ export const createSection = (
   options?: {
     description?: string;
     note?: string;
-  }
+  },
 ): AnalysisSection => {
   return {
     id,
@@ -30,7 +30,10 @@ export const createSection = (
 };
 
 // helper format angka
-export const safeFixed = (val: number | undefined | null, digits = 3): string => {
+export const safeFixed = (
+  val: number | undefined | null,
+  digits = 3,
+): string => {
   if (val === undefined || val === null || isNaN(val)) return ".";
   if (Math.abs(val) < 1e-9) return (0).toFixed(digits);
   const factor = 10 ** digits;
@@ -45,7 +48,9 @@ export const fmtSig = (num: number | undefined | null): string => {
   return num < 0.001 ? "< .001" : num.toFixed(3);
 };
 
-const uniquePreserveOrder = (values: Array<string | number>): Array<string | number> => {
+const uniquePreserveOrder = (
+  values: Array<string | number>,
+): Array<string | number> => {
   const seen = new Set<string | number>();
   const ordered: Array<string | number> = [];
   for (const value of values) {
@@ -59,14 +64,16 @@ const uniquePreserveOrder = (values: Array<string | number>): Array<string | num
 
 export const normalizeOrderedCategories = (
   values: Array<string | number>,
-  explicitOrder?: Array<string | number>
+  explicitOrder?: Array<string | number>,
 ): Array<string | number> => {
   if (explicitOrder && explicitOrder.length > 0) {
     return uniquePreserveOrder(explicitOrder);
   }
 
   const uniqueValues = uniquePreserveOrder(values);
-  const allNumeric = uniqueValues.every((v) => typeof v === "number" && !isNaN(v));
+  const allNumeric = uniqueValues.every(
+    (v) => typeof v === "number" && !isNaN(v),
+  );
   if (allNumeric) {
     return [...uniqueValues].sort((a, b) => Number(a) - Number(b));
   }
@@ -98,11 +105,13 @@ export const inferModelType = (scaleType: PlumScaleType): PlumModelType => {
 };
 
 export const buildDefaultEstimationOptions = (
-  params: OrdinalOptionsParams
+  params: OrdinalOptionsParams,
 ): PlumEstimationOptions => {
   return {
     method: "fisher_scoring",
-    maxIterations: Number.isFinite(params.maxIterations) ? params.maxIterations : 100,
+    maxIterations: Number.isFinite(params.maxIterations)
+      ? params.maxIterations
+      : 100,
     maxStepHalving: params.maxStepHalving,
     logLikelihoodConvergence: params.logLikelihoodConvergence,
     parameterConvergence: params.parameterConvergence,
@@ -113,13 +122,15 @@ export const buildDefaultEstimationOptions = (
 };
 
 export const buildDefaultOutputOptions = (
-  params: OrdinalOutputParams
+  params: OrdinalOutputParams,
 ): PlumOutputOptions => {
   const printIterationHistory = Boolean(
-    params.display.printIterationHistory ?? params.display.iterationHistory
+    params.display.printIterationHistory ?? params.display.iterationHistory,
   );
   const iterationHistoryEvery = Number(
-    params.display.iterationHistoryEvery ?? params.display.iterationHistoryStep ?? 1
+    params.display.iterationHistoryEvery ??
+      params.display.iterationHistoryStep ??
+      1,
   );
 
   return {
@@ -127,25 +138,23 @@ export const buildDefaultOutputOptions = (
     summaryStatistics: params.display.summaryStatistics,
     parameterEstimates: params.display.parameterEstimates,
     testOfParallelLines: params.display.testOfParallelLines,
-    test_of_multicolinearity: Boolean(
-      params.display.test_of_multicolinearity
-      ?? (params.display as any).multicolinearity
-    ),
     iterationHistory: printIterationHistory,
     iterationHistoryStep: iterationHistoryEvery,
     printIterationHistory,
     iterationHistoryEvery,
     cellInformation: params.display.cellInformation,
     predictedResponseCategory: params.savedVariables.predictedResponseCategory,
-    estimatedResponseProbabilities: params.savedVariables.estimatedResponseProbabilities,
-    predictedCategoryProbability: params.savedVariables.predictedCategoryProbability,
+    estimatedResponseProbabilities:
+      params.savedVariables.estimatedResponseProbabilities,
+    predictedCategoryProbability:
+      params.savedVariables.predictedCategoryProbability,
     actualCategoryProbability: params.savedVariables.actualCategoryProbability,
     printLogLikelihood: params.printLogLikelihood,
   };
 };
 
 export const validateOrdinalPayload = (
-  payload: OrdinalPlumPayload
+  payload: OrdinalPlumPayload,
 ): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
@@ -157,7 +166,9 @@ export const validateOrdinalPayload = (
     errors.push("Jumlah kategori response harus minimal 3.");
   }
 
-  if (payload.response.orderedCategories.length !== payload.response.categoryCount) {
+  if (
+    payload.response.orderedCategories.length !== payload.response.categoryCount
+  ) {
     errors.push("Category count tidak konsisten dengan orderedCategories.");
   }
 
@@ -176,7 +187,9 @@ export const validateOrdinalPayload = (
     const factorNames = new Set(payload.factors.map((v) => v.name));
     for (const cov of payload.covariates) {
       if (factorNames.has(cov.name)) {
-        errors.push("Variabel yang sama tidak boleh muncul di factors dan covariates.");
+        errors.push(
+          "Variabel yang sama tidak boleh muncul di factors dan covariates.",
+        );
         break;
       }
     }

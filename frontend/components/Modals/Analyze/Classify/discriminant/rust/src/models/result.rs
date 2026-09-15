@@ -56,6 +56,12 @@ pub struct DiscriminantResult {
     /// The map itself is built on the frontend from the group centroids.
     #[serde(rename = "territorial_map")]
     pub territorial_map: bool,
+    /// True when the Combined-Groups plot was requested (Classify → Plots).
+    #[serde(rename = "combined_groups_plot")]
+    pub combined_groups_plot: bool,
+    /// True when the Separate-Groups plots were requested (Classify → Plots).
+    #[serde(rename = "separate_groups_plot")]
+    pub separate_groups_plot: bool,
 }
 
 /// Bundle of all requested assumption checks plus an at-a-glance summary used to
@@ -191,6 +197,14 @@ pub struct ProcessingSummary {
     pub both_missing_percent: Option<f64>,
     #[serde(rename = "total_excluded_percent")]
     pub total_excluded_percent: Option<f64>,
+    /// Classification Processing Summary: cases excluded for a missing predictor.
+    /// 0 when "Replace missing values with mean" is on, because those cases are still
+    /// classified with the predictor means substituted.
+    #[serde(rename = "classification_missing_disc_vars")]
+    pub classification_missing_disc_vars: Option<usize>,
+    /// Classification Processing Summary: cases used in the classification output.
+    #[serde(rename = "classification_used_count")]
+    pub classification_used_cases: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -386,6 +400,8 @@ pub struct StepwiseNote {
     pub max_steps: String,
     pub min_f_to_enter: String,
     pub max_f_to_remove: String,
+    /// "Minimum Rao's V to enter is …" — empty for every method except Rao's V.
+    pub min_v_to_enter: String,
     pub note: String,
 }
 
@@ -429,6 +445,10 @@ pub struct PairwiseComparison {
     pub group_name: String,
     pub f_value: f64,
     pub significance: f64,
+    /// Numerator degrees of freedom of F: p, the number of variables in the model.
+    pub df1: i32,
+    /// Denominator degrees of freedom of F: n − g − p + 1.
+    pub df2: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

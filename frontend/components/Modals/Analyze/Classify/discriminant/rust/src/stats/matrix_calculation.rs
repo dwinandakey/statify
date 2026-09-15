@@ -680,7 +680,7 @@ pub fn calculate_min_f_ratio(dataset: &AnalyzedDataset, variables: &[String]) ->
 ///
 /// Returns `None` if the regularized matrix is singular (callers fall back to
 /// the squared Euclidean distance of the mean difference).
-fn pooled_within_inverse(dataset: &AnalyzedDataset, variables: &[String]) -> Option<DMatrix<f64>> {
+pub(crate) fn pooled_within_inverse(dataset: &AnalyzedDataset, variables: &[String]) -> Option<DMatrix<f64>> {
     if variables.is_empty() {
         return None;
     }
@@ -719,7 +719,7 @@ fn group_mean_diff(
 
 /// Squared Mahalanobis distance D² = δ'·S⁻¹·δ between two groups, given a
 /// precomputed pooled inverse. `None` → singular fallback (‖δ‖²).
-fn group_mahalanobis_with_inv(
+pub(crate) fn group_mahalanobis_with_inv(
     dataset: &AnalyzedDataset,
     group_i: &str,
     group_j: &str,
