@@ -512,10 +512,13 @@ export const BinaryLogisticMain = () => {
       variablesToAdd.push(newVariable);
 
       // Prepare cell updates for this variable
+      // NOTE: rowIndex is the position among ANALYZED cases (post listwise
+      // deletion), not the dataset row. row.case_index is the original
+      // dataset row the worker remapped it to - use that as the target.
       values.forEach((value, rowIndex) => {
         if (value !== undefined && !isNaN(value)) {
           allCellUpdates.push({
-            row: rowIndex,
+            row: rows[rowIndex]?.case_index ?? rowIndex,
             col: nextColumnIndex,
             value,
           });
@@ -566,7 +569,7 @@ export const BinaryLogisticMain = () => {
       values.forEach((value, rowIndex) => {
         if (value !== undefined) {
           allCellUpdates.push({
-            row: rowIndex,
+            row: rows[rowIndex]?.case_index ?? rowIndex,
             col: nextColumnIndex,
             value,
           });
@@ -628,7 +631,7 @@ export const BinaryLogisticMain = () => {
         values.forEach((value, rowIndex) => {
           if (value !== undefined && !isNaN(value)) {
             allCellUpdates.push({
-              row: rowIndex,
+              row: rows[rowIndex]?.case_index ?? rowIndex,
               col: nextColumnIndex,
               value,
             });

@@ -42,11 +42,18 @@ self.onmessage = async (event) => {
       ? [dependentId, ...independentIds]
       : [...independentIds];
 
-    const cleanData = data.filter((row) => {
-      return allIds.every((id) => {
+    // Track each kept row's position in the ORIGINAL dataset. Rust only ever
+    // sees `cleanData` (no gaps) and numbers cases 1..N within that filtered
+    // set, so this array is what lets us translate those numbers back to
+    // real dataset rows after listwise deletion drops any cases.
+    const keptIndices = [];
+    const cleanData = data.filter((row, originalIndex) => {
+      const isComplete = allIds.every((id) => {
         const val = getValue(row, id);
         return val !== null && val !== undefined && val !== "";
       });
+      if (isComplete) keptIndices.push(originalIndex);
+      return isComplete;
     });
 
     if (cleanData.length === 0) {
@@ -151,6 +158,25 @@ self.onmessage = async (event) => {
 
         if (!result || !result.classification_table) {
           throw new Error("Calculation failed in backend.");
+        }
+
+        // Translate Rust's post-listwise-deletion case numbering back to
+        // original dataset row positions (see keptIndices above), so the
+        // Casewise List table and the Save-tab cell writes both point at
+        // the correct rows instead of silently shifting after the first
+        // dropped case.
+        if (result.saved_predictions?.rows) {
+          result.saved_predictions.rows.forEach((row, i) => {
+            row.case_index = keptIndices[i];
+          });
+        }
+        if (result.casewise_list) {
+          result.casewise_list.forEach((row) => {
+            const originalIndex = keptIndices[row.case_number - 1];
+            if (originalIndex !== undefined) {
+              row.case_number = originalIndex + 1;
+            }
+          });
         }
 
         const finalResult = {
