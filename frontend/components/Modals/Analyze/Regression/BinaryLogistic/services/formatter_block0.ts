@@ -298,21 +298,43 @@ export const formatBlock0 = (
   // Pastikan array
   const varsNotInArray = varsNotIn ? [...varsNotIn] : [];
 
-  // --- LOGIKA FIX OVERALL STATISTICS ---
-  // Cek apakah di dalam list variabel sudah ada baris "Overall Statistics".
-  // (Backward method biasanya sudah menyertakannya dari Rust).
-  const hasOverall = varsNotInArray.some(
-    (v: any) => v.label === "Overall Statistics"
+  // SPSS omits the joint "Overall Statistics" score test (and swaps the
+  // table footnote) whenever a multi-category predictor (df > 1) is among
+  // the candidates: its omnibus row and its own dummy rows make the joint
+  // information matrix redundant, so SPSS reports it as not computable
+  // rather than showing a number. Exclude any pre-existing "Overall
+  // Statistics" row itself from this check (Backward can already include
+  // one) so it doesn't flag itself via its own df.
+  const hasRedundantCategoricalGroup = varsNotInArray.some(
+    (v: any) => v.df > 1 && v.label !== "Overall Statistics"
   );
+  const canComputeOverall = !hasRedundantCategoricalGroup;
 
-  // Jika belum ada (biasanya pada Enter/Forward), dan kita punya datanya, tambahkan manual.
-  if (!hasOverall && remainderTest) {
-    varsNotInArray.push({
-      label: "Overall Statistics",
-      score: remainderTest.chi_square,
-      df: remainderTest.df,
-      sig: remainderTest.sig,
-    });
+  // --- LOGIKA FIX OVERALL STATISTICS ---
+  if (!canComputeOverall) {
+    // Backward embeds "Overall Statistics" directly from Rust as a row in
+    // variables_not_in_equation - strip it out here so the redundant case
+    // behaves the same regardless of method.
+    const redundantIdx = varsNotInArray.findIndex(
+      (v: any) => v.label === "Overall Statistics"
+    );
+    if (redundantIdx !== -1) varsNotInArray.splice(redundantIdx, 1);
+  } else {
+    // Cek apakah di dalam list variabel sudah ada baris "Overall Statistics".
+    // (Backward method biasanya sudah menyertakannya dari Rust).
+    const hasOverall = varsNotInArray.some(
+      (v: any) => v.label === "Overall Statistics"
+    );
+
+    // Jika belum ada (biasanya pada Enter/Forward), dan kita punya datanya, tambahkan manual.
+    if (!hasOverall && remainderTest) {
+      varsNotInArray.push({
+        label: "Overall Statistics",
+        score: remainderTest.chi_square,
+        df: remainderTest.df,
+        sig: remainderTest.sig,
+      });
+    }
   }
 
   const varsNotInData = {
@@ -338,7 +360,7 @@ export const formatBlock0 = (
 
   // Generate deskripsi dinamis untuk "Variables not in equation"
   let varsOutDesc = "Score tests for predictors not included in the model.";
-  if (remainderTest) {
+  if (remainderTest && canComputeOverall) {
     const pVal = remainderTest.sig;
     const isSig = pVal < 0.05;
     const pText = pVal < 0.001 ? "< .001" : `= ${pVal.toFixed(3)}`;
@@ -357,7 +379,9 @@ export const formatBlock0 = (
       varsNotInData,
       {
         description: varsOutDesc,
-        note: "a. Residual Chi-Squares are computed based on the likelihood ratios.",
+        note: canComputeOverall
+          ? "a. Residual Chi-Squares are computed based on the likelihood ratios."
+          : "a. Residual Chi-Squares are not computed because of redundancies.",
       }
     )
   );
