@@ -51,7 +51,7 @@ const VariablesTab: FC<VariablesTabProps> = ({
      */
     const isVariableDisabled = useCallback((variable: Variable, targetList?: string): boolean => {
         // Untuk Test Variables: harus scale (numerik/kontinu)
-        if (!targetList || targetList === 'test') {
+        if (targetList === 'test') {
             // Jika measure unknown, fallback ke pengecekan tipe - hanya NUMERIC yang diizinkan
             if (!variable.measure || variable.measure === 'unknown') {
                 return variable.type !== 'NUMERIC';
@@ -61,7 +61,7 @@ const VariablesTab: FC<VariablesTabProps> = ({
         }
 
         // Untuk Grouping Variable: bisa nominal, ordinal, atau bahkan scale (untuk kode numerik)
-        if (targetList === 'factor') {
+        if (!targetList || targetList === 'factor') {
             // Jika measure unknown, izinkan STRING dan NUMERIC
             if (!variable.measure || variable.measure === 'unknown') {
                 return !['STRING', 'NUMERIC'].includes(variable.type || '');

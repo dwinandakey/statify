@@ -33,9 +33,10 @@ export function useBartlettAnalysis({
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const workerRef = useRef<Worker | null>(null);
     const resultsRef = useRef<BartlettTestResult[]>([]);
+    const requestIdRef = useRef(0);
 
     // Menggunakan useAnalysisData untuk mendapatkan data dari store
-    const { data: analysisData } = useAnalysisData();
+    const { data: analysisData, weightVariable } = useAnalysisData();
     const { addLog, addAnalytic, addStatistic } = useResultStore();
 
     /**
@@ -146,11 +147,10 @@ export function useBartlettAnalysis({
         }
     }, [factorVariable, testVariables, options, addAnalytic, addStatistic, addLog, onClose, handleCalculationError]);
 
-    // Inisialisasi worker
-    useEffect(() => {
-        workerRef.current = new Worker('/workers/CompareMeans/bartlettTestWorker.js', { type: 'module' });
+    const createWorker = useCallback(() => {
+        const worker = new Worker('/workers/CompareMeans/bartlettTestWorker.js', { type: 'module' });
 
-        workerRef.current.onmessage = (e) => {
+        worker.onmessage = (e) => {
             const { type, data, error } = e.data;
 
             if (type === 'BARTLETT_RESULT') {
@@ -160,17 +160,20 @@ export function useBartlettAnalysis({
             }
         };
 
-        workerRef.current.onerror = (error) => {
+        worker.onerror = (error) => {
             console.error('Worker error:', error);
             handleCalculationError('Worker error occurred');
         };
 
-        return () => {
-            if (workerRef.current) {
-                workerRef.current.terminate();
-            }
-        };
+        workerRef.current = worker;
+        return worker;
     }, [handleCalculationComplete, handleCalculationError]);
+
+    useEffect(() => () => {
+        requestIdRef.current++;
+        workerRef.current?.terminate();
+        workerRef.current = null;
+    }, []);
 
     /**
      * Jalankan analisis Bartlett Test
@@ -193,12 +196,19 @@ export function useBartlettAnalysis({
             return;
         }
 
+        if (weightVariable) {
+            handleCalculationError('Bartlett does not support case weights yet. Turn off Weight Cases before running this test.');
+            return;
+        }
+
+        const requestId = ++requestIdRef.current;
         setIsCalculating(true);
         setErrorMsg(null);
 
         try {
             // Simpan perubahan pending sebelum analisis
             await useDataStore.getState().checkAndSave();
+            if (requestId !== requestIdRef.current) return;
 
             // Persiapkan data untuk setiap test variable
             // analysisData adalah array of rows, setiap row adalah object dengan key=columnIndex
@@ -209,8 +219,9 @@ export function useBartlettAnalysis({
             const factorData = analysisData.map((row: any) => row[factorVariable.columnIndex]);
 
             // Kirim data ke worker untuk kalkulasi
-            if (workerRef.current) {
-                workerRef.current.postMessage({
+            workerRef.current?.terminate();
+            const worker = createWorker();
+            worker.postMessage({
                     type: 'CALCULATE',  // Worker mengharapkan type 'CALCULATE'
                     data: {
                         testVariables,
@@ -219,21 +230,21 @@ export function useBartlettAnalysis({
                         factorData,
                     }
                 });
-            }
 
         } catch (error) {
             console.error('Error preparing data:', error);
             handleCalculationError('Failed to prepare data for analysis');
         }
-    }, [testVariables, factorVariable, analysisData, handleCalculationError]);
+    }, [testVariables, factorVariable, analysisData, weightVariable, createWorker, handleCalculationError]);
 
     /**
      * Batalkan kalkulasi
      */
     const cancelCalculation = useCallback(() => {
+        requestIdRef.current++;
         if (workerRef.current) {
             workerRef.current.terminate();
-            workerRef.current = new Worker('/workers/CompareMeans/bartlettTestWorker.js');
+            workerRef.current = null;
         }
         setIsCalculating(false);
         setErrorMsg(null);

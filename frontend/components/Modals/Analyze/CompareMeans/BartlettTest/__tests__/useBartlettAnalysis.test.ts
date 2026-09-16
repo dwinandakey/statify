@@ -12,6 +12,7 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { useBartlettAnalysis } from '../hooks/useBartlettAnalysis';
 import { Variable } from '@/types/Variable';
 import type { BartlettTestOptions } from '../types';
+import { useAnalysisData } from '@/hooks/useAnalysisData';
 
 // Mock dependencies
 const mockGetData = jest.fn(() => [
@@ -46,10 +47,10 @@ jest.mock('@/stores/useResultStore', () => ({
 jest.mock('@/hooks/useAnalysisData', () => ({
     useAnalysisData: jest.fn(() => ({
         data: [
-            { score: 10, group: 1 },
-            { score: 20, group: 1 },
-            { score: 15, group: 2 },
-            { score: 25, group: 2 },
+            { 0: 10, 1: 1 },
+            { 0: 20, 1: 1 },
+            { 0: 15, 1: 2 },
+            { 0: 25, 1: 2 },
         ],
     })),
 }));
@@ -75,6 +76,10 @@ jest.mock('../utils/formatters', () => ({
 
 // Mock Worker
 class MockWorker {
+    static instances: MockWorker[] = [];
+    constructor(public url: string, public options?: WorkerOptions) {
+        MockWorker.instances.push(this);
+    }
     onmessage: ((event: MessageEvent) => void) | null = null;
     onerror: ((event: ErrorEvent) => void) | null = null;
     postMessage = jest.fn();
@@ -135,6 +140,55 @@ describe('useBartlettAnalysis', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        MockWorker.instances = [];
+    });
+
+    it('cancels without creating a worker and restarts with module options and handlers', async () => {
+        const { result, unmount } = renderHook(() => useBartlettAnalysis(defaultProps));
+        await act(async () => { await result.current.runAnalysis(); });
+        const countBeforeCancel = MockWorker.instances.length;
+        const activeWorker = MockWorker.instances[countBeforeCancel - 1];
+        act(() => result.current.cancelCalculation());
+        expect(activeWorker.terminate).toHaveBeenCalled();
+        expect(MockWorker.instances).toHaveLength(countBeforeCancel);
+        await act(async () => { await result.current.runAnalysis(); });
+        const sentTo = MockWorker.instances[MockWorker.instances.length - 1];
+        expect(sentTo?.options).toEqual({ type: 'module' });
+        expect(sentTo?.onmessage).toEqual(expect.any(Function));
+        expect(sentTo?.postMessage).toHaveBeenCalledWith(expect.objectContaining({
+            data: expect.objectContaining({ variablesData: [[10, 20, 15, 25]], factorData: [1, 1, 2, 2] }),
+        }));
+        const countBeforeUnmount = MockWorker.instances.length;
+        unmount();
+        expect(MockWorker.instances).toHaveLength(countBeforeUnmount);
+        expect(MockWorker.instances.every(worker => worker.terminate.mock.calls.length > 0)).toBe(true);
+    });
+
+    it('does not start a worker if cancelled while saving pending data', async () => {
+        let finishSave!: () => void;
+        mockCheckAndSave.mockImplementationOnce(() => new Promise<void>(resolve => { finishSave = resolve; }));
+        const { result } = renderHook(() => useBartlettAnalysis(defaultProps));
+        let analysis!: Promise<void>;
+        act(() => { analysis = result.current.runAnalysis(); });
+        act(() => result.current.cancelCalculation());
+        await act(async () => { finishSave(); await analysis; });
+        expect(MockWorker.instances).toHaveLength(0);
+        expect(result.current.isCalculating).toBe(false);
+    });
+
+    it('rejects active case weights instead of silently computing an unweighted result', async () => {
+        const mockAnalysis = jest.mocked(useAnalysisData);
+        const original = mockAnalysis.getMockImplementation()!;
+        mockAnalysis.mockImplementation(() => ({ data: [[10, 1], [20, 2]], weights: [0, 3], weightVariable: mockTestVariables[0] }));
+        try {
+            const { result } = renderHook(() => useBartlettAnalysis(defaultProps));
+            await act(async () => { await result.current.runAnalysis(); });
+            expect(result.current.errorMsg).toMatch(/weight/i);
+            expect(result.current.isCalculating).toBe(false);
+            expect(MockWorker.instances.every(worker => worker.postMessage.mock.calls.length === 0)).toBe(true);
+        } finally {
+            mockAnalysis.mockImplementation(original);
+        }
     });
 
     describe('State Awal', () => {

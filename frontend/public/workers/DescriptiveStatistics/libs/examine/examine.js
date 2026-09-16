@@ -343,11 +343,22 @@ class ExamineCalculator {
     }
 
     // Build sorted numeric-weighted entries for computations
-    #getNumericWeightedEntries() {
+    #getNumericWeightedEntries(forNormality = false) {
         const out = [];
         const n = Array.isArray(this.data) ? this.data.length : 0;
         for (let i = 0; i < n; i++) {
             const raw = this.data[i];
+            if (forNormality) {
+                if (raw === null || raw === undefined ||
+                    (typeof raw === 'string' && raw.trim() === '') ||
+                    !Number.isFinite(Number(raw))) continue;
+                const missing = this.variable.missing;
+                if (typeof checkIsMissing === 'function' && checkIsMissing(raw, missing, true)) continue;
+                // Variable View uses discrete/range; older files use type/values.
+                if (missing?.discrete?.some(value => Number(value) === Number(raw))) continue;
+                if (missing?.range && Number(raw) >= Number(missing.range.min) &&
+                    Number(raw) <= Number(missing.range.max)) continue;
+            }
             const w = this.weights ? (this.weights[i] ?? 1) : 1;
             if (!(typeof w === 'number' && isFinite(w) && w > 0)) continue;
 
@@ -371,7 +382,7 @@ class ExamineCalculator {
     }
 
     #getExpandedNumericValues() {
-        const entries = this.#getNumericWeightedEntries();
+        const entries = this.#getNumericWeightedEntries(true);
         if (!entries || entries.length === 0) return [];
 
         const expanded = [];

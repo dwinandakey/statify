@@ -185,8 +185,10 @@ describe('Crosstabs Formatters', () => {
 
             expect(formatted).not.toBeNull();
             expect(formatted?.title).toBe('Chi-Square Tests');
-            expect(formatted?.rows).toHaveLength(1);
+            expect(formatted?.rows).toHaveLength(2);
             expect(formatted?.rows[0].rowHeader).toEqual(['Pearson Chi-Square']);
+            expect(formatted?.rows[1].rowHeader).toEqual(['N of Valid Cases']);
+            expect((formatted?.rows[1] as any).value).toBe('474');
             expect((formatted?.rows[0] as any).df).toBe('2');
             expect((formatted?.rows[0] as any).sig).toBe('<.001');
             expect(formatted?.footnotes?.[0]).toContain('expected count less than 5');

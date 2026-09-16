@@ -53,5 +53,7 @@ Log, hasil JSON, dan kode keluar pengujian/build disimpan di
 
 Seluruh suite proyek tidak dijalankan ulang pada pembaruan ini. Hasil terarah
 ini tidak membatalkan catatan 245 kegagalan pada pengujian penuh 14 September.
-Lint dilewati oleh konfigurasi build proyek. Merge Request tetap Draft untuk
-review dan tindak lanjut kegagalan sebelum digabungkan ke `main`.
+Lint dilewati oleh konfigurasi build proyek. Pada tahap ini Merge Request
+masih Draft. Pengguna kemudian mengizinkan integrasi ke `main` tanpa
+memperbaiki kegagalan pengujian modul lain; tindak lanjut dicatat dalam
+[laporan pemeriksaan sebelum main](integrasi-daniel-main-2026-09-16.md).

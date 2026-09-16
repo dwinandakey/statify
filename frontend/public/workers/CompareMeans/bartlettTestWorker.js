@@ -55,6 +55,7 @@
  */
 
 import chiSquareCdf from 'https://cdn.jsdelivr.net/npm/@stdlib/stats-base-dists-chisquare-cdf@0.2.2/+esm';
+import { checkIsMissing } from './libs/utils.js';
 
 /**
  * Menghitung varians dari array data menggunakan Typed Arrays (optimized)
@@ -141,8 +142,18 @@ function safeLog(value) {
  *     '3': Float64Array([20, 22, 21])
  *   }
  */
-function groupDataByFactor(testData, factorData) {
+function groupDataByFactor(testData, factorData, testVariable = {}, factorVariable = {}) {
     const n = testData.length;
+    const isValidCase = (index) => {
+        const value = testData[index];
+        const group = factorData[index];
+        if (typeof value === 'string' && value.trim() === '') return false;
+        if (typeof group === 'string' && group.trim() === '') return false;
+        if (checkIsMissing(value, testVariable.missing, true)) return false;
+        if (checkIsMissing(group, factorVariable.missing, factorVariable.type !== 'STRING')) return false;
+        return Number.isFinite(Number(value)) &&
+            (typeof group !== 'number' || Number.isFinite(group));
+    };
 
     console.log('[DEBUG] Worker - groupDataByFactor input:', {
         testDataLength: n,
@@ -154,11 +165,10 @@ function groupDataByFactor(testData, factorData) {
     });
 
     // LANGKAH 1: Hitung jumlah item per grup (first pass)
-    const groupCounts = {};
+    const groupCounts = Object.create(null);
     for (let i = 0; i < n; i++) {
         // Skip missing values
-        if (testData[i] === null || testData[i] === undefined) continue;
-        if (factorData[i] === null || factorData[i] === undefined) continue;
+        if (!isValidCase(i)) continue;
 
         const factorValue = String(factorData[i]);
         const testValue = Number(testData[i]);
@@ -176,8 +186,8 @@ function groupDataByFactor(testData, factorData) {
     }
 
     // LANGKAH 2: Buat Float64Array untuk setiap grup
-    const grouped = {};
-    const groupIndices = {};
+    const grouped = Object.create(null);
+    const groupIndices = Object.create(null);
     for (const key in groupCounts) {
         grouped[key] = new Float64Array(groupCounts[key]);
         groupIndices[key] = 0;
@@ -186,8 +196,7 @@ function groupDataByFactor(testData, factorData) {
     // LANGKAH 3: Isi data ke Float64Array (second pass)
     for (let i = 0; i < n; i++) {
         // Skip missing values
-        if (testData[i] === null || testData[i] === undefined) continue;
-        if (factorData[i] === null || factorData[i] === undefined) continue;
+        if (!isValidCase(i)) continue;
 
         const factorValue = String(factorData[i]);
         const testValue = Number(testData[i]);
@@ -685,7 +694,7 @@ self.onmessage = function(e) {
                 const groupingStart = performance.now();
 
                 // Group data by factor
-                const groupedData = groupDataByFactor(testData, factorData);
+                const groupedData = groupDataByFactor(testData, factorData, testVariable, factorVariable);
 
                 const groupingEnd = performance.now();
                 const groupingTime = groupingEnd - groupingStart;

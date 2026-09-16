@@ -51,6 +51,20 @@ const ExamineCalculator = global.self.ExamineCalculator;
 // -------------------------------------------------------------
 
 describe('ExamineCalculator', () => {
+    it.each([
+        { type: 'discrete', values: [999] },
+        { discrete: [999] },
+        { range: { min: 990, max: 1000 } },
+    ])('excludes user-defined missing values from normality: %j', (missing) => {
+        const calculator = new ExamineCalculator({
+            variable: { name: 'score', type: 'NUMERIC', measure: 'scale', missing },
+            data: [1, 2, 3, 4, 999, '', '  ', null, Infinity],
+        });
+        const actual = calculator.getNormalityTests();
+        expect(actual.sampleSize).toBe(4);
+        expect(actual.shapiroWilk.df).toBe(4);
+    });
+
     const variable = { name: 'salary', measure: 'scale' };
     const data = [1, 2, 3, 4, 5];
 
