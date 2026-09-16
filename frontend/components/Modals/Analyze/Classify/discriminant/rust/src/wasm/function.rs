@@ -51,6 +51,21 @@ pub fn run_analysis(
 
     web_sys::console::log_1(&format!("Filtered Data: {:?}", filtered_data).into());
 
+    // "Replace missing values with mean": cases left out of the analysis for a missing
+    // predictor are still classified (casewise, classification results, plots), with
+    // the predictor means of the analysis cases substituted.
+    let substituted_cases = if config.classify.replace {
+        match core::mean_substituted_cases(data, &filtered_data, config) {
+            Ok(cases) => cases,
+            Err(e) => {
+                error_collector.add_error("mean_substituted_cases", &e);
+                Vec::new()
+            }
+        }
+    } else {
+        Vec::new()
+    };
+
     // Step 2: Group statistics if requested
     let mut group_statistics = None;
     logger.add_log("calculate_group_statistics");
@@ -153,22 +168,30 @@ pub fn run_analysis(
     if config.main.stepwise {
         // Stepwise statistics
         logger.add_log("calculate_stepwise_statistics");
-        match core::calculate_stepwise_statistics(&filtered_data, config) {
-            Ok(statistics) => {
-                // Prime the cache from this single stepwise run so eigen/canonical/
-                // structure/wilks/casewise/classification reuse the selection instead
-                // of recomputing the whole procedure.
-                core::prime_selected_vars_cache(core::select_final_variables(&statistics, config));
-                stepwise_statistics = Some(statistics);
-                web_sys::console::log_1(
-                    &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
-                );
-            }
+        // A stepwise failure is fatal: every downstream table depends on the selected
+        // variables, and continuing would silently report "enter together" results
+        // under a stepwise analysis.
+        let statistics = match core::calculate_stepwise_statistics(&filtered_data, config) {
+            Ok(statistics) => statistics,
             Err(e) => {
                 error_collector.add_error("calculate_stepwise_statistics", &e);
-                // Continue execution despite errors for non-critical functions
+                return Err(string_to_js_error(format!("Stepwise selection failed: {}", e)));
+            }
+        };
+        // Prime the cache from this single stepwise run so eigen/canonical/
+        // structure/wilks/casewise/classification reuse the selection instead
+        // of recomputing the whole procedure.
+        match core::select_final_variables(&statistics) {
+            Ok(selected) => core::prime_selected_vars_cache(selected),
+            Err(e) => {
+                error_collector.add_error("select_final_variables", &e);
+                return Err(string_to_js_error(e));
             }
         }
+        stepwise_statistics = Some(statistics);
+        web_sys::console::log_1(
+            &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
+        );
     }
 
     // Eigen Values
@@ -265,7 +288,7 @@ pub fn run_analysis(
     let mut casewise_statistics = None;
     if config.classify.case {
         logger.add_log("Casewise Statistics");
-        match core::calculate_casewise_statistics(&filtered_data, config) {
+        match core::calculate_casewise_statistics(&filtered_data, config, &substituted_cases) {
             Ok(stats) => {
                 casewise_statistics = Some(stats);
                 web_sys::console::log_1(
@@ -283,7 +306,7 @@ pub fn run_analysis(
     // but the user wants scatter plots (combine or sep_grp checked).
     let mut scatter_data = None;
     if !config.classify.case && (config.classify.combine || config.classify.sep_grp) {
-        match core::calculate_scatter_data(&filtered_data, config) {
+        match core::calculate_scatter_data(&filtered_data, config, &substituted_cases) {
             Ok(sd) => {
                 scatter_data = Some(sd);
             }
@@ -333,7 +356,7 @@ pub fn run_analysis(
     let mut classification_results = None;
     if config.classify.leave {
         logger.add_log("calculate_classification_results");
-        match core::calculate_classification_results(&filtered_data, config) {
+        match core::calculate_classification_results(&filtered_data, config, &substituted_cases) {
             Ok(results) => {
                 web_sys::console::log_1(&format!("Classification Results: {:?}", results).into());
                 classification_results = Some(results);
@@ -368,6 +391,8 @@ pub fn run_analysis(
         bootstrap_results,
         assumption_results,
         territorial_map: config.classify.terr,
+        combined_groups_plot: config.classify.combine,
+        separate_groups_plot: config.classify.sep_grp,
     };
 
     Ok(Some(result))

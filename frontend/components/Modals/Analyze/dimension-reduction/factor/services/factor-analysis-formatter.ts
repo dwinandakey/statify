@@ -2230,6 +2230,60 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
             covTable.interpretation = "a. Determinant = .000<br>b. This matrix is not positive definite.";
         }
     }
+
+
+    // hari ini
+    // ==================================================================================
+    // POST-PROCESSING KHUSUS 2: Penanganan Fatal Error (Zero Variance / Konstanta)
+    // ==================================================================================
+    let isFatalZeroVariance = false;
+    
+    // Teks warning 
+    const fatalWarningText = "Warning: Extraction terminated. Further statistics cannot be computed because at least one variable has zero variance (constant), there are fewer than two valid cases, or correlation coefficients could not be calculated for all pairs.";
+
+    // 1. Cek Mandiri dari Tabel Descriptive Statistics
+    if (data.descriptive_statistics && Array.isArray(data.descriptive_statistics)) {
+        for (const stat of data.descriptive_statistics) {
+            if (stat.std_deviation !== undefined && stat.std_deviation !== null && Math.abs(stat.std_deviation) <= 1e-12) {
+                isFatalZeroVariance = true;
+                break;
+            }
+        }
+    }
+
+    // 2. Cek Fallback dari pesan terminasi backend
+    const backendWarning = data.analysis_status?.termination_reason;
+    if (backendWarning && backendWarning.toLowerCase().includes("zero variance")) {
+        isFatalZeroVariance = true;
+    }
+
+    // JIKA TERDETEKSI VARIANS NOL / KONSTANTA:
+    if (isFatalZeroVariance) {
+        console.log("[FA Formatter] Fatal error detected (Zero Variance). Cleaning up downstream tables...");
+
+        // A. Sapu bersih (Hapus) SEMUA tabel ekstraksi termasuk Covariance Matrix. 
+        // HANYA sisakan Descriptives dan Correlation.
+        const allowedTables = ["descriptive_statistics", "correlation_matrix"];
+        resultJson.tables = resultJson.tables.filter((table: Table) => allowedTables.includes(table.key));
+
+        // B. Sisipkan pesan warning ke dalam interpretation Correlation Matrix
+        const corrTable = resultJson.tables.find((table: Table) => table.key === "correlation_matrix");
+        if (corrTable) {
+            if (corrTable.interpretation && corrTable.interpretation.trim() !== "") {
+                // Jika sudah ada deskripsi (misal: nilai determinan)
+                corrTable.interpretation = `${corrTable.interpretation}<br><br>${fatalWarningText}`;
+            } else {
+                // Jika masih kosong
+                corrTable.interpretation = fatalWarningText;
+            }
+        }
+
+        // C. Hapus data Chart dan Factor Scores agar UI benar-benar bersih
+        delete resultJson.screePlotChart;
+        delete resultJson.loadingPlotChart;
+        delete resultJson.factorScores;
+    }
+
   
     appendSelectionDescription(resultJson, configData);
     return resultJson;

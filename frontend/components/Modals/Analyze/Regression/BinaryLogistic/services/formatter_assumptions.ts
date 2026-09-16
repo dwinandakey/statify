@@ -1,57 +1,34 @@
 import type { LogisticResult, AnalysisSection } from "../types/binary-logistic";
 import { createSection, safeFixed, fmtSig } from "./formatter_utils";
 
-// Helper untuk menentukan Concern Level berdasarkan nilai VIF
-const getConcernLevel = (vif: number): string => {
-  if (vif < 2) return "Low";
-  if (vif >= 2 && vif < 5) return "Moderate";
-  if (vif >= 5 && vif < 10) return "High";
+// Helper untuk menentukan Concern Level berdasarkan nilai VIF.
+// When the table is on the GVIF^(1/(2*Df)) scale (any term has df > 1),
+// thresholds are sqrt-adjusted (e.g. VIF>10 <=> GVIF^(1/(2*Df)) > sqrt(10)),
+// the standard adaptation since that value is already a square-root-scaled
+// quantity - comparing it against the raw VIF thresholds would understate
+// collinearity for every variable in the table, not just the multi-df ones.
+const getConcernLevel = (vif: number, isGvif?: boolean): string => {
+  const scale = isGvif ? Math.sqrt : (n: number) => n;
+  if (vif < scale(2)) return "Low";
+  if (vif < scale(5)) return "Moderate";
+  if (vif < scale(10)) return "High";
   return "Very High";
 };
 
-// Helper untuk membuat deskripsi dinamis VIF & Korelasi
-const generateAssumptionDescription = (
-  vifData: any[],
-  correlationMatrix: any,
-): string => {
-  const descriptionParts = [];
-
-  // Analisis VIF
-  const highVif = vifData.filter((r) => r.vif >= 5);
+// Helper untuk membuat deskripsi dinamis VIF
+const generateAssumptionDescription = (vifData: any[]): string => {
+  // Analisis VIF (GVIF^(1/(2*Df)) scale uses sqrt-adjusted thresholds - see getConcernLevel)
+  const isGvif = vifData.some((r) => r.is_gvif);
+  const metricLabel = isGvif ? "GVIF^(1/2Df)" : "VIF";
+  const threshold = isGvif ? Math.sqrt(5) : 5;
+  const highVif = vifData.filter((r) => r.vif >= threshold);
   if (highVif.length > 0) {
     const vars = highVif
-      .map((r) => `${r.variable} (VIF=${safeFixed(r.vif)})`)
+      .map((r) => `${r.variable} (${metricLabel}=${safeFixed(r.vif)})`)
       .join(", ");
-    descriptionParts.push(
-      `Potential multicollinearity detected. The following variables have VIF values greater than 5: ${vars}. Values above 10 usually indicate serious multicollinearity.`,
-    );
-  } else {
-    descriptionParts.push(
-      "No significant multicollinearity detected based on VIF values (all < 5).",
-    );
+    return `Potential multicollinearity detected. The following variables have ${metricLabel} values greater than ${safeFixed(threshold, 2)}: ${vars}. Values above ${safeFixed(isGvif ? Math.sqrt(10) : 10, 2)} usually indicate serious multicollinearity.`;
   }
-
-  // Analisis Korelasi (jika ada)
-  if (correlationMatrix && correlationMatrix.length > 0) {
-    let highCorrCount = 0;
-    // Cek triangle atas saja. Struktur data: { variable, values: [] }
-    for (let i = 0; i < correlationMatrix.length; i++) {
-      const rowVals = correlationMatrix[i].values;
-      if (!rowVals) continue;
-
-      for (let j = i + 1; j < correlationMatrix.length; j++) {
-        const val = Math.abs(rowVals[j]);
-        if (val > 0.8) highCorrCount++;
-      }
-    }
-    if (highCorrCount > 0) {
-      descriptionParts.push(
-        `Review of the correlation matrix shows ${highCorrCount} pair(s) of variables with strong correlations (|r| > 0.8), which supports the possibility of multicollinearity.`,
-      );
-    }
-  }
-
-  return descriptionParts.join(" ");
+  return `No significant multicollinearity detected based on ${metricLabel} values (all < ${safeFixed(threshold, 2)}).`;
 };
 
 // Helper untuk membuat deskripsi dinamis Box-Tidwell
@@ -68,23 +45,17 @@ const generateBoxTidwellDescription = (boxTidwellData: any[]): string => {
     const violatedVars = testedVars.filter((row: any) => row.is_significant);
     if (violatedVars.length > 0) {
       const details = violatedVars
-        .map((v: any) => {
-          const lambdaStr =
-            v.mle_lambda != null && isFinite(v.mle_lambda)
-              ? `λ̂=${safeFixed(v.mle_lambda, 3)}`
-              : "";
-          return `${v.variable} (${lambdaStr}, p=${fmtSig(v.sig)})`;
-        })
+        .map((v: any) => `${v.variable} (z=${safeFixed(v.score_z ?? 0, 3)}, p=${fmtSig(v.sig)})`)
         .join(", ");
       parts.push(
         `Linearity assumption violated for: ${details}. ` +
-          `The MLE of λ indicates the estimated power transformation; λ=1 implies linearity. ` +
-          `Consider applying a power transformation or treating these variables as categorical.`
+          `A significant interaction term (X·ln(X)) indicates the relationship between this predictor and the logit is not linear. ` +
+          `Consider applying a power/log transformation or treating these variables as categorical.`
       );
     } else {
       parts.push(
-        "Linearity assumption met for all tested continuous predictors (all p > 0.05). " +
-          "The MLE of λ is close to 1 for all variables, consistent with a linear relationship in the logit."
+        "Linearity assumption met for all tested continuous predictors (all p > 0.05), " +
+          "consistent with a linear relationship in the logit."
       );
     }
   }
@@ -114,83 +85,49 @@ export const formatAssumptionTests = (
 
   if (!assumptions) return { sections };
 
-  // --- 1. Correlation Matrix ---
-  if (
-    assumptions.correlation_matrix &&
-    assumptions.correlation_matrix.length > 0
-  ) {
-    // Ambil daftar nama variabel langsung dari data correlation matrix
-    const predictors = assumptions.correlation_matrix.map(
-      (row: any) => row.variable,
-    );
-
-    // Setup Column Headers: Variable Name sebagai kolom
-    const corrHeaders = [
-      { header: "Variable", key: "row_var" },
-      ...predictors.map((name: string, idx: number) => ({
-        header: name,
-        key: `col_${idx}`,
-      })),
-    ];
-
-    // Setup Rows
-    const corrRows = assumptions.correlation_matrix.map((rowObj: any) => {
-      // rowObj adalah { variable: string, values: number[] }
-      const outputRow: any = {
-        rowHeader: [rowObj.variable], // Header kiri
-        row_var: rowObj.variable, // Key untuk kolom pertama
-      };
-
-      const values = rowObj.values;
-
-      if (Array.isArray(values)) {
-        values.forEach((val: number, colIdx: number) => {
-          outputRow[`col_${colIdx}`] = safeFixed(val, 3);
-        });
-      }
-
-      return outputRow;
-    });
-
-    sections.push(
-      createSection(
-        "assumption_corr_matrix",
-        "Correlation Matrix",
-        {
-          columnHeaders: corrHeaders,
-          rows: corrRows,
-        },
-        {
-          description:
-            "Pearson correlation coefficients between predictor variables. Coefficients close to 1 or -1 indicate strong linear relationships, suggesting potential multicollinearity.",
-        },
-      ),
-    );
-  }
-
-  // --- 2. Variance Inflation Factors (VIF) ---
+  // --- 1. Variance Inflation Factors (VIF) ---
+  // (No separate raw predictor Correlation Matrix here - redundant with
+  // the Correlation of Estimates table already shown in Block 1, and VIF/
+  // GVIF already covers multicollinearity more directly.)
   if (assumptions.vif && assumptions.vif.length > 0) {
+    // When any predictor has df > 1 (a 3+ category factor), R's car::vif()
+    // switches its WHOLE table to 3 columns - GVIF, Df, GVIF^(1/(2*Df)) -
+    // for every row, single-df terms included, so the scale stays
+    // comparable across the table rather than mixing raw VIF and GVIF
+    // units. Mirrored here, in that column order.
+    const isGvif = assumptions.vif.some((row) => row.is_gvif);
+    const adjHeader = "GVIF^(1/2Df)"; // cleaner than R's literal "GVIF^(1/(2*Df))"
+
+    const vifColumnHeaders: any[] = [
+      { header: "Variable", key: "var" },
+      { header: "Tolerance", key: "tol" },
+    ];
+    if (isGvif) {
+      vifColumnHeaders.push(
+        { header: "GVIF", key: "gvif" },
+        { header: "Df", key: "df" },
+        { header: adjHeader, key: "vif" },
+      );
+    } else {
+      vifColumnHeaders.push({ header: "VIF", key: "vif" });
+    }
+    vifColumnHeaders.push({ header: "Concern Level", key: "concern" });
+
     const vifData = {
-      columnHeaders: [
-        { header: "Variable", key: "var" },
-        { header: "Tolerance", key: "tol" },
-        { header: "VIF", key: "vif" },
-        { header: "Concern Level", key: "concern" },
-      ],
+      columnHeaders: vifColumnHeaders,
       rows: assumptions.vif.map((row) => ({
         rowHeader: [row.variable],
         var: row.variable,
         tol: safeFixed(row.tolerance),
+        gvif: safeFixed(row.gvif ?? row.vif),
         vif: safeFixed(row.vif),
-        concern: getConcernLevel(row.vif),
+        df: (row.df ?? 1).toString(),
+        concern: getConcernLevel(row.vif, row.is_gvif),
       })),
     };
 
     // Buat Deskripsi Dinamis VIF
-    const dynamicDesc = generateAssumptionDescription(
-      assumptions.vif,
-      assumptions.correlation_matrix,
-    );
+    const dynamicDesc = generateAssumptionDescription(assumptions.vif);
 
     sections.push(
       createSection(
@@ -198,41 +135,45 @@ export const formatAssumptionTests = (
         "Collinearity Statistics (VIF)",
         vifData,
         {
-          description: dynamicDesc,
+          description: isGvif
+            ? `${dynamicDesc} Note: one or more predictors are categorical with 3+ categories, so this table reports Generalized VIF (GVIF) adjusted for degrees of freedom (${adjHeader}) alongside the raw GVIF - matching R's car::vif() convention - with the adjusted column comparable across all variables regardless of df.`
+            : dynamicDesc,
         },
       ),
     );
 
-    // --- 3. Legend VIF ---
+    // --- 2. Legend VIF ---
+    // Ranges are sqrt-adjusted to match the GVIF^(1/2Df) scale when applicable.
+    const fmtRange = (n: number) => safeFixed(isGvif ? Math.sqrt(n) : n, isGvif ? 2 : 0);
     const legendData = {
       columnHeaders: [
         { header: "Level", key: "level" },
-        { header: "VIF Range", key: "range" },
+        { header: "Range", key: "range" },
         { header: "Interpretation", key: "interp" },
       ],
       rows: [
         {
           rowHeader: ["Low"],
           level: "Low",
-          range: "< 2",
+          range: `< ${fmtRange(2)}`,
           interp: "No significant multicollinearity.",
         },
         {
           rowHeader: ["Moderate"],
           level: "Moderate",
-          range: "2 - 5",
+          range: `${fmtRange(2)} - ${fmtRange(5)}`,
           interp: "Moderate multicollinearity; typically acceptable.",
         },
         {
           rowHeader: ["High"],
           level: "High",
-          range: "5 - 10",
+          range: `${fmtRange(5)} - ${fmtRange(10)}`,
           interp: "High multicollinearity; verify coefficient stability.",
         },
         {
           rowHeader: ["Very High"],
           level: "Very High",
-          range: "> 10",
+          range: `> ${fmtRange(10)}`,
           interp: "Severe multicollinearity; remedial action recommended.",
         },
       ],
@@ -251,7 +192,7 @@ export const formatAssumptionTests = (
     );
   }
 
-  // --- 4. Box-Tidwell Test (R-style output: Fox & Weisberg 2011) ---
+  // --- 3. Box-Tidwell Test (R-style output: Fox & Weisberg 2011) ---
   if (assumptions.box_tidwell && assumptions.box_tidwell.length > 0) {
     // Separate tested vs skipped for cleaner output
     const testedRows = assumptions.box_tidwell.filter(
@@ -267,7 +208,8 @@ export const formatAssumptionTests = (
         columnHeaders: [
           { header: "Variable", key: "var" },
           { header: "Interaction Term", key: "interaction" },
-          { header: "MLE of λ", key: "lambda" },
+          { header: "B", key: "b" },
+          { header: "S.E.", key: "se" },
           { header: "Score Statistic (z)", key: "score_z" },
           { header: "df", key: "df" },
           { header: "Sig.", key: "sig" },
@@ -275,16 +217,12 @@ export const formatAssumptionTests = (
         rows: testedRows.map((row: any) => {
           const sig = row.sig ?? 1.0;
 
-          const lambdaVal =
-            row.mle_lambda != null && isFinite(row.mle_lambda)
-              ? safeFixed(row.mle_lambda, 5)
-              : "—";
-
           return {
             rowHeader: [row.variable],
             var: row.variable,
             interaction: row.interaction_term || `${row.variable} × ln(${row.variable})`,
-            lambda: lambdaVal,
+            b: safeFixed(row.b_interaction ?? 0, 5),
+            se: safeFixed(row.se_interaction ?? 0, 5),
             score_z: safeFixed(row.score_z ?? 0, 4),
             df: String(row.df ?? 1),
             sig: fmtSig(sig),

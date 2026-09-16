@@ -253,7 +253,7 @@ export const baseTourSteps: TourStep[] = [
   },
   {
     title: 'Multicollinearity (VIF)',
-    content: 'Checks whether covariates are too strongly correlated with each other, which can destabilize the model. Requires at least two covariates.',
+    content: 'Checks whether covariates are too strongly correlated with each other, which can destabilize the model. Requires one dependent and at least two covariates.',
     targetId: 'binary-logistic-assumption-vif-section',
     defaultPosition: 'bottom',
     defaultHorizontalPosition: null,

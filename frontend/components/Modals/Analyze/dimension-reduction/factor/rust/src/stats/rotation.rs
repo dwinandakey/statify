@@ -644,7 +644,7 @@ fn compute_oblimin_obj_grad_l(
 }
 
 // =========================================================
-// Direct Oblimin Rotation (Exact SPSS GPA Algorithm)
+// Direct Oblimin Rotation 
 // =========================================================
 pub fn rotate_oblimin(
     extraction_result: &ExtractionResult,
@@ -873,6 +873,9 @@ pub fn rotate_oblimin(
         convergence_value: final_convergence,
     })
 }
+
+
+
 
 // =========================================================
 // Promax Rotation
