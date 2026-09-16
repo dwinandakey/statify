@@ -2,7 +2,6 @@ import init, {
   calculate_binary_logistic,
   calculate_vif,
   calculate_box_tidwell,
-  calculate_correlation_matrix,
 } from "./Binary/pkg/statify_logistic.js";
 
 self.onmessage = async (event) => {
@@ -42,11 +41,18 @@ self.onmessage = async (event) => {
       ? [dependentId, ...independentIds]
       : [...independentIds];
 
-    const cleanData = data.filter((row) => {
-      return allIds.every((id) => {
+    // Track each kept row's position in the ORIGINAL dataset. Rust only ever
+    // sees `cleanData` (no gaps) and numbers cases 1..N within that filtered
+    // set, so this array is what lets us translate those numbers back to
+    // real dataset rows after listwise deletion drops any cases.
+    const keptIndices = [];
+    const cleanData = data.filter((row, originalIndex) => {
+      const isComplete = allIds.every((id) => {
         const val = getValue(row, id);
         return val !== null && val !== undefined && val !== "";
       });
+      if (isComplete) keptIndices.push(originalIndex);
+      return isComplete;
     });
 
     if (cleanData.length === 0) {
@@ -153,6 +159,25 @@ self.onmessage = async (event) => {
           throw new Error("Calculation failed in backend.");
         }
 
+        // Translate Rust's post-listwise-deletion case numbering back to
+        // original dataset row positions (see keptIndices above), so the
+        // Casewise List table and the Save-tab cell writes both point at
+        // the correct rows instead of silently shifting after the first
+        // dropped case.
+        if (result.saved_predictions?.rows) {
+          result.saved_predictions.rows.forEach((row, i) => {
+            row.case_index = keptIndices[i];
+          });
+        }
+        if (result.casewise_list) {
+          result.casewise_list.forEach((row) => {
+            const originalIndex = keptIndices[row.case_number - 1];
+            if (originalIndex !== undefined) {
+              row.case_number = originalIndex + 1;
+            }
+          });
+        }
+
         const finalResult = {
           ...result,
           method_used: rustConfig.method,
@@ -175,7 +200,32 @@ self.onmessage = async (event) => {
       }
 
       case "run_vif": {
-        let vifResult = await calculate_vif(xFlat, rows, cols);
+        // Same categorical config as the main regression, so VIF is
+        // computed on the actual dummy-coded design matrix (Rust expands
+        // it via design_matrix::build) instead of raw ordinal category
+        // codes - matches R's car::vif(), which uses Generalized VIF for
+        // multi-category (3+ level) predictors.
+        //
+        // Y is now required too: VIF is computed from the actual fitted
+        // logistic model's weighted vcov (X'WX)^-1, W = p̂(1-p̂) - matching
+        // car::vif() on a real glm object - not from the plain correlation
+        // of X alone (which only matches car::vif() for an lm).
+        const rawY = cleanData.map((row) => getValue(row, dependentId));
+        const { yVector } = processDependentVariable(rawY);
+        const yFlat = new Float64Array(rows);
+        for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
+
+        const vifConfig = {
+          feature_names: xFeatureNames,
+          categorical_variables: categoricalConfigForRust,
+        };
+        let vifResult = await calculate_vif(
+          xFlat,
+          rows,
+          cols,
+          yFlat,
+          JSON.stringify(vifConfig)
+        );
         if (typeof vifResult === "string") vifResult = JSON.parse(vifResult);
 
         const formattedVif = vifResult.map((item, idx) => ({
@@ -183,18 +233,9 @@ self.onmessage = async (event) => {
           variable: xFeatureNames[idx] || item.variable || `Var ${idx + 1}`,
         }));
 
-        let corrResult = await calculate_correlation_matrix(xFlat, rows, cols);
-        if (typeof corrResult === "string") corrResult = JSON.parse(corrResult);
-
-        const formattedCorr = corrResult.map((item, idx) => ({
-          variable: xFeatureNames[idx] || `Var ${idx + 1}`,
-          values: item.values,
-        }));
-
         const payload = {
           assumption_tests: {
             vif: formattedVif,
-            correlation_matrix: formattedCorr,
           },
         };
         self.postMessage({ type: "SUCCESS", payload: payload, action });
@@ -207,7 +248,20 @@ self.onmessage = async (event) => {
         const yFlat = new Float64Array(rows);
         for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
 
-        const btConfig = { feature_names: xFeatureNames };
+        // Reuse the SAME categorical config already computed above for the
+        // main regression (measure = nominal/ordinal, or explicitly added
+        // in the Categorical tab). Rust needs the full config, not just
+        // the column indices, so it can (1) skip categoricals as ln(X)
+        // candidates - a nominal variable with 5+ categories would
+        // otherwise slip past a "<=4 unique values" heuristic and get
+        // tested as if continuous - and (2) dummy-code them properly when
+        // they're used as CONTROL variables in the augmented regression,
+        // instead of feeding in raw ordinal integers that would distort
+        // the fit for every variable in the model.
+        const btConfig = {
+          feature_names: xFeatureNames,
+          categorical_variables: categoricalConfigForRust,
+        };
         let btResult = await calculate_box_tidwell(
           xFlat,
           rows,

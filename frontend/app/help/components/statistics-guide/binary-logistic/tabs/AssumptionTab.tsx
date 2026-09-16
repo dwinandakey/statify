@@ -16,8 +16,8 @@ export const AssumptionTab = () => {
             title={isEn ? "Multicollinearity (VIF & Tolerance)" : "Multikolinearitas (VIF & Tolerance)"}
             description={
               isEn
-                ? "Click Check VIF (requires at least 2 covariates) to detect strong correlation among independent variables. A VIF above 10 or a Tolerance below 0.1 indicates a serious multicollinearity problem. Results are printed to the Output Viewer."
-                : "Klik Check VIF (membutuhkan minimal 2 kovariat) untuk mendeteksi apakah variabel independen saling berkorelasi tinggi. VIF > 10 atau Tolerance < 0.1 mengindikasikan masalah multikolinearitas yang serius. Hasilnya dicetak ke Output Viewer."
+                ? "Click Check VIF (requires a dependent variable and at least 2 covariates) to detect strong correlation among independent variables. A VIF above 10 or a Tolerance below 0.1 indicates a serious multicollinearity problem. Results are printed to the Output Viewer."
+                : "Klik Check VIF (membutuhkan variabel dependen dan minimal 2 kovariat) untuk mendeteksi apakah variabel independen saling berkorelasi tinggi. VIF > 10 atau Tolerance < 0.1 mengindikasikan masalah multikolinearitas yang serius. Hasilnya dicetak ke Output Viewer."
             }
           />
           <HelpStep
