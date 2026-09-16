@@ -106,9 +106,6 @@ export enum ModalType {
     PPPlots = "PPPlots",
     QQPlots = "QQPlots",
 
-    // Normality Tests modals
-    JarqueBeraTest = "JarqueBeraTest",
-
     // Compare Means modals
     OneSampleTTest = "OneSampleTTest",
     IndependentSamplesTTest = "IndependentSamplesTTest",
@@ -311,9 +308,6 @@ export const MODAL_CATEGORIES: Record<ModalType, ModalCategory> = {
     [ModalType.Ratio]: ModalCategory.Analyze,
     [ModalType.PPPlots]: ModalCategory.Analyze,
     [ModalType.QQPlots]: ModalCategory.Analyze,
-
-    // Normality Tests modals
-    [ModalType.JarqueBeraTest]: ModalCategory.Analyze,
 
     // Compare Means modals
     [ModalType.IndependentSamplesTTest]: ModalCategory.Analyze,

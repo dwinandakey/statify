@@ -61,15 +61,6 @@ const Navbar: React.FC = () => {
                   <MenubarItem onClick={() => openModal(ModalType.Crosstabs)} data-testid="descriptive-statistics-crosstabs">
                     Crosstabs
                   </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarSub>
-                    <MenubarSubTrigger data-testid="normality-tests-trigger">Normality Tests</MenubarSubTrigger>
-                    <MenubarSubContent>
-                      <MenubarItem onClick={() => openModal(ModalType.JarqueBeraTest)} data-testid="normality-tests-jarque-bera">
-                        Jarque-Bera Test...
-                      </MenubarItem>
-                    </MenubarSubContent>
-                  </MenubarSub>
                 </MenubarSubContent>
               </MenubarSub>
               <MenubarSub>

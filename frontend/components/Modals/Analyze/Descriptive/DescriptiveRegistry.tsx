@@ -35,9 +35,6 @@ const ExploreModal = lazy(() => import('@/components/Modals/Analyze/Descriptive/
 const FrequenciesModal = lazy(() => import('@/components/Modals/Analyze/Descriptive/Frequencies'));
 const CrosstabsModal = lazy(() => import('@/components/Modals/Analyze/Descriptive/Crosstabs'));
 
-// Lazy load Normality Test modals
-const JarqueBeraTestModal = lazy(() => import('@/components/Modals/Analyze/Descriptive/NormalityTests/JarqueBera'));
-
 /**
  * DESCRIPTIVE_MODAL_COMPONENTS - Registry for descriptive statistics modal components
  *
@@ -48,8 +45,6 @@ export const DESCRIPTIVE_MODAL_COMPONENTS: Record<string, React.ComponentType<Ba
   [ModalType.Explore]: withSuspense(ExploreModal as any) as React.ComponentType<BaseModalProps>,
   [ModalType.Frequencies]: withSuspense(FrequenciesModal as any) as React.ComponentType<BaseModalProps>,
   [ModalType.Crosstabs]: withSuspense(CrosstabsModal as any) as React.ComponentType<BaseModalProps>,
-  // Normality Tests
-  [ModalType.JarqueBeraTest]: withSuspense(JarqueBeraTestModal as any) as React.ComponentType<BaseModalProps>,
 };
 
 /**
@@ -80,6 +75,4 @@ export const DESCRIPTIVE_MODAL_CONTAINER_PREFERENCES: Partial<Record<ModalType, 
   [ModalType.Explore]: "sidebar",
   [ModalType.Frequencies]: "sidebar",
   [ModalType.Crosstabs]: "sidebar",
-  // Normality Tests
-  [ModalType.JarqueBeraTest]: "sidebar",
 };
