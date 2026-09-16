@@ -30,6 +30,12 @@ sudah selesai diimplementasikan.
   407 tes lulus, 3 tes Bartlett lama dilewati, tidak ada kegagalan.
 - Daftar persis suite dan hasil JSON tersedia lokal pada
   `.integration-local/20260916-main/test-paths.txt` dan `modules.json`.
+- Build produksi sebelum dan setelah penggabungan pembaruan tim lulus,
+  termasuk TypeScript. Lint dilewati sesuai konfigurasi proyek.
+- Smoke test Chromium dengan data terisolasi lulus: kelompok nominal dapat
+  dipilih, Bartlett menghasilkan chi-square 0, df 1, signifikansi 1,000,
+  dua tabel hasil tampil, dan tidak ada page error.
+- Review terpisah tidak menemukan penghambat pada perubahan yang diperiksa.
 - Tidak menjalankan ulang seluruh suite proyek. Tes eksperimen
   `mathPrecision` (implementasi masih kosong), benchmark Bartlett,
   loop performance, serta profiling/performance/memory normalitas tidak
@@ -43,3 +49,8 @@ perbaikan. Snapshot file lokal sebelumnya tetap disimpan beserta hash.
 Pembaruan main tidak menggunakan force push. Integrasi menu/registry dan
 dukungan renderer tetap diperlukan agar modul baru dapat diakses, sedangkan
 perbaikan algoritme modul teman-teman tidak menjadi cakupan pekerjaan ini.
+
+Fetch akhir menemukan lima commit baru hingga `945697ee`. Semuanya
+digabungkan otomatis pada `a1d29e77`. Dari 15 file pembaruan tim, 14 file
+di luar HamburgerMenu identik dengan main terbaru. Diff HamburgerMenu
+hanya menambahkan item Bartlett; pembaruan menu tim tetap dipertahankan.
