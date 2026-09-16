@@ -168,9 +168,10 @@ fn cholesky_log_determinant(matrix: &DMatrix<f64>) -> Option<f64> {
 /// F = ((1 - Λ^(1/s)) / Λ^(1/s)) × (df2 / df1)
 ///
 /// Where:
-/// - s = sqrt((p²×(g-1)² - 4) / (p² + (g-1)² - 5))
+/// - s = sqrt((p²×(g-1)² - 4) / (p² + (g-1)² - 5)), and s = 1 when p×(g-1) ≤ 2
 /// - df1 = p × (g - 1)
-/// - df2 = (n - 1 - (p+g)/2) × s - (p×(g-1) - 2) / 2
+/// - df2 = (n - 1 - (p+g)/2) × s - (p×(g-1) - 2) / 2, rounded to an integer
+///   (F uses the rounded df1 and df2)
 /// - p = number of variables, g = number of groups, n = total cases
 ///
 /// This matches SPSS and the standard Rao approximation formula.
@@ -194,8 +195,8 @@ pub fn calculate_overall_f_statistic(
     let n = total_cases as f64;
 
     // Calculate s for the approximation
-    // s = sqrt((p*(g-1))² - 4) / (p + (g-1) - 2))
-    // i.e. s = sqrt((numerator) / (denominator))
+    // s = sqrt((p²·(g-1)² - 4) / (p² + (g-1)² - 5)); falls back to 1 when the ratio
+    // is undefined (p·(g-1) ≤ 2, e.g. g = 2 or p = 1). The ratio is always ≥ 1.
     let numerator = p.powi(2) * (g - 1.0).powi(2) - 4.0;
     let denominator = p.powi(2) + (g - 1.0).powi(2) - 5.0;
     let s = if denominator > EPSILON && numerator > 0.0 {
@@ -214,7 +215,7 @@ pub fn calculate_overall_f_statistic(
     let df2 = if s > EPSILON {
         (w * s - (p_k1 - 2.0) / 2.0).round() as i32
     } else {
-        // fallback when s ≈ 1 (i.e., p*(g-1) = 2)
+        // Defensive guard only: s is always ≥ 1 above, so this branch is not reached
         (w * 1.0 - (p_k1 - 2.0) / 2.0).round() as i32
     };
 
@@ -245,9 +246,10 @@ pub fn calculate_overall_f_statistic(
 /// explained by the other independent variables in the model. Low tolerance
 /// indicates multicollinearity.
 ///
-/// This implementation uses the **multivariate** approach: regress the target
-/// variable on ALL other variables simultaneously, then compute
-/// tolerance = 1 - R² (where R² is from that multivariate regression).
+/// Computed from the pooled within-groups correlation matrix R of `other_variables`
+/// plus the target: tolerance_i = 1 / (R⁻¹)_ii, which equals 1 - R²_i where R²_i is
+/// the squared multiple correlation of variable i with all the other variables
+/// (pooled within groups). No explicit regression is run.
 ///
 /// This matches SPSS's "Tolerance" column in stepwise output.
 ///
@@ -257,7 +259,7 @@ pub fn calculate_overall_f_statistic(
 /// * `other_variables` - Other variables already in the model
 ///
 /// # Returns
-/// A tuple of (tolerance, minimum tolerance)
+/// A tuple of (tolerance of `variable`, minimum tolerance over every variable in the set)
 pub fn calculate_tolerance(
     variable: &str,
     dataset: &AnalyzedDataset,

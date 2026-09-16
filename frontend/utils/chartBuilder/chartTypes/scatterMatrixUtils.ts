@@ -30,13 +30,19 @@ export interface ScatterMatrixDatum {
     [key: string]: number;
 }
 
-export const createScatterPlotMatrix = (
+export const createResidualScatterPlotMatrix = (
     data: ScatterMatrixDatum[],
     dimensions: ScatterMatrixDimension[],
     width: number,
     height: number,
     titleOptions?: ChartTitleOptions
 ): SVGSVGElement | null => {
+    // `dimensions` must be an array of {key, label}. Guarding on Array.isArray
+    // first means a caller that passes the wrong argument shape renders nothing
+    // instead of throwing deep inside the layout code (a plain `.length < 2`
+    // check passes silently for non-arrays, since `undefined < 2` is false).
+    if (!Array.isArray(dimensions) || !Array.isArray(data)) return null;
+
     const n = dimensions.length;
     if (n < 2 || data.length === 0) return null;
 
