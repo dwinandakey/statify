@@ -153,11 +153,15 @@ pub fn calculate_eigen_statistics(
         })
         .collect();
 
-    // Flatten the eigenvectors matrix into a single vector for storage
+    // Scale the eigenvectors by sqrt(n-g) and flatten them for storage.
+    // solve_eigenvalue_problem returns w with wᵀ·W·w = 1 (W = SSCP). Since
+    // S_pooled = W/(n-g), the scaled vector satisfies wᵀ·S_pooled·w = 1, i.e. the
+    // discriminant scores have unit pooled within-groups variance (SPSS
+    // unstandardized coefficients).
     let scale_factor = (df_within as f64).sqrt();
     let flat_eigenvectors: Vec<f64> = eigenvectors
         .iter()
-        .flat_map(|vec| vec.iter().map(|&v| v * scale_factor)) // <--- KALIKAN DI SINI!
+        .flat_map(|vec| vec.iter().map(|&v| v * scale_factor))
         .collect();
 
     // Create function names (Function 1, Function 2, etc.)
@@ -280,12 +284,14 @@ pub fn calculate_canonical_functions(
 /// W^(-1/2) B W^(-1/2), with W^(-1/2) formed as a pseudo-inverse square root.
 ///
 /// # Parameters
-/// * `pooled_within` - The pooled within-groups covariance matrix
-/// * `between_groups` - The between-groups covariance matrix
+/// * `pooled_within` - The within-groups SSCP matrix W = Σ(nᵢ-1)Sᵢ (NOT divided by n-g;
+///   callers multiply the pooled covariance by n-g before passing it in)
+/// * `between_groups` - The between-groups SSCP matrix B = Σ nᵢ(x̄ᵢ-x̄)(x̄ᵢ-x̄)ᵀ
 /// * `num_functions` - The number of discriminant functions to calculate
 ///
 /// # Returns
-/// A tuple containing (eigenvalues, eigenvectors)
+/// A tuple containing (eigenvalues sorted descending, eigenvectors w = W^(-1/2)u).
+/// Eigenvectors are indexed [variable][function] and normalized so that wᵀ·W·w = 1.
 pub fn solve_eigenvalue_problem(
     pooled_within: &DMatrix<f64>,
     between_groups: &DMatrix<f64>,
@@ -368,7 +374,8 @@ pub fn solve_eigenvalue_problem(
 /// This makes the coefficients comparable across variables with different scales.
 ///
 /// # Parameters
-/// * `eigenvectors` - Eigenvectors from the eigenvalue problem
+/// * `eigenvectors` - Eigenvectors already scaled by sqrt(n-g) (wᵀ·S_pooled·w = 1),
+///   indexed [variable][function]; used directly as the unstandardized coefficients
 /// * `variables` - Variables in the model
 /// * `pooled_within` - Pooled within-groups covariance matrix
 /// * `overall_means` - Overall means for each variable

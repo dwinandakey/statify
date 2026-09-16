@@ -133,7 +133,7 @@ pub fn calculate_between_groups_sscp(
 /// Calculate between-groups and within-groups matrices
 ///
 /// These are fundamental matrices for discriminant analysis:
-/// - Between-groups: SSCP of group means (B)
+/// - Between-groups: size-weighted SSCP of the group means, B = Σ nᵢ(x̄ᵢ-x̄)(x̄ᵢ-x̄)ᵀ
 /// - Within-groups: pooled within-groups covariance (W_SSCP / (n-g)), no EPSILON
 ///
 /// # Parameters
@@ -461,21 +461,17 @@ pub fn calculate_covariance_matrices(
 /// Calculate total unexplained variation between groups (SPSS "Residual Variance").
 ///
 /// SPSS's Unexplained Variance (MINRESID) method minimizes the sum, over all pairs
-/// of groups, of the unexplained variation. The unexplained variation for a pair
-/// (i, j) is that pair's 2-group Wilks' lambda — i.e. the proportion of variance
-/// NOT explained by the group difference, computed with the common (all-groups)
-/// pooled covariance for D² but the PAIR's degrees of freedom:
+/// of groups, of the unexplained variation. For each pair (i, j):
 ///
-///   U_ij = (n_i + n_j - 2) / ((n_i + n_j - 2) + T²_ij),
-///   T²_ij = D²_ij · n_i·n_j / (n_i + n_j)
+///   U_ij = 4 / (4 + D²_ij)
 ///
-/// For each pair the unexplained variance is `4 / (4 + D²_ij)`, where D²_ij is
-/// the squared Mahalanobis distance between the two group centroids (common
-/// all-groups pooled covariance). The constant 4 is the between-centroid
-/// variance of two equally-weighted means at distance D — i.e. (D/2)² → D²/4 —
-/// so unexplained = within / (within + between) = 1 / (1 + D²/4). It is NOT
-/// weighted by the group sizes (Hotelling T²). Verified to match SPSS exactly
-/// for every predictor (e.g. {Fe2O3} → 1.137, {CaO} → 1.402, {BaO} → 2.911).
+/// where D²_ij is the squared Mahalanobis distance between the two group
+/// centroids using the common (all-groups) pooled within-groups covariance. The
+/// constant 4 is the between-centroid variance of two equally-weighted means at
+/// distance D — i.e. (D/2)² → D²/4 — so unexplained = within / (within + between)
+/// = 1 / (1 + D²/4). It is NOT weighted by the group sizes (no Hotelling T² and
+/// no pair degrees of freedom). Verified to match SPSS exactly for every
+/// predictor (e.g. {Fe2O3} → 1.137, {CaO} → 1.402, {BaO} → 2.911).
 ///
 /// Residual Variance = Σ_{i<j} U_ij; lower = better separation.
 pub fn calculate_total_unexplained_variation(
@@ -735,8 +731,9 @@ pub(crate) fn group_mahalanobis_with_inv(
 
 /// Calculate Rao's V statistic
 ///
-/// Rao's V (Lawley-Hotelling Trace) is a multivariate test statistic
-/// that measures the separation between group means.
+/// Rao's V is a multivariate statistic that measures the separation between
+/// group means: V = tr(S_pooled⁻¹·B) = (n-g)·tr(W⁻¹B), i.e. the Lawley-Hotelling
+/// trace tr(W⁻¹B) scaled by the within-groups degrees of freedom (n-g).
 pub fn calculate_raos_v(dataset: &AnalyzedDataset, variables: &[String]) -> f64 {
     if variables.is_empty() {
         return 0.0;

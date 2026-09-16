@@ -874,7 +874,7 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
               // intact (chartData is the array of value rows).
               const matrixDimensions =
                 (chartConfig as any)?.matrixDimensions ?? [];
-              chartNode = chartUtils.createScatterPlotMatrix(
+              chartNode = chartUtils.createResidualScatterPlotMatrix(
                 chartDataPoints,
                 matrixDimensions,
                 width,
@@ -1190,22 +1190,6 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 useAxis,
                 {
                   title: chartMetadata?.title || "Clustered Error Bar Chart",
-                  subtitle: chartMetadata?.subtitle,
-                  titleFontSize: chartMetadata?.titleFontSize || 16,
-                  subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
-                },
-                chartConfig?.axisLabels,
-                chartConfig?.chartColor
-              );
-              break;
-            case "Scatter Plot Matrix":
-              chartNode = chartUtils.createScatterPlotMatrix(
-                chartDataPoints,
-                width,
-                height,
-                useAxis,
-                {
-                  title: chartMetadata?.title || "Scatter Plot Matrix",
                   subtitle: chartMetadata?.subtitle,
                   titleFontSize: chartMetadata?.titleFontSize || 16,
                   subtitleFontSize: chartMetadata?.subtitleFontSize || 12,

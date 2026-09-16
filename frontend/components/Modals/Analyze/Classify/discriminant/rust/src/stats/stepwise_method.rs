@@ -165,16 +165,11 @@ fn calculate_f_to_remove_wilks(
 
 /// Calculate F-to-enter using Unexplained Variance method
 ///
-/// This method follows the SPSS univariate criterion (ibmc0.c:2551-2567):
-/// for candidate variable x, do univariate regression of x on the current
-/// in-model variables using the pooled within-groups covariance, then:
-///
-///     unexplained = (N - k) / N · (1 - R²)
-///     F_to_enter = ((N - k - p - 1) / p) · unexplained / (1 - unexplained)
-///
-/// where N = total_cases, k = num_groups, p = |M ∪ {x}|, R² is the squared
-/// multiple correlation of x with the in-model variables computed from
-/// the within-groups correlation matrix.
+/// Returns the standard partial Wilks F-to-enter (identical to the Wilks method),
+/// which is what SPSS shows in the "F to Enter" column and gates entry on. The
+/// method statistic itself (Residual Variance = Σ_{i<j} 4 / (4 + D²_ij), see
+/// `calculate_total_unexplained_variation`) only ranks candidates and is computed
+/// in analyze_variables_not_in_model.
 ///
 /// # Parameters
 /// * `variable` - The candidate variable to test
@@ -182,7 +177,7 @@ fn calculate_f_to_remove_wilks(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-enter, Wilks' lambda proxy)
+/// A tuple of (partial F-to-enter, Wilks' lambda after entry)
 fn calculate_f_to_enter_unexplained(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -197,9 +192,8 @@ fn calculate_f_to_enter_unexplained(
 
 /// Calculate F-to-remove using Unexplained Variance method
 ///
-/// For variable v in model M, compute the criterion on the reduced
-/// model M \ {v} using the same SPSS univariate formula. p is the
-/// number of variables in M \ {v} (i.e. |M| - 1).
+/// Returns the standard partial Wilks F-to-remove (identical to the Wilks method).
+/// The "Residual Variance" column for variables in the model is computed separately.
 ///
 /// # Parameters
 /// * `variable` - The variable in the model to test
@@ -207,7 +201,7 @@ fn calculate_f_to_enter_unexplained(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-remove, Wilks' lambda proxy)
+/// A tuple of (partial F-to-remove, Wilks' lambda of the reduced model)
 fn calculate_f_to_remove_unexplained(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -220,8 +214,10 @@ fn calculate_f_to_remove_unexplained(
 
 /// Calculate F-to-enter using Mahalanobis Distance method
 ///
-/// This method maximizes the minimum Mahalanobis distance
-/// between any two groups.
+/// This method maximizes the minimum squared Mahalanobis distance D² between any
+/// two groups. The F returned is the standard partial Wilks F-to-enter (entry
+/// gate); the ranking statistic is min D² after entry, returned negated so that
+/// lower = better, like Wilks' lambda.
 ///
 /// # Parameters
 /// * `variable` - The variable to test
@@ -229,7 +225,7 @@ fn calculate_f_to_remove_unexplained(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-enter, Wilks' lambda)
+/// A tuple of (partial F-to-enter, −min D² after entry)
 fn calculate_f_to_enter_mahalanobis(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -253,8 +249,9 @@ fn calculate_f_to_enter_mahalanobis(
 
 /// Calculate F-to-remove using Mahalanobis Distance method
 ///
-/// This method measures the decrease in minimum Mahalanobis distance
-/// when a variable is removed from the model.
+/// The F returned is the standard partial Wilks F-to-remove (removal gate); the
+/// second value is min D² of the reduced model, negated (1.0 when removing the
+/// variable leaves the model empty).
 ///
 /// # Parameters
 /// * `variable` - The variable to test
@@ -262,7 +259,7 @@ fn calculate_f_to_enter_mahalanobis(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-remove, Wilks' lambda proxy)
+/// A tuple of (partial F-to-remove, −min D² of the reduced model)
 fn calculate_f_to_remove_mahalanobis(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -295,7 +292,9 @@ fn calculate_f_to_remove_mahalanobis(
 
 /// Calculate F-to-enter using Smallest F Ratio method
 ///
-/// This method maximizes the minimum F ratio between any two groups.
+/// This method maximizes the minimum pairwise F ratio between any two groups.
+/// The F returned here is the standard partial Wilks F-to-enter (entry gate), not
+/// the pairwise F ratio.
 ///
 /// # Parameters
 /// * `variable` - The variable to test
@@ -303,7 +302,7 @@ fn calculate_f_to_remove_mahalanobis(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-enter, Wilks' lambda)
+/// A tuple of (partial F-to-enter, Wilks' lambda after entry)
 fn calculate_f_to_enter_fratio(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -318,9 +317,9 @@ fn calculate_f_to_enter_fratio(
 
 /// Calculate F-to-remove using Smallest F Ratio method
 ///
-/// For variable v in model M, F-to-remove is the minimum F_ij across all
-/// group pairs evaluated on the reduced model M \ {v} — same shape as
-/// F-to-enter but on the smaller set (SPSS does not report a difference).
+/// Returns the standard partial Wilks F-to-remove (identical to the Wilks method),
+/// not the pairwise F ratio. The "Min. F" column for variables in the model is
+/// computed separately.
 ///
 /// # Parameters
 /// * `variable` - The variable in the model to test
@@ -328,7 +327,7 @@ fn calculate_f_to_enter_fratio(
 /// * `current_variables` - Variables currently in the model
 ///
 /// # Returns
-/// A tuple of (F-to-remove, Wilks' lambda proxy)
+/// A tuple of (partial F-to-remove, Wilks' lambda of the reduced model)
 fn calculate_f_to_remove_fratio(
     variable: &str,
     dataset: &AnalyzedDataset,
