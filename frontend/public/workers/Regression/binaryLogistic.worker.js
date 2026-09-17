@@ -306,6 +306,9 @@ function processCovariates(data, ids, details, configObj, getValueFn) {
   let xFeatureNames = [];
   let categoricalConfigForRust = [];
   let xEncodings = {};
+  // Collects non-numeric values hit by non-categorical columns' encode() so
+  // we can raise one descriptive error instead of silently coding them 0.0.
+  const invalidValues = [];
 
   const uiCatSettings = configObj.categoricalVariables || [];
   const getCatSetting = (id) => {
@@ -383,10 +386,14 @@ function processCovariates(data, ids, details, configObj, getValueFn) {
       uiSetting,
       codeMap,
 
-      encode: function (val) {
+      encode: function (val, rowIndex) {
         if (!this.isCategorical) {
           const num = Number(val);
-          return isNaN(num) ? 0.0 : num;
+          if (isNaN(num)) {
+            invalidValues.push({ name: this.name, value: val, rowIndex });
+            return 0.0;
+          }
+          return num;
         }
         const strVal = String(val);
         return this.codeMap.has(strVal) ? this.codeMap.get(strVal) : 0.0;
@@ -409,12 +416,26 @@ function processCovariates(data, ids, details, configObj, getValueFn) {
   });
 
   // 3. Generate Matrix
-  const xMatrix = data.map((row) => {
+  const xMatrix = data.map((row, rowIndex) => {
     return columnProcessors.map((col) => {
       const rawVal = getValueFn(row, col.id);
-      return col.encode(rawVal);
+      return col.encode(rawVal, rowIndex);
     });
   });
+
+  if (invalidValues.length > 0) {
+    const varNames = [...new Set(invalidValues.map((v) => v.name))];
+    const sample = invalidValues
+      .slice(0, 5)
+      .map((v) => `"${v.value}" (row ${v.rowIndex + 1})`)
+      .join(", ");
+    const remaining = invalidValues.length - 5;
+    throw new Error(
+      `Variable(s) ${varNames.join(", ")} contain non-numeric value(s) that cannot be used as a scale covariate: ${sample}` +
+        (remaining > 0 ? `, and ${remaining} more` : "") +
+        `. If this variable is categorical, set its measurement level to Nominal/Ordinal or add it in the Categorical tab.`
+    );
+  }
 
   // KEMBALIKAN xEncodings
   return { xMatrix, xFeatureNames, categoricalConfigForRust, xEncodings };

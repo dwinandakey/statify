@@ -87,10 +87,14 @@ export const formatBlock1 = (
   if (!isStepwise) {
     // 1. Omnibus Tests
     const omni = result.omni_tests;
+    // Use ?? not || - a chi-square/sig of exactly 0 (a highly significant
+    // result) is falsy and was silently replaced by the fallback, which is
+    // how a table showing "Sig. < .001" ended up paired with a description
+    // claiming "p = 1.000".
     const omniDesc = generateOmnibusDescription(
-      omni?.chi_square || 0,
-      omni?.df || 1,
-      omni?.sig || 1
+      omni?.chi_square ?? 0,
+      omni?.df ?? 1,
+      omni?.sig ?? 1
     );
 
     const omnibusData = {

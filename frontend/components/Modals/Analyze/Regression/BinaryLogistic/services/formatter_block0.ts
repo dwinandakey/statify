@@ -4,6 +4,7 @@ import {
   safeFixed,
   fmtSig,
   fmtPct,
+  fmtPSig,
   generateClassificationDescription,
 } from "./formatter_utils";
 
@@ -361,14 +362,12 @@ export const formatBlock0 = (
   // Generate deskripsi dinamis untuk "Variables not in equation"
   let varsOutDesc = "Score tests for predictors not included in the model.";
   if (remainderTest && canComputeOverall) {
-    const pVal = remainderTest.sig;
-    const isSig = pVal < 0.05;
-    const pText = pVal < 0.001 ? "< .001" : `= ${pVal.toFixed(3)}`;
+    const isSig = remainderTest.sig < 0.05;
 
     if (isSig) {
-      varsOutDesc = `The overall residual Score statistic is statistically significant (p ${pText}), indicating that the addition of one or more predictors would significantly improve the model fit.`;
+      varsOutDesc = `The overall residual Score statistic is statistically significant (${fmtPSig(remainderTest.sig)}), indicating that the addition of one or more predictors would significantly improve the model fit.`;
     } else {
-      varsOutDesc = `The overall residual Score statistic is not statistically significant (p ${pText}), suggesting that adding predictors may not significantly improve the model.`;
+      varsOutDesc = `The overall residual Score statistic is not statistically significant (${fmtPSig(remainderTest.sig)}), suggesting that adding predictors may not significantly improve the model.`;
     }
   }
 
