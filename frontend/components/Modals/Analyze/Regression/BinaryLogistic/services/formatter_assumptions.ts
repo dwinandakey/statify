@@ -1,34 +1,51 @@
 import type { LogisticResult, AnalysisSection } from "../types/binary-logistic";
-import { createSection, safeFixed, fmtSig } from "./formatter_utils";
+import { createSection, safeFixed, fmtSig, fmtPSig } from "./formatter_utils";
+
+// Single-reference decision threshold for collinearity (see VIF hypothesis
+// note below for the full citation). Kept as one constant so the table
+// title, legend, description and hypothesis note can't drift out of sync.
+const VIF_THRESHOLD = 10;
+
+// Decision rule tested by the VIF/GVIF table, shown once alongside the
+// results. This is a diagnostic decision rule, not an inferential
+// significance test (there is no sampling distribution/p-value for VIF),
+// but it is phrased as H0/H1 to match how collinearity is conventionally
+// reported in the literature and stated per Hair et al. (2010), the most
+// widely used single reference for this cutoff.
+const getVifHypothesisNote = (isGvif: boolean): string => {
+  const base =
+    "H0: no serious multicollinearity among predictors (Tolerance > 0.10, equivalently VIF < 10).";
+  if (!isGvif) return base;
+  return (
+    base +
+    "\nFor predictors with 3+ categories, the equivalent cutoff on the adjusted GVIF^(1/(2·Df)) scale is √10 ≈ 3.16, following the scaling convention in Fox, J., & Monette, G. (1992)."
+  );
+};
 
 // Helper untuk menentukan Concern Level berdasarkan nilai VIF.
 // When the table is on the GVIF^(1/(2*Df)) scale (any term has df > 1),
-// thresholds are sqrt-adjusted (e.g. VIF>10 <=> GVIF^(1/(2*Df)) > sqrt(10)),
+// the threshold is sqrt-adjusted (VIF>=10 <=> GVIF^(1/(2*Df)) >= sqrt(10)),
 // the standard adaptation since that value is already a square-root-scaled
-// quantity - comparing it against the raw VIF thresholds would understate
+// quantity - comparing it against the raw VIF threshold would understate
 // collinearity for every variable in the table, not just the multi-df ones.
 const getConcernLevel = (vif: number, isGvif?: boolean): string => {
-  const scale = isGvif ? Math.sqrt : (n: number) => n;
-  if (vif < scale(2)) return "Low";
-  if (vif < scale(5)) return "Moderate";
-  if (vif < scale(10)) return "High";
-  return "Very High";
+  const threshold = isGvif ? Math.sqrt(VIF_THRESHOLD) : VIF_THRESHOLD;
+  return vif >= threshold ? "Problematic" : "Acceptable";
 };
 
 // Helper untuk membuat deskripsi dinamis VIF
 const generateAssumptionDescription = (vifData: any[]): string => {
-  // Analisis VIF (GVIF^(1/(2*Df)) scale uses sqrt-adjusted thresholds - see getConcernLevel)
   const isGvif = vifData.some((r) => r.is_gvif);
   const metricLabel = isGvif ? "GVIF^(1/2Df)" : "VIF";
-  const threshold = isGvif ? Math.sqrt(5) : 5;
-  const highVif = vifData.filter((r) => r.vif >= threshold);
-  if (highVif.length > 0) {
-    const vars = highVif
+  const threshold = isGvif ? Math.sqrt(VIF_THRESHOLD) : VIF_THRESHOLD;
+  const problematic = vifData.filter((r) => r.vif >= threshold);
+  if (problematic.length > 0) {
+    const vars = problematic
       .map((r) => `${r.variable} (${metricLabel}=${safeFixed(r.vif)})`)
       .join(", ");
-    return `Potential multicollinearity detected. The following variables have ${metricLabel} values greater than ${safeFixed(threshold, 2)}: ${vars}. Values above ${safeFixed(isGvif ? Math.sqrt(10) : 10, 2)} usually indicate serious multicollinearity.`;
+    return `H0 is rejected for: ${vars}. These variable(s) have ${metricLabel} values at or above ${safeFixed(threshold, 2)}, indicating a multicollinearity problem serious enough to distort their coefficient estimates and standard errors.`;
   }
-  return `No significant multicollinearity detected based on ${metricLabel} values (all < ${safeFixed(threshold, 2)}).`;
+  return `H0 is not rejected for any predictor (all ${metricLabel} values are below ${safeFixed(threshold, 2)}) — no serious multicollinearity problem is indicated.`;
 };
 
 // Helper untuk membuat deskripsi dinamis Box-Tidwell
@@ -45,17 +62,17 @@ const generateBoxTidwellDescription = (boxTidwellData: any[]): string => {
     const violatedVars = testedVars.filter((row: any) => row.is_significant);
     if (violatedVars.length > 0) {
       const details = violatedVars
-        .map((v: any) => `${v.variable} (z=${safeFixed(v.score_z ?? 0, 3)}, p=${fmtSig(v.sig)})`)
+        .map((v: any) => `${v.variable} (z=${safeFixed(v.score_z ?? 0, 3)}, ${fmtPSig(v.sig)})`)
         .join(", ");
       parts.push(
-        `Linearity assumption violated for: ${details}. ` +
-          `A significant interaction term (X·ln(X)) indicates the relationship between this predictor and the logit is not linear. ` +
+        `H0 rejected (linearity assumption violated) for: ${details}. ` +
+          `A significant interaction term (X·ln(X)) indicates that the relationship between this predictor and the logit is not linear. ` +
           `Consider applying a power/log transformation or treating these variables as categorical.`
       );
     } else {
       parts.push(
-        "Linearity assumption met for all tested continuous predictors (all p > 0.05), " +
-          "consistent with a linear relationship in the logit."
+        "H0 not rejected for any tested predictor (all p (Sig.) > .05), " +
+          "consistent with a linear relationship between each continuous predictor and the logit."
       );
     }
   }
@@ -132,49 +149,46 @@ export const formatAssumptionTests = (
     sections.push(
       createSection(
         "assumption_vif",
-        "Collinearity Statistics (VIF)",
+        // Table title must track the metric actually reported: GVIF once any
+        // predictor has df > 1, plain VIF otherwise.
+        isGvif ? "Collinearity Statistics (GVIF)" : "Collinearity Statistics (VIF)",
         vifData,
         {
+          note: getVifHypothesisNote(isGvif),
           description: isGvif
-            ? `${dynamicDesc} Note: one or more predictors are categorical with 3+ categories, so this table reports Generalized VIF (GVIF) adjusted for degrees of freedom (${adjHeader}) alongside the raw GVIF - matching R's car::vif() convention - with the adjusted column comparable across all variables regardless of df.`
+            ? `${dynamicDesc} Note: one or more predictors are categorical with 3+ categories, so this table reports Generalized VIF (GVIF) instead of the standard VIF, adjusted for degrees of freedom (${adjHeader}) alongside the raw GVIF with the adjusted column comparable across all variables regardless of df.`
             : dynamicDesc,
         },
       ),
     );
 
     // --- 2. Legend VIF ---
-    // Ranges are sqrt-adjusted to match the GVIF^(1/2Df) scale when applicable.
+    // Single reference (Hair et al., 2010) instead of the previously
+    // unattributed 4-tier scale, per feedback that mixed conventions across
+    // sources caused inconsistent interpretation. Range is sqrt-adjusted to
+    // match the GVIF^(1/2Df) scale when applicable.
     const fmtRange = (n: number) => safeFixed(isGvif ? Math.sqrt(n) : n, isGvif ? 2 : 0);
     const legendData = {
       columnHeaders: [
-        { header: "Level", key: "level" },
-        { header: "Range", key: "range" },
+        { header: "Criterion", key: "level" },
+        { header: `${isGvif ? adjHeader : "VIF"} Range`, key: "range" },
+        { header: "Tolerance Range", key: "tol" },
         { header: "Interpretation", key: "interp" },
       ],
       rows: [
         {
-          rowHeader: ["Low"],
-          level: "Low",
-          range: `< ${fmtRange(2)}`,
-          interp: "No significant multicollinearity.",
+          rowHeader: ["Acceptable"],
+          level: "Acceptable (H0 not rejected)",
+          range: `< ${fmtRange(VIF_THRESHOLD)}`,
+          tol: "> 0.10",
+          interp: "No serious multicollinearity problem.",
         },
         {
-          rowHeader: ["Moderate"],
-          level: "Moderate",
-          range: `${fmtRange(2)} - ${fmtRange(5)}`,
-          interp: "Moderate multicollinearity; typically acceptable.",
-        },
-        {
-          rowHeader: ["High"],
-          level: "High",
-          range: `${fmtRange(5)} - ${fmtRange(10)}`,
-          interp: "High multicollinearity; verify coefficient stability.",
-        },
-        {
-          rowHeader: ["Very High"],
-          level: "Very High",
-          range: `> ${fmtRange(10)}`,
-          interp: "Severe multicollinearity; remedial action recommended.",
+          rowHeader: ["Problematic"],
+          level: "Problematic (H0 rejected)",
+          range: `≥ ${fmtRange(VIF_THRESHOLD)}`,
+          tol: "≤ 0.10",
+          interp: "Multicollinearity problem indicated; coefficient estimates and standard errors may be unstable.",
         },
       ],
     };
@@ -182,11 +196,11 @@ export const formatAssumptionTests = (
     sections.push(
       createSection(
         "assumption_vif_legend",
-        "VIF Interpretation Guide",
+        isGvif ? "GVIF Interpretation Guide" : "VIF Interpretation Guide",
         legendData,
         {
           description:
-            "General guidelines for interpreting Variance Inflation Factors.",
+            "Single-reference decision criterion for interpreting collinearity statistics (Hair, Black, Babin, & Anderson, 2010, Multivariate Data Analysis, 7th ed.).",
         },
       ),
     );
@@ -240,6 +254,8 @@ export const formatAssumptionTests = (
           "Box-Tidwell Test for Linearity of the Logit",
           btData,
           {
+            note:
+              "H0: the relationship between the predictor and the logit is linear (the coefficient of the X·ln(X) interaction term equals 0).",
             description: btDescription,
           }
         )
