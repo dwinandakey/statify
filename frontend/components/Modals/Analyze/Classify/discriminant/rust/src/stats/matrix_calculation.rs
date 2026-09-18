@@ -14,7 +14,9 @@ use crate::{
         result::{CovarianceMatrices, PooledMatrices},
         AnalysisData, DiscriminantConfig,
     },
-    stats::core::{calculate_covariance, AnalyzedDataset, EPSILON},
+    stats::core::{
+        calculate_covariance, is_rank_deficient, push_analysis_warning, AnalyzedDataset, EPSILON,
+    },
 };
 
 use super::core::extract_analyzed_dataset;
@@ -674,13 +676,27 @@ pub fn calculate_min_f_ratio(dataset: &AnalyzedDataset, variables: &[String]) ->
 /// variable set. The inverse depends only on the variables, not on the group
 /// pair, so all pairwise D² loops share a single inversion via this helper.
 ///
-/// Returns `None` if the regularized matrix is singular (callers fall back to
-/// the squared Euclidean distance of the mean difference).
+/// Returns `None` if the pooled matrix is singular or near-singular (callers fall
+/// back to the squared Euclidean distance of the mean difference). That fallback is
+/// not a Mahalanobis distance, so it is reported as a warning rather than silently.
 pub(crate) fn pooled_within_inverse(dataset: &AnalyzedDataset, variables: &[String]) -> Option<DMatrix<f64>> {
     if variables.is_empty() {
         return None;
     }
     let mut reg_cov = calculate_pooled_within_matrix_no_epsilon(dataset, variables);
+    // The EPSILON ridge below keeps near-singular matrices invertible, but their
+    // inverse is dominated by 1/EPSILON and the resulting D² is meaningless, so the
+    // rank is checked on the unregularized matrix first.
+    if is_rank_deficient(&reg_cov) {
+        push_analysis_warning(
+            "mahalanobis_distance",
+            format!(
+                "The pooled within-groups covariance matrix of [{}] is singular (a predictor is a linear combination of the others). Group-pair Mahalanobis distances (Min. D Squared, Smallest F Ratio, Residual Variance, pairwise F) for this set were replaced by squared Euclidean distances and are not valid.",
+                variables.join(", ")
+            ),
+        );
+        return None;
+    }
     for i in 0..variables.len() {
         reg_cov[(i, i)] += EPSILON;
     }
@@ -741,6 +757,17 @@ pub fn calculate_raos_v(dataset: &AnalyzedDataset, variables: &[String]) -> f64 
 
     // Calculate between-groups and within-groups matrices
     let (between_mat, within_mat) = calculate_between_within_matrices(dataset, variables);
+
+    if is_rank_deficient(&within_mat) {
+        push_analysis_warning(
+            "raos_v",
+            format!(
+                "The pooled within-groups covariance matrix of [{}] is singular, so Rao's V is undefined for this set; the value shown is the trace of the between-groups matrix and is not valid.",
+                variables.join(", ")
+            ),
+        );
+        return (0..variables.len()).map(|i| between_mat[(i, i)]).sum();
+    }
 
     // Try to invert within-groups matrix
     // within_mat = S_pooled = W_SS / (n-k), so w_inv = S_pooled^{-1}

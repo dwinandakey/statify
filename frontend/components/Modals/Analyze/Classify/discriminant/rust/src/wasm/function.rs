@@ -21,6 +21,7 @@ pub fn run_analysis(
     // Reset the per-analysis stepwise-selection cache so this run never reuses a
     // selection from a previous analysis in the same worker instance.
     core::clear_selected_vars_cache();
+    core::clear_analysis_warnings();
 
     // Log configuration to track which methods will be executed
     web_sys::console::log_1(&format!("Config: {:?}", config).into());
@@ -366,6 +367,12 @@ pub fn run_analysis(
                 // Continue execution despite errors for non-critical functions
             }
         };
+    }
+
+    // Forward warnings raised inside the statistics routines (singular matrices,
+    // fallbacks, excluded groups) so they reach the user alongside the errors.
+    for (context, message) in core::take_analysis_warnings() {
+        error_collector.add_error(&format!("Warning ({})", context), &message);
     }
 
     // Create the final result

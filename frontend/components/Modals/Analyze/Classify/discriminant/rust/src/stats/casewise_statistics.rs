@@ -13,8 +13,8 @@ use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_p_value_from_chi_square,
     classification_case_values, MeanSubstitutedCase,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
-    extract_analyzed_dataset, get_stepwise_selected_variables,
-    EPSILON,
+    extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
+    push_analysis_warning, EPSILON,
 };
 
 /// Calculate detailed statistics for each case
@@ -205,14 +205,21 @@ pub fn calculate_casewise_statistics(
     // ---- CROSS-VALIDATED (Leave-One-Out) ----
     // Only compute if config.classify.leave is true
     let cross_validated = if config.classify.leave {
-        let cv_result = calculate_cross_validated_casewise(
+        // A failed cross-validation keeps the original casewise rows and reports why
+        // the cross-validated block is missing.
+        match calculate_cross_validated_casewise(
             data,
             config,
             &dataset,
             &variables_to_use,
             num_functions,
-        )?;
-        Some(cv_result)
+        ) {
+            Ok(cv_result) => Some(cv_result),
+            Err(e) => {
+                push_analysis_warning("cross_validation", e);
+                None
+            }
+        }
     } else {
         None
     };
@@ -291,6 +298,9 @@ fn calculate_cross_validated_casewise(
 
     let total_cases = all_cases.len();
 
+    // First singular-matrix failure seen by any held-out case (see below).
+    let singular_failure: std::sync::Mutex<Option<String>> = std::sync::Mutex::new(None);
+
     // Process in parallel using rayon
     let results: Vec<CrossValidatedCaseResult> = all_cases
         .par_iter()
@@ -368,9 +378,31 @@ fn calculate_cross_validated_casewise(
                 for i in 0..p_vars {
                     reg_cov[(i, i)] += EPSILON;
                 }
-                let inv_cov = reg_cov
-                    .try_inverse()
-                    .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
+                // Holding a case out can make S_pooled singular. An identity-matrix
+                // substitute would report Euclidean distances as cross-validated D², so
+                // the failure is recorded and the whole cross-validated block dropped.
+                let singular_msg = || {
+                    format!(
+                        "Cross-validated casewise statistics cannot be computed: the pooled within-groups covariance matrix becomes singular when case {} of group {} is held out.",
+                        case_idx + 1,
+                        group_name
+                    )
+                };
+                if is_rank_deficient(&pooled_cov) {
+                    if let Ok(mut f) = singular_failure.lock() {
+                        f.get_or_insert_with(singular_msg);
+                    }
+                    return None;
+                }
+                let inv_cov = match reg_cov.try_inverse() {
+                    Some(inv) => inv,
+                    None => {
+                        if let Ok(mut f) = singular_failure.lock() {
+                            f.get_or_insert_with(singular_msg);
+                        }
+                        return None;
+                    }
+                };
 
                 let mut group_probs: Vec<(usize, f64)> = Vec::new();
                 let mut group_distances: Vec<(usize, f64)> = Vec::new();
@@ -481,12 +513,27 @@ fn calculate_cross_validated_casewise(
         )
         .collect();
 
+    if let Some(msg) = singular_failure.lock().ok().and_then(|mut f| f.take()) {
+        return Err(msg);
+    }
+
     // Sort results back into original sequential case order
     let mut sorted_results = results;
     sorted_results.sort_by_key(|r| r.original_idx);
 
-    let case_number: Vec<usize> = (1..=total_cases).collect();
-    let actual_group: Vec<String> = all_cases.iter().map(|(g, _, _, _)| g.clone()).collect();
+    // Case numbers and actual groups come from the results themselves, so a skipped
+    // case (single-case group) cannot shift the rows out of line with the predictions.
+    if sorted_results.len() < total_cases {
+        push_analysis_warning(
+            "cross_validation",
+            format!(
+                "{} case(s) could not be held out (their group has only one case) and are omitted from the cross-validated casewise statistics.",
+                total_cases - sorted_results.len()
+            ),
+        );
+    }
+    let case_number: Vec<usize> = sorted_results.iter().map(|r| r.original_idx + 1).collect();
+    let actual_group: Vec<String> = sorted_results.iter().map(|r| r.actual_group.clone()).collect();
     let predicted_group: Vec<String> = sorted_results
         .iter()
         .map(|r| r.predicted_group.clone())

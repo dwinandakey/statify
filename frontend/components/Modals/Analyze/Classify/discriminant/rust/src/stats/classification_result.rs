@@ -15,7 +15,8 @@ use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantCon
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
     calculate_prior_probabilities, classification_case_values, extract_analyzed_dataset,
-    get_stepwise_selected_variables, AnalyzedDataset, MeanSubstitutedCase, EPSILON,
+    get_stepwise_selected_variables, is_rank_deficient, push_analysis_warning, AnalyzedDataset,
+    MeanSubstitutedCase, EPSILON,
 };
 
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
@@ -98,8 +99,16 @@ pub fn calculate_classification_results(
     }
 
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
+    // A failed cross-validation keeps the original classification table and reports
+    // why the cross-validated part is missing.
     let (cross_validated_classification, cross_validated_percentage) = if config.classify.leave {
-        calculate_cross_validation(&dataset, &variables_to_use, &priors)?
+        match calculate_cross_validation(&dataset, &variables_to_use, &priors) {
+            Ok(cv) => cv,
+            Err(e) => {
+                push_analysis_warning("cross_validation", e);
+                (None, None)
+            }
+        }
     } else {
         (None, None)
     };
@@ -162,12 +171,27 @@ fn calculate_cross_validation(
         }
     }
 
+    let single_case_groups: Vec<&String> = dataset
+        .group_labels
+        .iter()
+        .filter(|g| all_cases.iter().filter(|(c, _, _)| c == *g).count() == 1)
+        .collect();
+    if !single_case_groups.is_empty() {
+        push_analysis_warning(
+            "cross_validation",
+            format!(
+                "Group(s) {} have only one case, which cannot be held out; those cases are not included in the cross-validated classification.",
+                single_case_groups.iter().map(|g| g.as_str()).collect::<Vec<_>>().join(", ")
+            ),
+        );
+    }
+
     let cv_results: Vec<(String, usize)> = all_cases
         .par_iter()
-        .filter_map(|(group_name, case_idx, case_values)| {
+        .map(|(group_name, case_idx, case_values)| -> Result<Option<(String, usize)>, String> {
             let group_cases = all_cases.iter().filter(|(g, _, _)| g == group_name).count();
             if group_cases <= 1 {
-                return None;
+                return Ok(None);
             } // Skip grup yang hanya punya 1 anggota
 
             // Clone dataset asli dan buang 1 case ini (Sangat efisien!)
@@ -201,13 +225,27 @@ fn calculate_cross_validation(
             // Hitung jarak Mahalanobis menggunakan Observation Space (Seperti SPSS)
             let pooled_cov =
                 calculate_pooled_within_matrix_no_epsilon(&leave_dataset, variables_to_use);
+            // Holding a case out can make S_pooled singular (e.g. a group left with
+            // too few cases). Substituting an identity matrix would classify by
+            // Euclidean distance while presenting it as cross-validation, so stop.
+            if is_rank_deficient(&pooled_cov) {
+                return Err(format!(
+                    "Leave-one-out cross-validation cannot be computed: the pooled within-groups covariance matrix becomes singular when case {} of group {} is held out.",
+                    case_idx + 1,
+                    group_name
+                ));
+            }
             let mut reg_cov = pooled_cov.clone();
             for i in 0..p_vars {
                 reg_cov[(i, i)] += EPSILON;
             }
-            let inv_cov = reg_cov
-                .try_inverse()
-                .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
+            let inv_cov = reg_cov.try_inverse().ok_or_else(|| {
+                format!(
+                    "Leave-one-out cross-validation cannot be computed: the pooled within-groups covariance matrix could not be inverted when case {} of group {} is held out.",
+                    case_idx + 1,
+                    group_name
+                )
+            })?;
 
             let mut group_probs = Vec::new();
             let x_vec = nalgebra::DVector::from_vec(case_values.clone());
@@ -235,8 +273,11 @@ fn calculate_cross_validation(
             // Urutkan dan ambil yang probabilitasnya paling tinggi
             group_probs
                 .sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
-            Some((group_name.clone(), group_probs[0].0))
+            Ok(Some((group_name.clone(), group_probs[0].0)))
         })
+        .collect::<Result<Vec<_>, String>>()?
+        .into_iter()
+        .flatten()
         .collect();
 
     // Rekapitulasi jumlah
@@ -355,6 +396,15 @@ pub fn calculate_summary_classification(
             .cloned()
             .collect()
     };
+
+    // The EPSILON ridge in calculate_pooled_within_matrix makes a singular matrix
+    // invertible, but the coefficients from that inverse are meaningless.
+    if is_rank_deficient(&calculate_pooled_within_matrix_no_epsilon(&dataset, &variables)) {
+        return Err(format!(
+            "Classification function coefficients cannot be computed: the pooled within-groups covariance matrix of [{}] is singular (a predictor is a linear combination of the others).",
+            variables.join(", ")
+        ));
+    }
 
     let pooled_within = calculate_pooled_within_matrix(&dataset, &variables);
 

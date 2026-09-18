@@ -110,6 +110,8 @@ pub struct MulticollinearityResult {
     pub note: String,
 }
 
+// INACTIVE — result shape of the former full-dataset (pooled) Henze–Zirkler test.
+/*
 /// Henze–Zirkler multivariate normality test computed on the full dataset
 /// (all cases pooled, grouping variable excluded), matching R's `MVN::mvn`.
 /// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
@@ -127,11 +129,36 @@ pub struct HenzeZirklerResult {
     pub violated: bool,
     pub note: String,
 }
+*/
 
-/// Per-variable Anderson–Darling univariate normality test computed on the full
-/// dataset (all cases pooled), matching R's `MVN::mvn` / `nortest::ad.test`.
+/// Henze–Zirkler multivariate normality test run within each group (grouping
+/// variable excluded); every vector has one entry per group, in group order.
+/// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
+/// tail. A group with n ≤ p is not tested (`tested` = false).
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct HenzeZirklerResult {
+    pub groups: Vec<String>,
+    /// Cases used in each group.
+    pub n: Vec<i32>,
+    /// Henze–Zirkler statistic per group (0 when not tested).
+    pub hz: Vec<f64>,
+    #[serde(rename = "p_value")]
+    pub p_value: Vec<f64>,
+    /// Verdict per group: p-value above the normality α (not significant).
+    pub normal: Vec<bool>,
+    /// False when the group could not be tested (too few cases for p predictors).
+    pub tested: Vec<bool>,
+    /// True when any tested group rejects multivariate normality.
+    pub violated: bool,
+    pub note: String,
+}
+
+/// Anderson–Darling univariate normality test per predictor within each group
+/// (`nortest::ad.test` on each group's cases). One entry per tested
+/// group × predictor pair; `groups` and `variables` are parallel.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UnivariateNormalityResult {
+    pub groups: Vec<String>,
     pub variables: Vec<String>,
     /// Anderson–Darling A² statistic per variable.
     pub statistic: Vec<f64>,

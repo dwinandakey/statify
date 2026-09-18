@@ -124,7 +124,16 @@ export const useDiscriminantState = (
 
                 await saveFormData("Discriminant", newFormData);
 
-                const configData = newFormData;
+                // The assumption checks always run with the full analysis, so their
+                // tables appear even when the user never opened the Assumptions tab.
+                const configData: DiscriminantType = {
+                    ...newFormData,
+                    assumptions: {
+                        Multicollinearity: true,
+                        MultivariateNormality: true,
+                        UnivariateNormality: true,
+                    },
+                };
 
                 // DEBUG: Log method config before sending
                 console.log("[Discriminant] Method config to send:", configData.method);
@@ -184,10 +193,12 @@ export const useDiscriminantState = (
 
                         // The WASM error collector always returns a summary string;
                         // "No errors occurred." is its empty state. Anything else means
-                        // some tables could not be computed, which the user must see.
+                        // some tables could not be computed, or were computed under a
+                        // condition the user must know about (entries whose context
+                        // starts with "Warning", e.g. a singular matrix).
                         if (typeof errors === "string" && errors.trim() !== "No errors occurred.") {
                             console.warn("Analysis warnings:", errors);
-                            toast.warning("Some discriminant output could not be computed", {
+                            toast.warning("Discriminant analysis reported errors or warnings", {
                                 description: errors,
                             });
                         }
