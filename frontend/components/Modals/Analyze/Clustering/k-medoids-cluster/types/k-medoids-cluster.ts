@@ -89,6 +89,19 @@ export enum NormalizationMethod {
 }
 
 /**
+ * Metode penanganan missing value sebelum clustering
+ * - Listwise: baris dengan missing value pada variabel manapun dibuang
+ * - Median: baris dipertahankan, sel kosong diisi median variabel tersebut
+ * - Knn: baris dipertahankan, sel kosong diisi rata-rata k tetangga terdekat
+ *   (dihitung dari fitur lain yang tersedia pada baris tsb)
+ */
+export enum MissingValueMethod {
+    Listwise = "listwise",
+    Median = "median",
+    Knn = "knn",
+}
+
+/**
  * Mode untuk pemakaian seed:
  * - default: gunakan seed default bawaan sistem
  * - random: gunakan RNG acak (seed kosong)
@@ -339,11 +352,8 @@ export type KMedoidsClusterOptionsType = {
      *  Disisakan opsional agar konfigurasi lama di IndexedDB tetap terbaca. */
     ShowConvergenceChart?: boolean;
 
-    /** Missing value handling: exclude listwise */
-    ExcludeListWise: boolean;
-
-    /** Missing value handling: exclude pairwise */
-    ExcludePairWise: boolean;
+    /** Missing value handling: listwise deletion, median imputation, atau KNN imputation */
+    MissingValueMethod: MissingValueMethod;
 
     /**
      * Standarisasi Z-score sebelum clustering.

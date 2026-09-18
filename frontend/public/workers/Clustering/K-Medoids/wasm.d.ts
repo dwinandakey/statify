@@ -8,6 +8,15 @@ export class KMedoidsCluster {
 }
 
 /**
+ * Compute Within-Cluster Sum of Squares (WCSS) for the Elbow method.
+ *
+ * Replaces the duplicated `calculateWCSS` (k-medoids-cluster-analysis.ts) and
+ * `computeWCSS` (cluster-worker.ts) TypeScript functions with a single Rust
+ * implementation (`utils::distance::compute_wcss`).
+ */
+export function calculate_wcss(input_value: any): any;
+
+/**
  * Initialize panic hook for better error messages in WASM
  */
 export function init_panic_hook(): void;
@@ -55,6 +64,19 @@ export function run_k_medoids_range(input_value: any): any;
  */
 export function run_k_medoids_typed(flat_data: Float64Array, n_rows: number, n_cols: number, n_clusters: number, method: string, max_iterations: number, distance_metric: string, random_seed: bigint, convergence_tolerance: number, n_init: number, on_progress?: Function | null, on_initial_medoids?: Function | null): any;
 
+/**
+ * Standardize/normalize a numeric matrix before clustering.
+ *
+ * Replaces the equivalent `standardizeZScore` / `normalizeMinMax` JS
+ * functions in the TypeScript service layer so the scaling formula has a
+ * single implementation (`stats::normalization`), consistent with every
+ * other K-Medoids formula living in Rust/WASM.
+ *
+ * `method`: "zscore" | "minmax" | "none" (anything else falls back to "none").
+ * Z-score uses sample standard deviation (n-1), matching R's `scale()`.
+ */
+export function standardize_data(input_value: any): any;
+
 export function test_connection(): string;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -62,10 +84,12 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_kmedoidscluster_free: (a: number, b: number) => void;
+    readonly calculate_wcss: (a: any) => [number, number, number];
     readonly kmedoidscluster_new: () => number;
     readonly run_k_medoids: (a: any) => [number, number, number];
     readonly run_k_medoids_range: (a: any) => [number, number, number];
     readonly run_k_medoids_typed: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: bigint, l: number, m: number, n: number, o: number) => [number, number, number];
+    readonly standardize_data: (a: any) => [number, number, number];
     readonly test_connection: () => [number, number];
     readonly init_panic_hook: () => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;

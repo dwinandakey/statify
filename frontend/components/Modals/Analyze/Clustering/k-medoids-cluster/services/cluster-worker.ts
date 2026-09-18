@@ -14,6 +14,12 @@ type WasmModule = {
     run_k_medoids_typed: (...args: unknown[]) => Record<string, unknown>;
     run_k_medoids_range: (input: unknown) => Record<string, unknown>[];
     run_silhouette?: (input: unknown) => Record<string, unknown>;
+    calculate_wcss?: (input: {
+        data: number[][];
+        labels: number[];
+        medoid_indices: number[];
+        distance_metric: string;
+    }) => { wcss: number };
     initThreadPool?: (n: number) => Promise<void>;
 };
 let wasmModule: WasmModule | null = null;
@@ -114,6 +120,28 @@ function computeWCSS(
         wcss += metric === "manhattan" ? dist : dist ** 2;
     }
     return wcss;
+}
+
+/**
+ * Prefer the WASM `calculate_wcss` export (single Rust implementation, same
+ * formula as `compute_wcss` used elsewhere); fall back to the JS computation
+ * above only for older WASM builds that don't export it yet.
+ */
+function wcssFromWasm(
+    data: number[][],
+    labels: number[],
+    medoidIndices: number[],
+    metric: "euclidean" | "manhattan"
+): number {
+    if (wasmModule && typeof wasmModule.calculate_wcss === "function") {
+        return wasmModule.calculate_wcss({
+            data,
+            labels,
+            medoid_indices: medoidIndices,
+            distance_metric: metric,
+        }).wcss;
+    }
+    return computeWCSS(data, labels, medoidIndices, metric);
 }
 
 /**
@@ -519,7 +547,7 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             ? silhouettePerObject.reduce((s, v) => s + v, 0) / silhouettePerObject.length
             : 0;
 
-        const wcssScore = computeWCSS(
+        const wcssScore = wcssFromWasm(
             resolvedData,
             labels,
             medoids,
@@ -694,7 +722,7 @@ async function runClusteringRange(input: ClusteringRangeInput, requestId?: numbe
                 converged: (item.converged ?? false) as boolean,
                 cost_history: (item.cost_history ?? []) as number[],
                 silhouetteScore,
-                wcssScore: computeWCSS(rangeData, labels, medoids, metric),
+                wcssScore: wcssFromWasm(rangeData, labels, medoids, metric),
             };
         });
 

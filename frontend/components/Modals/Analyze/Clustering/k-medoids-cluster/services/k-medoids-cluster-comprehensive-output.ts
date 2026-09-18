@@ -338,28 +338,16 @@ export async function generateComprehensiveKMedoidsOutput(
         }
         const k = configK;
         // ── Valid-row mapping ─────────────────────────────────────────────────
-        // The analysis service filters dataVariables → dataMatrix (drops rows where
-        // any selected variable is non-finite) BEFORE sending to WASM.  WASM therefore
-        // returns labels/medoids indexed into the FILTERED matrix (0..N_valid-1), not
-        // into the original full dataVariables array (0..N_total-1).
-        //
-        // We re-derive the same filter here so we can:
-        //  1. Map WASM label index → original row index (case number shown to user)
-        //  2. Map WASM medoid index → original row index (medoid case numbers)
-        //  3. Correctly compute silhouette / cluster profiles on valid rows only
-        //
-        // This makes case numbers and cluster assignments match R's pam() output.
-        const validRowIndices: number[] = [];
-        dataVariables.forEach((row: any, origIdx: number) => {
-            const valid = variables.every(v => {
-                const val = row[v.columnIndex as number];
-                return isFinite(typeof val === 'number' ? val : parseFloat(val));
-            });
-            if (valid) validRowIndices.push(origIdx);
-        });
+        // `dataVariables` here is already the post-preprocessing row set built
+        // by analyzeKMedoidsCluster: rows with missing values were either
+        // dropped (listwise) or imputed and patched back into the row object
+        // (median/knn — see patchImputedAttributes), so every row is already
+        // finite for every selected variable and lines up 1:1 with what WASM
+        // received (0..N-1). No re-filtering needed here.
+        const validRowIndices: number[] = dataVariables.map((_: any, idx: number) => idx);
 
         // n = number of cases actually sent to WASM (= result.labels.length).
-        // nTotal = total original rows (used for display only).
+        // nTotal = total rows after preprocessing (used for display only).
         const n = validRowIndices.length;
         const nTotal = dataVariables.length;
 

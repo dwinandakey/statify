@@ -14,6 +14,7 @@ import {
     ClusterMode,
     AutoKMethod,
     NormalizationMethod,
+    MissingValueMethod,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 
 /**
@@ -105,8 +106,7 @@ export const KMedoidsClusterOptionsDefault: KMedoidsClusterOptionsType = {
     ShowDistanceMatrixTable: false, // Default off: tampilkan hanya jika dipilih user
     // ShowOptimalKChart pindah ke tab Evaluation, ShowConvergenceChart pindah ke tab Results
     // agar grafik satu grup dengan tabelnya.
-    ExcludeListWise: true, // Default: listwise deletion
-    ExcludePairWise: false,
+    MissingValueMethod: MissingValueMethod.Listwise, // Default: listwise deletion
     Standardize: false, // Default: no normalization unless user selects
     NormalizationMethod: NormalizationMethod.None,
 };

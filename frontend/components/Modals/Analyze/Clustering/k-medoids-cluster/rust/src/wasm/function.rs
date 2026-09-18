@@ -8,7 +8,11 @@ use web_sys::console;
 use crate::algorithms::pam::{run_pam, PAMConfig, run_pam_range, run_pam_with_progress};
 use crate::algorithms::clara::{run_clara, CLARAConfig};
 use crate::algorithms::clarans::{run_clarans, CLARANSConfig};
-use crate::models::{KMedoidsInput, KMedoidsOutput, KMedoidsRangeInput, KMedoidsRangeItem};
+use crate::models::{
+    KMedoidsInput, KMedoidsOutput, KMedoidsRangeInput, KMedoidsRangeItem,
+    StandardizeInput, StandardizeOutput, WcssInput, WcssOutput,
+};
+use crate::stats::normalization::{normalize_data, NormalizationMethod};
 use crate::utils::distance::DistanceMetric;
 use crate::utils::validation::validate_input;
 
@@ -320,6 +324,52 @@ fn run_clarans_clustering(
 #[wasm_bindgen]
 pub fn test_connection() -> String {
     "K-Medoids Cluster WASM module connected successfully!".to_string()
+}
+
+/// Standardize/normalize a numeric matrix before clustering.
+///
+/// Replaces the equivalent `standardizeZScore` / `normalizeMinMax` JS
+/// functions in the TypeScript service layer so the scaling formula has a
+/// single implementation (`stats::normalization`), consistent with every
+/// other K-Medoids formula living in Rust/WASM.
+///
+/// `method`: "zscore" | "minmax" | "none" (anything else falls back to "none").
+/// Z-score uses sample standard deviation (n-1), matching R's `scale()`.
+#[wasm_bindgen]
+pub fn standardize_data(input_value: JsValue) -> Result<JsValue, JsValue> {
+    let input: StandardizeInput = from_value(input_value)
+        .map_err(|e| JsValue::from_str(&format!("Failed to parse input: {:?}", e)))?;
+
+    let method = NormalizationMethod::from_str(&input.method);
+
+    let (matrix, _stats) = normalize_data(&input.data, method);
+
+    to_value(&StandardizeOutput { matrix })
+        .map_err(|e| JsValue::from_str(&format!("Failed to serialize output: {:?}", e)))
+}
+
+/// Compute Within-Cluster Sum of Squares (WCSS) for the Elbow method.
+///
+/// Replaces the duplicated `calculateWCSS` (k-medoids-cluster-analysis.ts) and
+/// `computeWCSS` (cluster-worker.ts) TypeScript functions with a single Rust
+/// implementation (`utils::distance::compute_wcss`).
+#[wasm_bindgen]
+pub fn calculate_wcss(input_value: JsValue) -> Result<JsValue, JsValue> {
+    let input: WcssInput = from_value(input_value)
+        .map_err(|e| JsValue::from_str(&format!("Failed to parse input: {:?}", e)))?;
+
+    let metric = parse_distance_metric(&input.distance_metric)
+        .map_err(|e| JsValue::from_str(&e))?;
+
+    let wcss = crate::utils::distance::compute_wcss(
+        &input.data,
+        &input.labels,
+        &input.medoid_indices,
+        &metric,
+    );
+
+    to_value(&WcssOutput { wcss })
+        .map_err(|e| JsValue::from_str(&format!("Failed to serialize output: {:?}", e)))
 }
 
 /// Run PAM for a range of k values in a single call.
