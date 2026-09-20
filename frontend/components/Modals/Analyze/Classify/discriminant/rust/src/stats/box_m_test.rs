@@ -6,7 +6,8 @@ use crate::models::{result::BoxMTest, AnalysisData, DiscriminantConfig};
 
 use super::core::{
     AnalyzedDataset, calculate_covariance, calculate_log_determinant,
-    extract_analyzed_dataset, get_stepwise_selected_variables, EPSILON,
+    extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
+    push_analysis_warning, EPSILON,
 };
 
 /// Calculates Box's M test for homogeneity of covariance matrices.
@@ -66,11 +67,59 @@ pub fn calculate_box_m_test(
     ).into());
 
     // Compute per-group covariance matrices and log determinants
-    let (group_covs, group_log_dets, group_sizes) =
+    let (all_group_covs, all_group_log_dets, all_group_sizes, all_group_names) =
         compute_group_covariances(&dataset, &variables)?;
 
-    if group_covs.is_empty() {
-        return Err("No valid groups for Box's M test".to_string());
+    // Groups with n ≤ 1 have no covariance matrix at all.
+    let too_small: Vec<&String> = dataset
+        .group_labels
+        .iter()
+        .filter(|g| !all_group_names.contains(g))
+        .collect();
+    let mut excluded: Vec<String> = too_small
+        .iter()
+        .map(|g| format!("group {} (fewer than 2 cases)", g))
+        .collect();
+
+    // A singular group covariance matrix has no log determinant: the SVD-based value
+    // would be a pseudo-determinant over the nonzero singular values only, which biases
+    // M. Such groups are excluded from the test, as SPSS does.
+    let mut group_covs = Vec::new();
+    let mut group_log_dets = Vec::new();
+    let mut group_sizes = Vec::new();
+    for i in 0..all_group_covs.len() {
+        if is_rank_deficient(&all_group_covs[i]) {
+            excluded.push(format!(
+                "group {} (singular covariance matrix, n = {}, p = {})",
+                all_group_names[i],
+                all_group_sizes[i],
+                variables.len()
+            ));
+        } else {
+            group_covs.push(all_group_covs[i].clone());
+            group_log_dets.push(all_group_log_dets[i]);
+            group_sizes.push(all_group_sizes[i]);
+        }
+    }
+
+    if group_covs.len() < 2 {
+        return Err(format!(
+            "Box's M cannot be computed: no test can be performed with fewer than two nonsingular group covariance matrices{}.",
+            if excluded.is_empty() {
+                String::new()
+            } else {
+                format!(" (excluded: {})", excluded.join("; "))
+            }
+        ));
+    }
+    if !excluded.is_empty() {
+        push_analysis_warning(
+            "box_m_test",
+            format!(
+                "Box's M was computed without {}. Its log determinant is not defined, so the test covers only the remaining groups.",
+                excluded.join("; ")
+            ),
+        );
     }
 
     let p = variables.len(); // Number of variables
@@ -79,6 +128,12 @@ pub fn calculate_box_m_test(
 
     // Compute pooled covariance matrix
     let pooled_cov_matrix = compute_pooled_covariance_matrix(&group_covs, &group_sizes);
+    if is_rank_deficient(&pooled_cov_matrix) {
+        return Err(format!(
+            "Box's M cannot be computed: the pooled within-groups covariance matrix of [{}] is singular (a predictor is a linear combination of the others).",
+            variables.join(", ")
+        ));
+    }
     let pooled_log_det = calculate_log_determinant(&pooled_cov_matrix);
 
     // Compute Box's M statistic: M = (n-g)log|S| - Σ(nᵢ-1)log|Sᵢ|
@@ -158,17 +213,19 @@ pub fn calculate_box_m_test(
 /// * `variables` - The variables to include in the covariance matrices
 ///
 /// # Returns
-/// A tuple containing (covariance matrices, log determinants, group sizes)
+/// A tuple containing (covariance matrices, log determinants, group sizes, group labels)
+/// for the groups with at least two cases
 fn compute_group_covariances(
     dataset: &AnalyzedDataset,
     variables: &[String],
-) -> Result<(Vec<DMatrix<f64>>, Vec<f64>, Vec<usize>), String> {
+) -> Result<(Vec<DMatrix<f64>>, Vec<f64>, Vec<usize>, Vec<String>), String> {
     let mut group_covs = Vec::new();
     let mut group_log_dets = Vec::new();
     let mut group_sizes = Vec::new();
+    let mut group_names = Vec::new();
 
     // Process each group in parallel
-    let results: Vec<Option<(DMatrix<f64>, f64, usize)>> = dataset
+    let results: Vec<Option<(DMatrix<f64>, f64, usize, String)>> = dataset
         .group_labels
         .par_iter()
         .map(|group| {
@@ -205,7 +262,7 @@ fn compute_group_covariances(
             match compute_group_covariance_matrix(dataset, group, variables) {
                 Ok(cov_matrix) => {
                     let log_det = calculate_log_determinant(&cov_matrix);
-                    Some((cov_matrix, log_det, group_size))
+                    Some((cov_matrix, log_det, group_size, group.clone()))
                 }
                 Err(_) => None,
             }
@@ -214,14 +271,15 @@ fn compute_group_covariances(
 
     // Collect valid results
     for result in results {
-        if let Some((cov, log_det, size)) = result {
+        if let Some((cov, log_det, size, name)) = result {
             group_covs.push(cov);
             group_log_dets.push(log_det);
             group_sizes.push(size);
+            group_names.push(name);
         }
     }
 
-    Ok((group_covs, group_log_dets, group_sizes))
+    Ok((group_covs, group_log_dets, group_sizes, group_names))
 }
 
 /// Computes the covariance matrix for a specific group.

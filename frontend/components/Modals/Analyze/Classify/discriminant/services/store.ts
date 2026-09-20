@@ -121,8 +121,8 @@ const GROUP_BOOTSTRAP = "Bootstrap";
 const ASSUMPTION_SECTIONS = [
     { key: "assumption_summary", title: "Assumption Checks Summary" },
     { key: "assumption_multicollinearity", title: "Multicollinearity (Tolerance and VIF)" },
-    { key: "assumption_multivariate_normality", title: "Multivariate Normality (Henze-Zirkler Test)" },
-    { key: "assumption_univariate_normality", title: "Univariate Normality (Anderson-Darling)" },
+    { key: "assumption_multivariate_normality", title: "Multivariate Normality within Groups (Henze-Zirkler Test)" },
+    { key: "assumption_univariate_normality", title: "Univariate Normality within Groups (Anderson-Darling)" },
 ];
 
 // Save one formatted table as a statistic under the given analytic. Shared by

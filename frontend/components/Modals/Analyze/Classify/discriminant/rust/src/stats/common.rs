@@ -7,6 +7,7 @@
 use nalgebra::{ DMatrix, SVD };
 use statrs::distribution::{ ChiSquared, ContinuousCDF, FisherSnedecor };
 use std::collections::HashMap;
+use std::sync::Mutex;
 use rayon::prelude::*;
 
 use crate::models::{ AnalysisData, DataRecord, DataValue, DiscriminantConfig };
@@ -14,6 +15,46 @@ use crate::models::{ AnalysisData, DataRecord, DataValue, DiscriminantConfig };
 /// Constants for numerical stability
 pub const EPSILON: f64 = 1e-10;
 pub const TOLERANCE_THRESHOLD: f64 = 0.001;
+
+/// Per-analysis warnings raised deep inside the statistics routines (singular
+/// matrices, fallbacks, excluded groups). Routines that still return a value push
+/// here instead of failing silently; `run_analysis` clears the sink at the start and
+/// forwards its contents to the ErrorCollector at the end, so they reach the user.
+/// A Mutex (not thread_local) so warnings raised inside rayon closures are kept.
+static ANALYSIS_WARNINGS: Mutex<Vec<(String, String)>> = Mutex::new(Vec::new());
+
+/// Clear the warning sink. Call at the start of every analysis.
+pub fn clear_analysis_warnings() {
+    if let Ok(mut w) = ANALYSIS_WARNINGS.lock() {
+        w.clear();
+    }
+}
+
+/// Record a warning. Identical (context, message) pairs are kept once, because the
+/// same routine is often re-run by several output tables in one analysis.
+pub fn push_analysis_warning(context: &str, message: String) {
+    if let Ok(mut w) = ANALYSIS_WARNINGS.lock() {
+        if !w.iter().any(|(c, m)| c == context && *m == message) {
+            w.push((context.to_string(), message));
+        }
+    }
+}
+
+/// Drain every recorded warning as (context, message).
+pub fn take_analysis_warnings() -> Vec<(String, String)> {
+    match ANALYSIS_WARNINGS.lock() {
+        Ok(mut w) => std::mem::take(&mut *w),
+        Err(_) => Vec::new(),
+    }
+}
+
+/// True when a square matrix is singular or numerically near-singular: its rank
+/// (singular values above EPSILON × the largest, the same rule as the Log
+/// Determinants table) is below its dimension.
+pub fn is_rank_deficient(matrix: &DMatrix<f64>) -> bool {
+    let p = matrix.nrows();
+    p > 0 && (calculate_rank_and_log_det(matrix).0 as usize) < p
+}
 
 /// Analyzed dataset structure to consolidate extracted data
 #[derive(Debug, Clone)]

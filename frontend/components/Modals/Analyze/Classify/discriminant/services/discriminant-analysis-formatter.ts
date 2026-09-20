@@ -2437,41 +2437,46 @@ export function transformDiscriminantResult(data: any): ResultJson {
       resultJson.tables.push(table);
     }
 
-    // Multivariate normality (Henze–Zirkler) on the full dataset — single row,
-    // matching R's MVN::mvn output (Test / HZ / p value / MVN).
+    // Multivariate normality (Henze–Zirkler) within each group — one row per
+    // group (Group / N / HZ / p value / MVN). LDA assumes normality within groups,
+    // so the former single pooled-data row (R's MVN::mvn(data)) is no longer shown.
     const mv = assumptions.multivariate_normality;
-    if (mv && typeof mv.hz === "number") {
+    if (mv && Array.isArray(mv.groups) && mv.groups.length > 0) {
       const table: Table = {
         key: "assumption_multivariate_normality",
-        title: "Multivariate Normality (Henze-Zirkler Test)",
+        title: "Multivariate Normality within Groups (Henze-Zirkler Test)",
         columnHeaders: [
-          { header: "Test", key: "test" },
+          { header: "Group", key: "group" },
+          { header: "N", key: "n" },
           { header: "HZ", key: "hz" },
           { header: "p value", key: "p_value" },
           { header: "MVN", key: "mvn" },
         ],
-        rows: [
-          {
-            rowHeader: ["Henze-Zirkler"],
-            hz: formatDisplayNumber(mv.hz),
-            p_value: formatDisplayNumber(mv.p_value),
-            mvn: mv.normal ? "YES" : "⚠ NO",
-          },
-        ],
+        rows: [],
       };
+      for (let i = 0; i < mv.groups.length; i++) {
+        const tested = mv.tested[i];
+        table.rows.push({
+          rowHeader: [mv.groups[i]],
+          n: String(mv.n[i]),
+          hz: tested ? formatDisplayNumber(mv.hz[i]) : "",
+          p_value: tested ? formatDisplayNumber(mv.p_value[i]) : "",
+          mvn: !tested ? "Not tested (n ≤ p)" : mv.normal[i] ? "YES" : "⚠ NO",
+        });
+      }
       (table as Table & { footer?: string }).footer = mv.note;
       resultJson.tables.push(table);
     }
 
-    // Univariate normality (Anderson–Darling) per predictor on the full dataset,
-    // matching R's MVN::mvn output (Test / Variable / Statistic / p value / Normality).
+    // Univariate normality (Anderson–Darling) per predictor within each group
+    // (Group / Variable / Statistic / p value / Normality).
     const uv = assumptions.univariate_normality;
     if (uv && Array.isArray(uv.variables) && uv.variables.length > 0) {
       const table: Table = {
         key: "assumption_univariate_normality",
-        title: "Univariate Normality (Anderson-Darling)",
+        title: "Univariate Normality within Groups (Anderson-Darling)",
         columnHeaders: [
-          { header: "Test", key: "test" },
+          { header: "Group", key: "group" },
           { header: "Variable", key: "variable" },
           { header: "Statistic", key: "statistic" },
           { header: "p value", key: "p_value" },
@@ -2481,7 +2486,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       };
       for (let i = 0; i < uv.variables.length; i++) {
         table.rows.push({
-          rowHeader: ["Anderson-Darling", uv.variables[i]],
+          rowHeader: [uv.groups[i], uv.variables[i]],
           statistic: formatDisplayNumber(uv.statistic[i]),
           p_value: formatDisplayNumber(uv.p_value[i]),
           normality: uv.normal[i] ? "YES" : "⚠ NO",

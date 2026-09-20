@@ -66,8 +66,9 @@ pub fn select_final_variables(stats: &StepwiseStatistics) -> Result<Vec<String>,
 }
 
 use super::core::{
-    calculate_between_groups_sscp, calculate_pooled_within_matrix, calculate_stepwise_statistics,
-    extract_analyzed_dataset, AnalyzedDataset, EPSILON,
+    calculate_between_groups_sscp, calculate_pooled_within_matrix,
+    calculate_pooled_within_matrix_no_epsilon, calculate_stepwise_statistics,
+    extract_analyzed_dataset, is_rank_deficient, push_analysis_warning, AnalyzedDataset, EPSILON,
 };
 
 /// Calculate eigenvalues and eigenvectors for discriminant functions
@@ -124,6 +125,21 @@ pub fn calculate_eigen_statistics(
         for j in 0..w_sscp.ncols(){
             w_sscp[(i,j)] *= df_within as f64;
         }
+    }
+
+    // A singular W is handled by the pseudo-inverse in solve_eigenvalue_problem, which
+    // still returns functions; they then ignore the redundant direction(s), so the user
+    // is told rather than shown ordinary-looking results.
+    // Checked on the unregularized matrix: the EPSILON ridge in pooled_within would
+    // otherwise lift a zero eigenvalue just enough to hide the singularity.
+    if is_rank_deficient(&calculate_pooled_within_matrix_no_epsilon(&dataset, &variables_to_use)) {
+        push_analysis_warning(
+            "canonical_functions",
+            format!(
+                "The within-groups matrix of [{}] is singular (a predictor is a linear combination of the others). The discriminant functions were computed with a pseudo-inverse; remove the redundant predictor(s) for interpretable coefficients.",
+                variables_to_use.join(", ")
+            ),
+        );
     }
 
     // Solve eigenvalue problem using RAW SSCP matrices (not divided by df).
