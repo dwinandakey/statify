@@ -208,6 +208,11 @@ pub fn run(
 
         let mut best_candidate_group_idx = None;
         let mut best_score_stat = 0.0;
+        // SPSS selects the entry candidate with the SMALLEST significance (p-value),
+        // not the largest score statistic. These coincide when every candidate has the
+        // same df (1), but diverge once a categorical group has df > 1 (its raw chi-square
+        // is not comparable to a df=1 candidate's), so p-value is the correct comparator.
+        let mut best_p_val = f64::INFINITY;
 
         // A. FORWARD ENTRY (Score Test - Group-aware)
         let current_x_for_score = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
@@ -237,8 +242,9 @@ pub fn run(
                     )
                 };
 
-                if p_val < config.p_entry && stat > best_score_stat {
+                if p_val < config.p_entry && p_val < best_p_val {
                     best_score_stat = stat;
+                    best_p_val = p_val;
                     best_candidate_group_idx = Some(g_idx);
                 }
             }
