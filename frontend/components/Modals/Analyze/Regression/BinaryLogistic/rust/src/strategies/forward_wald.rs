@@ -165,12 +165,14 @@ pub fn run(
         let mut best_candidate_group_idx: Option<usize> = None;
         let mut best_score_stat = 0.0;
         let mut _best_score_df = 1_i32;
+        // SPSS selects the VARIABLE GROUP with the SMALLEST significance (p-value)
+        // among those meeting the p_entry threshold, not the largest raw score statistic.
+        // For categorical vars (joint, multi-df score test), the chi-square is not
+        // comparable across groups with different df, so comparing p-values is required.
+        let mut best_p_val = f64::INFINITY;
 
         // ---------------------------------------------------------
         // A. FORWARD ENTRY: Score Test (Group-aware)
-        // SPSS selects the VARIABLE GROUP with the LARGEST Score statistic
-        // among those meeting the p_entry threshold.
-        // For categorical vars, this is a joint score test (multi-df).
         // ---------------------------------------------------------
         let design_matrix = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
 
@@ -205,8 +207,9 @@ pub fn run(
                 )
             };
 
-            if p_val < config.p_entry && stat > best_score_stat {
+            if p_val < config.p_entry && p_val < best_p_val {
                 best_score_stat = stat;
+                best_p_val = p_val;
                 _best_score_df = df;
                 best_candidate_group_idx = Some(g_idx);
             }
