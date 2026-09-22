@@ -41,6 +41,8 @@ const LOAF = setting("loaf", "false") === "true"; // also observe long-animation
 const RM_LEVELS = Number(setting("rm-levels", 5));
 const RM_MEASURES = Number(setting("rm-measures", 1));
 const RM_OPTIONS = String(setting("rm-options", "")).split(",").filter(Boolean); // checkbox ids in the Options dialog
+// Repeated Measures dataset variant: "" (default, datasets.cjs repeatedMeasuresRows) or "noise".
+const RM_DATA = String(setting("rm-data", ""));
 const sizesFor = (module) => (args[`sizes-${module}`] ? args[`sizes-${module}`].split(",").map(Number) : SIZES);
 
 const REPO = path.resolve(__dirname, "../../..");
@@ -136,7 +138,7 @@ function environment(browserVersion) {
         config: { BASE, MODULES, SIZES, CPUS, RUNS, RUN_TIMEOUT_MS, SETTLE_MS, HEADLESS },
         ...(CLEAN || LOAF || RM_LEVELS !== 5 || RM_MEASURES !== 1 || RM_OPTIONS.length ? {
             config2: {
-                CLEAN, LOAF, RM_LEVELS, RM_MEASURES, RM_OPTIONS, RM_BETWEEN,
+                CLEAN, LOAF, RM_LEVELS, RM_MEASURES, RM_OPTIONS, RM_BETWEEN, ...(RM_DATA ? { RM_DATA } : {}),
                 sizesPerModule: Object.fromEntries(MODULES.map((m) => [m, sizesFor(m)])),
             },
             buildId: (() => { try { return fs.readFileSync(path.join(REPO, "frontend/.next/BUILD_ID"), "utf8").trim(); } catch { return null; } })(),
@@ -443,7 +445,7 @@ function loafSummary(loafs, module, chunkTags) {
 
 async function runCell(browser, module, size, cpu, chunkTags) {
     const cell = `${module}-${size}-cpu${cpu}`;
-    const csvFile = writeDataset(module, size, DATA_DIR, { levels: RM_LEVELS, measures: RM_MEASURES });
+    const csvFile = writeDataset(module, size, DATA_DIR, { levels: RM_LEVELS, measures: RM_MEASURES, variant: RM_DATA });
     const context = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
     await context.addInitScript({ content: LOAF ? buildProbe(true) : PROBE });
     const page = await context.newPage();

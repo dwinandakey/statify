@@ -50,6 +50,11 @@ const DESIGNS = {
         csv: "repeated-measures-5000-L10-M1.csv", external: true, factor: "time", levels: 10,
         measures: [["score", Array.from({ length: 10 }, (_, i) => `t${i + 1}`)]], between: [], options: OPT,
     },
+    // Same with the nonsingular "noise" dataset (datasets.cjs repeatedMeasuresRowsNoise).
+    exp5000n: {
+        csv: "repeated-measures-5000-L10-M1-noise.csv", external: true, factor: "time", levels: 10,
+        measures: [["score", Array.from({ length: 10 }, (_, i) => `t${i + 1}`)]], between: [], options: OPT,
+    },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

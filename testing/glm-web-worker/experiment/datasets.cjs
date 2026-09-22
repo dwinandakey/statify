@@ -9,6 +9,12 @@
 //  - Repeated Measures: repeated-measures.performance.test.ts generator
 //    (5 within-subject levels t1..t5; column "group" is written but only used
 //    when the between factor is enabled), n = subjects.
+//  - Repeated Measures, variant "noise" (repeatedMeasuresRowsNoise): the same
+//    level and subject effects plus independent normal noise per cell from a
+//    seeded PRNG, so the error SSCP of the within-subject contrasts is
+//    nonsingular (the sin() term of the generator above gives within-subject
+//    variation of rank 2 only, and Mauchly / Multivariate Tests are then not
+//    computable). The earlier datasets are unchanged.
 const fs = require("fs");
 const path = require("path");
 
@@ -67,24 +73,50 @@ function repeatedMeasuresRows(n, L = 5, M = 1) {
     return { columns: [...within, "group"], rows };
 }
 
+// Variant "noise": y = 10 + 1.5·l + subjectEffect + 3·m + e, with
+// subjectEffect = (s mod 50)·0.1 as above and e ~ N(0, 0.7²) independent per
+// subject and cell (mulberry32 + Box–Muller, fixed seed), 6 decimals.
+function repeatedMeasuresRowsNoise(n, L = 5, M = 1, seed = 20260927) {
+    const rand = mulberry32(seed);
+    const normal = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    const within = repeatedMeasuresColumns(L, M);
+    const rows = [];
+    for (let s = 0; s < n; s += 1) {
+        const subjectEffect = (s % 50) * 0.1;
+        const row = {};
+        within.forEach((col, i) => {
+            const l = i % L, m = Math.floor(i / L);
+            row[col] = Number((10 + l * 1.5 + subjectEffect + m * 3 + 0.7 * normal()).toFixed(6));
+        });
+        row.group = s % 2 === 0 ? "G1" : "G2";
+        rows.push(row);
+    }
+    return { columns: [...within, "group"], rows };
+}
+
 function toCsv({ columns, rows }) {
     // Full double precision (shortest round-trip form) so the imported values
     // equal the generator's values.
     return [columns.join(","), ...rows.map((r) => columns.map((c) => String(r[c])).join(","))].join("\n") + "\n";
 }
 
-// rm = { levels, measures } for Repeated Measures; the default file name is
-// unchanged for the first experiment's design (5 levels, 1 measure).
+// rm = { levels, measures, variant } for Repeated Measures; the default file
+// name is unchanged for the first experiment's design (5 levels, 1 measure).
+// variant "noise" uses repeatedMeasuresRowsNoise and adds "-noise" to the name.
 function writeDataset(module, n, dir, rm = { levels: 5, measures: 1 }) {
-    const data = module === "multivariate" ? multivariateRows(n) : repeatedMeasuresRows(n, rm.levels, rm.measures);
-    const suffix = module === "repeated-measures" && (rm.levels !== 5 || rm.measures !== 1) ? `-L${rm.levels}-M${rm.measures}` : "";
+    const noise = module === "repeated-measures" && rm.variant === "noise";
+    const data = module === "multivariate"
+        ? multivariateRows(n)
+        : noise ? repeatedMeasuresRowsNoise(n, rm.levels, rm.measures) : repeatedMeasuresRows(n, rm.levels, rm.measures);
+    const suffix = module === "repeated-measures" && (rm.levels !== 5 || rm.measures !== 1 || noise)
+        ? `-L${rm.levels}-M${rm.measures}${noise ? "-noise" : ""}` : "";
     const file = path.join(dir, `${module}-${n}${suffix}.csv`);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(file, toCsv(data));
     return file;
 }
 
-module.exports = { multivariateRows, repeatedMeasuresRows, repeatedMeasuresColumns, toCsv, writeDataset };
+module.exports = { multivariateRows, repeatedMeasuresRows, repeatedMeasuresRowsNoise, repeatedMeasuresColumns, toCsv, writeDataset };
 
 if (require.main === module) {
     const dir = process.argv[2] || path.join(__dirname, "data");
