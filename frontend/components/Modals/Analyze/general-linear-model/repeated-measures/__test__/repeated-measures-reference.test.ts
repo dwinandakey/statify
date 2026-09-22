@@ -30,6 +30,8 @@ type Design = {
     between: string[];
     options: Record<string, boolean>;
     emmeans?: Record<string, unknown>;
+    /** Contrast dialog type (default Polynomial, as the SPSS syntax). */
+    contrast?: string;
 };
 
 const OPT = { DescStats: true, EstEffectSize: true, ObsPower: true };
@@ -42,6 +44,8 @@ const DESIGNS: Record<string, Design> = {
         csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: { ...OPT, HomogenTest: true, ResSscpMat: true },
         emmeans: { TargetList: ["(OVERALL)", "metode", "sesi", "metode*sesi"], CompMainEffect: true, ConfiIntervalMethod: "bonferroni" },
     },
+    // spss/rm_d.sps: the data of (b) with /WSFACTOR=waktu 4 Repeated.
+    d: { csv: "rm_b.csv", factor: "waktu", levels: 4, measures: [["skor", ["w1", "w2", "w3", "w4"]]], between: ["kelompok"], options: OPT, contrast: "Repeated" },
 };
 
 const readCsv = (file: string): Row[] => {
@@ -59,7 +63,7 @@ const def = (name: string, columnIndex: number, nominal = false) => ({
 });
 
 /** Payload in the layout of repeated-measures-analysis.ts (factors_data[f][s]). */
-function payload(d: Design, factorList: string[] | null = [`${d.factor}(Polynomial)`]) {
+function payload(d: Design, factorList: string[] | null = [`${d.factor}(${d.contrast ?? "Polynomial"})`]) {
     const rows = readCsv(d.csv);
     const encoded: string[] = [];
     const cols: string[] = [];
@@ -277,5 +281,37 @@ describe("Tests of Within-Subjects Contrasts: contrast type", () => {
     });
     it("Repeated is still selectable", () => {
         expect(labels(["sesi (repeated, Ref: Last)"])).toEqual(["Level 1 vs. Level 2", "Level 2 vs. Level 3"]);
+    });
+});
+
+// spss/rm_e.sps: two within-subjects factors (kondisi 2 x waktu 3). The earlier
+// modules did not match SPSS, so the design is blocked: the analysis must stop
+// with a readable message and no tables (the SPSS values stay in
+// fixture.spss_blocked.e for a later implementation).
+describe("Two within-subjects factors (dataset e): blocked", () => {
+    it("stops with a readable message and no computed tables", () => {
+        const rows = readCsv("rm_e.csv");
+        const cols = ["k1w1", "k1w2", "k1w3", "k2w1", "k2w2", "k2w3"];
+        const tuples = [[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3]];
+        const encoded = cols.map((c, i) => `${c}_(${tuples[i].join(",")},skor)`);
+        const cfg = JSON.parse(JSON.stringify(fixture.config_template));
+        cfg.main.SubVar = encoded;
+        cfg.main.FactorsVar = null;
+        cfg.model.DefFactors = "kondisi;waktu";
+        cfg.model.BetSubVar = [];
+        cfg.options = { ...cfg.options, ...OPT };
+        const subject = rows.map((r) => [Object.fromEntries(cols.map((c, i) => [encoded[i], r[c]]))]);
+        const a = new RepeatedMeasureAnalysis(subject, [], [], encoded.map((n, i) => [def(n, i)]), [], [], cfg);
+        try {
+            const results = a.get_formatted_results();
+            const errors = String(a.get_all_errors());
+            expect(errors).toContain(fixture.spss_blocked.e.reason);
+            for (const table of ["mauchly_test", "multivariate_tests", "tests_of_within_subjects_effects", "tests_of_within_subjects_contrasts", "tests_of_between_subjects_effects", "descriptive_statistics"]) {
+                expect(get(results, table) ?? null).toBeNull();
+            }
+            expect(fixture.spss_blocked.e.values.length).toBeGreaterThan(0);
+        } finally {
+            a.free();
+        }
     });
 });

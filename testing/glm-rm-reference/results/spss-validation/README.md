@@ -104,6 +104,6 @@ Sig. Mauchly memakai cabang singular (tidak berubah), sedangkan Bartlett, Residu
 ## Belum dicakup
 
 - **Univariate Tests** (target between) dan **Multivariate Tests** (target within) di bawah EM Means belum dibuat. Nilai F, Sig., η², dan power-nya sama dengan tabel utama; SS tabel univariat SPSS = SS between / k.
-- **Kontras Repeated** (bawaan dialog Statify) belum divalidasi terhadap SPSS. Untuk itu perlu sintaks dengan `/WSFACTOR=… Repeated`.
-- **Bawaan dialog tetap None** (kontras repeated), sedangkan bawaan SPSS Polynomial. Pengguna mengonfirmasi bahwa None sudah benar (sesuai website yang di-deploy), sehingga eksperimen tidak dijalankan ulang.
-- Desain dengan lebih dari satu faktor within tetap memakai modul lama. Tidak ada keluaran SPSS untuknya.
+- Kontras Repeated kemudian divalidasi dengan `spss/rm_d.sps` (skala Between disesuaikan); lihat `../spss-validation-de/README.md`.
+- Bawaan dialog kemudian diubah menjadi **Polynomial** atas permintaan pengguna (`../contrast-default/README.md`).
+- Desain dengan lebih dari satu faktor within tidak cocok dengan SPSS (`spss/rm_e.sps`) dan **diblokir** di UI dan mesin (`../spss-validation-de/README.md`).

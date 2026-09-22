@@ -268,7 +268,9 @@ impl RmModel {
             .filter(|s| !s.is_empty())
             .collect();
         if factor_names.len() > 1 {
-            return Err("Designs with more than one within-subjects factor are not supported yet".to_string());
+            return Err(
+                "Designs with more than one within-subjects factor are not supported in this version".to_string()
+            );
         }
         if within.measures.is_empty() {
             return Err("No within-subjects variables".to_string());
@@ -479,10 +481,17 @@ impl RmModel {
         &m.y * helmert(self.k).transpose()
     }
 
-    /// Between-subjects transform T = Σ_j y_j / √k (n × 1).
+    /// Between-subjects transform "Average" (n × 1), scaled as SPSS does for
+    /// the chosen contrast: T = Σ_j y_j / √k with Polynomial (orthonormal)
+    /// contrasts, the mean Σ_j y_j / k with Repeated contrasts (SPSS 27,
+    /// spss/rm_d.sps: between-subjects SS = SS(Polynomial) / k). F, Sig. and
+    /// effect sizes do not depend on the scale.
     pub fn average(&self, m: &MeasureData) -> DMatrix<f64> {
-        let root = (self.k as f64).sqrt();
-        DMatrix::from_fn(self.n, 1, |i, _| m.y.row(i).sum() / root)
+        let scale = match self.contrast {
+            Ok(WithinContrast::Repeated) => self.k as f64,
+            _ => (self.k as f64).sqrt(),
+        };
+        DMatrix::from_fn(self.n, 1, |i, _| m.y.row(i).sum() / scale)
     }
 
     /// (source name, columns) of the within-subjects effects: the factor

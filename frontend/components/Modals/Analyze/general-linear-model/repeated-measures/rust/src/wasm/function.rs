@@ -21,16 +21,16 @@ pub fn run_analysis(
     // contrasts, univariate tests and descriptives. It reads the
     // between-subjects factors and covariates from config.main
     // (FactorsVar, Covariates).
-    let has_between_design = config.main.factors_var.as_ref().map_or(false, |f| !f.is_empty())
-        || config.main.covariates.as_ref().map_or(false, |c| !c.is_empty());
-    // Within-only designs use the same model when it can be built (one
-    // within-subjects factor); otherwise (several within-subjects factors)
-    // they keep the earlier per-measure modules.
+    // Every design uses this model. When it cannot be built (e.g. more than
+    // one within-subjects factor, validated against SPSS as not supported by
+    // the earlier modules) the analysis stops after the within-subjects
+    // factors table with the reason in the Errors Logs, instead of falling
+    // back to the earlier per-measure modules.
     let mut rm_model: Option<RmModel> = None;
     let mut rm_model_failed = false;
-    if !has_between_design {
-        if let Ok(model) = RmModel::build(data, config) {
-            executed_functions.push("build_rm_model".to_string());
+    executed_functions.push("build_rm_model".to_string());
+    match RmModel::build(data, config) {
+        Ok(model) => {
             if model.excluded > 0 {
                 error_collector.add_error(
                     "build_rm_model",
@@ -39,22 +39,9 @@ pub fn run_analysis(
             }
             rm_model = Some(model);
         }
-    } else {
-        executed_functions.push("build_rm_model".to_string());
-        match RmModel::build(data, config) {
-            Ok(model) => {
-                if model.excluded > 0 {
-                    error_collector.add_error(
-                        "build_rm_model",
-                        &format!("{} subject(s) with missing values were excluded (listwise).", model.excluded)
-                    );
-                }
-                rm_model = Some(model);
-            }
-            Err(e) => {
-                rm_model_failed = true;
-                error_collector.add_error("build_rm_model", &e);
-            }
+        Err(e) => {
+            rm_model_failed = true;
+            error_collector.add_error("build_rm_model", &e);
         }
     }
 
@@ -68,6 +55,31 @@ pub fn run_analysis(
         Err(e) => {
             error_collector.add_error("calculate_within_subjects_factors", &e);
         }
+    }
+    if rm_model_failed {
+        return Ok(Some(RepeatedMeasureResult {
+            within_subjects_factors,
+            descriptive_statistics: None,
+            bartlett_test: None,
+            homogeneity_tests: None,
+            multivariate_tests: None,
+            mauchly_test: None,
+            tests_of_within_subjects_effects: None,
+            within_subjects_multivariate: None,
+            tests_of_within_subjects_contrasts: None,
+            tests_of_between_subjects_effects: None,
+            parameter_estimates: None,
+            general_estimable_function: None,
+            within_subjects_sscp: None,
+            between_subjects_sscp: None,
+            residual_matrix: None,
+            sscp_matrix: None,
+            univariate_tests: None,
+            posthoc_tests: None,
+            emmeans: None,
+            emmeans_pairwise: None,
+            executed_functions,
+        }));
     }
 
     // Step 2: Descriptive statistics if requested in options

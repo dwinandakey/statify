@@ -29,9 +29,9 @@ from read_xlsx import read_workbook  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(HERE, "..", "spss-output")
-FILES = ["rm_gambar51.xlsx", "rm_a.xlsx", "rm_b.xlsx", "rm_c.xlsx"]
-DATASET = {"gambar51": "gambar51", "rm_a": "a", "rm_b": "b", "rm_c": "c"}
-OWN_FILE = {"gambar51": "rm_gambar51.xlsx", "a": "rm_a.xlsx", "b": "rm_b.xlsx", "c": "rm_c.xlsx"}
+FILES = ["rm_gambar51.xlsx", "rm_a.xlsx", "rm_b.xlsx", "rm_c.xlsx", "rm_d.xlsx", "rm_e.xlsx"]
+DATASET = {"gambar51": "gambar51", "rm_a": "a", "rm_b": "b", "rm_c": "c", "rm_d": "d", "rm_e": "e"}
+OWN_FILE = {"gambar51": "rm_gambar51.xlsx", "a": "rm_a.xlsx", "b": "rm_b.xlsx", "c": "rm_c.xlsx", "d": "rm_d.xlsx", "e": "rm_e.xlsx"}
 
 TITLES = [
     "Within-Subjects Factors", "Between-Subjects Factors", "Descriptive Statistics",
@@ -256,10 +256,13 @@ def slot_values(ds, file, tables):
                         add("between_effects", measure, source, SS.get(f, f), v, title)
         elif main and title == "Tests of Within-Subjects Contrasts":
             for r in t["rows"]:
-                if len(r["labels"]) == 3:
-                    source, measure, contrast = r["labels"]
+                if t["measure"]:
+                    # One measure: Source, then one contrast column per
+                    # within-subjects factor ("Linear | Linear" for two).
+                    source, measure = r["labels"][0], t["measure"]
+                    contrast = " | ".join(x for x in r["labels"][1:] if x)
                 else:
-                    (source, contrast), measure = r["labels"], t["measure"]
+                    source, measure, contrast = r["labels"]
                 for f, v in r["values"].items():
                     if v is not None:
                         add("within_contrasts", measure, f"{source} | {contrast}", SS.get(f, f), v, title)

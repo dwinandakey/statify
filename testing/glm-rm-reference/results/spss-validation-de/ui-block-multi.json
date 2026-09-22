@@ -1,0 +1,8 @@
+{
+  "base": "http://localhost:3101",
+  "firstFactorAdded": true,
+  "secondFactorAdded": false,
+  "messageShown": true,
+  "message": "Designs with more than one within-subjects factor are not supported in this version.",
+  "blocked": true
+}

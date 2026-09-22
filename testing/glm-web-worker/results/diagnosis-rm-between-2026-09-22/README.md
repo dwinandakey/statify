@@ -52,9 +52,9 @@ Ditambahkan setelah diagnosis. Isi diagnosis di atas tidak diubah. Rincian dan b
 Validasi terhadap SPSS 27 juga menemukan dan memperbaiki: Sig. Mauchly tanpa koreksi ω₂, Likelihood Ratio Bartlett, pilihan kontras dialog yang diabaikan (kini None/Repeated = kontras repeated, dan Polynomial), sub-tabel Multivariate untuk > 1 measure, serta bagian Covariance/Correlation Residual SSCP.
 
 Batasan yang masih ada:
-- Desain dengan lebih dari satu faktor within memakai modul lama (tanpa faktor between) atau ditolak dengan pesan (dengan faktor between).
+- Desain dengan lebih dari satu faktor within **diblokir** di dialog Define dan di mesin, karena modul lama tidak cocok dengan SPSS (`testing/glm-rm-reference/results/spss-validation-de/README.md`).
 - Model kustom diabaikan (selalu faktorial penuh).
-- Kontras within: Polynomial (tervalidasi SPSS), serta None (bawaan dialog) dan Repeated yang memberi kontras repeated (belum divalidasi SPSS). Jenis lain tidak ditawarkan di dialog.
+- Kontras within: Polynomial (bawaan, seperti SPSS) dan Repeated, keduanya tervalidasi SPSS. Jenis lain tidak ditawarkan di dialog.
 - Univariate/Multivariate Tests di bawah EM Means belum dibuat.
 - Pairwise untuk target interaksi belum ada.
 

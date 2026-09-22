@@ -37,7 +37,12 @@ const LAYOUT = {
     a: { measures: ["cemas", "stres"], factor: "waktu", between: null },
     b: { measures: ["skor"], factor: "waktu", between: "kelompok" },
     c: { measures: ["nilai"], factor: "sesi", between: "metode" },
+    // (d): the data of (b) with Repeated contrasts (spss/rm_d.sps).
+    d: { measures: ["skor"], factor: "waktu", between: "kelompok" },
 };
+// (e): two within-subjects factors; blocked in Statify (does not match SPSS),
+// its SPSS values are kept as reference in "spss_blocked".
+const BLOCKED = { e: "Designs with more than one within-subjects factor are not supported in this version" };
 const CORR = ["Sphericity Assumed", "Greenhouse-Geisser", "Huynh-Feldt", "Lower-bound"];
 const TESTS = ["Pillai's Trace", "Wilks' Lambda", "Hotelling's Trace", "Roy's Largest Root"];
 
@@ -119,6 +124,10 @@ const fixture = {
         && !(e.table === "levene" && e.dataset !== "c"))
         .concat(afex.filter((e) => datasets.includes(e.dataset))),
     spss,
+    spss_blocked: Object.fromEntries(Object.entries(BLOCKED).map(([ds, reason]) => [ds, {
+        reason,
+        values: [...fromSpss.values()].filter((e) => e.dataset === ds),
+    }])),
 };
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(fixture, null, 2) + "\n");

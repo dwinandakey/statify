@@ -10,7 +10,8 @@
     "gambar51",
     "a",
     "b",
-    "c"
+    "c",
+    "d"
   ],
   "config_template": {
     "main": {
@@ -10857,6 +10858,1742 @@
       "spss_source": "SPSS 27, spss-output/rm_c.xlsx: Multivariate Tests"
     },
     {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Mauchly's W",
+      "value": 0.8412827353021015,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Approx. Chi-Square",
+      "value": 3.40854208674207,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "df",
+      "value": 5,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Sig.",
+      "value": 0.6376335284833365,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Greenhouse-Geisser",
+      "value": 0.8946909662383676,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Huynh-Feldt",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "mauchly",
+      "measure": "skor",
+      "source": "waktu",
+      "field": "Lower-bound",
+      "value": 0.3333333333333333,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Mauchly's Test of Sphericity"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": 80.11458333334815,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": 26.70486111111605,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "F",
+      "value": 2.3730330145021363,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Sig.",
+      "value": 0.0786395818639952,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Partial Eta Squared",
+      "value": 0.10152867251031364,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Noncent. Parameter",
+      "value": 7.1190990435064085,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Observed Power",
+      "value": 0.5682838184928168,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": 80.11458333334815,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": 2.684072898715103,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": 29.84813988163285,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "F",
+      "value": 2.3730330145021363,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Sig.",
+      "value": 0.08632436283549028,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Partial Eta Squared",
+      "value": 0.10152867251031364,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Noncent. Parameter",
+      "value": 6.369393601981388,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Observed Power",
+      "value": 0.534382851455541,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": 80.11458333334815,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": 26.70486111111605,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "F",
+      "value": 2.3730330145021363,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Sig.",
+      "value": 0.0786395818639952,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Partial Eta Squared",
+      "value": 0.10152867251031364,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Noncent. Parameter",
+      "value": 7.1190990435064085,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Observed Power",
+      "value": 0.5682838184928168,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": 80.11458333334815,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": 80.11458333334815,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "F",
+      "value": 2.373033014502136,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Sig.",
+      "value": 0.1383811678583208,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Partial Eta Squared",
+      "value": 0.10152867251031364,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Noncent. Parameter",
+      "value": 2.3730330145021363,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Observed Power",
+      "value": 0.31248743559536796,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": 140.16666666666626,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": 6,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": 23.361111111111043,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "F",
+      "value": 2.0759024992286275,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "Sig.",
+      "value": 0.06857979900321443,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "Partial Eta Squared",
+      "value": 0.16506986272801955,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "Noncent. Parameter",
+      "value": 12.455414995371765,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Sphericity Assumed",
+      "field": "Observed Power",
+      "value": 0.7069632870561613,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": 140.16666666666626,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": 5.368145797430206,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": 26.110815904770263,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "F",
+      "value": 2.0759024992286275,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "Sig.",
+      "value": 0.07739633720315404,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "Partial Eta Squared",
+      "value": 0.16506986272801955,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "Noncent. Parameter",
+      "value": 11.143747277109018,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Greenhouse-Geisser",
+      "field": "Observed Power",
+      "value": 0.6681003097937472,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": 140.16666666666626,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": 6,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": 23.361111111111043,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "F",
+      "value": 2.0759024992286275,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "Sig.",
+      "value": 0.06857979900321443,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "Partial Eta Squared",
+      "value": 0.16506986272801955,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "Noncent. Parameter",
+      "value": 12.455414995371765,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Huynh-Feldt",
+      "field": "Observed Power",
+      "value": 0.7069632870561613,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": 140.16666666666626,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": 2,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": 70.08333333333313,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "F",
+      "value": 2.0759024992286275,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "Sig.",
+      "value": 0.15042722471151895,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "Partial Eta Squared",
+      "value": 0.16506986272801955,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "Noncent. Parameter",
+      "value": 4.151804998457255,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "waktu * kelompok",
+      "correction": "Lower-bound",
+      "field": "Observed Power",
+      "value": 0.3782655085632767,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": 708.9687499999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": 63,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": 11.25347222222222,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": 708.9687499999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": 56.365530873017164,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": 12.578055045683806,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": 708.9687499999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": 63,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": 11.25347222222222,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": 708.9687499999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": 21,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "within_effects",
+      "measure": "skor",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": 33.760416666666664,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "SS",
+      "value": 77208.39843749997,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "df",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "Mean Square",
+      "value": 77208.39843749997,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "F",
+      "value": 2202.092153429889,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": 9.50150675108175e-23,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "Partial Eta Squared",
+      "value": 0.9905536979348336,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "Noncent. Parameter",
+      "value": 2202.092153429889,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Intercept",
+      "field": "Observed Power",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "SS",
+      "value": 36.74999999999993,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "df",
+      "value": 2,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "Mean Square",
+      "value": 18.374999999999964,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "F",
+      "value": 0.5240808530956539,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "Sig.",
+      "value": 0.5996426951210139,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "Partial Eta Squared",
+      "value": 0.047539641633568726,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "Noncent. Parameter",
+      "value": 1.0481617061913078,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "kelompok",
+      "field": "Observed Power",
+      "value": 0.12479851780396722,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Error",
+      "field": "SS",
+      "value": 736.2890625,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Error",
+      "field": "df",
+      "value": 21,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "between_effects",
+      "measure": "skor",
+      "source": "Error",
+      "field": "Mean Square",
+      "value": 35.06138392857143,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Between-Subjects Effects"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Value",
+      "value": 0.276076959387707,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "F",
+      "value": 2.415,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Error df",
+      "value": 19,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Sig.",
+      "value": 0.09823296221431813,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Partial Eta Squared",
+      "value": 0.276076959387707,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Noncent. Parameter",
+      "value": 7.245883794401446,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Observed Power",
+      "value": 0.5115220816872663,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Value",
+      "value": 0.7239230406122931,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "F",
+      "value": 2.415,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Error df",
+      "value": 19,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Sig.",
+      "value": 0.09823296221431813,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Partial Eta Squared",
+      "value": 0.27607695938770693,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Noncent. Parameter",
+      "value": 7.2458837944014425,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Observed Power",
+      "value": 0.5115220816872661,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Value",
+      "value": 0.381362304968497,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "F",
+      "value": 2.415,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Error df",
+      "value": 19,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Sig.",
+      "value": 0.09823296221431813,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Partial Eta Squared",
+      "value": 0.276076959387707,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Noncent. Parameter",
+      "value": 7.245883794401446,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Observed Power",
+      "value": 0.5115220816872663,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Value",
+      "value": 0.381362304968497,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "F",
+      "value": 2.415,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Error df",
+      "value": 19,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Sig.",
+      "value": 0.09823296221431813,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Partial Eta Squared",
+      "value": 0.276076959387707,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Noncent. Parameter",
+      "value": 7.245883794401446,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Observed Power",
+      "value": 0.5115220816872663,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Value",
+      "value": 0.41078947344133415,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "F",
+      "value": 1.7232433613054092,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": 6,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Error df",
+      "value": 40,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Sig.",
+      "value": 0.14064911033319286,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Partial Eta Squared",
+      "value": 0.20539473672066708,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Noncent. Parameter",
+      "value": 10.339460167832454,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Pillai's Trace",
+      "field": "Observed Power",
+      "value": 0.5826478927018985,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Value",
+      "value": 0.6306278328438065,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "F",
+      "value": 1.642,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": 6,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Error df",
+      "value": 38,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Sig.",
+      "value": 0.1624128485601784,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Partial Eta Squared",
+      "value": 0.20587920764923517,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Noncent. Parameter",
+      "value": 9.851662323954516,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Wilks' Lambda",
+      "field": "Observed Power",
+      "value": 0.5545345540046851,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Value",
+      "value": 0.5200450151274569,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "F",
+      "value": 1.5601350453823708,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": 6,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Error df",
+      "value": 36,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Sig.",
+      "value": 0.18717726197751805,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Partial Eta Squared",
+      "value": 0.2063633831958174,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Noncent. Parameter",
+      "value": 9.360810272294222,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Hotelling's Trace",
+      "field": "Observed Power",
+      "value": 0.5253499473264862,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Value",
+      "value": 0.304015675388622,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "F",
+      "value": 2.027,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": 3,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Error df",
+      "value": 20,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Sig.",
+      "value": 0.142512853983839,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Partial Eta Squared",
+      "value": 0.23313805280601357,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Noncent. Parameter",
+      "value": 6.080313507772441,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
+      "dataset": "d",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu * kelompok | Roy's Largest Root",
+      "field": "Observed Power",
+      "value": 0.4417713495917889,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Multivariate Tests"
+    },
+    {
       "dataset": "gambar51",
       "table": "within_contrasts",
       "measure": "anjing",
@@ -14045,6 +15782,4183 @@
       "value": 1,
       "status": "SPSS 27",
       "spss_source": "SPSS 27, spss-output/rm_c.xlsx: Residual SSCP Matrix"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "1",
+      "field": "Mean",
+      "value": 51.875,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "1",
+      "field": "Std. Deviation",
+      "value": 7.772432970808709,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "1",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "2",
+      "field": "Mean",
+      "value": 57.875,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "2",
+      "field": "Std. Deviation",
+      "value": 6.937218462755804,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "2",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "3",
+      "field": "Mean",
+      "value": 58.37499999999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "3",
+      "field": "Std. Deviation",
+      "value": 7.558108228915489,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "3",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "Total",
+      "field": "Mean",
+      "value": 56.04166666666666,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "Total",
+      "field": "Std. Deviation",
+      "value": 7.714915912453738,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w1",
+      "source": "Total",
+      "field": "N",
+      "value": 24,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "1",
+      "field": "Mean",
+      "value": 54.75,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "1",
+      "field": "Std. Deviation",
+      "value": 8.924284685220274,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "1",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "2",
+      "field": "Mean",
+      "value": 57.49999999999999,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "2",
+      "field": "Std. Deviation",
+      "value": 4.242640687119285,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "2",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "3",
+      "field": "Mean",
+      "value": 55.75,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "3",
+      "field": "Std. Deviation",
+      "value": 5.063877678504599,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "3",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "Total",
+      "field": "Mean",
+      "value": 56,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "Total",
+      "field": "Std. Deviation",
+      "value": 6.234546111577914,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w2",
+      "source": "Total",
+      "field": "N",
+      "value": 24,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "1",
+      "field": "Mean",
+      "value": 55.375,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "1",
+      "field": "Std. Deviation",
+      "value": 6.523309852258394,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "1",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "2",
+      "field": "Mean",
+      "value": 56.00000000000001,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "2",
+      "field": "Std. Deviation",
+      "value": 3.3380918415851206,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "2",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "3",
+      "field": "Mean",
+      "value": 58.375,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "3",
+      "field": "Std. Deviation",
+      "value": 5.629958132298017,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "3",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "Total",
+      "field": "Mean",
+      "value": 56.583333333333336,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "Total",
+      "field": "Std. Deviation",
+      "value": 5.26610710657987,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w3",
+      "source": "Total",
+      "field": "N",
+      "value": 24,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "1",
+      "field": "Mean",
+      "value": 57.875,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "1",
+      "field": "Std. Deviation",
+      "value": 9.716517600751533,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "1",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "2",
+      "field": "Mean",
+      "value": 59,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "2",
+      "field": "Std. Deviation",
+      "value": 5.631543812693436,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "2",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "3",
+      "field": "Mean",
+      "value": 57.87500000000001,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "3",
+      "field": "Std. Deviation",
+      "value": 4.6425824094539685,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "3",
+      "field": "N",
+      "value": 8,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "Total",
+      "field": "Mean",
+      "value": 58.25,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "Total",
+      "field": "Std. Deviation",
+      "value": 6.726004046592792,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "descriptives",
+      "measure": "w4",
+      "source": "Total",
+      "field": "N",
+      "value": 24,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Descriptive Statistics"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "SS",
+      "value": 0.04166666668606922,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "df",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "Mean Square",
+      "value": 0.04166666668606922,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "F",
+      "value": 0.0015122056606739316,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "Sig.",
+      "value": 0.9693477320929397,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "Partial Eta Squared",
+      "value": 0.00007200460832845821,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "Noncent. Parameter",
+      "value": 0.0015122056606739316,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 1 vs. Level 2",
+      "field": "Observed Power",
+      "value": 0.050158046166193127,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "SS",
+      "value": 8.16666666668607,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "df",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "Mean Square",
+      "value": 8.16666666668607,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "F",
+      "value": 0.5200909780148824,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "Sig.",
+      "value": 0.4787555754078259,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "Partial Eta Squared",
+      "value": 0.024167694204741606,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "Noncent. Parameter",
+      "value": 0.5200909780148824,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 2 vs. Level 3",
+      "field": "Observed Power",
+      "value": 0.10585464421215196,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "SS",
+      "value": 66.66666666668607,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "df",
+      "value": 1,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "Mean Square",
+      "value": 66.66666666668607,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "F",
+      "value": 3.1963470319644003,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "Sig.",
+      "value": 0.08824382191681525,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "Partial Eta Squared",
+      "value": 0.13210039630122228,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "Noncent. Parameter",
+      "value": 3.1963470319644007,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu | Level 3 vs. Level 4",
+      "field": "Observed Power",
+      "value": 0.3999263488959033,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "SS",
+      "value": 122.333333333333,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "df",
+      "value": 2,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "Mean Square",
+      "value": 61.1666666666665,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "F",
+      "value": 2.219917908835596,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "Sig.",
+      "value": 0.13347575959346386,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "Partial Eta Squared",
+      "value": 0.17452297449919713,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "Noncent. Parameter",
+      "value": 4.439835817671192,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 1 vs. Level 2",
+      "field": "Observed Power",
+      "value": 0.40142779467311973,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "SS",
+      "value": 68.08333333333286,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "df",
+      "value": 2,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "Mean Square",
+      "value": 34.04166666666643,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "F",
+      "value": 2.1679302501895226,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "Sig.",
+      "value": 0.13934075961268577,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "Partial Eta Squared",
+      "value": 0.17113531629660564,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "Noncent. Parameter",
+      "value": 4.335860500379045,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 2 vs. Level 3",
+      "field": "Observed Power",
+      "value": 0.39310282795567286,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "SS",
+      "value": 57.33333333333284,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "df",
+      "value": 2,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "Mean Square",
+      "value": 28.66666666666642,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "F",
+      "value": 1.3744292237442803,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "Sig.",
+      "value": 0.27482348079060553,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "Partial Eta Squared",
+      "value": 0.11574697173620369,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "Noncent. Parameter",
+      "value": 2.7488584474885607,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "waktu * kelompok | Level 3 vs. Level 4",
+      "field": "Observed Power",
+      "value": 0.26244334991444795,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 1 vs. Level 2",
+      "field": "SS",
+      "value": 578.625,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 1 vs. Level 2",
+      "field": "df",
+      "value": 21,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 1 vs. Level 2",
+      "field": "Mean Square",
+      "value": 27.553571428571427,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 2 vs. Level 3",
+      "field": "SS",
+      "value": 329.75,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 2 vs. Level 3",
+      "field": "df",
+      "value": 21,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 2 vs. Level 3",
+      "field": "Mean Square",
+      "value": 15.702380952380953,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 3 vs. Level 4",
+      "field": "SS",
+      "value": 438,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 3 vs. Level 4",
+      "field": "df",
+      "value": 21,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
+    },
+    {
+      "dataset": "d",
+      "table": "within_contrasts",
+      "measure": "skor",
+      "source": "Error(waktu) | Level 3 vs. Level 4",
+      "field": "Mean Square",
+      "value": 20.857142857142858,
+      "status": "SPSS 27",
+      "spss_source": "SPSS 27, spss-output/rm_d.xlsx: Tests of Within-Subjects Contrasts"
     }
-  ]
+  ],
+  "spss_blocked": {
+    "e": {
+      "reason": "Designs with more than one within-subjects factor are not supported in this version",
+      "values": [
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w1",
+          "source": "",
+          "field": "Mean",
+          "value": 38.93333333333334,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w1",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 4.096456075799224,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w1",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w2",
+          "source": "",
+          "field": "Mean",
+          "value": 41.26666666666667,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w2",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 4.651676605063518,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w2",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w3",
+          "source": "",
+          "field": "Mean",
+          "value": 42.73333333333333,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w3",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 4.934813162864522,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k1w3",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w1",
+          "source": "",
+          "field": "Mean",
+          "value": 40.733333333333334,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w1",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 4.043807729403186,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w1",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w2",
+          "source": "",
+          "field": "Mean",
+          "value": 45.199999999999996,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w2",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 5.734606724590126,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w2",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w3",
+          "source": "",
+          "field": "Mean",
+          "value": 48.2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w3",
+          "source": "",
+          "field": "Std. Deviation",
+          "value": 3.3209293019532087,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "descriptives",
+          "measure": "k2w3",
+          "source": "",
+          "field": "N",
+          "value": 15,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Descriptive Statistics"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Value",
+          "value": 0.7298681148176883,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "F",
+          "value": 37.827,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Hypothesis df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Error df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Sig.",
+          "value": 0.000025174066540402193,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176883,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Noncent. Parameter",
+          "value": 37.82653647329125,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Pillai's Trace",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Value",
+          "value": 0.2701318851823117,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "F",
+          "value": 37.827,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Hypothesis df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Error df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Sig.",
+          "value": 0.00002517406654040215,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176883,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Noncent. Parameter",
+          "value": 37.82653647329125,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Wilks' Lambda",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Value",
+          "value": 2.701895462377947,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "F",
+          "value": 37.827,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Hypothesis df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Error df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Sig.",
+          "value": 0.00002517406654040215,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176883,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Noncent. Parameter",
+          "value": 37.82653647329125,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Hotelling's Trace",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Value",
+          "value": 2.701895462377947,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "F",
+          "value": 37.827,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Hypothesis df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Error df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Sig.",
+          "value": 0.00002517406654040215,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176883,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Noncent. Parameter",
+          "value": 37.82653647329125,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi | Roy's Largest Root",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Value",
+          "value": 0.8586250930951578,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "F",
+          "value": 39.477,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Sig.",
+          "value": 0.000003002065459222839,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.8586250930951578,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Noncent. Parameter",
+          "value": 78.95408354008782,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Pillai's Trace",
+          "field": "Observed Power",
+          "value": 0.9999999701928847,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Value",
+          "value": 0.14137490690484225,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "F",
+          "value": 39.477,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Sig.",
+          "value": 0.000003002065459222844,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Partial Eta Squared",
+          "value": 0.8586250930951578,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Noncent. Parameter",
+          "value": 78.95408354008782,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Wilks' Lambda",
+          "field": "Observed Power",
+          "value": 0.9999999701928847,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Value",
+          "value": 6.073391041545217,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "F",
+          "value": 39.477,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Sig.",
+          "value": 0.000003002065459222839,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.8586250930951578,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Noncent. Parameter",
+          "value": 78.95408354008782,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Hotelling's Trace",
+          "field": "Observed Power",
+          "value": 0.9999999701928847,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Value",
+          "value": 6.073391041545217,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "F",
+          "value": 39.477,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Sig.",
+          "value": 0.000003002065459222839,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Partial Eta Squared",
+          "value": 0.8586250930951578,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Noncent. Parameter",
+          "value": 78.95408354008782,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "waktu | Roy's Largest Root",
+          "field": "Observed Power",
+          "value": 0.9999999701928847,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Value",
+          "value": 0.3481419110327779,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "F",
+          "value": 3.471,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Sig.",
+          "value": 0.06194337782654069,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.3481419110327779,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Noncent. Parameter",
+          "value": 6.942990997621401,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Pillai's Trace",
+          "field": "Observed Power",
+          "value": 0.5443199209507914,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Value",
+          "value": 0.6518580889672222,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "F",
+          "value": 3.471,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Sig.",
+          "value": 0.061943377826540746,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Partial Eta Squared",
+          "value": 0.3481419110327778,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Noncent. Parameter",
+          "value": 6.942990997621397,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Wilks' Lambda",
+          "field": "Observed Power",
+          "value": 0.5443199209507912,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Value",
+          "value": 0.5340762305862615,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "F",
+          "value": 3.471,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Sig.",
+          "value": 0.06194337782654069,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Partial Eta Squared",
+          "value": 0.3481419110327779,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Noncent. Parameter",
+          "value": 6.942990997621401,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Hotelling's Trace",
+          "field": "Observed Power",
+          "value": 0.5443199209507914,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Value",
+          "value": 0.5340762305862615,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "F",
+          "value": 3.471,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Hypothesis df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Error df",
+          "value": 13,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Sig.",
+          "value": 0.06194337782654069,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Partial Eta Squared",
+          "value": 0.3481419110327779,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Noncent. Parameter",
+          "value": 6.942990997621401,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "multivariate",
+          "measure": "",
+          "source": "kondisi * waktu | Roy's Largest Root",
+          "field": "Observed Power",
+          "value": 0.5443199209507914,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Multivariate Tests"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "Mauchly's W",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "Approx. Chi-Square",
+          "value": 0,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "df",
+          "value": 0,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "Greenhouse-Geisser",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "Huynh-Feldt",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi",
+          "field": "Lower-bound",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Mauchly's W",
+          "value": 0.9735168047397219,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Approx. Chi-Square",
+          "value": 0.3489224977052974,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Sig.",
+          "value": 0.8399094010515549,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Greenhouse-Geisser",
+          "value": 0.9742000693410653,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Huynh-Feldt",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "waktu",
+          "field": "Lower-bound",
+          "value": 0.5,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Mauchly's W",
+          "value": 0.9937910946369048,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Approx. Chi-Square",
+          "value": 0.08096739007331344,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Sig.",
+          "value": 0.9603248224447892,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Greenhouse-Geisser",
+          "value": 0.9938294072632411,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Huynh-Feldt",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "mauchly",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "field": "Lower-bound",
+          "value": 0.5,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Mauchly's Test of Sphericity"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "F",
+          "value": 37.82653647329082,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "Sig.",
+          "value": 0.000025174066540403622,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176861,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "Noncent. Parameter",
+          "value": 37.826536473290815,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Sphericity Assumed",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "F",
+          "value": 37.82653647329082,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "Sig.",
+          "value": 0.000025174066540403622,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176861,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "Noncent. Parameter",
+          "value": 37.826536473290815,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Greenhouse-Geisser",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "F",
+          "value": 37.82653647329082,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "Sig.",
+          "value": 0.000025174066540403622,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176861,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "Noncent. Parameter",
+          "value": 37.826536473290815,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Huynh-Feldt",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 313.5999999999967,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "F",
+          "value": 37.82653647329082,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "Sig.",
+          "value": 0.000025174066540403622,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176861,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "Noncent. Parameter",
+          "value": 37.826536473290815,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi",
+          "correction": "Lower-bound",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 116.06666666666666,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 8.29047619047619,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 116.06666666666666,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 8.29047619047619,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 116.06666666666666,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 8.29047619047619,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 116.06666666666666,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi)",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 8.29047619047619,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 482.82222222222106,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 241.41111111111053,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "F",
+          "value": 41.765481257723366,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Sig.",
+          "value": 3.950718955420339e-9,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Partial Eta Squared",
+          "value": 0.748948638400551,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Noncent. Parameter",
+          "value": 83.53096251544673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Observed Power",
+          "value": 0.9999999998235009,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 482.82222222222106,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 1.9484001386821306,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 247.80444870466647,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "F",
+          "value": 41.765481257723366,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Sig.",
+          "value": 6.026819360695393e-9,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Partial Eta Squared",
+          "value": 0.748948638400551,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Noncent. Parameter",
+          "value": 81.37586947467413,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Observed Power",
+          "value": 0.9999999996646287,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 482.82222222222106,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 241.41111111111053,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "F",
+          "value": 41.765481257723366,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Sig.",
+          "value": 3.950718955420339e-9,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Partial Eta Squared",
+          "value": 0.748948638400551,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Noncent. Parameter",
+          "value": 83.53096251544673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Observed Power",
+          "value": 0.9999999998235009,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 482.82222222222106,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 482.82222222222106,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "F",
+          "value": 41.765481257723366,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "Sig.",
+          "value": 0.000014911580270865097,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "Partial Eta Squared",
+          "value": 0.748948638400551,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "Noncent. Parameter",
+          "value": 41.765481257723366,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "waktu",
+          "correction": "Lower-bound",
+          "field": "Observed Power",
+          "value": 0.9999704813091037,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 161.84444444444443,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 28,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 5.78015873015873,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 161.84444444444443,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 27.27760194154983,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 5.933235802444917,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 161.84444444444443,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 28,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 5.78015873015873,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 161.84444444444443,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(waktu)",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 11.56031746031746,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 50.86666666666446,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 25.43333333333223,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "F",
+          "value": 3.482882295402521,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Sig.",
+          "value": 0.044587182335306945,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Partial Eta Squared",
+          "value": 0.19921671018276066,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Noncent. Parameter",
+          "value": 6.965764590805042,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Sphericity Assumed",
+          "field": "Observed Power",
+          "value": 0.6029171321810451,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 50.86666666666446,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 1.9876588145264822,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 25.591246493066954,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "F",
+          "value": 3.4828822954025216,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Sig.",
+          "value": 0.04493290319281016,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Partial Eta Squared",
+          "value": 0.19921671018276066,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Noncent. Parameter",
+          "value": 6.9227816944150495,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Greenhouse-Geisser",
+          "field": "Observed Power",
+          "value": 0.6009316045190265,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 50.86666666666446,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 2,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 25.43333333333223,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "F",
+          "value": 3.482882295402521,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Sig.",
+          "value": 0.044587182335306945,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Partial Eta Squared",
+          "value": 0.19921671018276066,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Noncent. Parameter",
+          "value": 6.965764590805042,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Huynh-Feldt",
+          "field": "Observed Power",
+          "value": 0.6029171321810451,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 50.86666666666446,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 50.86666666666446,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "F",
+          "value": 3.482882295402521,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "Sig.",
+          "value": 0.083093766177854,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "Partial Eta Squared",
+          "value": 0.19921671018276066,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "Noncent. Parameter",
+          "value": 3.482882295402521,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "kondisi * waktu",
+          "correction": "Lower-bound",
+          "field": "Observed Power",
+          "value": 0.41239456921704754,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "SS",
+          "value": 204.46666666666673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "df",
+          "value": 28,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Sphericity Assumed",
+          "field": "Mean Square",
+          "value": 7.302380952380955,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "SS",
+          "value": 204.46666666666673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "df",
+          "value": 27.827223403370752,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Greenhouse-Geisser",
+          "field": "Mean Square",
+          "value": 7.34772074463956,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "SS",
+          "value": 204.46666666666673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "df",
+          "value": 28,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Huynh-Feldt",
+          "field": "Mean Square",
+          "value": 7.302380952380955,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Lower-bound",
+          "field": "SS",
+          "value": 204.46666666666673,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Lower-bound",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_effects",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu)",
+          "correction": "Lower-bound",
+          "field": "Mean Square",
+          "value": 14.60476190476191,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "SS",
+          "value": 313.59999999999854,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "Mean Square",
+          "value": 313.59999999999854,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "F",
+          "value": 37.826536473291036,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "Sig.",
+          "value": 0.00002517406654040295,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "Partial Eta Squared",
+          "value": 0.7298681148176872,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "Noncent. Parameter",
+          "value": 37.826536473291036,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi | Linear",
+          "field": "Observed Power",
+          "value": 0.9999044506084078,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi) | Linear",
+          "field": "SS",
+          "value": 116.06666666666668,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi) | Linear",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi) | Linear",
+          "field": "Mean Square",
+          "value": 8.290476190476191,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "SS",
+          "value": 476.01666666667006,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "Mean Square",
+          "value": 476.01666666667006,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "F",
+          "value": 78.64948859166073,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "Sig.",
+          "value": 4.045535840479846e-7,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "Partial Eta Squared",
+          "value": 0.8488928518353407,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "Noncent. Parameter",
+          "value": 78.64948859166074,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Linear",
+          "field": "Observed Power",
+          "value": 0.9999999997395383,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "SS",
+          "value": 6.805555555551109,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "Mean Square",
+          "value": 6.805555555551109,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "F",
+          "value": 1.2355907780971749,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "Sig.",
+          "value": 0.2850476341765563,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "Partial Eta Squared",
+          "value": 0.08109897384966992,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "Noncent. Parameter",
+          "value": 1.2355907780971749,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "waktu | Quadratic",
+          "field": "Observed Power",
+          "value": 0.17926124695269463,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Linear",
+          "field": "SS",
+          "value": 84.73333333333326,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Linear",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Linear",
+          "field": "Mean Square",
+          "value": 6.052380952380948,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Quadratic",
+          "field": "SS",
+          "value": 77.11111111111114,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Quadratic",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(waktu) | Quadratic",
+          "field": "Mean Square",
+          "value": 5.507936507936511,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "SS",
+          "value": 50.41666666666424,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "Mean Square",
+          "value": 50.41666666666424,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "F",
+          "value": 7.326989619376818,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "Sig.",
+          "value": 0.017026958020423012,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "Partial Eta Squared",
+          "value": 0.34355479840998365,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "Noncent. Parameter",
+          "value": 7.326989619376817,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Linear",
+          "field": "Observed Power",
+          "value": 0.7115608409266185,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "SS",
+          "value": 0.4499999999970896,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "Mean Square",
+          "value": 0.4499999999970896,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "F",
+          "value": 0.05826140567163302,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "Sig.",
+          "value": 0.8127646515243638,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "Partial Eta Squared",
+          "value": 0.0041442824251459835,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "Noncent. Parameter",
+          "value": 0.05826140567163302,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "kondisi * waktu | Linear | Quadratic",
+          "field": "Observed Power",
+          "value": 0.0558342887576363,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Linear",
+          "field": "SS",
+          "value": 96.33333333333324,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Linear",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Linear",
+          "field": "Mean Square",
+          "value": 6.880952380952374,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Quadratic",
+          "field": "SS",
+          "value": 108.1333333333334,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Quadratic",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "within_contrasts",
+          "measure": "skor",
+          "source": "Error(kondisi*waktu) | Linear | Quadratic",
+          "field": "Mean Square",
+          "value": 7.723809523809528,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Within-Subjects Contrasts"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "SS",
+          "value": 165208.17777777783,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "df",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "Mean Square",
+          "value": 165208.17777777783,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "F",
+          "value": 1865.0196570322723,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "Sig.",
+          "value": 2.678704036091078e-16,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "Partial Eta Squared",
+          "value": 0.9925493062578644,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "Noncent. Parameter",
+          "value": 1865.0196570322726,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Intercept",
+          "field": "Observed Power",
+          "value": 1,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Error",
+          "field": "SS",
+          "value": 1240.1555555555556,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Error",
+          "field": "df",
+          "value": 14,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        },
+        {
+          "dataset": "e",
+          "table": "between_effects",
+          "measure": "skor",
+          "source": "Error",
+          "field": "Mean Square",
+          "value": 88.58253968253969,
+          "spss_source": "SPSS 27, spss-output/rm_e.xlsx: Tests of Between-Subjects Effects"
+        }
+      ]
+    }
+  }
 }

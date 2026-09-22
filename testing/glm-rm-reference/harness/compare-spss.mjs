@@ -12,13 +12,16 @@ import { DESIGNS, csvPath } from "./designs.mjs";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SPSS = path.join(here, "../spss-output");
 const opts = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
-const values = JSON.parse(fs.readFileSync(path.join(SPSS, "spss-values.json"), "utf8"));
+// (e) two within-subjects factors: blocked in Statify, reported separately.
+const BLOCKED = ["e"];
+const allValues = JSON.parse(fs.readFileSync(path.join(SPSS, "spss-values.json"), "utf8"));
+const values = allValues.filter((e) => !BLOCKED.includes(e.dataset));
 const tables = JSON.parse(fs.readFileSync(path.join(SPSS, "spss-tables.json"), "utf8"));
 
 // Designs as in spss/*.sps (dataset c: all EM Means targets and /PRINT=RSSCP).
 const design = (key) => {
     const d = JSON.parse(JSON.stringify(DESIGNS[key].design));
-    d.contrast = "Polynomial";
+    d.contrast = d.contrast ?? "Polynomial";
     if (key === "c") {
         d.emmeans = { ...d.emmeans, TargetList: ["(OVERALL)", "metode", "sesi", "metode*sesi"] };
         d.options = { ...d.options, ResSscpMat: true };
@@ -120,6 +123,8 @@ const outputs = {};
 for (const key of Object.keys(tables)) {
     outputs[key] = run(rm, buildPayload({ rows: readCsv(csvPath(key)), design: design(key) }));
 }
+const blockedLines = BLOCKED.filter((k) => outputs[k]).map((k) =>
+    `  ${k}: ${allValues.filter((e) => e.dataset === k).length} nilai SPSS disimpan; Statify: ${String(outputs[k].errors).split(/\r?\n/).filter((l) => /not supported/.test(l)).join(" ").trim()}`);
 
 const rows = [];
 const add = (e, statify) => {
@@ -171,6 +176,7 @@ lines.push("", "Tidak ada nilai Statify:");
 for (const g of Object.values(groups)) for (const r of g.noValue) {
     lines.push(`  ${r.dataset} ${r.table} ${r.measure} ${r.source} ${r.correction ?? ""} ${r.field}: SPSS ${r.value}, Statify ${JSON.stringify(r.statify)}`);
 }
+lines.push("", "Desain yang diblokir di Statify:", ...blockedLines);
 lines.push("", "Tabel (atau bagian tabel) SPSS yang tidak dibuat Statify:");
 for (const m of [...new Set(missing)]) lines.push(`  ${m}`);
 const text = lines.join("\n") + "\n";
