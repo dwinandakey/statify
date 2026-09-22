@@ -256,6 +256,8 @@ Pada run startup mode A, long task yang tercatat jauh lebih pendek daripada jeda
 
 ## 10. Tambahan 2026-09-22: diagnosis, pilot, dan eksperimen kedua
 
+Langkah yang diusulkan di §8 telah dijalankan sebagai eksperimen kedua (10.3–10.10).
+
 Bagian 1–9 di atas adalah laporan eksperimen pertama. Isinya **tidak diubah**, dan datanya tetap di `results/experiment-2026-09-22-cpu1/`.
 
 Eksperimen kedua **dirancang setelah eksperimen pertama selesai**. Tujuannya menghilangkan *confounder* yang ditemukan di sana: halaman Result merender semua keluaran yang menumpuk, sehingga terjadi *drift* (7.1). Eksperimen kedua **bukan pengganti** eksperimen pertama. Keduanya dilaporkan berdampingan, dan angkanya disajikan apa adanya tanpa kesimpulan tentang tujuan penelitian.
@@ -604,3 +606,198 @@ Sumber: [analysis/drift-vs-exp1.md](../../../../../testing/glm-web-worker/result
 | Eksperimen kedua: analisis | [analysis/](../../../../../testing/glm-web-worker/results/experiment-2026-09-22-cpu1-clean/analysis/) (`tables.md`, `summary.csv`, `tests.csv`, `drift.csv`, `drift-vs-exp1.md`, `clean-check.csv`, `loaf-runs.csv`, `loaf-attribution.csv`, `excluded-runs.csv`, `analysis.json`) |
 | Eksperimen kedua: lingkungan dan peta chunk | `environment-*.json`, `chunk-map.json` di folder hasil |
 | Skrip | `experiment/run-experiment.cjs` (opsi `--clean`, `--loaf`, `--rm-levels`, `--rm-measures`, `--rm-options`, `--sizes-<modul>`), `run-detached.ps1 -Extra`, `analyze.py --raw --env`, `compare-drift.py` |
+
+---
+
+## 11. Tambahan 2026-09-23: perbaikan kebenaran Repeated Measures, validasi SPSS, dan sel RM final
+
+Bagian 1–10 tidak diubah (kecuali satu kalimat di awal §10). Datanya tetap di foldernya masing-masing.
+
+### 11.1 Ringkasan perbaikan kebenaran modul Repeated Measures
+
+Perbaikan dilakukan di branch `fix/rm-correctness` (commit per tahap, dari baseline `8e2ddbd2`). Rincian per tahap ada di `testing/glm-rm-reference/results/stage1`–`stage5`, `spss-validation`, `spss-validation-de`, dan `contrast-default`. Daftar perubahan kode untuk naskah ada di [thesis-impact.md](../../../../../testing/glm-rm-reference/results/thesis-impact.md).
+
+| Masalah (sebelum perbaikan) | Perbaikan |
+|---|---|
+| Keluaran berubah antar-komputasi di instance WASM yang sama (dua measure; urutan baris satu measure), 10.2 | `HashMap` crate → `IndexMap` (urutan deterministik). Mauchly dan epsilon dikunci per measure. Uji *doubly multivariate* untuk > 1 measure. |
+| Desain campuran salah atau error (10.1): tata letak `factors_data`, matriks desain, `BetSubVar` basi | Satu tata letak per variabel (`factors_data[f][s]`). Mesin GLM multivariat baru `RmModel` (`stats/rm_model.rs`): intercept, kovariat, kode efek, interaksi faktorial penuh, SS tipe III, galat model penuh, listwise. `BetSubVar` diturunkan dari data dialog yang dikirim. |
+| EMMeans *panic* (`RuntimeError: unreachable`) | `RmModel::emmeans`: (OVERALL), faktor between/within, dan interaksi. Perbandingan berpasangan LSD, Bonferroni, dan Sidak. Target tak valid → pesan. |
+| Homogeneity tests menghitung Bartlett's test of sphericity pada variabel faktor (error bila < 2 faktor) | Box's M dan Levene (4 baris) seperti SPSS. Bartlett dipindah ke Residual SSCP, dengan rumus diperbaiki. |
+| Nilai yang berbeda dari SPSS | Sig. Mauchly dengan koreksi ω₂; Likelihood Ratio Bartlett W^(N/2); *observed power* eksak (F nonsentral); noncentrality baris koreksi = F × df terkoreksi; SS between pada skala SPSS (Σy/√k untuk Polynomial, Σy/k untuk Repeated) |
+| Tabel yang tidak ada | Tests of Within-Subjects Effects (Multivariate) untuk > 1 measure. Residual SSCP Matrix dengan Covariance dan Correlation. |
+| Pilihan kontras dialog diabaikan | Polynomial (bawaan, seperti SPSS) dan Repeated. Jenis lain tidak ditawarkan. |
+| Matriks galat singular menghasilkan angka tak bermakna tanpa peringatan | Pesan di Errors Logs; Mauchly W = 0 dengan χ² dan Sig. kosong |
+| Desain > 1 faktor within: modul lama tidak cocok dengan SPSS | **Diblokir** di dialog Define dan di mesin, dengan pesan "Designs with more than one within-subjects factor are not supported in this version." |
+
+Modul Multivariate, `shared/glm-execution.ts`, dan kontrak pesan worker tidak diubah. WASM Multivariate di build baru (`wasm_bg.6c6ecfdf.wasm`) sama dengan eksperimen kedua.
+
+### 11.2 Validasi terhadap SPSS 27
+
+Acuan: keluaran SPSS 27 yang dijalankan pengguna dari `testing/glm-rm-reference/spss/*.sps`, diekspor ke `spss-output/*.xlsx`. Nilainya dibaca `harness/spss_extract.py` dan diuji di `__test__/repeated-measures-reference.test.ts` dengan toleransi |Statify − SPSS| ≤ 0,001.
+
+| Dataset | Desain | Nilai SPSS | Hasil |
+|---|---|---|---|
+| Gambar 51, (a), (b), (c) | Within-only 1 dan 2 measure; campuran; campuran dengan EMMeans, Homogeneity, dan RSSCP (kontras Polynomial) | 1047 | Semua lulus |
+| (d) `rm_d.sps` | Data (b) dengan kontras Repeated | 271 | Semua lulus (setelah skala Between untuk Repeated disesuaikan) |
+| (e) `rm_e.sps` | Dua faktor within (kondisi 2 × waktu 3) | 332 (disimpan di fixture `spss_blocked`) | Tidak cocok, sehingga desainnya diblokir (11.1) |
+
+- **Total 1318 nilai SPSS lulus.** Pada presisi penuh, selisih maksimum 4,4·10⁻⁴, dan hanya berasal dari nilai F yang disimpan SPSS dengan tiga desimal. Nilai lainnya ≤ 4,9·10⁻¹⁰.
+- Tabel yang tercakup:
+  - Descriptive Statistics, Box's M, Levene, Bartlett, dan Residual SSCP;
+  - Multivariate Tests, Mauchly, Tests of Within-Subjects Effects (dengan Multivariate), dan Contrasts (Polynomial dan Repeated);
+  - Tests of Between-Subjects Effects;
+  - EM Means (Estimates, Pairwise Comparisons).
+- Belum dibuat: tabel Univariate/Multivariate Tests di bawah EM Means.
+- Jest penuh setelah setiap perubahan kode aplikasi: 49 suite gagal, sama dengan baseline. Satu kali ada tambahan test performa Multivariate yang melewati batas waktu karena beban mesin; test itu lulus bila dijalankan sendiri. Test acuan RM terakhir: 1687 lulus.
+
+### 11.3 Alasan sel RM dijalankan ulang
+
+1. **Perubahan kode di jalur yang diukur.** WASM RM, service (payload), pemformat, output, dan dialog berada di dalam jendela klik OK → `glm-analysis-end`.
+2. **Kontras bawaan kini Polynomial**, seperti SPSS. Konfigurasi sel RM memakai kontras bawaan, sehingga tabel kontrasnya berubah.
+3. **Dataset nonsingular.** Dataset RM lama (`repeatedMeasuresRows`) punya variasi within berpangkat 2. Dengan kode terperbaiki, Mauchly dan Multivariate Tests tidak terhitung, dan 2 pesan muncul di Errors Logs. Varian baru `repeatedMeasuresRowsNoise` (noise normal independen per sel, seed 20260927) menghasilkan 17 tabel dan 0 pesan.
+   - Dataset Multivariate dan dataset RM lama tidak berubah (md5 sama).
+
+**Perubahan protokol: pin P-core.**
+- Run penuh pertama dengan kode dan dataset baru ([experiment-2026-09-22-cpu1-rm-noise](../../../../../testing/glm-web-worker/results/experiment-2026-09-22-cpu1-rm-noise/README.md)) mengalami episode perlambatan ~1,7–2× yang berselang-seling di kedua mode, walaupun mode daya Windows sudah *Best performance* dan tidak ada proses berat lain.
+- CPU i7-12700H bersifat hibrida: loop satu thread butuh ~1,4 s di CPU logis 0–11 (P-core) dan ~4,1 s di CPU 12–19 (E-core) (`cpu-core-bench.ps1`).
+- Sel RM final dijalankan dengan `run-detached.ps1 -Affinity FFF`. Server, node, dan Chromium mewarisi *affinity* ke P-core, sama untuk mode A dan B.
+- Sel Multivariate eksperimen kedua tidak dijalankan dengan pin.
+
+### 11.4 Desain dan kualitas data sel RM final
+
+> **Data:** [experiment-2026-09-23-cpu1-rm-noise-pcore](../../../../../testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore/README.md) · 2026-09-23 00:09–00:48 WIB · build `MHninJmEe45iPpG1SPYZ3` (kode aplikasi commit `182b6f05`)
+
+- Sama dengan eksperimen kedua: protokol bersih, LoAF, CPU 1×, 31 run per mode bergantian dengan pasangan pertama sebagai startup, within-only `time` 10 level, 1 measure, 3 opsi (Descriptive statistics, Estimates of effect size, Observed power), dan n = 5000, 10000, 20000, 40000.
+- Berbeda: kode terperbaiki, kontras bawaan Polynomial, dataset `-noise`, pin P-core, dan mode daya *Best performance*.
+- **Kualitas:**
+  - 248 run, **0 dibuang**, status `ok` di semua run, mode tidak sesuai 0;
+  - **17 tabel dan 0 pesan Errors Logs** di semua run;
+  - tersimpan = 0 tepat sebelum OK di 248/248 run, dan log dirender = 1 di semua run.
+- **Pengecekan perlambatan:** median long task mode A tiap sel dibandingkan dengan pilot ber-pin (3 run per mode). Selisihnya −10,1%, −13,3%, −7,3%, dan −15,2%, semuanya di bawah batas 30%, sehingga tidak ada sel yang diulang.
+
+### 11.5 Hasil steady-state sel RM final
+
+#### 11.5.1 Ringkasan metrik (median [IQR], CPU 1×, n = 30 per mode)
+
+| Modul | n data | Mode | Long task terpanjang (ms) | Total blocking (ms) | Jeda frame terpanjang (ms) | Waktu total (ms) | LoAF terpanjang (ms) |
+|---|---|---|---|---|---|---|---|
+| Repeated Measures | 5000 | A | 147,0 [144,0–153,0] | 97,0 [94,0–103,0] | 133,3 [116,7–133,3] | 267,1 [258,0–281,3] | 148,4 [145,0–154,2] |
+| Repeated Measures | 5000 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 290,4 [275,9–311,4] | 0,0 [0,0–0,0] |
+| Repeated Measures | 10000 | A | 284,0 [247,2–291,8] | 234,0 [197,2–241,8] | 266,6 [216,7–266,7] | 404,9 [351,6–421,6] | 285,1 [248,0–293,2] |
+| Repeated Measures | 10000 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 417,2 [363,0–438,1] | 0,0 [0,0–0,0] |
+| Repeated Measures | 20000 | A | 547,5 [473,0–565,5] | 497,5 [423,0–515,5] | 525,0 [450,0–550,0] | 674,2 [580,5–689,8] | 548,2 [473,9–566,9] |
+| Repeated Measures | 20000 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 730,1 [604,9–758,7] | 0,0 [0,0–0,0] |
+| Repeated Measures | 40000 | A | 987,5 [965,5–1.102,8] | 937,5 [915,5–1.052,8] | 966,6 [950,0–1.075,0] | 1.095,7 [1.070,0–1.232,1] | 988,2 [966,8–1.103,5] |
+| Repeated Measures | 40000 | B | 80,0 [73,5–91,5] | 30,0 [23,5–41,5] | 58,4 [50,0–66,7] | 1.160,3 [1.105,3–1.320,0] | 80,9 [74,3–92,7] |
+
+#### 11.5.2 Long task dan LoAF terpanjang: mean (CI 95%), ms
+
+| Modul | n data | Long task A | Long task B | LoAF A | LoAF B |
+|---|---|---|---|---|---|
+| Repeated Measures | 5000 | 150,4 (146,5–154,3) | 0,0 (0,0–0,0) | 151,7 (147,7–155,8) | 0,0 (0,0–0,0) |
+| Repeated Measures | 10000 | 274,4 (263,9–284,9) | 0,0 (0,0–0,0) | 275,4 (264,8–285,9) | 0,0 (0,0–0,0) |
+| Repeated Measures | 20000 | 526,8 (507,6–546,0) | 1,8 (−1,7–5,2) | 527,9 (508,7–547,1) | 3,5 (−1,3–8,2) |
+| Repeated Measures | 40000 | 1.029,0 (998,0–1.060,0) | 84,8 (79,9–89,7) | 1.030,1 (999,1–1.061,1) | 85,8 (80,9–90,8) |
+
+#### 11.5.3 Uji statistik (long task terpanjang, H₁: B < A, α = 0,05)
+
+| Modul | n data | CPU | n A / n B | U (B) | p satu arah | Â₁₂ (A vs B) | Berpengaruh? | Tujuan 2 tercapai? |
+|---|---|---|---|---|---|---|---|---|
+| Repeated Measures | 5000 | 1× | 30 / 30 | 0,0 | 5,98·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Repeated Measures | 10000 | 1× | 30 / 30 | 0,0 | 6,03·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Repeated Measures | 20000 | 1× | 30 / 30 | 0,0 | 8,56·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Repeated Measures | 40000 | 1× | 30 / 30 | 0,0 | 1,49·10⁻¹¹ | 1,000 | tidak diisi | tidak diisi |
+
+#### 11.5.4 Uji tambahan: LoAF terpanjang (H₁: B < A; bukan kriteria §4.5)
+
+| Modul | n data | n A / n B | U (B) | p satu arah | Â₁₂ (A vs B) | Median A (ms) | Median B (ms) | Maks B (ms) |
+|---|---|---|---|---|---|---|---|---|
+| Repeated Measures | 5000 | 30 / 30 | 0,0 | 6,05·10⁻¹³ | 1,000 | 148,4 | 0,0 | 0,0 |
+| Repeated Measures | 10000 | 30 / 30 | 0,0 | 6,06·10⁻¹³ | 1,000 | 285,1 | 0,0 | 0,0 |
+| Repeated Measures | 20000 | 30 / 30 | 0,0 | 1,18·10⁻¹² | 1,000 | 548,2 | 0,0 | 53,8 |
+| Repeated Measures | 40000 | 30 / 30 | 0,0 | 1,51·10⁻¹¹ | 1,000 | 988,2 | 80,9 | 118,9 |
+
+### 11.6 Run startup sel RM final (pasangan pertama, n = 1 per mode)
+
+| Modul | n data | Mode | Long task terpanjang (ms) | Total blocking (ms) | Jeda frame terpanjang (ms) | Waktu total (ms) | LoAF terpanjang (ms) |
+|---|---|---|---|---|---|---|---|
+| Repeated Measures | 5000 | A | 0,0 | 0,0 | 300,0 | 671,3 | 320,1 |
+| Repeated Measures | 5000 | B | 0,0 | 0,0 | 16,7 | 354,6 | 0,0 |
+| Repeated Measures | 10000 | A | 0,0 | 0,0 | 516,6 | 851,9 | 536,8 |
+| Repeated Measures | 10000 | B | 0,0 | 0,0 | 16,7 | 518,1 | 0,0 |
+| Repeated Measures | 20000 | A | 0,0 | 0,0 | 750,0 | 1.095,1 | 777,2 |
+| Repeated Measures | 20000 | B | 0,0 | 0,0 | 16,7 | 792,0 | 0,0 |
+| Repeated Measures | 40000 | A | 63,0 | 13,0 | 1.166,6 | 1.520,0 | 1.195,2 |
+| Repeated Measures | 40000 | B | 74,0 | 24,0 | 50,0 | 1.162,9 | 74,4 |
+
+Pola startup mode A sama dengan 10.6: LoAF terpanjang mendekati jeda frame terpanjang, Long Tasks API mencatat nilai kecil atau 0, dan 4 dari 5 frame startup mode A tidak punya skrip teratribusi.
+
+### 11.7 Nilai yang relevan dengan kriteria §4.5 (sel RM final)
+
+Bagian ini hanya menyajikan angka. Kolom keputusan tidak diisi.
+
+**(a) Uji beda.** Ambang yang dipakai: p < 0,05 dan Â₁₂ ≥ 0,71.
+
+| Sel | p | Â₁₂ |
+|---|---|---|
+| Repeated Measures 5000, 10000, 20000 | 5,98·10⁻¹³ – 8,56·10⁻¹³ | 1,000 |
+| Repeated Measures 40000 | 1,49·10⁻¹¹ | 1,000 |
+
+Keempat sel memenuhi ambang (a) secara angka.
+
+**(b) Mode B.** Ambang yang dipakai: median long task terpanjang < 100 ms di semua ukuran, dan tidak ada long task yang bersumber dari WASM.
+
+1. **Median long task terpanjang mode B (steady-state):**
+
+   | Modul | 5000 | 10000 | 20000 | 40000 |
+   |---|---|---|---|---|
+   | Repeated Measures | 0,0 ms | 0,0 ms | 0,0 ms | **80,0 ms** (maks 118,0; 6 dari 30 run ≥ 100 ms) |
+
+   Median < 100 ms di keempat ukuran, sehingga angka ini memenuhi ambang (b). Di sel 20000, 1 dari 30 run mode B punya long task (53 ms); di sel 5000 dan 10000 tidak ada.
+2. **Median 5 run steady-state pertama → 5 terakhir, mode B:** 0 → 0 ms (5000–20000), 78 → 87 ms (40000).
+3. **Sumber long task / LoAF mode B:**
+   - 0 run (A maupun B) punya skrip teratribusi ke chunk glue WASM GLM (`2965.*`/`8520.*`) atau chunk service GLM (`3910.*`/`4918.*`).
+   - Frame mode B pada RM-40000 (30 run) dan RM-20000 (2 run) teratribusi ke `IDBRequest.onsuccess` di `9919.*`.
+   - Keterbatasannya sama dengan 10.7 poin 3: atribusi hanya pada titik masuk skrip.
+4. **Pada kondisi tanpa pin** (run yang terganggu, 11.9), median long task mode B RM-40000 = **111,5 ms**, sehingga ambang (b) tidak terpenuhi pada run itu.
+
+### 11.8 Atribusi LoAF (sel RM final)
+
+| Modul | Mode | Fase | Frame | Frame tanpa skrip | Titik masuk skrip (invoker · invokerType · chunk) | Durasi skrip total (ms) |
+|---|---|---|---|---|---|---|
+| Repeated Measures | A | startup | 5 (4 run) | 4 | `IDBRequest.onsuccess` · event-listener · `9919.*` (1) | 63 |
+| Repeated Measures | A | steady | 120 (120 run) | 0 | `IDBRequest.onsuccess` · event-listener · `9919.*` (120) | 59.412 |
+| Repeated Measures | B | startup | 1 (RM-40000) | 0 | `IDBRequest.onsuccess` · event-listener · `9919.*` (1) | 73 |
+| Repeated Measures | B | steady | 32 (32 run; RM-40000 30, RM-20000 2) | 0 | `IDBRequest.onsuccess` · event-listener · `9919.*` (32) | 2.644 |
+
+Rincian ada di `analysis/loaf-runs.csv`, `loaf-attribution.csv`, dan `runs-raw.jsonl` folder final.
+
+### 11.9 Anomali dan keterbatasan
+
+1. **Perlambatan berselang tanpa pin P-core.**
+   - Dua pilot (mode daya *Best power efficiency*, lalu *Best performance*) dan satu run penuh tanpa pin mengalami episode ~1,7–2× di kedua mode. Contohnya RM-40000 mode A median 1.449 ms, dibanding 988 ms dengan pin.
+   - Data itu disimpan sebagai catatan: `experiment-2026-09-22-cpu1-rm-noise-pilot`, `-pilot2`, dan `experiment-2026-09-22-cpu1-rm-noise`.
+2. **Pin P-core hanya pada sel RM final.** Sel Multivariate final (eksperimen kedua) dijalankan tanpa pin. Nilai absolut kedua modul tidak diukur pada kondisi CPU yang sama.
+3. **Sisa variasi dengan pin.** Rentang maks/min long task mode A 1,3–1,4 per sel. Sel 10000 dan 20000 punya dua sub-level dengan *drift* turun (ρ −0,81 dan −0,70). Karena A dan B berselang-seling, keduanya mengalami kondisi yang sama.
+4. **Beban tidak setara dengan eksperimen sebelumnya.** Kode, kontras, dan dataset berbeda. Angka RM 11.5 tidak dapat dibandingkan langsung dengan 10.5 (misalnya median long task B RM-40000: 103,0 ms di 10.5 dan 80,0 ms di sini).
+5. Sama dengan 10.10 poin 4 dan 7: atribusi LoAF terbatas pada titik masuk skrip; hanya CPU 1× dan Chromium; satu mesin.
+
+### 11.10 Data yang menjadi hasil final
+
+| Modul | Hasil final | Lokasi |
+|---|---|---|
+| **Multivariate** (100 / 500 / 1000 / 2000) | Eksperimen kedua (10.3–10.8) | [results/experiment-2026-09-22-cpu1-clean/](../../../../../testing/glm-web-worker/results/experiment-2026-09-22-cpu1-clean/README.md), sel Multivariate |
+| **Repeated Measures** (5000 / 10000 / 20000 / 40000) | Sel RM final (11.4–11.8) | [results/experiment-2026-09-23-cpu1-rm-noise-pcore/](../../../../../testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore/README.md) |
+
+Sel RM eksperimen pertama, sel RM eksperimen kedua, eksperimen ulang RM sebelum perubahan kontras dan dataset (`experiment-2026-09-22-cpu1-clean-rm-rerun`, `-rm-rerun-b`), serta run tanpa pin (11.9) **bukan** hasil final. Semuanya tetap disimpan sebagai catatan.
+
+### 11.11 Lokasi berkas (tambahan)
+
+| Isi | Lokasi |
+|---|---|
+| Validasi SPSS dan bukti per tahap | `testing/glm-rm-reference/results/` (`stage1`–`stage5`, `spss-validation`, `spss-validation-de`, `contrast-default`, `experiment-dataset`) |
+| Keluaran SPSS dan sintaks | `testing/glm-rm-reference/spss-output/`, `testing/glm-rm-reference/spss/` |
+| Perubahan kode untuk naskah | `testing/glm-rm-reference/results/thesis-impact.md` |
+| Sel RM final | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore/` (`runs.csv`, `runs-raw.jsonl`, `analysis/`, `data/`) |
+| Pilot ber-pin dan benchmark core | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore-pilot/` (`pilot-medians.json`, `core-bench.json`) |
+| Skrip | `experiment/datasets.cjs` (`repeatedMeasuresRowsNoise`), `run-experiment.cjs --rm-data=noise`, `run-detached.ps1 -Affinity`, `cpu-core-bench.ps1` |
