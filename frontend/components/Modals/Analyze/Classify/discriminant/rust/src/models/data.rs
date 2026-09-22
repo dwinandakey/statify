@@ -109,6 +109,11 @@ pub struct AnalysisData {
     pub group_data: Vec<Vec<DataRecord>>,
     pub independent_data: Vec<Vec<DataRecord>>,
     pub selection_data: Option<Vec<Vec<DataRecord>>>,
+    /// Values of the bootstrap "Strata Variables": one inner Vec per strata
+    /// variable, rows in the same order as `group_data`. Only the bootstrap
+    /// reads it; `None` when the user selected no strata variables.
+    #[serde(default)]
+    pub strata_data: Option<Vec<Vec<DataRecord>>>,
     pub group_data_defs: Vec<Vec<VariableDefinition>>,
     pub independent_data_defs: Vec<Vec<VariableDefinition>>,
     pub selection_data_defs: Option<Vec<Vec<VariableDefinition>>>,

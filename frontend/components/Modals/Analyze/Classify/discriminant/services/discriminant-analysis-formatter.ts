@@ -2368,13 +2368,23 @@ export function transformDiscriminantResult(data: any): ResultJson {
       }
     }
 
-    table.rows.push({
-      rowHeader: [
-        `Bootstrap results are based on ${b.num_samples} ${(
-          b.sampling ?? "Simple"
-        ).toLowerCase()} bootstrap samples.`,
-      ],
-    });
+    // The count is the number of resamples actually fitted: resamples that lost
+    // a group are dropped, because they cannot support the full set of functions.
+    const requested: number = b.num_samples ?? 0;
+    const used: number = b.valid_samples ?? requested;
+    const strataVars: string[] = b.strata_variables ?? [];
+
+    let footnote = `Bootstrap results are based on ${used} ${(
+      b.sampling ?? "Simple"
+    ).toLowerCase()} bootstrap samples`;
+    footnote += strataVars.length
+      ? `, stratified by ${strataVars.join(", ")}.`
+      : ".";
+    if (used < requested) {
+      footnote += ` ${requested - used} of the ${requested} requested samples were dropped because a group was lost in the resample.`;
+    }
+
+    table.rows.push({ rowHeader: [footnote] });
 
     resultJson.tables.push(table);
   }
