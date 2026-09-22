@@ -21,6 +21,7 @@ cd ../ && node harness/compare-spss.mjs --out=results/spss-validation/compare-sp
 | `data/rm_a.csv`, `rm_b.csv`, `rm_c.csv` | Dataset acuan (a), (b), (c) untuk diimpor ke Statify |
 | `data/gambar51.csv` | Dataset validasi Gambar 51, diekspor dari `dataset/repeated measures.sav` |
 | `spss/rm_a.sps`, `rm_b.sps`, `rm_c.sps`, `gambar51.sps` | Sintaks SPSS 27 dengan data *inline* (tanpa path berkas) |
+| `spss/rm_d.sps`, `rm_e.sps` | Sintaks tambahan untuk validasi kontras Repeated (d) dan desain dua faktor within (e). Masing-masing membuka jendela output sendiri (`OUTPUT NEW`), dan export ke `spss-output/` sudah aktif. |
 | `generate.py` | Pembuat CSV dan sintaks. Deterministik: Python `random.Random` dengan seed tetap, nilai dibulatkan ke bilangan bulat. |
 | `r/reference.R` → `r-output/reference-r.{json,txt}` | Pembanding sementara di R |
 | `harness/` | Menjalankan WASM Repeated Measures (`rust/pkg` yang sama dengan aplikasi) di Node dengan payload berbentuk sama seperti yang dibuat `repeated-measures-analysis.ts` |
@@ -36,6 +37,8 @@ cd ../ && node harness/compare-spss.mjs --out=results/spss-validation/compare-sp
 | (b) | Campuran: within `waktu` 4 level × between `kelompok` 3 grup (8 per grup) | 24 | `w1..w4`, `kelompok` (1, 2, 3) |
 | (c) | Campuran dengan EMMeans dan homogeneity tests: within `sesi` 3 level × between `metode` 2 grup (10 per grup, sebaran berbeda) | 20 | `p1..p3`, `metode` (1, 2) |
 | Gambar 51 | Within-only, `perlakuan` 4 level, 1 measure | 15 | `perlakuan1..4` |
+| (d) | Data (b) dengan kontras **Repeated** (`/WSFACTOR=waktu 4 Repeated`), memakai `data/rm_b.csv` | 24 | seperti (b) |
+| (e) | Within-only dengan **dua faktor within**: `kondisi` 2 level × `waktu` 3 level, 1 measure `skor`, tanpa faktor between | 15 | `k1w1, k1w2, k1w3, k2w1, k2w2, k2w3` (urutan SPSS: faktor terakhir berubah paling cepat) |
 
 Kolom `subjek` hanya penanda dan tidak dipakai dalam analisis.
 
@@ -59,6 +62,12 @@ Kolom `subjek` hanya penanda dan tidak dipakai dalam analisis.
 | (b) | Within-Subjects Factors · Between-Subjects Factors · Descriptive Statistics · **Multivariate Tests** (waktu, waktu * kelompok) · **Mauchly's Test of Sphericity** · **Tests of Within-Subjects Effects** (waktu, waktu * kelompok, Error(waktu)) · Tests of Within-Subjects Contrasts · **Tests of Between-Subjects Effects** (Intercept, kelompok, Error) |
 | (c) | Semua tabel (b) untuk `sesi` × `metode`, ditambah: **Box's Test of Equality of Covariance Matrices** · **Levene's Test of Equality of Error Variances** (semua baris "Based on …") · Residual SSCP Matrix dan Bartlett's Test of Sphericity · **Estimated Marginal Means**: Grand Mean; metode (Estimates, Pairwise Comparisons, Univariate Tests); sesi (Estimates, Pairwise Comparisons, Multivariate Tests); metode * sesi |
 | Gambar 51 | **Mauchly's Test of Sphericity**, untuk memastikan Approx. Chi-Square dan Sig. (lihat catatan 1) |
+| (d) | **Tests of Within-Subjects Contrasts** (Repeated: Level 1 vs. Level 2, Level 2 vs. Level 3, Level 3 vs. Level 4, untuk `waktu` dan `waktu * kelompok`). Tabel lain sama dengan (b) dan ikut terekspor sebagai pengecekan. |
+| (e) | Within-Subjects Factors · Descriptive Statistics · **Multivariate Tests** (kondisi, waktu, kondisi * waktu) · **Mauchly's Test of Sphericity** (ketiga efek) · **Tests of Within-Subjects Effects** (kondisi, waktu, kondisi * waktu dan Error-nya, keempat koreksi) · **Tests of Within-Subjects Contrasts** · **Tests of Between-Subjects Effects** |
+
+**Cara menjalankan (d) dan (e):** buka `spss/rm_d.sps` lalu **Run → All**, kemudian `spss/rm_e.sps` lalu **Run → All**. Setiap sintaks membuka jendela output baru, dan berkas `spss-output/rm_d.xlsx` serta `rm_e.xlsx` langsung tersimpan. Kalau repositori ada di folder lain, ganti path di baris `OUTPUT EXPORT` di akhir sintaks. Berkas `.spv` boleh ikut disimpan ke folder yang sama.
+
+Jangan jalankan eksperimen Web Worker bersamaan dengan SPSS (mesin yang sama).
 
 Tabel bercetak tebal dipakai untuk validasi Tahap 2 (b), Tahap 3 (c), dan Tahap 4 (c). Toleransinya: selisih mutlak ≤ 0,001 untuk nilai yang ditampilkan SPSS dengan tiga desimal.
 
