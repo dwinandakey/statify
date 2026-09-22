@@ -110,7 +110,7 @@ export const dialogTourSteps: TourStep[] = [
     {
         title: "Run Analysis",
         content:
-            "Click OK to run the analysis. It stays disabled until a grouping variable and at least one independent variable are selected.",
+            "Click OK to run the analysis. It stays disabled until a grouping variable with its Define Range and at least one independent variable are set, as in SPSS. The range must be two integers (maximum above minimum) covering at least two groups that contain data.",
         targetId: "discriminant-ok-button",
         defaultPosition: "top",
         defaultHorizontalPosition: null,

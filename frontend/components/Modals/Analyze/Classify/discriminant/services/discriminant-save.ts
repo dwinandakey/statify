@@ -48,7 +48,7 @@ export type CaseResults = {
 };
 
 /** Mirrors `parseCellValue` in hooks/useVariable.ts so both read cells alike. */
-function parseCell(raw: unknown): string | number | null {
+export function parseCell(raw: unknown): string | number | null {
     if (raw === null || raw === undefined || raw === "") return null;
     const text = String(raw);
     const parsed = Number.parseFloat(text.replace(",", "."));
