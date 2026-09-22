@@ -16,15 +16,30 @@ pub fn run_analysis(
 ) -> Result<Option<RepeatedMeasureResult>, JsValue> {
     let mut executed_functions = Vec::new();
 
-    // Designs with between-subjects factors or covariates use the
-    // multivariate GLM model (stats/rm_model.rs) for the multivariate tests,
-    // Mauchly, within-/between-subjects effects, contrasts and descriptives.
-    // It reads the factors from config.main (FactorsVar, Covariates).
+    // The multivariate GLM model (stats/rm_model.rs) computes the
+    // multivariate tests, Mauchly, within-/between-subjects effects,
+    // contrasts, univariate tests and descriptives. It reads the
+    // between-subjects factors and covariates from config.main
+    // (FactorsVar, Covariates).
     let has_between_design = config.main.factors_var.as_ref().map_or(false, |f| !f.is_empty())
         || config.main.covariates.as_ref().map_or(false, |c| !c.is_empty());
+    // Within-only designs use the same model when it can be built (one
+    // within-subjects factor); otherwise (several within-subjects factors)
+    // they keep the earlier per-measure modules.
     let mut rm_model: Option<RmModel> = None;
     let mut rm_model_failed = false;
-    if has_between_design {
+    if !has_between_design {
+        if let Ok(model) = RmModel::build(data, config) {
+            executed_functions.push("build_rm_model".to_string());
+            if model.excluded > 0 {
+                error_collector.add_error(
+                    "build_rm_model",
+                    &format!("{} subject(s) with missing values were excluded (listwise).", model.excluded)
+                );
+            }
+            rm_model = Some(model);
+        }
+    } else {
         executed_functions.push("build_rm_model".to_string());
         match RmModel::build(data, config) {
             Ok(model) => {

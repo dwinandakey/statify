@@ -6,6 +6,8 @@
     "r_car: pembanding SEMENTARA, nilai langsung dari R car (sumber di r_source). Toleransi 1e-6."
   ],
   "datasets": [
+    "gambar51",
+    "a",
     "b",
     "c"
   ],
@@ -122,6 +124,591 @@
     }
   },
   "r_car": [
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "SS",
+      "value": 10908164.8166667,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "df",
+      "value": 1,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "error SS",
+      "value": 213028.933333333,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "error df",
+      "value": 14,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "F",
+      "value": 716.871201689661,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": 1.99898162469189e-13,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "SS",
+      "value": 168181.65,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "df",
+      "value": 3,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "error SS",
+      "value": 73911.6000000001,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "error df",
+      "value": 42,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "F",
+      "value": 31.8562052505965,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Sig.",
+      "value": 6.69424597074561e-11,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "W",
+      "value": 0.618936302390557,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Greenhouse-Geisser",
+      "value": 0.74666374717162,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Sig. Greenhouse-Geisser",
+      "value": 1.18425150738214e-8,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Value",
+      "value": 0.867652152414152,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "F",
+      "value": 26.2233853663951,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": 3,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Error df",
+      "value": 12,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Sig.",
+      "value": 0.0000148385745412395,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Value",
+      "value": 0.132347847585847,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "F",
+      "value": 26.2233853663952,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": 3,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Error df",
+      "value": 12,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Sig.",
+      "value": 0.0000148385745412392,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Value",
+      "value": 6.55584634159881,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "F",
+      "value": 26.2233853663952,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": 3,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Error df",
+      "value": 12,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Sig.",
+      "value": 0.0000148385745412392,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Value",
+      "value": 6.55584634159881,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "F",
+      "value": 26.2233853663952,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": 3,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Error df",
+      "value": 12,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "anjing",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Sig.",
+      "value": 0.0000148385745412392,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "SS",
+      "value": 37018.5208333333,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "df",
+      "value": 1,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "error SS",
+      "value": 729.145833333333,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "error df",
+      "value": 15,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "F",
+      "value": 761.545615589017,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": 2.84988464293982e-14,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "SS",
+      "value": 244.666666666667,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "df",
+      "value": 2,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "error SS",
+      "value": 232.666666666667,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "error df",
+      "value": 30,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "F",
+      "value": 15.7736389684814,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Sig.",
+      "value": 0.0000208298465109219,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "W",
+      "value": 0.859007725716538,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Greenhouse-Geisser",
+      "value": 0.876430123620245,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Sig. Greenhouse-Geisser",
+      "value": 0.0000565998886103443,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "SS",
+      "value": 24570.75,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "df",
+      "value": 1,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "error SS",
+      "value": 240.583333333333,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "error df",
+      "value": 15,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "F",
+      "value": 1531.94838933149,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": 1.61489132573761e-16,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "SS",
+      "value": 134,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "df",
+      "value": 2,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "error SS",
+      "value": 114.666666666667,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "error df",
+      "value": 30,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "F",
+      "value": 17.5290697674419,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Sig.",
+      "value": 0.00000906346425895579,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "W",
+      "value": 0.997532449972958,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Greenhouse-Geisser",
+      "value": 0.99753852378865,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Sig. Greenhouse-Geisser",
+      "value": 0.00000926331155568759,
+      "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+    },
     {
       "dataset": "b",
       "table": "between_effects",
@@ -1888,6 +2475,2676 @@
     }
   ],
   "spss": [
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Mauchly's W",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Approx. Chi-Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Greenhouse-Geisser",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Huynh-Feldt",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "mauchly",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "field": "Lower-bound",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Sphericity Assumed",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Greenhouse-Geisser",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Huynh-Feldt",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "perlakuan",
+      "correction": "Lower-bound",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "within_effects",
+      "measure": "anjing",
+      "source": "Error(perlakuan)",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Intercept",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Error",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Error",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "between_effects",
+      "measure": "anjing",
+      "source": "Error",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Pillai's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Wilks' Lambda",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Hotelling's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "gambar51",
+      "table": "multivariate",
+      "measure": "",
+      "source": "perlakuan | Roy's Largest Root",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Mauchly's W",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Approx. Chi-Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Greenhouse-Geisser",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Huynh-Feldt",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "cemas",
+      "source": "waktu",
+      "field": "Lower-bound",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "cemas",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Intercept",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Error",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Error",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "cemas",
+      "source": "Error",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Mauchly's W",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Approx. Chi-Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Greenhouse-Geisser",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Huynh-Feldt",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "mauchly",
+      "measure": "stres",
+      "source": "waktu",
+      "field": "Lower-bound",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Sphericity Assumed",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Greenhouse-Geisser",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Huynh-Feldt",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "waktu",
+      "correction": "Lower-bound",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Sphericity Assumed",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Greenhouse-Geisser",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Huynh-Feldt",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "within_effects",
+      "measure": "stres",
+      "source": "Error(waktu)",
+      "correction": "Lower-bound",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Intercept",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Error",
+      "field": "SS",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Error",
+      "field": "df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "between_effects",
+      "measure": "stres",
+      "source": "Error",
+      "field": "Mean Square",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Pillai's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Wilks' Lambda",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Hotelling's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "Intercept | Roy's Largest Root",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Pillai's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Wilks' Lambda",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Hotelling's Trace",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Value",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "F",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Hypothesis df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Error df",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Sig.",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Partial Eta Squared",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Noncent. Parameter",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
+    {
+      "dataset": "a",
+      "table": "multivariate",
+      "measure": "",
+      "source": "waktu | Roy's Largest Root",
+      "field": "Observed Power",
+      "value": null,
+      "status": "menunggu SPSS"
+    },
     {
       "dataset": "b",
       "table": "mauchly",

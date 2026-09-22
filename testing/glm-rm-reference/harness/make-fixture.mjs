@@ -72,7 +72,10 @@ const fixture = {
     ],
     datasets,
     config_template: JSON.parse(fs.readFileSync(path.join(here, "config-template.json"), "utf8")),
-    r_car: car.filter((e) => datasets.includes(e.dataset) && rTables.includes(e.table)),
+    // "Univariate Tests" are produced only for designs with between-subjects
+    // factors or covariates (as before), so within-only datasets skip them.
+    r_car: car.filter((e) => datasets.includes(e.dataset) && rTables.includes(e.table)
+        && !(e.table === "univariate" && !LAYOUT[e.dataset].between)),
     spss,
 };
 fs.mkdirSync(path.dirname(OUT), { recursive: true });

@@ -772,9 +772,10 @@ impl RmModel {
                     }
                 }
                 let all: Vec<f64> = (0..self.n).map(|i| m.y[(i, j)]).collect();
+                // Within-only: one row per variable, labelled with its level.
                 groups.push(StatGroup {
                     factor_name: if self.factors.is_empty() { self.factor.clone() } else { factor_label.clone() },
-                    factor_value: "Total".to_string(),
+                    factor_value: if self.factors.is_empty() { (j + 1).to_string() } else { "Total".to_string() },
                     stats: stats(&all),
                     subgroups: None,
                 });
