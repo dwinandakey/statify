@@ -1,0 +1,34 @@
+{
+ "5000-main": {
+  "median_longest_longtask_ms": 224.0,
+  "median_total_time_ms": 422.5
+ },
+ "5000-worker": {
+  "median_longest_longtask_ms": 0.0,
+  "median_total_time_ms": 412.75
+ },
+ "10000-main": {
+  "median_longest_longtask_ms": 432.0,
+  "median_total_time_ms": 628.45
+ },
+ "10000-worker": {
+  "median_longest_longtask_ms": 0.0,
+  "median_total_time_ms": 591.95
+ },
+ "20000-main": {
+  "median_longest_longtask_ms": 871.0,
+  "median_total_time_ms": 1034.2
+ },
+ "20000-worker": {
+  "median_longest_longtask_ms": 157.0,
+  "median_total_time_ms": 2743.0499999999997
+ },
+ "40000-main": {
+  "median_longest_longtask_ms": 1457.0,
+  "median_total_time_ms": 1630.15
+ },
+ "40000-worker": {
+  "median_longest_longtask_ms": 143.5,
+  "median_total_time_ms": 1744.75
+ }
+}

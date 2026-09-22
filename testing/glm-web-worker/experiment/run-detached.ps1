@@ -14,13 +14,23 @@ param(
     [int]$Port = 3101,
     # Extra runner arguments, e.g. for the clean-protocol experiment:
     # "--clean=true --loaf=true --rm-levels=10 --rm-measures=2 --rm-options=DescStats,EstEffectSize,ObsPower --sizes-repeated-measures=2500,5000,10000,20000"
-    [string]$Extra = ""
+    [string]$Extra = "",
+    # Optional processor affinity mask (hex, e.g. "FFF" = logical CPUs 0-11).
+    # Set on this PowerShell process before anything is started, so the
+    # server, node and Chromium inherit it (same for mode A and B). Used to
+    # keep the run on the P-cores of a hybrid CPU.
+    [string]$Affinity = ""
 )
 $ErrorActionPreference = "Stop"
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 $status = Join-Path $OutDir "detached-status.txt"
 function Note($msg) { "$(Get-Date -Format o) $msg" | Out-File -Append -Encoding utf8 $status }
+if ($Affinity) {
+    $me = [System.Diagnostics.Process]::GetCurrentProcess()
+    $me.ProcessorAffinity = [IntPtr][Convert]::ToInt64($Affinity, 16)
+    Note "processor affinity set to 0x$Affinity (inherited by server, node and Chromium)"
+}
 
 Add-Type -Namespace Win32 -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
 [Win32.Power]::SetThreadExecutionState([uint32]2147483649) | Out-Null   # ES_CONTINUOUS | ES_SYSTEM_REQUIRED

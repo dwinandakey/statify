@@ -91,6 +91,8 @@ Eksperimen ini menjalankan **UI aplikasi yang asli** pada build produksi, bukan 
 | `experiment/datasets.cjs` | Generator dataset deterministik (Multivariate: 5 DV × 3 faktor 4×3×2; Repeated Measures: L level within × M measure, bawaan 5 × 1) |
 | `experiment/run-experiment.cjs` | Runner Playwright. Per sel (modul × ukuran × CPU) ada satu *context* dan halaman baru; run bergantian A, B, A, B, … sampai `--runs` per mode; pasangan pertama dicatat sebagai `startup`. Hasil: `runs.csv`, `runs-raw.jsonl` (long task dan frame per run), `environment-*.json`, `log.txt` |
 | `experiment/run-detached.ps1` | Menjalankan server dan runner tanpa pengawasan, dan mencegah *sleep* selama berjalan |
+| `experiment/run-detached.ps1 -Affinity FFF` | Sama, dengan *processor affinity* (hex) untuk PowerShell detached, yang diwarisi server, node, dan Chromium. `FFF` = CPU logis 0–11 (P-core i7-12700H), dipakai untuk sel RM final |
+| `experiment/cpu-core-bench.ps1` | Kecepatan satu thread per CPU logis (node dengan affinity satu CPU), untuk membedakan P-core dan E-core |
 | `experiment/inspect-output.cjs` | Pemeriksaan validitas: menyimpan keluaran lengkap analisis dari IndexedDB untuk urutan mode tertentu |
 | `experiment/analyze.py` | Statistik (Python, NumPy, SciPy): median, IQR, mean ± CI 95%, Mann–Whitney U satu arah, Vargha–Delaney Â₁₂ |
 
