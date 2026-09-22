@@ -35,7 +35,7 @@ Nilai F yang dicetak SPSS dengan huruf catatan kaki (mis. "24.593b") disimpan SP
 |---|---|---|
 | Sig. Mauchly tanpa koreksi orde kedua | `glm_tests::sphericity_significance`: P = P(χ²_f > c) + ω₂·[P(χ²_{f+4} > c) − P(χ²_f > c)], dengan ω₂ = (p+2)(p−1)(p−2)(2p³+6p²+3p+2)/(288p²v²ρ²), rumus yang juga dipakai `mauchly.test` di R. Dipakai di `rm_model.rs` dan modul lama `mauchly_test.rs`. Untuk p = 2 (3 level), ω₂ = 0 sehingga (a) dan (c) tidak berubah. | Gambar 51: 0,2975045146266828 vs SPSS 0,29750451462668587. (b): selisih 3,6·10⁻⁴ → 5·10⁻¹⁵ |
 | Likelihood Ratio Bartlett | SPSS mencetak W^(N/2) (N = jumlah kasus), bukan W. Label pemformat diubah menjadi "Likelihood Ratio" seperti SPSS. | (c): 2,432075063293607·10⁻¹¹ vs 2,4320750632936687·10⁻¹¹. χ², df, dan Sig. sudah sama sebelumnya. Hanya (c) yang tersedia, sehingga eksponen N/2 dan (N − r + 2)/2 tidak bisa dibedakan (sama-sama 10). |
-| Pilihan kontras dialog diabaikan | `RmModel` membaca `FactorList` ("sesi(Repeated)" atau "sesi (polynomial, Ref: Last)"). **Polynomial**: kontras polinomial ortonormal (Linear, Quadratic, Cubic, Order 4, …) seperti `WSFACTOR … Polynomial`. **Repeated**: seperti sebelumnya, dan tetap menjadi bawaan dialog. Jenis lain → pesan di Errors Logs, dan di dialog Contrast hanya Polynomial dan Repeated yang ditawarkan, dengan catatan "Only Polynomial and Repeated contrasts are supported in this version." | Kontras polinomial keempat dataset: 163 nilai, selisih maksimum 4,9·10⁻¹⁰ |
+| Pilihan kontras dialog diabaikan | `RmModel` membaca `FactorList` ("sesi(Repeated)" atau "sesi (polynomial, Ref: Last)"). **Polynomial**: kontras polinomial ortonormal (Linear, Quadratic, Cubic, Order 4, …) seperti `WSFACTOR … Polynomial`. **None** (bawaan dialog, dikonfirmasi pengguna) dan **Repeated**: kontras repeated seperti sebelumnya. Jenis lain → pesan di Errors Logs, dan dialog Contrast hanya menawarkan None, Repeated, dan Polynomial, dengan catatan "Only None (repeated contrasts), Repeated and Polynomial are supported in this version." | Kontras polinomial keempat dataset: 163 nilai, selisih maksimum 4,9·10⁻¹⁰ |
 | Sub-tabel Multivariate (averaged) tidak ada | `RmModel::averaged_multivariate` untuk > 1 measure: H*_ml = Σ_c H_(m,c)(l,c), E* sama, df hipotesis = df(sumber)·p, df galat = v·p. Tabel baru "Tests of Within-Subjects Effects (Multivariate)" dengan catatan "Tests are based on averaged variables." | (a): 32 nilai (Pillai, Wilks, Hotelling, Roy), selisih maksimum 4,4·10⁻⁴ (F catatan kaki SPSS) |
 | Residual SSCP tanpa Covariance/Correlation | `RmModel::residual_matrix`: SSCP, Covariance (SSCP/(N − r)), dan Correlation dari matriks galat model. Pemformat menampilkan tiga blok seperti SPSS dengan nama variabel asli. | (c): 27 nilai, selisih maksimum 1,1·10⁻¹³ |
 
@@ -75,7 +75,7 @@ Perbaikan:
 - `contrast.tsx` dan `repeated-measures-main.tsx` memakai `split("(")[0].trim()`.
 - Parser Rust membaca kelompok kurung terakhir.
 
-Setelah perbaikan, desain `cPoly` (UI asli) menghasilkan 17 tabel, 0 error, dan byte-identik di 4 run main/worker. Dialog hanya menawarkan Repeated dan Polynomial.
+Setelah perbaikan, desain `cPoly` (UI asli) menghasilkan 17 tabel, 0 error, dan byte-identik di 4 run main/worker. Dialog menawarkan None, Repeated, dan Polynomial.
 
 ## Pemeriksaan
 
@@ -83,7 +83,7 @@ Setelah perbaikan, desain `cPoly` (UI asli) menghasilkan 17 tabel, 0 error, dan 
 |---|---|---|
 | Build WASM RM, `next build` | — | Berhasil |
 | Test acuan RM (1047 nilai SPSS + 353 nilai R) | `__test__/repeated-measures-reference.test.ts` | 3 suite RM, 1410 test lulus, 0 *todo* |
-| Jest penuh | `jest-summary.txt`, `jest-failed-suites.txt` | Putaran 1: 49 gagal = baseline. Putaran final (setelah perbaikan dialog Contrast): 50, yaitu 49 baseline + `multivariate.performance.test.ts` (5197 ms > batas 5000 ms). Dijalankan sendiri lulus (4219 ms); kode Multivariate tidak berubah. |
+| Jest penuh | `jest-summary.txt`, `jest-failed-suites.txt` | Putaran 1: 49 gagal = baseline. Putaran 2 (setelah perbaikan dialog Contrast): 50, yaitu 49 baseline + `multivariate.performance.test.ts` (5197 ms > batas 5000 ms), yang lulus bila dijalankan sendiri (4219 ms); kode Multivariate tidak berubah. **Putaran 3 (final, None dikembalikan ke dialog): 49 gagal = baseline.** |
 | Regresi Gambar 51 | `regression-g51.txt` | W, χ², df, dan ε sama dengan baseline (presisi penuh) dan SPSS. Sig. berubah sengaja 0,29628 → 0,29750 = SPSS |
 | Determinisme (10× instance sama + 10× instance baru) | `determinism.json` | gambar51, a, b, c, L10M1, L10M2: 1 keluaran per desain |
 | Tabel inti vs R (Mauchly Sig. kini dibandingkan dengan versi ω₂ di `reference.R`), EMMeans vs afex, panic | `compare-r-*.txt` | 0 selisih; 68/68; tidak ada panic |
@@ -91,7 +91,7 @@ Setelah perbaikan, desain `cPoly` (UI asli) menghasilkan 17 tabel, 0 error, dan 
 
 ## Dampak ke eksperimen Web Worker
 
-Konfigurasi sel RM eksperimen: within-only, 1 measure, 10 level, kontras bawaan (Repeated).
+Konfigurasi sel RM eksperimen: within-only, 1 measure, 10 level, kontras bawaan (None = repeated).
 - **Keluaran WASM byte-identik** dengan pkg commit `a6985509`, yang dipakai eksperimen ulang (`harness/tahap5-compare.mjs --old=<pkg a6985509>`, n = 5000/10000/20000/40000).
 - **Tabel UI exp5000 identik** (`output_data` 16 tabel sama dengan `../stage5/ui-exp5000-1-main.json`).
 
@@ -105,5 +105,5 @@ Sig. Mauchly memakai cabang singular (tidak berubah), sedangkan Bartlett, Residu
 
 - **Univariate Tests** (target between) dan **Multivariate Tests** (target within) di bawah EM Means belum dibuat. Nilai F, Sig., η², dan power-nya sama dengan tabel utama; SS tabel univariat SPSS = SS between / k.
 - **Kontras Repeated** (bawaan dialog Statify) belum divalidasi terhadap SPSS. Untuk itu perlu sintaks dengan `/WSFACTOR=… Repeated`.
-- **Bawaan dialog tetap Repeated**, sedangkan bawaan SPSS Polynomial. Mengganti bawaan ke Polynomial akan mengubah tabel kontras sel RM eksperimen, sehingga keempat sel perlu dijalankan ulang lagi (sekitar 1 jam). Keputusan ini diserahkan ke pengguna.
+- **Bawaan dialog tetap None** (kontras repeated), sedangkan bawaan SPSS Polynomial. Pengguna mengonfirmasi bahwa None sudah benar (sesuai website yang di-deploy), sehingga eksperimen tidak dijalankan ulang.
 - Desain dengan lebih dari satu faktor within tetap memakai modul lama. Tidak ada keluaran SPSS untuknya.

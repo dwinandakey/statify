@@ -17,10 +17,11 @@ import {Badge} from "@/components/ui/badge";
 import {ScrollArea} from "@/components/ui/scroll-area";
 
 // Contrasts of the within-subjects factor that the Repeated Measures engine
-// computes (Polynomial as SPSS WSFACTOR … Polynomial, Repeated as the dialog
-// default). The other types of the shared list are not supported yet.
+// computes: None (dialog default) and Repeated give repeated contrasts,
+// Polynomial as SPSS WSFACTOR … Polynomial. The other types of the shared
+// list are not supported yet.
 const RM_CONTRAST_METHODS = CONTRASTMETHOD.filter((method) =>
-    ["polynomial", "repeated"].includes(method.value)
+    ["none", "repeated", "polynomial"].includes(method.value)
 );
 
 export const RepeatedMeasuresContrast = ({
@@ -226,7 +227,7 @@ export const RepeatedMeasuresContrast = ({
                                         </Select>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        Only Polynomial and Repeated contrasts are supported in this version.
+                                        Only None (repeated contrasts), Repeated and Polynomial are supported in this version.
                                     </p>
                                     <RadioGroup
                                         value={

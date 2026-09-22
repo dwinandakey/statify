@@ -7,7 +7,7 @@
     "worker"
   ],
   "chromium": "143.0.7499.4",
-  "startedAt": "2026-09-22T12:48:12.818Z",
+  "startedAt": "2026-09-22T13:37:16.427Z",
   "designs": {
     "gambar51": {
       "identical": true,
@@ -309,6 +309,7 @@
           "tables": 17,
           "loggedErrors": [],
           "contrastOptions": [
+            "None",
             "Repeated",
             "Polynomial"
           ],
@@ -326,6 +327,7 @@
           "tables": 17,
           "loggedErrors": [],
           "contrastOptions": [
+            "None",
             "Repeated",
             "Polynomial"
           ],
@@ -343,6 +345,7 @@
           "tables": 17,
           "loggedErrors": [],
           "contrastOptions": [
+            "None",
             "Repeated",
             "Polynomial"
           ],
@@ -360,6 +363,7 @@
           "tables": 17,
           "loggedErrors": [],
           "contrastOptions": [
+            "None",
             "Repeated",
             "Polynomial"
           ],

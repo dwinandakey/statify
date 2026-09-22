@@ -49,12 +49,12 @@ Ditambahkan setelah diagnosis. Isi diagnosis di atas tidak diubah. Rincian dan b
 | Pilot B §1: EMMeans panic (`unreachable`) | `RmModel::emmeans`: (OVERALL), faktor between/within, dan interaksi. Perbandingan berpasangan LSD/Bonferroni/Sidak. Kondisi tak didukung → pesan di Errors Logs. | `f2b17f68` (3) | Diperbaiki; tidak ada panic; Estimates dan Pairwise Comparisons tervalidasi terhadap SPSS 27 (c) |
 | Pilot B §1: Homogeneity tests error (Bartlett butuh ≥ 2 faktor) | Box's M dan Levene seperti SPSS. Bartlett's test of sphericity dipindah ke Residual SSCP dan rumusnya diperbaiki. | `fb5a087a` (4) | Diperbaiki; Box's M, Levene (4 baris), dan Bartlett tervalidasi terhadap SPSS 27 (c) |
 
-Validasi terhadap SPSS 27 juga menemukan dan memperbaiki: Sig. Mauchly tanpa koreksi ω₂, Likelihood Ratio Bartlett, pilihan kontras dialog yang diabaikan (kini Polynomial dan Repeated), sub-tabel Multivariate untuk > 1 measure, serta bagian Covariance/Correlation Residual SSCP.
+Validasi terhadap SPSS 27 juga menemukan dan memperbaiki: Sig. Mauchly tanpa koreksi ω₂, Likelihood Ratio Bartlett, pilihan kontras dialog yang diabaikan (kini None/Repeated = kontras repeated, dan Polynomial), sub-tabel Multivariate untuk > 1 measure, serta bagian Covariance/Correlation Residual SSCP.
 
 Batasan yang masih ada:
 - Desain dengan lebih dari satu faktor within memakai modul lama (tanpa faktor between) atau ditolak dengan pesan (dengan faktor between).
 - Model kustom diabaikan (selalu faktorial penuh).
-- Kontras within: hanya Polynomial (tervalidasi SPSS) dan Repeated (bawaan dialog, belum divalidasi SPSS). Jenis lain tidak ditawarkan di dialog.
+- Kontras within: Polynomial (tervalidasi SPSS), serta None (bawaan dialog) dan Repeated yang memberi kontras repeated (belum divalidasi SPSS). Jenis lain tidak ditawarkan di dialog.
 - Univariate/Multivariate Tests di bawah EM Means belum dibuat.
 - Pairwise untuk target interaksi belum ada.
 

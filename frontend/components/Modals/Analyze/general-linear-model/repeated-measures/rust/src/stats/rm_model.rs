@@ -187,7 +187,7 @@ pub fn helmert(k: usize) -> DMatrix<f64> {
 }
 
 /// Contrast of the within-subjects factor in the Tests of Within-Subjects
-/// Contrasts (dialog Contrast). Repeated stays the default of the dialog.
+/// Contrasts (dialog Contrast). The dialog default None gives Repeated.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum WithinContrast {
     Polynomial,
@@ -213,7 +213,7 @@ pub fn within_contrast_type(config: &RepeatedMeasuresConfig, factor: &str) -> Re
         other =>
             Err(
                 format!(
-                    "Contrast type '{}' for the within-subjects factor '{}' is not supported yet; use Polynomial or Repeated",
+                    "Contrast type '{}' for the within-subjects factor '{}' is not supported yet; use None, Repeated or Polynomial",
                     other,
                     factor
                 )
