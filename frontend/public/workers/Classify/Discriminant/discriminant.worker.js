@@ -35,12 +35,13 @@ self.onmessage = async (event) => {
 
         const wasm = await loadWasm();
 
-        const { group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data } = event.data || {};
+        const { group_data, independent_data, selection_data, strata_data, group_data_defs, independent_data_defs, selection_data_defs, config_data } = event.data || {};
 
         console.log("[Discriminant Worker] Received data:", {
             groupDataLength: group_data?.length,
             independentDataLength: independent_data?.length,
             selectionDataLength: selection_data?.length,
+            strataDataLength: strata_data?.length,
         });
 
         // DEBUG: Log method config being sent to WASM
@@ -54,7 +55,8 @@ self.onmessage = async (event) => {
             group_data_defs,
             independent_data_defs,
             selection_data_defs,
-            config_data
+            config_data,
+            strata_data
         );
 
         // Get results

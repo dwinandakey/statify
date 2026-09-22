@@ -176,12 +176,20 @@ pub struct UnivariateNormalityResult {
 pub struct BootstrapResults {
     #[serde(rename = "num_samples")]
     pub num_samples: i32,
+    /// Resamples that were actually fitted. Lower than `num_samples` when a
+    /// resample lost a group or could not be fitted.
+    #[serde(rename = "valid_samples")]
+    pub valid_samples: i32,
     pub level: f64,
     /// "Percentile" or "BCa"
     #[serde(rename = "ci_method")]
     pub ci_method: String,
     /// "Simple" or "Stratified"
     pub sampling: String,
+    /// Variables that define the strata under stratified sampling. Empty when
+    /// the strata are the groups of the grouping variable.
+    #[serde(rename = "strata_variables")]
+    pub strata_variables: Vec<String>,
     pub functions: Vec<String>,
     pub variables: Vec<String>,
     pub standardized: Vec<BootstrapCoefficient>,

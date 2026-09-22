@@ -717,6 +717,25 @@ pub fn filter_valid_cases(
         filtered_independent_data.push(filtered_var_data);
     }
 
+    // Filter strata_data the same way as independent_data, so bootstrap strata
+    // keys stay aligned with the cases that survive the filters.
+    let filtered_strata_data = data.strata_data.as_ref().map(|strata_data| {
+        strata_data
+            .iter()
+            .map(|var_rows| {
+                let mut filtered_var_data = Vec::new();
+                for group_valid_indices in valid_indices.iter() {
+                    for &idx in group_valid_indices {
+                        if idx < var_rows.len() {
+                            filtered_var_data.push(var_rows[idx].clone());
+                        }
+                    }
+                }
+                filtered_var_data
+            })
+            .collect()
+    });
+
     // Filter selection_data if applicable
     let filtered_selection_data = match &data.selection_data {
         Some(selection_data) => {
@@ -746,6 +765,7 @@ pub fn filter_valid_cases(
         group_data: filtered_group_data,
         independent_data: filtered_independent_data,
         selection_data: filtered_selection_data,
+        strata_data: filtered_strata_data,
         group_data_defs: data.group_data_defs.clone(),
         independent_data_defs: data.independent_data_defs.clone(),
         selection_data_defs: data.selection_data_defs.clone(),

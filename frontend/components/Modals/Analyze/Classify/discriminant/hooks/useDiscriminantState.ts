@@ -145,6 +145,11 @@ export const useDiscriminantState = (
                 const SelectionVariable = mainData.SelectionVariable
                     ? [mainData.SelectionVariable]
                     : [];
+                // Bootstrap strata variables: the engine stratifies by their
+                // crossed cells, so their values have to travel with the data.
+                const StrataVariables = (
+                    configData.bootstrap?.StrataVariables || []
+                ).filter((name) => !!name && name.trim() !== "");
 
                 const slicedDataForGrouping = getSlicedData({
                     dataVariables,
@@ -161,6 +166,11 @@ export const useDiscriminantState = (
                     variables,
                     selectedVariables: SelectionVariable,
                 });
+                const slicedDataForStrata = getSlicedData({
+                    dataVariables,
+                    variables,
+                    selectedVariables: StrataVariables,
+                });
 
                 const varDefsForGrouping = getVarDefs(variables, GroupingVariable);
                 const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
@@ -174,6 +184,7 @@ export const useDiscriminantState = (
                     group_data: slicedDataForGrouping,
                     independent_data: slicedDataForIndependent,
                     selection_data: slicedDataForSelection,
+                    strata_data: slicedDataForStrata,
                     group_data_defs: varDefsForGrouping,
                     independent_data_defs: varDefsForIndependent,
                     selection_data_defs: varDefsForSelection,
