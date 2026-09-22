@@ -123,9 +123,9 @@ export const RepeatedMeasuresContainer = ({
             const newState = { ...prev };
 
             // Within-subjects factors (from Define) drive the Contrast list.
-            // Format follows SPSS: "perlakuan(Repeated)".
+            // Format follows SPSS: "perlakuan(Polynomial)" (SPSS default).
             const defaultContrastMethod =
-                prev.contrast.ContrastMethod ?? "Repeated";
+                prev.contrast.ContrastMethod ?? "Polynomial";
             const contrastMethodLabel =
                 defaultContrastMethod.charAt(0).toUpperCase() +
                 defaultContrastMethod.slice(1);

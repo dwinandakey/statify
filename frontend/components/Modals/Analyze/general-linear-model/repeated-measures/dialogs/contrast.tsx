@@ -17,11 +17,10 @@ import {Badge} from "@/components/ui/badge";
 import {ScrollArea} from "@/components/ui/scroll-area";
 
 // Contrasts of the within-subjects factor that the Repeated Measures engine
-// computes: None (dialog default) and Repeated give repeated contrasts,
-// Polynomial as SPSS WSFACTOR … Polynomial. The other types of the shared
-// list are not supported yet.
-const RM_CONTRAST_METHODS = CONTRASTMETHOD.filter((method) =>
-    ["none", "repeated", "polynomial"].includes(method.value)
+// computes: Polynomial (default, as SPSS WSFACTOR … Polynomial) and Repeated.
+// The other types of the shared list are not supported yet.
+const RM_CONTRAST_METHODS = ["polynomial", "repeated"].map(
+    (value) => CONTRASTMETHOD.find((method) => method.value === value)!
 );
 
 export const RepeatedMeasuresContrast = ({
@@ -54,7 +53,7 @@ export const RepeatedMeasuresContrast = ({
 
             data.FactorList?.forEach((variable) => {
                 // Extract original name from possibly formatted variable
-                // ("sesi(None)" or "sesi (polynomial, Ref: Last)")
+                // ("sesi(Polynomial)" or "sesi (repeated, Ref: Last)")
                 const originalName = variable.split("(")[0].trim();
                 originals.push(originalName);
 
@@ -101,7 +100,7 @@ export const RepeatedMeasuresContrast = ({
         const reference = contrastState.Last ? "Last" : "First";
 
         // Get the original variable name to prevent double formatting; the
-        // list holds "sesi(None)" (default) or "sesi (polynomial, Ref: Last)".
+        // list holds "sesi(Polynomial)" (default) or "sesi (repeated, Ref: Last)".
         const originalName = variable.split("(")[0].trim();
         return `${originalName} (${method}, Ref: ${reference})`;
     };
@@ -227,7 +226,7 @@ export const RepeatedMeasuresContrast = ({
                                         </Select>
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        Only None (repeated contrasts), Repeated and Polynomial are supported in this version.
+                                        Only Polynomial (default) and Repeated contrasts are supported in this version.
                                     </p>
                                     <RadioGroup
                                         value={

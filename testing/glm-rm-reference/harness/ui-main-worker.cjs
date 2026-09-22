@@ -39,6 +39,11 @@ const DESIGNS = {
         csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"],
         options: [...OPT, "HomogenTest", "ResSscpMat"], contrast: "Polynomial",
     },
+    // (c) with Repeated contrasts chosen in the Contrast dialog (default: Polynomial).
+    cRep: {
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"],
+        options: OPT, contrast: "Repeated",
+    },
     // Repeated Measures cell of Web Worker experiment 2 (Tahap 5): the CSV of
     // datasets.cjs (repeated-measures-5000-L10-M1.csv) is read from --expDir.
     exp5000: {

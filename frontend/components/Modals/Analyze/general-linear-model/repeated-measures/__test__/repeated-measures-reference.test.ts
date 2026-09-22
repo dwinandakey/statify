@@ -59,7 +59,7 @@ const def = (name: string, columnIndex: number, nominal = false) => ({
 });
 
 /** Payload in the layout of repeated-measures-analysis.ts (factors_data[f][s]). */
-function payload(d: Design) {
+function payload(d: Design, factorList: string[] | null = [`${d.factor}(Polynomial)`]) {
     const rows = readCsv(d.csv);
     const encoded: string[] = [];
     const cols: string[] = [];
@@ -73,7 +73,7 @@ function payload(d: Design) {
     cfg.options = { ...cfg.options, ...d.options };
     cfg.emmeans = { ...cfg.emmeans, ...(d.emmeans || {}) };
     // Polynomial contrasts, as /WSFACTOR=<factor> <k> Polynomial in spss/*.sps.
-    cfg.contrast = { ...cfg.contrast, FactorList: [`${d.factor}(Polynomial)`] };
+    cfg.contrast = { ...cfg.contrast, FactorList: factorList };
     return {
         subject: rows.map((r) => [Object.fromEntries(cols.map((c, i) => [encoded[i], r[c]]))]),
         factors: d.between.map((b) => rows.map((r) => ({ [b]: r[b] }))),
@@ -83,8 +83,8 @@ function payload(d: Design) {
     };
 }
 
-function run(key: string) {
-    const p = payload(DESIGNS[key]);
+function run(key: string, factorList?: string[] | null) {
+    const p = payload(DESIGNS[key], factorList);
     const a = new RepeatedMeasureAnalysis(p.subject, p.factors, [], p.subjectDefs, p.factorDefs, [], p.cfg);
     try {
         return { results: a.get_formatted_results(), errors: String(a.get_all_errors()) };
@@ -258,4 +258,24 @@ describe.each(fixture.datasets as string[])("Repeated Measures dataset %s", (key
     }
     const pendingTables = [...new Set(spss.filter((e) => e.value === null).map((e) => e.table))];
     pendingTables.forEach((t) => it.todo(`SPSS 27: ${t} (${spss.filter((e) => e.table === t && e.value === null).length} nilai) — menunggu SPSS`));
+});
+
+// Contrast dialog: Polynomial is the default (as SPSS WSFACTOR … Polynomial),
+// Repeated stays selectable.
+describe("Tests of Within-Subjects Contrasts: contrast type", () => {
+    const labels = (factorList: string[] | null) => {
+        const out = run("c", factorList);
+        const sources: any[] = get(get(get(out.results.tests_of_within_subjects_contrasts, "measures"), "nilai"), "sources") ?? [];
+        return [...new Set(sources.map((s) => Object.values(s.factor_values ?? {})[0]))];
+    };
+    it.each([
+        ["no entry", null],
+        ["dialog default", ["sesi(Polynomial)"]],
+        ["older saved dialog 'None'", ["sesi(None)"]],
+    ])("%s gives Polynomial contrasts", (_l, factorList) => {
+        expect(labels(factorList as string[] | null)).toEqual(["Linear", "Quadratic"]);
+    });
+    it("Repeated is still selectable", () => {
+        expect(labels(["sesi (repeated, Ref: Last)"])).toEqual(["Level 1 vs. Level 2", "Level 2 vs. Level 3"]);
+    });
 });

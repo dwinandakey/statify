@@ -187,7 +187,7 @@ pub fn helmert(k: usize) -> DMatrix<f64> {
 }
 
 /// Contrast of the within-subjects factor in the Tests of Within-Subjects
-/// Contrasts (dialog Contrast). The dialog default None gives Repeated.
+/// Contrasts (dialog Contrast). Polynomial is the default, as in SPSS.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum WithinContrast {
     Polynomial,
@@ -196,8 +196,8 @@ pub enum WithinContrast {
 
 /// Contrast type chosen for `factor` in the Contrast dialog. `FactorList`
 /// holds "<factor>(<Type>)" (dialog default) or "<factor> (<type>, Ref: …)"
-/// (after "Change"); the last parenthesised group is used. "none" or no
-/// entry keeps the dialog default (Repeated).
+/// (after "Change"); the last parenthesised group is used. "none" (older
+/// saved dialogs) or no entry gives the default, Polynomial.
 pub fn within_contrast_type(config: &RepeatedMeasuresConfig, factor: &str) -> Result<WithinContrast, String> {
     let method = config.contrast.factor_list
         .as_deref()
@@ -208,12 +208,12 @@ pub fn within_contrast_type(config: &RepeatedMeasuresConfig, factor: &str) -> Re
         .map(|(_, rest)| rest.trim_end_matches(')').split(',').next().unwrap_or("").trim().to_lowercase())
         .unwrap_or_default();
     match method.as_str() {
-        "" | "none" | "repeated" => Ok(WithinContrast::Repeated),
-        "polynomial" => Ok(WithinContrast::Polynomial),
+        "" | "none" | "polynomial" => Ok(WithinContrast::Polynomial),
+        "repeated" => Ok(WithinContrast::Repeated),
         other =>
             Err(
                 format!(
-                    "Contrast type '{}' for the within-subjects factor '{}' is not supported yet; use None, Repeated or Polynomial",
+                    "Contrast type '{}' for the within-subjects factor '{}' is not supported yet; use Polynomial or Repeated",
                     other,
                     factor
                 )
