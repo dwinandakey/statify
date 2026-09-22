@@ -41,8 +41,8 @@ export const formatParallelLines = (
         ],
       },
       {
-        description: "Uji asumsi parallel lines.",
-        note: `The null hypothesis states that the location parameters (slope coefficients) are the same across response categories.\n${linkFunctionNote}`,
+        description: "Uji Parallel Lines dengan H₀ menyatakan model menghasilkan koefisien regresi yang sama. Tolak H₀ jika Sig. < α (0.05).",
+        note: `Disarankan penggunaan uji parallel lines dalam membangun Proportional Odds Model untuk link function logit atau probit.\n${linkFunctionNote}`,
       }
     ),
   ];

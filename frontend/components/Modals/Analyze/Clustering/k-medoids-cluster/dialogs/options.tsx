@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { NormalizationMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+import { NormalizationMethod, MissingValueMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import type {
     KMedoidsClusterOptionsProps,
     KMedoidsClusterOptionsType,
@@ -56,18 +56,15 @@ export const KMedoidsClusterOptions = ({
         updateFormData("Standardize", shouldStandardize);
     };
 
-    // Listwise dan pairwise saling eksklusif — satu radio group, dua flag.
     const handleMissingValueChange = (value: string) => {
-        const useListWise = value === "ExcludeListWise";
+        const method = value as MissingValueMethod;
 
         setOptionsState((prevState) => ({
             ...prevState,
-            ExcludeListWise: useListWise,
-            ExcludePairWise: !useListWise,
+            MissingValueMethod: method,
         }));
 
-        updateFormData("ExcludeListWise", useListWise);
-        updateFormData("ExcludePairWise", !useListWise);
+        updateFormData("MissingValueMethod", method);
     };
 
     return (
@@ -222,26 +219,22 @@ export const KMedoidsClusterOptions = ({
                     )}
 
                     <RadioGroup
-                        value={
-                            optionsState.ExcludePairWise && !optionsState.ExcludeListWise
-                                ? "ExcludePairWise"
-                                : "ExcludeListWise"
-                        }
+                        value={optionsState.MissingValueMethod ?? MissingValueMethod.Listwise}
                         onValueChange={handleMissingValueChange}
                         className="gap-3"
                     >
                         <div className="flex items-start space-x-2">
                             <RadioGroupItem
-                                id="ExcludeListWise"
-                                value="ExcludeListWise"
+                                id="MissingValueListwise"
+                                value={MissingValueMethod.Listwise}
                                 className="mt-0.5"
                             />
                             <div className="flex-1">
                                 <Label
-                                    htmlFor="ExcludeListWise"
+                                    htmlFor="MissingValueListwise"
                                     className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Exclude Cases Listwise
+                                    Listwise Deletion
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
                                     Rows with a missing value on any variable are removed from
@@ -251,20 +244,39 @@ export const KMedoidsClusterOptions = ({
                         </div>
                         <div className="flex items-start space-x-2">
                             <RadioGroupItem
-                                id="ExcludePairWise"
-                                value="ExcludePairWise"
+                                id="MissingValueMedian"
+                                value={MissingValueMethod.Median}
                                 className="mt-0.5"
                             />
                             <div className="flex-1">
                                 <Label
-                                    htmlFor="ExcludePairWise"
+                                    htmlFor="MissingValueMedian"
                                     className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Exclude Cases Pairwise
+                                    Median Imputation
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Rows are kept as long as at least one valid value exists; empty
-                                    cells are filled with the variable mean so the distance matrix stays numeric.
+                                    Rows are kept; empty cells are filled with the variable&apos;s
+                                    median so the distance matrix stays numeric and outlier-resistant.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-start space-x-2">
+                            <RadioGroupItem
+                                id="MissingValueKnn"
+                                value={MissingValueMethod.Knn}
+                                className="mt-0.5"
+                            />
+                            <div className="flex-1">
+                                <Label
+                                    htmlFor="MissingValueKnn"
+                                    className="text-sm font-medium leading-none cursor-pointer"
+                                >
+                                    KNN Imputation
+                                </Label>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Rows are kept; empty cells are filled with the average of the
+                                    k nearest rows, based on the variables that are available.
                                 </p>
                             </div>
                         </div>

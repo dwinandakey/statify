@@ -49,6 +49,7 @@ describe('crosstabs.worker – basics and date handling', () => {
     expect(payload.status).toBe('success');
     const summary = payload.results.summary;
     expect(summary).toBeDefined();
+    expect(payload.results.chiSquare?.pearson?.expectedDiagnostics).toBeDefined();
     // Row categories should be formatted back to dd-mm-yyyy for display
     expect(summary.rowCategories).toEqual(expect.arrayContaining(['01-01-2020', '02-01-2020']));
   });

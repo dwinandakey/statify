@@ -1910,7 +1910,7 @@ export const MultinomialLogisticMain = () => {
             <div className="flex-grow px-6 py-3 overflow-hidden min-h-0 flex flex-col">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col min-h-0 overflow-hidden">
                     <TabsList className="grid w-full grid-cols-5 flex-shrink-0">
-                        <TabsTrigger value="variables" id="multinomial-logistic-variables-tab-trigger">Model</TabsTrigger>
+                        <TabsTrigger value="variables" id="multinomial-logistic-variables-tab-trigger">Variables</TabsTrigger>
                         <TabsTrigger value="statistics" id="multinomial-logistic-statistics-tab-trigger">Statistics</TabsTrigger>
                         <TabsTrigger value="criteria" id="multinomial-logistic-criteria-tab-trigger">Criteria</TabsTrigger>
                         <TabsTrigger value="options" id="multinomial-logistic-options-tab-trigger">Options</TabsTrigger>

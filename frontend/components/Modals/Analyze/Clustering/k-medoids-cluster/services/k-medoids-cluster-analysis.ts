@@ -1,5 +1,5 @@
 import type { KMedoidsClusterType } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
-import { ClusterMode, AutoKMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+import { ClusterMode, AutoKMethod, MissingValueMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import type { Variable } from "@/types/Variable";
 import { ClusterWorker, type ClusteringInput, type ClusteringResult, type ClusteringRangeInput, type ClusteringRangeItem, type ProgressUpdate, type ClusteringMethod, type DistanceMetric } from "../types/worker";
 import { generateComprehensiveKMedoidsOutput } from "./k-medoids-cluster-comprehensive-output";
@@ -11,6 +11,13 @@ type WasmModule = {
     default: (moduleOrPath?: unknown) => Promise<unknown>;
     run_k_medoids: (input: ClusteringInput) => unknown;
     run_k_medoids_range?: (input: ClusteringRangeInput) => unknown[];
+    standardize_data: (input: { data: number[][]; method: string }) => { matrix: number[][] };
+    calculate_wcss?: (input: {
+        data: number[][];
+        labels: number[];
+        medoid_indices: number[];
+        distance_metric: string;
+    }) => { wcss: number };
 };
 
 export type KMedoidsClusterAnalysisType = {
@@ -34,18 +41,6 @@ type MissingHandlingResult = {
     matrix: number[][];
     rows: any[];
     removedCount: number;
-};
-
-type ZScoreResult = {
-    matrix: number[][];
-    means: number[];
-    stdDevs: number[];
-};
-
-type MinMaxResult = {
-    matrix: number[][];
-    mins: number[];
-    maxs: number[];
 };
 
 let wasmInitialized = false;
@@ -76,22 +71,124 @@ function getInitializedWasmModule(): WasmModule {
 }
 
 
+/** Per-feature median, computed over the finite values of each column. */
+function calculateFeatureMedians(matrix: number[][], d: number): number[] {
+    return Array.from({ length: d }, (_, j) => {
+        const valid = matrix
+            .map(row => row[j])
+            .filter(v => Number.isFinite(v))
+            .sort((a, b) => a - b);
+        if (valid.length === 0) return 0;
+        const mid = Math.floor(valid.length / 2);
+        return valid.length % 2 === 0 ? (valid[mid - 1] + valid[mid]) / 2 : valid[mid];
+    });
+}
+
+/** Impute missing entries with the median of their own feature/column. */
+function imputeMedian(matrix: number[][]): number[][] {
+    const d = matrix[0].length;
+    const medians = calculateFeatureMedians(matrix, d);
+    return matrix.map(row => row.map((v, j) => (Number.isFinite(v) ? v : medians[j])));
+}
+
 /**
- * Missing handling aligned with k-means preprocessing behavior:
- * - Listwise: keep rows only when all selected vars are valid.
- * - Pairwise: keep rows with at least one valid value, then impute remaining
- *   missing entries using per-feature mean to keep matrix numeric.
+ * Impute missing entries using the average of the k nearest rows (default k=5).
+ * Distance between two rows is the Euclidean distance computed over the
+ * features both rows have available (NaN-aware, à la scikit-learn's
+ * KNNImputer), scaled up to the full feature count so rows sharing few
+ * features aren't unfairly favored. Rows with no comparable neighbor for a
+ * given feature fall back to that feature's median.
  */
-function applyMissingHandling(
+export function imputeKnn(matrix: number[][], k: number = 5): number[][] {
+    const n = matrix.length;
+    const d = matrix[0].length;
+    const medians = calculateFeatureMedians(matrix, d);
+    const result = matrix.map(row => [...row]);
+
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < d; j++) {
+            if (Number.isFinite(matrix[i][j])) continue;
+
+            const neighbors: { dist: number; value: number }[] = [];
+            for (let other = 0; other < n; other++) {
+                if (other === i) continue;
+                const otherValue = matrix[other][j];
+                if (!Number.isFinite(otherValue)) continue;
+
+                let sumSq = 0;
+                let shared = 0;
+                for (let f = 0; f < d; f++) {
+                    if (f === j) continue;
+                    const a = matrix[i][f];
+                    const b = matrix[other][f];
+                    if (Number.isFinite(a) && Number.isFinite(b)) {
+                        sumSq += (a - b) ** 2;
+                        shared += 1;
+                    }
+                }
+                if (shared === 0) continue;
+                neighbors.push({ dist: Math.sqrt((sumSq / shared) * d), value: otherValue });
+            }
+
+            if (neighbors.length === 0) {
+                result[i][j] = medians[j];
+                continue;
+            }
+
+            neighbors.sort((a, b) => a.dist - b.dist);
+            const nearest = neighbors.slice(0, Math.min(k, neighbors.length));
+            result[i][j] = nearest.reduce((s, nb) => s + nb.value, 0) / nearest.length;
+        }
+    }
+
+    return result;
+}
+
+/**
+ * After imputation, `rows` still holds the original source objects — the
+ * cells that were filled in only exist in the numeric `matrix`. Patch those
+ * imputed values back into cloned copies of the source rows so downstream
+ * consumers (output tables, saved attributes) display the filled-in value
+ * instead of a blank/0 for cells that were originally missing. No-op for
+ * listwise deletion, since no missing values remain in the kept rows.
+ */
+function patchImputedAttributes(
+    rows: any[],
+    matrix: number[][],
+    variables: Variable[]
+): any[] {
+    return rows.map((sourceRow, i) => {
+        const numericRow = matrix[i];
+        let patched = sourceRow;
+        variables.forEach((v, j) => {
+            const columnIndex = v.columnIndex as number;
+            const rawValue = sourceRow[columnIndex];
+            const parsed = typeof rawValue === "number" ? rawValue : parseFloat(rawValue);
+            if (!Number.isFinite(parsed)) {
+                if (patched === sourceRow) patched = { ...sourceRow };
+                patched[columnIndex] = numericRow[j];
+            }
+        });
+        return patched;
+    });
+}
+
+/**
+ * Missing value handling per Options → Missing Values:
+ * - Listwise: keep rows only when all selected vars are valid.
+ * - Median / Knn: keep rows with at least one valid value, drop rows that are
+ *   entirely missing, then impute the remaining empty cells so the matrix
+ *   stays numeric.
+ */
+export function applyMissingHandling(
     rowsWithNumeric: Array<{ source: any; numeric: number[] }>,
-    useListWise: boolean,
-    usePairWise: boolean
+    method: MissingValueMethod
 ): MissingHandlingResult {
     if (rowsWithNumeric.length === 0) {
         return { matrix: [], rows: [], removedCount: 0 };
     }
 
-    if (useListWise || !usePairWise) {
+    if (method === MissingValueMethod.Listwise) {
         const kept = rowsWithNumeric.filter(item => item.numeric.every(v => Number.isFinite(v)));
         return {
             matrix: kept.map(item => item.numeric),
@@ -100,99 +197,44 @@ function applyMissingHandling(
         };
     }
 
-    // Pairwise mode: keep rows with at least one valid value.
-    const pairwiseKept = rowsWithNumeric.filter(item => item.numeric.some(v => Number.isFinite(v)));
-    if (pairwiseKept.length === 0) {
-        return {
-            matrix: [],
-            rows: [],
-            removedCount: rowsWithNumeric.length,
-        };
+    // Median / Knn imputation: keep rows with at least one valid value.
+    const kept = rowsWithNumeric.filter(item => item.numeric.some(v => Number.isFinite(v)));
+    if (kept.length === 0) {
+        return { matrix: [], rows: [], removedCount: rowsWithNumeric.length };
     }
 
-    const d = pairwiseKept[0].numeric.length;
-    const means = Array.from({ length: d }, (_, j) => {
-        const valid = pairwiseKept
-            .map(item => item.numeric[j])
-            .filter(v => Number.isFinite(v));
-        if (valid.length === 0) return 0;
-        return valid.reduce((s, v) => s + v, 0) / valid.length;
-    });
-
-    const imputedMatrix = pairwiseKept.map(item =>
-        item.numeric.map((v, j) => (Number.isFinite(v) ? v : means[j]))
-    );
+    const rawMatrix = kept.map(item => item.numeric);
+    const imputedMatrix = method === MissingValueMethod.Knn
+        ? imputeKnn(rawMatrix)
+        : imputeMedian(rawMatrix);
 
     return {
         matrix: imputedMatrix,
-        rows: pairwiseKept.map(item => item.source),
-        removedCount: rowsWithNumeric.length - pairwiseKept.length,
+        rows: kept.map(item => item.source),
+        removedCount: rowsWithNumeric.length - kept.length,
     };
-}
-
-/**
- * Standardize matrix with Z-score per variable.
- * Uses sample standard deviation (n-1), aligned with R scale() default behavior.
- */
-function standardizeZScore(matrix: number[][]): ZScoreResult {
-    if (matrix.length === 0) {
-        return { matrix: [], means: [], stdDevs: [] };
-    }
-
-    const nRows = matrix.length;
-    const nCols = matrix[0].length;
-    const means = Array.from({ length: nCols }, (_, col) =>
-        matrix.reduce((sum, row) => sum + row[col], 0) / nRows
-    );
-
-    const stdDevs = Array.from({ length: nCols }, (_, col) => {
-        if (nRows <= 1) return 1;
-        const mean = means[col];
-        const variance = matrix.reduce((sum, row) => {
-            const diff = row[col] - mean;
-            return sum + diff * diff;
-        }, 0) / (nRows - 1);
-        const std = Math.sqrt(variance);
-        return std > 1e-12 ? std : 1;
-    });
-
-    const standardized = matrix.map(row =>
-        row.map((value, col) => (value - means[col]) / stdDevs[col])
-    );
-
-    return {
-        matrix: standardized,
-        means,
-        stdDevs,
-    };
-}
-
-function normalizeMinMax(matrix: number[][]): MinMaxResult {
-    if (matrix.length === 0) {
-        return { matrix: [], mins: [], maxs: [] };
-    }
-
-    const nCols = matrix[0].length;
-    const mins = Array.from({ length: nCols }, (_, col) =>
-        Math.min(...matrix.map(row => row[col]))
-    );
-    const maxs = Array.from({ length: nCols }, (_, col) =>
-        Math.max(...matrix.map(row => row[col]))
-    );
-
-    const normalized = matrix.map(row =>
-        row.map((value, col) => {
-            const min = mins[col];
-            const max = maxs[col];
-            if (max === min) return 0;
-            return (value - min) / (max - min);
-        })
-    );
-
-    return { matrix: normalized, mins, maxs };
 }
 
 type NormalizationKind = "none" | "zscore" | "minmax";
+
+/**
+ * Standardize/normalize a matrix via the WASM `standardize_data` export, so
+ * the scaling formula (Z-score with sample std n-1, or Min-Max) has a single
+ * implementation in Rust (`stats::normalization`) instead of being duplicated
+ * in TypeScript.
+ */
+async function standardizeMatrixWasm(
+    matrix: number[][],
+    method: NormalizationKind
+): Promise<number[][]> {
+    if (method === "none" || matrix.length === 0) {
+        return matrix;
+    }
+
+    await initializeWasm();
+    const result = getInitializedWasmModule().standardize_data({ data: matrix, method });
+    return result.matrix;
+}
 
 function resolveNormalizationMethod(config: any): NormalizationKind {
     const methodFromOptions = config?.options?.NormalizationMethod as NormalizationKind | undefined;
@@ -327,6 +369,29 @@ function calculateSilhouetteScore(
     }
 
     return silhouettes.reduce((sum, s) => sum + s, 0) / sn;
+}
+
+/**
+ * Prefer the WASM `calculate_wcss` export (single Rust implementation);
+ * fall back to the local JS computation only for older WASM builds that
+ * don't export it yet.
+ */
+function wcssFromWasm(
+    wasmModule: WasmModule,
+    matrix: number[][],
+    labels: number[],
+    medoidIndices: number[],
+    metric: DistanceMetric
+): number {
+    if (typeof wasmModule.calculate_wcss === "function") {
+        return wasmModule.calculate_wcss({
+            data: matrix,
+            labels,
+            medoid_indices: medoidIndices,
+            distance_metric: metric,
+        }).wcss;
+    }
+    return calculateWCSS(matrix, labels, medoidIndices, metric);
 }
 
 /**
@@ -505,26 +570,30 @@ async function saveClusteringVariables(
     }
 }
 
-function persistComprehensiveOutputInBackground(
+/**
+ * Must be awaited before navigating to the result page — the result page loads
+ * its data once on mount (see ResultOutput's loadResults effect) and does not
+ * re-fetch afterwards, so navigating before this settles can leave the newly
+ * computed output invisible until some unrelated remount/refetch happens.
+ */
+async function persistComprehensiveOutput(
     analysisResult: any,
     processedDataRows: any[],
     variables: Variable[],
     caseLabelColumnIndex: number | null,
     finalMatrix?: number[][]
-): void {
-    void (async () => {
-        try {
-            await generateComprehensiveKMedoidsOutput(
-                analysisResult,
-                processedDataRows,
-                variables,
-                caseLabelColumnIndex,
-                finalMatrix
-            );
-        } catch (err) {
-            console.error("Failed to generate comprehensive output in background:", err);
-        }
-    })();
+): Promise<void> {
+    try {
+        await generateComprehensiveKMedoidsOutput(
+            analysisResult,
+            processedDataRows,
+            variables,
+            caseLabelColumnIndex,
+            finalMatrix
+        );
+    } catch (err) {
+        console.error("Failed to generate comprehensive output:", err);
+    }
 }
 
 /**
@@ -568,7 +637,7 @@ if (typeof window !== "undefined") {
  * WASM returns: cluster_assignments, medoids_indices, total_distance
  * TypeScript expects: labels, medoids, cost
  */
-function mapWasmOutputToResult(wasmOutput: any): ClusteringResult {
+export function mapWasmOutputToResult(wasmOutput: any): ClusteringResult {
     // Build iteration_history from cost_history if present
     const costHistory: number[] = wasmOutput.cost_history || [];
     const iterationHistory = costHistory.length > 0
@@ -678,22 +747,19 @@ export async function analyzeKMedoidsCluster({
         // Preprocessing flow:
         // 1) non-numeric -> NaN (already done above),
         // 2) missing handling per Options → Missing Values:
-        //    listwise = drop rows with any NaN/Inf (RemoveRow),
-        //    pairwise = keep rows with at least one valid value, impute rest with column mean,
+        //    listwise = drop rows with any NaN/Inf,
+        //    median/knn = keep rows with at least one valid value, impute rest,
         // 3) optional Z-score standardization.
-        const useListWise = configData.options?.ExcludeListWise ?? true;
-        const usePairWise = configData.options?.ExcludePairWise ?? false;
-        const missingHandled = applyMissingHandling(parsedRows, useListWise, usePairWise);
+        const missingValueMethod = configData.options?.MissingValueMethod ?? MissingValueMethod.Listwise;
+        const missingHandled = applyMissingHandling(parsedRows, missingValueMethod);
 
         const dataMatrix = missingHandled.matrix;
-        const processedDataRows = missingHandled.rows;
+        // Reflect imputed cells (Median/Knn) back into the row objects so
+        // output tables show the filled-in value instead of the original blank.
+        const processedDataRows = patchImputedAttributes(missingHandled.rows, dataMatrix, variables);
 
         const normalizationMethod = resolveNormalizationMethod(configData);
-        const standardizedMatrix = normalizationMethod === "zscore"
-            ? standardizeZScore(dataMatrix).matrix
-            : normalizationMethod === "minmax"
-            ? normalizeMinMax(dataMatrix).matrix
-            : dataMatrix;
+        const standardizedMatrix = await standardizeMatrixWasm(dataMatrix, normalizationMethod);
 
         const preprocessingSummary: PreprocessingSummary = {
             initialN: dataVariables.length,
@@ -796,8 +862,12 @@ export async function analyzeKMedoidsCluster({
                     iterations: item.iterations || 0,
                     converged: item.converged || false,
                     cost_history: item.cost_history || [],
-                    silhouetteScore: calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
-                    wcssScore: calculateWCSS(finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
+                    // Prefer the WASM-computed silhouette_overall (reuses the shared
+                    // distance matrix); only recompute in JS for older WASM builds.
+                    silhouetteScore: typeof item.silhouette_overall === "number"
+                        ? item.silhouette_overall
+                        : calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
+                    wcssScore: wcssFromWasm(wasmModule, finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
                 }));
             }
 
@@ -908,15 +978,16 @@ export async function analyzeKMedoidsCluster({
                 processedDataRows
             );
             
-            // Persist large comprehensive output in background so the main flow can return early.
-            persistComprehensiveOutputInBackground(
+            // Persist comprehensive output before returning so the result page
+            // (which loads its data once on navigation) already has it available.
+            await persistComprehensiveOutput(
                 analysisResult,
                 processedDataRows,
                 variables,
                 caseLabelColumnIndex,
                 finalMatrix
             );
-            
+
             return analysisResult;
         } else {
             // ========== MANUAL K SELECTION ==========
@@ -1034,8 +1105,12 @@ export async function analyzeKMedoidsCluster({
                             iterations: item.iterations || 0,
                             converged: item.converged || false,
                             cost_history: item.cost_history || [],
-                            silhouetteScore: calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
-                            wcssScore: calculateWCSS(finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
+                            // Prefer the WASM-computed silhouette_overall (reuses the shared
+                            // distance matrix); only recompute in JS for older WASM builds.
+                            silhouetteScore: typeof item.silhouette_overall === "number"
+                                ? item.silhouette_overall
+                                : calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
+                            wcssScore: wcssFromWasm(wasmModule, finalMatrix, item.cluster_assignments || [], item.medoids_indices || [], distanceMetric),
                         }));
                     }
 
@@ -1104,18 +1179,19 @@ export async function analyzeKMedoidsCluster({
                 processedDataRows
             );
             
-            // Persist large comprehensive output in background so the main flow can return early.
-            persistComprehensiveOutputInBackground(
+            // Persist comprehensive output before returning so the result page
+            // (which loads its data once on navigation) already has it available.
+            await persistComprehensiveOutput(
                 analysisResult,
                 processedDataRows,
                 variables,
                 caseLabelColumnIndex,
                 finalMatrix
             );
-            
+
             return analysisResult;
         }
-        
+
     } catch (error) {
         console.error("Error in K-Medoids analysis:", error);
         const errorMessage = error instanceof Error ? error.message : String(error);

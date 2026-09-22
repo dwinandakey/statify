@@ -87,10 +87,16 @@ const nextConfig = {
         ];
     },
     async rewrites() {
+        const backendUrl = (process.env.NEXT_PUBLIC_BACKEND_URL ||
+            (process.env.NODE_ENV === 'production'
+                ? 'http://statify-backend:5000'
+                : 'http://localhost:5000')).replace(/\/+$/, '');
+        const backendApiUrl = backendUrl.endsWith('/api') ? backendUrl : `${backendUrl}/api`;
         return [
             {
+                // Proxy API requests to backend
                 source: '/api/:path*',
-                destination: 'http://statify-backend:5000/api/:path*'
+                destination: `${backendApiUrl}/:path*`
             }
         ];
     },

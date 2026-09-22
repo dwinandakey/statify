@@ -194,7 +194,7 @@ const OrdinalMain: React.FC = () => {
   const toNumberOrThrow = (value: unknown, label: string) => {
     const numeric = Number(value);
     if (Number.isNaN(numeric) || !Number.isFinite(numeric)) {
-      throw new Error(`Covariate '${label}' contains non-numeric values.`);
+      throw new Error(`Covariate '${label}' Variabel kovariat wajib bertipe numerik.`);
     }
     return numeric;
   };
@@ -925,13 +925,8 @@ const OrdinalMain: React.FC = () => {
       </AnimatePresence>
       <ActiveElementHighlight active={tourActive} />
 
-      <div className="px-6 py-4 flex-shrink-0">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Ordinal Regression
-        </h2>
-      </div>
       <Separator />
-      <div className="flex-grow px-6 overflow-y-auto min-h-0">
+      <div className="flex-grow px-6 py-3 overflow-y-auto min-h-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
           <TabsList className="grid w-full grid-cols-5 flex-shrink-0">
             <TabsTrigger value="variables" id="ordinal-regression-variables-tab-trigger">Variables</TabsTrigger>

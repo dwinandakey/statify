@@ -126,7 +126,7 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
   const computeMaxRowHeaderDepth = (rows: TableRowData[]): number => {
     let max = 0;
     rows.forEach((r) => {
-      const len = r.rowHeader ? r.rowHeader.length : 0;
+      const len = Array.isArray(r.rowHeader) ? r.rowHeader.length : 0;
       if (len > max) max = len;
     });
     return max;
@@ -136,9 +136,10 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
     row: TableRowData,
     accumulated: (string | null)[]
   ): TableRowData[] => {
+    if (!row) return [];
     const combined: (string | null)[] = [];
 
-    const currentHeaders = row.rowHeader || [];
+    const currentHeaders = Array.isArray(row.rowHeader) ? row.rowHeader : [];
 
     const length = Math.max(accumulated.length, currentHeaders.length);
 
@@ -158,6 +159,7 @@ const DataTableRenderer: React.FC<DataTableProps> = ({ data }) => {
   };
 
   const flattenRows = (rows: TableRowData[]): TableRowData[] => {
+    if (!Array.isArray(rows)) return [];
     const result: TableRowData[] = [];
     for (const row of rows) {
       result.push(...propagateHeaders(row, []));

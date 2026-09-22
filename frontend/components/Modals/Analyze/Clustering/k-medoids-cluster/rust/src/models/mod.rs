@@ -127,3 +127,36 @@ pub struct KMedoidsRangeItem {
     /// Pre-computed in WASM so the worker can skip JS silhouette computation.
     pub silhouette_overall: f64,
 }
+
+// ── Standardization request / response types ─────────────────────────────────
+
+/// Input for `standardize_data`: a numeric matrix plus the scaling method to apply.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StandardizeInput {
+    pub data: Vec<Vec<f64>>,
+    /// "zscore" | "minmax" | "none" (unknown values fall back to "none")
+    pub method: String,
+}
+
+/// Output of `standardize_data`: the scaled matrix, same shape as the input.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StandardizeOutput {
+    pub matrix: Vec<Vec<f64>>,
+}
+
+// ── WCSS (Elbow method) request / response types ──────────────────────────────
+
+/// Input for `calculate_wcss`: a clustering result plus the data it was computed from.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WcssInput {
+    pub data: Vec<Vec<f64>>,
+    pub labels: Vec<usize>,
+    pub medoid_indices: Vec<usize>,
+    pub distance_metric: String,
+}
+
+/// Output of `calculate_wcss`.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WcssOutput {
+    pub wcss: f64,
+}

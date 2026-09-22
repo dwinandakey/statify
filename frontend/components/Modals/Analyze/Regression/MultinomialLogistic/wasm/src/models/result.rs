@@ -55,6 +55,9 @@ pub struct GoodnessOfFit {
     pub deviance: f64,
     pub deviance_df: u32,
     pub deviance_p_value: f64,
+    /// Jumlah pola kovariat unik (m) — ditampilkan sebagai baris Subpopulation
+    /// pada tabel Case Processing Summary, sesuai perilaku SPSS NOMREG.
+    pub subpopulations_count: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

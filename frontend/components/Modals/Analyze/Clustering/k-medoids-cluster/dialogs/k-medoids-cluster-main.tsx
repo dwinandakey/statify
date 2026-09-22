@@ -16,7 +16,7 @@ import type {
     KMedoidsClusterMainType,
     KMedoidsClusterType,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
-import { ClusterMode } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+import { ClusterMode, MissingValueMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { KMedoidsClusterDialog } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/dialog";
 import { KMedoidsClusterIterate } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/iterate";
 import { KMedoidsClusterResults } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/results";
@@ -255,8 +255,7 @@ export const KMedoidsClusterContainer = ({
     const getValidRowCount = (
         rows: any[],
         selectedVariables: typeof variables,
-        useListWise: boolean,
-        usePairWise: boolean
+        missingValueMethod: MissingValueMethod
     ) => {
         if (rows.length === 0 || selectedVariables.length === 0) {
             return 0;
@@ -280,7 +279,7 @@ export const KMedoidsClusterContainer = ({
                 }
             }
 
-            if (useListWise || !usePairWise) {
+            if (missingValueMethod === MissingValueMethod.Listwise) {
                 if (!hasAnyMissing && hasAnyValid) {
                     validCount += 1;
                 }
@@ -306,13 +305,11 @@ export const KMedoidsClusterContainer = ({
             return;
         }
 
-        const useListWise = formData.options?.ExcludeListWise ?? true;
-        const usePairWise = formData.options?.ExcludePairWise ?? false;
+        const missingValueMethod = formData.options?.MissingValueMethod ?? MissingValueMethod.Listwise;
         const validRows = getValidRowCount(
             dataVariables,
             selectedVariables,
-            useListWise,
-            usePairWise
+            missingValueMethod
         );
 
         if (validRows < 2) {

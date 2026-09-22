@@ -1,4 +1,4 @@
-import { formatCaseProcessingSummary, formatCrosstabulationTable } from '../utils/formatters';
+import { formatCaseProcessingSummary, formatCrosstabulationTable, formatChiSquareTestsTable } from '../utils/formatters';
 import type { CrosstabsWorkerResult, CrosstabsAnalysisParams } from '../types';
 import type { Variable } from '@/types/Variable';
 
@@ -6,6 +6,7 @@ const mockParams: CrosstabsAnalysisParams = {
     rowVariables: [{ name: 'gender', label: 'Gender' } as Variable],
     columnVariables: [{ name: 'jobcat', label: 'Job Category' } as Variable],
     options: {
+        statistics: { chiSquare: true },
         cells: { observed: true, expected: false, row: false, column: false, total: false, hideSmallCounts: false, hideSmallCountsThreshold: 5 },
         residuals: { unstandardized: false, standardized: false, adjustedStandardized: false },
         nonintegerWeights: 'roundCell',
@@ -26,6 +27,19 @@ const mockResult: CrosstabsWorkerResult = {
         [180, 0, 36],
         [183, 27, 48],
     ],
+    chiSquare: {
+        pearson: {
+            value: 67.149,
+            df: 2,
+            pValue: 0.00000000026,
+            expectedDiagnostics: {
+                minExpectedCount: 12.3,
+                cellsUnder5: 0,
+                totalCells: 6,
+                percentCellsUnder5: 0,
+            }
+        }
+    }
 };
 
 describe('Crosstabs Formatters', () => {
@@ -33,10 +47,10 @@ describe('Crosstabs Formatters', () => {
     describe('formatCaseProcessingSummary', () => {
         it('should format the case processing summary correctly', () => {
             const formatted = formatCaseProcessingSummary(mockResult, mockParams);
-            
+
             expect(formatted?.title).toBe('Case Processing Summary');
             expect(formatted?.rows).toHaveLength(1);
-            
+
             const row = formatted?.rows[0];
             expect(row?.rowHeader).toEqual(['Gender * Job Category']);
             expect(row?.valid_n).toBe(474);
@@ -64,7 +78,7 @@ describe('Crosstabs Formatters', () => {
             const formatted = formatCrosstabulationTable(mockResult, mockParams);
 
             expect(formatted?.title).toBe('Gender * Job Category Crosstabulation');
-            
+
             // Check headers
             expect(formatted?.columnHeaders).toHaveLength(4);
             expect(formatted?.columnHeaders[2].header).toBe('Job Category');
@@ -120,20 +134,20 @@ describe('Crosstabs Formatters', () => {
             };
 
             const formatted = formatCrosstabulationTable(zeroRowResult, paramsWithRowPct);
-            
+
             expect(formatted).not.toBeNull();
             expect(formatted?.title).toBe('Gender * Job Category Crosstabulation');
-            
+
             // Check that the first row (with zero total) has empty percentage values
             const mainRow = formatted?.rows[0] as any;
             const firstDataRow = mainRow.children[0]; // First data row (Female)
-            
+
             // All percentage cells should show 0.0% for the row with zero total
             expect(firstDataRow.c1).toBe('0.0%'); // Should show 0.0% instead of empty
             expect(firstDataRow.c2).toBe('0.0%'); // Should show 0.0% instead of empty
             expect(firstDataRow.c3).toBe('0.0%'); // Should show 0.0% instead of empty
             expect(firstDataRow.total).toBe('100.0%'); // Total should show 100.0% for valid rows
-            
+
             // Second row should still have valid percentages
             const secondDataRow = mainRow.children[1]; // Second data row (Male)
             expect(secondDataRow.total).toBe('100.0%'); // This should still work
@@ -149,19 +163,48 @@ describe('Crosstabs Formatters', () => {
             };
 
             const formatted = formatCrosstabulationTable(mockResult, paramsWithRowPct);
-            
+
             expect(formatted).not.toBeNull();
-            
+
             // Check total row - should show column percentages for row percentage statistic
             const totalRow = formatted?.rows[1] as any; // Total row
             expect(totalRow.rowHeader).toEqual(['Total', null, '% within Gender']);
-            
+
             // Check that total row shows column percentages (colTotals/totalCases)
             // 363/474 = 76.6%, 27/474 = 5.7%, 84/474 = 17.7%
             expect(totalRow.c1).toBe('76.6%'); // Clerical percentage of total
-            expect(totalRow.c2).toBe('5.7%');  // Custodial percentage of total  
+            expect(totalRow.c2).toBe('5.7%');  // Custodial percentage of total
             expect(totalRow.c3).toBe('17.7%'); // Manager percentage of total
             expect(totalRow.total).toBe('100.0%'); // Always 100% for total
         });
     });
-}); 
+
+    describe('formatChiSquareTestsTable', () => {
+        it('should format Pearson chi-square table correctly when enabled', () => {
+            const formatted = formatChiSquareTestsTable(mockResult, mockParams);
+
+            expect(formatted).not.toBeNull();
+            expect(formatted?.title).toBe('Chi-Square Tests');
+            expect(formatted?.rows).toHaveLength(2);
+            expect(formatted?.rows[0].rowHeader).toEqual(['Pearson Chi-Square']);
+            expect(formatted?.rows[1].rowHeader).toEqual(['N of Valid Cases']);
+            expect((formatted?.rows[1] as any).value).toBe('474');
+            expect((formatted?.rows[0] as any).df).toBe('2');
+            expect((formatted?.rows[0] as any).sig).toBe('<.001');
+            expect(formatted?.footnotes?.[0]).toContain('expected count less than 5');
+        });
+
+        it('should return null when chi-square option is disabled', () => {
+            const paramsWithoutChi: CrosstabsAnalysisParams = {
+                ...mockParams,
+                options: {
+                    ...mockParams.options,
+                    statistics: { chiSquare: false },
+                }
+            };
+
+            const formatted = formatChiSquareTestsTable(mockResult, paramsWithoutChi);
+            expect(formatted).toBeNull();
+        });
+    });
+});
