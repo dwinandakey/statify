@@ -88,16 +88,40 @@ pub fn run_analysis(
         }
     }
 
-    // Step 3: Bartlett test if requested in options
-    let mut bartlett_test = None;
+    // Step 3: Homogeneity tests (Options: Homogeneity tests) as SPSS prints
+    // them for /PRINT=HOMOGENEITY: Box's M and Levene's test. Bartlett's test
+    // of sphericity belongs to the residual SSCP matrix (Options: Residual
+    // SSCP matrix), as in SPSS.
+    let mut homogeneity_tests = None;
     if config.options.homogen_test {
-        executed_functions.push("calculate_bartlett_test".to_string());
-        match core::calculate_bartlett_test(data, config) {
-            Ok(test) => {
-                bartlett_test = Some(test);
-            }
-            Err(e) => {
-                error_collector.add_error("calculate_bartlett_test", &e);
+        executed_functions.push("calculate_homogeneity_tests".to_string());
+        match &rm_model {
+            Some(model) => match model.homogeneity_tests() {
+                Ok(tests) => {
+                    if let Some(note) = &tests.box_m_note {
+                        error_collector.add_error("calculate_homogeneity_tests", note);
+                    }
+                    homogeneity_tests = Some(tests);
+                }
+                Err(e) => error_collector.add_error("calculate_homogeneity_tests", &e),
+            },
+            None => error_collector.add_error(
+                "calculate_homogeneity_tests",
+                "Homogeneity tests are not computed: the between-subjects model could not be built"
+            ),
+        }
+    }
+    let mut bartlett_test = None;
+    if config.options.res_sscp_mat {
+        if let Some(model) = &rm_model {
+            executed_functions.push("calculate_bartlett_test".to_string());
+            match model.bartlett_sphericity() {
+                Ok(test) => {
+                    bartlett_test = Some(test);
+                }
+                Err(e) => {
+                    error_collector.add_error("calculate_bartlett_test", &e);
+                }
             }
         }
     }
@@ -351,6 +375,7 @@ pub fn run_analysis(
         within_subjects_factors,
         descriptive_statistics,
         bartlett_test,
+        homogeneity_tests,
         multivariate_tests,
         mauchly_test,
         tests_of_within_subjects_effects,

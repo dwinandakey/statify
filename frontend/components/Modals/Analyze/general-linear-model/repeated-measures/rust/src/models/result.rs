@@ -6,6 +6,8 @@ pub struct RepeatedMeasureResult {
     pub within_subjects_factors: Option<WithinSubjectsFactors>,
     pub descriptive_statistics: Option<HashMap<String, DescriptiveStatistics>>,
     pub bartlett_test: Option<BartlettTest>,
+    /// Box's M and Levene's tests (Options: Homogeneity tests).
+    pub homogeneity_tests: Option<HomogeneityTests>,
     pub multivariate_tests: Option<MultivariateTests>,
     pub mauchly_test: Option<MauchlyTest>,
     pub tests_of_within_subjects_effects: Option<TestsWithinSubjectsEffects>,
@@ -56,6 +58,35 @@ pub struct StatsEntry {
     pub mean: f64,
     pub std_deviation: f64,
     pub n: usize,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct HomogeneityTests {
+    /// Box's Test of Equality of Covariance Matrices (None when it cannot be
+    /// computed, e.g. a singular cell covariance matrix; see `box_m_note`).
+    pub box_m: Option<BoxMTest>,
+    pub box_m_note: Option<String>,
+    /// Levene's Test of Equality of Error Variances per dependent variable.
+    pub levene: HashMap<String, Vec<LeveneEntry>>,
+    pub design: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct BoxMTest {
+    pub box_m: f64,
+    pub f: f64,
+    pub df1: f64,
+    pub df2: f64,
+    pub significance: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LeveneEntry {
+    pub based_on: String,
+    pub statistic: f64,
+    pub df1: f64,
+    pub df2: f64,
+    pub significance: f64,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

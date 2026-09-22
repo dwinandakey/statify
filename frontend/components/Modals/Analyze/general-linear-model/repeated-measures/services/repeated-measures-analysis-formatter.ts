@@ -10,6 +10,7 @@ export function transformRepeatedMeasureResult(
 
     formatWithinSubjectsFactors(data, resultJson);
     formatDescriptiveStatistics(data, resultJson);
+    formatHomogeneityTests(data, resultJson);
     formatBartlettTest(data, resultJson);
     formatMultivariateTests(data, resultJson);
     formatMauchlyTest(data, resultJson);
@@ -107,6 +108,69 @@ function formatDescriptiveStatistics(data: any, resultJson: ResultJson) {
             resultJson.tables.push(table);
         }
     );
+}
+
+// ── 3a. Homogeneity tests (Box's M, Levene) ──────────────────────────────────
+function formatHomogeneityTests(data: any, resultJson: ResultJson) {
+    const h = data.homogeneity_tests;
+    if (!h) return;
+    const design = h.design ? `Design: ${h.design}` : "";
+
+    if (h.box_m) {
+        const b = h.box_m;
+        resultJson.tables.push({
+            key: "box_m_test",
+            title: "Box's Test of Equality of Covariance Matrices",
+            columnHeaders: [
+                { header: "", key: "label" },
+                { header: "", key: "value" },
+            ],
+            rows: [
+                { rowHeader: [], label: "Box's M", value: fmt3(b.box_m) },
+                { rowHeader: [], label: "F", value: fmt3(b.f) },
+                { rowHeader: [], label: "df1", value: fmt3(b.df1) },
+                { rowHeader: [], label: "df2", value: fmt3(b.df2) },
+                { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
+            ],
+            note: `Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups. ${design}`.trim(),
+            interpretation: "If significant (Sig. < .05), the covariance matrices of the dependent variables differ across the between-subjects groups.",
+        });
+    }
+
+    const levene = h.levene || {};
+    const dvs = Object.keys(levene);
+    if (dvs.length) {
+        const table: Table = {
+            key: "levene_test",
+            title: "Levene's Test of Equality of Error Variances",
+            columnHeaders: [
+                { header: "", key: "dv" },
+                { header: "", key: "based_on" },
+                { header: "Levene Statistic", key: "statistic" },
+                { header: "df1", key: "df1" },
+                { header: "df2", key: "df2" },
+                { header: "Sig.", key: "sig" },
+            ],
+            rows: [],
+            note: `Tests the null hypothesis that the error variance of the dependent variable is equal across groups. ${design}`.trim(),
+            interpretation: "If significant (Sig. < .05), the error variances differ across the between-subjects groups.",
+        };
+        dvs.forEach((dv) => {
+            (levene[dv] || []).forEach((e: any, idx: number) => {
+                const integerDf = Number.isInteger(e.df2);
+                table.rows.push({
+                    rowHeader: [],
+                    dv: idx === 0 ? dv : "",
+                    based_on: e.based_on,
+                    statistic: fmt3(e.statistic),
+                    df1: String(e.df1),
+                    df2: integerDf ? String(e.df2) : fmt3(e.df2),
+                    sig: formatSig(e.significance),
+                });
+            });
+        });
+        resultJson.tables.push(table);
+    }
 }
 
 // ── 3. Bartlett's Test ────────────────────────────────────────────────────────

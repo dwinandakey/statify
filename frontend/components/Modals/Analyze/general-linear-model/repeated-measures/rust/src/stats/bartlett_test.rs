@@ -175,13 +175,14 @@ pub fn calculate_bartlett_test_from_residual(
         return Err("Insufficient degrees of freedom for residual".to_string());
     }
 
-    // Convert SSCP to correlation matrix
+    // Residual covariance matrix S = E / (n − r). The test compares S with a
+    // multiple of the identity: W = |S| / (tr(S)/p)^p (determinant and trace
+    // of the same matrix; the earlier version mixed the correlation
+    // determinant with the covariance trace).
     let mut cov_matrix = residual_sscp.clone();
     cov_matrix /= (n - r_x) as f64;
-    let cor_matrix = covariance_to_correlation(&cov_matrix);
 
-    // Calculate the test statistic
-    match matrix_determinant(&from_dmatrix(&cor_matrix)) {
+    match matrix_determinant(&from_dmatrix(&cov_matrix)) {
         Ok(det) => {
             if det <= 0.0 {
                 return Err("Correlation matrix is singular".to_string());
@@ -204,10 +205,9 @@ pub fn calculate_bartlett_test_from_residual(
                         2.0)) /
                 (288.0 * (p as f64).powi(2) * ((n - r_x) as f64).powi(2) * rho.powi(2));
 
-            // Calculate test statistic
-            let w =
-                det.powf(((n - r_x) as f64) / 2.0) /
-                (cov_matrix.trace() / (p as f64)).powf((((n - r_x) * p) as f64) / 2.0);
+            // Test statistic: χ² = −ρ·(n − r)·ln W (W not raised to (n − r)/2
+            // a second time, as before).
+            let w = det / (cov_matrix.trace() / (p as f64)).powi(p as i32);
 
             let chi_square = -rho * ((n - r_x) as f64) * w.ln();
 

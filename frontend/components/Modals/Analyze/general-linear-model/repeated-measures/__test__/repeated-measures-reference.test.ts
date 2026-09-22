@@ -38,7 +38,7 @@ const DESIGNS: Record<string, Design> = {
     a: { csv: "rm_a.csv", factor: "waktu", levels: 3, measures: [["cemas", ["cemas1", "cemas2", "cemas3"]], ["stres", ["stres1", "stres2", "stres3"]]], between: [], options: OPT },
     b: { csv: "rm_b.csv", factor: "waktu", levels: 4, measures: [["skor", ["w1", "w2", "w3", "w4"]]], between: ["kelompok"], options: OPT },
     c: {
-        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT,
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: { ...OPT, HomogenTest: true },
         emmeans: { TargetList: ["(OVERALL)", "metode", "sesi", "metode*sesi"], CompMainEffect: true, ConfiIntervalMethod: "bonferroni" },
     },
 };
@@ -141,6 +141,17 @@ function pick(results: any, key: string, e: any): number | undefined {
             const dv = `${cols[Number(j) - 1]}_(${j},${m})`;
             const row = (get(get(results.univariate_tests, "tests"), dv) ?? []).find((x: any) => x.source === e.source);
             return ({ SS: row?.sum_of_squares, df: row?.df, F: row?.f } as Record<string, number>)[e.field];
+        }
+        case "levene": {
+            const [m, j] = String(e.measure).split("|");
+            const cols = d.measures.find(([name]) => name === m)![1];
+            const dv = `${cols[Number(j) - 1]}_(${j},${m})`;
+            const row = (get(get(results.homogeneity_tests, "levene"), dv) ?? []).find((x: any) => x.based_on === e.source);
+            return ({ "Levene Statistic": row?.statistic, df1: row?.df1, df2: row?.df2, "Sig.": row?.significance } as Record<string, number>)[e.field];
+        }
+        case "box_m": {
+            const b = get(results.homogeneity_tests, "box_m");
+            return ({ "Box's M": b?.box_m, F: b?.f, df1: b?.df1, df2: b?.df2, "Sig.": b?.significance } as Record<string, number>)[e.field];
         }
         case "emmeans": {
             const [target, level] = String(e.source).split(" | ");

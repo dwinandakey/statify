@@ -15,7 +15,7 @@ const REPO = path.resolve(here, "../../..");
 const OUT = path.join(REPO, "frontend/components/Modals/Analyze/general-linear-model/repeated-measures/__test__/fixtures/rm-reference-values.json");
 const opts = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const datasets = (opts.datasets || "b,c").split(",");
-const rTables = (opts["r-tables"] || "within_effects,between_effects,mauchly,multivariate,univariate").split(",");
+const rTables = (opts["r-tables"] || "within_effects,between_effects,mauchly,multivariate,univariate,levene").split(",");
 
 const car = JSON.parse(fs.readFileSync(path.join(here, "../r-output/car-values.json"), "utf8"));
 // EM Means of dataset (c) from afex (r/emmeans-afex.R).
@@ -59,6 +59,11 @@ for (const ds of datasets) {
         }
     }
     if (ds === "c") {
+        // Homogeneity tests (spss/rm_c.sps: /PRINT=HOMOGENEITY).
+        for (const f of ["Box's M", "F", "df1", "df2", "Sig."]) slot({ dataset: ds, table: "box_m", measure: "", source: "Box's M", field: f });
+        for (const j of [1, 2, 3]) for (const b of ["Based on Mean", "Based on Median", "Based on Median and with adjusted df", "Based on trimmed mean"]) {
+            for (const f of ["Levene Statistic", "df1", "df2", "Sig."]) slot({ dataset: ds, table: "levene", measure: `nilai|${j}`, source: b, field: f });
+        }
         // EM Means slots as requested in spss/rm_c.sps (Estimates + Pairwise Comparisons).
         const targets = { "(OVERALL)": ["(OVERALL)"], metode: ["1", "2"], sesi: ["1", "2", "3"], "metode * sesi": ["1 · 1", "1 · 2", "1 · 3", "2 · 1", "2 · 2", "2 · 3"] };
         for (const [t, levels] of Object.entries(targets)) for (const l of levels) {
@@ -88,7 +93,9 @@ const fixture = {
     // "Univariate Tests" are produced only for designs with between-subjects
     // factors or covariates (as before), so within-only datasets skip them.
     r_car: car.filter((e) => datasets.includes(e.dataset) && rTables.includes(e.table)
-        && !(e.table === "univariate" && !LAYOUT[e.dataset].between))
+        && !(e.table === "univariate" && !LAYOUT[e.dataset].between)
+        // Levene: only for (c), the dataset the test runs with homogeneity tests.
+        && !(e.table === "levene" && e.dataset !== "c"))
         .concat(afex.filter((e) => datasets.includes(e.dataset))),
     spss,
 };

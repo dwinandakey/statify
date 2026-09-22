@@ -286,6 +286,12 @@ car_values <- function(key, d, within, measures, between = NULL) {
         add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "df1", value = lt[1, "Df"], r_source = src)
         add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "df2", value = lt[2, "Df"], r_source = src)
         add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "Sig.", value = lt[1, "Pr(>F)"], r_source = src)
+        lm2 <- leveneTest(y ~ grp, center = median)
+        src <- paste0(tag, " leveneTest(", col, " ~ ", between, ", center = median)")
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Median", field = "Levene Statistic", value = lm2[1, "F value"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Median", field = "df1", value = lm2[1, "Df"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Median", field = "df2", value = lm2[2, "Df"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Median", field = "Sig.", value = lm2[1, "Pr(>F)"], r_source = src)
       }
     }
   }

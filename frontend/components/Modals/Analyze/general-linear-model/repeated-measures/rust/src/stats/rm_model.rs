@@ -48,7 +48,7 @@ use crate::utils::collections::HashMap;
 use super::core::parse_within_subject_factors;
 use super::glm_tests::{ f_significance, multivariate_statistics, observed_power };
 use crate::models::config::CIMethod;
-use crate::models::result::{ ConfidenceInterval, EstimatedMarginalMean, PairwiseComparison };
+use crate::models::result::{ BartlettTest, BoxMTest, ConfidenceInterval, EstimatedMarginalMean, HomogeneityTests, LeveneEntry, PairwiseComparison };
 use statrs::distribution::StudentsT;
 
 /// Estimated marginal means per target, pairwise comparisons per factor, and
@@ -1020,6 +1020,196 @@ impl RmModel {
             }
         }
         Ok((means, pairwise, problems))
+    }
+}
+
+/// Median of a slice (sorted copy).
+fn median(values: &[f64]) -> f64 {
+    let mut v = values.to_vec();
+    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let n = v.len();
+    if n % 2 == 1 { v[n / 2] } else { (v[n / 2 - 1] + v[n / 2]) / 2.0 }
+}
+
+/// 5% trimmed mean as in SPSS EXAMINE: k = ⌊0.05n⌋ cases removed from each
+/// end and the next case on each side weighted by (k + 1 − 0.05n).
+fn trimmed_mean(values: &[f64]) -> f64 {
+    let mut v = values.to_vec();
+    v.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let n = v.len();
+    let alpha = 0.05;
+    let na = alpha * (n as f64);
+    let k = na.floor() as usize;
+    if n < 2 * k + 2 {
+        return v.iter().sum::<f64>() / (n as f64);
+    }
+    let w = (k as f64) + 1.0 - na;
+    let inner: f64 = v[(k + 1)..(n - k - 1)].iter().sum();
+    (w * (v[k] + v[n - k - 1]) + inner) / ((n as f64) * (1.0 - 2.0 * alpha))
+}
+
+impl RmModel {
+    /// Cell (combination of all between-subjects factor levels) of every subject.
+    fn cells(&self) -> (Vec<usize>, usize) {
+        let mut sizes = Vec::new();
+        for f in &self.factors {
+            sizes.push(f.levels.len());
+        }
+        let n_cells: usize = sizes.iter().product();
+        let ids = self
+            .subject_levels
+            .iter()
+            .map(|sl| sl.iter().zip(&sizes).fold(0, |acc, (l, s)| acc * s + l))
+            .collect();
+        (ids, n_cells)
+    }
+
+    /// One-way ANOVA F of z over the cells: (F, df1, df2, Σ within SS per cell, n per cell).
+    fn cell_anova(z: &[f64], cell: &[usize], n_cells: usize) -> (f64, f64, f64, Vec<f64>, Vec<usize>) {
+        let n = z.len();
+        let mut sum = vec![0.0; n_cells];
+        let mut count = vec![0usize; n_cells];
+        for (i, &c) in cell.iter().enumerate() {
+            sum[c] += z[i];
+            count[c] += 1;
+        }
+        let used: Vec<usize> = (0..n_cells).filter(|&c| count[c] > 0).collect();
+        let g = used.len();
+        let grand = z.iter().sum::<f64>() / (n as f64);
+        let mean: Vec<f64> = (0..n_cells).map(|c| if count[c] > 0 { sum[c] / (count[c] as f64) } else { 0.0 }).collect();
+        let ss_between: f64 = used.iter().map(|&c| (count[c] as f64) * (mean[c] - grand).powi(2)).sum();
+        let mut within = vec![0.0; n_cells];
+        for (i, &c) in cell.iter().enumerate() {
+            within[c] += (z[i] - mean[c]).powi(2);
+        }
+        let ss_within: f64 = within.iter().sum();
+        let df1 = (g - 1) as f64;
+        let df2 = (n - g) as f64;
+        ((ss_between / df1) / (ss_within / df2), df1, df2, within, count)
+    }
+
+    /// Levene's Test of Equality of Error Variances for every dependent
+    /// variable (SPSS 27 GLM layout): based on mean, median, median with
+    /// adjusted df (Satterthwaite-type df2 = (Σu)² / Σ u²/(n−1)) and 5%
+    /// trimmed mean, over the cells of the between-subjects factors.
+    pub fn levene(&self) -> HashMap<String, Vec<LeveneEntry>> {
+        let (cell, n_cells) = self.cells();
+        let mut out = HashMap::new();
+        for m in &self.measures {
+            for (j, var) in m.variables.iter().enumerate() {
+                let y: Vec<f64> = (0..self.n).map(|i| m.y[(i, j)]).collect();
+                let centre = |f: &dyn Fn(&[f64]) -> f64| -> Vec<f64> {
+                    let centres: Vec<f64> = (0..n_cells)
+                        .map(|c| {
+                            let v: Vec<f64> = (0..self.n).filter(|&i| cell[i] == c).map(|i| y[i]).collect();
+                            if v.is_empty() { 0.0 } else { f(&v) }
+                        })
+                        .collect();
+                    (0..self.n).map(|i| (y[i] - centres[cell[i]]).abs()).collect()
+                };
+                let mean_fn = |v: &[f64]| v.iter().sum::<f64>() / (v.len() as f64);
+                let mut rows = Vec::new();
+                let mut push = |label: &str, f: f64, df1: f64, df2: f64| {
+                    rows.push(LeveneEntry { based_on: label.to_string(), statistic: f, df1, df2, significance: f_significance(f, df1, df2) });
+                };
+                let (f, df1, df2, _, _) = Self::cell_anova(&centre(&mean_fn), &cell, n_cells);
+                push("Based on Mean", f, df1, df2);
+                let (f, df1, df2, within, count) = Self::cell_anova(&centre(&median), &cell, n_cells);
+                push("Based on Median", f, df1, df2);
+                let num: f64 = within.iter().sum::<f64>().powi(2);
+                let den: f64 = (0..n_cells).filter(|&c| count[c] > 1).map(|c| within[c].powi(2) / ((count[c] - 1) as f64)).sum();
+                push("Based on Median and with adjusted df", f, df1, if den > 0.0 { num / den } else { f64::NAN });
+                let (f, df1, df2, _, _) = Self::cell_anova(&centre(&trimmed_mean), &cell, n_cells);
+                push("Based on trimmed mean", f, df1, df2);
+                out.insert(var.clone(), rows);
+            }
+        }
+        out
+    }
+
+    /// Box's Test of Equality of Covariance Matrices of all dependent
+    /// variables over the between-subjects cells, with the F approximation
+    /// of Box (1949).
+    pub fn box_m(&self) -> Result<BoxMTest, String> {
+        let (cell, n_cells) = self.cells();
+        let y = hstack(self.measures.iter().map(|m| m.y.clone()).collect());
+        let p = y.ncols();
+        let mut pooled = DMatrix::<f64>::zeros(p, p);
+        let mut terms = Vec::new();
+        let mut used = 0usize;
+        for c in 0..n_cells {
+            let rows: Vec<usize> = (0..self.n).filter(|&i| cell[i] == c).collect();
+            let ni = rows.len();
+            if ni == 0 {
+                continue;
+            }
+            used += 1;
+            if ni <= p {
+                return Err(format!(
+                    "Box's M cannot be computed: a cell has {} cases for {} dependent variables (each cell needs more cases than dependent variables)",
+                    ni, p
+                ));
+            }
+            let sub = DMatrix::from_fn(ni, p, |r, k| y[(rows[r], k)]);
+            let mean = DMatrix::from_fn(1, p, |_, k| sub.column(k).mean());
+            let centred = DMatrix::from_fn(ni, p, |r, k| sub[(r, k)] - mean[(0, k)]);
+            let sscp = centred.transpose() * &centred;
+            let s = &sscp / ((ni - 1) as f64);
+            let det = s.determinant();
+            if !(det > 0.0) {
+                return Err("Box's M cannot be computed: a cell covariance matrix is singular".to_string());
+            }
+            pooled += sscp;
+            terms.push((ni as f64, det));
+        }
+        let g = used as f64;
+        let n = self.n as f64;
+        let p_f = p as f64;
+        let sp = &pooled / (n - g);
+        let det_p = sp.determinant();
+        if !(det_p > 0.0) {
+            return Err("Box's M cannot be computed: the pooled covariance matrix is singular".to_string());
+        }
+        let m_stat = (n - g) * det_p.ln() - terms.iter().map(|(ni, d)| (ni - 1.0) * d.ln()).sum::<f64>();
+        let sum_inv: f64 = terms.iter().map(|(ni, _)| 1.0 / (ni - 1.0)).sum();
+        let sum_inv2: f64 = terms.iter().map(|(ni, _)| 1.0 / (ni - 1.0).powi(2)).sum();
+        let c1 = (sum_inv - 1.0 / (n - g)) * (2.0 * p_f * p_f + 3.0 * p_f - 1.0) / (6.0 * (p_f + 1.0) * (g - 1.0));
+        let c2 = (sum_inv2 - 1.0 / (n - g).powi(2)) * (p_f - 1.0) * (p_f + 2.0) / (6.0 * (g - 1.0));
+        let df1 = (g - 1.0) * p_f * (p_f + 1.0) / 2.0;
+        let (f, df2) = if c2 - c1 * c1 > 0.0 {
+            let df2 = (df1 + 2.0) / (c2 - c1 * c1);
+            let b = df1 / (1.0 - c1 - df1 / df2);
+            (m_stat / b, df2)
+        } else {
+            let df2 = (df1 + 2.0) / (c1 * c1 - c2);
+            let b = df2 / (1.0 - c1 + 2.0 / df2);
+            (df2 * m_stat / (df1 * (b - m_stat)), df2)
+        };
+        Ok(BoxMTest { box_m: m_stat, f, df1, df2, significance: f_significance(f, df1, df2) })
+    }
+
+    /// Homogeneity tests of the Options dialog (SPSS /PRINT=HOMOGENEITY).
+    pub fn homogeneity_tests(&self) -> Result<HomogeneityTests, String> {
+        if self.factors.is_empty() {
+            return Err("Homogeneity tests (Box's M, Levene) need at least one between-subjects factor".to_string());
+        }
+        let (box_m, box_m_note) = match self.box_m() {
+            Ok(b) => (Some(b), None),
+            Err(e) => (None, Some(e)),
+        };
+        let design = {
+            let mut between = vec!["Intercept".to_string()];
+            between.extend(self.terms.iter().map(|t| t.name.clone()));
+            format!("{}; Within Subjects Design: {}", between.join(" + "), self.factor)
+        };
+        Ok(HomogeneityTests { box_m, box_m_note, levene: self.levene(), design })
+    }
+
+    /// Bartlett's Test of Sphericity of the residual covariance matrix of all
+    /// dependent variables (SPSS prints it with the residual SSCP matrix).
+    pub fn bartlett_sphericity(&self) -> Result<BartlettTest, String> {
+        let y = hstack(self.measures.iter().map(|m| m.y.clone()).collect());
+        super::bartlett_test::calculate_bartlett_test_from_residual(&self.error(&y), self.n, self.rank)
     }
 }
 
