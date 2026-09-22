@@ -6,6 +6,7 @@ import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { saveDiscriminantResult, saveDiscriminantAssumptions } from "@/components/Modals/Analyze/Classify/discriminant/services/store";
 import { saveDiscriminantVariables } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-save";
 import { exportDiscriminantModelXml } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-xml-export";
+import { validateDiscriminantInput } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-validation";
 import { toast } from "sonner";
 import { Variable } from "@/types/Variable";
 
@@ -19,6 +20,8 @@ export interface UseDiscriminantStateResult {
         value: DiscriminantType[T][keyof DiscriminantType[T]] | DiscriminantValueUnion
     ) => void;
     executeAnalysis: (mainData: DiscriminantMainType) => Promise<void>;
+    /** Pre-run checks (variables, Define Range, non-empty groups); message or `null`. */
+    validateInput: (mainData: DiscriminantMainType) => string | null;
     /** Run only the assumption checks and push their output immediately. */
     runAssumptions: (mainData: DiscriminantMainType) => Promise<void>;
     resetFormData: () => Promise<void>;
@@ -110,6 +113,12 @@ export const useDiscriminantState = (
             console.error("Failed to clear form data:", err);
         }
     }, []);
+
+    const validateInput = useCallback(
+        (mainData: DiscriminantMainType) =>
+            validateDiscriminantInput(dataVariables, variables, { ...formData, main: mainData }),
+        [formData, dataVariables, variables]
+    );
 
     const executeAnalysis = useCallback(
         async (mainData: DiscriminantMainType) => {
@@ -292,11 +301,9 @@ export const useDiscriminantState = (
     // the worker finishes so the caller can drive its own loading/success state.
     const runAssumptions = useCallback(
         async (mainData: DiscriminantMainType) => {
-            if (!mainData.GroupingVariable) {
-                throw new Error("Please select a Grouping Variable first.");
-            }
-            if (!mainData.IndependentVariables || mainData.IndependentVariables.length === 0) {
-                throw new Error("Please select at least one Independent Variable first.");
+            const validationError = validateInput(mainData);
+            if (validationError || !mainData.GroupingVariable) {
+                throw new Error(validationError ?? "Please select a Grouping Variable.");
             }
 
             // Lightweight config: force all three assumption checks on and skip
@@ -359,13 +366,14 @@ export const useDiscriminantState = (
                 };
             });
         },
-        [formData, dataVariables, variables]
+        [formData, dataVariables, variables, validateInput]
     );
 
     return {
         formData,
         updateFormData,
         executeAnalysis,
+        validateInput,
         runAssumptions,
         resetFormData,
         isLoading,
