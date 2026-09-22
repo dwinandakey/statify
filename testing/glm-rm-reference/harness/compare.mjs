@@ -4,6 +4,7 @@
 // regression and for Tahap 5.
 //   node compare.mjs <a.json> <b.json> [--tol=1e-9] [--sort-arrays]
 import fs from "fs";
+import path from "path";
 
 export function canonical(v, sortArrays = false) {
     if (Array.isArray(v)) {
@@ -41,7 +42,7 @@ export function diffValues(a, b, { tol = 1e-9, sortArrays = false } = {}) {
     return out;
 }
 
-if (process.argv[1] && process.argv[1].endsWith("compare.mjs")) {
+if (process.argv[1] && path.basename(process.argv[1]) === "compare.mjs") {
     const args = process.argv.slice(2);
     const opts = Object.fromEntries(args.filter((a) => a.startsWith("--")).map((a) => a.slice(2).split("=")));
     const [fa, fb] = args.filter((a) => !a.startsWith("--"));

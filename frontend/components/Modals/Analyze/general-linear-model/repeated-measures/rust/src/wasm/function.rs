@@ -147,7 +147,13 @@ pub fn run_analysis(
     let mut mauchly_test = None;
     executed_functions.push("calculate_mauchly_test".to_string());
     let result = match &rm_model {
-        Some(model) => model.mauchly(),
+        Some(model) =>
+            model.mauchly().map(|(test, problems)| {
+                for p in &problems {
+                    error_collector.add_error("calculate_mauchly_test", p);
+                }
+                test
+            }),
         None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
         None => core::calculate_mauchly_test(data, config),
     };

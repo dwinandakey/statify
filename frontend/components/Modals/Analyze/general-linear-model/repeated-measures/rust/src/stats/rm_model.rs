@@ -455,29 +455,46 @@ impl RmModel {
     }
 
     /// Mauchly's test per measure on the error SSCP of the full model.
-    pub fn mauchly(&self) -> Result<MauchlyTest, String> {
+    /// Mauchly's test per measure, plus messages for measures whose error
+    /// covariance matrix is singular (W = 0; chi-square and Sig. are then not
+    /// computable and left empty, the epsilons are still computed).
+    pub fn mauchly(&self) -> Result<(MauchlyTest, Vec<String>), String> {
         let v = self.error_df() as f64;
         let p = self.k - 1;
         let p_f = p as f64;
         let n = self.n as f64;
         let mut tests = HashMap::new();
+        let mut problems = Vec::new();
         for m in &self.measures {
             let s = self.error(&self.within(m)) / v;
-            let det = s.determinant();
-            let trace = s.trace();
-            let mean_eig = trace / p_f;
-            let w = if mean_eig.abs() < 1e-12 { 0.0 } else { det / mean_eig.powi(p as i32) };
-            let correction = (2.0 * p_f * p_f + p_f + 2.0) / (6.0 * p_f);
-            let chi_square = if w > 0.0 { -(v - correction) * w.ln() } else { f64::INFINITY };
-            let df = p * (p + 1) / 2 - 1;
-            let significance = if df == 0 {
-                f64::NAN
-            } else if chi_square.is_finite() {
-                1.0 - ChiSquared::new(df as f64).map_err(|e| e.to_string())?.cdf(chi_square)
-            } else {
-                0.0
-            };
             let eig: Vec<f64> = SymmetricEigen::new(s.clone()).eigenvalues.iter().copied().collect();
+            let max_eig = eig.iter().cloned().fold(f64::MIN, f64::max);
+            let min_eig = eig.iter().cloned().fold(f64::MAX, f64::min);
+            // Same singularity criterion as the multivariate tests.
+            let singular = !(max_eig > 0.0) || min_eig <= 1e-10 * max_eig;
+            let df = p * (p + 1) / 2 - 1;
+            let (w, chi_square, significance) = if singular {
+                problems.push(format!(
+                    "{}: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed",
+                    m.name
+                ));
+                (0.0, f64::NAN, f64::NAN)
+            } else {
+                let det = s.determinant();
+                let trace = s.trace();
+                let mean_eig = trace / p_f;
+                let w = if mean_eig.abs() < 1e-12 { 0.0 } else { det / mean_eig.powi(p as i32) };
+                let correction = (2.0 * p_f * p_f + p_f + 2.0) / (6.0 * p_f);
+                let chi_square = if w > 0.0 { -(v - correction) * w.ln() } else { f64::INFINITY };
+                let significance = if df == 0 {
+                    f64::NAN
+                } else if chi_square.is_finite() {
+                    1.0 - ChiSquared::new(df as f64).map_err(|e| e.to_string())?.cdf(chi_square)
+                } else {
+                    0.0
+                };
+                (w, if chi_square.is_finite() { chi_square } else { 0.0 }, significance)
+            };
             let sum: f64 = eig.iter().sum();
             let sum_sq: f64 = eig.iter().map(|e| e * e).sum();
             let gg = if sum_sq < 1e-12 { 1.0 } else { (sum * sum) / (p_f * sum_sq) };
@@ -491,7 +508,7 @@ impl RmModel {
             tests.insert(m.name.clone(), MauchlyTestEntry {
                 effect: self.factor.clone(),
                 mauchly_w: w,
-                chi_square: if chi_square.is_finite() { chi_square } else { 0.0 },
+                chi_square,
                 df,
                 significance,
                 greenhouse_geisser_epsilon: gg,
@@ -499,13 +516,14 @@ impl RmModel {
                 lower_bound_epsilon: 1.0 / p_f,
             });
         }
-        Ok(MauchlyTest {
+        let test = MauchlyTest {
             tests,
             design: Some(self.design_note()),
             note: Some(
                 "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix.".to_string()
             ),
-        })
+        };
+        Ok((test, problems))
     }
 
     fn effect_rows(

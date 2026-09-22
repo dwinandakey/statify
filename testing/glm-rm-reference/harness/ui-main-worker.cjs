@@ -33,6 +33,12 @@ const DESIGNS = {
         csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT,
         emmeans: { targets: ["(OVERALL)", "metode", "sesi", "metode*sesi"], compare: true, method: "Bonferroni" },
     },
+    // Repeated Measures cell of Web Worker experiment 2 (Tahap 5): the CSV of
+    // datasets.cjs (repeated-measures-5000-L10-M1.csv) is read from --expDir.
+    exp5000: {
+        csv: "repeated-measures-5000-L10-M1.csv", external: true, factor: "time", levels: 10,
+        measures: [["score", Array.from({ length: 10 }, (_, i) => `t${i + 1}`)]], between: [], options: OPT,
+    },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -126,7 +132,7 @@ async function outputTables(page) {
         const page = await context.newPage();
         await page.goto(`${BASE}/dashboard/data`, { timeout: 300000 });
         await page.locator('[data-testid="main-navbar"]').waitFor({ timeout: 300000 });
-        await runner.importCsv(page, path.join(DATA, d.csv));
+        await runner.importCsv(page, path.join(d.external ? path.resolve(args.expDir) : DATA, d.csv));
         const runs = [];
         let first = true;
         for (const mode of SEQUENCE) {
