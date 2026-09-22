@@ -1,0 +1,346 @@
+{
+  "base": "http://localhost:3101",
+  "label": "prod",
+  "startedAt": "2026-09-21T17:25:37.001Z",
+  "compare": {
+    "rows": [
+      {
+        "step": "runCompute:multivariate:A",
+        "ms": {
+          "main": 102,
+          "worker": 38
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 13608,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:multivariate:B",
+        "ms": {
+          "main": 96,
+          "worker": 81
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 25973,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:multivariate:C",
+        "ms": {
+          "main": 7,
+          "worker": 8
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 14353,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:multivariate:perf500",
+        "ms": {
+          "main": 3223,
+          "worker": 6271
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 18024,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:repeated-measures:A",
+        "ms": {
+          "main": 390,
+          "worker": 92
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 7932,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:repeated-measures:B",
+        "ms": {
+          "main": 84,
+          "worker": 63
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 8002,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runCompute:repeated-measures:large",
+        "ms": {
+          "main": 776,
+          "worker": 773
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 8806,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true
+      },
+      {
+        "step": "runAnalyze:multivariate:A",
+        "ms": {
+          "main": 66,
+          "worker": 17
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "endModules": [
+          "multivariate",
+          "multivariate"
+        ],
+        "nOutputs": [
+          8,
+          8
+        ],
+        "bytes": 18437,
+        "identicalStoreOutput": true,
+        "marks": {
+          "starts": 2,
+          "ends": 2
+        }
+      },
+      {
+        "step": "runAnalyze:multivariate:B",
+        "ms": {
+          "main": 110,
+          "worker": 132
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "endModules": [
+          "multivariate",
+          "multivariate"
+        ],
+        "nOutputs": [
+          8,
+          8
+        ],
+        "bytes": 29206,
+        "identicalStoreOutput": true,
+        "marks": {
+          "starts": 4,
+          "ends": 4
+        }
+      },
+      {
+        "step": "runAnalyze:repeated-measures:A",
+        "ms": {
+          "main": 90,
+          "worker": 81
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "endModules": [
+          "repeated-measures",
+          "repeated-measures"
+        ],
+        "nOutputs": [
+          13,
+          13
+        ],
+        "bytes": 15799,
+        "identicalStoreOutput": true,
+        "marks": {
+          "starts": 6,
+          "ends": 6
+        }
+      },
+      {
+        "step": "runAnalyze:repeated-measures:B",
+        "ms": {
+          "main": 97,
+          "worker": 87
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "endModules": [
+          "repeated-measures",
+          "repeated-measures"
+        ],
+        "nOutputs": [
+          11,
+          11
+        ],
+        "bytes": 13932,
+        "identicalStoreOutput": true,
+        "marks": {
+          "starts": 8,
+          "ends": 8
+        }
+      },
+      {
+        "step": "runCompute:multivariate:A",
+        "ms": {
+          "main": 13,
+          "worker": 11
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 13608,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true,
+        "sameAsFirstMainRun": false
+      },
+      {
+        "step": "runCompute:repeated-measures:A",
+        "ms": {
+          "main": 52,
+          "worker": 56
+        },
+        "modes": [
+          "main",
+          "worker"
+        ],
+        "bytes": 7932,
+        "identicalExact": true,
+        "identicalSortedKeys": true,
+        "identicalErrors": true,
+        "sameAsFirstMainRun": false
+      }
+    ],
+    "log": {
+      "console": [],
+      "pageErrors": [],
+      "workers": [
+        "http://localhost:3101/_next/static/chunks/2609.81c68b4d528af86f.js",
+        "http://localhost:3101/_next/static/chunks/6745.c6b05c048accf297.js"
+      ]
+    }
+  },
+  "workerOnly": {
+    "results": [
+      {
+        "step": "runCompute:multivariate:A",
+        "mode": "worker",
+        "nonEmpty": true
+      },
+      {
+        "step": "runCompute:repeated-measures:A",
+        "mode": "worker",
+        "nonEmpty": true
+      },
+      {
+        "step": "runAnalyze:multivariate:B",
+        "mode": "worker",
+        "nonEmpty": true
+      },
+      {
+        "step": "runAnalyze:repeated-measures:B",
+        "mode": "worker",
+        "nonEmpty": true
+      },
+      {
+        "step": "runCompute:multivariate:perf500",
+        "mode": "worker",
+        "nonEmpty": true
+      }
+    ],
+    "mainThreadWasmCalls": [],
+    "log": {
+      "console": [],
+      "pageErrors": [],
+      "workers": [
+        "http://localhost:3101/_next/static/chunks/2609.81c68b4d528af86f.js",
+        "http://localhost:3101/_next/static/chunks/6745.c6b05c048accf297.js"
+      ]
+    }
+  },
+  "fallback": {
+    "results": [
+      {
+        "step": "runAnalyze:multivariate:A",
+        "mode": "main-fallback",
+        "endDetail": {
+          "module": "multivariate",
+          "mode": "main-fallback"
+        },
+        "nonEmpty": true
+      },
+      {
+        "step": "runAnalyze:repeated-measures:A",
+        "mode": "main-fallback",
+        "endDetail": {
+          "module": "repeated-measures",
+          "mode": "main-fallback"
+        },
+        "nonEmpty": true
+      },
+      {
+        "step": "runCompute:multivariate:A",
+        "mode": "main-fallback",
+        "endDetail": null,
+        "nonEmpty": true
+      }
+    ],
+    "warnings": [
+      "[warning] [GLM multivariate] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\").",
+      "[warning] [GLM repeated-measures] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\").",
+      "[warning] [GLM multivariate] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\")."
+    ],
+    "log": {
+      "console": [
+        "[warning] [GLM multivariate] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\").",
+        "[warning] [GLM repeated-measures] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\").",
+        "[warning] [GLM multivariate] Web Worker could not be created: Error: Worker blocked for fallback verification. Running on the main thread (mode \"main-fallback\")."
+      ],
+      "pageErrors": [],
+      "workers": []
+    }
+  },
+  "storageFailure": {
+    "mode": "worker",
+    "nOutputs": 8,
+    "log": {
+      "console": [],
+      "pageErrors": [],
+      "workers": [
+        "http://localhost:3101/_next/static/chunks/2609.81c68b4d528af86f.js"
+      ]
+    }
+  },
+  "finishedAt": "2026-09-21T17:25:56.146Z"
+}

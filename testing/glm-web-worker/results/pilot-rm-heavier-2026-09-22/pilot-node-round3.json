@@ -1,0 +1,170 @@
+[
+  {
+    "step": "4a 3' + EMMeans (OVERALL)",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4a 3' + EMMeans (OVERALL)",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4a 3' + EMMeans (OVERALL)",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4a 3' + EMMeans (OVERALL)",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4b 3' + EMMeans (OVERALL) compare",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4b 3' + EMMeans (OVERALL) compare",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4b 3' + EMMeans (OVERALL) compare",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "4b 3' + EMMeans (OVERALL) compare",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "(OVERALL)"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  }
+]

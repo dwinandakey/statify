@@ -1,0 +1,380 @@
+{
+  "rows": [
+    {
+      "dataset": "A",
+      "statistic": "multivariate_tests",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "tests_of_between_subjects_effects",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "parameter_estimates",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "box_test",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "box_test.df1",
+      "matcher": "toBe",
+      "expected": 6,
+      "actual": 6,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "box_test.f",
+      "matcher": "toBeGreaterThanOrEqual",
+      "expected": 0,
+      "actual": 0,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "between-subjects Y1 × Group",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "between-subjects Y1 × Group .df",
+      "matcher": "toBe",
+      "expected": 2,
+      "actual": 2,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "Group Pillai's Trace",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "A",
+      "statistic": "Group Pillai's Trace .value",
+      "matcher": "toBeCloseTo(6)",
+      "expected": 0,
+      "actual": 0.9999020857632955,
+      "difference": 0.9999020857632955,
+      "pass": false
+    },
+    {
+      "dataset": "B",
+      "statistic": "multivariate_tests Group*Treatment",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "between-subjects Y3 × Group",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "between-subjects Y3 × Group .df",
+      "matcher": "toBe",
+      "expected": 2,
+      "actual": 2,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "box_test.df1",
+      "matcher": "toBe",
+      "expected": 30,
+      "actual": 30,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "box_test.f",
+      "matcher": "toBeGreaterThanOrEqual",
+      "expected": 0,
+      "actual": 4.693951306795932e-11,
+      "difference": 4.693951306795932e-11,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "Group Pillai's Trace",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "B",
+      "statistic": "Group Pillai's Trace .f",
+      "matcher": "toBeCloseTo(6)",
+      "expected": 0,
+      "actual": 17.66327308976982,
+      "difference": 17.66327308976982,
+      "pass": false
+    },
+    {
+      "dataset": "C",
+      "statistic": "multivariate_tests Species",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "C",
+      "statistic": "between-subjects SepalLength × Species",
+      "matcher": "toBeDefined",
+      "expected": "defined",
+      "actual": "defined",
+      "difference": null,
+      "pass": true
+    },
+    {
+      "dataset": "C",
+      "statistic": "between-subjects SepalLength × Species .df",
+      "matcher": "toBe",
+      "expected": 2,
+      "actual": 2,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "C",
+      "statistic": "box_test.box_m",
+      "matcher": "toBeCloseTo(6)",
+      "expected": 10.393282721313454,
+      "actual": 10.393282721313454,
+      "difference": 0,
+      "pass": true
+    },
+    {
+      "dataset": "C",
+      "statistic": "box_test.f",
+      "matcher": "toBeCloseTo(6)",
+      "expected": 1.5497442954550478,
+      "actual": 1.5484993981127095,
+      "difference": -0.001244897342338236,
+      "pass": false
+    },
+    {
+      "dataset": "C",
+      "statistic": "box_test.significance",
+      "matcher": "toBeCloseTo(6)",
+      "expected": 0.1975627435596765,
+      "actual": 0.15801440394882937,
+      "difference": -0.03954833961084714,
+      "pass": false
+    }
+  ],
+  "engine": {
+    "A_groupEffect": {
+      "Pillai's Trace": {
+        "value": 0.9999020857632955,
+        "f": 13.497356574437978,
+        "hypothesis_df": 4,
+        "error_df": 54,
+        "significance": 1.0830951424622981e-7,
+        "partial_eta_squared": 0.49995104288164777,
+        "noncent_parameter": 53.98942629775191,
+        "observed_power": 0.9925911418692616,
+        "is_exact_statistic": false
+      },
+      "Roy's Largest Root": {
+        "value": 10212.019410228524,
+        "f": 137862.2620380851,
+        "hypothesis_df": 2,
+        "error_df": 27,
+        "significance": 0,
+        "partial_eta_squared": 0.9999020857632955,
+        "noncent_parameter": 275724.5240761702,
+        "observed_power": 0.9999992746383345,
+        "is_exact_statistic": false
+      },
+      "Hotelling's Trace": {
+        "value": 10212.019410228524,
+        "f": 63825.12131392828,
+        "hypothesis_df": 4,
+        "error_df": 50,
+        "significance": 0,
+        "partial_eta_squared": 0.9999020857632955,
+        "noncent_parameter": 255300.4852557131,
+        "observed_power": 0.9999984332188026,
+        "is_exact_statistic": false
+      },
+      "Wilks' Lambda": {
+        "value": 0.00009791423670442474,
+        "f": 1300.7732986815574,
+        "hypothesis_df": 4,
+        "error_df": 52,
+        "significance": 0,
+        "partial_eta_squared": 0.9901048377120724,
+        "noncent_parameter": 5203.09319472623,
+        "observed_power": 0.999923122653193,
+        "is_exact_statistic": false
+      }
+    },
+    "B_groupPillai": {
+      "value": 0.999903946145387,
+      "f": 17.66327308976982,
+      "hypothesis_df": 6,
+      "error_df": 106,
+      "significance": 4.296563105299356e-14,
+      "partial_eta_squared": 0.4999519730726935,
+      "noncent_parameter": 105.97963853861893,
+      "observed_power": 0.9943385351349225,
+      "is_exact_statistic": false
+    },
+    "B_betweenSubjects_Y1": {
+      "Corrected Total": {
+        "df": 59,
+        "sum_of_squares": 305.11149999999964
+      },
+      "Treatment": {
+        "df": 1,
+        "sum_of_squares": 14.449999999999985
+      },
+      "Intercept": {
+        "df": 1,
+        "sum_of_squares": 15717.253499999992
+      },
+      "Group": {
+        "df": 2,
+        "sum_of_squares": 85.66334248772172
+      },
+      "Group*Treatment": {
+        "df": 2,
+        "sum_of_squares": -4.996003610813204e-16
+      },
+      "Corrected Model": {
+        "df": 6,
+        "sum_of_squares": 304.9682272727269
+      },
+      "Error": {
+        "df": 53,
+        "sum_of_squares": 0.1432727272727261
+      }
+    },
+    "B_multivariateEffects": [
+      "Intercept",
+      "Group",
+      "Group*Treatment",
+      "Treatment"
+    ],
+    "B_boxTest": {
+      "box_m": 1.646970559932015e-9,
+      "f": 4.693951306795932e-11,
+      "df1": 30,
+      "df2": 6589.959784207964,
+      "significance": 1,
+      "design": "Box's M Test of Equality of Covariance Matrices",
+      "description": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."
+    },
+    "C_boxTest": {
+      "box_m": 10.393282721313454,
+      "f": 1.5484993981127095,
+      "df1": 6,
+      "df2": 8348.706650615308,
+      "significance": 0.15801440394882937,
+      "design": "Box's M Test of Equality of Covariance Matrices",
+      "description": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."
+    }
+  },
+  "independent": {
+    "A_groupPillai": {
+      "value": 0.9999020857632956,
+      "f": 13.497356574437978,
+      "df1": 4,
+      "df2": 54,
+      "significance": 1.0830951419784517e-7
+    },
+    "B_groupPillai": {
+      "value": 0.9999999999854481,
+      "f": 17.333333332828865,
+      "df1": 6,
+      "df2": 104,
+      "significance": 8.248957079007803e-14
+    },
+    "B_groupPillai_withoutCovariate": {
+      "value": 0.9999039461459915,
+      "f": 17.663273089791172,
+      "df1": 6,
+      "df2": 106,
+      "significance": 4.2981676580014863e-14
+    },
+    "B_residualSSCP_minEigen_withCovariate": {
+      "eigenvalues": [
+        -1.325422690999898e-17,
+        0.05316861880475429,
+        0.26919501755888037
+      ],
+      "dfe": 53
+    },
+    "B_residualSSCP_minEigen_withoutCovariate": {
+      "eigenvalues": [
+        0.018905061312898153,
+        0.05698624310116813,
+        143.2311086955858
+      ],
+      "dfe": 54
+    },
+    "C_boxM": {
+      "M": 10.393282721313454,
+      "c1": 0.1053388980113118,
+      "c2": 0.01205451568921927,
+      "df1": 6,
+      "oldEngineFormula": {
+        "F": 1.5497442954550478,
+        "df2": 29,
+        "significance": 0.19756274356036932
+      },
+      "box1949": {
+        "case": "c2 > c1^2",
+        "df2": 8348.706650615308,
+        "F": 1.5484993981127095,
+        "significance": 0.15801439104344475
+      }
+    }
+  }
+}

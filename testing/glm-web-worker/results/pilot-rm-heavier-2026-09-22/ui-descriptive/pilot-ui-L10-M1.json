@@ -1,0 +1,757 @@
+{
+  "env": {
+    "chromium": "143.0.7499.4",
+    "base": "http://localhost:3101",
+    "levels": 10,
+    "measures": 1,
+    "options": "DescStats,EstEffectSize,ObsPower",
+    "emmeans": null,
+    "sizes": [
+      200
+    ],
+    "sequence": [
+      "main",
+      "worker",
+      "main",
+      "worker",
+      "main",
+      "worker"
+    ],
+    "startedAt": "2026-09-22T02:36:27.470Z",
+    "emmeansDialog": {
+      "draggableItems": [
+        "(OVERALL)"
+      ],
+      "compareDisabled": false
+    },
+    "identical": {
+      "200": false
+    },
+    "identicalValues": {
+      "200": false
+    },
+    "identicalWithinPairs": {
+      "200": [
+        true,
+        true,
+        true
+      ]
+    }
+  },
+  "results": [
+    {
+      "n": 200,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 574,
+      "clickToEndMs": 586,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 169,
+      "loaf": {
+        "longest_loaf_ms": "169.4",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "118.8",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "cbef563d76f5",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "b7b5d1caea50",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 598,
+      "clickToEndMs": 610,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 0,
+      "loaf": {
+        "longest_loaf_ms": "0.0",
+        "loaf_count": 0,
+        "loaf_blocking_ms": "0.0",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "cbef563d76f5",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "b7b5d1caea50",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 157,
+      "clickToEndMs": 172,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 0,
+      "loaf": {
+        "longest_loaf_ms": "0.0",
+        "loaf_count": 0,
+        "loaf_blocking_ms": "0.0",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "780d3bf43283",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "01a05da3670b",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 167,
+      "clickToEndMs": 181,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 0,
+      "loaf": {
+        "longest_loaf_ms": "0.0",
+        "loaf_count": 0,
+        "loaf_blocking_ms": "0.0",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "780d3bf43283",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "01a05da3670b",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 145,
+      "clickToEndMs": 159,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 0,
+      "loaf": {
+        "longest_loaf_ms": "0.0",
+        "loaf_count": 0,
+        "loaf_blocking_ms": "0.0",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "0d7c093499d3",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "43cc2dafffe8",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 138,
+      "clickToEndMs": 153,
+      "longestLongtaskMs": 0,
+      "longestLoafMs": 0,
+      "loaf": {
+        "longest_loaf_ms": "0.0",
+        "loaf_count": 0,
+        "loaf_blocking_ms": "0.0",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 200,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "0d7c093499d3",
+        "Multivariate Tests": "daf445604cd2",
+        "Mauchly's Test of Sphericity": "a506bf611752",
+        "Tests of Within-Subjects Effects": "dc1e394e74d7",
+        "Tests of Within-Subjects Contrasts": "9b650554632c",
+        "Tests of Between-Subjects Effects": "c856a642c07c",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "43cc2dafffe8",
+        "Multivariate Tests": "179ed63bd0b9",
+        "Mauchly's Test of Sphericity": "bfef3ed9da7c",
+        "Tests of Within-Subjects Effects": "8f19ebf9f4e0",
+        "Tests of Within-Subjects Contrasts": "5ef4ade76f7d",
+        "Tests of Between-Subjects Effects": "2633c9bcea56",
+        "Errors Logs": "f4ea4883a853"
+      },
+      "savedTables": [
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t2_(2,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"2\",\"mean\":\"13.9501\",\"std_dev\":\"1.4835\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t2_(2,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t1_(1,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"1\",\"mean\":\"12.4532\",\"std_dev\":\"1.5056\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t1_(1,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t6_(6,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"6\",\"mean\":\"19.9527\",\"std_dev\":\"1.56\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t6_(6,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t9_(9,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"9\",\"mean\":\"24.4477\",\"std_dev\":\"1.4937\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t9_(9,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t10_(10,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"10\",\"mean\":\"25.9463\",\"std_dev\":\"1.5343\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t10_(10,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t3_(3,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"3\",\"mean\":\"15.447\",\"std_dev\":\"1.5032\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t3_(3,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t5_(5,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"5\",\"mean\":\"18.4494\",\"std_dev\":\"1.5742\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t5_(5,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t8_(8,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"8\",\"mean\":\"22.9511\",\"std_dev\":\"1.4857\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t8_(8,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t7_(7,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"7\",\"mean\":\"21.4536\",\"std_dev\":\"1.5174\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t7_(7,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Descriptive Statistics",
+          "output_data": "{\"tables\":[{\"key\":\"descriptive_statistics_t4_(4,score)\",\"title\":\"Descriptive Statistics\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"label\"},{\"header\":\"Mean\",\"key\":\"mean\"},{\"header\":\"Std. Deviation\",\"key\":\"std_dev\"},{\"header\":\"N\",\"key\":\"n\"}],\"rows\":[{\"rowHeader\":[],\"label\":\"4\",\"mean\":\"16.9466\",\"std_dev\":\"1.5468\",\"n\":\"200\"}],\"note\":\"Dependent Variable: t4_(4,score)\",\"interpretation\":\"Descriptive statistics for each level of the within-subjects factor.\"}]}"
+        }
+      ]
+    }
+  ]
+}

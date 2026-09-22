@@ -1,0 +1,694 @@
+[
+  {
+    "step": "0 default options",
+    "L": 5,
+    "M": 1,
+    "options": {},
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 77,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "0 default options",
+    "L": 5,
+    "M": 1,
+    "options": {},
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 123,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "0 default options",
+    "L": 5,
+    "M": 1,
+    "options": {},
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 208,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "0 default options",
+    "L": 5,
+    "M": 1,
+    "options": {},
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 381,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1a desc+effect size+power",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 77,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1a desc+effect size+power",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 174,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1a desc+effect size+power",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 370,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1a desc+effect size+power",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 668,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1b 1a + homogeneity tests",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true,
+      "HomogenTest": true
+    },
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 122,
+    "errors": "Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1b 1a + homogeneity tests",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true,
+      "HomogenTest": true
+    },
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 215,
+    "errors": "Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1b 1a + homogeneity tests",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true,
+      "HomogenTest": true
+    },
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 373,
+    "errors": "Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1b 1a + homogeneity tests",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true,
+      "HomogenTest": true
+    },
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 692,
+    "errors": "Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "1c 1a + EMMeans (no compare)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1c 1a + EMMeans (no compare)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1c 1a + EMMeans (no compare)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1c 1a + EMMeans (no compare)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1d 1a + EMMeans compare (bonf)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1d 1a + EMMeans compare (bonf)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1d 1a + EMMeans compare (bonf)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "1d 1a + EMMeans compare (bonf)",
+    "L": 5,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": true,
+      "ConfiIntervalMethod": "bonferroni"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2a 1c, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2a 1c, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2a 1c, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2a 1c, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2b 1c, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2b 1c, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2b 1c, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "2b 1c, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "3 1c, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 2000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "3 1c, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 5000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "3 1c, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 10000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  },
+  {
+    "step": "3 1c, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {
+      "TargetList": [
+        "time"
+      ],
+      "CompMainEffect": false,
+      "ConfiIntervalMethod": "lsdNone"
+    },
+    "n": 20000,
+    "medianMs": null,
+    "errors": "PANIC/exception: unreachable",
+    "keys": []
+  }
+]

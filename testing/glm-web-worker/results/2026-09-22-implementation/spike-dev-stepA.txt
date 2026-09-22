@@ -1,0 +1,47 @@
+[
+  {
+    "variant": "dotworker",
+    "ok": false,
+    "detail": "constructor threw: Error: dotworker variant disabled for isolation step A"
+  },
+  {
+    "variant": "plain",
+    "ok": true,
+    "detail": {
+      "ok": true,
+      "inWorkerScope": true,
+      "initMs": 87.13499999046326,
+      "totalMs": 128,
+      "resultKeys": [
+        "between_subjects_factors",
+        "descriptive_statistics",
+        "levene_test",
+        "tests_of_between_subjects_effects",
+        "parameter_estimates",
+        "general_estimable_function",
+        "contrast_coefficients",
+        "spread_vs_level_plots",
+        "posthoc_tests",
+        "emmeans",
+        "plots",
+        "saved_variables",
+        "executed_functions",
+        "box_test",
+        "bartlett_test",
+        "multivariate_tests",
+        "between_subjects_sscp",
+        "residual_matrix",
+        "sscp_matrix",
+        "univariate_tests",
+        "homogeneous_subsets",
+        "scatter_plot_matrices",
+        "profile_plots",
+        "residual_plots"
+      ],
+      "errorsHead": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+    }
+  }
+]
+---- browser logs ----
+[console.info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[worker created] http://localhost:3100/_next/static/chunks/_app-pages-browser_components_Modals_Analyze_general-linear-model_multivariate_services___spi-3a540e.js

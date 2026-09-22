@@ -4,15 +4,71 @@ import type {
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/types/repeated-measures-worker";
 import { transformRepeatedMeasureResult } from "./repeated-measures-analysis-formatter";
 import { resultRepeatedMeasures } from "./repeated-measures-analysis-output";
+import type { RepeatedMeasuresWorkerPayload } from "./repeated-measures-analysis-worker";
+import {
+    executeGlmComputation,
+    GlmWorkerClient,
+    markGlmAnalysisEnd,
+    markGlmAnalysisStart,
+} from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 import init, {
     RepeatedMeasureAnalysis,
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/rust/pkg/wasm";
+
+// Reused across analyses so WASM is initialised once per worker.
+const repeatedMeasuresWorker = new GlmWorkerClient<RepeatedMeasuresWorkerPayload, any>(
+    "repeated-measures",
+    () =>
+        new Worker(new URL("./repeated-measures-analysis-worker.ts", import.meta.url), {
+            type: "module",
+        })
+);
+
+// Main-thread computation (mode "main" and "main-fallback"). Mirrors the
+// worker: the Rust-side object is released with free() right after the
+// results are read, instead of whenever the JS garbage collector finalises it.
+async function runRepeatedMeasuresOnMainThread(payload: RepeatedMeasuresWorkerPayload) {
+    await init();
+
+    const repeatedMeasure = new RepeatedMeasureAnalysis(
+        payload.subject_data,
+        payload.factors_data,
+        payload.covar_data,
+        payload.subject_data_defs,
+        payload.factors_data_defs,
+        payload.covar_data_defs,
+        payload.config_data
+    );
+
+    try {
+        const results = repeatedMeasure.get_formatted_results();
+        const errors = repeatedMeasure.get_all_errors();
+        return { results, errors };
+    } finally {
+        repeatedMeasure.free();
+    }
+}
+
+/**
+ * Runs the WASM computation in the mode selected by localStorage
+ * "glm-execution-mode" and reports the mode actually used.
+ */
+export function computeRepeatedMeasures(payload: RepeatedMeasuresWorkerPayload) {
+    return executeGlmComputation({
+        module: "repeated-measures",
+        client: repeatedMeasuresWorker,
+        payload,
+        runOnMainThread: runRepeatedMeasuresOnMainThread,
+    });
+}
 
 export async function analyzeRepeatedMeasures({
     configData,
     dataVariables,
     variables,
 }: RepeatedMeasuresAnalysisType) {
+    markGlmAnalysisStart();
+
     const SubjectVariables = configData.main.SubVar || [];
     const FactorsVariables = configData.main.FactorsVar || [];
     const CovariateVariables = configData.main.Covariates || [];
@@ -100,20 +156,19 @@ export async function analyzeRepeatedMeasures({
     const varDefsForFactors = getVarDefs(variables, FactorsVariables);
     const varDefsForCovariate = getVarDefs(variables, CovariateVariables);
 
-    await init();
-
-    const repeatedMeasure = new RepeatedMeasureAnalysis(
-        slicedDataForSubject,
-        slicedDataForFactors,
-        slicedDataForCovariate,
-        varDefsForSubject,
-        varDefsForFactors,
-        varDefsForCovariate,
-        configData
-    );
-
-    const results = repeatedMeasure.get_formatted_results();
-    const errorsString = repeatedMeasure.get_all_errors();
+    const {
+        results,
+        errors: errorsString,
+        mode,
+    } = await computeRepeatedMeasures({
+        subject_data: slicedDataForSubject,
+        factors_data: slicedDataForFactors,
+        covar_data: slicedDataForCovariate,
+        subject_data_defs: varDefsForSubject,
+        factors_data_defs: varDefsForFactors,
+        covar_data_defs: varDefsForCovariate,
+        config_data: configData,
+    });
 
     // Parse error string and suppress non-requested posthoc warnings
     const ph = configData.posthoc;
@@ -163,4 +218,6 @@ export async function analyzeRepeatedMeasures({
     await resultRepeatedMeasures({
         formattedResult: formattedResults,
     });
+
+    markGlmAnalysisEnd("repeated-measures", mode);
 }
