@@ -18,6 +18,9 @@ const datasets = (opts.datasets || "b,c").split(",");
 const rTables = (opts["r-tables"] || "within_effects,between_effects,mauchly,multivariate,univariate").split(",");
 
 const car = JSON.parse(fs.readFileSync(path.join(here, "../r-output/car-values.json"), "utf8"));
+// EM Means of dataset (c) from afex (r/emmeans-afex.R).
+const afexFile = path.join(here, "../r-output/afex-emmeans-c.json");
+const afex = fs.existsSync(afexFile) ? JSON.parse(fs.readFileSync(afexFile, "utf8")) : [];
 const previous = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : { spss: [] };
 const spssKey = (e) => [e.dataset, e.table, e.measure, e.source, e.correction ?? "", e.field].join("|");
 const kept = new Map(previous.spss.filter((e) => e.value !== null).map((e) => [spssKey(e), e]));
@@ -55,6 +58,16 @@ for (const ds of datasets) {
             for (const f of fields) slot({ dataset: ds, table: "between_effects", measure: m, source: s, field: f });
         }
     }
+    if (ds === "c") {
+        // EM Means slots as requested in spss/rm_c.sps (Estimates + Pairwise Comparisons).
+        const targets = { "(OVERALL)": ["(OVERALL)"], metode: ["1", "2"], sesi: ["1", "2", "3"], "metode * sesi": ["1 · 1", "1 · 2", "1 · 3", "2 · 1", "2 · 2", "2 · 3"] };
+        for (const [t, levels] of Object.entries(targets)) for (const l of levels) {
+            for (const f of ["Mean", "Std. Error", "Lower Bound", "Upper Bound"]) slot({ dataset: ds, table: "emmeans", measure: "nilai", source: `${t} | ${l}`, field: f });
+        }
+        for (const [t, levels] of [["metode", ["1", "2"]], ["sesi", ["1", "2", "3"]]]) for (const i of levels) for (const j of levels) if (i !== j) {
+            for (const f of ["Mean Difference", "Std. Error", "Sig.", "Lower Bound", "Upper Bound"]) slot({ dataset: ds, table: "emmeans_pairwise", measure: "nilai", source: `${t} | ${i} - ${j}`, field: f });
+        }
+    }
     const mvEffects = [...(L.measures.length > 1 ? betweenSources : []), ...withinSources];
     for (const eff of mvEffects) for (const t of TESTS) {
         for (const f of ["Value", "F", "Hypothesis df", "Error df", "Sig.", "Partial Eta Squared", "Noncent. Parameter", "Observed Power"]) {
@@ -68,14 +81,15 @@ const fixture = {
         "Nilai acuan test Repeated Measures (dibuat oleh testing/glm-rm-reference/harness/make-fixture.mjs).",
         "spss: acuan UTAMA, keluaran SPSS 27 yang dijalankan pengguna (testing/glm-rm-reference/spss/*.sps). value null = menunggu SPSS.",
         "  Isi value dengan angka seperti yang ditampilkan SPSS (3 desimal); untuk Sig. '<.001' tulis \"<.001\". Toleransi |Statify - SPSS| <= 0.001.",
-        "r_car: pembanding SEMENTARA, nilai langsung dari R car (sumber di r_source). Toleransi 1e-6.",
+        "r_car: pembanding SEMENTARA, nilai langsung dari R car / afex (sumber di r_source). Toleransi 1e-6.",
     ],
     datasets,
     config_template: JSON.parse(fs.readFileSync(path.join(here, "config-template.json"), "utf8")),
     // "Univariate Tests" are produced only for designs with between-subjects
     // factors or covariates (as before), so within-only datasets skip them.
     r_car: car.filter((e) => datasets.includes(e.dataset) && rTables.includes(e.table)
-        && !(e.table === "univariate" && !LAYOUT[e.dataset].between)),
+        && !(e.table === "univariate" && !LAYOUT[e.dataset].between))
+        .concat(afex.filter((e) => datasets.includes(e.dataset))),
     spss,
 };
 fs.mkdirSync(path.dirname(OUT), { recursive: true });

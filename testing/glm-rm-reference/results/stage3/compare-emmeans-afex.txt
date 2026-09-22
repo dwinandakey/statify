@@ -1,0 +1,2 @@
+errors: No errors occurred.
+EM Means vs afex: 68/68 cocok

@@ -28,6 +28,11 @@ const DESIGNS = {
     a: { csv: "rm_a.csv", factor: "waktu", levels: 3, measures: [["cemas", ["cemas1", "cemas2", "cemas3"]], ["stres", ["stres1", "stres2", "stres3"]]], between: [], options: OPT },
     b: { csv: "rm_b.csv", factor: "waktu", levels: 4, measures: [["skor", ["w1", "w2", "w3", "w4"]]], between: ["kelompok"], options: OPT },
     c: { csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: [...OPT, "HomogenTest"] },
+    // (c) with the EM Means of spss/rm_c.sps through the EM Means dialog (Tahap 3).
+    cEm: {
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT,
+        emmeans: { targets: ["(OVERALL)", "metode", "sesi", "metode*sesi"], compare: true, method: "Bonferroni" },
+    },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -69,6 +74,26 @@ async function openDialog(page, d, first) {
     const slots = d.measures.flatMap(([m, cols]) => cols.map((c, i) => ({ col: c, text: `${c}_(${i + 1},${m})` })));
     for (const s of slots) if (!(await within.getByText(s.text, { exact: true }).count())) await badge(s.col).dragTo(within);
     for (const b of d.between) if (!(await between.getByText(b, { exact: true }).count())) await badge(b).dragTo(between);
+    // EM Means after the variables: opening a sub-dialog saves the main
+    // dialog, and the EM Means list offers the between factors only then.
+    if (d.emmeans) {
+        await page.getByRole("button", { name: "EM Means", exact: true }).click();
+        await page.locator("#CompMainEffect").waitFor({ state: "visible", timeout: 30000 });
+        const zone = page.locator("div", { has: page.getByText(/^Display Means for:/) }).last();
+        for (const t of d.emmeans.targets) {
+            if (!(await zone.getByText(t, { exact: true }).count())) {
+                await page.locator('[draggable="true"]').filter({ hasText: exact(t) }).first().dragTo(zone);
+            }
+        }
+        const box = page.locator("#CompMainEffect");
+        if (d.emmeans.compare && (await box.getAttribute("data-state")) !== "checked") await box.click();
+        if (d.emmeans.method) {
+            await page.getByRole("combobox").last().click();
+            await page.getByRole("option", { name: d.emmeans.method, exact: true }).click();
+        }
+        await page.getByRole("button", { name: "Continue", exact: true }).click();
+        await within.waitFor({ state: "visible", timeout: 60000 });
+    }
     let filled = 0;
     for (const s of slots) if (await within.getByText(s.text, { exact: true }).count()) filled += 1;
     let grp = 0;

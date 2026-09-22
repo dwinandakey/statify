@@ -1,0 +1,614 @@
+[
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "(OVERALL) | (OVERALL)",
+    "field": "Mean",
+    "value": 61.3,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~1))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "(OVERALL) | (OVERALL)",
+    "field": "Std. Error",
+    "value": 1.28939166438966,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~1))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "(OVERALL) | (OVERALL)",
+    "field": "Lower Bound",
+    "value": 58.5910886337807,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~1))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "(OVERALL) | (OVERALL)",
+    "field": "Upper Bound",
+    "value": 64.0089113662193,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~1))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 1",
+    "field": "Mean",
+    "value": 61.5,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 1",
+    "field": "Std. Error",
+    "value": 1.82347517899067,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 1",
+    "field": "Lower Bound",
+    "value": 57.669020806626,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 1",
+    "field": "Upper Bound",
+    "value": 65.330979193374,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 2",
+    "field": "Mean",
+    "value": 61.1,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 2",
+    "field": "Std. Error",
+    "value": 1.82347517899067,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 2",
+    "field": "Lower Bound",
+    "value": 57.269020806626,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode | 2",
+    "field": "Upper Bound",
+    "value": 64.930979193374,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 1",
+    "field": "Mean",
+    "value": 58.8,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 1",
+    "field": "Std. Error",
+    "value": 1.30809445802324,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 1",
+    "field": "Lower Bound",
+    "value": 56.0517955224218,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 1",
+    "field": "Upper Bound",
+    "value": 61.5482044775782,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 2",
+    "field": "Mean",
+    "value": 61.15,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 2",
+    "field": "Std. Error",
+    "value": 1.29582663449501,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 2",
+    "field": "Lower Bound",
+    "value": 58.4275692632581,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 2",
+    "field": "Upper Bound",
+    "value": 63.8724307367419,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 3",
+    "field": "Mean",
+    "value": 63.95,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 3",
+    "field": "Std. Error",
+    "value": 1.5695894721586,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 3",
+    "field": "Lower Bound",
+    "value": 60.6524148838117,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "sesi | 3",
+    "field": "Upper Bound",
+    "value": 67.2475851161883,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 1",
+    "field": "Mean",
+    "value": 59.4,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 1",
+    "field": "Std. Error",
+    "value": 1.84992492340155,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 1",
+    "field": "Lower Bound",
+    "value": 55.5134519556345,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 1",
+    "field": "Upper Bound",
+    "value": 63.2865480443655,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 1",
+    "field": "Mean",
+    "value": 58.2,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 1",
+    "field": "Std. Error",
+    "value": 1.84992492340155,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 1",
+    "field": "Lower Bound",
+    "value": 54.3134519556345,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 1",
+    "field": "Upper Bound",
+    "value": 62.0865480443655,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 2",
+    "field": "Mean",
+    "value": 61.7,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 2",
+    "field": "Std. Error",
+    "value": 1.83257560098713,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 2",
+    "field": "Lower Bound",
+    "value": 57.8499015294782,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 2",
+    "field": "Upper Bound",
+    "value": 65.5500984705218,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 2",
+    "field": "Mean",
+    "value": 60.6,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 2",
+    "field": "Std. Error",
+    "value": 1.83257560098713,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 2",
+    "field": "Lower Bound",
+    "value": 56.7499015294782,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 2",
+    "field": "Upper Bound",
+    "value": 64.4500984705218,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 3",
+    "field": "Mean",
+    "value": 63.4,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 3",
+    "field": "Std. Error",
+    "value": 2.21973471888472,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 3",
+    "field": "Lower Bound",
+    "value": 58.7365104056069,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 1 · 3",
+    "field": "Upper Bound",
+    "value": 68.0634895943931,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 3",
+    "field": "Mean",
+    "value": 64.5,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 3",
+    "field": "Std. Error",
+    "value": 2.21973471888472,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 3",
+    "field": "Lower Bound",
+    "value": 59.8365104056069,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans",
+    "measure": "nilai",
+    "source": "metode * sesi | 2 · 3",
+    "field": "Upper Bound",
+    "value": 69.1634895943932,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(emmeans(fit, ~metode:sesi))"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "metode | 1 - 2",
+    "field": "Mean Difference",
+    "value": 0.399999999999999,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~metode), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "metode | 1 - 2",
+    "field": "Std. Error",
+    "value": 2.57878332877931,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~metode), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "metode | 1 - 2",
+    "field": "Sig.",
+    "value": 0.878459220876229,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~metode), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "metode | 1 - 2",
+    "field": "Lower Bound",
+    "value": -5.01782273243861,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~metode), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "metode | 1 - 2",
+    "field": "Upper Bound",
+    "value": 5.81782273243861,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~metode), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 2",
+    "field": "Mean Difference",
+    "value": -2.35000000000001,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 2",
+    "field": "Std. Error",
+    "value": 0.928708781050335,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 2",
+    "field": "Sig.",
+    "value": 0.0628194481049016,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 2",
+    "field": "Lower Bound",
+    "value": -4.80099696825514,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 2",
+    "field": "Upper Bound",
+    "value": 0.100996968255122,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 3",
+    "field": "Mean Difference",
+    "value": -5.15000000000001,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 3",
+    "field": "Std. Error",
+    "value": 0.730486900027037,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 3",
+    "field": "Sig.",
+    "value": 4.23521357219793e-06,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 3",
+    "field": "Lower Bound",
+    "value": -7.07786071785761,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 1 - 3",
+    "field": "Upper Bound",
+    "value": -3.2221392821424,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 2 - 3",
+    "field": "Mean Difference",
+    "value": -2.8,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 2 - 3",
+    "field": "Std. Error",
+    "value": 1.09671225842414,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 2 - 3",
+    "field": "Sig.",
+    "value": 0.0599115072481793,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 2 - 3",
+    "field": "Lower Bound",
+    "value": -5.69438247521008,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  },
+  {
+    "dataset": "c",
+    "table": "emmeans_pairwise",
+    "measure": "nilai",
+    "source": "sesi | 2 - 3",
+    "field": "Upper Bound",
+    "value": 0.0943824752100819,
+    "r_source": "R 4.3.2 afex 1.4.1 emmeans 2.0.2 (emmeans_model = multivariate): summary(pairs(emmeans(fit, ~sesi), adjust = 'bonferroni'), infer = TRUE)"
+  }
+]

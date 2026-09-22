@@ -308,17 +308,39 @@ pub fn run_analysis(
         }
     }
 
-    // Step 18: Estimated Marginal Means if requested
+    // Step 18: Estimated Marginal Means if requested. The model computes
+    // them per measure like SPSS (and pairwise comparisons when "Compare main
+    // effects" is set); targets it cannot compute are reported, never a panic.
     let mut emmeans = None;
+    let mut emmeans_pairwise = None;
     if let Some(target_list) = &config.emmeans.target_list {
         if !target_list.is_empty() {
             executed_functions.push("calculate_emmeans".to_string());
-            match core::calculate_emmeans(data, config) {
-                Ok(means) => {
-                    emmeans = Some(means);
+            match &rm_model {
+                Some(model) => {
+                    match model.emmeans(target_list, config.emmeans.comp_main_effect, config.emmeans.confi_interval_method.as_ref()) {
+                        Ok((means, pairs, problems)) => {
+                            for problem in problems {
+                                error_collector.add_error("calculate_emmeans", &problem);
+                            }
+                            if !means.is_empty() {
+                                emmeans = Some(means);
+                            }
+                            if !pairs.is_empty() {
+                                emmeans_pairwise = Some(pairs);
+                            }
+                        }
+                        Err(e) => error_collector.add_error("calculate_emmeans", &e),
+                    }
                 }
-                Err(e) => {
-                    error_collector.add_error("calculate_emmeans", &e);
+                None if rm_model_failed => {
+                    error_collector.add_error("calculate_emmeans", "Not computed: the between-subjects model could not be built");
+                }
+                None => {
+                    error_collector.add_error(
+                        "calculate_emmeans",
+                        "Estimated marginal means are not supported for designs with more than one within-subjects factor yet"
+                    );
                 }
             }
         }
@@ -343,6 +365,7 @@ pub fn run_analysis(
         univariate_tests,
         posthoc_tests,
         emmeans,
+        emmeans_pairwise,
         executed_functions,
     };
 

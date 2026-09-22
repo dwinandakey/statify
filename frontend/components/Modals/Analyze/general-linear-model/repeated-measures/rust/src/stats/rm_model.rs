@@ -47,11 +47,24 @@ use crate::utils::collections::HashMap;
 
 use super::core::parse_within_subject_factors;
 use super::glm_tests::{ f_significance, multivariate_statistics, observed_power };
+use crate::models::config::CIMethod;
+use crate::models::result::{ ConfidenceInterval, EstimatedMarginalMean, PairwiseComparison };
+use statrs::distribution::StudentsT;
 
-/// One term of the between-subjects design: its columns in X.
+/// Estimated marginal means per target, pairwise comparisons per factor, and
+/// the targets that could not be computed (with the reason).
+pub type EmmeansOutput = (
+    HashMap<String, Vec<EstimatedMarginalMean>>,
+    HashMap<String, Vec<PairwiseComparison>>,
+    Vec<String>,
+);
+
+/// One term of the between-subjects design: its columns in X and the
+/// between-subjects factors it is built from (empty for a covariate).
 pub struct Term {
     pub name: String,
     pub cols: Vec<usize>,
+    pub factors: Vec<usize>,
 }
 
 pub struct MeasureData {
@@ -284,7 +297,7 @@ impl RmModel {
         let mut columns: Vec<Vec<f64>> = vec![vec![1.0; n]];
         let mut terms: Vec<Term> = Vec::new();
         for (ci, name) in covariate_list.iter().enumerate() {
-            terms.push(Term { name: name.clone(), cols: vec![columns.len()] });
+            terms.push(Term { name: name.clone(), cols: vec![columns.len()], factors: vec![] });
             columns.push(rows.iter().map(|r| r.2[ci]).collect());
         }
         let effect_cols: Vec<Vec<Vec<f64>>> = factors
@@ -321,7 +334,7 @@ impl RmModel {
             let name = subset.iter().map(|&fi| factors[fi].name.clone()).collect::<Vec<_>>().join(" * ");
             let start = columns.len();
             columns.extend(products);
-            terms.push(Term { name, cols: (start..columns.len()).collect() });
+            terms.push(Term { name, cols: (start..columns.len()).collect(), factors: subset.clone() });
         }
         let x = DMatrix::from_fn(n, columns.len(), |i, j| columns[j][i]);
         let rank = x.ncols();
@@ -783,6 +796,230 @@ impl RmModel {
             }
         }
         out
+    }
+}
+
+/// One component of an EM Means target: the within factor or a
+/// between-subjects factor (index into `RmModel::factors`).
+#[derive(Clone, Copy, PartialEq)]
+enum Component {
+    Within,
+    Between(usize),
+}
+
+impl RmModel {
+    /// Effect codes of level `level` of between-subjects factor `fi`.
+    fn effect_codes(&self, fi: usize, level: usize) -> Vec<f64> {
+        let last = self.factors[fi].levels.len() - 1;
+        (0..last).map(|j| if level == j { 1.0 } else if level == last { -1.0 } else { 0.0 }).collect()
+    }
+
+    /// L vector of a marginal mean: intercept, covariates at their means,
+    /// the given between-subjects levels and 0 (= equal-weight average) for
+    /// the factors not given, with interaction columns built in the same
+    /// order as the design matrix.
+    fn marginal_l(&self, levels: &[(usize, usize)]) -> DMatrix<f64> {
+        let mut l = DMatrix::<f64>::zeros(1, self.x.ncols());
+        l[(0, 0)] = 1.0;
+        for t in &self.terms {
+            if t.factors.is_empty() {
+                let c = t.cols[0];
+                l[(0, c)] = self.x.column(c).mean();
+                continue;
+            }
+            if !t.factors.iter().all(|fi| levels.iter().any(|(f, _)| f == fi)) {
+                continue;
+            }
+            let mut products = vec![1.0];
+            for fi in &t.factors {
+                let level = levels.iter().find(|(f, _)| f == fi).unwrap().1;
+                let codes = self.effect_codes(*fi, level);
+                products = products.iter().flat_map(|p| codes.iter().map(move |c| p * c)).collect();
+            }
+            for (c, v) in t.cols.iter().zip(products) {
+                l[(0, *c)] = v;
+            }
+        }
+        l
+    }
+
+    /// Estimate and standard error of L·β for response y.
+    fn estimate(&self, l: &DMatrix<f64>, y: &DMatrix<f64>) -> (f64, f64) {
+        let b = self.coefficients(y);
+        let est = (l * &b)[(0, 0)];
+        let mse = self.error(y)[(0, 0)] / (self.error_df() as f64);
+        let var = (l * &self.xtx_inv * l.transpose())[(0, 0)] * mse;
+        (est, var.max(0.0).sqrt())
+    }
+
+    /// Response of a marginal mean: one within level, or the mean of all.
+    fn response(&self, m: &MeasureData, within: Option<usize>) -> DMatrix<f64> {
+        match within {
+            Some(j) => DMatrix::from_fn(self.n, 1, |i, _| m.y[(i, j)]),
+            None => DMatrix::from_fn(self.n, 1, |i, _| m.y.row(i).mean()),
+        }
+    }
+
+    fn parse_target(&self, target: &str) -> Result<Vec<Component>, String> {
+        if target.trim() == "(OVERALL)" {
+            return Ok(vec![]);
+        }
+        target
+            .split('*')
+            .map(|c| c.trim())
+            .map(|c| {
+                if c == self.factor {
+                    Ok(Component::Within)
+                } else if let Some(fi) = self.factors.iter().position(|f| f.name == c) {
+                    Ok(Component::Between(fi))
+                } else {
+                    Err(format!("'{}' is not a factor of this design", c))
+                }
+            })
+            .collect()
+    }
+
+    fn component_name(&self, c: Component) -> String {
+        match c {
+            Component::Within => self.factor.clone(),
+            Component::Between(fi) => self.factors[fi].name.clone(),
+        }
+    }
+
+    fn component_levels(&self, c: Component) -> Vec<String> {
+        match c {
+            Component::Within => (1..=self.k).map(|j| j.to_string()).collect(),
+            Component::Between(fi) => self.factors[fi].labels.clone(),
+        }
+    }
+
+    /// Estimated marginal means of every target (SPSS EMMEANS TABLES) and,
+    /// when `compare` is set, pairwise comparisons of main-effect targets
+    /// (COMPARE ADJ(LSD/BONFERRONI/SIDAK)). Means are per measure, averaged
+    /// with equal weights over the within levels and the between factors not
+    /// in the target; covariates are evaluated at their means.
+    pub fn emmeans(&self, targets: &[String], compare: bool, method: Option<&CIMethod>) -> Result<EmmeansOutput, String> {
+        let v = self.error_df() as f64;
+        let t_dist = StudentsT::new(0.0, 1.0, v).map_err(|e| e.to_string())?;
+        let t_crit = |alpha: f64| t_dist.inverse_cdf(1.0 - alpha / 2.0);
+        let mut means = HashMap::new();
+        let mut pairwise = HashMap::new();
+        let mut problems = Vec::new();
+        for target in targets {
+            let comps = match self.parse_target(target) {
+                Ok(c) => c,
+                Err(e) => {
+                    problems.push(format!("EM Means '{}': {}", target, e));
+                    continue;
+                }
+            };
+            let name = if comps.is_empty() {
+                "(OVERALL)".to_string()
+            } else {
+                comps.iter().map(|&c| self.component_name(c)).collect::<Vec<_>>().join(" * ")
+            };
+            // Level combinations, first component outermost.
+            let mut combos: Vec<Vec<usize>> = vec![vec![]];
+            for &c in &comps {
+                let n_levels = self.component_levels(c).len();
+                let mut next = Vec::new();
+                for prefix in &combos {
+                    for l in 0..n_levels {
+                        let mut p = prefix.clone();
+                        p.push(l);
+                        next.push(p);
+                    }
+                }
+                combos = next;
+            }
+            let mut rows = Vec::new();
+            for m in &self.measures {
+                for combo in &combos {
+                    let mut within = None;
+                    let mut between = Vec::new();
+                    for (&c, &l) in comps.iter().zip(combo) {
+                        match c {
+                            Component::Within => within = Some(l),
+                            Component::Between(fi) => between.push((fi, l)),
+                        }
+                    }
+                    let (est, se) = self.estimate(&self.marginal_l(&between), &self.response(m, within));
+                    let half = t_crit(self.alpha) * se;
+                    let label = if comps.is_empty() {
+                        "(OVERALL)".to_string()
+                    } else {
+                        comps
+                            .iter()
+                            .zip(combo)
+                            .map(|(&c, &l)| self.component_levels(c)[l].clone())
+                            .collect::<Vec<_>>()
+                            .join(" · ")
+                    };
+                    rows.push(EstimatedMarginalMean {
+                        dependent_variable: m.name.clone(),
+                        factor_name: name.clone(),
+                        factor_value: label,
+                        mean: est,
+                        std_error: se,
+                        confidence_interval: ConfidenceInterval { lower_bound: est - half, upper_bound: est + half },
+                    });
+                }
+            }
+            means.insert(name.clone(), rows);
+
+            if compare && comps.len() == 1 {
+                let c = comps[0];
+                let labels = self.component_levels(c);
+                let n_levels = labels.len();
+                let n_comparisons = ((n_levels * (n_levels - 1)) / 2).max(1) as f64;
+                let (adjustment, alpha_ci) = match method {
+                    Some(CIMethod::Bonferroni) => ("Bonferroni", self.alpha / n_comparisons),
+                    Some(CIMethod::Sidak) => ("Sidak", 1.0 - (1.0 - self.alpha).powf(1.0 / n_comparisons)),
+                    _ => ("LSD (none)", self.alpha),
+                };
+                let mut rows = Vec::new();
+                for m in &self.measures {
+                    for i in 0..n_levels {
+                        for j in 0..n_levels {
+                            if i == j {
+                                continue;
+                            }
+                            let (diff, se) = match c {
+                                Component::Between(fi) => {
+                                    let l = self.marginal_l(&[(fi, i)]) - self.marginal_l(&[(fi, j)]);
+                                    self.estimate(&l, &self.response(m, None))
+                                }
+                                Component::Within => {
+                                    let d = DMatrix::from_fn(self.n, 1, |r, _| m.y[(r, i)] - m.y[(r, j)]);
+                                    self.estimate(&self.marginal_l(&[]), &d)
+                                }
+                            };
+                            let t = diff / se;
+                            let p = 2.0 * (1.0 - t_dist.cdf(t.abs()));
+                            let p_adj = match adjustment {
+                                "Bonferroni" => (p * n_comparisons).min(1.0),
+                                "Sidak" => 1.0 - (1.0 - p).powf(n_comparisons),
+                                _ => p,
+                            };
+                            let half = t_crit(alpha_ci) * se;
+                            rows.push(PairwiseComparison {
+                                dependent_variable: m.name.clone(),
+                                factor_name: name.clone(),
+                                level_i: labels[i].clone(),
+                                level_j: labels[j].clone(),
+                                mean_difference: diff,
+                                std_error: se,
+                                significance: p_adj,
+                                confidence_interval: ConfidenceInterval { lower_bound: diff - half, upper_bound: diff + half },
+                                adjustment: adjustment.to_string(),
+                            });
+                        }
+                    }
+                }
+                pairwise.insert(name, rows);
+            }
+        }
+        Ok((means, pairwise, problems))
     }
 }
 

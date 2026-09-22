@@ -1,0 +1,7 @@
+{
+  suites: 275,
+  failedSuites: 49,
+  tests: 3396,
+  passed: 3168,
+  failed: 210,
+  pending: 0

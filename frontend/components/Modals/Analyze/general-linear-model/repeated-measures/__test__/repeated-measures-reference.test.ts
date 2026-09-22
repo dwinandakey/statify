@@ -7,8 +7,9 @@
  *  - spss: PRIMARY reference, SPSS 27 output run by the user
  *    (testing/glm-rm-reference/spss/*.sps). Empty slots are "menunggu SPSS"
  *    (it.todo). Tolerance |Statify − SPSS| ≤ 0.001 (SPSS shows 3 decimals).
- *  - r_car: INTERIM reference, values printed directly by R car (each entry
- *    carries its R source). Tolerance 1e-6 (relative for large values).
+ *  - r_car: INTERIM reference, values printed directly by R car, and EM Means
+ *    from R afex (each entry carries its R source). Tolerance 1e-6 (relative
+ *    for large values).
  * No expected value in this file is computed by Statify itself.
  */
 import fs from "fs";
@@ -28,6 +29,7 @@ type Design = {
     measures: [string, string[]][];
     between: string[];
     options: Record<string, boolean>;
+    emmeans?: Record<string, unknown>;
 };
 
 const OPT = { DescStats: true, EstEffectSize: true, ObsPower: true };
@@ -35,7 +37,10 @@ const DESIGNS: Record<string, Design> = {
     gambar51: { csv: "gambar51.csv", factor: "perlakuan", levels: 4, measures: [["anjing", ["perlakuan1", "perlakuan2", "perlakuan3", "perlakuan4"]]], between: [], options: {} },
     a: { csv: "rm_a.csv", factor: "waktu", levels: 3, measures: [["cemas", ["cemas1", "cemas2", "cemas3"]], ["stres", ["stres1", "stres2", "stres3"]]], between: [], options: OPT },
     b: { csv: "rm_b.csv", factor: "waktu", levels: 4, measures: [["skor", ["w1", "w2", "w3", "w4"]]], between: ["kelompok"], options: OPT },
-    c: { csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT },
+    c: {
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT,
+        emmeans: { TargetList: ["(OVERALL)", "metode", "sesi", "metode*sesi"], CompMainEffect: true, ConfiIntervalMethod: "bonferroni" },
+    },
 };
 
 const readCsv = (file: string): Row[] => {
@@ -65,6 +70,7 @@ function payload(d: Design) {
     cfg.model.BetSubVar = [...d.between];
     cfg.emmeans.SrcList = [...d.between];
     cfg.options = { ...cfg.options, ...d.options };
+    cfg.emmeans = { ...cfg.emmeans, ...(d.emmeans || {}) };
     return {
         subject: rows.map((r) => [Object.fromEntries(cols.map((c, i) => [encoded[i], r[c]]))]),
         factors: d.between.map((b) => rows.map((r) => ({ [b]: r[b] }))),
@@ -136,6 +142,25 @@ function pick(results: any, key: string, e: any): number | undefined {
             const row = (get(get(results.univariate_tests, "tests"), dv) ?? []).find((x: any) => x.source === e.source);
             return ({ SS: row?.sum_of_squares, df: row?.df, F: row?.f } as Record<string, number>)[e.field];
         }
+        case "emmeans": {
+            const [target, level] = String(e.source).split(" | ");
+            const row = (get(results.emmeans, target) ?? []).find((x: any) => x.factor_value === level && x.dependent_variable === e.measure);
+            return ({
+                Mean: row?.mean, "Std. Error": row?.std_error,
+                "Lower Bound": row?.confidence_interval?.lower_bound, "Upper Bound": row?.confidence_interval?.upper_bound,
+            } as Record<string, number>)[e.field];
+        }
+        case "emmeans_pairwise": {
+            const [target, pair] = String(e.source).split(" | ");
+            const [li, lj] = pair.split(" - ");
+            const row = (get(results.emmeans_pairwise, target) ?? []).find(
+                (x: any) => x.level_i === li && x.level_j === lj && x.dependent_variable === e.measure
+            );
+            return ({
+                "Mean Difference": row?.mean_difference, "Std. Error": row?.std_error, "Sig.": row?.significance,
+                "Lower Bound": row?.confidence_interval?.lower_bound, "Upper Bound": row?.confidence_interval?.upper_bound,
+            } as Record<string, number>)[e.field];
+        }
         default:
             return undefined;
     }
@@ -159,7 +184,7 @@ describe.each(fixture.datasets as string[])("Repeated Measures dataset %s", (key
 
     const rEntries = (fixture.r_car as any[]).filter((e) => e.dataset === key);
     if (rEntries.length) {
-        it.each(rEntries.map((e) => [label(e), e]))("R car (sementara): %s", (_l, e: any) => {
+        it.each(rEntries.map((e) => [label(e), e]))("R car/afex (sementara): %s", (_l, e: any) => {
             const v = pick(out.results, key, e);
             expect(typeof v).toBe("number");
             expect(Math.abs((v as number) - e.value)).toBeLessThanOrEqual(1e-6 * Math.max(1, Math.abs(e.value)));

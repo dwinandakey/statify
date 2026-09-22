@@ -166,9 +166,11 @@ export const RepeatedMeasuresContainer = ({
                 BetSubVar: [...factorList, ...covariatesList],
             };
 
+            // EM Means can target the between-subjects factors and, as in
+            // SPSS, the within-subjects factor(s) and their interactions.
             newState.emmeans = {
                 ...prev.emmeans,
-                SrcList: [...factorList],
+                SrcList: [...factorList, ...(factorVars ?? [])],
             };
 
             return newState;
@@ -265,7 +267,7 @@ export const RepeatedMeasuresContainer = ({
                 },
                 emmeans: {
                     ...formData.emmeans,
-                    SrcList: [...factorList],
+                    SrcList: [...factorList, ...(factorVars ?? [])],
                 },
                 ...(mainData.FactorsVar
                     ? {

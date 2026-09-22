@@ -23,6 +23,7 @@ export function transformRepeatedMeasureResult(
     formatUnivariateTests(data, resultJson);
     formatPosthocTests(data, resultJson);
     formatEmmeans(data, resultJson);
+    formatEmmeansPairwise(data, resultJson);
     formatErrors(errors, resultJson);
 
     return resultJson;
@@ -697,12 +698,18 @@ function formatPosthocTests(data: any, resultJson: ResultJson) {
 function formatEmmeans(data: any, resultJson: ResultJson) {
     if (!data.emmeans) return;
 
-    Object.entries(data.emmeans).forEach(([groupName, meanList]: [string, any]) => {
+    // One table per target ("(OVERALL)", a factor or an interaction), rows per
+    // level (and per measure when there are several), as SPSS EMMEANS TABLES.
+    Object.entries(data.emmeans).forEach(([target, meanList]: [string, any]) => {
+        const list = Array.isArray(meanList) ? meanList : [];
+        const measures = [...new Set(list.map((m: any) => m.dependent_variable))];
+        const multiMeasure = measures.length > 1;
         const table: Table = {
-            key: `emmeans_${groupName}`,
+            key: `emmeans_${target}`,
             title: `Estimated Marginal Means`,
             columnHeaders: [
-                { header: "Factor", key: "factor" },
+                { header: target === "(OVERALL)" ? "" : target, key: "factor" },
+                ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
                 { header: "Mean", key: "mean" },
                 { header: "Std. Error", key: "se" },
                 {
@@ -714,18 +721,70 @@ function formatEmmeans(data: any, resultJson: ResultJson) {
                 },
             ],
             rows: [],
-            note: `Factor: ${groupName}`,
+            note: `${target === "(OVERALL)" ? "Grand Mean" : target}${multiMeasure ? "" : `; Measure: ${measures[0] ?? ""}`}`,
             interpretation: "Estimated marginal means for each level of the specified factor.",
         };
 
-        (Array.isArray(meanList) ? meanList : []).forEach((m: any) => {
+        list.forEach((m: any, idx: number) => {
             table.rows.push({
                 rowHeader: [],
-                factor: m.factor_value,
+                factor: idx === 0 || list[idx - 1].factor_value !== m.factor_value ? m.factor_value : "",
+                ...(multiMeasure ? { measure: m.dependent_variable } : {}),
                 mean: formatDisplayNumber(m.mean),
                 se: formatDisplayNumber(m.std_error),
                 ci_lower: formatDisplayNumber(m.confidence_interval?.lower_bound),
                 ci_upper: formatDisplayNumber(m.confidence_interval?.upper_bound),
+            });
+        });
+
+        resultJson.tables.push(table);
+    });
+}
+
+// ── 15b. EM Means Pairwise Comparisons ───────────────────────────────────────
+function formatEmmeansPairwise(data: any, resultJson: ResultJson) {
+    if (!data.emmeans_pairwise) return;
+
+    Object.entries(data.emmeans_pairwise).forEach(([factor, rows]: [string, any]) => {
+        const list = Array.isArray(rows) ? rows : [];
+        const measures = [...new Set(list.map((r: any) => r.dependent_variable))];
+        const multiMeasure = measures.length > 1;
+        const adjustment = list[0]?.adjustment ?? "";
+        const table: Table = {
+            key: `emmeans_pairwise_${factor}`,
+            title: "Pairwise Comparisons",
+            columnHeaders: [
+                ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
+                { header: `(I) ${factor}`, key: "level_i" },
+                { header: `(J) ${factor}`, key: "level_j" },
+                { header: "Mean Difference (I-J)", key: "diff" },
+                { header: "Std. Error", key: "se" },
+                { header: "Sig.", key: "sig" },
+                {
+                    header: "95% Confidence Interval for Difference",
+                    children: [
+                        { header: "Lower Bound", key: "ci_lower" },
+                        { header: "Upper Bound", key: "ci_upper" },
+                    ],
+                },
+            ],
+            rows: [],
+            note: `Based on estimated marginal means. Adjustment for multiple comparisons: ${adjustment}.${multiMeasure ? "" : ` Measure: ${measures[0] ?? ""}`}`,
+            interpretation: "Pairwise comparisons of the estimated marginal means of the factor.",
+        };
+
+        list.forEach((r: any, idx: number) => {
+            const newGroup = idx === 0 || list[idx - 1].level_i !== r.level_i || list[idx - 1].dependent_variable !== r.dependent_variable;
+            table.rows.push({
+                rowHeader: [],
+                ...(multiMeasure ? { measure: newGroup ? r.dependent_variable : "" } : {}),
+                level_i: newGroup ? r.level_i : "",
+                level_j: r.level_j,
+                diff: formatDisplayNumber(r.mean_difference),
+                se: formatDisplayNumber(r.std_error),
+                sig: formatSig(r.significance),
+                ci_lower: formatDisplayNumber(r.confidence_interval?.lower_bound),
+                ci_upper: formatDisplayNumber(r.confidence_interval?.upper_bound),
             });
         });
 

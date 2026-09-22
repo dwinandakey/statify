@@ -20,6 +20,9 @@ pub struct RepeatedMeasureResult {
     pub univariate_tests: Option<UnivariateTests>,
     pub posthoc_tests: Option<HashMap<String, Vec<PostHocTest>>>,
     pub emmeans: Option<HashMap<String, Vec<EstimatedMarginalMean>>>,
+    /// Pairwise comparisons of estimated marginal means (EM Means dialog,
+    /// "Compare main effects"), keyed by factor.
+    pub emmeans_pairwise: Option<HashMap<String, Vec<PairwiseComparison>>>,
     pub executed_functions: Vec<String>,
 }
 
@@ -262,6 +265,20 @@ pub struct PostHocTest {
     pub std_error: f64,
     pub significance: f64,
     pub confidence_interval: ConfidenceInterval,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct PairwiseComparison {
+    pub dependent_variable: String,
+    pub factor_name: String,
+    pub level_i: String,
+    pub level_j: String,
+    pub mean_difference: f64,
+    pub std_error: f64,
+    pub significance: f64,
+    pub confidence_interval: ConfidenceInterval,
+    /// "LSD (none)", "Bonferroni" or "Sidak".
+    pub adjustment: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
