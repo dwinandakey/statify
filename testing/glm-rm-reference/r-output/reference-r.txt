@@ -1,0 +1,307 @@
+# R pembanding sementara (BUKAN acuan utama; acuan utama = SPSS 27)
+# R version 4.3.2 (2023-10-31 ucrt) car 3.1.3 emmeans 2.0.2
+
+
+==================== dataset gambar51 ====================
+
+--- descriptive_statistics ---
+    variable group        mean          sd  n
+1 perlakuan1 Total 358.7333333 54.47340985 15
+2 perlakuan2 Total 394.1333333 90.40138010 15
+3 perlakuan3 Total 458.9333333 66.39434858 15
+4 perlakuan4 Total 493.7333333 70.34046454 15
+
+--- mauchly ---
+     mauchly_w approx_chi_square df          sig sig_anderson greenhouse_geisser  huynh_feldt  lower_bound measure    effect
+1 0.6189363024       6.103523205  5 0.2962756243 0.2975045146       0.7466637472 0.8956872191 0.3333333333  anjing perlakuan
+
+--- within_effects ---
+     source         correction type_III_ss          df  mean_square           F             sig partial_eta_sq     noncent observed_power error_ss    error_df    error_ms measure
+1 perlakuan Sphericity Assumed   168181.65 3.000000000  56060.55000 31.85620525 6.694245971e-11   0.6946978076 95.56861575   1.0000000000  73911.6 42.00000000 1759.800000  anjing
+2 perlakuan Greenhouse-Geisser   168181.65 2.239991242  75081.38732 31.85620525 1.184251507e-08   0.6946978076 71.35762075   0.9999999883  73911.6 31.35987738 2356.884216  anjing
+3 perlakuan        Huynh-Feldt   168181.65 2.687061657  62589.42721 31.85620525 5.619837404e-10   0.6946978076 85.59958767   0.9999999998  73911.6 37.61886320 1964.748366  anjing
+4 perlakuan        Lower-bound   168181.65 1.000000000 168181.65000 31.85620525 6.054160564e-05   0.6946978076 31.85620525   0.9994549511  73911.6 14.00000000 5279.400000  anjing
+
+--- within_contrasts ---
+  measure    source  contrast type_III_ss df mean_square               F             sig  partial_eta_sq         noncent observed_power error_ss error_df
+1  anjing perlakuan    Linear   165534.03  1   165534.03 7.802551587e+01 0.0000004243701 8.478682801e-01 7.802551587e+01  0.99999999968 29701.52       14
+2  anjing perlakuan Quadratic        1.35  1        1.35 8.908203088e-04 0.9766106941617 6.362597354e-05 8.908203088e-04  0.05008891037 21216.40       14
+3  anjing perlakuan     Cubic     2646.27  1     2646.27 1.611215778e+00 0.2250171102405 1.032088596e-01 1.611215778e+00  0.21954210083 22993.68       14
+
+--- between_effects ---
+  measure    source type_III_ss df mean_square           F             sig partial_eta_sq     noncent observed_power    error_ss error_df
+1  anjing Intercept 10908164.82  1 10908164.82 716.8712017 1.998981625e-13   0.9808447782 716.8712017              1 213028.9333       14
+
+--- multivariate_tests ---
+                      effect               test        value           F hypothesis_df error_df             sig partial_eta_sq    noncent observed_power
+1 Within Subjects: perlakuan     Pillai's Trace 0.8676521524 26.22338537             3       12 1.483857454e-05   0.8676521524 78.6701561   0.9999991025
+2 Within Subjects: perlakuan      Wilks' Lambda 0.1323478476 26.22338537             3       12 1.483857454e-05   0.8676521524 78.6701561   0.9999991025
+3 Within Subjects: perlakuan  Hotelling's Trace 6.5558463416 26.22338537             3       12 1.483857454e-05   0.8676521524 78.6701561   0.9999991025
+4 Within Subjects: perlakuan Roy's Largest Root 6.5558463416 26.22338537             3       12 1.483857454e-05   0.8676521524 78.6701561   0.9999991025
+
+--- car_crosscheck ---
+       measure abs_diff_SS_within abs_diff_F_within abs_diff_mauchly_W     abs_diff_GG abs_diff_SS_between_intercept   car_HF_eps spss_formula_HF
+anjing  anjing    4.074536264e-10    1.10134124e-13    9.992007222e-16 7.771561172e-16                             0 0.8956872191    0.8956872191
+
+==================== dataset a ====================
+
+--- descriptive_statistics ---
+  variable group    mean          sd  n
+1   cemas1 Total 30.6875 5.641734367 16
+2   cemas2 Total 27.4375 3.365882747 16
+3   cemas3 Total 25.1875 4.578482281 16
+4   stres1 Total 24.3750 2.704933764 16
+5   stres2 Total 23.1250 2.156385865 16
+6   stres3 Total 20.3750 3.422961681 16
+
+--- mauchly ---
+     mauchly_w approx_chi_square df          sig sig_anderson greenhouse_geisser  huynh_feldt lower_bound measure effect
+1 0.8590077257     2.12768308465  2 0.3451274388 0.3451274388       0.8764301236 0.9830712305         0.5   cemas  waktu
+2 0.9975324500     0.03458839224  2 0.9828544901 0.9828544901       0.9975385238 1.0000000000         0.5   stres  waktu
+
+--- within_effects ---
+  source         correction type_III_ss          df  mean_square           F             sig partial_eta_sq     noncent observed_power    error_ss    error_df     error_ms measure
+1  waktu Sphericity Assumed 244.6666667 2.000000000 122.33333333 15.77363897 2.082984651e-05   0.5125698324 31.54727794   0.9987347149 232.6666667 30.00000000  7.755555556   cemas
+2  waktu Greenhouse-Geisser 244.6666667 1.752860247 139.58138822 15.77363897 5.659988861e-05   0.5125698324 27.64898470   0.9969281033 232.6666667 26.29290371  8.849028972   cemas
+3  waktu        Huynh-Feldt 244.6666667 1.966142461 124.43994853 15.77363897 2.388107620e-05   0.5125698324 31.01322134   0.9985698472 232.6666667 29.49213692  7.889108454   cemas
+4  waktu        Lower-bound 244.6666667 1.000000000 244.66666667 15.77363897 1.228276134e-03   0.5125698324 15.77363897   0.9596498778 232.6666667 15.00000000 15.511111111   cemas
+5  waktu Sphericity Assumed 134.0000000 2.000000000  67.00000000 17.52906977 9.063464259e-06   0.5388739946 35.05813953   0.9995221546 114.6666667 30.00000000  3.822222222   stres
+6  waktu Greenhouse-Geisser 134.0000000 1.995077048  67.16532585 17.52906977 9.263311556e-06   0.5388739946 34.97184476   0.9995122476 114.6666667 29.92615571  3.831653747   stres
+7  waktu        Huynh-Feldt 134.0000000 2.000000000  67.00000000 17.52906977 9.063464259e-06   0.5388739946 35.05813953   0.9995221546 114.6666667 30.00000000  3.822222222   stres
+8  waktu        Lower-bound 134.0000000 1.000000000 134.00000000 17.52906977 7.938357126e-04   0.5388739946 17.52906977   0.9741906289 114.6666667 15.00000000  7.644444444   stres
+
+--- within_contrasts ---
+  measure source  contrast   type_III_ss df   mean_square             F             sig partial_eta_sq       noncent observed_power     error_ss error_df
+1   cemas  waktu    Linear 242.000000000  1 242.000000000 45.3750000000 6.680768188e-06  0.75155279503 45.3750000000  0.99999158839  80.00000000       15
+2   cemas  waktu Quadratic   2.666666667  1   2.666666667  0.2620087336 6.161963725e-01  0.01716738197  0.2620087336  0.07677282667 152.66666667       15
+3   stres  waktu    Linear 128.000000000  1 128.000000000 32.5423728814 4.172655242e-05  0.68449197861 32.5423728814  0.99959813604  59.00000000       15
+4   stres  waktu Quadratic   6.000000000  1   6.000000000  1.6167664671 2.229058916e-01  0.09729729730  1.6167664671  0.22179449818  55.66666667       15
+
+--- between_effects ---
+  measure    source type_III_ss df mean_square            F             sig partial_eta_sq      noncent observed_power    error_ss error_df
+1   cemas Intercept 37018.52083  1 37018.52083  761.5456156 2.849884643e-14   0.9806836846  761.5456156              1 729.1458333       15
+2   stres Intercept 24570.75000  1 24570.75000 1531.9483893 1.614891326e-16   0.9903034903 1531.9483893              1 240.5833333       15
+
+--- multivariate_tests ---
+                       effect               test           value            F hypothesis_df error_df             sig partial_eta_sq      noncent observed_power
+1 Between Subjects: Intercept     Pillai's Trace 9.907316043e-01 748.25476430             2       14 5.875325947e-15   0.9907316043 1496.5095286    1.000000000
+2 Between Subjects: Intercept      Wilks' Lambda 9.268395687e-03 748.25476430             2       14 5.875325947e-15   0.9907316043 1496.5095286    1.000000000
+3 Between Subjects: Intercept  Hotelling's Trace 1.068935378e+02 748.25476430             2       14 5.875325947e-15   0.9907316043 1496.5095286    1.000000000
+4 Between Subjects: Intercept Roy's Largest Root 1.068935378e+02 748.25476430             2       14 5.875325947e-15   0.9907316043 1496.5095286    1.000000000
+5      Within Subjects: waktu     Pillai's Trace 9.045935423e-01  28.44441239             4       12 4.847444576e-06   0.9045935423  113.7776496    0.999999994
+6      Within Subjects: waktu      Wilks' Lambda 9.540645768e-02  28.44441239             4       12 4.847444576e-06   0.9045935423  113.7776496    0.999999994
+7      Within Subjects: waktu  Hotelling's Trace 9.481470797e+00  28.44441239             4       12 4.847444576e-06   0.9045935423  113.7776496    0.999999994
+8      Within Subjects: waktu Roy's Largest Root 9.481470797e+00  28.44441239             4       12 4.847444576e-06   0.9045935423  113.7776496    0.999999994
+
+--- car_crosscheck ---
+      measure abs_diff_SS_within abs_diff_F_within abs_diff_mauchly_W     abs_diff_GG abs_diff_SS_between_intercept   car_HF_eps spss_formula_HF
+cemas   cemas    1.023181539e-12   6.217248938e-14    2.220446049e-16 1.110223025e-16               0.000000000e+00 0.9830712305    0.9830712305
+stres   stres    3.410605132e-13   5.684341886e-14    3.330669074e-16 2.220446049e-16               3.637978807e-12 1.1503810084    1.0000000000
+
+==================== dataset b ====================
+
+--- descriptive_statistics ---
+   variable group        mean          sd  n
+1        w1     1 51.87500000 7.772432971  8
+2        w1     2 57.87500000 6.937218463  8
+3        w1     3 58.37500000 7.558108229  8
+4        w1 Total 56.04166667 7.714915912 24
+5        w2     1 54.75000000 8.924284685  8
+6        w2     2 57.50000000 4.242640687  8
+7        w2     3 55.75000000 5.063877679  8
+8        w2 Total 56.00000000 6.234546112 24
+9        w3     1 55.37500000 6.523309852  8
+10       w3     2 56.00000000 3.338091842  8
+11       w3     3 58.37500000 5.629958132  8
+12       w3 Total 56.58333333 5.266107107 24
+13       w4     1 57.87500000 9.716517601  8
+14       w4     2 59.00000000 5.631543813  8
+15       w4     3 57.87500000 4.642582409  8
+16       w4 Total 58.25000000 6.726004047 24
+
+--- mauchly ---
+     mauchly_w approx_chi_square df          sig sig_anderson greenhouse_geisser huynh_feldt  lower_bound measure effect
+1 0.8412827353       3.408542087  5 0.6372692722 0.6376335285       0.8946909662           1 0.3333333333    skor  waktu
+
+--- within_effects ---
+            source         correction  type_III_ss          df mean_square           F           sig partial_eta_sq      noncent observed_power  error_ss    error_df    error_ms measure
+1            waktu Sphericity Assumed  80.11458333 3.000000000 26.70486111 2.373033015 0.07863958186   0.1015286725  7.119099044   0.5682838186 708.96875 63.00000000 11.25347222    skor
+2            waktu Greenhouse-Geisser  80.11458333 2.684072899 29.84813988 2.373033015 0.08632436284   0.1015286725  6.369393602   0.5343828517 708.96875 56.36553087 12.57805505    skor
+3            waktu        Huynh-Feldt  80.11458333 3.000000000 26.70486111 2.373033015 0.07863958186   0.1015286725  7.119099044   0.5682838186 708.96875 63.00000000 11.25347222    skor
+4            waktu        Lower-bound  80.11458333 1.000000000 80.11458333 2.373033015 0.13838116786   0.1015286725  2.373033015   0.3124874357 708.96875 21.00000000 33.76041667    skor
+5 waktu * kelompok Sphericity Assumed 140.16666667 6.000000000 23.36111111 2.075902499 0.06857979900   0.1650698627 12.455414995   0.7069632878 708.96875 63.00000000 11.25347222    skor
+6 waktu * kelompok Greenhouse-Geisser 140.16666667 5.368145797 26.11081590 2.075902499 0.07739633720   0.1650698627 11.143747277   0.6681003099 708.96875 56.36553087 12.57805505    skor
+7 waktu * kelompok        Huynh-Feldt 140.16666667 6.000000000 23.36111111 2.075902499 0.06857979900   0.1650698627 12.455414995   0.7069632878 708.96875 63.00000000 11.25347222    skor
+8 waktu * kelompok        Lower-bound 140.16666667 2.000000000 70.08333333 2.075902499 0.15042722471   0.1650698627  4.151804998   0.3782655087 708.96875 21.00000000 33.76041667    skor
+
+--- within_contrasts ---
+  measure           source  contrast   type_III_ss df   mean_square             F           sig partial_eta_sq       noncent observed_power  error_ss error_df
+1    skor            waktu    Linear 62.3520833333  1 62.3520833333 4.73249903996 0.04116480655 0.183911365647 4.73249903996  0.54598561566 276.68125       21
+2    skor waktu * kelompok    Linear 78.3166666667  2 39.1583333333 2.97210237412 0.07301569266 0.220611623308 5.94420474824  0.51603492768 276.68125       21
+3    skor            waktu Quadratic 17.5104166667  1 17.5104166667 1.60817274839 0.21862846350 0.071132362898 1.60817274839  0.22757966994 228.65625       21
+4    skor waktu * kelompok Quadratic 14.5833333333  2  7.2916666667 0.66967336340 0.52247158030 0.059954605798 1.33934672680  0.14739371502 228.65625       21
+5    skor            waktu     Cubic  0.2520833333  1  0.2520833333 0.02599674657 0.87344936473 0.001236409711 0.02599674657  0.05272117548 203.63125       21
+6    skor waktu * kelompok     Cubic 47.2666666667  2 23.6333333333 2.43724870323 0.11172423933 0.188390032467 4.87449740646  0.43573091749 203.63125       21
+
+--- between_effects ---
+  measure    source type_III_ss df mean_square               F             sig partial_eta_sq        noncent observed_power   error_ss error_df
+1    skor Intercept 308833.5938  1 308833.5938 2202.0921534299 9.501506751e-23  0.99055369793 2202.092153430   1.0000000000 2945.15625       21
+2    skor  kelompok    147.0000  2     73.5000    0.5240808531 5.996426951e-01  0.04753964163    1.048161706   0.1247985179 2945.15625       21
+
+--- multivariate_tests ---
+                             effect               test        value           F hypothesis_df error_df           sig partial_eta_sq      noncent observed_power
+1            Within Subjects: waktu     Pillai's Trace 0.2760769594 2.415294598             3       19 0.09823296221   0.2760769594  7.245883794   0.5115220820
+2            Within Subjects: waktu      Wilks' Lambda 0.7239230406 2.415294598             3       19 0.09823296221   0.2760769594  7.245883794   0.5115220820
+3            Within Subjects: waktu  Hotelling's Trace 0.3813623050 2.415294598             3       19 0.09823296221   0.2760769594  7.245883794   0.5115220820
+4            Within Subjects: waktu Roy's Largest Root 0.3813623050 2.415294598             3       19 0.09823296221   0.2760769594  7.245883794   0.5115220820
+5 Within Subjects: waktu * kelompok     Pillai's Trace 0.4107894734 1.723243361             6       40 0.14064911033   0.2053947367 10.339460168   0.5826478930
+6 Within Subjects: waktu * kelompok      Wilks' Lambda 0.6306278328 1.641943721             6       38 0.16241284856   0.2058792076  9.851662324   0.5545345542
+7 Within Subjects: waktu * kelompok  Hotelling's Trace 0.5200450151 1.560135045             6       36 0.18717726198   0.2063633832  9.360810272   0.5253499481
+8 Within Subjects: waktu * kelompok Roy's Largest Root 0.3040156754 2.026771169             3       20 0.14251285398   0.2331380528  6.080313508   0.4417713499
+
+--- car_crosscheck ---
+     measure abs_diff_SS_within abs_diff_F_within abs_diff_mauchly_W     abs_diff_GG abs_diff_SS_between_intercept  car_HF_eps spss_formula_HF
+skor    skor    9.663381206e-13   2.797762022e-14    2.109423747e-15 2.220446049e-16               1.746229827e-10 1.038251271               1
+
+--- levene ---
+  variable based_on levene_statistic df1 df2          sig
+1       w1     Mean     0.3717680857   2  21 0.6939621039
+2       w1   Median     0.1992196465   2  21 0.8209005662
+3       w2     Mean     1.2607578677   2  21 0.3040303213
+4       w2   Median     0.8814180929   2  21 0.4289687728
+5       w3     Mean     1.8313494979   2  21 0.1848741835
+6       w3   Median     1.3536585366   2  21 0.2799221779
+7       w4     Mean     1.7290283780   2  21 0.2017772208
+8       w4   Median     1.6737024221   2  21 0.2116164791
+
+--- box_m ---
+        box_m            F df1         df2          sig
+1 25.18784747 0.8996467503  20 1582.994924 0.5878724509
+
+==================== dataset c ====================
+
+--- descriptive_statistics ---
+  variable group  mean          sd  n
+1       p1     1 59.40 4.221637386 10
+2       p1     2 58.20 7.114929530 10
+3       p1 Total 58.80 5.727128425 20
+4       p2     1 61.70 3.591656999 10
+5       p2     2 60.60 7.366591251 10
+6       p2 Total 61.15 5.668704484 20
+7       p3     1 63.40 3.657564460 10
+8       p3     2 64.50 9.228578800 10
+9       p3 Total 63.95 6.855462670 20
+
+--- mauchly ---
+     mauchly_w approx_chi_square df          sig sig_anderson greenhouse_geisser  huynh_feldt lower_bound measure effect
+1 0.8010901181       3.770291131  2 0.1518069599 0.1518069599       0.8340910481 0.9602005763         0.5   nilai   sesi
+
+--- within_effects ---
+         source         correction type_III_ss          df   mean_square             F             sig partial_eta_sq       noncent observed_power    error_ss    error_df     error_ms measure
+1          sesi Sphericity Assumed       265.9 2.000000000 132.950000000 15.3469431381 1.513200828e-05  0.46022038885 30.6938862762   0.9986290042 311.8666667 36.00000000  8.662962963   nilai
+2          sesi Greenhouse-Geisser       265.9 1.668182096 159.395068799 15.3469431381 6.040672221e-05  0.46022038885 25.6014957751   0.9956170600 311.8666667 30.02727773 10.386111903   nilai
+3          sesi        Huynh-Feldt       265.9 1.920401153 138.460654251 15.3469431381 2.107723202e-05  0.46022038885 29.4722872899   0.9981834218 311.8666667 34.56722075  9.022034747   nilai
+4          sesi        Lower-bound       265.9 1.000000000 265.900000000 15.3469431381 1.009241559e-03  0.46022038885 15.3469431381   0.9591715373 311.8666667 18.00000000 17.325925926   nilai
+5 sesi * metode Sphericity Assumed        16.9 2.000000000   8.450000000  0.9754168448 3.867775341e-01  0.05140423806  1.9508336896   0.2061292959 311.8666667 36.00000000  8.662962963   nilai
+6 sesi * metode Greenhouse-Geisser        16.9 1.668182096  10.130788502  0.9754168448 3.746626192e-01  0.05140423806  1.6271729169   0.1900090242 311.8666667 30.02727773 10.386111903   nilai
+7 sesi * metode        Huynh-Feldt        16.9 1.920401153   8.800244667  0.9754168448 3.841315523e-01  0.05140423806  1.8731916329   0.2023216079 311.8666667 34.56722075  9.022034747   nilai
+8 sesi * metode        Lower-bound        16.9 1.000000000  16.900000000  0.9754168448 3.364238981e-01  0.05140423806  0.9754168448   0.1547394939 311.8666667 18.00000000 17.325925926   nilai
+
+--- within_contrasts ---
+  measure        source  contrast type_III_ss df mean_square              F             sig partial_eta_sq        noncent observed_power    error_ss error_df
+1   nilai          sesi    Linear     265.225  1     265.225 49.70380010411 1.411737857e-06 0.734136045948 49.70380010411  0.99999857303  96.0500000       18
+2   nilai sesi * metode    Linear      13.225  1      13.225  2.47839666840 1.328321060e-01 0.121024937085  2.47839666840  0.31971131472  96.0500000       18
+3   nilai          sesi Quadratic       0.675  1       0.675  0.05629778361 8.151256883e-01 0.003117902922  0.05629778361  0.05581356677 215.8166667       18
+4   nilai sesi * metode Quadratic       3.675  1       3.675  0.30651015522 5.866417335e-01 0.016743232469  0.30651015522  0.08208564172 215.8166667       18
+
+--- between_effects ---
+  measure    source type_III_ss df mean_square               F             sig partial_eta_sq         noncent observed_power    error_ss error_df
+1   nilai Intercept    225461.4  1    225461.4 2.260222701e+03 2.233118123e-20 0.992099104274 2.260222701e+03  1.00000000000 1795.533333       18
+2   nilai    metode         2.4  1         2.4 2.405970371e-02 8.784592209e-01 0.001334865957 2.405970371e-02  0.05247970524 1795.533333       18
+
+--- multivariate_tests ---
+                          effect               test        value            F hypothesis_df error_df             sig partial_eta_sq      noncent observed_power
+1          Within Subjects: sesi     Pillai's Trace 0.7431514011 24.593425612             2       17 9.599667880e-06   0.7431514011 49.186851224   0.9999729633
+2          Within Subjects: sesi      Wilks' Lambda 0.2568485989 24.593425612             2       17 9.599667880e-06   0.7431514011 49.186851224   0.9999729633
+3          Within Subjects: sesi  Hotelling's Trace 2.8933441897 24.593425612             2       17 9.599667880e-06   0.7431514011 49.186851224   0.9999729633
+4          Within Subjects: sesi Roy's Largest Root 2.8933441897 24.593425612             2       17 9.599667880e-06   0.7431514011 49.186851224   0.9999729633
+5 Within Subjects: sesi * metode     Pillai's Trace 0.1222964539  1.184363289             2       17 3.299565472e-01   0.1222964539  2.368726578   0.2244984147
+6 Within Subjects: sesi * metode      Wilks' Lambda 0.8777035461  1.184363289             2       17 3.299565472e-01   0.1222964539  2.368726578   0.2244984147
+7 Within Subjects: sesi * metode  Hotelling's Trace 0.1393368575  1.184363289             2       17 3.299565472e-01   0.1222964539  2.368726578   0.2244984147
+8 Within Subjects: sesi * metode Roy's Largest Root 0.1393368575  1.184363289             2       17 3.299565472e-01   0.1222964539  2.368726578   0.2244984147
+
+--- car_crosscheck ---
+      measure abs_diff_SS_within abs_diff_F_within abs_diff_mauchly_W     abs_diff_GG abs_diff_SS_between_intercept   car_HF_eps spss_formula_HF
+nilai   nilai    2.728484105e-12   1.829647545e-13     1.33226763e-15 4.440892099e-16               1.746229827e-10 0.9091290389    0.9602005763
+
+--- levene ---
+  variable based_on levene_statistic df1 df2           sig
+1       p1     Mean      2.740731647   1  18 0.11514981849
+2       p1   Median      2.585536160   1  18 0.12524262749
+3       p2     Mean      2.649769352   1  18 0.12094192093
+4       p2   Median      2.705567010   1  18 0.11734880234
+5       p3     Mean      6.424877947   1  18 0.02075107068
+6       p3   Median      6.469648562   1  18 0.02037254359
+
+--- box_m ---
+        box_m           F df1         df2           sig
+1 13.53466943 1.842719309   6 2347.471698 0.08715560185
+
+--- emmeans ---
+$overall
+ 1       emmean       SE df lower.CL upper.CL
+ overall   61.3 1.289392 18 58.59109 64.00891
+
+Results are averaged over the levels of: metode, sesi 
+Confidence level used: 0.95 
+
+$metode
+ metode emmean       SE df lower.CL upper.CL
+ 1        61.5 1.823475 18 57.66902 65.33098
+ 2        61.1 1.823475 18 57.26902 64.93098
+
+Results are averaged over the levels of: sesi 
+Confidence level used: 0.95 
+
+$metode_pairs
+ contrast          estimate       SE df  lower.CL upper.CL t.ratio p.value
+ metode1 - metode2      0.4 2.578783 18 -5.017823 5.817823   0.155  0.8785
+
+Results are averaged over the levels of: sesi 
+Confidence level used: 0.95 
+
+$sesi
+ sesi emmean       SE df lower.CL upper.CL
+ p1    58.80 1.308094 18 56.05180 61.54820
+ p2    61.15 1.295827 18 58.42757 63.87243
+ p3    63.95 1.569589 18 60.65241 67.24759
+
+Results are averaged over the levels of: metode 
+Confidence level used: 0.95 
+
+$sesi_pairs
+ contrast estimate        SE df  lower.CL    upper.CL t.ratio p.value
+ p1 - p2     -2.35 0.9287088 18 -4.800997  0.10099697  -2.530  0.0628
+ p1 - p3     -5.15 0.7304869 18 -7.077861 -3.22213928  -7.050 <0.0001
+ p2 - p3     -2.80 1.0967123 18 -5.694382  0.09438247  -2.553  0.0599
+
+Results are averaged over the levels of: metode 
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 3 estimates 
+P value adjustment: bonferroni method for 3 tests 
+
+$metode_sesi
+metode = 1:
+ sesi emmean       SE df lower.CL upper.CL
+ p1     59.4 1.849925 18 55.51345 63.28655
+ p2     61.7 1.832576 18 57.84990 65.55010
+ p3     63.4 2.219735 18 58.73651 68.06349
+
+metode = 2:
+ sesi emmean       SE df lower.CL upper.CL
+ p1     58.2 1.849925 18 54.31345 62.08655
+ p2     60.6 1.832576 18 56.74990 64.45010
+ p3     64.5 2.219735 18 59.83651 69.16349
+
+Confidence level used: 0.95 
+
