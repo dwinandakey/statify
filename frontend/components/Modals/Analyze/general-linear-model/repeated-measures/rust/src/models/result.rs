@@ -11,6 +11,9 @@ pub struct RepeatedMeasureResult {
     pub multivariate_tests: Option<MultivariateTests>,
     pub mauchly_test: Option<MauchlyTest>,
     pub tests_of_within_subjects_effects: Option<TestsWithinSubjectsEffects>,
+    /// Tests of Within-Subjects Effects, "Multivariate" part (more than one
+    /// measure; tests based on averaged variables).
+    pub within_subjects_multivariate: Option<MultivariateTests>,
     pub tests_of_within_subjects_contrasts: Option<TestsWithinSubjectsContrasts>,
     pub tests_of_between_subjects_effects: Option<TestsBetweenSubjectsEffects>,
     pub parameter_estimates: Option<ParameterEstimates>,
@@ -258,6 +261,12 @@ pub struct ResidualMatrix {
     pub matrix_type: String,
     pub values: HashMap<String, HashMap<String, f64>>,
     pub description: Option<String>,
+    /// Covariance (SSCP / error df) and correlation parts of the SPSS
+    /// Residual SSCP Matrix (None from the older modules).
+    #[serde(default)]
+    pub covariance: Option<HashMap<String, HashMap<String, f64>>>,
+    #[serde(default)]
+    pub correlation: Option<HashMap<String, HashMap<String, f64>>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

@@ -225,8 +225,10 @@ pub fn calculate_bartlett_test_from_residual(
             let significance = significance_corrected.max(0.0); // Ensure non-negative
 
             // Create the result
+            // SPSS prints the likelihood ratio W^(n/2) (n = number of cases),
+            // e.g. 2.432E-11 for W = 0.0868 and n = 20 (dataset c).
             Ok(BartlettTest {
-                likelihood_ratio: w,
+                likelihood_ratio: w.powf((n as f64) / 2.0),
                 approx_chi_square: chi_square,
                 df,
                 significance,

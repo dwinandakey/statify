@@ -1,5 +1,4 @@
 use nalgebra::DMatrix;
-use statrs::distribution::{ ChiSquared, ContinuousCDF };
 use crate::utils::collections::HashMap;
 
 use crate::models::{
@@ -163,12 +162,13 @@ pub fn calculate_mauchly_test(
         // df for χ²: p(p+1)/2 - 1 (same as k(k-1)/2 - 1 with p = k-1)
         let df = p_dim * (p_dim + 1) / 2 - 1;
 
-        let chi_squared_dist = ChiSquared::new(df as f64).map_err(|e| e.to_string())?;
-        let significance = if chi_square.is_finite() {
-            1.0 - chi_squared_dist.cdf(chi_square)
-        } else {
-            0.0
-        };
+        // With the ω₂ correction, as SPSS (error df n − 1 without between factors).
+        let significance = crate::stats::glm_tests::sphericity_significance(
+            chi_square,
+            p_dim,
+            n - 1.0,
+            1.0 - correction / (n - 1.0)
+        );
 
         // Greenhouse-Geisser ε = (Σλᵢ)² / (p · Σλᵢ²) using the true
         // eigenvalues of Σ_t.

@@ -44,6 +44,7 @@ const varDef = (name, i, { nominal = false, string = false } = {}) => ({
  *   measures: [{ name: "cemas", columns: ["cemas1", …] }], // one column per cell, factor levels in order
  *   between: ["kelompok"], covariates: [],
  *   options: { DescStats: true, … }, emmeans: { TargetList: [...], … },
+ *   contrast: "Polynomial",                               // optional, Contrast dialog
  * }
  * Layout of factors_data / covar_data: "variable-major" (default) is the
  * layout of the service since Tahap 2 (factors_data[f][s]); "subject-major"
@@ -72,6 +73,9 @@ export function buildPayload({ rows, design, layout = "variable-major" }) {
     if (between.length) cfg.posthoc.SrcList = [...between];
     cfg.options = { ...cfg.options, ...(design.options || {}) };
     cfg.emmeans = { ...cfg.emmeans, ...(design.emmeans || {}) };
+    // Contrast dialog: "<factor>(<Type>)" per within-subjects factor, e.g.
+    // design.contrast = "Polynomial" as in spss/*.sps (dialog default: Repeated).
+    if (design.contrast) cfg.contrast = { ...cfg.contrast, FactorList: design.factors.map((f) => `${f.name}(${design.contrast})`) };
 
     const subject_data = rows.map((r) => [Object.fromEntries(subjectCols.map((col, i) => [encoded[i], r[col]]))]);
     const perSubject = (names) => rows.map((r) => [Object.fromEntries(names.map((n) => [n, r[n]]))]);

@@ -2,6 +2,8 @@
 
 Status: **diperbaiki, tervalidasi terhadap R (car), menunggu SPSS**. Nilai SPSS untuk dataset (b) belum tersedia. Slot test-nya sudah disiapkan dengan status "menunggu SPSS" di `frontend/.../repeated-measures/__test__/fixtures/rm-reference-values.json`.
 
+> **Pembaruan (setelah keluaran SPSS 27 diterima):** semua tabel tahap ini tervalidasi terhadap SPSS 27 (toleransi 0,001; pada presisi penuh selisih ≤ 4,4·10⁻⁴, hanya dari F tiga desimal SPSS). Lihat `../spss-validation/README.md`. Status di atas adalah catatan saat tahap ini selesai.
+
 ## 2a — commit `041ca05e`: desain dengan faktor between / kovariat
 
 | Sebab (diagnosis) | Perbaikan |

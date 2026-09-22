@@ -133,7 +133,7 @@ export const RepeatedMeasuresContainer = ({
             const existingContrastFactors = prev.contrast.FactorList ?? [];
             const contrastFactorList = factorVars.map((fName) => {
                 const existing = existingContrastFactors.find(
-                    (entry) => entry.split("(")[0] === fName
+                    (entry) => entry.split("(")[0].trim() === fName
                 );
                 return existing ?? `${fName}(${contrastMethodLabel})`;
             });

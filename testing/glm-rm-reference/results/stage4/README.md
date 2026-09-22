@@ -2,6 +2,8 @@
 
 Status: **diperbaiki dan disesuaikan dengan SPSS**. Levene (mean, median) tervalidasi terhadap R car. Box's M menunggu SPSS: di R hanya dicek dengan rumus Box (1949) karena uji ini tidak ada di car/afex. Tidak diblokir di dialog.
 
+> **Pembaruan (setelah keluaran SPSS 27 diterima):** semua tabel tahap ini tervalidasi terhadap SPSS 27 (toleransi 0,001; pada presisi penuh selisih ≤ 4,4·10⁻⁴, hanya dari F tiga desimal SPSS). Lihat `../spss-validation/README.md`. Likelihood Ratio Bartlett diperbaiki menjadi W^(N/2) seperti SPSS. Status di atas adalah catatan saat tahap ini selesai.
+
 ## Uji yang diimplementasikan sebelumnya
 
 Opsi **Homogeneity tests** memanggil `calculate_bartlett_test` (`stats/bartlett_test.rs`), yang:

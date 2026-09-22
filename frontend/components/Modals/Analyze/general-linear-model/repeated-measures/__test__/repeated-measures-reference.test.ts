@@ -38,7 +38,8 @@ const DESIGNS: Record<string, Design> = {
     a: { csv: "rm_a.csv", factor: "waktu", levels: 3, measures: [["cemas", ["cemas1", "cemas2", "cemas3"]], ["stres", ["stres1", "stres2", "stres3"]]], between: [], options: OPT },
     b: { csv: "rm_b.csv", factor: "waktu", levels: 4, measures: [["skor", ["w1", "w2", "w3", "w4"]]], between: ["kelompok"], options: OPT },
     c: {
-        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: { ...OPT, HomogenTest: true },
+        // spss/rm_c.sps: /PRINT=… HOMOGENEITY RSSCP.
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: { ...OPT, HomogenTest: true, ResSscpMat: true },
         emmeans: { TargetList: ["(OVERALL)", "metode", "sesi", "metode*sesi"], CompMainEffect: true, ConfiIntervalMethod: "bonferroni" },
     },
 };
@@ -71,6 +72,8 @@ function payload(d: Design) {
     cfg.emmeans.SrcList = [...d.between];
     cfg.options = { ...cfg.options, ...d.options };
     cfg.emmeans = { ...cfg.emmeans, ...(d.emmeans || {}) };
+    // Polynomial contrasts, as /WSFACTOR=<factor> <k> Polynomial in spss/*.sps.
+    cfg.contrast = { ...cfg.contrast, FactorList: [`${d.factor}(Polynomial)`] };
     return {
         subject: rows.map((r) => [Object.fromEntries(cols.map((c, i) => [encoded[i], r[c]]))]),
         factors: d.between.map((b) => rows.map((r) => ({ [b]: r[b] }))),
@@ -134,6 +137,45 @@ function pick(results: any, key: string, e: any): number | undefined {
                 Value: row?.value, F: row?.f, "Hypothesis df": row?.hypothesis_df, "Error df": row?.error_df, "Sig.": row?.significance,
                 "Partial Eta Squared": row?.partial_eta_squared, "Noncent. Parameter": row?.noncent_parameter, "Observed Power": row?.observed_power,
             } as Record<string, number>)[e.field];
+        }
+        case "within_contrasts": {
+            const [src, contrast] = String(e.source).split(" | ");
+            const sources: any[] = get(get(get(results.tests_of_within_subjects_contrasts, "measures"), e.measure), "sources") ?? [];
+            const row = sources.find((s) => s.source === src && Object.values(s.factor_values ?? {})[0] === contrast);
+            return ({
+                SS: row?.sum_of_squares, df: row?.df, "Mean Square": row?.mean_square, F: row?.f, "Sig.": row?.significance,
+                "Partial Eta Squared": row?.partial_eta_squared, "Noncent. Parameter": row?.noncent_parameter, "Observed Power": row?.observed_power,
+            } as Record<string, number>)[e.field];
+        }
+        case "within_multivariate": {
+            const [effect, test] = String(e.source).split(" | ");
+            const row = get(get(get(results.within_subjects_multivariate, "effects"), effect), test);
+            return ({
+                Value: row?.value, F: row?.f, "Hypothesis df": row?.hypothesis_df, "Error df": row?.error_df, "Sig.": row?.significance,
+                "Partial Eta Squared": row?.partial_eta_squared, "Noncent. Parameter": row?.noncent_parameter, "Observed Power": row?.observed_power,
+            } as Record<string, number>)[e.field];
+        }
+        case "bartlett": {
+            const b = results.bartlett_test;
+            return ({ "Likelihood Ratio": b?.likelihood_ratio, "Approx. Chi-Square": b?.approx_chi_square, df: b?.df, "Sig.": b?.significance } as Record<string, number>)[e.field];
+        }
+        case "descriptives": {
+            // measure = dependent variable column, source = between-subjects level ("" without between factors).
+            const [m, cols] = d.measures.find(([, c]) => c.includes(e.measure))!;
+            const j = cols.indexOf(e.measure) + 1;
+            const groups: any[] = get(get(results.descriptive_statistics, `${e.measure}_(${j},${m})`), "groups") ?? [];
+            const g = e.source === "" ? groups[0] : groups.find((x) => x.factor_value === e.source);
+            return ({ Mean: g?.stats?.mean, "Std. Deviation": g?.stats?.std_deviation, N: g?.stats?.n } as Record<string, number>)[e.field];
+        }
+        case "residual_sscp": {
+            // measure = part of the table, source = "<row DV> | <column DV>".
+            const part = ({ "Sum-of-Squares and Cross-Products": "values", Covariance: "covariance", Correlation: "correlation" } as Record<string, string>)[e.measure];
+            const [a, b] = String(e.source).split(" | ");
+            const enc = (col: string) => {
+                const [m, cols] = d.measures.find(([, c]) => c.includes(col))!;
+                return `${col}_(${cols.indexOf(col) + 1},${m})`;
+            };
+            return get(get(get(results.residual_matrix, part), enc(a)), enc(b));
         }
         case "univariate": {
             const [m, j] = String(e.measure).split("|");

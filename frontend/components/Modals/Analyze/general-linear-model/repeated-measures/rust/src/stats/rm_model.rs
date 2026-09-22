@@ -18,7 +18,7 @@
 //! between-subjects factor f / covariate c for subject s, with f and c
 //! following `factors_data_defs` / `covariate_data_defs`.
 use nalgebra::{ DMatrix, SymmetricEigen };
-use statrs::distribution::{ ChiSquared, ContinuousCDF };
+use statrs::distribution::ContinuousCDF;
 
 use crate::models::{
     config::RepeatedMeasuresConfig,
@@ -46,9 +46,9 @@ use crate::models::{
 use crate::utils::collections::HashMap;
 
 use super::core::parse_within_subject_factors;
-use super::glm_tests::{ f_significance, multivariate_statistics, observed_power };
+use super::glm_tests::{ f_significance, multivariate_statistics, observed_power, sphericity_significance };
 use crate::models::config::CIMethod;
-use crate::models::result::{ BartlettTest, BoxMTest, ConfidenceInterval, EstimatedMarginalMean, HomogeneityTests, LeveneEntry, PairwiseComparison };
+use crate::models::result::{ BartlettTest, BoxMTest, ResidualMatrix, ConfidenceInterval, EstimatedMarginalMean, HomogeneityTests, LeveneEntry, PairwiseComparison };
 use statrs::distribution::StudentsT;
 
 /// Estimated marginal means per target, pairwise comparisons per factor, and
@@ -98,6 +98,8 @@ pub struct RmModel {
     pub excluded: usize,
     pub alpha: f64,
     pub sum_of_squares: String,
+    /// Contrast of the within-subjects factor (or why it is not supported).
+    pub contrast: Result<WithinContrast, String>,
 }
 
 fn number(value: Option<&DataValue>) -> Option<f64> {
@@ -182,6 +184,77 @@ pub fn helmert(k: usize) -> DMatrix<f64> {
         m[(i - 1, i)] = (i as f64) / scale;
     }
     m
+}
+
+/// Contrast of the within-subjects factor in the Tests of Within-Subjects
+/// Contrasts (dialog Contrast). Repeated stays the default of the dialog.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum WithinContrast {
+    Polynomial,
+    Repeated,
+}
+
+/// Contrast type chosen for `factor` in the Contrast dialog. `FactorList`
+/// holds "<factor>(<Type>)" (dialog default) or "<factor> (<type>, Ref: …)"
+/// (after "Change"); the last parenthesised group is used. "none" or no
+/// entry keeps the dialog default (Repeated).
+pub fn within_contrast_type(config: &RepeatedMeasuresConfig, factor: &str) -> Result<WithinContrast, String> {
+    let method = config.contrast.factor_list
+        .as_deref()
+        .unwrap_or(&[])
+        .iter()
+        .find(|entry| entry.split('(').next().map(|name| name.trim()) == Some(factor))
+        .and_then(|entry| entry.rsplit_once('('))
+        .map(|(_, rest)| rest.trim_end_matches(')').split(',').next().unwrap_or("").trim().to_lowercase())
+        .unwrap_or_default();
+    match method.as_str() {
+        "" | "none" | "repeated" => Ok(WithinContrast::Repeated),
+        "polynomial" => Ok(WithinContrast::Polynomial),
+        other =>
+            Err(
+                format!(
+                    "Contrast type '{}' for the within-subjects factor '{}' is not supported yet; use Polynomial or Repeated",
+                    other,
+                    factor
+                )
+            ),
+    }
+}
+
+/// Orthonormal polynomial contrasts for equally spaced levels 1..k,
+/// (k−1) × k, rows Linear, Quadratic, Cubic, Order 4, … (SPSS
+/// WSFACTOR … Polynomial). Gram-Schmidt (two passes) on centred powers.
+pub fn polynomial(k: usize) -> DMatrix<f64> {
+    let centre = ((k as f64) + 1.0) / 2.0;
+    let mut basis: Vec<Vec<f64>> = vec![vec![1.0 / (k as f64).sqrt(); k]];
+    let mut out = DMatrix::<f64>::zeros(k - 1, k);
+    for degree in 1..k {
+        let mut v: Vec<f64> = (1..=k).map(|x| ((x as f64) - centre).powi(degree as i32)).collect();
+        for _ in 0..2 {
+            for b in &basis {
+                let dot: f64 = v.iter().zip(b).map(|(a, c)| a * c).sum();
+                for (vi, bi) in v.iter_mut().zip(b) {
+                    *vi -= dot * bi;
+                }
+            }
+        }
+        let norm = v.iter().map(|a| a * a).sum::<f64>().sqrt();
+        for (j, vi) in v.iter_mut().enumerate() {
+            *vi /= norm;
+            out[(degree - 1, j)] = *vi;
+        }
+        basis.push(v);
+    }
+    out
+}
+
+fn polynomial_label(degree: usize) -> String {
+    match degree {
+        1 => "Linear".to_string(),
+        2 => "Quadratic".to_string(),
+        3 => "Cubic".to_string(),
+        d => format!("Order {}", d),
+    }
 }
 
 impl RmModel {
@@ -351,6 +424,7 @@ impl RmModel {
             measures.push(MeasureData { name, variables, y });
         }
 
+        let contrast = within_contrast_type(config, &factor);
         Ok(RmModel {
             factor,
             k,
@@ -365,6 +439,7 @@ impl RmModel {
             excluded,
             alpha: config.options.sig_level.unwrap_or(0.05),
             sum_of_squares: format!("{:?}", config.model.sum_of_square_method),
+            contrast,
         })
     }
 
@@ -454,8 +529,8 @@ impl RmModel {
         })
     }
 
-    /// Mauchly's test per measure on the error SSCP of the full model.
-    /// Mauchly's test per measure, plus messages for measures whose error
+    /// Mauchly's test per measure on the error SSCP of the full model,
+    /// plus messages for measures whose error
     /// covariance matrix is singular (W = 0; chi-square and Sig. are then not
     /// computable and left empty, the epsilons are still computed).
     pub fn mauchly(&self) -> Result<(MauchlyTest, Vec<String>), String> {
@@ -486,13 +561,9 @@ impl RmModel {
                 let w = if mean_eig.abs() < 1e-12 { 0.0 } else { det / mean_eig.powi(p as i32) };
                 let correction = (2.0 * p_f * p_f + p_f + 2.0) / (6.0 * p_f);
                 let chi_square = if w > 0.0 { -(v - correction) * w.ln() } else { f64::INFINITY };
-                let significance = if df == 0 {
-                    f64::NAN
-                } else if chi_square.is_finite() {
-                    1.0 - ChiSquared::new(df as f64).map_err(|e| e.to_string())?.cdf(chi_square)
-                } else {
-                    0.0
-                };
+                // With the ω₂ correction, as SPSS (Gambar 51: Sig. .2975).
+                let rho = 1.0 - correction / v;
+                let significance = sphericity_significance(chi_square, p, v, rho);
                 (w, if chi_square.is_finite() { chi_square } else { 0.0 }, significance)
             };
             let sum: f64 = eig.iter().sum();
@@ -600,15 +671,29 @@ impl RmModel {
     /// Tests of within-subjects contrasts per measure with the contrasts
     /// Statify uses (adjacent levels, "Level j vs. Level j+1"), each
     /// tested against the error of the full between-subjects model.
-    pub fn within_contrasts(&self) -> TestsWithinSubjectsContrasts {
+    pub fn within_contrasts(&self) -> Result<TestsWithinSubjectsContrasts, String> {
+        let contrast = self.contrast.clone()?;
+        let poly = polynomial(self.k);
         let v = self.error_df();
         let mut measures = HashMap::new();
         for m in &self.measures {
             let mut effects = Vec::new();
             let mut errors = Vec::new();
             for j in 0..(self.k - 1) {
-                let label = format!("Level {} vs. Level {}", j + 1, j + 2);
-                let d = DMatrix::from_fn(self.n, 1, |i, _| m.y[(i, j + 1)] - m.y[(i, j)]);
+                // Polynomial: orthonormal coefficients (as SPSS prints them);
+                // Repeated: level j+1 minus level j.
+                let (label, d) = match contrast {
+                    WithinContrast::Polynomial =>
+                        (
+                            polynomial_label(j + 1),
+                            DMatrix::from_fn(self.n, 1, |i, _| (0..self.k).map(|c| m.y[(i, c)] * poly[(j, c)]).sum::<f64>()),
+                        ),
+                    WithinContrast::Repeated =>
+                        (
+                            format!("Level {} vs. Level {}", j + 1, j + 2),
+                            DMatrix::from_fn(self.n, 1, |i, _| m.y[(i, j + 1)] - m.y[(i, j)]),
+                        ),
+                };
                 let ss_error = self.error(&d)[(0, 0)];
                 let ms_error = ss_error / (v as f64);
                 for (name, cols) in self.within_sources() {
@@ -659,7 +744,47 @@ impl RmModel {
             sources.extend(errors);
             measures.insert(m.name.clone(), WithinSubjectsContrastsResult { sources });
         }
-        TestsWithinSubjectsContrasts { measures }
+        Ok(TestsWithinSubjectsContrasts { measures })
+    }
+
+    /// SPSS "Tests of Within-Subjects Effects: Multivariate" for more than
+    /// one measure ("tests are based on averaged variables"): multivariate
+    /// tests on the measures with the SSCP of each within-subjects source
+    /// summed over the orthonormal contrasts, H*_ml = Σ_c H_(m,c)(l,c) and
+    /// E*_ml = Σ_c E_(m,c)(l,c) (invariant to the choice of orthonormal
+    /// contrasts), with hypothesis df = df(source)·p and error df = v·p.
+    /// None for a single measure (SPSS does not print the table then).
+    pub fn averaged_multivariate(&self) -> Option<Result<MultivariateTests, String>> {
+        if self.measures.len() < 2 {
+            return None;
+        }
+        let p = self.k - 1;
+        let n_m = self.measures.len();
+        let v = self.error_df() as f64;
+        let z_all = hstack(self.measures.iter().map(|m| self.within(m)).collect());
+        let sum_blocks = |full: &DMatrix<f64>| {
+            DMatrix::from_fn(n_m, n_m, |a, b| (0..p).map(|c| full[(a * p + c, b * p + c)]).sum::<f64>())
+        };
+        let e = sum_blocks(&self.error(&z_all));
+        let mut effects: HashMap<String, HashMap<String, MultivariateTestEntry>> = HashMap::new();
+        for (name, cols) in self.within_sources() {
+            let h = sum_blocks(&self.hypothesis(&z_all, &cols));
+            match multivariate_statistics(&h, &e, (cols.len() * p) as f64, v * (p as f64), self.alpha) {
+                Ok(stats) => {
+                    effects.insert(name, stats);
+                }
+                Err(err) => {
+                    return Some(Err(format!("{}: {}", name, err)));
+                }
+            }
+        }
+        Some(
+            Ok(MultivariateTests {
+                effects,
+                design: Some(self.design_note()),
+                alpha: Some(self.alpha),
+            })
+        )
     }
 
     /// Tests of between-subjects effects per measure (transformed variable:
@@ -1225,6 +1350,34 @@ impl RmModel {
 
     /// Bartlett's Test of Sphericity of the residual covariance matrix of all
     /// dependent variables (SPSS prints it with the residual SSCP matrix).
+    /// Residual SSCP matrix of all dependent variables (every measure, levels
+    /// in order) with its covariance (SSCP / (n − r)) and correlation parts,
+    /// as SPSS /PRINT=RSSCP.
+    pub fn residual_matrix(&self) -> ResidualMatrix {
+        let y = hstack(self.measures.iter().map(|m| m.y.clone()).collect());
+        let names: Vec<String> = self.measures.iter().flat_map(|m| m.variables.clone()).collect();
+        let e = self.error(&y);
+        let v = self.error_df() as f64;
+        let table = |f: &dyn Fn(usize, usize) -> f64| {
+            let mut out = HashMap::new();
+            for (i, a) in names.iter().enumerate() {
+                let mut row = HashMap::new();
+                for (j, b) in names.iter().enumerate() {
+                    row.insert(b.clone(), f(i, j));
+                }
+                out.insert(a.clone(), row);
+            }
+            out
+        };
+        ResidualMatrix {
+            matrix_type: "Residual SSCP".to_string(),
+            values: table(&|i, j| e[(i, j)]),
+            description: Some("Based on Type III Sum of Squares".to_string()),
+            covariance: Some(table(&|i, j| e[(i, j)] / v)),
+            correlation: Some(table(&|i, j| e[(i, j)] / (e[(i, i)] * e[(j, j)]).sqrt())),
+        }
+    }
+
     pub fn bartlett_sphericity(&self) -> Result<BartlettTest, String> {
         let y = hstack(self.measures.iter().map(|m| m.y.clone()).collect());
         super::bartlett_test::calculate_bartlett_test_from_residual(&self.error(&y), self.n, self.rank)

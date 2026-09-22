@@ -5,6 +5,15 @@ Folder ini menyiapkan nilai acuan untuk memperbaiki modul GLM Repeated Measures.
 - **Acuan utama: keluaran SPSS 27** yang dijalankan pengguna dengan sintaks di `spss/`.
 - **Pembanding sementara:** R 4.3.2 (car 3.1.3, emmeans). Dipakai sampai keluaran SPSS tersedia, dan tidak menggantikan SPSS.
 
+**Status (2026-09-22): keluaran SPSS 27 sudah diterima** di `spss-output/` (rm_a, rm_b, rm_c, gambar51). Semua 1047 nilai tabel yang dicek cocok dengan Statify (toleransi 0,001). Rinciannya ada di `results/spss-validation/README.md`. Setelah SPSS dijalankan ulang, perbarui nilai acuan dengan:
+
+```bash
+cd testing/glm-rm-reference/harness
+python spss_extract.py                                  # spss-output/*.xlsx -> spss-tables.json, spss-values.json
+node make-fixture.mjs --datasets=gambar51,a,b,c         # isi slot SPSS di fixture Jest
+cd ../ && node harness/compare-spss.mjs --out=results/spss-validation/compare-spss.txt
+```
+
 ## Isi folder
 
 | Path | Isi |
@@ -16,7 +25,8 @@ Folder ini menyiapkan nilai acuan untuk memperbaiki modul GLM Repeated Measures.
 | `r/reference.R` → `r-output/reference-r.{json,txt}` | Pembanding sementara di R |
 | `harness/` | Menjalankan WASM Repeated Measures (`rust/pkg` yang sama dengan aplikasi) di Node dengan payload berbentuk sama seperti yang dibuat `repeated-measures-analysis.ts` |
 | `statify-baseline/` | Keluaran Statify **sebelum** perbaikan (branch `fix/rm-correctness`, commit baseline `8e2ddbd2`) |
-| `spss-output/` | **Tempat keluaran SPSS dari pengguna** (lihat langkah 3) |
+| `spss-output/` | Keluaran SPSS 27 dari pengguna (`*.xlsx`, `*.spv`) dan hasil ekstraksinya (`spss-tables.json`, `spss-values.json`) |
+| `results/spss-validation/` | Perbandingan Statify vs SPSS 27 dan perbaikan setelahnya |
 
 ## Dataset
 

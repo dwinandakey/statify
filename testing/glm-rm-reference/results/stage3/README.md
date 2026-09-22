@@ -2,6 +2,8 @@
 
 Status: **diperbaiki, tervalidasi terhadap R (afex), menunggu SPSS** dataset (c). EMMeans **tidak diblokir** di dialog.
 
+> **Pembaruan (setelah keluaran SPSS 27 diterima):** semua tabel tahap ini tervalidasi terhadap SPSS 27 (toleransi 0,001; pada presisi penuh selisih ≤ 4,4·10⁻⁴, hanya dari F tiga desimal SPSS). Lihat `../spss-validation/README.md`. Tabel Univariate/Multivariate Tests di bawah EM Means belum dibuat. Status di atas adalah catatan saat tahap ini selesai.
+
 ## Diagnosis
 
 `stats/emmeans.rs` (lama):

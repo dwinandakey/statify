@@ -184,11 +184,27 @@ pub fn run_analysis(
         }
     }
 
+    // Step 6b: Tests of within-subjects effects, multivariate part (> 1 measure)
+    let mut within_subjects_multivariate = None;
+    if let Some(model) = &rm_model {
+        if let Some(result) = model.averaged_multivariate() {
+            executed_functions.push("calculate_within_subjects_multivariate".to_string());
+            match result {
+                Ok(tests) => {
+                    within_subjects_multivariate = Some(tests);
+                }
+                Err(e) => {
+                    error_collector.add_error("calculate_within_subjects_multivariate", &e);
+                }
+            }
+        }
+    }
+
     // Step 7: Tests of within-subjects contrasts
     let mut tests_of_within_subjects_contrasts = None;
     executed_functions.push("calculate_tests_within_subjects_contrasts".to_string());
     let result = match &rm_model {
-        Some(model) => Ok(model.within_contrasts()),
+        Some(model) => model.within_contrasts(),
         None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
         None => core::calculate_tests_within_subjects_contrasts(data, config),
     };
@@ -267,7 +283,11 @@ pub fn run_analysis(
     let mut residual_matrix = None;
     if config.options.res_sscp_mat {
         executed_functions.push("calculate_residual_matrix".to_string());
-        match core::calculate_residual_matrix(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.residual_matrix()),
+            None => core::calculate_residual_matrix(data, config),
+        };
+        match result {
             Ok(matrix) => {
                 residual_matrix = Some(matrix);
             }
@@ -385,6 +405,7 @@ pub fn run_analysis(
         multivariate_tests,
         mauchly_test,
         tests_of_within_subjects_effects,
+        within_subjects_multivariate,
         tests_of_within_subjects_contrasts,
         tests_of_between_subjects_effects,
         parameter_estimates,

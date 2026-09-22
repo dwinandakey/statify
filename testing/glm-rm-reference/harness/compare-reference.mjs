@@ -28,7 +28,8 @@ export function compareWithR(key, statify, ref, tol = 1e-6) {
         cmp("Mauchly", m.measure, "W", e.mauchly_w, m.mauchly_w);
         cmp("Mauchly", m.measure, "Approx. Chi-Square", e.chi_square, m.approx_chi_square);
         cmp("Mauchly", m.measure, "df", e.df, m.df);
-        cmp("Mauchly", m.measure, "Sig. (uncorrected χ²)", e.significance, m.sig);
+        // Sig. with the ω₂ correction (sig_anderson), as SPSS 27 prints it (Gambar 51: .2975).
+        cmp("Mauchly", m.measure, "Sig. (χ² + ω₂, as SPSS)", e.significance, m.sig_anderson);
         cmp("Mauchly", m.measure, "Greenhouse-Geisser", e.greenhouse_geisser_epsilon, m.greenhouse_geisser);
         cmp("Mauchly", m.measure, "Huynh-Feldt", e.huynh_feldt_epsilon, m.huynh_feldt);
         cmp("Mauchly", m.measure, "Lower-bound", e.lower_bound_epsilon, m.lower_bound);

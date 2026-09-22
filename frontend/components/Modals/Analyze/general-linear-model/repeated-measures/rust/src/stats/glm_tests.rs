@@ -3,7 +3,7 @@
 //! and error SSCP matrices, and observed power from the noncentral F
 //! distribution.
 use nalgebra::{ DMatrix, SymmetricEigen };
-use statrs::distribution::{ ContinuousCDF, FisherSnedecor };
+use statrs::distribution::{ ChiSquared, ContinuousCDF, FisherSnedecor };
 use statrs::function::{ beta::beta_reg, gamma::ln_gamma };
 
 use crate::models::result::MultivariateTestEntry;
@@ -85,6 +85,25 @@ pub fn observed_power(f: f64, df1: f64, df2: f64, alpha: f64) -> f64 {
 }
 
 /// Upper-tail p-value of the central F distribution.
+/// Significance of a sphericity chi-square (Mauchly; statistic −v·ρ·ln W with
+/// ρ = 1 − (2p² + p + 2)/(6pv)) with the second-order correction that SPSS
+/// and R `mauchly.test` use:
+///   P = P(χ²_f > c) + ω₂·[P(χ²_{f+4} > c) − P(χ²_f > c)],
+///   ω₂ = (p + 2)(p − 1)(p − 2)(2p³ + 6p² + 3p + 2) / (288·p²·v²·ρ²),
+/// with f = p(p + 1)/2 − 1 and p the number of transformed variables.
+pub fn sphericity_significance(chi_square: f64, p: usize, v: f64, rho: f64) -> f64 {
+    let pf = p as f64;
+    let f = (p * (p + 1)) / 2 - 1;
+    if f == 0 || !chi_square.is_finite() {
+        return if f == 0 { f64::NAN } else { 0.0 };
+    }
+    let upper = |df: f64| ChiSquared::new(df).map(|d| 1.0 - d.cdf(chi_square)).unwrap_or(f64::NAN);
+    let omega2 = ((pf + 2.0) * (pf - 1.0) * (pf - 2.0) * (2.0 * pf.powi(3) + 6.0 * pf * pf + 3.0 * pf + 2.0))
+        / (288.0 * pf * pf * v * v * rho * rho);
+    let p1 = upper(f as f64);
+    (p1 + omega2 * (upper((f + 4) as f64) - p1)).clamp(0.0, 1.0)
+}
+
 pub fn f_significance(f: f64, df1: f64, df2: f64) -> f64 {
     if !f.is_finite() || df1 <= 0.0 || df2 <= 0.0 {
         return f64::NAN;

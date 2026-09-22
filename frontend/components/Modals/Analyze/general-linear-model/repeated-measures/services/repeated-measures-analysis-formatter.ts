@@ -14,6 +14,7 @@ export function transformRepeatedMeasureResult(
     formatBartlettTest(data, resultJson);
     formatMultivariateTests(data, resultJson);
     formatMauchlyTest(data, resultJson);
+    formatWithinSubjectsMultivariate(data, resultJson);
     formatTestsWithinSubjectsEffects(data, resultJson);
     formatTestsWithinSubjectsContrasts(data, resultJson);
     formatTestsBetweenSubjectsEffects(data, resultJson);
@@ -185,7 +186,7 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
             { header: "", key: "value" },
         ],
         rows: [
-            { rowHeader: [], label: "Likelihood Ratio Chi-Square", value: formatDisplayNumber(b.likelihood_ratio) },
+            { rowHeader: [], label: "Likelihood Ratio", value: formatDisplayNumber(b.likelihood_ratio) },
             { rowHeader: [], label: "Approx. Chi-Square", value: formatDisplayNumber(b.approx_chi_square) },
             { rowHeader: [], label: "df", value: String(b.df) },
             { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
@@ -200,7 +201,36 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
 // ── 4. Multivariate Tests ─────────────────────────────────────────────────────
 function formatMultivariateTests(data: any, resultJson: ResultJson) {
     if (!data.multivariate_tests?.effects) return;
-    const effects = data.multivariate_tests.effects;
+    resultJson.tables.push(
+        multivariateTable(
+            data.multivariate_tests,
+            "multivariate_tests",
+            "Multivariate Tests",
+            "",
+            "Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels."
+        )
+    );
+}
+
+// Tests of Within-Subjects Effects, "Multivariate" part (more than one
+// measure), as SPSS prints it above the univariate tests. The key keeps the
+// tests_within_subjects_effects_ prefix so the output module stores it with
+// the within-subjects effects tables.
+function formatWithinSubjectsMultivariate(data: any, resultJson: ResultJson) {
+    if (!data.within_subjects_multivariate?.effects) return;
+    resultJson.tables.push(
+        multivariateTable(
+            data.within_subjects_multivariate,
+            "tests_within_subjects_effects__multivariate",
+            "Tests of Within-Subjects Effects (Multivariate)",
+            " Tests are based on averaged variables.",
+            "Multivariate tests of the within-subjects effects over all measures, based on the averaged transformed variables."
+        )
+    );
+}
+
+function multivariateTable(tests: any, key: string, title: string, noteSuffix: string, interpretation: string): Table {
+    const effects = tests.effects;
 
     const testOrder = [
         "Pillai's Trace",
@@ -210,8 +240,8 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
     ];
 
     const table: Table = {
-        key: "multivariate_tests",
-        title: "Multivariate Tests",
+        key,
+        title,
         columnHeaders: [
             { header: "", key: "effect" },
             { header: "", key: "test_name" },
@@ -225,13 +255,12 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
             { header: "Observed Power", key: "power" },
         ],
         rows: [],
-        note: data.multivariate_tests.design
-            ? String(data.multivariate_tests.design).includes("Within Subjects Design")
-                ? `Design: ${data.multivariate_tests.design}`
-                : `Design: Intercept; Within Subjects Design: ${data.multivariate_tests.design}`
+        note: tests.design
+            ? (String(tests.design).includes("Within Subjects Design")
+                ? `Design: ${tests.design}`
+                : `Design: Intercept; Within Subjects Design: ${tests.design}`) + noteSuffix
             : undefined,
-        interpretation:
-            "Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.",
+        interpretation,
     };
 
     Object.entries(effects).forEach(([effectName, testMap]: [string, any]) => {
@@ -256,7 +285,7 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
         });
     });
 
-    resultJson.tables.push(table);
+    return table;
 }
 
 // ── 5. Mauchly's Test ─────────────────────────────────────────────────────────
@@ -610,27 +639,39 @@ function formatGeneralEstimableFunction(data: any, resultJson: ResultJson) {
 // ── 11. Residual SSCP Matrix ──────────────────────────────────────────────────
 function formatResidualMatrix(data: any, resultJson: ResultJson) {
     if (!data.residual_matrix?.values) return;
-    const vals = data.residual_matrix.values;
-    const rowKeys = Object.keys(vals);
+    const rm = data.residual_matrix;
+    const rowKeys = Object.keys(rm.values);
     if (rowKeys.length === 0) return;
-    const colKeys = Object.keys(vals[rowKeys[0]] || {});
+    const colKeys = Object.keys(rm.values[rowKeys[0]] || {});
+    // Encoded names "p1_(1,nilai)" are shown as the variable name "p1".
+    const display = (k: string) => k.replace(/_\([^()]*\)$/, "");
 
     const table: Table = {
         key: "residual_sscp_matrix",
         title: "Residual SSCP Matrix",
         columnHeaders: [
+            { header: "", key: "part" },
             { header: "", key: "row_label" },
-            ...colKeys.map((k) => ({ header: k, key: k })),
+            ...colKeys.map((k) => ({ header: display(k), key: k })),
         ],
         rows: [],
-        note: data.residual_matrix.description || undefined,
-        interpretation: "The residual sum of squares and cross-products matrix.",
+        note: rm.description || undefined,
+        interpretation: "The residual sum of squares and cross-products matrix, with the residual covariance and correlation matrices.",
     };
 
-    rowKeys.forEach((rk) => {
-        const row: Row = { rowHeader: [], row_label: rk };
-        colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(vals[rk][ck]); });
-        table.rows.push(row);
+    // SSCP, then (from the GLM engine) Covariance and Correlation, as SPSS.
+    const parts: [string, any][] = [
+        ["Sum-of-Squares and Cross-Products", rm.values],
+        ["Covariance", rm.covariance],
+        ["Correlation", rm.correlation],
+    ];
+    parts.forEach(([part, vals]) => {
+        if (!vals) return;
+        rowKeys.forEach((rk, i) => {
+            const row: Row = { rowHeader: [], part: i === 0 ? part : "", row_label: display(rk) };
+            colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(vals[rk]?.[ck]); });
+            table.rows.push(row);
+        });
     });
 
     resultJson.tables.push(table);

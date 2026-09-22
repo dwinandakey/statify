@@ -33,6 +33,12 @@ const DESIGNS = {
         csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"], options: OPT,
         emmeans: { targets: ["(OVERALL)", "metode", "sesi", "metode*sesi"], compare: true, method: "Bonferroni" },
     },
+    // (c) as spss/rm_c.sps: Polynomial contrasts chosen in the Contrast dialog,
+    // homogeneity tests and the residual SSCP matrix (validation against SPSS).
+    cPoly: {
+        csv: "rm_c.csv", factor: "sesi", levels: 3, measures: [["nilai", ["p1", "p2", "p3"]]], between: ["metode"],
+        options: [...OPT, "HomogenTest", "ResSscpMat"], contrast: "Polynomial",
+    },
     // Repeated Measures cell of Web Worker experiment 2 (Tahap 5): the CSV of
     // datasets.cjs (repeated-measures-5000-L10-M1.csv) is read from --expDir.
     exp5000: {
@@ -100,12 +106,29 @@ async function openDialog(page, d, first) {
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         await within.waitFor({ state: "visible", timeout: 60000 });
     }
+    // Contrast dialog: pick the factor, choose the contrast, Change, Continue.
+    // The offered contrast types are returned for the report.
+    let contrastOptions = null;
+    if (d.contrast) {
+        await page.getByRole("button", { name: "Contrasts", exact: true }).click();
+        const dlg = page.getByRole("dialog").filter({ hasText: "Repeated Measures: Contrast" });
+        await dlg.waitFor({ state: "visible", timeout: 30000 });
+        await dlg.getByText(new RegExp(`^\\s*${esc(d.factor)}\\s*\\(`)).first().click();
+        await dlg.getByRole("combobox").click();
+        contrastOptions = await page.getByRole("option").allTextContents();
+        await page.getByRole("option", { name: d.contrast, exact: true }).click();
+        await dlg.getByRole("button", { name: "Change", exact: true }).click();
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        await within.waitFor({ state: "visible", timeout: 60000 });
+    }
     let filled = 0;
     for (const s of slots) if (await within.getByText(s.text, { exact: true }).count()) filled += 1;
     let grp = 0;
     for (const b of d.between) if (await between.getByText(b, { exact: true }).count()) grp += 1;
     if (filled !== slots.length || grp !== d.between.length) throw new Error(`dialog: ${filled}/${slots.length} slots, ${grp}/${d.between.length} between`);
-    return () => page.getByRole("button", { name: "OK", exact: true }).click({ timeout: 10 * 60 * 1000 });
+    const clickOk = () => page.getByRole("button", { name: "OK", exact: true }).click({ timeout: 10 * 60 * 1000 });
+    clickOk.contrastOptions = contrastOptions;
+    return clickOk;
 }
 
 async function outputTables(page) {
@@ -150,7 +173,7 @@ async function outputTables(page) {
             const tables = await outputTables(page);
             const summary = await runner.readOutputSummary(page);
             const set = tables.map((t) => `${t.title}|${md5(String(t.output_data))}`).sort();
-            runs.push({ mode, modeActual: markMode, pre, tables: tables.length, loggedErrors: summary.loggedErrors, set });
+            runs.push({ mode, modeActual: markMode, pre, tables: tables.length, loggedErrors: summary.loggedErrors, ...(clickOk.contrastOptions ? { contrastOptions: clickOk.contrastOptions } : {}), set });
             console.log(`${key} ${mode}->${markMode} tables=${tables.length} errors=${JSON.stringify(summary.loggedErrors).slice(0, 160)}`);
             if (args.saveTables) fs.writeFileSync(path.join(path.dirname(OUT), `ui-${key}-${runs.length}-${mode}.json`), JSON.stringify(tables, null, 1));
             await page.getByRole("button", { name: "OK", exact: true }).waitFor({ state: "detached", timeout: 60000 }).catch(() => {});
