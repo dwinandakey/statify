@@ -6,6 +6,7 @@ pub mod common;
 pub mod descriptive_statistics;
 pub mod emmeans;
 pub mod estimable_function;
+pub mod glm_tests;
 pub mod mauchly_test;
 pub mod multivariate_tests;
 pub mod parameter_estimates;

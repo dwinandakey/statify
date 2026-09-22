@@ -2,7 +2,7 @@ use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared
 use statrs::function::gamma::gamma;
 use nalgebra::{ DMatrix, DVector };
 
-use std::collections::{ HashMap, HashSet };
+use crate::utils::collections::{ HashMap, HashSet };
 use crate::models::config::ContrastMethod;
 use crate::models::{
     data::{ AnalysisData, DataRecord, DataValue },

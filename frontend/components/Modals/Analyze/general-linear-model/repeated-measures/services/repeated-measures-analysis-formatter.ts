@@ -221,28 +221,13 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
             "If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.",
     };
 
-    // Build factor→measure lookup
-    const measuresMap: Record<string, string> = {};
-    if (data.within_subjects_factors?.measures) {
-        Object.entries(data.within_subjects_factors.measures).forEach(
-            ([measureName, factorList]: [string, any]) => {
-                if (Array.isArray(factorList) && factorList.length > 0) {
-                    const factorKeys = Object.keys(factorList[0]?.factor_values || {});
-                    if (factorKeys.length > 0) {
-                        measuresMap[factorKeys[0]] = measureName;
-                    }
-                }
-            }
-        );
-    }
-
-    let firstRow = true;
-    Object.entries(tests).forEach(([factorName, entry]: [string, any]) => {
-        const measureName = measuresMap[factorName] || "";
+    // Keyed by measure (one test per measure); the within-subjects effect
+    // name is in entry.effect.
+    Object.entries(tests).forEach(([measureName, entry]: [string, any]) => {
         table.rows.push({
             rowHeader: [],
-            measure: firstRow ? measureName : "",
-            effect: factorName,
+            measure: measureName,
+            effect: entry.effect ?? "",
             w: fmt3(entry.mauchly_w),
             chi_sq: fmt3(entry.chi_square),
             df: String(entry.df),
@@ -251,7 +236,6 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
             hf: fmt3(entry.huynh_feldt_epsilon),
             lb: fmt3(entry.lower_bound_epsilon),
         });
-        firstRow = false;
     });
 
     resultJson.tables.push(table);
@@ -410,11 +394,17 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
     if (!data.tests_of_between_subjects_effects?.effects) return;
     const effects = data.tests_of_between_subjects_effects.effects;
 
+    // Several measures: one table with a Measure column, rows grouped by
+    // source then measure (SPSS layout).
+    const measureNames = Object.keys(effects);
+    const multiMeasure = measureNames.length > 1;
+
     const table: Table = {
         key: "tests_between_subjects_effects",
         title: "Tests of Between-Subjects Effects",
         columnHeaders: [
             { header: "Source", key: "source" },
+            ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
             { header: "Type III Sum of Squares", key: "ss" },
             { header: "df", key: "df" },
             { header: "Mean Square", key: "ms" },
@@ -430,17 +420,19 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
     };
 
     const effectOrder = ["Intercept", "Error"];
+    table.note = multiMeasure
+        ? "Transformed Variable: Average"
+        : `Measure: ${measureNames[0]}; Transformed Variable: Average`;
 
-    Object.entries(effects).forEach(([measureName, effectMap]: [string, any]) => {
-        table.note = `Measure: ${measureName}; Transformed Variable: Average`;
-
-        effectOrder.forEach((effectName) => {
-            const entry = effectMap[effectName];
+    effectOrder.forEach((effectName) => {
+        measureNames.forEach((measureName, mIdx) => {
+            const entry = effects[measureName]?.[effectName];
             if (!entry) return;
             const isError = effectName === "Error";
             table.rows.push({
                 rowHeader: [],
-                source: effectName,
+                source: mIdx === 0 ? effectName : "",
+                ...(multiMeasure ? { measure: measureName } : {}),
                 ss: fmt3(entry.sum_of_squares),
                 df: String(entry.df),
                 ms: fmt3(entry.mean_square),

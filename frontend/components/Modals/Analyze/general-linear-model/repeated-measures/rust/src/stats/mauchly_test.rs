@@ -1,6 +1,6 @@
 use nalgebra::DMatrix;
 use statrs::distribution::{ ChiSquared, ContinuousCDF };
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 use crate::models::{
     config::RepeatedMeasuresConfig,
@@ -38,7 +38,9 @@ pub fn calculate_mauchly_test(
     let mut design = None;
 
     // Process each within-subjects factor
-    for (factor_name, factors) in &within_factors.measures {
+    // Keyed by measure: with several measures every measure has its own test
+    // (the within-subjects factor name, shared by all measures, is `effect`).
+    for (measure_name, factors) in &within_factors.measures {
         // We need at least 2 levels for the test
         if factors.len() < 2 {
             continue;
@@ -195,16 +197,14 @@ pub fn calculate_mauchly_test(
         let lower_bound_epsilon = 1.0 / p_f;
 
         // Within-subjects effect name (e.g., "perlakuan") is read from the
-        // factor_values populated by parse_within_subject_factors. The map
-        // key (factor_name) is actually the *measure* name (e.g.,
-        // "perlakuan_anjing") — keep that as the HashMap key and let the
-        // formatter look up the measure separately.
+        // factor_values populated by parse_within_subject_factors; the map
+        // key is the measure name (e.g., "anjing").
         let ws_factor_name = factors[0]
             .factor_values
             .keys()
             .next()
             .cloned()
-            .unwrap_or_else(|| factor_name.clone());
+            .unwrap_or_else(|| measure_name.clone());
 
         let test_entry = MauchlyTestEntry {
             effect: ws_factor_name.clone(),
@@ -217,7 +217,7 @@ pub fn calculate_mauchly_test(
             lower_bound_epsilon,
         };
 
-        tests.insert(ws_factor_name, test_entry);
+        tests.insert(measure_name.clone(), test_entry);
 
         // Design line: SPSS reports e.g. "Design: Intercept; Within Subjects
         // Design: perlakuan".
