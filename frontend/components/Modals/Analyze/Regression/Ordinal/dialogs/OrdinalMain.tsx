@@ -194,7 +194,7 @@ const OrdinalMain: React.FC = () => {
   const toNumberOrThrow = (value: unknown, label: string) => {
     const numeric = Number(value);
     if (Number.isNaN(numeric) || !Number.isFinite(numeric)) {
-      throw new Error(`Covariate '${label}' contains non-numeric values.`);
+      throw new Error(`Covariate '${label}' Variabel kovariat wajib bertipe numerik.`);
     }
     return numeric;
   };
