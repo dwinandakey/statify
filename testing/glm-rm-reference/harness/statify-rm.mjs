@@ -45,10 +45,11 @@ const varDef = (name, i, { nominal = false, string = false } = {}) => ({
  *   between: ["kelompok"], covariates: [],
  *   options: { DescStats: true, … }, emmeans: { TargetList: [...], … },
  * }
- * Layout of factors_data / covar_data: "subject-major" reproduces the service
- * as of the baseline (one array per subject holding one merged record).
+ * Layout of factors_data / covar_data: "variable-major" (default) is the
+ * layout of the service since Tahap 2 (factors_data[f][s]); "subject-major"
+ * reproduces the service before Tahap 2 (one array per subject).
  */
-export function buildPayload({ rows, design, layout = "subject-major" }) {
+export function buildPayload({ rows, design, layout = "variable-major" }) {
     const cfg = JSON.parse(JSON.stringify(TEMPLATE));
     const levelTuples = cellLevels(design.factors);
     const encoded = [];

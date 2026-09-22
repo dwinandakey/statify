@@ -13,6 +13,7 @@ pub mod parameter_estimates;
 pub mod parse_factors;
 pub mod posthoc;
 pub mod residual_sscp_matrix;
+pub mod rm_model;
 pub mod sscp_matrix;
 pub mod summary_processing;
 pub mod univariate_tests;

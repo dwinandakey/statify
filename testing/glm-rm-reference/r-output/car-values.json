@@ -1,0 +1,3053 @@
+[
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 10908164.8166667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "error SS",
+    "value": 213028.933333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "error df",
+    "value": 14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "F",
+    "value": 716.871201689661,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "between_effects",
+    "measure": "anjing",
+    "source": "Intercept",
+    "field": "Sig.",
+    "value": 1.99898162469189e-13,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "SS",
+    "value": 168181.65,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "error SS",
+    "value": 73911.6000000001,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "error df",
+    "value": 42,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "F",
+    "value": 31.8562052505965,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "Sig.",
+    "value": 6.69424597074561e-11,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "mauchly",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "W",
+    "value": 0.618936302390557,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "mauchly",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "Greenhouse-Geisser",
+    "value": 0.74666374717162,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "within_effects",
+    "measure": "anjing",
+    "source": "perlakuan",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 1.18425150738214e-08,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Pillai's Trace",
+    "field": "Value",
+    "value": 0.867652152414152,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Pillai's Trace",
+    "field": "F",
+    "value": 26.2233853663951,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Pillai's Trace",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Pillai's Trace",
+    "field": "Error df",
+    "value": 12,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Pillai's Trace",
+    "field": "Sig.",
+    "value": 1.48385745412395e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Wilks' Lambda",
+    "field": "Value",
+    "value": 0.132347847585847,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Wilks' Lambda",
+    "field": "F",
+    "value": 26.2233853663952,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Wilks' Lambda",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Wilks' Lambda",
+    "field": "Error df",
+    "value": 12,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Wilks' Lambda",
+    "field": "Sig.",
+    "value": 1.48385745412392e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Hotelling's Trace",
+    "field": "Value",
+    "value": 6.55584634159881,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Hotelling's Trace",
+    "field": "F",
+    "value": 26.2233853663952,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Hotelling's Trace",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Hotelling's Trace",
+    "field": "Error df",
+    "value": 12,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Hotelling's Trace",
+    "field": "Sig.",
+    "value": 1.48385745412392e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Roy's Largest Root",
+    "field": "Value",
+    "value": 6.55584634159881,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Roy's Largest Root",
+    "field": "F",
+    "value": 26.2233853663952,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Roy's Largest Root",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Roy's Largest Root",
+    "field": "Error df",
+    "value": 12,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "multivariate",
+    "measure": "anjing",
+    "source": "perlakuan | Roy's Largest Root",
+    "field": "Sig.",
+    "value": 1.48385745412392e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|1",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 1930344.06666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|1",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|1",
+    "source": "Intercept",
+    "field": "F",
+    "value": 650.527412604471,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|1",
+    "source": "Error",
+    "field": "SS",
+    "value": 41542.9333333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|1",
+    "source": "Error",
+    "field": "df",
+    "value": 14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|2",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 2330116.26666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|2",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|2",
+    "source": "Intercept",
+    "field": "F",
+    "value": 285.119860902479,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|2",
+    "source": "Error",
+    "field": "SS",
+    "value": 114413.733333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|2",
+    "source": "Error",
+    "field": "df",
+    "value": 14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|3",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 3159297.06666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|3",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|3",
+    "source": "Intercept",
+    "field": "F",
+    "value": 716.684869356309,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|3",
+    "source": "Error",
+    "field": "SS",
+    "value": 61714.9333333334,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|3",
+    "source": "Error",
+    "field": "df",
+    "value": 14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|4",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 3656589.06666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan4 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|4",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan4 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|4",
+    "source": "Intercept",
+    "field": "F",
+    "value": 739.036166285223,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan4 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|4",
+    "source": "Error",
+    "field": "SS",
+    "value": 69268.9333333332,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan4 ~ 1), type=3)"
+  },
+  {
+    "dataset": "gambar51",
+    "table": "univariate",
+    "measure": "anjing|4",
+    "source": "Error",
+    "field": "df",
+    "value": 14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(perlakuan4 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 37018.5208333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "error SS",
+    "value": 729.145833333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "error df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "F",
+    "value": 761.545615589017,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "cemas",
+    "source": "Intercept",
+    "field": "Sig.",
+    "value": 2.84988464293982e-14,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "SS",
+    "value": 244.666666666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "error SS",
+    "value": 232.666666666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "error df",
+    "value": 30,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "F",
+    "value": 15.7736389684814,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "Sig.",
+    "value": 2.08298465109219e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "mauchly",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "W",
+    "value": 0.859007725716538,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "mauchly",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "Greenhouse-Geisser",
+    "value": 0.876430123620245,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "cemas",
+    "source": "waktu",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 5.65998886103443e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|1",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 15067.5625,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|1",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|1",
+    "source": "Intercept",
+    "field": "F",
+    "value": 473.388532530436,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|1",
+    "source": "Error",
+    "field": "SS",
+    "value": 477.4375,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|1",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|2",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 12045.0625,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|2",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|2",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1063.19051121736,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|2",
+    "source": "Error",
+    "field": "SS",
+    "value": 169.9375,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|2",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|3",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 10150.5625,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|3",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|3",
+    "source": "Intercept",
+    "field": "F",
+    "value": 484.224806201551,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|3",
+    "source": "Error",
+    "field": "SS",
+    "value": 314.4375,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "cemas|3",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(cemas3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 24570.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "error SS",
+    "value": 240.583333333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "error df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1531.94838933149,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "between_effects",
+    "measure": "stres",
+    "source": "Intercept",
+    "field": "Sig.",
+    "value": 1.61489132573761e-16,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "SS",
+    "value": 134,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "error SS",
+    "value": 114.666666666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "error df",
+    "value": 30,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "F",
+    "value": 17.5290697674419,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "Sig.",
+    "value": 9.06346425895579e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "a",
+    "table": "mauchly",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "W",
+    "value": 0.997532449972958,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "mauchly",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "Greenhouse-Geisser",
+    "value": 0.99753852378865,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "within_effects",
+    "measure": "stres",
+    "source": "waktu",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 9.26331155568759e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|1",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 9506.25,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|1",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|1",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1299.25968109339,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|1",
+    "source": "Error",
+    "field": "SS",
+    "value": 109.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|1",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres1 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|2",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 8556.25,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|2",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|2",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1840.05376344086,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|2",
+    "source": "Error",
+    "field": "SS",
+    "value": 69.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|2",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres2 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|3",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 6642.25,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|3",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|3",
+    "source": "Intercept",
+    "field": "F",
+    "value": 566.906116642959,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|3",
+    "source": "Error",
+    "field": "SS",
+    "value": 175.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "a",
+    "table": "univariate",
+    "measure": "stres|3",
+    "source": "Error",
+    "field": "df",
+    "value": 15,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(stres3 ~ 1), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 308833.59375,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "error SS",
+    "value": 2945.15625000001,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "error df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "F",
+    "value": 2202.09215342989,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "Intercept",
+    "field": "Sig.",
+    "value": 9.50150675108181e-23,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "SS",
+    "value": 146.999999999999,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "error SS",
+    "value": 2945.15625000001,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "error df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "F",
+    "value": 0.524080853095651,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "between_effects",
+    "measure": "skor",
+    "source": "kelompok",
+    "field": "Sig.",
+    "value": 0.599642695121016,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "SS",
+    "value": 80.1145833333343,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "error SS",
+    "value": 708.96875,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "error df",
+    "value": 63,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "F",
+    "value": 2.37303301450172,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "Sig.",
+    "value": 0.0786395818640348,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "SS",
+    "value": 140.166666666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "df",
+    "value": 6,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "error SS",
+    "value": 708.96875,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "error df",
+    "value": 63,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "F",
+    "value": 2.07590249922863,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "Sig.",
+    "value": 0.0685797990032124,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "b",
+    "table": "mauchly",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "W",
+    "value": 0.841282735302099,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "mauchly",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "Greenhouse-Geisser",
+    "value": 0.894690966238368,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 0.0863243628355283,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "mauchly",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "W",
+    "value": 0.841282735302099,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "mauchly",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "Greenhouse-Geisser",
+    "value": 0.894690966238368,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "within_effects",
+    "measure": "skor",
+    "source": "waktu * kelompok",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 0.0773963372031537,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Pillai's Trace",
+    "field": "Value",
+    "value": 0.276076959387709,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Pillai's Trace",
+    "field": "F",
+    "value": 2.41529459813384,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Pillai's Trace",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Pillai's Trace",
+    "field": "Error df",
+    "value": 19,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Pillai's Trace",
+    "field": "Sig.",
+    "value": 0.0982329622143154,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Wilks' Lambda",
+    "field": "Value",
+    "value": 0.723923040612291,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Wilks' Lambda",
+    "field": "F",
+    "value": 2.41529459813384,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Wilks' Lambda",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Wilks' Lambda",
+    "field": "Error df",
+    "value": 19,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Wilks' Lambda",
+    "field": "Sig.",
+    "value": 0.0982329622143154,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Hotelling's Trace",
+    "field": "Value",
+    "value": 0.381362304968501,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Hotelling's Trace",
+    "field": "F",
+    "value": 2.41529459813384,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Hotelling's Trace",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Hotelling's Trace",
+    "field": "Error df",
+    "value": 19,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Hotelling's Trace",
+    "field": "Sig.",
+    "value": 0.0982329622143154,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Roy's Largest Root",
+    "field": "Value",
+    "value": 0.381362304968501,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Roy's Largest Root",
+    "field": "F",
+    "value": 2.41529459813384,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Roy's Largest Root",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Roy's Largest Root",
+    "field": "Error df",
+    "value": 19,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu | Roy's Largest Root",
+    "field": "Sig.",
+    "value": 0.0982329622143154,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Pillai's Trace",
+    "field": "Value",
+    "value": 0.410789473441335,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Pillai's Trace",
+    "field": "F",
+    "value": 1.72324336130541,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Pillai's Trace",
+    "field": "Hypothesis df",
+    "value": 6,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Pillai's Trace",
+    "field": "Error df",
+    "value": 40,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Pillai's Trace",
+    "field": "Sig.",
+    "value": 0.140649110333192,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Wilks' Lambda",
+    "field": "Value",
+    "value": 0.630627832843806,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Wilks' Lambda",
+    "field": "F",
+    "value": 1.64194372065909,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Wilks' Lambda",
+    "field": "Hypothesis df",
+    "value": 6,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Wilks' Lambda",
+    "field": "Error df",
+    "value": 38,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Wilks' Lambda",
+    "field": "Sig.",
+    "value": 0.162412848560178,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Hotelling's Trace",
+    "field": "Value",
+    "value": 0.520045015127458,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Hotelling's Trace",
+    "field": "F",
+    "value": 1.56013504538237,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Hotelling's Trace",
+    "field": "Hypothesis df",
+    "value": 6,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Hotelling's Trace",
+    "field": "Error df",
+    "value": 36,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Hotelling's Trace",
+    "field": "Sig.",
+    "value": 0.187177261977517,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Roy's Largest Root",
+    "field": "Value",
+    "value": 0.304015675388623,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Roy's Largest Root",
+    "field": "F",
+    "value": 2.02677116925748,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Roy's Largest Root",
+    "field": "Hypothesis df",
+    "value": 3,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Roy's Largest Root",
+    "field": "Error df",
+    "value": 20,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "multivariate",
+    "measure": "skor",
+    "source": "waktu * kelompok | Roy's Largest Root",
+    "field": "Sig.",
+    "value": 0.142512853983839,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 75376.0416666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1365.00754554274,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "kelompok",
+    "field": "SS",
+    "value": 209.333333333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "kelompok",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "kelompok",
+    "field": "F",
+    "value": 1.89544033631561,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "Error",
+    "field": "SS",
+    "value": 1159.625,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|1",
+    "source": "Error",
+    "field": "df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w1 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|1",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 0.371768085662053,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w1 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|1",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w1 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|1",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w1 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|1",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.693962103948163,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w1 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 75264,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1831.45307068366,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "kelompok",
+    "field": "SS",
+    "value": 30.9999999999999,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "kelompok",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "kelompok",
+    "field": "F",
+    "value": 0.377172653534181,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "Error",
+    "field": "SS",
+    "value": 863.000000000002,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|2",
+    "source": "Error",
+    "field": "df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w2 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|2",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 1.26075786769428,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w2 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|2",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w2 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|2",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w2 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|2",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.304030321277629,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w2 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 76840.1666666667,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "Intercept",
+    "field": "F",
+    "value": 2699.52906733584,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "kelompok",
+    "field": "SS",
+    "value": 40.0833333333334,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "kelompok",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "kelompok",
+    "field": "F",
+    "value": 0.704098703471352,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "Error",
+    "field": "SS",
+    "value": 597.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|3",
+    "source": "Error",
+    "field": "df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w3 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|3",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 1.8313494979182,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w3 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|3",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w3 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|3",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w3 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|3",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.184874183451255,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w3 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 81433.5,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1654.27182587666,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "kelompok",
+    "field": "SS",
+    "value": 6.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "kelompok",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "kelompok",
+    "field": "F",
+    "value": 0.0685610640870614,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "Error",
+    "field": "SS",
+    "value": 1033.75,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "univariate",
+    "measure": "skor|4",
+    "source": "Error",
+    "field": "df",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(w4 ~ kelompok), type=3)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|4",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 1.72902837795697,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w4 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|4",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w4 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|4",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 21,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w4 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "b",
+    "table": "levene",
+    "measure": "skor|4",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.201777220769582,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(w4 ~ kelompok, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 225461.4,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "error SS",
+    "value": 1795.53333333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "error df",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "F",
+    "value": 2260.222700776,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "Intercept",
+    "field": "Sig.",
+    "value": 2.23311812286801e-20,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "SS",
+    "value": 2.39999999999999,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "error SS",
+    "value": 1795.53333333333,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "error df",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "F",
+    "value": 0.0240597037092042,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "between_effects",
+    "measure": "nilai",
+    "source": "metode",
+    "field": "Sig.",
+    "value": 0.878459220876229,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "SS",
+    "value": 265.900000000001,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "error SS",
+    "value": 311.866666666666,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "error df",
+    "value": 36,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "F",
+    "value": 15.3469431380933,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "Sig.",
+    "value": 1.51320082760431e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "SS",
+    "value": 16.9,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "error SS",
+    "value": 311.866666666666,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "error df",
+    "value": 36,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "F",
+    "value": 0.975416844805474,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "Sig.",
+    "value": 0.38677753411106,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: univariate.tests"
+  },
+  {
+    "dataset": "c",
+    "table": "mauchly",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "W",
+    "value": 0.801090118098947,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "mauchly",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "Greenhouse-Geisser",
+    "value": 0.834091048123106,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 6.04067222120178e-05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "mauchly",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "W",
+    "value": 0.801090118098947,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "mauchly",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "Greenhouse-Geisser",
+    "value": 0.834091048123106,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "within_effects",
+    "measure": "nilai",
+    "source": "sesi * metode",
+    "field": "Sig. Greenhouse-Geisser",
+    "value": 0.374662619202982,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: sphericity.tests / pval.adjustments"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Pillai's Trace",
+    "field": "Value",
+    "value": 0.743151401137965,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Pillai's Trace",
+    "field": "F",
+    "value": 24.5934256120499,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Pillai's Trace",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Pillai's Trace",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Pillai's Trace",
+    "field": "Sig.",
+    "value": 9.59966788008081e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Wilks' Lambda",
+    "field": "Value",
+    "value": 0.256848598862035,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Wilks' Lambda",
+    "field": "F",
+    "value": 24.5934256120499,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Wilks' Lambda",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Wilks' Lambda",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Wilks' Lambda",
+    "field": "Sig.",
+    "value": 9.59966788008077e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Hotelling's Trace",
+    "field": "Value",
+    "value": 2.89334418965293,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Hotelling's Trace",
+    "field": "F",
+    "value": 24.5934256120499,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Hotelling's Trace",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Hotelling's Trace",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Hotelling's Trace",
+    "field": "Sig.",
+    "value": 9.59966788008074e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Roy's Largest Root",
+    "field": "Value",
+    "value": 2.89334418965293,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Roy's Largest Root",
+    "field": "F",
+    "value": 24.5934256120499,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Roy's Largest Root",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Roy's Largest Root",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi | Roy's Largest Root",
+    "field": "Sig.",
+    "value": 9.59966788008074e-06,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Pillai's Trace",
+    "field": "Value",
+    "value": 0.12229645394971,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Pillai's Trace",
+    "field": "F",
+    "value": 1.18436328900621,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Pillai's Trace",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Pillai's Trace",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Pillai's Trace",
+    "field": "Sig.",
+    "value": 0.329956547162757,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Wilks' Lambda",
+    "field": "Value",
+    "value": 0.87770354605029,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Wilks' Lambda",
+    "field": "F",
+    "value": 1.18436328900621,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Wilks' Lambda",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Wilks' Lambda",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Wilks' Lambda",
+    "field": "Sig.",
+    "value": 0.329956547162756,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Hotelling's Trace",
+    "field": "Value",
+    "value": 0.139336857530143,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Hotelling's Trace",
+    "field": "F",
+    "value": 1.18436328900621,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Hotelling's Trace",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Hotelling's Trace",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Hotelling's Trace",
+    "field": "Sig.",
+    "value": 0.329956547162757,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Roy's Largest Root",
+    "field": "Value",
+    "value": 0.139336857530142,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Roy's Largest Root",
+    "field": "F",
+    "value": 1.18436328900621,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Roy's Largest Root",
+    "field": "Hypothesis df",
+    "value": 2,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Roy's Largest Root",
+    "field": "Error df",
+    "value": 17,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "multivariate",
+    "measure": "nilai",
+    "source": "sesi * metode | Roy's Largest Root",
+    "field": "Sig.",
+    "value": 0.329956547162757,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 69148.8,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "Intercept",
+    "field": "F",
+    "value": 2020.58181818182,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "metode",
+    "field": "SS",
+    "value": 7.19999999999993,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "metode",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "metode",
+    "field": "F",
+    "value": 0.210389610389608,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "Error",
+    "field": "SS",
+    "value": 616,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|1",
+    "source": "Error",
+    "field": "df",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p1 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|1",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 2.74073164743433,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p1 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|1",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p1 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|1",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p1 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|1",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.11514981848663,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p1 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 74786.45,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "Intercept",
+    "field": "F",
+    "value": 2226.89181141439,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "metode",
+    "field": "SS",
+    "value": 6.05000000000007,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "metode",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "metode",
+    "field": "F",
+    "value": 0.180148883374692,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "Error",
+    "field": "SS",
+    "value": 604.5,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|2",
+    "source": "Error",
+    "field": "df",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p2 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|2",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 2.64976935165002,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p2 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|2",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p2 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|2",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p2 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|2",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.120941920928533,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p2 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "Intercept",
+    "field": "SS",
+    "value": 81792.05,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "Intercept",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "Intercept",
+    "field": "F",
+    "value": 1660.00326981621,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "metode",
+    "field": "SS",
+    "value": 6.05000000000007,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "metode",
+    "field": "df",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "metode",
+    "field": "F",
+    "value": 0.122787236441539,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "Error",
+    "field": "SS",
+    "value": 886.9,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "univariate",
+    "measure": "nilai|3",
+    "source": "Error",
+    "field": "df",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 Anova(lm(p3 ~ metode), type=3)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|3",
+    "source": "Based on Mean",
+    "field": "Levene Statistic",
+    "value": 6.42487794713027,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p3 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|3",
+    "source": "Based on Mean",
+    "field": "df1",
+    "value": 1,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p3 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|3",
+    "source": "Based on Mean",
+    "field": "df2",
+    "value": 18,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p3 ~ metode, center = mean)"
+  },
+  {
+    "dataset": "c",
+    "table": "levene",
+    "measure": "nilai|3",
+    "source": "Based on Mean",
+    "field": "Sig.",
+    "value": 0.0207510706849944,
+    "r_source": "R 4.3.2 car 3.1.3 leveneTest(p3 ~ metode, center = mean)"
+  }
+]

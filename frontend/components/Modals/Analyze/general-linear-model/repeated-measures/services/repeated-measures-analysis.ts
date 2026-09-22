@@ -83,11 +83,16 @@ export async function analyzeRepeatedMeasures({
     });
     const realSubjectNames = subjectMap.map((s) => s.real);
 
-    const slicedDataForSubjectReal = getSlicedData({
+    // One slice for all variables, so dependent variables, factors and
+    // covariates have the same number of rows (subjects). Within-only designs
+    // slice exactly the dependent variables, as before.
+    const slicedAll = getSlicedData({
         dataVariables,
         variables,
-        selectedVariables: realSubjectNames,
+        selectedVariables: [...realSubjectNames, ...FactorsVariables, ...CovariateVariables],
     });
+    const nSubjectVars = realSubjectNames.length;
+    const slicedDataForSubjectReal = slicedAll.slice(0, nSubjectVars);
     // Reshape from variable-major (outer=var, inner=subject) to subject-major
     // (outer=subject, inner=record). Each subject becomes one DataRecord with
     // all dependent variables merged under their encoded names — this matches
@@ -105,46 +110,15 @@ export async function analyzeRepeatedMeasures({
         slicedDataForSubject.push([merged]);
     }
 
-    // Between-subjects factors and covariates: also reshape per-subject so the
-    // same record_group iteration pattern lets Rust look up everything for a
-    // single subject from one place.
-    const slicedDataForFactorsRaw = getSlicedData({
-        dataVariables,
-        variables,
-        selectedVariables: FactorsVariables,
-    });
-    const slicedDataForFactors: Record<string, unknown>[][] = [];
-    if (FactorsVariables.length > 0) {
-        const fSubjectCount = slicedDataForFactorsRaw[0]?.length ?? 0;
-        for (let s = 0; s < fSubjectCount; s++) {
-            const merged: Record<string, unknown> = {};
-            slicedDataForFactorsRaw.forEach((records, vIdx) => {
-                const real = FactorsVariables[vIdx];
-                const rec = records[s];
-                if (rec && real in rec) merged[real] = rec[real];
-            });
-            slicedDataForFactors.push([merged]);
-        }
-    }
-
-    const slicedDataForCovariateRaw = getSlicedData({
-        dataVariables,
-        variables,
-        selectedVariables: CovariateVariables,
-    });
-    const slicedDataForCovariate: Record<string, unknown>[][] = [];
-    if (CovariateVariables.length > 0) {
-        const cSubjectCount = slicedDataForCovariateRaw[0]?.length ?? 0;
-        for (let s = 0; s < cSubjectCount; s++) {
-            const merged: Record<string, unknown> = {};
-            slicedDataForCovariateRaw.forEach((records, vIdx) => {
-                const real = CovariateVariables[vIdx];
-                const rec = records[s];
-                if (rec && real in rec) merged[real] = rec[real];
-            });
-            slicedDataForCovariate.push([merged]);
-        }
-    }
+    // Between-subjects factors and covariates use the VARIABLE-MAJOR layout
+    // expected by Rust (models/data.rs, stats/rm_model.rs):
+    //   factors_data[f][s] = { <factor f>: value of subject s }
+    //   covar_data[c][s]   = { <covariate c>: value of subject s }
+    // with f / c in the order of factors_data_defs / covar_data_defs and s in
+    // the same subject order as subject_data. This is exactly the layout
+    // getSlicedData returns, so the slices are passed through unchanged.
+    const slicedDataForFactors = slicedAll.slice(nSubjectVars, nSubjectVars + FactorsVariables.length);
+    const slicedDataForCovariate = slicedAll.slice(nSubjectVars + FactorsVariables.length);
 
     const varDefsForSubjectReal = getVarDefs(variables, realSubjectNames);
     const varDefsForSubject = varDefsForSubjectReal.map((defs, idx) =>

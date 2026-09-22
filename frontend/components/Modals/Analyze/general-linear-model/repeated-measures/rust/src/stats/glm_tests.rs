@@ -19,29 +19,53 @@ pub fn noncentral_f_cdf(x: f64, df1: f64, df2: f64, lambda: f64) -> f64 {
     if lambda <= 0.0 {
         return beta_reg(df1 / 2.0, df2 / 2.0, y);
     }
-    let half = lambda / 2.0;
-    // Sum outward from the Poisson mode so large λ does not underflow.
-    let mode = half.floor();
-    let weight = |j: f64| (-half + j * half.ln() - ln_gamma(j + 1.0)).exp();
-    let term = |j: f64| weight(j) * beta_reg(df1 / 2.0 + j, df2 / 2.0, y);
-    let mut sum = term(mode);
-    let mut j = mode + 1.0;
-    loop {
-        let t = term(j);
-        sum += t;
-        if weight(j) < 1e-16 || j > mode + 100_000.0 {
-            break;
-        }
-        j += 1.0;
+    // Sum outward from the Poisson mode (no underflow for large λ). Only the
+    // mode needs beta_reg; neighbouring terms use the recurrences
+    //   I_y(a+1, b) = I_y(a, b) − g(a),  g(a) = Γ(a+b)/(Γ(a+1)Γ(b))·yᵃ(1−y)ᵇ,
+    //   g(a+1) = g(a)·y·(a+b)/(a+1),
+    // and the Poisson weights w(j+1) = w(j)·h/(j+1) (as in AS 226).
+    let h = lambda / 2.0;
+    // Numerator chi-square has mean df1 + λ and sd √(2(df1 + 2λ)); when x·df1
+    // lies more than 40 sd below that mean the CDF is < 1e-300.
+    if df1 * x < df1 + lambda - 40.0 * (2.0 * (df1 + 2.0 * lambda)).sqrt() && lambda > 1e4 {
+        return 0.0;
     }
-    let mut j = mode - 1.0;
-    while j >= 0.0 {
-        let t = term(j);
-        sum += t;
-        if weight(j) < 1e-16 {
+    let a0 = df1 / 2.0;
+    let b = df2 / 2.0;
+    let mode = h.floor();
+    let w_mode = (-h + mode * h.ln() - ln_gamma(mode + 1.0)).exp();
+    let a_mode = a0 + mode;
+    let i_mode = beta_reg(a_mode, b, y);
+    let g_mode = (ln_gamma(a_mode + b) - ln_gamma(a_mode + 1.0) - ln_gamma(b) + a_mode * y.ln() + b * (1.0 - y).ln()).exp();
+    let mut sum = w_mode * i_mode;
+
+    // Upward: j = mode+1, mode+2, …
+    let (mut w, mut i, mut g, mut j) = (w_mode, i_mode, g_mode, mode);
+    for _ in 0..10_000_000 {
+        let a = a0 + j;
+        i = (i - g).max(0.0);
+        g *= y * (a + b) / (a + 1.0);
+        j += 1.0;
+        w *= h / j;
+        sum += w * i;
+        if w < 1e-17 || i <= 0.0 {
             break;
         }
+    }
+    // Downward: j = mode−1, …, 0
+    let (mut w, mut i, mut g, mut j) = (w_mode, i_mode, g_mode, mode);
+    let mut steps = 0u32;
+    while j >= 1.0 && steps < 10_000_000 {
+        steps += 1;
+        let a = a0 + j;
+        g *= a / (y * (a - 1.0 + b)); // g(a−1)
+        i = (i + g).min(1.0);
+        w *= j / h;
         j -= 1.0;
+        sum += w * i;
+        if w < 1e-17 {
+            break;
+        }
     }
     sum.min(1.0).max(0.0)
 }
@@ -72,7 +96,18 @@ pub fn f_significance(f: f64, df1: f64, df2: f64) -> f64 {
 }
 
 /// Eigenvalues of E⁻¹H through the symmetric form (E^-1/2 H E^-1/2).
+/// E is treated as singular when its smallest eigenvalue is at most 1e-10
+/// times its largest (e.g. dependent variables with linearly dependent
+/// within-subjects contrasts); no statistics are computed then.
 fn eigenvalues_e_inv_h(h: &DMatrix<f64>, e: &DMatrix<f64>) -> Result<Vec<f64>, String> {
+    let e_eig = SymmetricEigen::new(e.clone()).eigenvalues;
+    let max = e_eig.iter().cloned().fold(f64::MIN, f64::max);
+    let min = e_eig.iter().cloned().fold(f64::MAX, f64::min);
+    if !(max > 0.0) || min <= 1e-10 * max {
+        return Err(
+            "The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed".to_string()
+        );
+    }
     let chol = e
         .clone()
         .cholesky()

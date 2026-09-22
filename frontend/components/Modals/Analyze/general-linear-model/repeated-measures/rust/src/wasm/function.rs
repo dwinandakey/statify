@@ -6,6 +6,7 @@ use crate::models::{
     result::RepeatedMeasureResult,
 };
 use crate::stats::core;
+use crate::stats::rm_model::RmModel;
 use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
 
 pub fn run_analysis(
@@ -14,6 +15,33 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector
 ) -> Result<Option<RepeatedMeasureResult>, JsValue> {
     let mut executed_functions = Vec::new();
+
+    // Designs with between-subjects factors or covariates use the
+    // multivariate GLM model (stats/rm_model.rs) for the multivariate tests,
+    // Mauchly, within-/between-subjects effects, contrasts and descriptives.
+    // It reads the factors from config.main (FactorsVar, Covariates).
+    let has_between_design = config.main.factors_var.as_ref().map_or(false, |f| !f.is_empty())
+        || config.main.covariates.as_ref().map_or(false, |c| !c.is_empty());
+    let mut rm_model: Option<RmModel> = None;
+    let mut rm_model_failed = false;
+    if has_between_design {
+        executed_functions.push("build_rm_model".to_string());
+        match RmModel::build(data, config) {
+            Ok(model) => {
+                if model.excluded > 0 {
+                    error_collector.add_error(
+                        "build_rm_model",
+                        &format!("{} subject(s) with missing values were excluded (listwise).", model.excluded)
+                    );
+                }
+                rm_model = Some(model);
+            }
+            Err(e) => {
+                rm_model_failed = true;
+                error_collector.add_error("build_rm_model", &e);
+            }
+        }
+    }
 
     // Step 1: Calculate within-subjects factors (always executed)
     executed_functions.push("parse_within_subject_factors".to_string());
@@ -31,7 +59,11 @@ pub fn run_analysis(
     let mut descriptive_statistics = None;
     if config.options.desc_stats {
         executed_functions.push("calculate_descriptive_statistics".to_string());
-        match core::calculate_descriptive_statistics(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.descriptives()),
+            None => core::calculate_descriptive_statistics(data, config),
+        };
+        match result {
             Ok(stats) => {
                 descriptive_statistics = Some(stats);
             }
@@ -58,7 +90,12 @@ pub fn run_analysis(
     // Step 4: Multivariate tests (always executed)
     let mut multivariate_tests = None;
     executed_functions.push("calculate_multivariate_tests".to_string());
-    match core::calculate_multivariate_tests(data, config) {
+    let result = match &rm_model {
+        Some(model) => model.multivariate_tests(),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_multivariate_tests(data, config),
+    };
+    match result {
         Ok(tests) => {
             multivariate_tests = Some(tests);
         }
@@ -70,7 +107,12 @@ pub fn run_analysis(
     // Step 5: Mauchly test
     let mut mauchly_test = None;
     executed_functions.push("calculate_mauchly_test".to_string());
-    match core::calculate_mauchly_test(data, config) {
+    let result = match &rm_model {
+        Some(model) => model.mauchly(),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_mauchly_test(data, config),
+    };
+    match result {
         Ok(test) => {
             mauchly_test = Some(test);
         }
@@ -82,7 +124,13 @@ pub fn run_analysis(
     // Step 6: Tests of within-subjects effects
     let mut tests_of_within_subjects_effects = None;
     executed_functions.push("calculate_tests_within_subjects_effects".to_string());
-    match core::calculate_tests_within_subjects_effects(data, config, &mauchly_test) {
+    let result = match (&rm_model, &mauchly_test) {
+        (Some(model), Some(mauchly)) => Ok(model.within_effects(mauchly)),
+        (Some(_), None) => Err("Not computed: Mauchly's test failed".to_string()),
+        (None, _) if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        (None, _) => core::calculate_tests_within_subjects_effects(data, config, &mauchly_test),
+    };
+    match result {
         Ok(tests) => {
             tests_of_within_subjects_effects = Some(tests);
         }
@@ -94,7 +142,12 @@ pub fn run_analysis(
     // Step 7: Tests of within-subjects contrasts
     let mut tests_of_within_subjects_contrasts = None;
     executed_functions.push("calculate_tests_within_subjects_contrasts".to_string());
-    match core::calculate_tests_within_subjects_contrasts(data, config) {
+    let result = match &rm_model {
+        Some(model) => Ok(model.within_contrasts()),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_tests_within_subjects_contrasts(data, config),
+    };
+    match result {
         Ok(tests) => {
             tests_of_within_subjects_contrasts = Some(tests);
         }
@@ -106,7 +159,12 @@ pub fn run_analysis(
     // Step 8: Tests of between-subjects effects
     let mut tests_of_between_subjects_effects = None;
     executed_functions.push("calculate_between_subjects_effects".to_string());
-    match core::calculate_between_subjects_effects(data, config) {
+    let result = match &rm_model {
+        Some(model) => Ok(model.between_effects()),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_between_subjects_effects(data, config),
+    };
+    match result {
         Ok(tests) => {
             tests_of_between_subjects_effects = Some(tests);
         }
@@ -204,7 +262,12 @@ pub fn run_analysis(
         .map_or(false, |c| !c.is_empty());
     if has_between_factors || has_covariates {
         executed_functions.push("calculate_univariate_tests".to_string());
-        match core::calculate_univariate_tests(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.univariate_tests()),
+            None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+            None => core::calculate_univariate_tests(data, config),
+        };
+        match result {
             Ok(tests) => {
                 univariate_tests = Some(tests);
             }

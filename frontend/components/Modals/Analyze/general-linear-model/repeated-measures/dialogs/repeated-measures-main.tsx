@@ -249,13 +249,30 @@ export const RepeatedMeasuresContainer = ({
         mainData: RepeatedMeasuresMainType
     ) => {
         try {
+            // Derive the between-subjects lists from the main dialog data being
+            // submitted. The effect that syncs them from formData.main runs only
+            // after a re-render, so on the first OK formData.model.BetSubVar was
+            // still empty while FactorsVar was already set (stale BetSubVar).
+            const factorList = mainData.FactorsVar ? [...mainData.FactorsVar] : [];
+            const covariateList = mainData.Covariates ? [...mainData.Covariates] : [];
             const newFormData = {
                 ...formData,
                 main: mainData,
                 model: {
                     ...formData.model,
                     DefFactors: (factorVars ?? []).join(";"),
+                    BetSubVar: [...factorList, ...covariateList],
                 },
+                emmeans: {
+                    ...formData.emmeans,
+                    SrcList: [...factorList],
+                },
+                ...(mainData.FactorsVar
+                    ? {
+                          plots: { ...formData.plots, SrcList: [...factorList] },
+                          posthoc: { ...formData.posthoc, SrcList: [...factorList] },
+                      }
+                    : {}),
             };
 
             await saveFormData("RepeatedMeasures", newFormData);

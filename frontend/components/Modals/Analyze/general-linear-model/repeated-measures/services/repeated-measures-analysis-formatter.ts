@@ -161,7 +161,9 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         note: data.multivariate_tests.design
-            ? `Design: Intercept; Within Subjects Design: ${data.multivariate_tests.design}`
+            ? String(data.multivariate_tests.design).includes("Within Subjects Design")
+                ? `Design: ${data.multivariate_tests.design}`
+                : `Design: Intercept; Within Subjects Design: ${data.multivariate_tests.design}`
             : undefined,
         interpretation:
             "Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.",
@@ -215,7 +217,9 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
         note:
             "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix." +
             (data.mauchly_test.design
-                ? ` Design: Intercept; Within Subjects Design: ${data.mauchly_test.design}`
+                ? String(data.mauchly_test.design).includes("Within Subjects Design")
+                    ? ` Design: ${data.mauchly_test.design}`
+                    : ` Design: Intercept; Within Subjects Design: ${data.mauchly_test.design}`
                 : ""),
         interpretation:
             "If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.",
@@ -359,9 +363,10 @@ function formatTestsWithinSubjectsContrasts(data: any, resultJson: ResultJson) {
 
         effectSources.forEach((s: any, idx: number) => {
             const contrastLabel = Object.values(s.factor_values || {})[0] ?? "";
+            const newSource = idx === 0 || effectSources[idx - 1].source !== s.source;
             table.rows.push({
                 rowHeader: [],
-                source: idx === 0 ? s.source : "",
+                source: newSource ? s.source : "",
                 contrast: String(contrastLabel),
                 ss: fmt3(s.sum_of_squares),
                 df: String(s.df),
@@ -419,7 +424,12 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
             "Tests of between-subjects effects using the average of the repeated measurements as the transform variable.",
     };
 
-    const effectOrder = ["Intercept", "Error"];
+    // All sources in result order (Intercept, covariates, factors,
+    // interactions), Error last.
+    const effectOrder = [
+        ...Object.keys(effects[measureNames[0]] || {}).filter((e) => e !== "Error"),
+        "Error",
+    ];
     table.note = multiMeasure
         ? "Transformed Variable: Average"
         : `Measure: ${measureNames[0]}; Transformed Variable: Average`;

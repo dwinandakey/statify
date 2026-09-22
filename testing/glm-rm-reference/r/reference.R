@@ -221,6 +221,77 @@ emmeans_c <- function(d) {
   )
 }
 
+# Values printed DIRECTLY by car (no own formulas), for the Jest test
+# fixtures: one row per value with its car source. car::Anova type III on
+# lm(Y ~ group) with idata/idesign, per measure; univariate per dependent
+# variable with car::Anova(lm(y ~ group), type = 3); Levene with
+# car::leveneTest(center = mean).
+car_values <- function(key, d, within, measures, between = NULL) {
+  rows <- list(); add <- function(...) rows[[length(rows) + 1]] <<- data.frame(dataset = key, lapply(list(...), unname), stringsAsFactors = FALSE, row.names = NULL)
+  k <- within$levels; grp <- if (!is.null(between)) factor(d[[between]]) else NULL
+  tag <- sprintf("R %s car %s", paste(R.version$major, R.version$minor, sep = "."), packageVersion("car"))
+  for (m in measures) {
+    Y <- as.matrix(d[, m$columns]); idata <- data.frame(w = factor(seq_len(k)))
+    fit <- if (is.null(grp)) lm(Y ~ 1) else lm(Y ~ grp)
+    av <- Anova(fit, idata = idata, idesign = ~ w, type = 3)
+    su <- suppressWarnings(summary(av, multivariate = TRUE))
+    u <- su$univariate.tests; sp <- su$sphericity.tests; ad <- su$pval.adjustments
+    nm <- function(r) switch(r, "(Intercept)" = "Intercept", "grp" = between, "w" = within$name, "grp:w" = paste0(within$name, " * ", between), r)
+    src <- paste0(tag, " Anova(type=3) summary: univariate.tests")
+    for (r in rownames(u)) {
+      table <- if (grepl("w", r)) "within_effects" else "between_effects"
+      add(table = table, measure = m$name, source = nm(r), field = "SS", value = u[r, "Sum Sq"], r_source = src)
+      add(table = table, measure = m$name, source = nm(r), field = "df", value = u[r, "num Df"], r_source = src)
+      add(table = table, measure = m$name, source = nm(r), field = "error SS", value = u[r, "Error SS"], r_source = src)
+      add(table = table, measure = m$name, source = nm(r), field = "error df", value = u[r, "den Df"], r_source = src)
+      add(table = table, measure = m$name, source = nm(r), field = "F", value = u[r, "F value"], r_source = src)
+      add(table = table, measure = m$name, source = nm(r), field = "Sig.", value = u[r, "Pr(>F)"], r_source = src)
+    }
+    src <- paste0(tag, " Anova(type=3) summary: sphericity.tests / pval.adjustments")
+    for (r in rownames(sp)) {
+      add(table = "mauchly", measure = m$name, source = nm(r), field = "W", value = sp[r, "Test statistic"], r_source = src)
+      add(table = "mauchly", measure = m$name, source = nm(r), field = "Greenhouse-Geisser", value = ad[r, "GG eps"], r_source = src)
+      add(table = "within_effects", measure = m$name, source = nm(r), field = "Sig. Greenhouse-Geisser", value = ad[r, "Pr(>F[GG])"], r_source = src)
+    }
+    if (length(measures) == 1) {
+      src <- paste0(tag, " Anova(type=3) summary: multivariate.tests (car:::Pillai/Wilks/HL/Roy)")
+      for (r in names(su$multivariate.tests)) if (grepl("w", r)) {
+        t <- su$multivariate.tests[[r]]
+        ev <- Re(eigen(qr.coef(qr(t$SSPE), t$SSPH), symmetric = FALSE)$values)
+        fns <- list("Pillai's Trace" = car:::Pillai, "Wilks' Lambda" = car:::Wilks, "Hotelling's Trace" = car:::HL, "Roy's Largest Root" = car:::Roy)
+        for (test in names(fns)) {
+          st <- fns[[test]](ev, t$df, t$df.residual)
+          add(table = "multivariate", measure = m$name, source = paste0(nm(r), " | ", test), field = "Value", value = st[1], r_source = src)
+          add(table = "multivariate", measure = m$name, source = paste0(nm(r), " | ", test), field = "F", value = st[2], r_source = src)
+          add(table = "multivariate", measure = m$name, source = paste0(nm(r), " | ", test), field = "Hypothesis df", value = st[3], r_source = src)
+          add(table = "multivariate", measure = m$name, source = paste0(nm(r), " | ", test), field = "Error df", value = st[4], r_source = src)
+          add(table = "multivariate", measure = m$name, source = paste0(nm(r), " | ", test), field = "Sig.", value = pf(st[2], st[3], st[4], lower.tail = FALSE), r_source = src)
+        }
+      }
+    }
+    for (j in seq_along(m$columns)) {
+      col <- m$columns[j]; y <- d[[col]]
+      a3 <- if (is.null(grp)) Anova(lm(y ~ 1), type = 3) else Anova(lm(y ~ grp), type = 3)
+      src <- paste0(tag, " Anova(lm(", col, " ~ ", if (is.null(grp)) "1" else between, "), type=3)")
+      for (r in rownames(a3)) {
+        rr <- if (r == "Residuals") "Error" else nm(r)
+        add(table = "univariate", measure = paste0(m$name, "|", j), source = rr, field = "SS", value = a3[r, "Sum Sq"], r_source = src)
+        add(table = "univariate", measure = paste0(m$name, "|", j), source = rr, field = "df", value = a3[r, "Df"], r_source = src)
+        if (r != "Residuals") add(table = "univariate", measure = paste0(m$name, "|", j), source = rr, field = "F", value = a3[r, "F value"], r_source = src)
+      }
+      if (!is.null(grp)) {
+        lt <- leveneTest(y ~ grp, center = mean)
+        src <- paste0(tag, " leveneTest(", col, " ~ ", between, ", center = mean)")
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "Levene Statistic", value = lt[1, "F value"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "df1", value = lt[1, "Df"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "df2", value = lt[2, "Df"], r_source = src)
+        add(table = "levene", measure = paste0(m$name, "|", j), source = "Based on Mean", field = "Sig.", value = lt[1, "Pr(>F)"], r_source = src)
+      }
+    }
+  }
+  do.call(rbind, rows)
+}
+
 read <- function(f) read.csv(file.path(data_dir, f))
 res <- list(
   gambar51 = analyse("gambar51", read("gambar51.csv"), list(name = "perlakuan", levels = 4),
@@ -233,6 +304,14 @@ res <- list(
               list(list(name = "nilai", columns = paste0("p", 1:3))), between = "metode")
 )
 res$c$emmeans <- emmeans_c(read("rm_c.csv"))
+car_rows <- rbind(
+  car_values("gambar51", read("gambar51.csv"), list(name = "perlakuan", levels = 4), list(list(name = "anjing", columns = paste0("perlakuan", 1:4)))),
+  car_values("a", read("rm_a.csv"), list(name = "waktu", levels = 3),
+             list(list(name = "cemas", columns = paste0("cemas", 1:3)), list(name = "stres", columns = paste0("stres", 1:3)))),
+  car_values("b", read("rm_b.csv"), list(name = "waktu", levels = 4), list(list(name = "skor", columns = paste0("w", 1:4))), between = "kelompok"),
+  car_values("c", read("rm_c.csv"), list(name = "sesi", levels = 3), list(list(name = "nilai", columns = paste0("p", 1:3))), between = "metode")
+)
+jsonlite::write_json(car_rows, file.path(out_dir, "car-values.json"), digits = NA, pretty = TRUE)
 
 meta <- list(source = "R pembanding sementara (BUKAN acuan utama; acuan utama = SPSS 27)",
              r = R.version.string, car = as.character(packageVersion("car")), emmeans = as.character(packageVersion("emmeans")),
