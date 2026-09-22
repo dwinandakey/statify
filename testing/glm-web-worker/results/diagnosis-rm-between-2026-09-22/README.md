@@ -34,3 +34,25 @@ Diagnosis saja, tanpa perbaikan. Skrip ada di [../../diagnosis/rm-between](../..
 - **Perkiraan ukuran perbaikan:**
   - **Kecil:** masalah `BetSubVar` yang basi di TypeScript, beberapa baris di `executeRepeatedMeasures`.
   - **Besar:** dukungan desain campuran di Rust. Perlu kontrak tata letak `factors_data` yang satu dan konsisten, matriks desain dengan intercept dan pengodean faktor yang benar, efek between bertipe Type III, interaksi within × between dan partisi Error(time), serta uji multivariat untuk efek within dan interaksinya. Ini menyentuh setidaknya `common.rs`, `univariate_tests.rs`, `between_subjects_effects.rs`, `within_subjects_effects.rs`, dan `multivariate_tests.rs`, dan membutuhkan acuan SPSS untuk validasi.
+
+## Status perbaikan (branch `fix/rm-correctness`, 2026-09-22)
+
+Ditambahkan setelah diagnosis. Isi diagnosis di atas tidak diubah. Rincian dan bukti per tahap ada di `testing/glm-rm-reference/results/stage*/README.md`. Nilai acuan sementara berasal dari R (car/afex); nilai SPSS belum tersedia (slot test "menunggu SPSS").
+
+| Temuan | Perbaikan | Commit | Status |
+|---|---|---|---|
+| 1–2. Tata letak `factors_data` berbeda antara TS dan Rust | Satu tata letak **variable-major** `factors_data[f][s]`, didokumentasikan di `models/data.rs`, `stats/rm_model.rs`, dan `repeated-measures-analysis.ts`. Service mengambil DV, faktor, dan kovariat dalam satu `getSlicedData`. Rust menolak tata letak yang salah dengan pesan jelas. | `041ca05e` (2a) | Diperbaiki; tervalidasi terhadap R, menunggu SPSS (b) |
+| 3. Matriks desain: nilai faktor dicari di rekaman within, tanpa intercept | Mesin GLM multivariat baru (`stats/rm_model.rs`): intercept, kovariat, kode efek, interaksi faktorial penuh, SS tipe III, galat model penuh, listwise. `build_design_matrix_and_response` juga diperbaiki. | `041ca05e` (2a) | Diperbaiki; Within, Between, Multivariate, dan Mauchly (b) 0 selisih vs car |
+| 4. `BetSubVar` basi di run pertama | `executeRepeatedMeasures` menurunkan `BetSubVar` dan `SrcList` dari `mainData` yang dikirim. | `041ca05e` (2a) | Diperbaiki; UI (b) run pertama = run berikutnya, main = worker |
+| 5. Tabel within/multivariat memakai model lain | Interaksi within × between, partisi Error(faktor), dan uji multivariat efek within beserta interaksinya dihitung dari model penuh. | `041ca05e` (2a) | Diperbaiki; tervalidasi terhadap R, menunggu SPSS (b) |
+| Pilot B §2: keluaran berubah dalam instance WASM yang sama (dua measure) dan urutan baris | `HashMap` → `IndexMap` (urutan deterministik). Mauchly dan epsilon dikunci per measure. Doubly multivariate untuk > 1 measure. | `cc96f24c` (1) | Diperbaiki dan tervalidasi: 10× instance sama + 10× instance baru byte-identik |
+| Pilot B §1: EMMeans panic (`unreachable`) | `RmModel::emmeans`: (OVERALL), faktor between/within, dan interaksi. Perbandingan berpasangan LSD/Bonferroni/Sidak. Kondisi tak didukung → pesan di Errors Logs. | `f2b17f68` (3) | Diperbaiki; tidak ada panic; 68/68 cocok dengan afex; menunggu SPSS (c) |
+| Pilot B §1: Homogeneity tests error (Bartlett butuh ≥ 2 faktor) | Box's M dan Levene seperti SPSS. Bartlett's test of sphericity dipindah ke Residual SSCP dan rumusnya diperbaiki. | `fb5a087a` (4) | Diperbaiki; Levene 24/24 cocok dengan car; menunggu SPSS (c) |
+
+Batasan yang masih ada:
+- Desain dengan lebih dari satu faktor within memakai modul lama (tanpa faktor between) atau ditolak dengan pesan (dengan faktor between).
+- Model kustom diabaikan (selalu faktorial penuh).
+- Kontras within tetap *repeated*, bukan polinomial seperti bawaan SPSS.
+- Pairwise untuk target interaksi belum ada.
+
+Dampak ke eksperimen Web Worker ada di `testing/glm-rm-reference/results/stage5/README.md`.
