@@ -633,6 +633,8 @@ Modul Multivariate, `shared/glm-execution.ts`, dan kontrak pesan worker tidak di
 
 ### 11.2 Validasi terhadap SPSS 27
 
+> **Ralat (2026-09-24):** jumlah uji acuan RM yang benar adalah **1681 lulus** (1318 nilai SPSS + 353 nilai R + 10 uji fungsional), sesuai [testing/RELEASE-NOTES.md](../../../../../testing/RELEASE-NOTES.md). Angka 1687 di bagian ini dan di `testing/glm-rm-reference/results/spss-validation-de/README.md` adalah salah hitung. Jumlah nilai SPSS (1318) tidak berubah.
+
 Acuan: keluaran SPSS 27 yang dijalankan pengguna dari `testing/glm-rm-reference/spss/*.sps`, diekspor ke `spss-output/*.xlsx`. Nilainya dibaca `harness/spss_extract.py` dan diuji di `__test__/repeated-measures-reference.test.ts` dengan toleransi |Statify − SPSS| ≤ 0,001.
 
 | Dataset | Desain | Nilai SPSS | Hasil |

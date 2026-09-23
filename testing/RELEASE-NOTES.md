@@ -1,10 +1,37 @@
-# Release notes: build final skripsi (`release/skripsi-final`, tag `skripsi-final-v1`)
+# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v1`)
 
-Tanggal: 2026-09-24. Belum di-push dan belum di-deploy.
+Tanggal: 2026-09-24. Tidak di-merge ke `main` dan tidak di-deploy.
 
-## 1. Asal branch dan commit yang digabung
+## 0. Branch rilis: `ilham`
 
-`release/skripsi-final` dibuat dari **`main` `4cb3507d`** (= `origin/main`). Dua branch digabung dengan `git merge --no-ff`, tanpa squash, sehingga riwayat per langkah tetap terlihat.
+**Branch rilis adalah `ilham`** (branch kerja penulis), bukan `release/skripsi-final`.
+
+| Commit di `ilham` | Isi |
+|---|---|
+| `3836f94c` | Basis: ujung `ilham` sebelum rilis (= induk `fix/rm-correctness`) |
+| `55a83973` | `Merge branch 'fix/rm-correctness' into ilham` (`--no-ff`, tanpa konflik) |
+| `d86bf88f` | `Merge branch 'validation/mv-spss' into ilham` (`--no-ff`, tanpa konflik) |
+| `ac5ea4fe` | Cherry-pick `5b6c7e93`: bukti pemeriksaan release dan berkas ini (hanya `testing/`) |
+| commit berikutnya | Berkas ini diperbarui untuk `ilham` dan ralat §11.2 `result_compare.md`. **Tag `skripsi-final-v1` dipasang pada commit ini**, yaitu commit terakhir `ilham` saat rilis (`git rev-parse skripsi-final-v1^{commit}`). |
+
+**Bukti isi sama dengan release yang diperiksa (§2):**
+- `git diff release/skripsi-final ilham` setelah kedua merge (sebelum cherry-pick): **0 berkas berbeda di `frontend/`**, dengan tree `frontend/` identik (`ee7a7c04…`) di kedua branch. 0 berkas berbeda di luar `testing/`.
+  - Berkas guide dari commit `main` `4cb3507d` juga tidak berbeda, karena isinya identik dengan `9bff42c6` yang ada di riwayat `ilham`. Jadi `ilham` tidak memuat `4cb3507d` sebagai commit, tetapi memuat isinya.
+  - Satu-satunya selisih adalah 60 berkas `testing/` dari commit bukti `5b6c7e93` (`RELEASE-NOTES.md`, `testing/release-skripsi-final/`, `testing/glm-mv-reference/results/fix-steps/release-skripsi-final/`) yang belum ada di `ilham`.
+- Setelah cherry-pick `ac5ea4fe`: `git diff release/skripsi-final ilham` **kosong**, dan tree seluruh repo identik (`a721d6c8…`).
+- **Build ulang di `ilham`:**
+  - WASM MV (md5 `403447c4…`) dan RM (md5 `f4c34490…`) identik dengan yang ter-commit dan dengan release. Glue hanya berbeda akhir baris dan dikembalikan ke versi ter-commit sebelum `next build`.
+  - `next build` memberi `BUILD_ID` `ype9BtloOSwA9xB6vEncj`, dengan berkas WASM **`static/media/wasm_bg.2ee22d6a.wasm`** (MV) dan **`wasm_bg.2bc2b212.wasm`** (RM), sama dengan build release yang diperiksa.
+- **Kesimpulan:** karena kode identik dan berkas WASM di build identik, hasil pemeriksaan §2 berlaku untuk `ilham`.
+
+**Status branch lain:**
+- `release/skripsi-final` dihapus setelah rilis (belum pernah di-push). Isinya sama dengan `ilham` sebelum commit pembaruan berkas ini.
+- `fix/rm-correctness` dan `validation/mv-spss` dipertahankan dan di-push sebagai cadangan riwayat per langkah.
+- `origin/main` sudah bergerak jauh melewati `4cb3507d` (commit anggota tim lain). Rilis ini sengaja tidak memuat commit-commit itu.
+
+## 1. Asal perubahan dan commit yang digabung
+
+Pemeriksaan §2 semula dijalankan di `release/skripsi-final`, yang dibuat dari **`main` `4cb3507d`** dengan dua merge `--no-ff` yang sama. Isi akhirnya identik dengan `ilham` (§0). Uraian di bawah memakai hash merge di branch itu. Commit yang digabung sama dengan yang digabung ke `ilham`.
 
 | Urutan | Merge commit | Branch | Ujung branch | Commit baru terhadap basis |
 |---|---|---|---|---|
@@ -80,7 +107,7 @@ b33c10bd docs(glm-mv): Observed Power Welch (step 10) di thesis-impact.md dan la
 90fc8984 docs(glm-mv): fakta kode untuk sequence diagram Tahap 1 dan Tahap 2 Bagian 1
 ```
 
-## 2. Hasil pemeriksaan di `release/skripsi-final`
+## 2. Hasil pemeriksaan di `release/skripsi-final` (berlaku untuk `ilham`, §0)
 
 Semua pemeriksaan dijalankan pada kode merge `29ca035a` (kode aplikasi tidak berubah sesudahnya).
 
@@ -110,13 +137,14 @@ Semua pemeriksaan dijalankan pada kode merge `29ca035a` (kode aplikasi tidak ber
    - Isi dan semua angkanya tetap identik: MV-500, 6 run berturut-turut, selisih numerik 0 (`mv-instance-reuse-check.txt`).
    - Perbandingan instance-bersama tetap memberi eksperimen = release untuk 8/8 sel (`experiment-output-check-shared-instance.json`).
    - Crate RM tidak terpengaruh, karena memakai `IndexMap`.
-2. **Jumlah uji acuan RM.** `testing/glm-rm-reference/results/spss-validation-de/README.md` menyebut "1687 lulus". Uji, fixture, dan WASM RM di release identik dengan `182b6f05` (tempat angka itu ditulis), dan jumlah uji menurut fixture adalah 1318 + 353 + 10 = **1681**. Angka 1687 adalah salah hitung di dokumen lama; README itu tidak diubah. Jumlah nilai SPSS (1318/1318) tidak terpengaruh.
+2. **Jumlah uji acuan RM.** `testing/glm-rm-reference/results/spss-validation-de/README.md` dan §11.2 `result_compare.md` menyebut "1687 lulus". Uji, fixture, dan WASM RM di release identik dengan `182b6f05` (tempat angka itu ditulis), dan jumlah uji menurut fixture adalah 1318 + 353 + 10 = **1681**. Angka 1687 adalah salah hitung di dokumen lama. README itu tidak diubah, dan ralatnya ditambahkan di awal §11.2 `result_compare.md`. Jumlah nilai SPSS (1318/1318) tidak terpengaruh.
 
 ## 3. Build produksi
 
 | Item | Nilai |
 |---|---|
-| `BUILD_ID` build yang diperiksa | `FOT4ctswQVT0EgK-b84KH` (di `frontend/.next/BUILD_ID`) |
+| `BUILD_ID` build yang diperiksa (`release/skripsi-final`) | `FOT4ctswQVT0EgK-b84KH` |
+| `BUILD_ID` build final dari `ilham` (§0) | `ype9BtloOSwA9xB6vEncj` (di `frontend/.next/BUILD_ID` saat rilis) |
 | WASM MV di build | `.next/static/media/wasm_bg.2ee22d6a.wasm` (md5 `403447c485cd…` = `rust/pkg/wasm_bg.wasm`) |
 | WASM RM di build | `.next/static/media/wasm_bg.2bc2b212.wasm` (md5 `f4c34490f7fe…` = `rust/pkg/wasm_bg.wasm`) |
 | Next.js / Node | 15.5.9 / 20.19.0 |
@@ -138,15 +166,15 @@ Semua pemeriksaan dijalankan pada kode merge `29ca035a` (kode aplikasi tidak ber
 
 ## 5. Menjalankan build final secara lokal
 
-Dari root repo, pada tag `skripsi-final-v1` (atau branch `release/skripsi-final`):
+Dari root repo, pada tag `skripsi-final-v1` (atau branch `ilham`):
 
 ```
-git checkout skripsi-final-v1        # atau: git checkout release/skripsi-final
+git checkout skripsi-final-v1        # atau: git checkout ilham
 cd frontend
 npx next build                       # = npm run build
 npx next start -p 3001               # = npm run start (port 3001); buka http://localhost:3001/dashboard/data
 ```
 
 - **WASM tidak perlu di-build ulang:** `rust/pkg` kedua modul sudah ter-commit dan identik dengan hasil build (§2a).
-- **Memakai build yang sudah diperiksa:** selama `frontend/.next/` belum ditimpa, `npx next start -p 3001` langsung menjalankan build yang diperiksa (`BUILD_ID` `FOT4ctswQVT0EgK-b84KH`) tanpa `next build`.
+- **Memakai build final `ilham`:** selama `frontend/.next/` belum ditimpa, `npx next start -p 3001` langsung menjalankan build final dari `ilham` (`BUILD_ID` `ype9BtloOSwA9xB6vEncj`) tanpa `next build`.
 - **Mode eksekusi:** bawaan aplikasi adalah worker. Mode dapat diganti lewat `localStorage["glm-execution-mode"]` (`"worker"` atau `"main"`) di konsol browser.
