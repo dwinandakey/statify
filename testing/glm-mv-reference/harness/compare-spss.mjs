@@ -10,27 +10,21 @@
 // |Statify − SPSS| ≤ 0.001. SPSS cells stored as text with a footnote letter
 // ("2.436b") only carry the printed decimals (display = true).
 //
-// Usage (repo root): node testing/glm-mv-reference/harness/compare-spss.mjs
+// Usage (repo root): node testing/glm-mv-reference/harness/compare-spss.mjs [--run=<dir>] [--out=<dir>]
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { locate, getPath, formattedCell } from "./mapping.mjs";
+import { MAP, locate, getPath, formattedCell } from "./mapping.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(here, "..");
-const RUN = path.join(ROOT, "results/spss-validation/statify-output");
-const OUT = path.join(ROOT, "results/spss-validation");
+const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
+// --run: folder of ui-run.cjs output (worker mode); --out: where compare-spss.* go.
+const RUN = path.resolve(args.run || path.join(ROOT, "results/spss-validation/statify-output"));
+const OUT = path.resolve(args.out || path.join(ROOT, "results/spss-validation"));
 const TOL = 0.001;
 const spss = JSON.parse(fs.readFileSync(path.join(ROOT, "spss-output/spss-values.json"), "utf8"));
 
-// SPSS labels → Statify names (variable labels, value labels, effect names).
-const MAP = {
-    mv1: { dv: { "mpg - 20": "mpg", "disp - 200": "disp", "hp - 150": "hp", "wt - 3": "wt" }, level: {} },
-    mv2: { dv: {}, level: { "laki-laki": "1", perempuan: "2" } },
-    mv3: { dv: { "kedalaman1 - kedalaman2": "d_kedalaman1_minus_kedalaman2", "ukuran1 - ukuran2": "d_ukuran1_minus_ukuran2" }, level: {} },
-    mv4: { dv: {}, level: { "treatment 1": "1", "treatment 2": "2", "treatment 3": "3" } },
-    mv5: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
-};
 const MV_FIELD = { Value: "value", F: "f", "Hypothesis df": "hypothesis_df", "Error df": "error_df", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const BSE_FIELD = { "Type III Sum of Squares": "sum_of_squares", df: "df", "Mean Square": "mean_square", F: "f_value", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const LEV_FIELD = { "Levene Statistic": "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
@@ -42,7 +36,8 @@ const load = (cfg) => ({
     raw: JSON.parse(fs.readFileSync(path.join(RUN, `${cfg}.raw.json`), "utf8")).response.results,
     ui: JSON.parse(fs.readFileSync(path.join(RUN, `${cfg}.json`), "utf8")).tables,
 });
-const runs = Object.fromEntries(Object.keys(MAP).map((c) => [c, load(c)]));
+const CONFIGS = [...new Set(spss.map((e) => e.config))].filter((c) => fs.existsSync(path.join(RUN, `${c}.raw.json`)));
+const runs = Object.fromEntries(CONFIGS.map((c) => [c, load(c)]));
 
 // UI table rows with the blank (repeated) label cells filled down.
 function uiRows(cfg, title, labelKeys) {
@@ -139,7 +134,7 @@ function uiLookup(e) {
     }
 }
 
-const results = spss.map((e) => {
+const results = spss.filter((e) => runs[e.config]).map((e) => {
     const s = lookup(e);
     const statify = s.raw !== undefined && s.raw !== null ? s.raw : typeof s.ui === "number" ? s.ui : undefined;
     const from = s.raw !== undefined && s.raw !== null ? "raw" : typeof s.ui === "number" ? "ui" : null;
@@ -187,6 +182,7 @@ for (const r of results.filter((x) => x.diff === null)) {
     (miss[k] ??= { fields: [], note: r.note }).fields.push(r.field);
 }
 for (const [k, v] of Object.entries(miss)) lines.push(`  ${k} :: ${v.fields.join(", ")} — ${v.note}`);
+fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, "compare-spss.txt"), lines.join("\n") + "\n");
 fs.writeFileSync(path.join(OUT, "compare-spss.json"), JSON.stringify({ tolerance: TOL, summary: Object.values(sum), results }, null, 1) + "\n");
 console.log(lines.join("\n"));
