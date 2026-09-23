@@ -934,7 +934,11 @@ fn calculate_multivariate_test_statistics(
         error_df_hotelling.round().max(1.0) as usize,
         f_hotelling
     );
-    let eta_squared_hotelling = hotelling_trace / (1.0 + hotelling_trace);
+    // SPSS: η² = (T/s) / (T/s + 1), s = min(p, df_h).
+    let eta_squared_hotelling = {
+        let t_per_s = hotelling_trace / s;
+        t_per_s / (t_per_s + 1.0)
+    };
 
     // ── Roy's Largest Root (upper bound F) ────────────────────────────────
     let (f_roy, hyp_df_roy, error_df_roy) = {
