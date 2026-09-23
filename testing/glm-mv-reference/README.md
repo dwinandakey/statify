@@ -113,12 +113,15 @@ Perbedaan penyajian yang sudah diketahui sebelum perbandingan (bukan hasil uji):
 3. Path di sintaks adalah path absolut repositori ini (`D:\0.POLTSTAT STIS\...\statify64\...`). Sesuaikan bila repositori ada di tempat lain.
 4. Jangan menyimpan dataset yang dibuka sintaks. Variabel `*_mu0` dan `d_*` hanya dibuat di sesi SPSS, dan berkas .sav di `data/` harus tetap identik dengan aslinya.
 
-## 4. Langkah berikutnya
+## 4. Hasil
 
-Setelah berkas xlsx tersedia, lakukan Langkah 3-5:
+Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md). Isinya: alur, hasil per tabel, selisih maksimum, diagnosis selisih, dan bagian yang belum dicakup.
 
-- jalankan kelima konfigurasi di Statify lewat UI (mode worker, build produksi);
-- ekstrak nilainya;
-- bandingkan dengan toleransi |Statify − SPSS| ≤ 0,001;
-- buat tes referensi yang setiap nilainya bersumber `spss`;
-- tulis `results/spss-validation/README.md`.
+Harness yang dipakai:
+
+| Berkas | Fungsi |
+|---|---|
+| `harness/ui-run.cjs` | Menjalankan konfigurasi lewat dialog asli (mode worker, build produksi) |
+| `harness/spss_extract.py` | Mengekstrak nilai acuan dari xlsx SPSS |
+| `harness/compare-spss.mjs` + `harness/mapping.mjs` | Membandingkan Statify dengan SPSS |
+| `harness/make-fixture.mjs` | Membuat fixture uji acuan Jest `multivariate/__test__/multivariate-reference.test.ts` |
