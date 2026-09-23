@@ -1,0 +1,2 @@
+403447c485cd5e933044e2e6a4860f84 *frontend/.next/static/media/wasm_bg.2ee22d6a.wasm
+f4c34490f7fe4152b5ffb9a8cf9de4f8 *frontend/.next/static/media/wasm_bg.2bc2b212.wasm

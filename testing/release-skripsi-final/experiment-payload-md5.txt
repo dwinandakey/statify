@@ -1,0 +1,9 @@
+2285bf33cabccf2ec88eda31845f5e43 *capture-report.json
+8639bf45b973048be3198a8aecd12b07 *multivariate-100.json
+89985330e2461b1d07ced110bf67b399 *multivariate-1000.json
+33da72441a09bd57ee42773585f2a18b *multivariate-2000.json
+51a5ce35d77dcf7a1bbee469537abdd7 *multivariate-500.json
+66366be0a348142deb2ac35a6ce2c781 *repeated-measures-10000.json
+3b658a33e39ca02b43c853cddfc6fab9 *repeated-measures-20000.json
+b84b8e6daa42d6b343fcdedd6ff59ba9 *repeated-measures-40000.json
+8fe91e6902820a70110c554e25068b59 *repeated-measures-5000.json

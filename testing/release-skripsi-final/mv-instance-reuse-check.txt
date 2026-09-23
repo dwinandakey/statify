@@ -1,0 +1,5 @@
+run 2 vs run 1: byte false | isi (kunci diurutkan) false | angka berbeda 1 | selisih abs maks 0.00e+0 | relatif maks 0.00e+0 | area errors
+run 3 vs run 1: byte false | isi (kunci diurutkan) false | angka berbeda 1 | selisih abs maks 0.00e+0 | relatif maks 0.00e+0 | area errors
+run 4 vs run 1: byte false | isi (kunci diurutkan) true | angka berbeda 0 | selisih abs maks 0.00e+0 | relatif maks 0.00e+0 | area 
+run 5 vs run 1: byte false | isi (kunci diurutkan) true | angka berbeda 0 | selisih abs maks 0.00e+0 | relatif maks 0.00e+0 | area 
+run 6 vs run 1: byte false | isi (kunci diurutkan) true | angka berbeda 0 | selisih abs maks 0.00e+0 | relatif maks 0.00e+0 | area 

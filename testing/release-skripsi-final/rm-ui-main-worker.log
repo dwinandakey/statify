@@ -1,0 +1,40 @@
+gambar51 main->main tables=7 errors=[]
+gambar51 worker->worker tables=7 errors=[]
+gambar51 main->main tables=7 errors=[]
+gambar51 worker->worker tables=7 errors=[]
+gambar51: all 4 runs byte-identical (main and worker): true
+a main->main tables=17 errors=[]
+a worker->worker tables=17 errors=[]
+a main->main tables=17 errors=[]
+a worker->worker tables=17 errors=[]
+a: all 4 runs byte-identical (main and worker): true
+b main->main tables=15 errors=[]
+b worker->worker tables=15 errors=[]
+b main->main tables=15 errors=[]
+b worker->worker tables=15 errors=[]
+b: all 4 runs byte-identical (main and worker): true
+c main->main tables=15 errors=[]
+c worker->worker tables=15 errors=[]
+c main->main tables=15 errors=[]
+c worker->worker tables=15 errors=[]
+c: all 4 runs byte-identical (main and worker): true
+cEm main->main tables=19 errors=[]
+cEm worker->worker tables=19 errors=[]
+cEm main->main tables=19 errors=[]
+cEm worker->worker tables=19 errors=[]
+cEm: all 4 runs byte-identical (main and worker): true
+cPoly main->main tables=17 errors=[]
+cPoly worker->worker tables=17 errors=[]
+cPoly main->main tables=17 errors=[]
+cPoly worker->worker tables=17 errors=[]
+cPoly: all 4 runs byte-identical (main and worker): true
+cRep main->main tables=13 errors=[]
+cRep worker->worker tables=13 errors=[]
+cRep main->main tables=13 errors=[]
+cRep worker->worker tables=13 errors=[]
+cRep: all 4 runs byte-identical (main and worker): true
+exp5000n main->main tables=17 errors=[]
+exp5000n worker->worker tables=17 errors=[]
+exp5000n main->main tables=17 errors=[]
+exp5000n worker->worker tables=17 errors=[]
+exp5000n: all 4 runs byte-identical (main and worker): true
