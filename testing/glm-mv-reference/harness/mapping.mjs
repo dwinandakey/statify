@@ -9,7 +9,8 @@
 //   { formatter: { title, match, key } }
 //                                   a cell the formatter derives itself
 //                                   (transformMultivariateResult), read from
-//                                   the formatted table (4 decimals)
+//                                   the formatted table (4 decimals); none
+//                                   since step 4 (Total comes from Rust)
 //   { missing: "<reason>" }         no Statify counterpart
 export const MAP = {
     mv1: { dv: { "mpg - 20": "mpg", "disp - 200": "disp", "hp - 150": "hp", "wt - 3": "wt" }, level: {} },
@@ -61,9 +62,6 @@ export function locate(e) {
         case "Tests of Between-Subjects Effects": {
             const src = effectOf(L[0]);
             const dv = dvOf(e.config, L[1]);
-            if (src === "Total") {
-                return { formatter: { title: "Tests of Between-Subjects Effects", match: { source: "Total", dependent_variable: uiDv(dv) }, key: BSE_FIELD[e.field] } };
-            }
             return { path: ["tests_of_between_subjects_effects", "effects", dv, src, BSE_FIELD[e.field]] };
         }
         default:

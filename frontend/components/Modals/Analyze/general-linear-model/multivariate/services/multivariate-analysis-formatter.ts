@@ -787,29 +787,9 @@ function formatTestsBetweenSubjectsEffects(
         return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
     });
 
-    // Synthesize "Total" source (uncorrected): SS_total = SS_intercept + SS_corrected_total,
-    // df_total = df_corrected_total + 1. Rust currently doesn't compute it.
-    const totalEntries: Record<string, { sum_of_squares: number; df: number }> = {};
-    dvNames.forEach((dv) => {
-        const intercept = effects[dv]?.["Intercept"];
-        const correctedTotal = effects[dv]?.["Corrected Total"];
-        if (intercept && correctedTotal) {
-            totalEntries[dv] = {
-                sum_of_squares:
-                    (intercept.sum_of_squares ?? 0) +
-                    (correctedTotal.sum_of_squares ?? 0),
-                df: (correctedTotal.df ?? 0) + 1,
-            };
-        }
-    });
-    if (Object.keys(totalEntries).length > 0 && !seenSrc.has("Total")) {
-        const ctIdx = sourceNames.indexOf("Corrected Total");
-        if (ctIdx >= 0) {
-            sourceNames.splice(ctIdx, 0, "Total");
-        } else {
-            sourceNames.push("Total");
-        }
-    }
+    // "Total" (uncorrected: Σ(y − μ₀)², df = n) comes from Rust like the other
+    // sources. It used to be synthesized here as SS_Intercept + SS_Corrected
+    // Total, which equals Σy² only for balanced designs.
 
     // Build R Squared footnote for each DV (matches SPSS a/b/c suffixes).
     const noteLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -858,10 +838,7 @@ function formatTestsBetweenSubjectsEffects(
         const blankMeanSquare = lower === "total" || lower === "corrected total";
 
         dvNames.forEach((dvName, dvIdx) => {
-            const entry =
-                sourceName === "Total"
-                    ? totalEntries[dvName]
-                    : effects[dvName]?.[sourceName];
+            const entry = effects[dvName]?.[sourceName];
             if (!entry) return;
             table.rows.push({
                 rowHeader: [],

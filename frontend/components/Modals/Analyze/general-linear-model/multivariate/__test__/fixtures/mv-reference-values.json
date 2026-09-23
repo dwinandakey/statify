@@ -5295,14 +5295,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "mpg"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "mpg",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -5317,14 +5316,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "mpg"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "mpg",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -5339,14 +5337,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "disp"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "disp",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -5361,14 +5358,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "disp"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "disp",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -5383,14 +5379,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "hp"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "hp",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -5405,14 +5400,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "hp"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "hp",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -5427,14 +5421,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "wt"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "wt",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -5449,14 +5442,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "wt"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "wt",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -11832,14 +11824,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x1"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x1",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -11854,14 +11845,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x1"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x1",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -11876,14 +11866,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x2"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x2",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -11898,14 +11887,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x2"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x2",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -11920,14 +11908,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x3"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x3",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -11942,14 +11929,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x3"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x3",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -11964,14 +11950,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x4"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x4",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -11986,14 +11971,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "x4"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "x4",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -13616,14 +13600,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "kedalaman1 − kedalaman2"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "d_kedalaman1_minus_kedalaman2",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -13638,14 +13621,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "kedalaman1 − kedalaman2"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "d_kedalaman1_minus_kedalaman2",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -13660,14 +13642,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "ukuran1 − ukuran2"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "d_ukuran1_minus_ukuran2",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -13682,14 +13663,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "ukuran1 − ukuran2"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "d_ukuran1_minus_ukuran2",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -17780,14 +17760,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "y1"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "y1",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -17802,14 +17781,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "y1"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "y1",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -17824,14 +17802,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "y2"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "y2",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -17846,14 +17823,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "y2"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "y2",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -23897,14 +23873,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "Y1A1"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "Y1A1",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -23919,14 +23894,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "Y1A1"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "Y1A1",
+     "Total",
+     "df"
+    ]
    }
   },
   {
@@ -23941,14 +23915,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "Y2A1"
-     },
-     "key": "sum_of_squares"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "Y2A1",
+     "Total",
+     "sum_of_squares"
+    ]
    }
   },
   {
@@ -23963,14 +23936,13 @@
    "spss_display": false,
    "source": "spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects",
    "statify": {
-    "formatter": {
-     "title": "Tests of Between-Subjects Effects",
-     "match": {
-      "source": "Total",
-      "dependent_variable": "Y2A1"
-     },
-     "key": "df"
-    }
+    "path": [
+     "tests_of_between_subjects_effects",
+     "effects",
+     "Y2A1",
+     "Total",
+     "df"
+    ]
    }
   },
   {

@@ -223,6 +223,24 @@ pub fn calculate_tests_between_subjects_effects(
             observed_power: 0.0, // Not applicable for Total
         });
 
+        // Add "Total" (uncorrected) as SPSS: Σ(y − μ₀)² with df = n. With Test
+        // Values the SPSS workaround runs GLM on d = y − μ₀, so μ₀ₖ is
+        // subtracted (0 otherwise).
+        let ss_uncorrected_total = y_vector
+            .iter()
+            .map(|y| (y - mu0_k).powi(2))
+            .sum::<f64>();
+        effect_results.insert("Total".to_string(), TestEffectEntry {
+            sum_of_squares: ss_uncorrected_total,
+            df: n,
+            mean_square: 0.0, // Not applicable for Total
+            f_value: 0.0, // Not applicable for Total
+            significance: 0.0, // Not applicable for Total
+            partial_eta_squared: 0.0, // Not applicable for Total
+            noncent_parameter: 0.0, // Not applicable for Total
+            observed_power: 0.0, // Not applicable for Total
+        });
+
         // If there are factors, calculate Type I, II, III, or IV SS for each
         if let Some(factors) = &config.main.fix_factor {
             for factor in factors {
