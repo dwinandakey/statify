@@ -290,11 +290,14 @@ pub fn calculate_levene_test(
 
             // df2 for p-value:
             // test_idx==2 ("Based on Median and with adjusted df") uses the
-            // Welch-Satterthwaite approximation — df2_adj can be fractional.
-            // All other variants use the standard residual df2 = N - k.
+            // Satterthwaite df of the pooled within-group SS — df2_adj can be
+            // fractional. All other variants use the standard residual
+            // df2 = N - k.
             let df2: f64 = if test_idx == 2 {
-                // Welch-Satterthwaite: df2_adj = (Σᵢ s²ᵢ/nᵢ)² / Σᵢ[(s²ᵢ/nᵢ)²/(nᵢ-1)]
-                // where s²ᵢ is within-group variance of the absolute deviations.
+                // Satterthwaite as SPSS: df2_adj = (Σᵢ uᵢ)² / Σᵢ[uᵢ²/(nᵢ-1)]
+                // where uᵢ = Σⱼ (zᵢⱼ − z̄ᵢ)² is the within-group SS of the
+                // absolute deviations. (The Welch form with s²ᵢ/nᵢ agrees only
+                // when every group has the same size.)
                 let mut sum_term = 0.0_f64;
                 let mut sum_term_sq_over_df = 0.0_f64;
                 for gi in 0..k {
@@ -305,10 +308,8 @@ pub fn calculate_levene_test(
                         .filter(|&j| group_indices[j] == gi)
                         .map(|j| (abs_deviations[j] - zi_mean).powi(2))
                         .sum();
-                    let s2_i = ss_i / (ni - 1.0);
-                    let term = s2_i / ni;
-                    sum_term += term;
-                    sum_term_sq_over_df += term * term / (ni - 1.0);
+                    sum_term += ss_i;
+                    sum_term_sq_over_df += ss_i * ss_i / (ni - 1.0);
                 }
                 if sum_term_sq_over_df > 0.0 {
                     sum_term * sum_term / sum_term_sq_over_df

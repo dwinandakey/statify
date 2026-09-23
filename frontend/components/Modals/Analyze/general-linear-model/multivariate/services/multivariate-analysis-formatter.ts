@@ -379,13 +379,29 @@ function formatDescriptiveStatistics(
     );
     if (!hasData) return;
 
-    // Single combined table matching SPSS layout: DV | factor level | Mean | SD | N
+    // With several factors the groups are nested (StatGroup.subgroups): one
+    // label column per factor, as SPSS (DV | A level | B level | ...).
+    const depth = (groups: any[]): number =>
+        groups.reduce(
+            (d: number, g: any) =>
+                Math.max(d, 1 + (Array.isArray(g.subgroups) ? depth(g.subgroups) : 0)),
+            0
+        );
+    const levelsDepth = Math.max(
+        1,
+        ...entries.map(([, stat]: [string, any]) => depth(stat.groups || []))
+    );
+    const labelKeys = Array.from({ length: levelsDepth }, (_, i) =>
+        i === 0 ? "group_label" : `group_label_${i + 1}`
+    );
+
+    // Single combined table matching SPSS layout: DV | factor level(s) | Mean | SD | N
     const table: Table = {
         key: "descriptive_statistics",
         title: "Descriptive Statistics",
         columnHeaders: [
             { header: "", key: "dv_name" },
-            { header: "", key: "group_label" },
+            ...labelKeys.map((key) => ({ header: "", key })),
             { header: "Mean", key: "mean" },
             { header: "Std. Deviation", key: "std_deviation" },
             { header: "N", key: "n" },
@@ -397,19 +413,33 @@ function formatDescriptiveStatistics(
 
     entries.forEach(([dvName, stat]: [string, any]) => {
         const displayDvName = relabelDiff(dvName);
-        const groups: any[] = stat.groups || [];
-        groups.forEach((g: any, idx: number) => {
-            if (g.stats) {
-                table.rows.push({
-                    rowHeader: [],
-                    dv_name: idx === 0 ? displayDvName : "",
-                    group_label: g.factor_value || "Total",
-                    mean: formatDisplayNumber(g.stats.mean),
-                    std_deviation: formatDisplayNumber(g.stats.std_deviation),
-                    n: String(g.stats.n),
-                });
-            }
-        });
+        let firstRow = true;
+        // A group with subgroups is shown through them (its own stats equal
+        // the subgroups' Total row); each label is printed on the first row
+        // of its block only.
+        const addRows = (groups: any[], labels: string[]) => {
+            groups.forEach((g: any, idx: number) => {
+                const label = g.factor_value || "Total";
+                const path = [...labels.map((l) => (idx === 0 ? l : "")), label];
+                if (Array.isArray(g.subgroups) && g.subgroups.length > 0) {
+                    addRows(g.subgroups, path);
+                } else if (g.stats) {
+                    const row: Row = {
+                        rowHeader: [],
+                        dv_name: firstRow ? displayDvName : "",
+                    };
+                    labelKeys.forEach((key, i) => {
+                        row[key] = path[i] ?? "";
+                    });
+                    row.mean = formatDisplayNumber(g.stats.mean);
+                    row.std_deviation = formatDisplayNumber(g.stats.std_deviation);
+                    row.n = String(g.stats.n);
+                    table.rows.push(row);
+                    firstRow = false;
+                }
+            });
+        };
+        addRows(stat.groups || [], []);
     });
 
     if (table.rows.length > 0) {
@@ -787,29 +817,9 @@ function formatTestsBetweenSubjectsEffects(
         return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
     });
 
-    // Synthesize "Total" source (uncorrected): SS_total = SS_intercept + SS_corrected_total,
-    // df_total = df_corrected_total + 1. Rust currently doesn't compute it.
-    const totalEntries: Record<string, { sum_of_squares: number; df: number }> = {};
-    dvNames.forEach((dv) => {
-        const intercept = effects[dv]?.["Intercept"];
-        const correctedTotal = effects[dv]?.["Corrected Total"];
-        if (intercept && correctedTotal) {
-            totalEntries[dv] = {
-                sum_of_squares:
-                    (intercept.sum_of_squares ?? 0) +
-                    (correctedTotal.sum_of_squares ?? 0),
-                df: (correctedTotal.df ?? 0) + 1,
-            };
-        }
-    });
-    if (Object.keys(totalEntries).length > 0 && !seenSrc.has("Total")) {
-        const ctIdx = sourceNames.indexOf("Corrected Total");
-        if (ctIdx >= 0) {
-            sourceNames.splice(ctIdx, 0, "Total");
-        } else {
-            sourceNames.push("Total");
-        }
-    }
+    // "Total" (uncorrected: Σ(y − μ₀)², df = n) comes from Rust like the other
+    // sources. It used to be synthesized here as SS_Intercept + SS_Corrected
+    // Total, which equals Σy² only for balanced designs.
 
     // Build R Squared footnote for each DV (matches SPSS a/b/c suffixes).
     const noteLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -858,11 +868,13 @@ function formatTestsBetweenSubjectsEffects(
         const blankMeanSquare = lower === "total" || lower === "corrected total";
 
         dvNames.forEach((dvName, dvIdx) => {
-            const entry =
-                sourceName === "Total"
-                    ? totalEntries[dvName]
-                    : effects[dvName]?.[sourceName];
+            const entry = effects[dvName]?.[sourceName];
             if (!entry) return;
+            // An effect with df = 0 (Corrected Model of an intercept-only
+            // model) has no test: SPSS leaves Mean Square, F, Sig. and
+            // Observed Power blank but prints Partial Eta Squared and
+            // Noncent. Parameter (0).
+            const noTest = Number(entry.df) === 0;
             table.rows.push({
                 rowHeader: [],
                 // Show source label only on the first DV row of the group (SPSS merges).
@@ -870,16 +882,16 @@ function formatTestsBetweenSubjectsEffects(
                 dependent_variable: relabelDv(dvName),
                 sum_of_squares: formatDisplayNumber(entry.sum_of_squares),
                 df: entry.df !== undefined && entry.df !== null ? String(entry.df) : "",
-                mean_square: blankMeanSquare ? "" : formatDisplayNumber(entry.mean_square),
-                f_value: blankInferential ? "" : formatDisplayNumber(entry.f_value),
-                significance: blankInferential ? "" : formatSig(entry.significance),
+                mean_square: blankMeanSquare || noTest ? "" : formatDisplayNumber(entry.mean_square),
+                f_value: blankInferential || noTest ? "" : formatDisplayNumber(entry.f_value),
+                significance: blankInferential || noTest ? "" : formatSig(entry.significance),
                 partial_eta_squared: blankInferential
                     ? ""
                     : formatDisplayNumber(entry.partial_eta_squared),
                 noncent_parameter: blankInferential
                     ? ""
                     : formatDisplayNumber(entry.noncent_parameter),
-                observed_power: blankInferential
+                observed_power: blankInferential || noTest
                     ? ""
                     : formatDisplayNumber(entry.observed_power),
             });

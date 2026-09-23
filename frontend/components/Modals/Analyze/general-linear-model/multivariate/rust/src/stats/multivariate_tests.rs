@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     models::{
-        config::{ MultivariateConfig, VarianceMode },
+        config::{ MultivariateConfig, SumOfSquaresMethod, VarianceMode },
         data::AnalysisData,
         result::{ MultivariateTestEntry, MultivariateTests },
     },
@@ -12,12 +12,21 @@ use crate::{
 use super::{
     common::{
         calculate_f_significance,
+        calculate_observed_power,
         compute_per_group_covariances,
         generate_interaction_terms,
         matrix_inverse,
         matrix_multiply,
     },
-    core::{ data_value_to_string, extract_dependent_value, parse_interaction_term },
+    core::{
+        build_design_matrix_and_response,
+        data_value_to_string,
+        extract_dependent_value,
+        get_factor_columns,
+        get_interaction_columns,
+        parse_interaction_term,
+        to_dmatrix,
+    },
 };
 use nalgebra::DMatrix;
 
@@ -60,6 +69,17 @@ pub fn calculate_multivariate_tests(
         all_values.push(values);
     }
 
+    // Hypothesis SSCPs of the factors and interactions (one design build).
+    let mut terms: Vec<String> = factors.clone();
+    if factors.len() > 1 {
+        terms.extend(generate_interaction_terms(&factors));
+    }
+    let term_sscp = if terms.is_empty() {
+        HashMap::new()
+    } else {
+        effect_hypothesis_sscps(data, config, &terms, dependent_vars)?
+    };
+
     // Calculate SSCP matrices for hypothesis and error
     // Calculate H and E matrices for each effect
 
@@ -71,7 +91,7 @@ pub fn calculate_multivariate_tests(
             "Intercept",
             dependent_vars,
             &all_values,
-            None
+            &term_sscp
         )
     {
         Ok(result) => result,
@@ -108,7 +128,7 @@ pub fn calculate_multivariate_tests(
                 factor,
                 dependent_vars,
                 &all_values,
-                None
+                &term_sscp
             )
         {
             Ok(result) => result,
@@ -143,8 +163,6 @@ pub fn calculate_multivariate_tests(
         let interaction_terms = generate_interaction_terms(&factors);
 
         for term in interaction_terms {
-            let term_factors: Vec<String> = parse_interaction_term(&term);
-
             let (h_matrix, e_matrix, hypothesis_df, error_df) = match
                 calculate_hypothesis_error_matrices(
                     data,
@@ -152,7 +170,7 @@ pub fn calculate_multivariate_tests(
                     &term,
                     dependent_vars,
                     &all_values,
-                    Some(&term_factors)
+                    &term_sscp
                 )
             {
                 Ok(result) => result,
@@ -217,8 +235,8 @@ pub fn calculate_multivariate_tests(
     // Create the final result
     let design_note = if config.main.variance_mode == VarianceMode::Welch {
         Some(format!(
-            "Type {:?} sum of squares (Welch-Satterthwaite for {})",
-            &config.model.sum_of_square_method,
+            "{} sum of squares (Welch-Satterthwaite for {})",
+            ss_type_label(&config.model.sum_of_square_method),
             config
                 .main
                 .fix_factor
@@ -228,7 +246,7 @@ pub fn calculate_multivariate_tests(
                 .unwrap_or_default()
         ))
     } else {
-        Some(format!("Type {:?} sum of squares", &config.model.sum_of_square_method))
+        Some(format!("{} sum of squares", ss_type_label(&config.model.sum_of_square_method)))
     };
 
     Ok(MultivariateTests {
@@ -236,6 +254,16 @@ pub fn calculate_multivariate_tests(
         design: design_note,
         alpha: Some(alpha),
     })
+}
+
+/// "Type III" etc. for the table note (the enum's Debug form is "TypeIII").
+fn ss_type_label(method: &SumOfSquaresMethod) -> &'static str {
+    match method {
+        SumOfSquaresMethod::TypeI => "Type I",
+        SumOfSquaresMethod::TypeII => "Type II",
+        SumOfSquaresMethod::TypeIII => "Type III",
+        SumOfSquaresMethod::TypeIV => "Type IV",
+    }
 }
 
 /// Hotelling T² two-sample test with unequal covariance matrices, using the
@@ -318,6 +346,15 @@ fn calculate_welch_two_sample_t2(
         f_stat,
     );
     let noncent = f_stat * df1;
+    // Observed power from the noncentral F (λ = F · df1) at the configured
+    // alpha, with the same df and F as the significance above.
+    let alpha = config.options.sig_level.unwrap_or(0.05);
+    let observed_power = calculate_observed_power(
+        df1.round().max(1.0) as usize,
+        df2.round().max(1.0) as usize,
+        f_stat,
+        alpha,
+    );
 
     let entry = MultivariateTestEntry {
         value: t_squared,
@@ -327,11 +364,7 @@ fn calculate_welch_two_sample_t2(
         significance,
         partial_eta_squared: t_squared / (t_squared + nu),
         noncent_parameter: noncent,
-        observed_power: if f_stat > 1.0 {
-            (1.0 - 0.1 / f_stat).min(1.0)
-        } else {
-            0.5
-        },
+        observed_power,
         is_exact_statistic: false,
     };
 
@@ -349,7 +382,7 @@ fn calculate_hypothesis_error_matrices(
     effect: &str,
     dependent_vars: &[String],
     all_values: &[Vec<f64>],
-    factors_in_effect: Option<&[String]>
+    term_sscp: &HashMap<String, (Vec<Vec<f64>>, usize)>
 ) -> Result<(Vec<Vec<f64>>, Vec<Vec<f64>>, f64, f64), String> {
     let p = dependent_vars.len();
     let n_obs = all_values[0].len();
@@ -528,275 +561,21 @@ fn calculate_hypothesis_error_matrices(
         let n_cells = cell_keys.len().max(1);
         let error_df = (n_obs - n_cells) as f64;
         return Ok((h_matrix, e_matrix, 1.0, error_df));
-    } else if factors_in_effect.is_none() || factors_in_effect.unwrap().is_empty() {
-        // Main effect — single factor.
-        // Build merged per-row records so each row's DV value aligns with its
-        // factor level.
-        let factor_levels = get_factor_levels(data, effect)?;
-        let level_count = factor_levels.len();
-
-        let merged = super::common::merge_records(data);
-
-        // Determine each row's level index (None if missing/unknown level).
-        let mut record_level_idx: Vec<Option<usize>> = Vec::with_capacity(n_obs);
-        for record in &merged {
-            let val = record.values.get(effect).map(|v| data_value_to_string(v));
-            let idx = val.and_then(|v| factor_levels.iter().position(|l| l == &v));
-            record_level_idx.push(idx);
-        }
-
-        // Bucket DV values by level using row-aligned indices.
-        let mut level_values: Vec<Vec<Vec<f64>>> =
-            vec![vec![Vec::new(); p]; level_count];
-        for row_idx in 0..n_obs {
-            if let Some(Some(level_idx)) = record_level_idx.get(row_idx).copied() {
-                for dv_i in 0..p {
-                    if row_idx < all_values[dv_i].len() {
-                        level_values[level_idx][dv_i].push(all_values[dv_i][row_idx]);
-                    }
-                }
-            }
-        }
-
-        // Compute level means and ns.
-        let mut level_means: Vec<Vec<f64>> = Vec::with_capacity(level_count);
-        let mut level_ns: Vec<usize> = Vec::with_capacity(level_count);
-        for k in 0..level_count {
-            let mut means = Vec::with_capacity(p);
-            for dv_i in 0..p {
-                let vals = &level_values[k][dv_i];
-                let mean = if !vals.is_empty() {
-                    vals.iter().sum::<f64>() / (vals.len() as f64)
-                } else {
-                    0.0
-                };
-                means.push(mean);
-            }
-            level_means.push(means);
-            level_ns.push(level_values[k][0].len());
-        }
-
-        // H = sum_k n_k * (mean_k - grand_mean) (mean_k - grand_mean)'
-        for i in 0..p {
-            for j in 0..p {
-                let mut h_sum = 0.0;
-                for k in 0..level_count {
-                    h_sum += (level_ns[k] as f64) *
-                        (level_means[k][i] - grand_means[i]) *
-                        (level_means[k][j] - grand_means[j]);
-                }
-                h_matrix[i][j] = h_sum;
-            }
-        }
-
-        // E for Multivariate Tests of a main effect must be the FULL-model
-        // residual SSCP (residuals around cell means using ALL fixed factors),
-        // not residuals around this factor's own level means. SPSS uses one
-        // pooled E for every effect — Intercept, main effects, and
-        // interactions — so the dfs and F approximations line up across
-        // effects in multi-factor designs. Previously this branch shadowed
-        // the pooled E with a one-way residual, giving inflated
-        // error_df (n_obs - levels_of_this_factor) and incorrect F values
-        // for faktorA, faktorB, ... in Two-Way MANOVA.
-        let all_factors = config.main.fix_factor.as_ref().map_or(Vec::new(), |f| f.clone());
-        let (e_full, error_df) = compute_full_model_residual_sscp(
-            data, &all_factors, &all_values, n_obs, p,
-        );
-
-        let hypothesis_df = (level_count - 1) as f64;
-
-        return Ok((h_matrix, e_full, hypothesis_df, error_df));
-    } else {
-        // Interaction effect
-        let interaction_factors = factors_in_effect.unwrap();
-
-        // Get levels for each factor in the interaction
-        let mut factor_levels = Vec::new();
-        for factor in interaction_factors {
-            let levels = get_factor_levels(data, factor)?;
-            factor_levels.push((factor.clone(), levels));
-        }
-
-        // Generate all combinations of levels
-        let mut level_combinations = Vec::new();
-        let mut current_combo = HashMap::new();
-
-        fn generate_level_combinations(
-            factor_levels: &[(String, Vec<String>)],
-            current_combo: &mut HashMap<String, String>,
-            index: usize,
-            result: &mut Vec<HashMap<String, String>>
-        ) {
-            if index == factor_levels.len() {
-                result.push(current_combo.clone());
-                return;
-            }
-
-            let (factor, levels) = &factor_levels[index];
-            for level in levels {
-                current_combo.insert(factor.clone(), level.clone());
-                generate_level_combinations(factor_levels, current_combo, index + 1, result);
-            }
-        }
-
-        generate_level_combinations(&factor_levels, &mut current_combo, 0, &mut level_combinations);
-
-        // Build merged per-row records so each row's DV value aligns with its
-        // factor levels.
-        let merged = super::common::merge_records(data);
-
-        // Determine each row's combination index by matching all factor values.
-        let mut record_combo_idx: Vec<Option<usize>> = Vec::with_capacity(n_obs);
-        for record in &merged {
-            let mut found: Option<usize> = None;
-            for (c_idx, combo) in level_combinations.iter().enumerate() {
-                let matches = combo.iter().all(|(f, l)| {
-                    record.values.get(f)
-                        .map(|v| data_value_to_string(v))
-                        .map_or(false, |v| &v == l)
-                });
-                if matches {
-                    found = Some(c_idx);
-                    break;
-                }
-            }
-            record_combo_idx.push(found);
-        }
-
-        // Bucket DV values by combination using row-aligned indices.
-        let mut combo_values: Vec<Vec<Vec<f64>>> =
-            vec![vec![Vec::new(); p]; level_combinations.len()];
-        for row_idx in 0..n_obs {
-            if let Some(Some(c_idx)) = record_combo_idx.get(row_idx).copied() {
-                for dv_i in 0..p {
-                    if row_idx < all_values[dv_i].len() {
-                        combo_values[c_idx][dv_i].push(all_values[dv_i][row_idx]);
-                    }
-                }
-            }
-        }
-
-        let mut combo_means: Vec<Vec<f64>> = Vec::new();
-        let mut combo_ns: Vec<usize> = Vec::new();
-        for c_idx in 0..level_combinations.len() {
-            let mut means = Vec::with_capacity(p);
-            for dv_i in 0..p {
-                let vals = &combo_values[c_idx][dv_i];
-                let m = if !vals.is_empty() {
-                    vals.iter().sum::<f64>() / (vals.len() as f64)
-                } else {
-                    0.0
-                };
-                means.push(m);
-            }
-            combo_means.push(means);
-            combo_ns.push(combo_values[c_idx][0].len());
-        }
-
-        // For Type III SS, compute main-effect means per factor level
-        // (row-aligned bucketing).
-        let mut factor_effect_means: HashMap<String, HashMap<String, (Vec<f64>, usize)>> =
-            HashMap::new();
-        for factor in interaction_factors {
-            let levels = get_factor_levels(data, factor)?;
-            let mut by_level: HashMap<String, (Vec<f64>, usize)> = HashMap::new();
-            for level in &levels {
-                let mut buckets: Vec<Vec<f64>> = vec![Vec::new(); p];
-                for (i, record) in merged.iter().enumerate() {
-                    if i >= n_obs {
-                        break;
-                    }
-                    let val = record.values.get(factor).map(|v| data_value_to_string(v));
-                    if val.as_deref() == Some(level.as_str()) {
-                        for dv_i in 0..p {
-                            if i < all_values[dv_i].len() {
-                                buckets[dv_i].push(all_values[dv_i][i]);
-                            }
-                        }
-                    }
-                }
-                let mut means = Vec::with_capacity(p);
-                for dv_i in 0..p {
-                    let m = if !buckets[dv_i].is_empty() {
-                        buckets[dv_i].iter().sum::<f64>() / (buckets[dv_i].len() as f64)
-                    } else {
-                        0.0
-                    };
-                    means.push(m);
-                }
-                let n = buckets[0].len();
-                by_level.insert(level.clone(), (means, n));
-            }
-            factor_effect_means.insert(factor.clone(), by_level);
-        }
-
-        // Calculate H matrix for the interaction (Type III SS - only interaction effect)
-        for i in 0..p {
-            for j in 0..p {
-                let mut h_sum = 0.0;
-                for (c, combo) in level_combinations.iter().enumerate() {
-                    if c >= combo_means.len() || c >= combo_ns.len() {
-                        continue;
-                    }
-
-                    // Calculate expected mean based on main effects
-                    let mut expected_i = grand_means[i];
-                    let mut expected_j = grand_means[j];
-
-                    // Add main effect adjustments
-                    for (factor, level) in combo {
-                        if let Some(level_means) = factor_effect_means.get(factor) {
-                            if let Some((means, _)) = level_means.get(level) {
-                                // Add main effect (centered around grand mean)
-                                expected_i += means[i] - grand_means[i];
-                                expected_j += means[j] - grand_means[j];
-                            }
-                        }
-                    }
-
-                    // Calculate interaction effect (observed - expected)
-                    let interaction_i = combo_means[c][i] - expected_i;
-                    let interaction_j = combo_means[c][j] - expected_j;
-
-                    // Add to H matrix
-                    h_sum += (combo_ns[c] as f64) * interaction_i * interaction_j;
-                }
-                h_matrix[i][j] = h_sum;
-            }
-        }
-
-        // E matrix for interaction — row-aligned residuals around combo means.
-        for i in 0..p {
-            for j in 0..p {
-                let mut e_sum = 0.0;
-                for row_idx in 0..n_obs {
-                    if let Some(Some(c_idx)) = record_combo_idx.get(row_idx).copied() {
-                        if c_idx < combo_means.len()
-                            && row_idx < all_values[i].len()
-                            && row_idx < all_values[j].len()
-                        {
-                            let r_i = all_values[i][row_idx] - combo_means[c_idx][i];
-                            let r_j = all_values[j][row_idx] - combo_means[c_idx][j];
-                            e_sum += r_i * r_j;
-                        }
-                    }
-                }
-                e_matrix[i][j] = e_sum;
-            }
-        }
-
-        // Calculate degrees of freedom for interaction
-        let mut hypothesis_df = 1.0;
-        for (factor, _) in &factor_levels {
-            let levels = get_factor_levels(data, factor)?;
-            hypothesis_df *= (levels.len() - 1) as f64;
-        }
-
-        let total_combinations = level_combinations.len();
-        let error_df = (n_obs - total_combinations) as f64;
-
-        return Ok((h_matrix, e_matrix, hypothesis_df, error_df));
     }
+
+    // Factor or interaction: H from the design and SS type of the univariate
+    // tests (unbalanced designs included). E for every effect is the pooled
+    // full-model residual SSCP, as SPSS uses one error term for all effects.
+    // (Earlier branches used Σ n_k (ȳ_k − ȳ)(ȳ_k − ȳ)ᵀ for main effects and
+    // cell-minus-marginal deviations for interactions, both exact only for
+    // balanced designs.)
+    let (h_matrix, hypothesis_df) = term_sscp
+        .get(effect)
+        .cloned()
+        .ok_or_else(|| format!("No hypothesis SSCP for effect '{}'", effect))?;
+    let all_factors = config.main.fix_factor.as_ref().map_or(Vec::new(), |f| f.clone());
+    let (e_full, error_df) = compute_full_model_residual_sscp(data, &all_factors, all_values, n_obs, p);
+    Ok((h_matrix, e_full, hypothesis_df as f64, error_df))
 }
 
 /// Compute the (real parts of the) eigenvalues of the product matrix `m`.
@@ -933,7 +712,11 @@ fn calculate_multivariate_test_statistics(
         error_df_hotelling.round().max(1.0) as usize,
         f_hotelling
     );
-    let eta_squared_hotelling = hotelling_trace / (1.0 + hotelling_trace);
+    // SPSS: η² = (T/s) / (T/s + 1), s = min(p, df_h).
+    let eta_squared_hotelling = {
+        let t_per_s = hotelling_trace / s;
+        t_per_s / (t_per_s + 1.0)
+    };
 
     // ── Roy's Largest Root (upper bound F) ────────────────────────────────
     let (f_roy, hyp_df_roy, error_df_roy) = {
@@ -990,12 +773,15 @@ fn calculate_multivariate_test_statistics(
     let noncent_parameter_hotelling = f_hotelling * hyp_df_hotelling;
     let noncent_parameter_roy = f_roy * hyp_df_roy;
 
-    let power_pillai = if f_pillai > 1.0 { (1.0 - 0.1 / f_pillai).min(1.0) } else { 0.5 };
-    let power_wilks = if f_wilks > 1.0 { (1.0 - 0.1 / f_wilks).min(1.0) } else { 0.5 };
-    let power_hotelling = if f_hotelling > 1.0 { (1.0 - 0.1 / f_hotelling).min(1.0) } else { 0.5 };
-    let power_roy = if f_roy > 1.0 { (1.0 - 0.1 / f_roy).min(1.0) } else { 0.5 };
-
-    let _ = alpha;
+    // Observed power from the noncentral F (λ = F · df1) at the configured
+    // alpha, with the same df as the significance above.
+    let power = |f: f64, df1: f64, df2: f64| {
+        calculate_observed_power(df1.round().max(1.0) as usize, df2.round().max(1.0) as usize, f, alpha)
+    };
+    let power_pillai = power(f_pillai, hyp_df_pillai, error_df_pillai);
+    let power_wilks = power(f_wilks, hyp_df_wilks, error_df_wilks);
+    let power_hotelling = power(f_hotelling, hyp_df_hotelling, error_df_hotelling);
+    let power_roy = power(f_roy, hyp_df_roy, error_df_roy);
 
     test_results.insert("Pillai's Trace".to_string(), MultivariateTestEntry {
         value: pillai_trace,
@@ -1146,4 +932,182 @@ fn compute_full_model_residual_sscp(
     let n_cells = cell_keys.len().max(1);
     let error_df = (n_obs - n_cells) as f64;
     (e_matrix, error_df)
+}
+
+/// Hypothesis SSCP and df of each factor or interaction term for the
+/// Multivariate Tests, from the same design and SS type as the univariate
+/// tests: every SS type is SSE(model A) − SSE(model B) for two column subsets
+/// (see effect_ss and calculate_type_*_ss), so
+///   H = R_Aᵀ R_A − R_Bᵀ R_B
+/// with R the residual matrices of all dependent variables; its diagonal
+/// equals the univariate sums of squares. Unlike Σ n_k (ȳ_k − ȳ)(ȳ_k − ȳ)ᵀ
+/// this also holds for unbalanced designs. The design is built once for all
+/// terms.
+fn effect_hypothesis_sscps(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+    effects: &[String],
+    dependent_vars: &[String]
+) -> Result<HashMap<String, (Vec<Vec<f64>>, usize)>, String> {
+    let p = dependent_vars.len();
+    let mut x_matrix: Vec<Vec<f64>> = Vec::new();
+    let mut ys: Vec<Vec<f64>> = Vec::with_capacity(p);
+    for dep_var in dependent_vars {
+        let (x, y) = build_design_matrix_and_response(data, config, dep_var)?;
+        if x_matrix.is_empty() {
+            x_matrix = x;
+        } else if x.len() != x_matrix.len() {
+            return Err("Dependent variables have different numbers of cases".to_string());
+        }
+        ys.push(y);
+    }
+    let n = x_matrix.len();
+    let x_deviation = deviation_coded_design(&x_matrix, data, config);
+    let x_dummy_mat = to_dmatrix(&x_matrix);
+    let x_deviation_mat = to_dmatrix(&x_deviation);
+    let y_mat = DMatrix::from_fn(n, p, |r, c| ys[c][r]);
+    let n_cols = x_dummy_mat.ncols();
+
+    let mut out = HashMap::new();
+    for effect in effects {
+        let effect_cols = get_factor_columns(&x_matrix, effect, data, config)?;
+        if effect_cols.is_empty() {
+            return Err(format!("No design columns for effect '{}'", effect));
+        }
+        // (design, columns dropped in model A, in model B, center when A is empty)
+        let (x, drop_a, drop_b, center_empty): (&DMatrix<f64>, Vec<usize>, Vec<usize>, bool) = match
+            config.model.sum_of_square_method
+        {
+            SumOfSquaresMethod::TypeI => {
+                let min_col = *effect_cols.iter().min().unwrap();
+                let max_col = *effect_cols.iter().max().unwrap();
+                ((&x_dummy_mat), (min_col..n_cols).collect(), (max_col + 1..n_cols).collect(), true)
+            }
+            SumOfSquaresMethod::TypeII => {
+                let containing = containing_effect_columns(&x_matrix, effect, data, config);
+                let mut without_effect = containing.clone();
+                without_effect.extend(effect_cols.iter().copied());
+                (&x_dummy_mat, without_effect, containing, false)
+            }
+            SumOfSquaresMethod::TypeIII | SumOfSquaresMethod::TypeIV =>
+                (&x_deviation_mat, effect_cols.clone(), Vec::new(), false),
+        };
+        let h = residual_sscp(x, &y_mat, &drop_a, center_empty)? - residual_sscp(x, &y_mat, &drop_b, false)?;
+        let h_rows: Vec<Vec<f64>> = (0..p).map(|i| (0..p).map(|j| h[(i, j)]).collect()).collect();
+        out.insert(effect.clone(), (h_rows, effect_cols.len()));
+    }
+    Ok(out)
+}
+
+/// Residual SSCP (Y − X_k B)ᵀ(Y − X_k B) of the model with the columns of `x`
+/// not in `drop`; with no column left, YᵀY (or the centered SSCP when
+/// `center_when_empty`, as calculate_type_i_ss does).
+fn residual_sscp(
+    x: &DMatrix<f64>,
+    y: &DMatrix<f64>,
+    drop: &[usize],
+    center_when_empty: bool
+) -> Result<DMatrix<f64>, String> {
+    let keep: Vec<usize> = (0..x.ncols()).filter(|j| !drop.contains(j)).collect();
+    if keep.is_empty() {
+        if center_when_empty {
+            let means = y.row_mean();
+            let centered = DMatrix::from_fn(y.nrows(), y.ncols(), |r, c| y[(r, c)] - means[c]);
+            return Ok(centered.transpose() * centered);
+        }
+        return Ok(y.transpose() * y);
+    }
+    let xk = x.select_columns(keep.iter());
+    let xtx_inv = (xk.transpose() * &xk)
+        .try_inverse()
+        .ok_or_else(|| "Could not invert X'X matrix - possibly due to multicollinearity".to_string())?;
+    let residuals = y - &xk * (xtx_inv * (xk.transpose() * y));
+    Ok(residuals.transpose() * residuals)
+}
+
+// Private copies of the between_subjects_effects.rs helpers of the same name
+// (kept private there; the crate's public API is unchanged).
+/// The design of build_design_matrix_and_response with the same columns in
+/// deviation (sum-to-zero) coding: a factor's dummy columns are all 0 for
+/// its last level, which becomes −1 in every column of that factor, and each
+/// interaction column is recomputed as the product of the recoded factor
+/// columns (same row-major order as the builder). Intercept and covariate
+/// columns are unchanged. Rows already deviation coded (contrast Deviation)
+/// are left as they are.
+fn deviation_coded_design(
+    x_matrix: &Vec<Vec<f64>>,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<Vec<f64>> {
+    let mut x = x_matrix.clone();
+    let factors = match &config.main.fix_factor {
+        Some(f) if !f.is_empty() => f.clone(),
+        _ => return x,
+    };
+    let mut factor_cols: HashMap<String, Vec<usize>> = HashMap::new();
+    for factor in &factors {
+        let cols = get_factor_columns(x_matrix, factor, data, config).unwrap_or_default();
+        for row in x.iter_mut() {
+            if !cols.is_empty() && cols.iter().all(|&c| row[c] == 0.0) {
+                for &c in &cols {
+                    row[c] = -1.0;
+                }
+            }
+        }
+        factor_cols.insert(factor.clone(), cols);
+    }
+    if factors.len() > 1 {
+        for term in generate_interaction_terms(&factors) {
+            let term_cols = get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default();
+            let parts: Vec<Vec<usize>> = parse_interaction_term(&term)
+                .iter()
+                .map(|f| factor_cols.get(f).cloned().unwrap_or_default())
+                .collect();
+            let dims: Vec<usize> = parts.iter().map(|c| c.len()).collect();
+            let width: usize = dims.iter().product();
+            if width == 0 || width != term_cols.len() {
+                continue;
+            }
+            let mut strides = vec![1usize; dims.len()];
+            for k in (0..dims.len().saturating_sub(1)).rev() {
+                strides[k] = strides[k + 1] * dims[k + 1];
+            }
+            for row in x.iter_mut() {
+                for (c, &col) in term_cols.iter().enumerate() {
+                    let mut value = 1.0;
+                    for (f_idx, cols) in parts.iter().enumerate() {
+                        value *= row[cols[(c / strides[f_idx]) % dims[f_idx]]];
+                    }
+                    row[col] = value;
+                }
+            }
+        }
+    }
+    x
+}
+
+/// Columns of the interaction terms that contain `effect` (every factor of
+/// `effect` appears in the term), excluding `effect` itself.
+fn containing_effect_columns(
+    x_matrix: &Vec<Vec<f64>>,
+    effect: &str,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<usize> {
+    let factors = match &config.main.fix_factor {
+        Some(f) if f.len() > 1 => f.clone(),
+        _ => return Vec::new(),
+    };
+    let effect_factors = parse_interaction_term(effect);
+    let mut cols = Vec::new();
+    for term in generate_interaction_terms(&factors) {
+        if term == effect {
+            continue;
+        }
+        let term_factors = parse_interaction_term(&term);
+        if effect_factors.iter().all(|f| term_factors.contains(f)) {
+            cols.extend(get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default());
+        }
+    }
+    cols
 }

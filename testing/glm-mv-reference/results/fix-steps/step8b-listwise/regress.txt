@@ -1,0 +1,9 @@
+SPSS: lulus sebelum 1259, sesudah 1470 (dari 1698 nilai); diperbaiki 211; REGRESI 0
+main vs worker mv1.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv2.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv3.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv4.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv5.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv6.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv7.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true

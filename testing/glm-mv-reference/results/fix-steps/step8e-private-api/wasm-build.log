@@ -1,0 +1,362 @@
+[INFO]: Checking for the Wasm target...
+[INFO]: Compiling to Wasm...
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src\stats\between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unused import: `f32::consts::E`
+ --> src\stats\generate_plots.rs:1:34
+  |
+1 | use std::{ collections::HashMap, f32::consts::E };
+  |                                  ^^^^^^^^^^^^^^
+
+
+warning: unused import: `StudentsT`
+ --> src\stats\homogeneous_subsets.rs:2:60
+  |
+2 | use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared };
+  |                                                            ^^^^^^^^^
+
+
+warning: unused imports: `calculate_std_deviation`, `calculate_t_significance`, and `data_value_to_string`
+  --> src\stats\homogeneous_subsets.rs:10:5
+   |
+10 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+...
+14 |     calculate_std_deviation,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+15 |     calculate_t_significance,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused import: `DataValue`
+  --> src\stats\levene_test.rs:6:27
+   |
+ 6 |     data::{ AnalysisData, DataValue },
+   |                           ^^^^^^^^^
+   |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+  --> src\stats\mod.rs:14:1
+   |
+14 | pub mod levene_test;
+   | ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src\stats\residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src\stats\sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:109:27
+    |
+109 |             for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:230:31
+    |
+230 |                 for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:293:35
+    |
+293 |                     for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `i`
+   --> src\stats\between_subjects_sscp.rs:392:10
+    |
+392 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `j`
+   --> src\stats\between_subjects_sscp.rs:394:14
+    |
+394 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+
+warning: unused variable: `level`
+   --> src\stats\between_subjects_sscp.rs:455:34
+    |
+455 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+
+
+warning: unused variable: `dep_var_name`
+   --> src\stats\common.rs:652:5
+    |
+652 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+
+
+warning: value assigned to `coefficients` is never read
+  --> src\stats\contrast_coefficients.rs:15:28
+   |
+15 |     let mut coefficients = Vec::new();
+   |                            ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:361:9
+    |
+361 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:431:9
+    |
+431 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:503:9
+    |
+503 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:580:9
+    |
+580 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:653:9
+    |
+653 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `p`
+   --> src\stats\homogeneous_subsets.rs:692:9
+    |
+692 |     for p in 2..=k {
+    |         ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:724:9
+    |
+724 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unused variable: `k`
+   --> src\stats\homogeneous_subsets.rs:760:9
+    |
+760 |     let k = level_means.len();
+    |         ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:795:9
+    |
+795 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+
+warning: unreachable pattern
+   --> src\stats\homogeneous_subsets.rs:864:21
+    |
+853 |                     cdf => {
+    |                     --- matches any value
+...
+864 |                     _ => {
+    |                     ^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unreachable pattern
+   --> src\stats\homogeneous_subsets.rs:921:21
+    |
+910 |                     cdf => {
+    |                     --- matches any value
+...
+921 |                     _ => {
+    |                     ^ no value can reach this
+
+
+warning: unused variable: `mse`
+    --> src\stats\homogeneous_subsets.rs:1053:5
+     |
+1053 |     mse: f64,
+     |     ^^^ help: if this is intentional, prefix it with an underscore: `_mse`
+
+
+warning: unused variable: `harmonic_mean`
+    --> src\stats\homogeneous_subsets.rs:1054:5
+     |
+1054 |     harmonic_mean: f64
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_harmonic_mean`
+
+
+warning: unused variable: `factors`
+  --> src\stats\residual_sscp_matrix.rs:36:9
+   |
+36 |     let factors = config.main.fix_factor.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+
+
+warning: unused variable: `i`
+  --> src\stats\residual_sscp_matrix.rs:85:10
+   |
+85 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `dependent_vars`
+  --> src\stats\sscp_matrix.rs:30:9
+   |
+30 |     let dependent_vars = config.main.dep_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+
+
+warning: unused variable: `i`
+  --> src\stats\sscp_matrix.rs:97:10
+   |
+97 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:367:10
+    |
+367 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:424:10
+    |
+424 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: value assigned to `test_entries` is never read
+  --> src\stats\univariate_tests.rs:42:32
+   |
+42 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+
+warning: unused variable: `total_ss`
+  --> src\stats\univariate_tests.rs:86:9
+   |
+86 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:228:5
+    |
+228 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:230:5
+    |
+230 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:233:5
+    |
+233 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:234:5
+    |
+234 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:469:5
+    |
+469 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:471:5
+    |
+471 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:474:5
+    |
+474 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:475:5
+    |
+475 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+
+    Finished `release` profile [unoptimized] target(s) in 0.10s
+[INFO]: Installing wasm-bindgen...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: :-) Done in 0.49s
+[INFO]: :-) Your wasm pkg is ready to publish at D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\frontend\components\Modals\Analyze\general-linear-model\multivariate\rust\pkg.

@@ -1,0 +1,140 @@
+{
+  "startedAt": "2026-09-23T15:08:28.820Z",
+  "os": "Windows_NT 10.0.26200 (win32 x64)",
+  "osVersion": "Windows 11 Home Single Language",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "logicalCores": 20,
+  "totalMemGB": 23.6,
+  "node": "v20.19.0",
+  "playwright": "1.57.0",
+  "chromium": "143.0.7499.4",
+  "next": "15.5.9",
+  "gitHead": "37851d510361137f68e3fa84daf29bc5d6a0f8ba",
+  "gitDirtyFiles": 8,
+  "codeHashes": {
+    "frontend/components/Modals/Analyze/general-linear-model/shared/glm-execution.ts": "6d419aea076ae31948faca17471a22dc70f27a73",
+    "frontend/components/Modals/Analyze/general-linear-model/multivariate/services/multivariate-analysis.ts": "13a7333bbe49d3f5a26f0ab311d07c3b47b73ed2",
+    "frontend/components/Modals/Analyze/general-linear-model/multivariate/services/multivariate-analysis-worker.ts": "557bccccc2e3a3a5deb175020b30f175a1ef03cd",
+    "frontend/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis.ts": "a6d0dcc9bd797643b58c17642c08fe69748a1c19",
+    "frontend/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis-worker.ts": "bdbc0709d3b7a6c6faf7b6107caf61ebda3929d8"
+  },
+  "config": {
+    "BASE": "http://localhost:3101",
+    "MODULES": [
+      "multivariate"
+    ],
+    "SIZES": [
+      100,
+      2000
+    ],
+    "CPUS": [
+      1
+    ],
+    "RUNS": 2,
+    "RUN_TIMEOUT_MS": 1800000,
+    "SETTLE_MS": 1000,
+    "HEADLESS": true
+  },
+  "config2": {
+    "CLEAN": true,
+    "LOAF": true,
+    "RM_LEVELS": 5,
+    "RM_MEASURES": 1,
+    "RM_OPTIONS": [],
+    "RM_BETWEEN": false,
+    "sizesPerModule": {
+      "multivariate": [
+        100,
+        2000
+      ]
+    }
+  },
+  "buildId": "omPbTrx0Tb3XkYhgNYbYW",
+  "chunks": {
+    "mediaModule": {
+      "statify_string_to_word_bg.22acffa0.wasm": "other",
+      "wasm_bg.1096746a.wasm": "other",
+      "wasm_bg.2b6d03d2.wasm": "other",
+      "wasm_bg.2bc2b212.wasm": "repeated-measures",
+      "wasm_bg.93fac433.wasm": "multivariate",
+      "wasm_bg.c0583b08.wasm": "other",
+      "wasm_bg.d6d2fb1b.wasm": "other"
+    },
+    "tags": {
+      "/_next/static/chunks/135.52714c6c8679dc5c.js": [
+        "wasm-glue:other"
+      ],
+      "/_next/static/chunks/2609.253272ba95a73788.js": [
+        "worker-entry"
+      ],
+      "/_next/static/chunks/2965.8e07c935ce46de00.js": [
+        "wasm-glue:multivariate"
+      ],
+      "/_next/static/chunks/3910.08fccc8a55d3a102.js": [
+        "glm-service:multivariate"
+      ],
+      "/_next/static/chunks/4918.692f1dee1cce0635.js": [
+        "glm-service:repeated-measures"
+      ],
+      "/_next/static/chunks/4937.4bf366e785718e16.js": [
+        "wasm-glue:other"
+      ],
+      "/_next/static/chunks/5590.3cab48542b1639ef.js": [
+        "wasm-glue:other"
+      ],
+      "/_next/static/chunks/6745.41864ecb50d61f49.js": [
+        "worker-entry"
+      ],
+      "/_next/static/chunks/7470.ebaddd14199837bb.js": [
+        "wasm-glue:other"
+      ],
+      "/_next/static/chunks/8520.3a202f35d328712b.js": [
+        "wasm-glue:repeated-measures"
+      ],
+      "/_next/static/chunks/9566.577c7981476b23f7.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/9627-5679c7631065f094.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/9919.04d6baa4c37d6f10.js": [
+        "wasm-glue:other",
+        "handsontable",
+        "modal-registry"
+      ],
+      "/_next/static/chunks/app/dashboard/data/page-bbb1ae9ff951ae04.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/app/dashboard/layout-cab5f7956372071c.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/app/dashboard/result/loading-b7a5248031cc0bb3.js": [
+        "result-page"
+      ],
+      "/_next/static/chunks/app/dashboard/result/page-564a2e91f10436b5.js": [
+        "result-page"
+      ],
+      "/_next/static/chunks/app/dashboard/variable/page-f1db4a9aefc9ba4b.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/c7879cf7-fabe25011515220e.js": [
+        "react-dom"
+      ],
+      "/_next/static/chunks/f83b46d2-62a7c95264eb84f3.js": [
+        "handsontable"
+      ],
+      "/_next/static/chunks/framework-4a09734066aa85e8.js": [
+        "react-framework"
+      ],
+      "/_next/static/chunks/main-app-2518fa3e80961e97.js": [
+        "next-runtime"
+      ],
+      "/_next/static/chunks/main-c4b4298603c173a5.js": [
+        "next-runtime"
+      ],
+      "/_next/static/chunks/webpack-8cda349fb97f1c3c.js": [
+        "next-runtime"
+      ]
+    }
+  }
+}

@@ -2,9 +2,10 @@ use wasm_bindgen::prelude::*;
 
 use crate::models::{
     config::MultivariateConfig,
-    data::{ AnalysisData, DataRecord, VariableDefinition },
+    data::{ AnalysisData, DataRecord, DataValue, VariableDefinition },
     result::MultivariateResult,
 };
+use crate::stats::common::merge_records;
 use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
 use crate::utils::log::FunctionLogger;
 use crate::wasm::function;
@@ -199,6 +200,21 @@ impl MultivariateAnalysis {
             wls_data_defs,
         };
 
+        // Cases with a missing value on any analysis variable are excluded
+        // (listwise) before the analysis runs, as SPSS GLM does.
+        let (data, excluded) = listwise_complete_cases(&data);
+        if excluded > 0 && data.dependent_data.iter().all(|slot| slot.is_empty()) {
+            let msg = "No complete cases: every case has a missing value.".to_string();
+            error_collector.add_error("listwise_deletion", &msg);
+            return Err(string_to_js_error(msg));
+        }
+        if excluded > 0 {
+            error_collector.add_error(
+                "listwise_deletion",
+                &format!("{} case(s) with missing values were excluded (listwise).", excluded)
+            );
+        }
+
         // Create instance
         let mut analysis = MultivariateAnalysis {
             config,
@@ -249,4 +265,71 @@ impl MultivariateAnalysis {
     pub fn clear_errors(&mut self) -> JsValue {
         function::clear_errors(&mut self.error_collector)
     }
+}
+
+/// Listwise deletion as SPSS GLM does (/MISSING=EXCLUDE): keep only the rows
+/// with a finite number for every dependent variable, covariate and WLS
+/// weight and a non-empty value for every fixed factor (the variables named
+/// in the definitions; a row's value is looked up across all slots, as
+/// merge_records does). Returns the data with the same slot layout and the
+/// number of excluded rows.
+///
+/// Only system-missing (null) cells count: the variable definitions carry no
+/// user-missing values (`getVarDefs` sends `missing: []`).
+fn listwise_complete_cases(data: &AnalysisData) -> (AnalysisData, usize) {
+    let numeric_ok = |v: &DataValue| matches!(v, DataValue::Number(x) if x.is_finite());
+    let factor_ok = |v: &DataValue| {
+        match v {
+            DataValue::Null => false,
+            DataValue::Number(x) => x.is_finite(),
+            DataValue::Text(s) => !s.trim().is_empty(),
+            DataValue::Boolean(_) => true,
+        }
+    };
+    let names = |defs: Option<&Vec<Vec<VariableDefinition>>>| -> Vec<String> {
+        defs.map_or(Vec::new(), |d| d.iter().flatten().map(|def| def.name.clone()).collect())
+    };
+    let groups: [(Vec<String>, &dyn Fn(&DataValue) -> bool); 4] = [
+        (names(Some(&data.dependent_data_defs)), &numeric_ok),
+        (names(Some(&data.fix_factor_data_defs)), &factor_ok),
+        (names(data.covariate_data_defs.as_ref()), &numeric_ok),
+        (names(data.wls_data_defs.as_ref()), &numeric_ok),
+    ];
+
+    let keep: Vec<bool> = merge_records(data)
+        .iter()
+        .map(|record| {
+            groups.iter().all(|(vars, ok)| {
+                vars.iter().all(|v| record.values.get(v).map_or(false, |value| ok(value)))
+            })
+        })
+        .collect();
+    let excluded = keep.iter().filter(|k| !**k).count();
+    if excluded == 0 {
+        return (data.clone(), 0);
+    }
+
+    let filter = |slots: &Vec<Vec<DataRecord>>| -> Vec<Vec<DataRecord>> {
+        slots
+            .iter()
+            .map(|slot| {
+                slot.iter()
+                    .enumerate()
+                    .filter(|(i, _)| keep.get(*i).copied().unwrap_or(false))
+                    .map(|(_, r)| r.clone())
+                    .collect()
+            })
+            .collect()
+    };
+    let complete = AnalysisData {
+        dependent_data: filter(&data.dependent_data),
+        fix_factor_data: filter(&data.fix_factor_data),
+        covariate_data: data.covariate_data.as_ref().map(|d| filter(d)),
+        wls_data: data.wls_data.as_ref().map(|d| filter(d)),
+        dependent_data_defs: data.dependent_data_defs.clone(),
+        fix_factor_data_defs: data.fix_factor_data_defs.clone(),
+        covariate_data_defs: data.covariate_data_defs.clone(),
+        wls_data_defs: data.wls_data_defs.clone(),
+    };
+    (complete, excluded)
 }

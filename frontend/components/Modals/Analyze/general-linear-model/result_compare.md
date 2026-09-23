@@ -801,3 +801,168 @@ Sel RM eksperimen pertama, sel RM eksperimen kedua, eksperimen ulang RM sebelum 
 | Sel RM final | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore/` (`runs.csv`, `runs-raw.jsonl`, `analysis/`, `data/`) |
 | Pilot ber-pin dan benchmark core | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore-pilot/` (`pilot-medians.json`, `core-bench.json`) |
 | Skrip | `experiment/datasets.cjs` (`repeatedMeasuresRowsNoise`), `run-experiment.cjs --rm-data=noise`, `run-detached.ps1 -Affinity`, `cpu-core-bench.ps1` |
+
+## 12. Tambahan 2026-09-23: sel Multivariate final setelah perbaikan dan validasi SPSS
+
+Bagian 1–11 tidak diubah. Datanya tetap di foldernya masing-masing. Mulai bagian ini, pernyataan di 11.10 tentang sel Multivariate final digantikan oleh 12.8.
+
+### 12.1 Alasan sel Multivariate dijalankan ulang
+
+1. **Jalur komputasi MV berubah.** Modul Multivariate diperbaiki dan divalidasi terhadap SPSS 27 di branch `validation/mv-spss` (baseline `82a63b45`). Hasilnya 1686 dari 1686 nilai SPSS yang punya padanan lulus (toleransi 0,001), untuk tujuh konfigurasi (satu/dua populasi, berpasangan, One-Way, Two-Way seimbang dan tak seimbang, nilai hilang). Rincian ada di [spss-validation/README.md](../../../../../testing/glm-mv-reference/results/spss-validation/README.md), dan daftar perubahan kode untuk naskah di [thesis-impact.md](../../../../../testing/glm-mv-reference/results/thesis-impact.md).
+
+   Isi fungsi WASM dan formatter yang berubah berada di dalam jendela klik OK → `glm-analysis-end`. Perubahan yang paling berpengaruh pada waktu adalah builder desain (`build_design_matrix_and_response`): level faktor kini dihitung sekali per build, bukan per baris. Sebelumnya waktunya kuadratik terhadap n, dan fungsi ini dipanggil per DV di beberapa tabel.
+
+   API publik WASM, `run_analysis`, `shared/glm-execution.ts`, kontrak pesan worker, dan modul Repeated Measures tidak berubah.
+2. **Protokol disamakan dengan sel RM final (11.3).** Sel MV eksperimen kedua dijalankan tanpa pin P-core. Sel MV final dijalankan dengan `run-detached.ps1 -Affinity FFF` dan mode daya *Best performance*, sehingga kedua modul final diukur pada kondisi CPU yang sama.
+
+### 12.2 Desain dan kualitas data sel MV final
+
+> **Data:** [experiment-2026-09-23-cpu1-mv-pcore](../../../../../testing/glm-web-worker/results/experiment-2026-09-23-cpu1-mv-pcore/README.md) · 2026-09-23 22:30–23:34 WIB · build `omPbTrx0Tb3XkYhgNYbYW` (kode aplikasi commit `ab21928c`)
+
+- **Sama dengan eksperimen kedua (10.3):**
+  - protokol bersih dan LoAF, CPU 1×, Chromium *headless* 143.0.7499.4;
+  - 31 run per mode bergantian, dengan pasangan pertama sebagai startup;
+  - konfigurasi dialog Y1..Y5 → Dependent, F1..F3 → Fixed Factor(s), opsi bawaan;
+  - dataset `multivariate-100/500/1000/2000.csv` **byte-identik** (md5 sama).
+- **Berbeda:** kode MV terperbaiki, pin P-core, mode daya *Best performance*. SPSS, Chrome, dan Word ditutup sebelum mulai.
+- **Kualitas:**
+  - 248 run, **0 dibuang**, status `ok` di semua run, mode tidak sesuai 0;
+  - **4 tabel dan 0 pesan Errors Logs** di semua run;
+  - tersimpan = 0 tepat sebelum OK di 248/248 run.
+- **Log dirender = 1 setelah run:** 183/248. Semua 65 run dengan log tidak dirender adalah run mode A, dan setiap run itu diikuti `clean_method` = `renav+button`. Gejalanya sama dengan 10.4 (23 kali di eksperimen kedua).
+- **Pengecekan perlambatan:** median long task mode A dibanding run pemeriksaan singkat ber-pin: −15,8% (100) dan −5,0% (2000), di bawah batas 30%. Rentang maks/min long task mode A per sel 1,03–1,19, dan tidak ada episode perlambatan seperti 11.9 poin 1.
+
+### 12.3 Hasil steady-state sel MV final
+
+#### 12.3.1 Ringkasan metrik (median [IQR], CPU 1×, n = 30 per mode)
+
+| Modul | n data | Mode | Long task terpanjang (ms) | Total blocking (ms) | Jeda frame terpanjang (ms) | Waktu total (ms) | LoAF terpanjang (ms) |
+|---|---|---|---|---|---|---|---|
+| Multivariate | 100 | A | 141,5 [140,0–144,0] | 91,5 [90,0–94,0] | 116,7 [116,7–133,3] | 170,4 [167,6–180,2] | 146,2 [144,6–148,2] |
+| Multivariate | 100 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 192,2 [187,2–195,6] | 0,0 [0,0–0,0] |
+| Multivariate | 500 | A | 611,0 [608,0–614,8] | 561,0 [558,0–564,8] | 600,0 [587,5–600,0] | 643,9 [639,6–650,0] | 616,6 [613,1–619,4] |
+| Multivariate | 500 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 663,3 [659,8–675,8] | 0,0 [0,0–0,0] |
+| Multivariate | 1000 | A | 1.239,5 [1.230,5–1.246,2] | 1.189,5 [1.180,5–1.196,2] | 1.216,6 [1.216,6–1.233,3] | 1.278,4 [1.271,8–1.293,7] | 1.244,3 [1.235,7–1.251,2] |
+| Multivariate | 1000 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 1.277,2 [1.262,0–1.287,5] | 0,0 [0,0–0,0] |
+| Multivariate | 2000 | A | 2.403,5 [2.396,2–2.416,5] | 2.353,5 [2.346,2–2.366,5] | 2.383,2 [2.383,2–2.399,9] | 2.444,3 [2.431,3–2.456,5] | 2.408,9 [2.401,8–2.421,8] |
+| Multivariate | 2000 | B | 0,0 [0,0–0,0] | 0,0 [0,0–0,0] | 16,7 [16,7–16,7] | 2.429,6 [2.411,6–2.445,8] | 0,0 [0,0–0,0] |
+
+#### 12.3.2 Long task dan LoAF terpanjang: mean (CI 95%), ms
+
+| Modul | n data | Long task A | Long task B | LoAF A | LoAF B |
+|---|---|---|---|---|---|
+| Multivariate | 100 | 143,2 (141,3–145,0) | 0,0 (0,0–0,0) | 147,6 (145,8–149,4) | 0,0 (0,0–0,0) |
+| Multivariate | 500 | 611,6 (610,0–613,3) | 0,0 (0,0–0,0) | 616,5 (614,8–618,1) | 0,0 (0,0–0,0) |
+| Multivariate | 1000 | 1.239,5 (1.234,3–1.244,6) | 0,0 (0,0–0,0) | 1.244,3 (1.239,2–1.249,5) | 0,0 (0,0–0,0) |
+| Multivariate | 2000 | 2.408,3 (2.401,9–2.414,7) | 0,0 (0,0–0,0) | 2.413,0 (2.406,6–2.419,3) | 0,0 (0,0–0,0) |
+
+#### 12.3.3 Uji statistik (long task terpanjang, H₁: B < A, α = 0,05)
+
+| Modul | n data | CPU | n A / n B | U (B) | p satu arah | Â₁₂ (A vs B) | Berpengaruh? | Tujuan 2 tercapai? |
+|---|---|---|---|---|---|---|---|---|
+| Multivariate | 100 | 1× | 30 / 30 | 0,0 | 5,56·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Multivariate | 500 | 1× | 30 / 30 | 0,0 | 5,88·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Multivariate | 1000 | 1× | 30 / 30 | 0,0 | 5,96·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+| Multivariate | 2000 | 1× | 30 / 30 | 0,0 | 6,02·10⁻¹³ | 1,000 | tidak diisi | tidak diisi |
+
+#### 12.3.4 Uji tambahan: LoAF terpanjang (H₁: B < A; bukan kriteria §4.5)
+
+| Modul | n data | n A / n B | U (B) | p satu arah | Â₁₂ (A vs B) | Median A (ms) | Median B (ms) | Maks B (ms) |
+|---|---|---|---|---|---|---|---|---|
+| Multivariate | 100 | 30 / 30 | 0,0 | 6,05·10⁻¹³ | 1,000 | 146,2 | 0,0 | 0,0 |
+| Multivariate | 500 | 30 / 30 | 0,0 | 6,04·10⁻¹³ | 1,000 | 616,6 | 0,0 | 0,0 |
+| Multivariate | 1000 | 30 / 30 | 0,0 | 6,05·10⁻¹³ | 1,000 | 1.244,3 | 0,0 | 0,0 |
+| Multivariate | 2000 | 30 / 30 | 0,0 | 6,06·10⁻¹³ | 1,000 | 2.408,9 | 0,0 | 0,0 |
+
+#### 12.3.5 Perbandingan dengan sel MV eksperimen kedua (median long task terpanjang mode A)
+
+| n data | Eksperimen kedua (10.5.1; kode `82a63b45`, tanpa pin) | Sel MV final (kode `ab21928c`, pin P-core) | Rasio |
+|---|---|---|---|
+| 100 | 348,5 ms | 141,5 ms | 2,5× lebih singkat |
+| 500 | 6.162,0 ms | 611,0 ms | 10,1× |
+| 1000 | 23.752,5 ms | 1.239,5 ms | 19,2× |
+| 2000 | 87.752,5 ms | 2.403,5 ms | 36,5× |
+
+- **Pola pertumbuhan:** dari n = 1000 ke 2000, mode A naik 3,7× di eksperimen kedua (mendekati kuadratik) dan 1,9× di sel final (mendekati linear).
+- **Pengaruh pin:** kode dan pin berubah bersamaan, sehingga pengaruh masing-masing tidak dipisahkan. Pada sel RM, pin hanya mengubah median mode A dalam orde puluhan persen (11.9 poin 1), jauh lebih kecil daripada rasio di atas.
+- **Mode B tidak berubah:** 0,0 ms di kedua eksperimen dan keempat ukuran.
+
+### 12.4 Run startup sel MV final (pasangan pertama, n = 1 per mode)
+
+| Modul | n data | Mode | Long task terpanjang (ms) | Total blocking (ms) | Jeda frame terpanjang (ms) | Waktu total (ms) | LoAF terpanjang (ms) |
+|---|---|---|---|---|---|---|---|
+| Multivariate | 100 | A | 197,0 | 147,0 | 216,7 | 570,2 | 233,6 |
+| Multivariate | 100 | B | 0,0 | 0,0 | 16,7 | 226,4 | 0,0 |
+| Multivariate | 500 | A | 232,0 | 182,0 | 716,6 | 1.107,7 | 732,7 |
+| Multivariate | 500 | B | 0,0 | 0,0 | 16,7 | 707,4 | 0,0 |
+| Multivariate | 1000 | A | 293,0 | 243,0 | 1.333,3 | 1.757,4 | 1.347,7 |
+| Multivariate | 1000 | B | 0,0 | 0,0 | 16,7 | 1.349,8 | 0,0 |
+| Multivariate | 2000 | A | 181,0 | 131,0 | 2.449,9 | 2.792,4 | 2.466,7 |
+| Multivariate | 2000 | B | 0,0 | 0,0 | 16,7 | 2.458,0 | 0,0 |
+
+Pola startup mode A sama dengan 10.6:
+- LoAF terpanjang mendekati jeda frame terpanjang, sedangkan Long Tasks API hanya mencatat frame pendek (181–293 ms). Frame pendek ini teratribusi ke `#document.onclick` (react-dom).
+- Tiap run startup mode A punya 2 frame LoAF (8 frame dari 4 run). Frame terpanjangnya tidak punya skrip teratribusi.
+- Mode B startup tanpa long task dan tanpa frame LoAF.
+
+### 12.5 Nilai yang relevan dengan kriteria §4.5 (sel MV final)
+
+Bagian ini hanya menyajikan angka. Kolom keputusan tidak diisi.
+
+**(a) Uji beda.** Ambang yang dipakai: p < 0,05 dan Â₁₂ ≥ 0,71.
+
+| Sel | p | Â₁₂ |
+|---|---|---|
+| Multivariate 100, 500, 1000, 2000 | 5,56·10⁻¹³ – 6,02·10⁻¹³ | 1,000 |
+
+Keempat sel memenuhi ambang (a) secara angka.
+
+**(b) Mode B.** Ambang yang dipakai: median long task terpanjang < 100 ms di semua ukuran, dan tidak ada long task yang bersumber dari WASM.
+
+1. **Median long task terpanjang mode B (steady-state):**
+
+   | Modul | 100 | 500 | 1000 | 2000 |
+   |---|---|---|---|---|
+   | Multivariate | 0,0 ms | 0,0 ms | 0,0 ms | 0,0 ms |
+
+   Maks mode B juga 0,0 ms di keempat sel: 0 dari 120 run steady-state dan 0 dari 4 run startup mode B punya long task. Angka ini memenuhi ambang (b).
+2. **Median 5 run steady-state pertama → 5 terakhir, mode B:** 0 → 0 ms di keempat ukuran.
+3. **Sumber long task / LoAF:** 0 run (A maupun B) punya skrip teratribusi ke chunk glue WASM GLM atau chunk service GLM. Mode B tidak punya frame LoAF sama sekali, sedangkan di eksperimen kedua ada 6 frame steady-state tanpa skrip dan tanpa waktu blokir (10.8). Keterbatasannya sama dengan 10.7 poin 3.
+
+### 12.6 Atribusi LoAF (sel MV final)
+
+| Modul | Mode | Fase | Frame | Frame tanpa skrip | Titik masuk skrip (invoker · invokerType · chunk) | Durasi skrip total (ms) |
+|---|---|---|---|---|---|---|
+| Multivariate | A | startup | 8 (4 run) | 4 | `#document.onclick` · event-listener · react-dom (4) | 892 |
+| Multivariate | A | steady | 120 (120 run) | 0 | `IDBRequest.onsuccess` · event-listener · `9919.*` (120) | 132.075 |
+| Multivariate | B | startup | 0 | — | — | — |
+| Multivariate | B | steady | 0 | — | — | — |
+
+Rincian ada di `analysis/loaf-runs.csv`, `loaf-attribution.csv`, dan `runs-raw.jsonl` folder final.
+
+### 12.7 Anomali dan keterbatasan
+
+1. **Kode dan kondisi CPU berubah bersamaan** terhadap sel MV eksperimen kedua (12.3.5), sehingga selisih mode A tidak dapat diatribusikan ke satu penyebab. Perbandingan A vs B di dalam sel final tidak terpengaruh, karena A dan B berselang-seling pada kode dan kondisi yang sama.
+2. **Log tidak dirender setelah run mode A** (65 run). Gejalanya sama dengan 10.4, dan terjadi di luar jendela pengukuran. Protokol bersih memastikan kondisi awal tiap run tetap 0.
+3. **Proses latar:** 7 proses `msedge` yang menganggur masih berjalan selama run (CPU kumulatif < 5 s sebelum mulai). Run pemeriksaan singkat sebelum run penuh (`experiment-2026-09-23-cpu1-mv-pcore-check`, 8 run) dijalankan saat SPSS masih terbuka, jadi bukan data hasil.
+4. Sama dengan 10.10 poin 4 dan 7: atribusi LoAF terbatas pada titik masuk skrip; hanya CPU 1× dan Chromium; satu mesin.
+
+### 12.8 Data yang menjadi hasil final
+
+**Hasil final eksperimen Web Worker sekarang adalah sel Multivariate dari 12.2–12.6 dan sel Repeated Measures dari `experiment-2026-09-23-cpu1-rm-noise-pcore` (11.4–11.8).** Keduanya diukur dengan pin P-core (`-Affinity FFF`), mode daya *Best performance*, protokol bersih, LoAF, dan CPU 1×.
+
+| Modul | Hasil final | Lokasi |
+|---|---|---|
+| **Multivariate** (100 / 500 / 1000 / 2000) | Sel MV final (12.2–12.6) | [results/experiment-2026-09-23-cpu1-mv-pcore/](../../../../../testing/glm-web-worker/results/experiment-2026-09-23-cpu1-mv-pcore/README.md) |
+| **Repeated Measures** (5000 / 10000 / 20000 / 40000) | Sel RM final (11.4–11.8) | [results/experiment-2026-09-23-cpu1-rm-noise-pcore/](../../../../../testing/glm-web-worker/results/experiment-2026-09-23-cpu1-rm-noise-pcore/README.md) |
+
+Sel MV eksperimen pertama dan kedua (10.3–10.8) **bukan lagi** hasil final. Datanya tetap disimpan sebagai catatan, begitu juga data lain yang disebut di 11.10.
+
+### 12.9 Lokasi berkas (tambahan)
+
+| Isi | Lokasi |
+|---|---|
+| Validasi SPSS MV, hasil per langkah perbaikan | `testing/glm-mv-reference/results/spss-validation/`, `testing/glm-mv-reference/results/fix-steps/` |
+| Perubahan kode MV untuk naskah | `testing/glm-mv-reference/results/thesis-impact.md` |
+| Sel MV final | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-mv-pcore/` (`runs.csv`, `runs-raw.jsonl`, `analysis/`, `data/`) |
+| Run pemeriksaan singkat (bukan hasil) | `testing/glm-web-worker/results/experiment-2026-09-23-cpu1-mv-pcore-check/` |

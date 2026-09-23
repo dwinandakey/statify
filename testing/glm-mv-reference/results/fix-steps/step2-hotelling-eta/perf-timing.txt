@@ -1,0 +1,7 @@
+multivariate.performance.test.ts (dua salinan) gagal di Jest penuh step2: 5105 ms dan 6162 ms (ambang < 5000 ms).
+Suite yang sama dijalankan sendiri: lulus 3/3 kali.
+Waktu analisis 500 x 5DV x 3 faktor (buildPerformanceInputs dari suite itu), 7 ulangan per proses Jest terpisah:
+  wasm step0 (8cb7d425): 3981 3983 3937 4010 3950 3965 3956 | 3930 3910 3929 3968 3896 3958 3914
+  wasm step2 (721f0c7d): 3891 3925 3917 3952 3907 3875 3915 | 3982 3912 3952 3892 3957 3937 3913
+Kesimpulan: tidak ada perlambatan dari perubahan kode; kegagalan adalah ambang waktu dinding di bawah beban Jest penuh (2 worker paralel).
+ulang Jest penuh: gagal 50 dari 276 ; di luar baseline: components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts

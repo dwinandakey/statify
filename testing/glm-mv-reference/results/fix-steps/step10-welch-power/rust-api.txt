@@ -1,0 +1,38 @@
+{
+ "old": "82a63b45",
+ "new": "WORKTREE",
+ "counts_old": {
+  "pub_fn_total": 79,
+  "pub_fn_common.rs": 34,
+  "struct_result.rs": 40,
+  "struct_total": 58,
+  "enum_total": 11,
+  "pub_method_total": 15
+ },
+ "counts_new": {
+  "pub_fn_total": 79,
+  "pub_fn_common.rs": 34,
+  "struct_result.rs": 40,
+  "struct_total": 58,
+  "enum_total": 11,
+  "pub_method_total": 15
+ },
+ "public_changes": [],
+ "private_added": [
+  "stats/between_subjects_effects.rs: effect_ss",
+  "stats/between_subjects_effects.rs: deviation_coded_design",
+  "stats/between_subjects_effects.rs: sse_without_columns",
+  "stats/between_subjects_effects.rs: containing_effect_columns",
+  "stats/box_m_test.rs: f_upper_tail",
+  "stats/common.rs: noncentral_f_cdf",
+  "stats/descriptive_statistics.rs: level_groups",
+  "stats/descriptive_statistics.rs: sort_levels",
+  "stats/multivariate_tests.rs: ss_type_label",
+  "stats/multivariate_tests.rs: effect_hypothesis_sscps",
+  "stats/multivariate_tests.rs: residual_sscp",
+  "stats/multivariate_tests.rs: deviation_coded_design",
+  "stats/multivariate_tests.rs: containing_effect_columns",
+  "wasm/constructor.rs: listwise_complete_cases"
+ ],
+ "private_removed": []
+}
