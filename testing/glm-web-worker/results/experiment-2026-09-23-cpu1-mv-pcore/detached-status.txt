@@ -1,0 +1,6 @@
+﻿2026-09-23T22:30:12.1781166+07:00 processor affinity set to 0xFFF (inherited by server, node and Chromium)
+2026-09-23T22:30:12.3027333+07:00 started (keep-awake on)
+2026-09-23T22:30:14.4521785+07:00 server up (pid 3884)
+2026-09-23T22:30:14.4636588+07:00 experiment started (pid 17564): node testing/glm-web-worker/experiment/run-experiment.cjs --base=http://localhost:3101 --modules=multivariate --sizes=100,500,1000,2000 --cpu=1 --runs=31 "--out=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-web-worker\results\experiment-2026-09-23-cpu1-mv-pcore" --clean=true --loaf=true
+2026-09-23T23:34:36.5633530+07:00 experiment exited with code 
+2026-09-23T23:34:37.3613163+07:00 server stopped, keep-awake off
