@@ -1,5 +1,6 @@
 use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared, Gamma };
-use statrs::function::gamma::gamma;
+use statrs::function::gamma::{ gamma, ln_gamma };
+use statrs::function::beta::beta_reg;
 use nalgebra::{ DMatrix, DVector };
 
 use std::collections::{ HashMap, HashSet };
@@ -92,15 +93,81 @@ pub fn calculate_t_critical(df: usize, alpha: f64) -> f64 {
         })
 }
 
-/// Calculate observed power for F-test
+/// Calculate observed power for F-test (SPSS): power = 1 − F_nc(F_crit; df1, df2, λ)
+/// with F_crit the (1 − alpha) quantile of the central F(df1, df2) and
+/// noncentrality λ = F · df1 (the "Noncent. Parameter" SPSS prints).
 pub fn calculate_observed_power(df1: usize, df2: usize, f_value: f64, alpha: f64) -> f64 {
-    if df1 == 0 || df2 == 0 || f_value <= 0.0 || alpha <= 0.0 || alpha >= 1.0 {
+    if df1 == 0 || df2 == 0 || !f_value.is_finite() || f_value <= 0.0 || alpha <= 0.0 || alpha >= 1.0 {
         return 0.0;
     }
+    let (d1, d2) = (df1 as f64, df2 as f64);
+    let critical = match FisherSnedecor::new(d1, d2) {
+        Ok(dist) => dist.inverse_cdf(1.0 - alpha),
+        Err(_) => return 0.0,
+    };
+    1.0 - noncentral_f_cdf(critical, d1, d2, f_value * d1)
+}
 
-    // Approximation using non-central parameter
-    let ncp = f_value * (df1 as f64);
-    1.0 - (-ncp * 0.5).exp()
+/// P(F' ≤ x) for the noncentral F distribution with df1, df2 and
+/// noncentrality λ, as a Poisson mixture of regularized incomplete betas
+/// (same algorithm as repeated-measures glm_tests::noncentral_f_cdf).
+fn noncentral_f_cdf(x: f64, df1: f64, df2: f64, lambda: f64) -> f64 {
+    if x <= 0.0 {
+        return 0.0;
+    }
+    let y = (df1 * x) / (df1 * x + df2);
+    if lambda <= 0.0 {
+        return beta_reg(df1 / 2.0, df2 / 2.0, y);
+    }
+    // Sum outward from the Poisson mode (no underflow for large λ). Only the
+    // mode needs beta_reg; neighbouring terms use the recurrences
+    //   I_y(a+1, b) = I_y(a, b) − g(a),  g(a) = Γ(a+b)/(Γ(a+1)Γ(b))·yᵃ(1−y)ᵇ,
+    //   g(a+1) = g(a)·y·(a+b)/(a+1),
+    // and the Poisson weights w(j+1) = w(j)·h/(j+1) (as in AS 226).
+    let h = lambda / 2.0;
+    // Numerator chi-square has mean df1 + λ and sd √(2(df1 + 2λ)); when x·df1
+    // lies more than 40 sd below that mean the CDF is < 1e-300.
+    if df1 * x < df1 + lambda - 40.0 * (2.0 * (df1 + 2.0 * lambda)).sqrt() && lambda > 1e4 {
+        return 0.0;
+    }
+    let a0 = df1 / 2.0;
+    let b = df2 / 2.0;
+    let mode = h.floor();
+    let w_mode = (-h + mode * h.ln() - ln_gamma(mode + 1.0)).exp();
+    let a_mode = a0 + mode;
+    let i_mode = beta_reg(a_mode, b, y);
+    let g_mode = (ln_gamma(a_mode + b) - ln_gamma(a_mode + 1.0) - ln_gamma(b) + a_mode * y.ln() + b * (1.0 - y).ln()).exp();
+    let mut sum = w_mode * i_mode;
+
+    // Upward: j = mode+1, mode+2, …
+    let (mut w, mut i, mut g, mut j) = (w_mode, i_mode, g_mode, mode);
+    for _ in 0..10_000_000 {
+        let a = a0 + j;
+        i = (i - g).max(0.0);
+        g *= y * (a + b) / (a + 1.0);
+        j += 1.0;
+        w *= h / j;
+        sum += w * i;
+        if w < 1e-17 || i <= 0.0 {
+            break;
+        }
+    }
+    // Downward: j = mode−1, …, 0
+    let (mut w, mut i, mut g, mut j) = (w_mode, i_mode, g_mode, mode);
+    let mut steps = 0u32;
+    while j >= 1.0 && steps < 10_000_000 {
+        steps += 1;
+        let a = a0 + j;
+        g *= a / (y * (a - 1.0 + b)); // g(a−1)
+        i = (i + g).min(1.0);
+        w *= j / h;
+        j -= 1.0;
+        sum += w * i;
+        if w < 1e-17 {
+            break;
+        }
+    }
+    sum.min(1.0).max(0.0)
 }
 
 /// Calculate observed power for t-test

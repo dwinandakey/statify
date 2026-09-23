@@ -29,6 +29,8 @@ pub fn calculate_tests_between_subjects_effects(
     let mut effects = HashMap::new();
     let mut r_squared = HashMap::new();
     let mut adjusted_r_squared = HashMap::new();
+    // Observed power at the configured significance level (SPSS /CRITERIA=ALPHA).
+    let alpha = config.options.sig_level.unwrap_or(0.05);
 
     // Get dependent variables
     let dependent_vars = data.dependent_data_defs
@@ -110,7 +112,7 @@ pub fn calculate_tests_between_subjects_effects(
 
         // Calculate noncentrality parameter and observed power
         let noncent_parameter = ss_model / ms_error;
-        let observed_power = calculate_observed_power(df_model, df_error, f_value, 0.05);
+        let observed_power = calculate_observed_power(df_model, df_error, f_value, alpha);
 
         // Add "Corrected Model" effect
         effect_results.insert("Corrected Model".to_string(), TestEffectEntry {
@@ -182,7 +184,7 @@ pub fn calculate_tests_between_subjects_effects(
                 intercept_df,
                 df_error,
                 intercept_f,
-                0.05
+                alpha
             );
 
             effect_results.insert("Intercept".to_string(), TestEffectEntry {
@@ -279,7 +281,7 @@ pub fn calculate_tests_between_subjects_effects(
                         factor_df,
                         df_error,
                         factor_f,
-                        0.05
+                        alpha
                     );
 
                     effect_results.insert(factor.clone(), TestEffectEntry {
@@ -365,7 +367,7 @@ pub fn calculate_tests_between_subjects_effects(
                             interaction_df,
                             df_error,
                             interaction_f,
-                            0.05
+                            alpha
                         );
 
                         effect_results.insert(term.clone(), TestEffectEntry {

@@ -12,6 +12,7 @@ use crate::{
 use super::{
     common::{
         calculate_f_significance,
+        calculate_observed_power,
         compute_per_group_covariances,
         generate_interaction_terms,
         matrix_inverse,
@@ -990,12 +991,15 @@ fn calculate_multivariate_test_statistics(
     let noncent_parameter_hotelling = f_hotelling * hyp_df_hotelling;
     let noncent_parameter_roy = f_roy * hyp_df_roy;
 
-    let power_pillai = if f_pillai > 1.0 { (1.0 - 0.1 / f_pillai).min(1.0) } else { 0.5 };
-    let power_wilks = if f_wilks > 1.0 { (1.0 - 0.1 / f_wilks).min(1.0) } else { 0.5 };
-    let power_hotelling = if f_hotelling > 1.0 { (1.0 - 0.1 / f_hotelling).min(1.0) } else { 0.5 };
-    let power_roy = if f_roy > 1.0 { (1.0 - 0.1 / f_roy).min(1.0) } else { 0.5 };
-
-    let _ = alpha;
+    // Observed power from the noncentral F (λ = F · df1) at the configured
+    // alpha, with the same df as the significance above.
+    let power = |f: f64, df1: f64, df2: f64| {
+        calculate_observed_power(df1.round().max(1.0) as usize, df2.round().max(1.0) as usize, f, alpha)
+    };
+    let power_pillai = power(f_pillai, hyp_df_pillai, error_df_pillai);
+    let power_wilks = power(f_wilks, hyp_df_wilks, error_df_wilks);
+    let power_hotelling = power(f_hotelling, hyp_df_hotelling, error_df_hotelling);
+    let power_roy = power(f_roy, hyp_df_roy, error_df_roy);
 
     test_results.insert("Pillai's Trace".to_string(), MultivariateTestEntry {
         value: pillai_trace,
