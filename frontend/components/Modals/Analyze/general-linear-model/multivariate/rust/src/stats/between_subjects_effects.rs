@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use nalgebra::DMatrix;
-
 use crate::models::{
     config::{ MultivariateConfig, SumOfSquaresMethod },
     data::AnalysisData,
@@ -469,97 +467,6 @@ fn effect_ss(
         SumOfSquaresMethod::TypeIV =>
             calculate_type_iv_ss(x_deviation, y_vector, effect, effect_cols, data, config),
     }
-}
-
-/// Hypothesis SSCP and df of each factor or interaction term for the
-/// Multivariate Tests, from the same design and SS type as the univariate
-/// tests: every SS type is SSE(model A) − SSE(model B) for two column subsets
-/// (see effect_ss and calculate_type_*_ss), so
-///   H = R_Aᵀ R_A − R_Bᵀ R_B
-/// with R the residual matrices of all dependent variables; its diagonal
-/// equals the univariate sums of squares. Unlike Σ n_k (ȳ_k − ȳ)(ȳ_k − ȳ)ᵀ
-/// this also holds for unbalanced designs. The design is built once for all
-/// terms.
-pub fn effect_hypothesis_sscps(
-    data: &AnalysisData,
-    config: &MultivariateConfig,
-    effects: &[String],
-    dependent_vars: &[String]
-) -> Result<HashMap<String, (Vec<Vec<f64>>, usize)>, String> {
-    let p = dependent_vars.len();
-    let mut x_matrix: Vec<Vec<f64>> = Vec::new();
-    let mut ys: Vec<Vec<f64>> = Vec::with_capacity(p);
-    for dep_var in dependent_vars {
-        let (x, y) = build_design_matrix_and_response(data, config, dep_var)?;
-        if x_matrix.is_empty() {
-            x_matrix = x;
-        } else if x.len() != x_matrix.len() {
-            return Err("Dependent variables have different numbers of cases".to_string());
-        }
-        ys.push(y);
-    }
-    let n = x_matrix.len();
-    let x_deviation = deviation_coded_design(&x_matrix, data, config);
-    let x_dummy_mat = to_dmatrix(&x_matrix);
-    let x_deviation_mat = to_dmatrix(&x_deviation);
-    let y_mat = DMatrix::from_fn(n, p, |r, c| ys[c][r]);
-    let n_cols = x_dummy_mat.ncols();
-
-    let mut out = HashMap::new();
-    for effect in effects {
-        let effect_cols = get_factor_columns(&x_matrix, effect, data, config)?;
-        if effect_cols.is_empty() {
-            return Err(format!("No design columns for effect '{}'", effect));
-        }
-        // (design, columns dropped in model A, in model B, center when A is empty)
-        let (x, drop_a, drop_b, center_empty): (&DMatrix<f64>, Vec<usize>, Vec<usize>, bool) = match
-            config.model.sum_of_square_method
-        {
-            SumOfSquaresMethod::TypeI => {
-                let min_col = *effect_cols.iter().min().unwrap();
-                let max_col = *effect_cols.iter().max().unwrap();
-                ((&x_dummy_mat), (min_col..n_cols).collect(), (max_col + 1..n_cols).collect(), true)
-            }
-            SumOfSquaresMethod::TypeII => {
-                let containing = containing_effect_columns(&x_matrix, effect, data, config);
-                let mut without_effect = containing.clone();
-                without_effect.extend(effect_cols.iter().copied());
-                (&x_dummy_mat, without_effect, containing, false)
-            }
-            SumOfSquaresMethod::TypeIII | SumOfSquaresMethod::TypeIV =>
-                (&x_deviation_mat, effect_cols.clone(), Vec::new(), false),
-        };
-        let h = residual_sscp(x, &y_mat, &drop_a, center_empty)? - residual_sscp(x, &y_mat, &drop_b, false)?;
-        let h_rows: Vec<Vec<f64>> = (0..p).map(|i| (0..p).map(|j| h[(i, j)]).collect()).collect();
-        out.insert(effect.clone(), (h_rows, effect_cols.len()));
-    }
-    Ok(out)
-}
-
-/// Residual SSCP (Y − X_k B)ᵀ(Y − X_k B) of the model with the columns of `x`
-/// not in `drop`; with no column left, YᵀY (or the centered SSCP when
-/// `center_when_empty`, as calculate_type_i_ss does).
-fn residual_sscp(
-    x: &DMatrix<f64>,
-    y: &DMatrix<f64>,
-    drop: &[usize],
-    center_when_empty: bool
-) -> Result<DMatrix<f64>, String> {
-    let keep: Vec<usize> = (0..x.ncols()).filter(|j| !drop.contains(j)).collect();
-    if keep.is_empty() {
-        if center_when_empty {
-            let means = y.row_mean();
-            let centered = DMatrix::from_fn(y.nrows(), y.ncols(), |r, c| y[(r, c)] - means[c]);
-            return Ok(centered.transpose() * centered);
-        }
-        return Ok(y.transpose() * y);
-    }
-    let xk = x.select_columns(keep.iter());
-    let xtx_inv = (xk.transpose() * &xk)
-        .try_inverse()
-        .ok_or_else(|| "Could not invert X'X matrix - possibly due to multicollinearity".to_string())?;
-    let residuals = y - &xk * (xtx_inv * (xk.transpose() * y));
-    Ok(residuals.transpose() * residuals)
 }
 
 /// Helper function to fit model and get error sum of squares

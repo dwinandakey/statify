@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Checks after every fix step (validation/mv-spss):
 #   1. build the MV WASM (rust/pkg); the JS glue and .d.ts must stay unchanged
-#      apart from line endings (no public API change);
+#      apart from line endings, and the Rust crate API must equal 82a63b45
+#      (rust_api.py: no pub item added, removed or changed);
 #   2. production build, UI runs of all configurations in main and worker mode;
 #   3. SPSS comparison (worker run) and regression check against --before;
 #      main and worker output byte-identical;
@@ -28,6 +29,15 @@ else
   echo "GLUE/.d.ts CHANGED" | tee "$OUT/api-check.txt"; git diff --ignore-cr-at-eol --stat -- "$MV/rust/pkg" | tee -a "$OUT/api-check.txt"; exit 1
 fi
 md5sum "$MV/rust/pkg/wasm_bg.wasm" | tee -a "$OUT/api-check.txt"
+# Rust crate API (pub fn, struct/enum, fields, methods) against 82a63b45: no
+# public item may be added, removed or change its signature.
+python testing/glm-mv-reference/harness/rust_api.py 82a63b45 WORKTREE --json "$OUT/rust-api.json" > "$OUT/rust-api.txt" 2>&1
+node -e '
+const j=require(process.argv[1]);
+if (j.public_changes.length) { console.log("API PUBLIK RUST BERUBAH: " + j.public_changes.join(" | ")); process.exit(1); }
+console.log("API publik Rust sama dengan 82a63b45 (fungsi privat baru: " + j.private_added.length + ")");
+' "$OUT/rust-api.json" | tee -a "$OUT/api-check.txt"
+[ "${PIPESTATUS[0]}" = 0 ] || exit 1
 
 echo "== 2. next build + UI runs"
 (cd frontend && npx next build > "$OUT/next-build.log" 2>&1) || { echo "NEXT BUILD FAILED"; tail -30 "$OUT/next-build.log"; exit 1; }

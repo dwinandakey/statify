@@ -1,0 +1,3 @@
+step8e (refaktor API privat) vs step8d: tabel tampilan worker mv1-mv7 identik (cmp tables).
+Hasil mentah: perbedaan hanya digit terakhir Levene (maks 8.9e-15: mv2 2 nilai, mv5 11, mv6 9, mv7 13) dan urutan konteks di ringkasan error mv7.
+Sebab: urutan iterasi HashMap (group_values di levene_test.rs, konteks ErrorCollector). Di wasm32 kunci RandomState bergantung pada jumlah HashMap yang dibuat sebelumnya, yang berubah karena kode dipindah; main dan worker tetap byte-identik dalam satu build.

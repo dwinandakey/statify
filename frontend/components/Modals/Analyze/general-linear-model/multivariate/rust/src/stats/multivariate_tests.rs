@@ -10,7 +10,6 @@ use crate::{
 };
 
 use super::{
-    between_subjects_effects::effect_hypothesis_sscps,
     common::{
         calculate_f_significance,
         calculate_observed_power,
@@ -19,7 +18,15 @@ use super::{
         matrix_inverse,
         matrix_multiply,
     },
-    core::{ data_value_to_string, extract_dependent_value },
+    core::{
+        build_design_matrix_and_response,
+        data_value_to_string,
+        extract_dependent_value,
+        get_factor_columns,
+        get_interaction_columns,
+        parse_interaction_term,
+        to_dmatrix,
+    },
 };
 use nalgebra::DMatrix;
 
@@ -920,4 +927,182 @@ fn compute_full_model_residual_sscp(
     let n_cells = cell_keys.len().max(1);
     let error_df = (n_obs - n_cells) as f64;
     (e_matrix, error_df)
+}
+
+/// Hypothesis SSCP and df of each factor or interaction term for the
+/// Multivariate Tests, from the same design and SS type as the univariate
+/// tests: every SS type is SSE(model A) − SSE(model B) for two column subsets
+/// (see effect_ss and calculate_type_*_ss), so
+///   H = R_Aᵀ R_A − R_Bᵀ R_B
+/// with R the residual matrices of all dependent variables; its diagonal
+/// equals the univariate sums of squares. Unlike Σ n_k (ȳ_k − ȳ)(ȳ_k − ȳ)ᵀ
+/// this also holds for unbalanced designs. The design is built once for all
+/// terms.
+fn effect_hypothesis_sscps(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+    effects: &[String],
+    dependent_vars: &[String]
+) -> Result<HashMap<String, (Vec<Vec<f64>>, usize)>, String> {
+    let p = dependent_vars.len();
+    let mut x_matrix: Vec<Vec<f64>> = Vec::new();
+    let mut ys: Vec<Vec<f64>> = Vec::with_capacity(p);
+    for dep_var in dependent_vars {
+        let (x, y) = build_design_matrix_and_response(data, config, dep_var)?;
+        if x_matrix.is_empty() {
+            x_matrix = x;
+        } else if x.len() != x_matrix.len() {
+            return Err("Dependent variables have different numbers of cases".to_string());
+        }
+        ys.push(y);
+    }
+    let n = x_matrix.len();
+    let x_deviation = deviation_coded_design(&x_matrix, data, config);
+    let x_dummy_mat = to_dmatrix(&x_matrix);
+    let x_deviation_mat = to_dmatrix(&x_deviation);
+    let y_mat = DMatrix::from_fn(n, p, |r, c| ys[c][r]);
+    let n_cols = x_dummy_mat.ncols();
+
+    let mut out = HashMap::new();
+    for effect in effects {
+        let effect_cols = get_factor_columns(&x_matrix, effect, data, config)?;
+        if effect_cols.is_empty() {
+            return Err(format!("No design columns for effect '{}'", effect));
+        }
+        // (design, columns dropped in model A, in model B, center when A is empty)
+        let (x, drop_a, drop_b, center_empty): (&DMatrix<f64>, Vec<usize>, Vec<usize>, bool) = match
+            config.model.sum_of_square_method
+        {
+            SumOfSquaresMethod::TypeI => {
+                let min_col = *effect_cols.iter().min().unwrap();
+                let max_col = *effect_cols.iter().max().unwrap();
+                ((&x_dummy_mat), (min_col..n_cols).collect(), (max_col + 1..n_cols).collect(), true)
+            }
+            SumOfSquaresMethod::TypeII => {
+                let containing = containing_effect_columns(&x_matrix, effect, data, config);
+                let mut without_effect = containing.clone();
+                without_effect.extend(effect_cols.iter().copied());
+                (&x_dummy_mat, without_effect, containing, false)
+            }
+            SumOfSquaresMethod::TypeIII | SumOfSquaresMethod::TypeIV =>
+                (&x_deviation_mat, effect_cols.clone(), Vec::new(), false),
+        };
+        let h = residual_sscp(x, &y_mat, &drop_a, center_empty)? - residual_sscp(x, &y_mat, &drop_b, false)?;
+        let h_rows: Vec<Vec<f64>> = (0..p).map(|i| (0..p).map(|j| h[(i, j)]).collect()).collect();
+        out.insert(effect.clone(), (h_rows, effect_cols.len()));
+    }
+    Ok(out)
+}
+
+/// Residual SSCP (Y − X_k B)ᵀ(Y − X_k B) of the model with the columns of `x`
+/// not in `drop`; with no column left, YᵀY (or the centered SSCP when
+/// `center_when_empty`, as calculate_type_i_ss does).
+fn residual_sscp(
+    x: &DMatrix<f64>,
+    y: &DMatrix<f64>,
+    drop: &[usize],
+    center_when_empty: bool
+) -> Result<DMatrix<f64>, String> {
+    let keep: Vec<usize> = (0..x.ncols()).filter(|j| !drop.contains(j)).collect();
+    if keep.is_empty() {
+        if center_when_empty {
+            let means = y.row_mean();
+            let centered = DMatrix::from_fn(y.nrows(), y.ncols(), |r, c| y[(r, c)] - means[c]);
+            return Ok(centered.transpose() * centered);
+        }
+        return Ok(y.transpose() * y);
+    }
+    let xk = x.select_columns(keep.iter());
+    let xtx_inv = (xk.transpose() * &xk)
+        .try_inverse()
+        .ok_or_else(|| "Could not invert X'X matrix - possibly due to multicollinearity".to_string())?;
+    let residuals = y - &xk * (xtx_inv * (xk.transpose() * y));
+    Ok(residuals.transpose() * residuals)
+}
+
+// Private copies of the between_subjects_effects.rs helpers of the same name
+// (kept private there; the crate's public API is unchanged).
+/// The design of build_design_matrix_and_response with the same columns in
+/// deviation (sum-to-zero) coding: a factor's dummy columns are all 0 for
+/// its last level, which becomes −1 in every column of that factor, and each
+/// interaction column is recomputed as the product of the recoded factor
+/// columns (same row-major order as the builder). Intercept and covariate
+/// columns are unchanged. Rows already deviation coded (contrast Deviation)
+/// are left as they are.
+fn deviation_coded_design(
+    x_matrix: &Vec<Vec<f64>>,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<Vec<f64>> {
+    let mut x = x_matrix.clone();
+    let factors = match &config.main.fix_factor {
+        Some(f) if !f.is_empty() => f.clone(),
+        _ => return x,
+    };
+    let mut factor_cols: HashMap<String, Vec<usize>> = HashMap::new();
+    for factor in &factors {
+        let cols = get_factor_columns(x_matrix, factor, data, config).unwrap_or_default();
+        for row in x.iter_mut() {
+            if !cols.is_empty() && cols.iter().all(|&c| row[c] == 0.0) {
+                for &c in &cols {
+                    row[c] = -1.0;
+                }
+            }
+        }
+        factor_cols.insert(factor.clone(), cols);
+    }
+    if factors.len() > 1 {
+        for term in generate_interaction_terms(&factors) {
+            let term_cols = get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default();
+            let parts: Vec<Vec<usize>> = parse_interaction_term(&term)
+                .iter()
+                .map(|f| factor_cols.get(f).cloned().unwrap_or_default())
+                .collect();
+            let dims: Vec<usize> = parts.iter().map(|c| c.len()).collect();
+            let width: usize = dims.iter().product();
+            if width == 0 || width != term_cols.len() {
+                continue;
+            }
+            let mut strides = vec![1usize; dims.len()];
+            for k in (0..dims.len().saturating_sub(1)).rev() {
+                strides[k] = strides[k + 1] * dims[k + 1];
+            }
+            for row in x.iter_mut() {
+                for (c, &col) in term_cols.iter().enumerate() {
+                    let mut value = 1.0;
+                    for (f_idx, cols) in parts.iter().enumerate() {
+                        value *= row[cols[(c / strides[f_idx]) % dims[f_idx]]];
+                    }
+                    row[col] = value;
+                }
+            }
+        }
+    }
+    x
+}
+
+/// Columns of the interaction terms that contain `effect` (every factor of
+/// `effect` appears in the term), excluding `effect` itself.
+fn containing_effect_columns(
+    x_matrix: &Vec<Vec<f64>>,
+    effect: &str,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<usize> {
+    let factors = match &config.main.fix_factor {
+        Some(f) if f.len() > 1 => f.clone(),
+        _ => return Vec::new(),
+    };
+    let effect_factors = parse_interaction_term(effect);
+    let mut cols = Vec::new();
+    for term in generate_interaction_terms(&factors) {
+        if term == effect {
+            continue;
+        }
+        let term_factors = parse_interaction_term(&term);
+        if effect_factors.iter().all(|f| term_factors.contains(f)) {
+            cols.extend(get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default());
+        }
+    }
+    cols
 }
