@@ -34,6 +34,7 @@ const TiptapEditor = dynamic(
 import { Edit, ChevronDown, ChevronUp } from "lucide-react";
 import TextRenderer from "@/components/Output/text/text-renderer";
 import { getStatisticsComponent } from "@/components/Output/Statistics";
+import { checkRenderCompletionTargets } from "@/lib/analysisTiming";
 
 const ResultOutput: React.FC = () => {
   const { logs, updateStatistic } = useResultStore();
@@ -84,6 +85,12 @@ const ResultOutput: React.FC = () => {
 
     return () => clearTimeout(timer); // Cleanup the timeout
   }, [logs]); // Rerunning when logs change ensures we can scroll to new content
+
+  // Resolves the "end-to-end response time" metric for any pending Analyze
+  // run once its expected statistics have all arrived and been painted.
+  useEffect(() => {
+    checkRenderCompletionTargets(logs);
+  }, [logs]);
 
   const handleDescriptionChange = (statId: number, value: string) => {
     // Trim leading/trailing whitespace but keep empty paragraphs for line breaks
