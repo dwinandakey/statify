@@ -143,7 +143,7 @@ Perbedaan penyajian yang sudah diketahui sebelum perbandingan (bukan hasil uji):
 
 ## 4. Hasil
 
-Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md): 1542 dari 1542 nilai SPSS yang punya padanan lulus (toleransi 0,001; selisih maksimum 5,8·10⁻¹⁰ pada nilai presisi penuh). Isinya: alur, hasil per tabel, riwayat perbaikan per langkah, penyebab dan perbaikan, dan bagian yang belum dicakup.
+Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md): 1686 dari 1686 nilai SPSS yang punya padanan lulus (toleransi 0,001; selisih maksimum 5,8·10⁻¹⁰ pada nilai presisi penuh). Isinya: alur, hasil per tabel, riwayat perbaikan per langkah, penyebab dan perbaikan, dan bagian yang belum dicakup.
 
 Harness yang dipakai:
 
@@ -154,4 +154,6 @@ Harness yang dipakai:
 | `harness/compare-spss.mjs` + `harness/mapping.mjs` | Membandingkan Statify dengan SPSS |
 | `harness/make-fixture.mjs` | Membuat fixture uji acuan Jest `multivariate/__test__/multivariate-reference.test.ts` |
 | `harness/regress.mjs` | Cek regresi terhadap langkah sebelumnya dan keluaran main = worker |
-| `harness/check-step.sh` | Pemeriksaan lengkap satu langkah perbaikan (WASM, build produksi, run UI, perbandingan, Jest) |
+| `harness/check-step.sh` | Pemeriksaan lengkap satu langkah perbaikan (WASM, API publik Rust, build produksi, run UI, perbandingan, Jest) |
+| `harness/rust_api.py` | Inventaris API publik crate Rust dan selisihnya terhadap `82a63b45` |
+| `harness/fn_changes.py` | Fungsi yang ditambah, dihapus, atau isinya berubah sejak `82a63b45` (untuk `results/thesis-impact.md`) |

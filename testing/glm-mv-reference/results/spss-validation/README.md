@@ -1,15 +1,16 @@
 # Validasi GLM Multivariate terhadap SPSS 27
 
-Diperbarui 2026-09-23, setelah perbaikan step 1–8d (branch `validation/mv-spss`, commit terakhir `a9fb2414`).
+Diperbarui 2026-09-23, setelah perbaikan step 1–9 (branch `validation/mv-spss`, commit terakhir `ab21928c`).
 
 ## Ringkasan
 
 Nilai pembanding berasal dari keluaran SPSS 27 yang dijalankan pengguna dari `spss/mv1..mv7.sps` dan diekspor ke `spss-output/*.xlsx` (beserta `.spv`). Toleransinya |Statify − SPSS| ≤ 0,001.
 
-- **Hasil akhir:** dari 1698 nilai SPSS, 1542 punya padanan di Statify, dan **ke-1542 nilai itu lulus (0 gagal)**. 156 nilai tidak punya padanan (§6).
+- **Hasil akhir:** dari 1698 nilai SPSS, 1686 punya padanan di Statify, dan **ke-1686 nilai itu lulus (0 gagal)**. 12 nilai tidak punya padanan (§5).
 - **Presisi:** selisih maksimum pada nilai SPSS presisi penuh adalah 5,8·10⁻¹⁰, termasuk Observed Power (maks 2,6·10⁻¹⁰). 74 nilai yang disimpan SPSS sebagai teks tiga desimal berselisih paling banyak 5,0·10⁻⁴.
-- **Dari awal ke akhir:** validasi awal (mv1–mv5, kode `82a63b45`) memberi 887 lulus dan 77 gagal dari 964 nilai berpadanan. Kegagalan itu berasal dari 5 penyebab. Dataset turunan mv6 (two-way tak seimbang) dan mv7 (nilai hilang) memunculkan 3 penyebab lagi. Kedelapan penyebab diperbaiki satu per satu (§3, §4) tanpa regresi.
-- **Pemeriksaan tiap langkah:** keluaran main thread dan web worker byte-identik untuk ketujuh konfigurasi, API publik WASM tidak berubah, dan Jest penuh kembali ke baseline 49 suite gagal (suite yang sudah gagal sebelum pekerjaan ini).
+- **Dari awal ke akhir:** validasi awal (mv1–mv5, kode `82a63b45`) memberi 887 lulus dan 77 gagal dari 964 nilai berpadanan. Kegagalan itu berasal dari 5 penyebab. Dataset turunan mv6 (two-way tak seimbang) dan mv7 (nilai hilang) memunculkan 3 penyebab lagi. Kedelapan penyebab diperbaiki satu per satu (§3, §4) tanpa regresi. Descriptive Statistics dua faktor ditambahkan di step 9.
+- **Pemeriksaan tiap langkah:** keluaran main thread dan web worker byte-identik untuk ketujuh konfigurasi, dan Jest penuh kembali ke baseline 49 suite gagal (suite yang sudah gagal sebelum pekerjaan ini). API publik WASM (glue JS, `.d.ts`) tidak berubah di semua langkah.
+- **API publik crate Rust:** sama dengan `82a63b45` sejak step 8e. Step 8b dan 8c sempat menambah dua fungsi `pub`, dan step 8e mengoreksinya (§4.11). Rincian perubahan kode ada di `results/thesis-impact.md`.
 
 ## 1. Alur
 
@@ -46,13 +47,13 @@ Nilai pembanding berasal dari keluaran SPSS 27 yang dijalankan pengguna dari `sp
 6. **Uji acuan Jest.**
    - Berkas: `frontend/.../multivariate/__test__/multivariate-reference.test.ts`, dengan fixture `__test__/fixtures/mv-reference-values.json` yang dibuat oleh `harness/make-fixture.mjs`.
    - Fixture memuat payload worker dari run UI dan semua nilai SPSS beserta sumbernya. Tidak ada nilai harapan yang berasal dari Statify.
-   - Uji memutar ulang payload lewat `rust/pkg` dan `transformMultivariateResult`. Hasil akhirnya: **1542 lulus, 0 gagal, 156 todo** (todo = tanpa padanan). Angka ini sama dengan perbandingan jalur UI.
+   - Uji memutar ulang payload lewat `rust/pkg` dan `transformMultivariateResult`. Hasil akhirnya: **1686 lulus, 0 gagal, 12 todo** (todo = tanpa padanan). Angka ini sama dengan perbandingan jalur UI.
 
 Nilai F yang dicetak SPSS dengan huruf catatan kaki ("2.436b", "Exact statistic" atau "upper bound") disimpan SPSS sebagai teks tiga desimal. Selisih wajar untuk nilai ini ≤ 5·10⁻⁴.
 
 **Baris kosong di akhir data (mv2, mv7).** CSV termuat 67 baris, tetapi `getSlicedData` memotong baris kosong di ujung, sehingga payload ke WASM berisi 64 baris. Nilai hilang *di tengah* data (mv7: x2 kasus 15, x4 kasus 45) dibuang oleh listwise deletion di Rust (§4.6), sehingga N = 62, sama dengan SPSS.
 
-## 2. Hasil akhir per tabel (step 8d)
+## 2. Hasil akhir per tabel (step 9)
 
 Kolom tabel:
 
@@ -82,13 +83,13 @@ Kolom tabel:
 | mv4 | Levene's Test | 32 | 32 | 32 | 0 | 5,8·10⁻¹⁵ | — |
 | mv4 | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 5,3·10⁻¹³ | 2 · 0 |
 | mv5 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | — |
-| mv5 | Descriptive Statistics | 90 | 18 | 18 | 72 | 2,8·10⁻¹⁴ | — |
+| mv5 | Descriptive Statistics | 90 | 90 | 90 | 0 | 2,8·10⁻¹⁴ | — |
 | mv5 | Box's Test | 5 | 5 | 5 | 0 | 2,7·10⁻¹² | — |
 | mv5 | Multivariate Tests | 128 | 128 | 128 | 0 | 5,8·10⁻¹⁰ | 12 · 4,4·10⁻⁴ |
 | mv5 | Levene's Test | 32 | 32 | 32 | 0 | 2,7·10⁻¹⁴ | — |
 | mv5 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 2,6·10⁻¹⁰ | 2 · 4,0·10⁻⁴ |
 | mv6 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | — |
-| mv6 | Descriptive Statistics | 90 | 18 | 18 | 72 | 2,8·10⁻¹⁴ | — |
+| mv6 | Descriptive Statistics | 90 | 90 | 90 | 0 | 2,8·10⁻¹⁴ | — |
 | mv6 | Box's Test | 5 | 5 | 5 | 0 | 3,3·10⁻¹² | — |
 | mv6 | Multivariate Tests | 128 | 128 | 128 | 0 | 2,2·10⁻¹⁰ | 12 · 3,1·10⁻⁴ |
 | mv6 | Levene's Test | 32 | 32 | 32 | 0 | 2,0·10⁻¹⁴ | — |
@@ -99,15 +100,15 @@ Kolom tabel:
 | mv7 | Multivariate Tests | 64 | 64 | 64 | 0 | 6,8·10⁻¹² | 8 · 2,7·10⁻⁴ |
 | mv7 | Levene's Test | 64 | 64 | 64 | 0 | 2,9·10⁻¹³ | — |
 | mv7 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 7,3·10⁻¹² | 4 · 4,2·10⁻⁴ |
-| **Total** | | **1698** | **1542** | **1542** | **156** | **5,8·10⁻¹⁰** | **74 · 5,0·10⁻⁴** |
+| **Total** | | **1698** | **1686** | **1686** | **12** | **5,8·10⁻¹⁰** | **74 · 5,0·10⁻⁴** |
 
-Sumber: `results/fix-steps/step8d-levene-adjusted-df/compare-spss.txt` dan `compare-spss.json`.
+Sumber: `results/fix-steps/step9-descriptive-two-factor/compare-spss.txt` dan `compare-spss.json`.
 
 ## 3. Riwayat perbaikan
 
 Setiap langkah diperiksa dengan `harness/check-step.sh` dan hasilnya disimpan di `results/fix-steps/<langkah>/`. Isi pemeriksaan:
 
-1. build WASM, dengan syarat glue JS dan `.d.ts` tidak berubah;
+1. build WASM, dengan syarat glue JS dan `.d.ts` tidak berubah dan, sejak step 8e, API publik crate Rust sama dengan `82a63b45` (`rust_api.py`);
 2. build produksi, lalu run UI ketujuh konfigurasi dalam mode main dan worker;
 3. perbandingan SPSS, cek regresi terhadap langkah sebelumnya (`regress.mjs`), dan cek keluaran main = worker;
 4. uji acuan Jest;
@@ -127,9 +128,11 @@ Satu commit per langkah.
 | step8a-mv67-before | `a0c2e531` | Keluaran SPSS mv6 dan mv7 ditambahkan; kode tidak diubah | 964 → 1259 | 1698 |
 | step8b-listwise | `e6874140` | Listwise deletion (§4.6) | 1259 → 1470 | 1698 |
 | step8c-mv-unbalanced | `d94a148f` | H uji multivariat untuk desain tak seimbang; builder desain lebih cepat (§4.7, §4.10) | 1470 → 1538 | 1698 |
-| step8d-levene-adjusted-df | `a9fb2414` | df2 Levene "Based on Median and with adjusted df" (§4.8) | 1538 → **1542** | 1698 |
+| step8d-levene-adjusted-df | `a9fb2414` | df2 Levene "Based on Median and with adjusted df" (§4.8) | 1538 → 1542 | 1698 |
+| step8e-private-api | `28b942db` | Koreksi API: pembantu step 8 dijadikan privat; `run_analysis` kembali seperti `82a63b45` (§4.11) | 1542 → 1542 | 1698 |
+| step9-descriptive-two-factor | `ab21928c` | Descriptive Statistics dua faktor (§4.12) | 1542 → **1686** | 1698 |
 
-Semua langkah: **0 regresi**, main = worker byte-identik, dan API publik WASM tidak berubah.
+Semua langkah: **0 regresi**, main = worker byte-identik, dan API publik WASM tidak berubah. API publik crate Rust sama dengan `82a63b45` di semua langkah kecuali 8b–8d (§4.11).
 
 Catatan Jest penuh: di step2, step8b, dan step8c, dua `multivariate.performance.test.ts` (ambang 5 detik) sempat gagal. Di step2 dan step8b penyebabnya beban mesin: waktunya setara HEAD saat diulang terpisah, dan step8b lulus setelah Jest penuh dijalankan ulang (catatan di pesan commit). Di step8c penyebabnya nyata, yaitu builder desain yang lambat. Masalah itu diperbaiki di langkah yang sama sebelum commit (§4.10).
 
@@ -180,7 +183,7 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
 - **Sebelum:** Rust MV (`merge_records`) tidak membuang kasus yang hilang. N per variabel berbeda (x1 64, x2 63), dan semua tabel mv7 gagal.
 - **Perbaikan:**
   - `common.rs` `listwise_complete_cases` membuang baris yang tidak punya angka berhingga pada setiap DV, kovariat, atau bobot WLS, atau yang punya nilai kosong pada faktor. Variabel yang diperiksa adalah yang dinamai di definisi, dan nilainya dicari di semua slot.
-  - Fungsi ini dipakai sekali di awal `run_analysis` (`wasm/function.rs`), jadi semua tabel memakai kasus yang sama. Jumlah kasus yang dibuang dicatat di Errors Logs.
+  - Fungsi ini dipanggil sekali sebelum analisis, jadi semua tabel memakai kasus yang sama. Jumlah kasus yang dibuang dicatat di Errors Logs. Sejak step 8e, fungsi ini privat di `wasm/constructor.rs` dan dipanggil di `MultivariateAnalysis::new`. Di step 8b fungsi ini `pub` di `common.rs` dan dipanggil di awal `run_analysis` (§4.11).
   - Bila tidak ada kasus lengkap, analisis berhenti dengan error.
 - **Batas:** hanya system-missing. User-missing tidak ikut, karena `getVarDefs` mengirim `missing: []` (§6).
 
@@ -210,9 +213,27 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
 - **Dampak:** Tests of Between-Subjects Effects, Parameter Estimates, Save, dan H uji multivariat ikut lebih cepat. `multivariate.performance.test.ts` (500 baris × 5 DV × 3 faktor) turun dari 4,1 s ke 1,9 s.
 - **Catatan perilaku:** data uji itu rank-deficient (F3 ditentukan oleh F1). Sejak step8c, Multivariate Tests melaporkan error inversi X'X seperti Tests of Between-Subjects Effects, bukan angka dari rumus lama.
 
-## 5. Tanpa padanan (156 nilai)
+### 4.11 Koreksi aturan API (step 8e)
 
-- **Descriptive Statistics dua faktor (144 nilai, mv5 dan mv6).** `descriptive_statistics.rs` hanya memakai faktor pertama. Tabel berisi level faktorA dan Total, tanpa sel A×B dan tanpa marginal faktorB.
+- **Masalah:** step 8b dan 8c menambah dua fungsi `pub`: `listwise_complete_cases` di `common.rs` dan `effect_hypothesis_sscps` di `between_subjects_effects.rs`. Ini melanggar aturan "tanpa item pub baru". Pemeriksaan per langkah saat itu hanya mengecek glue JS dan `.d.ts` WASM, sehingga pelanggaran tidak tertangkap.
+- **Perbaikan:**
+  - `listwise_complete_cases` menjadi fungsi privat di `wasm/constructor.rs`, dipanggil di `MultivariateAnalysis::new` sebelum `run_analysis`. `wasm/function.rs` kembali identik dengan `82a63b45`.
+  - `effect_hypothesis_sscps` dan `residual_sscp` menjadi fungsi privat di `multivariate_tests.rs`, dengan salinan privat `deviation_coded_design` dan `containing_effect_columns`.
+  - `check-step.sh` kini menjalankan `rust_api.py 82a63b45 WORKTREE` dan gagal bila ada perubahan publik.
+- **Hasil:**
+  - Tabel tampilan identik dengan step 8d.
+  - Hasil mentah hanya berbeda ≤ 8,9·10⁻¹⁵ di Levene, ditambah urutan konteks di ringkasan error. Sebabnya urutan iterasi `HashMap` yang sudah ada (`step8e-private-api/refactor-check.txt`).
+
+### 4.12 Descriptive Statistics dua faktor (144 nilai, mv5 dan mv6; step 9)
+
+- **Sebelum:** `descriptive_statistics.rs` hanya memakai faktor pertama. Tabel berisi level faktorA dan Total, tanpa sel A×B dan tanpa marginal faktorB.
+- **Perbaikan:**
+  - Grup bertingkat lewat field `StatGroup.subgroups` yang sudah ada (fungsi privat `level_groups`): level faktor pertama → level faktor kedua + Total, lalu blok Total. Level diurutkan menaik seperti SPSS.
+  - Formatter menambah satu kolom label per tingkat. Tabel satu faktor tidak berubah (tampilan mv1–mv4 dan mv7 identik dengan step 8e).
+- **Label level:** baik tabel satu faktor maupun dua faktor menampilkan kode nilai ("1", "2"), bukan label nilai SPSS ("A1", "laki-laki"). Ini perilaku formatter yang sudah ada.
+
+## 5. Tanpa padanan (12 nilai)
+
 - **Descriptive Statistics GLM mv1 (12 nilai).** SPSS menampilkan statistik selisih x − μ₀, sedangkan Statify menampilkan variabel asli. Variabel asli sudah dibandingkan lewat tabel Report (12/12 lulus).
 
 ## 6. Belum dicakup
