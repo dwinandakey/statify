@@ -43,6 +43,7 @@ node testing/glm-mv-reference/harness/compare-spss.mjs --run="$OUT/worker" --out
 node testing/glm-mv-reference/harness/regress.mjs --before="$BEFORE" --after="$OUT/compare-spss.json" --main="$OUT/main" --worker="$OUT/worker" --out="$OUT/regress.txt"
 
 echo "== 4. reference test"
+node testing/glm-mv-reference/harness/make-fixture.mjs --run="$OUT/worker"
 (cd frontend && npx jest components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts > "$OUT/jest-reference.log" 2>&1)
 grep -E "^Tests:" "$OUT/jest-reference.log"
 

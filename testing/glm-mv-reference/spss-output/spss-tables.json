@@ -123,5 +123,65 @@
   "config": "mv5",
   "table": "Tests of Between-Subjects Effects",
   "rows": 17
+ },
+ {
+  "config": "mv6",
+  "table": "Between-Subjects Factors",
+  "rows": 7
+ },
+ {
+  "config": "mv6",
+  "table": "Descriptive Statistics",
+  "rows": 31
+ },
+ {
+  "config": "mv6",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "rows": 5
+ },
+ {
+  "config": "mv6",
+  "table": "Multivariate Tests",
+  "rows": 17
+ },
+ {
+  "config": "mv6",
+  "table": "Levene's Test of Equality of Error Variances",
+  "rows": 9
+ },
+ {
+  "config": "mv6",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 17
+ },
+ {
+  "config": "mv7",
+  "table": "Between-Subjects Factors",
+  "rows": 3
+ },
+ {
+  "config": "mv7",
+  "table": "Descriptive Statistics",
+  "rows": 13
+ },
+ {
+  "config": "mv7",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "rows": 5
+ },
+ {
+  "config": "mv7",
+  "table": "Multivariate Tests",
+  "rows": 9
+ },
+ {
+  "config": "mv7",
+  "table": "Levene's Test of Equality of Error Variances",
+  "rows": 17
+ },
+ {
+  "config": "mv7",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 25
  }
 ]

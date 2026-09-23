@@ -1,0 +1,382 @@
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+1698 nilai SPSS; dibandingkan 1542; lulus 1259; gagal 283; tanpa padanan 156
+
+config | tabel | nilai | dibandingkan | lulus | gagal | tanpa padanan | selisih maks | di | tampilan UI gagal
+mv1 | Report | 12 | 12 | 12 | 0 | 0 | 2.842170943040401e-14 | disp · Mean | 0
+mv1 | Descriptive Statistics | 12 | 0 | 0 | 0 | 12 | 0 |  | 0
+mv1 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.0004805504253213577 | Intercept / Pillai's Trace · F | 0
+mv1 | Tests of Between-Subjects Effects | 76 | 76 | 76 | 0 | 0 | 1.6370904631912708e-10 | Intercept / disp - 200 · Type III Sum of Squares | 0
+mv2 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv2 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 3.552713678800501e-15 | x3 / laki-laki · Mean | 0
+mv2 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.546585164964199e-11 |  · df2 | 0
+mv2 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0004116211212021881 | Intercept / Pillai's Trace · F | 0
+mv2 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 9.298117831235686e-14 | x4 / Based on trimmed mean · Sig. | 0
+mv2 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0005000000000006111 | Corrected Model / x4 · Type III Sum of Squares | 0
+mv3 | Descriptive Statistics | 6 | 6 | 6 | 0 | 0 | 1.7763568394002505e-15 | kedalaman1 - kedalaman2 · Mean | 0
+mv3 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.00006003652066155496 | Intercept / Pillai's Trace · F | 0
+mv3 | Tests of Between-Subjects Effects | 38 | 38 | 38 | 0 | 0 | 5.24691401437849e-13 | Intercept / ukuran1 - ukuran2 · Observed Power | 0
+mv4 | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | 0 |  | 0
+mv4 | Descriptive Statistics | 24 | 24 | 24 | 0 | 0 | 8.881784197001252e-16 | y1 / Total · Mean | 0
+mv4 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 9.185896487906575e-11 |  · df2 | 0
+mv4 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.00014043622162240865 | treatment / Wilks' Lambda · F | 0
+mv4 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 5.773159728050814e-15 | y2 / Based on trimmed mean · Levene Statistic | 0
+mv4 | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 0 | 5.323519403077626e-13 | Intercept / y2 · Observed Power | 0
+mv5 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv5 | Descriptive Statistics | 90 | 18 | 18 | 0 | 72 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv5 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.7284841053187847e-12 |  · df2 | 0
+mv5 | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 0.00043671311358539633 | faktorA * faktorB / Roy's Largest Root · F | 0
+mv5 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 2.7200464103316335e-14 | ultimate torque / Based on Median · Sig. | 0
+mv5 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.0004031250000000597 | Corrected Model / ultimate torque · Type III Sum of Squares | 0
+mv6 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv6 | Descriptive Statistics | 90 | 18 | 18 | 0 | 72 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv6 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 3.296918293926865e-12 |  · df2 | 0
+mv6 | Multivariate Tests | 128 | 128 | 60 | 68 | 0 | 1.1854047416273295 | faktorB / Pillai's Trace · Noncent. Parameter | 68
+mv6 | Levene's Test of Equality of Error Variances | 32 | 32 | 28 | 4 | 0 | 2.4917937573410835 | ultimate strain / Based on Median and with adjusted df · df2 | 4
+mv6 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.00046153846210472693 | Corrected Model / ultimate strain · Type III Sum of Squares | 0
+mv7 | Between-Subjects Factors | 2 | 2 | 0 | 2 | 0 | 1 | jk / 1 / laki-laki · N | 2
+mv7 | Descriptive Statistics | 36 | 36 | 6 | 30 | 0 | 2 | x1 / Total · N | 30
+mv7 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 4.3655745685100555e-11 |  · df2 | 0
+mv7 | Multivariate Tests | 64 | 64 | 24 | 40 | 0 | 1064.6275585210815 | Intercept / Pillai's Trace · Noncent. Parameter | 40
+mv7 | Levene's Test of Equality of Error Variances | 64 | 64 | 17 | 47 | 0 | 2 | x1 / Based on Mean · df2 | 47
+mv7 | Tests of Between-Subjects Effects | 124 | 124 | 32 | 92 | 0 | 1586 | Total / x3 · Type III Sum of Squares | 92
+
+GAGAL (|Statify − SPSS| > 0.001):
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Value | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Value | SPSS 0.503678862788946 | Statify 0.5008677535667677 (raw) | selisih 0.0028111092221783096
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Partial Eta Squared | SPSS 0.496321137211054 | Statify 0.4991322464332323 (raw) | selisih 0.0028111092221783096
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Noncent. Parameter | SPSS 16.75166451470373 | Statify 16.94109498752914 (raw) | selisih 0.1894304728254106
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Value | SPSS 0.98539203027669 | Statify 0.9965349992664201 (raw) | selisih 0.011142968989730107
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Value | SPSS 0.98539203027669 | Statify 0.9965349992664201 (raw) | selisih 0.011142968989730107
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Value | SPSS 0.2793919208547408 | Statify 0.32679061887299493 (raw) | selisih 0.04739869801825414
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | F | SPSS 0.9742785387600879 | Statify 1.171845995697976 (raw) | selisih 0.19756745693788824
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Sig. | SPSS 0.4565900168509036 | Statify 0.3428586473952353 (raw) | selisih 0.11373136945566831
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Partial Eta Squared | SPSS 0.1396959604273704 | Statify 0.16339530943649747 (raw) | selisih 0.02369934900912707
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Noncent. Parameter | SPSS 5.845671232560528 | Statify 7.031075974187857 (raw) | selisih 1.1854047416273295
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Observed Power | SPSS 0.33272943662355614 | Statify 0.3994548191218392 (raw) | selisih 0.06672538249828308
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Value | SPSS 0.7270063026785327 | Statify 0.6889965635750559 (raw) | selisih 0.038009739103476825
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | F | SPSS 0.979 (teks) | Statify 1.1601641263209324 (raw) | selisih 0.18116412632093237
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Sig. | SPSS 0.4542663980303764 | Statify 0.35020716947706587 (raw) | selisih 0.10405922855331051
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Partial Eta Squared | SPSS 0.14735335415042372 | Statify 0.1699418312099712 (raw) | selisih 0.022588477059547474
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Noncent. Parameter | SPSS 5.875838561614739 | Statify 6.960984757925594 (raw) | selisih 1.0851461963108555
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Observed Power | SPSS 0.33135240417578027 | Statify 0.3918887431867345 (raw) | selisih 0.06053633901095423
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Value | SPSS 0.36670311220957424 | Statify 0.428472752382217 (raw) | selisih 0.06176964017264275
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | F | SPSS 0.9778749658921979 | Statify 1.1425940063525786 (raw) | selisih 0.16471904046038066
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Sig. | SPSS 0.45614292701535175 | Statify 0.3608314610941864 (raw) | selisih 0.09531146592116535
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Partial Eta Squared | SPSS 0.1549425909476314 | Statify 0.1764371257457616 (raw) | selisih 0.021494534798130183
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Noncent. Parameter | SPSS 5.867249795353188 | Statify 6.855564038115471 (raw) | selisih 0.9883142427622831
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Observed Power | SPSS 0.3274695993009481 | Statify 0.38205003349948263 (raw) | selisih 0.05458043419853453
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Value | SPSS 0.3408857166667405 | Statify 0.36584088974378837 (raw) | selisih 0.024955173077047865
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | F | SPSS 2.045 (teks) | Statify 2.19504533846273 (raw) | selisih 0.15004533846273027
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Sig. | SPSS 0.14351894171032173 | Statify 0.12387791826227923 (raw) | selisih 0.0196410234480425
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Partial Eta Squared | SPSS 0.25422428804308245 | Statify 0.2678502982967619 (raw) | selisih 0.013626010253679433
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Noncent. Parameter | SPSS 6.135942900001329 | Statify 6.585136015388191 (raw) | selisih 0.449193115386862
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Observed Power | SPSS 0.4370182249539658 | Statify 0.46568126150321076 (raw) | selisih 0.028663036549244958
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Value | SPSS 0.08335194229819627 | Statify 0.10491849399228292 (raw) | selisih 0.021566551694086653
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | F | SPSS 0.2609303527476228 | Statify 0.3321814718565113 (raw) | selisih 0.07125111910888854
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Sig. | SPSS 0.9514320697049196 | Statify 0.9154887134228373 (raw) | selisih 0.03594335628208223
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Partial Eta Squared | SPSS 0.041675971149098136 | Statify 0.05245924699614146 (raw) | selisih 0.010783275847043326
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Noncent. Parameter | SPSS 1.5655821164857366 | Statify 1.993088831139068 (raw) | selisih 0.42750671465333134
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Observed Power | SPSS 0.10995543434597654 | Statify 0.12908745787425047 (raw) | selisih 0.019132023528273923
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Value | SPSS 0.9182349870191939 | Statify 0.8974398305719669 (raw) | selisih 0.02079515644722707
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | F | SPSS 0.247 (teks) | Statify 0.3150384051921817 (raw) | selisih 0.06803840519218168
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Sig. | SPSS 0.9572348405365915 | Statify 0.9246624488716068 (raw) | selisih 0.03257239166498471
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Partial Eta Squared | SPSS 0.041754213670003204 | Statify 0.05266699066697411 (raw) | selisih 0.010912776996970908
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Noncent. Parameter | SPSS 1.481502225245599 | Statify 1.89023043115309 (raw) | selisih 0.40872820590749104
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Observed Power | SPSS 0.10574439805781499 | Statify 0.12361487935404603 (raw) | selisih 0.017870481296231033
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Value | SPSS 0.08731760910536901 | Statify 0.11165299494220263 (raw) | selisih 0.024335385836833617
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | F | SPSS 0.23284695761431734 | Statify 0.29774131984587365 (raw) | selisih 0.06489436223155631
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Sig. | SPSS 0.9626874065543752 | Statify 0.9334393985238757 (raw) | selisih 0.02924800803049954
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Partial Eta Squared | SPSS 0.04183244980278474 | Statify 0.052874688791023944 (raw) | selisih 0.011042238988239202
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Noncent. Parameter | SPSS 1.3970817456859044 | Statify 1.786447919075242 (raw) | selisih 0.38936617338933766
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Observed Power | SPSS 0.10158578232045512 | Statify 0.11818967614182163 (raw) | selisih 0.01660389382136651
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Value | SPSS 0.05699493708695552 | Statify 0.07793445904944685 (raw) | selisih 0.020939521962491325
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | F | SPSS 0.342 (teks) | Statify 0.4676067542966811 (raw) | selisih 0.12560675429668106
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Sig. | SPSS 0.7952751868687169 | Statify 0.7085180564477804 (raw) | selisih 0.08675713042093647
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Partial Eta Squared | SPSS 0.05392167463359073 | Statify 0.07229981228930343 (raw) | selisih 0.018378137655712702
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Noncent. Parameter | SPSS 1.0259088675651993 | Statify 1.4028202628900432 (raw) | selisih 0.37691139532484397
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Observed Power | SPSS 0.10385425324088116 | Statify 0.12581584988396377 (raw) | selisih 0.021961596643082615
+  mv6 | Levene's Test of Equality of Error Variances | ultimate torque / Based on Median and with adjusted df | df2 | SPSS 11.13685754589761 | Statify 9.147570905714904 (raw) | selisih 1.9892866401827067
+  mv6 | Levene's Test of Equality of Error Variances | ultimate torque / Based on Median and with adjusted df | Sig. | SPSS 0.25824518410127006 | Statify 0.2745470034858597 (raw) | selisih 0.016301819384589633
+  mv6 | Levene's Test of Equality of Error Variances | ultimate strain / Based on Median and with adjusted df | df2 | SPSS 10.562583319023206 | Statify 8.070789561682123 (raw) | selisih 2.4917937573410835
+  mv6 | Levene's Test of Equality of Error Variances | ultimate strain / Based on Median and with adjusted df | Sig. | SPSS 0.2956999094312977 | Statify 0.31771943410115977 (raw) | selisih 0.022019524669862067
+  mv7 | Between-Subjects Factors | jk / 1 / laki-laki | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Between-Subjects Factors | jk / 2 / perempuan | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x1 / laki-laki | Mean | SPSS 15.903225806451612 | Statify 15.96875 (raw) | selisih 0.0655241935483879
+  mv7 | Descriptive Statistics | x1 / laki-laki | Std. Deviation | SPSS 2.285531866760666 | Statify 2.2787146206975204 (raw) | selisih 0.00681724606314571
+  mv7 | Descriptive Statistics | x1 / laki-laki | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x1 / perempuan | Mean | SPSS 12.290322580645162 | Statify 12.34375 (raw) | selisih 0.05342741935483808
+  mv7 | Descriptive Statistics | x1 / perempuan | Std. Deviation | SPSS 3.0571615199625595 | Statify 3.0225963524224366 (raw) | selisih 0.03456516754012284
+  mv7 | Descriptive Statistics | x1 / perempuan | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x1 / Total | Mean | SPSS 14.096774193548384 | Statify 14.15625 (raw) | selisih 0.059475806451615654
+  mv7 | Descriptive Statistics | x1 / Total | Std. Deviation | SPSS 3.237635635081968 | Statify 3.2230260354823113 (raw) | selisih 0.014609599599656686
+  mv7 | Descriptive Statistics | x1 / Total | N | SPSS 62 | Statify 64 (raw) | selisih 2
+  mv7 | Descriptive Statistics | x2 / perempuan | Mean | SPSS 14.032258064516126 | Statify 13.90625 (raw) | selisih 0.12600806451612634
+  mv7 | Descriptive Statistics | x2 / perempuan | Std. Deviation | SPSS 4.324225333072132 | Statify 4.313215812495509 (raw) | selisih 0.011009520576623189
+  mv7 | Descriptive Statistics | x2 / perempuan | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x2 / Total | Mean | SPSS 14.935483870967744 | Statify 14.857142857142858 (raw) | selisih 0.07834101382488612
+  mv7 | Descriptive Statistics | x2 / Total | Std. Deviation | SPSS 4.080625826889774 | Statify 4.095068406444051 (raw) | selisih 0.014442579554277302
+  mv7 | Descriptive Statistics | x2 / Total | N | SPSS 62 | Statify 63 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x3 / laki-laki | Mean | SPSS 27.06451612903226 | Statify 27.1875 (raw) | selisih 0.12298387096774022
+  mv7 | Descriptive Statistics | x3 / laki-laki | Std. Deviation | SPSS 5.397131854797001 | Statify 5.354753691513196 (raw) | selisih 0.04237816328380539
+  mv7 | Descriptive Statistics | x3 / laki-laki | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x3 / perempuan | Mean | SPSS 16.451612903225808 | Statify 16.71875 (raw) | selisih 0.2671370967741922
+  mv7 | Descriptive Statistics | x3 / perempuan | Std. Deviation | SPSS 5.233473732792394 | Statify 5.365567492458653 (raw) | selisih 0.13209375966625903
+  mv7 | Descriptive Statistics | x3 / perempuan | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x3 / Total | Mean | SPSS 21.758064516129032 | Statify 21.953125 (raw) | selisih 0.19506048387096797
+  mv7 | Descriptive Statistics | x3 / Total | Std. Deviation | SPSS 7.51105302231093 | Statify 7.490586023019425 (raw) | selisih 0.020466999291505417
+  mv7 | Descriptive Statistics | x3 / Total | N | SPSS 62 | Statify 64 (raw) | selisih 2
+  mv7 | Descriptive Statistics | x4 / laki-laki | Mean | SPSS 22.612903225806445 | Statify 22.75 (raw) | selisih 0.13709677419355515
+  mv7 | Descriptive Statistics | x4 / laki-laki | Std. Deviation | SPSS 4.071669758668539 | Statify 4.0798481945193235 (raw) | selisih 0.008178435850784815
+  mv7 | Descriptive Statistics | x4 / laki-laki | N | SPSS 31 | Statify 32 (raw) | selisih 1
+  mv7 | Descriptive Statistics | x4 / Total | Mean | SPSS 22.177419354838705 | Statify 22.253968253968253 (raw) | selisih 0.07654889912954843
+  mv7 | Descriptive Statistics | x4 / Total | Std. Deviation | SPSS 4.685254838664147 | Statify 4.686866529990339 (raw) | selisih 0.0016116913261923216
+  mv7 | Descriptive Statistics | x4 / Total | N | SPSS 62 | Statify 63 (raw) | selisih 1
+  mv7 | Multivariate Tests | Intercept / Pillai's Trace | Value | SPSS 0.9750088243530495 | Statify 0.9823745518931414 (raw) | selisih 0.007365727540091904
+  mv7 | Multivariate Tests | Intercept / Pillai's Trace | F | SPSS 555.951 (teks) | Statify 822.1081559215909 (raw) | selisih 266.15715592159086
+  mv7 | Multivariate Tests | Intercept / Pillai's Trace | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | Intercept / Pillai's Trace | Partial Eta Squared | SPSS 0.9750088243530495 | Statify 0.9823745518931414 (raw) | selisih 0.007365727540091904
+  mv7 | Multivariate Tests | Intercept / Pillai's Trace | Noncent. Parameter | SPSS 2223.805065165282 | Statify 3288.4326236863635 (raw) | selisih 1064.6275585210815
+  mv7 | Multivariate Tests | Intercept / Wilks' Lambda | Value | SPSS 0.024991175646950473 | Statify 0.01762544810686167 (raw) | selisih 0.0073657275400888025
+  mv7 | Multivariate Tests | Intercept / Wilks' Lambda | F | SPSS 555.951 (teks) | Statify 822.1081559215909 (raw) | selisih 266.15715592159086
+  mv7 | Multivariate Tests | Intercept / Wilks' Lambda | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | Intercept / Wilks' Lambda | Partial Eta Squared | SPSS 0.9750088243530495 | Statify 0.9823745518931384 (raw) | selisih 0.007365727540088907
+  mv7 | Multivariate Tests | Intercept / Wilks' Lambda | Noncent. Parameter | SPSS 2223.805065165282 | Statify 3288.4326236863635 (raw) | selisih 1064.6275585210815
+  mv7 | Multivariate Tests | Intercept / Hotelling's Trace | Value | SPSS 39.01412395026819 | Statify 55.73614616417565 (raw) | selisih 16.722022213907458
+  mv7 | Multivariate Tests | Intercept / Hotelling's Trace | F | SPSS 555.951 (teks) | Statify 822.1081559215909 (raw) | selisih 266.15715592159086
+  mv7 | Multivariate Tests | Intercept / Hotelling's Trace | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | Intercept / Hotelling's Trace | Partial Eta Squared | SPSS 0.9750088243530495 | Statify 0.9823745518931383 (raw) | selisih 0.007365727540088796
+  mv7 | Multivariate Tests | Intercept / Hotelling's Trace | Noncent. Parameter | SPSS 2223.805065165282 | Statify 3288.4326236863635 (raw) | selisih 1064.6275585210815
+  mv7 | Multivariate Tests | Intercept / Roy's Largest Root | Value | SPSS 39.01412395026819 | Statify 55.73614616417565 (raw) | selisih 16.722022213907458
+  mv7 | Multivariate Tests | Intercept / Roy's Largest Root | F | SPSS 555.951 (teks) | Statify 822.1081559215909 (raw) | selisih 266.15715592159086
+  mv7 | Multivariate Tests | Intercept / Roy's Largest Root | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | Intercept / Roy's Largest Root | Partial Eta Squared | SPSS 0.9750088243530495 | Statify 0.9823745518931383 (raw) | selisih 0.007365727540088796
+  mv7 | Multivariate Tests | Intercept / Roy's Largest Root | Noncent. Parameter | SPSS 2223.805065165282 | Statify 3288.4326236863635 (raw) | selisih 1064.6275585210815
+  mv7 | Multivariate Tests | jk / Pillai's Trace | Value | SPSS 0.6229252056771912 | Statify 0.5286654561287327 (raw) | selisih 0.0942597495484585
+  mv7 | Multivariate Tests | jk / Pillai's Trace | F | SPSS 23.541 (teks) | Statify 16.54310636809502 (raw) | selisih 6.997893631904979
+  mv7 | Multivariate Tests | jk / Pillai's Trace | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | jk / Pillai's Trace | Partial Eta Squared | SPSS 0.6229252056771912 | Statify 0.5286654561287327 (raw) | selisih 0.0942597495484585
+  mv7 | Multivariate Tests | jk / Pillai's Trace | Noncent. Parameter | SPSS 94.16364407853538 | Statify 66.17242547238008 (raw) | selisih 27.9912186061553
+  mv7 | Multivariate Tests | jk / Wilks' Lambda | Value | SPSS 0.37707479432280894 | Statify 0.47134261868991045 (raw) | selisih 0.09426782436710152
+  mv7 | Multivariate Tests | jk / Wilks' Lambda | F | SPSS 23.541 (teks) | Statify 16.54310636809502 (raw) | selisih 6.997893631904979
+  mv7 | Multivariate Tests | jk / Wilks' Lambda | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | jk / Wilks' Lambda | Partial Eta Squared | SPSS 0.622925205677191 | Statify 0.5286573813100895 (raw) | selisih 0.09426782436710146
+  mv7 | Multivariate Tests | jk / Wilks' Lambda | Noncent. Parameter | SPSS 94.16364407853528 | Statify 66.17242547238008 (raw) | selisih 27.9912186061552
+  mv7 | Multivariate Tests | jk / Hotelling's Trace | Value | SPSS 1.651993755763778 | Statify 1.12158180807163 (raw) | selisih 0.5304119476921481
+  mv7 | Multivariate Tests | jk / Hotelling's Trace | F | SPSS 23.541 (teks) | Statify 16.54310636809502 (raw) | selisih 6.997893631904979
+  mv7 | Multivariate Tests | jk / Hotelling's Trace | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | jk / Hotelling's Trace | Partial Eta Squared | SPSS 0.6229252056771912 | Statify 0.5286535752731919 (raw) | selisih 0.09427163040399933
+  mv7 | Multivariate Tests | jk / Hotelling's Trace | Noncent. Parameter | SPSS 94.16364407853538 | Statify 66.17242547238008 (raw) | selisih 27.9912186061553
+  mv7 | Multivariate Tests | jk / Roy's Largest Root | Value | SPSS 1.651993755763778 | Statify 1.121566533430171 (raw) | selisih 0.5304272223336071
+  mv7 | Multivariate Tests | jk / Roy's Largest Root | F | SPSS 23.541 (teks) | Statify 16.54310636809502 (raw) | selisih 6.997893631904979
+  mv7 | Multivariate Tests | jk / Roy's Largest Root | Error df | SPSS 57 | Statify 59 (raw) | selisih 2
+  mv7 | Multivariate Tests | jk / Roy's Largest Root | Partial Eta Squared | SPSS 0.6229252056771912 | Statify 0.5286501817205849 (raw) | selisih 0.09427502395660636
+  mv7 | Multivariate Tests | jk / Roy's Largest Root | Noncent. Parameter | SPSS 94.16364407853538 | Statify 66.17242547238008 (raw) | selisih 27.9912186061553
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Mean | Levene Statistic | SPSS 0.40633112738060506 | Statify 0.3943078030215331 (raw) | selisih 0.01202332435907194
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Mean | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Mean | Sig. | SPSS 0.5262626480081346 | Statify 0.5323498890418308 (raw) | selisih 0.006087241033696178
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median | Levene Statistic | SPSS 0.35105460849465464 | Statify 0.2762461709830131 (raw) | selisih 0.07480843751164157
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median | Sig. | SPSS 0.5557432234272724 | Statify 0.6010470529992874 (raw) | selisih 0.04530382957201495
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median and with adjusted df | Levene Statistic | SPSS 0.35105460849465464 | Statify 0.2762461709830131 (raw) | selisih 0.07480843751164157
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median and with adjusted df | df2 | SPSS 49.22787085362545 | Statify 50.779705582063734 (raw) | selisih 1.551834728438287
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on Median and with adjusted df | Sig. | SPSS 0.5562287031332049 | Statify 0.6014599823740905 (raw) | selisih 0.04523127924088555
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on trimmed mean | Levene Statistic | SPSS 0.4158928902383675 | Statify 0.3466828724787521 (raw) | selisih 0.06921001775961538
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on trimmed mean | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x1 / Based on trimmed mean | Sig. | SPSS 0.5214518390963825 | Statify 0.5581360672289073 (raw) | selisih 0.03668422813252481
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Mean | Levene Statistic | SPSS 1.7478251079001683 | Statify 1.9924145191316394 (raw) | selisih 0.24458941123147104
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Mean | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Mean | Sig. | SPSS 0.19116853358201982 | Statify 0.16316921902650983 (raw) | selisih 0.027999314555509996
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median | Levene Statistic | SPSS 1.2476415094339635 | Statify 1.4572607569522875 (raw) | selisih 0.20961924751832406
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median | Sig. | SPSS 0.26845640170519824 | Statify 0.2320266925680573 (raw) | selisih 0.03642970913714094
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median and with adjusted df | Levene Statistic | SPSS 1.2476415094339635 | Statify 1.4572607569522875 (raw) | selisih 0.20961924751832406
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median and with adjusted df | df2 | SPSS 59.29398271774642 | Statify 60.73539684682549 (raw) | selisih 1.441414129079071
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on Median and with adjusted df | Sig. | SPSS 0.2685091846547157 | Statify 0.23204690492929825 (raw) | selisih 0.036462279725417435
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on trimmed mean | Levene Statistic | SPSS 1.6917771093535319 | Statify 1.8897948573092478 (raw) | selisih 0.19801774795571592
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on trimmed mean | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x2 / Based on trimmed mean | Sig. | SPSS 0.19834039707032175 | Statify 0.17425407515817137 (raw) | selisih 0.024086321912150377
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Mean | Levene Statistic | SPSS 0.14853806576141398 | Statify 0.36791223580387034 (raw) | selisih 0.21937417004245635
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Mean | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Mean | Sig. | SPSS 0.7012993804484972 | Statify 0.5463591604125584 (raw) | selisih 0.15494022003593877
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median | Levene Statistic | SPSS 0.17695232524129836 | Statify 0.3900134952766532 (raw) | selisih 0.21306117003535482
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median | Sig. | SPSS 0.6755084396068384 | Statify 0.5345837938902785 (raw) | selisih 0.14092464571655983
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median and with adjusted df | Levene Statistic | SPSS 0.17695232524129836 | Statify 0.3900134952766532 (raw) | selisih 0.21306117003535482
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median and with adjusted df | df2 | SPSS 56.52031873692876 | Statify 58.41221632900571 (raw) | selisih 1.8918975920769512
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on Median and with adjusted df | Sig. | SPSS 0.6756007200108903 | Statify 0.5347241095342004 (raw) | selisih 0.14087661047668998
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on trimmed mean | Levene Statistic | SPSS 0.18698566740967873 | Statify 0.44804441387683097 (raw) | selisih 0.2610587464671522
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on trimmed mean | df2 | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Levene's Test of Equality of Error Variances | x3 / Based on trimmed mean | Sig. | SPSS 0.6669875977673694 | Statify 0.505750178446528 (raw) | selisih 0.16123741932084135
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Mean | Levene Statistic | SPSS 2.916973245893297 | Statify 2.9141328379699076 (raw) | selisih 0.002840407923389243
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Mean | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median | Levene Statistic | SPSS 1.7403114813473377 | Statify 1.702246471284203 (raw) | selisih 0.038065010063134785
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median | Sig. | SPSS 0.19211178511133115 | Statify 0.19689531879230027 (raw) | selisih 0.004783533680969121
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median and with adjusted df | Levene Statistic | SPSS 1.7403114813473377 | Statify 1.702246471284203 (raw) | selisih 0.038065010063134785
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median and with adjusted df | df2 | SPSS 55.61787292554999 | Statify 55.17299862964588 (raw) | selisih 0.444874295904107
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on Median and with adjusted df | Sig. | SPSS 0.1925048479871159 | Statify 0.197410431979399 (raw) | selisih 0.004905583992283108
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on trimmed mean | Levene Statistic | SPSS 2.654969234828396 | Statify 2.670529474178254 (raw) | selisih 0.015560239349857952
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on trimmed mean | df2 | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Levene's Test of Equality of Error Variances | x4 / Based on trimmed mean | Sig. | SPSS 0.10846632805463206 | Statify 0.10737306459828022 (raw) | selisih 0.0010932634563518423
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x1 | Type III Sum of Squares | SPSS 202.323 (teks) | Statify 210.25 (raw) | selisih 7.9269999999999925
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x1 | Mean Square | SPSS 202.32258064516128 | Statify 210.25 (raw) | selisih 7.927419354838719
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x1 | F | SPSS 27.772693726937256 | Statify 29.346841142535528 (raw) | selisih 1.5741474155982722
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x1 | Partial Eta Squared | SPSS 0.31641610331954384 | Statify 0.32126826473116227 (raw) | selisih 0.0048521614116184275
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x1 | Noncent. Parameter | SPSS 27.772693726937256 | Statify 29.346841142535528 (raw) | selisih 1.5741474155982722
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Type III Sum of Squares | SPSS 50.581 (teks) | Statify 58.80198732718918 (raw) | selisih 8.220987327189178
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Mean Square | SPSS 50.58064516129036 | Statify 58.80198732718918 (raw) | selisih 8.221342165898818
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | F | SPSS 3.144385026737971 | Statify 3.6567195995569377 (raw) | selisih 0.5123345728189665
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Sig. | SPSS 0.08126402834001363 | Statify 0.06054248850391375 (raw) | selisih 0.02072153983609988
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Partial Eta Squared | SPSS 0.04979674796747972 | Statify 0.056555909767837885 (raw) | selisih 0.006759161800358168
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Noncent. Parameter | SPSS 3.1443850267379707 | Statify 3.6567195995569377 (raw) | selisih 0.512334572818967
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x2 | Observed Power | SPSS 0.4149456712222519 | Statify 0.46903702736295905 (raw) | selisih 0.05409135614070715
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x3 | Type III Sum of Squares | SPSS 1745.823 (teks) | Statify 1753.515625 (raw) | selisih 7.692624999999907
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x3 | Mean Square | SPSS 1745.822580645159 | Statify 1753.515625 (raw) | selisih 7.693044354841049
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x3 | F | SPSS 61.77904189338297 | Statify 61.03143694191534 (raw) | selisih 0.7476049514676291
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x3 | Partial Eta Squared | SPSS 0.5073043845054246 | Statify 0.49606375784043744 (raw) | selisih 0.011240626664987152
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x3 | Noncent. Parameter | SPSS 61.77904189338296 | Statify 61.03143694191534 (raw) | selisih 0.747604951467622
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Type III Sum of Squares | SPSS 11.758 (teks) | Statify 16.001024065540378 (raw) | selisih 4.243024065540379
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Mean Square | SPSS 11.758064516128343 | Statify 16.001024065540378 (raw) | selisih 4.242959549412035
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | F | SPSS 0.5315218976327885 | Statify 0.7251926111575316 (raw) | selisih 0.1936707135247432
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Sig. | SPSS 0.46880411301221336 | Statify 0.3977767470548048 (raw) | selisih 0.07102736595740855
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Partial Eta Squared | SPSS 0.008780910853879833 | Statify 0.011748729821321689 (raw) | selisih 0.0029678189674418563
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Noncent. Parameter | SPSS 0.5315218976327885 | Statify 0.7251926111575316 (raw) | selisih 0.1936707135247432
+  mv7 | Tests of Between-Subjects Effects | Corrected Model / x4 | Observed Power | SPSS 0.11073192230397566 | Statify 0.13355781581710746 (raw) | selisih 0.0228258935131318
+  mv7 | Tests of Between-Subjects Effects | Intercept / x1 | Type III Sum of Squares | SPSS 12320.58064516129 | Statify 12825.5625 (raw) | selisih 504.9818548387102
+  mv7 | Tests of Between-Subjects Effects | Intercept / x1 | Mean Square | SPSS 12320.58064516129 | Statify 12825.5625 (raw) | selisih 504.9818548387102
+  mv7 | Tests of Between-Subjects Effects | Intercept / x1 | F | SPSS 1691.2383763837631 | Statify 1790.2009286618827 (raw) | selisih 98.96255227811957
+  mv7 | Tests of Between-Subjects Effects | Intercept / x1 | Noncent. Parameter | SPSS 1691.238376383763 | Statify 1790.2009286618827 (raw) | selisih 98.9625522781198
+  mv7 | Tests of Between-Subjects Effects | Intercept / x2 | Type III Sum of Squares | SPSS 13830.25806451613 | Statify 13931.500400025596 (raw) | selisih 101.24233550946519
+  mv7 | Tests of Between-Subjects Effects | Intercept / x2 | Mean Square | SPSS 13830.25806451613 | Statify 13931.500400025596 (raw) | selisih 101.24233550946519
+  mv7 | Tests of Between-Subjects Effects | Intercept / x2 | F | SPSS 859.7687165775404 | Statify 866.3583133771626 (raw) | selisih 6.5895967996222
+  mv7 | Tests of Between-Subjects Effects | Intercept / x2 | Noncent. Parameter | SPSS 859.7687165775403 | Statify 866.3583133771626 (raw) | selisih 6.5895967996223135
+  mv7 | Tests of Between-Subjects Effects | Intercept / x3 | Type III Sum of Squares | SPSS 29351.629032258064 | Statify 30844.140625 (raw) | selisih 1492.5115927419356
+  mv7 | Tests of Between-Subjects Effects | Intercept / x3 | Mean Square | SPSS 29351.629032258064 | Statify 30844.140625 (raw) | selisih 1492.5115927419356
+  mv7 | Tests of Between-Subjects Effects | Intercept / x3 | F | SPSS 1038.6596780944408 | Statify 1073.5360419627038 (raw) | selisih 34.87636386826307
+  mv7 | Tests of Between-Subjects Effects | Intercept / x3 | Noncent. Parameter | SPSS 1038.6596780944408 | Statify 1073.5360419627038 (raw) | selisih 34.87636386826307
+  mv7 | Tests of Between-Subjects Effects | Intercept / x4 | Type III Sum of Squares | SPSS 30493.951612903224 | Statify 31169.778801843328 (raw) | selisih 675.827188940104
+  mv7 | Tests of Between-Subjects Effects | Intercept / x4 | Mean Square | SPSS 30493.951612903224 | Statify 31169.778801843328 (raw) | selisih 675.827188940104
+  mv7 | Tests of Between-Subjects Effects | Intercept / x4 | F | SPSS 1378.4754289602874 | Statify 1412.665413533835 (raw) | selisih 34.18998457354746
+  mv7 | Tests of Between-Subjects Effects | Intercept / x4 | Noncent. Parameter | SPSS 1378.4754289602874 | Statify 1412.665413533835 (raw) | selisih 34.18998457354746
+  mv7 | Tests of Between-Subjects Effects | jk / x1 | Type III Sum of Squares | SPSS 202.32258064516125 | Statify 210.25 (raw) | selisih 7.927419354838747
+  mv7 | Tests of Between-Subjects Effects | jk / x1 | Mean Square | SPSS 202.32258064516125 | Statify 210.25 (raw) | selisih 7.927419354838747
+  mv7 | Tests of Between-Subjects Effects | jk / x1 | F | SPSS 27.772693726937252 | Statify 29.346841142535528 (raw) | selisih 1.5741474155982758
+  mv7 | Tests of Between-Subjects Effects | jk / x1 | Partial Eta Squared | SPSS 0.3164161033195438 | Statify 0.32126826473116227 (raw) | selisih 0.004852161411618483
+  mv7 | Tests of Between-Subjects Effects | jk / x1 | Noncent. Parameter | SPSS 27.77269372693725 | Statify 29.346841142535528 (raw) | selisih 1.5741474155982793
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Type III Sum of Squares | SPSS 50.58064516129031 | Statify 58.80198732718918 (raw) | selisih 8.221342165898868
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Mean Square | SPSS 50.58064516129031 | Statify 58.80198732718918 (raw) | selisih 8.221342165898868
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | F | SPSS 3.144385026737968 | Statify 3.6567195995569377 (raw) | selisih 0.5123345728189697
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Sig. | SPSS 0.08126402834001399 | Statify 0.06054248850391375 (raw) | selisih 0.020721539836100242
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Partial Eta Squared | SPSS 0.04979674796747967 | Statify 0.056555909767837885 (raw) | selisih 0.006759161800358217
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Noncent. Parameter | SPSS 3.1443850267379676 | Statify 3.6567195995569377 (raw) | selisih 0.5123345728189701
+  mv7 | Tests of Between-Subjects Effects | jk / x2 | Observed Power | SPSS 0.41494567122225157 | Statify 0.46903702736295905 (raw) | selisih 0.05409135614070748
+  mv7 | Tests of Between-Subjects Effects | jk / x3 | Type III Sum of Squares | SPSS 1745.8225806451617 | Statify 1753.515625 (raw) | selisih 7.693044354838321
+  mv7 | Tests of Between-Subjects Effects | jk / x3 | Mean Square | SPSS 1745.8225806451617 | Statify 1753.515625 (raw) | selisih 7.693044354838321
+  mv7 | Tests of Between-Subjects Effects | jk / x3 | F | SPSS 61.77904189338306 | Statify 61.03143694191534 (raw) | selisih 0.7476049514677214
+  mv7 | Tests of Between-Subjects Effects | jk / x3 | Partial Eta Squared | SPSS 0.507304384505425 | Statify 0.49606375784043744 (raw) | selisih 0.011240626664987596
+  mv7 | Tests of Between-Subjects Effects | jk / x3 | Noncent. Parameter | SPSS 61.77904189338306 | Statify 61.03143694191534 (raw) | selisih 0.7476049514677214
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Type III Sum of Squares | SPSS 11.758064516129034 | Statify 16.001024065540378 (raw) | selisih 4.242959549411344
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Mean Square | SPSS 11.758064516129034 | Statify 16.001024065540378 (raw) | selisih 4.242959549411344
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | F | SPSS 0.5315218976328198 | Statify 0.7251926111575316 (raw) | selisih 0.19367071352471188
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Sig. | SPSS 0.4688041130122048 | Statify 0.3977767470548048 (raw) | selisih 0.0710273659574
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Partial Eta Squared | SPSS 0.008780910853880344 | Statify 0.011748729821321689 (raw) | selisih 0.0029678189674413446
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Noncent. Parameter | SPSS 0.5315218976328198 | Statify 0.7251926111575316 (raw) | selisih 0.19367071352471188
+  mv7 | Tests of Between-Subjects Effects | jk / x4 | Observed Power | SPSS 0.11073192230397944 | Statify 0.13355781581710746 (raw) | selisih 0.022825893513128026
+  mv7 | Tests of Between-Subjects Effects | Error / x1 | Type III Sum of Squares | SPSS 437.0967741935486 | Statify 444.1875 (raw) | selisih 7.090725806451417
+  mv7 | Tests of Between-Subjects Effects | Error / x1 | df | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Error / x1 | Mean Square | SPSS 7.284946236559143 | Statify 7.164314516129032 (raw) | selisih 0.12063172043011061
+  mv7 | Tests of Between-Subjects Effects | Error / x2 | Type III Sum of Squares | SPSS 965.1612903225805 | Statify 980.9122983870968 (raw) | selisih 15.751008064516327
+  mv7 | Tests of Between-Subjects Effects | Error / x2 | df | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Tests of Between-Subjects Effects | Error / x2 | Mean Square | SPSS 16.08602150537634 | Statify 16.080529481755686 (raw) | selisih 0.005492023620654152
+  mv7 | Tests of Between-Subjects Effects | Error / x3 | Type III Sum of Squares | SPSS 1695.5483870967744 | Statify 1781.34375 (raw) | selisih 85.79536290322562
+  mv7 | Tests of Between-Subjects Effects | Error / x3 | df | SPSS 60 | Statify 62 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Error / x3 | Mean Square | SPSS 28.25913978494624 | Statify 28.731350806451612 (raw) | selisih 0.4722110215053732
+  mv7 | Tests of Between-Subjects Effects | Error / x4 | Type III Sum of Squares | SPSS 1327.2903225806454 | Statify 1345.9354838709678 (raw) | selisih 18.64516129032245
+  mv7 | Tests of Between-Subjects Effects | Error / x4 | df | SPSS 60 | Statify 61 (raw) | selisih 1
+  mv7 | Tests of Between-Subjects Effects | Error / x4 | Mean Square | SPSS 22.12150537634409 | Statify 22.06451612903226 (raw) | selisih 0.056989247311829416
+  mv7 | Tests of Between-Subjects Effects | Total / x1 | Type III Sum of Squares | SPSS 12960 | Statify 13480 (raw) | selisih 520
+  mv7 | Tests of Between-Subjects Effects | Total / x1 | df | SPSS 62 | Statify 64 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Total / x2 | Type III Sum of Squares | SPSS 14846 | Statify 14946 (raw) | selisih 100
+  mv7 | Tests of Between-Subjects Effects | Total / x2 | df | SPSS 62 | Statify 63 (raw) | selisih 1
+  mv7 | Tests of Between-Subjects Effects | Total / x3 | Type III Sum of Squares | SPSS 32793 | Statify 34379 (raw) | selisih 1586
+  mv7 | Tests of Between-Subjects Effects | Total / x3 | df | SPSS 62 | Statify 64 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Total / x4 | Type III Sum of Squares | SPSS 31833 | Statify 32562 (raw) | selisih 729
+  mv7 | Tests of Between-Subjects Effects | Total / x4 | df | SPSS 62 | Statify 63 (raw) | selisih 1
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x1 | Type III Sum of Squares | SPSS 639.4193548387099 | Statify 654.4375 (raw) | selisih 15.018145161290136
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x1 | df | SPSS 61 | Statify 63 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x2 | Type III Sum of Squares | SPSS 1015.7419354838709 | Statify 1039.714285714286 (raw) | selisih 23.972350230415145
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x2 | df | SPSS 61 | Statify 62 (raw) | selisih 1
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x3 | Type III Sum of Squares | SPSS 3441.3709677419333 | Statify 3534.859375 (raw) | selisih 93.48840725806667
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x3 | df | SPSS 61 | Statify 63 (raw) | selisih 2
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x4 | Type III Sum of Squares | SPSS 1339.0483870967737 | Statify 1361.9365079365082 (raw) | selisih 22.888120839734484
+  mv7 | Tests of Between-Subjects Effects | Corrected Total / x4 | df | SPSS 61 | Statify 62 (raw) | selisih 1
+
+LULUS pada nilai mentah tetapi tampilan UI tidak (|UI − SPSS| > 0.001 atau "<.001" untuk p ≥ .001):
+
+TANPA PADANAN di Statify:
+  mv1 | Descriptive Statistics | mpg - 20 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | disp - 200 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | hp - 150 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | wt - 3 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)

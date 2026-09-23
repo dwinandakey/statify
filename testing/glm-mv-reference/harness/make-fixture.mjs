@@ -9,7 +9,7 @@
 //   comes from Statify.
 // - not_covered: SPSS values without a Statify counterpart.
 //
-// Usage (repo root): node testing/glm-mv-reference/harness/make-fixture.mjs
+// Usage (repo root): node testing/glm-mv-reference/harness/make-fixture.mjs [--run=<ui-run out dir>]
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -17,7 +17,9 @@ import { locate } from "./mapping.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(here, "..");
-const RUN = path.join(ROOT, "results/spss-validation/statify-output");
+const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
+// --run: folder of a ui-run.cjs output (the payloads do not depend on the Rust code).
+const RUN = path.resolve(args.run || path.join(ROOT, "results/spss-validation/statify-output"));
 const OUT = path.join(ROOT, "../../frontend/components/Modals/Analyze/general-linear-model/multivariate/__test__/fixtures/mv-reference-values.json");
 const spss = JSON.parse(fs.readFileSync(path.join(ROOT, "spss-output/spss-values.json"), "utf8"));
 
