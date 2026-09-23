@@ -346,6 +346,15 @@ fn calculate_welch_two_sample_t2(
         f_stat,
     );
     let noncent = f_stat * df1;
+    // Observed power from the noncentral F (λ = F · df1) at the configured
+    // alpha, with the same df and F as the significance above.
+    let alpha = config.options.sig_level.unwrap_or(0.05);
+    let observed_power = calculate_observed_power(
+        df1.round().max(1.0) as usize,
+        df2.round().max(1.0) as usize,
+        f_stat,
+        alpha,
+    );
 
     let entry = MultivariateTestEntry {
         value: t_squared,
@@ -355,11 +364,7 @@ fn calculate_welch_two_sample_t2(
         significance,
         partial_eta_squared: t_squared / (t_squared + nu),
         noncent_parameter: noncent,
-        observed_power: if f_stat > 1.0 {
-            (1.0 - 0.1 / f_stat).min(1.0)
-        } else {
-            0.5
-        },
+        observed_power,
         is_exact_statistic: false,
     };
 
