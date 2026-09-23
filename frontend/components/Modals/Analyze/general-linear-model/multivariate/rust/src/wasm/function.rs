@@ -6,7 +6,7 @@ use crate::models::{
     data::AnalysisData,
     result::MultivariateResult,
 };
-use crate::stats::core;
+use crate::stats::{ common, core };
 use crate::utils::log::FunctionLogger;
 use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
 
@@ -16,6 +16,20 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector,
     logger: &mut FunctionLogger
 ) -> Result<Option<MultivariateResult>, JsValue> {
+    // Cases with a missing value on any analysis variable are excluded
+    // (listwise) before every step, as SPSS GLM does.
+    let (complete, excluded) = common::listwise_complete_cases(data);
+    if excluded > 0 && complete.dependent_data.iter().all(|slot| slot.is_empty()) {
+        return Err(string_to_js_error("No complete cases: every case has a missing value.".to_string()));
+    }
+    if excluded > 0 {
+        error_collector.add_error(
+            "listwise_deletion",
+            &format!("{} case(s) with missing values were excluded (listwise).", excluded)
+        );
+    }
+    let data = &complete;
+
     // Step 1: Basic processing summary (always executed)
     logger.add_log("basic_processing_summary");
     let mut processing_summary = None;
