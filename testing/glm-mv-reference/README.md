@@ -1,8 +1,8 @@
 # Acuan SPSS untuk GLM Multivariate
 
-Folder ini menyiapkan validasi numerik modul GLM Multivariate Statify terhadap IBM SPSS Statistics 27. Isinya lima prosedur: satu populasi, dua populasi, berpasangan, One-Way MANOVA, dan Two-Way MANOVA. Pola kerjanya sama dengan `testing/glm-rm-reference/`.
+Folder ini menyiapkan validasi numerik modul GLM Multivariate Statify terhadap IBM SPSS Statistics 27. Isinya lima prosedur: satu populasi, dua populasi, berpasangan, One-Way MANOVA, dan Two-Way MANOVA, ditambah dua dataset turunan (two-way tak seimbang dan nilai hilang). Pola kerjanya sama dengan `testing/glm-rm-reference/`.
 
-Selama validasi, kode modul Multivariate dibekukan. Folder ini hanya berisi data, sintaks SPSS, keluaran SPSS, dan (nanti) harness pembanding.
+Folder ini berisi data, sintaks SPSS, keluaran SPSS, harness pembanding, dan hasil pemeriksaan tiap langkah perbaikan modul (branch `validation/mv-spss`).
 
 ```
 data/          lima .sav asli (salinan byte-identik) + versi .csv
@@ -10,7 +10,8 @@ sav_to_csv.R   konversi .sav -> .csv tanpa mengubah nilai
 make_derived.R dataset turunan mv6 dan mv7 (.sav + .csv) untuk validasi lanjutan
 spss/          sintaks SPSS per prosedur (mv1..mv5; mv6, mv7 validasi lanjutan)
 spss-output/   keluaran SPSS .xlsx (diisi oleh pengguna)
-results/       hasil perbandingan (Langkah 3-5)
+harness/       run UI, ekstraksi SPSS, pembanding, fixture, pemeriksaan per langkah
+results/       spss-validation/ (laporan) dan fix-steps/ (hasil tiap langkah perbaikan)
 ```
 
 ## 1. Dataset
@@ -142,7 +143,7 @@ Perbedaan penyajian yang sudah diketahui sebelum perbandingan (bukan hasil uji):
 
 ## 4. Hasil
 
-Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md). Isinya: alur, hasil per tabel, selisih maksimum, diagnosis selisih, dan bagian yang belum dicakup.
+Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md): 1542 dari 1542 nilai SPSS yang punya padanan lulus (toleransi 0,001; selisih maksimum 5,8·10⁻¹⁰ pada nilai presisi penuh). Isinya: alur, hasil per tabel, riwayat perbaikan per langkah, penyebab dan perbaikan, dan bagian yang belum dicakup.
 
 Harness yang dipakai:
 
@@ -152,3 +153,5 @@ Harness yang dipakai:
 | `harness/spss_extract.py` | Mengekstrak nilai acuan dari xlsx SPSS |
 | `harness/compare-spss.mjs` + `harness/mapping.mjs` | Membandingkan Statify dengan SPSS |
 | `harness/make-fixture.mjs` | Membuat fixture uji acuan Jest `multivariate/__test__/multivariate-reference.test.ts` |
+| `harness/regress.mjs` | Cek regresi terhadap langkah sebelumnya dan keluaran main = worker |
+| `harness/check-step.sh` | Pemeriksaan lengkap satu langkah perbaikan (WASM, build produksi, run UI, perbandingan, Jest) |
