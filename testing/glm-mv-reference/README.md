@@ -7,7 +7,8 @@ Selama validasi, kode modul Multivariate dibekukan. Folder ini hanya berisi data
 ```
 data/          lima .sav asli (salinan byte-identik) + versi .csv
 sav_to_csv.R   konversi .sav -> .csv tanpa mengubah nilai
-spss/          sintaks SPSS per prosedur (mv1..mv5)
+make_derived.R dataset turunan mv6 dan mv7 (.sav + .csv) untuk validasi lanjutan
+spss/          sintaks SPSS per prosedur (mv1..mv5; mv6, mv7 validasi lanjutan)
 spss-output/   keluaran SPSS .xlsx (diisi oleh pengguna)
 results/       hasil perbandingan (Langkah 3-5)
 ```
@@ -54,6 +55,28 @@ Yang dipakai adalah format **lebar** (`hotelling berpasangan (data asli).sav`): 
 
 Versi bertumpuk (`(data edit).sav`, 30 baris dengan kolom jenis pelapis) tidak bisa dimasukkan ke dialog Paired. Versi itu juga akan diperlakukan sebagai dua sampel independen, bukan berpasangan. Berkas itu tidak disalin.
 
+### Dataset turunan untuk validasi lanjutan (mv6, mv7)
+
+Dua dataset dibuat dari dataset di atas dengan `make_derived.R` (haven; `.sav` dengan label variabel dan label nilai, `.csv` dengan nilai persis). Skrip memverifikasi bahwa hanya baris atau sel yang disebut di bawah yang berubah.
+
+| Berkas | Prosedur | Baris (lengkap) | Diturunkan dari | Perubahan |
+|---|---|---|---|---|
+| `two-way manova tak seimbang.sav` | Two-Way MANOVA tak seimbang (mv6) | 26 (26) | `two-way manova.sav` | Kasus 4, 11, 12, 21, 26, 31 (nomor kasus asli) dihapus. Ukuran sel faktorA × faktorB: A1 = 3, 4, 2, 4; A2 = 4, 3, 3, 3. Tidak ada sel kosong. |
+| `hotelling 2 populasi independen dengan nilai hilang.sav` | One-Way MANOVA dua grup dengan nilai hilang di tengah (mv7) | 67 (62) | `hotelling 2 populasi independen.sav` | x2 kasus 15 (jk = 1, semula 18) dan x4 kasus 45 (jk = 2, semula 28) dikosongkan (system-missing). Baris lain tidak berubah, termasuk 3 baris kosong di akhir. |
+
+Kasus yang dihapus pada mv6 (Y1A1, Y2A1, faktorA, faktorB):
+
+| Kasus | Y1A1 | Y2A1 | faktorA | faktorB |
+|---|---|---|---|---|
+| 4 | 7,82 | 88,8 | 1 | 1 |
+| 11 | 7,75 | 90,2 | 1 | 3 |
+| 12 | 7,8 | 88 | 1 | 3 |
+| 21 | 8,19 | 66 | 2 | 2 |
+| 26 | 7,15 | 72 | 2 | 3 |
+| 31 | 7,52 | 86,4 | 2 | 4 |
+
+mv4 tidak dipakai sebagai dasar mv7 karena hanya 8 baris, dan grup 2-nya berisi n = 2: satu sel kosong akan menyisakan satu kasus di grup itu.
+
 ## 2. Pemetaan konfigurasi Statify ↔ SPSS
 
 Pengaturan yang sama untuk kelima prosedur:
@@ -63,7 +86,7 @@ Pengaturan yang sama untuk kelima prosedur:
 | Model | Model = Full factorial, Sum of squares = Type III, Include intercept aktif | `/METHOD=SSTYPE(3) /INTERCEPT=INCLUDE` |
 | Options | Descriptive statistics, Estimates of effect size, Observed power, dan Homogeneity tests dicentang. Significance level 0,05. | `/PRINT=DESCRIPTIVE ETASQ OPOWER [HOMOGENEITY] /CRITERIA=ALPHA(.05)` |
 
-Homogeneity tests hanya dicentang, dan `HOMOGENEITY` hanya diminta, untuk desain yang punya faktor (mv2, mv4, mv5). Pada desain intercept-only tidak ada grup untuk diuji.
+Homogeneity tests hanya dicentang, dan `HOMOGENEITY` hanya diminta, untuk desain yang punya faktor (mv2, mv4, mv5, mv6, mv7). Pada desain intercept-only tidak ada grup untuk diuji.
 
 | # | Prosedur | Konfigurasi Statify | Perintah SPSS setara | Sintaks |
 |---|---|---|---|---|
@@ -72,6 +95,8 @@ Homogeneity tests hanya dicentang, dan `HOMOGENEITY` hanya diminta, untuk desain
 | 3 | Berpasangan | Tombol **Paired**: pasangan (kedalaman1, kedalaman2) dan (ukuran1, ukuran2), δ₀ = 0, 0. Fixed Factor: kosong. | Model intercept-only pada variabel selisih: `COMPUTE d_kedalaman = kedalaman1 − kedalaman2`, `d_ukuran = ukuran1 − ukuran2`, lalu `GLM d_kedalaman d_ukuran` | `spss/mv3_berpasangan.sps` |
 | 4 | One-Way MANOVA | Dependent Variables: y1, y2. Fixed Factor: treatment | `GLM y1 y2 BY treatment /DESIGN=treatment` | `spss/mv4_one_way.sps` |
 | 5 | Two-Way MANOVA | Dependent Variables: Y1A1, Y2A1. Fixed Factor: faktorA, faktorB | `GLM Y1A1 Y2A1 BY faktorA faktorB /DESIGN=faktorA faktorB faktorA*faktorB` | `spss/mv5_two_way.sps` |
+| 6 | Two-Way MANOVA tak seimbang | sama dengan 5, data `two-way manova tak seimbang` | sama dengan 5 | `spss/mv6_two_way_tak_seimbang.sps` |
+| 7 | One-Way MANOVA, nilai hilang | sama dengan 2 (Fixed Factor jk, Pooled), data `hotelling 2 populasi independen dengan nilai hilang` | `GLM x1 x2 x3 x4 BY jk /DESIGN=jk` (listwise: N = 62) | `spss/mv7_one_way_nilai_hilang.sps` |
 
 Mode varians **Unequal (Welch-Satterthwaite)** (Krishnamoorthy-Yu) tidak punya padanan di SPSS GLM, jadi tidak divalidasi di sini.
 
@@ -110,6 +135,8 @@ Perbedaan penyajian yang sudah diketahui sebelum perbandingan (bukan hasil uji):
    - `mv3_berpasangan.xlsx`
    - `mv4_one_way.xlsx`
    - `mv5_two_way.xlsx`
+   - `mv6_two_way_tak_seimbang.xlsx`
+   - `mv7_one_way_nilai_hilang.xlsx`
 3. Path di sintaks adalah path absolut repositori ini (`D:\0.POLTSTAT STIS\...\statify64\...`). Sesuaikan bila repositori ada di tempat lain.
 4. Jangan menyimpan dataset yang dibuka sintaks. Variabel `*_mu0` dan `d_*` hanya dibuat di sesi SPSS, dan berkas .sav di `data/` harus tetap identik dengan aslinya.
 

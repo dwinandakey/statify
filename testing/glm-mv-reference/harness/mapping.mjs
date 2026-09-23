@@ -18,6 +18,8 @@ export const MAP = {
     mv3: { dv: { "kedalaman1 - kedalaman2": "d_kedalaman1_minus_kedalaman2", "ukuran1 - ukuran2": "d_ukuran1_minus_ukuran2" }, level: {} },
     mv4: { dv: {}, level: { "treatment 1": "1", "treatment 2": "2", "treatment 3": "3" } },
     mv5: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
+    mv6: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
+    mv7: { dv: {}, level: { "laki-laki": "1", perempuan: "2" } },
 };
 const MV_FIELD = { Value: "value", F: "f", "Hypothesis df": "hypothesis_df", "Error df": "error_df", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const BSE_FIELD = { "Type III Sum of Squares": "sum_of_squares", df: "df", "Mean Square": "mean_square", F: "f_value", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };

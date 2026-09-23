@@ -30,7 +30,8 @@ from read_xlsx import read_workbook  # noqa: E402
 
 OUT_DIR = os.path.join(HERE, "..", "spss-output")
 FILES = {"mv1": "mv1_satu_populasi.xlsx", "mv2": "mv2_dua_populasi.xlsx", "mv3": "mv3_berpasangan.xlsx",
-         "mv4": "mv4_one_way.xlsx", "mv5": "mv5_two_way.xlsx"}
+         "mv4": "mv4_one_way.xlsx", "mv5": "mv5_two_way.xlsx",
+         "mv6": "mv6_two_way_tak_seimbang.xlsx", "mv7": "mv7_one_way_nilai_hilang.xlsx"}
 TITLES = ["Report", "Case Processing Summary", "Between-Subjects Factors", "Descriptive Statistics",
           "Box's Test of Equality of Covariance Matrices", "Multivariate Tests",
           "Levene's Test of Equality of Error Variances", "Tests of Between-Subjects Effects"]
@@ -145,6 +146,9 @@ def cells(title, body):
 def main():
     values, all_tables = [], []
     for config, file in FILES.items():
+        if not os.path.exists(os.path.join(OUT_DIR, file)):
+            print("belum ada:", file)
+            continue
         book = read_workbook(os.path.join(OUT_DIR, file))
         rows = [r for sheet in book.values() for r in sheet]
         for title, body in parse(rows):

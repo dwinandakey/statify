@@ -29,6 +29,9 @@ const CONFIGS = {
     mv3: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: OPT, pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]] },
     mv4: { csv: "one-way manova.csv", dep: ["y1", "y2"], fix: ["treatment"], options: [...OPT, "HomogenTest"] },
     mv5: { csv: "two-way manova.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: [...OPT, "HomogenTest"] },
+    // Validasi lanjutan (Langkah 7, make_derived.R).
+    mv6: { csv: "two-way manova tak seimbang.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: [...OPT, "HomogenTest"] },
+    mv7: { csv: "hotelling 2 populasi independen dengan nilai hilang.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-pooled" },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

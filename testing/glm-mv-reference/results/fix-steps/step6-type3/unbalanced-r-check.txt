@@ -1,4 +1,4 @@
-Acuan sementara R 4.3.2 car::Anova (contr.sum), data two-way manova.csv tanpa kasus 4, 11, 12, 21, 26, 31 (N = 26, sel 3/4/2/4/3/4/3/3).
+Acuan sementara R 4.3.2 car::Anova (contr.sum), data two-way manova.csv tanpa kasus 4, 11, 12, 21, 26, 31 (N = 26; sel A1B1..A1B4 = 3, 4, 2, 4; A2B1..A2B4 = 4, 3, 3, 3).
 Statify: WASM step 6 (payload mv5 dari fixture UI dengan baris yang sama dibuang, SumOfSquareMethod typeIII/typeII).
 
 typeIII Y1A1 Intercept: R 1447.63748817204 Statify 1447.6374881720428 selisih 2.73e-12

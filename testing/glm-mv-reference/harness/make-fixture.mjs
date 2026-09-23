@@ -29,17 +29,19 @@ const FORMATTER = {
     mv3: { testValues: [0, 0], varianceMode: "Pooled", factor: null, pairedMode: { pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [0, 0] } },
     mv4: { testValues: null, varianceMode: "Pooled", factor: "treatment", pairedMode: null },
     mv5: { testValues: null, varianceMode: "Pooled", factor: null, pairedMode: null },
+    mv6: { testValues: null, varianceMode: "Pooled", factor: null, pairedMode: null },
+    mv7: { testValues: null, varianceMode: "Pooled", factor: "jk", pairedMode: null },
 };
-const SYNTAX = { mv1: "spss/mv1_satu_populasi.sps", mv2: "spss/mv2_dua_populasi.sps", mv3: "spss/mv3_berpasangan.sps", mv4: "spss/mv4_one_way.sps", mv5: "spss/mv5_two_way.sps" };
+const SYNTAX = { mv1: "spss/mv1_satu_populasi.sps", mv2: "spss/mv2_dua_populasi.sps", mv3: "spss/mv3_berpasangan.sps", mv4: "spss/mv4_one_way.sps", mv5: "spss/mv5_two_way.sps", mv6: "spss/mv6_two_way_tak_seimbang.sps", mv7: "spss/mv7_one_way_nilai_hilang.sps" };
 
 const configs = {};
-for (const cfg of Object.keys(FORMATTER)) {
+for (const cfg of Object.keys(FORMATTER).filter((c) => fs.existsSync(path.join(RUN, `${c}.raw.json`)))) {
     const raw = JSON.parse(fs.readFileSync(path.join(RUN, `${cfg}.raw.json`), "utf8"));
     configs[cfg] = { spss_syntax: `testing/glm-mv-reference/${SYNTAX[cfg]}`, payload: raw.request.payload, formatter_options: FORMATTER[cfg] };
 }
 const values = [];
 const notCovered = [];
-for (const e of spss) {
+for (const e of spss.filter((x) => configs[x.config])) {
     const loc = locate(e);
     const entry = { config: e.config, table: e.table, labels: e.labels, field: e.field, spss: e.value, spss_display: e.display, source: e.source };
     if (loc.missing) notCovered.push({ ...entry, reason: loc.missing });
