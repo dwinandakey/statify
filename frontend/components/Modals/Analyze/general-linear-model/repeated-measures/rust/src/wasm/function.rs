@@ -6,6 +6,7 @@ use crate::models::{
     result::RepeatedMeasureResult,
 };
 use crate::stats::core;
+use crate::stats::rm_model::RmModel;
 use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
 
 pub fn run_analysis(
@@ -14,6 +15,35 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector
 ) -> Result<Option<RepeatedMeasureResult>, JsValue> {
     let mut executed_functions = Vec::new();
+
+    // The multivariate GLM model (stats/rm_model.rs) computes the
+    // multivariate tests, Mauchly, within-/between-subjects effects,
+    // contrasts, univariate tests and descriptives. It reads the
+    // between-subjects factors and covariates from config.main
+    // (FactorsVar, Covariates).
+    // Every design uses this model. When it cannot be built (e.g. more than
+    // one within-subjects factor, validated against SPSS as not supported by
+    // the earlier modules) the analysis stops after the within-subjects
+    // factors table with the reason in the Errors Logs, instead of falling
+    // back to the earlier per-measure modules.
+    let mut rm_model: Option<RmModel> = None;
+    let mut rm_model_failed = false;
+    executed_functions.push("build_rm_model".to_string());
+    match RmModel::build(data, config) {
+        Ok(model) => {
+            if model.excluded > 0 {
+                error_collector.add_error(
+                    "build_rm_model",
+                    &format!("{} subject(s) with missing values were excluded (listwise).", model.excluded)
+                );
+            }
+            rm_model = Some(model);
+        }
+        Err(e) => {
+            rm_model_failed = true;
+            error_collector.add_error("build_rm_model", &e);
+        }
+    }
 
     // Step 1: Calculate within-subjects factors (always executed)
     executed_functions.push("parse_within_subject_factors".to_string());
@@ -26,12 +56,41 @@ pub fn run_analysis(
             error_collector.add_error("calculate_within_subjects_factors", &e);
         }
     }
+    if rm_model_failed {
+        return Ok(Some(RepeatedMeasureResult {
+            within_subjects_factors,
+            descriptive_statistics: None,
+            bartlett_test: None,
+            homogeneity_tests: None,
+            multivariate_tests: None,
+            mauchly_test: None,
+            tests_of_within_subjects_effects: None,
+            within_subjects_multivariate: None,
+            tests_of_within_subjects_contrasts: None,
+            tests_of_between_subjects_effects: None,
+            parameter_estimates: None,
+            general_estimable_function: None,
+            within_subjects_sscp: None,
+            between_subjects_sscp: None,
+            residual_matrix: None,
+            sscp_matrix: None,
+            univariate_tests: None,
+            posthoc_tests: None,
+            emmeans: None,
+            emmeans_pairwise: None,
+            executed_functions,
+        }));
+    }
 
     // Step 2: Descriptive statistics if requested in options
     let mut descriptive_statistics = None;
     if config.options.desc_stats {
         executed_functions.push("calculate_descriptive_statistics".to_string());
-        match core::calculate_descriptive_statistics(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.descriptives()),
+            None => core::calculate_descriptive_statistics(data, config),
+        };
+        match result {
             Ok(stats) => {
                 descriptive_statistics = Some(stats);
             }
@@ -41,16 +100,40 @@ pub fn run_analysis(
         }
     }
 
-    // Step 3: Bartlett test if requested in options
-    let mut bartlett_test = None;
+    // Step 3: Homogeneity tests (Options: Homogeneity tests) as SPSS prints
+    // them for /PRINT=HOMOGENEITY: Box's M and Levene's test. Bartlett's test
+    // of sphericity belongs to the residual SSCP matrix (Options: Residual
+    // SSCP matrix), as in SPSS.
+    let mut homogeneity_tests = None;
     if config.options.homogen_test {
-        executed_functions.push("calculate_bartlett_test".to_string());
-        match core::calculate_bartlett_test(data, config) {
-            Ok(test) => {
-                bartlett_test = Some(test);
-            }
-            Err(e) => {
-                error_collector.add_error("calculate_bartlett_test", &e);
+        executed_functions.push("calculate_homogeneity_tests".to_string());
+        match &rm_model {
+            Some(model) => match model.homogeneity_tests() {
+                Ok(tests) => {
+                    if let Some(note) = &tests.box_m_note {
+                        error_collector.add_error("calculate_homogeneity_tests", note);
+                    }
+                    homogeneity_tests = Some(tests);
+                }
+                Err(e) => error_collector.add_error("calculate_homogeneity_tests", &e),
+            },
+            None => error_collector.add_error(
+                "calculate_homogeneity_tests",
+                "Homogeneity tests are not computed: the between-subjects model could not be built"
+            ),
+        }
+    }
+    let mut bartlett_test = None;
+    if config.options.res_sscp_mat {
+        if let Some(model) = &rm_model {
+            executed_functions.push("calculate_bartlett_test".to_string());
+            match model.bartlett_sphericity() {
+                Ok(test) => {
+                    bartlett_test = Some(test);
+                }
+                Err(e) => {
+                    error_collector.add_error("calculate_bartlett_test", &e);
+                }
             }
         }
     }
@@ -58,7 +141,12 @@ pub fn run_analysis(
     // Step 4: Multivariate tests (always executed)
     let mut multivariate_tests = None;
     executed_functions.push("calculate_multivariate_tests".to_string());
-    match core::calculate_multivariate_tests(data, config) {
+    let result = match &rm_model {
+        Some(model) => model.multivariate_tests(),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_multivariate_tests(data, config),
+    };
+    match result {
         Ok(tests) => {
             multivariate_tests = Some(tests);
         }
@@ -70,7 +158,18 @@ pub fn run_analysis(
     // Step 5: Mauchly test
     let mut mauchly_test = None;
     executed_functions.push("calculate_mauchly_test".to_string());
-    match core::calculate_mauchly_test(data, config) {
+    let result = match &rm_model {
+        Some(model) =>
+            model.mauchly().map(|(test, problems)| {
+                for p in &problems {
+                    error_collector.add_error("calculate_mauchly_test", p);
+                }
+                test
+            }),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_mauchly_test(data, config),
+    };
+    match result {
         Ok(test) => {
             mauchly_test = Some(test);
         }
@@ -82,7 +181,13 @@ pub fn run_analysis(
     // Step 6: Tests of within-subjects effects
     let mut tests_of_within_subjects_effects = None;
     executed_functions.push("calculate_tests_within_subjects_effects".to_string());
-    match core::calculate_tests_within_subjects_effects(data, config, &mauchly_test) {
+    let result = match (&rm_model, &mauchly_test) {
+        (Some(model), Some(mauchly)) => Ok(model.within_effects(mauchly)),
+        (Some(_), None) => Err("Not computed: Mauchly's test failed".to_string()),
+        (None, _) if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        (None, _) => core::calculate_tests_within_subjects_effects(data, config, &mauchly_test),
+    };
+    match result {
         Ok(tests) => {
             tests_of_within_subjects_effects = Some(tests);
         }
@@ -91,10 +196,31 @@ pub fn run_analysis(
         }
     }
 
+    // Step 6b: Tests of within-subjects effects, multivariate part (> 1 measure)
+    let mut within_subjects_multivariate = None;
+    if let Some(model) = &rm_model {
+        if let Some(result) = model.averaged_multivariate() {
+            executed_functions.push("calculate_within_subjects_multivariate".to_string());
+            match result {
+                Ok(tests) => {
+                    within_subjects_multivariate = Some(tests);
+                }
+                Err(e) => {
+                    error_collector.add_error("calculate_within_subjects_multivariate", &e);
+                }
+            }
+        }
+    }
+
     // Step 7: Tests of within-subjects contrasts
     let mut tests_of_within_subjects_contrasts = None;
     executed_functions.push("calculate_tests_within_subjects_contrasts".to_string());
-    match core::calculate_tests_within_subjects_contrasts(data, config) {
+    let result = match &rm_model {
+        Some(model) => model.within_contrasts(),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_tests_within_subjects_contrasts(data, config),
+    };
+    match result {
         Ok(tests) => {
             tests_of_within_subjects_contrasts = Some(tests);
         }
@@ -106,7 +232,12 @@ pub fn run_analysis(
     // Step 8: Tests of between-subjects effects
     let mut tests_of_between_subjects_effects = None;
     executed_functions.push("calculate_between_subjects_effects".to_string());
-    match core::calculate_between_subjects_effects(data, config) {
+    let result = match &rm_model {
+        Some(model) => Ok(model.between_effects()),
+        None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+        None => core::calculate_between_subjects_effects(data, config),
+    };
+    match result {
         Ok(tests) => {
             tests_of_between_subjects_effects = Some(tests);
         }
@@ -164,7 +295,11 @@ pub fn run_analysis(
     let mut residual_matrix = None;
     if config.options.res_sscp_mat {
         executed_functions.push("calculate_residual_matrix".to_string());
-        match core::calculate_residual_matrix(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.residual_matrix()),
+            None => core::calculate_residual_matrix(data, config),
+        };
+        match result {
             Ok(matrix) => {
                 residual_matrix = Some(matrix);
             }
@@ -204,7 +339,12 @@ pub fn run_analysis(
         .map_or(false, |c| !c.is_empty());
     if has_between_factors || has_covariates {
         executed_functions.push("calculate_univariate_tests".to_string());
-        match core::calculate_univariate_tests(data, config) {
+        let result = match &rm_model {
+            Some(model) => Ok(model.univariate_tests()),
+            None if rm_model_failed => Err("Not computed: the between-subjects model could not be built".to_string()),
+            None => core::calculate_univariate_tests(data, config),
+        };
+        match result {
             Ok(tests) => {
                 univariate_tests = Some(tests);
             }
@@ -230,17 +370,39 @@ pub fn run_analysis(
         }
     }
 
-    // Step 18: Estimated Marginal Means if requested
+    // Step 18: Estimated Marginal Means if requested. The model computes
+    // them per measure like SPSS (and pairwise comparisons when "Compare main
+    // effects" is set); targets it cannot compute are reported, never a panic.
     let mut emmeans = None;
+    let mut emmeans_pairwise = None;
     if let Some(target_list) = &config.emmeans.target_list {
         if !target_list.is_empty() {
             executed_functions.push("calculate_emmeans".to_string());
-            match core::calculate_emmeans(data, config) {
-                Ok(means) => {
-                    emmeans = Some(means);
+            match &rm_model {
+                Some(model) => {
+                    match model.emmeans(target_list, config.emmeans.comp_main_effect, config.emmeans.confi_interval_method.as_ref()) {
+                        Ok((means, pairs, problems)) => {
+                            for problem in problems {
+                                error_collector.add_error("calculate_emmeans", &problem);
+                            }
+                            if !means.is_empty() {
+                                emmeans = Some(means);
+                            }
+                            if !pairs.is_empty() {
+                                emmeans_pairwise = Some(pairs);
+                            }
+                        }
+                        Err(e) => error_collector.add_error("calculate_emmeans", &e),
+                    }
                 }
-                Err(e) => {
-                    error_collector.add_error("calculate_emmeans", &e);
+                None if rm_model_failed => {
+                    error_collector.add_error("calculate_emmeans", "Not computed: the between-subjects model could not be built");
+                }
+                None => {
+                    error_collector.add_error(
+                        "calculate_emmeans",
+                        "Estimated marginal means are not supported for designs with more than one within-subjects factor yet"
+                    );
                 }
             }
         }
@@ -251,9 +413,11 @@ pub fn run_analysis(
         within_subjects_factors,
         descriptive_statistics,
         bartlett_test,
+        homogeneity_tests,
         multivariate_tests,
         mauchly_test,
         tests_of_within_subjects_effects,
+        within_subjects_multivariate,
         tests_of_within_subjects_contrasts,
         tests_of_between_subjects_effects,
         parameter_estimates,
@@ -265,6 +429,7 @@ pub fn run_analysis(
         univariate_tests,
         posthoc_tests,
         emmeans,
+        emmeans_pairwise,
         executed_functions,
     };
 

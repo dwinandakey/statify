@@ -1,0 +1,46 @@
+{
+  "pkg": "rust/pkg",
+  "n": 10,
+  "designs": {
+    "gambar51": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "abb1c1a8ab1c78ac331503ddee9278e2"
+    },
+    "a": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "ac1f00947f80786a64f7a8a1415da7fe"
+    },
+    "b": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "3ac2983575f7a94678de96913b1b1830"
+    },
+    "L10M1": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "85af12a651008be0e1f342b49a1ff408"
+    },
+    "L10M2": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "59447d6e709091b68a14f8f8d8a8244e"
+    }
+  }
+}

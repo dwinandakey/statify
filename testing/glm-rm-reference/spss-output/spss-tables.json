@@ -1,0 +1,5382 @@
+{
+ "gambar51": {
+  "file": "rm_gambar51.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": "anjing",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "4"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "perlakuan",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.8676521524141529,
+       "F": 26.223,
+       "Hypothesis df": 3.0,
+       "Error df": 12.0,
+       "Sig.": 1.483857454123906e-05
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.1323478475858471,
+       "F": 26.223,
+       "Hypothesis df": 3.0,
+       "Error df": 12.0,
+       "Sig.": 1.4838574541239113e-05
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 6.555846341598815,
+       "F": 26.223,
+       "Hypothesis df": 3.0,
+       "Error df": 12.0,
+       "Sig.": 1.483857454123906e-05
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 6.555846341598815,
+       "F": 26.223,
+       "Hypothesis df": 3.0,
+       "Error df": 12.0,
+       "Sig.": 1.483857454123906e-05
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": "anjing",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "perlakuan"
+      ],
+      "values": {
+       "Mauchly's W": 0.6189363023905571,
+       "Approx. Chi-Square": 6.103523204614488,
+       "df": 5.0,
+       "Sig.": 0.29750451462668587,
+       "Greenhouse-Geisser": 0.7466637471716207,
+       "Huynh-Feldt": 0.8956872190513986,
+       "Lower-bound": 0.3333333333333333
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "anjing",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "perlakuan",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 168181.65000000002,
+       "df": 3.0,
+       "Mean Square": 56060.55000000001,
+       "F": 31.85620525059665,
+       "Sig.": 6.69424597074537e-11
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 168181.65000000002,
+       "df": 2.239991241514862,
+       "Mean Square": 75081.38732107813,
+       "F": 31.85620525059665,
+       "Sig.": 1.1842515073820862e-08
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 168181.65000000002,
+       "df": 2.687061657154196,
+       "Mean Square": 62589.427210284884,
+       "F": 31.856205250596645,
+       "Sig.": 5.619837403707309e-10
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 168181.65000000002,
+       "df": 1.0,
+       "Mean Square": 168181.65000000002,
+       "F": 31.85620525059665,
+       "Sig.": 6.054160564091969e-05
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 73911.60000000003,
+       "df": 42.0,
+       "Mean Square": 1759.8000000000009,
+       "F": null,
+       "Sig.": null
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 73911.60000000003,
+       "df": 31.35987738120807,
+       "Mean Square": 2356.884215506864,
+       "F": null,
+       "Sig.": null
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 73911.60000000003,
+       "df": 37.61886320015874,
+       "Mean Square": 1964.7483659125603,
+       "F": null,
+       "Sig.": null
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 73911.60000000003,
+       "df": 14.0,
+       "Mean Square": 5279.400000000002,
+       "F": null,
+       "Sig.": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": "anjing",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "perlakuan",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 165534.0299999998,
+       "df": 1.0,
+       "Mean Square": 165534.0299999998,
+       "F": 78.02551586585453,
+       "Sig.": 4.2437009999654254e-07
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 1.3500000000931323,
+       "df": 1.0,
+       "Mean Square": 1.3500000000931323,
+       "F": 0.0008908203088791615,
+       "Sig.": 0.9766106941609162
+      }
+     },
+     {
+      "labels": [
+       "perlakuan",
+       "Cubic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 2646.2700000004843,
+       "df": 1.0,
+       "Mean Square": 2646.2700000004843,
+       "F": 1.6112157775530842,
+       "Sig.": 0.2250171102404998
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 29701.52000000002,
+       "df": 14.0,
+       "Mean Square": 2121.5371428571443,
+       "F": null,
+       "Sig.": null
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 21216.400000000012,
+       "df": 14.0,
+       "Mean Square": 1515.4571428571437,
+       "F": null,
+       "Sig.": null
+      }
+     },
+     {
+      "labels": [
+       "Error(perlakuan)",
+       "Cubic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 22993.67999999999,
+       "df": 14.0,
+       "Mean Square": 1642.4057142857134,
+       "F": null,
+       "Sig.": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "anjing",
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept"
+      ],
+      "values": {
+       "Type III Sum of Squares": 10908164.81666667,
+       "df": 1.0,
+       "Mean Square": 10908164.81666667,
+       "F": 716.8712016896612,
+       "Sig.": 1.9989816246918673e-13
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Type III Sum of Squares": 213028.93333333332,
+       "df": 14.0,
+       "Mean Square": 15216.35238095238,
+       "F": null,
+       "Sig.": null
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "b": {
+  "file": "rm_b.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "4"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Between-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kelompok",
+       "1.00"
+      ],
+      "values": {
+       "Value Label": "K1",
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok",
+       "2.00"
+      ],
+      "values": {
+       "Value Label": "K2",
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok",
+       "3.00"
+      ],
+      "values": {
+       "Value Label": "K3",
+       "N": 8.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Descriptive Statistics",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "w1",
+       "K1"
+      ],
+      "values": {
+       "Mean": 51.875,
+       "Std. Deviation": 7.772432970808709,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "K2"
+      ],
+      "values": {
+       "Mean": 57.875,
+       "Std. Deviation": 6.937218462755804,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "K3"
+      ],
+      "values": {
+       "Mean": 58.37499999999999,
+       "Std. Deviation": 7.558108228915489,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.04166666666666,
+       "Std. Deviation": 7.714915912453738,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K1"
+      ],
+      "values": {
+       "Mean": 54.75,
+       "Std. Deviation": 8.924284685220274,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K2"
+      ],
+      "values": {
+       "Mean": 57.49999999999999,
+       "Std. Deviation": 4.242640687119285,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K3"
+      ],
+      "values": {
+       "Mean": 55.75,
+       "Std. Deviation": 5.063877678504599,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.0,
+       "Std. Deviation": 6.234546111577914,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K1"
+      ],
+      "values": {
+       "Mean": 55.375,
+       "Std. Deviation": 6.523309852258394,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K2"
+      ],
+      "values": {
+       "Mean": 56.00000000000001,
+       "Std. Deviation": 3.3380918415851206,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K3"
+      ],
+      "values": {
+       "Mean": 58.375,
+       "Std. Deviation": 5.629958132298017,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.583333333333336,
+       "Std. Deviation": 5.26610710657987,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K1"
+      ],
+      "values": {
+       "Mean": 57.875,
+       "Std. Deviation": 9.716517600751533,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K2"
+      ],
+      "values": {
+       "Mean": 59.0,
+       "Std. Deviation": 5.631543812693436,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K3"
+      ],
+      "values": {
+       "Mean": 57.87500000000001,
+       "Std. Deviation": 4.6425824094539685,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "Total"
+      ],
+      "values": {
+       "Mean": 58.25,
+       "Std. Deviation": 6.726004046592792,
+       "N": 24.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.2760769593877241,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221429824,
+       "Partial Eta Squared": 0.2760769593877241,
+       "Noncent. Parameter": 7.245883794402065,
+       "Observed Power": 0.5115220816873041
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.723923040612276,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221429824,
+       "Partial Eta Squared": 0.27607695938772403,
+       "Noncent. Parameter": 7.245883794402062,
+       "Observed Power": 0.5115220816873038
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.3813623049685297,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221429824,
+       "Partial Eta Squared": 0.2760769593877241,
+       "Noncent. Parameter": 7.245883794402065,
+       "Observed Power": 0.5115220816873041
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.3813623049685297,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221429824,
+       "Partial Eta Squared": 0.2760769593877241,
+       "Noncent. Parameter": 7.245883794402065,
+       "Observed Power": 0.5115220816873041
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.41078947344133415,
+       "F": 1.7232433613054092,
+       "Hypothesis df": 6.0,
+       "Error df": 40.0,
+       "Sig.": 0.14064911033319286,
+       "Partial Eta Squared": 0.20539473672066708,
+       "Noncent. Parameter": 10.339460167832454,
+       "Observed Power": 0.5826478927018985
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.6306278328438065,
+       "F": 1.642,
+       "Hypothesis df": 6.0,
+       "Error df": 38.0,
+       "Sig.": 0.1624128485601784,
+       "Partial Eta Squared": 0.20587920764923517,
+       "Noncent. Parameter": 9.851662323954516,
+       "Observed Power": 0.5545345540046851
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.5200450151274569,
+       "F": 1.5601350453823708,
+       "Hypothesis df": 6.0,
+       "Error df": 36.0,
+       "Sig.": 0.18717726197751805,
+       "Partial Eta Squared": 0.2063633831958174,
+       "Noncent. Parameter": 9.360810272294222,
+       "Observed Power": 0.5253499473264862
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.30401567538862195,
+       "F": 2.027,
+       "Hypothesis df": 3.0,
+       "Error df": 20.0,
+       "Sig.": 0.142512853983839,
+       "Partial Eta Squared": 0.23313805280601352,
+       "Noncent. Parameter": 6.080313507772439,
+       "Observed Power": 0.44177134959178865
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu"
+      ],
+      "values": {
+       "Mauchly's W": 0.8412827353021015,
+       "Approx. Chi-Square": 3.40854208674207,
+       "df": 5.0,
+       "Sig.": 0.6376335284833365,
+       "Greenhouse-Geisser": 0.8946909662383676,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 0.3333333333333333
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 3.0,
+       "Mean Square": 26.70486111111605,
+       "F": 2.3730330145021363,
+       "Sig.": 0.0786395818639952,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 7.1190990435064085,
+       "Observed Power": 0.5682838184928168
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 2.684072898715103,
+       "Mean Square": 29.84813988163285,
+       "F": 2.3730330145021363,
+       "Sig.": 0.08632436283549028,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 6.369393601981388,
+       "Observed Power": 0.534382851455541
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 3.0,
+       "Mean Square": 26.70486111111605,
+       "F": 2.3730330145021363,
+       "Sig.": 0.0786395818639952,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 7.1190990435064085,
+       "Observed Power": 0.5682838184928168
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 1.0,
+       "Mean Square": 80.11458333334815,
+       "F": 2.373033014502136,
+       "Sig.": 0.1383811678583208,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 2.3730330145021363,
+       "Observed Power": 0.31248743559536796
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 6.0,
+       "Mean Square": 23.361111111111043,
+       "F": 2.0759024992286275,
+       "Sig.": 0.06857979900321443,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 12.455414995371765,
+       "Observed Power": 0.7069632870561613
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 5.368145797430206,
+       "Mean Square": 26.110815904770263,
+       "F": 2.0759024992286275,
+       "Sig.": 0.07739633720315404,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 11.143747277109018,
+       "Observed Power": 0.6681003097937472
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 6.0,
+       "Mean Square": 23.361111111111043,
+       "F": 2.0759024992286275,
+       "Sig.": 0.06857979900321443,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 12.455414995371765,
+       "Observed Power": 0.7069632870561613
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 2.0,
+       "Mean Square": 70.08333333333313,
+       "F": 2.0759024992286275,
+       "Sig.": 0.15042722471151895,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 4.151804998457255,
+       "Observed Power": 0.3782655085632767
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 63.0,
+       "Mean Square": 11.25347222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 56.365530873017164,
+       "Mean Square": 12.578055045683806,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 63.0,
+       "Mean Square": 11.25347222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 21.0,
+       "Mean Square": 33.760416666666664,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 62.352083333345945,
+       "df": 1.0,
+       "Mean Square": 62.352083333345945,
+       "F": 4.7324990399611995,
+       "Sig.": 0.04116480655411205,
+       "Partial Eta Squared": 0.18391136564745927,
+       "Noncent. Parameter": 4.732499039961199,
+       "Observed Power": 0.545985615479339
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 17.510416666671517,
+       "df": 1.0,
+       "Mean Square": 17.510416666671517,
+       "F": 1.608172748394596,
+       "Sig.": 0.2186284634972344,
+       "Partial Eta Squared": 0.07113236289778405,
+       "Noncent. Parameter": 1.608172748394596,
+       "Observed Power": 0.22757966976147948
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Cubic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 0.2520833333401242,
+       "df": 1.0,
+       "Mean Square": 0.2520833333401242,
+       "F": 0.025996746570787186,
+       "Sig.": 0.8734493647255813,
+       "Partial Eta Squared": 0.0012364097114695453,
+       "Noncent. Parameter": 0.025996746570787186,
+       "Observed Power": 0.052721175325485814
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 78.31666666666663,
+       "df": 2.0,
+       "Mean Square": 39.15833333333332,
+       "F": 2.972102374121844,
+       "Sig.": 0.07301569265663113,
+       "Partial Eta Squared": 0.2206116233076484,
+       "Noncent. Parameter": 5.9442047482436875,
+       "Observed Power": 0.5160349273024618
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 14.583333333333353,
+       "df": 2.0,
+       "Mean Square": 7.291666666666677,
+       "F": 0.6696733634003016,
+       "Sig.": 0.5224715802996168,
+       "Partial Eta Squared": 0.05995460579846695,
+       "Noncent. Parameter": 1.3393467268006032,
+       "Observed Power": 0.14739371460718254
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Cubic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 47.26666666666634,
+       "df": 2.0,
+       "Mean Square": 23.63333333333317,
+       "F": 2.437248703231928,
+       "Sig.": 0.11172423933314178,
+       "Partial Eta Squared": 0.18839003246672262,
+       "Noncent. Parameter": 4.874497406463855,
+       "Observed Power": 0.43573091691569665
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 276.6812500000001,
+       "df": 21.0,
+       "Mean Square": 13.175297619047623,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 228.65625,
+       "df": 21.0,
+       "Mean Square": 10.888392857142858,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Cubic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 203.63125000000002,
+       "df": 21.0,
+       "Mean Square": 9.696726190476191,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept"
+      ],
+      "values": {
+       "Type III Sum of Squares": 308833.5937499999,
+       "df": 1.0,
+       "Mean Square": 308833.5937499999,
+       "F": 2202.092153429889,
+       "Sig.": 9.50150675108175e-23,
+       "Partial Eta Squared": 0.9905536979348336,
+       "Noncent. Parameter": 2202.092153429889,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok"
+      ],
+      "values": {
+       "Type III Sum of Squares": 146.99999999999972,
+       "df": 2.0,
+       "Mean Square": 73.49999999999986,
+       "F": 0.5240808530956539,
+       "Sig.": 0.5996426951210139,
+       "Partial Eta Squared": 0.047539641633568726,
+       "Noncent. Parameter": 1.0481617061913078,
+       "Observed Power": 0.12479851780396722
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Type III Sum of Squares": 2945.15625,
+       "df": 21.0,
+       "Mean Square": 140.24553571428572,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "a": {
+  "file": "rm_a.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "cemas",
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "cemas",
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "cemas",
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "stres",
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "stres",
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "stres",
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Descriptive Statistics",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "cemas1"
+      ],
+      "values": {
+       "Mean": 30.6875,
+       "Std. Deviation": 5.641734366900543,
+       "N": 16.0
+      }
+     },
+     {
+      "labels": [
+       "cemas2"
+      ],
+      "values": {
+       "Mean": 27.4375,
+       "Std. Deviation": 3.365882747016994,
+       "N": 16.0
+      }
+     },
+     {
+      "labels": [
+       "cemas3"
+      ],
+      "values": {
+       "Mean": 25.187500000000004,
+       "Std. Deviation": 4.5784822812805555,
+       "N": 16.0
+      }
+     },
+     {
+      "labels": [
+       "stres1"
+      ],
+      "values": {
+       "Mean": 24.375000000000004,
+       "Std. Deviation": 2.7049337638224467,
+       "N": 16.0
+      }
+     },
+     {
+      "labels": [
+       "stres2"
+      ],
+      "values": {
+       "Mean": 23.125,
+       "Std. Deviation": 2.1563858652847827,
+       "N": 16.0
+      }
+     },
+     {
+      "labels": [
+       "stres3"
+      ],
+      "values": {
+       "Mean": 20.375000000000004,
+       "Std. Deviation": 3.4229616805723473,
+       "N": 16.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Between Subjects",
+       "Intercept",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.9907316043129787,
+       "F": 748.255,
+       "Hypothesis df": 2.0,
+       "Error df": 14.0,
+       "Sig.": 5.87532594748356e-15,
+       "Partial Eta Squared": 0.9907316043129787,
+       "Noncent. Parameter": 1496.5095285912782,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Between Subjects",
+       "Intercept",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.009268395687021347,
+       "F": 748.255,
+       "Hypothesis df": 2.0,
+       "Error df": 14.0,
+       "Sig.": 5.875325947483726e-15,
+       "Partial Eta Squared": 0.9907316043129787,
+       "Noncent. Parameter": 1496.5095285912782,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Between Subjects",
+       "Intercept",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 106.89353775651956,
+       "F": 748.255,
+       "Hypothesis df": 2.0,
+       "Error df": 14.0,
+       "Sig.": 5.875325947483684e-15,
+       "Partial Eta Squared": 0.9907316043129787,
+       "Noncent. Parameter": 1496.5095285912782,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Between Subjects",
+       "Intercept",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 106.89353775651956,
+       "F": 748.255,
+       "Hypothesis df": 2.0,
+       "Error df": 14.0,
+       "Sig.": 5.875325947483684e-15,
+       "Partial Eta Squared": 0.9907316043129787,
+       "Noncent. Parameter": 1496.5095285912782,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Within Subjects",
+       "waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.9045935423187228,
+       "F": 28.444,
+       "Hypothesis df": 4.0,
+       "Error df": 12.0,
+       "Sig.": 4.847444576331296e-06,
+       "Partial Eta Squared": 0.9045935423187228,
+       "Noncent. Parameter": 113.77764956003509,
+       "Observed Power": 0.9999999939635883
+      }
+     },
+     {
+      "labels": [
+       "Within Subjects",
+       "waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.09540645768127724,
+       "F": 28.444,
+       "Hypothesis df": 4.0,
+       "Error df": 12.0,
+       "Sig.": 4.847444576331314e-06,
+       "Partial Eta Squared": 0.9045935423187228,
+       "Noncent. Parameter": 113.77764956003509,
+       "Observed Power": 0.9999999939635883
+      }
+     },
+     {
+      "labels": [
+       "Within Subjects",
+       "waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 9.481470796669587,
+       "F": 28.444,
+       "Hypothesis df": 4.0,
+       "Error df": 12.0,
+       "Sig.": 4.847444576331296e-06,
+       "Partial Eta Squared": 0.9045935423187228,
+       "Noncent. Parameter": 113.77764956003509,
+       "Observed Power": 0.9999999939635883
+      }
+     },
+     {
+      "labels": [
+       "Within Subjects",
+       "waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 9.481470796669587,
+       "F": 28.444,
+       "Hypothesis df": 4.0,
+       "Error df": 12.0,
+       "Sig.": 4.847444576331296e-06,
+       "Partial Eta Squared": 0.9045935423187228,
+       "Noncent. Parameter": 113.77764956003509,
+       "Observed Power": 0.9999999939635883
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "cemas"
+      ],
+      "values": {
+       "Mauchly's W": 0.8590077257165382,
+       "Approx. Chi-Square": 2.127683084646538,
+       "df": 2.0,
+       "Sig.": 0.34512743880286745,
+       "Greenhouse-Geisser": 0.8764301236202455,
+       "Huynh-Feldt": 0.9830712305432676,
+       "Lower-bound": 0.5
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres"
+      ],
+      "values": {
+       "Mauchly's W": 0.9975324499729566,
+       "Approx. Chi-Square": 0.03458839224456156,
+       "df": 2.0,
+       "Sig.": 0.9828544901172839,
+       "Greenhouse-Geisser": 0.9975385237886505,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 0.5
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.7199624988751049,
+       "F": 8.436813354011928,
+       "Hypothesis df": 4.0,
+       "Error df": 60.0,
+       "Sig.": 1.809848545524905e-05,
+       "Partial Eta Squared": 0.35998124943755244,
+       "Noncent. Parameter": 33.74725341604771,
+       "Observed Power": 0.9978921546444537
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.3187367278656713,
+       "F": 11.183,
+       "Hypothesis df": 4.0,
+       "Error df": 58.0,
+       "Sig.": 8.59375406333117e-07,
+       "Partial Eta Squared": 0.4354322645902696,
+       "Noncent. Parameter": 44.733465556452636,
+       "Observed Power": 0.9998777950342046
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 2.015971142379159,
+       "F": 14.111797996654113,
+       "Hypothesis df": 4.0,
+       "Error df": 56.0,
+       "Sig.": 5.01653472239545e-08,
+       "Partial Eta Squared": 0.5019884533295845,
+       "Noncent. Parameter": 56.44719198661644,
+       "Observed Power": 0.9999951762893586
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 1.953829383597806,
+       "F": 29.307,
+       "Hypothesis df": 2.0,
+       "Error df": 30.0,
+       "Sig.": 8.794656961583318e-08,
+       "Partial Eta Squared": 0.6614564112765424,
+       "Noncent. Parameter": 58.61488150793419,
+       "Observed Power": 0.9999995738938319
+      }
+     }
+    ]
+   },
+   {
+    "title": "Univariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 244.6666666666663,
+       "df": 2.0,
+       "Mean Square": 122.33333333333314,
+       "F": 15.773638968481357,
+       "Sig.": 2.0829846510922092e-05,
+       "Partial Eta Squared": 0.5125698324022343,
+       "Noncent. Parameter": 31.54727793696272,
+       "Observed Power": 0.9987347147615848
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 244.6666666666663,
+       "df": 1.752860247240491,
+       "Mean Square": 139.58138822067667,
+       "F": 15.773638968481357,
+       "Sig.": 5.6599888610344715e-05,
+       "Partial Eta Squared": 0.5125698324022343,
+       "Noncent. Parameter": 27.648984702174474,
+       "Observed Power": 0.9969281031493827
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 244.6666666666663,
+       "df": 1.9661424610865352,
+       "Mean Square": 124.43994853326035,
+       "F": 15.773638968481357,
+       "Sig.": 2.38810762009169e-05,
+       "Partial Eta Squared": 0.5125698324022343,
+       "Noncent. Parameter": 31.01322134178041,
+       "Observed Power": 0.9985698471242644
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 244.6666666666663,
+       "df": 1.0,
+       "Mean Square": 244.6666666666663,
+       "F": 15.773638968481357,
+       "Sig.": 0.0012282761338968191,
+       "Partial Eta Squared": 0.5125698324022343,
+       "Noncent. Parameter": 15.77363896848136,
+       "Observed Power": 0.9596498776873228
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 134.0000000000008,
+       "df": 2.0,
+       "Mean Square": 67.0000000000004,
+       "F": 17.529069767441964,
+       "Sig.": 9.063464258955352e-06,
+       "Partial Eta Squared": 0.5388739946380712,
+       "Noncent. Parameter": 35.05813953488393,
+       "Observed Power": 0.9995221544035446
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 134.0000000000008,
+       "df": 1.995077047577301,
+       "Mean Square": 67.16532585181217,
+       "F": 17.529069767441964,
+       "Sig.": 9.263311555687136e-06,
+       "Partial Eta Squared": 0.5388739946380712,
+       "Noncent. Parameter": 34.97184475840464,
+       "Observed Power": 0.9995122473391289
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 134.0000000000008,
+       "df": 2.0,
+       "Mean Square": 67.0000000000004,
+       "F": 17.529069767441964,
+       "Sig.": 9.063464258955352e-06,
+       "Partial Eta Squared": 0.5388739946380712,
+       "Noncent. Parameter": 35.05813953488393,
+       "Observed Power": 0.9995221544035446
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 134.0000000000008,
+       "df": 1.0,
+       "Mean Square": 134.0000000000008,
+       "F": 17.529069767441964,
+       "Sig.": 0.0007938357125995455,
+       "Partial Eta Squared": 0.5388739946380712,
+       "Noncent. Parameter": 17.529069767441964,
+       "Observed Power": 0.9741906286345395
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 232.66666666666657,
+       "df": 30.0,
+       "Mean Square": 7.755555555555552,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 232.66666666666657,
+       "df": 26.292903708607366,
+       "Mean Square": 8.84902897166507,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 232.66666666666657,
+       "df": 29.49213691629803,
+       "Mean Square": 7.889108453788903,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 232.66666666666657,
+       "df": 15.0,
+       "Mean Square": 15.511111111111104,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 114.66666666666666,
+       "df": 30.0,
+       "Mean Square": 3.822222222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 114.66666666666666,
+       "df": 29.926155713659515,
+       "Mean Square": 3.8316537467700247,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 114.66666666666666,
+       "df": 30.0,
+       "Mean Square": 3.822222222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 114.66666666666666,
+       "df": 15.0,
+       "Mean Square": 7.644444444444444,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 241.99999999999818,
+       "df": 1.0,
+       "Mean Square": 241.99999999999818,
+       "F": 45.374999999999694,
+       "Sig.": 6.680768187610091e-06,
+       "Partial Eta Squared": 0.7515527950310547,
+       "Noncent. Parameter": 45.374999999999694,
+       "Observed Power": 0.9999915882758513
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "cemas",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 2.6666666666642413,
+       "df": 1.0,
+       "Mean Square": 2.6666666666642413,
+       "F": 0.26200873362421584,
+       "Sig.": 0.6161963724520446,
+       "Partial Eta Squared": 0.017167381974233578,
+       "Noncent. Parameter": 0.26200873362421584,
+       "Observed Power": 0.0767728264700881
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 127.99999999999864,
+       "df": 1.0,
+       "Mean Square": 127.99999999999864,
+       "F": 32.5423728813556,
+       "Sig.": 4.172655241953968e-05,
+       "Partial Eta Squared": 0.6844919786096235,
+       "Noncent. Parameter": 32.5423728813556,
+       "Observed Power": 0.9995981358501004
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "stres",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 5.999999999998181,
+       "df": 1.0,
+       "Mean Square": 5.999999999998181,
+       "F": 1.6167664670653785,
+       "Sig.": 0.22290589161910773,
+       "Partial Eta Squared": 0.09729729729727069,
+       "Noncent. Parameter": 1.6167664670653783,
+       "Observed Power": 0.22179449780037175
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 79.99999999999994,
+       "df": 15.0,
+       "Mean Square": 5.3333333333333295,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "cemas",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 152.66666666666669,
+       "df": 15.0,
+       "Mean Square": 10.177777777777779,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 58.99999999999998,
+       "df": 15.0,
+       "Mean Square": 3.933333333333332,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "stres",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 55.66666666666666,
+       "df": 15.0,
+       "Mean Square": 3.7111111111111104,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept",
+       "cemas"
+      ],
+      "values": {
+       "Type III Sum of Squares": 37018.52083333334,
+       "df": 1.0,
+       "Mean Square": 37018.52083333334,
+       "F": 761.5456155890168,
+       "Sig.": 2.84988464293982e-14,
+       "Partial Eta Squared": 0.9806836846427593,
+       "Noncent. Parameter": 761.5456155890168,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Intercept",
+       "stres"
+      ],
+      "values": {
+       "Type III Sum of Squares": 24570.750000000004,
+       "df": 1.0,
+       "Mean Square": 24570.750000000004,
+       "F": 1531.9483893314857,
+       "Sig.": 1.6148913257376059e-16,
+       "Partial Eta Squared": 0.9903034903404359,
+       "Noncent. Parameter": 1531.9483893314857,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Error",
+       "cemas"
+      ],
+      "values": {
+       "Type III Sum of Squares": 729.1458333333335,
+       "df": 15.0,
+       "Mean Square": 48.60972222222223,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error",
+       "stres"
+      ],
+      "values": {
+       "Type III Sum of Squares": 240.5833333333334,
+       "df": 15.0,
+       "Mean Square": 16.038888888888895,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "c": {
+  "file": "rm_c.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Between-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "metode",
+       "1.00"
+      ],
+      "values": {
+       "Value Label": "M1",
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "metode",
+       "2.00"
+      ],
+      "values": {
+       "Value Label": "M2",
+       "N": 10.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Descriptive Statistics",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "p1",
+       "M1"
+      ],
+      "values": {
+       "Mean": 59.39999999999999,
+       "Std. Deviation": 4.221637386396683,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p1",
+       "M2"
+      ],
+      "values": {
+       "Mean": 58.199999999999996,
+       "Std. Deviation": 7.114929530376405,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p1",
+       "Total"
+      ],
+      "values": {
+       "Mean": 58.8,
+       "Std. Deviation": 5.727128425310541,
+       "N": 20.0
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "M1"
+      ],
+      "values": {
+       "Mean": 61.699999999999996,
+       "Std. Deviation": 3.591656999213594,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "M2"
+      ],
+      "values": {
+       "Mean": 60.6,
+       "Std. Deviation": 7.366591251499344,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "Total"
+      ],
+      "values": {
+       "Mean": 61.15,
+       "Std. Deviation": 5.668704483946557,
+       "N": 20.0
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "M1"
+      ],
+      "values": {
+       "Mean": 63.4,
+       "Std. Deviation": 3.6575644598253874,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "M2"
+      ],
+      "values": {
+       "Mean": 64.5,
+       "Std. Deviation": 9.228578799938084,
+       "N": 10.0
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "Total"
+      ],
+      "values": {
+       "Mean": 63.95,
+       "Std. Deviation": 6.8554626700940196,
+       "N": 20.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Box's Test of Equality of Covariance Matrices",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Box's M"
+      ],
+      "values": {
+       "Value": 13.534669432583541
+      }
+     },
+     {
+      "labels": [
+       "F"
+      ],
+      "values": {
+       "Value": 1.8427193087587816
+      }
+     },
+     {
+      "labels": [
+       "df1"
+      ],
+      "values": {
+       "Value": 6.0
+      }
+     },
+     {
+      "labels": [
+       "df2"
+      ],
+      "values": {
+       "Value": 2347.4716981132146
+      }
+     },
+     {
+      "labels": [
+       "Sig."
+      ],
+      "values": {
+       "Value": 0.08715560184772123
+      }
+     }
+    ]
+   },
+   {
+    "title": "Bartlett's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Likelihood Ratio"
+      ],
+      "values": {
+       "Value": 2.4320750632936687e-11
+      }
+     },
+     {
+      "labels": [
+       "Approx. Chi-Square"
+      ],
+      "values": {
+       "Value": 40.86859471963438
+      }
+     },
+     {
+      "labels": [
+       "df"
+      ],
+      "values": {
+       "Value": 5.0
+      }
+     },
+     {
+      "labels": [
+       "Sig."
+      ],
+      "values": {
+       "Value": 1.0825442064054627e-07
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "sesi",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.7431514011379653,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.59966788008063e-06,
+       "Partial Eta Squared": 0.7431514011379653,
+       "Noncent. Parameter": 49.186851224099875,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.2568485988620347,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.59966788008063e-06,
+       "Partial Eta Squared": 0.7431514011379653,
+       "Noncent. Parameter": 49.186851224099875,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 2.8933441896529346,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.59966788008063e-06,
+       "Partial Eta Squared": 0.7431514011379653,
+       "Noncent. Parameter": 49.186851224099875,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 2.8933441896529346,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.59966788008063e-06,
+       "Partial Eta Squared": 0.7431514011379653,
+       "Noncent. Parameter": 49.186851224099875,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.1222964539497104,
+       "F": 1.184,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 0.329956547162756,
+       "Partial Eta Squared": 0.1222964539497104,
+       "Noncent. Parameter": 2.3687265780124287,
+       "Observed Power": 0.22449841455330732
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.8777035460502897,
+       "F": 1.184,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 0.329956547162756,
+       "Partial Eta Squared": 0.12229645394971034,
+       "Noncent. Parameter": 2.3687265780124274,
+       "Observed Power": 0.2244984145533071
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.13933685753014285,
+       "F": 1.184,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 0.329956547162756,
+       "Partial Eta Squared": 0.1222964539497104,
+       "Noncent. Parameter": 2.3687265780124287,
+       "Observed Power": 0.22449841455330732
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.13933685753014285,
+       "F": 1.184,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 0.329956547162756,
+       "Partial Eta Squared": 0.1222964539497104,
+       "Noncent. Parameter": 2.3687265780124287,
+       "Observed Power": 0.22449841455330732
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "sesi"
+      ],
+      "values": {
+       "Mauchly's W": 0.8010901180989451,
+       "Approx. Chi-Square": 3.7702911312886,
+       "df": 2.0,
+       "Sig.": 0.1518069599430733,
+       "Greenhouse-Geisser": 0.8340910481231063,
+       "Huynh-Feldt": 0.9602005762541436,
+       "Lower-bound": 0.5
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "sesi",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 265.8999999999885,
+       "df": 2.0,
+       "Mean Square": 132.94999999999425,
+       "F": 15.346943138092545,
+       "Sig.": 1.5132008276048882e-05,
+       "Partial Eta Squared": 0.46022038885362115,
+       "Noncent. Parameter": 30.69388627618509,
+       "Observed Power": 0.9986290040501183
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 265.8999999999885,
+       "df": 1.6681820962462126,
+       "Mean Square": 159.39506879873827,
+       "F": 15.346943138092543,
+       "Sig.": 6.040672221203723e-05,
+       "Partial Eta Squared": 0.46022038885362115,
+       "Noncent. Parameter": 25.601495775074646,
+       "Observed Power": 0.9956170598582696
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 265.8999999999885,
+       "df": 1.9204011525082871,
+       "Mean Square": 138.46065425064415,
+       "F": 15.346943138092545,
+       "Sig.": 2.1077232020018502e-05,
+       "Partial Eta Squared": 0.46022038885362115,
+       "Noncent. Parameter": 29.47228728987207,
+       "Observed Power": 0.9981834216611354
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 265.8999999999885,
+       "df": 1.0,
+       "Mean Square": 265.8999999999885,
+       "F": 15.346943138092545,
+       "Sig.": 0.0010092415587497875,
+       "Partial Eta Squared": 0.46022038885362115,
+       "Noncent. Parameter": 15.346943138092545,
+       "Observed Power": 0.9591715370871623
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 16.900000000000002,
+       "df": 2.0,
+       "Mean Square": 8.450000000000001,
+       "F": 0.975416844805473,
+       "Sig.": 0.38677753411105975,
+       "Partial Eta Squared": 0.05140423806144178,
+       "Noncent. Parameter": 1.9508336896109457,
+       "Observed Power": 0.20612929569714755
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 16.900000000000002,
+       "df": 1.6681820962462126,
+       "Mean Square": 10.13078850206391,
+       "F": 0.9754168448054729,
+       "Sig.": 0.3746626192029754,
+       "Partial Eta Squared": 0.05140423806144178,
+       "Noncent. Parameter": 1.6271729168814604,
+       "Observed Power": 0.19000902353497584
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 16.900000000000002,
+       "df": 1.9204011525082871,
+       "Mean Square": 8.800244666551288,
+       "F": 0.9754168448054729,
+       "Sig.": 0.3841315523393578,
+       "Partial Eta Squared": 0.05140423806144178,
+       "Noncent. Parameter": 1.8731916329404275,
+       "Observed Power": 0.20232160778702757
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 16.900000000000002,
+       "df": 1.0,
+       "Mean Square": 16.900000000000002,
+       "F": 0.975416844805473,
+       "Sig.": 0.3364238981464194,
+       "Partial Eta Squared": 0.05140423806144178,
+       "Noncent. Parameter": 0.9754168448054729,
+       "Observed Power": 0.15473949374833174
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 311.86666666666656,
+       "df": 36.0,
+       "Mean Square": 8.66296296296296,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 311.86666666666656,
+       "df": 30.027277732431827,
+       "Mean Square": 10.38611190283913,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 311.86666666666656,
+       "df": 34.56722074514917,
+       "Mean Square": 9.022034746904867,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 311.86666666666656,
+       "df": 18.0,
+       "Mean Square": 17.32592592592592,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "sesi",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 265.2250000000058,
+       "df": 1.0,
+       "Mean Square": 265.2250000000058,
+       "F": 49.703800104113554,
+       "Sig.": 1.4117378573991196e-06,
+       "Partial Eta Squared": 0.7341360459483817,
+       "Noncent. Parameter": 49.703800104113554,
+       "Observed Power": 0.9999985729737089
+      }
+     },
+     {
+      "labels": [
+       "sesi",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 0.6749999999883585,
+       "df": 1.0,
+       "Mean Square": 0.6749999999883585,
+       "F": 0.0562977836116633,
+       "Sig.": 0.8151256882754186,
+       "Partial Eta Squared": 0.0031179029215369137,
+       "Noncent. Parameter": 0.0562977836116633,
+       "Observed Power": 0.05581356676324045
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 13.225000000000001,
+       "df": 1.0,
+       "Mean Square": 13.225000000000001,
+       "F": 2.4783966684018757,
+       "Sig.": 0.13283210597598463,
+       "Partial Eta Squared": 0.12102493708533524,
+       "Noncent. Parameter": 2.4783966684018752,
+       "Observed Power": 0.3197113143896422
+      }
+     },
+     {
+      "labels": [
+       "sesi * metode",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 3.675,
+       "df": 1.0,
+       "Mean Square": 3.675,
+       "F": 0.306510155224342,
+       "Sig.": 0.5866417334639489,
+       "Partial Eta Squared": 0.016743232468962397,
+       "Noncent. Parameter": 0.306510155224342,
+       "Observed Power": 0.08208564130625395
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 96.04999999999995,
+       "df": 18.0,
+       "Mean Square": 5.336111111111109,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(sesi)",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 215.81666666666638,
+       "df": 18.0,
+       "Mean Square": 11.9898148148148,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Levene's Test of Equality of Error Variances",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "p1",
+       "Based on Mean"
+      ],
+      "values": {
+       "Levene Statistic": 2.7407316474343255,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.11514981848662958
+      }
+     },
+     {
+      "labels": [
+       "p1",
+       "Based on Median"
+      ],
+      "values": {
+       "Levene Statistic": 2.5855361596009967,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.12524262748574652
+      }
+     },
+     {
+      "labels": [
+       "p1",
+       "Based on Median and with adjusted df"
+      ],
+      "values": {
+       "Levene Statistic": 2.5855361596009967,
+       "df1": 1.0,
+       "df2": 15.296012788029786,
+       "Sig.": 0.12828554200267733
+      }
+     },
+     {
+      "labels": [
+       "p1",
+       "Based on trimmed mean"
+      ],
+      "values": {
+       "Levene Statistic": 2.7574506874635993,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.11412156990034801
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "Based on Mean"
+      ],
+      "values": {
+       "Levene Statistic": 2.6497693516500243,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.12094192092853244
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "Based on Median"
+      ],
+      "values": {
+       "Levene Statistic": 2.7055670103092786,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.11734880233882863
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "Based on Median and with adjusted df"
+      ],
+      "values": {
+       "Levene Statistic": 2.7055670103092786,
+       "df1": 1.0,
+       "df2": 12.812634888156762,
+       "Sig.": 0.12429573315027445
+      }
+     },
+     {
+      "labels": [
+       "p2",
+       "Based on trimmed mean"
+      ],
+      "values": {
+       "Levene Statistic": 2.6231278847059576,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.12270386889515106
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "Based on Mean"
+      ],
+      "values": {
+       "Levene Statistic": 6.424877947130269,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.020751070684994277
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "Based on Median"
+      ],
+      "values": {
+       "Levene Statistic": 6.469648562300319,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.020372543587058266
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "Based on Median and with adjusted df"
+      ],
+      "values": {
+       "Levene Statistic": 6.469648562300319,
+       "df1": 1.0,
+       "df2": 12.351474692321702,
+       "Sig.": 0.02529375340229491
+      }
+     },
+     {
+      "labels": [
+       "p3",
+       "Based on trimmed mean"
+      ],
+      "values": {
+       "Levene Statistic": 6.4214329049693895,
+       "df1": 1.0,
+       "df2": 18.0,
+       "Sig.": 0.020780526674766868
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "nilai",
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept"
+      ],
+      "values": {
+       "Type III Sum of Squares": 225461.4000000001,
+       "df": 1.0,
+       "Mean Square": 225461.4000000001,
+       "F": 2260.2227007760002,
+       "Sig.": 2.2331181228679672e-20,
+       "Partial Eta Squared": 0.992099104273753,
+       "Noncent. Parameter": 2260.2227007760002,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "metode"
+      ],
+      "values": {
+       "Type III Sum of Squares": 2.4000000000000026,
+       "df": 1.0,
+       "Mean Square": 2.4000000000000026,
+       "F": 0.02405970370920434,
+       "Sig.": 0.8784592208762287,
+       "Partial Eta Squared": 0.001334865957210131,
+       "Noncent. Parameter": 0.02405970370920434,
+       "Observed Power": 0.05247970512099864
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Type III Sum of Squares": 1795.533333333334,
+       "df": 18.0,
+       "Mean Square": 99.75185185185188,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Residual SSCP Matrix",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Sum-of-Squares and Cross-Products",
+       "p1"
+      ],
+      "values": {
+       "p1": 616.0,
+       "p2": 455.00000000000006,
+       "p3": 655.4
+      }
+     },
+     {
+      "labels": [
+       "Sum-of-Squares and Cross-Products",
+       "p2"
+      ],
+      "values": {
+       "p1": 455.00000000000006,
+       "p2": 604.4999999999999,
+       "p3": 529.2
+      }
+     },
+     {
+      "labels": [
+       "Sum-of-Squares and Cross-Products",
+       "p3"
+      ],
+      "values": {
+       "p1": 655.4,
+       "p2": 529.2,
+       "p3": 886.9
+      }
+     },
+     {
+      "labels": [
+       "Covariance",
+       "p1"
+      ],
+      "values": {
+       "p1": 34.22222222222222,
+       "p2": 25.277777777777782,
+       "p3": 36.41111111111111
+      }
+     },
+     {
+      "labels": [
+       "Covariance",
+       "p2"
+      ],
+      "values": {
+       "p1": 25.277777777777782,
+       "p2": 33.58333333333333,
+       "p3": 29.400000000000002
+      }
+     },
+     {
+      "labels": [
+       "Covariance",
+       "p3"
+      ],
+      "values": {
+       "p1": 36.41111111111111,
+       "p2": 29.400000000000002,
+       "p3": 49.27222222222222
+      }
+     },
+     {
+      "labels": [
+       "Correlation",
+       "p1"
+      ],
+      "values": {
+       "p1": 1.0,
+       "p2": 0.7456291667779308,
+       "p3": 0.8867041753940559
+      }
+     },
+     {
+      "labels": [
+       "Correlation",
+       "p2"
+      ],
+      "values": {
+       "p1": 0.7456291667779308,
+       "p2": 1.0,
+       "p3": 0.7227437678315722
+      }
+     },
+     {
+      "labels": [
+       "Correlation",
+       "p3"
+      ],
+      "values": {
+       "p1": 0.8867041753940559,
+       "p2": 0.7227437678315722,
+       "p3": 1.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Estimates",
+    "section": "emmeans",
+    "target": "Grand Mean",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [],
+      "values": {
+       "Mean": 61.3,
+       "Std. Error": 1.2893916643896575,
+       "Lower Bound": 58.591088633780764,
+       "Upper Bound": 64.00891136621922
+      }
+     }
+    ]
+   },
+   {
+    "title": "Estimates",
+    "section": "emmeans",
+    "target": "metode",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "M1"
+      ],
+      "values": {
+       "Mean": 61.50000000000001,
+       "Std. Error": 1.8234751789906716,
+       "Lower Bound": 57.669020806626136,
+       "Upper Bound": 65.33097919337388
+      }
+     },
+     {
+      "labels": [
+       "M2"
+      ],
+      "values": {
+       "Mean": 61.1,
+       "Std. Error": 1.8234751789906714,
+       "Lower Bound": 57.26902080662613,
+       "Upper Bound": 64.93097919337387
+      }
+     }
+    ]
+   },
+   {
+    "title": "Pairwise Comparisons",
+    "section": "emmeans",
+    "target": "metode",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "M1",
+       "M2"
+      ],
+      "values": {
+       "Mean Difference (I-J)": 0.4,
+       "Std. Error": 2.5787833287793145,
+       "Sig.": 0.8784592208762287,
+       "Lower Bound": -5.017822732438461,
+       "Upper Bound": 5.8178227324384615
+      }
+     },
+     {
+      "labels": [
+       "M2",
+       "M1"
+      ],
+      "values": {
+       "Mean Difference (I-J)": -0.4,
+       "Std. Error": 2.5787833287793145,
+       "Sig.": 0.8784592208762287,
+       "Lower Bound": -5.8178227324384615,
+       "Upper Bound": 5.017822732438461
+      }
+     }
+    ]
+   },
+   {
+    "title": "Univariate Tests",
+    "section": "emmeans",
+    "target": "metode",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Contrast"
+      ],
+      "values": {
+       "Sum of Squares": 0.8000000000000004,
+       "df": 1.0,
+       "Mean Square": 0.8000000000000004,
+       "F": 0.02405970370920434,
+       "Sig.": 0.8784592208762287,
+       "Partial Eta Squared": 0.0013348659572101312,
+       "Noncent. Parameter": 0.02405970370920434,
+       "Observed Power": 0.05247970512099864
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Sum of Squares": 598.511111111111,
+       "df": 18.0,
+       "Mean Square": 33.25061728395061,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Estimates",
+    "section": "emmeans",
+    "target": "sesi",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1"
+      ],
+      "values": {
+       "Mean": 58.800000000000004,
+       "Std. Error": 1.3080944580232392,
+       "Lower Bound": 56.0517955224219,
+       "Upper Bound": 61.54820447757811
+      }
+     },
+     {
+      "labels": [
+       "2"
+      ],
+      "values": {
+       "Mean": 61.150000000000006,
+       "Std. Error": 1.2958266344950111,
+       "Lower Bound": 58.42756926325814,
+       "Upper Bound": 63.87243073674187
+      }
+     },
+     {
+      "labels": [
+       "3"
+      ],
+      "values": {
+       "Mean": 63.95,
+       "Std. Error": 1.5695894721586,
+       "Lower Bound": 60.652414883811794,
+       "Upper Bound": 67.2475851161882
+      }
+     }
+    ]
+   },
+   {
+    "title": "Pairwise Comparisons",
+    "section": "emmeans",
+    "target": "sesi",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1",
+       "2"
+      ],
+      "values": {
+       "Mean Difference (I-J)": -2.3500000000000014,
+       "Std. Error": 0.9287087810503356,
+       "Sig.": 0.06281944810490288,
+       "Lower Bound": -4.800996968255134,
+       "Upper Bound": 0.10099696825513105
+      }
+     },
+     {
+      "labels": [
+       "1",
+       "3"
+      ],
+      "values": {
+       "Mean Difference (I-J)": -5.15,
+       "Std. Error": 0.730486900027038,
+       "Sig.": 4.235213572198051e-06,
+       "Lower Bound": -7.077860717857602,
+       "Upper Bound": -3.222139282142395
+      }
+     },
+     {
+      "labels": [
+       "2",
+       "1"
+      ],
+      "values": {
+       "Mean Difference (I-J)": 2.3500000000000014,
+       "Std. Error": 0.9287087810503356,
+       "Sig.": 0.06281944810490288,
+       "Lower Bound": -0.10099696825513105,
+       "Upper Bound": 4.800996968255134
+      }
+     },
+     {
+      "labels": [
+       "2",
+       "3"
+      ],
+      "values": {
+       "Mean Difference (I-J)": -2.799999999999997,
+       "Std. Error": 1.09671225842414,
+       "Sig.": 0.05991150724817923,
+       "Lower Bound": -5.694382475210077,
+       "Upper Bound": 0.09438247521008236
+      }
+     },
+     {
+      "labels": [
+       "3",
+       "1"
+      ],
+      "values": {
+       "Mean Difference (I-J)": 5.15,
+       "Std. Error": 0.730486900027038,
+       "Sig.": 4.235213572198051e-06,
+       "Lower Bound": 3.222139282142395,
+       "Upper Bound": 7.077860717857602
+      }
+     },
+     {
+      "labels": [
+       "3",
+       "2"
+      ],
+      "values": {
+       "Mean Difference (I-J)": 2.799999999999997,
+       "Std. Error": 1.09671225842414,
+       "Sig.": 0.05991150724817923,
+       "Lower Bound": -0.09438247521008236,
+       "Upper Bound": 5.694382475210077
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "emmeans",
+    "target": "sesi",
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "Pillai's trace"
+      ],
+      "values": {
+       "Value": 0.7431514011379643,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.599667880080971e-06,
+       "Partial Eta Squared": 0.7431514011379643,
+       "Noncent. Parameter": 49.18685122409962,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "Wilks' lambda"
+      ],
+      "values": {
+       "Value": 0.25684859886203576,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.599667880080971e-06,
+       "Partial Eta Squared": 0.7431514011379643,
+       "Noncent. Parameter": 49.18685122409962,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "Hotelling's trace"
+      ],
+      "values": {
+       "Value": 2.893344189652918,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.599667880080971e-06,
+       "Partial Eta Squared": 0.7431514011379643,
+       "Noncent. Parameter": 49.18685122409962,
+       "Observed Power": 0.9999729630973955
+      }
+     },
+     {
+      "labels": [
+       "Roy's largest root"
+      ],
+      "values": {
+       "Value": 2.893344189652918,
+       "F": 24.593,
+       "Hypothesis df": 2.0,
+       "Error df": 17.0,
+       "Sig.": 9.599667880080971e-06,
+       "Partial Eta Squared": 0.7431514011379643,
+       "Noncent. Parameter": 49.18685122409962,
+       "Observed Power": 0.9999729630973955
+      }
+     }
+    ]
+   },
+   {
+    "title": "Estimates",
+    "section": "emmeans",
+    "target": "metode * sesi",
+    "measure": "nilai",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "M1",
+       "1"
+      ],
+      "values": {
+       "Mean": 59.400000000000006,
+       "Std. Error": 1.849924923401548,
+       "Lower Bound": 55.51345195563459,
+       "Upper Bound": 63.286548044365425
+      }
+     },
+     {
+      "labels": [
+       "M1",
+       "2"
+      ],
+      "values": {
+       "Mean": 61.70000000000001,
+       "Std. Error": 1.8325756009871281,
+       "Lower Bound": 57.849901529478295,
+       "Upper Bound": 65.55009847052173
+      }
+     },
+     {
+      "labels": [
+       "M1",
+       "3"
+      ],
+      "values": {
+       "Mean": 63.4,
+       "Std. Error": 2.219734718884719,
+       "Lower Bound": 58.73651040560698,
+       "Upper Bound": 68.06348959439302
+      }
+     },
+     {
+      "labels": [
+       "M2",
+       "1"
+      ],
+      "values": {
+       "Mean": 58.2,
+       "Std. Error": 1.8499249234015478,
+       "Lower Bound": 54.313451955634584,
+       "Upper Bound": 62.08654804436542
+      }
+     },
+     {
+      "labels": [
+       "M2",
+       "2"
+      ],
+      "values": {
+       "Mean": 60.60000000000001,
+       "Std. Error": 1.832575600987128,
+       "Lower Bound": 56.749901529478294,
+       "Upper Bound": 64.45009847052172
+      }
+     },
+     {
+      "labels": [
+       "M2",
+       "3"
+      ],
+      "values": {
+       "Mean": 64.5,
+       "Std. Error": 2.219734718884719,
+       "Lower Bound": 59.83651040560698,
+       "Upper Bound": 69.16348959439303
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "d": {
+  "file": "rm_d.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "4"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Between-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kelompok",
+       "1.00"
+      ],
+      "values": {
+       "Value Label": "K1",
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok",
+       "2.00"
+      ],
+      "values": {
+       "Value Label": "K2",
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok",
+       "3.00"
+      ],
+      "values": {
+       "Value Label": "K3",
+       "N": 8.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Descriptive Statistics",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "w1",
+       "K1"
+      ],
+      "values": {
+       "Mean": 51.875,
+       "Std. Deviation": 7.772432970808709,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "K2"
+      ],
+      "values": {
+       "Mean": 57.875,
+       "Std. Deviation": 6.937218462755804,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "K3"
+      ],
+      "values": {
+       "Mean": 58.37499999999999,
+       "Std. Deviation": 7.558108228915489,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w1",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.04166666666666,
+       "Std. Deviation": 7.714915912453738,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K1"
+      ],
+      "values": {
+       "Mean": 54.75,
+       "Std. Deviation": 8.924284685220274,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K2"
+      ],
+      "values": {
+       "Mean": 57.49999999999999,
+       "Std. Deviation": 4.242640687119285,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "K3"
+      ],
+      "values": {
+       "Mean": 55.75,
+       "Std. Deviation": 5.063877678504599,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w2",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.0,
+       "Std. Deviation": 6.234546111577914,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K1"
+      ],
+      "values": {
+       "Mean": 55.375,
+       "Std. Deviation": 6.523309852258394,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K2"
+      ],
+      "values": {
+       "Mean": 56.00000000000001,
+       "Std. Deviation": 3.3380918415851206,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "K3"
+      ],
+      "values": {
+       "Mean": 58.375,
+       "Std. Deviation": 5.629958132298017,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w3",
+       "Total"
+      ],
+      "values": {
+       "Mean": 56.583333333333336,
+       "Std. Deviation": 5.26610710657987,
+       "N": 24.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K1"
+      ],
+      "values": {
+       "Mean": 57.875,
+       "Std. Deviation": 9.716517600751533,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K2"
+      ],
+      "values": {
+       "Mean": 59.0,
+       "Std. Deviation": 5.631543812693436,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "K3"
+      ],
+      "values": {
+       "Mean": 57.87500000000001,
+       "Std. Deviation": 4.6425824094539685,
+       "N": 8.0
+      }
+     },
+     {
+      "labels": [
+       "w4",
+       "Total"
+      ],
+      "values": {
+       "Mean": 58.25,
+       "Std. Deviation": 6.726004046592792,
+       "N": 24.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.276076959387707,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221431813,
+       "Partial Eta Squared": 0.276076959387707,
+       "Noncent. Parameter": 7.245883794401446,
+       "Observed Power": 0.5115220816872663
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.7239230406122931,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221431813,
+       "Partial Eta Squared": 0.27607695938770693,
+       "Noncent. Parameter": 7.2458837944014425,
+       "Observed Power": 0.5115220816872661
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.381362304968497,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221431813,
+       "Partial Eta Squared": 0.276076959387707,
+       "Noncent. Parameter": 7.245883794401446,
+       "Observed Power": 0.5115220816872663
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.381362304968497,
+       "F": 2.415,
+       "Hypothesis df": 3.0,
+       "Error df": 19.0,
+       "Sig.": 0.09823296221431813,
+       "Partial Eta Squared": 0.276076959387707,
+       "Noncent. Parameter": 7.245883794401446,
+       "Observed Power": 0.5115220816872663
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.41078947344133415,
+       "F": 1.7232433613054092,
+       "Hypothesis df": 6.0,
+       "Error df": 40.0,
+       "Sig.": 0.14064911033319286,
+       "Partial Eta Squared": 0.20539473672066708,
+       "Noncent. Parameter": 10.339460167832454,
+       "Observed Power": 0.5826478927018985
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.6306278328438065,
+       "F": 1.642,
+       "Hypothesis df": 6.0,
+       "Error df": 38.0,
+       "Sig.": 0.1624128485601784,
+       "Partial Eta Squared": 0.20587920764923517,
+       "Noncent. Parameter": 9.851662323954516,
+       "Observed Power": 0.5545345540046851
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.5200450151274569,
+       "F": 1.5601350453823708,
+       "Hypothesis df": 6.0,
+       "Error df": 36.0,
+       "Sig.": 0.18717726197751805,
+       "Partial Eta Squared": 0.2063633831958174,
+       "Noncent. Parameter": 9.360810272294222,
+       "Observed Power": 0.5253499473264862
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.304015675388622,
+       "F": 2.027,
+       "Hypothesis df": 3.0,
+       "Error df": 20.0,
+       "Sig.": 0.142512853983839,
+       "Partial Eta Squared": 0.23313805280601357,
+       "Noncent. Parameter": 6.080313507772441,
+       "Observed Power": 0.4417713495917889
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu"
+      ],
+      "values": {
+       "Mauchly's W": 0.8412827353021015,
+       "Approx. Chi-Square": 3.40854208674207,
+       "df": 5.0,
+       "Sig.": 0.6376335284833365,
+       "Greenhouse-Geisser": 0.8946909662383676,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 0.3333333333333333
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 3.0,
+       "Mean Square": 26.70486111111605,
+       "F": 2.3730330145021363,
+       "Sig.": 0.0786395818639952,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 7.1190990435064085,
+       "Observed Power": 0.5682838184928168
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 2.684072898715103,
+       "Mean Square": 29.84813988163285,
+       "F": 2.3730330145021363,
+       "Sig.": 0.08632436283549028,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 6.369393601981388,
+       "Observed Power": 0.534382851455541
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 3.0,
+       "Mean Square": 26.70486111111605,
+       "F": 2.3730330145021363,
+       "Sig.": 0.0786395818639952,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 7.1190990435064085,
+       "Observed Power": 0.5682838184928168
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 80.11458333334815,
+       "df": 1.0,
+       "Mean Square": 80.11458333334815,
+       "F": 2.373033014502136,
+       "Sig.": 0.1383811678583208,
+       "Partial Eta Squared": 0.10152867251031364,
+       "Noncent. Parameter": 2.3730330145021363,
+       "Observed Power": 0.31248743559536796
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 6.0,
+       "Mean Square": 23.361111111111043,
+       "F": 2.0759024992286275,
+       "Sig.": 0.06857979900321443,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 12.455414995371765,
+       "Observed Power": 0.7069632870561613
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 5.368145797430206,
+       "Mean Square": 26.110815904770263,
+       "F": 2.0759024992286275,
+       "Sig.": 0.07739633720315404,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 11.143747277109018,
+       "Observed Power": 0.6681003097937472
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 6.0,
+       "Mean Square": 23.361111111111043,
+       "F": 2.0759024992286275,
+       "Sig.": 0.06857979900321443,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 12.455414995371765,
+       "Observed Power": 0.7069632870561613
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 140.16666666666626,
+       "df": 2.0,
+       "Mean Square": 70.08333333333313,
+       "F": 2.0759024992286275,
+       "Sig.": 0.15042722471151895,
+       "Partial Eta Squared": 0.16506986272801955,
+       "Noncent. Parameter": 4.151804998457255,
+       "Observed Power": 0.3782655085632767
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 63.0,
+       "Mean Square": 11.25347222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 56.365530873017164,
+       "Mean Square": 12.578055045683806,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 63.0,
+       "Mean Square": 11.25347222222222,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 708.9687499999999,
+       "df": 21.0,
+       "Mean Square": 33.760416666666664,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "waktu",
+       "Level 1 vs. Level 2"
+      ],
+      "values": {
+       "Type III Sum of Squares": 0.04166666668606922,
+       "df": 1.0,
+       "Mean Square": 0.04166666668606922,
+       "F": 0.0015122056606739316,
+       "Sig.": 0.9693477320929397,
+       "Partial Eta Squared": 7.200460832845821e-05,
+       "Noncent. Parameter": 0.0015122056606739316,
+       "Observed Power": 0.050158046166193127
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Level 2 vs. Level 3"
+      ],
+      "values": {
+       "Type III Sum of Squares": 8.16666666668607,
+       "df": 1.0,
+       "Mean Square": 8.16666666668607,
+       "F": 0.5200909780148824,
+       "Sig.": 0.4787555754078259,
+       "Partial Eta Squared": 0.024167694204741606,
+       "Noncent. Parameter": 0.5200909780148824,
+       "Observed Power": 0.10585464421215196
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Level 3 vs. Level 4"
+      ],
+      "values": {
+       "Type III Sum of Squares": 66.66666666668607,
+       "df": 1.0,
+       "Mean Square": 66.66666666668607,
+       "F": 3.1963470319644003,
+       "Sig.": 0.08824382191681525,
+       "Partial Eta Squared": 0.13210039630122228,
+       "Noncent. Parameter": 3.1963470319644007,
+       "Observed Power": 0.3999263488959033
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Level 1 vs. Level 2"
+      ],
+      "values": {
+       "Type III Sum of Squares": 122.333333333333,
+       "df": 2.0,
+       "Mean Square": 61.1666666666665,
+       "F": 2.219917908835596,
+       "Sig.": 0.13347575959346386,
+       "Partial Eta Squared": 0.17452297449919713,
+       "Noncent. Parameter": 4.439835817671192,
+       "Observed Power": 0.40142779467311973
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Level 2 vs. Level 3"
+      ],
+      "values": {
+       "Type III Sum of Squares": 68.08333333333286,
+       "df": 2.0,
+       "Mean Square": 34.04166666666643,
+       "F": 2.1679302501895226,
+       "Sig.": 0.13934075961268577,
+       "Partial Eta Squared": 0.17113531629660564,
+       "Noncent. Parameter": 4.335860500379045,
+       "Observed Power": 0.39310282795567286
+      }
+     },
+     {
+      "labels": [
+       "waktu * kelompok",
+       "Level 3 vs. Level 4"
+      ],
+      "values": {
+       "Type III Sum of Squares": 57.33333333333284,
+       "df": 2.0,
+       "Mean Square": 28.66666666666642,
+       "F": 1.3744292237442803,
+       "Sig.": 0.27482348079060553,
+       "Partial Eta Squared": 0.11574697173620369,
+       "Noncent. Parameter": 2.7488584474885607,
+       "Observed Power": 0.26244334991444795
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Level 1 vs. Level 2"
+      ],
+      "values": {
+       "Type III Sum of Squares": 578.625,
+       "df": 21.0,
+       "Mean Square": 27.553571428571427,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Level 2 vs. Level 3"
+      ],
+      "values": {
+       "Type III Sum of Squares": 329.75,
+       "df": 21.0,
+       "Mean Square": 15.702380952380953,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Level 3 vs. Level 4"
+      ],
+      "values": {
+       "Type III Sum of Squares": 438.0,
+       "df": 21.0,
+       "Mean Square": 20.857142857142858,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept"
+      ],
+      "values": {
+       "Type III Sum of Squares": 77208.39843749997,
+       "df": 1.0,
+       "Mean Square": 77208.39843749997,
+       "F": 2202.092153429889,
+       "Sig.": 9.50150675108175e-23,
+       "Partial Eta Squared": 0.9905536979348336,
+       "Noncent. Parameter": 2202.092153429889,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "kelompok"
+      ],
+      "values": {
+       "Type III Sum of Squares": 36.74999999999993,
+       "df": 2.0,
+       "Mean Square": 18.374999999999964,
+       "F": 0.5240808530956539,
+       "Sig.": 0.5996426951210139,
+       "Partial Eta Squared": 0.047539641633568726,
+       "Noncent. Parameter": 1.0481617061913078,
+       "Observed Power": 0.12479851780396722
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Type III Sum of Squares": 736.2890625,
+       "df": 21.0,
+       "Mean Square": 35.06138392857143,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "e": {
+  "file": "rm_e.xlsx",
+  "tables": [
+   {
+    "title": "Within-Subjects Factors",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "1",
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "1",
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "1",
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2",
+       "1"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2",
+       "2"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     },
+     {
+      "labels": [
+       "2",
+       "3"
+      ],
+      "values": {
+       "Dependent Variable": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Descriptive Statistics",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "k1w1"
+      ],
+      "values": {
+       "Mean": 38.93333333333334,
+       "Std. Deviation": 4.096456075799224,
+       "N": 15.0
+      }
+     },
+     {
+      "labels": [
+       "k1w2"
+      ],
+      "values": {
+       "Mean": 41.26666666666667,
+       "Std. Deviation": 4.651676605063518,
+       "N": 15.0
+      }
+     },
+     {
+      "labels": [
+       "k1w3"
+      ],
+      "values": {
+       "Mean": 42.73333333333333,
+       "Std. Deviation": 4.934813162864522,
+       "N": 15.0
+      }
+     },
+     {
+      "labels": [
+       "k2w1"
+      ],
+      "values": {
+       "Mean": 40.733333333333334,
+       "Std. Deviation": 4.043807729403186,
+       "N": 15.0
+      }
+     },
+     {
+      "labels": [
+       "k2w2"
+      ],
+      "values": {
+       "Mean": 45.199999999999996,
+       "Std. Deviation": 5.734606724590126,
+       "N": 15.0
+      }
+     },
+     {
+      "labels": [
+       "k2w3"
+      ],
+      "values": {
+       "Mean": 48.2,
+       "Std. Deviation": 3.3209293019532087,
+       "N": 15.0
+      }
+     }
+    ]
+   },
+   {
+    "title": "Multivariate Tests",
+    "section": "main",
+    "target": null,
+    "measure": null,
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kondisi",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.7298681148176883,
+       "F": 37.827,
+       "Hypothesis df": 1.0,
+       "Error df": 14.0,
+       "Sig.": 2.5174066540402193e-05,
+       "Partial Eta Squared": 0.7298681148176883,
+       "Noncent. Parameter": 37.82653647329125,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.2701318851823117,
+       "F": 37.827,
+       "Hypothesis df": 1.0,
+       "Error df": 14.0,
+       "Sig.": 2.517406654040215e-05,
+       "Partial Eta Squared": 0.7298681148176883,
+       "Noncent. Parameter": 37.82653647329125,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 2.701895462377947,
+       "F": 37.827,
+       "Hypothesis df": 1.0,
+       "Error df": 14.0,
+       "Sig.": 2.517406654040215e-05,
+       "Partial Eta Squared": 0.7298681148176883,
+       "Noncent. Parameter": 37.82653647329125,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 2.701895462377947,
+       "F": 37.827,
+       "Hypothesis df": 1.0,
+       "Error df": 14.0,
+       "Sig.": 2.517406654040215e-05,
+       "Partial Eta Squared": 0.7298681148176883,
+       "Noncent. Parameter": 37.82653647329125,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.8586250930951578,
+       "F": 39.477,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 3.002065459222839e-06,
+       "Partial Eta Squared": 0.8586250930951578,
+       "Noncent. Parameter": 78.95408354008782,
+       "Observed Power": 0.9999999701928847
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.14137490690484225,
+       "F": 39.477,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 3.002065459222844e-06,
+       "Partial Eta Squared": 0.8586250930951578,
+       "Noncent. Parameter": 78.95408354008782,
+       "Observed Power": 0.9999999701928847
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 6.073391041545217,
+       "F": 39.477,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 3.002065459222839e-06,
+       "Partial Eta Squared": 0.8586250930951578,
+       "Noncent. Parameter": 78.95408354008782,
+       "Observed Power": 0.9999999701928847
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 6.073391041545217,
+       "F": 39.477,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 3.002065459222839e-06,
+       "Partial Eta Squared": 0.8586250930951578,
+       "Noncent. Parameter": 78.95408354008782,
+       "Observed Power": 0.9999999701928847
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Pillai's Trace"
+      ],
+      "values": {
+       "Value": 0.3481419110327779,
+       "F": 3.471,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 0.06194337782654069,
+       "Partial Eta Squared": 0.3481419110327779,
+       "Noncent. Parameter": 6.942990997621401,
+       "Observed Power": 0.5443199209507914
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Wilks' Lambda"
+      ],
+      "values": {
+       "Value": 0.6518580889672222,
+       "F": 3.471,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 0.061943377826540746,
+       "Partial Eta Squared": 0.3481419110327778,
+       "Noncent. Parameter": 6.942990997621397,
+       "Observed Power": 0.5443199209507912
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Hotelling's Trace"
+      ],
+      "values": {
+       "Value": 0.5340762305862615,
+       "F": 3.471,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 0.06194337782654069,
+       "Partial Eta Squared": 0.3481419110327779,
+       "Noncent. Parameter": 6.942990997621401,
+       "Observed Power": 0.5443199209507914
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Roy's Largest Root"
+      ],
+      "values": {
+       "Value": 0.5340762305862615,
+       "F": 3.471,
+       "Hypothesis df": 2.0,
+       "Error df": 13.0,
+       "Sig.": 0.06194337782654069,
+       "Partial Eta Squared": 0.3481419110327779,
+       "Noncent. Parameter": 6.942990997621401,
+       "Observed Power": 0.5443199209507914
+      }
+     }
+    ]
+   },
+   {
+    "title": "Mauchly's Test of Sphericity",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kondisi"
+      ],
+      "values": {
+       "Mauchly's W": 1.0,
+       "Approx. Chi-Square": 0.0,
+       "df": 0.0,
+       "Sig.": null,
+       "Greenhouse-Geisser": 1.0,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 1.0
+      }
+     },
+     {
+      "labels": [
+       "waktu"
+      ],
+      "values": {
+       "Mauchly's W": 0.9735168047397219,
+       "Approx. Chi-Square": 0.3489224977052974,
+       "df": 2.0,
+       "Sig.": 0.8399094010515549,
+       "Greenhouse-Geisser": 0.9742000693410653,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 0.5
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu"
+      ],
+      "values": {
+       "Mauchly's W": 0.9937910946369048,
+       "Approx. Chi-Square": 0.08096739007331344,
+       "df": 2.0,
+       "Sig.": 0.9603248224447892,
+       "Greenhouse-Geisser": 0.9938294072632411,
+       "Huynh-Feldt": 1.0,
+       "Lower-bound": 0.5
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kondisi",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 313.5999999999967,
+       "df": 1.0,
+       "Mean Square": 313.5999999999967,
+       "F": 37.82653647329082,
+       "Sig.": 2.5174066540403622e-05,
+       "Partial Eta Squared": 0.7298681148176861,
+       "Noncent. Parameter": 37.826536473290815,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 313.5999999999967,
+       "df": 1.0,
+       "Mean Square": 313.5999999999967,
+       "F": 37.82653647329082,
+       "Sig.": 2.5174066540403622e-05,
+       "Partial Eta Squared": 0.7298681148176861,
+       "Noncent. Parameter": 37.826536473290815,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 313.5999999999967,
+       "df": 1.0,
+       "Mean Square": 313.5999999999967,
+       "F": 37.82653647329082,
+       "Sig.": 2.5174066540403622e-05,
+       "Partial Eta Squared": 0.7298681148176861,
+       "Noncent. Parameter": 37.826536473290815,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "kondisi",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 313.5999999999967,
+       "df": 1.0,
+       "Mean Square": 313.5999999999967,
+       "F": 37.82653647329082,
+       "Sig.": 2.5174066540403622e-05,
+       "Partial Eta Squared": 0.7298681148176861,
+       "Noncent. Parameter": 37.826536473290815,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 116.06666666666666,
+       "df": 14.0,
+       "Mean Square": 8.29047619047619,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 116.06666666666666,
+       "df": 14.0,
+       "Mean Square": 8.29047619047619,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 116.06666666666666,
+       "df": 14.0,
+       "Mean Square": 8.29047619047619,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 116.06666666666666,
+       "df": 14.0,
+       "Mean Square": 8.29047619047619,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 482.82222222222106,
+       "df": 2.0,
+       "Mean Square": 241.41111111111053,
+       "F": 41.765481257723366,
+       "Sig.": 3.950718955420339e-09,
+       "Partial Eta Squared": 0.748948638400551,
+       "Noncent. Parameter": 83.53096251544673,
+       "Observed Power": 0.9999999998235009
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 482.82222222222106,
+       "df": 1.9484001386821306,
+       "Mean Square": 247.80444870466647,
+       "F": 41.765481257723366,
+       "Sig.": 6.026819360695393e-09,
+       "Partial Eta Squared": 0.748948638400551,
+       "Noncent. Parameter": 81.37586947467413,
+       "Observed Power": 0.9999999996646287
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 482.82222222222106,
+       "df": 2.0,
+       "Mean Square": 241.41111111111053,
+       "F": 41.765481257723366,
+       "Sig.": 3.950718955420339e-09,
+       "Partial Eta Squared": 0.748948638400551,
+       "Noncent. Parameter": 83.53096251544673,
+       "Observed Power": 0.9999999998235009
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 482.82222222222106,
+       "df": 1.0,
+       "Mean Square": 482.82222222222106,
+       "F": 41.765481257723366,
+       "Sig.": 1.4911580270865097e-05,
+       "Partial Eta Squared": 0.748948638400551,
+       "Noncent. Parameter": 41.765481257723366,
+       "Observed Power": 0.9999704813091037
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 161.84444444444443,
+       "df": 28.0,
+       "Mean Square": 5.78015873015873,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 161.84444444444443,
+       "df": 27.27760194154983,
+       "Mean Square": 5.933235802444917,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 161.84444444444443,
+       "df": 28.0,
+       "Mean Square": 5.78015873015873,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 161.84444444444443,
+       "df": 14.0,
+       "Mean Square": 11.56031746031746,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 50.86666666666446,
+       "df": 2.0,
+       "Mean Square": 25.43333333333223,
+       "F": 3.482882295402521,
+       "Sig.": 0.044587182335306945,
+       "Partial Eta Squared": 0.19921671018276066,
+       "Noncent. Parameter": 6.965764590805042,
+       "Observed Power": 0.6029171321810451
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 50.86666666666446,
+       "df": 1.9876588145264822,
+       "Mean Square": 25.591246493066954,
+       "F": 3.4828822954025216,
+       "Sig.": 0.04493290319281016,
+       "Partial Eta Squared": 0.19921671018276066,
+       "Noncent. Parameter": 6.9227816944150495,
+       "Observed Power": 0.6009316045190265
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 50.86666666666446,
+       "df": 2.0,
+       "Mean Square": 25.43333333333223,
+       "F": 3.482882295402521,
+       "Sig.": 0.044587182335306945,
+       "Partial Eta Squared": 0.19921671018276066,
+       "Noncent. Parameter": 6.965764590805042,
+       "Observed Power": 0.6029171321810451
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 50.86666666666446,
+       "df": 1.0,
+       "Mean Square": 50.86666666666446,
+       "F": 3.482882295402521,
+       "Sig.": 0.083093766177854,
+       "Partial Eta Squared": 0.19921671018276066,
+       "Noncent. Parameter": 3.482882295402521,
+       "Observed Power": 0.41239456921704754
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Sphericity Assumed"
+      ],
+      "values": {
+       "Type III Sum of Squares": 204.46666666666673,
+       "df": 28.0,
+       "Mean Square": 7.302380952380955,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Greenhouse-Geisser"
+      ],
+      "values": {
+       "Type III Sum of Squares": 204.46666666666673,
+       "df": 27.827223403370752,
+       "Mean Square": 7.34772074463956,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Huynh-Feldt"
+      ],
+      "values": {
+       "Type III Sum of Squares": 204.46666666666673,
+       "df": 28.0,
+       "Mean Square": 7.302380952380955,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Lower-bound"
+      ],
+      "values": {
+       "Type III Sum of Squares": 204.46666666666673,
+       "df": 14.0,
+       "Mean Square": 14.60476190476191,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Within-Subjects Contrasts",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": null,
+    "rows": [
+     {
+      "labels": [
+       "kondisi",
+       "Linear",
+       ""
+      ],
+      "values": {
+       "Type III Sum of Squares": 313.59999999999854,
+       "df": 1.0,
+       "Mean Square": 313.59999999999854,
+       "F": 37.826536473291036,
+       "Sig.": 2.517406654040295e-05,
+       "Partial Eta Squared": 0.7298681148176872,
+       "Noncent. Parameter": 37.826536473291036,
+       "Observed Power": 0.9999044506084078
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi)",
+       "Linear",
+       ""
+      ],
+      "values": {
+       "Type III Sum of Squares": 116.06666666666668,
+       "df": 14.0,
+       "Mean Square": 8.290476190476191,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 476.01666666667006,
+       "df": 1.0,
+       "Mean Square": 476.01666666667006,
+       "F": 78.64948859166073,
+       "Sig.": 4.045535840479846e-07,
+       "Partial Eta Squared": 0.8488928518353407,
+       "Noncent. Parameter": 78.64948859166074,
+       "Observed Power": 0.9999999997395383
+      }
+     },
+     {
+      "labels": [
+       "waktu",
+       "",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 6.805555555551109,
+       "df": 1.0,
+       "Mean Square": 6.805555555551109,
+       "F": 1.2355907780971749,
+       "Sig.": 0.2850476341765563,
+       "Partial Eta Squared": 0.08109897384966992,
+       "Noncent. Parameter": 1.2355907780971749,
+       "Observed Power": 0.17926124695269463
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 84.73333333333326,
+       "df": 14.0,
+       "Mean Square": 6.052380952380948,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(waktu)",
+       "",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 77.11111111111114,
+       "df": 14.0,
+       "Mean Square": 5.507936507936511,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Linear",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 50.41666666666424,
+       "df": 1.0,
+       "Mean Square": 50.41666666666424,
+       "F": 7.326989619376818,
+       "Sig.": 0.017026958020423012,
+       "Partial Eta Squared": 0.34355479840998365,
+       "Noncent. Parameter": 7.326989619376817,
+       "Observed Power": 0.7115608409266185
+      }
+     },
+     {
+      "labels": [
+       "kondisi * waktu",
+       "Linear",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 0.4499999999970896,
+       "df": 1.0,
+       "Mean Square": 0.4499999999970896,
+       "F": 0.05826140567163302,
+       "Sig.": 0.8127646515243638,
+       "Partial Eta Squared": 0.0041442824251459835,
+       "Noncent. Parameter": 0.05826140567163302,
+       "Observed Power": 0.0558342887576363
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Linear",
+       "Linear"
+      ],
+      "values": {
+       "Type III Sum of Squares": 96.33333333333324,
+       "df": 14.0,
+       "Mean Square": 6.880952380952374,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     },
+     {
+      "labels": [
+       "Error(kondisi*waktu)",
+       "Linear",
+       "Quadratic"
+      ],
+      "values": {
+       "Type III Sum of Squares": 108.1333333333334,
+       "df": 14.0,
+       "Mean Square": 7.723809523809528,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   },
+   {
+    "title": "Tests of Between-Subjects Effects",
+    "section": "main",
+    "target": null,
+    "measure": "skor",
+    "transformed": "Average",
+    "rows": [
+     {
+      "labels": [
+       "Intercept"
+      ],
+      "values": {
+       "Type III Sum of Squares": 165208.17777777783,
+       "df": 1.0,
+       "Mean Square": 165208.17777777783,
+       "F": 1865.0196570322723,
+       "Sig.": 2.678704036091078e-16,
+       "Partial Eta Squared": 0.9925493062578644,
+       "Noncent. Parameter": 1865.0196570322726,
+       "Observed Power": 1.0
+      }
+     },
+     {
+      "labels": [
+       "Error"
+      ],
+      "values": {
+       "Type III Sum of Squares": 1240.1555555555556,
+       "df": 14.0,
+       "Mean Square": 88.58253968253969,
+       "F": null,
+       "Sig.": null,
+       "Partial Eta Squared": null,
+       "Noncent. Parameter": null,
+       "Observed Power": null
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

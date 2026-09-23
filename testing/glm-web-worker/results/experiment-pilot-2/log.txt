@@ -1,0 +1,14 @@
+[2026-09-21T19:53:56.780Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; cells=2, runs/mode=2
+[2026-09-21T19:53:56.835Z] cell multivariate-100-cpu1: loading multivariate-100.csv
+[2026-09-21T19:54:06.623Z] multivariate-100-cpu1 run 1/4 startup main->main status=ok longest=422.0 total=952.3
+[2026-09-21T19:54:12.716Z] multivariate-100-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=197.3
+[2026-09-21T19:54:18.723Z] multivariate-100-cpu1 run 3/4 steady main->main status=ok longest=126.0 total=161.8
+[2026-09-21T19:54:24.730Z] multivariate-100-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=213.0
+[2026-09-21T19:54:24.739Z] cell multivariate-100-cpu1 done in 28 s
+[2026-09-21T19:54:24.782Z] cell repeated-measures-100-cpu1: loading repeated-measures-100.csv
+[2026-09-21T19:54:33.939Z] repeated-measures-100-cpu1 run 1/4 startup main->main status=ok longest=0.0 total=269.4
+[2026-09-21T19:54:34.946Z] repeated-measures-100-cpu1 run 2/4 startup worker->- status=error:Repeated Measures dialog has 0 within slots / 1 group (expected 5 / 1) longest=- total=-
+[2026-09-21T19:54:35.923Z] repeated-measures-100-cpu1 run 3/4 steady main->- status=error:Repeated Measures dialog has 0 within slots / 1 group (expected 5 / 1) longest=- total=-
+[2026-09-21T19:54:36.642Z] repeated-measures-100-cpu1 run 4/4 steady worker->- status=error:Repeated Measures dialog has 0 within slots / 1 group (expected 5 / 1) longest=- total=-
+[2026-09-21T19:54:36.645Z] cell repeated-measures-100-cpu1 done in 12 s
+[2026-09-21T19:54:36.693Z] finished

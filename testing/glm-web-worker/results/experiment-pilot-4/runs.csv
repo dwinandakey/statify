@@ -1,0 +1,7 @@
+module,size,cpu,run_index,pair_index,phase,mode_intended,mode_actual,valid,status,longest_longtask_ms,total_blocking_ms,longtask_count,max_frame_gap_ms,frames_in_window,total_time_ms,t0_ms,t_end_ms,timestamp
+multivariate,500,1,1,1,startup,main,main,1,ok,245.0,195.0,1,5866.4,12,6271.4,8398.5,14669.9,2026-09-21T20:10:08.235Z
+multivariate,500,1,2,1,startup,worker,worker,1,ok,0.0,0.0,0,16.7,352,5862.0,20463.9,26325.9,2026-09-21T20:10:20.741Z
+multivariate,1000,1,1,1,startup,main,main,1,ok,322.0,272.0,1,21832.5,13,22326.5,8256.1,30582.6,2026-09-21T20:10:35.108Z
+multivariate,1000,1,2,1,startup,worker,worker,1,ok,0.0,0.0,0,16.7,1362,22705.8,36355.2,59061.0,2026-09-21T20:11:03.596Z
+multivariate,2000,1,1,1,startup,main,main,1,ok,197.0,147.0,1,118095.3,16,118508.4,8147.3,126655.7,2026-09-21T20:11:34.742Z
+multivariate,2000,1,2,1,startup,worker,worker,1,ok,0.0,0.0,0,33.3,5177,86311.9,132458.2,218770.1,2026-09-21T20:13:39.449Z

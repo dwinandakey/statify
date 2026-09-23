@@ -1,0 +1,17 @@
+cell                       mode  n_LT  LT_start_from_end_ms(min/median/max)  LT_before_last_2s  frac_pos(min)
+repeated-measures-100-cpu1 worker 66    9/547/1611                             0                  0.034
+repeated-measures-100-cpu1 main   52    10/492/1443                            0                  0.036
+repeated-measures-500-cpu1 worker 63    11/475/1573                            0                  0.036
+repeated-measures-500-cpu1 main   63    9/408/1488                             0                  0.033
+repeated-measures-1000-cpu1 worker 68    8/543/1616                             0                  0.043
+repeated-measures-1000-cpu1 main   70    10/687/1610                            0                  0.038
+repeated-measures-2000-cpu1 worker 69    10/462/1627                            0                  0.047
+repeated-measures-2000-cpu1 main   62    9/507/1528                             0                  0.046
+multivariate-100-cpu1      worker 133   53/740/2311                            5                  -0.003
+multivariate-100-cpu1      main   147   52/765/2441                            6                  -0.003
+multivariate-500-cpu1      worker 145   51/865/8448                            63                 -0.000
+multivariate-500-cpu1      main   157   52/941/8051                            59                 -0.000
+multivariate-1000-cpu1     worker 156   56/869/23898                           62                 -0.000
+multivariate-1000-cpu1     main   150   51/983/24594                           59                 -0.000
+multivariate-2000-cpu1     worker 159   50/818/90464                           62                 -0.000
+multivariate-2000-cpu1     main   149   51/953/90070                           58                 -0.000

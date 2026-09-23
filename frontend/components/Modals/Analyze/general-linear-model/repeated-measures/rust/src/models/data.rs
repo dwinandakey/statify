@@ -1,5 +1,5 @@
 use serde::{ Deserialize, Serialize };
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DataRecord {
@@ -104,6 +104,16 @@ pub struct VariableDefinition {
     pub role: VariableRole,
 }
 
+/// Input of the repeated measures analysis (sent by
+/// services/repeated-measures-analysis.ts).
+///
+/// Layout (one convention for both sides, see also stats/rm_model.rs):
+/// - `subject_data[s]`: records of subject s holding every dependent
+///   variable under its encoded name ("t1_(1,score)"), SUBJECT-MAJOR.
+/// - `factors_data[f][s]` / `covariate_data[c][s]`: value of between-subjects
+///   factor f / covariate c for subject s, VARIABLE-MAJOR: one array per
+///   variable in the order of `factors_data_defs` / `covariate_data_defs`,
+///   one record per subject in the same subject order as `subject_data`.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AnalysisData {
     pub subject_data: Vec<Vec<DataRecord>>,

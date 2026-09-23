@@ -16,6 +16,13 @@ import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Badge} from "@/components/ui/badge";
 import {ScrollArea} from "@/components/ui/scroll-area";
 
+// Contrasts of the within-subjects factor that the Repeated Measures engine
+// computes: Polynomial (default, as SPSS WSFACTOR … Polynomial) and Repeated.
+// The other types of the shared list are not supported yet.
+const RM_CONTRAST_METHODS = ["polynomial", "repeated"].map(
+    (value) => CONTRASTMETHOD.find((method) => method.value === value)!
+);
+
 export const RepeatedMeasuresContrast = ({
     isContrastOpen,
     setIsContrastOpen,
@@ -46,7 +53,8 @@ export const RepeatedMeasuresContrast = ({
 
             data.FactorList?.forEach((variable) => {
                 // Extract original name from possibly formatted variable
-                const originalName = variable.split(" (")[0];
+                // ("sesi(Polynomial)" or "sesi (repeated, Ref: Last)")
+                const originalName = variable.split("(")[0].trim();
                 originals.push(originalName);
 
                 // If the variable is formatted, store the formatting
@@ -91,8 +99,9 @@ export const RepeatedMeasuresContrast = ({
         const method = contrastState.ContrastMethod || "deviation";
         const reference = contrastState.Last ? "Last" : "First";
 
-        // Get the original variable name to prevent double formatting
-        const originalName = variable.split(" (")[0];
+        // Get the original variable name to prevent double formatting; the
+        // list holds "sesi(Polynomial)" (default) or "sesi (repeated, Ref: Last)".
+        const originalName = variable.split("(")[0].trim();
         return `${originalName} (${method}, Ref: ${reference})`;
     };
 
@@ -200,7 +209,7 @@ export const RepeatedMeasuresContrast = ({
                                             </SelectTrigger>
                                             <SelectContent className="w-[150px]">
                                                 <SelectGroup>
-                                                    {CONTRASTMETHOD.map(
+                                                    {RM_CONTRAST_METHODS.map(
                                                         (method, index) => (
                                                             <SelectItem
                                                                 key={index}
@@ -216,6 +225,9 @@ export const RepeatedMeasuresContrast = ({
                                             </SelectContent>
                                         </Select>
                                     </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Only Polynomial (default) and Repeated contrasts are supported in this version.
+                                    </p>
                                     <RadioGroup
                                         value={
                                             contrastState.Last

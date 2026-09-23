@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 // Tipe data untuk menghimpun error dari berbagai fungsi
 pub type AnalysisResult<T> = Result<T, String>;

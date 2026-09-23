@@ -5,14 +5,73 @@ import type {
 import { transformMultivariateResult } from "./multivariate-analysis-formatter";
 import { resultMultivariateAnalysis } from "./multivariate-analysis-output";
 import { buildDifferenceData } from "./paired-difference";
+import type { MultivariateWorkerPayload } from "./multivariate-analysis-worker";
+import {
+    executeGlmComputation,
+    GlmWorkerClient,
+    markGlmAnalysisEnd,
+    markGlmAnalysisStart,
+} from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 // @ts-ignore
 import init, { MultivariateAnalysis } from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
+
+// Reused across analyses so WASM is initialised once per worker.
+const multivariateWorker = new GlmWorkerClient<MultivariateWorkerPayload, any>(
+    "multivariate",
+    () =>
+        new Worker(new URL("./multivariate-analysis-worker.ts", import.meta.url), {
+            type: "module",
+        })
+);
+
+// Main-thread computation (mode "main" and "main-fallback"). Mirrors the
+// worker: the Rust-side object is released with free() right after the
+// results are read, instead of whenever the JS garbage collector finalises it
+// (without this the WASM heap grew ~1.5 MB per perf500 run).
+async function runMultivariateOnMainThread(payload: MultivariateWorkerPayload) {
+    await init();
+
+    const multivariate = new MultivariateAnalysis(
+        payload.dep_data,
+        payload.fix_factor_data,
+        payload.covar_data,
+        payload.wls_data,
+        payload.dep_data_defs,
+        payload.fix_factor_data_defs,
+        payload.covar_data_defs,
+        payload.wls_data_defs,
+        payload.config_data
+    );
+
+    try {
+        const results = multivariate.get_formatted_results();
+        const errors = multivariate.get_all_errors();
+        return { results, errors };
+    } finally {
+        multivariate.free();
+    }
+}
+
+/**
+ * Runs the WASM computation in the mode selected by localStorage
+ * "glm-execution-mode" and reports the mode actually used.
+ */
+export function computeMultivariate(payload: MultivariateWorkerPayload) {
+    return executeGlmComputation({
+        module: "multivariate",
+        client: multivariateWorker,
+        payload,
+        runOnMainThread: runMultivariateOnMainThread,
+    });
+}
 
 export async function analyzeMultivariate({
     configData,
     dataVariables,
     variables,
 }: MultivariateAnalysisType) {
+    markGlmAnalysisStart();
+
     // Paired Hotelling T² is implemented entirely in TS by synthesising
     // difference columns (d_k = v1_k − v2_k) and routing them through the
     // existing Test Values pipeline (cabang Intercept dengan μ₀ = δ₀).
@@ -92,8 +151,6 @@ export async function analyzeMultivariate({
     const varDefsForCovariate = getVarDefs(variables, CovariateVariables);
     const varDefsForWlsWeight = getVarDefs(variables, WlsWeightVariable);
 
-    await init();
-
     // Rust's MainConfig deserializes VarianceMode as a non-optional enum with
     // #[serde(default)] (config.rs:110-111). serde's `default` only fires when
     // the field is MISSING — a `null` payload still attempts deserialization
@@ -111,20 +168,21 @@ export async function analyzeMultivariate({
         },
     };
 
-    const multivariate = new MultivariateAnalysis(
-        slicedDataForDependent,
-        slicedDataForFixFactor,
-        slicedDataForCovariate,
-        slicedDataForWlsWeight,
-        varDefsForDependent,
-        varDefsForFixFactor,
-        varDefsForCovariate,
-        varDefsForWlsWeight,
-        configForRust
-    );
-
-    const results = multivariate.get_formatted_results();
-    const errorsString = multivariate.get_all_errors();
+    const {
+        results,
+        errors: errorsString,
+        mode,
+    } = await computeMultivariate({
+        dep_data: slicedDataForDependent,
+        fix_factor_data: slicedDataForFixFactor,
+        covar_data: slicedDataForCovariate,
+        wls_data: slicedDataForWlsWeight,
+        dep_data_defs: varDefsForDependent,
+        fix_factor_data_defs: varDefsForFixFactor,
+        covar_data_defs: varDefsForCovariate,
+        wls_data_defs: varDefsForWlsWeight,
+        config_data: configForRust,
+    });
 
     // Determine whether the user actually requested post-hoc tests so we can
     // suppress non-failure warnings when they didn't (Rust always runs
@@ -284,4 +342,6 @@ export async function analyzeMultivariate({
     await resultMultivariateAnalysis({
         formattedResult: formattedResults ?? [],
     });
+
+    markGlmAnalysisEnd("multivariate", mode);
 }

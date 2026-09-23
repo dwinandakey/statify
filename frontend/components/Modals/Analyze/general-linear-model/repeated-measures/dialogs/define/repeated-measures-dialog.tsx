@@ -137,10 +137,20 @@ export const RepeatedMeasureDefineDialog = ({
         return true;
     };
 
+    // Designs with more than one within-subjects factor give results that do
+    // not match SPSS (testing/glm-rm-reference, dataset (e)); they are blocked.
+    const MULTI_WITHIN_MESSAGE =
+        "Designs with more than one within-subjects factor are not supported in this version.";
+
     // Handler for adding a factor
     const handleAddFactor = () => {
         const factorName = dialogState.factorName?.trim() || "";
         const factorLevels = dialogState.factorLevels;
+
+        if (dialogState.factors.length >= 1) {
+            toast.error(MULTI_WITHIN_MESSAGE);
+            return;
+        }
 
         // Validate factor name and levels
         if (!isFactorNameValid(factorName)) return;
@@ -325,6 +335,10 @@ export const RepeatedMeasureDefineDialog = ({
 
     // Handler for continuing with the defined data
     const handleContinue = () => {
+        if (dialogState.factors.length > 1) {
+            toast.error(MULTI_WITHIN_MESSAGE);
+            return;
+        }
         Object.entries(dialogState).forEach(([key, value]) => {
             updateFormData(key as keyof RepeatedMeasureDefineData, value);
         });

@@ -1,0 +1,184 @@
+{
+  "base": "http://localhost:3101",
+  "sequence": [
+    "main",
+    "worker",
+    "main",
+    "worker"
+  ],
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-22T09:52:19.599Z",
+  "designs": {
+    "gambar51": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "ae587141076b"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "ae587141076b"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "ae587141076b"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "ae587141076b"
+        }
+      ]
+    },
+    "a": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [],
+          "hash": "d209e05aa6cd"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [],
+          "hash": "d209e05aa6cd"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [],
+          "hash": "d209e05aa6cd"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [],
+          "hash": "d209e05aa6cd"
+        }
+      ]
+    },
+    "b": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "976c13ba334e"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "976c13ba334e"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "976c13ba334e"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "976c13ba334e"
+        }
+      ]
+    }
+  }
+}

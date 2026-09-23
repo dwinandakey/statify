@@ -1,0 +1,125 @@
+module,size,mode,phase,run_index,loaf_count,longest_loaf_ms,longest_loaf_dominant_source,glue_in_any_loaf,service_in_any_loaf
+repeated-measures,20000,main,startup,1,1,668.3299999833107,,0,0
+repeated-measures,20000,worker,startup,2,0,0,,0,0
+repeated-measures,20000,main,steady,3,1,464.86500000953674,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,4,0,0,,0,0
+repeated-measures,20000,main,steady,5,1,475.10499995946884,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,6,0,0,,0,0
+repeated-measures,20000,main,steady,7,1,464.58999997377396,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,8,0,0,,0,0
+repeated-measures,20000,main,steady,9,1,460.875,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,10,0,0,,0,0
+repeated-measures,20000,main,steady,11,1,487.335000038147,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,12,0,0,,0,0
+repeated-measures,20000,main,steady,13,1,486.28500002622604,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,14,1,65,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,main,steady,15,1,454.5649999976158,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,16,0,0,,0,0
+repeated-measures,20000,main,steady,17,1,483.3149999976158,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,18,0,0,,0,0
+repeated-measures,20000,main,steady,19,1,459.59500002861023,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,20,0,0,,0,0
+repeated-measures,20000,main,steady,21,1,466.2549999952316,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,22,0,0,,0,0
+repeated-measures,20000,main,steady,23,1,466.1299999952316,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,24,0,0,,0,0
+repeated-measures,20000,main,steady,25,1,460.02999997138977,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,26,0,0,,0,0
+repeated-measures,20000,main,steady,27,1,460.8149999976158,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,28,0,0,,0,0
+repeated-measures,20000,main,steady,29,1,459.9350000023842,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,30,0,0,,0,0
+repeated-measures,20000,main,steady,31,1,463.8700000047684,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,32,0,0,,0,0
+repeated-measures,20000,main,steady,33,1,457.96499997377396,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,34,0,0,,0,0
+repeated-measures,20000,main,steady,35,1,501.60999995470047,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,36,0,0,,0,0
+repeated-measures,20000,main,steady,37,1,460.8100000023842,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,38,0,0,,0,0
+repeated-measures,20000,main,steady,39,1,462.8400000333786,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,40,0,0,,0,0
+repeated-measures,20000,main,steady,41,1,459.17500001192093,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,42,0,0,,0,0
+repeated-measures,20000,main,steady,43,2,457.14500004053116,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,44,0,0,,0,0
+repeated-measures,20000,main,steady,45,1,465.5,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,46,0,0,,0,0
+repeated-measures,20000,main,steady,47,1,457.67500001192093,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,48,1,64.60999995470047,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,main,steady,49,1,448.4850000143051,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,50,0,0,,0,0
+repeated-measures,20000,main,steady,51,1,459.86500000953674,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,52,0,0,,0,0
+repeated-measures,20000,main,steady,53,1,454.84500002861023,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,54,0,0,,0,0
+repeated-measures,20000,main,steady,55,1,457.7950000166893,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,56,0,0,,0,0
+repeated-measures,20000,main,steady,57,1,471.6599999666214,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,58,0,0,,0,0
+repeated-measures,20000,main,steady,59,1,460.14500004053116,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,60,0,0,,0,0
+repeated-measures,20000,main,steady,61,1,904.9399999976158,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,20000,worker,steady,62,0,0,,0,0
+repeated-measures,40000,main,startup,1,2,1161.6200000047684,,0,0
+repeated-measures,40000,worker,startup,2,1,108.71000003814697,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,3,1,954.2350000143051,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,4,1,108.08000004291534,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,5,1,906.9200000166893,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,6,1,95.25499999523163,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,7,1,903.1650000214577,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,8,1,82.90499997138977,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,9,1,887.1549999713898,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,10,1,85.25499999523163,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,11,1,901.0849999785423,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,12,1,84.0799999833107,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,13,1,889.460000038147,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,14,1,81.125,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,15,1,901.9699999690056,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,16,1,80.22499996423721,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,17,1,897.8899999856949,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,18,1,85.83000004291534,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,19,1,889.8249999880791,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,20,1,85.05500000715256,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,21,1,894.0749999880791,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,22,1,85.90499997138977,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,23,1,886.7849999666214,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,24,1,79.56000000238419,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,25,1,901.464999973774,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,26,1,85.63999998569489,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,27,1,905.9750000238419,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,28,1,82.76499998569489,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,29,1,909.1700000166893,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,30,1,99.7150000333786,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,31,1,885.3799999952316,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,32,1,95.43999999761581,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,33,1,907.6050000190735,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,34,1,77.06000000238419,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,35,1,923.5450000166893,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,36,1,83.00999999046326,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,37,1,884.1850000023842,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,38,1,79.64999997615814,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,39,1,890.3600000143051,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,40,1,81.01499998569489,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,41,1,887.9950000047684,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,42,1,81.33499997854233,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,43,1,892.5150000452995,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,44,1,83.50499999523163,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,45,1,889.2750000357628,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,46,1,98.47500002384186,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,47,1,895.8900000452995,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,48,1,81.06499999761581,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,49,1,892.6150000095367,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,50,1,77.74000000953674,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,51,1,894.0600000023842,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,52,1,87.74000000953674,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,53,1,896.4650000333786,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,54,1,89.76499998569489,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,55,1,880.9900000095367,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,56,1,79.58500003814697,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,57,1,895.4049999713898,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,58,1,83.32499998807907,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,59,1,872.1899999976158,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,60,1,82.13499999046326,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,main,steady,61,1,869.1949999928474,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0
+repeated-measures,40000,worker,steady,62,1,77.92999994754791,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",0,0

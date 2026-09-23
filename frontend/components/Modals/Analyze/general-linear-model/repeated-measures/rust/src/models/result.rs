@@ -1,14 +1,19 @@
 use serde::{ Deserialize, Serialize };
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RepeatedMeasureResult {
     pub within_subjects_factors: Option<WithinSubjectsFactors>,
     pub descriptive_statistics: Option<HashMap<String, DescriptiveStatistics>>,
     pub bartlett_test: Option<BartlettTest>,
+    /// Box's M and Levene's tests (Options: Homogeneity tests).
+    pub homogeneity_tests: Option<HomogeneityTests>,
     pub multivariate_tests: Option<MultivariateTests>,
     pub mauchly_test: Option<MauchlyTest>,
     pub tests_of_within_subjects_effects: Option<TestsWithinSubjectsEffects>,
+    /// Tests of Within-Subjects Effects, "Multivariate" part (more than one
+    /// measure; tests based on averaged variables).
+    pub within_subjects_multivariate: Option<MultivariateTests>,
     pub tests_of_within_subjects_contrasts: Option<TestsWithinSubjectsContrasts>,
     pub tests_of_between_subjects_effects: Option<TestsBetweenSubjectsEffects>,
     pub parameter_estimates: Option<ParameterEstimates>,
@@ -20,6 +25,9 @@ pub struct RepeatedMeasureResult {
     pub univariate_tests: Option<UnivariateTests>,
     pub posthoc_tests: Option<HashMap<String, Vec<PostHocTest>>>,
     pub emmeans: Option<HashMap<String, Vec<EstimatedMarginalMean>>>,
+    /// Pairwise comparisons of estimated marginal means (EM Means dialog,
+    /// "Compare main effects"), keyed by factor.
+    pub emmeans_pairwise: Option<HashMap<String, Vec<PairwiseComparison>>>,
     pub executed_functions: Vec<String>,
 }
 
@@ -53,6 +61,35 @@ pub struct StatsEntry {
     pub mean: f64,
     pub std_deviation: f64,
     pub n: usize,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct HomogeneityTests {
+    /// Box's Test of Equality of Covariance Matrices (None when it cannot be
+    /// computed, e.g. a singular cell covariance matrix; see `box_m_note`).
+    pub box_m: Option<BoxMTest>,
+    pub box_m_note: Option<String>,
+    /// Levene's Test of Equality of Error Variances per dependent variable.
+    pub levene: HashMap<String, Vec<LeveneEntry>>,
+    pub design: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct BoxMTest {
+    pub box_m: f64,
+    pub f: f64,
+    pub df1: f64,
+    pub df2: f64,
+    pub significance: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LeveneEntry {
+    pub based_on: String,
+    pub statistic: f64,
+    pub df1: f64,
+    pub df2: f64,
+    pub significance: f64,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -224,6 +261,12 @@ pub struct ResidualMatrix {
     pub matrix_type: String,
     pub values: HashMap<String, HashMap<String, f64>>,
     pub description: Option<String>,
+    /// Covariance (SSCP / error df) and correlation parts of the SPSS
+    /// Residual SSCP Matrix (None from the older modules).
+    #[serde(default)]
+    pub covariance: Option<HashMap<String, HashMap<String, f64>>>,
+    #[serde(default)]
+    pub correlation: Option<HashMap<String, HashMap<String, f64>>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -262,6 +305,20 @@ pub struct PostHocTest {
     pub std_error: f64,
     pub significance: f64,
     pub confidence_interval: ConfidenceInterval,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct PairwiseComparison {
+    pub dependent_variable: String,
+    pub factor_name: String,
+    pub level_i: String,
+    pub level_j: String,
+    pub mean_difference: f64,
+    pub std_error: f64,
+    pub significance: f64,
+    pub confidence_interval: ConfidenceInterval,
+    /// "LSD (none)", "Bonferroni" or "Sidak".
+    pub adjustment: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

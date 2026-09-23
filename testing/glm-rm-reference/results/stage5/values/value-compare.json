@@ -1,0 +1,1262 @@
+{
+ "5000": {
+  "differences": 74,
+  "byTable": {
+   "executed_functions": 8,
+   "mauchly_test": 3,
+   "multivariate_tests": 1,
+   "tests_of_between_subjects_effects": 5,
+   "tests_of_within_subjects_contrasts": 54,
+   "tests_of_within_subjects_effects": 3
+  },
+  "errorsOld": "No errors occurred.",
+  "errorsNew": "Error Summary:\nContext: calculate_multivariate_tests\n  1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed\nContext: calculate_mauchly_test\n  1. score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed\n",
+  "sample": [
+   {
+    "path": ".executed_functions.length",
+    "a": 7,
+    "b": 8
+   },
+   {
+    "path": ".executed_functions[0]",
+    "a": "calculate_between_subjects_effects",
+    "b": "build_rm_model"
+   },
+   {
+    "path": ".executed_functions[1]",
+    "a": "calculate_descriptive_statistics",
+    "b": "calculate_between_subjects_effects"
+   },
+   {
+    "path": ".executed_functions[2]",
+    "a": "calculate_mauchly_test",
+    "b": "calculate_descriptive_statistics"
+   },
+   {
+    "path": ".executed_functions[3]",
+    "a": "calculate_multivariate_tests",
+    "b": "calculate_mauchly_test"
+   },
+   {
+    "path": ".executed_functions[4]",
+    "a": "calculate_tests_within_subjects_contrasts",
+    "b": "calculate_multivariate_tests"
+   },
+   {
+    "path": ".executed_functions[5]",
+    "a": "calculate_tests_within_subjects_effects",
+    "b": "calculate_tests_within_subjects_contrasts"
+   },
+   {
+    "path": ".executed_functions[6]",
+    "a": "parse_within_subject_factors",
+    "b": "calculate_tests_within_subjects_effects"
+   },
+   {
+    "path": ".mauchly_test.design",
+    "a": "time",
+    "b": "Intercept; Within Subjects Design: time"
+   },
+   {
+    "path": ".mauchly_test.tests.time",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".mauchly_test.tests.score",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".multivariate_tests",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.mean_square",
+    "a": 2.0913092821983508,
+    "b": 20.913092821983494
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.significance",
+    "a": 1,
+    "b": null
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.sum_of_squares",
+    "a": 10454.455101709556,
+    "b": 104544.55101709548
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.mean_square",
+    "a": 1843198.905767925,
+    "b": 18431989.057679337
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.sum_of_squares",
+    "a": 1843198.905767925,
+    "b": 18431989.057679337
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[14].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   }
+  ]
+ },
+ "10000": {
+  "differences": 74,
+  "byTable": {
+   "executed_functions": 8,
+   "mauchly_test": 3,
+   "multivariate_tests": 1,
+   "tests_of_between_subjects_effects": 5,
+   "tests_of_within_subjects_contrasts": 54,
+   "tests_of_within_subjects_effects": 3
+  },
+  "errorsOld": "No errors occurred.",
+  "errorsNew": "Error Summary:\nContext: calculate_multivariate_tests\n  1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed\nContext: calculate_mauchly_test\n  1. score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed\n",
+  "sample": [
+   {
+    "path": ".executed_functions.length",
+    "a": 7,
+    "b": 8
+   },
+   {
+    "path": ".executed_functions[0]",
+    "a": "calculate_between_subjects_effects",
+    "b": "build_rm_model"
+   },
+   {
+    "path": ".executed_functions[1]",
+    "a": "calculate_descriptive_statistics",
+    "b": "calculate_between_subjects_effects"
+   },
+   {
+    "path": ".executed_functions[2]",
+    "a": "calculate_mauchly_test",
+    "b": "calculate_descriptive_statistics"
+   },
+   {
+    "path": ".executed_functions[3]",
+    "a": "calculate_multivariate_tests",
+    "b": "calculate_mauchly_test"
+   },
+   {
+    "path": ".executed_functions[4]",
+    "a": "calculate_tests_within_subjects_contrasts",
+    "b": "calculate_multivariate_tests"
+   },
+   {
+    "path": ".executed_functions[5]",
+    "a": "calculate_tests_within_subjects_effects",
+    "b": "calculate_tests_within_subjects_contrasts"
+   },
+   {
+    "path": ".executed_functions[6]",
+    "a": "parse_within_subject_factors",
+    "b": "calculate_tests_within_subjects_effects"
+   },
+   {
+    "path": ".mauchly_test.design",
+    "a": "time",
+    "b": "Intercept; Within Subjects Design: time"
+   },
+   {
+    "path": ".mauchly_test.tests.time",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".mauchly_test.tests.score",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".multivariate_tests",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.mean_square",
+    "a": 2.091589291632685,
+    "b": 20.915892916326765
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.significance",
+    "a": 1,
+    "b": null
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.sum_of_squares",
+    "a": 20913.801327035217,
+    "b": 209138.01327035134
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.mean_square",
+    "a": 3686405.8579150112,
+    "b": 36864058.57915006
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.sum_of_squares",
+    "a": 3686405.8579150112,
+    "b": 36864058.57915006
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[14].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   }
+  ]
+ },
+ "20000": {
+  "differences": 74,
+  "byTable": {
+   "executed_functions": 8,
+   "mauchly_test": 3,
+   "multivariate_tests": 1,
+   "tests_of_between_subjects_effects": 5,
+   "tests_of_within_subjects_contrasts": 54,
+   "tests_of_within_subjects_effects": 3
+  },
+  "errorsOld": "No errors occurred.",
+  "errorsNew": "Error Summary:\nContext: calculate_multivariate_tests\n  1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed\nContext: calculate_mauchly_test\n  1. score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed\n",
+  "sample": [
+   {
+    "path": ".executed_functions.length",
+    "a": 7,
+    "b": 8
+   },
+   {
+    "path": ".executed_functions[0]",
+    "a": "calculate_between_subjects_effects",
+    "b": "build_rm_model"
+   },
+   {
+    "path": ".executed_functions[1]",
+    "a": "calculate_descriptive_statistics",
+    "b": "calculate_between_subjects_effects"
+   },
+   {
+    "path": ".executed_functions[2]",
+    "a": "calculate_mauchly_test",
+    "b": "calculate_descriptive_statistics"
+   },
+   {
+    "path": ".executed_functions[3]",
+    "a": "calculate_multivariate_tests",
+    "b": "calculate_mauchly_test"
+   },
+   {
+    "path": ".executed_functions[4]",
+    "a": "calculate_tests_within_subjects_contrasts",
+    "b": "calculate_multivariate_tests"
+   },
+   {
+    "path": ".executed_functions[5]",
+    "a": "calculate_tests_within_subjects_effects",
+    "b": "calculate_tests_within_subjects_contrasts"
+   },
+   {
+    "path": ".executed_functions[6]",
+    "a": "parse_within_subject_factors",
+    "b": "calculate_tests_within_subjects_effects"
+   },
+   {
+    "path": ".mauchly_test.design",
+    "a": "time",
+    "b": "Intercept; Within Subjects Design: time"
+   },
+   {
+    "path": ".mauchly_test.tests.time",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".mauchly_test.tests.score",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".multivariate_tests",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.mean_square",
+    "a": 2.0924720257066776,
+    "b": 20.92472025706686
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.significance",
+    "a": 1,
+    "b": null
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.sum_of_squares",
+    "a": 41847.34804210784,
+    "b": 418473.48042108014
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.mean_square",
+    "a": 7372803.1542865615,
+    "b": 73728031.5428667
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.sum_of_squares",
+    "a": 7372803.1542865615,
+    "b": 73728031.5428667
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[14].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   }
+  ]
+ },
+ "40000": {
+  "differences": 74,
+  "byTable": {
+   "executed_functions": 8,
+   "mauchly_test": 3,
+   "multivariate_tests": 1,
+   "tests_of_between_subjects_effects": 5,
+   "tests_of_within_subjects_contrasts": 54,
+   "tests_of_within_subjects_effects": 3
+  },
+  "errorsOld": "No errors occurred.",
+  "errorsNew": "Error Summary:\nContext: calculate_multivariate_tests\n  1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed\nContext: calculate_mauchly_test\n  1. score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed\n",
+  "sample": [
+   {
+    "path": ".executed_functions.length",
+    "a": 7,
+    "b": 8
+   },
+   {
+    "path": ".executed_functions[0]",
+    "a": "calculate_between_subjects_effects",
+    "b": "build_rm_model"
+   },
+   {
+    "path": ".executed_functions[1]",
+    "a": "calculate_descriptive_statistics",
+    "b": "calculate_between_subjects_effects"
+   },
+   {
+    "path": ".executed_functions[2]",
+    "a": "calculate_mauchly_test",
+    "b": "calculate_descriptive_statistics"
+   },
+   {
+    "path": ".executed_functions[3]",
+    "a": "calculate_multivariate_tests",
+    "b": "calculate_mauchly_test"
+   },
+   {
+    "path": ".executed_functions[4]",
+    "a": "calculate_tests_within_subjects_contrasts",
+    "b": "calculate_multivariate_tests"
+   },
+   {
+    "path": ".executed_functions[5]",
+    "a": "calculate_tests_within_subjects_effects",
+    "b": "calculate_tests_within_subjects_contrasts"
+   },
+   {
+    "path": ".executed_functions[6]",
+    "a": "parse_within_subject_factors",
+    "b": "calculate_tests_within_subjects_effects"
+   },
+   {
+    "path": ".mauchly_test.design",
+    "a": "time",
+    "b": "Intercept; Within Subjects Design: time"
+   },
+   {
+    "path": ".mauchly_test.tests.time",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".mauchly_test.tests.score",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".multivariate_tests",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.mean_square",
+    "a": 2.0923686414739375,
+    "b": 20.92368641473929
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.significance",
+    "a": 1,
+    "b": null
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Error.sum_of_squares",
+    "a": 83692.65329031603,
+    "b": 836926.5329031568
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.mean_square",
+    "a": 14745606.499402236,
+    "b": 147456064.9940243
+   },
+   {
+    "path": ".tests_of_between_subjects_effects.effects.score.Intercept.sum_of_squares",
+    "a": 14745606.499402236,
+    "b": 147456064.9940243
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[0].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[1].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[2].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[3].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[4].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[5].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[6].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[7].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.score",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].factor_values.time",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[8].source",
+    "a": "score",
+    "b": "time"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[9].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[10].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[11].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[12].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].factor_values.Error(time)",
+    "a": "(missing)",
+    "b": "(present)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[13].source",
+    "a": "Error(score)",
+    "b": "Error(time)"
+   },
+   {
+    "path": ".tests_of_within_subjects_contrasts.measures.score.sources[14].factor_values.Error(score)",
+    "a": "(present)",
+    "b": "(missing)"
+   }
+  ]
+ }
+}

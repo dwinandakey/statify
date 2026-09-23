@@ -4,15 +4,71 @@ import type {
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/types/repeated-measures-worker";
 import { transformRepeatedMeasureResult } from "./repeated-measures-analysis-formatter";
 import { resultRepeatedMeasures } from "./repeated-measures-analysis-output";
+import type { RepeatedMeasuresWorkerPayload } from "./repeated-measures-analysis-worker";
+import {
+    executeGlmComputation,
+    GlmWorkerClient,
+    markGlmAnalysisEnd,
+    markGlmAnalysisStart,
+} from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 import init, {
     RepeatedMeasureAnalysis,
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/rust/pkg/wasm";
+
+// Reused across analyses so WASM is initialised once per worker.
+const repeatedMeasuresWorker = new GlmWorkerClient<RepeatedMeasuresWorkerPayload, any>(
+    "repeated-measures",
+    () =>
+        new Worker(new URL("./repeated-measures-analysis-worker.ts", import.meta.url), {
+            type: "module",
+        })
+);
+
+// Main-thread computation (mode "main" and "main-fallback"). Mirrors the
+// worker: the Rust-side object is released with free() right after the
+// results are read, instead of whenever the JS garbage collector finalises it.
+async function runRepeatedMeasuresOnMainThread(payload: RepeatedMeasuresWorkerPayload) {
+    await init();
+
+    const repeatedMeasure = new RepeatedMeasureAnalysis(
+        payload.subject_data,
+        payload.factors_data,
+        payload.covar_data,
+        payload.subject_data_defs,
+        payload.factors_data_defs,
+        payload.covar_data_defs,
+        payload.config_data
+    );
+
+    try {
+        const results = repeatedMeasure.get_formatted_results();
+        const errors = repeatedMeasure.get_all_errors();
+        return { results, errors };
+    } finally {
+        repeatedMeasure.free();
+    }
+}
+
+/**
+ * Runs the WASM computation in the mode selected by localStorage
+ * "glm-execution-mode" and reports the mode actually used.
+ */
+export function computeRepeatedMeasures(payload: RepeatedMeasuresWorkerPayload) {
+    return executeGlmComputation({
+        module: "repeated-measures",
+        client: repeatedMeasuresWorker,
+        payload,
+        runOnMainThread: runRepeatedMeasuresOnMainThread,
+    });
+}
 
 export async function analyzeRepeatedMeasures({
     configData,
     dataVariables,
     variables,
 }: RepeatedMeasuresAnalysisType) {
+    markGlmAnalysisStart();
+
     const SubjectVariables = configData.main.SubVar || [];
     const FactorsVariables = configData.main.FactorsVar || [];
     const CovariateVariables = configData.main.Covariates || [];
@@ -27,11 +83,16 @@ export async function analyzeRepeatedMeasures({
     });
     const realSubjectNames = subjectMap.map((s) => s.real);
 
-    const slicedDataForSubjectReal = getSlicedData({
+    // One slice for all variables, so dependent variables, factors and
+    // covariates have the same number of rows (subjects). Within-only designs
+    // slice exactly the dependent variables, as before.
+    const slicedAll = getSlicedData({
         dataVariables,
         variables,
-        selectedVariables: realSubjectNames,
+        selectedVariables: [...realSubjectNames, ...FactorsVariables, ...CovariateVariables],
     });
+    const nSubjectVars = realSubjectNames.length;
+    const slicedDataForSubjectReal = slicedAll.slice(0, nSubjectVars);
     // Reshape from variable-major (outer=var, inner=subject) to subject-major
     // (outer=subject, inner=record). Each subject becomes one DataRecord with
     // all dependent variables merged under their encoded names — this matches
@@ -49,46 +110,15 @@ export async function analyzeRepeatedMeasures({
         slicedDataForSubject.push([merged]);
     }
 
-    // Between-subjects factors and covariates: also reshape per-subject so the
-    // same record_group iteration pattern lets Rust look up everything for a
-    // single subject from one place.
-    const slicedDataForFactorsRaw = getSlicedData({
-        dataVariables,
-        variables,
-        selectedVariables: FactorsVariables,
-    });
-    const slicedDataForFactors: Record<string, unknown>[][] = [];
-    if (FactorsVariables.length > 0) {
-        const fSubjectCount = slicedDataForFactorsRaw[0]?.length ?? 0;
-        for (let s = 0; s < fSubjectCount; s++) {
-            const merged: Record<string, unknown> = {};
-            slicedDataForFactorsRaw.forEach((records, vIdx) => {
-                const real = FactorsVariables[vIdx];
-                const rec = records[s];
-                if (rec && real in rec) merged[real] = rec[real];
-            });
-            slicedDataForFactors.push([merged]);
-        }
-    }
-
-    const slicedDataForCovariateRaw = getSlicedData({
-        dataVariables,
-        variables,
-        selectedVariables: CovariateVariables,
-    });
-    const slicedDataForCovariate: Record<string, unknown>[][] = [];
-    if (CovariateVariables.length > 0) {
-        const cSubjectCount = slicedDataForCovariateRaw[0]?.length ?? 0;
-        for (let s = 0; s < cSubjectCount; s++) {
-            const merged: Record<string, unknown> = {};
-            slicedDataForCovariateRaw.forEach((records, vIdx) => {
-                const real = CovariateVariables[vIdx];
-                const rec = records[s];
-                if (rec && real in rec) merged[real] = rec[real];
-            });
-            slicedDataForCovariate.push([merged]);
-        }
-    }
+    // Between-subjects factors and covariates use the VARIABLE-MAJOR layout
+    // expected by Rust (models/data.rs, stats/rm_model.rs):
+    //   factors_data[f][s] = { <factor f>: value of subject s }
+    //   covar_data[c][s]   = { <covariate c>: value of subject s }
+    // with f / c in the order of factors_data_defs / covar_data_defs and s in
+    // the same subject order as subject_data. This is exactly the layout
+    // getSlicedData returns, so the slices are passed through unchanged.
+    const slicedDataForFactors = slicedAll.slice(nSubjectVars, nSubjectVars + FactorsVariables.length);
+    const slicedDataForCovariate = slicedAll.slice(nSubjectVars + FactorsVariables.length);
 
     const varDefsForSubjectReal = getVarDefs(variables, realSubjectNames);
     const varDefsForSubject = varDefsForSubjectReal.map((defs, idx) =>
@@ -100,20 +130,19 @@ export async function analyzeRepeatedMeasures({
     const varDefsForFactors = getVarDefs(variables, FactorsVariables);
     const varDefsForCovariate = getVarDefs(variables, CovariateVariables);
 
-    await init();
-
-    const repeatedMeasure = new RepeatedMeasureAnalysis(
-        slicedDataForSubject,
-        slicedDataForFactors,
-        slicedDataForCovariate,
-        varDefsForSubject,
-        varDefsForFactors,
-        varDefsForCovariate,
-        configData
-    );
-
-    const results = repeatedMeasure.get_formatted_results();
-    const errorsString = repeatedMeasure.get_all_errors();
+    const {
+        results,
+        errors: errorsString,
+        mode,
+    } = await computeRepeatedMeasures({
+        subject_data: slicedDataForSubject,
+        factors_data: slicedDataForFactors,
+        covar_data: slicedDataForCovariate,
+        subject_data_defs: varDefsForSubject,
+        factors_data_defs: varDefsForFactors,
+        covar_data_defs: varDefsForCovariate,
+        config_data: configData,
+    });
 
     // Parse error string and suppress non-requested posthoc warnings
     const ph = configData.posthoc;
@@ -163,4 +192,6 @@ export async function analyzeRepeatedMeasures({
     await resultRepeatedMeasures({
         formattedResult: formattedResults,
     });
+
+    markGlmAnalysisEnd("repeated-measures", mode);
 }

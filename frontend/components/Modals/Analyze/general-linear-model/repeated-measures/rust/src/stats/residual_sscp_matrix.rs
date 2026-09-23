@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 use crate::models::{
     config::RepeatedMeasuresConfig,
@@ -175,6 +175,8 @@ pub fn calculate_residual_matrix(
         matrix_type: "Residual SSCP".to_string(),
         values: residual_sscp,
         description: Some(format!("Degrees of freedom: {}", df)),
+        covariance: None,
+        correlation: None,
     })
 }
 
@@ -200,6 +202,8 @@ pub fn calculate_residual_covariance(
         matrix_type: "Residual Covariance".to_string(),
         values: residual_cov,
         description: Some(format!("Residual Covariance Matrix (SSCP/df), df = {}", df)),
+        covariance: None,
+        correlation: None,
     })
 }
 
@@ -243,6 +247,8 @@ pub fn calculate_residual_correlation(
         matrix_type: "Residual Correlation".to_string(),
         values: residual_corr,
         description: Some("Standardized Residual Correlation Matrix".to_string()),
+        covariance: None,
+        correlation: None,
     })
 }
 

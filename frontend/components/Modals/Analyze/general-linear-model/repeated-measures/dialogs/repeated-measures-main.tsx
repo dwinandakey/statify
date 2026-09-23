@@ -123,9 +123,9 @@ export const RepeatedMeasuresContainer = ({
             const newState = { ...prev };
 
             // Within-subjects factors (from Define) drive the Contrast list.
-            // Format follows SPSS: "perlakuan(Repeated)".
+            // Format follows SPSS: "perlakuan(Polynomial)" (SPSS default).
             const defaultContrastMethod =
-                prev.contrast.ContrastMethod ?? "Repeated";
+                prev.contrast.ContrastMethod ?? "Polynomial";
             const contrastMethodLabel =
                 defaultContrastMethod.charAt(0).toUpperCase() +
                 defaultContrastMethod.slice(1);
@@ -133,7 +133,7 @@ export const RepeatedMeasuresContainer = ({
             const existingContrastFactors = prev.contrast.FactorList ?? [];
             const contrastFactorList = factorVars.map((fName) => {
                 const existing = existingContrastFactors.find(
-                    (entry) => entry.split("(")[0] === fName
+                    (entry) => entry.split("(")[0].trim() === fName
                 );
                 return existing ?? `${fName}(${contrastMethodLabel})`;
             });
@@ -166,9 +166,11 @@ export const RepeatedMeasuresContainer = ({
                 BetSubVar: [...factorList, ...covariatesList],
             };
 
+            // EM Means can target the between-subjects factors and, as in
+            // SPSS, the within-subjects factor(s) and their interactions.
             newState.emmeans = {
                 ...prev.emmeans,
-                SrcList: [...factorList],
+                SrcList: [...factorList, ...(factorVars ?? [])],
             };
 
             return newState;
@@ -249,13 +251,30 @@ export const RepeatedMeasuresContainer = ({
         mainData: RepeatedMeasuresMainType
     ) => {
         try {
+            // Derive the between-subjects lists from the main dialog data being
+            // submitted. The effect that syncs them from formData.main runs only
+            // after a re-render, so on the first OK formData.model.BetSubVar was
+            // still empty while FactorsVar was already set (stale BetSubVar).
+            const factorList = mainData.FactorsVar ? [...mainData.FactorsVar] : [];
+            const covariateList = mainData.Covariates ? [...mainData.Covariates] : [];
             const newFormData = {
                 ...formData,
                 main: mainData,
                 model: {
                     ...formData.model,
                     DefFactors: (factorVars ?? []).join(";"),
+                    BetSubVar: [...factorList, ...covariateList],
                 },
+                emmeans: {
+                    ...formData.emmeans,
+                    SrcList: [...factorList, ...(factorVars ?? [])],
+                },
+                ...(mainData.FactorsVar
+                    ? {
+                          plots: { ...formData.plots, SrcList: [...factorList] },
+                          posthoc: { ...formData.posthoc, SrcList: [...factorList] },
+                      }
+                    : {}),
             };
 
             await saveFormData("RepeatedMeasures", newFormData);

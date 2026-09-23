@@ -1,0 +1,34 @@
+[2026-09-22T17:04:37.396Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; cells=4, runs/mode=3, clean, loaf
+[2026-09-22T17:04:37.486Z] cell repeated-measures-5000-cpu1: loading repeated-measures-5000-L10-M1-noise.csv
+[2026-09-22T17:04:50.358Z] repeated-measures-5000-cpu1 run 1/6 startup main->main status=ok tables=17 errors=0 longest=0.0 total=651.3
+[2026-09-22T17:04:59.453Z] repeated-measures-5000-cpu1 run 2/6 startup worker->worker status=ok tables=17 errors=0 longest=0.0 total=377.4
+[2026-09-22T17:05:08.403Z] repeated-measures-5000-cpu1 run 3/6 steady main->main status=ok tables=17 errors=0 longest=162.0 total=293.6
+[2026-09-22T17:05:17.226Z] repeated-measures-5000-cpu1 run 4/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=310.9
+[2026-09-22T17:05:26.191Z] repeated-measures-5000-cpu1 run 5/6 steady main->main status=ok tables=17 errors=0 longest=165.0 total=301.2
+[2026-09-22T17:05:35.234Z] repeated-measures-5000-cpu1 run 6/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=290.0
+[2026-09-22T17:05:35.241Z] cell repeated-measures-5000-cpu1 done in 58 s
+[2026-09-22T17:05:35.364Z] cell repeated-measures-10000-cpu1: loading repeated-measures-10000-L10-M1-noise.csv
+[2026-09-22T17:05:49.209Z] repeated-measures-10000-cpu1 run 1/6 startup main->main status=ok tables=17 errors=0 longest=0.0 total=830.4
+[2026-09-22T17:05:58.433Z] repeated-measures-10000-cpu1 run 2/6 startup worker->worker status=ok tables=17 errors=0 longest=0.0 total=506.9
+[2026-09-22T17:06:07.563Z] repeated-measures-10000-cpu1 run 3/6 steady main->main status=ok tables=17 errors=0 longest=320.0 total=448.2
+[2026-09-22T17:06:16.753Z] repeated-measures-10000-cpu1 run 4/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=469.1
+[2026-09-22T17:06:26.018Z] repeated-measures-10000-cpu1 run 5/6 steady main->main status=ok tables=17 errors=0 longest=335.0 total=455.8
+[2026-09-22T17:06:35.079Z] repeated-measures-10000-cpu1 run 6/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=468.0
+[2026-09-22T17:06:35.084Z] cell repeated-measures-10000-cpu1 done in 60 s
+[2026-09-22T17:06:35.262Z] cell repeated-measures-20000-cpu1: loading repeated-measures-20000-L10-M1-noise.csv
+[2026-09-22T17:06:50.466Z] repeated-measures-20000-cpu1 run 1/6 startup main->main status=ok tables=17 errors=0 longest=0.0 total=1150.6
+[2026-09-22T17:06:59.940Z] repeated-measures-20000-cpu1 run 2/6 startup worker->worker status=ok tables=17 errors=0 longest=0.0 total=773.4
+[2026-09-22T17:07:09.239Z] repeated-measures-20000-cpu1 run 3/6 steady main->main status=ok tables=17 errors=0 longest=611.0 total=740.3
+[2026-09-22T17:07:18.658Z] repeated-measures-20000-cpu1 run 4/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=740.7
+[2026-09-22T17:07:28.266Z] repeated-measures-20000-cpu1 run 5/6 steady main->main status=ok tables=17 errors=0 longest=570.0 total=707.1
+[2026-09-22T17:07:37.564Z] repeated-measures-20000-cpu1 run 6/6 steady worker->worker status=ok tables=17 errors=0 longest=0.0 total=722.9
+[2026-09-22T17:07:37.569Z] cell repeated-measures-20000-cpu1 done in 62 s
+[2026-09-22T17:07:37.866Z] cell repeated-measures-40000-cpu1: loading repeated-measures-40000-L10-M1-noise.csv
+[2026-09-22T17:08:00.590Z] repeated-measures-40000-cpu1 run 1/6 startup main->main status=ok tables=17 errors=0 longest=65.0 total=1804.4
+[2026-09-22T17:08:10.807Z] repeated-measures-40000-cpu1 run 2/6 startup worker->worker status=ok tables=17 errors=0 longest=98.0 total=1493.6
+[2026-09-22T17:08:20.974Z] repeated-measures-40000-cpu1 run 3/6 steady main->main status=ok tables=17 errors=0 longest=1205.0 total=1330.8
+[2026-09-22T17:08:30.997Z] repeated-measures-40000-cpu1 run 4/6 steady worker->worker status=ok tables=17 errors=0 longest=92.0 total=1413.5
+[2026-09-22T17:08:41.037Z] repeated-measures-40000-cpu1 run 5/6 steady main->main status=ok tables=17 errors=0 longest=1124.0 total=1250.8
+[2026-09-22T17:08:53.495Z] repeated-measures-40000-cpu1 run 6/6 steady worker->worker status=ok tables=17 errors=0 longest=99.0 total=1395.3
+[2026-09-22T17:08:53.499Z] cell repeated-measures-40000-cpu1 done in 76 s
+[2026-09-22T17:08:53.549Z] finished

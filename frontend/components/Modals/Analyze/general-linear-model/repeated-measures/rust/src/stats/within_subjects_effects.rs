@@ -1,6 +1,6 @@
 use nalgebra::{ DMatrix, DVector };
 use statrs::distribution::{ FisherSnedecor, ContinuousCDF };
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 use crate::models::{
     config::RepeatedMeasuresConfig,
@@ -176,7 +176,8 @@ pub fn calculate_tests_within_subjects_effects(
 
         // Apply corrections if Mauchly's test is available
         if let Some(mauchly) = mauchly_test {
-            if let Some(test) = mauchly.tests.get(&factor_name) {
+            // Mauchly results are keyed by measure: use this measure's epsilons.
+            if let Some(test) = mauchly.tests.get(measure_name) {
                 // Greenhouse-Geisser correction
                 let gg_df_factor = df_factor * test.greenhouse_geisser_epsilon;
                 let gg_df_error = df_error * test.greenhouse_geisser_epsilon;

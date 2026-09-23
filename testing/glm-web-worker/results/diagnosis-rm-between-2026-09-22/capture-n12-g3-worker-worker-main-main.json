@@ -1,0 +1,1030 @@
+{
+  "n": 12,
+  "groups": 3,
+  "sequence": [
+    "worker",
+    "worker",
+    "main",
+    "main"
+  ],
+  "runs": [
+    {
+      "mode": "worker",
+      "mark": {
+        "module": "repeated-measures",
+        "mode": "worker"
+      },
+      "loggedErrors": [
+        "Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication"
+      ],
+      "rowsPerTable": [
+        "Within-Subjects Factors:5",
+        "Multivariate Tests:8",
+        "Mauchly's Test of Sphericity:1",
+        "Tests of Within-Subjects Effects:8",
+        "Tests of Within-Subjects Contrasts:8",
+        "Tests of Between-Subjects Effects:2",
+        "Errors Logs:1"
+      ],
+      "statistics": [
+        {
+          "title": "Within-Subjects Factors",
+          "output_data": "{\"tables\":[{\"key\":\"within_subjects_factors_score\",\"title\":\"Within-Subjects Factors\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"time\",\"key\":\"factor_level\"},{\"header\":\"Dependent Variable\",\"key\":\"dep_var\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"factor_level\":\"1\",\"dep_var\":\"t1_(1,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"2\",\"dep_var\":\"t2_(2,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"3\",\"dep_var\":\"t3_(3,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"4\",\"dep_var\":\"t4_(4,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"5\",\"dep_var\":\"t5_(5,score)\"}],\"note\":\"Measure: score\",\"interpretation\":\"This table lists the dependent variables associated with each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Multivariate Tests",
+          "output_data": "{\"tables\":[{\"key\":\"multivariate_tests\",\"title\":\"Multivariate Tests\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"effect\"},{\"header\":\"\",\"key\":\"test_name\"},{\"header\":\"Value\",\"key\":\"value\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Hypothesis df\",\"key\":\"hyp_df\"},{\"header\":\"Error df\",\"key\":\"err_df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"effect\":\"Intercept\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.996\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"11.953\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":\"0.000\",\"hyp_df\":\"5.000\",\"err_df\":\"11.000\",\"sig\":\"1\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"253.137\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"253.137\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"50.627\",\"f\":\"556.902\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.981\",\"noncent\":\"50.627\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"group\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"0.000\",\"sig\":\"<.001\",\"eta2\":null,\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"8.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"}],\"note\":\"Design: Intercept; Within Subjects Design: Type TypeIII sum of squares\",\"interpretation\":\"Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.\"}]}"
+        },
+        {
+          "title": "Mauchly's Test of Sphericity",
+          "output_data": "{\"tables\":[{\"key\":\"mauchly_test\",\"title\":\"Mauchly's Test of Sphericity\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"Within Subjects Effect\",\"key\":\"effect\"},{\"header\":\"Mauchly's W\",\"key\":\"w\"},{\"header\":\"Approx. Chi-Square\",\"key\":\"chi_sq\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Greenhouse-Geisser\",\"key\":\"gg\"},{\"header\":\"Huynh-Feldt\",\"key\":\"hf\"},{\"header\":\"Lower-bound\",\"key\":\"lb\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"effect\":\"time\",\"w\":\"0.595\",\"chi_sq\":\"4.888\",\"df\":\"9\",\"sig\":\"0.844\",\"gg\":\"0.805\",\"hf\":\"1.000\",\"lb\":\"0.250\"}],\"note\":\"Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: time\",\"interpretation\":\"If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_effects_score\",\"title\":\"Tests of Within-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"\",\"key\":\"assumption\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"time\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"279.075\",\"df\":\"4\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"279.075\",\"df\":\"3.221\",\"ms\":\"86.647\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"279.075\",\"df\":\"4.000\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"279.075\",\"df\":\"1.000\",\"ms\":\"279.075\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"Error(time)\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"10.725\",\"df\":\"44\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"10.725\",\"df\":\"35.429\",\"ms\":\"0.303\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"10.725\",\"df\":\"44.000\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"10.725\",\"df\":\"11.000\",\"ms\":\"0.975\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Contrasts",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_contrasts_score\",\"title\":\"Tests of Within-Subjects Contrasts\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"score\",\"key\":\"contrast\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"score\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"Error(score)\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Pairwise contrasts between adjacent levels of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_between_subjects_effects\",\"title\":\"Tests of Between-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"Intercept\",\"ss\":\"2920.320\",\"df\":\"1\",\"ms\":\"2920.320\",\"f\":\"1003.860\",\"sig\":\"<.001\",\"eta2\":\"0.989\",\"noncent\":\"1003.860\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"Error\",\"ss\":\"32.000\",\"df\":\"11\",\"ms\":\"2.909\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null}],\"interpretation\":\"Tests of between-subjects effects using the average of the repeated measurements as the transform variable.\",\"note\":\"Measure: score; Transformed Variable: Average\"}]}"
+        },
+        {
+          "title": "Errors Logs",
+          "output_data": "{\"tables\":[{\"key\":\"error_table\",\"title\":\"Errors Logs\",\"columnHeaders\":[{\"header\":\"Context\",\"key\":\"context\"},{\"header\":\"Message\",\"key\":\"message\"}],\"rows\":[{\"rowHeader\":[],\"context\":\"calculate_univariate_tests\",\"message\":\"Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication\"}],\"interpretation\":\"Errors logs from the analysis.\"}]}"
+        }
+      ]
+    },
+    {
+      "mode": "worker",
+      "mark": {
+        "module": "repeated-measures",
+        "mode": "worker"
+      },
+      "loggedErrors": [
+        "Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication"
+      ],
+      "rowsPerTable": [
+        "Within-Subjects Factors:5",
+        "Multivariate Tests:8",
+        "Mauchly's Test of Sphericity:1",
+        "Tests of Within-Subjects Effects:8",
+        "Tests of Within-Subjects Contrasts:8",
+        "Tests of Between-Subjects Effects:0",
+        "Errors Logs:1"
+      ],
+      "statistics": [
+        {
+          "title": "Within-Subjects Factors",
+          "output_data": "{\"tables\":[{\"key\":\"within_subjects_factors_score\",\"title\":\"Within-Subjects Factors\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"time\",\"key\":\"factor_level\"},{\"header\":\"Dependent Variable\",\"key\":\"dep_var\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"factor_level\":\"1\",\"dep_var\":\"t1_(1,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"2\",\"dep_var\":\"t2_(2,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"3\",\"dep_var\":\"t3_(3,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"4\",\"dep_var\":\"t4_(4,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"5\",\"dep_var\":\"t5_(5,score)\"}],\"note\":\"Measure: score\",\"interpretation\":\"This table lists the dependent variables associated with each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Multivariate Tests",
+          "output_data": "{\"tables\":[{\"key\":\"multivariate_tests\",\"title\":\"Multivariate Tests\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"effect\"},{\"header\":\"\",\"key\":\"test_name\"},{\"header\":\"Value\",\"key\":\"value\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Hypothesis df\",\"key\":\"hyp_df\"},{\"header\":\"Error df\",\"key\":\"err_df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"effect\":\"group\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"0.000\",\"sig\":\"<.001\",\"eta2\":null,\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"8.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"Intercept\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.996\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"11.953\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":\"0.000\",\"hyp_df\":\"5.000\",\"err_df\":\"11.000\",\"sig\":\"1\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"253.137\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"253.137\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"50.627\",\"f\":\"556.902\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.981\",\"noncent\":\"50.627\",\"power\":\"1.000\"}],\"note\":\"Design: Intercept; Within Subjects Design: Type TypeIII sum of squares\",\"interpretation\":\"Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.\"}]}"
+        },
+        {
+          "title": "Mauchly's Test of Sphericity",
+          "output_data": "{\"tables\":[{\"key\":\"mauchly_test\",\"title\":\"Mauchly's Test of Sphericity\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"Within Subjects Effect\",\"key\":\"effect\"},{\"header\":\"Mauchly's W\",\"key\":\"w\"},{\"header\":\"Approx. Chi-Square\",\"key\":\"chi_sq\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Greenhouse-Geisser\",\"key\":\"gg\"},{\"header\":\"Huynh-Feldt\",\"key\":\"hf\"},{\"header\":\"Lower-bound\",\"key\":\"lb\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"effect\":\"time\",\"w\":\"0.595\",\"chi_sq\":\"4.888\",\"df\":\"9\",\"sig\":\"0.844\",\"gg\":\"0.805\",\"hf\":\"1.000\",\"lb\":\"0.250\"}],\"note\":\"Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: time\",\"interpretation\":\"If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_effects_score\",\"title\":\"Tests of Within-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"\",\"key\":\"assumption\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"time\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"279.075\",\"df\":\"4\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"279.075\",\"df\":\"3.221\",\"ms\":\"86.647\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"279.075\",\"df\":\"4.000\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"279.075\",\"df\":\"1.000\",\"ms\":\"279.075\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"Error(time)\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"10.725\",\"df\":\"44\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"10.725\",\"df\":\"35.429\",\"ms\":\"0.303\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"10.725\",\"df\":\"44.000\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"10.725\",\"df\":\"11.000\",\"ms\":\"0.975\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Contrasts",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_contrasts_score\",\"title\":\"Tests of Within-Subjects Contrasts\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"score\",\"key\":\"contrast\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"score\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"Error(score)\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Pairwise contrasts between adjacent levels of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_between_subjects_effects\",\"title\":\"Tests of Between-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[],\"interpretation\":\"Tests of between-subjects effects using the average of the repeated measurements as the transform variable.\"}]}"
+        },
+        {
+          "title": "Errors Logs",
+          "output_data": "{\"tables\":[{\"key\":\"error_table\",\"title\":\"Errors Logs\",\"columnHeaders\":[{\"header\":\"Context\",\"key\":\"context\"},{\"header\":\"Message\",\"key\":\"message\"}],\"rows\":[{\"rowHeader\":[],\"context\":\"calculate_univariate_tests\",\"message\":\"Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication\"}],\"interpretation\":\"Errors logs from the analysis.\"}]}"
+        }
+      ]
+    },
+    {
+      "mode": "main",
+      "mark": {
+        "module": "repeated-measures",
+        "mode": "main"
+      },
+      "loggedErrors": [
+        "Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication"
+      ],
+      "rowsPerTable": [
+        "Within-Subjects Factors:5",
+        "Multivariate Tests:8",
+        "Mauchly's Test of Sphericity:1",
+        "Tests of Within-Subjects Effects:8",
+        "Tests of Within-Subjects Contrasts:8",
+        "Tests of Between-Subjects Effects:0",
+        "Errors Logs:1"
+      ],
+      "statistics": [
+        {
+          "title": "Within-Subjects Factors",
+          "output_data": "{\"tables\":[{\"key\":\"within_subjects_factors_score\",\"title\":\"Within-Subjects Factors\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"time\",\"key\":\"factor_level\"},{\"header\":\"Dependent Variable\",\"key\":\"dep_var\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"factor_level\":\"1\",\"dep_var\":\"t1_(1,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"2\",\"dep_var\":\"t2_(2,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"3\",\"dep_var\":\"t3_(3,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"4\",\"dep_var\":\"t4_(4,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"5\",\"dep_var\":\"t5_(5,score)\"}],\"note\":\"Measure: score\",\"interpretation\":\"This table lists the dependent variables associated with each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Multivariate Tests",
+          "output_data": "{\"tables\":[{\"key\":\"multivariate_tests\",\"title\":\"Multivariate Tests\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"effect\"},{\"header\":\"\",\"key\":\"test_name\"},{\"header\":\"Value\",\"key\":\"value\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Hypothesis df\",\"key\":\"hyp_df\"},{\"header\":\"Error df\",\"key\":\"err_df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"effect\":\"Intercept\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.996\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"11.953\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":\"0.000\",\"hyp_df\":\"5.000\",\"err_df\":\"11.000\",\"sig\":\"1\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"253.137\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"253.137\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"50.627\",\"f\":\"556.902\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.981\",\"noncent\":\"50.627\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"group\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"0.000\",\"sig\":\"<.001\",\"eta2\":null,\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"8.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"}],\"note\":\"Design: Intercept; Within Subjects Design: Type TypeIII sum of squares\",\"interpretation\":\"Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.\"}]}"
+        },
+        {
+          "title": "Mauchly's Test of Sphericity",
+          "output_data": "{\"tables\":[{\"key\":\"mauchly_test\",\"title\":\"Mauchly's Test of Sphericity\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"Within Subjects Effect\",\"key\":\"effect\"},{\"header\":\"Mauchly's W\",\"key\":\"w\"},{\"header\":\"Approx. Chi-Square\",\"key\":\"chi_sq\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Greenhouse-Geisser\",\"key\":\"gg\"},{\"header\":\"Huynh-Feldt\",\"key\":\"hf\"},{\"header\":\"Lower-bound\",\"key\":\"lb\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"effect\":\"time\",\"w\":\"0.595\",\"chi_sq\":\"4.888\",\"df\":\"9\",\"sig\":\"0.844\",\"gg\":\"0.805\",\"hf\":\"1.000\",\"lb\":\"0.250\"}],\"note\":\"Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: time\",\"interpretation\":\"If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_effects_score\",\"title\":\"Tests of Within-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"\",\"key\":\"assumption\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"time\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"279.075\",\"df\":\"4\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"279.075\",\"df\":\"3.221\",\"ms\":\"86.647\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"279.075\",\"df\":\"4.000\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"279.075\",\"df\":\"1.000\",\"ms\":\"279.075\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"Error(time)\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"10.725\",\"df\":\"44\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"10.725\",\"df\":\"35.429\",\"ms\":\"0.303\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"10.725\",\"df\":\"44.000\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"10.725\",\"df\":\"11.000\",\"ms\":\"0.975\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Contrasts",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_contrasts_score\",\"title\":\"Tests of Within-Subjects Contrasts\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"score\",\"key\":\"contrast\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"score\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"Error(score)\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Pairwise contrasts between adjacent levels of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_between_subjects_effects\",\"title\":\"Tests of Between-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[],\"interpretation\":\"Tests of between-subjects effects using the average of the repeated measurements as the transform variable.\"}]}"
+        },
+        {
+          "title": "Errors Logs",
+          "output_data": "{\"tables\":[{\"key\":\"error_table\",\"title\":\"Errors Logs\",\"columnHeaders\":[{\"header\":\"Context\",\"key\":\"context\"},{\"header\":\"Message\",\"key\":\"message\"}],\"rows\":[{\"rowHeader\":[],\"context\":\"calculate_univariate_tests\",\"message\":\"Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication\"}],\"interpretation\":\"Errors logs from the analysis.\"}]}"
+        }
+      ]
+    },
+    {
+      "mode": "main",
+      "mark": {
+        "module": "repeated-measures",
+        "mode": "main"
+      },
+      "loggedErrors": [
+        "Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication"
+      ],
+      "rowsPerTable": [
+        "Within-Subjects Factors:5",
+        "Multivariate Tests:8",
+        "Mauchly's Test of Sphericity:1",
+        "Tests of Within-Subjects Effects:8",
+        "Tests of Within-Subjects Contrasts:8",
+        "Tests of Between-Subjects Effects:0",
+        "Errors Logs:1"
+      ],
+      "statistics": [
+        {
+          "title": "Within-Subjects Factors",
+          "output_data": "{\"tables\":[{\"key\":\"within_subjects_factors_score\",\"title\":\"Within-Subjects Factors\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"time\",\"key\":\"factor_level\"},{\"header\":\"Dependent Variable\",\"key\":\"dep_var\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"factor_level\":\"1\",\"dep_var\":\"t1_(1,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"2\",\"dep_var\":\"t2_(2,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"3\",\"dep_var\":\"t3_(3,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"4\",\"dep_var\":\"t4_(4,score)\"},{\"rowHeader\":[],\"measure\":\"\",\"factor_level\":\"5\",\"dep_var\":\"t5_(5,score)\"}],\"note\":\"Measure: score\",\"interpretation\":\"This table lists the dependent variables associated with each level of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Multivariate Tests",
+          "output_data": "{\"tables\":[{\"key\":\"multivariate_tests\",\"title\":\"Multivariate Tests\",\"columnHeaders\":[{\"header\":\"\",\"key\":\"effect\"},{\"header\":\"\",\"key\":\"test_name\"},{\"header\":\"Value\",\"key\":\"value\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Hypothesis df\",\"key\":\"hyp_df\"},{\"header\":\"Error df\",\"key\":\"err_df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"effect\":\"Intercept\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.996\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"11.953\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":\"0.000\",\"hyp_df\":\"5.000\",\"err_df\":\"11.000\",\"sig\":\"1\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"253.137\",\"f\":\"354.392\",\"hyp_df\":\"5.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.996\",\"noncent\":\"253.137\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"50.627\",\"f\":\"556.902\",\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.981\",\"noncent\":\"50.627\",\"power\":\"1.000\"},{\"rowHeader\":[],\"effect\":\"group\",\"test_name\":\"Pillai's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"0.000\",\"sig\":\"<.001\",\"eta2\":null,\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Wilks' Lambda\",\"value\":\"1.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"8.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Hotelling's Trace\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"0.000\",\"err_df\":\"35.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"},{\"rowHeader\":[],\"effect\":\"\",\"test_name\":\"Roy's Largest Root\",\"value\":\"0.000\",\"f\":null,\"hyp_df\":\"5.000\",\"err_df\":\"7.000\",\"sig\":\"<.001\",\"eta2\":\"0.000\",\"noncent\":\"0.000\",\"power\":\"0.500\"}],\"note\":\"Design: Intercept; Within Subjects Design: Type TypeIII sum of squares\",\"interpretation\":\"Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.\"}]}"
+        },
+        {
+          "title": "Mauchly's Test of Sphericity",
+          "output_data": "{\"tables\":[{\"key\":\"mauchly_test\",\"title\":\"Mauchly's Test of Sphericity\",\"columnHeaders\":[{\"header\":\"Measure\",\"key\":\"measure\"},{\"header\":\"Within Subjects Effect\",\"key\":\"effect\"},{\"header\":\"Mauchly's W\",\"key\":\"w\"},{\"header\":\"Approx. Chi-Square\",\"key\":\"chi_sq\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Greenhouse-Geisser\",\"key\":\"gg\"},{\"header\":\"Huynh-Feldt\",\"key\":\"hf\"},{\"header\":\"Lower-bound\",\"key\":\"lb\"}],\"rows\":[{\"rowHeader\":[],\"measure\":\"score\",\"effect\":\"time\",\"w\":\"0.595\",\"chi_sq\":\"4.888\",\"df\":\"9\",\"sig\":\"0.844\",\"gg\":\"0.805\",\"hf\":\"1.000\",\"lb\":\"0.250\"}],\"note\":\"Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: time\",\"interpretation\":\"If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_effects_score\",\"title\":\"Tests of Within-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"\",\"key\":\"assumption\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"time\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"279.075\",\"df\":\"4\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"279.075\",\"df\":\"3.221\",\"ms\":\"86.647\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"279.075\",\"df\":\"4.000\",\"ms\":\"69.769\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"279.075\",\"df\":\"1.000\",\"ms\":\"279.075\",\"f\":\"286.231\",\"sig\":\"<.001\",\"eta2\":\"0.963\",\"noncent\":\"1144.923\",\"power\":\"1.000\"},{\"rowHeader\":[],\"source\":\"Error(time)\",\"assumption\":\"Sphericity Assumed\",\"ss\":\"10.725\",\"df\":\"44\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Greenhouse-Geisser\",\"ss\":\"10.725\",\"df\":\"35.429\",\"ms\":\"0.303\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Huynh-Feldt\",\"ss\":\"10.725\",\"df\":\"44.000\",\"ms\":\"0.244\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null},{\"rowHeader\":[],\"source\":\"\",\"assumption\":\"Lower-bound\",\"ss\":\"10.725\",\"df\":\"11.000\",\"ms\":\"0.975\",\"f\":null,\"sig\":null,\"eta2\":null,\"noncent\":null,\"power\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.\"}]}"
+        },
+        {
+          "title": "Tests of Within-Subjects Contrasts",
+          "output_data": "{\"tables\":[{\"key\":\"tests_within_subjects_contrasts_score\",\"title\":\"Tests of Within-Subjects Contrasts\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"score\",\"key\":\"contrast\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"}],\"rows\":[{\"rowHeader\":[],\"source\":\"score\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"27.907\",\"df\":\"1\",\"ms\":\"27.907\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"27.908\",\"df\":\"1\",\"ms\":\"27.908\",\"f\":\"46.778\",\"sig\":\"<.001\"},{\"rowHeader\":[],\"source\":\"Error(score)\",\"contrast\":\"Level 1 vs. Level 2\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 2 vs. Level 3\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 3 vs. Level 4\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null},{\"rowHeader\":[],\"source\":\"\",\"contrast\":\"Level 4 vs. Level 5\",\"ss\":\"6.562\",\"df\":\"11\",\"ms\":\"0.597\",\"f\":null,\"sig\":null}],\"note\":\"Measure: score\",\"interpretation\":\"Pairwise contrasts between adjacent levels of the within-subjects factor.\"}]}"
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "output_data": "{\"tables\":[{\"key\":\"tests_between_subjects_effects\",\"title\":\"Tests of Between-Subjects Effects\",\"columnHeaders\":[{\"header\":\"Source\",\"key\":\"source\"},{\"header\":\"Type III Sum of Squares\",\"key\":\"ss\"},{\"header\":\"df\",\"key\":\"df\"},{\"header\":\"Mean Square\",\"key\":\"ms\"},{\"header\":\"F\",\"key\":\"f\"},{\"header\":\"Sig.\",\"key\":\"sig\"},{\"header\":\"Partial Eta Squared\",\"key\":\"eta2\"},{\"header\":\"Noncent. Parameter\",\"key\":\"noncent\"},{\"header\":\"Observed Power\",\"key\":\"power\"}],\"rows\":[],\"interpretation\":\"Tests of between-subjects effects using the average of the repeated measurements as the transform variable.\"}]}"
+        },
+        {
+          "title": "Errors Logs",
+          "output_data": "{\"tables\":[{\"key\":\"error_table\",\"title\":\"Errors Logs\",\"columnHeaders\":[{\"header\":\"Context\",\"key\":\"context\"},{\"header\":\"Message\",\"key\":\"message\"}],\"rows\":[{\"rowHeader\":[],\"context\":\"calculate_univariate_tests\",\"message\":\"Failed to calculate tests for t1_(1,score): Error computing X'X: Empty matrices provided for multiplication\"}],\"interpretation\":\"Errors logs from the analysis.\"}]}"
+        }
+      ]
+    }
+  ],
+  "payloads": [
+    {
+      "id": 1,
+      "payload": {
+        "subject_data": [
+          [
+            {
+              "t1_(1,score)": 10,
+              "t2_(2,score)": 12.4,
+              "t3_(3,score)": 13.3,
+              "t4_(4,score)": 15.7,
+              "t5_(5,score)": 16.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12.6,
+              "t2_(2,score)": 13.5,
+              "t3_(3,score)": 15.9,
+              "t4_(4,score)": 16.8,
+              "t5_(5,score)": 19.2
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 15.2,
+              "t2_(2,score)": 16.1,
+              "t3_(3,score)": 17,
+              "t4_(4,score)": 19.4,
+              "t5_(5,score)": 20.3
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.3,
+              "t2_(2,score)": 12.7,
+              "t3_(3,score)": 13.6,
+              "t4_(4,score)": 14.5,
+              "t5_(5,score)": 16.9
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12.9,
+              "t2_(2,score)": 13.8,
+              "t3_(3,score)": 16.2,
+              "t4_(4,score)": 17.1,
+              "t5_(5,score)": 18
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14,
+              "t2_(2,score)": 16.4,
+              "t3_(3,score)": 17.3,
+              "t4_(4,score)": 19.7,
+              "t5_(5,score)": 20.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.6,
+              "t2_(2,score)": 11.5,
+              "t3_(3,score)": 13.9,
+              "t4_(4,score)": 14.8,
+              "t5_(5,score)": 17.2
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 13.2,
+              "t2_(2,score)": 14.1,
+              "t3_(3,score)": 15,
+              "t4_(4,score)": 17.4,
+              "t5_(5,score)": 18.3
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14.3,
+              "t2_(2,score)": 16.7,
+              "t3_(3,score)": 17.6,
+              "t4_(4,score)": 18.5,
+              "t5_(5,score)": 20.9
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.9,
+              "t2_(2,score)": 11.8,
+              "t3_(3,score)": 14.2,
+              "t4_(4,score)": 15.1,
+              "t5_(5,score)": 16
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12,
+              "t2_(2,score)": 14.4,
+              "t3_(3,score)": 15.3,
+              "t4_(4,score)": 17.7,
+              "t5_(5,score)": 18.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14.6,
+              "t2_(2,score)": 15.5,
+              "t3_(3,score)": 17.9,
+              "t4_(4,score)": 18.8,
+              "t5_(5,score)": 21.2
+            }
+          ]
+        ],
+        "factors_data": [
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ]
+        ],
+        "covar_data": [],
+        "subject_data_defs": [
+          [
+            {
+              "id": 1,
+              "columnIndex": 0,
+              "name": "t1_(1,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 2,
+              "columnIndex": 1,
+              "name": "t2_(2,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "columnIndex": 2,
+              "name": "t3_(3,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "columnIndex": 3,
+              "name": "t4_(4,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 5,
+              "columnIndex": 4,
+              "name": "t5_(5,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ]
+        ],
+        "factors_data_defs": [
+          [
+            {
+              "id": 6,
+              "columnIndex": 5,
+              "name": "group",
+              "type": "STRING",
+              "width": 8,
+              "decimals": 0,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "left",
+              "measure": "nominal",
+              "role": "input"
+            }
+          ]
+        ],
+        "covar_data_defs": [],
+        "config_data": {
+          "main": {
+            "SubVar": [
+              "t1_(1,score)",
+              "t2_(2,score)",
+              "t3_(3,score)",
+              "t4_(4,score)",
+              "t5_(5,score)"
+            ],
+            "FactorsVar": [
+              "group"
+            ],
+            "Covariates": null
+          },
+          "model": {
+            "NonCust": true,
+            "Custom": false,
+            "BuildCustomTerm": false,
+            "BetSubVar": [],
+            "BetSubModel": null,
+            "WithSubVar": null,
+            "WithSubModel": null,
+            "DefFactors": "time",
+            "BetFactors": null,
+            "CovModel": null,
+            "BuildTermMethod": "interaction",
+            "SumOfSquareMethod": "typeIII",
+            "TermText": null
+          },
+          "contrast": {
+            "FactorList": [
+              "time(None)"
+            ],
+            "ContrastMethod": "none",
+            "Last": true,
+            "First": false
+          },
+          "plots": {
+            "SrcList": null,
+            "AxisList": null,
+            "LineList": null,
+            "PlotList": null,
+            "FixFactorVars": null,
+            "RandFactorVars": null,
+            "LineChartType": true,
+            "BarChartType": false,
+            "IncludeErrorBars": false,
+            "ConfidenceInterval": true,
+            "StandardError": false,
+            "IncludeRefLineForGrandMean": false,
+            "YAxisStart0": false,
+            "Multiplier": 2
+          },
+          "posthoc": {
+            "SrcList": null,
+            "FixFactorVars": null,
+            "ErrorRatio": 100,
+            "Twosided": true,
+            "LtControl": false,
+            "GtControl": false,
+            "CategoryMethod": "last",
+            "Waller": false,
+            "Dunnett": false,
+            "Lsd": false,
+            "Bonfe": false,
+            "Sidak": false,
+            "Scheffe": false,
+            "Regwf": false,
+            "Regwq": false,
+            "Snk": false,
+            "Tu": false,
+            "Tub": false,
+            "Dun": false,
+            "Hoc": false,
+            "Gabriel": false,
+            "Tam": false,
+            "Dunt": false,
+            "Games": false,
+            "Dunc": false
+          },
+          "emmeans": {
+            "SrcList": [],
+            "TargetList": null,
+            "CompMainEffect": false,
+            "ConfiIntervalMethod": "lsdNone"
+          },
+          "save": {
+            "ResWeighted": false,
+            "PreWeighted": false,
+            "StdStatistics": false,
+            "CooksD": false,
+            "Leverage": false,
+            "UnstandardizedRes": false,
+            "WeightedRes": false,
+            "StandardizedRes": false,
+            "StudentizedRes": false,
+            "DeletedRes": false,
+            "CoeffStats": false,
+            "NewDataSet": true,
+            "FilePath": null,
+            "DatasetName": null,
+            "WriteNewDataSet": false
+          },
+          "options": {
+            "DescStats": false,
+            "HomogenTest": false,
+            "EstEffectSize": false,
+            "SprVsLevel": false,
+            "ObsPower": false,
+            "ResPlot": false,
+            "ParamEst": false,
+            "LackOfFit": false,
+            "SscpMat": false,
+            "GeneralFun": false,
+            "ResSscpMat": false,
+            "CoefficientMatrix": false,
+            "TransformMat": false,
+            "SigLevel": 0.05
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "payload": {
+        "subject_data": [
+          [
+            {
+              "t1_(1,score)": 10,
+              "t2_(2,score)": 12.4,
+              "t3_(3,score)": 13.3,
+              "t4_(4,score)": 15.7,
+              "t5_(5,score)": 16.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12.6,
+              "t2_(2,score)": 13.5,
+              "t3_(3,score)": 15.9,
+              "t4_(4,score)": 16.8,
+              "t5_(5,score)": 19.2
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 15.2,
+              "t2_(2,score)": 16.1,
+              "t3_(3,score)": 17,
+              "t4_(4,score)": 19.4,
+              "t5_(5,score)": 20.3
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.3,
+              "t2_(2,score)": 12.7,
+              "t3_(3,score)": 13.6,
+              "t4_(4,score)": 14.5,
+              "t5_(5,score)": 16.9
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12.9,
+              "t2_(2,score)": 13.8,
+              "t3_(3,score)": 16.2,
+              "t4_(4,score)": 17.1,
+              "t5_(5,score)": 18
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14,
+              "t2_(2,score)": 16.4,
+              "t3_(3,score)": 17.3,
+              "t4_(4,score)": 19.7,
+              "t5_(5,score)": 20.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.6,
+              "t2_(2,score)": 11.5,
+              "t3_(3,score)": 13.9,
+              "t4_(4,score)": 14.8,
+              "t5_(5,score)": 17.2
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 13.2,
+              "t2_(2,score)": 14.1,
+              "t3_(3,score)": 15,
+              "t4_(4,score)": 17.4,
+              "t5_(5,score)": 18.3
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14.3,
+              "t2_(2,score)": 16.7,
+              "t3_(3,score)": 17.6,
+              "t4_(4,score)": 18.5,
+              "t5_(5,score)": 20.9
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 10.9,
+              "t2_(2,score)": 11.8,
+              "t3_(3,score)": 14.2,
+              "t4_(4,score)": 15.1,
+              "t5_(5,score)": 16
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 12,
+              "t2_(2,score)": 14.4,
+              "t3_(3,score)": 15.3,
+              "t4_(4,score)": 17.7,
+              "t5_(5,score)": 18.6
+            }
+          ],
+          [
+            {
+              "t1_(1,score)": 14.6,
+              "t2_(2,score)": 15.5,
+              "t3_(3,score)": 17.9,
+              "t4_(4,score)": 18.8,
+              "t5_(5,score)": 21.2
+            }
+          ]
+        ],
+        "factors_data": [
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ],
+          [
+            {
+              "group": "G1"
+            }
+          ],
+          [
+            {
+              "group": "G2"
+            }
+          ],
+          [
+            {
+              "group": "G3"
+            }
+          ]
+        ],
+        "covar_data": [],
+        "subject_data_defs": [
+          [
+            {
+              "id": 1,
+              "columnIndex": 0,
+              "name": "t1_(1,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 2,
+              "columnIndex": 1,
+              "name": "t2_(2,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 3,
+              "columnIndex": 2,
+              "name": "t3_(3,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 4,
+              "columnIndex": 3,
+              "name": "t4_(4,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ],
+          [
+            {
+              "id": 5,
+              "columnIndex": 4,
+              "name": "t5_(5,score)",
+              "type": "NUMERIC",
+              "width": 8,
+              "decimals": 3,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "right",
+              "measure": "scale",
+              "role": "input"
+            }
+          ]
+        ],
+        "factors_data_defs": [
+          [
+            {
+              "id": 6,
+              "columnIndex": 5,
+              "name": "group",
+              "type": "STRING",
+              "width": 8,
+              "decimals": 0,
+              "label": "",
+              "values": [],
+              "missing": [],
+              "columns": 72,
+              "align": "left",
+              "measure": "nominal",
+              "role": "input"
+            }
+          ]
+        ],
+        "covar_data_defs": [],
+        "config_data": {
+          "analysisType": "RepeatedMeasures",
+          "main": {
+            "SubVar": [
+              "t1_(1,score)",
+              "t2_(2,score)",
+              "t3_(3,score)",
+              "t4_(4,score)",
+              "t5_(5,score)"
+            ],
+            "FactorsVar": [
+              "group"
+            ],
+            "Covariates": null
+          },
+          "model": {
+            "NonCust": true,
+            "Custom": false,
+            "BuildCustomTerm": false,
+            "BetSubVar": [
+              "group"
+            ],
+            "BetSubModel": null,
+            "WithSubVar": null,
+            "WithSubModel": null,
+            "DefFactors": "time",
+            "BetFactors": null,
+            "CovModel": null,
+            "BuildTermMethod": "interaction",
+            "SumOfSquareMethod": "typeIII",
+            "TermText": null
+          },
+          "contrast": {
+            "FactorList": [
+              "time(None)"
+            ],
+            "ContrastMethod": "none",
+            "Last": true,
+            "First": false
+          },
+          "plots": {
+            "SrcList": [
+              "group"
+            ],
+            "AxisList": null,
+            "LineList": null,
+            "PlotList": null,
+            "FixFactorVars": null,
+            "RandFactorVars": null,
+            "LineChartType": true,
+            "BarChartType": false,
+            "IncludeErrorBars": false,
+            "ConfidenceInterval": true,
+            "StandardError": false,
+            "IncludeRefLineForGrandMean": false,
+            "YAxisStart0": false,
+            "Multiplier": 2
+          },
+          "posthoc": {
+            "SrcList": [
+              "group"
+            ],
+            "FixFactorVars": null,
+            "ErrorRatio": 100,
+            "Twosided": true,
+            "LtControl": false,
+            "GtControl": false,
+            "CategoryMethod": "last",
+            "Waller": false,
+            "Dunnett": false,
+            "Lsd": false,
+            "Bonfe": false,
+            "Sidak": false,
+            "Scheffe": false,
+            "Regwf": false,
+            "Regwq": false,
+            "Snk": false,
+            "Tu": false,
+            "Tub": false,
+            "Dun": false,
+            "Hoc": false,
+            "Gabriel": false,
+            "Tam": false,
+            "Dunt": false,
+            "Games": false,
+            "Dunc": false
+          },
+          "emmeans": {
+            "SrcList": [
+              "group"
+            ],
+            "TargetList": null,
+            "CompMainEffect": false,
+            "ConfiIntervalMethod": "lsdNone"
+          },
+          "save": {
+            "ResWeighted": false,
+            "PreWeighted": false,
+            "StdStatistics": false,
+            "CooksD": false,
+            "Leverage": false,
+            "UnstandardizedRes": false,
+            "WeightedRes": false,
+            "StandardizedRes": false,
+            "StudentizedRes": false,
+            "DeletedRes": false,
+            "CoeffStats": false,
+            "NewDataSet": true,
+            "FilePath": null,
+            "DatasetName": null,
+            "WriteNewDataSet": false
+          },
+          "options": {
+            "DescStats": false,
+            "HomogenTest": false,
+            "EstEffectSize": false,
+            "SprVsLevel": false,
+            "ObsPower": false,
+            "ResPlot": false,
+            "ParamEst": false,
+            "LackOfFit": false,
+            "SscpMat": false,
+            "GeneralFun": false,
+            "ResSscpMat": false,
+            "CoefficientMatrix": false,
+            "TransformMat": false,
+            "SigLevel": 0.05
+          },
+          "updatedAt": "2026-09-22T01:59:30.673Z"
+        }
+      }
+    }
+  ]
+}

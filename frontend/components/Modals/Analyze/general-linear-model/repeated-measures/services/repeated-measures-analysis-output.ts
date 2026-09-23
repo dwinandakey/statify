@@ -46,6 +46,18 @@ export async function resultRepeatedMeasures({
                 });
             }
 
+            // ── Box's Test of Equality of Covariance Matrices ──
+            const boxMTest = findTable("box_m_test");
+            if (boxMTest) {
+                const analyticId = await addAnalytic(logId, { title: boxMTest.title, note: boxMTest.note || "" });
+                await addStatistic(analyticId, {
+                    title: boxMTest.title,
+                    description: boxMTest.interpretation || boxMTest.title,
+                    output_data: JSON.stringify({ tables: [boxMTest] }),
+                    components: boxMTest.title,
+                });
+            }
+
             // ── Bartlett's Test ───────────────────────────────────────────
             const bartlettTest = findTable("bartlett_test");
             if (bartlettTest) {
@@ -107,6 +119,18 @@ export async function resultRepeatedMeasures({
                     description: table.interpretation || table.title,
                     output_data: JSON.stringify({ tables: [table] }),
                     components: table.title,
+                });
+            }
+
+            // ── Levene's Test of Equality of Error Variances ──
+            const leveneTest = findTable("levene_test");
+            if (leveneTest) {
+                const analyticId = await addAnalytic(logId, { title: leveneTest.title, note: leveneTest.note || "" });
+                await addStatistic(analyticId, {
+                    title: leveneTest.title,
+                    description: leveneTest.interpretation || leveneTest.title,
+                    output_data: JSON.stringify({ tables: [leveneTest] }),
+                    components: leveneTest.title,
                 });
             }
 

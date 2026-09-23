@@ -1,0 +1,33 @@
+n=5000: imported repeated-measures-5000-L10-M1.csv in 3 s
+n=5000 main->main compute=724 ms click→end=736 ms longest LT=0 LoAF=390 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=5000 worker->worker compute=273 ms click→end=288 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=5000 main->main compute=239 ms click→end=254 ms longest LT=139 LoAF=140 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=5000 worker->worker compute=248 ms click→end=262 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=5000 main->main compute=229 ms click→end=244 ms longest LT=130 LoAF=131 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=5000 worker->worker compute=234 ms click→end=247 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+EM Means dialog: {"draggableItems":["(OVERALL)"],"compareDisabled":false}
+n=10000: imported repeated-measures-10000-L10-M1.csv in 3 s
+n=10000 main->main compute=605 ms click→end=621 ms longest LT=0 LoAF=377 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=10000 worker->worker compute=411 ms click→end=426 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=10000 main->main compute=653 ms click→end=667 ms longest LT=450 LoAF=451 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=10000 worker->worker compute=691 ms click→end=707 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=10000 main->main compute=734 ms click→end=748 ms longest LT=498 LoAF=500 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=10000 worker->worker compute=650 ms click→end=663 ms longest LT=0 LoAF=0 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000: imported repeated-measures-20000-L10-M1.csv in 7 s
+n=20000 main->main compute=1633 ms click→end=1649 ms longest LT=57 LoAF=1051 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000 worker->worker compute=1345 ms click→end=1357 ms longest LT=71 LoAF=73 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000 main->main compute=1048 ms click→end=1063 ms longest LT=844 LoAF=847 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000 worker->worker compute=1148 ms click→end=1164 ms longest LT=69 LoAF=71 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000 main->main compute=1066 ms click→end=1071 ms longest LT=855 LoAF=857 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=20000 worker->worker compute=1182 ms click→end=1212 ms longest LT=57 LoAF=67 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000: imported repeated-measures-40000-L10-M1.csv in 19 s
+n=40000 main->main compute=2594 ms click→end=2609 ms longest LT=126 LoAF=1991 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000 worker->worker compute=2200 ms click→end=2215 ms longest LT=181 LoAF=183 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000 main->main compute=1814 ms click→end=1828 ms longest LT=1613 LoAF=1616 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000 worker->worker compute=1843 ms click→end=1859 ms longest LT=155 LoAF=158 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000 main->main compute=1858 ms click→end=1871 ms longest LT=1639 LoAF=1640 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+n=40000 worker->worker compute=1940 ms click→end=1956 ms longest LT=168 LoAF=170 pre={"logs":0,"analytics":0,"statistics":0,"domLogs":0} post=1/1 tables=17 errors=[]
+outputs byte-identical across runs/modes per size: {"5000":true,"10000":true,"20000":true,"40000":true}
+output values identical (row order ignored) per size: {"5000":true,"10000":true,"20000":true,"40000":true}
+byte-identical within each A,B pair: {"5000":[true,true,true],"10000":[true,true,true],"20000":[true,true,true],"40000":[true,true,true]}
+written: D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-web-worker\results\pilot-rm-heavier-2026-09-22\ui-final\pilot-ui-L10-M1.json
