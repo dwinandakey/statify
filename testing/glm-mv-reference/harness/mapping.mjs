@@ -46,12 +46,11 @@ export function locate(e) {
                 const lv = L[1] === "Total" ? "Total" : levelOf(e.config, L[1]);
                 return { path: ["descriptive_statistics", dv, "groups", { factor_value: lv }, "stats", DESC_FIELD[e.field]] };
             }
-            // Two factors: Statify gives only the first factor's levels and Total.
-            if (L[2] === "Total") {
-                const lv = L[1] === "Total" ? "Total" : levelOf(e.config, L[1]);
-                return { path: ["descriptive_statistics", dv, "groups", { factor_value: lv }, "stats", DESC_FIELD[e.field]] };
-            }
-            return { missing: "Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)" };
+            // Two factors: groups of the first factor, each with the groups of
+            // the second factor (and Total) as subgroups, as SPSS nests them.
+            const lvA = L[1] === "Total" ? "Total" : levelOf(e.config, L[1]);
+            const lvB = L[2] === "Total" ? "Total" : levelOf(e.config, L[2]);
+            return { path: ["descriptive_statistics", dv, "groups", { factor_value: lvA }, "subgroups", { factor_value: lvB }, "stats", DESC_FIELD[e.field]] };
         }
         case "Between-Subjects Factors":
             return { path: ["between_subjects_factors", L[0], "value_counts", L[1]] };

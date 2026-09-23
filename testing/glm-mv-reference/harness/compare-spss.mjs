@@ -88,13 +88,20 @@ function uiLookup(e) {
             if (e.config === "mv1") return { note: "SPSS: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)" };
             const dv = dvOf(e.config, L[0]);
             const groups = raw.descriptive_statistics?.[dv]?.groups || [];
+            const lv = (label) => (label === "Total" ? "Total" : levelOf(e.config, label));
             let g;
+            let ui = null;
             if (L.length === 1) g = groups.find((x) => x.factor_value === "" || x.factor_value === "Total");
-            else if (L.length === 2) g = groups.find((x) => x.factor_value === (L[1] === "Total" ? "Total" : levelOf(e.config, L[1])));
-            else if (L[2] === "Total") g = groups.find((x) => x.factor_value === (L[1] === "Total" ? "Total" : levelOf(e.config, L[1])));
-            // Cells of a second factor (A×B, B marginals) are not produced.
-            const groupLabel = g ? (g.factor_value || "Total") : null;
-            const ui = g ? uiRows(e.config, e.table, ["dv_name", "group_label"]).find((r) => r.dv_name === uiDv(e.config, dv) && r.group_label === groupLabel) : null;
+            else g = groups.find((x) => x.factor_value === lv(L[1]));
+            if (L.length <= 2) {
+                const groupLabel = g ? (g.factor_value || "Total") : null;
+                ui = g ? uiRows(e.config, e.table, ["dv_name", "group_label"]).find((r) => r.dv_name === uiDv(e.config, dv) && r.group_label === groupLabel) : null;
+            } else {
+                // Two factors: the second factor's groups nested in the first's.
+                const outer = g;
+                g = outer?.subgroups?.find((x) => x.factor_value === lv(L[2]));
+                ui = g ? uiRows(e.config, e.table, ["dv_name", "group_label", "group_label_2"]).find((r) => r.dv_name === uiDv(e.config, dv) && r.group_label === outer.factor_value && r.group_label_2 === g.factor_value) : null;
+            }
             return { raw: g?.stats?.[DESC_FIELD[e.field]], ui: num(ui?.[DESC_FIELD[e.field]]) };
         }
         case "Between-Subjects Factors": {

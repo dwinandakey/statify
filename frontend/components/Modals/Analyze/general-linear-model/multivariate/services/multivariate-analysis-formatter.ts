@@ -379,13 +379,29 @@ function formatDescriptiveStatistics(
     );
     if (!hasData) return;
 
-    // Single combined table matching SPSS layout: DV | factor level | Mean | SD | N
+    // With several factors the groups are nested (StatGroup.subgroups): one
+    // label column per factor, as SPSS (DV | A level | B level | ...).
+    const depth = (groups: any[]): number =>
+        groups.reduce(
+            (d: number, g: any) =>
+                Math.max(d, 1 + (Array.isArray(g.subgroups) ? depth(g.subgroups) : 0)),
+            0
+        );
+    const levelsDepth = Math.max(
+        1,
+        ...entries.map(([, stat]: [string, any]) => depth(stat.groups || []))
+    );
+    const labelKeys = Array.from({ length: levelsDepth }, (_, i) =>
+        i === 0 ? "group_label" : `group_label_${i + 1}`
+    );
+
+    // Single combined table matching SPSS layout: DV | factor level(s) | Mean | SD | N
     const table: Table = {
         key: "descriptive_statistics",
         title: "Descriptive Statistics",
         columnHeaders: [
             { header: "", key: "dv_name" },
-            { header: "", key: "group_label" },
+            ...labelKeys.map((key) => ({ header: "", key })),
             { header: "Mean", key: "mean" },
             { header: "Std. Deviation", key: "std_deviation" },
             { header: "N", key: "n" },
@@ -397,19 +413,33 @@ function formatDescriptiveStatistics(
 
     entries.forEach(([dvName, stat]: [string, any]) => {
         const displayDvName = relabelDiff(dvName);
-        const groups: any[] = stat.groups || [];
-        groups.forEach((g: any, idx: number) => {
-            if (g.stats) {
-                table.rows.push({
-                    rowHeader: [],
-                    dv_name: idx === 0 ? displayDvName : "",
-                    group_label: g.factor_value || "Total",
-                    mean: formatDisplayNumber(g.stats.mean),
-                    std_deviation: formatDisplayNumber(g.stats.std_deviation),
-                    n: String(g.stats.n),
-                });
-            }
-        });
+        let firstRow = true;
+        // A group with subgroups is shown through them (its own stats equal
+        // the subgroups' Total row); each label is printed on the first row
+        // of its block only.
+        const addRows = (groups: any[], labels: string[]) => {
+            groups.forEach((g: any, idx: number) => {
+                const label = g.factor_value || "Total";
+                const path = [...labels.map((l) => (idx === 0 ? l : "")), label];
+                if (Array.isArray(g.subgroups) && g.subgroups.length > 0) {
+                    addRows(g.subgroups, path);
+                } else if (g.stats) {
+                    const row: Row = {
+                        rowHeader: [],
+                        dv_name: firstRow ? displayDvName : "",
+                    };
+                    labelKeys.forEach((key, i) => {
+                        row[key] = path[i] ?? "";
+                    });
+                    row.mean = formatDisplayNumber(g.stats.mean);
+                    row.std_deviation = formatDisplayNumber(g.stats.std_deviation);
+                    row.n = String(g.stats.n);
+                    table.rows.push(row);
+                    firstRow = false;
+                }
+            });
+        };
+        addRows(stat.groups || [], []);
     });
 
     if (table.rows.length > 0) {
