@@ -1,6 +1,6 @@
 # Validasi GLM Multivariate terhadap SPSS 27
 
-Diperbarui 2026-09-23, setelah perbaikan step 1–9 (branch `validation/mv-spss`, commit terakhir `ab21928c`).
+Diperbarui 2026-09-24, setelah perbaikan step 1–10 (branch `validation/mv-spss`, commit kode terakhir `1c7335d8`).
 
 ## Ringkasan
 
@@ -131,6 +131,7 @@ Satu commit per langkah.
 | step8d-levene-adjusted-df | `a9fb2414` | df2 Levene "Based on Median and with adjusted df" (§4.8) | 1538 → 1542 | 1698 |
 | step8e-private-api | `28b942db` | Koreksi API: pembantu step 8 dijadikan privat; `run_analysis` kembali seperti `82a63b45` (§4.11) | 1542 → 1542 | 1698 |
 | step9-descriptive-two-factor | `ab21928c` | Descriptive Statistics dua faktor (§4.12) | 1542 → **1686** | 1698 |
+| step10-welch-power | `1c7335d8` | Observed Power mode Unequal (Welch) dari F nonsentral (§4.13) | 1686 → 1686 | 1698 |
 
 Semua langkah: **0 regresi**, main = worker byte-identik, dan API publik WASM tidak berubah. API publik crate Rust sama dengan `82a63b45` di semua langkah kecuali 8b–8d (§4.11).
 
@@ -231,6 +232,12 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
   - Grup bertingkat lewat field `StatGroup.subgroups` yang sudah ada (fungsi privat `level_groups`): level faktor pertama → level faktor kedua + Total, lalu blok Total. Level diurutkan menaik seperti SPSS.
   - Formatter menambah satu kolom label per tingkat. Tabel satu faktor tidak berubah (tampilan mv1–mv4 dan mv7 identik dengan step 8e).
 - **Label level:** baik tabel satu faktor maupun dua faktor menampilkan kode nilai ("1", "2"), bukan label nilai SPSS ("A1", "laki-laki"). Ini perilaku formatter yang sudah ada.
+
+### 4.13 Observed Power mode Unequal / Welch (step 10; tanpa nilai SPSS)
+
+- **Sebelum:** `calculate_welch_two_sample_t2` memakai heuristik 1 − 0,1/F (0,5 bila F ≤ 1). Mode ini tidak punya padanan di SPSS GLM, sehingga tidak tercakup langkah 1.
+- **Perbaikan:** `calculate_observed_power(df1, df2, F, alpha)` dengan df (dibulatkan) dan F yang sama dengan Sig. entri tersebut, dan alpha = `config.options.sig_level.unwrap_or(0.05)`.
+- **Hasil:** mv2 dengan radio Unequal (`jk`, Hotelling's Trace; F = 23,2926, df 4 dan 55): power 0,9957067968 → 0,9999999999300. Nilai dari R `1 − pf(qf(0,95; 4, 55), 4, 55, ncp = 4F)` = 0,9999999999306 (`step10-welch-power/welch-power-check.txt`). Tampilan mv1–mv7 identik dengan step 9, karena ketujuhnya memakai Equal (Pooled).
 
 ## 5. Tanpa padanan (12 nilai)
 
