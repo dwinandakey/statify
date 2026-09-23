@@ -1,0 +1,127 @@
+[
+ {
+  "config": "mv1",
+  "table": "Report",
+  "rows": 4
+ },
+ {
+  "config": "mv1",
+  "table": "Descriptive Statistics",
+  "rows": 5
+ },
+ {
+  "config": "mv1",
+  "table": "Multivariate Tests",
+  "rows": 5
+ },
+ {
+  "config": "mv1",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 21
+ },
+ {
+  "config": "mv2",
+  "table": "Between-Subjects Factors",
+  "rows": 3
+ },
+ {
+  "config": "mv2",
+  "table": "Descriptive Statistics",
+  "rows": 13
+ },
+ {
+  "config": "mv2",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "rows": 5
+ },
+ {
+  "config": "mv2",
+  "table": "Multivariate Tests",
+  "rows": 9
+ },
+ {
+  "config": "mv2",
+  "table": "Levene's Test of Equality of Error Variances",
+  "rows": 17
+ },
+ {
+  "config": "mv2",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 25
+ },
+ {
+  "config": "mv3",
+  "table": "Descriptive Statistics",
+  "rows": 3
+ },
+ {
+  "config": "mv3",
+  "table": "Multivariate Tests",
+  "rows": 5
+ },
+ {
+  "config": "mv3",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 11
+ },
+ {
+  "config": "mv4",
+  "table": "Between-Subjects Factors",
+  "rows": 4
+ },
+ {
+  "config": "mv4",
+  "table": "Descriptive Statistics",
+  "rows": 9
+ },
+ {
+  "config": "mv4",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "rows": 5
+ },
+ {
+  "config": "mv4",
+  "table": "Multivariate Tests",
+  "rows": 9
+ },
+ {
+  "config": "mv4",
+  "table": "Levene's Test of Equality of Error Variances",
+  "rows": 9
+ },
+ {
+  "config": "mv4",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 13
+ },
+ {
+  "config": "mv5",
+  "table": "Between-Subjects Factors",
+  "rows": 7
+ },
+ {
+  "config": "mv5",
+  "table": "Descriptive Statistics",
+  "rows": 31
+ },
+ {
+  "config": "mv5",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "rows": 5
+ },
+ {
+  "config": "mv5",
+  "table": "Multivariate Tests",
+  "rows": 17
+ },
+ {
+  "config": "mv5",
+  "table": "Levene's Test of Equality of Error Variances",
+  "rows": 9
+ },
+ {
+  "config": "mv5",
+  "table": "Tests of Between-Subjects Effects",
+  "rows": 17
+ }
+]
