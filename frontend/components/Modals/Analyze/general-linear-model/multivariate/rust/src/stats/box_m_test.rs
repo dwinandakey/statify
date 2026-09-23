@@ -8,12 +8,8 @@ use crate::models::{
 };
 
 use super::common::compute_per_group_covariances;
-use super::core::{
-    matrix_determinant,
-    chi_square_cdf,
-    calculate_f_significance,
-    from_dmatrix,
-};
+use super::core::{ matrix_determinant, from_dmatrix };
+use statrs::distribution::{ ContinuousCDF, FisherSnedecor };
 
 /// Calculate Box's M test for homogeneity of covariance matrices
 ///
@@ -115,8 +111,6 @@ pub fn calculate_box_test(
             (6.0 * ((p as f64) + 1.0) * ((g as f64) - 1.0))) *
         (sum_reciprocal - (1.0 / (total_df as f64)));
 
-    let chi_square = ((1.0 - c) * box_m).max(0.0);
-
     // F approximation following Box (1949). Standard form, e.g. Rencher
     // (2002) "Methods of Multivariate Analysis" §7.3.2, Anderson (2003)
     // §10.5.3, or the original Box paper:
@@ -146,21 +140,13 @@ pub fn calculate_box_test(
     // the f₁ factor belongs only inside that ratio — not inside `b` itself.
     let b = (df1_f + 2.0) / (c2 - c * c).abs().max(1e-10);
 
-    let (f_statistic, df2, significance) = if c2 > c * c {
-        // Full F approximation: finite df₂.
-        let f_stat = (1.0 - c - df1_f / b) * box_m / df1_f;
-        let df2_val = b;
-        let sig = calculate_f_significance(df1, df2_val as usize, f_stat);
-        (f_stat.max(0.0), df2_val, sig)
-    } else {
-        // Chi-square approximation (df₂ → ∞).
-        // F = χ²/df₁ ~ F(df₁, ∞); p-value from χ²(df₁) distribution.
-        let f_stat = chi_square / df1_f;
-        let sig = 1.0 - chi_square_cdf(chi_square, df1_f);
-        // df₂ computed as b (though conceptually ∞); cap at a display ceiling.
-        let df2_display = b.min(1_000_000.0);
-        (f_stat, df2_display, sig)
-    };
+    // SPSS uses F = (1 − ρ₁ − f₁/f₂)·M/f₁ with f₂ = (f₁ + 2)/|ρ₂ − ρ₁²| also
+    // when ρ₂ < ρ₁² (checked against SPSS 27: one-way MANOVA of
+    // testing/glm-mv-reference, SPSS F = 0.46553997506145306). Sig. uses the
+    // fractional f₂ as is.
+    let f_statistic = ((1.0 - c - df1_f / b) * box_m / df1_f).max(0.0);
+    let df2 = b;
+    let significance = f_upper_tail(f_statistic, df1_f, df2);
 
     // Step 7: Assemble result
 
@@ -178,4 +164,15 @@ pub fn calculate_box_test(
             )
         ),
     })
+}
+
+/// P(F > f) for the central F distribution with fractional df2 (Box's M f₂
+/// is not an integer).
+fn f_upper_tail(f: f64, df1: f64, df2: f64) -> f64 {
+    if !f.is_finite() || df1 <= 0.0 || df2 <= 0.0 {
+        return 0.0;
+    }
+    FisherSnedecor::new(df1, df2)
+        .map(|dist| 1.0 - dist.cdf(f))
+        .unwrap_or(0.0)
 }
