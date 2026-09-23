@@ -932,6 +932,15 @@ pub fn build_design_matrix_and_response(
     // dependent value at the same row index.
     let merged = merge_records(data);
 
+    // Levels of every factor, computed once (get_factor_levels scans the whole
+    // data set; calling it per row made the build quadratic in n). None when
+    // the levels cannot be determined, as the per-row calls skipped them.
+    let factor_levels: HashMap<String, Option<Vec<String>>> = config.main.fix_factor
+        .iter()
+        .flatten()
+        .map(|f| (f.clone(), get_factor_levels(data, f).ok()))
+        .collect();
+
     for record in &merged {
         if let Some(y_value) = extract_dependent_value(record, dependent_var) {
             // Build design matrix row for this record
@@ -945,7 +954,7 @@ pub fn build_design_matrix_and_response(
                 // Add factor columns (dummy variables)
                 if let Some(factors) = &config.main.fix_factor {
                     for factor in factors {
-                        if let Ok(levels) = get_factor_levels(data, factor) {
+                        if let Some(Some(levels)) = factor_levels.get(factor) {
                             // Create dummy variables based on the factor levels
                             let factor_value = record.values
                                 .get(factor)
@@ -1017,9 +1026,9 @@ pub fn build_design_matrix_and_response(
                                 Vec::with_capacity(term_factors.len());
                             let mut all_present = true;
                             for factor in &term_factors {
-                                let levels = match get_factor_levels(data, factor) {
-                                    Ok(l) => l,
-                                    Err(_) => {
+                                let levels = match factor_levels.get(factor) {
+                                    Some(Some(l)) => l,
+                                    _ => {
                                         all_present = false;
                                         break;
                                     }
