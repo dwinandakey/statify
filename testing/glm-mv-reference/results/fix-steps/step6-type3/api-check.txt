@@ -1,0 +1,3 @@
+glue/.d.ts unchanged (API publik WASM sama)
+067067a25bb80acea923e45b50128108 */d/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/frontend/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg/wasm_bg.wasm
+Setelah pemeriksaan: parameter calculate_type_ii_ss dikembalikan ke nama _data (teks signature sama dengan 82a63b45); wasm_bg.wasm tetap 067067a25bb80acea923e45b50128108, hasil pemeriksaan ini berlaku.

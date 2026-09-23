@@ -1,0 +1,35 @@
+Acuan sementara R 4.3.2 car::Anova (contr.sum), data two-way manova.csv tanpa kasus 4, 11, 12, 21, 26, 31 (N = 26, sel 3/4/2/4/3/4/3/3).
+Statify: WASM step 6 (payload mv5 dari fixture UI dengan baris yang sama dibuang, SumOfSquareMethod typeIII/typeII).
+
+typeIII Y1A1 Intercept: R 1447.63748817204 Statify 1447.6374881720428 selisih 2.73e-12
+typeIII Y1A1 faktorA: R 1.22647741935484 Statify 1.226477419354838 selisih 2.00e-15
+typeIII Y1A1 faktorB: R 1.42555598455598 Statify 1.4255559845559862 selisih 6.22e-15
+typeIII Y1A1 faktorA*faktorB: R 0.135633719433719 Statify 0.13563371943372005 selisih 1.05e-15
+typeII Y1A1 faktorA: R 1.14786532818533 Statify 1.147865328185329 selisih 8.88e-16
+typeII Y1A1 faktorB: R 1.45066884466884 Statify 1.4506688446688498 selisih 9.77e-15
+typeII Y1A1 faktorA*faktorB: R 0.135633719433719 Statify 0.13563371943372005 selisih 1.05e-15
+R Total Y1A1 1520.6326 n=26
+typeIII Y2A1 Intercept: R 174243.551075269 Statify 174243.5510752688 selisih 2.04e-10
+typeIII Y2A1 faktorA: R 363.252043010752 Statify 363.25204301075314 selisih 1.14e-12
+typeIII Y2A1 faktorB: R 20.7484234234234 Statify 20.748423423423503 selisih 1.03e-13
+typeIII Y2A1 faktorA*faktorB: R 27.9874967824966 Statify 27.987496782496578 selisih 2.13e-14
+typeII Y2A1 faktorA: R 356.228788931789 Statify 356.2287889317886 selisih 3.98e-13
+typeII Y2A1 faktorB: R 27.228657063657 Statify 27.228657063657124 selisih 1.24e-13
+typeII Y2A1 faktorA*faktorB: R 27.9874967824966 Statify 27.98749678249669 selisih 9.24e-14
+R Total Y2A1 184100.02 n=26
+Statify Total Y1A1: 1520.6326000000001 df 26
+Statify Total Y2A1: 184100.02 df 26
+
+--- R script
+suppressMessages(library(car))
+d <- read.csv("testing/glm-mv-reference/data/two-way manova.csv")
+d <- d[-c(4, 11, 12, 21, 26, 31), ]
+d$A <- factor(d$faktorA); d$B <- factor(d$faktorB)
+options(contrasts = c("contr.sum", "contr.poly"))
+for (y in c("Y1A1", "Y2A1")) {
+  m <- lm(as.formula(paste(y, "~ A * B")), data = d)
+  a3 <- Anova(m, type = 3); a2 <- Anova(m, type = 2)
+  for (t in c("(Intercept)", "A", "B", "A:B")) cat(sprintf("R typeIII %s %s %.15g\n", y, t, a3[t, "Sum Sq"]))
+  for (t in c("A", "B", "A:B")) cat(sprintf("R typeII %s %s %.15g\n", y, t, a2[t, "Sum Sq"]))
+  cat(sprintf("R Total %s %.15g n=%d\n", y, sum(d[[y]]^2), nrow(d)))
+}

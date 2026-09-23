@@ -11,11 +11,8 @@ use super::core::{
     calculate_f_significance,
     calculate_mean,
     calculate_observed_power,
-    data_value_to_string,
-    extract_dependent_value,
     generate_interaction_terms,
     get_factor_levels,
-    merge_records,
     parse_interaction_term,
     to_dmatrix,
     to_dvector,
@@ -54,6 +51,10 @@ pub fn calculate_tests_between_subjects_effects(
 
         // Build design matrix and response vector
         let (x_matrix, y_vector) = build_design_matrix_and_response(data, config, dep_var)?;
+        // Same columns in deviation (sum-to-zero) coding, for the Type III
+        // tests (Intercept, factors, interactions). The dummy-coded design
+        // stays in use for the fit and elsewhere (Parameter Estimates).
+        let x_deviation = deviation_coded_design(&x_matrix, data, config);
 
         // Calculate total sum of squares
         let mean_y = calculate_mean(&y_vector);
@@ -128,52 +129,15 @@ pub fn calculate_tests_between_subjects_effects(
 
         // Add "Intercept" effect if included
         if config.model.intercept {
-            // Type III SS for Intercept in unbalanced designs:
-            //   SS = (Σᵢ ȳᵢ)² / Σᵢ(1/nᵢ)
-            // This equals N * grand_mean² only for balanced designs.
-            // Fall back to N * ȳ² when no factors are present (one-pop T² case).
-            //
-            // When μ₀ₖ ≠ 0 (Test Values mode) we shift every group mean (or
-            // the grand mean in the no-factor fallback) by μ₀ₖ, which is
-            // arithmetically identical to running GLM on `d_var = var − μ₀`
-            // and matches the reference SPSS output.
-            let intercept_ss = if config.main.fix_factor
-                .as_ref()
-                .map_or(false, |f| !f.is_empty())
-            {
-                let factor = &config.main.fix_factor.as_ref().unwrap()[0];
-                let merged_rows = merge_records(data);
-                let mut sum_group_means = 0.0_f64;
-                let mut sum_inv_n = 0.0_f64;
-                if let Ok(levels) = get_factor_levels(data, factor) {
-                    for level in &levels {
-                        let group_vals: Vec<f64> = merged_rows
-                            .iter()
-                            .filter_map(|rec| {
-                                let fv = rec.values
-                                    .get(factor.as_str())
-                                    .map(|v| data_value_to_string(v));
-                                if fv.as_deref() == Some(level.as_str()) {
-                                    extract_dependent_value(rec, dep_var)
-                                } else {
-                                    None
-                                }
-                            })
-                            .collect();
-                        if !group_vals.is_empty() {
-                            sum_group_means += calculate_mean(&group_vals) - mu0_k;
-                            sum_inv_n += 1.0 / (group_vals.len() as f64);
-                        }
-                    }
-                }
-                if sum_inv_n > 0.0 {
-                    sum_group_means * sum_group_means / sum_inv_n
-                } else {
-                    (n as f64) * (mean_y - mu0_k).powi(2)
-                }
-            } else {
-                (n as f64) * (mean_y - mu0_k).powi(2)
-            };
+            // Type III SS for Intercept: SSE without the intercept column −
+            // SSE of the full model, both in deviation coding (tests the
+            // unweighted mean of the cell means; n·(ȳ − μ₀)² without factors).
+            // With Test Values the response is y − μ₀ₖ, as the SPSS workaround
+            // of running GLM on `d_var = var − μ₀`; the other effects do not
+            // depend on the shift because the intercept is in both models.
+            let y_shifted: Vec<f64> = y_vector.iter().map(|y| y - mu0_k).collect();
+            let intercept_ss = sse_without_columns(&x_deviation, &y_shifted, &[0])? -
+                sse_without_columns(&x_deviation, &y_shifted, &[])?;
             let intercept_df = 1;
             let intercept_ms = intercept_ss;
             let intercept_f = intercept_ms / ms_error;
@@ -269,7 +233,7 @@ pub fn calculate_tests_between_subjects_effects(
                         SumOfSquaresMethod::TypeIII => {
                             // Type III SS (default)
                             calculate_type_iii_ss(
-                                &x_matrix,
+                                &x_deviation,
                                 &y_vector,
                                 factor,
                                 &factor_cols,
@@ -280,7 +244,7 @@ pub fn calculate_tests_between_subjects_effects(
                         SumOfSquaresMethod::TypeIV => {
                             // Type IV SS
                             calculate_type_iv_ss(
-                                &x_matrix,
+                                &x_deviation,
                                 &y_vector,
                                 factor,
                                 &factor_cols,
@@ -351,7 +315,7 @@ pub fn calculate_tests_between_subjects_effects(
                             SumOfSquaresMethod::TypeIII => {
                                 // Type III SS (default)
                                 calculate_type_iii_ss(
-                                    &x_matrix,
+                                    &x_deviation,
                                     &y_vector,
                                     term,
                                     &interaction_cols,
@@ -362,7 +326,7 @@ pub fn calculate_tests_between_subjects_effects(
                             SumOfSquaresMethod::TypeIV => {
                                 // Type IV SS
                                 calculate_type_iv_ss(
-                                    &x_matrix,
+                                    &x_deviation,
                                     &y_vector,
                                     term,
                                     &interaction_cols,
@@ -482,26 +446,22 @@ pub fn calculate_type_ii_ss(
     _data: &AnalysisData,
     config: &MultivariateConfig
 ) -> Result<f64, String> {
-    // Type II SS calculation
-    // Adjusted for all other appropriate effects
-
-    // Create a model with all main effects except the current factor
-    let mut reduced_x = Vec::new();
-    for row in x_matrix {
-        let mut new_row = Vec::new();
-        for (j, val) in row.iter().enumerate() {
-            if !factor_cols.contains(&j) {
-                new_row.push(*val);
-            }
-        }
-        reduced_x.push(new_row);
-    }
-
-    let full_model_ss = fit_model_and_get_ss(&x_matrix, &y_vector)?;
-    let reduced_model_ss = fit_model_and_get_ss(&reduced_x, &y_vector)?;
-
-    // Type II SS is the difference between full and reduced model SS
-    Ok(reduced_model_ss - full_model_ss)
+    // Type II SS: the effect adjusted for every effect that does not contain
+    // it (SPSS / car Type II):
+    //   SSE(model without the effect and without the effects containing it)
+    //   − SSE(model without the effects containing it).
+    // Both models keep every lower-order term of what they contain, so the
+    // result does not depend on dummy vs deviation coding. (The previous body
+    // dropped only the effect's own columns from the full model — the Type
+    // III formula, and with dummy coding a simple effect at the reference
+    // level whenever an interaction containing the effect is in the model.)
+    let containing = containing_effect_columns(x_matrix, factor, _data, config);
+    let mut without_effect = containing.clone();
+    without_effect.extend(factor_cols.iter().copied());
+    Ok(
+        sse_without_columns(x_matrix, y_vector, &without_effect)? -
+            sse_without_columns(x_matrix, y_vector, &containing)?
+    )
 }
 
 pub fn calculate_type_iii_ss(
@@ -512,8 +472,11 @@ pub fn calculate_type_iii_ss(
     _data: &AnalysisData,
     _config: &MultivariateConfig
 ) -> Result<f64, String> {
-    // Type III SS calculation
-    // Adjusted for all other effects and orthogonal to any effects that contain it
+    // Type III SS: SSE without the effect's columns − SSE of the full model.
+    // This is the Type III test only when `x_matrix` is deviation (sum-to-
+    // zero) coded, as calculate_tests_between_subjects_effects passes it
+    // (deviation_coded_design); with dummy coding it would test the effect at
+    // the reference level of the factors it interacts with.
 
     // Full model
     let full_model_ss = fit_model_and_get_ss(&x_matrix, &y_vector)?;
@@ -688,4 +651,112 @@ pub fn get_interaction_columns(
     }
 
     Ok(interaction_cols)
+}
+
+/// The design of build_design_matrix_and_response with the same columns in
+/// deviation (sum-to-zero) coding: a factor's dummy columns are all 0 for
+/// its last level, which becomes −1 in every column of that factor, and each
+/// interaction column is recomputed as the product of the recoded factor
+/// columns (same row-major order as the builder). Intercept and covariate
+/// columns are unchanged. Rows already deviation coded (contrast Deviation)
+/// are left as they are.
+fn deviation_coded_design(
+    x_matrix: &Vec<Vec<f64>>,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<Vec<f64>> {
+    let mut x = x_matrix.clone();
+    let factors = match &config.main.fix_factor {
+        Some(f) if !f.is_empty() => f.clone(),
+        _ => return x,
+    };
+    let mut factor_cols: HashMap<String, Vec<usize>> = HashMap::new();
+    for factor in &factors {
+        let cols = get_factor_columns(x_matrix, factor, data, config).unwrap_or_default();
+        for row in x.iter_mut() {
+            if !cols.is_empty() && cols.iter().all(|&c| row[c] == 0.0) {
+                for &c in &cols {
+                    row[c] = -1.0;
+                }
+            }
+        }
+        factor_cols.insert(factor.clone(), cols);
+    }
+    if factors.len() > 1 {
+        for term in generate_interaction_terms(&factors) {
+            let term_cols = get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default();
+            let parts: Vec<Vec<usize>> = parse_interaction_term(&term)
+                .iter()
+                .map(|f| factor_cols.get(f).cloned().unwrap_or_default())
+                .collect();
+            let dims: Vec<usize> = parts.iter().map(|c| c.len()).collect();
+            let width: usize = dims.iter().product();
+            if width == 0 || width != term_cols.len() {
+                continue;
+            }
+            let mut strides = vec![1usize; dims.len()];
+            for k in (0..dims.len().saturating_sub(1)).rev() {
+                strides[k] = strides[k + 1] * dims[k + 1];
+            }
+            for row in x.iter_mut() {
+                for (c, &col) in term_cols.iter().enumerate() {
+                    let mut value = 1.0;
+                    for (f_idx, cols) in parts.iter().enumerate() {
+                        value *= row[cols[(c / strides[f_idx]) % dims[f_idx]]];
+                    }
+                    row[col] = value;
+                }
+            }
+        }
+    }
+    x
+}
+
+/// Error sum of squares of the model without the given columns (Σy² when no
+/// column is left).
+fn sse_without_columns(
+    x_matrix: &Vec<Vec<f64>>,
+    y_vector: &Vec<f64>,
+    drop: &[usize]
+) -> Result<f64, String> {
+    let reduced: Vec<Vec<f64>> = x_matrix
+        .iter()
+        .map(|row| {
+            row.iter()
+                .enumerate()
+                .filter(|(j, _)| !drop.contains(j))
+                .map(|(_, v)| *v)
+                .collect()
+        })
+        .collect();
+    if reduced.first().map_or(true, |r| r.is_empty()) {
+        return Ok(y_vector.iter().map(|y| y * y).sum());
+    }
+    fit_model_and_get_ss(&reduced, y_vector)
+}
+
+/// Columns of the interaction terms that contain `effect` (every factor of
+/// `effect` appears in the term), excluding `effect` itself.
+fn containing_effect_columns(
+    x_matrix: &Vec<Vec<f64>>,
+    effect: &str,
+    data: &AnalysisData,
+    config: &MultivariateConfig
+) -> Vec<usize> {
+    let factors = match &config.main.fix_factor {
+        Some(f) if f.len() > 1 => f.clone(),
+        _ => return Vec::new(),
+    };
+    let effect_factors = parse_interaction_term(effect);
+    let mut cols = Vec::new();
+    for term in generate_interaction_terms(&factors) {
+        if term == effect {
+            continue;
+        }
+        let term_factors = parse_interaction_term(&term);
+        if effect_factors.iter().all(|f| term_factors.contains(f)) {
+            cols.extend(get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default());
+        }
+    }
+    cols
 }
