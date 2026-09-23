@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     models::{
-        config::{ MultivariateConfig, VarianceMode },
+        config::{ MultivariateConfig, SumOfSquaresMethod, VarianceMode },
         data::AnalysisData,
         result::{ MultivariateTestEntry, MultivariateTests },
     },
@@ -218,8 +218,8 @@ pub fn calculate_multivariate_tests(
     // Create the final result
     let design_note = if config.main.variance_mode == VarianceMode::Welch {
         Some(format!(
-            "Type {:?} sum of squares (Welch-Satterthwaite for {})",
-            &config.model.sum_of_square_method,
+            "{} sum of squares (Welch-Satterthwaite for {})",
+            ss_type_label(&config.model.sum_of_square_method),
             config
                 .main
                 .fix_factor
@@ -229,7 +229,7 @@ pub fn calculate_multivariate_tests(
                 .unwrap_or_default()
         ))
     } else {
-        Some(format!("Type {:?} sum of squares", &config.model.sum_of_square_method))
+        Some(format!("{} sum of squares", ss_type_label(&config.model.sum_of_square_method)))
     };
 
     Ok(MultivariateTests {
@@ -237,6 +237,16 @@ pub fn calculate_multivariate_tests(
         design: design_note,
         alpha: Some(alpha),
     })
+}
+
+/// "Type III" etc. for the table note (the enum's Debug form is "TypeIII").
+fn ss_type_label(method: &SumOfSquaresMethod) -> &'static str {
+    match method {
+        SumOfSquaresMethod::TypeI => "Type I",
+        SumOfSquaresMethod::TypeII => "Type II",
+        SumOfSquaresMethod::TypeIII => "Type III",
+        SumOfSquaresMethod::TypeIV => "Type IV",
+    }
 }
 
 /// Hotelling T² two-sample test with unequal covariance matrices, using the

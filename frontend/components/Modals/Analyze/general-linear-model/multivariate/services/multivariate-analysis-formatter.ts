@@ -840,6 +840,11 @@ function formatTestsBetweenSubjectsEffects(
         dvNames.forEach((dvName, dvIdx) => {
             const entry = effects[dvName]?.[sourceName];
             if (!entry) return;
+            // An effect with df = 0 (Corrected Model of an intercept-only
+            // model) has no test: SPSS leaves Mean Square, F, Sig. and
+            // Observed Power blank but prints Partial Eta Squared and
+            // Noncent. Parameter (0).
+            const noTest = Number(entry.df) === 0;
             table.rows.push({
                 rowHeader: [],
                 // Show source label only on the first DV row of the group (SPSS merges).
@@ -847,16 +852,16 @@ function formatTestsBetweenSubjectsEffects(
                 dependent_variable: relabelDv(dvName),
                 sum_of_squares: formatDisplayNumber(entry.sum_of_squares),
                 df: entry.df !== undefined && entry.df !== null ? String(entry.df) : "",
-                mean_square: blankMeanSquare ? "" : formatDisplayNumber(entry.mean_square),
-                f_value: blankInferential ? "" : formatDisplayNumber(entry.f_value),
-                significance: blankInferential ? "" : formatSig(entry.significance),
+                mean_square: blankMeanSquare || noTest ? "" : formatDisplayNumber(entry.mean_square),
+                f_value: blankInferential || noTest ? "" : formatDisplayNumber(entry.f_value),
+                significance: blankInferential || noTest ? "" : formatSig(entry.significance),
                 partial_eta_squared: blankInferential
                     ? ""
                     : formatDisplayNumber(entry.partial_eta_squared),
                 noncent_parameter: blankInferential
                     ? ""
                     : formatDisplayNumber(entry.noncent_parameter),
-                observed_power: blankInferential
+                observed_power: blankInferential || noTest
                     ? ""
                     : formatDisplayNumber(entry.observed_power),
             });
