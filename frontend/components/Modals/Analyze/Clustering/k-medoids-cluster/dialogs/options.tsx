@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { NormalizationMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+import { NormalizationMethod, MissingValueMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import type {
     KMedoidsClusterOptionsProps,
     KMedoidsClusterOptionsType,
@@ -56,18 +56,15 @@ export const KMedoidsClusterOptions = ({
         updateFormData("Standardize", shouldStandardize);
     };
 
-    // Listwise dan pairwise saling eksklusif — satu radio group, dua flag.
     const handleMissingValueChange = (value: string) => {
-        const useListWise = value === "ExcludeListWise";
+        const method = value as MissingValueMethod;
 
         setOptionsState((prevState) => ({
             ...prevState,
-            ExcludeListWise: useListWise,
-            ExcludePairWise: !useListWise,
+            MissingValueMethod: method,
         }));
 
-        updateFormData("ExcludeListWise", useListWise);
-        updateFormData("ExcludePairWise", !useListWise);
+        updateFormData("MissingValueMethod", method);
     };
 
     return (
@@ -123,9 +120,9 @@ export const KMedoidsClusterOptions = ({
                     </div>
                 </div>
 
-                {/* ========== MATRIKS JARAK ========== */}
+                {/* ========== DISTANCE MATRIX ========== */}
                 <div className="flex flex-col gap-2 border-t pt-4">
-                    <Label className="font-bold">Matriks Jarak</Label>
+                    <Label className="font-bold">Distance Matrix</Label>
                     <div className="flex items-center space-x-2">
                         <Checkbox
                             id="ShowDistanceMatrixBetweenMedoids"
@@ -138,7 +135,7 @@ export const KMedoidsClusterOptions = ({
                             htmlFor="ShowDistanceMatrixBetweenMedoids"
                             className="text-sm font-medium leading-none cursor-pointer"
                         >
-                            Matriks Jarak Antar Medoid
+                            Distance Matrix Between Medoids
                         </label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -153,11 +150,11 @@ export const KMedoidsClusterOptions = ({
                             htmlFor="ShowDistanceMatrixTable"
                             className="text-sm font-medium leading-none cursor-pointer"
                         >
-                            Matriks Jarak Semua Objek
+                            Distance Matrix of All Objects
                         </label>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        Tabel semua objek dipaginasi untuk menjaga performa.
+                        The all-objects table is paginated to maintain performance.
                     </p>
                 </div>
 
@@ -175,7 +172,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationNone"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Tanpa Normalisasi
+                                No Normalization
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -184,7 +181,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationZScore"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Standarisasi Data (Z-score)
+                                Standardize Data (Z-score)
                             </Label>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -193,7 +190,7 @@ export const KMedoidsClusterOptions = ({
                                 htmlFor="NormalizationMinMax"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Normalisasi Min-Max (0-1)
+                                Min-Max Normalization (0-1)
                             </Label>
                         </div>
                     </RadioGroup>
@@ -203,68 +200,83 @@ export const KMedoidsClusterOptions = ({
                 <div className="flex flex-col gap-2 border-t pt-4">
                     <Label className="font-bold">Missing Values</Label>
 
-                    {/* Dampak nyata pada data yang dipilih, ditampilkan tepat di tempat
-                        strateginya dipilih. Rekap lengkap tetap ada di Case Processing Summary. */}
+                    {/* Real impact on the selected data, shown right where the strategy is
+                        chosen. The full recap remains in the Case Processing Summary. */}
                     {missingStats && (
                         <div className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2">
                             <p className="text-xs text-foreground">
                                 <span className="font-medium">
-                                    {missingStats.rowsWithMissing} dari {missingStats.totalRows} baris
+                                    {missingStats.rowsWithMissing} of {missingStats.totalRows} rows
                                     ({missingStats.missingPercent}%)
                                 </span>{" "}
-                                mengandung missing value
+                                contain missing values
                                 {missingStats.topVariables ? ` — ${missingStats.topVariables}` : ""}
                                 {missingStats.remainingVariables > 0
-                                    ? `, +${missingStats.remainingVariables} variabel lain`
+                                    ? `, +${missingStats.remainingVariables} more variable(s)`
                                     : ""}
                             </p>
                         </div>
                     )}
 
                     <RadioGroup
-                        value={
-                            optionsState.ExcludePairWise && !optionsState.ExcludeListWise
-                                ? "ExcludePairWise"
-                                : "ExcludeListWise"
-                        }
+                        value={optionsState.MissingValueMethod ?? MissingValueMethod.Listwise}
                         onValueChange={handleMissingValueChange}
                         className="gap-3"
                     >
                         <div className="flex items-start space-x-2">
                             <RadioGroupItem
-                                id="ExcludeListWise"
-                                value="ExcludeListWise"
+                                id="MissingValueListwise"
+                                value={MissingValueMethod.Listwise}
                                 className="mt-0.5"
                             />
                             <div className="flex-1">
                                 <Label
-                                    htmlFor="ExcludeListWise"
+                                    htmlFor="MissingValueListwise"
                                     className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Exclude Cases Listwise
+                                    Listwise Deletion
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Baris yang punya missing value pada variabel mana pun dihapus
-                                    dari analisis.
+                                    Rows with a missing value on any variable are removed from
+                                    the analysis.
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-start space-x-2">
                             <RadioGroupItem
-                                id="ExcludePairWise"
-                                value="ExcludePairWise"
+                                id="MissingValueMedian"
+                                value={MissingValueMethod.Median}
                                 className="mt-0.5"
                             />
                             <div className="flex-1">
                                 <Label
-                                    htmlFor="ExcludePairWise"
+                                    htmlFor="MissingValueMedian"
                                     className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Exclude Cases Pairwise
+                                    Median Imputation
                                 </Label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Baris dipertahankan selama ada minimal satu nilai valid; sel yang
-                                    kosong diisi rata-rata variabelnya agar matriks jarak tetap numerik.
+                                    Rows are kept; empty cells are filled with the variable&apos;s
+                                    median so the distance matrix stays numeric and outlier-resistant.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-start space-x-2">
+                            <RadioGroupItem
+                                id="MissingValueKnn"
+                                value={MissingValueMethod.Knn}
+                                className="mt-0.5"
+                            />
+                            <div className="flex-1">
+                                <Label
+                                    htmlFor="MissingValueKnn"
+                                    className="text-sm font-medium leading-none cursor-pointer"
+                                >
+                                    KNN Imputation
+                                </Label>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Rows are kept; empty cells are filled with the average of the
+                                    k nearest rows, based on the variables that are available.
                                 </p>
                             </div>
                         </div>

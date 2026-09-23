@@ -129,7 +129,7 @@ export const formatModelFittingInformation = (
         ],
       },
       {
-        description: "Uji signifikansi model secara keseluruhan (perbandingan model dengan konstanta saja vs model lengkap)",
+        description: "Uji Simultan dengan H₀ menyatakan semua variabel independen tidak berpengaruh terhadap variabel dependen. Tolak H₀ jika nilai Sig. < α (0.05). ",
         note: linkFunctionNote,
       }
     ),
@@ -177,7 +177,7 @@ export const formatGoodnessOfFit = (
         ],
       },
       {
-        description: "Uji Goodness-of-Fit Pearson dan Deviance (menguji kecocokan model, null hypothesis: model cocok dengan data)",
+        description: "Uji Kesesuaian Model dengan H₀ menyatakan model cocok dengan data (hasil observasi sesuai dengan prediksi). Terima H₀ jika nilai Sig. > α (0.05).",
         note: linkFunctionNote,
       }
     ),
@@ -218,7 +218,7 @@ export const formatPseudoRSquare = (
         ],
       },
       {
-        description: "Koefisien Pseudo R-Square (mengukur proporsi variansi dependen yang dapat dijelaskan oleh model)",
+        description: "Koefisien Pseudo R-Square mengukur proporsi seberapa besar variabel independen dapat menjelaskan variabel dependen dalam model.",
         note: linkFunctionNote,
       }
     ),

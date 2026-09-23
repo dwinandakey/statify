@@ -1,7 +1,7 @@
 // Data Normalization and Standardization for K-Medoids
 
 /// Normalization/Standardization methods
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum NormalizationMethod {
     /// Z-score normalization: (x - mean) / std_dev
     ZScore,
@@ -13,6 +13,21 @@ pub enum NormalizationMethod {
     Robust,
     /// No normalization
     None,
+}
+
+impl NormalizationMethod {
+    /// Resolve a method name ("zscore" | "minmax" | anything else -> None)
+    /// into the matching variant. Case-insensitive. This is the single
+    /// dispatch logic used by `wasm::standardize_data` so the routing
+    /// between z-score and min-max can be unit tested without going through
+    /// the JsValue/WASM boundary.
+    pub fn from_str(s: &str) -> Self {
+        match s.to_lowercase().as_str() {
+            "zscore" => NormalizationMethod::ZScore,
+            "minmax" => NormalizationMethod::MinMax,
+            _ => NormalizationMethod::None,
+        }
+    }
 }
 
 /// Statistics for a single variable/feature
@@ -63,7 +78,13 @@ pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics>
 
         let n = values.len();
         let mean = values.iter().sum::<f64>() / n as f64;
-        let variance = values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / n as f64;
+        // Sample variance (n-1 denominator), matching R's scale() and the
+        // TypeScript standardizeZScore() implementation this replaces.
+        let variance = if n > 1 {
+            values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / (n - 1) as f64
+        } else {
+            0.0
+        };
         let std_dev = variance.sqrt();
 
         let min = values[0];
@@ -263,7 +284,8 @@ mod tests {
         assert!((stats[0].iqr - 2.0).abs() < 1e-10);
     }
 
-    /// Setelah Z-score, simpangan baku (populasi) setiap kolom harus ≈ 1.
+    /// Setelah Z-score, simpangan baku SAMPEL (n-1) setiap kolom harus ≈ 1.
+    /// (Bukan simpangan baku populasi — lihat catatan pada calculate_feature_statistics.)
     #[test]
     fn test_zscore_std_approximately_one() {
         let data = vec![
@@ -278,11 +300,11 @@ mod tests {
         for col in 0..2 {
             let values: Vec<f64> = normalized.iter().map(|row| row[col]).collect();
             let mean = values.iter().sum::<f64>() / values.len() as f64;
-            let variance = values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / values.len() as f64;
+            let variance = values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / (values.len() - 1) as f64;
             let std = variance.sqrt();
             assert!(
                 (std - 1.0).abs() < 1e-10,
-                "kolom {} std harus 1.0 setelah Z-score, dapat {}",
+                "kolom {} std sampel harus 1.0 setelah Z-score, dapat {}",
                 col, std
             );
         }

@@ -116,7 +116,7 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
                 .style("left", `${mx + 14}px`)
                 .style("top", `${my - 10}px`)
                 .html(
-                    `<strong>Iterasi ${d.iteration}</strong><br/>` +
+                    `<strong>Iteration ${d.iteration}</strong><br/>` +
                     `Total Cost: <strong>${d.totalCost.toFixed(4)}</strong><br/>` +
                     `Improvement: <strong>${d.improvement.toFixed(4)}</strong><br/>` +
                     `Swaps made: <strong>${d.swapsMade}</strong>`
@@ -267,7 +267,7 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("x", innerW / 2).attr("y", innerH + 46)
             .attr("text-anchor", "middle")
             .attr("font-size", "12").attr("fill", mutedColor)
-            .text("Iterasi");
+            .text("Iteration");
 
         // Left Y (Total Cost)
         g.append("g")
@@ -336,7 +336,7 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
     if (!data || data.length === 0) {
         return (
             <div className="flex items-center justify-center h-40 text-sm text-muted-foreground">
-                Data konvergensi tidak tersedia
+                Convergence data is not available
             </div>
         );
     }

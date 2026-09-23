@@ -66,13 +66,13 @@ export const formatParameterEstimates = (
   const notes = [
     options?.linkFunctionNote,
     hasRedundant
-      ? "0. This parameter is set to zero because it is redundant."
+      ? "0. Parameter ini dihilangkan karena redundant (dijadikan sebagai referensi)."
       : undefined,
   ].filter(Boolean);
 
   sections.push(
     createSection("ordinal_parameter_estimates", "Parameter Estimates", data, {
-      description: "Estimasi parameter model",
+      description: "Uji Parsial (Wald) dengan H₀ menyatakan parameter tidak berpengaruh signifikan terhadap variabel dependen. Tolak H₀ jika Sig. < α (0.05).",
       note: notes.length > 0 ? notes.join("\n") : undefined,
     }),
   );

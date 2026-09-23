@@ -48,7 +48,7 @@ export type CaseResults = {
 };
 
 /** Mirrors `parseCellValue` in hooks/useVariable.ts so both read cells alike. */
-function parseCell(raw: unknown): string | number | null {
+export function parseCell(raw: unknown): string | number | null {
     if (raw === null || raw === undefined || raw === "") return null;
     const text = String(raw);
     const parsed = Number.parseFloat(text.replace(",", "."));
@@ -70,8 +70,10 @@ function groupLabelOf(value: string | number): string {
  *
  * A row takes part only when its grouping value falls inside the defined range
  * and every analyzed predictor holds a number — the same listwise rule the
- * analysis itself applies. Everything else comes back as `null` and is left
- * blank in the saved columns.
+ * analysis itself applies. With "Replace missing values with mean", a row missing
+ * a predictor is still classified, with that predictor's mean over the analysis
+ * rows substituted (as Rust does). Everything else comes back as `null` and is
+ * left blank in the saved columns.
  */
 export function computeDiscriminantCaseResults(
     dataVariables: string[][],
@@ -120,9 +122,33 @@ export function computeDiscriminantCaseResults(
 
     const { minRange, maxRange } = config.defineRange;
 
-    // Pass 1 — decide which rows are in the analysis and score them.
-    type Scored = { rowIndex: number; label: string; scores: number[] };
-    const scored: Scored[] = [];
+    // Selection variable, applied exactly like filter_valid_cases in common.rs: only
+    // when both a selection variable and a value are set; a numeric cell matches
+    // within 1e-10, a text cell matches the value's string form, a blank never
+    // matches. Unselected rows are still classified (as SPSS does), but only selected
+    // rows count toward "Compute from group sizes" priors, because Rust estimates
+    // those priors from the analysis sample.
+    const selectionName = config.main.SelectionVariable;
+    const selectionValue = config.setValue.Value;
+    const selectionColumn =
+        selectionName && selectionValue !== null ? columnOf.get(selectionName) : undefined;
+    const isSelected = (row: string[]): boolean => {
+        if (selectionColumn === undefined || selectionValue === null) return true;
+        const cell = parseCell(row[selectionColumn]);
+        if (typeof cell === "number") return Math.abs(cell - selectionValue) < 1e-10;
+        if (typeof cell === "string") return cell === String(selectionValue);
+        return false;
+    };
+
+    // Pass 1a — collect the rows with a valid group code, with each predictor cell
+    // read as a number or `null` when missing.
+    type Candidate = {
+        rowIndex: number;
+        label: string;
+        cells: Array<number | null>;
+        selected: boolean;
+    };
+    const candidates: Candidate[] = [];
 
     for (let rowIndex = 0; rowIndex < dataVariables.length; rowIndex++) {
         const row = dataVariables[rowIndex];
@@ -138,17 +164,40 @@ export function computeDiscriminantCaseResults(
         const label = groupLabelOf(groupValue);
         if (!centroidOf.has(label)) continue;
 
-        const values: number[] = [];
-        let complete = true;
-        for (const col of predictorColumns) {
+        const cells = predictorColumns.map((col) => {
             const cell = parseCell(row[col]);
-            if (typeof cell !== "number" || !Number.isFinite(cell)) {
-                complete = false;
-                break;
-            }
-            values.push(cell);
+            return typeof cell === "number" && Number.isFinite(cell) ? cell : null;
+        });
+
+        candidates.push({ rowIndex, label, cells, selected: isSelected(row) });
+    }
+
+    // Analysis rows are the selected, complete ones — the cases Rust estimates the
+    // functions, the priors and the substituted means from.
+    const isComplete = (c: Candidate) => c.cells.every((v) => v !== null);
+    const isAnalysisRow = (c: Candidate) => c.selected && isComplete(c);
+
+    const predictorMeans = predictors.map((_, v) => {
+        let sum = 0;
+        let n = 0;
+        for (const c of candidates) {
+            if (!isAnalysisRow(c)) continue;
+            sum += c.cells[v] as number;
+            n++;
         }
-        if (!complete) continue;
+        return n > 0 ? sum / n : Number.NaN;
+    });
+
+    // Pass 1b — score the rows. Incomplete rows are scored only with "Replace
+    // missing values with mean", each missing predictor replaced by its mean.
+    type Scored = { rowIndex: number; label: string; scores: number[]; analysis: boolean };
+    const scored: Scored[] = [];
+
+    for (const c of candidates) {
+        if (!isComplete(c) && !config.classify.Replace) continue;
+
+        const values = c.cells.map((v, i) => v ?? predictorMeans[i]);
+        if (values.some((v) => !Number.isFinite(v))) continue;
 
         const scores = new Array<number>(numFunctions).fill(0);
         for (let f = 0; f < numFunctions; f++) {
@@ -159,19 +208,30 @@ export function computeDiscriminantCaseResults(
             scores[f] = s;
         }
 
-        scored.push({ rowIndex, label, scores });
+        scored.push({ rowIndex: c.rowIndex, label: c.label, scores, analysis: isAnalysisRow(c) });
     }
 
     if (scored.length === 0) return null;
 
-    // Priors, following classify_case_safe.
+    // Priors, following the Prior Probabilities table (prior_probabilities.rs), which
+    // every Rust classification path now uses: group sizes are counted over the
+    // analysis sample (selected, complete rows), with equal priors if it is empty.
     const priors: number[] = [];
     if (config.classify.AllGroupEqual) {
         priors.push(...new Array<number>(groupLabels.length).fill(1 / groupLabels.length));
     } else {
         const counts = new Map<string, number>(groupLabels.map((g) => [g, 0]));
-        for (const c of scored) counts.set(c.label, (counts.get(c.label) ?? 0) + 1);
-        for (const g of groupLabels) priors.push((counts.get(g) ?? 0) / scored.length);
+        let analysisCases = 0;
+        for (const c of scored) {
+            if (!c.analysis) continue;
+            counts.set(c.label, (counts.get(c.label) ?? 0) + 1);
+            analysisCases++;
+        }
+        for (const g of groupLabels) {
+            priors.push(
+                analysisCases > 0 ? (counts.get(g) ?? 0) / analysisCases : 1 / groupLabels.length
+            );
+        }
     }
 
     // Pass 2 — distances, posterior probabilities, predicted group.

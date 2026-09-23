@@ -1,8 +1,8 @@
 /**
  * ConvergenceAlgorithmPanel
- * Combined iteration table (Iterasi | Medoid Aktif | Total Cost | Status)
- * followed by a simple D3 Total-Cost line chart — matches the "Proses Iterasi
- * K-Medoids (PAM)" design with Init row, Berubah / Konvergen status badges.
+ * Combined iteration table (Iteration | Active Medoids | Total Cost | Status)
+ * followed by a simple D3 Total-Cost line chart — matches the "Iteration Process
+ * K-Medoids (PAM)" design with Init row, Changed / Converged status badges.
  */
 
 import React, { useEffect, useMemo, useRef } from "react";
@@ -178,29 +178,29 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
             tables: [
                 {
                     key: "convergence_algorithm",
-                    title: `Konvergensi Algoritma (${numIterations} Iterasi)`,
+                    title: `Algorithm Convergence (${numIterations} Iterations)`,
                     columnHeaders: [
-                        { header: "Iterasi" },
-                        { header: "Medoid Aktif" },
+                        { header: "Iteration" },
+                        { header: "Active Medoids" },
                         { header: "Total Cost" },
                         { header: "Status" },
                     ],
                     rows: [
                         {
                             rowHeader: ["Init"],
-                            "Medoid Aktif": `${medoidStr(initEntry.medoids)} (BUILD)`,
+                            "Active Medoids": `${medoidStr(initEntry.medoids)} (BUILD)`,
                             "Total Cost": fmtCost(initEntry.totalCost),
-                            Status: numIterations === 0 && converged ? "Konvergen" : "Inisialisasi",
+                            Status: numIterations === 0 && converged ? "Converged" : "Initialization",
                         },
                         ...iterEntries.map((row, i) => {
                             const isLast = i === iterEntries.length - 1;
-                            const isKonvergen = isLast && converged;
-                            const isBerubah = row.improvement > 0.0001;
+                            const isConverged = isLast && converged;
+                            const isChanged = row.improvement > 0.0001;
                             return {
                                 rowHeader: [String(i + 1)],
-                                "Medoid Aktif": medoidStr(row.medoids),
+                                "Active Medoids": medoidStr(row.medoids),
                                 "Total Cost": fmtCost(row.totalCost),
-                                Status: isKonvergen ? "Konvergen" : isBerubah ? "Berubah" : "Stabil",
+                                Status: isConverged ? "Converged" : isChanged ? "Changed" : "Stable",
                             };
                         }),
                     ],
@@ -213,7 +213,7 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
     if (data.length === 0) {
         return (
             <div className="flex items-center justify-center h-20 text-sm text-muted-foreground">
-                Data iterasi tidak tersedia
+                Iteration data is not available
             </div>
         );
     }

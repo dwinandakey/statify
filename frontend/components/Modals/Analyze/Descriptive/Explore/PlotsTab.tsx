@@ -13,17 +13,15 @@ const PlotsTab: FC<PlotsTabProps> = ({
     setShowStemAndLeaf,
     showHistogram,
     setShowHistogram,
-    showNormalityPlots: _showNormalityPlots,
-    setShowNormalityPlots: _setShowNormalityPlots,
+    showNormalityPlots,
+    setShowNormalityPlots,
     factorVariablesCount: _factorVariablesCount,
     tourActive: _tourActive = false,
     currentStep: _currentStep = 0,
     tourSteps: _tourSteps = [],
 }) => {
-    
+
     // Silence unused prop warnings
-    void _showNormalityPlots;
-    void _setShowNormalityPlots;
     void _factorVariablesCount;
     void _tourActive;
     void _currentStep;
@@ -35,11 +33,11 @@ const PlotsTab: FC<PlotsTabProps> = ({
         <div data-testid="explore-plots-tab-content" className="space-y-6">
             <div data-testid="explore-boxplots-section" className="p-4 border rounded-md">
                 <Label className="text-base font-medium">Boxplots</Label>
-                <RadioGroup 
+                <RadioGroup
                     data-testid="explore-boxplot-radio-group"
-                    value={boxplotType} 
+                    value={boxplotType}
                     onValueChange={(value) => {
-                    
+
                         setBoxplotType(value as 'none' | 'dependents-together' | 'factor-levels-together' | 'dependents-separately');
                     }}
                     className="mt-2 space-y-1"
@@ -63,7 +61,7 @@ const PlotsTab: FC<PlotsTabProps> = ({
                 </RadioGroup>
                 {/* Info text removed so user can preconfigure before variable selection */}
             </div>
-            
+
             <div data-testid="explore-descriptives-plots-section" className="p-4 border rounded-md space-y-3">
                 <Label className="text-base font-medium">Descriptives</Label>
                 <div className="flex items-center space-x-2">
@@ -72,7 +70,7 @@ const PlotsTab: FC<PlotsTabProps> = ({
                         data-testid="explore-stem-and-leaf-checkbox"
                         checked={showStemAndLeaf}
                         onCheckedChange={(checked) => {
-                        
+
                             setShowStemAndLeaf(checked as boolean);
                         }}
                     />
@@ -84,15 +82,27 @@ const PlotsTab: FC<PlotsTabProps> = ({
                         data-testid="explore-histogram-checkbox"
                         checked={showHistogram}
                         onCheckedChange={(checked) => {
-                        
+
                             setShowHistogram(checked as boolean);
                         }}
                     />
                     <Label htmlFor="histogram" className="font-normal">Histogram</Label>
                 </div>
             </div>
-
-            {/* Normality plots with tests option removed as per requirement */}
+            <div data-testid="explore-normality-section" className="p-4 border rounded-md space-y-3">
+                <Label className="text-base font-medium">Normality</Label>
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="normality-plots-tests"
+                        data-testid="explore-normality-plots-tests-checkbox"
+                        checked={showNormalityPlots}
+                        onCheckedChange={(checked) => {
+                            setShowNormalityPlots(checked as boolean);
+                        }}
+                    />
+                    <Label htmlFor="normality-plots-tests" className="font-normal">Normality plots with tests</Label>
+                </div>
+            </div>
         </div>
     );
 };

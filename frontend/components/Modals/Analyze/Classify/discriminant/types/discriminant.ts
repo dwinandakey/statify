@@ -72,16 +72,6 @@ export type DiscriminantStatisticsType = {
     TotalCovariance: boolean;
 };
 
-export type DiscriminantStatisticsProps = {
-    isStatisticsOpen: boolean;
-    setIsStatisticsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantStatisticsType,
-        value: boolean
-    ) => void;
-    data: DiscriminantStatisticsType;
-};
-
 export type DiscriminantMethodType = {
     Wilks: boolean;
     Unexplained: boolean;
@@ -97,16 +87,6 @@ export type DiscriminantMethodType = {
     FRemoval: number | null;
     PEntry: number | null;
     PRemoval: number | null;
-};
-
-export type DiscriminantMethodProps = {
-    isMethodOpen: boolean;
-    setIsMethodOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantMethodType,
-        value: number | boolean | null
-    ) => void;
-    data: DiscriminantMethodType;
 };
 
 export type DiscriminantClassifyType = {
@@ -125,16 +105,6 @@ export type DiscriminantClassifyType = {
     Replace: boolean;
 };
 
-export type DiscriminantClassifyProps = {
-    isClassifyOpen: boolean;
-    setIsClassifyOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantClassifyType,
-        value: number | boolean | null
-    ) => void;
-    data: DiscriminantClassifyType;
-};
-
 export type DiscriminantSaveType = {
     Predicted: boolean;
     Discriminant: boolean;
@@ -143,16 +113,6 @@ export type DiscriminantSaveType = {
     ExportXml: boolean;
     /** Target file name for that export (SPSS asks for a path; a browser can only name the download). */
     XmlFile: string | null;
-};
-
-export type DiscriminantSaveProps = {
-    isSaveOpen: boolean;
-    setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantSaveType,
-        value: boolean | string | null
-    ) => void;
-    data: DiscriminantSaveType;
 };
 
 export type DiscriminantBootstrapType = {
@@ -169,30 +129,10 @@ export type DiscriminantBootstrapType = {
     StrataVariables: string[] | null;
 };
 
-export type DiscriminantBootstrapProps = {
-    isBootstrapOpen: boolean;
-    setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantBootstrapType,
-        value: string[] | string | number | boolean | null
-    ) => void;
-    data: DiscriminantBootstrapType;
-};
-
 export type DiscriminantAssumptionsType = {
     Multicollinearity: boolean;
     MultivariateNormality: boolean;
     UnivariateNormality: boolean;
-};
-
-export type DiscriminantAssumptionsProps = {
-    isAssumptionsOpen: boolean;
-    setIsAssumptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantAssumptionsType,
-        value: boolean
-    ) => void;
-    data: DiscriminantAssumptionsType;
 };
 
 export type DiscriminantType = {
@@ -205,8 +145,4 @@ export type DiscriminantType = {
     save: DiscriminantSaveType;
     bootstrap: DiscriminantBootstrapType;
     assumptions: DiscriminantAssumptionsType;
-};
-
-export type DiscriminantContainerProps = {
-    onClose: () => void;
 };

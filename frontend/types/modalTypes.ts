@@ -111,6 +111,7 @@ export enum ModalType {
     IndependentSamplesTTest = "IndependentSamplesTTest",
     PairedSamplesTTest = "PairedSamplesTTest",
     OneWayANOVA = "OneWayANOVA",
+    BartlettTest = "BartlettTest",
 
     // Correlate modals
     Bivariate = "Bivariate",
@@ -313,6 +314,7 @@ export const MODAL_CATEGORIES: Record<ModalType, ModalCategory> = {
     [ModalType.OneSampleTTest]: ModalCategory.Analyze,
     [ModalType.PairedSamplesTTest]: ModalCategory.Analyze,
     [ModalType.OneWayANOVA]: ModalCategory.Analyze,
+    [ModalType.BartlettTest]: ModalCategory.Analyze,
 
     // Correlate modals
     [ModalType.Bivariate]: ModalCategory.Analyze,

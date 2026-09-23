@@ -11,15 +11,17 @@ use crate::models::{
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_p_value_from_chi_square,
+    classification_case_values, MeanSubstitutedCase,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
-    extract_analyzed_dataset, get_stepwise_selected_variables,
-    EPSILON,
+    extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
+    push_analysis_warning, EPSILON,
 };
 
 /// Calculate detailed statistics for each case
 pub fn calculate_casewise_statistics(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<CasewiseStatistics, String> {
 
     if !config.classify.case {
@@ -85,32 +87,19 @@ pub fn calculate_casewise_statistics(
     // [PERBAIKAN UTAMA]: Ekstrak data langsung dari `dataset` yang sudah terjamin matang (f64).
     // Loop langsung berdasarkan grup yang ada di dataset untuk mencegah mismatch data.
     for group_name in &dataset.group_labels {
-        let n_cases = dataset
-            .group_data
-            .get(&variables_to_use[0])
-            .and_then(|g| g.get(group_name))
-            .map(|v| v.len())
-            .unwrap_or(0);
+        // Cases of this group to classify: the analysis cases, then any
+        // mean-substituted cases ("Replace missing values with mean"), which are
+        // classified but were not used to estimate the functions.
+        let group_cases =
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted);
 
-        for i in 0..n_cases {
+        for case_values in group_cases {
             if processed_cases >= limit {
                 break;
             }
 
             case_idx += 1;
             processed_cases += 1;
-
-            // Pasti terisi angka aslinya, tidak akan lagi bernilai 0.0 semua!
-            let mut case_values = Vec::with_capacity(variables_to_use.len());
-            for var in &variables_to_use {
-                let val = dataset
-                    .group_data
-                    .get(var)
-                    .and_then(|g| g.get(group_name))
-                    .map(|v| v[i])
-                    .unwrap_or(0.0);
-                case_values.push(val);
-            }
 
             let disc_scores = calculate_discriminant_scores(
                 &case_values,
@@ -216,14 +205,21 @@ pub fn calculate_casewise_statistics(
     // ---- CROSS-VALIDATED (Leave-One-Out) ----
     // Only compute if config.classify.leave is true
     let cross_validated = if config.classify.leave {
-        let cv_result = calculate_cross_validated_casewise(
+        // A failed cross-validation keeps the original casewise rows and reports why
+        // the cross-validated block is missing.
+        match calculate_cross_validated_casewise(
             data,
             config,
             &dataset,
             &variables_to_use,
             num_functions,
-        )?;
-        Some(cv_result)
+        ) {
+            Ok(cv_result) => Some(cv_result),
+            Err(e) => {
+                push_analysis_warning("cross_validation", e);
+                None
+            }
+        }
     } else {
         None
     };
@@ -302,6 +298,9 @@ fn calculate_cross_validated_casewise(
 
     let total_cases = all_cases.len();
 
+    // First singular-matrix failure seen by any held-out case (see below).
+    let singular_failure: std::sync::Mutex<Option<String>> = std::sync::Mutex::new(None);
+
     // Process in parallel using rayon
     let results: Vec<CrossValidatedCaseResult> = all_cases
         .par_iter()
@@ -379,9 +378,31 @@ fn calculate_cross_validated_casewise(
                 for i in 0..p_vars {
                     reg_cov[(i, i)] += EPSILON;
                 }
-                let inv_cov = reg_cov
-                    .try_inverse()
-                    .unwrap_or_else(|| nalgebra::DMatrix::identity(p_vars, p_vars));
+                // Holding a case out can make S_pooled singular. An identity-matrix
+                // substitute would report Euclidean distances as cross-validated D², so
+                // the failure is recorded and the whole cross-validated block dropped.
+                let singular_msg = || {
+                    format!(
+                        "Cross-validated casewise statistics cannot be computed: the pooled within-groups covariance matrix becomes singular when case {} of group {} is held out.",
+                        case_idx + 1,
+                        group_name
+                    )
+                };
+                if is_rank_deficient(&pooled_cov) {
+                    if let Ok(mut f) = singular_failure.lock() {
+                        f.get_or_insert_with(singular_msg);
+                    }
+                    return None;
+                }
+                let inv_cov = match reg_cov.try_inverse() {
+                    Some(inv) => inv,
+                    None => {
+                        if let Ok(mut f) = singular_failure.lock() {
+                            f.get_or_insert_with(singular_msg);
+                        }
+                        return None;
+                    }
+                };
 
                 let mut group_probs: Vec<(usize, f64)> = Vec::new();
                 let mut group_distances: Vec<(usize, f64)> = Vec::new();
@@ -452,7 +473,10 @@ fn calculate_cross_validated_casewise(
                     .unwrap()
                     .1;
 
-                // SPSS menggunakan df = p (jumlah variabel) untuk jarak di observation space!
+                // df = p (jumlah variabel), bukan jumlah fungsi: D² di atas dihitung di
+                // ruang observasi (x - mean)' S_loo^-1 (x - mean), sehingga di bawah asumsi
+                // model berdistribusi chi-square dengan p derajat bebas. Jalur Original
+                // memakai df = jumlah fungsi karena jaraknya dihitung di ruang kanonik.
                 let df_cv = p_vars;
 
                 let p_val_highest = calculate_p_value_from_chi_square(highest_dist, df_cv);
@@ -489,12 +513,27 @@ fn calculate_cross_validated_casewise(
         )
         .collect();
 
+    if let Some(msg) = singular_failure.lock().ok().and_then(|mut f| f.take()) {
+        return Err(msg);
+    }
+
     // Sort results back into original sequential case order
     let mut sorted_results = results;
     sorted_results.sort_by_key(|r| r.original_idx);
 
-    let case_number: Vec<usize> = (1..=total_cases).collect();
-    let actual_group: Vec<String> = all_cases.iter().map(|(g, _, _, _)| g.clone()).collect();
+    // Case numbers and actual groups come from the results themselves, so a skipped
+    // case (single-case group) cannot shift the rows out of line with the predictions.
+    if sorted_results.len() < total_cases {
+        push_analysis_warning(
+            "cross_validation",
+            format!(
+                "{} case(s) could not be held out (their group has only one case) and are omitted from the cross-validated casewise statistics.",
+                total_cases - sorted_results.len()
+            ),
+        );
+    }
+    let case_number: Vec<usize> = sorted_results.iter().map(|r| r.original_idx + 1).collect();
+    let actual_group: Vec<String> = sorted_results.iter().map(|r| r.actual_group.clone()).collect();
     let predicted_group: Vec<String> = sorted_results
         .iter()
         .map(|r| r.predicted_group.clone())
@@ -575,6 +614,7 @@ struct CrossValidatedCaseResult {
 pub fn calculate_scatter_data(
     data: &AnalysisData,
     config: &DiscriminantConfig,
+    substituted: &[MeanSubstitutedCase],
 ) -> Result<ScatterData, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -601,29 +641,11 @@ pub fn calculate_scatter_data(
         .collect();
 
     for group_name in &dataset.group_labels {
-        let n = if variables_to_use.is_empty() {
-            0
-        } else {
-            dataset.group_data
-                .get(&variables_to_use[0])
-                .and_then(|g| g.get(group_name))
-                .map(|v| v.len())
-                .unwrap_or(0)
-        };
-
-        for i in 0..n {
+        // Same cases as the casewise table: analysis cases, then mean-substituted ones.
+        for case_values in
+            classification_case_values(&dataset, group_name, &variables_to_use, substituted)
+        {
             actual_group.push(group_name.clone());
-
-            let case_values: Vec<f64> = variables_to_use
-                .iter()
-                .map(|var| {
-                    dataset.group_data
-                        .get(var)
-                        .and_then(|g| g.get(group_name))
-                        .map(|v| v[i])
-                        .unwrap_or(0.0)
-                })
-                .collect();
 
             let scores = calculate_discriminant_scores(
                 &case_values,

@@ -13,6 +13,7 @@ import {
   generateModelSummaryDescription,
   generateClassificationDescription,
   generateVarsInEquationDescription,
+  generateConvergenceNote,
 } from "./formatter_utils";
 
 /**
@@ -86,10 +87,14 @@ export const formatBlock1 = (
   if (!isStepwise) {
     // 1. Omnibus Tests
     const omni = result.omni_tests;
+    // Use ?? not || - a chi-square/sig of exactly 0 (a highly significant
+    // result) is falsy and was silently replaced by the fallback, which is
+    // how a table showing "Sig. < .001" ended up paired with a description
+    // claiming "p = 1.000".
     const omniDesc = generateOmnibusDescription(
-      omni?.chi_square || 0,
-      omni?.df || 1,
-      omni?.sig || 1
+      omni?.chi_square ?? 0,
+      omni?.df ?? 1,
+      omni?.sig ?? 1
     );
 
     const omnibusData = {
@@ -163,10 +168,7 @@ export const formatBlock1 = (
     sections.push(
       createSection("block1_summary", "Model Summary", modelSummaryData, {
         description: summaryDesc,
-        note:
-          `a. Estimation terminated at iteration number ${ 
-          summary?.iterations || "?" 
-          } because parameter estimates changed by less than .001.`,
+        note: `a. ${generateConvergenceNote(summary?.iterations, summary?.converged)}`,
       })
     );
 
@@ -460,17 +462,27 @@ export const formatBlock1 = (
       // 5. Variables Out Rows
       const varsNotIn = stepDetail.variables_not_in_equation;
       if (varsNotIn && varsNotIn.length > 0) {
-        varsNotIn.forEach((v) => {
-          varsOutRows.push({
-            rowHeader: [currentStepLabel, getRealVariableName(v.label)],
-            score: safeFixed(v.score),
-            df: v.df.toString(),
-            sig: fmtSig(v.sig),
-          });
-        });
+        // SPSS omits the joint "Overall Statistics" score test whenever a
+        // multi-category predictor (df > 1) is still outside the equation
+        // at this step, since its omnibus row and its own dummy rows make
+        // the joint information matrix redundant (same rule as Block 0).
+        const stepHasRedundantGroup = varsNotIn.some(
+          (v) => v.df > 1 && v.label !== "Overall Statistics"
+        );
 
-        // Add Overall Statistics for this step if available
-        if (stepDetail.remainder_test) {
+        varsNotIn
+          .filter((v) => !stepHasRedundantGroup || v.label !== "Overall Statistics")
+          .forEach((v) => {
+            varsOutRows.push({
+              rowHeader: [currentStepLabel, getRealVariableName(v.label)],
+              score: safeFixed(v.score),
+              df: v.df.toString(),
+              sig: fmtSig(v.sig),
+            });
+          });
+
+        // Add Overall Statistics for this step if available and computable
+        if (stepDetail.remainder_test && !stepHasRedundantGroup) {
           varsOutRows.push({
             rowHeader: [currentStepLabel, "Overall Statistics"],
             score: safeFixed(stepDetail.remainder_test.chi_square),
@@ -558,6 +570,9 @@ export const formatBlock1 = (
             },
             {
               description: `Model summary statistics for each step. Final step: ${sumDesc}`,
+              note: summary
+                ? `a. ${generateConvergenceNote(summary.iterations, summary.converged)}`
+                : undefined,
             }
           )
         );

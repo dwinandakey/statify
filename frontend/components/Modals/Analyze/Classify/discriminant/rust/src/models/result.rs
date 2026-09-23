@@ -56,6 +56,12 @@ pub struct DiscriminantResult {
     /// The map itself is built on the frontend from the group centroids.
     #[serde(rename = "territorial_map")]
     pub territorial_map: bool,
+    /// True when the Combined-Groups plot was requested (Classify → Plots).
+    #[serde(rename = "combined_groups_plot")]
+    pub combined_groups_plot: bool,
+    /// True when the Separate-Groups plots were requested (Classify → Plots).
+    #[serde(rename = "separate_groups_plot")]
+    pub separate_groups_plot: bool,
 }
 
 /// Bundle of all requested assumption checks plus an at-a-glance summary used to
@@ -104,6 +110,8 @@ pub struct MulticollinearityResult {
     pub note: String,
 }
 
+// INACTIVE — result shape of the former full-dataset (pooled) Henze–Zirkler test.
+/*
 /// Henze–Zirkler multivariate normality test computed on the full dataset
 /// (all cases pooled, grouping variable excluded), matching R's `MVN::mvn`.
 /// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
@@ -121,11 +129,36 @@ pub struct HenzeZirklerResult {
     pub violated: bool,
     pub note: String,
 }
+*/
 
-/// Per-variable Anderson–Darling univariate normality test computed on the full
-/// dataset (all cases pooled), matching R's `MVN::mvn` / `nortest::ad.test`.
+/// Henze–Zirkler multivariate normality test run within each group (grouping
+/// variable excluded); every vector has one entry per group, in group order.
+/// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
+/// tail. A group with n ≤ p is not tested (`tested` = false).
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct HenzeZirklerResult {
+    pub groups: Vec<String>,
+    /// Cases used in each group.
+    pub n: Vec<i32>,
+    /// Henze–Zirkler statistic per group (0 when not tested).
+    pub hz: Vec<f64>,
+    #[serde(rename = "p_value")]
+    pub p_value: Vec<f64>,
+    /// Verdict per group: p-value above the normality α (not significant).
+    pub normal: Vec<bool>,
+    /// False when the group could not be tested (too few cases for p predictors).
+    pub tested: Vec<bool>,
+    /// True when any tested group rejects multivariate normality.
+    pub violated: bool,
+    pub note: String,
+}
+
+/// Anderson–Darling univariate normality test per predictor within each group
+/// (`nortest::ad.test` on each group's cases). One entry per tested
+/// group × predictor pair; `groups` and `variables` are parallel.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UnivariateNormalityResult {
+    pub groups: Vec<String>,
     pub variables: Vec<String>,
     /// Anderson–Darling A² statistic per variable.
     pub statistic: Vec<f64>,
@@ -143,12 +176,20 @@ pub struct UnivariateNormalityResult {
 pub struct BootstrapResults {
     #[serde(rename = "num_samples")]
     pub num_samples: i32,
+    /// Resamples that were actually fitted. Lower than `num_samples` when a
+    /// resample lost a group or could not be fitted.
+    #[serde(rename = "valid_samples")]
+    pub valid_samples: i32,
     pub level: f64,
     /// "Percentile" or "BCa"
     #[serde(rename = "ci_method")]
     pub ci_method: String,
     /// "Simple" or "Stratified"
     pub sampling: String,
+    /// Variables that define the strata under stratified sampling. Empty when
+    /// the strata are the groups of the grouping variable.
+    #[serde(rename = "strata_variables")]
+    pub strata_variables: Vec<String>,
     pub functions: Vec<String>,
     pub variables: Vec<String>,
     pub standardized: Vec<BootstrapCoefficient>,
@@ -191,6 +232,14 @@ pub struct ProcessingSummary {
     pub both_missing_percent: Option<f64>,
     #[serde(rename = "total_excluded_percent")]
     pub total_excluded_percent: Option<f64>,
+    /// Classification Processing Summary: cases excluded for a missing predictor.
+    /// 0 when "Replace missing values with mean" is on, because those cases are still
+    /// classified with the predictor means substituted.
+    #[serde(rename = "classification_missing_disc_vars")]
+    pub classification_missing_disc_vars: Option<usize>,
+    /// Classification Processing Summary: cases used in the classification output.
+    #[serde(rename = "classification_used_count")]
+    pub classification_used_cases: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -234,6 +283,11 @@ pub struct EigenDescription {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CanonicalFunctions {
+    /// Variables in the model, in analysis order. The coefficient maps below are
+    /// unordered, so this is what fixes the row order of the output tables to match
+    /// SPSS. Defaulted so older serialised results still deserialise.
+    #[serde(default)]
+    pub variables: Vec<String>,
     pub coefficients: HashMap<String, Vec<f64>>,
     #[serde(rename = "standardized_coefficients")]
     pub standardized_coefficients: HashMap<String, Vec<f64>>,
@@ -381,6 +435,8 @@ pub struct StepwiseNote {
     pub max_steps: String,
     pub min_f_to_enter: String,
     pub max_f_to_remove: String,
+    /// "Minimum Rao's V to enter is …" — empty for every method except Rao's V.
+    pub min_v_to_enter: String,
     pub note: String,
 }
 
@@ -424,6 +480,10 @@ pub struct PairwiseComparison {
     pub group_name: String,
     pub f_value: f64,
     pub significance: f64,
+    /// Numerator degrees of freedom of F: p, the number of variables in the model.
+    pub df1: i32,
+    /// Denominator degrees of freedom of F: n − g − p + 1.
+    pub df2: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

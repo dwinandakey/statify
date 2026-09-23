@@ -34,10 +34,10 @@ function clusterColor(idx: number, total: number): string {
 }
 
 function qualityLabel(score: number): string {
-    if (score >= 0.70) return "Sangat Baik";
-    if (score >= 0.50) return "Baik";
-    if (score >= 0.30) return "Cukup";
-    return "Lemah";
+    if (score >= 0.70) return "Very Strong";
+    if (score >= 0.50) return "Strong";
+    if (score >= 0.30) return "Moderate";
+    return "Weak";
 }
 
 function qualityColor(score: number): string {
@@ -244,7 +244,7 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("font-size", "10")
             .attr("font-weight", "600")
             .attr("fill", mutedColor)
-            .text("n | rata-rata sᵢ");
+            .text("n | mean sᵢ");
 
         groups.forEach((gr, ci) => {
             const midY = bandTops[ci] + bands[ci] / 2;
@@ -293,14 +293,14 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("font-size", "12")
             .attr("font-weight", "600")
             .attr("fill", fgColor)
-            .text(`n = ${total.toLocaleString("id-ID")} objek, ${numClusters} cluster`);
+            .text(`n = ${total.toLocaleString("en-US")} objects, ${numClusters} clusters`);
 
         svg.append("text")
             .attr("x", margin.left)
             .attr("y", 34)
             .attr("font-size", "11")
             .attr("fill", "#6366f1")
-            .text(`Rata-rata silhouette keseluruhan: ${overall.toFixed(3)} (${qualityLabel(overall)})`);
+            .text(`Overall mean silhouette: ${overall.toFixed(3)} (${qualityLabel(overall)})`);
 
         // ── Cluster-level hover (one overlay per cluster, not per object) ─────
         const parent = svgEl.parentElement;
@@ -346,10 +346,10 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                     .style("opacity", "1")
                     .html(
                         `<strong>Cluster ${gr.label}</strong><br/>` +
-                        `Jumlah objek: <strong>${gr.count.toLocaleString("id-ID")}</strong><br/>` +
-                        `Rata-rata sᵢ: <strong style="color:${qualityColor(gr.mean)}">${gr.mean.toFixed(4)}</strong> (${qualityLabel(gr.mean)})<br/>` +
-                        `Rentang: ${gr.min.toFixed(3)} – ${gr.max.toFixed(3)}<br/>` +
-                        `sᵢ negatif: <strong>${gr.negatives.toLocaleString("id-ID")}</strong> (${negPct.toFixed(1)}%)`
+                        `Object count: <strong>${gr.count.toLocaleString("en-US")}</strong><br/>` +
+                        `Mean sᵢ: <strong style="color:${qualityColor(gr.mean)}">${gr.mean.toFixed(4)}</strong> (${qualityLabel(gr.mean)})<br/>` +
+                        `Range: ${gr.min.toFixed(3)} – ${gr.max.toFixed(3)}<br/>` +
+                        `Negative sᵢ: <strong>${gr.negatives.toLocaleString("en-US")}</strong> (${negPct.toFixed(1)}%)`
                     );
                 moveTooltip(event as MouseEvent);
             })
@@ -361,7 +361,7 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
     if (total === 0) {
         return (
             <div className="flex items-center justify-center h-24 text-sm text-muted-foreground">
-                Data silhouette per objek tidak tersedia
+                Silhouette data per object is not available
             </div>
         );
     }

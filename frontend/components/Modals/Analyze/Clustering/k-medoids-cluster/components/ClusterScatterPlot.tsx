@@ -345,7 +345,7 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             .attr("x", 0).attr("y", 0)
             .attr("font-size", "11px").attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Klaster");
+            .text("Cluster");
 
         // Cluster entries
         clusterIds.forEach((id, i) => {

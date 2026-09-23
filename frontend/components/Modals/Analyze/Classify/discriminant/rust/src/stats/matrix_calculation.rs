@@ -14,7 +14,9 @@ use crate::{
         result::{CovarianceMatrices, PooledMatrices},
         AnalysisData, DiscriminantConfig,
     },
-    stats::core::{calculate_covariance, AnalyzedDataset, EPSILON},
+    stats::core::{
+        calculate_covariance, is_rank_deficient, push_analysis_warning, AnalyzedDataset, EPSILON,
+    },
 };
 
 use super::core::extract_analyzed_dataset;
@@ -133,7 +135,7 @@ pub fn calculate_between_groups_sscp(
 /// Calculate between-groups and within-groups matrices
 ///
 /// These are fundamental matrices for discriminant analysis:
-/// - Between-groups: SSCP of group means (B)
+/// - Between-groups: size-weighted SSCP of the group means, B = Σ nᵢ(x̄ᵢ-x̄)(x̄ᵢ-x̄)ᵀ
 /// - Within-groups: pooled within-groups covariance (W_SSCP / (n-g)), no EPSILON
 ///
 /// # Parameters
@@ -461,21 +463,17 @@ pub fn calculate_covariance_matrices(
 /// Calculate total unexplained variation between groups (SPSS "Residual Variance").
 ///
 /// SPSS's Unexplained Variance (MINRESID) method minimizes the sum, over all pairs
-/// of groups, of the unexplained variation. The unexplained variation for a pair
-/// (i, j) is that pair's 2-group Wilks' lambda — i.e. the proportion of variance
-/// NOT explained by the group difference, computed with the common (all-groups)
-/// pooled covariance for D² but the PAIR's degrees of freedom:
+/// of groups, of the unexplained variation. For each pair (i, j):
 ///
-///   U_ij = (n_i + n_j - 2) / ((n_i + n_j - 2) + T²_ij),
-///   T²_ij = D²_ij · n_i·n_j / (n_i + n_j)
+///   U_ij = 4 / (4 + D²_ij)
 ///
-/// For each pair the unexplained variance is `4 / (4 + D²_ij)`, where D²_ij is
-/// the squared Mahalanobis distance between the two group centroids (common
-/// all-groups pooled covariance). The constant 4 is the between-centroid
-/// variance of two equally-weighted means at distance D — i.e. (D/2)² → D²/4 —
-/// so unexplained = within / (within + between) = 1 / (1 + D²/4). It is NOT
-/// weighted by the group sizes (Hotelling T²). Verified to match SPSS exactly
-/// for every predictor (e.g. {Fe2O3} → 1.137, {CaO} → 1.402, {BaO} → 2.911).
+/// where D²_ij is the squared Mahalanobis distance between the two group
+/// centroids using the common (all-groups) pooled within-groups covariance. The
+/// constant 4 is the between-centroid variance of two equally-weighted means at
+/// distance D — i.e. (D/2)² → D²/4 — so unexplained = within / (within + between)
+/// = 1 / (1 + D²/4). It is NOT weighted by the group sizes (no Hotelling T² and
+/// no pair degrees of freedom). Verified to match SPSS exactly for every
+/// predictor (e.g. {Fe2O3} → 1.137, {CaO} → 1.402, {BaO} → 2.911).
 ///
 /// Residual Variance = Σ_{i<j} U_ij; lower = better separation.
 pub fn calculate_total_unexplained_variation(
@@ -678,13 +676,27 @@ pub fn calculate_min_f_ratio(dataset: &AnalyzedDataset, variables: &[String]) ->
 /// variable set. The inverse depends only on the variables, not on the group
 /// pair, so all pairwise D² loops share a single inversion via this helper.
 ///
-/// Returns `None` if the regularized matrix is singular (callers fall back to
-/// the squared Euclidean distance of the mean difference).
-fn pooled_within_inverse(dataset: &AnalyzedDataset, variables: &[String]) -> Option<DMatrix<f64>> {
+/// Returns `None` if the pooled matrix is singular or near-singular (callers fall
+/// back to the squared Euclidean distance of the mean difference). That fallback is
+/// not a Mahalanobis distance, so it is reported as a warning rather than silently.
+pub(crate) fn pooled_within_inverse(dataset: &AnalyzedDataset, variables: &[String]) -> Option<DMatrix<f64>> {
     if variables.is_empty() {
         return None;
     }
     let mut reg_cov = calculate_pooled_within_matrix_no_epsilon(dataset, variables);
+    // The EPSILON ridge below keeps near-singular matrices invertible, but their
+    // inverse is dominated by 1/EPSILON and the resulting D² is meaningless, so the
+    // rank is checked on the unregularized matrix first.
+    if is_rank_deficient(&reg_cov) {
+        push_analysis_warning(
+            "mahalanobis_distance",
+            format!(
+                "The pooled within-groups covariance matrix of [{}] is singular (a predictor is a linear combination of the others). Group-pair Mahalanobis distances (Min. D Squared, Smallest F Ratio, Residual Variance, pairwise F) for this set were replaced by squared Euclidean distances and are not valid.",
+                variables.join(", ")
+            ),
+        );
+        return None;
+    }
     for i in 0..variables.len() {
         reg_cov[(i, i)] += EPSILON;
     }
@@ -719,7 +731,7 @@ fn group_mean_diff(
 
 /// Squared Mahalanobis distance D² = δ'·S⁻¹·δ between two groups, given a
 /// precomputed pooled inverse. `None` → singular fallback (‖δ‖²).
-fn group_mahalanobis_with_inv(
+pub(crate) fn group_mahalanobis_with_inv(
     dataset: &AnalyzedDataset,
     group_i: &str,
     group_j: &str,
@@ -735,8 +747,9 @@ fn group_mahalanobis_with_inv(
 
 /// Calculate Rao's V statistic
 ///
-/// Rao's V (Lawley-Hotelling Trace) is a multivariate test statistic
-/// that measures the separation between group means.
+/// Rao's V is a multivariate statistic that measures the separation between
+/// group means: V = tr(S_pooled⁻¹·B) = (n-g)·tr(W⁻¹B), i.e. the Lawley-Hotelling
+/// trace tr(W⁻¹B) scaled by the within-groups degrees of freedom (n-g).
 pub fn calculate_raos_v(dataset: &AnalyzedDataset, variables: &[String]) -> f64 {
     if variables.is_empty() {
         return 0.0;
@@ -744,6 +757,17 @@ pub fn calculate_raos_v(dataset: &AnalyzedDataset, variables: &[String]) -> f64 
 
     // Calculate between-groups and within-groups matrices
     let (between_mat, within_mat) = calculate_between_within_matrices(dataset, variables);
+
+    if is_rank_deficient(&within_mat) {
+        push_analysis_warning(
+            "raos_v",
+            format!(
+                "The pooled within-groups covariance matrix of [{}] is singular, so Rao's V is undefined for this set; the value shown is the trace of the between-groups matrix and is not valid.",
+                variables.join(", ")
+            ),
+        );
+        return (0..variables.len()).map(|i| between_mat[(i, i)]).sum();
+    }
 
     // Try to invert within-groups matrix
     // within_mat = S_pooled = W_SS / (n-k), so w_inv = S_pooled^{-1}

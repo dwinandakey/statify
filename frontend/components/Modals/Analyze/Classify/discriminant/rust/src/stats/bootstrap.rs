@@ -20,6 +20,7 @@ use rand_mt::Mt;
 use statrs::distribution::{ContinuousCDF, Normal};
 
 use crate::models::{
+    data::DataValue,
     result::{BootstrapCoefficient, BootstrapResults},
     AnalysisData, DiscriminantConfig,
 };
@@ -27,14 +28,17 @@ use crate::models::{
 use super::core::{
     calculate_between_groups_sscp, calculate_group_means, calculate_overall_means,
     calculate_pooled_within_matrix, extract_analyzed_dataset, get_stepwise_selected_variables,
-    process_discriminant_coefficients, solve_eigenvalue_problem, AnalyzedDataset,
+    process_discriminant_coefficients, push_analysis_warning, solve_eigenvalue_problem,
+    AnalyzedDataset,
 };
 
-/// One resampled/observed case: its group label and predictor values (in the
-/// same order as the model's variable list).
+/// One resampled/observed case: its group label, the stratum it is drawn from
+/// under stratified sampling, and predictor values (in the same order as the
+/// variable list of the model).
 #[derive(Clone)]
 struct Case {
     group: String,
+    stratum: String,
     values: Vec<f64>,
 }
 
@@ -68,7 +72,46 @@ pub fn calculate_bootstrap(
     let (orig_unstd, orig_std) = canonical_coeffs_from_dataset(&dataset, &variables, num_functions)
         .ok_or_else(|| "Failed to compute original canonical coefficients".to_string())?;
 
-    let cases = extract_cases(&dataset, &variables);
+    let mut cases = extract_cases(&dataset, &variables);
+
+    // Strata Variables (bootstrap dialog): when the user picked any, the strata
+    // are the crossed cells of those variables, as in the SPSS syntax
+    // /SAMPLING METHOD=STRATIFIED STRATA=varlist. With none picked the stratum
+    // stays the grouping variable, which is what extract_cases set.
+    let mut strata_labels: Vec<String> = Vec::new();
+    if config.bootstrap.stratified {
+        let wanted: Vec<String> = config
+            .bootstrap
+            .strata_variables
+            .clone()
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|v| !v.trim().is_empty())
+            .collect();
+
+        if !wanted.is_empty() {
+            match strata_keys_for_cases(data, config, &dataset, &wanted) {
+                Some(keyed)
+                    if keyed.len() == cases.len() &&
+                        keyed
+                            .iter()
+                            .zip(cases.iter())
+                            .all(|((g, _), c)| g == &c.group) => {
+                    for (case, (_, key)) in cases.iter_mut().zip(keyed.into_iter()) {
+                        case.stratum = key;
+                    }
+                    strata_labels = wanted;
+                }
+                _ => {
+                    push_analysis_warning(
+                        "Warning: calculate_bootstrap",
+                        "Strata variable values could not be matched to the analysis cases, so the bootstrap was stratified by the grouping variable instead."
+                            .to_string(),
+                    );
+                }
+            }
+        }
+    }
 
     // Mersenne Twister, seeded when the user set a seed.
     let seed: u32 = if config.bootstrap.seed {
@@ -85,19 +128,28 @@ pub fn calculate_bootstrap(
     let mut samples: Vec<Vec<Vec<f64>>> =
         vec![vec![Vec::with_capacity(n_samples as usize); num_functions]; p];
 
+    let mut valid_samples: i32 = 0;
+    let mut skipped_samples: i32 = 0;
+
     for _ in 0..n_samples {
         let resampled = if stratified {
-            resample_stratified(&cases, &dataset.group_labels, &mut rng)
+            resample_stratified(&cases, &mut rng)
         } else {
             resample_simple(&cases, &mut rng)
         };
 
         let ds = dataset_from_cases(&resampled, &variables, &dataset.group_labels);
-        if ds.num_groups < 2 {
-            continue; // Degenerate resample (a group vanished) — skip.
+        // A resample that lost a group cannot support num_functions functions:
+        // fitting it anyway yields an arbitrary extra function and inflates the
+        // Std. Error and the CI. Such resamples are dropped, and the number of
+        // resamples actually used is reported with the table.
+        if ds.num_groups != dataset.num_groups {
+            skipped_samples += 1;
+            continue;
         }
 
         if let Some((unstd, std)) = canonical_coeffs_from_dataset(&ds, &variables, num_functions) {
+            valid_samples += 1;
             let signs = alignment_signs(&orig_unstd, &unstd, &variables, num_functions);
             for (vi, var) in variables.iter().enumerate() {
                 if let Some(coefs) = std.get(var) {
@@ -107,7 +159,21 @@ pub fn calculate_bootstrap(
                     }
                 }
             }
+        } else {
+            skipped_samples += 1;
         }
+    }
+
+    if skipped_samples > 0 {
+        push_analysis_warning(
+            "Warning: calculate_bootstrap",
+            format!(
+                "{} of {} bootstrap samples were dropped because a group was lost in the resample or the functions could not be fitted. The results are based on the remaining {}.",
+                skipped_samples,
+                n_samples,
+                valid_samples
+            ),
+        );
     }
 
     let use_bca = config.bootstrap.bca;
@@ -178,9 +244,11 @@ pub fn calculate_bootstrap(
 
     Ok(BootstrapResults {
         num_samples: n_samples,
+        valid_samples,
         level,
         ci_method: if use_bca { "BCa".to_string() } else { "Percentile".to_string() },
         sampling: if stratified { "Stratified".to_string() } else { "Simple".to_string() },
+        strata_variables: strata_labels,
         functions,
         variables,
         standardized,
@@ -255,11 +323,99 @@ fn extract_cases(dataset: &AnalyzedDataset, variables: &[String]) -> Vec<Case> {
                 .collect();
             cases.push(Case {
                 group: group.clone(),
+                stratum: group.clone(),
                 values,
             });
         }
     }
     cases
+}
+
+/// Stratum key of every analysis case, paired with the group label the case
+/// belongs to, in the same order as `extract_cases` returns them.
+///
+/// The case order of `extract_cases` is: groups in `group_labels` order, and
+/// within a group the rows in storage order. That is exactly the order in which
+/// `extract_grouped_data` collected the rows, so rebuilding the same group to
+/// row-index map here recovers which row each case came from. `data` is the
+/// filtered data, so every row it still holds is an analysis case.
+///
+/// Returns `None` when the strata values are unavailable; the caller also
+/// verifies the group labels line up before trusting the result.
+fn strata_keys_for_cases(
+    data: &AnalysisData,
+    config: &DiscriminantConfig,
+    dataset: &AnalyzedDataset,
+    strata_variables: &[String],
+) -> Option<Vec<(String, String)>> {
+    let strata_data = data.strata_data.as_ref()?;
+    if strata_data.is_empty() {
+        return None;
+    }
+
+    let grouping_variable = &config.main.grouping_variable;
+    let min_range = config.define_range.min_range;
+    let max_range = config.define_range.max_range;
+
+    // Same labelling and range rules as extract_grouped_data.
+    let mut group_mappings: HashMap<String, Vec<usize>> = HashMap::new();
+    for (i, record) in data.group_data.iter().flatten().enumerate() {
+        if let Some(value) = record.values.get(grouping_variable) {
+            let group_label = match value {
+                DataValue::Number(num) => {
+                    if
+                        min_range.map_or(true, |min| *num >= min) &&
+                        max_range.map_or(true, |max| *num <= max)
+                    {
+                        num.to_string()
+                    } else {
+                        continue;
+                    }
+                }
+                DataValue::Text(text) => text.clone(),
+                _ => {
+                    continue;
+                }
+            };
+            group_mappings.entry(group_label).or_default().push(i);
+        }
+    }
+
+    // Rows of each strata variable, located by name like extract_grouped_data
+    // does, with the positional fallback for data organised by variable slot.
+    let mut columns: Vec<&Vec<crate::models::data::DataRecord>> =
+        Vec::with_capacity(strata_variables.len());
+    for (vi, var_name) in strata_variables.iter().enumerate() {
+        let column = strata_data
+            .iter()
+            .find(|rows| rows.iter().any(|row| row.values.contains_key(var_name)))
+            .or_else(|| strata_data.get(vi))?;
+        columns.push(column);
+    }
+
+    let mut keys = Vec::with_capacity(dataset.total_cases);
+    for group in &dataset.group_labels {
+        let indices = group_mappings.get(group)?;
+        for &idx in indices {
+            let mut parts: Vec<String> = Vec::with_capacity(columns.len());
+            for (vi, var_name) in strata_variables.iter().enumerate() {
+                let value = columns[vi].get(idx).and_then(|row| row.values.get(var_name));
+                parts.push(match value {
+                    Some(DataValue::Number(num)) => num.to_string(),
+                    Some(DataValue::Text(text)) => text.clone(),
+                    Some(DataValue::Boolean(b)) => b.to_string(),
+                    // A missing strata value forms its own cell rather than
+                    // silently joining another one.
+                    _ => "(missing)".to_string(),
+                });
+            }
+            // Unit separator: cannot appear in a data value, so distinct
+            // combinations cannot collide.
+            keys.push((group.clone(), parts.join("")));
+        }
+    }
+
+    Some(keys)
 }
 
 /// Build an `AnalyzedDataset` from a set of (resampled) cases, recomputing group
@@ -321,20 +477,27 @@ fn resample_simple(cases: &[Case], rng: &mut Mt) -> Vec<Case> {
     (0..n).map(|_| cases[next_index(rng, n)].clone()).collect()
 }
 
-/// Stratified bootstrap: within each group, draw nᵢ cases with replacement so
-/// group sizes are preserved.
-fn resample_stratified(cases: &[Case], group_order: &[String], rng: &mut Mt) -> Vec<Case> {
-    let mut by_group: HashMap<&String, Vec<&Case>> = HashMap::new();
+/// Stratified bootstrap: within each stratum, draw nᵢ cases with replacement so
+/// stratum sizes are preserved. The stratum is the grouping variable unless the
+/// user picked Strata Variables, in which case it is their crossed cells.
+/// Strata are visited in first-appearance order, so a given seed always produces
+/// the same draws.
+fn resample_stratified(cases: &[Case], rng: &mut Mt) -> Vec<Case> {
+    let mut order: Vec<&String> = Vec::new();
+    let mut by_stratum: HashMap<&String, Vec<&Case>> = HashMap::new();
     for c in cases {
-        by_group.entry(&c.group).or_default().push(c);
+        if !by_stratum.contains_key(&c.stratum) {
+            order.push(&c.stratum);
+        }
+        by_stratum.entry(&c.stratum).or_default().push(c);
     }
 
     let mut out = Vec::with_capacity(cases.len());
-    for group in group_order {
-        if let Some(group_cases) = by_group.get(group) {
-            let m = group_cases.len();
+    for stratum in order {
+        if let Some(stratum_cases) = by_stratum.get(stratum) {
+            let m = stratum_cases.len();
             for _ in 0..m {
-                out.push(group_cases[next_index(rng, m)].clone());
+                out.push(stratum_cases[next_index(rng, m)].clone());
             }
         }
     }
@@ -465,7 +628,9 @@ fn jackknife_acceleration(
             .collect();
 
         let ds = dataset_from_cases(&subset, variables, group_order);
-        if ds.num_groups < 2 {
+        // Same rule as the resampling loop: a subset that lost a group cannot
+        // support num_functions functions.
+        if ds.num_groups != group_order.len() {
             continue;
         }
 

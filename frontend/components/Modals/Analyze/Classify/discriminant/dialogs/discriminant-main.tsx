@@ -43,6 +43,7 @@ import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/De
 import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
 import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
 import { dialogTourSteps } from "../hooks/tourConfig";
+import { validateDefineRange } from "../services/discriminant-validation";
 
 /** Boxes a variable can be moved into on the Variables tab. */
 type DropTarget = "GroupingVariable" | "IndependentVariables" | "SelectionVariable";
@@ -61,6 +62,7 @@ export const DiscriminantMain = () => {
     formData,
     updateFormData,
     executeAnalysis,
+    validateInput,
     runAssumptions,
     resetFormData,
     isLoading,
@@ -93,19 +95,32 @@ export const DiscriminantMain = () => {
   const [isDefineRangeOpen, setIsDefineRangeOpen] = useState(false);
   const [pendingMinRange, setPendingMinRange] = useState<number | string>("");
   const [pendingMaxRange, setPendingMaxRange] = useState<number | string>("");
+  const [defineRangeError, setDefineRangeError] = useState<string | null>(null);
 
   const handleDefineRangeOpen = () => {
     setPendingMinRange(formData.defineRange?.minRange ?? "");
     setPendingMaxRange(formData.defineRange?.maxRange ?? "");
+    setDefineRangeError(null);
     setIsSetValueOpen(false);
     setIsDefineRangeOpen(true);
   };
 
+  // Like SPSS, Continue refuses an incomplete, non-integer or inverted range
+  // instead of storing a placeholder value.
   const handleDefineRangeContinue = () => {
-    updateFormData("defineRange", "minRange", Number(pendingMinRange) || 0);
-    updateFormData("defineRange", "maxRange", Number(pendingMaxRange) || 0);
+    const rangeError = validateDefineRange(pendingMinRange, pendingMaxRange);
+    if (rangeError) {
+      setDefineRangeError(rangeError);
+      return;
+    }
+    updateFormData("defineRange", "minRange", Number(pendingMinRange));
+    updateFormData("defineRange", "maxRange", Number(pendingMaxRange));
+    setDefineRangeError(null);
     setIsDefineRangeOpen(false);
   };
+
+  const { minRange, maxRange } = formData.defineRange;
+  const isRangeDefined = minRange !== null && maxRange !== null;
 
   // Set Value inline panel state
   const [isSetValueOpen, setIsSetValueOpen] = useState(false);
@@ -307,7 +322,10 @@ export const DiscriminantMain = () => {
 
   const handleRemoveVariable = (target: string, variable?: string) => {
     if (target === "GroupingVariable") {
+      // The range belongs to the removed variable's codes, so clear it too.
       updateFormData("main", "GroupingVariable", null);
+      updateFormData("defineRange", "minRange", null);
+      updateFormData("defineRange", "maxRange", null);
     } else if (target === "IndependentVariables" && variable) {
       const current = mainData.IndependentVariables || [];
       updateFormData("main", "IndependentVariables", current.filter((v) => v !== variable));
@@ -330,12 +348,9 @@ export const DiscriminantMain = () => {
 
   // --- ANALYZE ---
   const handleAnalyze = async () => {
-    if (!mainData.GroupingVariable) {
-      toast.error("Please select a Grouping Variable.");
-      return;
-    }
-    if (!mainData.IndependentVariables || mainData.IndependentVariables.length === 0) {
-      toast.error("Please select at least one Independent Variable.");
+    const validationError = validateInput(mainData);
+    if (validationError) {
+      toast.error(validationError);
       return;
     }
 
@@ -496,7 +511,8 @@ export const DiscriminantMain = () => {
                                 }
                                 title="Click to remove"
                               >
-                                {mainData.GroupingVariable}
+                                {mainData.GroupingVariable}(
+                                {isRangeDefined ? `${minRange} ${maxRange}` : "? ?"})
                               </Badge>
                             ) : (
                               <span className="text-sm font-light text-gray-500">
@@ -509,6 +525,7 @@ export const DiscriminantMain = () => {
                           variant="secondary"
                           size="sm"
                           onClick={handleDefineRangeOpen}
+                          disabled={!mainData.GroupingVariable}
                         >
                           Define Range...
                         </Button>
@@ -658,18 +675,29 @@ export const DiscriminantMain = () => {
                             <Label className="text-xs text-muted-foreground">Minimum</Label>
                             <Input
                               type="number"
+                              step={1}
                               value={pendingMinRange}
-                              onChange={(e) => setPendingMinRange(e.target.value)}
+                              onChange={(e) => {
+                                setPendingMinRange(e.target.value);
+                                setDefineRangeError(null);
+                              }}
                             />
                           </div>
                           <div className="flex flex-col gap-1">
                             <Label className="text-xs text-muted-foreground">Maximum</Label>
                             <Input
                               type="number"
+                              step={1}
                               value={pendingMaxRange}
-                              onChange={(e) => setPendingMaxRange(e.target.value)}
+                              onChange={(e) => {
+                                setPendingMaxRange(e.target.value);
+                                setDefineRangeError(null);
+                              }}
                             />
                           </div>
+                          {defineRangeError && (
+                            <p className="text-xs text-destructive">{defineRangeError}</p>
+                          )}
                           <div className="flex flex-col gap-2 pt-1">
                             <Button size="sm" onClick={handleDefineRangeContinue}>
                               Continue
@@ -819,6 +847,7 @@ export const DiscriminantMain = () => {
             disabled={
               isLoading ||
               !mainData.GroupingVariable ||
+              !isRangeDefined ||
               !mainData.IndependentVariables ||
               mainData.IndependentVariables.length === 0
             }

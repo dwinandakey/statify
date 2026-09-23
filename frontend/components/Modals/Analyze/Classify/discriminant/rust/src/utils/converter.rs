@@ -1,5 +1,7 @@
 use wasm_bindgen::JsValue;
 use serde::Serialize;
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use crate::models::result::{
     DiscriminantResult,
@@ -55,6 +57,29 @@ struct FormatResult {
     // Already display-shaped (Vec-based), so passed straight through.
     assumption_results: Option<crate::models::result::AssumptionResults>,
     territorial_map: bool,
+    combined_groups_plot: bool,
+    separate_groups_plot: bool,
+}
+
+/// Convert a `"Function k" → scores` map into a Vec ordered Function 1, 2, …
+/// HashMap iteration order is arbitrary, and the formatter lays out the casewise
+/// "Discriminant Scores" columns in Vec order, so the order must be fixed here.
+fn scores_in_function_order(scores: &HashMap<String, Vec<f64>>) -> Vec<ScoreValue> {
+    let mut ordered: Vec<ScoreValue> = scores
+        .iter()
+        .map(|(function, values)| ScoreValue {
+            function: function.clone(),
+            values: values.clone(),
+        })
+        .collect();
+    ordered.sort_by_key(|s| {
+        s.function
+            .rsplit(' ')
+            .next()
+            .and_then(|n| n.parse::<usize>().ok())
+            .unwrap_or(usize::MAX)
+    });
+    ordered
 }
 
 #[derive(Serialize)]
@@ -96,6 +121,105 @@ struct FunctionValue {
 struct GroupCentroid {
     group: String,
     values: Vec<f64>,
+}
+
+/// Row label SPSS always prints last in the unstandardized coefficients table.
+const CONSTANT_ROW: &str = "(Constant)";
+
+/// Turn an unordered coefficient map into table rows in `order`.
+///
+/// The result structs store these keyed by variable name in a `HashMap`, whose
+/// iteration order is arbitrary and differs between builds of the binary. Every
+/// table below therefore has to impose its own order explicitly, or the rows come
+/// out shuffled relative to SPSS.
+///
+/// Keys missing from `order` are appended afterwards — `(Constant)` last, as SPSS
+/// prints it, and anything else by name so the output stays deterministic.
+fn ordered_function_values(
+    map: &HashMap<String, Vec<f64>>,
+    order: &[String]
+) -> Vec<FunctionValue> {
+    let mut rows: Vec<FunctionValue> = Vec::with_capacity(map.len());
+
+    for name in order {
+        if let Some(values) = map.get(name) {
+            rows.push(FunctionValue { variable: name.clone(), values: values.clone() });
+        }
+    }
+
+    let mut leftover: Vec<&String> = map
+        .keys()
+        .filter(|k| !order.iter().any(|o| o == *k))
+        .collect();
+    leftover.sort_by(|a, b| {
+        let key = |s: &str| (s == CONSTANT_ROW, s.to_string());
+        key(a).cmp(&key(b))
+    });
+    for name in leftover {
+        rows.push(FunctionValue { variable: name.clone(), values: map[name].clone() });
+    }
+
+    rows
+}
+
+/// Index of the function a variable correlates most strongly with, and that
+/// correlation's absolute value. Mirrors the superscript the formatter puts on the
+/// largest absolute correlation in each row of the Structure Matrix.
+fn dominant_function(values: &[f64]) -> (usize, f64) {
+    let mut index = 0;
+    let mut largest = 0.0_f64;
+    for (i, value) in values.iter().enumerate() {
+        if value.abs() > largest {
+            largest = value.abs();
+            index = i;
+        }
+    }
+    (index, largest)
+}
+
+/// Structure Matrix row order: "Variables ordered by absolute size of correlation
+/// within function" — the footnote the table already prints. Variables are grouped
+/// by the function they correlate most strongly with, functions in order, and within
+/// each group sorted by descending absolute correlation.
+fn ordered_structure_rows(
+    map: &HashMap<String, Vec<f64>>,
+    variables: &[String]
+) -> Vec<FunctionValue> {
+    // Seed from the analysis variable order so ties below break deterministically
+    // (`sort_by` is stable).
+    let mut rows = ordered_function_values(map, variables);
+    rows.sort_by(|a, b| {
+        let (fa, va) = dominant_function(&a.values);
+        let (fb, vb) = dominant_function(&b.values);
+        fa.cmp(&fb).then(vb.partial_cmp(&va).unwrap_or(Ordering::Equal))
+    });
+    rows
+}
+
+/// Group centroid rows, by group code ascending — numerically when the codes are
+/// numeric (so 10 sorts after 2), otherwise as text.
+fn ordered_group_centroids(map: &HashMap<String, Vec<f64>>) -> Vec<GroupCentroid> {
+    let mut rows: Vec<GroupCentroid> = map
+        .iter()
+        .map(|(group, values)| GroupCentroid {
+            group: group.clone(),
+            values: values.clone(),
+        })
+        .collect();
+
+    // (is_non_numeric, numeric value, text) — non-numeric codes sort after numeric ones.
+    let key = |g: &str| match g.parse::<f64>() {
+        Ok(n) if n.is_finite() => (0_u8, n, String::new()),
+        _ => (1_u8, 0.0, g.to_string()),
+    };
+    rows.sort_by(|a, b| {
+        let (ka, kb) = (key(&a.group), key(&b.group));
+        ka.0
+            .cmp(&kb.0)
+            .then(ka.1.partial_cmp(&kb.1).unwrap_or(Ordering::Equal))
+            .then(ka.2.cmp(&kb.2))
+    });
+    rows
 }
 
 #[derive(Serialize)]
@@ -181,6 +305,9 @@ struct FormattedStepwiseStatistics {
     variables_in_analysis: Vec<StepVariables>,
     variables_not_in_analysis: Vec<StepVariables>,
     pairwise_comparisons: Vec<GroupPairComparison>,
+    /// Footnotes of the Variables Entered/Removed table, built from the thresholds
+    /// the procedure actually applied.
+    note: crate::models::result::StepwiseNote,
 }
 
 #[derive(Serialize)]
@@ -189,11 +316,12 @@ struct StepVariables {
     variables: Vec<VariableInAnalysis>,
 }
 
+/// One row block of the Pairwise Group Comparisons table: a group at a step and its
+/// F / Sig. against every other group (each comparison names the other group).
 #[derive(Serialize)]
 struct GroupPairComparison {
     step: String,
-    group1: String,
-    group2: String,
+    group: String,
     comparisons: Vec<PairwiseComparison>,
 }
 
@@ -373,60 +501,25 @@ impl FormatResult {
             }
         });
 
-        // Transform CanonicalFunctions
+        // Transform CanonicalFunctions.
+        // Both coefficient tables follow the analysis variable order, with
+        // "(Constant)" last in the unstandardized one; centroids follow group code.
         let canonical_functions = result.canonical_functions.as_ref().map(|funcs| {
-            let coefficients = funcs.coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let standardized_coefficients = funcs.standardized_coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let function_at_centroids = funcs.function_at_centroids
-                .iter()
-                .map(|(group, values)| {
-                    GroupCentroid {
-                        group: group.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedCanonicalFunctions {
-                coefficients,
-                standardized_coefficients,
-                function_at_centroids,
+                coefficients: ordered_function_values(&funcs.coefficients, &funcs.variables),
+                standardized_coefficients: ordered_function_values(
+                    &funcs.standardized_coefficients,
+                    &funcs.variables
+                ),
+                function_at_centroids: ordered_group_centroids(&funcs.function_at_centroids),
             }
         });
 
         // Transform StructureMatrix
         let structure_matrix = result.structure_matrix.as_ref().map(|matrix| {
-            let correlations = matrix.correlations
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedStructureMatrix {
                 variables: matrix.variables.clone(),
-                correlations,
+                correlations: ordered_structure_rows(&matrix.correlations, &matrix.variables),
             }
         });
 
@@ -634,22 +727,23 @@ impl FormatResult {
                 })
                 .collect();
 
-            let pairwise_comparisons = stats.pairwise_comparisons
+            // One entry per (step, group), ordered by step then group. Both levels come
+            // from HashMaps with arbitrary iteration order, so sort explicitly.
+            let mut pairwise_comparisons: Vec<GroupPairComparison> = stats.pairwise_comparisons
                 .iter()
                 .flat_map(|(step, group_comps)| {
-                    group_comps
-                        .iter()
-                        .map(|(group1, comps)| {
-                            GroupPairComparison {
-                                step: step.clone(),
-                                group1: group1.clone(),
-                                group2: "".to_string(), // Would need actual group2 info
-                                comparisons: comps.clone(),
-                            }
-                        })
-                        .collect::<Vec<GroupPairComparison>>()
+                    group_comps.iter().map(move |(group, comps)| GroupPairComparison {
+                        step: step.clone(),
+                        group: group.clone(),
+                        comparisons: comps.clone(),
+                    })
                 })
                 .collect();
+            pairwise_comparisons.sort_by(|a, b| {
+                let step_a = a.step.parse::<i32>().unwrap_or(i32::MAX);
+                let step_b = b.step.parse::<i32>().unwrap_or(i32::MAX);
+                step_a.cmp(&step_b).then_with(|| a.group.cmp(&b.group))
+            });
 
             FormattedStepwiseStatistics {
                 method: stats.method.clone(),
@@ -674,20 +768,13 @@ impl FormatResult {
                 variables_in_analysis,
                 variables_not_in_analysis,
                 pairwise_comparisons,
+                note: stats.note.clone(),
             }
         });
 
         // Transform CasewiseStatistics
         let casewise_statistics = result.casewise_statistics.as_ref().map(|stats| {
-            let discriminant_scores = stats.discriminant_scores
-                .iter()
-                .map(|(func, values)| {
-                    ScoreValue {
-                        function: func.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&stats.discriminant_scores);
 
             // Transform cross-validated casewise statistics if present
             let cross_validated = stats.cross_validated.as_ref().map(|cv| {
@@ -788,13 +875,7 @@ impl FormatResult {
 
         // Transform ScatterData
         let scatter_data = result.scatter_data.as_ref().map(|sd| {
-            let discriminant_scores = sd.discriminant_scores
-                .iter()
-                .map(|(func, values)| ScoreValue {
-                    function: func.clone(),
-                    values: values.clone(),
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&sd.discriminant_scores);
             FormattedScatterData {
                 actual_group: sd.actual_group.clone(),
                 discriminant_scores,
@@ -823,6 +904,8 @@ impl FormatResult {
             bootstrap_results: result.bootstrap_results.clone(),
             assumption_results: result.assumption_results.clone(),
             territorial_map: result.territorial_map,
+            combined_groups_plot: result.combined_groups_plot,
+            separate_groups_plot: result.separate_groups_plot,
         }
     }
 }

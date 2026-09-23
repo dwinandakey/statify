@@ -8,7 +8,7 @@ export class DiscriminantAnalysis {
     get_all_log(): any;
     get_formatted_results(): any;
     get_results(): any;
-    constructor(group_data: any, independent_data: any, selection_data: any, group_data_defs: any, independent_data_defs: any, selection_data_defs: any, config_data: any);
+    constructor(group_data: any, independent_data: any, selection_data: any, group_data_defs: any, independent_data_defs: any, selection_data_defs: any, config_data: any, strata_data: any);
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -20,7 +20,7 @@ export interface InitOutput {
     readonly discriminantanalysis_get_all_log: (a: number) => [number, number, number];
     readonly discriminantanalysis_get_formatted_results: (a: number) => [number, number, number];
     readonly discriminantanalysis_get_results: (a: number) => [number, number, number];
-    readonly discriminantanalysis_new: (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => [number, number, number];
+    readonly discriminantanalysis_new: (a: any, b: any, c: any, d: any, e: any, f: any, g: any, h: any) => [number, number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;

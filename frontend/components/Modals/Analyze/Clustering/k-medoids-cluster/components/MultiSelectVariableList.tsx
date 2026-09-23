@@ -589,12 +589,11 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         >
             <InfoIcon size={14} className="mr-1.5 mt-0.5 flex-shrink-0 text-muted-foreground" />
             <span>
-                Klik untuk memilih, <strong>Ctrl/Cmd + klik</strong> untuk menambah pilihan,{" "}
-                <strong>Shift + klik</strong> untuk memilih rentang. Drag atau klik ganda untuk
-                memindahkan.
+                Click to select, <strong>Ctrl/Cmd + click</strong> to add to the selection,{" "}
+                <strong>Shift + click</strong> to select a range. Drag or double-click to move.
                 {selectionCount > 0 && (
                     <span className="ml-1 font-medium text-foreground">
-                        ({selectionCount} variabel terpilih)
+                        ({selectionCount} variable(s) selected)
                     </span>
                 )}
             </span>

@@ -43,8 +43,8 @@ export const KMedoidsClusterSave = ({
                         Save New Variables to Dataset
                     </Label>
                     <p className="text-sm text-muted-foreground mb-4">
-                        Menambah kolom baru ke dataset aktif — berbeda dari tab Results yang
-                        hanya menampilkan hasil pada output.
+                        Adds new columns to the active dataset — unlike the Results tab, which
+                        only displays results in the output.
                     </p>
                 </div>
 
@@ -64,7 +64,7 @@ export const KMedoidsClusterSave = ({
                             Cluster membership
                         </label>
                         <p className="text-xs text-muted-foreground mt-1">
-                            Simpan nomor cluster tiap case sebagai variabel baru (CLU_1, CLU_2, ...).
+                            Save the cluster number of each case as a new variable (CLU_1, CLU_2, ...).
                         </p>
                     </div>
                 </div>
@@ -85,7 +85,7 @@ export const KMedoidsClusterSave = ({
                             Distance from medoid
                         </label>
                         <p className="text-xs text-muted-foreground mt-1">
-                            Simpan jarak tiap case ke medoid clusternya (DIS_1, DIS_2, ...).
+                            Save the distance of each case to its cluster medoid (DIS_1, DIS_2, ...).
                         </p>
                     </div>
                 </div>

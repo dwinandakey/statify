@@ -88,8 +88,104 @@ pub fn expected_information(
     data: &AggregatedData,
     spec: &PlumSpec,
 ) -> DMatrix<f64> {
-    let hess = finite_difference_hessian(params, data, spec);
-    -hess
+    let k = spec.parameter_count();
+    let mut info = DMatrix::zeros(k, k);
+    let t = spec.threshold_count();
+    let p = spec.location_parameter_count();
+    let q = spec.scale_parameter_count();
+
+    for subpop in &data.subpopulations {
+        let m = subpop.marginal_count;
+        if m <= 0.0 {
+            continue;
+        }
+
+        let sigma = scale_sigma(&subpop.z, &params.tau, spec.scale_type);
+        let mut eta = Vec::with_capacity(t);
+        let mut gprime = Vec::with_capacity(t);
+        for j in 0..t {
+            let eta_j = linear_predictor(
+                params.theta[j],
+                &subpop.x,
+                &params.beta,
+                &subpop.z,
+                &params.tau,
+                spec.scale_type,
+            );
+            eta.push(eta_j);
+            gprime.push(d_inverse_link(eta_j, spec.link_function));
+        }
+
+        let cumulative = cumulative_probabilities(params, subpop, spec);
+        let pi = cell_probabilities_raw(&cumulative);
+
+        let mut dpis = Vec::with_capacity(k);
+        for param_index in 0..k {
+            let mut dgamma = vec![0.0; t];
+            if param_index < t {
+                let j = param_index;
+                dgamma[j] = gprime[j] / sigma;
+            } else if param_index < t + p {
+                let r = param_index - t;
+                let coeff = -subpop.x[r] / sigma;
+                for j in 0..t {
+                    dgamma[j] = gprime[j] * coeff;
+                }
+            } else if param_index < t + p + q {
+                let s = param_index - t - p;
+                if spec.scale_type == ScaleType::NonConstant {
+                    let coeff = -subpop.z[s];
+                    for j in 0..t {
+                        dgamma[j] = gprime[j] * coeff * eta[j];
+                    }
+                }
+            }
+
+            let mut dpi = vec![0.0; t + 1];
+            if t > 0 {
+                dpi[0] = dgamma[0];
+                for j in 1..t {
+                    dpi[j] = dgamma[j] - dgamma[j - 1];
+                }
+                dpi[t] = -dgamma[t - 1];
+            } else {
+                dpi[0] = 0.0;
+            }
+            dpis.push(dpi);
+        }
+
+        let cat_len = t + 1;
+        for c in 0..cat_len {
+            let prob = if pi[c] > EPS { pi[c] } else { EPS };
+            let weight = m / prob;
+            for a in 0..k {
+                let dpi_a = dpis[a][c];
+                if dpi_a.abs() < 1e-15 {
+                    continue;
+                }
+                for b in a..k {
+                    let dpi_b = dpis[b][c];
+                    if dpi_b.abs() < 1e-15 {
+                        continue;
+                    }
+                    let val = weight * dpi_a * dpi_b;
+                    info[(a, b)] += val;
+                }
+            }
+        }
+    }
+
+    for a in 0..k {
+        for b in 0..a {
+            info[(a, b)] = info[(b, a)];
+        }
+    }
+
+    if max_abs_vector(&info.diagonal().clone_owned()) == 0.0 {
+        info += DMatrix::identity(k, k) * 1e-12;
+    }
+
+    info
 }
 
 fn finite_difference_hessian(

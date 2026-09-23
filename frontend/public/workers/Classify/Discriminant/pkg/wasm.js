@@ -56,9 +56,10 @@ export class DiscriminantAnalysis {
      * @param {any} independent_data_defs
      * @param {any} selection_data_defs
      * @param {any} config_data
+     * @param {any} strata_data
      */
-    constructor(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data) {
-        const ret = wasm.discriminantanalysis_new(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data);
+    constructor(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data, strata_data) {
+        const ret = wasm.discriminantanalysis_new(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data, strata_data);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

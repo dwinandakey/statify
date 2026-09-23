@@ -93,8 +93,8 @@ pub fn calculate_structure_matrix(
 
             // Hitung Korelasi / Structure Loading
             // Rumus asli: Cov(X_i, Z_m) / (StdDev(X_i) * StdDev(Z_m))
-            // Karena Eigenvector kita (Unstandardized Coefs) sudah di-scale dengan akar df,
-            // maka varians Z_m (fungsi diskriminan) = 1.0, sehingga StdDev(Z_m) = 1.0!
+            // Karena Unstandardized Coefs sudah di-scale dengan akar (n-g), berlaku
+            // bᵀ·S_pooled·b = 1: varians dalam-grup (pooled) Z_m = 1, sehingga StdDev(Z_m) = 1.
             let loading = if std_dev_i > EPSILON {
                 cov_xz / std_dev_i
             } else {

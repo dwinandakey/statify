@@ -14,7 +14,18 @@ import {
     ClusterMode,
     AutoKMethod,
     NormalizationMethod,
+    MissingValueMethod,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+
+/**
+ * PAM membangun matriks jarak n×n bertipe f64 (n² × 8 B).
+ * - PAM_WARN_ROWS: di atas ini pengguna diperingatkan dan disarankan memakai CLARA,
+ *   tetapi tetap boleh memaksa PAM.
+ * - PAM_HARD_MAX_ROWS: batas mutlak (~763 MB), ditolak karena hampir pasti gagal alokasi.
+ *   Harus sama dengan PAM_HARD_MAX_N di rust/src/wasm/function.rs.
+ */
+export const PAM_WARN_ROWS = 2500;
+export const PAM_HARD_MAX_ROWS = 10000;
 
 /**
  * ========================================
@@ -105,8 +116,7 @@ export const KMedoidsClusterOptionsDefault: KMedoidsClusterOptionsType = {
     ShowDistanceMatrixTable: false, // Default off: tampilkan hanya jika dipilih user
     // ShowOptimalKChart pindah ke tab Evaluation, ShowConvergenceChart pindah ke tab Results
     // agar grafik satu grup dengan tabelnya.
-    ExcludeListWise: true, // Default: listwise deletion
-    ExcludePairWise: false,
+    MissingValueMethod: MissingValueMethod.Listwise, // Default: listwise deletion
     Standardize: false, // Default: no normalization unless user selects
     NormalizationMethod: NormalizationMethod.None,
 };

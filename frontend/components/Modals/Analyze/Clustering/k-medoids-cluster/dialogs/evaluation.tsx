@@ -36,7 +36,7 @@ export const KMedoidsClusterEvaluation = ({
                         Cluster Quality Evaluation
                     </Label>
                     <p className="text-sm text-muted-foreground mb-4">
-                        Pilih metrik dan grafik evaluasi yang ditampilkan pada output.
+                        Choose the evaluation metrics and charts shown in the output.
                     </p>
                 </div>
 
@@ -57,10 +57,10 @@ export const KMedoidsClusterEvaluation = ({
                                 htmlFor="ShowSilhouettePlot"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Silhouette Plot (per objek)
+                                Silhouette Plot (per object)
                             </label>
                             <p className="text-xs text-muted-foreground mt-1">
-                                Grafik batang silhouette untuk setiap objek, dikelompokkan per cluster.
+                                Silhouette bar chart for each object, grouped by cluster.
                             </p>
                         </div>
                     </div>
@@ -81,16 +81,16 @@ export const KMedoidsClusterEvaluation = ({
                                 Overall Quality Assessment
                             </label>
                             <p className="text-xs text-muted-foreground mt-1">
-                                Ringkasan skor silhouette rata-rata beserta interpretasi kekuatan
-                                struktur cluster.
+                                Summary of the average silhouette score along with an interpretation
+                                of the cluster structure strength.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* ========== K OPTIMAL ========== */}
+                {/* ========== OPTIMAL K ========== */}
                 <div className="flex flex-col gap-3 w-full">
-                    <Label className="font-semibold">K Optimal</Label>
+                    <Label className="font-semibold">Optimal K</Label>
 
                     <div className="flex items-start space-x-2">
                         <Checkbox
@@ -105,10 +105,10 @@ export const KMedoidsClusterEvaluation = ({
                                 htmlFor="ShowOptimalKChart"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Grafik K Optimal
+                                Optimal K Chart
                             </label>
                             <p className="text-xs text-muted-foreground mt-1">
-                                Kurva silhouette / elbow untuk tiap kandidat k.
+                                Silhouette / elbow curve for each candidate k.
                             </p>
                         </div>
                     </div>
@@ -126,17 +126,17 @@ export const KMedoidsClusterEvaluation = ({
                                 htmlFor="ShowOptimalKTable"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                Tabel K Optimal
+                                Optimal K Table
                             </label>
                             <p className="text-xs text-muted-foreground mt-1">
-                                Nilai cost dan silhouette per k dalam bentuk tabel.
+                                Cost and silhouette values per k in table form.
                             </p>
                         </div>
                     </div>
 
                     <p className="text-xs text-muted-foreground">
-                        Pada mode k manual, mengaktifkan salah satunya membuat sistem tetap
-                        mengevaluasi rentang k untuk menghasilkan data pembanding.
+                        In manual k mode, enabling either of these makes the system still evaluate
+                        the k range to produce comparison data.
                     </p>
                 </div>
             </div>

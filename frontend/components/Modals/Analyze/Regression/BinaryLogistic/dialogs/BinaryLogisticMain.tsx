@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
@@ -41,6 +40,16 @@ import { formatAssumptionTests } from "../services/formatter_assumptions";
 // Syntax Generator
 import { generateLogisticRegressionSyntax } from "../services/syntaxGenerator";
 
+// Timing instrumentation
+import {
+  startAnalysisRun,
+  markDispatch,
+  markWorkerResponse,
+  markProcedureEnd,
+  registerRenderCompletionTarget,
+  type AnalysisRunContext,
+} from "@/lib/analysisTiming";
+
 // Types
 import type { Variable } from "@/types/Variable";
 import type { CellUpdate } from "@/stores/useDataStore";
@@ -58,20 +67,9 @@ import {
   DEFAULT_BINARY_LOGISTIC_SAVE_PARAMS,
   DEFAULT_BINARY_LOGISTIC_OPTIONS_PARAMS,
   DEFAULT_BINARY_LOGISTIC_ASSUMPTION_PARAMS,
+  validateOptionsParams,
 } from "../types/binary-logistic";
 
-/**
- * Resolves a possibly-stale Variable reference (captured earlier in `options`)
- * against the CURRENT list of variables from the store.
- *
- * IDs can change after the dataset round-trips through the backend (e.g. after
- * saving predictions/residuals via addVariables), so selections made before
- * that point can no longer be found by `id` alone.
- *
- * 1. Try to find by ID (exact match)
- * 2. Fallback to columnIndex if ID not found
- * 3. Fallback to name if columnIndex not found
- */
 const findActualVariable = (
   currentVariables: Variable[],
   targetVar: Variable
@@ -100,7 +98,6 @@ export const BinaryLogisticMain = () => {
   // --- STATE ---
   const [activeTab, setActiveTab] = useState("variables");
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // --- Help Tour ---
   const tabControl = useMemo<TabControlProps>(
@@ -314,7 +311,11 @@ export const BinaryLogisticMain = () => {
   };
 
   // --- WORKER HELPER ---
-  const runWorkerAction = (action: string, extraConfig = {}) => {
+  const runWorkerAction = (
+    action: string,
+    extraConfig = {},
+    timingCtx?: AnalysisRunContext
+  ) => {
     return new Promise((resolve, reject) => {
       // Validasi minimal untuk semua action
       if (
@@ -339,10 +340,15 @@ export const BinaryLogisticMain = () => {
       );
 
       worker.onmessage = (event) => {
-        const { type, payload } = event.data;
+        const { type, payload, timing } = event.data;
         worker.terminate();
-        if (type === "SUCCESS") resolve(payload);
-        else reject(new Error(payload || "Worker error"));
+        if (type === "SUCCESS") {
+          if (timingCtx) {
+            markWorkerResponse(timingCtx);
+            timingCtx.workerTiming = timing;
+          }
+          resolve(payload);
+        } else reject(new Error(payload || "Worker error"));
       };
 
       worker.onerror = (error) => {
@@ -414,6 +420,8 @@ export const BinaryLogisticMain = () => {
         // ... (config lain tidak relevan untuk VIF/BT raw calc, tapi dikirim saja)
         ...extraConfig,
       };
+
+      if (timingCtx) markDispatch(timingCtx);
 
       worker.postMessage({
         action,
@@ -525,10 +533,13 @@ export const BinaryLogisticMain = () => {
       variablesToAdd.push(newVariable);
 
       // Prepare cell updates for this variable
+      // NOTE: rowIndex is the position among ANALYZED cases (post listwise
+      // deletion), not the dataset row. row.case_index is the original
+      // dataset row the worker remapped it to - use that as the target.
       values.forEach((value, rowIndex) => {
         if (value !== undefined && !isNaN(value)) {
           allCellUpdates.push({
-            row: rowIndex,
+            row: rows[rowIndex]?.case_index ?? rowIndex,
             col: nextColumnIndex,
             value,
           });
@@ -579,7 +590,7 @@ export const BinaryLogisticMain = () => {
       values.forEach((value, rowIndex) => {
         if (value !== undefined) {
           allCellUpdates.push({
-            row: rowIndex,
+            row: rows[rowIndex]?.case_index ?? rowIndex,
             col: nextColumnIndex,
             value,
           });
@@ -641,7 +652,7 @@ export const BinaryLogisticMain = () => {
         values.forEach((value, rowIndex) => {
           if (value !== undefined && !isNaN(value)) {
             allCellUpdates.push({
-              row: rowIndex,
+              row: rows[rowIndex]?.case_index ?? rowIndex,
               col: nextColumnIndex,
               value,
             });
@@ -731,13 +742,19 @@ export const BinaryLogisticMain = () => {
   // --- ASSUMPTION HANDLERS (UPDATED TO USE FORMATTER) ---
   const handleRunVIF = async () => {
     try {
+      if (!options.dependent)
+        throw new Error("Dependent variable is required.");
       if (options.covariates.length < 2) {
         throw new Error("VIF requires at least two independent variables.");
       }
 
-      const payload: any = await runWorkerAction("run_vif");
+      const timingCtx = startAnalysisRun("BinaryLogistic:VIF");
+
+      const payload: any = await runWorkerAction("run_vif", {}, timingCtx);
 
       console.log("VIF Payload form Worker:", payload); // Debugging
+
+      markProcedureEnd(timingCtx, timingCtx.workerTiming);
 
       // Save log & analytic container
       const logId = await addLog({
@@ -750,6 +767,12 @@ export const BinaryLogisticMain = () => {
       });
 
       const formattedOutput = formatAssumptionTests(payload);
+
+      registerRenderCompletionTarget(
+        timingCtx,
+        analyticId,
+        formattedOutput.sections?.length ?? 0
+      );
 
       // Save sections using loop
       if (formattedOutput.sections && formattedOutput.sections.length > 0) {
@@ -779,7 +802,11 @@ export const BinaryLogisticMain = () => {
       if (!options.dependent)
         throw new Error("Dependent variable is required.");
 
-      const payload: any = await runWorkerAction("run_box_tidwell");
+      const timingCtx = startAnalysisRun("BinaryLogistic:BoxTidwell");
+
+      const payload: any = await runWorkerAction("run_box_tidwell", {}, timingCtx);
+
+      markProcedureEnd(timingCtx, timingCtx.workerTiming);
 
       // Save log & analytic container
       const logId = await addLog({
@@ -799,6 +826,12 @@ export const BinaryLogisticMain = () => {
       } as Partial<LogisticResult> as LogisticResult;
 
       const formattedOutput = formatAssumptionTests(mockResult);
+
+      registerRenderCompletionTarget(
+        timingCtx,
+        analyticId,
+        formattedOutput.sections?.length ?? 0
+      );
 
       for (const section of formattedOutput.sections) {
         const tableDataWithTitle = {
@@ -822,19 +855,26 @@ export const BinaryLogisticMain = () => {
   const handleAnalyze = async () => {
     // 1. Validasi Input
     if (!options.dependent || options.covariates.length === 0) {
-      setErrorMsg(
-        "Mohon pilih satu variabel dependen dan setidaknya satu kovariat."
-      );
+      toast.error("Please select a dependent variable and at least one covariate.");
       return;
     }
 
     if (!data || data.length === 0) {
-      setErrorMsg("Dataset kosong atau tidak tersedia.");
+      toast.error("Dataset is empty or unavailable.");
       return;
     }
 
+    const optionsValidationErrors = validateOptionsParams(optParams);
+    if (optionsValidationErrors.length > 0) {
+      toast.error(
+        "Some values on the Options tab are out of range. Fix the highlighted fields before running the analysis."
+      );
+      return;
+    }
+
+    const timingCtx = startAnalysisRun(`BinaryLogistic:${options.method}`);
+
     setIsLoading(true);
-    setErrorMsg(null);
 
     try {
       const worker = new Worker(
@@ -846,10 +886,11 @@ export const BinaryLogisticMain = () => {
       );
 
       worker.onmessage = async (event) => {
-        const { type, payload } = event.data;
+        const { type, payload, timing } = event.data;
         console.log(`[Main] Worker Message: ${type}`, payload);
 
         if (type === "SUCCESS") {
+          markWorkerResponse(timingCtx);
           try {
             console.log("[Main] Starting Formatting Process...");
 
@@ -892,6 +933,10 @@ export const BinaryLogisticMain = () => {
               optionParams: optParams,
             });
 
+            // Procedure time ends here: result data is fully built, nothing
+            // below this point is IndexedDB or render work.
+            markProcedureEnd(timingCtx, timing);
+
             const logId = await addLog({
               log: syntaxLog,
             });
@@ -901,6 +946,12 @@ export const BinaryLogisticMain = () => {
               title: "Binary Logistic Regression",
               note: `Method: ${options.method}`,
             });
+
+            registerRenderCompletionTarget(
+              timingCtx,
+              analyticId,
+              formattedResult.sections?.length ?? 0
+            );
 
             console.log(`[Main] Saving to DB (AnalyticID: ${analyticId})...`);
 
@@ -995,16 +1046,16 @@ export const BinaryLogisticMain = () => {
             closeModal("BINARY_LOGISTIC");
           } catch (saveError: any) {
             console.error("[Main] Error inside SUCCESS block:", saveError);
-            setErrorMsg(`Gagal menyimpan hasil: ${  saveError.message}`);
+            toast.error(`Failed to save results: ${saveError.message}`);
             setIsLoading(false);
             worker.terminate();
           }
         } else if (type === "ERROR") {
           console.error("[Main] Worker reported ERROR:", payload);
-          setErrorMsg(
+          toast.error(
             typeof payload === "string"
               ? payload
-              : "Terjadi kesalahan perhitungan."
+              : "An unexpected error occurred during computation."
           );
           setIsLoading(false);
           worker.terminate();
@@ -1014,7 +1065,7 @@ export const BinaryLogisticMain = () => {
       worker.onerror = (event) => {
         event.preventDefault();
         console.error("[Main] Worker System Error:", event);
-        setErrorMsg("Gagal menjalankan modul kalkulasi (WASM Error).");
+        toast.error("Failed to run the calculation module (WASM error).");
         setIsLoading(false);
         worker.terminate();
       };
@@ -1054,15 +1105,15 @@ export const BinaryLogisticMain = () => {
         console.error("[Main] Variable IDs in store:", storeIds);
         console.error("[Main] Looking for dependent ID:", options.dependent?.id);
         throw new Error(
-          `Variabel dependen "${options.dependent?.name}" tidak ditemukan di dataset. ` +
-          `Silakan pilih ulang variabel dari daftar yang tersedia.`
+          `Dependent variable "${options.dependent?.name}" was not found in the dataset. ` +
+          `Please reselect it from the available list.`
         );
       }
 
       if (indepIndices.length === 0) {
         throw new Error(
-          `Tidak ada variabel independen yang ditemukan di dataset. ` +
-          `Covariates yang dipilih: ${options.covariates.map(c => c.name).join(", ")}`
+          `No independent variables were found in the dataset. ` +
+          `Selected covariates: ${options.covariates.map(c => c.name).join(", ")}`
         );
       }
 
@@ -1165,6 +1216,8 @@ export const BinaryLogisticMain = () => {
 
       console.log("Config Cleaned for Rust:", JSON.stringify(analysisConfig));
 
+      markDispatch(timingCtx);
+
       // Use ACTUAL IDs from currentVariables (not the potentially stale IDs from options)
       worker.postMessage({
         action: "run_binary_logistic",
@@ -1179,7 +1232,7 @@ export const BinaryLogisticMain = () => {
       });
     } catch (err: any) {
       console.error("Main Thread Error:", err);
-      setErrorMsg(`Gagal memulai analisis: ${  err.message}`);
+      toast.error(`Failed to start analysis: ${err.message}`);
       setIsLoading(false);
     }
   };
@@ -1274,15 +1327,6 @@ export const BinaryLogisticMain = () => {
             </TabsContent>
           </div>
         </Tabs>
-
-        {errorMsg && (
-          <div className="mt-4">
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{errorMsg}</AlertDescription>
-            </Alert>
-          </div>
-        )}
       </div>
 
       <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">

@@ -182,7 +182,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                     .attr("x", cx2 + 5).attr("y", innerH - 8)
                     .attr("font-size", "10")
                     .attr("fill", currentKColor)
-                    .text(`K terpilih = ${currentK}`);
+                    .text(`Selected K = ${currentK}`);
             }
         }
 
@@ -238,7 +238,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .style("left", `${mx + 14}px`)
                 .style("top", `${my - 10}px`)
                 .html(
-                    `<strong>K = ${d.k}</strong>${d.k === selectedOptimalK ? " ★ Optimal" : ""}${d.k === currentK ? " ● Terpilih" : ""}<br/>${ 
+                    `<strong>K = ${d.k}</strong>${d.k === selectedOptimalK ? " ★ Optimal" : ""}${d.k === currentK ? " ● Selected" : ""}<br/>${ 
                     hasWCSS ? `Total Cost: <strong>${d.totalCost.toFixed(2)}</strong><br/>` : "" 
                     }${hasSilhouette ? `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong>` : ""}`
                 );
@@ -389,7 +389,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             .attr("text-anchor", "middle")
             .attr("font-size", "12")
             .attr("fill", mutedColor)
-            .text("Jumlah Klaster (K)");
+            .text("Number of Clusters (K)");
 
         // ── Legend ────────────────────────────────────────────────────────────
         const legendItems: { color: string; dash?: string; label: string }[] = [];
@@ -402,7 +402,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 label: `Optimal K = ${selectedOptimalK}`,
             });
         }
-        if (currentK)     legendItems.push({ color: currentKColor, dash: "7,4", label: `K terpilih = ${currentK}` });
+        if (currentK)     legendItems.push({ color: currentKColor, dash: "7,4", label: `Selected K = ${currentK}` });
 
         const legendG = svg.append("g")
             .attr("transform", `translate(${margin.left + 12},${height - 34})`);
@@ -453,7 +453,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
     if (!data || data.length === 0) {
         return (
             <div className="flex items-center justify-center h-40 text-sm text-muted-foreground">
-                Data Elbow tidak tersedia (hanya muncul saat K otomatis digunakan)
+                Elbow data is not available (only shown when automatic K is used)
             </div>
         );
     }

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { getSlicedData, getVarDefs } from "@/hooks/useVariable";
-import type { DiscriminantAnalysisType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant-worker";
 import type { DiscriminantType, DiscriminantMainType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant";
 import { DiscriminantDefault } from "@/components/Modals/Analyze/Classify/discriminant/constants/discriminant-default";
 import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { saveDiscriminantResult, saveDiscriminantAssumptions } from "@/components/Modals/Analyze/Classify/discriminant/services/store";
 import { saveDiscriminantVariables } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-save";
 import { exportDiscriminantModelXml } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-xml-export";
+import { validateDiscriminantInput } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-validation";
 import { toast } from "sonner";
 import { Variable } from "@/types/Variable";
 
@@ -20,6 +20,8 @@ export interface UseDiscriminantStateResult {
         value: DiscriminantType[T][keyof DiscriminantType[T]] | DiscriminantValueUnion
     ) => void;
     executeAnalysis: (mainData: DiscriminantMainType) => Promise<void>;
+    /** Pre-run checks (variables, Define Range, non-empty groups); message or `null`. */
+    validateInput: (mainData: DiscriminantMainType) => string | null;
     /** Run only the assumption checks and push their output immediately. */
     runAssumptions: (mainData: DiscriminantMainType) => Promise<void>;
     resetFormData: () => Promise<void>;
@@ -112,6 +114,12 @@ export const useDiscriminantState = (
         }
     }, []);
 
+    const validateInput = useCallback(
+        (mainData: DiscriminantMainType) =>
+            validateDiscriminantInput(dataVariables, variables, { ...formData, main: mainData }),
+        [formData, dataVariables, variables]
+    );
+
     const executeAnalysis = useCallback(
         async (mainData: DiscriminantMainType) => {
             setIsLoading(true);
@@ -125,7 +133,16 @@ export const useDiscriminantState = (
 
                 await saveFormData("Discriminant", newFormData);
 
-                const configData = newFormData;
+                // The assumption checks always run with the full analysis, so their
+                // tables appear even when the user never opened the Assumptions tab.
+                const configData: DiscriminantType = {
+                    ...newFormData,
+                    assumptions: {
+                        Multicollinearity: true,
+                        MultivariateNormality: true,
+                        UnivariateNormality: true,
+                    },
+                };
 
                 // DEBUG: Log method config before sending
                 console.log("[Discriminant] Method config to send:", configData.method);
@@ -137,6 +154,11 @@ export const useDiscriminantState = (
                 const SelectionVariable = mainData.SelectionVariable
                     ? [mainData.SelectionVariable]
                     : [];
+                // Bootstrap strata variables: the engine stratifies by their
+                // crossed cells, so their values have to travel with the data.
+                const StrataVariables = (
+                    configData.bootstrap?.StrataVariables || []
+                ).filter((name) => !!name && name.trim() !== "");
 
                 const slicedDataForGrouping = getSlicedData({
                     dataVariables,
@@ -153,6 +175,11 @@ export const useDiscriminantState = (
                     variables,
                     selectedVariables: SelectionVariable,
                 });
+                const slicedDataForStrata = getSlicedData({
+                    dataVariables,
+                    variables,
+                    selectedVariables: StrataVariables,
+                });
 
                 const varDefsForGrouping = getVarDefs(variables, GroupingVariable);
                 const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
@@ -166,6 +193,7 @@ export const useDiscriminantState = (
                     group_data: slicedDataForGrouping,
                     independent_data: slicedDataForIndependent,
                     selection_data: slicedDataForSelection,
+                    strata_data: slicedDataForStrata,
                     group_data_defs: varDefsForGrouping,
                     independent_data_defs: varDefsForIndependent,
                     selection_data_defs: varDefsForSelection,
@@ -183,8 +211,16 @@ export const useDiscriminantState = (
                         console.log("errors", errors);
                         console.log("results", formattedResults);
 
-                        if (errors && errors.length > 0) {
+                        // The WASM error collector always returns a summary string;
+                        // "No errors occurred." is its empty state. Anything else means
+                        // some tables could not be computed, or were computed under a
+                        // condition the user must know about (entries whose context
+                        // starts with "Warning", e.g. a singular matrix).
+                        if (typeof errors === "string" && errors.trim() !== "No errors occurred.") {
                             console.warn("Analysis warnings:", errors);
+                            toast.warning("Discriminant analysis reported errors or warnings", {
+                                description: errors,
+                            });
                         }
 
                         await saveDiscriminantResult(formattedResults);
@@ -229,6 +265,9 @@ export const useDiscriminantState = (
                         worker.terminate();
                     } else {
                         console.error("[Discriminant] Worker Error:", workerError);
+                        // The dialog may already be closed when the worker replies, so
+                        // the inline Alert alone is not enough — surface it as a toast.
+                        toast.error(`Discriminant analysis failed: ${workerError || "Unknown worker error"}`);
                         setError(workerError || "Unknown worker error");
                         setIsLoading(false);
                         worker.terminate();
@@ -241,6 +280,7 @@ export const useDiscriminantState = (
                     const detail = err.message
                         ? `${err.message} (${err.filename || "unknown"}:${err.lineno || 0}:${err.colno || 0})`
                         : String(err);
+                    toast.error(`Discriminant analysis failed: ${detail}`);
                     setError(`Worker Error: ${detail}`);
                     setIsLoading(false);
                     worker.terminate();
@@ -261,11 +301,9 @@ export const useDiscriminantState = (
     // the worker finishes so the caller can drive its own loading/success state.
     const runAssumptions = useCallback(
         async (mainData: DiscriminantMainType) => {
-            if (!mainData.GroupingVariable) {
-                throw new Error("Please select a Grouping Variable first.");
-            }
-            if (!mainData.IndependentVariables || mainData.IndependentVariables.length === 0) {
-                throw new Error("Please select at least one Independent Variable first.");
+            const validationError = validateInput(mainData);
+            if (validationError || !mainData.GroupingVariable) {
+                throw new Error(validationError ?? "Please select a Grouping Variable.");
             }
 
             // Lightweight config: force all three assumption checks on and skip
@@ -328,13 +366,14 @@ export const useDiscriminantState = (
                 };
             });
         },
-        [formData, dataVariables, variables]
+        [formData, dataVariables, variables, validateInput]
     );
 
     return {
         formData,
         updateFormData,
         executeAnalysis,
+        validateInput,
         runAssumptions,
         resetFormData,
         isLoading,

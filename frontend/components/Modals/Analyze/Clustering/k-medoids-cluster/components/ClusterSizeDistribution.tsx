@@ -211,7 +211,7 @@ export const ClusterSizeDistribution: React.FC<ClusterSizeDistributionProps> = (
     if (!profiles || profiles.length === 0) {
         return (
             <div className="flex items-center justify-center h-40 text-sm text-muted-foreground">
-                Data tidak tersedia
+                Data is not available
             </div>
         );
     }

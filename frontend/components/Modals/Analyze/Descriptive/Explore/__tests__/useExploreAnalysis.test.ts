@@ -88,7 +88,7 @@ describe('useExploreAnalysis', () => {
             addAnalytic: mockAddAnalytic,
             addStatistic: mockAddStatistic,
         }));
-        
+
         mockAddLog.mockResolvedValue('log-456');
         mockAddAnalytic.mockResolvedValue('analytic-456');
     });
@@ -170,13 +170,13 @@ describe('useExploreAnalysis', () => {
 
     it('should group data by a factor variable and run analysis for each group', async () => {
         const { result } = renderTestHook({ factorVariables: mockFactorVars });
-    
+
         let runPromise: Promise<void> | undefined;
         await act(async () => {
             runPromise = result.current.runAnalysis();
             await Promise.resolve();
         });
-        
+
         expect(result.current.isCalculating).toBe(true);
         // This will be called for each group.
         await act(async () => {
@@ -184,7 +184,7 @@ describe('useExploreAnalysis', () => {
             await new Promise(resolve => setTimeout(resolve, 0));
         });
         expect(global.Worker).toHaveBeenCalledTimes(2); // One worker per group (A and B)
-    
+
         // Check calls for each group
         expect(mockPostMessage).toHaveBeenCalledWith(expect.objectContaining({
             data: [10, 15] // Data for group 'A'
@@ -192,25 +192,25 @@ describe('useExploreAnalysis', () => {
         expect(mockPostMessage).toHaveBeenCalledWith(expect.objectContaining({
             data: [20, 25] // Data for group 'B'
         }));
-    
+
         const mockWorkerResultA = { status: 'success', results: { summary: { n: 2 } } };
         const mockWorkerResultB = { status: 'success', results: { summary: { n: 2 } } };
-        
+
         await act(async () => {
             // For this test, we'll assume they resolve sequentially for simplicity.
             const firstWorkerOnMessage = (mockWorkerInstances[0] as any).onmessage;
             const secondWorkerOnMessage = (mockWorkerInstances[1] as any).onmessage;
-            
+
             firstWorkerOnMessage({ data: mockWorkerResultA });
             secondWorkerOnMessage({ data: mockWorkerResultB });
-            
+
             if (runPromise) await runPromise;
         });
-        
+
         expect(mockAddStatistic).toHaveBeenCalledTimes(2); // Case Processing Summary + Descriptives tables
         const formatCall = (mockAddStatistic.mock.calls[0][1] as any).output_data;
         const parsedData = JSON.parse(formatCall);
-        
+
         // The formatter should produce rows for each factor level in a nested structure
         const rows = parsedData.tables[0].rows;
         expect(rows).toHaveLength(1); // One parent row for the dependent variable
@@ -226,27 +226,62 @@ describe('useExploreAnalysis', () => {
         expect(result.current.isCalculating).toBe(false);
         expect(mockOnClose).toHaveBeenCalled();
     });
-    
+
 
     it('should handle worker errors during analysis', async () => {
         const { result } = renderTestHook();
-        
+
         let runPromise: Promise<void> | undefined;
         await act(async () => {
             runPromise = result.current.runAnalysis();
             await Promise.resolve();
         });
-        
+
         const mockWorkerError = { status: 'error', error: 'Calculation failed in worker' };
-        
+
         await act(async () => {
             workerOnMessage({ data: mockWorkerError });
             if (runPromise) await runPromise;
         });
-        
+
         expect(result.current.error).toContain('An analysis task failed');
         expect(mockAddStatistic).not.toHaveBeenCalled();
         expect(mockOnClose).toHaveBeenCalled();
         expect(result.current.isCalculating).toBe(false);
     });
-}); 
+
+    it('should add Tests of Normality table when normality plots with tests is enabled', async () => {
+        const { result } = renderTestHook({
+            showNormalityPlots: true,
+            boxplotType: 'none',
+        });
+
+        let runPromise: Promise<void> | undefined;
+        await act(async () => {
+            runPromise = result.current.runAnalysis();
+            await Promise.resolve();
+        });
+
+        const mockWorkerResult = {
+            status: 'success',
+            results: {
+                summary: { n: 4 },
+                descriptives: { Mean: 17.5 },
+                normalityTests: {
+                    sampleSize: 4,
+                    kolmogorovSmirnov: { statistic: 0.2, df: 4, pValue: 0.9 },
+                    shapiroWilk: { statistic: 0.98, df: 4, pValue: 0.8 },
+                },
+            }
+        };
+
+        await act(async () => {
+            workerOnMessage({ data: mockWorkerResult });
+            if (runPromise) await runPromise;
+        });
+
+        expect(mockAddStatistic).toHaveBeenCalledTimes(3); // Case Processing Summary + Descriptives + Tests of Normality
+        const titles = mockAddStatistic.mock.calls.map((call: any[]) => call[1]?.title);
+        expect(titles).toContain('Tests of Normality');
+    });
+});

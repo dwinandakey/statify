@@ -70,6 +70,7 @@ const Navbar: React.FC = () => {
                   <MenubarItem onClick={() => openModal(ModalType.IndependentSamplesTTest)}>Independent-Samples T Test...</MenubarItem>
                   <MenubarItem onClick={() => openModal(ModalType.PairedSamplesTTest)}>Paired-Samples T Test...</MenubarItem>
                   <MenubarItem onClick={() => openModal(ModalType.OneWayANOVA)}>One-Way ANOVA...</MenubarItem>
+                  <MenubarItem onClick={() => openModal(ModalType.BartlettTest)}>Bartlett&apos;s Test of Homogeneity...</MenubarItem>
                 </MenubarSubContent>
               </MenubarSub>
               <MenubarSub>

@@ -268,6 +268,8 @@ pub struct ComponentScoreCovarianceMatrix {
 
 pub struct ExtractionResult {
     pub loadings: DMatrix<f64>,
+    pub standardized_loadings: Option<DMatrix<f64>>,
+    pub standard_deviations: Option<Vec<f64>>,
     pub eigenvalues: Vec<f64>,
     pub communalities: Vec<f64>,
     pub explained_variance: Vec<f64>,
@@ -348,6 +350,8 @@ impl ExtractionResult {
 
         Self {
             loadings: nalgebra::DMatrix::zeros(0,0),
+            standardized_loadings: None,
+            standard_deviations: None,
             eigenvalues: vec![],
             communalities: vec![],
             explained_variance: vec![],

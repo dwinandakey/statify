@@ -38,9 +38,9 @@ export const IterationDetailsTable: React.FC<IterationDetailsTableProps> = ({
             tables: [
                 {
                     key: "iteration_details",
-                    title: "Detail Iterasi K-Medoids",
+                    title: "K-Medoids Iteration Details",
                     columnHeaders: [
-                        { header: "Iterasi" },
+                        { header: "Iteration" },
                         { header: "Total Cost" },
                         { header: "Improvement" },
                         { header: "Swaps" },
@@ -59,7 +59,7 @@ export const IterationDetailsTable: React.FC<IterationDetailsTableProps> = ({
                         };
                     }),
                     footer: [
-                        `${data.length} iterasi · Awal: ${fmt(data[0].totalCost)} · Akhir: ${fmt(data[data.length - 1].totalCost)} · Reduksi: ${fmt(totalReduction)} (${reductionPct.toFixed(1)}%)${converged ? " · ✓ Converged" : ""}`,
+                        `${data.length} iterations · Start: ${fmt(data[0].totalCost)} · End: ${fmt(data[data.length - 1].totalCost)} · Reduction: ${fmt(totalReduction)} (${reductionPct.toFixed(1)}%)${converged ? " · ✓ Converged" : ""}`,
                     ],
                 },
             ],
@@ -69,7 +69,7 @@ export const IterationDetailsTable: React.FC<IterationDetailsTableProps> = ({
     if (!data || data.length === 0) {
         return (
             <div className="flex items-center justify-center h-24 text-sm text-muted-foreground">
-                Data iterasi tidak tersedia
+                Iteration data is not available
             </div>
         );
     }

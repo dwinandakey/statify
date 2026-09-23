@@ -5,11 +5,12 @@
 //! among predictors, and univariate normality of each predictor.
 //!
 //! This module computes multicollinearity (tolerance/VIF), multivariate
-//! normality (Henze–Zirkler on the full dataset), and univariate normality
-//! (Anderson–Darling per predictor), plus an at-a-glance summary used to surface
-//! PASS/VIOLATED warnings at the top of the output. The normality tests are
-//! computed on the pooled dataset to match R's `MVN::mvn`. It reuses the same
-//! `AnalyzedDataset` machinery as the rest of the analysis.
+//! normality (Henze–Zirkler within each group), and univariate normality
+//! (Anderson–Darling per predictor within each group), plus an at-a-glance
+//! summary used to surface PASS/VIOLATED warnings at the top of the output. The
+//! normality tests run per group because LDA assumes normality within groups;
+//! the former pooled-data versions (R `MVN::mvn(data)`) are kept commented out.
+//! It reuses the same `AnalyzedDataset` machinery as the rest of the analysis.
 
 use nalgebra::{DMatrix, DVector, SymmetricEigen};
 use statrs::distribution::{ContinuousCDF, Normal};
@@ -94,6 +95,10 @@ fn fin(x: f64) -> f64 {
     }
 }
 
+// INACTIVE — pooled-data helpers for the former full-dataset normality tests
+// (R `MVN::mvn(data)`). Kept for reference; see the note on the inactive
+// compute_henze_zirkler below for why the tests now run per group.
+/*
 /// Pool all cases of one variable across every group, in group-label order.
 fn pooled_column(dataset: &AnalyzedDataset, variable: &str) -> Vec<f64> {
     let mut out = Vec::new();
@@ -113,6 +118,42 @@ fn full_case_matrix(dataset: &AnalyzedDataset, variables: &[String]) -> Option<D
         return None;
     }
     let columns: Vec<Vec<f64>> = variables.iter().map(|v| pooled_column(dataset, v)).collect();
+    let n = columns[0].len();
+    if n == 0 || columns.iter().any(|c| c.len() != n) {
+        return None;
+    }
+    let mut m = DMatrix::zeros(n, p);
+    for (j, col) in columns.iter().enumerate() {
+        for i in 0..n {
+            m[(i, j)] = col[i];
+        }
+    }
+    Some(m)
+}
+*/
+
+/// All cases of one variable within one group.
+fn group_column(dataset: &AnalyzedDataset, group: &str, variable: &str) -> Vec<f64> {
+    dataset
+        .group_data
+        .get(variable)
+        .and_then(|g| g.get(group))
+        .cloned()
+        .unwrap_or_default()
+}
+
+/// Build the n_g×p case matrix of one group (rows = the group's cases,
+/// cols = variables). Returns `None` if columns are missing or ragged.
+fn group_case_matrix(
+    dataset: &AnalyzedDataset,
+    group: &str,
+    variables: &[String],
+) -> Option<DMatrix<f64>> {
+    let p = variables.len();
+    if p == 0 {
+        return None;
+    }
+    let columns: Vec<Vec<f64>> = variables.iter().map(|v| group_column(dataset, group, v)).collect();
     let n = columns[0].len();
     if n == 0 || columns.iter().any(|c| c.len() != n) {
         return None;
@@ -332,6 +373,12 @@ fn henze_zirkler(x: &DMatrix<f64>) -> Option<HzStat> {
     })
 }
 
+// INACTIVE — Henze–Zirkler on the full dataset (all cases pooled across groups),
+// matching R's `MVN::mvn(data)`. Replaced by the per-group test below: LDA assumes
+// multivariate normality WITHIN each group, and pooled data from groups with
+// different centroids is a normal mixture, so the pooled test rejects more often
+// the better the groups are separated.
+/*
 /// Henze–Zirkler test on the full dataset (all cases pooled across groups),
 /// matching R's `MVN::mvn(data)` which returns a single multivariate statistic.
 fn compute_henze_zirkler(dataset: &AnalyzedDataset, variables: &[String]) -> HenzeZirklerResult {
@@ -364,6 +411,87 @@ fn compute_henze_zirkler(dataset: &AnalyzedDataset, variables: &[String]) -> Hen
             violated: false,
             note: "Could not be tested: too few cases relative to the number of predictors to compute a non-singular covariance.".to_string(),
         },
+    }
+}
+*/
+
+/// Henze–Zirkler test run separately on the cases of each group, since LDA
+/// assumes x ~ N_p(μ_g, Σ) within every group g. Equivalent to R's
+/// `MVN::mvn(data[group == g, ])` for each group. A group is not tested when
+/// n_g ≤ p (its covariance matrix is singular) or the covariance cannot be
+/// inverted; the assumption is judged violated when any tested group rejects.
+fn compute_henze_zirkler(dataset: &AnalyzedDataset, variables: &[String]) -> HenzeZirklerResult {
+    let mut groups = Vec::new();
+    let mut n_out = Vec::new();
+    let mut hz_out = Vec::new();
+    let mut p_out = Vec::new();
+    let mut normal_out = Vec::new();
+    let mut tested_out = Vec::new();
+
+    for group in &dataset.group_labels {
+        let matrix = group_case_matrix(dataset, group, variables);
+        let n = matrix.as_ref().map_or(0, |m| m.nrows());
+        let result = matrix.and_then(|m| henze_zirkler(&m));
+
+        groups.push(group.clone());
+        n_out.push(n as i32);
+        match result {
+            Some(hz) => {
+                hz_out.push(hz.hz);
+                p_out.push(hz.p_value);
+                normal_out.push(hz.p_value > NORMALITY_ALPHA);
+                tested_out.push(true);
+            }
+            None => {
+                hz_out.push(0.0);
+                p_out.push(1.0);
+                normal_out.push(true);
+                tested_out.push(false);
+            }
+        }
+    }
+
+    let tested = tested_out.iter().filter(|&&t| t).count();
+    let rejected: Vec<&String> = groups
+        .iter()
+        .zip(tested_out.iter().zip(normal_out.iter()))
+        .filter(|(_, (&t, &ok))| t && !ok)
+        .map(|(g, _)| g)
+        .collect();
+    let untested: Vec<&String> = groups
+        .iter()
+        .zip(tested_out.iter())
+        .filter(|(_, &t)| !t)
+        .map(|(g, _)| g)
+        .collect();
+
+    let violated = !rejected.is_empty();
+    let mut note = if tested == 0 {
+        "Could not be tested: every group has too few cases relative to the number of predictors (n ≤ p) to compute a non-singular covariance.".to_string()
+    } else if violated {
+        format!(
+            "Not met: multivariate normality is rejected within group(s) {} (Henze–Zirkler significant, p ≤ 0.05).",
+            rejected.iter().map(|g| g.as_str()).collect::<Vec<_>>().join(", ")
+        )
+    } else {
+        "Met: the predictors are multivariate normal within every tested group (Henze–Zirkler not significant, p > 0.05).".to_string()
+    };
+    if tested > 0 && !untested.is_empty() {
+        note.push_str(&format!(
+            " Group(s) {} not tested: too few cases relative to the number of predictors.",
+            untested.iter().map(|g| g.as_str()).collect::<Vec<_>>().join(", ")
+        ));
+    }
+
+    HenzeZirklerResult {
+        groups,
+        n: n_out,
+        hz: hz_out,
+        p_value: p_out,
+        normal: normal_out,
+        tested: tested_out,
+        violated,
+        note,
     }
 }
 
@@ -430,6 +558,10 @@ fn anderson_darling(values: &[f64]) -> Option<(f64, f64)> {
     Some((fin(a2), fin(pval.clamp(0.0, 1.0))))
 }
 
+// INACTIVE — Anderson–Darling on the full pooled dataset (R `MVN::mvn(data)`).
+// Replaced by the per-group version below for the same reason as the pooled
+// Henze–Zirkler test: pooled data is a mixture of the group distributions.
+/*
 /// Anderson–Darling univariate normality for each predictor, computed on the
 /// full pooled dataset (all cases across groups), matching R's `MVN::mvn`.
 fn compute_univariate_normality(
@@ -475,6 +607,68 @@ fn compute_univariate_normality(
         note,
     }
 }
+*/
+
+/// Anderson–Darling univariate normality for each predictor within each group
+/// (one row per group × predictor), equivalent to R's `nortest::ad.test` on
+/// `x[group == g]`. A group/predictor pair with n_g < 8 or a constant column is
+/// not tested and is listed in the note.
+fn compute_univariate_normality(
+    dataset: &AnalyzedDataset,
+    variables: &[String],
+) -> UnivariateNormalityResult {
+    let mut groups = Vec::new();
+    let mut vars = Vec::new();
+    let mut statistic = Vec::new();
+    let mut p_value = Vec::new();
+    let mut normal = Vec::new();
+    let mut any_violation = false;
+    let mut untested: Vec<String> = Vec::new();
+
+    for group in &dataset.group_labels {
+        for var in variables {
+            let values = group_column(dataset, group, var);
+            match anderson_darling(&values) {
+                Some((a2, p)) => {
+                    let is_normal = p > NORMALITY_ALPHA;
+                    if !is_normal {
+                        any_violation = true;
+                    }
+                    groups.push(group.clone());
+                    vars.push(var.clone());
+                    statistic.push(a2);
+                    p_value.push(p);
+                    normal.push(is_normal);
+                }
+                None => untested.push(format!("{} in group {}", var, group)),
+            }
+        }
+    }
+
+    let mut note = if vars.is_empty() {
+        "Could not be tested: no group has enough cases (n ≥ 8) of a non-constant predictor for the Anderson–Darling test.".to_string()
+    } else if any_violation {
+        "Not met: one or more predictors are not normal within a group (Anderson–Darling significant, p ≤ 0.05). Check the rows marked NO.".to_string()
+    } else {
+        "Met: every predictor is univariate normal within every tested group (Anderson–Darling, p > 0.05).".to_string()
+    };
+    if !vars.is_empty() && !untested.is_empty() {
+        note.push_str(&format!(
+            " Not tested (fewer than 8 cases or constant): {}.",
+            untested.join("; ")
+        ));
+    }
+
+    UnivariateNormalityResult {
+        groups,
+        variables: vars,
+        statistic,
+        p_value,
+        normal,
+        violated: any_violation,
+        note,
+    }
+}
 
 // ── Summary ─────────────────────────────────────────────────────────────────
 
@@ -504,10 +698,17 @@ fn build_summary(
         ));
     }
     if let Some(m) = mv {
+        let tested = m.tested.iter().filter(|&&t| t).count();
+        let bad = m
+            .tested
+            .iter()
+            .zip(m.normal.iter())
+            .filter(|(&t, &ok)| t && !ok)
+            .count();
         rows.push(status_row(
             "Multivariate normality",
-            "Henze–Zirkler",
-            format!("HZ = {:.3}, p = {:.3}", m.hz, m.p_value),
+            "Henze–Zirkler (per group)",
+            format!("{} of {} tested groups non-normal", bad, tested),
             m.violated,
         ));
     }
@@ -515,8 +716,8 @@ fn build_summary(
         let bad = u.normal.iter().filter(|&&ok| !ok).count();
         rows.push(status_row(
             "Univariate normality",
-            "Anderson–Darling",
-            format!("{} of {} predictors non-normal", bad, u.normal.len()),
+            "Anderson–Darling (per group)",
+            format!("{} of {} group × predictor tests non-normal", bad, u.normal.len()),
             u.violated,
         ));
     }

@@ -37,11 +37,21 @@ export interface CellsTabProps extends TourProps {
     containerType?: "dialog" | "sidebar";
 }
 
+// === Statistics Tab Props ===
+export interface StatisticsTabProps extends TourProps {
+    options: CrosstabsAnalysisParams['options'];
+    setOptions: Dispatch<SetStateAction<CrosstabsAnalysisParams['options']>>;
+    containerType?: "dialog" | "sidebar";
+}
+
 // === Analysis Params ===
 export interface CrosstabsAnalysisParams {
     rowVariables: Variable[];
     columnVariables: Variable[];
     options: {
+        statistics?: {
+            chiSquare: boolean;
+        },
         cells: {
             observed: boolean;
             expected: boolean;
@@ -81,4 +91,17 @@ export interface CrosstabsWorkerResult {
         colPercent: number;
         totalPercent: number;
     }[][];
-} 
+    chiSquare?: {
+        pearson: {
+            value: number;
+            df: number;
+            pValue: number | null;
+            expectedDiagnostics?: {
+                minExpectedCount: number | null;
+                cellsUnder5: number;
+                totalCells: number;
+                percentCellsUnder5: number;
+            };
+        };
+    };
+}

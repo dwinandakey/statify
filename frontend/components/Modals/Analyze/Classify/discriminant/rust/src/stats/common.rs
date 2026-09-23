@@ -7,6 +7,7 @@
 use nalgebra::{ DMatrix, SVD };
 use statrs::distribution::{ ChiSquared, ContinuousCDF, FisherSnedecor };
 use std::collections::HashMap;
+use std::sync::Mutex;
 use rayon::prelude::*;
 
 use crate::models::{ AnalysisData, DataRecord, DataValue, DiscriminantConfig };
@@ -14,6 +15,46 @@ use crate::models::{ AnalysisData, DataRecord, DataValue, DiscriminantConfig };
 /// Constants for numerical stability
 pub const EPSILON: f64 = 1e-10;
 pub const TOLERANCE_THRESHOLD: f64 = 0.001;
+
+/// Per-analysis warnings raised deep inside the statistics routines (singular
+/// matrices, fallbacks, excluded groups). Routines that still return a value push
+/// here instead of failing silently; `run_analysis` clears the sink at the start and
+/// forwards its contents to the ErrorCollector at the end, so they reach the user.
+/// A Mutex (not thread_local) so warnings raised inside rayon closures are kept.
+static ANALYSIS_WARNINGS: Mutex<Vec<(String, String)>> = Mutex::new(Vec::new());
+
+/// Clear the warning sink. Call at the start of every analysis.
+pub fn clear_analysis_warnings() {
+    if let Ok(mut w) = ANALYSIS_WARNINGS.lock() {
+        w.clear();
+    }
+}
+
+/// Record a warning. Identical (context, message) pairs are kept once, because the
+/// same routine is often re-run by several output tables in one analysis.
+pub fn push_analysis_warning(context: &str, message: String) {
+    if let Ok(mut w) = ANALYSIS_WARNINGS.lock() {
+        if !w.iter().any(|(c, m)| c == context && *m == message) {
+            w.push((context.to_string(), message));
+        }
+    }
+}
+
+/// Drain every recorded warning as (context, message).
+pub fn take_analysis_warnings() -> Vec<(String, String)> {
+    match ANALYSIS_WARNINGS.lock() {
+        Ok(mut w) => std::mem::take(&mut *w),
+        Err(_) => Vec::new(),
+    }
+}
+
+/// True when a square matrix is singular or numerically near-singular: its rank
+/// (singular values above EPSILON × the largest, the same rule as the Log
+/// Determinants table) is below its dimension.
+pub fn is_rank_deficient(matrix: &DMatrix<f64>) -> bool {
+    let p = matrix.nrows();
+    p > 0 && (calculate_rank_and_log_det(matrix).0 as usize) < p
+}
 
 /// Analyzed dataset structure to consolidate extracted data
 #[derive(Debug, Clone)]
@@ -425,19 +466,12 @@ pub fn calculate_correlation(values1: &[f64], values2: &[f64]) -> f64 {
 }
 
 /// Calculate log determinant of a matrix
+///
+/// Delegates to `calculate_rank_and_log_det`, so Box's M (which calls this) and the
+/// Log Determinants table (which calls that) share a single implementation — same
+/// SVD, same truncation threshold — and can never disagree on the same matrix.
 pub fn calculate_log_determinant(matrix: &DMatrix<f64>) -> f64 {
-    let svd = SVD::new(matrix.clone(), false, false);
-    let singular_values = &svd.singular_values;
-
-    // Use scaled threshold (same as calculate_rank_and_log_det) for consistency
-    let max_val = singular_values.iter().fold(0.0_f64, |max, &v| max.max(v));
-    let threshold = EPSILON * max_val;
-
-    singular_values
-        .iter()
-        .filter(|&v| *v > threshold)
-        .map(|v| v.ln())
-        .sum()
+    calculate_rank_and_log_det(matrix).1
 }
 
 /// Calculate rank and log determinant of a matrix
@@ -683,6 +717,25 @@ pub fn filter_valid_cases(
         filtered_independent_data.push(filtered_var_data);
     }
 
+    // Filter strata_data the same way as independent_data, so bootstrap strata
+    // keys stay aligned with the cases that survive the filters.
+    let filtered_strata_data = data.strata_data.as_ref().map(|strata_data| {
+        strata_data
+            .iter()
+            .map(|var_rows| {
+                let mut filtered_var_data = Vec::new();
+                for group_valid_indices in valid_indices.iter() {
+                    for &idx in group_valid_indices {
+                        if idx < var_rows.len() {
+                            filtered_var_data.push(var_rows[idx].clone());
+                        }
+                    }
+                }
+                filtered_var_data
+            })
+            .collect()
+    });
+
     // Filter selection_data if applicable
     let filtered_selection_data = match &data.selection_data {
         Some(selection_data) => {
@@ -712,8 +765,190 @@ pub fn filter_valid_cases(
         group_data: filtered_group_data,
         independent_data: filtered_independent_data,
         selection_data: filtered_selection_data,
+        strata_data: filtered_strata_data,
         group_data_defs: data.group_data_defs.clone(),
         independent_data_defs: data.independent_data_defs.clone(),
         selection_data_defs: data.selection_data_defs.clone(),
     })
+}
+
+/// A case with a valid group code that passes the selection filter but has at least
+/// one missing predictor. It is left out of the analysis (listwise), but with
+/// "Replace missing values with mean" (SPSS /CLASSIFY=MEANSUB) it is still
+/// classified, each missing predictor replaced by that predictor's mean over the
+/// analysis cases. It is never used to estimate anything, and it is not
+/// cross-validated (cross-validation covers only the cases in the analysis).
+#[derive(Debug, Clone)]
+pub struct MeanSubstitutedCase {
+    /// Group label, formatted like `AnalyzedDataset::group_labels`.
+    pub group: String,
+    /// One value per independent variable, missing ones already replaced by the mean.
+    pub values: HashMap<String, f64>,
+}
+
+/// Collect the mean-substituted cases from the raw (unfiltered) data.
+///
+/// Uses the same rules as the analysis pipeline so no case is counted twice or
+/// dropped: the selection filter and "missing" test of `filter_valid_cases`, and the
+/// group-label formatting and range check of `extract_grouped_data`. Cases whose
+/// group is not one of the analysis groups are skipped. The means come from the
+/// analysis cases (`filtered`), i.e. the same `overall_means` the functions use.
+pub fn mean_substituted_cases(
+    raw: &AnalysisData,
+    filtered: &AnalysisData,
+    config: &DiscriminantConfig
+) -> Result<Vec<MeanSubstitutedCase>, String> {
+    let dataset = extract_analyzed_dataset(filtered, config)?;
+    let group_var = &config.main.grouping_variable;
+    let min_range = config.define_range.min_range;
+    let max_range = config.define_range.max_range;
+
+    let variables: Vec<&String> = config.main.independent_variables
+        .iter()
+        .filter(|v| *v != group_var)
+        .collect();
+
+    // Each predictor lives in its own column of `independent_data`.
+    let columns: Vec<Option<&Vec<crate::models::data::DataRecord>>> = variables
+        .iter()
+        .map(|var| {
+            raw.independent_data
+                .iter()
+                .find(|records| records.iter().any(|r| r.values.contains_key(*var)))
+        })
+        .collect();
+
+    let selection_rows: Option<Vec<&crate::models::data::DataRecord>> = match
+        (&raw.selection_data, &config.main.selection_variable, &config.set_value.value)
+    {
+        (Some(selection_data), Some(_), Some(_)) => Some(selection_data.iter().flatten().collect()),
+        _ => None,
+    };
+
+    let mut cases = Vec::new();
+
+    for (row, record) in raw.group_data.iter().flatten().enumerate() {
+        // Group label and range check, as in extract_grouped_data.
+        let group = match record.values.get(group_var) {
+            Some(DataValue::Number(num)) => {
+                if min_range.map_or(true, |min| *num >= min) && max_range.map_or(true, |max| *num <= max) {
+                    num.to_string()
+                } else {
+                    continue;
+                }
+            }
+            Some(DataValue::Text(text)) => text.clone(),
+            _ => {
+                continue;
+            }
+        };
+        if !dataset.group_labels.contains(&group) {
+            continue;
+        }
+
+        // Selection filter, as in filter_valid_cases.
+        if
+            let (Some(rows), Some(selection_var), Some(set_value)) = (
+                &selection_rows,
+                &config.main.selection_variable,
+                &config.set_value.value,
+            )
+        {
+            let selected = match rows.get(row).and_then(|r| r.values.get(selection_var)) {
+                Some(DataValue::Number(val)) => (val - set_value).abs() < EPSILON,
+                Some(DataValue::Text(s)) => s == &set_value.to_string(),
+                _ => false,
+            };
+            if !selected {
+                continue;
+            }
+        }
+
+        let cells: Vec<Option<&DataValue>> = columns
+            .iter()
+            .zip(&variables)
+            .map(|(column, var)| column.and_then(|c| c.get(row)).and_then(|r| r.values.get(*var)))
+            .collect();
+
+        // "Missing", as in filter_valid_cases. A complete case is already in the analysis.
+        let is_missing = |cell: &Option<&DataValue>| {
+            match cell {
+                Some(DataValue::Number(val)) => val.is_nan(),
+                Some(DataValue::Text(s)) => s.trim().is_empty(),
+                Some(DataValue::Null) | None => true,
+                _ => false,
+            }
+        };
+        if !cells.iter().any(is_missing) {
+            continue;
+        }
+
+        let mut values = HashMap::new();
+        for (var, cell) in variables.iter().zip(&cells) {
+            let present = match cell {
+                Some(DataValue::Number(val)) if val.is_finite() => Some(*val),
+                Some(DataValue::Text(s)) => s.trim().parse::<f64>().ok(),
+                _ => None,
+            };
+            let value = match present {
+                Some(val) => val,
+                None =>
+                    *dataset.overall_means
+                        .get(*var)
+                        .ok_or_else(|| format!("No analysis mean available for variable {}", var))?,
+            };
+            values.insert((*var).clone(), value);
+        }
+
+        cases.push(MeanSubstitutedCase { group, values });
+    }
+
+    Ok(cases)
+}
+
+/// Predictor values (in `variables` order) of every case of `group` to classify: the
+/// analysis cases in dataset order, then that group's mean-substituted cases.
+pub fn classification_case_values(
+    dataset: &AnalyzedDataset,
+    group: &str,
+    variables: &[String],
+    substituted: &[MeanSubstitutedCase]
+) -> Vec<Vec<f64>> {
+    let n_cases = variables
+        .first()
+        .and_then(|v| dataset.group_data.get(v))
+        .and_then(|g| g.get(group))
+        .map_or(0, |v| v.len());
+
+    // After listwise filtering every predictor holds a value for every analysis case;
+    // NaN (not 0) marks a broken invariant so it cannot pass as a real value.
+    let mut cases: Vec<Vec<f64>> = (0..n_cases)
+        .map(|i| {
+            variables
+                .iter()
+                .map(|var| {
+                    dataset.group_data
+                        .get(var)
+                        .and_then(|g| g.get(group))
+                        .and_then(|values| values.get(i))
+                        .copied()
+                        .unwrap_or(f64::NAN)
+                })
+                .collect()
+        })
+        .collect();
+
+    cases.extend(
+        substituted
+            .iter()
+            .filter(|case| case.group == group)
+            .map(|case| {
+                variables
+                    .iter()
+                    .map(|var| case.values.get(var).copied().unwrap_or(f64::NAN))
+                    .collect()
+            })
+    );
+
+    cases
 }

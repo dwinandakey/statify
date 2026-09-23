@@ -13,8 +13,8 @@ import { Label } from "@/components/ui/label";
  * ========================================
  * RESULTS DIALOG
  * ========================================
- * Konfigurasi output hasil clustering:
- * - Final medoids (setara Final Cluster Centers SPSS)
+ * Clustering result output configuration:
+ * - Final medoids (equivalent to SPSS Final Cluster Centers)
  * - Cluster membership
  * - Case count per cluster
  * - Iteration history
@@ -138,7 +138,7 @@ export const KMedoidsClusterResults = ({
                     </div>
                 </div>
 
-                {/* ========== OUTPUT TAMBAHAN ========== */}
+                {/* ========== ADDITIONAL OUTPUT ========== */}
                 <div className="flex flex-col gap-3 w-full">
                     <Label className="font-semibold">Additional Information (Optional)</Label>
 
@@ -157,10 +157,10 @@ export const KMedoidsClusterResults = ({
                                         htmlFor="ShowConvergenceAlgorithm"
                                         className="text-sm font-medium leading-none cursor-pointer"
                                     >
-                                        Konvergensi Algoritma
+                                        Algorithm Convergence
                                     </label>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        Panel status konvergensi dan tabel histori iterasi.
+                                        Convergence status panel and iteration history table.
                                     </p>
                                 </div>
                             </div>
@@ -178,11 +178,11 @@ export const KMedoidsClusterResults = ({
                                         htmlFor="ShowConvergenceChart"
                                         className="text-sm font-medium leading-none cursor-pointer"
                                     >
-                                        Grafik Konvergensi Algoritma
+                                        Algorithm Convergence Chart
                                     </label>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        Grafik biaya (cost) dan perbaikan per iterasi, sebagai section
-                                        tersendiri. Bisa diaktifkan tanpa tabel di atas, atau sebaliknya.
+                                        Cost and improvement chart per iteration, as its own section.
+                                        Can be enabled without the table above, or vice versa.
                                     </p>
                                 </div>
                             </div>
@@ -203,10 +203,10 @@ export const KMedoidsClusterResults = ({
                                     htmlFor="ShowSamplingHistory"
                                     className="text-sm font-medium leading-none cursor-pointer"
                                 >
-                                    Histori Sampling (CLARA)
+                                    Sampling History (CLARA)
                                 </label>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Tampilkan grafik dan tabel histori biaya (cost) untuk setiap sampel yang diambil pada metode CLARA.
+                                    Show the cost history chart and table for every sample drawn by the CLARA method.
                                 </p>
                             </div>
                         </div>

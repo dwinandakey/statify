@@ -34,21 +34,13 @@ pub fn prime_selected_vars_cache(vars: Vec<String>) {
     SELECTED_VARS_CACHE.with(|c| *c.borrow_mut() = Some(vars));
 }
 
-/// Extract the final-step selected variables from a computed StepwiseStatistics,
-/// falling back to all (non-grouping) independent variables when the final step
-/// is missing or empty. Pure — shared by the cache primer and get_stepwise.
-pub fn select_final_variables(stats: &StepwiseStatistics, config: &DiscriminantConfig) -> Vec<String> {
-    let grouping_var = &config.main.grouping_variable;
-    let all_vars = || -> Vec<String> {
-        config
-            .main
-            .independent_variables
-            .iter()
-            .filter(|v| *v != grouping_var)
-            .cloned()
-            .collect()
-    };
-
+/// Extract the final-step selected variables from a computed StepwiseStatistics.
+/// Pure — shared by the cache primer and get_stepwise.
+///
+/// Returns an error when no variable met the entry criteria. Falling back to all
+/// independent variables would silently turn a stepwise run into "enter
+/// independents together" while the output is still read as a stepwise result.
+pub fn select_final_variables(stats: &StepwiseStatistics) -> Result<Vec<String>, String> {
     let final_step = stats
         .variables_in_analysis
         .keys()
@@ -57,23 +49,26 @@ pub fn select_final_variables(stats: &StepwiseStatistics, config: &DiscriminantC
         .unwrap_or(0)
         .to_string();
 
-    match stats.variables_in_analysis.get(&final_step) {
-        Some(vars_in_model) => {
-            let selected: Vec<String> =
-                vars_in_model.iter().map(|v| v.variable.clone()).collect();
-            if selected.is_empty() {
-                all_vars()
-            } else {
-                selected
-            }
-        }
-        None => all_vars(),
+    let selected: Vec<String> = stats
+        .variables_in_analysis
+        .get(&final_step)
+        .map(|vars_in_model| vars_in_model.iter().map(|v| v.variable.clone()).collect())
+        .unwrap_or_default();
+
+    if selected.is_empty() {
+        return Err(
+            "Stepwise selection: no variable met the entry criteria, so no discriminant function can be estimated."
+                .to_string(),
+        );
     }
+
+    Ok(selected)
 }
 
 use super::core::{
-    calculate_between_groups_sscp, calculate_pooled_within_matrix, calculate_stepwise_statistics,
-    extract_analyzed_dataset, AnalyzedDataset, EPSILON,
+    calculate_between_groups_sscp, calculate_pooled_within_matrix,
+    calculate_pooled_within_matrix_no_epsilon, calculate_stepwise_statistics,
+    extract_analyzed_dataset, is_rank_deficient, push_analysis_warning, AnalyzedDataset, EPSILON,
 };
 
 /// Calculate eigenvalues and eigenvectors for discriminant functions
@@ -132,8 +127,23 @@ pub fn calculate_eigen_statistics(
         }
     }
 
+    // A singular W is handled by the pseudo-inverse in solve_eigenvalue_problem, which
+    // still returns functions; they then ignore the redundant direction(s), so the user
+    // is told rather than shown ordinary-looking results.
+    // Checked on the unregularized matrix: the EPSILON ridge in pooled_within would
+    // otherwise lift a zero eigenvalue just enough to hide the singularity.
+    if is_rank_deficient(&calculate_pooled_within_matrix_no_epsilon(&dataset, &variables_to_use)) {
+        push_analysis_warning(
+            "canonical_functions",
+            format!(
+                "The within-groups matrix of [{}] is singular (a predictor is a linear combination of the others). The discriminant functions were computed with a pseudo-inverse; remove the redundant predictor(s) for interpretable coefficients.",
+                variables_to_use.join(", ")
+            ),
+        );
+    }
+
     // Solve eigenvalue problem using RAW SSCP matrices (not divided by df).
-    // This ensures eigenvalues λ satisfy W·v = λ·B, which matches the
+    // This ensures eigenvalues λ satisfy Bv = λWv, which matches the
     // Wilks' Lambda product formula: Λ = Π(1/(1+λ_i)) where λ_i come
     // from the raw SSCP eigenvalue problem.
     //
@@ -159,11 +169,15 @@ pub fn calculate_eigen_statistics(
         })
         .collect();
 
-    // Flatten the eigenvectors matrix into a single vector for storage
+    // Scale the eigenvectors by sqrt(n-g) and flatten them for storage.
+    // solve_eigenvalue_problem returns w with wᵀ·W·w = 1 (W = SSCP). Since
+    // S_pooled = W/(n-g), the scaled vector satisfies wᵀ·S_pooled·w = 1, i.e. the
+    // discriminant scores have unit pooled within-groups variance (SPSS
+    // unstandardized coefficients).
     let scale_factor = (df_within as f64).sqrt();
     let flat_eigenvectors: Vec<f64> = eigenvectors
         .iter()
-        .flat_map(|vec| vec.iter().map(|&v| v * scale_factor)) // <--- KALIKAN DI SINI!
+        .flat_map(|vec| vec.iter().map(|&v| v * scale_factor))
         .collect();
 
     // Create function names (Function 1, Function 2, etc.)
@@ -256,8 +270,22 @@ pub fn calculate_canonical_functions(
         num_functions,
     );
 
+    // Row order for the coefficient tables. `variables_to_use` carries the stepwise
+    // table's own order (most recently entered first), which is not the order SPSS
+    // prints these two tables in — SPSS follows the analysis variable list. So order
+    // by the user's independent-variable list, restricted to the variables that made
+    // it into the final model.
+    let variables: Vec<String> = config
+        .main
+        .independent_variables
+        .iter()
+        .filter(|v| *v != grouping_var && variables_to_use.contains(v))
+        .cloned()
+        .collect();
+
     // Return only the fields defined in the CanonicalFunctions struct from result.rs
     Ok(CanonicalFunctions {
+        variables,
         coefficients,
         standardized_coefficients,
         function_at_centroids,
@@ -266,16 +294,20 @@ pub fn calculate_canonical_functions(
 
 /// Solve the eigenvalue problem for discriminant analysis
 ///
-/// This function solves the eigenvalue problem (T-W)V = λWV to find the eigenvalues
-/// and eigenvectors that define the discriminant functions.
+/// This function solves the generalized eigenvalue problem Bv = λWv (B = between-groups
+/// SSCP, W = within-groups SSCP) to find the eigenvalues and eigenvectors that define
+/// the discriminant functions. It is reduced to a symmetric problem via
+/// W^(-1/2) B W^(-1/2), with W^(-1/2) formed as a pseudo-inverse square root.
 ///
 /// # Parameters
-/// * `pooled_within` - The pooled within-groups covariance matrix
-/// * `between_groups` - The between-groups covariance matrix
+/// * `pooled_within` - The within-groups SSCP matrix W = Σ(nᵢ-1)Sᵢ (NOT divided by n-g;
+///   callers multiply the pooled covariance by n-g before passing it in)
+/// * `between_groups` - The between-groups SSCP matrix B = Σ nᵢ(x̄ᵢ-x̄)(x̄ᵢ-x̄)ᵀ
 /// * `num_functions` - The number of discriminant functions to calculate
 ///
 /// # Returns
-/// A tuple containing (eigenvalues, eigenvectors)
+/// A tuple containing (eigenvalues sorted descending, eigenvectors w = W^(-1/2)u).
+/// Eigenvectors are indexed [variable][function] and normalized so that wᵀ·W·w = 1.
 pub fn solve_eigenvalue_problem(
     pooled_within: &DMatrix<f64>,
     between_groups: &DMatrix<f64>,
@@ -288,10 +320,17 @@ pub fn solve_eigenvalue_problem(
     let d_w = eigen_w.eigenvalues;
     let v_w = eigen_w.eigenvectors;
 
+    // Ambang pemotongan nilai eigen dibuat RELATIF terhadap nilai eigen terbesar W,
+    // bukan absolut. Ambang absolut (mis. 1e-9) selalu terlampaui pada data berskala
+    // besar (SSCP bisa berorde 1e10 ke atas), sehingga perlindungan pseudo-invers
+    // terhadap multikolinearitas tidak pernah aktif. Konvensinya sama dengan
+    // calculate_rank_and_log_det di common.rs (EPSILON × nilai terbesar).
+    let d_w_max = d_w.iter().fold(0.0_f64, |max, &v| max.max(v));
+    let truncation_threshold = EPSILON * d_w_max;
+
     let mut d_w_inv_sqrt = DMatrix::zeros(n, n);
     for i in 0..n {
-        // Gunakan threshold epsilon yang rasional untuk memotong (truncate) zero eigenvalues
-        if d_w[i] > 1e-9 {
+        if d_w_max > 0.0 && d_w[i] > truncation_threshold {
             d_w_inv_sqrt[(i, i)] = 1.0 / d_w[i].sqrt();
         } else {
             d_w_inv_sqrt[(i, i)] = 0.0; // Mencegah pembagian dengan nol (pseudo-inverse logic)
@@ -351,7 +390,8 @@ pub fn solve_eigenvalue_problem(
 /// This makes the coefficients comparable across variables with different scales.
 ///
 /// # Parameters
-/// * `eigenvectors` - Eigenvectors from the eigenvalue problem
+/// * `eigenvectors` - Eigenvectors already scaled by sqrt(n-g) (wᵀ·S_pooled·w = 1),
+///   indexed [variable][function]; used directly as the unstandardized coefficients
 /// * `variables` - Variables in the model
 /// * `pooled_within` - Pooled within-groups covariance matrix
 /// * `overall_means` - Overall means for each variable
@@ -479,17 +519,12 @@ pub fn get_stepwise_selected_variables(
         return Ok(cached);
     }
 
-    // Cache miss: compute the stepwise selection once, then store it.
-    let selected = match calculate_stepwise_statistics(data, config) {
-        Ok(stats) => select_final_variables(&stats, config),
-        Err(_) => config
-            .main
-            .independent_variables
-            .iter()
-            .filter(|v| *v != grouping_var)
-            .cloned()
-            .collect(),
-    };
+    // Cache miss: compute the stepwise selection once, then store it. A failed
+    // stepwise run is an error, never a silent fallback to all variables (which
+    // would be the "enter" method presented as a stepwise result).
+    let stats = calculate_stepwise_statistics(data, config)
+        .map_err(|e| format!("Stepwise selection failed: {}", e))?;
+    let selected = select_final_variables(&stats)?;
     prime_selected_vars_cache(selected.clone());
     Ok(selected)
 }
