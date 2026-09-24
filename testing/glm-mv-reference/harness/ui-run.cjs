@@ -51,8 +51,16 @@ const inList = (page, list) => page.locator(`[data-testid^="variable-name-${list
 const dialogTitled = (page, title) => page.getByRole("dialog").filter({ has: page.getByText(title, { exact: true }) });
 async function dragBadge(dlg, name, dropLabel) {
     const source = dlg.locator('[draggable="true"]').filter({ hasText: new RegExp(`^\\s*${esc(name)}\\s*$`) }).first();
-    const target = dlg.locator("div.flex-col", { has: dlg.getByText(new RegExp(`^\\s*${esc(dropLabel)}\\s*$`)) }).last();
+    const target = dlg.locator("div.flex-col", { has: dlg.page().getByText(new RegExp(`^\\s*${esc(dropLabel)}\\s*$`)) }).last();
     await source.dragTo(target);
+    if ((await target.innerText()).split(String.fromCharCode(10)).some((line) => line.trim() === name)) return;
+    // Fallback: the dialog's own HTML5 handlers (dragstart sets "text",
+    // drop reads it), dispatched with one DataTransfer.
+    const dt = await dlg.page().evaluateHandle(() => new DataTransfer());
+    await source.dispatchEvent("dragstart", { dataTransfer: dt });
+    await target.dispatchEvent("dragover", { dataTransfer: dt });
+    await target.dispatchEvent("drop", { dataTransfer: dt });
+    await source.dispatchEvent("dragend", { dataTransfer: dt });
 }
 
 async function fillDialog(page, c) {
@@ -80,7 +88,7 @@ async function fillDialog(page, c) {
         await dlg.waitFor({ state: "visible", timeout: 30000 });
         await dlg.locator("#Custom").click();
         for (const term of c.buildTerms) await dragBadge(dlg, term, "Model:");
-        const model = dlg.locator("div.flex-col", { has: dlg.getByText(/^\s*Model:\s*$/) }).last();
+        const model = dlg.locator("div.flex-col", { has: page.getByText(/^\s*Model:\s*$/) }).last();
         for (const term of c.buildTerms) {
             if (!(await model.getByText(term, { exact: true }).count())) throw new Error(`Model: term "${term}" not added`);
         }
@@ -92,6 +100,11 @@ async function fillDialog(page, c) {
         const dlg = dialogTitled(page, "Multivariate: Post Hoc");
         await dlg.waitFor({ state: "visible", timeout: 30000 });
         for (const f of c.posthoc.factors) await dragBadge(dlg, f, "Post Hoc Tests for:");
+        const phList = dlg.locator("div.flex-col", { has: page.getByText("Post Hoc Tests for:", { exact: true }) }).last();
+        const phText = await phList.innerText();
+        for (const f of c.posthoc.factors) {
+            if (!phText.split(/\r?\n/).some((line) => line.trim() === f)) throw new Error(`Post Hoc: factor "${f}" not added (list: ${JSON.stringify(phText)})`);
+        }
         for (const id of c.posthoc.methods) {
             const box = dlg.locator(`#${id}`);
             if ((await box.getAttribute("data-state")) !== "checked") await box.click();

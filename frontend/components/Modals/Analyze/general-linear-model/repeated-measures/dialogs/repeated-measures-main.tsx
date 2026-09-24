@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
+import { toast } from "sonner";
 import type {
     RepeatedMeasuresContainerProps,
     RepeatedMeasuresMainType,
@@ -288,6 +289,7 @@ export const RepeatedMeasuresContainer = ({
             });
         } catch (error) {
             console.error(error);
+            toast.error(`An error occurred during Repeated Measures analysis. Error: ${String(error)}`);
         }
 
         closeModal();

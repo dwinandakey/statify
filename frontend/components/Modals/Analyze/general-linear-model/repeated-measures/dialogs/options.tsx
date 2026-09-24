@@ -24,7 +24,9 @@ export const RepeatedMeasuresOptions = ({
 
     useEffect(() => {
         if (isOptionsOpen) {
-            setOptionsState({ ...data });
+            // Spread-vs.-level plots, residual plots and the lack-of-fit test
+            // are not computed for Repeated Measures: shown disabled and off.
+            setOptionsState({ ...data, SprVsLevel: false, ResPlot: false, LackOfFit: false });
         }
     }, [isOptionsOpen, data]);
 
@@ -223,6 +225,7 @@ export const RepeatedMeasuresOptions = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="SprVsLevel"
+                                                    disabled
                                                     checked={
                                                         optionsState.SprVsLevel
                                                     }
@@ -245,6 +248,7 @@ export const RepeatedMeasuresOptions = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="ResPlot"
+                                                    disabled
                                                     checked={
                                                         optionsState.ResPlot
                                                     }
@@ -267,6 +271,7 @@ export const RepeatedMeasuresOptions = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="LackOfFit"
+                                                    disabled
                                                     checked={
                                                         optionsState.LackOfFit
                                                     }
@@ -286,6 +291,9 @@ export const RepeatedMeasuresOptions = ({
                                                     Lack of Fit Test
                                                 </label>
                                             </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                Spread-vs.-level plots, residual plots, and the lack-of-fit test are not supported in this version.
+                                            </p>
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="GeneralFun"

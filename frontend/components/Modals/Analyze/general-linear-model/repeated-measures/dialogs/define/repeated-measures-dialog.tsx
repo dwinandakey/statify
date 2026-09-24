@@ -339,6 +339,15 @@ export const RepeatedMeasureDefineDialog = ({
             toast.error(MULTI_WITHIN_MESSAGE);
             return;
         }
+        // Both lists are needed to build the within-subjects slots.
+        if (dialogState.factors.length === 0) {
+            toast.error("Add a within-subjects factor (name and number of levels) before clicking Define.");
+            return;
+        }
+        if (dialogState.measures.length === 0) {
+            toast.error("Add a measure name before clicking Define.");
+            return;
+        }
         Object.entries(dialogState).forEach(([key, value]) => {
             updateFormData(key as keyof RepeatedMeasureDefineData, value);
         });

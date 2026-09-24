@@ -34,7 +34,6 @@ export const MultivariateDialog = ({
     setIsMainOpen,
     setIsModelOpen,
     setIsContrastOpen,
-    setIsPlotsOpen,
     setIsPostHocOpen,
     setIsEMMeansOpen,
     setIsSaveOpen,
@@ -359,12 +358,16 @@ export const MultivariateDialog = ({
                                     Contrasts
                                 </Button>
                                 <Button
+                                    id="multivariate-plots-button"
                                     className="w-full"
                                     variant="outline"
-                                    onClick={openDialog(setIsPlotsOpen)}
+                                    disabled
                                 >
                                     Plots
                                 </Button>
+                                <p className="w-full text-[11px] leading-tight text-muted-foreground">
+                                    Plots are not supported in this version.
+                                </p>
                                 <Button
                                     className="w-full"
                                     variant="outline"
