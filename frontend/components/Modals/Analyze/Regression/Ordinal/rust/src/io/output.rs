@@ -54,12 +54,20 @@ pub fn build_plum_output(
         .as_ref()
         .and_then(|opt| opt.parameter_estimates)
         .unwrap_or(default_all);
-    let want_covariance = output_options
+    let want_covariance_table = output_options
+        .as_ref()
+        .and_then(|opt| opt.asymptotic_covariance)
+        .unwrap_or(default_all);
+    let want_correlation = output_options
+        .as_ref()
+        .and_then(|opt| opt.asymptotic_correlation)
+        .unwrap_or(default_all);
+    let want_covariance = want_covariance_table
+        || output_options
         .as_ref()
         .and_then(|opt| opt.asymptotic_correlation)
         .unwrap_or(default_all)
         || want_parameters;
-    let want_correlation = want_covariance;
     let want_parallel = output_options
         .as_ref()
         .and_then(|opt| opt.test_of_parallel_lines)
@@ -358,8 +366,8 @@ pub fn build_plum_output(
         predicted_probability,
         actual_probability,
         saved_variables,
-        covariance_matrix: covariance.map(|m| matrix_to_vec(&m)),
-        correlation_matrix: correlation.map(|m| matrix_to_vec(&m)),
+        covariance_matrix: if want_covariance_table { covariance.map(|m| matrix_to_vec(&m)) } else { None },
+        correlation_matrix: if want_correlation { correlation.map(|m| matrix_to_vec(&m)) } else { None },
         errors: Vec::new(),
     })
 }

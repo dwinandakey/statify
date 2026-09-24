@@ -41,6 +41,7 @@ import {
   buildOrdinalPlumDesignMatrix,
   extractOrdinalDependentCategories,
 } from "../services/plum_design_matrix";
+import { generateOrdinalRegressionSyntax } from "../services/syntaxGenerator";
 
 // Types
 import {
@@ -98,6 +99,7 @@ const OrdinalMain: React.FC = () => {
       goodnessOfFit: true,
       summaryStatistics: true,
       parameterEstimates: true,
+      asymptoticCovariance: false,
       asymptoticCorrelation: false,
       cellInformation: false,
       testOfParallelLines: false,
@@ -752,6 +754,7 @@ const OrdinalMain: React.FC = () => {
           goodnessOfFit: outputParams.display.goodnessOfFit,
           summaryStatistics: outputParams.display.summaryStatistics,
           parameterEstimates: outputParams.display.parameterEstimates,
+          asymptoticCovariance: outputParams.display.asymptoticCovariance,
           asymptoticCorrelation: outputParams.display.asymptoticCorrelation,
           cellInformation: outputParams.display.cellInformation,
           testOfParallelLines: outputParams.display.testOfParallelLines,
@@ -825,6 +828,25 @@ const OrdinalMain: React.FC = () => {
         validRows: workerPayload.metadata.validRows,
       });
 
+      const syntaxLog = generateOrdinalRegressionSyntax({
+        dependent: responseVariable,
+        factors,
+        covariates,
+        locationModel: locationPredictorsRaw,
+        scaleModel: scalePredictors,
+        options: optParams,
+        output: outputParams,
+      });
+      console.log("[ORDINAL][MAIN][SYNTAX_LOG]", syntaxLog);
+
+      // Create the log and the analytic before dispatching the worker so the
+      // syntax is the first item rendered in the Report Viewer.
+      const logId = await addLog({ log: syntaxLog });
+      const analyticId = await addAnalytic(logId, {
+        title: "Ordinal Regression",
+        note: `Link: ${optParams.linkFunction}`,
+      });
+
       const worker = new Worker(
         new URL("/workers/Regression/ordinal.worker.js", window.location.origin),
         { type: "module" }
@@ -846,15 +868,6 @@ const OrdinalMain: React.FC = () => {
             }
 
             console.log("[ORDINAL][MAIN][FORMATTED_SECTIONS]", formattedResult.sections);
-
-            const logId = await addLog({
-              log: `ORDINAL REGRESSION VARIABLES ${responseVariable.id}`,
-            });
-
-            const analyticId = await addAnalytic(logId, {
-              title: "Ordinal Regression",
-              note: `Link: ${optParams.linkFunction}`,
-            });
 
             for (const section of formattedResult.sections) {
               const tableObjectForRenderer = {
