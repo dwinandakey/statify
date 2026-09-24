@@ -149,12 +149,10 @@ export const MultivariateDialog = ({
             FixFactor: fixFactor.map((v) => v.name),
             Covar: covar.map((v) => v.name),
             WlsWeight: wlsWeight[0]?.name || null,
-            // The Welch radio is only visible with exactly one Fixed Factor.
-            // Reset to default (null → Pooled in Rust) when the user moves
-            // away from that shape, so stale Welch state can't leak into a
-            // multi-factor or no-factor analysis.
-            VarianceMode:
-                fixFactor.length === 1 ? prevState.VarianceMode : null,
+            // VarianceMode is kept here: this effect also runs when the
+            // dialog remounts after a sub-dialog closes, while the lists are
+            // still empty, so a reset here lost the user's choice. It is
+            // reset in handleMoveVariable when the user changes the factors.
         }));
     }, [depVar, fixFactor, covar, wlsWeight]);
 
@@ -224,8 +222,22 @@ export const MultivariateDialog = ({
                     toSetter((prev) => [...prev, variable]);
                 }
             }
+
+            // The Welch radio is only visible with exactly one Fixed Factor.
+            // Reset to default (null → Pooled in Rust) when the user moves
+            // away from that shape, so stale Welch state can't leak into a
+            // multi-factor or no-factor analysis.
+            if (fromListId !== toListId && (fromListId === "FixFactor" || toListId === "FixFactor")) {
+                const nextFactorCount =
+                    fixFactor.length +
+                    (toListId === "FixFactor" ? 1 : 0) -
+                    (fromListId === "FixFactor" ? 1 : 0);
+                if (nextFactorCount !== 1) {
+                    setMainState((prev) => ({ ...prev, VarianceMode: null }));
+                }
+            }
         },
-        [listStateSetters, targetListsConfig, setAvailableVars]
+        [listStateSetters, targetListsConfig, setAvailableVars, fixFactor.length]
     );
 
     const handleReorderVariable = useCallback(
