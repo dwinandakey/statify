@@ -9,7 +9,16 @@
 // layar ke bukti/<ID>[-n].png.
 //
 // Pemakaian (root repo, server berjalan):
-//   node testing/black-box/harness/bb-run.cjs --base=http://localhost:3001 [--only=BB-KF02-01,...]
+//   node testing/black-box/harness/bb-run.cjs --base=http://localhost:3001 --iter=2 [--only=BB-KF02-01,...]
+//
+// --iter menentukan folder keluaran (bukti/iterasi-N, hasil-eksekusi/iterasi-N)
+// dan perbedaan antariterasi:
+//   iterasi 1: skenario RM yang membuka ulang dialog mengisi ulang slot within;
+//              tangkapan tabel memotret elemen tabel saja; langkah 3 BB-KF04-02
+//              mencoba membentuk pasangan (kedalaman1, kedalaman1).
+//   iterasi 2: slot within TIDAK diisi ulang (bukti perbaikan BB-KF07-02);
+//              tangkapan tabel memotret seluruh kartu hasil (judul, catatan,
+//              tabel); langkah revisi BB-KF02-02 (R1) dan BB-KF04-02 (R2).
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("@playwright/test");
@@ -19,8 +28,9 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/
 const BASE = args.base || "http://localhost:3001";
 const REPO = path.resolve(__dirname, "../../..");
 const BB = path.resolve(__dirname, "..");
-const SHOTS = path.join(BB, "bukti");
-const OBS = path.join(BB, "hasil-eksekusi");
+const ITER = Number(args.iter || 2);
+const SHOTS = path.join(BB, "bukti", `iterasi-${ITER}`);
+const OBS = path.join(BB, "hasil-eksekusi", `iterasi-${ITER}`);
 const MVD = path.join(REPO, "testing/glm-mv-reference/data");
 const RMD = path.join(REPO, "testing/glm-rm-reference/data");
 const BBD = path.join(BB, "data");
@@ -183,8 +193,10 @@ async function snapTable(c, title, label, { expand = true } = {}) {
         const toggle = out.locator('[data-testid^="toggle-table-"]').filter({ hasText: /Show Full/ });
         if (await toggle.count()) await toggle.first().click().catch(() => {});
     }
-    await tbl.scrollIntoViewIfNeeded();
-    return c.snap(tbl, label || title);
+    // Iterasi 2: seluruh kartu hasil (judul, catatan analitik, tabel).
+    const target = ITER >= 2 ? log.locator('[data-testid^="result-analytic-"]').filter({ has: tbl }).last() : tbl;
+    await target.scrollIntoViewIfNeeded();
+    return c.snap(target, label || title);
 }
 async function snapCharts(c, label) {
     const log = c.page.locator('[data-testid^="result-log-"]').last();
@@ -401,7 +413,8 @@ S["BB-KF02-02"] = async (c) => {
     await mvDV(c, ["wt"]);
     const l4 = await mvTestValues(c); c.note("langkah4", l4);
     await c.snap(p, "langkah 4: Test Values setelah wt ditambah lagi");
-    // Varian: langkah 3 ditutup dengan Cancel (hanya dicatat di Keterangan).
+    // Varian: langkah 3 ditutup dengan Cancel (hanya iterasi 1, dicatat di Keterangan).
+    if (ITER === 1) {
     await p.getByRole("button", { name: "Cancel", exact: true }).last().click();
     await p.locator(MVOK).waitFor();
     await mvRemove(c, "DepVar", "wt");
@@ -410,6 +423,7 @@ S["BB-KF02-02"] = async (c) => {
     await p.locator(MVOK).waitFor();
     await mvDV(c, ["wt"]);
     c.note("variantCancelLangkah4", await mvTestValues(c));
+    }
     await continueTo(c, MVOK);
     await mvRun(c, "OK");
     await gotoResult(p);
@@ -533,9 +547,15 @@ S["BB-KF04-02"] = async (c) => {
     }
     await p.waitForTimeout(300);
     c.note("isiPasangan", await dlg.locator("#multivariate-paired-test-variables").innerText());
-    await c.snap(dlg, "pasangan (kedalaman1, kedalaman1)");
-    await dlg.getByRole("button", { name: "Continue", exact: true }).click();
-    await waitToast(c, /Pasangan harus|belum lengkap|Tambahkan/, "Continue dengan variabel sama", 5000).catch(() => c.obs.notes.push("tidak ada toast setelah Continue langkah 3"));
+    c.note("availableSetelahLangkah3", await avail.innerText());
+    if (ITER === 1) {
+        await c.snap(dlg, "pasangan (kedalaman1, kedalaman1)");
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        await waitToast(c, /Pasangan harus|belum lengkap|Tambahkan/, "Continue dengan variabel sama", 5000).catch(() => c.obs.notes.push("tidak ada toast setelah Continue langkah 3"));
+    } else {
+        // Revisi R2: pasangan dengan variabel yang sama tidak dapat dibentuk.
+        await c.snap(dlg, "langkah 3: kedalaman1 tidak ada di Available Variables; pasangan tidak terbentuk");
+    }
     c.note("terbuka3", await dlg.isVisible());
 };
 
@@ -973,9 +993,13 @@ S["BB-KF10-03"] = async (c) => {
     await snapTable(c, "Mauchly's Test of Sphericity", "langkah 3: Mauchly");
     await gotoData(p);
     await rmOpen(c); await p.getByRole("button", { name: "Define", exact: true }).click(); await within(p).waitFor();
-    // Define mengembalikan slot ke placeholder (lihat BB-KF07-02); slot diisi lagi.
-    await rmSlots(c, [["nilai", ["p1", "p2", "p3"]]]);
-    if (!(await between(p).getByText("metode", { exact: true }).count())) await rmBetween(c, ["metode"]);
+    // Iterasi 1: Define mengembalikan slot ke placeholder (BB-KF07-02), slot
+    // diisi lagi. Iterasi 2: slot tidak diisi ulang (bukti perbaikan).
+    c.note("slotSetelahDefineUlang", await within(p).innerText());
+    if (ITER === 1) {
+        await rmSlots(c, [["nilai", ["p1", "p2", "p3"]]]);
+        if (!(await between(p).getByText("metode", { exact: true }).count())) await rmBetween(c, ["metode"]);
+    }
     await rmOptions(c, ["HomogenTest"]);
     await rmRun(c, "langkah 4: Homogenity Tests dicentang");
     await gotoResult(p); c.note("judulLangkah4", await visibleTitles(p));
@@ -1002,9 +1026,12 @@ S["BB-KF11-05"] = async (c) => {
     for (const [i, method] of ["Bonferroni", "LSD(None)", "Sidak"].entries()) {
         if (i) {
             await gotoData(p); await rmOpen(c); await p.getByRole("button", { name: "Define", exact: true }).click(); await within(p).waitFor();
-            // Define mengembalikan slot ke placeholder (lihat BB-KF07-02); slot diisi lagi.
-            await rmSlots(c, [["nilai", ["p1", "p2", "p3"]]]);
-            if (!(await between(p).getByText("metode", { exact: true }).count())) await rmBetween(c, ["metode"]);
+            // Iterasi 1: slot diisi lagi (BB-KF07-02). Iterasi 2: tidak diisi ulang.
+            c.note(`slotSetelahDefineUlang-${method}`, await within(p).innerText());
+            if (ITER === 1) {
+                await rmSlots(c, [["nilai", ["p1", "p2", "p3"]]]);
+                if (!(await between(p).getByText("metode", { exact: true }).count())) await rmBetween(c, ["metode"]);
+            }
         }
         await p.getByRole("button", { name: "EM Means", exact: true }).click();
         await p.locator("#CompMainEffect").waitFor();

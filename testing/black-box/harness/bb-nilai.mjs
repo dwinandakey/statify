@@ -3,14 +3,15 @@
 // (spss-output/spss-values.json di glm-mv-reference dan glm-rm-reference).
 // Toleransi |Statify − SPSS| ≤ 0,001; nilai Sig. "<.001" cocok bila SPSS < 0,001.
 //
-// Pemakaian (root repo): node testing/black-box/harness/bb-nilai.mjs
+// Pemakaian (root repo): node testing/black-box/harness/bb-nilai.mjs --iter=2
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(here, "../../..");
-const OBS = path.resolve(here, "../hasil-eksekusi");
+const ITER = Number((process.argv.find((x) => x.startsWith("--iter=")) || "--iter=2").split("=")[1]);
+const OBS = path.resolve(here, "../hasil-eksekusi", `iterasi-${ITER}`);
 const TOL = 0.001;
 const mvSpss = JSON.parse(fs.readFileSync(path.join(REPO, "testing/glm-mv-reference/spss-output/spss-values.json"), "utf8"));
 const rmSpss = JSON.parse(fs.readFileSync(path.join(REPO, "testing/glm-rm-reference/spss-output/spss-values.json"), "utf8"));
