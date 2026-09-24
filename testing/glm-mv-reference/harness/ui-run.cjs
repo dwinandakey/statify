@@ -32,6 +32,9 @@ const CONFIGS = {
     // Validasi lanjutan (Langkah 7, make_derived.R).
     mv6: { csv: "two-way manova tak seimbang.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: [...OPT, "HomogenTest"] },
     mv7: { csv: "hotelling 2 populasi independen dengan nilai hilang.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-pooled" },
+    // skripsi-final-v2: model efek utama (dialog Model, Build Terms) dan post hoc.
+    mv8: { csv: "two-way manova.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: [...OPT, "HomogenTest"], buildTerms: ["faktorA", "faktorB"] },
+    mv4ph: { csv: "one-way manova.csv", dep: ["y1", "y2"], fix: ["treatment"], options: [...OPT, "HomogenTest"], posthoc: { factors: ["treatment"], methods: ["Lsd", "Bonfe", "Sidak"] } },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -42,6 +45,15 @@ const available = (page, name) =>
         has: page.locator('[data-testid^="variable-name-available-"]').filter({ hasText: nameWithLabel(name) }),
     }).first();
 const inList = (page, list) => page.locator(`[data-testid^="variable-name-${list}-"]`);
+
+// Sub-dialog by its title, and a drag of one of its draggable badges onto the
+// drop area holding the given label (Model: / Post Hoc Tests for:).
+const dialogTitled = (page, title) => page.getByRole("dialog").filter({ has: page.getByText(title, { exact: true }) });
+async function dragBadge(dlg, name, dropLabel) {
+    const source = dlg.locator('[draggable="true"]').filter({ hasText: new RegExp(`^\\s*${esc(name)}\\s*$`) }).first();
+    const target = dlg.locator("div.flex-col", { has: dlg.getByText(new RegExp(`^\\s*${esc(dropLabel)}\\s*$`)) }).last();
+    await source.dragTo(target);
+}
 
 async function fillDialog(page, c) {
     await page.locator('[data-testid="analyze-menu-trigger"]').click();
@@ -62,6 +74,32 @@ async function fillDialog(page, c) {
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
 
+    if (c.buildTerms) {
+        await page.getByRole("button", { name: "Model", exact: true }).click();
+        const dlg = dialogTitled(page, "Multivariate: Model");
+        await dlg.waitFor({ state: "visible", timeout: 30000 });
+        await dlg.locator("#Custom").click();
+        for (const term of c.buildTerms) await dragBadge(dlg, term, "Model:");
+        const model = dlg.locator("div.flex-col", { has: dlg.getByText(/^\s*Model:\s*$/) }).last();
+        for (const term of c.buildTerms) {
+            if (!(await model.getByText(term, { exact: true }).count())) throw new Error(`Model: term "${term}" not added`);
+        }
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
+    }
+    if (c.posthoc) {
+        await page.getByRole("button", { name: "Post Hoc", exact: true }).click();
+        const dlg = dialogTitled(page, "Multivariate: Post Hoc");
+        await dlg.waitFor({ state: "visible", timeout: 30000 });
+        for (const f of c.posthoc.factors) await dragBadge(dlg, f, "Post Hoc Tests for:");
+        for (const id of c.posthoc.methods) {
+            const box = dlg.locator(`#${id}`);
+            if ((await box.getAttribute("data-state")) !== "checked") await box.click();
+            if ((await box.getAttribute("data-state")) !== "checked") throw new Error(`Post Hoc: ${id} not checked`);
+        }
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
+    }
     if (c.testValues) {
         await page.getByRole("button", { name: "Test Values", exact: true }).click();
         for (let i = 0; i < c.testValues.length; i++) await page.locator(`#mu0-${i}`).fill(String(c.testValues[i]));

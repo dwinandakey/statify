@@ -33,8 +33,10 @@ const FORMATTER = {
     mv5: { testValues: null, varianceMode: "Pooled", factor: null, pairedMode: null },
     mv6: { testValues: null, varianceMode: "Pooled", factor: null, pairedMode: null },
     mv7: { testValues: null, varianceMode: "Pooled", factor: "jk", pairedMode: null },
+    mv8: { testValues: null, varianceMode: "Pooled", factor: null, pairedMode: null },
+    mv4ph: { testValues: null, varianceMode: "Pooled", factor: "treatment", pairedMode: null },
 };
-const SYNTAX = { mv1: "spss/mv1_satu_populasi.sps", mv2: "spss/mv2_dua_populasi.sps", mv3: "spss/mv3_berpasangan.sps", mv4: "spss/mv4_one_way.sps", mv5: "spss/mv5_two_way.sps", mv6: "spss/mv6_two_way_tak_seimbang.sps", mv7: "spss/mv7_one_way_nilai_hilang.sps" };
+const SYNTAX = { mv1: "spss/mv1_satu_populasi.sps", mv2: "spss/mv2_dua_populasi.sps", mv3: "spss/mv3_berpasangan.sps", mv4: "spss/mv4_one_way.sps", mv5: "spss/mv5_two_way.sps", mv6: "spss/mv6_two_way_tak_seimbang.sps", mv7: "spss/mv7_one_way_nilai_hilang.sps", mv8: "spss/mv8_two_way_main_effects.sps", mv4ph: "spss/mv4_posthoc.sps" };
 
 const configs = {};
 for (const cfg of Object.keys(FORMATTER).filter((c) => fs.existsSync(path.join(RUN, `${c}.raw.json`)))) {
@@ -47,7 +49,7 @@ for (const e of spss.filter((x) => configs[x.config])) {
     const loc = locate(e);
     const entry = { config: e.config, table: e.table, labels: e.labels, field: e.field, spss: e.value, spss_display: e.display, source: e.source };
     if (loc.missing) notCovered.push({ ...entry, reason: loc.missing });
-    else values.push({ ...entry, statify: loc.path ? { path: loc.path } : { formatter: loc.formatter } });
+    else values.push({ ...entry, statify: loc.path ? { path: loc.path, ...(loc.scale ? { scale: loc.scale } : {}) } : { formatter: loc.formatter } });
 }
 const fixture = {
     description: "GLM Multivariate vs IBM SPSS 27 (testing/glm-mv-reference). Every expected value is SPSS output run by the user; payloads are the worker payloads of the UI run (worker mode, production build).",

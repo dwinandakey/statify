@@ -16,7 +16,6 @@ export const RepeatedMeasuresDialog = ({
     setIsModelOpen,
     setIsContrastOpen,
     setIsPlotsOpen,
-    setIsPostHocOpen,
     setIsEMMeansOpen,
     setIsSaveOpen,
     setIsOptionsOpen,
@@ -410,14 +409,21 @@ export const RepeatedMeasuresDialog = ({
                             >
                                 Plots
                             </Button>
+                            {/* Post hoc tests are not computed for Repeated
+                                Measures; pairwise comparisons come from EM
+                                Means > Compare main effects. */}
                             <Button
+                                id="repeated-measures-posthoc-button"
                                 className="w-full"
                                 type="button"
                                 variant="outline"
-                                onClick={openDialog(setIsPostHocOpen)}
+                                disabled
                             >
                                 Post Hoc
                             </Button>
+                            <p className="w-full text-[11px] leading-tight text-muted-foreground">
+                                Post Hoc is not supported in this version. Use EM Means &gt; Compare main effects for pairwise comparisons.
+                            </p>
                             <Button
                                 className="w-full"
                                 type="button"

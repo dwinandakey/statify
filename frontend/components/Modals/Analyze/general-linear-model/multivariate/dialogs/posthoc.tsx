@@ -19,6 +19,26 @@ import {
 import type {CheckedState} from "@radix-ui/react-checkbox";
 import {Badge} from "@/components/ui/badge";
 
+// Methods other than LSD, Bonferroni and Sidak are not computed by the
+// Rust module; they are shown disabled.
+const UNSUPPORTED_POSTHOC_OFF = {
+    Scheffe: false,
+    Regwf: false,
+    Regwq: false,
+    Snk: false,
+    Tu: false,
+    Tub: false,
+    Dun: false,
+    Hoc: false,
+    Gabriel: false,
+    Waller: false,
+    Dunnett: false,
+    Tam: false,
+    Dunt: false,
+    Games: false,
+    Dunc: false,
+};
+
 export const MultivariatePostHoc = ({
     isPostHocOpen,
     setIsPostHocOpen,
@@ -33,7 +53,9 @@ export const MultivariatePostHoc = ({
 
     useEffect(() => {
         if (isPostHocOpen) {
-            setPostHocState({ ...data });
+            // Only LSD, Bonferroni and Sidak are computed; clear the other
+            // methods a saved configuration may still carry.
+            setPostHocState({ ...data, ...UNSUPPORTED_POSTHOC_OFF });
             setAvailableVariables(data.SrcList ?? []);
         }
     }, [isPostHocOpen, data]);
@@ -235,6 +257,9 @@ export const MultivariatePostHoc = ({
                                         <Label className="font-bold">
                                             Equal Variances Assumed
                                         </Label>
+                                        <p className="text-xs text-muted-foreground">
+                                            Only LSD, Bonferroni, and Sidak are supported in this version.
+                                        </p>
                                         <ResizablePanelGroup direction="horizontal">
                                             <ResizablePanel defaultSize={50}>
                                                 <div className="grid grid-cols-2 gap-2 p-2">
@@ -308,6 +333,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Scheffe"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Scheffe
                                                                 }
@@ -330,6 +356,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Regwf"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Regwf
                                                                 }
@@ -352,6 +379,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Regwq"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Regwq
                                                                 }
@@ -376,6 +404,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Snk"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Snk
                                                                 }
@@ -398,6 +427,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Tu"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Tu
                                                                 }
@@ -420,6 +450,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Tub"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Tub
                                                                 }
@@ -442,6 +473,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Dun"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Dun
                                                                 }
@@ -464,6 +496,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Hoc"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Hoc
                                                                 }
@@ -487,6 +520,7 @@ export const MultivariatePostHoc = ({
                                                         <div className="flex items-center space-x-2">
                                                             <Checkbox
                                                                 id="Gabriel"
+                                                                disabled
                                                                 checked={
                                                                     postHocState.Gabriel
                                                                 }
@@ -515,6 +549,7 @@ export const MultivariatePostHoc = ({
                                                     <div className="flex items-center space-x-2">
                                                         <Checkbox
                                                             id="Waller"
+                                                            disabled
                                                             checked={
                                                                 postHocState.Waller
                                                             }
@@ -548,9 +583,7 @@ export const MultivariatePostHoc = ({
                                                                     postHocState.ErrorRatio ??
                                                                     ""
                                                                 }
-                                                                disabled={
-                                                                    !postHocState.Waller
-                                                                }
+                                                                disabled
                                                                 onChange={(e) =>
                                                                     handleChange(
                                                                         "ErrorRatio",
@@ -567,6 +600,7 @@ export const MultivariatePostHoc = ({
                                                     <div className="flex items-center space-x-2">
                                                         <Checkbox
                                                             id="Dunnett"
+                                                            disabled
                                                             checked={
                                                                 postHocState.Dunnett
                                                             }
@@ -638,7 +672,7 @@ export const MultivariatePostHoc = ({
                                                     <Label className="font-bold">
                                                         Test
                                                     </Label>
-                                                    <RadioGroup>
+                                                    <RadioGroup disabled>
                                                         <div className="grid grid-cols-3 gap-2">
                                                             <div className="flex items-center space-x-2">
                                                                 <RadioGroupItem
@@ -684,6 +718,7 @@ export const MultivariatePostHoc = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="Tam"
+                                                    disabled
                                                     checked={postHocState.Tam}
                                                     onCheckedChange={(
                                                         checked
@@ -704,6 +739,7 @@ export const MultivariatePostHoc = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="Dunt"
+                                                    disabled
                                                     checked={postHocState.Dunt}
                                                     onCheckedChange={(
                                                         checked
@@ -724,6 +760,7 @@ export const MultivariatePostHoc = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="Games"
+                                                    disabled
                                                     checked={postHocState.Games}
                                                     onCheckedChange={(
                                                         checked
@@ -744,6 +781,7 @@ export const MultivariatePostHoc = ({
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="Dunc"
+                                                    disabled
                                                     checked={postHocState.Dunc}
                                                     onCheckedChange={(
                                                         checked

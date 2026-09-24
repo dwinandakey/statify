@@ -1549,7 +1549,7 @@ function formatPosthocTests(
         // no-op here.
         const twoLevelNote =
             levelCount < 3
-                ? `Note: with only ${levelCount} levels of ${factor} there is a single pairwise comparison (c = 1). Multiple comparison adjustments (Bonferroni, Sidak, Scheffé, …) produce the same p-value as the uncorrected LSD, and the p-value matches the main effect F-test in Tests of Between-Subjects Effects. The 95% Confidence Interval for the mean difference is the additional information that justifies keeping this table.`
+                ? `Note: with only ${levelCount} levels of ${factor} there is a single pairwise comparison (c = 1). Multiple comparison adjustments (Bonferroni, Sidak) produce the same p-value as the uncorrected LSD, and the p-value matches the main effect F-test in Tests of Between-Subjects Effects. The 95% Confidence Interval for the mean difference is the additional information that justifies keeping this table.`
                 : null;
 
         const titleSuffix = singleTestType

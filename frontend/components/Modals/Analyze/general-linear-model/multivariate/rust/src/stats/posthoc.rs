@@ -166,81 +166,61 @@ pub fn calculate_posthoc_tests(
                                 // the two-sample n_i + n_j − 2.
                                 let df = df_full;
                                 let t_value = mean_diff / std_error;
-                                let mut significance = calculate_t_significance(df, t_value);
+                                let p_raw = calculate_t_significance(df, t_value);
+                                let c = ((levels.len() * (levels.len() - 1)) / 2) as f64;
+                                let alpha = config.options.sig_level.unwrap_or(0.05);
 
-                                // Apply multiple comparison correction based on selected method.
-                                // SPSS conventions:
-                                //   Bonferroni:  p_adj = min(1, c · p_raw)
-                                //   Sidak:       p_adj = 1 − (1 − p_raw)^c
-                                // The old code multiplied a clamped p by c — producing
-                                // values up to c (e.g. 5.49 instead of 1.000), which is
-                                // obviously not a probability.
+                                // One entry per selected method, in the SPSS
+                                // order LSD, Bonferroni, Sidak (only these are
+                                // computed). SPSS conventions with c pairwise
+                                // comparisons of the factor:
+                                //   LSD:        p,                   t(1 − α/2)
+                                //   Bonferroni: min(1, c·p),          t(1 − α/(2c))
+                                //   Sidak:      1 − (1 − p)^c,        t(1 − α′/2), α′ = 1 − (1 − α)^(1/c)
+                                // No method selected: unadjusted, labelled
+                                // "Pairwise Comparison".
+                                let mut methods: Vec<&str> = Vec::new();
+                                if config.posthoc.lsd {
+                                    methods.push("LSD");
+                                }
                                 if config.posthoc.bonfe {
-                                    let total_comparisons = (levels.len() * (levels.len() - 1)) / 2;
-                                    significance =
-                                        (significance * (total_comparisons as f64)).min(1.0);
-                                } else if config.posthoc.sidak {
-                                    let total_comparisons = (levels.len() * (levels.len() - 1)) / 2;
-                                    let one_minus =
-                                        (1.0 - significance).max(0.0).min(1.0);
-                                    significance = (1.0 -
-                                        one_minus.powf(total_comparisons as f64))
-                                        .min(1.0)
-                                        .max(0.0);
+                                    methods.push("Bonferroni");
+                                }
+                                if config.posthoc.sidak {
+                                    methods.push("Sidak");
+                                }
+                                if methods.is_empty() {
+                                    methods.push("Pairwise Comparison");
                                 }
 
-                                // Calculate confidence interval (default 95%)
-                                let alpha = 0.05;
-                                let mut t_critical = calculate_t_critical(df, alpha / 2.0);
+                                for method in methods {
+                                    let (significance, upper_tail) = match method {
+                                        "Bonferroni" => ((p_raw * c).min(1.0), alpha / (2.0 * c)),
+                                        "Sidak" => (
+                                            (1.0 - (1.0 - p_raw).max(0.0).min(1.0).powf(c)).min(1.0).max(0.0),
+                                            (1.0 - (1.0 - alpha).powf(1.0 / c)) / 2.0,
+                                        ),
+                                        _ => (p_raw, alpha / 2.0),
+                                    };
+                                    let t_critical = calculate_t_critical(df, upper_tail);
+                                    let ci_lower = mean_diff - t_critical * std_error;
+                                    let ci_upper = mean_diff + t_critical * std_error;
 
-                                // Adjust critical value for multiple comparisons if needed
-                                if config.posthoc.bonfe {
-                                    let total_comparisons = (levels.len() * (levels.len() - 1)) / 2;
-                                    t_critical = calculate_t_critical(
-                                        df,
-                                        alpha / (2.0 * (total_comparisons as f64))
-                                    );
-                                } else if config.posthoc.sidak {
-                                    let total_comparisons = (levels.len() * (levels.len() - 1)) / 2;
-                                    t_critical = calculate_t_critical(
-                                        df,
-                                        1.0 -
-                                            (1.0 - alpha / 2.0).powf(
-                                                1.0 / (total_comparisons as f64)
-                                            )
-                                    );
+                                    tests.push(PostHocTest {
+                                        dependent_variable: dep_var.clone(),
+                                        test_type: method.to_string(),
+                                        factor_name: factor.clone(),
+                                        i_level: level_i.clone(),
+                                        j_level: level_j.clone(),
+                                        mean_difference: mean_diff,
+                                        std_error,
+                                        significance,
+                                        confidence_interval: ConfidenceInterval {
+                                            lower_bound: ci_lower,
+                                            upper_bound: ci_upper,
+                                        },
+                                    });
                                 }
-
-                                let ci_lower = mean_diff - t_critical * std_error;
-                                let ci_upper = mean_diff + t_critical * std_error;
-
-                                // Determine which posthoc test was used
-                                let test_type = if config.posthoc.bonfe {
-                                    "Bonferroni"
-                                } else if config.posthoc.sidak {
-                                    "Sidak"
-                                } else if config.posthoc.scheffe {
-                                    "Scheffe"
-                                } else if config.posthoc.lsd {
-                                    "LSD"
-                                } else {
-                                    "Pairwise Comparison"
-                                };
-
-                                tests.push(PostHocTest {
-                                    dependent_variable: dep_var.clone(),
-                                    test_type: test_type.to_string(),
-                                    factor_name: factor.clone(),
-                                    i_level: level_i.clone(),
-                                    j_level: level_j.clone(),
-                                    mean_difference: mean_diff,
-                                    std_error,
-                                    significance,
-                                    confidence_interval: ConfidenceInterval {
-                                        lower_bound: ci_lower,
-                                        upper_bound: ci_upper,
-                                    },
-                                });
                             }
                         }
                     }

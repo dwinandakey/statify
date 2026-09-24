@@ -31,7 +31,9 @@ from read_xlsx import read_workbook  # noqa: E402
 OUT_DIR = os.path.join(HERE, "..", "spss-output")
 FILES = {"mv1": "mv1_satu_populasi.xlsx", "mv2": "mv2_dua_populasi.xlsx", "mv3": "mv3_berpasangan.xlsx",
          "mv4": "mv4_one_way.xlsx", "mv5": "mv5_two_way.xlsx",
-         "mv6": "mv6_two_way_tak_seimbang.xlsx", "mv7": "mv7_one_way_nilai_hilang.xlsx"}
+         "mv6": "mv6_two_way_tak_seimbang.xlsx", "mv7": "mv7_one_way_nilai_hilang.xlsx",
+         # Langkah KF6 dan KF11 (skripsi-final-v2).
+         "mv8": "mv8_two_way_main_effects.xlsx", "mv4ph": "mv4_posthoc.xlsx"}
 TITLES = ["Report", "Case Processing Summary", "Between-Subjects Factors", "Descriptive Statistics",
           "Box's Test of Equality of Covariance Matrices", "Multivariate Tests",
           "Levene's Test of Equality of Error Variances", "Tests of Between-Subjects Effects"]

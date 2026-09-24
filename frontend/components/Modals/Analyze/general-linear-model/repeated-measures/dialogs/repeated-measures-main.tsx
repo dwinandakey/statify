@@ -272,7 +272,9 @@ export const RepeatedMeasuresContainer = ({
                 ...(mainData.FactorsVar
                     ? {
                           plots: { ...formData.plots, SrcList: [...factorList] },
-                          posthoc: { ...formData.posthoc, SrcList: [...factorList] },
+                          // Post Hoc is disabled for Repeated Measures: no
+                          // factor is sent, so no post hoc test is requested.
+                          posthoc: { ...formData.posthoc, SrcList: [...factorList], FixFactorVars: [] },
                       }
                     : {}),
             };

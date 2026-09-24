@@ -12,6 +12,9 @@
 //                                   the formatted table (4 decimals); none
 //                                   since step 4 (Total comes from Rust)
 //   { missing: "<reason>" }         no Statify counterpart
+//   { path, scale: -1 }             the value at path times scale (Multiple
+//                                   Comparisons: SPSS lists (J, I) as well,
+//                                   Statify only I < J)
 export const MAP = {
     mv1: { dv: { "mpg - 20": "mpg", "disp - 200": "disp", "hp - 150": "hp", "wt - 3": "wt" }, level: {} },
     mv2: { dv: {}, level: { "laki-laki": "1", perempuan: "2" } },
@@ -20,7 +23,12 @@ export const MAP = {
     mv5: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
     mv6: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
     mv7: { dv: {}, level: { "laki-laki": "1", perempuan: "2" } },
+    // mv8: data mv5, model efek utama (Langkah KF6). mv4ph: data mv4 dengan
+    // /POSTHOC=treatment(LSD BONFERRONI SIDAK) (Langkah KF11).
+    mv8: { dv: { "ultimate torque": "Y1A1", "ultimate strain": "Y2A1" }, level: { A1: "1", A2: "2", B1: "1", B2: "2", B3: "3", B4: "4" } },
+    mv4ph: { dv: {}, level: { "treatment 1": "1", "treatment 2": "2", "treatment 3": "3" } },
 };
+const PH_FIELD = { "Mean Difference (I-J)": "mean_difference", "Std. Error": "std_error", "Sig.": "significance" };
 const MV_FIELD = { Value: "value", F: "f", "Hypothesis df": "hypothesis_df", "Error df": "error_df", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const BSE_FIELD = { "Type III Sum of Squares": "sum_of_squares", df: "df", "Mean Square": "mean_square", F: "f_value", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const LEV_FIELD = { "Levene Statistic": "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
@@ -65,6 +73,26 @@ export function locate(e) {
             const dv = dvOf(e.config, L[1]);
             return { path: ["tests_of_between_subjects_effects", "effects", dv, src, BSE_FIELD[e.field]] };
         }
+        case "Multiple Comparisons": {
+            // Labels: Dependent Variable, method, (I) level, (J) level.
+            const [dvLabel, method, li, lj] = L;
+            const dv = dvOf(e.config, dvLabel);
+            const i = levelOf(e.config, li);
+            const j = levelOf(e.config, lj);
+            // Statify stores each pair once with I before J in the order of
+            // the factor levels (ascending codes here); (J, I) is the same
+            // entry with the difference and the interval bounds negated.
+            const reversed = Number(i) > Number(j);
+            const sel = { test_type: method, i_level: reversed ? j : i, j_level: reversed ? i : j };
+            const base = ["posthoc_tests", dv, sel];
+            if (e.field === "Lower Bound" || e.field === "Upper Bound") {
+                const bound = (e.field === "Lower Bound") !== reversed ? "lower_bound" : "upper_bound";
+                return { path: [...base, "confidence_interval", bound], ...(reversed ? { scale: -1 } : {}) };
+            }
+            const key = PH_FIELD[e.field];
+            if (!key) return { missing: "kolom tidak dipetakan" };
+            return { path: [...base, key], ...(reversed && key === "mean_difference" ? { scale: -1 } : {}) };
+        }
         default:
             return { missing: "tabel tidak dipetakan" };
     }
@@ -76,9 +104,9 @@ export function getPath(obj, path) {
         if (cur === undefined || cur === null) return undefined;
         if (typeof step === "object") {
             if (!Array.isArray(cur)) return undefined;
-            const [k, v] = Object.entries(step)[0];
-            // factor_value "" also matches the no-factor "Overall" group.
-            cur = cur.find((x) => x[k] === v || (k === "factor_value" && v === "" && x.factor_name === "Overall"));
+            // Every field of the step must match; factor_value "" also
+            // matches the no-factor "Overall" group.
+            cur = cur.find((x) => Object.entries(step).every(([k, v]) => x[k] === v || (k === "factor_value" && v === "" && x.factor_name === "Overall")));
         } else {
             cur = cur[step];
         }

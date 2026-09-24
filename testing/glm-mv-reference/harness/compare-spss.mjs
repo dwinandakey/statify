@@ -71,7 +71,8 @@ function lookup(e) {
         const tables = runs[e.config].ui.map((t) => JSON.parse(t.output_data).tables[0]);
         return { raw: undefined, ui: formattedCell(tables, loc.formatter) ?? u.ui };
     }
-    return { raw: getPath(runs[e.config].raw, loc.path), ui: u.ui };
+    const v = getPath(runs[e.config].raw, loc.path);
+    return { raw: typeof v === "number" && loc.scale ? v * loc.scale : v, ui: u.ui };
 }
 
 /** Displayed (UI) cell for one SPSS value. */
@@ -135,6 +136,24 @@ function uiLookup(e) {
             const key = BSE_FIELD[e.field];
             if (src === "Total") return { raw: undefined, ui: num(ui?.[key]), formatterOnly: true };
             return { raw: raw.tests_of_between_subjects_effects?.effects?.[dv]?.[src]?.[key], ui: num(ui?.[key]) };
+        }
+        case "Multiple Comparisons": {
+            // Displayed table "Multiple Comparisons — <factor>[ (<method>)]":
+            // one row per stored pair (I < J) and method.
+            const loc = locate(e);
+            if (!loc.path) return {};
+            const [, dv, sel] = loc.path;
+            const t = runs[e.config].ui.map((x) => JSON.parse(x.output_data).tables[0]).find((x) => /^Multiple Comparisons/.test(x.title ?? ""));
+            if (!t) return {};
+            let dvCarry = "";
+            const row = t.rows.map((r) => ({ ...r, dependent_variable: (dvCarry = r.dependent_variable || dvCarry) })).find((r) =>
+                r.dependent_variable === uiDv(e.config, dv) && (r.test_type === undefined ? t.title.endsWith(`(${sel.test_type})`) : r.test_type === sel.test_type) &&
+                String(r.i_level) === sel.i_level && String(r.j_level) === sel.j_level);
+            if (!row) return {};
+            const key = { "Mean Difference (I-J)": "mean_difference", "Std. Error": "std_error", "Sig.": "significance" }[e.field]
+                ?? (loc.path.at(-1) === "lower_bound" ? "ci_lower" : "ci_upper");
+            const v = num(row[key]);
+            return { ui: typeof v === "number" && loc.scale ? v * loc.scale : v };
         }
         default:
             return {};

@@ -28,7 +28,7 @@ type Entry = {
     spss: number;
     spss_display: boolean;
     source: string;
-    statify: { path?: Step[]; formatter?: { title: string; match: Record<string, string>; key: string } };
+    statify: { path?: Step[]; scale?: number; formatter?: { title: string; match: Record<string, string>; key: string } };
 };
 
 const fixture = JSON.parse(fs.readFileSync(path.join(__dirname, "fixtures/mv-reference-values.json"), "utf8"));
@@ -40,8 +40,10 @@ function getPath(obj: any, steps: Step[]): unknown {
         if (cur === undefined || cur === null) return undefined;
         if (typeof step === "object") {
             if (!Array.isArray(cur)) return undefined;
-            const [k, v] = Object.entries(step)[0];
-            cur = cur.find((x: any) => x[k] === v || (k === "factor_value" && v === "" && x.factor_name === "Overall"));
+            // Every field of the step must match.
+            cur = cur.find((x: any) =>
+                Object.entries(step).every(([k, v]) => x[k] === v || (k === "factor_value" && v === "" && x.factor_name === "Overall"))
+            );
         } else {
             cur = cur[step];
         }
@@ -101,8 +103,10 @@ describe("GLM Multivariate vs SPSS 27", () => {
         describe(group, () => {
             it.each(entries.map((e) => [`${e.labels.join(" / ")} · ${e.field}`, e] as const))("%s", (_name, e) => {
                 const r = results[e.config];
+                const atPath = e.statify.path ? (getPath(r.raw, e.statify.path) as number | undefined) : undefined;
+                // scale: Multiple Comparisons (J, I) = −(I, J) (see mapping.mjs).
                 const statify = e.statify.path
-                    ? (getPath(r.raw, e.statify.path) as number | undefined)
+                    ? (typeof atPath === "number" && e.statify.scale ? atPath * e.statify.scale : atPath)
                     : formattedCell(r.formatted, e.statify.formatter!);
                 expect(typeof statify).toBe("number");
                 const diff = Math.abs((statify as number) - e.spss);
