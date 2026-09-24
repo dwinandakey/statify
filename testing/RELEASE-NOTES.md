@@ -23,7 +23,8 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`
 | `5017948c` | BB-KF07-02: slot within RM tetap bila Define diklik tanpa perubahan definisi (`repeated-measures/dialogs/repeated-measures-main.tsx`) |
 | `37e0e15b` | BB-KF08-02: Number of Levels kosong atau bukan angka menampilkan "Number of levels must be a valid number." (`repeated-measures/dialogs/define/repeated-measures-dialog.tsx`) |
 | `851321f9` | Pemeriksaan regresi v3 (`testing/glm-mv-reference/results/fix-steps/step15-v3/`) |
-| commit berikutnya | Iterasi 2 black-box, dokumen skenario, pemetaan kebutuhan, berkas ini. **Tag `skripsi-final-v3`.** |
+| `4ea1e16f` | Iterasi 2 black-box, dokumen skenario, pemetaan kebutuhan, bagian v3 berkas ini |
+| commit berikutnya | Catatan integritas eksekusi iterasi 2 (`testing/black-box/integritas-iterasi-2.txt`, `harness/bb-integritas.mjs`), keterangan BB-KF08-02, catatan keterbatasan §v3.6, bahan Bab V (`testing/black-box/ringkasan-bab5.md`). **Tag `skripsi-final-v3`** (sebelumnya di `4ea1e16f`, dipindah sebelum push; kode frontend sama). |
 
 Tidak ada merge dan tidak ada push di v3 sampai disetujui.
 
@@ -53,6 +54,11 @@ Tidak ada merge dan tidak ada push di v3 sampai disetujui.
 - **Hasil:** 50 Sesuai, 0 Tidak Sesuai, 0 kendala alat uji.
 - **Nilai tampil vs SPSS 27:** 1536/1536 cocok (MV 1063, RM 473).
 - **Rincian:** `testing/black-box/skenario-black-box.md` (ringkasan kedua iterasi, revisi skenario R1–R2).
+
+### v3.6 Catatan keterbatasan
+
+1. **Catatan Design pada Levene MV (faktorial penuh).** Field `design` dari Rust hanya memuat efek utama. Karena itu, pada model faktorial penuh catatan Design di tabel Levene disusun di frontend dengan menambahkan suku interaksi dari efek Multivariate Tests. Bila Multivariate Tests gagal dihitung (misalnya matriks galat singular), suku interaksi tidak ikut tercantum.
+2. **Number of Levels (Define RM).** Input bertipe number tidak dapat membedakan "bukan angka" dari "kosong": browser tidak memasukkan huruf, sehingga isian bukan angka terbaca kosong. Keduanya menampilkan "Number of levels must be a valid number."; angka di luar 2–99 menampilkan "Number of levels must be between 2 and 99."
 
 ### v3.5 Menjalankan build v3 secara lokal
 

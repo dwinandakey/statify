@@ -154,7 +154,7 @@
   },
   "BB-KF08-02": {
    "hasil": "Sesuai",
-   "keterangan": "Ketujuh pesan sesuai: \"Factor name cannot be empty.\"; \"Factor name cannot contain spaces or special characters. Use only letters, numbers, and underscores.\"; \"Number of levels must be a valid number.\" (level \"abc\"; perbaikan v3); \"Number of levels must be between 2 and 99.\" (level 1 dan 100); \"Measure name cannot be empty.\"; \"Measure name cannot contain spaces or special characters. Use only letters, numbers, and underscores.\"; \"A measure with this name already exists.\""
+   "keterangan": "Chrome tidak memasukkan huruf ke input bertipe number, sehingga isian \"abc\" membuat nilai isian kosong; yang teruji untuk langkah ini adalah jalur isian kosong atau tidak valid. Ketujuh pesan sesuai: \"Factor name cannot be empty.\"; \"Factor name cannot contain spaces or special characters. Use only letters, numbers, and underscores.\"; \"Number of levels must be a valid number.\" (level \"abc\"; perbaikan v3); \"Number of levels must be between 2 and 99.\" (level 1 dan 100); \"Measure name cannot be empty.\"; \"Measure name cannot contain spaces or special characters. Use only letters, numbers, and underscores.\"; \"A measure with this name already exists.\""
   },
   "BB-KF08-03": {
    "hasil": "Sesuai",
