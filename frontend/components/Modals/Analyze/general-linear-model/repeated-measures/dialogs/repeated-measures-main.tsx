@@ -228,12 +228,35 @@ export const RepeatedMeasuresContainer = ({
         setCombinationVars(nextCombinationVars);
         setFactorVars(nextFactorVars);
 
-        // Reset SubVar to the new placeholder set so the main dialog shows the
-        // correct slots for the user to fill.
-        setFormData((prev) => ({
-            ...prev,
-            main: { ...prev.main, SubVar: nextCombinationVars },
-        }));
+        // Reset SubVar to the new placeholder set only when the definition
+        // (factor names and levels, measure names) actually changed. When
+        // Define is clicked again without changes, the filled slots are kept.
+        const definitionKey = (d: RepeatedMeasureDefineData | undefined) =>
+            JSON.stringify({
+                factors: (d?.factors ?? []).map((f) => [f.name, f.levels]),
+                measures: (d?.measures ?? []).map((m) => m.name),
+            });
+        const definitionUnchanged =
+            definitionKey(defineData.main) === definitionKey(defineState);
+        const slotSuffix = (s: string) => s.match(/_(\(.*\))$/)?.[1] ?? null;
+        setFormData((prev) => {
+            const prevSubVar = prev.main.SubVar ?? [];
+            const slotsAligned =
+                prevSubVar.length === nextCombinationVars.length &&
+                prevSubVar.every(
+                    (s, i) => slotSuffix(s) === slotSuffix(nextCombinationVars[i])
+                );
+            return {
+                ...prev,
+                main: {
+                    ...prev.main,
+                    SubVar:
+                        definitionUnchanged && slotsAligned
+                            ? prevSubVar
+                            : nextCombinationVars,
+                },
+            };
+        });
 
         setIsDefineOpen(false);
         setIsMainOpen(true);
