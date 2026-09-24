@@ -1,0 +1,209 @@
+{
+  "base": "http://localhost:3001",
+  "chromium": "143.0.7499.4",
+  "playwright": "1.57.0",
+  "startedAt": "2026-09-24T05:07:38.848Z",
+  "scenarios": {
+    "BB-KF01-01": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF01-02": {
+      "status": "selesai",
+      "shots": 5
+    },
+    "BB-KF02-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF02-02": {
+      "status": "selesai",
+      "shots": 4
+    },
+    "BB-KF02-03": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF03-01": {
+      "status": "selesai",
+      "shots": 6
+    },
+    "BB-KF03-02": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF03-03": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF04-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF04-02": {
+      "status": "selesai",
+      "shots": 4
+    },
+    "BB-KF05-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF05-02": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF06-01": {
+      "status": "selesai",
+      "shots": 5
+    },
+    "BB-KF06-02": {
+      "status": "selesai",
+      "shots": 5
+    },
+    "BB-KF06-03": {
+      "status": "selesai",
+      "shots": 6
+    },
+    "BB-KF06-04": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF06-05": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF06-06": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF06-07": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF06-08": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF06-09": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF10-01": {
+      "status": "selesai",
+      "shots": 5
+    },
+    "BB-KF10-02": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF11-01": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF11-02": {
+      "status": "selesai",
+      "shots": 6
+    },
+    "BB-KF11-03": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF13-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF13-02": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF13-03": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF13-04": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF14-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF14-02": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF07-01": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF07-02": {
+      "status": "selesai",
+      "shots": 5
+    },
+    "BB-KF08-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF08-02": {
+      "status": "selesai",
+      "shots": 8
+    },
+    "BB-KF08-03": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF08-04": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF08-05": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF09-01": {
+      "status": "selesai",
+      "shots": 4
+    },
+    "BB-KF09-02": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF09-03": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF10-03": {
+      "status": "selesai",
+      "shots": 4
+    },
+    "BB-KF11-04": {
+      "status": "selesai",
+      "shots": 1
+    },
+    "BB-KF11-05": {
+      "status": "selesai",
+      "shots": 4
+    },
+    "BB-KF12-01": {
+      "status": "selesai",
+      "shots": 3
+    },
+    "BB-KF13-05": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF13-06": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF13-07": {
+      "status": "selesai",
+      "shots": 2
+    },
+    "BB-KF14-03": {
+      "status": "selesai",
+      "shots": 2
+    }
+  },
+  "finishedAt": "2026-09-24T05:07:50.206Z"
+}

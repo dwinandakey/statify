@@ -1,0 +1,94 @@
+{
+ "id": "BB-KF11-01",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "checkbox": [
+   {
+    "id": "Lsd",
+    "disabled": false
+   },
+   {
+    "id": "Bonfe",
+    "disabled": false
+   },
+   {
+    "id": "Sidak",
+    "disabled": false
+   },
+   {
+    "id": "Scheffe",
+    "disabled": true
+   },
+   {
+    "id": "Regwf",
+    "disabled": true
+   },
+   {
+    "id": "Regwq",
+    "disabled": true
+   },
+   {
+    "id": "Snk",
+    "disabled": true
+   },
+   {
+    "id": "Tu",
+    "disabled": true
+   },
+   {
+    "id": "Tub",
+    "disabled": true
+   },
+   {
+    "id": "Dun",
+    "disabled": true
+   },
+   {
+    "id": "Hoc",
+    "disabled": true
+   },
+   {
+    "id": "Gabriel",
+    "disabled": true
+   },
+   {
+    "id": "Waller",
+    "disabled": true
+   },
+   {
+    "id": "Dunnett",
+    "disabled": true
+   },
+   {
+    "id": "Tam",
+    "disabled": true
+   },
+   {
+    "id": "Dunt",
+    "disabled": true
+   },
+   {
+    "id": "Games",
+    "disabled": true
+   },
+   {
+    "id": "Dunc",
+    "disabled": true
+   }
+  ],
+  "catatan": 1
+ },
+ "notes": [
+  "BB-KF11-01.png: dialog Multivariate: Post Hoc"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 4
+}

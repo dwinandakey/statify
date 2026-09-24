@@ -1,0 +1,29 @@
+{
+ "id": "BB-KF02-03",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan 1 DV",
+   "texts": [
+    "Please select at least two dependent variables for multivariate analysis.",
+    "Please select at least two dependent variables for multivariate analysis."
+   ],
+   "file": "BB-KF02-03.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "dialogMasihTerbuka": true,
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF02-03.png: toast: OK dengan 1 DV"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 9
+}

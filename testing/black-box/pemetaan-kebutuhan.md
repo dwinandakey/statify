@@ -230,6 +230,22 @@ Perubahan dari pemetaan v1:
 - Model kustom yang ditolak dan Levene model efek utama adalah perilaku baru v2.
 - Pesan singular MV dan "No complete cases" diperiksa pada WASM v2 dengan dataset baru (`testing/black-box/data/`).
 
+## Pesan yang tidak bisa dipicu dari UI
+
+Pesan berikut ada di kode v2, tetapi validasi di dialog selalu berjalan lebih dulu, sehingga kondisinya tidak pernah sampai ke kode tersebut. Karena itu pesan ini tidak dijadikan skenario black-box. Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`.
+
+| Pesan | Lokasi pesan | Alasan tidak terjangkau |
+|---|---|---|
+| `TestValues must have the same length as Dependent Variables. Got <n> values for <m> dependent variables.` | `multivariate/rust/src/wasm/constructor.rs:171-183` | Saat subdialog dibuka, jumlah isian μ₀ disesuaikan dengan jumlah DV (`multivariate/dialogs/test-values.tsx:18-42`, `resizeTestValues`). Saat OK, vektor μ₀ dipotong atau ditambah 0 sampai sama panjang dengan DV (`multivariate/dialogs/multivariate-main.tsx:185-202`, `normalizedTestValues`). Konfigurasi yang dikirim ke WASM selalu sama panjang. |
+| `Dependent variable must be selected for multivariate analysis` | `multivariate/rust/src/wasm/constructor.rs:137-141` | OK ditolak bila DV kurang dari dua, kecuali pada mode Paired (`multivariate/dialogs/dialog.tsx:247-262`). Pada mode Paired, service mengisi DepVar dengan nama variabel selisih (`multivariate/services/multivariate-analysis.ts:108`). |
+| `Model specification method must be selected` | `multivariate/rust/src/wasm/constructor.rs:144-148` | Dialog Model memakai radio: tepat satu dari NonCust, Custom, dan BuildCustomTerm bernilai true (`multivariate/dialogs/model.tsx:68-74`). Bawaannya NonCust = true (`multivariate/constants/multivariate-default.ts:25-27`). |
+| `Fixed factors must be specified for post-hoc tests` | `multivariate/rust/src/wasm/constructor.rs:151-157` | Daftar sumber Post Hoc (`SrcList`) selalu disalin dari Fixed Factor(s) di dialog utama (`multivariate/dialogs/multivariate-main.tsx:112-115`). Daftar itu tidak pernah terisi bila Fixed Factor kosong. |
+| `A factor with this name already exists.` | `repeated-measures/dialogs/define/repeated-measures-dialog.tsx:72-81` | Penolakan faktor within kedua dijalankan lebih dulu: `handleAddFactor` berhenti di baris 150-153 bila sudah ada satu faktor, sebelum `isFactorNameValid` di baris 156. Pada Change (baris 171-183), satu-satunya faktor adalah faktor yang sedang diubah, dan faktor itu dikecualikan dari pemeriksaan duplikat (baris 76). |
+| `No within-subjects variables are defined. Go back to Define and add a within-subjects factor and a measure.` | `repeated-measures/dialogs/dialog.tsx:183-188` | Define menolak konfigurasi tanpa faktor atau tanpa measure (`repeated-measures/dialogs/define/repeated-measures-dialog.tsx:342-349`). Karena itu dialog utama selalu dibuka dengan minimal satu slot. |
+| `At least one subject variable must be selected for repeated measures analysis` | `repeated-measures/rust/src/wasm/constructor.rs:111-116` | Slot selalu ada (baris sebelumnya), dan OK ditolak bila ada slot yang belum diisi (`repeated-measures/dialogs/dialog.tsx:190-193`). |
+| `Designs with more than one within-subjects factor are not supported in this version` (Rust, tanpa titik) | `repeated-measures/rust/src/stats/rm_model.rs:270-273` | Faktor within kedua sudah ditolak di Define, dengan pesan versi UI yang diakhiri titik (`repeated-measures/dialogs/define/repeated-measures-dialog.tsx:150-153` dan `338-341`). |
+| `Estimated marginal means are not supported for designs with more than one within-subjects factor yet` | `repeated-measures/rust/src/wasm/function.rs:400-404` | Sama dengan baris sebelumnya: desain dengan lebih dari satu faktor within tidak dapat dibuat dari UI. |
+
 ## Keterbatasan terhadap redaksi Tabel 5 lama (dicatat, bukan skenario)
 
 - Uji normalitas multivariat tidak ada di kedua modul.

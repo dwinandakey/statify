@@ -1,0 +1,49 @@
+{
+ "id": "BB-KF06-08",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: custom [\"faktorA\",\"faktorB\",\"faktorA(faktorB)\"] → kotak Model: [\"faktorA\",\"faktorB\",\"faktorA(faktorB))\"] (BB-KF06-08-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Nested terms are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Nested terms are not supported in this version."
+   ],
+   "file": "BB-KF06-08-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Nested terms are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Nested terms are not supported in this version."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-custom-terms": [
+   "faktorA",
+   "faktorB",
+   "faktorA(faktorB))"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-08-1.png: dialog Model (custom): faktorA; faktorB; faktorA(faktorB))",
+  "BB-KF06-08-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72
+}

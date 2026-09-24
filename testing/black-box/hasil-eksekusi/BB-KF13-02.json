@@ -1,0 +1,39 @@
+{
+ "id": "BB-KF13-02",
+ "steps": [
+  "impor bb-mv-no-complete.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [
+  {
+   "label": "OK",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value.",
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value."
+   ],
+   "file": "BB-KF13-02.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value.",
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF13-02.png: toast: OK"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 12
+}

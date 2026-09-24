@@ -1,0 +1,20 @@
+{
+ "id": "BB-KF14-02",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "plotsDisabled": true,
+  "dialogPlotsTerbuka": 0,
+  "catatan": 1
+ },
+ "notes": [
+  "BB-KF14-02.png: tombol Plots nonaktif dengan keterangan"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 4
+}

@@ -1,0 +1,21 @@
+{
+ "id": "BB-KF11-04",
+ "steps": [
+  "impor rm_c.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: sesi(3); measure nilai"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "postHocDisabled": true,
+  "dialogPostHocTerbuka": 0,
+  "catatan": 1
+ },
+ "notes": [
+  "BB-KF11-04.png: tombol Post Hoc RM nonaktif"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7
+}
