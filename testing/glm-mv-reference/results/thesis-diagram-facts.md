@@ -1,6 +1,6 @@
 # Fakta kode GLM Multivariate untuk sequence diagram (Tahap 1 dan Tahap 2 Bagian 1)
 
-Dokumen ini adalah hasil investigasi saja; tidak ada kode yang diubah.
+Dokumen ini adalah hasil investigasi saja; tidak ada kode yang diubah. Pembaruan untuk skripsi-final-v2 ada di bagian "Pembaruan skripsi-final-v2" di bawah.
 
 - **Kondisi kode:** HEAD branch `validation/mv-spss`. Investigasi awal pada commit `6e4c5a89`; diperbarui untuk commit `1c7335d8` (Observed Power Welch, B.5 dan B.6).
 - **Nomor baris `stats/multivariate_tests.rs`:** mengacu pada `6e4c5a89`. Sejak `1c7335d8`, baris sesudah 348 bergeser **+5** (mis. `calculate_hypothesis_error_matrices` di 379, `calculate_multivariate_test_statistics` di 609, `effect_hypothesis_sscps` di 946). Berkas lain tidak berubah.
@@ -8,6 +8,39 @@ Dokumen ini adalah hasil investigasi saja; tidak ada kode yang diubah.
 - **Path Rust:** relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/multivariate/rust/src/`.
 - **Nama:** fungsi, variabel, konteks galat, dan pesan ditulis persis seperti di kode. Nomor baris mengacu pada `6e4c5a89`; untuk `stats/multivariate_tests.rs` lihat catatan pergeseran di atas.
 - **Modul `core`:** `stats/core.rs` hanya berisi `pub use` dari semua modul `stats/*`. Karena itu `core::get_factor_levels` dan `common::get_factor_levels` adalah fungsi yang sama (`stats/common.rs`).
+
+
+---
+
+## Pembaruan skripsi-final-v2 (tag `skripsi-final-v2`, branch `ilham`)
+
+Bagian A dan B di bawah ditulis untuk `6e4c5a89` / `1c7335d8` (skripsi-final-v1). Di v2 (langkah 11–14, `thesis-impact.md` §e), yang berubah untuk kedua diagram adalah:
+
+**Tahap 1 (`MultivariateAnalysis::new`):** tidak berubah. Konstruktor identik dengan v1, termasuk `listwise_complete_cases`.
+
+**Awal `run_analysis` (`wasm/function.rs`):** langkah baru sebelum `basic_processing_summary`:
+
+| # | Langkah | Kode | Bila gagal |
+|---|---|---|---|
+| 0a | Salin konfigurasi | `let mut model_config = config.clone();` | — |
+| 0b | Normalisasi model dialog Model | `normalize_model_spec(&mut model_config)` (privat, baru): Full Factorial → langsung `Ok`; Build Terms / Build Custom Terms setara faktorial penuh → `NonCust = true`; hanya efek utama → `NonCust = false` | `error_collector.add_error("config.validation.model_terms", &msg)`; `return Err(string_to_js_error(msg))`. Pesan: "Nested terms are not supported in this version.", "The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.", "Model term '<t>' is not a selected fixed factor or covariate.", "Interaction terms with covariates are not supported in this version.", "The custom model must include every fixed factor and covariate as a main effect ('<nama>' is missing).", "Only the full factorial model and the main-effects model are supported in this version." |
+| 0c | Pakai konfigurasi hasil normalisasi | `let config = &model_config;` | — |
+
+Dengan langkah ini, cabang `Err(e)` di konstruktor (A.1 langkah 24) **dapat terjangkau** di v2 (model kustom yang ditolak). Pada v1 cabang itu tidak terjangkau.
+
+**Tahap 2 Bagian 1 (`calculate_multivariate_tests`):**
+
+| Langkah di B.1 | Perubahan v2 |
+|---|---|
+| #7 `generate_interaction_terms(&factors)` untuk `terms` | Kondisi menjadi `factors.len() > 1 && config.model.non_cust` |
+| #8 `effect_hypothesis_sscps(...)` | Pada model efek utama (`!non_cust`), hasilnya juga memuat `"Intercept"` (H Intercept dari desain berkode deviasi tanpa kolom intercept, pada y − μ₀) dan entri galat model aditif `MAIN_EFFECTS_ERROR_KEY` (E residual, df n − kolom desain) |
+| #9, #12 `calculate_hypothesis_error_matrices(...)` | Di awal fungsi: bila `!config.model.non_cust`, H dan df diambil dari `term_sscp.get(effect)` (termasuk Intercept), serta E dan df galat dari `term_sscp.get(MAIN_EFFECTS_ERROR_KEY)`, lalu `return`. Cabang lama (Intercept rata-rata sel, E sel faktorial penuh) hanya untuk faktorial penuh. |
+| #15–#18 loop interaksi | Kondisi menjadi `factors.len() > 1 && config.model.non_cust` (tidak ada baris interaksi pada model efek utama) |
+| #19–#25 Welch, `design_note`, return | Tidak berubah |
+
+Fungsi lain yang ikut membaca `config.model.non_cust` (di luar diagram Tahap 2 Bagian 1): `build_design_matrix_and_response`, `calculate_tests_between_subjects_effects`, `calculate_between_subjects_sscp`, `generate_parameter_names`, `build_model_string` (residual plots), `compute_model_mse` (post hoc), dan `calculate_levene_test` (satu uji per DV lewat `model_residual_levene`).
+
+**Nomor baris `stats/multivariate_tests.rs` di v2:** bergeser dari angka di bawah. Nama fungsi dan urutan panggilan untuk faktorial penuh tetap.
 
 ---
 

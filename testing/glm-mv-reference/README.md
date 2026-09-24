@@ -143,7 +143,7 @@ Perbedaan penyajian yang sudah diketahui sebelum perbandingan (bukan hasil uji):
 
 ## 4. Hasil
 
-Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md): 1686 dari 1686 nilai SPSS yang punya padanan lulus (toleransi 0,001; selisih maksimum 5,8·10⁻¹⁰ pada nilai presisi penuh). Isinya: alur, hasil per tabel, riwayat perbaikan per langkah, penyebab dan perbaikan, dan bagian yang belum dicakup.
+Hasil validasi ada di [`results/spss-validation/README.md`](results/spss-validation/README.md): 2339 dari 2339 nilai SPSS yang punya padanan lulus (skripsi-final-v2: mv1–mv8 dan mv4ph) (toleransi 0,001; selisih maksimum 5,8·10⁻¹⁰ pada nilai presisi penuh). Isinya: alur, hasil per tabel, riwayat perbaikan per langkah, penyebab dan perbaikan, dan bagian yang belum dicakup.
 
 Harness yang dipakai:
 

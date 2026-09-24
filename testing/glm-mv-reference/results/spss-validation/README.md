@@ -1,13 +1,13 @@
 # Validasi GLM Multivariate terhadap SPSS 27
 
-Diperbarui 2026-09-24, setelah perbaikan step 1–10 (branch `validation/mv-spss`, commit kode terakhir `1c7335d8`).
+Diperbarui 2026-09-24 untuk **skripsi-final-v2** (branch `ilham`), setelah perbaikan step 1–14. Validasi v1 (`skripsi-final-v1`, step 1–10) tetap tercakup; v2 menambah mv8 (Two-Way tanpa interaksi) dan mv4ph (Multiple Comparisons).
 
 ## Ringkasan
 
 Nilai pembanding berasal dari keluaran SPSS 27 yang dijalankan pengguna dari `spss/mv1..mv7.sps` dan diekspor ke `spss-output/*.xlsx` (beserta `.spv`). Toleransinya |Statify − SPSS| ≤ 0,001.
 
-- **Hasil akhir:** dari 1698 nilai SPSS, 1686 punya padanan di Statify, dan **ke-1686 nilai itu lulus (0 gagal)**. 12 nilai tidak punya padanan (§5).
-- **Presisi:** selisih maksimum pada nilai SPSS presisi penuh adalah 5,8·10⁻¹⁰, termasuk Observed Power (maks 2,6·10⁻¹⁰). 74 nilai yang disimpan SPSS sebagai teks tiga desimal berselisih paling banyak 5,0·10⁻⁴.
+- **Hasil akhir (v2):** dari 2351 nilai SPSS (9 konfigurasi: mv1–mv8 dan mv4ph), 2339 punya padanan di Statify, dan **ke-2339 nilai itu lulus (0 gagal)**. 12 nilai tidak punya padanan (§5). (v1: 1686 dari 1698, mv1–mv7.)
+- **Presisi:** selisih maksimum pada nilai SPSS presisi penuh adalah 5,8·10⁻¹⁰, termasuk Observed Power (maks 2,6·10⁻¹⁰). 108 nilai yang disimpan SPSS sebagai teks (tiga desimal, atau dua desimal bertanda `*` pada Multiple Comparisons) berselisih paling banyak 5,0·10⁻⁴.
 - **Dari awal ke akhir:** validasi awal (mv1–mv5, kode `82a63b45`) memberi 887 lulus dan 77 gagal dari 964 nilai berpadanan. Kegagalan itu berasal dari 5 penyebab. Dataset turunan mv6 (two-way tak seimbang) dan mv7 (nilai hilang) memunculkan 3 penyebab lagi. Kedelapan penyebab diperbaiki satu per satu (§3, §4) tanpa regresi. Descriptive Statistics dua faktor ditambahkan di step 9.
 - **Pemeriksaan tiap langkah:** keluaran main thread dan web worker byte-identik untuk ketujuh konfigurasi, dan Jest penuh kembali ke baseline 49 suite gagal (suite yang sudah gagal sebelum pekerjaan ini). API publik WASM (glue JS, `.d.ts`) tidak berubah di semua langkah.
 - **API publik crate Rust:** sama dengan `82a63b45` sejak step 8e. Step 8b dan 8c sempat menambah dua fungsi `pub`, dan step 8e mengoreksinya (§4.11). Rincian perubahan kode ada di `results/thesis-impact.md`.
@@ -32,28 +32,30 @@ Nilai pembanding berasal dari keluaran SPSS 27 yang dijalankan pengguna dari `sp
    | mv5 | DV Y1A1, Y2A1; Fixed Factor faktorA, faktorB |
    | mv6 | seperti mv5, data `two-way manova tak seimbang` (N = 26, ukuran sel 2–4) |
    | mv7 | seperti mv2, data `hotelling 2 populasi independen dengan nilai hilang` (67 baris, 62 lengkap) |
+   | mv8 (v2) | seperti mv5; dialog **Model** → **Build Terms**, drag `faktorA` dan `faktorB` ke Model (model efek utama, `/DESIGN=faktorA faktorB`) |
+   | mv4ph (v2) | seperti mv4; dialog **Post Hoc** → drag `treatment` ke "Post Hoc Tests for:", centang LSD, Bonferroni, Sidak (`/POSTHOC=treatment(LSD BONFERRONI SIDAK)`) |
 
-   Options untuk semua konfigurasi: Descriptive statistics, Estimates of effect size, dan Observed power. Homogeneity tests dicentang untuk mv2 dan mv4–mv7.
+   Options untuk semua konfigurasi: Descriptive statistics, Estimates of effect size, dan Observed power. Homogeneity tests dicentang untuk mv2 dan mv4–mv8 (termasuk mv4ph).
 
    Errors Logs kosong untuk mv1–mv6. mv7 mencatat "2 case(s) with missing values were excluded (listwise)." (§4.6).
 3. **Pengambilan nilai Statify.** Harness memasang penyadap `Worker` di sisi uji; kode aplikasi tidak diubah untuk keperluan ini. Penyadap merekam:
    - payload permintaan ke worker (data yang sudah dipotong dan konfigurasi dialog);
    - hasil mentah WASM dalam respons worker, pada presisi penuh sebelum dibulatkan formatter: `<cfg>.raw.json`;
    - tabel yang disimpan dan ditampilkan aplikasi (4 desimal): `<cfg>.json`.
-4. **Nilai acuan SPSS.** `harness/spss_extract.py` membaca xlsx dengan pustaka standar Python dan menulis `spss-output/spss-values.json`: 1698 nilai, masing-masing dengan `source` (berkas dan tabel).
+4. **Nilai acuan SPSS.** `harness/spss_extract.py` membaca xlsx dengan pustaka standar Python dan menulis `spss-output/spss-values.json`: 2351 nilai (v1: 1698), masing-masing dengan `source` (berkas dan tabel).
 5. **Perbandingan.** `harness/compare-spss.mjs` memakai pemetaan di `harness/mapping.mjs`.
    - **Sumber nilai Statify:** hasil mentah worker (presisi penuh). Sejak step 4, baris *Total* juga diambil dari hasil mentah.
    - **Pemeriksaan tampilan:** semua sel yang lulus juga dicek pada tabel tampilan, dan tidak ada yang gagal.
 6. **Uji acuan Jest.**
    - Berkas: `frontend/.../multivariate/__test__/multivariate-reference.test.ts`, dengan fixture `__test__/fixtures/mv-reference-values.json` yang dibuat oleh `harness/make-fixture.mjs`.
    - Fixture memuat payload worker dari run UI dan semua nilai SPSS beserta sumbernya. Tidak ada nilai harapan yang berasal dari Statify.
-   - Uji memutar ulang payload lewat `rust/pkg` dan `transformMultivariateResult`. Hasil akhirnya: **1686 lulus, 0 gagal, 12 todo** (todo = tanpa padanan). Angka ini sama dengan perbandingan jalur UI.
+   - Uji memutar ulang payload lewat `rust/pkg` dan `transformMultivariateResult`. Hasil akhirnya (v2): **2339 lulus, 0 gagal, 12 todo** (todo = tanpa padanan). Angka ini sama dengan perbandingan jalur UI.
 
 Nilai F yang dicetak SPSS dengan huruf catatan kaki ("2.436b", "Exact statistic" atau "upper bound") disimpan SPSS sebagai teks tiga desimal. Selisih wajar untuk nilai ini ≤ 5·10⁻⁴.
 
 **Baris kosong di akhir data (mv2, mv7).** CSV termuat 67 baris, tetapi `getSlicedData` memotong baris kosong di ujung, sehingga payload ke WASM berisi 64 baris. Nilai hilang *di tengah* data (mv7: x2 kasus 15, x4 kasus 45) dibuang oleh listwise deletion di Rust (§4.6), sehingga N = 62, sama dengan SPSS.
 
-## 2. Hasil akhir per tabel (step 9)
+## 2. Hasil akhir per tabel (step 14, skripsi-final-v2)
 
 Kolom tabel:
 
@@ -100,9 +102,22 @@ Kolom tabel:
 | mv7 | Multivariate Tests | 64 | 64 | 64 | 0 | 6,8·10⁻¹² | 8 · 2,7·10⁻⁴ |
 | mv7 | Levene's Test | 64 | 64 | 64 | 0 | 2,9·10⁻¹³ | — |
 | mv7 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 7,3·10⁻¹² | 4 · 4,2·10⁻⁴ |
-| **Total** | | **1698** | **1686** | **1686** | **12** | **5,8·10⁻¹⁰** | **74 · 5,0·10⁻⁴** |
+| mv8 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | — |
+| mv8 | Descriptive Statistics | 90 | 90 | 90 | 0 | 2,8·10⁻¹⁴ | — |
+| mv8 | Box's Test | 5 | 5 | 5 | 0 | 2,7·10⁻¹² | — |
+| mv8 | Multivariate Tests (Intercept, faktorA, faktorB; tanpa interaksi) | 96 | 96 | 96 | 0 | 3,5·10⁻¹⁰ | 10 · 4,1·10⁻⁴ |
+| mv8 | Levene's Test (satu baris per DV, residual model) | 8 | 8 | 8 | 0 | 3,9·10⁻¹⁴ | — |
+| mv8 | Tests of Between-Subjects Effects (tanpa interaksi) | 78 | 78 | 78 | 0 | 1,2·10⁻¹⁰ | 2 · 2,1·10⁻⁴ |
+| mv4ph | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | — |
+| mv4ph | Descriptive Statistics | 24 | 24 | 24 | 0 | 8,9·10⁻¹⁶ | — |
+| mv4ph | Box's Test | 5 | 5 | 5 | 0 | 9,2·10⁻¹¹ | — |
+| mv4ph | Multivariate Tests | 64 | 64 | 64 | 0 | 7,6·10⁻¹³ | 6 · 1,4·10⁻⁴ |
+| mv4ph | Levene's Test | 32 | 32 | 32 | 0 | 5,8·10⁻¹⁵ | — |
+| mv4ph | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 5,3·10⁻¹³ | 2 · 0 |
+| mv4ph | Multiple Comparisons (LSD, Bonferroni, Sidak) | 180 | 180 | 180 | 0 | 4,3·10⁻¹¹ | 14 · 0 |
+| **Total** | | **2351** | **2339** | **2339** | **12** | **5,8·10⁻¹⁰** | **108 · 5,0·10⁻⁴** |
 
-Sumber: `results/fix-steps/step9-descriptive-two-factor/compare-spss.txt` dan `compare-spss.json`.
+Sumber: `results/fix-steps/step14-spss-v2/compare-spss.txt` dan `compare-spss.json`. Baris mv1–mv7 sama dengan step 9 dan step 10 (0 regresi).
 
 ## 3. Riwayat perbaikan
 
@@ -132,6 +147,10 @@ Satu commit per langkah.
 | step8e-private-api | `28b942db` | Koreksi API: pembantu step 8 dijadikan privat; `run_analysis` kembali seperti `82a63b45` (§4.11) | 1542 → 1542 | 1698 |
 | step9-descriptive-two-factor | `ab21928c` | Descriptive Statistics dua faktor (§4.12) | 1542 → **1686** | 1698 |
 | step10-welch-power | `1c7335d8` | Observed Power mode Unequal (Welch) dari F nonsentral (§4.13) | 1686 → 1686 | 1698 |
+| step11-main-effects (v2) | `59fe397e` | Two-Way MANOVA tanpa interaksi dari dialog Model (§4.14) | — (dicek R) | 1698 |
+| step12-posthoc (v2) | `53f1a978` | Post hoc MV: LSD, Bonferroni, Sidak per metode; CI Sidak (§4.15) | — (dicek R) | 1698 |
+| step13-pre-spss (v2) | `d4dfd820`, `d1b3ab15` | Opsi yang tidak berfungsi dinonaktifkan; pemeriksaan lengkap sebelum SPSS mv8/mv4ph | 1686 → 1686 | 1698 |
+| step14-spss-v2 (v2) | `d78df40b` | Keluaran SPSS mv8 dan mv4ph; Levene model efek utama seperti SPSS (§4.16) | 1686 → **2339** | 2351 |
 
 Semua langkah: **0 regresi**, main = worker byte-identik, dan API publik WASM tidak berubah. API publik crate Rust sama dengan `82a63b45` di semua langkah kecuali 8b–8d (§4.11).
 
@@ -239,6 +258,30 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
 - **Perbaikan:** `calculate_observed_power(df1, df2, F, alpha)` dengan df (dibulatkan) dan F yang sama dengan Sig. entri tersebut, dan alpha = `config.options.sig_level.unwrap_or(0.05)`.
 - **Hasil:** mv2 dengan radio Unequal (`jk`, Hotelling's Trace; F = 23,2926, df 4 dan 55): power 0,9957067968 → 0,9999999999300. Nilai dari R `1 − pf(qf(0,95; 4, 55), 4, 55, ncp = 4F)` = 0,9999999999306 (`step10-welch-power/welch-power-check.txt`). Tampilan mv1–mv7 identik dengan step 9, karena ketujuhnya memakai Equal (Pooled).
 
+### 4.14 Two-Way MANOVA tanpa interaksi (v2, step 11; mv8)
+
+- **Sebelum:** dialog Model menawarkan Full Factorial, Build Terms, dan Build Custom Terms, tetapi Rust tidak membaca isinya, sehingga desain selalu faktorial penuh.
+- **Perbaikan:**
+  - `normalize_model_spec` (privat, di awal `run_analysis`) mereduksi model ke faktorial penuh (`NonCust = true`) atau efek utama (`NonCust = false`). Bentuk lain ditolak dengan pesan.
+  - Suku interaksi hanya masuk ke desain, H multivariat, dan tabel bila `NonCust`.
+  - Pada model efek utama, H Intercept dan E dihitung dari desain aditif.
+- **Hasil:** mv8 cocok dengan SPSS (283 nilai) dan R. Jalur faktorial penuh tidak berubah: keluaran mv1–mv7 dan sel eksperimen byte-identik dengan v1.
+
+### 4.15 Multiple Comparisons (v2, step 12; mv4ph)
+
+- **Sebelum:** hanya satu metode per analisis (prioritas Bonferroni → Sidak → LSD). Scheffe hanya mengganti label. Metode lain di dialog diabaikan. CI Sidak memakai 1 − (1 − α/2)^(1/c).
+- **Perbaikan:**
+  - Satu baris per metode yang dicentang (LSD, Bonferroni, Sidak), dan CI Sidak dengan α′ = 1 − (1 − α)^(1/c) seperti SPSS.
+  - Dialog hanya mengaktifkan tiga metode itu.
+  - Statify menyimpan pasangan I < J; baris SPSS (J, I) dicocokkan sebagai −(I, J) dengan batas CI ditukar.
+- **Hasil:** 180 nilai lulus, selisih maksimum 4,3·10⁻¹¹.
+
+### 4.16 Levene's Test untuk model selain faktorial penuh (v2, step 14; mv8)
+
+- **Temuan dari SPSS:** untuk `/DESIGN=faktorA faktorB`, SPSS menampilkan satu baris per DV (F, df1 = 7, df2 = 24) dengan catatan "Design: Intercept + faktorA + faktorB", tanpa empat varian "Based on …". Nilainya sama dengan ANOVA atas 8 sel dari |residual model aditif| (dicek R: 1,04525383206 dan 2,04087113403), bukan |y − rata-rata sel|.
+- **Perbaikan:** `model_residual_levene` (privat) untuk model efek utama, `test_basis` "Based on Model Residuals". Faktorial penuh tidak berubah.
+- **Hasil:** 8 nilai lulus.
+
 ## 5. Tanpa padanan (12 nilai)
 
 - **Descriptive Statistics GLM mv1 (12 nilai).** SPSS menampilkan statistik selisih x − μ₀, sedangkan Statify menampilkan variabel asli. Variabel asli sudah dibandingkan lewat tabel Report (12/12 lulus).
@@ -248,7 +291,10 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
 - **User-missing values.** `getVarDefs` (`frontend/hooks/useVariable.ts`, hook bersama) selalu mengirim `missing: []`, sehingga definisi user-missing tidak sampai ke Rust.
 - **Desain rank-deficient atau sel kosong.** SPSS memakai invers umum. Statify berhenti dengan error inversi X'X. Type IV sama dengan Type III.
 - **Mode Unequal (Welch-Satterthwaite, Krishnamoorthy-Yu):** tidak ada padanan di SPSS GLM.
-- **Kovariat, WLS, Parameter Estimates, SSCP, EM Means, Post Hoc, Contrast, Plots, Save, Bootstrap:** tidak diminta di sintaks.
+- **Kovariat, WLS, Parameter Estimates, SSCP, EM Means, Contrast, Save, Bootstrap:** tidak diminta di sintaks.
+- **Post Hoc (v2):** hanya LSD, Bonferroni, dan Sidak (divalidasi, mv4ph). Metode lain dinonaktifkan di dialog.
+- **Plots:** dinonaktifkan di dialog (v2). Profile plots tidak ditampilkan.
+- **Model kustom (v2):** hanya faktorial penuh dan model efek utama (semua faktor dan kovariat, tanpa interaksi). Model dengan sebagian interaksi, suku bersarang, atau interaksi dengan kovariat ditolak dengan pesan. Tabel sekunder pada model efek utama (Parameter Estimates, EM Means, SSCP, residual) mengikuti desain aditif tetapi tidak divalidasi SPSS.
 - **Kolom T² di Statify (mv1, mv3):** tidak punya padanan di SPSS.
 - **Saved Variables:** tabel menomori kasus setelah listwise deletion (1..N lengkap), bukan nomor baris asli.
 
@@ -257,7 +303,7 @@ Semua path relatif ke `frontend/components/Modals/Analyze/general-linear-model/m
 Satu langkah lengkap (build WASM, build produksi, run UI main dan worker, perbandingan SPSS, cek regresi, uji acuan, Jest penuh):
 
 ```
-bash testing/glm-mv-reference/harness/check-step.sh <label> <compare-spss.json langkah sebelumnya> mv1,mv2,mv3,mv4,mv5,mv6,mv7
+bash testing/glm-mv-reference/harness/check-step.sh <label> <compare-spss.json langkah sebelumnya> mv1,mv2,mv3,mv4,mv5,mv6,mv7,mv8,mv4ph
 ```
 
 Langkah per bagian:

@@ -1,6 +1,82 @@
-# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v1`)
+# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v2`)
 
 Tanggal: 2026-09-24. Tidak di-merge ke `main` dan tidak di-deploy.
+
+- **Versi berlaku:** **`skripsi-final-v2`**, yaitu commit terakhir `ilham` yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v2^{commit}`).
+- **Tag lama:** `skripsi-final-v1` (`e365897d`) tetap ada.
+- **Isi:** bagian v2 langsung di bawah; §0–§5 adalah catatan v1 dan tetap berlaku kecuali disebut lain.
+
+## v2. Perubahan dan pemeriksaan skripsi-final-v1 → skripsi-final-v2
+
+Dasar perubahan: keputusan atas `testing/black-box/pemetaan-kebutuhan.md` (Tabel 5 direvisi).
+
+### v2.1 Commit (di `ilham`, sesudah `e365897d`)
+
+| Commit | Isi |
+|---|---|
+| `db546515` | Dokumen pemetaan kebutuhan Tabel 5 ke kode |
+| `59fe397e` | KF6: Two-Way MANOVA tanpa interaksi. Rust MV membaca dialog Model (Full Factorial, Build Terms, Build Custom Terms); `normalize_model_spec` di awal `run_analysis`; suku interaksi hanya pada faktorial penuh; sintaks SPSS mv8 |
+| `53f1a978` | KF11: Post hoc MV hanya LSD/Bonferroni/Sidak (satu baris per metode, CI Sidak seperti SPSS, label Scheffe dihapus); Post Hoc RM dinonaktifkan; sintaks SPSS mv4-posthoc; harness mv8/mv4ph |
+| `d4dfd820` | Opsi yang tidak berfungsi dinonaktifkan (Plots MV/RM; Options RM: spread-vs-level, residual plot, lack of fit); toast galat Define/OK/analisis RM |
+| `d1b3ab15` | Pemeriksaan lengkap sebelum SPSS; `regress.mjs` membaca mv4ph |
+| `d78df40b` | Keluaran SPSS mv8 dan mv4-posthoc; Levene model efek utama seperti SPSS (ANOVA atas sel dari \|residual model\|) |
+| commit berikutnya | Dokumen: laporan validasi MV, `thesis-impact.md` MV §e, `thesis-diagram-facts.md` MV (bagian v2), berkas ini. **Tag `skripsi-final-v2`.** |
+
+Tidak ada merge dan tidak ada push di v2 sampai disetujui. Crate Rust RM tidak berubah (WASM RM identik dengan v1).
+
+### v2.2 Hasil pemeriksaan (kode `d78df40b`; commit sesudahnya hanya dokumen)
+
+| Pemeriksaan | Hasil | Bukti |
+|---|---|---|
+| API publik Rust (MV) | Sama dengan `82a63b45`: 0 perubahan publik; 79 fungsi pub (34 di `common.rs`), 40 struct `result.rs`, 7 method `MultivariateAnalysis`. Fungsi privat baru di v2: `normalize_model_spec`, `model_residual_levene` | `testing/glm-mv-reference/results/fix-steps/step14-spss-v2/api-check.txt`, `rust-api.json` |
+| Uji acuan SPSS MV | **2339 lulus, 0 gagal, 12 todo**, dari 2351 nilai (v1: 1686/1698). Baru: mv8 283 nilai, mv4ph 370 nilai (termasuk Multiple Comparisons 180) | `…/step14-spss-v2/compare-spss.txt`, `jest-reference.log` |
+| Regresi | 0 (semua nilai yang lulus di v1 tetap lulus) | `…/step14-spss-v2/regress.txt` |
+| Uji acuan RM | **1681 lulus, 0 todo** (1318 SPSS + 353 R + 10 fungsional) | `…/step14-spss-v2/rm/rm-reference.log` |
+| Jest penuh | 49 suite gagal = baseline 49 | `…/step14-spss-v2/jest-summary.txt` |
+| Main = worker, MV | Byte-identik untuk mv1–mv8 dan mv4ph | `…/step14-spss-v2/regress.txt` |
+| Main = worker, RM | 9 desain byte-identik di 4 run; hash tabel sama dengan v1 | `…/step14-spss-v2/rm/rm-ui-main-worker*.json` |
+| Sel eksperimen Web Worker final | 8/8 sel (MV 100–2000, RM 5000–40000): payload dan respons worker lewat dialog asli build v2 **identik** dengan build v1; replay WASM identik dengan `e365897d`. Hasil eksperimen `result_compare.md` §11–§12 tetap berlaku. | `…/step14-spss-v2/experiment-output-check.txt` |
+| Jalur Full Factorial | Keluaran WASM mv1–mv7 dan sel eksperimen MV byte-identik dengan v1 | `…/step11-main-effects/full-factorial-byte-check.txt` |
+| UI | Tombol/opsi nonaktif dan toast baru tampil sesuai rancangan | `…/step13-ui-options/ui-smoke.txt` |
+
+### v2.3 Build produksi v2
+
+| Item | Nilai |
+|---|---|
+| `BUILD_ID` (build pemeriksaan step 14) | `da2MPL8uMDzMEA8FyYFr9` |
+| WASM MV di build | `.next/static/media/wasm_bg.4c7b0023.wasm` (md5 `81ee712d0eba…` = `rust/pkg/wasm_bg.wasm`; **baru** di v2) |
+| WASM RM di build | `.next/static/media/wasm_bg.2bc2b212.wasm` (md5 `f4c34490f7fe…`; sama dengan v1) |
+
+`BUILD_ID` acak di setiap `next build`. Build dengan isi yang sama dikenali dari kedua nama berkas WASM di atas.
+
+### v2.4 Catatan
+
+1. **Toast tampil dua kali di seluruh aplikasi**, karena ada dua `<Toaster>` (`frontend/app/layout.tsx` dan `frontend/app/dashboard/layout.tsx`). Ini bawaan dan di luar modul GLM, sehingga tidak diubah.
+2. **Pilihan Type di Build Terms:** Build Terms memakai faktor yang di-drag ke Model; pilihan Type di dialog tidak dipakai. Model efek utama didapat dengan men-drag setiap faktor.
+3. **Urutan baris Multiple Comparisons:** Statify menyimpan pasangan I < J dan mengurutkan per pasangan lalu per metode. SPSS menampilkan (I, J) dan (J, I) per metode. Nilainya sama.
+4. **Keterbatasan (redaksi Tabel 5 lama):**
+   - uji normalitas multivariat tidak ada;
+   - Mauchly RM selalu dihitung (tidak opsional);
+   - post hoc hanya LSD, Bonferroni, dan Sidak di MV, sedangkan RM memakai EM Means > Compare main effects;
+   - grafik hanya residual plot MV (Scatter Plot Matrix);
+   - analisis profil lewat desain RM dengan faktor between, tanpa grafik profil.
+
+   Rinciannya ada di `testing/black-box/pemetaan-kebutuhan.md`.
+
+### v2.5 Menjalankan build v2 secara lokal
+
+```
+git checkout skripsi-final-v2        # atau: git checkout ilham
+cd frontend
+npx next build
+npx next start -p 3001               # http://localhost:3001/dashboard/data
+```
+
+Selama `frontend/.next/` belum ditimpa, `npx next start -p 3001` langsung menjalankan build pemeriksaan v2.
+
+---
+
+# Catatan skripsi-final-v1 (tetap berlaku kecuali disebut di v2)
 
 ## 0. Branch rilis: `ilham`
 
