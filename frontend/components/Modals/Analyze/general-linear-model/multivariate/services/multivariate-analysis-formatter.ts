@@ -517,6 +517,32 @@ function formatLeveneTest(
     );
     if (!hasData) return;
 
+    // Design line sent by Rust with every Levene result ("Design: Intercept + A + B").
+    // It lists the main effects only, so on the full factorial model the
+    // interaction effects of the Multivariate Tests are appended, as in the
+    // SPSS footnote ("Design: Intercept + A + B + A * B").
+    let design: string | undefined = tests
+        .flatMap((lt: any) => lt.levene || [])
+        .map((entry: any) => entry.design)
+        .find((d: any) => typeof d === "string" && d.length > 0);
+    const interactions = Object.keys(data.multivariate_tests?.effects || {})
+        .filter((name) => name.includes("*"))
+        .map((name) => name.split("*").map((p) => p.trim()).filter(Boolean))
+        .sort((a, b) =>
+            a.length !== b.length
+                ? a.length - b.length
+                : a.join("*").localeCompare(b.join("*"), undefined, {
+                      numeric: true,
+                      sensitivity: "base",
+                  })
+        )
+        .map((parts) => parts.join(" * "));
+    if (design) {
+        for (const term of interactions) {
+            if (!design.split(" + ").includes(term)) design += ` + ${term}`;
+        }
+    }
+
     // Single combined table matching SPSS layout: DV | basis | Levene Statistic | df1 | df2 | Sig.
     const table: Table = {
         key: "levene_test",
@@ -530,7 +556,9 @@ function formatLeveneTest(
             { header: "Sig.", key: "significance" },
         ],
         rows: [],
-        note: "Tests the null hypothesis that the error variance of the dependent variable is equal across groups.",
+        note:
+            "Tests the null hypothesis that the error variance of the dependent variable is equal across groups." +
+            (design ? ` ${design}` : ""),
         interpretation:
             "Tests the assumption of homogeneity of variance. A non-significant result (Sig. > .05) supports the assumption that error variances are equal across groups.",
     };
