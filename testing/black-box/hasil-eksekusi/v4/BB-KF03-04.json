@@ -1,0 +1,1777 @@
+{
+ "id": "BB-KF03-04",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3, x4",
+  "FixFactor: jk",
+  "Covariance Matrices: variance-pooled",
+  "Options: centang DescStats, HomogenTest",
+  "profil browser baru (bersih) untuk langkah berikutnya",
+  "impor mv2-geser.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3, x4",
+  "FixFactor: jk",
+  "Covariance Matrices: variance-pooled",
+  "Options: centang DescStats, HomogenTest"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan δ₀ = (3, 2, 10, 1)",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF03-04-3.png"
+  },
+  {
+   "label": "langkah 7: mv2-geser.csv, δ₀ = 0",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF03-04-7.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK dengan δ₀ = (3, 2, 10, 1)",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Between-Subjects Factors",
+     "tables": [
+      {
+       "title": "Between-Subjects Factors",
+       "columns": [
+        "",
+        "",
+        "Value Label",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "factor": "jk",
+         "level": "1",
+         "value_label": "",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "2",
+         "value_label": "",
+         "n": "32"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "x1",
+         "group_label": "1",
+         "mean": "15.9688",
+         "std_deviation": "2.2787",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "12.3438",
+         "std_deviation": "3.0226",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "14.1563",
+         "std_deviation": "3.223",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x2",
+         "group_label": "1",
+         "mean": "15.9063",
+         "std_deviation": "3.631",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "13.9063",
+         "std_deviation": "4.3132",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "14.9063",
+         "std_deviation": "4.0814",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x3",
+         "group_label": "1",
+         "mean": "27.1875",
+         "std_deviation": "5.3548",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "16.7188",
+         "std_deviation": "5.3656",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "21.9531",
+         "std_deviation": "7.4906",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x4",
+         "group_label": "1",
+         "mean": "22.75",
+         "std_deviation": "4.0798",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "21.9375",
+         "std_deviation": "5.2911",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "22.3438",
+         "std_deviation": "4.7047",
+         "n": "64"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Box's Test of Equality of Covariance Matrices",
+     "tables": [
+      {
+       "title": "Box's Test of Equality of Covariance Matrices",
+       "columns": [
+        "",
+        ""
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "stat_label": "Box's M",
+         "stat_value": "14.7503"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "F",
+         "stat_value": "1.3719"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "df1",
+         "stat_value": "10"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "df2",
+         "stat_value": "18377.6892"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "Sig.",
+         "stat_value": "0.1863"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Levene's Test of Equality of Error Variances",
+     "tables": [
+      {
+       "title": "Levene's Test of Equality of Error Variances",
+       "columns": [
+        "",
+        "",
+        "Levene Statistic",
+        "df1",
+        "df2",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "x1",
+         "function": "Based on Mean",
+         "levene_statistic": "0.3943",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5323"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "0.2762",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.601"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "0.2762",
+         "df1": "1",
+         "df2": "50.7797",
+         "significance": "0.6015"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "0.3467",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5581"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x2",
+         "function": "Based on Mean",
+         "levene_statistic": "2.1704",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1458"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "1.5849",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.2128"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "1.5849",
+         "df1": "1",
+         "df2": "61.2163",
+         "significance": "0.2128"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "2.0425",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.158"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x3",
+         "function": "Based on Mean",
+         "levene_statistic": "0.3679",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5464"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "0.39",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5346"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "0.39",
+         "df1": "1",
+         "df2": "58.4122",
+         "significance": "0.5347"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "0.448",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5058"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x4",
+         "function": "Based on Mean",
+         "levene_statistic": "3.0399",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.0862"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "1.8516",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1785"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "1.8516",
+         "df1": "1",
+         "df2": "57.4931",
+         "significance": "0.1789"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "2.7167",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1044"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error variance of the dependent variable is equal across groups. Design: Intercept + jk"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Intercept",
+         "test_name": "Pillai's Trace",
+         "value": "0.9708",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0292",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "33.2714",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "33.2714",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "jk",
+         "test_name": "Pillai's Trace",
+         "value": "0.0259",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.9741",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.0266",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.0266",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        }
+       ],
+       "footnote": "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "x1",
+         "sum_of_squares": "6.25",
+         "df": "1",
+         "mean_square": "6.25",
+         "f_value": "0.8724",
+         "significance": "0.3539",
+         "partial_eta_squared": "0.0139",
+         "noncent_parameter": "0.8724",
+         "observed_power": "0.1511"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "0",
+         "df": "1",
+         "mean_square": "0",
+         "f_value": "0",
+         "significance": "1",
+         "partial_eta_squared": "0",
+         "noncent_parameter": "0",
+         "observed_power": "0"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "3.5156",
+         "df": "1",
+         "mean_square": "3.5156",
+         "f_value": "0.1224",
+         "significance": "0.7277",
+         "partial_eta_squared": "0.002",
+         "noncent_parameter": "0.1224",
+         "observed_power": "0.0637"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "0.5625",
+         "df": "1",
+         "mean_square": "0.5625",
+         "f_value": "0.0252",
+         "significance": "0.8744",
+         "partial_eta_squared": "0.0004",
+         "noncent_parameter": "0.0252",
+         "observed_power": "0.0528"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "x1",
+         "sum_of_squares": "10251.5625",
+         "df": "1",
+         "mean_square": "10251.5625",
+         "f_value": "1430.9202",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9585",
+         "noncent_parameter": "1430.9202",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "12376.5625",
+         "df": "1",
+         "mean_square": "12376.5625",
+         "f_value": "778.6865",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9263",
+         "noncent_parameter": "778.6865",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "18394.1406",
+         "df": "1",
+         "mean_square": "18394.1406",
+         "f_value": "640.2115",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9117",
+         "noncent_parameter": "640.2115",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "30537.5625",
+         "df": "1",
+         "mean_square": "30537.5625",
+         "f_value": "1368.1358",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9566",
+         "noncent_parameter": "1368.1358",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "jk",
+         "dependent_variable": "x1",
+         "sum_of_squares": "6.25",
+         "df": "1",
+         "mean_square": "6.25",
+         "f_value": "0.8724",
+         "significance": "0.3539",
+         "partial_eta_squared": "0.0139",
+         "noncent_parameter": "0.8724",
+         "observed_power": "0.1511"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "0",
+         "df": "1",
+         "mean_square": "0",
+         "f_value": "0",
+         "significance": "1",
+         "partial_eta_squared": "0",
+         "noncent_parameter": "0",
+         "observed_power": "0"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "3.5156",
+         "df": "1",
+         "mean_square": "3.5156",
+         "f_value": "0.1224",
+         "significance": "0.7277",
+         "partial_eta_squared": "0.002",
+         "noncent_parameter": "0.1224",
+         "observed_power": "0.0637"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "0.5625",
+         "df": "1",
+         "mean_square": "0.5625",
+         "f_value": "0.0252",
+         "significance": "0.8744",
+         "partial_eta_squared": "0.0004",
+         "noncent_parameter": "0.0252",
+         "observed_power": "0.0528"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "x1",
+         "sum_of_squares": "444.1875",
+         "df": "62",
+         "mean_square": "7.1643",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "985.4375",
+         "df": "62",
+         "mean_square": "15.8942",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1781.3438",
+         "df": "62",
+         "mean_square": "28.7314",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1383.875",
+         "df": "62",
+         "mean_square": "22.3206",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "10702",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "13362",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "20179",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "31922",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "450.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "985.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1784.8594",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1384.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  },
+  {
+   "label": "langkah 7: mv2-geser.csv, δ₀ = 0",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Between-Subjects Factors",
+     "tables": [
+      {
+       "title": "Between-Subjects Factors",
+       "columns": [
+        "",
+        "",
+        "Value Label",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "factor": "jk",
+         "level": "1",
+         "value_label": "",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "2",
+         "value_label": "",
+         "n": "32"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "x1",
+         "group_label": "1",
+         "mean": "12.9688",
+         "std_deviation": "2.2787",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "12.3438",
+         "std_deviation": "3.0226",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "12.6563",
+         "std_deviation": "2.6739",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x2",
+         "group_label": "1",
+         "mean": "13.9063",
+         "std_deviation": "3.631",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "13.9063",
+         "std_deviation": "4.3132",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "13.9063",
+         "std_deviation": "3.955",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x3",
+         "group_label": "1",
+         "mean": "17.1875",
+         "std_deviation": "5.3548",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "16.7188",
+         "std_deviation": "5.3656",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "16.9531",
+         "std_deviation": "5.3227",
+         "n": "64"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x4",
+         "group_label": "1",
+         "mean": "21.75",
+         "std_deviation": "4.0798",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "2",
+         "mean": "21.9375",
+         "std_deviation": "5.2911",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "group_label": "Total",
+         "mean": "21.8438",
+         "std_deviation": "4.6878",
+         "n": "64"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Box's Test of Equality of Covariance Matrices",
+     "tables": [
+      {
+       "title": "Box's Test of Equality of Covariance Matrices",
+       "columns": [
+        "",
+        ""
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "stat_label": "Box's M",
+         "stat_value": "14.7503"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "F",
+         "stat_value": "1.3719"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "df1",
+         "stat_value": "10"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "df2",
+         "stat_value": "18377.6892"
+        },
+        {
+         "rowHeader": [],
+         "stat_label": "Sig.",
+         "stat_value": "0.1863"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Levene's Test of Equality of Error Variances",
+     "tables": [
+      {
+       "title": "Levene's Test of Equality of Error Variances",
+       "columns": [
+        "",
+        "",
+        "Levene Statistic",
+        "df1",
+        "df2",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "x1",
+         "function": "Based on Mean",
+         "levene_statistic": "0.3943",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5323"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "0.2762",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.601"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "0.2762",
+         "df1": "1",
+         "df2": "50.7797",
+         "significance": "0.6015"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "0.3467",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5581"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x2",
+         "function": "Based on Mean",
+         "levene_statistic": "2.1704",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1458"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "1.5849",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.2128"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "1.5849",
+         "df1": "1",
+         "df2": "61.2163",
+         "significance": "0.2128"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "2.0425",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.158"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x3",
+         "function": "Based on Mean",
+         "levene_statistic": "0.3679",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5464"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "0.39",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5346"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "0.39",
+         "df1": "1",
+         "df2": "58.4122",
+         "significance": "0.5347"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "0.448",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.5058"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "x4",
+         "function": "Based on Mean",
+         "levene_statistic": "3.0399",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.0862"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median",
+         "levene_statistic": "1.8516",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1785"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on Median and with adjusted df",
+         "levene_statistic": "1.8516",
+         "df1": "1",
+         "df2": "57.4931",
+         "significance": "0.1789"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "",
+         "function": "Based on trimmed mean",
+         "levene_statistic": "2.7167",
+         "df1": "1",
+         "df2": "62",
+         "significance": "0.1044"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error variance of the dependent variable is equal across groups. Design: Intercept + jk"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Intercept",
+         "test_name": "Pillai's Trace",
+         "value": "0.9708",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0292",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "33.2714",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "33.2714",
+         "f": "490.7538",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9708",
+         "noncent_parameter": "1963.015",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "effect": "jk",
+         "test_name": "Pillai's Trace",
+         "value": "0.0259",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.9741",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.0266",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.0266",
+         "f": "0.3928",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "0.813",
+         "partial_eta_squared": "0.0259",
+         "noncent_parameter": "1.5712",
+         "observed_power": "0.1343"
+        }
+       ],
+       "footnote": "Type III sum of squares"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "x1",
+         "sum_of_squares": "6.25",
+         "df": "1",
+         "mean_square": "6.25",
+         "f_value": "0.8724",
+         "significance": "0.3539",
+         "partial_eta_squared": "0.0139",
+         "noncent_parameter": "0.8724",
+         "observed_power": "0.1511"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "0",
+         "df": "1",
+         "mean_square": "0",
+         "f_value": "0",
+         "significance": "1",
+         "partial_eta_squared": "0",
+         "noncent_parameter": "0",
+         "observed_power": "0"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "3.5156",
+         "df": "1",
+         "mean_square": "3.5156",
+         "f_value": "0.1224",
+         "significance": "0.7277",
+         "partial_eta_squared": "0.002",
+         "noncent_parameter": "0.1224",
+         "observed_power": "0.0637"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "0.5625",
+         "df": "1",
+         "mean_square": "0.5625",
+         "f_value": "0.0252",
+         "significance": "0.8744",
+         "partial_eta_squared": "0.0004",
+         "noncent_parameter": "0.0252",
+         "observed_power": "0.0528"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "x1",
+         "sum_of_squares": "10251.5625",
+         "df": "1",
+         "mean_square": "10251.5625",
+         "f_value": "1430.9202",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9585",
+         "noncent_parameter": "1430.9202",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "12376.5625",
+         "df": "1",
+         "mean_square": "12376.5625",
+         "f_value": "778.6865",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9263",
+         "noncent_parameter": "778.6865",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "18394.1406",
+         "df": "1",
+         "mean_square": "18394.1406",
+         "f_value": "640.2115",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9117",
+         "noncent_parameter": "640.2115",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "30537.5625",
+         "df": "1",
+         "mean_square": "30537.5625",
+         "f_value": "1368.1358",
+         "significance": "<.001",
+         "partial_eta_squared": "0.9566",
+         "noncent_parameter": "1368.1358",
+         "observed_power": "1"
+        },
+        {
+         "rowHeader": [],
+         "source": "jk",
+         "dependent_variable": "x1",
+         "sum_of_squares": "6.25",
+         "df": "1",
+         "mean_square": "6.25",
+         "f_value": "0.8724",
+         "significance": "0.3539",
+         "partial_eta_squared": "0.0139",
+         "noncent_parameter": "0.8724",
+         "observed_power": "0.1511"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "0",
+         "df": "1",
+         "mean_square": "0",
+         "f_value": "0",
+         "significance": "1",
+         "partial_eta_squared": "0",
+         "noncent_parameter": "0",
+         "observed_power": "0"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "3.5156",
+         "df": "1",
+         "mean_square": "3.5156",
+         "f_value": "0.1224",
+         "significance": "0.7277",
+         "partial_eta_squared": "0.002",
+         "noncent_parameter": "0.1224",
+         "observed_power": "0.0637"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "0.5625",
+         "df": "1",
+         "mean_square": "0.5625",
+         "f_value": "0.0252",
+         "significance": "0.8744",
+         "partial_eta_squared": "0.0004",
+         "noncent_parameter": "0.0252",
+         "observed_power": "0.0528"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "x1",
+         "sum_of_squares": "444.1875",
+         "df": "62",
+         "mean_square": "7.1643",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "985.4375",
+         "df": "62",
+         "mean_square": "15.8942",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1781.3438",
+         "df": "62",
+         "mean_square": "28.7314",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1383.875",
+         "df": "62",
+         "mean_square": "22.3206",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "10702",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "13362",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "20179",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "31922",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "450.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "985.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1784.8594",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1384.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "dialogDelta": {
+   "judulAda": true,
+   "hipotesis": "H₀: μ(jk = 1) − μ(jk = 2) = δ₀",
+   "isian": 4,
+   "nilaiAwal": [
+    "0",
+    "0",
+    "0",
+    "0"
+   ]
+  },
+  "ringkasan": "δ₀ = [3, 2, 10, 1]",
+  "catatanMT": "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.",
+  "mtSamaDenganLangkah7": true,
+  "bseSamaDenganLangkah7": true,
+  "descJk1X1": [
+   {
+    "rowHeader": [],
+    "dv_name": "x1",
+    "group_label": "1",
+    "mean": "15.9688",
+    "std_deviation": "2.2787",
+    "n": "32"
+   }
+  ],
+  "spss": "keluaran SPSS spss/mv2_delta0.sps belum tersedia (testing/fitur-v4/spss-output/ kosong)"
+ },
+ "notes": [
+  "BB-KF03-04-1.png: dialog utama: tombol Test Values (δ₀) di panel Covariance Matrices",
+  "BB-KF03-04-2.png: subdialog δ₀ terisi 3, 2, 10, 1",
+  "BB-KF03-04-3.png: toast: OK dengan δ₀ = (3, 2, 10, 1)",
+  "BB-KF03-04-4.png: Multivariate Tests",
+  "BB-KF03-04-5.png: Tests of Between-Subjects Effects",
+  "BB-KF03-04-6.png: Descriptive Statistics",
+  "BB-KF03-04-7.png: toast: langkah 7: mv2-geser.csv, δ₀ = 0",
+  "BB-KF03-04-8.png: langkah 7: Multivariate Tests (data geser)"
+ ],
+ "env": {
+  "base": "http://localhost:3102",
+  "port": "3102",
+  "buildIdFile": "1IBznO-olYCW5GfFOKskp",
+  "buildIdServed": "1IBznO-olYCW5GfFOKskp"
+ },
+ "startedAt": "2026-09-24T20:04:01.852Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-24T20:04:29.434Z",
+ "durationS": 28
+}

@@ -1,0 +1,64 @@
+{
+ "id": "BB-KF03-06",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3, x4",
+  "FixFactor: jk",
+  "hapus x4 dari DepVar",
+  "DV: x4"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "langkah4": {
+   "isian": 3,
+   "nilai": [
+    "3",
+    "2",
+    "10"
+   ]
+  },
+  "langkah5": {
+   "isian": 4,
+   "nilai": [
+    "3",
+    "2",
+    "10",
+    "0"
+   ]
+  },
+  "langkah6": {
+   "isianSetelahCancel": [
+    "3",
+    "2",
+    "10",
+    "0"
+   ]
+  },
+  "langkah7Isian": [
+   "0",
+   "0",
+   "0",
+   "0"
+  ],
+  "langkah7Ringkasan": "δ₀ = 0 (H₀: μ₁ = μ₂)"
+ },
+ "notes": [
+  "BB-KF03-06-1.png: langkah 4: δ₀ setelah x4 dihapus",
+  "BB-KF03-06-2.png: langkah 5: δ₀ setelah x4 ditambah lagi",
+  "BB-KF03-06-3.png: langkah 6: dibuka lagi setelah perubahan dan Cancel",
+  "BB-KF03-06-4.png: langkah 7: ringkasan δ₀ di panel Covariance Matrices"
+ ],
+ "env": {
+  "base": "http://localhost:3102",
+  "port": "3102",
+  "buildIdFile": "1IBznO-olYCW5GfFOKskp",
+  "buildIdServed": "1IBznO-olYCW5GfFOKskp"
+ },
+ "startedAt": "2026-09-24T20:10:10.029Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-24T20:10:18.172Z",
+ "durationS": 8
+}

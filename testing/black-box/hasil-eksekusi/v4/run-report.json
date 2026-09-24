@@ -1,0 +1,114 @@
+{
+  "base": "http://localhost:3102",
+  "port": "3102",
+  "buildIdFile": "1IBznO-olYCW5GfFOKskp",
+  "buildIdServed": "1IBznO-olYCW5GfFOKskp",
+  "chromium": "143.0.7499.4",
+  "playwright": "1.57.0",
+  "startedAt": "2026-09-24T20:10:09.431Z",
+  "scenarios": {
+    "BB-KF03-04": {
+      "status": "selesai",
+      "shots": 8,
+      "startedAt": "2026-09-24T20:04:01.852Z",
+      "finishedAt": "2026-09-24T20:04:29.434Z"
+    },
+    "BB-KF03-05": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-24T20:04:30.021Z",
+      "finishedAt": "2026-09-24T20:04:56.914Z"
+    },
+    "BB-KF03-06": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-24T20:10:10.029Z",
+      "finishedAt": "2026-09-24T20:10:18.172Z"
+    },
+    "BB-KF03-07": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-24T20:10:18.747Z",
+      "finishedAt": "2026-09-24T20:10:44.229Z"
+    },
+    "BB-KF03-08": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:05:32.217Z",
+      "finishedAt": "2026-09-24T20:05:43.590Z"
+    },
+    "BB-KF03-09": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-24T20:10:44.803Z",
+      "finishedAt": "2026-09-24T20:10:58.002Z"
+    },
+    "BB-KF04-03": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-24T20:05:57.549Z",
+      "finishedAt": "2026-09-24T20:06:23.975Z"
+    },
+    "BB-KF02-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-24T20:06:24.553Z",
+      "finishedAt": "2026-09-24T20:06:37.461Z"
+    },
+    "BB-KF02-05": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:06:38.037Z",
+      "finishedAt": "2026-09-24T20:06:51.512Z"
+    },
+    "BB-KF02-06": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:06:52.091Z",
+      "finishedAt": "2026-09-24T20:07:04.990Z"
+    },
+    "BB-KF02-07": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:07:05.566Z",
+      "finishedAt": "2026-09-24T20:07:18.837Z"
+    },
+    "BB-KF03-10": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:07:19.416Z",
+      "finishedAt": "2026-09-24T20:07:32.741Z"
+    },
+    "BB-KF03-11": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:07:33.323Z",
+      "finishedAt": "2026-09-24T20:07:46.643Z"
+    },
+    "BB-KF03-12": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:07:47.212Z",
+      "finishedAt": "2026-09-24T20:08:00.377Z"
+    },
+    "BB-KF04-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-24T20:08:00.949Z",
+      "finishedAt": "2026-09-24T20:08:13.689Z"
+    },
+    "BB-KF03-13": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:08:14.267Z",
+      "finishedAt": "2026-09-24T20:08:27.278Z"
+    },
+    "BB-KF06-10": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-24T20:08:27.854Z",
+      "finishedAt": "2026-09-24T20:08:40.881Z"
+    }
+  },
+  "finishedAt": "2026-09-24T20:10:58.006Z"
+}

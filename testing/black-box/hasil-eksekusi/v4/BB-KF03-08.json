@@ -1,0 +1,49 @@
+{
+ "id": "BB-KF03-08",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan δ₀ pada faktor 3 level",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.",
+    "An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."
+   ],
+   "file": "BB-KF03-08-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK dengan δ₀ pada faktor 3 level",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.",
+    "An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "pesanSubdialog": "δ₀ hanya berlaku bila Fixed Factor memiliki tepat 2 level (treatment memiliki 3 level).",
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF03-08-1.png: subdialog δ₀ dengan faktor 3 level, isian 1, 1",
+  "BB-KF03-08-2.png: toast: OK dengan δ₀ pada faktor 3 level"
+ ],
+ "env": {
+  "base": "http://localhost:3102",
+  "port": "3102",
+  "buildIdFile": "1IBznO-olYCW5GfFOKskp",
+  "buildIdServed": "1IBznO-olYCW5GfFOKskp"
+ },
+ "startedAt": "2026-09-24T20:05:32.217Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-24T20:05:43.590Z",
+ "durationS": 11
+}
