@@ -1,0 +1,34 @@
+{
+ "id": "BB-KF14-03",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: waktu(4); measure skor"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "plotsDisabled": true,
+  "dialogPlotsTerbuka": 0,
+  "catatanPlots": 1,
+  "optionsDisabled": {
+   "SprVsLevel": true,
+   "ResPlot": true,
+   "LackOfFit": true,
+   "HomogenTest": false
+  },
+  "labelOptions": [
+   "Spread-Vs.-Level Plots",
+   "Residual Plots",
+   "Lack of Fit Test"
+  ],
+  "catatanOptions": 1
+ },
+ "notes": [
+  "BB-KF14-03-1.png: tombol Plots RM nonaktif",
+  "BB-KF14-03-2.png: Options RM: opsi grafik nonaktif"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7
+}

@@ -1,10 +1,70 @@
-# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v2`)
+# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v3`)
 
 Tanggal: 2026-09-24. Tidak di-merge ke `main` dan tidak di-deploy.
 
-- **Versi berlaku:** **`skripsi-final-v2`**, yaitu commit terakhir `ilham` yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v2^{commit}`).
-- **Tag lama:** `skripsi-final-v1` (`e365897d`) tetap ada.
-- **Isi:** bagian v2 langsung di bawah; §0–§5 adalah catatan v1 dan tetap berlaku kecuali disebut lain.
+- **Versi berlaku:** **`skripsi-final-v3`**, yaitu commit terakhir `ilham` yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v3^{commit}`).
+- **Tag lama:** `skripsi-final-v1` (`e365897d`) dan `skripsi-final-v2` (`d863de09`) tetap ada.
+- **Isi:** bagian v3 langsung di bawah, lalu bagian v2; §0–§5 adalah catatan v1. Semuanya tetap berlaku kecuali disebut lain.
+
+## v3. Perubahan dan pemeriksaan skripsi-final-v2 → skripsi-final-v3
+
+Dasar perubahan: iterasi 1 pengujian black-box terhadap v2 (commit `4bb3124b`): 45 Sesuai dan 5 Tidak Sesuai. Kelima skenario Tidak Sesuai diperbaiki di frontend. Crate Rust MV dan RM tidak berubah.
+
+### v3.1 Commit (di `ilham`, sesudah `4bb3124b`)
+
+Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`.
+
+| Commit | Isi |
+|---|---|
+| `2ac13488` | Hasil iterasi 1 dipindah ke `testing/black-box/{bukti,hasil-eksekusi}/iterasi-1/` tanpa perubahan isi; harness menerima `--iter` |
+| `3494ea5c` | BB-KF03-02: pilihan varians (Pooled/Unequal) tidak lagi ter-reset saat dialog utama MV dipasang ulang setelah subdialog ditutup. Reset hanya saat pengguna mengubah Fixed Factor(s) (`multivariate/dialogs/dialog.tsx`) |
+| `fa286c6c` | BB-KF04-02: Paired melaporkan pasangan belum lengkap sebelum "Tambahkan minimal satu pasangan variabel." (`multivariate/dialogs/paired.tsx`) |
+| `b24c22ea` | BB-KF10-02: catatan tabel Levene MV diakhiri "Design: …" dari field `design` Rust, ditambah suku interaksi pada faktorial penuh seperti SPSS (`multivariate/services/multivariate-analysis-formatter.ts`) |
+| `5017948c` | BB-KF07-02: slot within RM tetap bila Define diklik tanpa perubahan definisi (`repeated-measures/dialogs/repeated-measures-main.tsx`) |
+| `37e0e15b` | BB-KF08-02: Number of Levels kosong atau bukan angka menampilkan "Number of levels must be a valid number." (`repeated-measures/dialogs/define/repeated-measures-dialog.tsx`) |
+| `851321f9` | Pemeriksaan regresi v3 (`testing/glm-mv-reference/results/fix-steps/step15-v3/`) |
+| commit berikutnya | Iterasi 2 black-box, dokumen skenario, pemetaan kebutuhan, berkas ini. **Tag `skripsi-final-v3`.** |
+
+Tidak ada merge dan tidak ada push di v3 sampai disetujui.
+
+### v3.2 Hasil pemeriksaan (kode `37e0e15b`; commit sesudahnya hanya dokumen dan hasil uji)
+
+| Pemeriksaan | Hasil | Bukti (`…/step15-v3/`) |
+|---|---|---|
+| Jest penuh | 49 suite gagal dari 276 = baseline 49; tidak ada kegagalan baru | `jest-summary.txt` |
+| Main = worker, MV | mv1–mv8 dan mv4ph byte-identik | `regress.txt` |
+| Main = worker, RM | 9 desain × 4 run byte-identik; hash tabel sama dengan v2 | `rm/rm-ui-main-worker*.json`, `rm/rm-hash-v2-v3.txt` |
+| Sel eksperimen Web Worker final | 8/8 sel: payload dan respons worker lewat dialog asli build v3 identik dengan v1 dan v2. Hasil `result_compare.md` §11–§12 tetap berlaku | `experiment-output-check.txt` |
+| WASM | Build v3 memuat `wasm_bg.4c7b0023.wasm` (MV) dan `wasm_bg.2bc2b212.wasm` (RM), sama dengan v2; wasm-pack MV md5 `81ee712d0eba…`; API publik Rust sama dengan `82a63b45` | `api-check.txt` |
+| Uji acuan SPSS | MV 2339 lulus (12 todo), regresi 0; RM 1681 lulus | `compare-spss.txt`, `jest-reference.log`, `rm/rm-reference.log` |
+| Perubahan keluaran | Hanya catatan tabel Levene MV (kini diakhiri "Design: …"). Baris dan nilai Levene serta tabel lain identik dengan v2 | `ringkasan.txt` |
+
+### v3.3 Build produksi v3
+
+| Item | Nilai |
+|---|---|
+| `BUILD_ID` | `LHuNzRz16C8sj4tUeFT-j` |
+| WASM MV di build | `.next/static/media/wasm_bg.4c7b0023.wasm` (sama dengan v2) |
+| WASM RM di build | `.next/static/media/wasm_bg.2bc2b212.wasm` (sama dengan v2) |
+
+### v3.4 Pengujian black-box iterasi 2
+
+- **Cakupan:** ke-50 skenario dijalankan ulang terhadap build v3 dengan harness dan aturan yang sama seperti iterasi 1 (`testing/black-box/harness/bb-run.cjs --iter=2`).
+- **Hasil:** 50 Sesuai, 0 Tidak Sesuai, 0 kendala alat uji.
+- **Nilai tampil vs SPSS 27:** 1536/1536 cocok (MV 1063, RM 473).
+- **Rincian:** `testing/black-box/skenario-black-box.md` (ringkasan kedua iterasi, revisi skenario R1–R2).
+
+### v3.5 Menjalankan build v3 secara lokal
+
+```
+git checkout skripsi-final-v3        # atau: git checkout ilham
+cd frontend
+npx next build
+npx next start -p 3001               # http://localhost:3001/dashboard/data
+```
+
+---
+
 
 ## v2. Perubahan dan pemeriksaan skripsi-final-v1 → skripsi-final-v2
 

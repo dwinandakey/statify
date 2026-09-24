@@ -1,0 +1,50 @@
+{
+ "id": "BB-KF06-09",
+ "steps": [
+  "impor multivariate-100.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1, Y2",
+  "FixFactor: F1, F2, F3",
+  "Model: custom [\"F1\",\"F2\",\"F3\",\"F1 * F2\"] → kotak Model: [\"F1\",\"F2\",\"F3\",\"F1 * F2\"] (BB-KF06-09-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version."
+   ],
+   "file": "BB-KF06-09-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-custom-terms": [
+   "F1",
+   "F2",
+   "F3",
+   "F1 * F2"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-09-1.png: dialog Model (custom): F1; F2; F3; F1 * F2",
+  "BB-KF06-09-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 73
+}

@@ -1,6 +1,6 @@
 # Pemetaan kebutuhan fungsional (Tabel 5 revisi) ke kode: GLM Multivariate dan GLM Repeated Measures
 
-- **Versi yang dipetakan:** **skripsi-final-v2** (branch `ilham`, tag `skripsi-final-v2`, commit `d863de09`). Pemetaan v1 (`skripsi-final-v1`, `e365897d`) ada di riwayat git berkas ini (commit `db546515`).
+- **Versi yang dipetakan:** **skripsi-final-v2** (branch `ilham`, tag `skripsi-final-v2`, commit `d863de09`), diperbarui untuk **skripsi-final-v3** (tag `skripsi-final-v3`; lima perbaikan frontend hasil iterasi 1 black-box, lihat bagian "Perubahan v3"). Pemetaan v1 (`skripsi-final-v1`, `e365897d`) ada di riwayat git berkas ini (commit `db546515`).
 - **Metode:** penelusuran kode (dialog, subdialog, service, formatter, crate Rust). Semua pesan dalam dokumen ini disalin dari kode v2: huruf, tanda baca, dan titik di akhir.
 - **Path singkatan:**
   - `MV/` = `frontend/components/Modals/Analyze/general-linear-model/multivariate/`
@@ -37,6 +37,20 @@ Hanya KF10, KF11, KF12, dan KF14 yang berubah. KF lain memakai redaksi semula.
 
 Status yang berubah dari v1: KF6, KF10, KF11, KF12, dan KF14 menjadi TERPENUHI. KF6 berubah karena perubahan kode di v2; KF10, KF11, KF12, dan KF14 berubah karena redaksi Tabel 5 direvisi dan didukung perubahan kode v2. Keterbatasan terhadap redaksi lama dicatat di bagian akhir.
 
+Status di v3 sama dengan v2. Perbaikan v3 menyangkut perilaku dialog dan catatan tabel; rinciannya di bagian "Perubahan v3".
+
+## Perubahan v3 (hasil iterasi 1 black-box)
+
+Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`. Crate Rust MV dan RM tidak berubah.
+
+| KF | Skenario | Perubahan | Berkas |
+|---|---|---|---|
+| KF3 | BB-KF03-02 | Pilihan Unequal (Welch-Satterthwaite) tidak lagi kembali ke Pooled setelah subdialog dibuka. Reset hanya terjadi bila pengguna mengubah Fixed Factor(s) sehingga jumlahnya bukan satu. | `multivariate/dialogs/dialog.tsx` (effect sinkronisasi daftar; `handleMoveVariable`) |
+| KF4 | BB-KF04-02 | Baris pasangan yang baru berisi Variable 1 menampilkan "Terdapat pasangan yang belum lengkap. …" (sebelumnya "Tambahkan minimal satu pasangan variabel."). | `multivariate/dialogs/paired.tsx` (`handleContinue`) |
+| KF10 | BB-KF10-02 | Catatan tabel Levene diakhiri catatan Design, misalnya "Design: Intercept + faktorA + faktorB". Pada faktorial penuh, suku interaksi ditambahkan seperti catatan SPSS. | `multivariate/services/multivariate-analysis-formatter.ts` (`formatLeveneTest`) |
+| KF7 | BB-KF07-02 | Isian slot within tetap bila Define diklik tanpa mengubah definisi faktor atau measure. | `repeated-measures/dialogs/repeated-measures-main.tsx` (`handleDefineContinue`) |
+| KF8 | BB-KF08-02 | Number of Levels yang kosong atau bukan angka menampilkan "Number of levels must be a valid number."; angka di luar 2–99 (termasuk 0) tetap menampilkan pesan rentang. | `repeated-measures/dialogs/define/repeated-measures-dialog.tsx` (`isFactorLevelsValid`, input `factorLevels`) |
+
 ---
 
 ## KF1. Pemilihan analisis pada kelompok GLM Multivariate — TERPENUHI
@@ -72,6 +86,7 @@ Prosedur dipilih lewat isian dialog (keputusan: TERPENUHI):
   - **Equal (Pooled estimate of Σ)** (`variance-pooled`);
   - **Unequal (Welch-Satterthwaite)** (`variance-welch`).
 - **Keluaran Unequal:** baris efek "<faktor> — Welch-Satterthwaite" dengan hanya Hotelling's Trace. Catatan tabel diakhiri "— Computed using Welch-Satterthwaite approximation for unequal covariance matrices.".
+- **v3:** pilihan Unequal tetap tersimpan setelah subdialog (misalnya Options) dibuka dan ditutup.
 - **Faktor dengan ≠ 2 level:** Errors Logs, konteks `calculate_multivariate_tests`, pesan `VarianceMode = Welch requires the Fixed Factor to have exactly two levels; '<faktor>' has <n>.`.
 
 ## KF4. Uji berpasangan — TERPENUHI
@@ -79,9 +94,9 @@ Prosedur dipilih lewat isian dialog (keputusan: TERPENUHI):
 - **Fitur:** subdialog **Paired** ("Paired (Hotelling T²) — Vektor Selisih").
 - **Keluaran:** tabel "Multivariate Tests — Hotelling T² Berpasangan", dengan baris efek "Hotelling T² Berpasangan".
 - **Pesan (toast):**
-  - "Tambahkan minimal satu pasangan variabel.";
-  - "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris.";
-  - "Pasangan harus berisi dua variabel yang berbeda.".
+  - "Tambahkan minimal satu pasangan variabel." (belum ada baris pasangan);
+  - "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris." (ada baris yang baru berisi satu variabel; v3: diperiksa lebih dulu);
+  - "Pasangan harus berisi dua variabel yang berbeda." (pengaman; tidak terjangkau lewat UI, lihat "Pesan yang tidak bisa dipicu dari UI").
 
 ## KF5. One-Way MANOVA — TERPENUHI
 
@@ -112,6 +127,7 @@ Menu Analyze → General Linear Model → **Repeated Measures** membuka dialog *
   - Measure Name, dengan tombol Add, Change, dan Remove;
   - tombol Reset, Cancel, dan Define.
 - **v2:** Define dan OK kini memvalidasi dengan toast (sebelumnya dialog tertutup tanpa pesan).
+- **v3:** Define tanpa perubahan definisi mempertahankan isian slot within; slot dikosongkan hanya bila faktor atau measure berubah.
 
 Pesan persis (toast):
 
@@ -119,7 +135,7 @@ Pesan persis (toast):
 |---|---|
 | Add faktor, nama kosong | `Factor name cannot be empty.` |
 | Add faktor, nama berspasi/simbol | `Factor name cannot contain spaces or special characters. Use only letters, numbers, and underscores.` |
-| Add faktor, level bukan angka | `Number of levels must be a valid number.` |
+| Add faktor, level kosong atau bukan angka (v3) | `Number of levels must be a valid number.` |
 | Add faktor, level di luar 2–99 | `Number of levels must be between 2 and 99.` |
 | Add measure, nama kosong | `Measure name cannot be empty.` |
 | Add measure, nama berspasi/simbol | `Measure name cannot contain spaces or special characters. Use only letters, numbers, and underscores.` |
@@ -150,7 +166,7 @@ Divalidasi SPSS (1318 nilai; gambar51, a, b, c, d).
 | Uji | MV | RM |
 |---|---|---|
 | Box's M | Opsional: Options → **Homogenity Tests** → "Box's Test of Equality of Covariance Matrices" | Opsional: Options → **Homogenity Tests** → "Box's Test of Equality of Covariance Matrices" |
-| Levene | Opsional, dengan pengaturan yang sama → "Levene's Test of Equality of Error Variances". Faktorial penuh: 4 baris per DV (Based on Mean, Based on Median, Based on Median and with adjusted df, Based on trimmed mean). Model efek utama: 1 baris per DV "Based on Model Residuals" (v2, seperti SPSS). | Opsional, dengan pengaturan yang sama (4 baris per measure dan level) |
+| Levene | Opsional, dengan pengaturan yang sama → "Levene's Test of Equality of Error Variances". Faktorial penuh: 4 baris per DV (Based on Mean, Based on Median, Based on Median and with adjusted df, Based on trimmed mean). Model efek utama: 1 baris per DV "Based on Model Residuals" (v2, seperti SPSS). Catatan tabel memuat Design (v3). | Opsional, dengan pengaturan yang sama (4 baris per measure dan level) |
 | Mauchly | — (tidak ada faktor within) | **Otomatis** (selalu dihitung): "Mauchly's Test of Sphericity" |
 
 Bukti: MV `MV/rust/src/wasm/function.rs` (Box, Bartlett, dan Levene bila `options.homogen_test`); RM `RM/rust/src/wasm/function.rs` (homogeneity bila `homogen_test`; Mauchly tanpa syarat).
@@ -206,7 +222,8 @@ Tidak ada grafik profil (Plots nonaktif).
 | MV: DV < 2 (tanpa Paired) | Toast peringatan; dialog tetap terbuka (OK tidak dinonaktifkan) | `Please select at least two dependent variables for multivariate analysis.` |
 | MV: tanpa faktor, kovariat, maupun Test Values | Toast peringatan | `Please select at least one fixed factor or covariate.` |
 | MV: jumlah μ₀ ≠ jumlah DV | Tidak terjadi: disesuaikan otomatis (KF2) | — |
-| MV: Paired tanpa pasangan / pasangan tidak lengkap / variabel sama | Toast | `Tambahkan minimal satu pasangan variabel.` / `Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris.` / `Pasangan harus berisi dua variabel yang berbeda.` |
+| MV: Paired tanpa pasangan / pasangan belum lengkap | Toast | `Tambahkan minimal satu pasangan variabel.` / `Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris.` |
+| MV: Paired, variabel yang sama pada kedua sisi | Tidak dapat dibentuk: variabel yang sudah dipakai hilang dari Available Variables | — (pesan pengaman `Pasangan harus berisi dua variabel yang berbeda.` tidak terjangkau) |
 | MV: model kustom tanpa suku (Build Terms, kotak Model kosong) | Toast galat MV (konteks `config.validation.model_terms` tidak tampil karena tidak ada log) | `The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.` |
 | MV: suku model bukan faktor atau kovariat terpilih (faktor dihapus dari Fixed Factor setelah dimasukkan ke Model) | Toast galat MV | `Model term '<nama>' is not a selected fixed factor or covariate.` |
 | MV: interaksi dengan kovariat (Build Custom Terms) | Toast galat MV | `Interaction terms with covariates are not supported in this version.` |
@@ -240,6 +257,7 @@ Pesan berikut ada di kode v2, tetapi validasi di dialog selalu berjalan lebih du
 | `Dependent variable must be selected for multivariate analysis` | `multivariate/rust/src/wasm/constructor.rs:137-141` | OK ditolak bila DV kurang dari dua, kecuali pada mode Paired (`multivariate/dialogs/dialog.tsx:247-262`). Pada mode Paired, service mengisi DepVar dengan nama variabel selisih (`multivariate/services/multivariate-analysis.ts:108`). |
 | `Model specification method must be selected` | `multivariate/rust/src/wasm/constructor.rs:144-148` | Dialog Model memakai radio: tepat satu dari NonCust, Custom, dan BuildCustomTerm bernilai true (`multivariate/dialogs/model.tsx:68-74`). Bawaannya NonCust = true (`multivariate/constants/multivariate-default.ts:25-27`). |
 | `Fixed factors must be specified for post-hoc tests` | `multivariate/rust/src/wasm/constructor.rs:151-157` | Daftar sumber Post Hoc (`SrcList`) selalu disalin dari Fixed Factor(s) di dialog utama (`multivariate/dialogs/multivariate-main.tsx:112-115`). Daftar itu tidak pernah terisi bila Fixed Factor kosong. |
+| `Pasangan harus berisi dua variabel yang berbeda.` | `multivariate/dialogs/paired.tsx:172-181`, `207-216`, `297-304` | Variabel yang sudah dipakai sebagai Variable 1 atau Variable 2 dikeluarkan dari Available Variables (`multivariate/dialogs/paired.tsx:115-125`), sehingga pasangan dengan variabel yang sama tidak dapat dibentuk. Pertukaran Variable 1 dan 2 hanya menukar dua variabel yang sudah berbeda. Pesan ini adalah pengaman. |
 | `A factor with this name already exists.` | `repeated-measures/dialogs/define/repeated-measures-dialog.tsx:72-81` | Penolakan faktor within kedua dijalankan lebih dulu: `handleAddFactor` berhenti di baris 150-153 bila sudah ada satu faktor, sebelum `isFactorNameValid` di baris 156. Pada Change (baris 171-183), satu-satunya faktor adalah faktor yang sedang diubah, dan faktor itu dikecualikan dari pemeriksaan duplikat (baris 76). |
 | `No within-subjects variables are defined. Go back to Define and add a within-subjects factor and a measure.` | `repeated-measures/dialogs/dialog.tsx:183-188` | Define menolak konfigurasi tanpa faktor atau tanpa measure (`repeated-measures/dialogs/define/repeated-measures-dialog.tsx:342-349`). Karena itu dialog utama selalu dibuka dengan minimal satu slot. |
 | `At least one subject variable must be selected for repeated measures analysis` | `repeated-measures/rust/src/wasm/constructor.rs:111-116` | Slot selalu ada (baris sebelumnya), dan OK ditolak bila ada slot yang belum diisi (`repeated-measures/dialogs/dialog.tsx:190-193`). |

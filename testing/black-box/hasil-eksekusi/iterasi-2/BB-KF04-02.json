@@ -1,0 +1,47 @@
+{
+ "id": "BB-KF04-02",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate"
+ ],
+ "toasts": [
+  {
+   "label": "Continue tanpa pasangan",
+   "texts": [
+    "Tambahkan minimal satu pasangan variabel.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem.",
+    "Tambahkan minimal satu pasangan variabel.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem."
+   ],
+   "file": "BB-KF04-02-1.png"
+  },
+  {
+   "label": "Continue dengan Variable 1 saja",
+   "texts": [
+    "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris.",
+    "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris."
+   ],
+   "file": "BB-KF04-02-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "terbuka1": true,
+  "terbuka2": true,
+  "kedalaman1DiAvailableSetelahDipakai": 0,
+  "isiPasangan": "Paired Variable(s)\nPair\tVariable 1\tVariable 2\n1\t\nkedalaman1\n\t",
+  "availableSetelahLangkah3": "Available Variables\nlokasi\nukuran1\nkedalaman2\nukuran2\nkd\nuk\nDouble-click to move variables between lists.",
+  "terbuka3": true
+ },
+ "notes": [
+  "BB-KF04-02-1.png: toast: Continue tanpa pasangan",
+  "BB-KF04-02-2.png: toast: Continue dengan Variable 1 saja",
+  "kedalaman1 tidak lagi tersedia di Available Variables setelah dipakai sebagai Variable 1; dicoba drag dari sel Variable 1 ke kolom Variable 2",
+  "BB-KF04-02-3.png: langkah 3: kedalaman1 tidak ada di Available Variables; pasangan tidak terbentuk"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 13
+}

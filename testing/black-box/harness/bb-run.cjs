@@ -194,7 +194,9 @@ async function snapTable(c, title, label, { expand = true } = {}) {
         if (await toggle.count()) await toggle.first().click().catch(() => {});
     }
     // Iterasi 2: seluruh kartu hasil (judul, catatan analitik, tabel).
-    const target = ITER >= 2 ? log.locator('[data-testid^="result-analytic-"]').filter({ has: tbl }).last() : tbl;
+    // (Locator di dalam `has` harus relatif: dibuat dari page, bukan dari log.)
+    const inner = page.locator('[data-testid^="result-table-"], [data-testid^="result-chart-"]').filter({ hasText: title });
+    const target = ITER >= 2 ? log.locator('[data-testid^="result-analytic-"]').filter({ has: inner }).first() : tbl;
     await target.scrollIntoViewIfNeeded();
     return c.snap(target, label || title);
 }
