@@ -137,7 +137,7 @@ fn build_model_string(config: &MultivariateConfig) -> String {
             terms.push(c.clone());
         }
     }
-    if factors.len() > 1 {
+    if factors.len() > 1 && config.model.non_cust {
         for term in generate_interaction_terms(&factors) {
             terms.push(term);
         }

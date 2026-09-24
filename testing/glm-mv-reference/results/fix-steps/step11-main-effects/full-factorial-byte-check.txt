@@ -1,0 +1,17 @@
+Jalur Full Factorial: keluaran WASM (get_formatted_results + get_all_errors) WASM e365897d vs WASM step 11, instance baru per payload.
+Payload: fixture uji acuan mv1-mv7 (run UI) dan sel eksperimen Web Worker MV 100/500/1000/2000 (dialog asli build release).
+multivariate-100: e365897d 803ccf97ebae (32316 B, wasm 403447c4) | step11 803ccf97ebae (32316 B, wasm b9eab675) | byte-identik true
+multivariate-1000: e365897d b20aeb90f511 (31444 B, wasm 403447c4) | step11 b20aeb90f511 (31444 B, wasm b9eab675) | byte-identik true
+multivariate-2000: e365897d 925dcba3bbe2 (30931 B, wasm 403447c4) | step11 925dcba3bbe2 (30931 B, wasm b9eab675) | byte-identik true
+multivariate-500: e365897d bb426914f7c8 (31895 B, wasm 403447c4) | step11 bb426914f7c8 (31895 B, wasm b9eab675) | byte-identik true
+multivariate-mv1: e365897d bb27321d3462 (8527 B, wasm 403447c4) | step11 bb27321d3462 (8527 B, wasm b9eab675) | byte-identik true
+multivariate-mv2: e365897d e3c187bb5282 (18377 B, wasm 403447c4) | step11 e3c187bb5282 (18377 B, wasm b9eab675) | byte-identik true
+multivariate-mv3: e365897d a8b94be54a0b (5424 B, wasm 403447c4) | step11 a8b94be54a0b (5424 B, wasm b9eab675) | byte-identik true
+multivariate-mv4: e365897d 25c53979e368 (11215 B, wasm 403447c4) | step11 25c53979e368 (11215 B, wasm b9eab675) | byte-identik true
+multivariate-mv5: e365897d 3f8ee39c6f1e (18859 B, wasm 403447c4) | step11 3f8ee39c6f1e (18859 B, wasm b9eab675) | byte-identik true
+multivariate-mv6: e365897d f6ec34dd1e0e (18962 B, wasm 403447c4) | step11 f6ec34dd1e0e (18962 B, wasm b9eab675) | byte-identik true
+multivariate-mv7: e365897d 6b3ef5b4692f (19283 B, wasm 403447c4) | step11 6b3ef5b4692f (19283 B, wasm b9eab675) | byte-identik true
+
+Catatan: normalisasi model semula ditaruh di MultivariateAnalysis::new; keluaran lalu berbeda urutan kunci/konteks dan digit terakhir Levene (<= 1.8e-14).
+Bisect: perubahan stats/ saja -> identik; perubahan konstruktor saja -> berbeda; array lokal 256 byte di new (tanpa efek logika) -> berbeda; black_box(1u8) -> identik.
+Kesimpulan: kunci hash std::HashMap di wasm32 ditentukan saat HashMap pertama dibuat (ErrorCollector di awal new) dan bergantung pada posisi stack; normalisasi dipindah ke awal run_analysis sehingga new tidak berubah.

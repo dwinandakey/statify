@@ -13,7 +13,8 @@ use super::core::{
     get_factor_levels,
     get_level_values,
 };
-use super::common::{ data_value_to_string, extract_dependent_value, merge_records };
+use super::common::{ build_design_matrix_and_response, data_value_to_string, extract_dependent_value, merge_records };
+use super::between_subjects_effects::fit_model_and_get_ss;
 
 /// Pooled mean-square error from the FULL model (residuals around cell
 /// means using every fixed factor) and the matching error degrees of
@@ -26,6 +27,15 @@ fn compute_model_mse(
     config: &MultivariateConfig,
     dep_var: &str,
 ) -> Option<(f64, usize)> {
+    // Main-effects model: the error is the residual of the additive design
+    // (the cell means below are the full factorial's).
+    if !config.model.non_cust {
+        let (x, y) = build_design_matrix_and_response(data, config, dep_var).ok()?;
+        let n_cols = x.first().map_or(0, |row| row.len());
+        let df = y.len().checked_sub(n_cols).filter(|&d| d > 0)?;
+        let sse = fit_model_and_get_ss(&x, &y).ok()?;
+        return Some((sse / (df as f64), df));
+    }
     let factors = config.main.fix_factor.as_ref().cloned().unwrap_or_default();
     let merged = merge_records(data);
 

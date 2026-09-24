@@ -947,8 +947,9 @@ pub fn build_design_matrix_and_response(
                 // interaction df from (a-1)(b-1) down to 1 — causing the
                 // wrong error df (n − k) and wrong SS distribution for every
                 // effect in multi-level Two-Way (and higher) designs.
+                // Main-effects model (non_cust false): no interaction columns.
                 if let Some(factors) = &config.main.fix_factor {
-                    if factors.len() > 1 {
+                    if factors.len() > 1 && config.model.non_cust {
                         let interaction_terms = generate_interaction_terms(factors);
                         for term in &interaction_terms {
                             let term_factors = parse_interaction_term(term);

@@ -71,7 +71,7 @@ pub fn calculate_multivariate_tests(
 
     // Hypothesis SSCPs of the factors and interactions (one design build).
     let mut terms: Vec<String> = factors.clone();
-    if factors.len() > 1 {
+    if factors.len() > 1 && config.model.non_cust {
         terms.extend(generate_interaction_terms(&factors));
     }
     let term_sscp = if terms.is_empty() {
@@ -158,8 +158,9 @@ pub fn calculate_multivariate_tests(
         effects.insert(factor.clone(), factor_tests);
     }
 
-    // 3. Calculate multivariate test statistics for interactions (if multiple factors)
-    if factors.len() > 1 {
+    // 3. Calculate multivariate test statistics for interactions (if multiple
+    // factors; none in the main-effects model)
+    if factors.len() > 1 && config.model.non_cust {
         let interaction_terms = generate_interaction_terms(&factors);
 
         for term in interaction_terms {
@@ -386,6 +387,21 @@ fn calculate_hypothesis_error_matrices(
 ) -> Result<(Vec<Vec<f64>>, Vec<Vec<f64>>, f64, f64), String> {
     let p = dependent_vars.len();
     let n_obs = all_values[0].len();
+
+    // Main-effects model: H (Intercept included) and E come from the additive
+    // design, computed with the effect SSCPs in effect_hypothesis_sscps. The
+    // cell-mean formulas below hold for the full factorial only.
+    if !config.model.non_cust {
+        let (h_matrix, hypothesis_df) = term_sscp
+            .get(effect)
+            .cloned()
+            .ok_or_else(|| format!("No hypothesis SSCP for effect '{}'", effect))?;
+        let (e_matrix, error_df) = term_sscp
+            .get(MAIN_EFFECTS_ERROR_KEY)
+            .cloned()
+            .ok_or_else(|| "No error SSCP for the main-effects model".to_string())?;
+        return Ok((h_matrix, e_matrix, hypothesis_df as f64, error_df as f64));
+    }
 
     // 1. Calculate grand means for each dependent variable
     let mut grand_means = Vec::new();
@@ -996,8 +1012,31 @@ fn effect_hypothesis_sscps(
         let h_rows: Vec<Vec<f64>> = (0..p).map(|i| (0..p).map(|j| h[(i, j)]).collect()).collect();
         out.insert(effect.clone(), (h_rows, effect_cols.len()));
     }
+
+    // Main-effects model (no interaction column in the design): also the
+    // Intercept SSCP (deviation-coded design without the intercept column,
+    // on y - mu0 as the univariate tests) and the model's residual SSCP with
+    // df n - (number of design columns), under MAIN_EFFECTS_ERROR_KEY.
+    if !config.model.non_cust {
+        let to_rows = |m: &DMatrix<f64>| -> Vec<Vec<f64>> {
+            (0..p).map(|i| (0..p).map(|j| m[(i, j)]).collect()).collect()
+        };
+        let e = residual_sscp(&x_deviation_mat, &y_mat, &[], false)?;
+        if config.model.intercept {
+            let mu0 = config.main.test_values.clone().unwrap_or_else(|| vec![0.0; p]);
+            let y0 = DMatrix::from_fn(n, p, |r, c| y_mat[(r, c)] - mu0.get(c).copied().unwrap_or(0.0));
+            let h_intercept = residual_sscp(&x_deviation_mat, &y0, &[0], false)? - residual_sscp(&x_deviation_mat, &y0, &[], false)?;
+            out.insert("Intercept".to_string(), (to_rows(&h_intercept), 1));
+        }
+        out.insert(MAIN_EFFECTS_ERROR_KEY.to_string(), (to_rows(&e), n.saturating_sub(n_cols)));
+    }
     Ok(out)
 }
+
+/// Key of the residual SSCP of the main-effects model in the map of
+/// effect_hypothesis_sscps (not an effect name: the leading space cannot
+/// occur in a variable name).
+const MAIN_EFFECTS_ERROR_KEY: &str = " error (main-effects model)";
 
 /// Residual SSCP (Y − X_k B)ᵀ(Y − X_k B) of the model with the columns of `x`
 /// not in `drop`; with no column left, YᵀY (or the centered SSCP when
@@ -1056,7 +1095,7 @@ fn deviation_coded_design(
         }
         factor_cols.insert(factor.clone(), cols);
     }
-    if factors.len() > 1 {
+    if factors.len() > 1 && config.model.non_cust {
         for term in generate_interaction_terms(&factors) {
             let term_cols = get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default();
             let parts: Vec<Vec<usize>> = parse_interaction_term(&term)
@@ -1095,7 +1134,7 @@ fn containing_effect_columns(
     config: &MultivariateConfig
 ) -> Vec<usize> {
     let factors = match &config.main.fix_factor {
-        Some(f) if f.len() > 1 => f.clone(),
+        Some(f) if f.len() > 1 && config.model.non_cust => f.clone(),
         _ => return Vec::new(),
     };
     let effect_factors = parse_interaction_term(effect);

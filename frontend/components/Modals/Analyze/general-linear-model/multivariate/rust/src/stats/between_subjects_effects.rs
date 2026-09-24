@@ -249,7 +249,8 @@ pub fn calculate_tests_between_subjects_effects(
             }
 
             // Calculate interaction effects if there are multiple factors
-            if factors.len() > 1 {
+            // (none in the main-effects model).
+            if factors.len() > 1 && config.model.non_cust {
                 let interaction_terms = generate_interaction_terms(factors);
 
                 for term in &interaction_terms {
@@ -637,7 +638,7 @@ fn deviation_coded_design(
         }
         factor_cols.insert(factor.clone(), cols);
     }
-    if factors.len() > 1 {
+    if factors.len() > 1 && config.model.non_cust {
         for term in generate_interaction_terms(&factors) {
             let term_cols = get_interaction_columns(x_matrix, &term, data, config).unwrap_or_default();
             let parts: Vec<Vec<usize>> = parse_interaction_term(&term)
@@ -699,7 +700,7 @@ fn containing_effect_columns(
     config: &MultivariateConfig
 ) -> Vec<usize> {
     let factors = match &config.main.fix_factor {
-        Some(f) if f.len() > 1 => f.clone(),
+        Some(f) if f.len() > 1 && config.model.non_cust => f.clone(),
         _ => return Vec::new(),
     };
     let effect_factors = parse_interaction_term(effect);
