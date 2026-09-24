@@ -17,6 +17,7 @@ import { MultivariateSave } from "@/components/Modals/Analyze/general-linear-mod
 import { MultivariateOptions } from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/options";
 import { MultivariateBootstrap } from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/bootstrap";
 import { MultivariateTestValues } from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/test-values";
+import { MultivariateTwoSampleDelta } from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/two-sample-delta";
 import { MultivariatePaired } from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/paired";
 import { useModal } from "@/hooks/useModal";
 import { useVariableStore } from "@/stores/useVariableStore";
@@ -50,6 +51,7 @@ export const MultivariateContainer = ({
     const [isOptionsOpen, setIsOptionsOpen] = useState(false);
     const [isBootstrapOpen, setIsBootstrapOpen] = useState(false);
     const [isTestValuesOpen, setIsTestValuesOpen] = useState(false);
+    const [isTwoSampleDeltaOpen, setIsTwoSampleDeltaOpen] = useState(false);
     const [isPairedOpen, setIsPairedOpen] = useState(false);
 
     const { closeModal } = useModal();
@@ -194,11 +196,24 @@ export const MultivariateContainer = ({
                                   : 0
                       );
 
+            // Two-population δ₀: same positional resize as μ₀.
+            const twoSampleDelta =
+                mainData.TwoSampleTestValues == null
+                    ? mainData.TwoSampleTestValues
+                    : Array.from({ length: depLen }, (_, i) =>
+                          Number.isFinite(mainData.TwoSampleTestValues?.[i])
+                              ? (mainData.TwoSampleTestValues as number[])[i]
+                              : 0
+                      );
+
             const newFormData = {
                 ...formData,
                 main: {
                     ...mainData,
                     TestValues: normalizedTestValues,
+                    ...(twoSampleDelta === undefined
+                        ? {}
+                        : { TwoSampleTestValues: twoSampleDelta }),
                 },
             };
 
@@ -250,6 +265,7 @@ export const MultivariateContainer = ({
             | "bootstrap"
             | "testValues"
             | "paired"
+            | "twoSampleDelta"
     ) => {
         setIsMainOpen(false);
         setIsModelOpen(false);
@@ -262,6 +278,7 @@ export const MultivariateContainer = ({
         setIsBootstrapOpen(false);
         setIsTestValuesOpen(false);
         setIsPairedOpen(false);
+        setIsTwoSampleDeltaOpen(false);
 
         switch (section) {
             case "main":
@@ -296,6 +313,9 @@ export const MultivariateContainer = ({
                 break;
             case "paired":
                 setIsPairedOpen(true);
+                break;
+            case "twoSampleDelta":
+                setIsTwoSampleDeltaOpen(true);
                 break;
         }
     };
@@ -351,6 +371,11 @@ export const MultivariateContainer = ({
                         value
                             ? openSection("paired")
                             : setIsPairedOpen(false)
+                    }
+                    setIsTwoSampleDeltaOpen={(value) =>
+                        value
+                            ? openSection("twoSampleDelta")
+                            : setIsTwoSampleDeltaOpen(false)
                     }
                     updateFormData={(field, value) =>
                         updateFormData("main", field, value)
@@ -478,6 +503,27 @@ export const MultivariateContainer = ({
                     testValues={formData.main.TestValues}
                     onSave={(testValues) =>
                         updateFormData("main", "TestValues", testValues)
+                    }
+                />
+            )}
+
+            {isTwoSampleDeltaOpen && (
+                <MultivariateTwoSampleDelta
+                    isTwoSampleDeltaOpen={isTwoSampleDeltaOpen}
+                    setIsTwoSampleDeltaOpen={(value) =>
+                        value
+                            ? openSection("twoSampleDelta")
+                            : handleContinue()
+                    }
+                    depVar={formData.main.DepVar ?? []}
+                    factor={
+                        (formData.main.FixFactor?.length ?? 0) === 1
+                            ? formData.main.FixFactor![0]
+                            : null
+                    }
+                    delta0={formData.main.TwoSampleTestValues ?? null}
+                    onSave={(delta0) =>
+                        updateFormData("main", "TwoSampleTestValues", delta0)
                     }
                 />
             )}

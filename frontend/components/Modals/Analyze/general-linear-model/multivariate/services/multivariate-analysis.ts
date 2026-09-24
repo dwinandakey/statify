@@ -5,6 +5,13 @@ import type {
 import { transformMultivariateResult } from "./multivariate-analysis-formatter";
 import { resultMultivariateAnalysis } from "./multivariate-analysis-output";
 import { buildDifferenceData } from "./paired-difference";
+import {
+    factorLevels,
+    hasNonZeroDelta,
+    normalizeDelta,
+    restoreDescriptiveStatistics,
+    shiftFirstLevel,
+} from "./two-sample-delta";
 import type { MultivariateWorkerPayload } from "./multivariate-analysis-worker";
 import {
     executeGlmComputation,
@@ -147,6 +154,42 @@ export async function analyzeMultivariate({
         selectedVariables: WlsWeightVariable,
     });
 
+    // Two-population δ₀ (H₀: μ₁ − μ₂ = δ₀): subtract δ₀ from every
+    // observation of the first factor level before the analysis. Only when
+    // δ₀ has a non-zero component, so δ₀ = 0 runs exactly as before.
+    let twoSampleDelta: {
+        factor: string;
+        levels: [string, string];
+        delta0: number[];
+    } | null = null;
+    if (
+        !pairedActive &&
+        FixFactorVariables.length === 1 &&
+        hasNonZeroDelta(configData.main.TwoSampleTestValues)
+    ) {
+        const factor = FixFactorVariables[0];
+        const levels = factorLevels(
+            (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+            factor
+        );
+        if (levels.length !== 2) {
+            throw new Error(
+                `Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; '${factor}' has ${levels.length}.`
+            );
+        }
+        const depVars = effectiveConfig.main.DepVar ?? [];
+        const delta0 = normalizeDelta(configData.main.TwoSampleTestValues, depVars.length);
+        slicedDataForDependent = shiftFirstLevel(
+            slicedDataForDependent as Record<string, any>[][],
+            depVars,
+            (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+            factor,
+            levels[0],
+            delta0
+        );
+        twoSampleDelta = { factor, levels: [levels[0], levels[1]], delta0 };
+    }
+
     const varDefsForFixFactor = getVarDefs(variables, FixFactorVariables);
     const varDefsForCovariate = getVarDefs(variables, CovariateVariables);
     const varDefsForWlsWeight = getVarDefs(variables, WlsWeightVariable);
@@ -159,7 +202,11 @@ export async function analyzeMultivariate({
     // exactly one Fixed Factor, so we normalise here before crossing the WASM
     // boundary. PairedMode is also stripped defensively because Rust doesn't
     // know about it.
-    const { PairedMode: _stripPaired, ...mainForRust } = effectiveConfig.main;
+    const {
+        PairedMode: _stripPaired,
+        TwoSampleTestValues: _stripTwoSample,
+        ...mainForRust
+    } = effectiveConfig.main;
     const configForRust = {
         ...effectiveConfig,
         main: {
@@ -294,7 +341,21 @@ export async function analyzeMultivariate({
               }
             : null;
 
-    const formattedResults = transformMultivariateResult(results, errors, {
+    // With a two-population δ₀ the analysis ran on shifted data; Descriptive
+    // Statistics are shown for the original data.
+    const resultsForFormat = twoSampleDelta
+        ? {
+              ...results,
+              descriptive_statistics: restoreDescriptiveStatistics(
+                  results?.descriptive_statistics,
+                  effectiveConfig.main.DepVar ?? [],
+                  twoSampleDelta.levels[0],
+                  twoSampleDelta.delta0
+              ),
+          }
+        : results;
+
+    const formattedResults = transformMultivariateResult(resultsForFormat, errors, {
         testValues: effectiveConfig.main.TestValues,
         varianceMode: effectiveConfig.main.VarianceMode,
         factor:
@@ -308,6 +369,7 @@ export async function analyzeMultivariate({
               }
             : null,
         contrastInfo,
+        twoSampleDelta,
         sumOfSquareMethod: configData.model?.SumOfSquareMethod ?? null,
         // Pass the user's DV selection order so per-DV tables (Descriptive
         // Statistics, Parameter Estimates) render in dialog order instead

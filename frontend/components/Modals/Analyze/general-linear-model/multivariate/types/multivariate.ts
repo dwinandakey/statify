@@ -21,6 +21,12 @@ export type MultivariateMainType = {
      *  service synthesises difference columns d_k = v1_k − v2_k and feeds
      *  them through the existing Test Values pipeline with μ₀ = δ₀. */
     PairedMode: PairedModeType;
+    /** Hypothesised difference δ₀ for the two-population test
+     *  (H₀: μ₁ − μ₂ = δ₀, μ₁ = first level of the single Fixed Factor in
+     *  output-table order). One entry per dependent variable; null = 0.
+     *  Applied in the service by shifting the first level's data; never
+     *  sent to Rust. */
+    TwoSampleTestValues?: number[] | null;
 };
 
 export type MultivariateDialogProps = {
@@ -36,6 +42,7 @@ export type MultivariateDialogProps = {
     setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsTestValuesOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsPairedOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsTwoSampleDeltaOpen: React.Dispatch<React.SetStateAction<boolean>>;
     updateFormData: (
         field: keyof MultivariateMainType,
         value: string[] | string | number[] | PairedModeType | null
@@ -255,6 +262,15 @@ export type MultivariateTestValuesProps = {
     depVar: string[];
     testValues: number[] | null;
     onSave: (testValues: number[] | null) => void;
+};
+
+export type MultivariateTwoSampleDeltaProps = {
+    isTwoSampleDeltaOpen: boolean;
+    setIsTwoSampleDeltaOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    depVar: string[];
+    factor: string | null;
+    delta0: number[] | null;
+    onSave: (delta0: number[] | null) => void;
 };
 
 export type MultivariatePairedProps = {

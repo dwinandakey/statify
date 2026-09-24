@@ -41,6 +41,7 @@ export const MultivariateDialog = ({
     setIsBootstrapOpen,
     setIsTestValuesOpen,
     setIsPairedOpen,
+    setIsTwoSampleDeltaOpen,
     updateFormData,
     data,
     globalVariables,
@@ -235,6 +236,13 @@ export const MultivariateDialog = ({
                 if (nextFactorCount !== 1) {
                     setMainState((prev) => ({ ...prev, VarianceMode: null }));
                 }
+                // δ₀ of the two-population test belongs to the factor it was
+                // entered for: any change of Fixed Factor(s) drops it.
+                setMainState((prev) =>
+                    prev.TwoSampleTestValues == null
+                        ? prev
+                        : { ...prev, TwoSampleTestValues: null }
+                );
             }
         },
         [listStateSetters, targetListsConfig, setAvailableVars, fixFactor.length]
@@ -503,6 +511,26 @@ export const MultivariateDialog = ({
                                 </Label>
                             </div>
                         </RadioGroup>
+                        <div className="mt-2 flex items-center justify-between gap-2">
+                            <span
+                                id="two-sample-delta-summary"
+                                className="text-xs text-muted-foreground truncate"
+                            >
+                                {Array.isArray(mainState.TwoSampleTestValues) &&
+                                mainState.TwoSampleTestValues.some((v) => v !== 0)
+                                    ? `δ₀ = [${mainState.TwoSampleTestValues.join(", ")}]`
+                                    : "δ₀ = 0 (H₀: μ₁ = μ₂)"}
+                            </span>
+                            <Button
+                                id="two-sample-delta-button"
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={openDialog(setIsTwoSampleDeltaOpen)}
+                            >
+                                Test Values (δ₀)
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>

@@ -21,6 +21,14 @@ export type MultivariateFormatterOptions = {
         method: string;
         first: boolean;
     } | null;
+    /** Two-population δ₀ (H₀: μ₁ − μ₂ = δ₀). When set, the analysis ran on
+     *  data in which δ₀ was subtracted from the first factor level; the
+     *  hypothesis and this shift are written into the table notes. */
+    twoSampleDelta?: {
+        factor: string;
+        levels: [string, string];
+        delta0: number[];
+    } | null;
     /** Sum-of-Squares method the user picked in the Model dialog
      *  ("typeI" | "typeII" | "typeIII" | "typeIV"). Drives the column header
      *  of the Tests of Between-Subjects Effects table — SPSS prints
@@ -300,11 +308,62 @@ export function transformMultivariateResult(
     formatResidualPlots(data, resultJson, relabelDv);
     formatSavedVariables(data, resultJson);
     formatErrors(errors, resultJson);
+    annotateTwoSampleDelta(resultJson, options.twoSampleDelta ?? null);
 
     return resultJson;
 }
 
 // ── 1. Between-Subjects Factors ──────────────────────────────────────────────
+// Tables whose values depend on the δ₀ shift of the first factor level.
+// Box's M, Levene, Bartlett and the residual SSCP are invariant to a shift
+// within a group; Descriptive Statistics are restored to the original data
+// in the service; Between-Subjects Factors only counts cases.
+const SHIFTED_TABLE_KEYS = [
+    "tests_between_subjects_effects",
+    "parameter_estimates_combined",
+    "between_subjects_sscp_",
+    "sscp_matrix_",
+    "contrast_results_k_matrix",
+    "contrast_multivariate_tests",
+    "contrast_univariate_tests",
+    "posthoc_tests_",
+    "homogeneous_subsets_",
+    "emmeans_",
+    "spread_vs_level_",
+];
+
+function formatDeltaVector(values: number[]): string {
+    return `[${values.map((v) => Number(v.toFixed(4)).toString()).join(", ")}]`;
+}
+
+/** Notes for a two-population δ₀ run (the data of the first level were
+ *  shifted by δ₀ before the analysis). */
+function annotateTwoSampleDelta(
+    resultJson: ResultJson,
+    delta: MultivariateFormatterOptions["twoSampleDelta"]
+) {
+    if (!delta) return;
+    const [a, b] = delta.levels;
+    const hypothesis = `H₀: μ(${delta.factor} = ${a}) − μ(${delta.factor} = ${b}) = δ₀, δ₀ = ${formatDeltaVector(delta.delta0)}`;
+    const shift = `Computed on data in which δ₀ is subtracted from every observation with ${delta.factor} = ${a}`;
+    const append = (note: string | undefined, text: string) =>
+        [note, text].filter((s) => s && s.length > 0).join(" ");
+    for (const table of resultJson.tables) {
+        if (table.key === "multivariate_tests") {
+            table.note = append(
+                table.note,
+                `${hypothesis}. ${shift}; the ${delta.factor} effect tests this hypothesis.`
+            );
+        } else if (SHIFTED_TABLE_KEYS.some((k) => table.key === k || table.key.startsWith(k))) {
+            table.note = append(table.note, `${shift} (${hypothesis}).`);
+        }
+    }
+    for (const chart of resultJson.charts ?? []) {
+        const meta = (chart as any).chartMetadata;
+        if (meta) meta.notes = append(meta.notes, `Observed and predicted values: ${shift.charAt(0).toLowerCase()}${shift.slice(1)} (${hypothesis}).`);
+    }
+}
+
 function formatBetweenSubjectsFactors(data: any, resultJson: ResultJson) {
     if (!data.between_subjects_factors) return;
 
@@ -658,6 +717,11 @@ function formatMultivariateTests(
             .map((v) => Number(v.toFixed(4)).toString())
             .join(", ")}]`;
         tableNote = `Analisis dilakukan pada vektor selisih ${pairList}. δ₀ = ${delta0Str}.`;
+        // δ₀ ≠ 0 (v4): state the hypothesis explicitly. δ₀ = 0 keeps the
+        // note unchanged.
+        if (pairedMode.delta0.some((v) => Number.isFinite(v) && v !== 0)) {
+            tableNote += ` H₀: μd = δ₀ (d = M1 − M2).`;
+        }
     } else if (welchMode) {
         tableNote = `${mt.design ?? ""} — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.`;
     } else {
