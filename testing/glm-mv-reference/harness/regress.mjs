@@ -25,7 +25,7 @@ for (const [k, r] of regressions) lines.push(`  REGRESI ${k}: SPSS ${r.spss}, se
 
 let identical = true;
 if (args.main && args.worker) {
-    for (const f of fs.readdirSync(args.worker).filter((x) => /^mv\d+\.json$/.test(x))) {
+    for (const f of fs.readdirSync(args.worker).filter((x) => /^mv[0-9a-z]+\.json$/.test(x))) {
         const w = read(path.join(args.worker, f));
         const m = read(path.join(args.main, f));
         const sig = (o) => JSON.stringify(o.tables.map((t) => [t.title, t.output_data]));
