@@ -480,8 +480,13 @@ function annotateTwoSampleDelta(
     const [a, b] = delta.levels;
     const hypothesis = `H₀: μ(${delta.factor} = ${a}) − μ(${delta.factor} = ${b}) = δ₀, δ₀ = ${formatDeltaVector(delta.delta0)}`;
     const shift = `Computed on data in which δ₀ is subtracted from every observation with ${delta.factor} = ${a}`;
-    const append = (note: string | undefined, text: string) =>
-        [note, text].filter((s) => s && s.length > 0).join(" ");
+    // The existing note may lack a final period (e.g. "Type III sum of
+    // squares"); end it as a sentence before appending.
+    const append = (note: string | undefined, text: string) => {
+        const base = (note ?? "").trimEnd();
+        if (base.length === 0) return text;
+        return `${/[.!?]$/.test(base) ? base : `${base}.`} ${text}`;
+    };
     for (const table of resultJson.tables) {
         if (table.key === "multivariate_tests") {
             table.note = append(
