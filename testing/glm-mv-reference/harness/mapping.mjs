@@ -31,7 +31,8 @@ export const MAP = {
 const PH_FIELD = { "Mean Difference (I-J)": "mean_difference", "Std. Error": "std_error", "Sig.": "significance" };
 const MV_FIELD = { Value: "value", F: "f", "Hypothesis df": "hypothesis_df", "Error df": "error_df", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const BSE_FIELD = { "Type III Sum of Squares": "sum_of_squares", df: "df", "Mean Square": "mean_square", F: "f_value", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
-const LEV_FIELD = { "Levene Statistic": "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
+// "F": SPSS header of the single Levene row of a model other than the full factorial (mv8).
+const LEV_FIELD = { "Levene Statistic": "levene_statistic", F: "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
 const BOX_FIELD = { "Box's M": "box_m", F: "f", df1: "df1", df2: "df2", "Sig.": "significance" };
 const DESC_FIELD = { Mean: "mean", "Std. Deviation": "std_deviation", N: "n" };
 
@@ -65,7 +66,9 @@ export function locate(e) {
         case "Box's Test of Equality of Covariance Matrices":
             return { path: ["box_test", BOX_FIELD[e.field]] };
         case "Levene's Test of Equality of Error Variances":
-            return { path: ["levene_test", { dependent_variable: dvOf(e.config, L[0]) }, "levene", { test_basis: L[1] }, LEV_FIELD[e.field]] };
+            // One row per DV (no "Based on" label) for a model other than the
+            // full factorial: Statify's single "Based on Model Residuals" entry.
+            return { path: ["levene_test", { dependent_variable: dvOf(e.config, L[0]) }, "levene", { test_basis: L[1] ?? "Based on Model Residuals" }, LEV_FIELD[e.field]] };
         case "Multivariate Tests":
             return { path: ["multivariate_tests", "effects", effectOf(L[0]), L[1], MV_FIELD[e.field]] };
         case "Tests of Between-Subjects Effects": {

@@ -20468,5 +20468,8262 @@
   "value": 61.0,
   "display": false,
   "source": "spss: spss-output/mv7_one_way_nilai_hilang.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorA",
+   "1",
+   "A1"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorA",
+   "2",
+   "A2"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorB",
+   "1",
+   "B1"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorB",
+   "2",
+   "B2"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorB",
+   "3",
+   "B3"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "faktorB",
+   "4",
+   "B4"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 7.6525,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.37034893456486895,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B1"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 8.195,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.6442825467137843,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B2"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 7.9475,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.7144869954496493,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B3"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 7.555,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.38310137909783964,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "B4"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 7.8374999999999995,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.5564350815683715,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A1",
+   "Total"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 7.27,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.2092844953645637,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B1"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 7.835,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.44523402086243674,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B2"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 7.362500000000001,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.2657536453183661,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B3"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 7.33,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.33166247903554014,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "B4"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 7.449375,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.3722627880051043,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "A2",
+   "Total"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 7.46125,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.34547844671246464,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B1"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 8.014999999999999,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.5476182194610711,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B2"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 7.655,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.588921532488473,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B3"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 7.4425,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.35285569693168173,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "B4"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 7.643437500000001,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 0.5057132259843359,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate torque",
+   "Total",
+   "Total"
+  ],
+  "field": "N",
+  "value": 32.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 88.5,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 1.8814887722226776,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B1"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 86.175,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 4.76121483097189,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B2"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 88.225,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 6.4706388144190745,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B3"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 88.85,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 3.7116932344506393,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "B4"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 87.9375,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 4.186625530583471,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A1",
+   "Total"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 81.975,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 6.127193484785668,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B1"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 77.5,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 9.161877536837087,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B2"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 76.25,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 4.993662650466757,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B3"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 80.97500000000001,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 4.1459819906346285,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "B4"
+  ],
+  "field": "N",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 79.17499999999998,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 6.221414630130352,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "A2",
+   "Total"
+  ],
+  "field": "N",
+  "value": 16.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B1"
+  ],
+  "field": "Mean",
+  "value": 85.23750000000001,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B1"
+  ],
+  "field": "Std. Deviation",
+  "value": 5.4563036938938785,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B1"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B2"
+  ],
+  "field": "Mean",
+  "value": 81.8375,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B2"
+  ],
+  "field": "Std. Deviation",
+  "value": 8.197026900041257,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B2"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B3"
+  ],
+  "field": "Mean",
+  "value": 82.2375,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B3"
+  ],
+  "field": "Std. Deviation",
+  "value": 8.342821978888708,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B3"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B4"
+  ],
+  "field": "Mean",
+  "value": 84.9125,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B4"
+  ],
+  "field": "Std. Deviation",
+  "value": 5.566850225088811,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "B4"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 83.55625,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 6.85743944971092,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "ultimate strain",
+   "Total",
+   "Total"
+  ],
+  "field": "N",
+  "value": 32.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv8",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "Box's M",
+  "value": 34.210742934405616,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv8",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "F",
+  "value": 1.1713030507244475,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv8",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "df1",
+  "value": 21.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv8",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "df2",
+  "value": 2064.6233766233718,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv8",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "Sig.",
+  "value": 0.26652757417772177,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Value",
+  "value": 0.9984999795016865,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "F",
+  "value": 8653.548,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Sig.",
+  "value": 1.94654084225463e-37,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9984999795016865,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 17307.09646716924,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Value",
+  "value": 0.0015000204983135782,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "F",
+  "value": 8653.548,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Sig.",
+  "value": 1.9465408422551555e-37,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9984999795016865,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 17307.09646716924,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Value",
+  "value": 665.6575564295729,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "F",
+  "value": 8653.548,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Sig.",
+  "value": 1.946540842255128e-37,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9984999795016865,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 17307.09646716924,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Value",
+  "value": 665.6575564295729,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "F",
+  "value": 8653.548,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Sig.",
+  "value": 1.946540842255128e-37,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9984999795016865,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 17307.09646716924,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Value",
+  "value": 0.5105496947849141,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "F",
+  "value": 13.56,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Sig.",
+  "value": 9.251493491566342e-05,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.5105496947849141,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 27.12081680810161,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Pillai's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.9953188490724879,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Value",
+  "value": 0.4894503052150859,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "F",
+  "value": 13.56,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Sig.",
+  "value": 9.251493491566342e-05,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.5105496947849141,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 27.12081680810161,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Wilks' Lambda"
+  ],
+  "field": "Observed Power",
+  "value": 0.9953188490724879,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Value",
+  "value": 1.043108338773139,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "F",
+  "value": 13.56,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Sig.",
+  "value": 9.251493491566325e-05,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.5105496947849141,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 27.12081680810161,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Hotelling's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.9953188490724879,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Value",
+  "value": 1.043108338773139,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "F",
+  "value": 13.56,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Error df",
+  "value": 26.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Sig.",
+  "value": 9.251493491566325e-05,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.5105496947849141,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 27.12081680810161,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorA",
+   "Roy's Largest Root"
+  ],
+  "field": "Observed Power",
+  "value": 0.9953188490724879,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Value",
+  "value": 0.3110585238291106,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "F",
+  "value": 1.6575628901061668,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Error df",
+  "value": 54.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.14942396319507234,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.1555292619145553,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 9.945377340637002,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Pillai's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.5824599807607016,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Value",
+  "value": 0.6942565835721404,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "F",
+  "value": 1.735,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Hypothesis df",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Error df",
+  "value": 52.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Sig.",
+  "value": 0.13143814712638419,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.1667793908140891,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 10.408441926089697,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Wilks' Lambda"
+  ],
+  "field": "Observed Power",
+  "value": 0.6035045910901343,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Value",
+  "value": 0.432733828004659,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "F",
+  "value": 1.8030576166860792,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Error df",
+  "value": 50.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.11752330410821969,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.17787964430107406,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 10.818345700116474,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Hotelling's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.6210220385740437,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Value",
+  "value": 0.4142527795050277,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "F",
+  "value": 3.728,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Hypothesis df",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Error df",
+  "value": 27.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Sig.",
+  "value": 0.02307827587797533,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.2929128268356746,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 11.184825046635748,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Multivariate Tests",
+  "labels": [
+   "faktorB",
+   "Roy's Largest Root"
+  ],
+  "field": "Observed Power",
+  "value": 0.7456069788265182,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate torque"
+  ],
+  "field": "F",
+  "value": 1.045253832056444,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate torque"
+  ],
+  "field": "df1",
+  "value": 7.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate torque"
+  ],
+  "field": "df2",
+  "value": 24.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate torque"
+  ],
+  "field": "Sig.",
+  "value": 0.42700396065713797,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate strain"
+  ],
+  "field": "F",
+  "value": 2.040871134032499,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate strain"
+  ],
+  "field": "df1",
+  "value": 7.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate strain"
+  ],
+  "field": "df2",
+  "value": 24.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "ultimate strain"
+  ],
+  "field": "Sig.",
+  "value": 0.09117659843324667,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 2.899,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Mean Square",
+  "value": 0.7248031250000004,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "F",
+  "value": 3.8914370722777245,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Sig.",
+  "value": 0.01272470914275283,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.36568717606904855,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 15.5657482891109,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate torque"
+  ],
+  "field": "Observed Power",
+  "value": 0.8391704055487827,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 689.125,
+  "display": true,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Mean Square",
+  "value": 172.28125000000006,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "F",
+  "value": 6.051768804063058,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Sig.",
+  "value": 0.0013050315537362737,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.4727291124131481,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 24.207075216252232,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "ultimate strain"
+  ],
+  "field": "Observed Power",
+  "value": 0.9662119357927594,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 1869.5083781249994,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Mean Square",
+  "value": 1869.5083781249994,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "F",
+  "value": 10037.310765691609,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Sig.",
+  "value": 2.941759791621712e-36,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9973172529516834,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 10037.310765691609,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate torque"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 223412.70125000013,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Mean Square",
+  "value": 223412.70125000013,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "F",
+  "value": 7847.8767472154395,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Sig.",
+  "value": 8.073319225705841e-35,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9965713749095124,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 7847.8767472154395,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "ultimate strain"
+  ],
+  "field": "Observed Power",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 1.205128125000025,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Mean Square",
+  "value": 1.205128125000025,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "F",
+  "value": 6.470281516059465,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Sig.",
+  "value": 0.017006619174068614,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.19331422452945138,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 6.470281516059466,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate torque"
+  ],
+  "field": "Observed Power",
+  "value": 0.6888006281022638,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 614.2512499999983,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Mean Square",
+  "value": 614.2512499999983,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "F",
+  "value": 21.576965297191233,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Sig.",
+  "value": 7.905093459737414e-05,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.4441810056512286,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 21.576965297191233,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorA",
+   "ultimate strain"
+  ],
+  "field": "Observed Power",
+  "value": 0.994038785024968,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 1.6940843750000425,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Mean Square",
+  "value": 0.5646947916666808,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "F",
+  "value": 3.0318222576839284,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Sig.",
+  "value": 0.04646060341050172,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.2519836308043617,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 9.095466773051786,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate torque"
+  ],
+  "field": "Observed Power",
+  "value": 0.646285583856469,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 74.87375000000031,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Mean Square",
+  "value": 24.957916666666772,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "F",
+  "value": 0.8767033063536478,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Sig.",
+  "value": 0.4654018684621746,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.08876477091193653,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 2.6301099190609434,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "faktorB",
+   "ultimate strain"
+  ],
+  "field": "Observed Power",
+  "value": 0.21519045439728257,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 5.028909375000002,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 27.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate torque"
+  ],
+  "field": "Mean Square",
+  "value": 0.18625590277777787,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 768.6337499999997,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 27.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "ultimate strain"
+  ],
+  "field": "Mean Square",
+  "value": 28.467916666666657,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 1877.4365000000003,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 32.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 224870.46000000002,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 32.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "ultimate torque"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 7.928121875000004,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "ultimate torque"
+  ],
+  "field": "df",
+  "value": 31.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "ultimate strain"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 1457.75875,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv8",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "ultimate strain"
+  ],
+  "field": "df",
+  "value": 31.0,
+  "display": false,
+  "source": "spss: spss-output/mv8_two_way_main_effects.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "treatment",
+   "1",
+   "treatment 1"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "treatment",
+   "2",
+   "treatment 2"
+  ],
+  "field": "N",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Between-Subjects Factors",
+  "labels": [
+   "treatment",
+   "3",
+   "treatment 3"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Between-Subjects Factors"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 1"
+  ],
+  "field": "Mean",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 1"
+  ],
+  "field": "Std. Deviation",
+  "value": 1.7320508075688774,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 1"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 2"
+  ],
+  "field": "Mean",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 2"
+  ],
+  "field": "Std. Deviation",
+  "value": 1.4142135623730951,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 2"
+  ],
+  "field": "N",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 3"
+  ],
+  "field": "Mean",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 3"
+  ],
+  "field": "Std. Deviation",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "treatment 3"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 4.000000000000001,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 3.545621041711673,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y1",
+   "Total"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 1"
+  ],
+  "field": "Mean",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 1"
+  ],
+  "field": "Std. Deviation",
+  "value": 2.6457513110645907,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 1"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 2"
+  ],
+  "field": "Mean",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 2"
+  ],
+  "field": "Std. Deviation",
+  "value": 2.8284271247461903,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 2"
+  ],
+  "field": "N",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 3"
+  ],
+  "field": "Mean",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 3"
+  ],
+  "field": "Std. Deviation",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "treatment 3"
+  ],
+  "field": "N",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "Total"
+  ],
+  "field": "Mean",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "Total"
+  ],
+  "field": "Std. Deviation",
+  "value": 3.2071349029490923,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Descriptive Statistics",
+  "labels": [
+   "y2",
+   "Total"
+  ],
+  "field": "N",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Descriptive Statistics"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "Box's M",
+  "value": 3.0541119092869806,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "F",
+  "value": 0.46553997506145306,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "df1",
+  "value": 3.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "df2",
+  "value": 2880.0000000001023,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Box's Test of Equality of Covariance Matrices",
+  "labels": [],
+  "field": "Sig.",
+  "value": 0.7063497824851163,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Box's Test of Equality of Covariance Matrices"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Value",
+  "value": 0.9423282429590816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "F",
+  "value": 32.679,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Error df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.003326031560186723,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9423282429590816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 65.35803945008955,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Pillai's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.9964088188571951,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Value",
+  "value": 0.05767175704091839,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "F",
+  "value": 32.679,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Error df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Sig.",
+  "value": 0.0033260315601867205,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9423282429590816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 65.35803945008955,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Wilks' Lambda"
+  ],
+  "field": "Observed Power",
+  "value": 0.9964088188571951,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Value",
+  "value": 16.3395098625224,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "F",
+  "value": 32.679,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Error df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.0033260315601867175,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9423282429590816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 65.35803945008955,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Hotelling's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.9964088188571951,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Value",
+  "value": 16.3395098625224,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "F",
+  "value": 32.679,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Error df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Sig.",
+  "value": 0.0033260315601867175,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9423282429590816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 65.35803945008955,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "Intercept",
+   "Roy's Largest Root"
+  ],
+  "field": "Observed Power",
+  "value": 0.9964088188571951,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Value",
+  "value": 1.5407884151246982,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "F",
+  "value": 8.388227049754729,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Error df",
+  "value": 10.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.0030962241983165735,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.7703942075623491,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 33.552908199018916,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Pillai's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.9687933856804856,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Value",
+  "value": 0.03845534995977475,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "F",
+  "value": 8.199,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Hypothesis df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Error df",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Sig.",
+  "value": 0.006234085936787559,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8038996431421535,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 32.79543825511349,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Wilks' Lambda"
+  ],
+  "field": "Observed Power",
+  "value": 0.9421452361868097,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Value",
+  "value": 9.941422594142258,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "F",
+  "value": 7.456066945606693,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Hypothesis df",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Error df",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Sig.",
+  "value": 0.016431809080210816,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8325157673440785,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 29.824267782426784,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Hotelling's Trace"
+  ],
+  "field": "Observed Power",
+  "value": 0.8555203320607083,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Value",
+  "value": 8.076385023101345,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "F",
+  "value": 20.191,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Hypothesis df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Error df",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Sig.",
+  "value": 0.004029189780219962,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8898239775577187,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 40.38192511550674,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multivariate Tests",
+  "labels": [
+   "treatment",
+   "Roy's Largest Root"
+  ],
+  "field": "Observed Power",
+  "value": 0.9837630976728863,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multivariate Tests"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Mean"
+  ],
+  "field": "Levene Statistic",
+  "value": 1.2499999999999996,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Mean"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Mean"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Mean"
+  ],
+  "field": "Sig.",
+  "value": 0.3628873693012117,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median"
+  ],
+  "field": "Levene Statistic",
+  "value": 0.07812500000000001,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median"
+  ],
+  "field": "Sig.",
+  "value": 0.9259554583128502,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "Levene Statistic",
+  "value": 0.07812500000000001,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "df2",
+  "value": 2.439024390243903,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "Sig.",
+  "value": 0.9270715346081769,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on trimmed mean"
+  ],
+  "field": "Levene Statistic",
+  "value": 1.0577089088397797,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on trimmed mean"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on trimmed mean"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y1",
+   "Based on trimmed mean"
+  ],
+  "field": "Sig.",
+  "value": 0.4139272264206564,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Mean"
+  ],
+  "field": "Levene Statistic",
+  "value": 3.125,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Mean"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Mean"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Mean"
+  ],
+  "field": "Sig.",
+  "value": 0.13168724279835387,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median"
+  ],
+  "field": "Levene Statistic",
+  "value": 0.6808035714285716,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median"
+  ],
+  "field": "Sig.",
+  "value": 0.5476560576878285,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "Levene Statistic",
+  "value": 0.6808035714285716,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "df2",
+  "value": 2.3058823529411763,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on Median and with adjusted df"
+  ],
+  "field": "Sig.",
+  "value": 0.5856602744375529,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on trimmed mean"
+  ],
+  "field": "Levene Statistic",
+  "value": 2.8290349786931843,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on trimmed mean"
+  ],
+  "field": "df1",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on trimmed mean"
+  ],
+  "field": "df2",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Levene's Test of Equality of Error Variances",
+  "labels": [
+   "y2",
+   "Based on trimmed mean"
+  ],
+  "field": "Sig.",
+  "value": 0.15074002900602915,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Levene's Test of Equality of Error Variances"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 78.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Mean Square",
+  "value": 39.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "F",
+  "value": 19.5,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Sig.",
+  "value": 0.004353046632639735,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8863636363636364,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 39.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y1"
+  ],
+  "field": "Observed Power",
+  "value": 0.9807572808926316,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 48.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Mean Square",
+  "value": 24.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "F",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Sig.",
+  "value": 0.0641500299099584,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.6666666666666666,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 10.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Model",
+   "y2"
+  ],
+  "field": "Observed Power",
+  "value": 0.5330993762804404,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 103.71428571428568,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Mean Square",
+  "value": 103.71428571428568,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "F",
+  "value": 51.85714285714284,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Sig.",
+  "value": 0.000804438202466303,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.9120603015075377,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 51.85714285714285,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y1"
+  ],
+  "field": "Observed Power",
+  "value": 0.9998259747946272,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 167.99999999999986,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "df",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Mean Square",
+  "value": 167.99999999999986,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "F",
+  "value": 34.99999999999997,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Sig.",
+  "value": 0.0019660731825616785,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8749999999999999,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 34.99999999999997,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Intercept",
+   "y2"
+  ],
+  "field": "Observed Power",
+  "value": 0.9958668282918652,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 78.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Mean Square",
+  "value": 39.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "F",
+  "value": 19.5,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Sig.",
+  "value": 0.004353046632639735,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.8863636363636364,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 39.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y1"
+  ],
+  "field": "Observed Power",
+  "value": 0.9807572808926316,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 47.99999999999999,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "df",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Mean Square",
+  "value": 23.999999999999996,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "F",
+  "value": 4.999999999999999,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Sig.",
+  "value": 0.06415002990995845,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Partial Eta Squared",
+  "value": 0.6666666666666665,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Noncent. Parameter",
+  "value": 9.999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "treatment",
+   "y2"
+  ],
+  "field": "Observed Power",
+  "value": 0.5330993762804404,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 10.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y1"
+  ],
+  "field": "df",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y1"
+  ],
+  "field": "Mean Square",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 24.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y2"
+  ],
+  "field": "df",
+  "value": 5.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Error",
+   "y2"
+  ],
+  "field": "Mean Square",
+  "value": 4.8,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 216.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "y1"
+  ],
+  "field": "df",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 272.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Total",
+   "y2"
+  ],
+  "field": "df",
+  "value": 8.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "y1"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 88.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "y1"
+  ],
+  "field": "df",
+  "value": 7.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "y2"
+  ],
+  "field": "Type III Sum of Squares",
+  "value": 72.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Tests of Between-Subjects Effects",
+  "labels": [
+   "Corrected Total",
+   "y2"
+  ],
+  "field": "df",
+  "value": 7.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Tests of Between-Subjects Effects"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.0028900201503452424,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": 3.681393120199935,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 10.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.0034781651152865052,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": 3.031747770467432,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 8.968252229532569,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.0028900201503452424,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -10.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -3.681393120199935,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.4735969360680603,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -4.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 2.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.0034781651152865052,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -8.968252229532569,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -3.031747770467432,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.4735969360680603,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -2.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 4.318606879800065,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.008670060451035726,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": 2.4374826998541828,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 11.562517300145817,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.010434495345859517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": 1.9191604673420564,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 10.080839532657944,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.008670060451035726,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -11.562517300145817,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -2.4374826998541828,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -5.562517300145817,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 3.5625173001458172,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.010434495345859517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -10.080839532657944,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -1.9191604673420564,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -3.5625173001458172,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 5.562517300145817,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.008645027939701344,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": 2.458079903888483,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 11.541920096111518,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.01039824452571525,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": 1.9375831666889072,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 10.062416833311094,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -7.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.008645027939701344,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -11.541920096111518,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -2.458079903888483,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.8541336132224966,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -5.541920096111517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 3.541920096111517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.1547005383792517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.01039824452571525,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -10.062416833311094,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": -1.9375831666889072,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.2909944487358056,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.8541336132224966,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -3.541920096111517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y1",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 5.541920096111517,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.3632174676491211,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -3.1411636712300037,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 7.141163671230004,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.0755868184216124,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -8.598396580929068,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 0.5983965809290677,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.3632174676491211,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -7.141163671230004,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 3.1411636712300037,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.030099247897462558,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -11.141163671230004,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": -0.8588363287699963,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.0755868184216124,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -0.5983965809290677,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 8.598396580929068,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": true,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.030099247897462558,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": 0.8588363287699963,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "LSD",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 11.141163671230004,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -5.068221408099189,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 9.06822140809919,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.22676045526483718,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -10.322009419411629,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 2.3220094194116285,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 1.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -9.06822140809919,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 5.068221408099189,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.09029774369238767,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -13.06822140809919,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 1.0682214080991894,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.22676045526483718,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -2.3220094194116285,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 10.322009419411629,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.09029774369238767,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -1.0682214080991894,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Bonferroni",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 13.06822140809919,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.7417897815264802,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -5.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 9.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.21005220915053935,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -10.293469096306612,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 1",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 2.2934690963066124,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -2.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.7417897815264802,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -9.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 5.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": -6.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Sig.",
+  "value": 0.08760711837722301,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Lower Bound",
+  "value": -13.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 2",
+   "treatment 3"
+  ],
+  "field": "Upper Bound",
+  "value": 1.0363123568178771,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 4.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Std. Error",
+  "value": 1.7888543819998317,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Sig.",
+  "value": 0.21005220915053935,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Lower Bound",
+  "value": -2.2934690963066124,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 1"
+  ],
+  "field": "Upper Bound",
+  "value": 10.293469096306612,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Mean Difference (I-J)",
+  "value": 6.0,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Std. Error",
+  "value": 1.9999999999999998,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Sig.",
+  "value": 0.08760711837722301,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Lower Bound",
+  "value": -1.0363123568178771,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
+ },
+ {
+  "config": "mv4ph",
+  "table": "Multiple Comparisons",
+  "labels": [
+   "y2",
+   "Sidak",
+   "treatment 3",
+   "treatment 2"
+  ],
+  "field": "Upper Bound",
+  "value": 13.036312356817877,
+  "display": false,
+  "source": "spss: spss-output/mv4_posthoc.xlsx, Multiple Comparisons"
  }
 ]

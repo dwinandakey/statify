@@ -8,11 +8,15 @@ use crate::models::{
 };
 
 use super::core::{
+    build_design_matrix_and_response,
     calculate_mean,
+    data_value_to_string,
     extract_dependent_value,
     get_factor_combinations,
     matches_combination,
     merge_records,
+    to_dmatrix,
+    to_dvector,
 };
 
 /// Calculate median of a list of values
@@ -141,6 +145,19 @@ pub fn calculate_levene_test(
             }
             design_string.push_str(&factors.join(" + "));
         }
+    }
+
+    // Main-effects model (not the full factorial): as SPSS, one test per
+    // dependent variable, an ANOVA over the cells of the fixed factors on the
+    // absolute residuals of the specified model.
+    if !config.model.non_cust {
+        for dep_var in &dependent_vars {
+            result.push(LeveneTest {
+                dependent_variable: dep_var.clone(),
+                levene: vec![model_residual_levene(data, config, dep_var, &design_string)?],
+            });
+        }
+        return Ok(result);
     }
 
     // Get between-subjects factors combinations
@@ -347,4 +364,79 @@ pub fn calculate_levene_test(
     }
 
     Ok(result)
+}
+
+/// Levene's test of a model other than the full factorial (SPSS): one-way
+/// ANOVA of |y - fitted| (residuals of the design of
+/// build_design_matrix_and_response) over the cells of all fixed factors;
+/// df1 = cells - 1, df2 = n - cells.
+fn model_residual_levene(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+    dep_var: &str,
+    design_string: &str
+) -> Result<LeveneResult, String> {
+    let (x, y) = build_design_matrix_and_response(data, config, dep_var)?;
+    let x_mat = to_dmatrix(&x);
+    let y_vec = to_dvector(&y);
+    let xtx_inv = (x_mat.transpose() * &x_mat)
+        .try_inverse()
+        .ok_or_else(|| "Could not invert X'X matrix - possibly due to multicollinearity".to_string())?;
+    let residuals = &y_vec - &x_mat * (xtx_inv * (x_mat.transpose() * &y_vec));
+
+    // Cell of each design row (the rows of the builder: merged records with a
+    // value of the dependent variable, in order).
+    let factors = config.main.fix_factor.clone().unwrap_or_default();
+    let cells: Vec<String> = merge_records(data)
+        .iter()
+        .filter(|record| extract_dependent_value(record, dep_var).is_some())
+        .map(|record| {
+            factors
+                .iter()
+                .map(|f| record.values.get(f).map(data_value_to_string).unwrap_or_default())
+                .collect::<Vec<String>>()
+                .join("|")
+        })
+        .collect();
+    if cells.len() != residuals.len() {
+        return Err("Levene's test: residuals and cells do not match".to_string());
+    }
+
+    let mut groups: Vec<(String, Vec<f64>)> = Vec::new();
+    for (cell, r) in cells.iter().zip(residuals.iter()) {
+        match groups.iter_mut().find(|(key, _)| key == cell) {
+            Some((_, values)) => values.push(r.abs()),
+            None => groups.push((cell.clone(), vec![r.abs()])),
+        }
+    }
+    let k = groups.len();
+    let n = cells.len();
+    if k < 2 || n <= k {
+        return Err("Levene's test needs at least two cells and more cases than cells".to_string());
+    }
+    let all: Vec<f64> = groups.iter().flat_map(|(_, v)| v.iter().copied()).collect();
+    let grand = calculate_mean(&all);
+    let mut ss_between = 0.0;
+    let mut ss_within = 0.0;
+    for (_, values) in &groups {
+        let mean = calculate_mean(values);
+        ss_between += (values.len() as f64) * (mean - grand).powi(2);
+        ss_within += values.iter().map(|v| (v - mean).powi(2)).sum::<f64>();
+    }
+    let df1 = (k - 1) as f64;
+    let df2 = (n - k) as f64;
+    let f = (ss_between / df1) / (ss_within / df2);
+    let significance = match FisherSnedecor::new(df1, df2) {
+        Ok(dist) if f.is_finite() => 1.0 - dist.cdf(f),
+        _ => f64::NAN,
+    };
+    Ok(LeveneResult {
+        levene_statistic: f,
+        df1: k - 1,
+        df2,
+        significance,
+        function: None,
+        design: Some(format!("Design: {}", design_string)),
+        test_basis: Some("Based on Model Residuals".to_string()),
+    })
 }

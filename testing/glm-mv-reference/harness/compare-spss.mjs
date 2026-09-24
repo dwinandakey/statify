@@ -27,7 +27,7 @@ const spss = JSON.parse(fs.readFileSync(path.join(ROOT, "spss-output/spss-values
 
 const MV_FIELD = { Value: "value", F: "f", "Hypothesis df": "hypothesis_df", "Error df": "error_df", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
 const BSE_FIELD = { "Type III Sum of Squares": "sum_of_squares", df: "df", "Mean Square": "mean_square", F: "f_value", "Sig.": "significance", "Partial Eta Squared": "partial_eta_squared", "Noncent. Parameter": "noncent_parameter", "Observed Power": "observed_power" };
-const LEV_FIELD = { "Levene Statistic": "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
+const LEV_FIELD = { "Levene Statistic": "levene_statistic", F: "levene_statistic", df1: "df1", df2: "df2", "Sig.": "significance" };
 const BOX_FIELD = { "Box's M": "box_m", F: "f", df1: "df1", df2: "df2", "Sig.": "significance" };
 const DESC_FIELD = { Mean: "mean", "Std. Deviation": "std_deviation", N: "n" };
 const UI_TITLE = { "Multivariate Tests": /^Multivariate Tests/ };
@@ -117,8 +117,9 @@ function uiLookup(e) {
         }
         case "Levene's Test of Equality of Error Variances": {
             const dv = dvOf(e.config, L[0]);
-            const r = raw.levene_test?.find((x) => x.dependent_variable === dv)?.levene?.find((x) => x.test_basis === L[1]);
-            const ui = uiRows(e.config, e.table, ["dv_name", "function"]).find((x) => x.dv_name === dv && x.function === L[1]);
+            const basis = L[1] ?? "Based on Model Residuals";
+            const r = raw.levene_test?.find((x) => x.dependent_variable === dv)?.levene?.find((x) => x.test_basis === basis);
+            const ui = uiRows(e.config, e.table, ["dv_name", "function"]).find((x) => x.dv_name === dv && x.function === basis);
             return { raw: r?.[LEV_FIELD[e.field]], ui: num(ui?.[LEV_FIELD[e.field]]) };
         }
         case "Multivariate Tests": {

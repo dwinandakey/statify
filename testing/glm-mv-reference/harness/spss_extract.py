@@ -36,9 +36,10 @@ FILES = {"mv1": "mv1_satu_populasi.xlsx", "mv2": "mv2_dua_populasi.xlsx", "mv3":
          "mv8": "mv8_two_way_main_effects.xlsx", "mv4ph": "mv4_posthoc.xlsx"}
 TITLES = ["Report", "Case Processing Summary", "Between-Subjects Factors", "Descriptive Statistics",
           "Box's Test of Equality of Covariance Matrices", "Multivariate Tests",
-          "Levene's Test of Equality of Error Variances", "Tests of Between-Subjects Effects"]
+          "Levene's Test of Equality of Error Variances", "Tests of Between-Subjects Effects",
+          "Multiple Comparisons"]
 SKIP = {"Case Processing Summary"}
-NUMBER = re.compile(r"^\s*(-?\d*\.?\d+(?:[eE][-+]?\d+)?)\s*([a-z](?:,[a-z])*)?\s*$")
+NUMBER = re.compile(r"^\s*(-?\d*\.?\d+(?:[eE][-+]?\d+)?)\s*([a-z](?:,[a-z])*|\*)?\s*$")
 STOP = re.compile(r"^([a-z]\. |Tests the null|\* |OUTPUT |GLM |MEANS |General Linear Model|Notes$|Means$)")
 
 
