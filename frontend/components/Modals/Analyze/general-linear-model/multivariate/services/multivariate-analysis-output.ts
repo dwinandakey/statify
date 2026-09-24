@@ -113,6 +113,21 @@ export async function resultMultivariateAnalysis({
                 });
             }
 
+            // ── Simultaneous Confidence Intervals (Options) ───────────────
+            const simultaneousCI = findTable("simultaneous_confidence_intervals");
+            if (simultaneousCI) {
+                const analyticId = await addAnalytic(logId, {
+                    title: simultaneousCI.title,
+                    note: simultaneousCI.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: simultaneousCI.title,
+                    description: simultaneousCI.interpretation || simultaneousCI.title,
+                    output_data: JSON.stringify({ tables: [simultaneousCI] }),
+                    components: simultaneousCI.title,
+                });
+            }
+
             // ── Tests of Between-Subjects Effects (combined table) ───────
             const tbsTable = findTable("tests_between_subjects_effects");
             if (tbsTable) {

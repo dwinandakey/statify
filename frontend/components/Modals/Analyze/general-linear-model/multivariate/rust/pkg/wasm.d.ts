@@ -10,6 +10,16 @@ export class MultivariateAnalysis {
     get_executed_functions(): any;
     get_formatted_results(): any;
     get_results(): any;
+    /**
+     * Simultaneous confidence intervals (T² and Bonferroni) for the mean
+     * vector components (Options → Simultaneous CI). The frontend calls it
+     * only when the option is checked, after get_formatted_results(); the
+     * intervals are computed on demand from the stored (listwise-complete)
+     * data, so an analysis without them is unchanged. On error the message
+     * goes to the error collector (context "calculate_simultaneous_ci") and
+     * null is returned.
+     */
+    get_simultaneous_ci(): any;
     constructor(dep_data: any, fix_factor_data: any, covar_data: any, wls_data: any, dep_data_defs: any, fix_factor_data_defs: any, covar_data_defs: any, wls_data_defs: any, config_data: any);
 }
 
@@ -24,6 +34,7 @@ export interface InitOutput {
     readonly multivariateanalysis_get_executed_functions: (a: number) => [number, number, number];
     readonly multivariateanalysis_get_formatted_results: (a: number) => [number, number, number];
     readonly multivariateanalysis_get_results: (a: number) => [number, number, number];
+    readonly multivariateanalysis_get_simultaneous_ci: (a: number) => [number, number, number];
     readonly multivariateanalysis_new: (a: any, b: any, c: any, d: any, e: any, f: any, g: any, h: any, i: any) => [number, number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

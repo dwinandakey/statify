@@ -55,6 +55,14 @@ self.onmessage = async (
         );
         try {
             const results = multivariate.get_formatted_results();
+            // Simultaneous confidence intervals (Options → Simultaneous CI):
+            // computed on demand, only when requested (the service sends
+            // SimultaneousCI only when checked), after the analysis results
+            // and before the errors so that a failure is logged.
+            if ((payload.config_data as any)?.options?.SimultaneousCI) {
+                const ci = multivariate.get_simultaneous_ci();
+                if (ci) (results as any).simultaneous_confidence_intervals = ci;
+            }
             const errors = multivariate.get_all_errors();
             response = { id, ok: true, results, errors };
         } finally {

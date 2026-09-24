@@ -220,6 +220,10 @@ export type MultivariateOptionsType = {
     SigLevel: number | null;
     CoefficientMatrix: boolean;
     TransformMat: boolean;
+    /** Simultaneous confidence intervals (T² and Bonferroni) for the mean
+     *  vector components (one-sample, paired, two-sample). Default off;
+     *  sent to Rust only when checked. */
+    SimultaneousCI?: boolean;
 };
 
 export type MultivariateOptionsProps = {

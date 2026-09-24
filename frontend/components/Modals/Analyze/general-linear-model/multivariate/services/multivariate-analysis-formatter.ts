@@ -287,6 +287,7 @@ export function transformMultivariateResult(
         options.varianceMode === "Welch" ? options.factor ?? null : null,
         pairedMode
     );
+    formatSimultaneousCI(data, resultJson, options, relabelDv);
     formatTestsBetweenSubjectsEffects(
         data,
         resultJson,
@@ -314,6 +315,139 @@ export function transformMultivariateResult(
 }
 
 // ── 1. Between-Subjects Factors ──────────────────────────────────────────────
+// ── Simultaneous confidence intervals (Options) ───────────────────────────────
+// Values computed in Rust (wasm/function.rs, calculate_simultaneous_ci);
+// the formulas follow Johnson & Wichern, Applied Multivariate Statistical
+// Analysis, 6th ed. (see the table note). With a two-population δ₀ the
+// analysis ran on data in which δ₀ was subtracted from the first level, so
+// δ₀ is added back here: the intervals are for μ₁ − μ₂ on the original scale.
+function formatSimultaneousCI(
+    data: any,
+    resultJson: ResultJson,
+    options: MultivariateFormatterOptions,
+    relabelDv: (name: string) => string
+) {
+    const ci = data.simultaneous_confidence_intervals;
+    if (!ci || !Array.isArray(ci.intervals)) return;
+
+    const p: number = ci.p;
+    const paired = Boolean(options.pairedMode && options.pairedMode.pairs.length > 0);
+    const twoSample = String(ci.design).startsWith("two_sample");
+    const unequal = ci.design === "two_sample_unequal";
+    const delta = twoSample ? options.twoSampleDelta ?? null : null;
+    const zeros = new Array(p).fill(0);
+    const hypothesised: number[] = twoSample
+        ? delta?.delta0 ?? zeros
+        : (options.testValues ?? zeros).map((v) => (Number.isFinite(v) ? v : 0));
+    const shift: number[] = delta?.delta0 ?? zeros;
+    const pct = Number((ci.confidence_level * 100).toFixed(6)).toString();
+    const alpha = Number((1 - ci.confidence_level).toFixed(10)).toString();
+    const num = (v: number) => formatDisplayNumber(v) ?? "";
+    const levelA = ci.levels?.[0];
+    const levelB = ci.levels?.[1];
+
+    const estimateHeader = twoSample
+        ? `Mean Difference (${ci.factor} = ${levelA} − ${ci.factor} = ${levelB})`
+        : paired
+            ? "Mean Difference (d̄)"
+            : "Mean";
+    const hypothesisHeader = twoSample || paired ? "δ₀" : "Test Value (μ₀)";
+    const containsHeader = twoSample || paired ? "Contains δ₀" : "Contains μ₀";
+    const t2Header = unequal
+        ? `${pct}% Simultaneous χ² Interval (large sample)`
+        : `${pct}% Simultaneous T² Interval`;
+    const bonferroniHeader = `${pct}% Bonferroni Interval`;
+
+    const table: Table = {
+        key: "simultaneous_confidence_intervals",
+        title: "Simultaneous Confidence Intervals",
+        columnHeaders: [
+            { header: "Dependent Variable", key: "dependent_variable" },
+            { header: estimateHeader, key: "estimate" },
+            { header: "Std. Error", key: "std_error" },
+            { header: hypothesisHeader, key: "hypothesized" },
+            {
+                header: t2Header,
+                children: [
+                    { header: "Lower Bound", key: "t2_lower" },
+                    { header: "Upper Bound", key: "t2_upper" },
+                    { header: containsHeader, key: "t2_contains" },
+                ],
+            },
+            {
+                header: bonferroniHeader,
+                children: [
+                    { header: "Lower Bound", key: "bonferroni_lower" },
+                    { header: "Upper Bound", key: "bonferroni_upper" },
+                    { header: containsHeader, key: "bonferroni_contains" },
+                ],
+            },
+        ],
+        rows: [],
+    };
+
+    ci.intervals.forEach((iv: any, i: number) => {
+        const s = shift[i] ?? 0;
+        const h = hypothesised[i] ?? 0;
+        const t2Lower = iv.t2_lower + s;
+        const t2Upper = iv.t2_upper + s;
+        const bonLower = iv.bonferroni_lower + s;
+        const bonUpper = iv.bonferroni_upper + s;
+        table.rows.push({
+            rowHeader: [],
+            dependent_variable: relabelDv(iv.dependent_variable),
+            estimate: num(iv.estimate + s),
+            std_error: num(iv.std_error),
+            hypothesized: num(h),
+            t2_lower: num(t2Lower),
+            t2_upper: num(t2Upper),
+            t2_contains: t2Lower <= h && h <= t2Upper ? "Yes" : "No",
+            bonferroni_lower: num(bonLower),
+            bonferroni_upper: num(bonUpper),
+            bonferroni_contains: bonLower <= h && h <= bonUpper ? "Yes" : "No",
+        });
+    });
+
+    const df = (v: number) => Number(Number(v).toFixed(4)).toString();
+    const [n1, n2] = ci.sample_sizes ?? [];
+    const c = num(ci.t2_critical);
+    const b = num(ci.bonferroni_critical);
+    const simultaneous = `The intervals hold simultaneously for all ${p} components at the ${pct}% confidence level (α = ${alpha} from Options → Significance Level).`;
+    let note: string;
+    if (unequal) {
+        let nu = "";
+        const welchRow = data.multivariate_tests?.effects?.[ci.factor]?.["Hotelling's Trace"];
+        if (welchRow && Number.isFinite(welchRow.error_df)) {
+            nu = ` (ν = ${df(welchRow.error_df + p - 1)})`;
+        }
+        note =
+            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ ≠ Σ₂. ` +
+            `Large-sample intervals (Johnson & Wichern, 6th ed., Result 6.4): (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(${df(ci.t2_df[0])}; α) · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), √χ²(${df(ci.t2_df[0])}; α) = ${c}; ` +
+            `Bonferroni: z(α/(2p)) = ${b}. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous} ` +
+            `Limitation: these are large-sample (chi-square) intervals; the Welch test in Multivariate Tests uses the Krishnamoorthy–Yu approximation${nu}, so for small samples the intervals and its Sig. can disagree.`;
+    } else if (twoSample) {
+        note =
+            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., sec. 6.3, Result 6.2): ` +
+            `(x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; ` +
+            `Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
+    } else if (paired) {
+        note =
+            `Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., sec. 6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), ` +
+            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
+    } else {
+        note =
+            `Components of μ (Johnson & Wichern, 6th ed., sec. 5.4, Result 5.3): x̄ᵢ ± c · √(sᵢᵢ/n), ` +
+            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
+    }
+    if (delta && delta.delta0.some((v) => v !== 0)) {
+        note += ` The intervals are for μ₁ − μ₂ on the original data (δ₀ = ${formatDeltaVector(delta.delta0)} added back).`;
+    }
+    table.note = note;
+    table.interpretation =
+        "Simultaneous confidence intervals for the components of the mean vector (or of the difference of two mean vectors). T² intervals hold jointly for every linear combination; Bonferroni intervals are shorter when only these p components are of interest. \"Contains\" tells whether the hypothesised value lies inside the interval.";
+    resultJson.tables.push(table);
+}
+
 // Tables whose values depend on the δ₀ shift of the first factor level.
 // Box's M, Levene, Bartlett and the residual SSCP are invariant to a shift
 // within a group; Descriptive Statistics are restored to the original data

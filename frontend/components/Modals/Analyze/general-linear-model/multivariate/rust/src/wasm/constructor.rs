@@ -1,11 +1,13 @@
+use serde::Serialize;
+use statrs::distribution::{ ChiSquared, Continuous, ContinuousCDF, FisherSnedecor, Normal, StudentsT };
 use wasm_bindgen::prelude::*;
 
 use crate::models::{
-    config::MultivariateConfig,
+    config::{ MultivariateConfig, VarianceMode },
     data::{ AnalysisData, DataRecord, DataValue, VariableDefinition },
-    result::MultivariateResult,
+    result::{ MultivariateResult, SimultaneousConfidenceIntervals, SimultaneousInterval },
 };
-use crate::stats::common::merge_records;
+use crate::stats::common::{ compute_per_group_covariances, get_factor_levels, merge_records };
 use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
 use crate::utils::log::FunctionLogger;
 use crate::wasm::function;
@@ -265,6 +267,28 @@ impl MultivariateAnalysis {
     pub fn clear_errors(&mut self) -> JsValue {
         function::clear_errors(&mut self.error_collector)
     }
+
+    /// Simultaneous confidence intervals (T² and Bonferroni) for the mean
+    /// vector components (Options → Simultaneous CI). The frontend calls it
+    /// only when the option is checked, after get_formatted_results(); the
+    /// intervals are computed on demand from the stored (listwise-complete)
+    /// data, so an analysis without them is unchanged. On error the message
+    /// goes to the error collector (context "calculate_simultaneous_ci") and
+    /// null is returned.
+    pub fn get_simultaneous_ci(&mut self) -> Result<JsValue, JsValue> {
+        self.logger.add_log("calculate_simultaneous_ci");
+        match calculate_simultaneous_ci(&self.data, &self.config) {
+            Ok(ci) => {
+                let serializer = serde_wasm_bindgen::Serializer::new().serialize_maps_as_objects(true);
+                ci.serialize(&serializer)
+                    .map_err(|e| JsValue::from_str(&format!("Failed to serialize simultaneous confidence intervals: {}", e)))
+            }
+            Err(e) => {
+                self.error_collector.add_error("calculate_simultaneous_ci", &e);
+                Ok(JsValue::NULL)
+            }
+        }
+    }
 }
 
 /// Listwise deletion as SPSS GLM does (/MISSING=EXCLUDE): keep only the rows
@@ -332,4 +356,234 @@ fn listwise_complete_cases(data: &AnalysisData) -> (AnalysisData, usize) {
         wls_data_defs: data.wls_data_defs.clone(),
     };
     (complete, excluded)
+}
+
+const SIMULTANEOUS_CI_DESIGN_MESSAGE: &str =
+    "Simultaneous confidence intervals are available for the one-sample, paired, and two-sample Hotelling T² designs (no Fixed Factor, or one Fixed Factor with two levels, without covariates or WLS weight).";
+
+/// Simultaneous confidence intervals for the components of a mean vector
+/// (Johnson & Wichern, Applied Multivariate Statistical Analysis, 6th ed.).
+/// F(ν₁, ν₂; α), t(ν; α), χ²(ν; α) and z(α) are upper-α quantiles; sᵢᵢ are
+/// the diagonal elements of the sample covariance matrix (divisor n − 1).
+///
+/// One sample, and the paired test on the differences d (sec. 5.4,
+/// Result 5.3 for the T² intervals; sec. 6.2 for paired comparisons):
+///   T²:         x̄ᵢ ± √( p(n−1)/(n−p) · F(p, n−p; α) ) · √(sᵢᵢ/n)
+///   Bonferroni: x̄ᵢ ± t(n−1; α/(2p)) · √(sᵢᵢ/n)
+/// Two samples, Σ₁ = Σ₂ (sec. 6.3, Result 6.2):
+///   T²:         (x̄₁ᵢ − x̄₂ᵢ) ± c · √( (1/n₁ + 1/n₂) · s_pooled,ᵢᵢ ),
+///               c² = (n₁+n₂−2)p/(n₁+n₂−p−1) · F(p, n₁+n₂−p−1; α)
+///   Bonferroni: t(n₁+n₂−2; α/(2p)) in place of c
+/// Two samples, Σ₁ ≠ Σ₂ (sec. 6.3, Result 6.4, large samples):
+///   χ²:         (x̄₁ᵢ − x̄₂ᵢ) ± √( χ²(p; α) ) · √( s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂ )
+///   Bonferroni: z(α/(2p)) in place of √χ²
+/// The Welch test itself uses the Krishnamoorthy–Yu approximation, which
+/// has no standard simultaneous-interval counterpart in Johnson & Wichern;
+/// hence the large-sample intervals of Result 6.4.
+///
+/// μ₁ is the first and μ₂ the second level of the factor in output-table
+/// order (numeric when both parse as numbers, as in Descriptive
+/// Statistics). α = Significance Level (Options).
+fn calculate_simultaneous_ci(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+) -> Result<SimultaneousConfidenceIntervals, String> {
+    let alpha = config.options.sig_level.unwrap_or(0.05);
+    if !(alpha > 0.0 && alpha < 1.0) {
+        return Err(
+            "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.".to_string()
+        );
+    }
+    let dep_vars = config.main.dep_var.clone().unwrap_or_default();
+    let p = dep_vars.len();
+    if p == 0 {
+        return Err("No dependent variables specified".to_string());
+    }
+    let has_covariates = config.main.covar.as_ref().map_or(false, |c| !c.is_empty());
+    if has_covariates || config.main.wls_weight.is_some() {
+        return Err(SIMULTANEOUS_CI_DESIGN_MESSAGE.to_string());
+    }
+    let factors = config.main.fix_factor.clone().unwrap_or_default();
+    let pf = p as f64;
+    let bonferroni_prob = 1.0 - alpha / (2.0 * pf);
+
+    let build = |design: &str,
+                 sample_sizes: Vec<usize>,
+                 factor: Option<String>,
+                 levels: Vec<String>,
+                 t2: (f64, &str, Vec<f64>),
+                 bonferroni: (f64, &str, Option<f64>),
+                 estimates: Vec<f64>,
+                 std_errors: Vec<f64>| {
+        let intervals = dep_vars
+            .iter()
+            .enumerate()
+            .map(|(i, dv)| SimultaneousInterval {
+                dependent_variable: dv.clone(),
+                estimate: estimates[i],
+                std_error: std_errors[i],
+                t2_lower: estimates[i] - t2.0 * std_errors[i],
+                t2_upper: estimates[i] + t2.0 * std_errors[i],
+                bonferroni_lower: estimates[i] - bonferroni.0 * std_errors[i],
+                bonferroni_upper: estimates[i] + bonferroni.0 * std_errors[i],
+            })
+            .collect();
+        SimultaneousConfidenceIntervals {
+            design: design.to_string(),
+            confidence_level: 1.0 - alpha,
+            p,
+            sample_sizes,
+            factor,
+            levels,
+            t2_critical: t2.0,
+            t2_reference: t2.1.to_string(),
+            t2_df: t2.2,
+            bonferroni_critical: bonferroni.0,
+            bonferroni_reference: bonferroni.1.to_string(),
+            bonferroni_df: bonferroni.2,
+            intervals,
+        }
+    };
+
+    match factors.len() {
+        0 => {
+            let groups = compute_per_group_covariances(data, config, &[])?;
+            let g = groups.first().ok_or_else(|| {
+                format!("Simultaneous confidence intervals need more cases than dependent variables (n > p = {}).", p)
+            })?;
+            let n = g.n as f64;
+            let f = upper_quantile_f(pf, n - pf, alpha)?;
+            let c_t2 = (pf * (n - 1.0) / (n - pf) * f).sqrt();
+            let c_bonferroni = quantile_t(n - 1.0, bonferroni_prob)?;
+            let estimates: Vec<f64> = (0..p).map(|i| g.mean[i]).collect();
+            let std_errors: Vec<f64> = (0..p).map(|i| (g.covariance[(i, i)] / n).sqrt()).collect();
+            Ok(build(
+                "one_sample",
+                vec![g.n],
+                None,
+                Vec::new(),
+                (c_t2, "F", vec![pf, n - pf]),
+                (c_bonferroni, "t", Some(n - 1.0)),
+                estimates,
+                std_errors,
+            ))
+        }
+        1 => {
+            let factor = factors[0].clone();
+            let mut levels = get_factor_levels(data, &factor)?;
+            levels.sort_by(|a, b| match (a.parse::<f64>(), b.parse::<f64>()) {
+                (Ok(x), Ok(y)) => x.partial_cmp(&y).unwrap_or(std::cmp::Ordering::Equal),
+                _ => a.cmp(b),
+            });
+            if levels.len() != 2 {
+                return Err(format!(
+                    "Simultaneous confidence intervals for two samples need the Fixed Factor to have exactly two levels; '{}' has {}.",
+                    factor,
+                    levels.len()
+                ));
+            }
+            let groups = compute_per_group_covariances(data, config, &[factor.clone()])?;
+            let find = |level: &String| {
+                groups
+                    .iter()
+                    .find(|g| g.label.get(&factor) == Some(level))
+                    .ok_or_else(|| {
+                        format!(
+                            "Simultaneous confidence intervals need more cases than dependent variables in each group ({} = {}).",
+                            factor, level
+                        )
+                    })
+            };
+            let g1 = find(&levels[0])?;
+            let g2 = find(&levels[1])?;
+            let (n1, n2) = (g1.n as f64, g2.n as f64);
+            let estimates: Vec<f64> = (0..p).map(|i| g1.mean[i] - g2.mean[i]).collect();
+            if config.main.variance_mode == VarianceMode::Welch {
+                let c_chi = upper_quantile_chi2(pf, alpha)?.sqrt();
+                let z = quantile_normal(bonferroni_prob)?;
+                let std_errors: Vec<f64> = (0..p)
+                    .map(|i| (g1.covariance[(i, i)] / n1 + g2.covariance[(i, i)] / n2).sqrt())
+                    .collect();
+                Ok(build(
+                    "two_sample_unequal",
+                    vec![g1.n, g2.n],
+                    Some(factor.clone()),
+                    levels.clone(),
+                    (c_chi, "chi-square", vec![pf]),
+                    (z, "z", None),
+                    estimates,
+                    std_errors,
+                ))
+            } else {
+                let df_error = n1 + n2 - 2.0;
+                let f = upper_quantile_f(pf, n1 + n2 - pf - 1.0, alpha)?;
+                let c_t2 = (df_error * pf / (n1 + n2 - pf - 1.0) * f).sqrt();
+                let c_bonferroni = quantile_t(df_error, bonferroni_prob)?;
+                let std_errors: Vec<f64> = (0..p)
+                    .map(|i| {
+                        let pooled = ((n1 - 1.0) * g1.covariance[(i, i)] + (n2 - 1.0) * g2.covariance[(i, i)]) / df_error;
+                        ((1.0 / n1 + 1.0 / n2) * pooled).sqrt()
+                    })
+                    .collect();
+                Ok(build(
+                    "two_sample_pooled",
+                    vec![g1.n, g2.n],
+                    Some(factor.clone()),
+                    levels.clone(),
+                    (c_t2, "F", vec![pf, n1 + n2 - pf - 1.0]),
+                    (c_bonferroni, "t", Some(df_error)),
+                    estimates,
+                    std_errors,
+                ))
+            }
+        }
+        _ => Err(SIMULTANEOUS_CI_DESIGN_MESSAGE.to_string()),
+    }
+}
+
+/// Newton steps on the CDF from statrs' quantile, so the quantile is exact
+/// to double precision (the chi-square/gamma quantile of statrs stops after
+/// a few bisection and Newton steps).
+fn polish_quantile<D: ContinuousCDF<f64, f64> + Continuous<f64, f64>>(dist: &D, prob: f64, start: f64) -> f64 {
+    let mut x = start;
+    for _ in 0..10 {
+        let density = dist.pdf(x);
+        if !(density.is_finite() && density > 0.0) {
+            break;
+        }
+        let next = x - (dist.cdf(x) - prob) / density;
+        if !next.is_finite() {
+            break;
+        }
+        let done = (next - x).abs() <= 1e-15 * x.abs().max(1.0);
+        x = next;
+        if done {
+            break;
+        }
+    }
+    x
+}
+
+fn upper_quantile_f(df1: f64, df2: f64, alpha: f64) -> Result<f64, String> {
+    let dist = FisherSnedecor::new(df1, df2).map_err(|_| {
+        format!("Simultaneous confidence intervals need more cases than dependent variables (F({}, {})).", df1, df2)
+    })?;
+    Ok(polish_quantile(&dist, 1.0 - alpha, dist.inverse_cdf(1.0 - alpha)))
+}
+
+fn upper_quantile_chi2(df: f64, alpha: f64) -> Result<f64, String> {
+    let dist = ChiSquared::new(df).map_err(|e| e.to_string())?;
+    Ok(polish_quantile(&dist, 1.0 - alpha, dist.inverse_cdf(1.0 - alpha)))
+}
+
+fn quantile_t(df: f64, prob: f64) -> Result<f64, String> {
+    let dist = StudentsT::new(0.0, 1.0, df).map_err(|_| {
+        format!("Simultaneous confidence intervals need at least two cases (t with {} df).", df)
+    })?;
+    Ok(polish_quantile(&dist, prob, dist.inverse_cdf(prob)))
+}
+
+fn quantile_normal(prob: f64) -> Result<f64, String> {
+    let dist = Normal::new(0.0, 1.0).map_err(|e| e.to_string())?;
+    Ok(polish_quantile(&dist, prob, dist.inverse_cdf(prob)))
 }

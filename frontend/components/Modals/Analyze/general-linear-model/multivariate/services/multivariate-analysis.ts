@@ -52,6 +52,11 @@ async function runMultivariateOnMainThread(payload: MultivariateWorkerPayload) {
 
     try {
         const results = multivariate.get_formatted_results();
+        // Same as the worker: simultaneous CI only when requested.
+        if ((payload.config_data as any)?.options?.SimultaneousCI) {
+            const ci = multivariate.get_simultaneous_ci();
+            if (ci) (results as any).simultaneous_confidence_intervals = ci;
+        }
         const errors = multivariate.get_all_errors();
         return { results, errors };
     } finally {
@@ -207,12 +212,19 @@ export async function analyzeMultivariate({
         TwoSampleTestValues: _stripTwoSample,
         ...mainForRust
     } = effectiveConfig.main;
+    // SimultaneousCI is sent only when checked, so a run without it sends
+    // the same payload as before the option existed.
+    const { SimultaneousCI: simultaneousCI, ...optionsWithoutCI } =
+        effectiveConfig.options;
     const configForRust = {
         ...effectiveConfig,
         main: {
             ...mainForRust,
             VarianceMode: mainForRust.VarianceMode ?? "Pooled",
         },
+        options: simultaneousCI
+            ? { ...optionsWithoutCI, SimultaneousCI: true }
+            : optionsWithoutCI,
     };
 
     const {

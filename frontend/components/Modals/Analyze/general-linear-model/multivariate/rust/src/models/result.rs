@@ -369,3 +369,44 @@ pub struct MauchlyTestEntry {
     pub huynh_feldt_epsilon: f64,
     pub lower_bound_epsilon: f64,
 }
+
+/// Simultaneous confidence intervals for the p components of μ (one sample,
+/// paired: μ_d) or μ₁ − μ₂ (two samples). Returned by
+/// MultivariateAnalysis::get_simultaneous_ci (wasm/constructor.rs), which the
+/// frontend calls only when Options → Simultaneous CI is checked; it is not a
+/// field of MultivariateResult, so analyses without it are unchanged.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SimultaneousConfidenceIntervals {
+    /// "one_sample" (also the paired test), "two_sample_pooled" or
+    /// "two_sample_unequal".
+    pub design: String,
+    pub confidence_level: f64,
+    pub p: usize,
+    /// [n] or [n₁, n₂].
+    pub sample_sizes: Vec<usize>,
+    pub factor: Option<String>,
+    /// [level 1, level 2] of the factor (μ₁ − μ₂), in output-table order.
+    pub levels: Vec<String>,
+    /// Multiplier of the standard error for the T² (or χ²) intervals.
+    pub t2_critical: f64,
+    /// "F" (t2_df = [df1, df2]) or "chi-square" (t2_df = [df]).
+    pub t2_reference: String,
+    pub t2_df: Vec<f64>,
+    /// Multiplier of the standard error for the Bonferroni intervals.
+    pub bonferroni_critical: f64,
+    /// "t" (degrees of freedom in bonferroni_df) or "z".
+    pub bonferroni_reference: String,
+    pub bonferroni_df: Option<f64>,
+    pub intervals: Vec<SimultaneousInterval>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SimultaneousInterval {
+    pub dependent_variable: String,
+    pub estimate: f64,
+    pub std_error: f64,
+    pub t2_lower: f64,
+    pub t2_upper: f64,
+    pub bonferroni_lower: f64,
+    pub bonferroni_upper: f64,
+}

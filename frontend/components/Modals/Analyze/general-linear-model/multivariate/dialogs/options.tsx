@@ -11,6 +11,7 @@ import {Label} from "@/components/ui/label";
 import {Checkbox} from "@/components/ui/checkbox";
 import type {CheckedState} from "@radix-ui/react-checkbox";
 import {Input} from "@/components/ui/input";
+import { toast } from "sonner";
 
 export const MultivariateOptions = ({
     isOptionsOpen,
@@ -40,6 +41,17 @@ export const MultivariateOptions = ({
     };
 
     const handleContinue = () => {
+        // The simultaneous intervals use 1 − Significance Level as confidence
+        // level, so the level has to lie strictly between 0 and 1.
+        if (optionsState.SimultaneousCI) {
+            const sig = optionsState.SigLevel;
+            if (sig === null || sig === undefined || !Number.isFinite(sig) || sig <= 0 || sig >= 1) {
+                toast.error(
+                    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals."
+                );
+                return;
+            }
+        }
         Object.entries(optionsState).forEach(([key, value]) => {
             updateFormData(key as keyof MultivariateOptionsType, value);
         });
@@ -219,6 +231,28 @@ export const MultivariateOptions = ({
                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
                                                     Homogenity Tests
+                                                </label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id="SimultaneousCI"
+                                                    checked={Boolean(
+                                                        optionsState.SimultaneousCI
+                                                    )}
+                                                    onCheckedChange={(
+                                                        checked
+                                                    ) =>
+                                                        handleChange(
+                                                            "SimultaneousCI",
+                                                            checked
+                                                        )
+                                                    }
+                                                />
+                                                <label
+                                                    htmlFor="SimultaneousCI"
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                >
+                                                    Simultaneous CI (T² &amp; Bonferroni)
                                                 </label>
                                             </div>
                                             <div className="flex items-center space-x-2">

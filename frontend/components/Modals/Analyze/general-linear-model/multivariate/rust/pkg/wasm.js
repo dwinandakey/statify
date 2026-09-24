@@ -66,6 +66,23 @@ export class MultivariateAnalysis {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
+     * Simultaneous confidence intervals (T² and Bonferroni) for the mean
+     * vector components (Options → Simultaneous CI). The frontend calls it
+     * only when the option is checked, after get_formatted_results(); the
+     * intervals are computed on demand from the stored (listwise-complete)
+     * data, so an analysis without them is unchanged. On error the message
+     * goes to the error collector (context "calculate_simultaneous_ci") and
+     * null is returned.
+     * @returns {any}
+     */
+    get_simultaneous_ci() {
+        const ret = wasm.multivariateanalysis_get_simultaneous_ci(this.__wbg_ptr);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * @param {any} dep_data
      * @param {any} fix_factor_data
      * @param {any} covar_data
