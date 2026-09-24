@@ -1,5 +1,5 @@
 use serde::Serialize;
-use statrs::distribution::{ ChiSquared, Continuous, ContinuousCDF, FisherSnedecor, Normal, StudentsT };
+use statrs::distribution::{ Continuous, ContinuousCDF, FisherSnedecor, StudentsT };
 use wasm_bindgen::prelude::*;
 
 use crate::models::{
@@ -362,24 +362,25 @@ const SIMULTANEOUS_CI_DESIGN_MESSAGE: &str =
     "Simultaneous confidence intervals are available for the one-sample, paired, and two-sample Hotelling T² designs (no Fixed Factor, or one Fixed Factor with two levels, without covariates or WLS weight).";
 
 /// Simultaneous confidence intervals for the components of a mean vector
-/// (Johnson & Wichern, Applied Multivariate Statistical Analysis, 6th ed.).
-/// F(ν₁, ν₂; α), t(ν; α), χ²(ν; α) and z(α) are upper-α quantiles; sᵢᵢ are
-/// the diagonal elements of the sample covariance matrix (divisor n − 1).
+/// (Johnson & Wichern, Applied Multivariate Statistical Analysis, 6th ed.;
+/// references by subsection only, see testing/fitur-v4/rujukan-jw.md).
+/// F(ν₁, ν₂; α) and t(ν; α) are upper-α quantiles; sᵢᵢ are the diagonal
+/// elements of the sample covariance matrix (divisor n − 1).
 ///
-/// One sample, and the paired test on the differences d (sec. 5.4,
-/// Result 5.3 for the T² intervals; sec. 6.2 for paired comparisons):
+/// One sample (§5.4), and the paired test on the differences d (§6.2):
 ///   T²:         x̄ᵢ ± √( p(n−1)/(n−p) · F(p, n−p; α) ) · √(sᵢᵢ/n)
 ///   Bonferroni: x̄ᵢ ± t(n−1; α/(2p)) · √(sᵢᵢ/n)
-/// Two samples, Σ₁ = Σ₂ (sec. 6.3, Result 6.2):
+/// Two samples, Σ₁ = Σ₂ (§6.3):
 ///   T²:         (x̄₁ᵢ − x̄₂ᵢ) ± c · √( (1/n₁ + 1/n₂) · s_pooled,ᵢᵢ ),
 ///               c² = (n₁+n₂−2)p/(n₁+n₂−p−1) · F(p, n₁+n₂−p−1; α)
 ///   Bonferroni: t(n₁+n₂−2; α/(2p)) in place of c
-/// Two samples, Σ₁ ≠ Σ₂ (sec. 6.3, Result 6.4, large samples):
-///   χ²:         (x̄₁ᵢ − x̄₂ᵢ) ± √( χ²(p; α) ) · √( s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂ )
-///   Bonferroni: z(α/(2p)) in place of √χ²
-/// The Welch test itself uses the Krishnamoorthy–Yu approximation, which
-/// has no standard simultaneous-interval counterpart in Johnson & Wichern;
-/// hence the large-sample intervals of Result 6.4.
+/// Two samples, Σ₁ ≠ Σ₂ (§6.3, Krishnamoorthy–Yu), consistent with the
+/// Welch test in Multivariate Tests (same ν, not rounded):
+///   T²:         (x̄₁ᵢ − x̄₂ᵢ) ± c · √( s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂ ),
+///               c² = νp/(ν−p+1) · F(p, ν−p+1; α)
+///   Bonferroni: Welch t per component, t(νᵢ; α/(2p)) in place of c, with
+///               νᵢ = (s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂)² /
+///                    ((s₁ᵢᵢ/n₁)²/(n₁−1) + (s₂ᵢᵢ/n₂)²/(n₂−1))
 ///
 /// μ₁ is the first and μ₂ the second level of the factor in output-table
 /// order (numeric when both parse as numbers, as in Descriptive
@@ -407,25 +408,31 @@ fn calculate_simultaneous_ci(
     let pf = p as f64;
     let bonferroni_prob = 1.0 - alpha / (2.0 * pf);
 
+    // bonferroni: (reference, [(critical, df)] per component).
     let build = |design: &str,
                  sample_sizes: Vec<usize>,
                  factor: Option<String>,
                  levels: Vec<String>,
                  t2: (f64, &str, Vec<f64>),
-                 bonferroni: (f64, &str, Option<f64>),
+                 bonferroni: (&str, Vec<(f64, f64)>),
                  estimates: Vec<f64>,
                  std_errors: Vec<f64>| {
         let intervals = dep_vars
             .iter()
             .enumerate()
-            .map(|(i, dv)| SimultaneousInterval {
-                dependent_variable: dv.clone(),
-                estimate: estimates[i],
-                std_error: std_errors[i],
-                t2_lower: estimates[i] - t2.0 * std_errors[i],
-                t2_upper: estimates[i] + t2.0 * std_errors[i],
-                bonferroni_lower: estimates[i] - bonferroni.0 * std_errors[i],
-                bonferroni_upper: estimates[i] + bonferroni.0 * std_errors[i],
+            .map(|(i, dv)| {
+                let (critical, df) = bonferroni.1[i];
+                SimultaneousInterval {
+                    dependent_variable: dv.clone(),
+                    estimate: estimates[i],
+                    std_error: std_errors[i],
+                    t2_lower: estimates[i] - t2.0 * std_errors[i],
+                    t2_upper: estimates[i] + t2.0 * std_errors[i],
+                    bonferroni_critical: critical,
+                    bonferroni_df: df,
+                    bonferroni_lower: estimates[i] - critical * std_errors[i],
+                    bonferroni_upper: estimates[i] + critical * std_errors[i],
+                }
             })
             .collect();
         SimultaneousConfidenceIntervals {
@@ -438,9 +445,7 @@ fn calculate_simultaneous_ci(
             t2_critical: t2.0,
             t2_reference: t2.1.to_string(),
             t2_df: t2.2,
-            bonferroni_critical: bonferroni.0,
-            bonferroni_reference: bonferroni.1.to_string(),
-            bonferroni_df: bonferroni.2,
+            bonferroni_reference: bonferroni.0.to_string(),
             intervals,
         }
     };
@@ -463,7 +468,7 @@ fn calculate_simultaneous_ci(
                 None,
                 Vec::new(),
                 (c_t2, "F", vec![pf, n - pf]),
-                (c_bonferroni, "t", Some(n - 1.0)),
+                ("t", vec![(c_bonferroni, n - 1.0); p]),
                 estimates,
                 std_errors,
             ))
@@ -499,18 +504,33 @@ fn calculate_simultaneous_ci(
             let (n1, n2) = (g1.n as f64, g2.n as f64);
             let estimates: Vec<f64> = (0..p).map(|i| g1.mean[i] - g2.mean[i]).collect();
             if config.main.variance_mode == VarianceMode::Welch {
-                let c_chi = upper_quantile_chi2(pf, alpha)?.sqrt();
-                let z = quantile_normal(bonferroni_prob)?;
-                let std_errors: Vec<f64> = (0..p)
-                    .map(|i| (g1.covariance[(i, i)] / n1 + g2.covariance[(i, i)] / n2).sqrt())
-                    .collect();
+                let nu = krishnamoorthy_yu_nu(g1, g2)?;
+                let df2 = nu - pf + 1.0;
+                if !(df2 > 0.0 && df2.is_finite()) {
+                    return Err(format!(
+                        "Welch df2 = ν − p + 1 = {} is not positive; check sample sizes vs p.",
+                        df2
+                    ));
+                }
+                let f = upper_quantile_f(pf, df2, alpha)?;
+                let c_t2 = (nu * pf / df2 * f).sqrt();
+                let mut std_errors = Vec::with_capacity(p);
+                let mut bonferroni = Vec::with_capacity(p);
+                for i in 0..p {
+                    let a = g1.covariance[(i, i)] / n1;
+                    let b = g2.covariance[(i, i)] / n2;
+                    // Welch–Satterthwaite df of component i.
+                    let nu_i = (a + b).powi(2) / (a * a / (n1 - 1.0) + b * b / (n2 - 1.0));
+                    std_errors.push((a + b).sqrt());
+                    bonferroni.push((quantile_t(nu_i, bonferroni_prob)?, nu_i));
+                }
                 Ok(build(
                     "two_sample_unequal",
                     vec![g1.n, g2.n],
                     Some(factor.clone()),
                     levels.clone(),
-                    (c_chi, "chi-square", vec![pf]),
-                    (z, "z", None),
+                    (c_t2, "F", vec![pf, df2]),
+                    ("welch_t", bonferroni),
                     estimates,
                     std_errors,
                 ))
@@ -531,7 +551,7 @@ fn calculate_simultaneous_ci(
                     Some(factor.clone()),
                     levels.clone(),
                     (c_t2, "F", vec![pf, n1 + n2 - pf - 1.0]),
-                    (c_bonferroni, "t", Some(df_error)),
+                    ("t", vec![(c_bonferroni, df_error); p]),
                     estimates,
                     std_errors,
                 ))
@@ -571,11 +591,6 @@ fn upper_quantile_f(df1: f64, df2: f64, alpha: f64) -> Result<f64, String> {
     Ok(polish_quantile(&dist, 1.0 - alpha, dist.inverse_cdf(1.0 - alpha)))
 }
 
-fn upper_quantile_chi2(df: f64, alpha: f64) -> Result<f64, String> {
-    let dist = ChiSquared::new(df).map_err(|e| e.to_string())?;
-    Ok(polish_quantile(&dist, 1.0 - alpha, dist.inverse_cdf(1.0 - alpha)))
-}
-
 fn quantile_t(df: f64, prob: f64) -> Result<f64, String> {
     let dist = StudentsT::new(0.0, 1.0, df).map_err(|_| {
         format!("Simultaneous confidence intervals need at least two cases (t with {} df).", df)
@@ -583,7 +598,33 @@ fn quantile_t(df: f64, prob: f64) -> Result<f64, String> {
     Ok(polish_quantile(&dist, prob, dist.inverse_cdf(prob)))
 }
 
-fn quantile_normal(prob: f64) -> Result<f64, String> {
-    let dist = Normal::new(0.0, 1.0).map_err(|e| e.to_string())?;
-    Ok(polish_quantile(&dist, prob, dist.inverse_cdf(prob)))
+/// Krishnamoorthy–Yu (2004) degrees of freedom ν of the two-sample Welch
+/// Hotelling T² — the same formula as calculate_welch_two_sample_t2
+/// (stats/multivariate_tests.rs), which is private to that module:
+///   V = S₁/n₁ + S₂/n₂, Vᵢ = Sᵢ/nᵢ,
+///   1/ν = Σᵢ [1/(nᵢ − 1)] · {tr((VᵢV⁻¹)²) + (tr(VᵢV⁻¹))²} / (p² + p).
+/// ν does not depend on the order of the two groups. testing/fitur-v4
+/// (v4-check) verifies that ν − p + 1 here equals the Error df of the Welch
+/// row in Multivariate Tests.
+fn krishnamoorthy_yu_nu(
+    g1: &crate::stats::common::GroupCovariance,
+    g2: &crate::stats::common::GroupCovariance,
+) -> Result<f64, String> {
+    let p = g1.mean.len() as f64;
+    let v1 = &g1.covariance / (g1.n as f64);
+    let v2 = &g2.covariance / (g2.n as f64);
+    let v = &v1 + &v2;
+    let v_inv = v
+        .clone()
+        .try_inverse()
+        .ok_or_else(|| "V = S₁/n₁ + S₂/n₂ is singular".to_string())?;
+    let denom = p * p + p;
+    let m1 = &v1 * &v_inv;
+    let m2 = &v2 * &v_inv;
+    let inv_nu = (1.0 / (g1.n as f64 - 1.0)) * ((&m1 * &m1).trace() + m1.trace().powi(2)) / denom
+        + (1.0 / (g2.n as f64 - 1.0)) * ((&m2 * &m2).trace() + m2.trace().powi(2)) / denom;
+    if !inv_nu.is_finite() || inv_nu <= 0.0 {
+        return Err("Welch degrees-of-freedom computation produced a non-positive value".to_string());
+    }
+    Ok(1.0 / inv_nu)
 }

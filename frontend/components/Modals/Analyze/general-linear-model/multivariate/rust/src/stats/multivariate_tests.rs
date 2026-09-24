@@ -29,6 +29,7 @@ use super::{
     },
 };
 use nalgebra::DMatrix;
+use statrs::distribution::{ ContinuousCDF, FisherSnedecor };
 
 /// Calculate multivariate tests for each effect in the model
 /// Multivariate tests examine effects across all dependent variables simultaneously
@@ -341,14 +342,15 @@ fn calculate_welch_two_sample_t2(
     }
 
     let f_stat = ((nu - df1 + 1.0) / (df1 * nu)) * t_squared;
-    let significance = calculate_f_significance(
-        df1.round().max(1.0) as usize,
-        df2.round().max(1.0) as usize,
-        f_stat,
-    );
+    // Sig. with the fractional df2 = ν − p + 1 (v4; before: df rounded to
+    // integers).
+    let significance = FisherSnedecor::new(df1, df2)
+        .map(|dist| 1.0 - dist.cdf(f_stat))
+        .unwrap_or(0.0);
     let noncent = f_stat * df1;
     // Observed power from the noncentral F (λ = F · df1) at the configured
-    // alpha, with the same df and F as the significance above.
+    // alpha; calculate_observed_power takes integer df, so df are rounded
+    // here (not changed in v4).
     let alpha = config.options.sig_level.unwrap_or(0.05);
     let observed_power = calculate_observed_power(
         df1.round().max(1.0) as usize,

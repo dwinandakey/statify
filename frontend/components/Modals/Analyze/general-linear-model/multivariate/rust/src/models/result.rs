@@ -387,16 +387,15 @@ pub struct SimultaneousConfidenceIntervals {
     pub factor: Option<String>,
     /// [level 1, level 2] of the factor (μ₁ − μ₂), in output-table order.
     pub levels: Vec<String>,
-    /// Multiplier of the standard error for the T² (or χ²) intervals.
+    /// Multiplier of the standard error for the T² intervals.
     pub t2_critical: f64,
-    /// "F" (t2_df = [df1, df2]) or "chi-square" (t2_df = [df]).
+    /// "F": t2_df = [p, df2] (df2 = ν − p + 1 with the Krishnamoorthy–Yu ν
+    /// in the unequal-covariance case, not rounded).
     pub t2_reference: String,
     pub t2_df: Vec<f64>,
-    /// Multiplier of the standard error for the Bonferroni intervals.
-    pub bonferroni_critical: f64,
-    /// "t" (degrees of freedom in bonferroni_df) or "z".
+    /// "t" (same df for every component) or "welch_t" (Welch–Satterthwaite
+    /// df per component); critical value and df are in each interval.
     pub bonferroni_reference: String,
-    pub bonferroni_df: Option<f64>,
     pub intervals: Vec<SimultaneousInterval>,
 }
 
@@ -407,6 +406,9 @@ pub struct SimultaneousInterval {
     pub std_error: f64,
     pub t2_lower: f64,
     pub t2_upper: f64,
+    /// t(df; α/(2p)) of this component.
+    pub bonferroni_critical: f64,
+    pub bonferroni_df: f64,
     pub bonferroni_lower: f64,
     pub bonferroni_upper: f64,
 }

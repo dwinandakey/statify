@@ -316,9 +316,9 @@ export function transformMultivariateResult(
 
 // ── 1. Between-Subjects Factors ──────────────────────────────────────────────
 // ── Simultaneous confidence intervals (Options) ───────────────────────────────
-// Values computed in Rust (wasm/function.rs, calculate_simultaneous_ci);
+// Values computed in Rust (wasm/constructor.rs, calculate_simultaneous_ci);
 // the formulas follow Johnson & Wichern, Applied Multivariate Statistical
-// Analysis, 6th ed. (see the table note). With a two-population δ₀ the
+// Analysis, 6th ed., cited by subsection (testing/fitur-v4/rujukan-jw.md). With a two-population δ₀ the
 // analysis ran on data in which δ₀ was subtracted from the first level, so
 // δ₀ is added back here: the intervals are for μ₁ − μ₂ on the original scale.
 function formatSimultaneousCI(
@@ -353,10 +353,10 @@ function formatSimultaneousCI(
             : "Mean";
     const hypothesisHeader = twoSample || paired ? "δ₀" : "Test Value (μ₀)";
     const containsHeader = twoSample || paired ? "Contains δ₀" : "Contains μ₀";
-    const t2Header = unequal
-        ? `${pct}% Simultaneous χ² Interval (large sample)`
-        : `${pct}% Simultaneous T² Interval`;
-    const bonferroniHeader = `${pct}% Bonferroni Interval`;
+    const t2Header = `${pct}% Simultaneous T² Interval`;
+    const bonferroniHeader = unequal
+        ? `${pct}% Bonferroni Interval (Welch t)`
+        : `${pct}% Bonferroni Interval`;
 
     const table: Table = {
         key: "simultaneous_confidence_intervals",
@@ -377,6 +377,8 @@ function formatSimultaneousCI(
             {
                 header: bonferroniHeader,
                 children: [
+                    // Welch–Satterthwaite df differ per component.
+                    ...(unequal ? [{ header: "df", key: "bonferroni_df" }] : []),
                     { header: "Lower Bound", key: "bonferroni_lower" },
                     { header: "Upper Bound", key: "bonferroni_upper" },
                     { header: containsHeader, key: "bonferroni_contains" },
@@ -402,6 +404,7 @@ function formatSimultaneousCI(
             t2_lower: num(t2Lower),
             t2_upper: num(t2Upper),
             t2_contains: t2Lower <= h && h <= t2Upper ? "Yes" : "No",
+            ...(unequal ? { bonferroni_df: num(iv.bonferroni_df) } : {}),
             bonferroni_lower: num(bonLower),
             bonferroni_upper: num(bonUpper),
             bonferroni_contains: bonLower <= h && h <= bonUpper ? "Yes" : "No",
@@ -411,33 +414,33 @@ function formatSimultaneousCI(
     const df = (v: number) => Number(Number(v).toFixed(4)).toString();
     const [n1, n2] = ci.sample_sizes ?? [];
     const c = num(ci.t2_critical);
-    const b = num(ci.bonferroni_critical);
+    // Same Bonferroni t for every component except in the Welch case.
+    const first = ci.intervals[0] ?? {};
+    const b = num(first.bonferroni_critical);
+    const bDf = df(first.bonferroni_df);
     const simultaneous = `The intervals hold simultaneously for all ${p} components at the ${pct}% confidence level (α = ${alpha} from Options → Significance Level).`;
     let note: string;
     if (unequal) {
-        let nu = "";
-        const welchRow = data.multivariate_tests?.effects?.[ci.factor]?.["Hotelling's Trace"];
-        if (welchRow && Number.isFinite(welchRow.error_df)) {
-            nu = ` (ν = ${df(welchRow.error_df + p - 1)})`;
-        }
+        // ν of the Welch test (Krishnamoorthy–Yu), not rounded: df2 = ν − p + 1.
+        const nu = df(ci.t2_df[1] + ci.t2_df[0] - 1);
         note =
-            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ ≠ Σ₂. ` +
-            `Large-sample intervals (Johnson & Wichern, 6th ed., Result 6.4): (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(${df(ci.t2_df[0])}; α) · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), √χ²(${df(ci.t2_df[0])}; α) = ${c}; ` +
-            `Bonferroni: z(α/(2p)) = ${b}. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous} ` +
-            `Limitation: these are large-sample (chi-square) intervals; the Welch test in Multivariate Tests uses the Krishnamoorthy–Yu approximation${nu}, so for small samples the intervals and its Sig. can disagree.`;
+            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). ` +
+            `T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = ${nu}): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), ` +
+            `c = √(νp/(ν−p+1) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; ` +
+            `Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch–Satterthwaite df νᵢ in the df column. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
     } else if (twoSample) {
         note =
-            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., sec. 6.3, Result 6.2): ` +
+            `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): ` +
             `(x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; ` +
-            `Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
+            `Bonferroni: t(${bDf}; α/(2p)) = ${b}. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
     } else if (paired) {
         note =
-            `Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., sec. 6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), ` +
-            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
+            `Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), ` +
+            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${bDf}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
     } else {
         note =
-            `Components of μ (Johnson & Wichern, 6th ed., sec. 5.4, Result 5.3): x̄ᵢ ± c · √(sᵢᵢ/n), ` +
-            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${df(ci.bonferroni_df)}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
+            `Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), ` +
+            `c = √(p(n−1)/(n−p) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; Bonferroni: t(${bDf}; α/(2p)) = ${b}. n = ${n1}. ${simultaneous}`;
     }
     if (delta && delta.delta0.some((v) => v !== 0)) {
         note += ` The intervals are for μ₁ − μ₂ on the original data (δ₀ = ${formatDeltaVector(delta.delta0)} added back).`;
