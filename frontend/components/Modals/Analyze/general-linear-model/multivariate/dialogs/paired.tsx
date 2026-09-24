@@ -418,14 +418,16 @@ export const MultivariatePaired = ({
 
     // ── Footer actions ───────────────────────────────────────────────────────
     const handleContinue = () => {
-        if (completePairs.length === 0) {
-            toast.warning("Tambahkan minimal satu pasangan variabel.");
-            return;
-        }
+        // An incomplete row is reported first, so a pair with only
+        // Variable 1 filled asks for Variable 2 instead of "add a pair".
         if (hasIncompletePair) {
             toast.warning(
                 "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris."
             );
+            return;
+        }
+        if (completePairs.length === 0) {
+            toast.warning("Tambahkan minimal satu pasangan variabel.");
             return;
         }
         const trimmedDelta0 = delta0.slice(0, completePairs.length);
