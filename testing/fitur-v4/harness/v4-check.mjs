@@ -7,9 +7,12 @@
 //     mv2d = mv2 (data asli, δ₀ = 0);
 //  C. CI simultan Statify (nilai mentah dari worker) vs R dasar dan MVTests,
 //     |selisih| < 1e-8;
-//  D. main = worker byte-identik untuk konfigurasi baru.
+//  D. main = worker byte-identik untuk konfigurasi baru;
+//  E. uji Welch (Krishnamoorthy–Yu): T², F, df, Sig. (df pecahan) vs R
+//     (welch_sig.R, pf dengan df pecahan); ν CI Unequal = ν uji; bila
+//     --before diberikan, daftar Sig./df sebelum (df dibulatkan) dan sesudah.
 //
-// Pemakaian (root repo): node testing/fitur-v4/harness/v4-check.mjs --run=<step18-v4> --v3=<step15-v3> --out=<file>
+// Pemakaian (root repo): node testing/fitur-v4/harness/v4-check.mjs --run=<step19-v4> --v3=<step15-v3> [--before=<step18-v4>] --out=<file>
 import fs from "fs";
 import path from "path";
 
@@ -92,13 +95,13 @@ for (const cfg of ciCfgs) {
     ci.intervals.forEach((iv, i) => {
         const r = rBase.find((x) => x.config === cfg && x.dv === iv.dependent_variable);
         const s = shift[i];
-        const pairs = [["estimate", iv.estimate + s], ["std_error", iv.std_error], ["t2_lower", iv.t2_lower + s], ["t2_upper", iv.t2_upper + s], ["bonferroni_lower", iv.bonferroni_lower + s], ["bonferroni_upper", iv.bonferroni_upper + s], ["t2_critical", ci.t2_critical], ["bonferroni_critical", ci.bonferroni_critical]];
+        const pairs = [["estimate", iv.estimate + s], ["std_error", iv.std_error], ["t2_lower", iv.t2_lower + s], ["t2_upper", iv.t2_upper + s], ["bonferroni_lower", iv.bonferroni_lower + s], ["bonferroni_upper", iv.bonferroni_upper + s], ["t2_critical", ci.t2_critical], ["bonferroni_critical", iv.bonferroni_critical], ["bonferroni_df", iv.bonferroni_df]];
         for (const [k, v] of pairs) { n += 1; maxDiff = Math.max(maxDiff, Math.abs(v - Number(r?.[k]))); }
         const m = rMv.find((x) => x.config === cfg && x.dv === iv.dependent_variable);
         if (m) for (const [k, v] of [["t2_lower", iv.t2_lower + s], ["t2_upper", iv.t2_upper + s]]) { nMv += 1; maxMv = Math.max(maxMv, Math.abs(v - Number(m[k]))); }
     });
     maxAll = Math.max(maxAll, maxDiff); nAll += n;
-    log(maxDiff < 1e-8, `${cfg} (${ci.design}, ${Math.round(ci.confidence_level * 100)}%): ${n} nilai vs R dasar, selisih maks ${maxDiff.toExponential(2)}` + (nMv ? `; ${nMv} batas T² vs MVTests, selisih maks ${maxMv.toExponential(2)}` : "; MVTests: tidak ada padanan (metode Statify = Result 6.4)"));
+    log(maxDiff < 1e-8, `${cfg} (${ci.design}, ${Math.round(ci.confidence_level * 100)}%): ${n} nilai vs R dasar, selisih maks ${maxDiff.toExponential(2)}` + (nMv ? `; ${nMv} batas T² vs MVTests, selisih maks ${maxMv.toExponential(2)}` : "; MVTests: tidak ada padanan (T² Krishnamoorthy–Yu, Bonferroni Welch t per variabel)"));
     if (nMv) log(maxMv < 1e-8, `${cfg}: batas T² vs MVTests < 1e-8`);
 }
 lines.push(`   total ${nAll} nilai vs R dasar, selisih maks ${maxAll.toExponential(2)}`);
@@ -112,6 +115,39 @@ lines.push("", "D. main = worker, konfigurasi baru");
 for (const cfg of ["mv2d", "mv2s", "mv2wd", "mv2ws", "mv3d", "mv3s", ...ciCfgs]) {
     const a = load(RUN, "main", cfg), b = load(RUN, "worker", cfg);
     log(tablesKey(a) === tablesKey(b), `${cfg}: main = worker byte-identik (${b.tables.length} tabel)`);
+}
+
+// ── E. Uji Welch: Sig. dengan df pecahan vs R ─────────────────────────────
+lines.push("", "E. Uji Welch (Krishnamoorthy–Yu) vs R dasar (welch_sig.R, pf dengan df pecahan)");
+const rWelch = readCsv("testing/fitur-v4/r/welch_sig_r.csv");
+const WELCH = { mv2wci: "asli", mv2wd: "geser", mv2ws: "geser" };
+const welchRow = (dir, cfg) => loadRaw(dir, "worker", cfg).response.results.multivariate_tests.effects.jk["Hotelling's Trace"];
+for (const [cfg, kind] of Object.entries(WELCH)) {
+    const w = welchRow(RUN, cfg);
+    const r = rWelch.find((x) => x.data.startsWith(kind));
+    const cmp = [["T²", w.value, r.t_squared], ["F", w.f, r.f], ["df2 = ν − p + 1", w.error_df, r.df2], ["Sig.", w.significance, r.sig_fraksional]];
+    const worst = Math.max(...cmp.map(([, a, b]) => Math.abs(a - Number(b))));
+    const relSig = Math.abs(w.significance - Number(r.sig_fraksional)) / Number(r.sig_fraksional);
+    // Kriteria sama dengan pemeriksaan lain: |selisih| < 1e-8. Selisih relatif
+    // Sig. hanya dilaporkan: pada Sig. ~1e-11 (ekor ekstrem) fungsi beta
+    // statrs dan pf R berbeda ~1e-6 relatif (juga pada Sig. lama dengan df
+    // dibulatkan), jauh di bawah ketelitian tampilan.
+    log(worst < 1e-8, `${cfg} (data ${kind}): T², F, df2, Sig. vs R selisih maks ${worst.toExponential(2)}; Sig. Statify ${w.significance.toPrecision(10)} vs R ${Number(r.sig_fraksional).toPrecision(10)} (selisih relatif ${relSig.toExponential(2)})`);
+}
+{
+    const ci = loadRaw(RUN, "worker", "mv2wci").response.results.simultaneous_confidence_intervals;
+    const w = welchRow(RUN, "mv2wci");
+    log(ci.t2_df[1] === w.error_df, `mv2wci: ν CI = ν uji (df2 CI ${ci.t2_df[1]} = Error df Welch ${w.error_df}, identik)`);
+}
+if (args.before) {
+    const BEFORE = path.resolve(args.before);
+    lines.push("   Sebelum (df dibulatkan) → sesudah (df pecahan), nilai mentah worker:");
+    for (const cfg of Object.keys(WELCH)) {
+        const a = welchRow(BEFORE, cfg), b = welchRow(RUN, cfg);
+        const shown = (dir) => JSON.parse(load(dir, "worker", cfg).tables.find((t) => t.title.startsWith("Multivariate Tests")).output_data).tables[0].rows.find((x) => /Welch/.test(x.effect || ""));
+        const sa = shown(BEFORE), sb = shown(RUN);
+        lines.push(`   ${cfg}: Sig. ${a.significance.toPrecision(10)} (df ${a.hypothesis_df}, ${Math.round(a.error_df)} dipakai; tampil "${sa?.significance}") → ${b.significance.toPrecision(10)} (df ${b.hypothesis_df}, ${b.error_df}; tampil "${sb?.significance}"); Error df tampil "${sa?.error_df}" → "${sb?.error_df}"; Observed Power ${a.observed_power} → ${b.observed_power}`);
+    }
 }
 
 lines.push("", `HASIL: ${failures === 0 ? "semua pemeriksaan lulus" : `${failures} gagal`}`);

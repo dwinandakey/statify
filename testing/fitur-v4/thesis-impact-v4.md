@@ -11,13 +11,19 @@ Diperiksa dengan `testing/glm-mv-reference/harness/rust_api.py` terhadap `82a63b
 | Berkas | Perubahan | Alasan |
 |---|---|---|
 | `rust/src/wasm/constructor.rs` | Method publik baru `MultivariateAnalysis::get_simultaneous_ci(&mut self) -> Result<JsValue, JsValue>` (diekspor wasm-bindgen; glue `pkg/wasm.js`/`wasm.d.ts` bertambah satu method) | CI dihitung sesuai permintaan dari data yang sudah disimpan objek (setelah listwise), sesudah `get_formatted_results()`. Galat masuk error collector (konteks `calculate_simultaneous_ci`) dan method mengembalikan `null`. |
-| `rust/src/models/result.rs` | Struct baru `SimultaneousConfidenceIntervals` (design, confidence_level, p, sample_sizes, factor, levels, t2_critical, t2_reference, t2_df, bonferroni_critical, bonferroni_reference, bonferroni_df, intervals) | Hasil method di atas: metode, tingkat kepercayaan, nilai kritis, derajat bebas. |
-| `rust/src/models/result.rs` | Struct baru `SimultaneousInterval` (dependent_variable, estimate, std_error, t2_lower, t2_upper, bonferroni_lower, bonferroni_upper) | Satu baris per DV atau per pasangan. |
+| `rust/src/models/result.rs` | Struct baru `SimultaneousConfidenceIntervals` (design, confidence_level, p, sample_sizes, factor, levels, t2_critical, t2_reference, t2_df, bonferroni_reference, intervals) | Hasil method di atas: metode, tingkat kepercayaan, nilai kritis T², derajat bebas. |
+| `rust/src/models/result.rs` | Struct baru `SimultaneousInterval` (dependent_variable, estimate, std_error, t2_lower, t2_upper, bonferroni_critical, bonferroni_df, bonferroni_lower, bonferroni_upper) | Satu baris per DV atau per pasangan. Nilai kritis dan df Bonferroni ada per baris, karena pada Σ₁ ≠ Σ₂ tiap variabel punya df Welch sendiri. |
+
+**Revisi v4 (sebelum push).**
+- Field `bonferroni_critical`/`bonferroni_df` dipindah dari `SimultaneousConfidenceIntervals` ke `SimultaneousInterval`.
+- Jumlah perubahan API tetap 3 (method + 2 struct baru); hanya daftar field yang berubah, dan `rust-api-allowed.json` diperbarui.
+- `calculate_welch_two_sample_t2` (privat, `stats/multivariate_tests.rs`) kini menghitung Sig. dengan df pecahan. Fungsi publik `calculate_f_significance` tidak berubah.
 
 **Fungsi privat baru di `rust/src/wasm/constructor.rs`** (tidak mengubah API):
-- `calculate_simultaneous_ci`, yang memuat rumus J&W dan rujukan Result/bagian di komentarnya;
+- `calculate_simultaneous_ci`, yang memuat rumus J&W dan rujukan subbab (§5.4, §6.2, §6.3) di komentarnya;
+- `krishnamoorthy_yu_nu`, dengan rumus ν yang sama dengan uji Welch (fungsi uji privat di modul `stats`);
 - `polish_quantile`;
-- `upper_quantile_f`, `upper_quantile_chi2`, `quantile_t`, `quantile_normal`.
+- `upper_quantile_f`, `quantile_t`.
 
 **Mengapa bukan field baru di `MultivariateResult`.**
 - **Rancangan pertama:** field `simultaneous_confidence_intervals` di `MultivariateResult` dan `OptionsConfig.simultaneous_ci`.

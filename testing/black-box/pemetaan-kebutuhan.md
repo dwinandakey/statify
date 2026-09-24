@@ -58,7 +58,7 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`
 - **Path:** relatif terhadap `MV/`.
 - **Crate RM:** tidak berubah.
 - **Crate MV:** hanya menambah method `get_simultaneous_ci` dan dua struct hasil (`testing/fitur-v4/thesis-impact-v4.md`).
-- **Keputusan redaksi:** kedua fitur belum tercantum di Tabel 5. Penulis perlu memutuskan apakah keduanya ditambahkan sebagai kebutuhan baru atau dimasukkan ke redaksi KF2–KF4.
+- **Keputusan redaksi:** kedua fitur belum tercantum di Tabel 5. Usulan redaksi KF2–KF4 ada di bawah (menunggu konfirmasi pembimbing).
 - **Skenario:** kelompok baru di `skenario-black-box.md`, belum dieksekusi.
 
 | KF | Fitur | Perilaku | Berkas | Skenario |
@@ -66,6 +66,21 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`
 | KF3 | δ₀ dua populasi (Pooled dan Unequal) | Tombol "Test Values (δ₀)" di panel Covariance Matrices membuka subdialog "Test Values (δ₀) — Hotelling T² Dua Populasi". Subdialog berisi satu isian per DV (bawaan 0) dan tombol Continue, Cancel, dan Reset to 0. H₀: μ(faktor = level 1) − μ(faktor = level 2) = δ₀, dengan urutan level mengikuti tabel Descriptive Statistics. Bila δ₀ ≠ 0, δ₀ dikurangkan dari setiap pengamatan level pertama sebelum WASM. Descriptive Statistics tetap pada data asli, catatan Multivariate Tests memuat H₀ dan δ₀, dan tabel yang dihitung dari data geser diberi catatan. δ₀ dibuang bila Fixed Factor(s) diubah. | `dialogs/two-sample-delta.tsx`, `dialogs/dialog.tsx`, `dialogs/multivariate-main.tsx`, `services/two-sample-delta.ts`, `services/multivariate-analysis.ts`, `services/multivariate-analysis-formatter.ts` | BB-KF03-04 s.d. BB-KF03-09 |
 | KF4 | δ₀ berpasangan | Isian δ₀ di dialog Paired sudah ada sejak v3. v4 menambah catatan "H₀: μd = δ₀ (d = M1 − M2)." pada Multivariate Tests bila δ₀ ≠ 0. | `services/multivariate-analysis-formatter.ts` | BB-KF04-03 |
 | KF2, KF3, KF4 | CI simultan T² dan Bonferroni | Checkbox Options "Simultaneous CI (T² & Bonferroni)" (bawaan tidak dicentang) menampilkan tabel "Simultaneous Confidence Intervals" untuk satu populasi, berpasangan, dan dua populasi (Pooled/Unequal). Tingkat kepercayaan = 1 − Significance Level. Bila δ₀ ≠ 0, selang ditampilkan pada skala data asli dengan kolom Contains μ₀/δ₀. | `dialogs/options.tsx`, `services/multivariate-analysis*.ts`, `rust/src/wasm/constructor.rs`, `rust/src/models/result.rs` | BB-KF02-04 s.d. BB-KF02-07, BB-KF03-10 s.d. BB-KF03-13, BB-KF04-04, BB-KF06-10 |
+
+**Usulan redaksi Tabel 5 untuk v4 (usulan penulis, menunggu konfirmasi pembimbing; belum menggantikan redaksi di atas):**
+
+| KF | Redaksi yang berlaku | Usulan redaksi |
+|---|---|---|
+| KF2 | Uji vektor rata-rata satu populasi | Sistem dapat melakukan uji vektor rata-rata satu populasi terhadap vektor hipotesis μ0, dilengkapi selang kepercayaan simultan T² dan Bonferroni. |
+| KF3 | Dua populasi, kovarians sama dan tidak sama | Sistem dapat melakukan uji vektor rata-rata dua populasi dengan matriks kovarians sama dan tidak sama terhadap selisih hipotesis δ0, dilengkapi selang kepercayaan simultan T² dan Bonferroni. |
+| KF4 | Uji berpasangan | Sistem dapat melakukan uji vektor rata-rata berpasangan terhadap selisih hipotesis δ0, dilengkapi selang kepercayaan simultan T² dan Bonferroni. |
+
+Bila usulan disetujui, status KF2–KF4 tetap TERPENUHI. Fiturnya ada di v4, dengan pengujian lewat skenario BB-KF02-04 s.d. BB-KF02-07, BB-KF03-04 s.d. BB-KF03-13, dan BB-KF04-03 s.d. BB-KF04-04 (belum dieksekusi).
+
+**Revisi v4 sebelum rilis:**
+- CI Unequal memakai T² Krishnamoorthy–Yu (ν sama dengan uji Welch) dan Bonferroni Welch t per variabel.
+- Sig. uji Welch dihitung dengan df pecahan.
+- Rujukan J&W hanya menyebut subbab (`testing/fitur-v4/rujukan-jw.md`).
 
 **Pesan baru v4** (disalin dari kode v4):
 

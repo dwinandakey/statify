@@ -31,11 +31,11 @@
     },
     {
       "file": "08-tabel-ci-satu-populasi.png",
-      "label": "Tabel CI simultan satu populasi (Result 5.3 dan Bonferroni), kolom Contains μ₀"
+      "label": "Tabel CI simultan satu populasi (§5.4: T² dan Bonferroni), kolom Contains μ₀"
     },
     {
       "file": "09-tabel-ci-dua-populasi-unequal.png",
-      "label": "Tabel CI simultan dua populasi Unequal (Result 6.4, χ² sampel besar) dan catatan keterbatasan"
+      "label": "Tabel CI simultan dua populasi Unequal (T² Krishnamoorthy–Yu, Bonferroni Welch t per variabel, kolom df)"
     },
     {
       "file": "10-dialog-paired-delta0.png",

@@ -1,10 +1,10 @@
 # Pembanding kedua CI simultan T²: paket CRAN MVTests (Bulut, 2023).
 # OneSampleHT2 dan TwoSamplesHT2(Homogenity = TRUE) menghitung selang T²
-# simultan dengan rumus Johnson & Wichern (Result 5.3 / Result 6.2); MVTests
-# tidak menghitung selang Bonferroni.
+# simultan dengan rumus Johnson & Wichern (§5.4 / §6.3); MVTests tidak
+# menghitung selang Bonferroni.
 # TwoSamplesHT2(Homogenity = FALSE) memakai selang dari aproksimasi F dengan ν
-# Nel–van der Merwe, berbeda dari Statify (Result 6.4, khi-kuadrat), sehingga
-# hanya dicatat sebagai informasi (kolom method).
+# Nel–van der Merwe, berbeda dari Statify (ν Krishnamoorthy–Yu seperti uji
+# Welch aplikasi), sehingga hanya dicatat sebagai informasi (kolom method).
 #
 # Pemakaian (root repo): Rscript testing/fitur-v4/r/ci_mvtests.R
 

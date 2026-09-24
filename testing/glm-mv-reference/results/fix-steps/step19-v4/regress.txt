@@ -1,0 +1,24 @@
+SPSS: lulus sebelum 2339, sesudah 2339 (dari 2351 nilai); diperbaiki 0; REGRESI 0
+main vs worker mv1.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv1ci.json: mode main/worker, 5 tabel, byte-identik true
+main vs worker mv1ci10.json: mode main/worker, 5 tabel, byte-identik true
+main vs worker mv2.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv2ci.json: mode main/worker, 6 tabel, byte-identik true
+main vs worker mv2d.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv2dci.json: mode main/worker, 6 tabel, byte-identik true
+main vs worker mv2s.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv2wci.json: mode main/worker, 6 tabel, byte-identik true
+main vs worker mv2wd.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv2ws.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv3.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv3ci.json: mode main/worker, 5 tabel, byte-identik true
+main vs worker mv3d.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv3dci.json: mode main/worker, 5 tabel, byte-identik true
+main vs worker mv3s.json: mode main/worker, 4 tabel, byte-identik true
+main vs worker mv4.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv4ph.json: mode main/worker, 8 tabel, byte-identik true
+main vs worker mv5.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv6.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv7.json: mode main/worker, 7 tabel, byte-identik true
+main vs worker mv8.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true

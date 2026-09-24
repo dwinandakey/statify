@@ -19,8 +19,10 @@ Dasar perubahan: dua fitur dari masukan dosen pengampu mata kuliah APG. Investig
    - δ₀ berpasangan (H₀: μd = δ₀) sudah ada sejak v3; v4 menambah kalimat H₀ di catatan.
 2. **Selang kepercayaan simultan T² dan Bonferroni.**
    - Diaktifkan lewat Options → "Simultaneous CI (T² & Bonferroni)", bawaan tidak dicentang; tingkat kepercayaan = 1 − Significance Level.
-   - Rumus dari Johnson & Wichern ed. 6: satu populasi dan berpasangan (Result 5.3, Bonferroni §5.4, §6.2), dua populasi Pooled (Result 6.2, §6.3), Unequal (Result 6.4, sampel besar; keterbatasan dicatat).
+   - Rumus dari Johnson & Wichern ed. 6, dirujuk per subbab (`testing/fitur-v4/rujukan-jw.md`): satu populasi §5.4, berpasangan §6.2, dua populasi §6.3.
+   - Unequal: T² Krishnamoorthy–Yu (ν sama dengan uji Welch) dan Bonferroni Welch t per variabel.
    - Dihitung oleh method WASM baru `get_simultaneous_ci()`, dan hanya dipanggil bila opsi dicentang.
+3. **Sig. uji Welch dengan df pecahan** (sebelumnya df dibulatkan). Rinciannya di §v4.7.
 
 ### v4.1 Commit (di `ilham`, sesudah `426429d8`)
 
@@ -31,7 +33,9 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/m
 | `2c4e994b` | Fitur 1, δ₀ dua populasi: `dialogs/two-sample-delta.tsx` (baru), `services/two-sample-delta.ts` (baru), `dialogs/dialog.tsx`, `dialogs/multivariate-main.tsx`, `services/multivariate-analysis.ts`, `services/multivariate-analysis-formatter.ts`, `types/multivariate.ts` |
 | `8751e76c` | Fitur 2, CI simultan: `dialogs/options.tsx`, service, worker, formatter, output, types, `rust/src/models/result.rs`, `rust/src/wasm/constructor.rs`, `rust/pkg/*` (glue bertambah satu method) |
 | `22a8be47` | Perbaikan: catatan δ₀ disambung sebagai kalimat baru ("Type III sum of squares. H₀: …"; sebelumnya menempel tanpa titik). Ditemukan saat memeriksa tangkapan layar `step17-v4`. |
-| commit berikutnya | Tes dan dokumen: `testing/fitur-v4/` (investigasi, dampak, data geser, sintaks SPSS, skrip R, harness, bukti), `check-step.sh` (`RUST_API_ALLOWED`), `ui-run.cjs` (13 konfigurasi baru), skenario black-box v4 (belum dieksekusi), `pemetaan-kebutuhan.md` §Perubahan v4, hasil `step17-v4` dan `step18-v4`, bagian v4 berkas ini. **Tag `skripsi-final-v4`.** |
+| `5da17f3a` | Tes dan dokumen: `testing/fitur-v4/` (investigasi, dampak, data geser, sintaks SPSS, skrip R, harness, bukti), `check-step.sh` (`RUST_API_ALLOWED`), `ui-run.cjs` (13 konfigurasi baru), skenario black-box v4 (belum dieksekusi), `pemetaan-kebutuhan.md` §Perubahan v4, hasil `step17-v4` dan `step18-v4`. Tag `skripsi-final-v4` pertama kali dipasang di sini (belum di-push), lalu dipindah. |
+| `91cc8e34` | Revisi sebelum push: CI Unequal T² Krishnamoorthy–Yu dan Bonferroni Welch t; Sig. Welch dengan df pecahan; rujukan J&W hanya per subbab (`rust/src/wasm/constructor.rs`, `rust/src/stats/multivariate_tests.rs`, `rust/src/models/result.rs`, `rust/pkg/wasm_bg.wasm`, `services/multivariate-analysis-formatter.ts`) |
+| commit berikutnya | Tes dan dokumen revisi: `rujukan-jw.md`, `r/welch_sig.R`, `r/ci_simultan.R` (Unequal baru), `r/sleeping_dog.R`, data dan tangkapan sleeping dog, `harness/sleeping-dog.cjs`, `v4-check.mjs` bagian E, skenario v4 (revisi R3–R5), usulan redaksi Tabel 5, hasil `step19-v4`, bagian v4 berkas ini. **Tag `skripsi-final-v4`.** |
 
 Tidak ada merge dan tidak ada push di v4 sampai disetujui.
 
@@ -47,16 +51,20 @@ Tiga perubahan, sama persis dengan `testing/fitur-v4/rust-api-allowed.json` (dip
 
 **Mengapa method terpisah, bukan field baru `MultivariateResult`.** Field baru mengubah urutan kunci HashMap di wasm32 dan nilai floating-point respons worker jalur lama, bahkan sebagai `Option<Box<…>>` yang selalu `None`. Rinciannya ada di `thesis-impact-v4.md` §1.
 
-### v4.3 Hasil pemeriksaan (kode `22a8be47`; commit sesudahnya hanya tes dan dokumen)
+### v4.3 Hasil pemeriksaan (kode `91cc8e34`; commit sesudahnya hanya tes dan dokumen)
 
-| Pemeriksaan | Hasil | Bukti (`testing/glm-mv-reference/results/fix-steps/step18-v4/`) |
+Hasil `step18-v4` (kode `22a8be47`, sebelum revisi) tetap tersimpan sebagai pembanding "sebelum" di §v4.7.
+
+| Pemeriksaan | Hasil | Bukti (`testing/glm-mv-reference/results/fix-steps/step19-v4/`) |
 |---|---|---|
-| WASM dan API | wasm-pack MV md5 `9ced17bc…` (sama dengan `rust/pkg` yang di-commit); glue tidak berubah terhadap commit; 3 perubahan API publik sesuai daftar | `api-check.txt`, `rust-api.txt` |
+| WASM dan API | wasm-pack MV md5 `398a7b46…` (sama dengan `rust/pkg` yang di-commit); glue tidak berubah terhadap commit; 3 perubahan API publik sesuai daftar yang diperbarui (field Bonferroni per baris) | `api-check.txt`, `rust-api.txt` |
 | Uji acuan SPSS MV | 2339 lulus (12 todo); regresi 0 terhadap v3 | `compare-spss.txt`, `regress.txt`, `jest-reference.log` |
 | Jalur lama = v3 | mv1–mv8, mv4ph: tabel (main dan worker), payload worker, dan respons worker byte-identik dengan v3 | `v4-check.txt` bagian A |
 | δ₀ = data geser | mv2d = mv2s dan mv2wd = mv2ws: payload dan respons worker identik; Descriptive Statistics = data asli; mv3d vs mv3s selisih maks 2.04e-17 | `v4-check.txt` bagian B |
-| CI vs R | 192 nilai vs R dasar (`testing/fitur-v4/r/ci_simultan.R`), selisih maks 2.02e-11; batas T² vs MVTests 2.3.1 (`OneSampleHT2`, `TwoSamplesHT2`) < 1e-8; Unequal tidak ada padanan di MVTests | `v4-check.txt` bagian C |
+| CI vs R | 216 nilai vs R dasar (`testing/fitur-v4/r/ci_simultan.R`), selisih maks 1.31e-12. Unequal: 36 nilai (termasuk df Welch per variabel) vs R (ν dihitung ulang; Bonferroni dari `t.test(var.equal = FALSE, conf.level = 1 − α/p)`), selisih maks 5.77e-14. Batas T² vs MVTests 2.3.1 < 1e-8 (Unequal tidak ada padanan). | `v4-check.txt` bagian C |
+| Uji Welch vs R | T², F, df2 = ν − p + 1, dan Sig. (df pecahan, `pf`) vs `r/welch_sig.R`: selisih absolut maks 2.13e-14. ν di tabel CI = ν uji (identik). | `v4-check.txt` bagian E |
 | Main = worker | 22 konfigurasi MV byte-identik (9 lama + 13 baru) | `regress.txt`, `v4-check.txt` bagian D |
+| Contoh sleeping dog (J&W §6.2) | Nilai tampil sama dengan nilai yang diharapkan dan dengan `r/sleeping_dog.R` (§v4.7) | `testing/fitur-v4/bukti/sleeping-dog/` |
 | Main = worker, RM | 9 desain × 4 run byte-identik; hash tabel sama dengan v3 | `rm/rm-ui-main-worker*.json`, `rm/rm-hash-v3-v4.txt` |
 | Sel eksperimen Web Worker final | 8/8 sel: payload dan respons worker lewat dialog asli build v4 identik dengan v1, v2, dan v3 | `experiment-output-check.txt` |
 | Uji acuan RM | **1681 lulus, 0 todo** (sama dengan v3) | `rm/rm-reference.log` |
@@ -64,7 +72,9 @@ Tiga perubahan, sama persis dengan `testing/fitur-v4/rust-api-allowed.json` (dip
 
 **Catatan eksekusi.**
 - **`step17-v4` (kode `8751e76c`):** UI run pertama terhenti dua kali di impor CSV. Mode worker berhenti di `mv2wci` karena `#csv-file-input-content` tidak muncul; mode main berhenti di `mv1` karena menu "not stable". Keduanya kendala alat uji, dan analisis belum dijalankan. Log disimpan sebagai `ui-*-percobaan1.log`, dan UI run ulang lulus.
-- **`step18-v4`:** dijalankan penuh pada kode final tanpa kendala.
+- **`step18-v4`:** dijalankan penuh pada kode `22a8be47` tanpa kendala.
+- **`step19-v4`:** dijalankan penuh pada kode revisi `91cc8e34` tanpa kendala.
+- **Kriteria bagian E.** Semula Sig. mv2wci juga diuji dengan selisih relatif < 1e-6. Nilainya 1.83e-6: Sig. Statify 2.549860e-11 vs R 2.549865e-11, dengan selisih absolut 4.7e-17. Sumbernya presisi fungsi beta statrs di ekor ekstrem; Sig. lama dengan df dibulatkan juga berbeda 6.9e-7 relatif dari R. Kriteria bagian E disamakan dengan pemeriksaan lain (|selisih| < 1e-8), dan selisih relatif tetap dilaporkan.
 - **`step16-v4`:** hasil rancangan pertama (field di `MultivariateResult`), yang respons worker jalur lamanya tidak identik dengan v3. Rancangan ini ditinggalkan, dan hasilnya tidak di-commit. Temuan yang sama dapat diulang dengan `testing/fitur-v4/harness/replay-v3.mjs`.
 - **Kesalahan argumen alat uji sebelum `step18`:**
   - Tangkapan sel eksperimen RM tanpa `--rm-levels=10` memakai 5 level bawaan, sehingga payload berbeda. Setelah ditangkap ulang dengan argumen v3, hasilnya identik.
@@ -75,8 +85,8 @@ Tiga perubahan, sama persis dengan `testing/fitur-v4/rust-api-allowed.json` (dip
 
 | Item | Nilai |
 |---|---|
-| `BUILD_ID` | `wbSNCISJNEFketrvfND-G` |
-| WASM MV di build | `.next/static/media/wasm_bg.8f16e568.wasm` (baru; v3: `wasm_bg.4c7b0023.wasm`) |
+| `BUILD_ID` | `1IBznO-olYCW5GfFOKskp` |
+| WASM MV di build | `.next/static/media/wasm_bg.aeff7f82.wasm` (baru; v3: `wasm_bg.4c7b0023.wasm`) |
 | WASM RM di build | `.next/static/media/wasm_bg.2bc2b212.wasm` (sama dengan v2/v3) |
 
 ### v4.5 Validasi yang menunggu penulis
@@ -86,12 +96,35 @@ Tiga perubahan, sama persis dengan `testing/fitur-v4/rust-api-allowed.json` (dip
    - Keluaran disimpan di `testing/fitur-v4/spss-output/`.
    - Unequal (Welch) tidak punya padanan di SPSS GLM.
    - Sebelum ada keluaran SPSS, bukti kesetaraan adalah bagian B: Statify dengan δ₀ identik dengan Statify δ₀ = 0 pada data geser.
-2. **CI Unequal.**
-   - Memakai Result 6.4 (χ², sampel besar), karena J&W tidak memberi CI yang padan dengan uji Welch Krishnamoorthy–Yu.
-   - MVTests (`Homogenity = FALSE`) memakai aproksimasi F Nel–van der Merwe.
-   - Pilihan metode menunggu keputusan penulis.
-3. **Nomor Result/bagian J&W** di komentar kode dan catatan tabel perlu dicocokkan dengan buku ed. 6, terutama bagian Bonferroni (§5.4, §6.3).
-4. **Skenario black-box v4** (17 skenario) belum dieksekusi.
+2. **Rujukan J&W.** Nomor Result/persamaan dan halaman diisi penulis di `testing/fitur-v4/rujukan-jw.md` (12 rumus). Sampai terverifikasi, kode, catatan tabel, dan dokumen hanya menyebut §5.4, §6.2, dan §6.3.
+3. **Usulan redaksi Tabel 5 (KF2–KF4)** ada di `testing/black-box/pemetaan-kebutuhan.md` §Perubahan v4 dan menunggu konfirmasi pembimbing.
+4. **Skenario black-box v4** (17 skenario) belum dieksekusi. Hasil yang diharapkan sudah direvisi (R3–R5 di "Revisi skenario").
+5. **Observed Power uji Welch** masih memakai df dibulatkan (`calculate_observed_power` menerima `usize`), dan tidak diubah di v4.
+
+### v4.7 Revisi sebelum push: Welch dan contoh sleeping dog
+
+**Sig. uji Welch, sebelum (df dibulatkan, `step18-v4`) dan sesudah (df pecahan, `step19-v4`).**
+- df₁ = 4, df₂ = ν − p + 1 = 55.268 (ν = 58.268).
+- Kolom Error df tetap menampilkan 55.268.
+- Observed Power tidak berubah.
+
+| Konfigurasi | Data | Sig. sebelum (df 4, 55) | Sig. sesudah (df 4, 55.268) | Tampil sebelum → sesudah |
+|---|---|---|---|---|
+| mv2wci, BB-KF03-02, BB-KF03-11 | asli | 2.668632e-11 | 2.549860e-11 | <.001 → <.001 |
+| mv2wd = mv2ws, BB-KF03-05 | geser δ₀ = (3, 2, 10, 1) | 0.8138157 | 0.8138206 | 0.8138 → 0.8138 |
+
+Hasil yang diharapkan di skenario BB-KF03-* tidak menyebut angka Sig. atau df Welch, jadi tidak perlu direvisi karena perubahan ini. Hasil pemeriksaan ada di Revisi skenario R5. BB-KF03-11 direvisi karena metode CI Unequal berubah (R3).
+
+**Contoh sleeping dog (J&W §6.2), build `step19-v4`, lewat UI.**
+- Data: `testing/fitur-v4/data/sleeping-dog.csv` (19 anjing, y1–y4) dan `sleeping-dog-kontras.csv` (d1 halotan, d2 CO2, d3 interaksi).
+
+| Analisis | Nilai yang diharapkan | Nilai tampil di Statify | R dasar (`r/sleeping_dog.R`) |
+|---|---|---|---|
+| RM, faktor within perlakuan (4 level), measure "anjing" | Hotelling's Trace 6.4454; F(3, 16) = 34.375; Sig. < .001 | Hotelling's Trace 6.445; F 34.375; df 3.000 dan 16.000; Sig. <.001 (tampilan RM 3 desimal) | 6.445351; 34.375206; Sig. 3.32e-07 |
+| MV satu populasi, DV d1–d3, μ₀ = 0 | T² = 116.02; Hotelling's Trace 6.4454 | T² 116.0163; Hotelling's Trace 6.4454; F 34.3752; df 3, 16; Sig. <.001 | T² 116.016321 |
+| CI T² 95% | d1 209.32 ± 73.67; d2 −60.05 ± 54.67; d3 −12.79 ± 65.94 | d1 209.3158 [135.6503, 282.9813]; d2 −60.0526 [−114.7271, −5.3782]; d3 −12.7895 [−78.7286, 53.1496] (setengah lebar mentah 73.6655, 54.6745, 65.9391) | setengah lebar 73.665492, 54.674451, 65.939111 |
+
+Semua nilai tampil sama dengan nilai yang diharapkan. Tidak ada kode yang diubah untuk contoh ini.
 
 ### v4.6 Menjalankan build v4 secara lokal
 

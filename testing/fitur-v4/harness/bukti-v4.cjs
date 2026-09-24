@@ -116,7 +116,7 @@ async function snapCard(page, title, file, label) {
         await continueMain(page);
         await options(page, ["SimultaneousCI"]);
         report.run2 = await run(page);
-        await snapCard(page, "Simultaneous Confidence Intervals", "08-tabel-ci-satu-populasi.png", "Tabel CI simultan satu populasi (Result 5.3 dan Bonferroni), kolom Contains μ₀");
+        await snapCard(page, "Simultaneous Confidence Intervals", "08-tabel-ci-satu-populasi.png", "Tabel CI simultan satu populasi (§5.4: T² dan Bonferroni), kolom Contains μ₀");
         await context.close();
     }
     // 3. Dua populasi, Unequal (Welch), CI simultan.
@@ -127,7 +127,7 @@ async function snapCard(page, title, file, label) {
         await page.locator("#variance-welch").click();
         await options(page, ["SimultaneousCI"]);
         report.run3 = await run(page);
-        await snapCard(page, "Simultaneous Confidence Intervals", "09-tabel-ci-dua-populasi-unequal.png", "Tabel CI simultan dua populasi Unequal (Result 6.4, χ² sampel besar) dan catatan keterbatasan");
+        await snapCard(page, "Simultaneous Confidence Intervals", "09-tabel-ci-dua-populasi-unequal.png", "Tabel CI simultan dua populasi Unequal (T² Krishnamoorthy–Yu, Bonferroni Welch t per variabel, kolom df)");
         await context.close();
     }
     // 4. Berpasangan, δ₀ = (8, 3), CI simultan.
