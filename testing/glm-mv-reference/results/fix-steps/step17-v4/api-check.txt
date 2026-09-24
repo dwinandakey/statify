@@ -1,0 +1,4 @@
+glue/.d.ts unchanged (API publik WASM sama)
+9ced17bcca5bd34092c8d1c2ac2de4d3 */d/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/frontend/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg/wasm_bg.wasm
+API publik Rust: 3 perubahan, sama persis dengan daftar yang disetujui (testing/fitur-v4/rust-api-allowed.json)
+fungsi privat baru: 22

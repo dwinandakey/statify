@@ -1,0 +1,86 @@
+A. Jalur lama (δ₀ = 0, CI tidak dicentang) vs v3
+OK   mv1 worker: tabel byte-identik dengan v3 (4 tabel)
+OK   mv1 main: tabel byte-identik dengan v3 (4 tabel)
+OK   mv1: payload worker identik dengan v3
+OK   mv1: respons worker identik dengan v3
+OK   mv2 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv2 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv2: payload worker identik dengan v3
+OK   mv2: respons worker identik dengan v3
+OK   mv3 worker: tabel byte-identik dengan v3 (4 tabel)
+OK   mv3 main: tabel byte-identik dengan v3 (4 tabel)
+OK   mv3: payload worker identik dengan v3
+OK   mv3: respons worker identik dengan v3
+OK   mv4 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv4 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv4: payload worker identik dengan v3
+OK   mv4: respons worker identik dengan v3
+OK   mv5 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv5 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv5: payload worker identik dengan v3
+OK   mv5: respons worker identik dengan v3
+OK   mv6 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv6 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv6: payload worker identik dengan v3
+OK   mv6: respons worker identik dengan v3
+OK   mv7 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv7 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv7: payload worker identik dengan v3
+OK   mv7: respons worker identik dengan v3
+OK   mv8 worker: tabel byte-identik dengan v3 (7 tabel)
+OK   mv8 main: tabel byte-identik dengan v3 (7 tabel)
+OK   mv8: payload worker identik dengan v3
+OK   mv8: respons worker identik dengan v3
+OK   mv4ph worker: tabel byte-identik dengan v3 (8 tabel)
+OK   mv4ph main: tabel byte-identik dengan v3 (8 tabel)
+OK   mv4ph: payload worker identik dengan v3
+OK   mv4ph: respons worker identik dengan v3
+
+B. δ₀ vs data yang digeser manual (δ₀ = 0)
+OK   mv2d vs mv2s: payload worker identik (data geser di TS = data geser manual; δ₀ tidak dikirim ke Rust)
+OK   mv2d vs mv2s: respons worker identik
+OK   mv2d vs mv2s: baris semua tabel selain Descriptive Statistics identik
+OK   mv2d: Descriptive Statistics = data asli (mv2, δ₀ = 0)
+OK   mv2d: catatan Multivariate Tests memuat hipotesis dan δ₀ ("k = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.")
+OK   mv2wd vs mv2ws: payload worker identik (data geser di TS = data geser manual; δ₀ tidak dikirim ke Rust)
+OK   mv2wd vs mv2ws: respons worker identik
+OK   mv2wd vs mv2ws: baris semua tabel selain Descriptive Statistics identik
+OK   mv2wd: Descriptive Statistics = data asli (mv2, δ₀ = 0)
+OK   mv2wd: catatan Multivariate Tests memuat hipotesis dan δ₀ ("k = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.")
+OK   mv3d vs mv3s: 32 nilai Multivariate Tests, selisih maks 2.04e-17 (≤ 1e-9)
+OK   mv3d vs mv3s: baris Multivariate Tests yang tampil identik
+OK   mv3d: catatan memuat δ₀ dan H₀ ("Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).")
+
+C. CI simultan Statify vs R (|selisih| < 1e-8)
+OK   mv1ci (one_sample, 95%): 32 nilai vs R dasar, selisih maks 1.19e-12; 8 batas T² vs MVTests, selisih maks 1.19e-12
+OK   mv1ci: batas T² vs MVTests < 1e-8
+OK   mv1ci10 (one_sample, 90%): 32 nilai vs R dasar, selisih maks 1.31e-12; 8 batas T² vs MVTests, selisih maks 1.31e-12
+OK   mv1ci10: batas T² vs MVTests < 1e-8
+OK   mv2ci (two_sample_pooled, 95%): 32 nilai vs R dasar, selisih maks 4.80e-14; 8 batas T² vs MVTests, selisih maks 3.73e-14
+OK   mv2ci: batas T² vs MVTests < 1e-8
+OK   mv2wci (two_sample_unequal, 95%): 32 nilai vs R dasar, selisih maks 2.02e-11; MVTests: tidak ada padanan (metode Statify = Result 6.4)
+OK   mv2dci (two_sample_pooled, 95%): 32 nilai vs R dasar, selisih maks 4.80e-14; 8 batas T² vs MVTests, selisih maks 3.73e-14
+OK   mv2dci: batas T² vs MVTests < 1e-8
+OK   mv3ci (one_sample, 95%): 16 nilai vs R dasar, selisih maks 7.11e-14; 4 batas T² vs MVTests, selisih maks 6.93e-14
+OK   mv3ci: batas T² vs MVTests < 1e-8
+OK   mv3dci (one_sample, 95%): 16 nilai vs R dasar, selisih maks 7.11e-14; 4 batas T² vs MVTests, selisih maks 6.93e-14
+OK   mv3dci: batas T² vs MVTests < 1e-8
+   total 192 nilai vs R dasar, selisih maks 2.02e-11
+   mv2dci tabel tampil: [["x1","3.625","3","1.4437","5.8063","Yes","Yes"],["x2","2","2","-1.2489","5.2489","Yes","Yes"],["x3","10.4688","10","6.1006","14.8369","Yes","Yes"],["x4","0.8125","1","-3.0376","4.6626","Yes","Yes"]]
+
+D. main = worker, konfigurasi baru
+OK   mv2d: main = worker byte-identik (7 tabel)
+OK   mv2s: main = worker byte-identik (7 tabel)
+OK   mv2wd: main = worker byte-identik (7 tabel)
+OK   mv2ws: main = worker byte-identik (7 tabel)
+OK   mv3d: main = worker byte-identik (4 tabel)
+OK   mv3s: main = worker byte-identik (4 tabel)
+OK   mv1ci: main = worker byte-identik (5 tabel)
+OK   mv1ci10: main = worker byte-identik (5 tabel)
+OK   mv2ci: main = worker byte-identik (6 tabel)
+OK   mv2wci: main = worker byte-identik (6 tabel)
+OK   mv2dci: main = worker byte-identik (6 tabel)
+OK   mv3ci: main = worker byte-identik (5 tabel)
+OK   mv3dci: main = worker byte-identik (5 tabel)
+
+HASIL: semua pemeriksaan lulus

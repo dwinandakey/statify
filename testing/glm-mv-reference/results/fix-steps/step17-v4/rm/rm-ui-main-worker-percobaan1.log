@@ -1,0 +1,43 @@
+gambar51 main->main tables=7 errors=[]
+gambar51 worker->worker tables=7 errors=[]
+gambar51 main->main tables=7 errors=[]
+gambar51 worker->worker tables=7 errors=[]
+gambar51: all 4 runs byte-identical (main and worker): true
+a main->main tables=17 errors=[]
+a worker->worker tables=17 errors=[]
+a main->main tables=17 errors=[]
+a worker->worker tables=17 errors=[]
+a: all 4 runs byte-identical (main and worker): true
+b main->main tables=15 errors=[]
+b worker->worker tables=15 errors=[]
+b main->main tables=15 errors=[]
+b worker->worker tables=15 errors=[]
+b: all 4 runs byte-identical (main and worker): true
+c main->main tables=15 errors=[]
+c worker->worker tables=15 errors=[]
+c main->main tables=15 errors=[]
+c worker->worker tables=15 errors=[]
+c: all 4 runs byte-identical (main and worker): true
+cEm main->main tables=19 errors=[]
+cEm worker->worker tables=19 errors=[]
+cEm main->main tables=19 errors=[]
+cEm worker->worker tables=19 errors=[]
+cEm: all 4 runs byte-identical (main and worker): true
+cPoly main->main tables=17 errors=[]
+cPoly worker->worker tables=17 errors=[]
+cPoly main->main tables=17 errors=[]
+cPoly worker->worker tables=17 errors=[]
+cPoly: all 4 runs byte-identical (main and worker): true
+cRep main->main tables=13 errors=[]
+cRep worker->worker tables=13 errors=[]
+cRep main->main tables=13 errors=[]
+cRep worker->worker tables=13 errors=[]
+cRep: all 4 runs byte-identical (main and worker): true
+UI CHECK FAILED: TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+    at Object.resolve (node:path:200:9)
+    at D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-rm-reference\harness\ui-main-worker.cjs:168:66
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processImmediate (node:internal/timers:454:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}

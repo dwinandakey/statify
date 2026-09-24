@@ -1,6 +1,6 @@
 # Pemetaan kebutuhan fungsional (Tabel 5 revisi) ke kode: GLM Multivariate dan GLM Repeated Measures
 
-- **Versi yang dipetakan:** **skripsi-final-v2** (branch `ilham`, tag `skripsi-final-v2`, commit `d863de09`), diperbarui untuk **skripsi-final-v3** (tag `skripsi-final-v3`; lima perbaikan frontend hasil iterasi 1 black-box, lihat bagian "Perubahan v3"). Pemetaan v1 (`skripsi-final-v1`, `e365897d`) ada di riwayat git berkas ini (commit `db546515`).
+- **Versi yang dipetakan:** **skripsi-final-v2** (branch `ilham`, tag `skripsi-final-v2`, commit `d863de09`), diperbarui untuk **skripsi-final-v3** (tag `skripsi-final-v3`; lima perbaikan frontend hasil iterasi 1 black-box, lihat bagian "Perubahan v3"), lalu **skripsi-final-v4** (tag `skripsi-final-v4`; dua fitur dari masukan dosen pengampu APG, lihat bagian "Perubahan v4"). Pemetaan v1 (`skripsi-final-v1`, `e365897d`) ada di riwayat git berkas ini (commit `db546515`).
 - **Metode:** penelusuran kode (dialog, subdialog, service, formatter, crate Rust). Semua pesan dalam dokumen ini disalin dari kode v2: huruf, tanda baca, dan titik di akhir.
 - **Path singkatan:**
   - `MV/` = `frontend/components/Modals/Analyze/general-linear-model/multivariate/`
@@ -39,6 +39,8 @@ Status yang berubah dari v1: KF6, KF10, KF11, KF12, dan KF14 menjadi TERPENUHI. 
 
 Status di v3 sama dengan v2. Perbaikan v3 menyangkut perilaku dialog dan catatan tabel; rinciannya di bagian "Perubahan v3".
 
+Status di v4 sama dengan v3. Fitur v4 memperluas KF2, KF3, dan KF4 (belum ada di redaksi Tabel 5); rinciannya di bagian "Perubahan v4".
+
 ## Perubahan v3 (hasil iterasi 1 black-box)
 
 Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`. Crate Rust MV dan RM tidak berubah.
@@ -50,6 +52,31 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`
 | KF10 | BB-KF10-02 | Catatan tabel Levene diakhiri catatan Design, misalnya "Design: Intercept + faktorA + faktorB". Pada faktorial penuh, suku interaksi ditambahkan seperti catatan SPSS. | `multivariate/services/multivariate-analysis-formatter.ts` (`formatLeveneTest`) |
 | KF7 | BB-KF07-02 | Isian slot within tetap bila Define diklik tanpa mengubah definisi faktor atau measure. | `repeated-measures/dialogs/repeated-measures-main.tsx` (`handleDefineContinue`) |
 | KF8 | BB-KF08-02 | Number of Levels yang kosong atau bukan angka menampilkan "Number of levels must be a valid number."; angka di luar 2–99 (termasuk 0) tetap menampilkan pesan rentang. | `repeated-measures/dialogs/define/repeated-measures-dialog.tsx` (`isFactorLevelsValid`, input `factorLevels`) |
+
+## Perubahan v4 (fitur dari masukan dosen pengampu APG)
+
+- **Path:** relatif terhadap `MV/`.
+- **Crate RM:** tidak berubah.
+- **Crate MV:** hanya menambah method `get_simultaneous_ci` dan dua struct hasil (`testing/fitur-v4/thesis-impact-v4.md`).
+- **Keputusan redaksi:** kedua fitur belum tercantum di Tabel 5. Penulis perlu memutuskan apakah keduanya ditambahkan sebagai kebutuhan baru atau dimasukkan ke redaksi KF2–KF4.
+- **Skenario:** kelompok baru di `skenario-black-box.md`, belum dieksekusi.
+
+| KF | Fitur | Perilaku | Berkas | Skenario |
+|---|---|---|---|---|
+| KF3 | δ₀ dua populasi (Pooled dan Unequal) | Tombol "Test Values (δ₀)" di panel Covariance Matrices membuka subdialog "Test Values (δ₀) — Hotelling T² Dua Populasi". Subdialog berisi satu isian per DV (bawaan 0) dan tombol Continue, Cancel, dan Reset to 0. H₀: μ(faktor = level 1) − μ(faktor = level 2) = δ₀, dengan urutan level mengikuti tabel Descriptive Statistics. Bila δ₀ ≠ 0, δ₀ dikurangkan dari setiap pengamatan level pertama sebelum WASM. Descriptive Statistics tetap pada data asli, catatan Multivariate Tests memuat H₀ dan δ₀, dan tabel yang dihitung dari data geser diberi catatan. δ₀ dibuang bila Fixed Factor(s) diubah. | `dialogs/two-sample-delta.tsx`, `dialogs/dialog.tsx`, `dialogs/multivariate-main.tsx`, `services/two-sample-delta.ts`, `services/multivariate-analysis.ts`, `services/multivariate-analysis-formatter.ts` | BB-KF03-04 s.d. BB-KF03-09 |
+| KF4 | δ₀ berpasangan | Isian δ₀ di dialog Paired sudah ada sejak v3. v4 menambah catatan "H₀: μd = δ₀ (d = M1 − M2)." pada Multivariate Tests bila δ₀ ≠ 0. | `services/multivariate-analysis-formatter.ts` | BB-KF04-03 |
+| KF2, KF3, KF4 | CI simultan T² dan Bonferroni | Checkbox Options "Simultaneous CI (T² & Bonferroni)" (bawaan tidak dicentang) menampilkan tabel "Simultaneous Confidence Intervals" untuk satu populasi, berpasangan, dan dua populasi (Pooled/Unequal). Tingkat kepercayaan = 1 − Significance Level. Bila δ₀ ≠ 0, selang ditampilkan pada skala data asli dengan kolom Contains μ₀/δ₀. | `dialogs/options.tsx`, `services/multivariate-analysis*.ts`, `rust/src/wasm/constructor.rs`, `rust/src/models/result.rs` | BB-KF02-04 s.d. BB-KF02-07, BB-KF03-10 s.d. BB-KF03-13, BB-KF04-04, BB-KF06-10 |
+
+**Pesan baru v4** (disalin dari kode v4):
+
+| Pesan | Tempat | Pemicu |
+|---|---|---|
+| "δ₀ hanya berlaku bila Fixed Factor memiliki tepat 2 level (<faktor> memiliki <n> level)." | Subdialog δ₀ | Fixed Factor tidak tepat 2 level |
+| "Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; '<faktor>' has <n>." | Toast galat analisis | OK dengan δ₀ ≠ 0 dan faktor tidak 2 level |
+| "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals." | Toast Options (dan pengaman di Rust) | CI dicentang, Significance Level ≤ 0 atau ≥ 1 |
+| "Simultaneous confidence intervals for two samples need the Fixed Factor to have exactly two levels; '<faktor>' has <n>." | Errors Logs, konteks `calculate_simultaneous_ci` | CI dicentang, satu faktor dengan ≠ 2 level |
+| "Simultaneous confidence intervals are available for the one-sample, paired, and two-sample Hotelling T² designs (no Fixed Factor, or one Fixed Factor with two levels, without covariates or WLS weight)." | Errors Logs, konteks `calculate_simultaneous_ci` | CI dicentang pada desain lain (dua faktor, kovariat, WLS) |
+| "Simultaneous confidence intervals need more cases than dependent variables (…)." dan "… need at least two cases (…)." | Errors Logs | Pengaman bila kasus terlalu sedikit (n ≤ p, atau kurang dari dua kasus); tidak dijadikan skenario |
 
 ---
 

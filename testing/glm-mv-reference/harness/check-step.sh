@@ -32,11 +32,19 @@ md5sum "$MV/rust/pkg/wasm_bg.wasm" | tee -a "$OUT/api-check.txt"
 # Rust crate API (pub fn, struct/enum, fields, methods) against 82a63b45: no
 # public item may be added, removed or change its signature.
 python testing/glm-mv-reference/harness/rust_api.py 82a63b45 WORKTREE --json "$OUT/rust-api.json" > "$OUT/rust-api.txt" 2>&1
+# RUST_API_ALLOWED (optional): JSON list of the public changes that were
+# approved and recorded (skripsi-final-v4: testing/fitur-v4/rust-api-allowed.json).
+# The check passes only when the changes equal that list exactly.
 node -e '
 const j=require(process.argv[1]);
-if (j.public_changes.length) { console.log("API PUBLIK RUST BERUBAH: " + j.public_changes.join(" | ")); process.exit(1); }
-console.log("API publik Rust sama dengan 82a63b45 (fungsi privat baru: " + j.private_added.length + ")");
-' "$OUT/rust-api.json" | tee -a "$OUT/api-check.txt"
+const allowedFile=process.argv[2];
+const allowed=allowedFile ? require(require("path").resolve(allowedFile)) : [];
+const same=JSON.stringify(j.public_changes)===JSON.stringify(allowed);
+if (j.public_changes.length && !same) { console.log("API PUBLIK RUST BERUBAH: " + j.public_changes.join(" | ")); process.exit(1); }
+if (j.public_changes.length) console.log("API publik Rust: " + j.public_changes.length + " perubahan, sama persis dengan daftar yang disetujui (" + allowedFile + ")");
+else console.log("API publik Rust sama dengan 82a63b45");
+console.log("fungsi privat baru: " + j.private_added.length);
+' "$OUT/rust-api.json" "${RUST_API_ALLOWED:-}" | tee -a "$OUT/api-check.txt"
 [ "${PIPESTATUS[0]}" = 0 ] || exit 1
 
 echo "== 2. next build + UI runs"

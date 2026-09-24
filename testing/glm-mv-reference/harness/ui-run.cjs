@@ -35,6 +35,22 @@ const CONFIGS = {
     // skripsi-final-v2: model efek utama (dialog Model, Build Terms) dan post hoc.
     mv8: { csv: "two-way manova.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: [...OPT, "HomogenTest"], buildTerms: ["faktorA", "faktorB"] },
     mv4ph: { csv: "one-way manova.csv", dep: ["y1", "y2"], fix: ["treatment"], options: [...OPT, "HomogenTest"], posthoc: { factors: ["treatment"], methods: ["Lsd", "Bonfe", "Sidak"] } },
+    // skripsi-final-v4 (testing/fitur-v4): δ₀ dua populasi dan berpasangan
+    // (d = data asli dengan δ₀, s = data tergeser manual dengan δ₀ = 0; hasil
+    // uji d harus sama dengan s), dan CI simultan (ci).
+    mv2d: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1] },
+    mv2s: { csvPath: "testing/fitur-v4/data/mv2-geser.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-pooled" },
+    mv2wd: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-welch", twoSampleDelta: [3, 2, 10, 1] },
+    mv2ws: { csvPath: "testing/fitur-v4/data/mv2-geser.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "HomogenTest"], variance: "variance-welch" },
+    mv3d: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: OPT, pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [8, 3] },
+    mv3s: { csvPath: "testing/fitur-v4/data/mv3-geser.csv", dep: [], fix: [], options: OPT, pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]] },
+    mv1ci: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: [...OPT, "SimultaneousCI"], testValues: [20, 200, 150, 3] },
+    mv1ci10: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: [...OPT, "SimultaneousCI"], testValues: [20, 200, 150, 3], sigLevel: 0.1 },
+    mv2ci: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled" },
+    mv2wci: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-welch" },
+    mv2dci: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1] },
+    mv3ci: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]] },
+    mv3dci: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [8, 3] },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -71,6 +87,13 @@ async function fillDialog(page, c) {
     for (const v of c.dep) await available(page, v).dblclick();
     for (const v of c.fix) await available(page, v).dragTo(page.locator('[data-testid="FixFactor-variables-list-container"]'));
     if (c.variance) await page.locator(`#${c.variance}`).click();
+    if (c.twoSampleDelta) {
+        await page.locator("#two-sample-delta-button").click();
+        await page.locator("#delta0-2s-0").waitFor({ state: "visible", timeout: 30000 });
+        for (let i = 0; i < c.twoSampleDelta.length; i++) await page.locator(`#delta0-2s-${i}`).fill(String(c.twoSampleDelta[i]));
+        await page.getByRole("button", { name: "Continue", exact: true }).click();
+        await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
+    }
 
     await page.getByRole("button", { name: "Options", exact: true }).click();
     await page.locator(`#${c.options[0]}`).waitFor({ state: "visible", timeout: 30000 });
@@ -79,6 +102,7 @@ async function fillDialog(page, c) {
         if ((await box.getAttribute("data-state")) !== "checked") await box.click();
         if ((await box.getAttribute("data-state")) !== "checked") throw new Error(`Options: ${id} not checked`);
     }
+    if (c.sigLevel !== undefined) await page.locator("#SigLevel").fill(String(c.sigLevel));
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
 
@@ -132,6 +156,7 @@ async function fillDialog(page, c) {
             const label = `d${i + 1} = ${c.pairs[i][0]} − ${c.pairs[i][1]}`;
             if (!(await dlg.getByText(label, { exact: true }).count())) throw new Error(`Paired: missing "${label}"`);
         }
+        for (let i = 0; i < (c.delta0 ?? []).length; i++) await dlg.locator(`#delta0-${i}`).fill(String(c.delta0[i]));
         await dlg.getByRole("button", { name: "Continue", exact: true }).click();
         await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
     }
@@ -186,7 +211,7 @@ async function outputTables(page) {
         const page = await context.newPage();
         await page.goto(`${BASE}/dashboard/data`, { timeout: 300000 });
         await page.locator('[data-testid="main-navbar"]').waitFor({ timeout: 300000 });
-        await runner.importCsv(page, path.join(DATA, c.csv));
+        await runner.importCsv(page, c.csvPath ? path.resolve(c.csvPath) : path.join(DATA, c.csv));
         await runner.clearResults(page);
         await page.evaluate((m) => localStorage.setItem("glm-execution-mode", m), MODE);
         const dialog = await fillDialog(page, c);

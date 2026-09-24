@@ -1,0 +1,62 @@
+{
+  "base": "http://localhost:3101",
+  "shots": [
+    {
+      "file": "01-dialog-utama-tombol-delta0.png",
+      "label": "Dialog utama: tombol Test Values (δ₀) dan ringkasan δ₀ = 0 di panel Covariance Matrices"
+    },
+    {
+      "file": "02-dialog-delta0-dua-populasi.png",
+      "label": "Subdialog Test Values (δ₀) — Hotelling T² Dua Populasi, arah H₀ μ(jk = 1) − μ(jk = 2) = δ₀, isian δ₀ = 3, 2, 10, 1"
+    },
+    {
+      "file": "03-dialog-utama-ringkasan-delta0.png",
+      "label": "Dialog utama sesudah Continue: ringkasan δ₀ = [3, 2, 10, 1]"
+    },
+    {
+      "file": "04-options-simultaneous-ci.png",
+      "label": "Options: checkbox Simultaneous CI (T² & Bonferroni) dicentang; Significance Level menentukan tingkat kepercayaan"
+    },
+    {
+      "file": "05-multivariate-tests-catatan-delta0.png",
+      "label": "Multivariate Tests dengan catatan H₀ dan δ₀ (data geser)"
+    },
+    {
+      "file": "06-tabel-ci-dua-populasi-pooled-delta0.png",
+      "label": "Tabel CI simultan dua populasi (Pooled), δ₀ ≠ 0, skala data asli, kolom Contains δ₀"
+    },
+    {
+      "file": "07-descriptive-statistics-data-asli.png",
+      "label": "Descriptive Statistics tetap pada data asli"
+    },
+    {
+      "file": "08-tabel-ci-satu-populasi.png",
+      "label": "Tabel CI simultan satu populasi (Result 5.3 dan Bonferroni), kolom Contains μ₀"
+    },
+    {
+      "file": "09-tabel-ci-dua-populasi-unequal.png",
+      "label": "Tabel CI simultan dua populasi Unequal (Result 6.4, χ² sampel besar) dan catatan keterbatasan"
+    },
+    {
+      "file": "10-dialog-paired-delta0.png",
+      "label": "Dialog Paired: pasangan d1, d2 dan δ₀ = 8, 3 (H₀: μd = δ₀)"
+    },
+    {
+      "file": "11-multivariate-tests-berpasangan-delta0.png",
+      "label": "Multivariate Tests berpasangan dengan catatan H₀: μd = δ₀"
+    },
+    {
+      "file": "12-tabel-ci-berpasangan-delta0.png",
+      "label": "Tabel CI simultan berpasangan, δ₀ = 8, 3, kolom Contains δ₀"
+    },
+    {
+      "file": "13-dialog-delta0-faktor-tiga-level.png",
+      "label": "Subdialog δ₀ dengan Fixed Factor 3 level: pesan δ₀ hanya berlaku untuk tepat 2 level"
+    }
+  ],
+  "chromium": "143.0.7499.4",
+  "run1": "Multivariate analysis has been completed successfully.",
+  "run2": "Multivariate analysis has been completed successfully.",
+  "run3": "Multivariate analysis has been completed successfully.",
+  "run4": "Multivariate analysis has been completed successfully."
+}
