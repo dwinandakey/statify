@@ -171,6 +171,7 @@ impl DiscriminantAnalysis {
             independent_data,
             selection_data,
             strata_data,
+            row_numbers: None,
             group_data_defs,
             independent_data_defs,
             selection_data_defs,

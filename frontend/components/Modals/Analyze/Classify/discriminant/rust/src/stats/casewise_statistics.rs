@@ -1,5 +1,5 @@
 use rayon::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::models::{
     result::{
@@ -10,8 +10,8 @@ use crate::models::{
 };
 
 use super::core::{
-    calculate_canonical_functions, calculate_eigen_statistics, calculate_p_value_from_chi_square,
-    classification_case_values, fit_groups, separate_groups_rule, MeanSubstitutedCase,
+    analysis_case_rows, calculate_canonical_functions, calculate_eigen_statistics,
+    calculate_p_value_from_chi_square, classification_case_values, group_row_indices, fit_groups, separate_groups_rule, MeanSubstitutedCase,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
     extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
     push_analysis_warning, EPSILON,
@@ -83,112 +83,134 @@ pub fn calculate_casewise_statistics(
         usize::MAX
     };
 
-    let mut case_idx = 0;
-    let mut processed_cases = 0;
-
-    // [PERBAIKAN UTAMA]: Ekstrak data langsung dari `dataset` yang sudah terjamin matang (f64).
-    // Loop langsung berdasarkan grup yang ada di dataset untuk mencegah mismatch data.
+    // Every case to classify with its data-file row: per group, the analysis cases
+    // and then any mean-substituted cases ("Replace missing values with mean"),
+    // which are classified but were not used to estimate the functions. Listed in
+    // file order with the row as the Case Number, as SPSS does; "Limit cases to
+    // first n" keeps the first n rows of the file.
+    let case_rows = analysis_case_rows(data, config);
+    let mut all_cases: Vec<(usize, String, Vec<f64>)> = Vec::new();
+    let mut rows_known = true;
     for group_name in &dataset.group_labels {
-        // Cases of this group to classify: the analysis cases, then any
-        // mean-substituted cases ("Replace missing values with mean"), which are
-        // classified but were not used to estimate the functions.
         let group_cases =
             classification_case_values(&dataset, group_name, &variables_to_use, substituted);
-
-        for case_values in group_cases {
-            if processed_cases >= limit {
-                break;
-            }
-
-            case_idx += 1;
-            processed_cases += 1;
-
-            let disc_scores = calculate_discriminant_scores(
-                &case_values,
-                &canonical_functions,
-                &variables_to_use,
-                num_functions,
-            );
-
-            for (func_idx, score) in disc_scores.iter().enumerate() {
-                if let Some(scores) =
-                    discriminant_scores.get_mut(&format!("Function {}", func_idx + 1))
-                {
-                    // Pastikan tidak ada NaN yang lolos ke frontend
-                    scores.push(if score.is_nan() { 0.0 } else { *score });
-                }
-            }
-
-            // Jarak Mahalanobis di dalam ruang Kanonikal adalah persis Jarak Euclidean
-            // (pooled). Under Separate-groups each group's own covariance matrix of
-            // the functions is used instead, with its rank as the df.
-            let fits = fit_groups(
-                &disc_scores,
-                &canonical_functions,
-                &dataset.group_labels,
-                &prior_probs.prior_probabilities,
-                separate_rule.as_ref(),
-            );
-            let group_distances: Vec<(usize, f64)> =
-                fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.d2)).collect();
-            let mut group_probs: Vec<(usize, f64)> =
-                fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.log_score)).collect();
-
-            group_probs
-                .sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
-
-            let max_log_prob = group_probs[0].1;
-            let mut sum_exp = 0.0;
-            for (_, log_prob) in &mut group_probs {
-                *log_prob = (*log_prob - max_log_prob).exp();
-                sum_exp += *log_prob;
-            }
-
-            if sum_exp > 0.0 {
-                for (_, prob) in &mut group_probs {
-                    *prob /= sum_exp;
-                }
-            }
-
-            let highest = &group_probs[0];
-            let second = if group_probs.len() > 1 {
-                &group_probs[1]
-            } else {
-                highest
-            };
-
-            let highest_dist = group_distances
-                .iter()
-                .find(|(idx, _)| *idx == highest.0)
-                .unwrap()
-                .1;
-            let second_dist = group_distances
-                .iter()
-                .find(|(idx, _)| *idx == second.0)
-                .unwrap()
-                .1;
-
-            case_number.push(case_idx);
-            actual_group.push(group_name.clone());
-            predicted_group.push(dataset.group_labels[highest.0].clone());
-
-            let highest_df_case = fits[highest.0].df;
-            let second_df_case = fits[second.0].df;
-            let p_val_highest = calculate_p_value_from_chi_square(highest_dist, highest_df_case);
-            let p_val_second = calculate_p_value_from_chi_square(second_dist, second_df_case);
-
-            highest_p_value.push(p_val_highest);
-            highest_df.push(highest_df_case);
-            highest_p_g_equals_d.push(highest.1);
-            highest_squared_mahalanobis_distance.push(highest_dist);
-            highest_group.push(dataset.group_labels[highest.0].clone());
-
-            second_p_value.push(p_val_second);
-            second_df.push(second_df_case);
-            second_p_g_equals_d.push(second.1);
-            second_squared_mahalanobis_distance.push(second_dist);
-            second_group.push(dataset.group_labels[second.0].clone());
+        let analysis_rows = case_rows.get(group_name).cloned().unwrap_or_default();
+        let substituted_rows: Vec<usize> = substituted
+            .iter()
+            .filter(|c| &c.group == group_name)
+            .map(|c| c.row)
+            .collect();
+        if analysis_rows.len() + substituted_rows.len() != group_cases.len() {
+            rows_known = false;
         }
+        let rows = analysis_rows.into_iter().chain(substituted_rows);
+        for (row, case_values) in rows.zip(group_cases) {
+            all_cases.push((row, group_name.clone(), case_values));
+        }
+    }
+    if rows_known {
+        all_cases.sort_by_key(|(row, _, _)| *row);
+    } else {
+        // Should not happen: a case's values could not be matched to its row. Keep
+        // the cases in group order and number them 1..n rather than print wrong rows.
+        push_analysis_warning(
+            "casewise_statistics",
+            "Casewise Statistics: the data-file row of some cases could not be determined, so cases are numbered in group order instead.".to_string(),
+        );
+        all_cases = all_cases
+            .into_iter()
+            .enumerate()
+            .map(|(i, (_, group, values))| (i, group, values))
+            .collect();
+    }
+    all_cases.truncate(limit);
+
+    for (row, group_name, case_values) in all_cases.iter() {
+        let disc_scores = calculate_discriminant_scores(
+            &case_values,
+            &canonical_functions,
+            &variables_to_use,
+            num_functions,
+        );
+
+        for (func_idx, score) in disc_scores.iter().enumerate() {
+            if let Some(scores) =
+                discriminant_scores.get_mut(&format!("Function {}", func_idx + 1))
+            {
+                // Pastikan tidak ada NaN yang lolos ke frontend
+                scores.push(if score.is_nan() { 0.0 } else { *score });
+            }
+        }
+
+        // Jarak Mahalanobis di dalam ruang Kanonikal adalah persis Jarak Euclidean
+        // (pooled). Under Separate-groups each group's own covariance matrix of
+        // the functions is used instead, with its rank as the df.
+        let fits = fit_groups(
+            &disc_scores,
+            &canonical_functions,
+            &dataset.group_labels,
+            &prior_probs.prior_probabilities,
+            separate_rule.as_ref(),
+        );
+        let group_distances: Vec<(usize, f64)> =
+            fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.d2)).collect();
+        let mut group_probs: Vec<(usize, f64)> =
+            fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.log_score)).collect();
+
+        group_probs
+            .sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
+
+        let max_log_prob = group_probs[0].1;
+        let mut sum_exp = 0.0;
+        for (_, log_prob) in &mut group_probs {
+            *log_prob = (*log_prob - max_log_prob).exp();
+            sum_exp += *log_prob;
+        }
+
+        if sum_exp > 0.0 {
+            for (_, prob) in &mut group_probs {
+                *prob /= sum_exp;
+            }
+        }
+
+        let highest = &group_probs[0];
+        let second = if group_probs.len() > 1 {
+            &group_probs[1]
+        } else {
+            highest
+        };
+
+        let highest_dist = group_distances
+            .iter()
+            .find(|(idx, _)| *idx == highest.0)
+            .unwrap()
+            .1;
+        let second_dist = group_distances
+            .iter()
+            .find(|(idx, _)| *idx == second.0)
+            .unwrap()
+            .1;
+
+        case_number.push(row + 1);
+        actual_group.push(group_name.clone());
+        predicted_group.push(dataset.group_labels[highest.0].clone());
+
+        let highest_df_case = fits[highest.0].df;
+        let second_df_case = fits[second.0].df;
+        let p_val_highest = calculate_p_value_from_chi_square(highest_dist, highest_df_case);
+        let p_val_second = calculate_p_value_from_chi_square(second_dist, second_df_case);
+
+        highest_p_value.push(p_val_highest);
+        highest_df.push(highest_df_case);
+        highest_p_g_equals_d.push(highest.1);
+        highest_squared_mahalanobis_distance.push(highest_dist);
+        highest_group.push(dataset.group_labels[highest.0].clone());
+
+        second_p_value.push(p_val_second);
+        second_df.push(second_df_case);
+        second_p_g_equals_d.push(second.1);
+        second_squared_mahalanobis_distance.push(second_dist);
+        second_group.push(dataset.group_labels[second.0].clone());
     }
 
     // ---- CROSS-VALIDATED (Leave-One-Out) ----
@@ -196,12 +218,16 @@ pub fn calculate_casewise_statistics(
     let cross_validated = if config.classify.leave {
         // A failed cross-validation keeps the original casewise rows and reports why
         // the cross-validated block is missing.
+        // Same cases as the Original rows (by data-file row), so the limit applies
+        // to both blocks. Without known rows, every case is cross-validated.
+        let shown_rows: Option<HashSet<usize>> =
+            rows_known.then(|| all_cases.iter().map(|(row, _, _)| *row).collect());
         match calculate_cross_validated_casewise(
             data,
             config,
             &dataset,
             &variables_to_use,
-            num_functions,
+            shown_rows.as_ref(),
         ) {
             Ok(cv_result) => Some(cv_result),
             Err(e) => {
@@ -238,14 +264,14 @@ pub fn calculate_casewise_statistics(
 
 /// Compute cross-validated (leave-one-out) casewise statistics.
 /// Each case is classified using discriminant functions derived from all OTHER cases.
-/// Compute cross-validated (leave-one-out) casewise statistics.
-/// Each case is classified using discriminant functions derived from all OTHER cases.
+/// `shown_rows` limits the output to the cases the Original rows show (same data-file
+/// rows, so "Limit cases to first n" applies to both blocks); `None` keeps every case.
 fn calculate_cross_validated_casewise(
     data: &AnalysisData,
     config: &DiscriminantConfig,
     dataset: &super::core::AnalyzedDataset,
     variables_to_use: &[String],
-    _num_functions: usize,
+    shown_rows: Option<&HashSet<usize>>,
 ) -> Result<CrossValidatedCasewiseStatistics, String> {
 
     // Guard against empty variables
@@ -256,10 +282,17 @@ fn calculate_cross_validated_casewise(
     let prior_probs = calculate_prior_probabilities(data, config)?;
     let p_vars = variables_to_use.len();
 
-    // Collect all cases (group_name, case_index, case_values, original_idx) in order
-    // The 4th element tracks the original sequential index for correct sorting
-    let mut all_cases: Vec<(String, usize, Vec<f64>, usize)> = Vec::new();
-    let mut original_idx = 0;
+    // Rows (in `data`) of every group's cases, in the order their values are stored,
+    // from the same grouping rules the dataset was extracted with.
+    let group_rows = group_row_indices(
+        data,
+        &config.main.grouping_variable,
+        config.define_range.min_range,
+        config.define_range.max_range,
+    );
+
+    // Collect the cases: (group, index within group, values, row in `data`, file row).
+    let mut all_cases: Vec<(String, usize, Vec<f64>, usize, usize)> = Vec::new();
     for group_name in &dataset.group_labels {
         let n_cases = dataset
             .group_data
@@ -267,8 +300,24 @@ fn calculate_cross_validated_casewise(
             .and_then(|g| g.get(group_name))
             .map(|v| v.len())
             .unwrap_or(0);
+        let rows = group_rows.get(group_name).cloned().unwrap_or_default();
+        if rows.len() != n_cases {
+            return Err(format!(
+                "Cross-validated casewise statistics: the cases of group {} could not be matched to their data rows.",
+                group_name
+            ));
+        }
 
         for i in 0..n_cases {
+            let data_row = rows[i];
+            let file_row = data
+                .row_numbers
+                .as_ref()
+                .and_then(|rn| rn.get(data_row).copied())
+                .unwrap_or(data_row);
+            if shown_rows.map_or(false, |shown| !shown.contains(&file_row)) {
+                continue;
+            }
             let case_values: Vec<f64> = variables_to_use
                 .iter()
                 .map(|var| {
@@ -280,8 +329,7 @@ fn calculate_cross_validated_casewise(
                         .unwrap_or(0.0)
                 })
                 .collect();
-            all_cases.push((group_name.clone(), i, case_values, original_idx));
-            original_idx += 1;
+            all_cases.push((group_name.clone(), i, case_values, data_row, file_row));
         }
     }
 
@@ -293,54 +341,23 @@ fn calculate_cross_validated_casewise(
     // Process in parallel using rayon
     let results: Vec<CrossValidatedCaseResult> = all_cases
         .par_iter()
-        .enumerate()
         .filter_map(
-            |(_local_idx, (group_name, case_idx, case_values, original_idx))| {
+            |(group_name, _case_idx, case_values, data_row, file_row)| {
                 // Skip single-case groups (can't compute LOO for n=1)
-                let group_cases = all_cases
-                    .iter()
-                    .filter(|(g, _, _, _)| g == group_name)
-                    .count();
+                let group_cases = dataset
+                    .group_data
+                    .get(&variables_to_use[0])
+                    .and_then(|g| g.get(group_name))
+                    .map_or(0, |v| v.len());
                 if group_cases <= 1 {
                     return None;
                 }
 
-                // Create temp data with this case removed.
+                // Create temp data with this case removed. The group/independent
+                // columns are parallel by row, and `data_row` is this case's row in
+                // them (from group_row_indices, the rules the dataset was built with).
                 let mut temp_data = data.clone();
-
-                // The raw data arrays are flat per-variable: one row per case in the
-                // original input order, with group_data/independent_data parallel by
-                // row. `case_idx` is the index WITHIN the group, so map it to the raw
-                // row index of the `case_idx`-th case that belongs to `group_name`.
-                // (Previously the within-group index was used directly, which removed
-                // the wrong case for every group after the first — so leave-one-out
-                // never actually dropped the target case for groups 2, 3, …)
-                let grouping_var = &config.main.grouping_variable;
-                let matches_group = |record: &crate::models::data::DataRecord| -> bool {
-                    match record.values.get(grouping_var) {
-                        Some(crate::models::data::DataValue::Number(n)) => {
-                            n.to_string() == *group_name
-                        }
-                        Some(crate::models::data::DataValue::Text(t)) => t == group_name,
-                        _ => false,
-                    }
-                };
-
-                let global_case_idx = {
-                    let grouping_col = temp_data.group_data.first()?;
-                    let mut seen = 0usize;
-                    let mut found = None;
-                    for (raw_idx, record) in grouping_col.iter().enumerate() {
-                        if matches_group(record) {
-                            if seen == *case_idx {
-                                found = Some(raw_idx);
-                                break;
-                            }
-                            seen += 1;
-                        }
-                    }
-                    found
-                }?;
+                let global_case_idx = *data_row;
 
                 // Remove the case from every parallel column (grouping + independent).
                 for col in temp_data.group_data.iter_mut() {
@@ -372,8 +389,8 @@ fn calculate_cross_validated_casewise(
                 // the failure is recorded and the whole cross-validated block dropped.
                 let singular_msg = || {
                     format!(
-                        "Cross-validated casewise statistics cannot be computed: the pooled within-groups covariance matrix becomes singular when case {} of group {} is held out.",
-                        case_idx + 1,
+                        "Cross-validated casewise statistics cannot be computed: the pooled within-groups covariance matrix becomes singular when case {} (group {}) is held out.",
+                        file_row + 1,
                         group_name
                     )
                 };
@@ -495,7 +512,7 @@ fn calculate_cross_validated_casewise(
                     second_p_g_equals_d: second.1,
                     second_squared_mahalanobis_distance: second_dist,
                     second_group: second_group_name,
-                    original_idx: *original_idx,
+                    original_idx: *file_row,
                     discriminant_scores: None, // SPSS mengosongkan ini untuk Cross-Validated
                 })
             },
@@ -594,7 +611,7 @@ struct CrossValidatedCaseResult {
     second_squared_mahalanobis_distance: f64,
     second_group: String,
     discriminant_scores: Option<Vec<f64>>,
-    /// Original sequential index for correct sorting
+    /// Data-file row (0-based): the sort key, and Case Number = row + 1
     original_idx: usize,
 }
 

@@ -59,3 +59,19 @@ export function formatCount(value: Cell): string {
   const n = value as number;
   return Number.isInteger(n) ? String(n) : fixed(n, STAT_DECIMALS);
 }
+
+/**
+ * Order of group codes in every table and saved column set, matching the Rust
+ * engine (compare_group_labels in common.rs): numeric codes ascending by value,
+ * so 10 follows 2 as in SPSS, then non-numeric codes as text.
+ */
+export function compareGroupLabels(a: string, b: string): number {
+  // Same inputs as Rust's `parse::<f64>` accepts for finite numbers (no spaces,
+  // no hex), which JS `Number` would otherwise also take.
+  const key = (g: string): [number, number] =>
+    /^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(g) ? [0, Number(g)] : [1, 0];
+  const [ka, kb] = [key(a), key(b)];
+  if (ka[0] !== kb[0]) return ka[0] - kb[0];
+  if (ka[1] !== kb[1]) return ka[1] - kb[1];
+  return a < b ? -1 : a > b ? 1 : 0;
+}

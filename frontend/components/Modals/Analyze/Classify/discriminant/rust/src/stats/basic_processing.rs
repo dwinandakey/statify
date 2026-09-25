@@ -1,6 +1,8 @@
 use crate::models::{ result::ProcessingSummary, AnalysisData, DiscriminantConfig };
 use crate::models::data::{ DataRecord, DataValue };
 
+use super::common::EPSILON;
+
 pub fn basic_processing_summary(
     data: &AnalysisData,
     config: &DiscriminantConfig
@@ -30,11 +32,43 @@ pub fn basic_processing_summary(
         })
         .collect();
 
+    // Selection variable, with the rule of filter_valid_cases: applied only when both
+    // a selection variable and a value are set; a numeric cell matches within
+    // EPSILON, a text cell matches the value's string form, anything else does not.
+    // Only selected cases enter the analysis, so the rest are counted as Unselected
+    // (and not as valid), keeping Valid equal to the analysis N.
+    let selection = match
+        (&data.selection_data, &config.main.selection_variable, &config.set_value.value)
+    {
+        (Some(selection_data), Some(selection_var), Some(set_value)) => {
+            let rows: Vec<&DataRecord> = selection_data.iter().flatten().collect();
+            Some((rows, selection_var, *set_value))
+        }
+        _ => None,
+    };
+    let is_selected = |row: usize| -> bool {
+        match &selection {
+            None => true,
+            Some((rows, selection_var, set_value)) =>
+                match rows.get(row).and_then(|r| r.values.get(*selection_var)) {
+                    Some(DataValue::Number(val)) => (val - set_value).abs() < EPSILON,
+                    Some(DataValue::Text(s)) => s == &set_value.to_string(),
+                    _ => false,
+                }
+        }
+    };
+
+    let mut unselected = 0;
     let mut missing_group_codes = 0;
     let mut missing_disc_vars = 0;
     let mut both_missing = 0;
 
     for (row, record) in data.group_data.iter().flatten().enumerate() {
+        if !is_selected(row) {
+            unselected += 1;
+            continue;
+        }
+
         let has_missing_group = match record.values.get(group_var) {
             Some(DataValue::Number(val)) =>
                 val.is_nan() ||
@@ -65,19 +99,20 @@ pub fn basic_processing_summary(
         }
     }
 
-    let excluded_cases = missing_group_codes + missing_disc_vars + both_missing;
+    let excluded_cases = unselected + missing_group_codes + missing_disc_vars + both_missing;
     let valid_cases = total_cases - excluded_cases;
 
-    // Classification Processing Summary. With "Replace missing values with mean", a
-    // case whose only problem is a missing predictor is still classified, so it is
-    // not excluded from the classification output.
+    // Classification Processing Summary. The classification tables cover the
+    // selected cases. With "Replace missing values with mean", a case whose only
+    // problem is a missing predictor is still classified, so it is not excluded.
+    let classification_processed = total_cases - unselected;
     let classification_missing_disc_vars = if config.classify.replace {
         0
     } else {
         missing_disc_vars
     };
     let classification_used_cases =
-        total_cases - missing_group_codes - both_missing - classification_missing_disc_vars;
+        classification_processed - missing_group_codes - both_missing - classification_missing_disc_vars;
 
     let calc_percent = |value: usize| -> f64 {
         if total_cases == 0 { 0.0 } else { ((value as f64) * 100.0) / (total_cases as f64) }
@@ -95,6 +130,9 @@ pub fn basic_processing_summary(
         both_missing: Some(both_missing),
         both_missing_percent: Some(calc_percent(both_missing)),
         total_excluded_percent: Some(calc_percent(excluded_cases)),
+        unselected: Some(unselected),
+        unselected_percent: Some(calc_percent(unselected)),
+        classification_processed: Some(classification_processed),
         classification_missing_disc_vars: Some(classification_missing_disc_vars),
         classification_used_cases: Some(classification_used_cases),
     })

@@ -417,10 +417,13 @@ pub fn calculate_summary_classification(
 
     let mut coefficients: HashMap<String, Vec<f64>> = HashMap::new();
     let mut constant_terms: Vec<f64> = Vec::with_capacity(dataset.group_labels.len());
-    let mut groups: Vec<usize> = Vec::with_capacity(dataset.group_labels.len());
+    // Column labels are the group codes themselves, in the analysis group order.
+    // (They used to be the positions 1..k, which mislabelled every column when the
+    // codes were not exactly 1..k in that order, e.g. 0/1 or ten or more groups.)
+    let mut groups: Vec<String> = Vec::with_capacity(dataset.group_labels.len());
 
     for (group_idx, group) in dataset.group_labels.iter().enumerate() {
-        groups.push(group_idx + 1);
+        groups.push(group.clone());
 
         let mut group_means = DVector::zeros(variables.len());
         for (var_idx, var_name) in variables.iter().enumerate() {

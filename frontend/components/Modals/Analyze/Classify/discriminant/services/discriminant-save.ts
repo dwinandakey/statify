@@ -20,6 +20,7 @@
 
 import type { Variable } from "@/types/Variable";
 import type { DiscriminantType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant";
+import { compareGroupLabels } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-number-format";
 
 /** The slice of the WASM `get_formatted_results()` payload this service needs. */
 export type DiscriminantModelInfo = {
@@ -44,7 +45,7 @@ export type CaseResult = {
 };
 
 export type CaseResults = {
-    /** Group labels in the same order Rust uses (lexicographic). */
+    /** Group labels in the same order Rust uses (numeric codes by value). */
     groupLabels: string[];
     /** Number of canonical discriminant functions. */
     numFunctions: number;
@@ -107,9 +108,9 @@ export function computeDiscriminantCaseResults(
     );
     if (!Number.isFinite(numFunctions) || numFunctions < 1) return null;
 
-    // Rust sorts its group labels as strings; match that so the probability
-    // columns come out in the same order as the result tables' group columns.
-    const groupLabels = centroidRows.map((c) => c.group).slice().sort();
+    // Same group order as Rust (compare_group_labels: numeric codes by value), so
+    // the probability columns follow the result tables' group columns.
+    const groupLabels = centroidRows.map((c) => c.group).slice().sort(compareGroupLabels);
     const centroidOf = new Map(centroidRows.map((c) => [c.group, c.values]));
 
     const columnOf = new Map<string, number>();
@@ -400,7 +401,8 @@ export function prepareDiscriminantSaveVariables(
         prepared.push({
             definition: numericVariable(
                 name,
-                `Probabilities of Group ${g + 1} Membership for Analysis ${names.analysis}`,
+                // The group's own code, not its position (codes need not be 1..k).
+                `Probabilities of Group ${groupLabels[g]} Membership for Analysis ${names.analysis}`,
                 5,
             ),
             values: rows.map((r) => (r ? r.probabilities[g] ?? null : null)),

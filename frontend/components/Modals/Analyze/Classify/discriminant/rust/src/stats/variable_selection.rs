@@ -396,11 +396,19 @@ pub fn find_worst_variable_to_remove(
         return Ok((None, default_result));
     }
 
-    // [PERBAIKAN 2]: Hapus logika eksekusi (should_remove).
-    // Fungsi ini murni hanya untuk mencari variabel dengan F-to-remove terendah.
-    // Keputusan untuk menghapus atau tidak diserahkan kembali ke process_variable_removal
-    // di stepwise_statistics.rs.
-    let worst_candidate = candidates.first().cloned();
+    // The removal candidate is the variable with the smallest partial F-to-remove,
+    // for every method; should_remove_variable then decides whether it goes. It is
+    // taken by value, not as `first()`: the display order is method-dependent, and
+    // for Rao's V the first row is the MOST important variable (smallest reduced V),
+    // which made Rao's V test the wrong variable and never remove the weak one.
+    let worst_candidate = candidates
+        .iter()
+        .min_by(|a, b| {
+            a.f_to_remove
+                .partial_cmp(&b.f_to_remove)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })
+        .cloned();
 
     if let Some(worst) = worst_candidate {
         Ok((Some(worst.variable.clone()), worst))

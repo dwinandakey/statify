@@ -160,20 +160,33 @@ pub fn filter_dataset(dataset: &AnalyzedDataset, include_vars: &[String]) -> Ana
     }
 }
 
-/// Extract grouped data from analysis data
-///
-/// This function extracts and organizes the data into groups based on the grouping variable,
-/// while applying filtering based on range constraints.
-pub fn extract_grouped_data(
+/// Order of group labels everywhere in the analysis: numeric codes ascending by
+/// value (so 10 follows 2, as SPSS orders them), then non-numeric labels as text.
+pub fn compare_group_labels(a: &str, b: &str) -> std::cmp::Ordering {
+    let key = |g: &str| match g.parse::<f64>() {
+        Ok(n) if n.is_finite() => (0_u8, n),
+        _ => (1_u8, 0.0),
+    };
+    let (ka, kb) = (key(a), key(b));
+    ka.0
+        .cmp(&kb.0)
+        .then(ka.1.partial_cmp(&kb.1).unwrap_or(std::cmp::Ordering::Equal))
+        .then_with(|| a.cmp(b))
+}
+
+/// Rows (indices into `data`) of each group, in row order, applying the group
+/// labelling and range rules of the analysis: a numeric code inside the defined
+/// range is labelled with `f64::to_string`, a text code is used as is, anything
+/// else is left out. The single source of these rules, so the data extraction,
+/// the bootstrap strata and the casewise row numbers always agree.
+pub fn group_row_indices(
     data: &AnalysisData,
     grouping_variable: &str,
-    independent_variables: &[String],
     min_range: Option<f64>,
     max_range: Option<f64>
-) -> Result<(HashMap<String, HashMap<String, Vec<f64>>>, Vec<String>, usize), String> {
+) -> HashMap<String, Vec<usize>> {
     let mut group_mappings: HashMap<String, Vec<usize>> = HashMap::new();
 
-    // Extract group data with range checking
     for (i, record) in data.group_data.iter().flatten().enumerate() {
         if let Some(value) = record.values.get(grouping_variable) {
             let group_label = match value {
@@ -198,9 +211,49 @@ pub fn extract_grouped_data(
         }
     }
 
-    // Sort group labels for consistent processing
+    group_mappings
+}
+
+/// Data-file row (0-based) of every analysis case, per group, in the order the
+/// group's values are stored in `AnalyzedDataset::group_data`. `data` is the
+/// filtered data the dataset was extracted from.
+pub fn analysis_case_rows(
+    data: &AnalysisData,
+    config: &DiscriminantConfig
+) -> HashMap<String, Vec<usize>> {
+    group_row_indices(
+        data,
+        &config.main.grouping_variable,
+        config.define_range.min_range,
+        config.define_range.max_range
+    )
+        .into_iter()
+        .map(|(group, rows)| {
+            let file_rows = rows
+                .into_iter()
+                .map(|r| data.row_numbers.as_ref().and_then(|rn| rn.get(r).copied()).unwrap_or(r))
+                .collect();
+            (group, file_rows)
+        })
+        .collect()
+}
+
+/// Extract grouped data from analysis data
+///
+/// This function extracts and organizes the data into groups based on the grouping variable,
+/// while applying filtering based on range constraints.
+pub fn extract_grouped_data(
+    data: &AnalysisData,
+    grouping_variable: &str,
+    independent_variables: &[String],
+    min_range: Option<f64>,
+    max_range: Option<f64>
+) -> Result<(HashMap<String, HashMap<String, Vec<f64>>>, Vec<String>, usize), String> {
+    let group_mappings = group_row_indices(data, grouping_variable, min_range, max_range);
+
+    // Group labels in SPSS order: numeric codes by value, not as text.
     let mut group_labels: Vec<String> = group_mappings.keys().cloned().collect();
-    group_labels.sort();
+    group_labels.sort_by(|a, b| compare_group_labels(a, b));
 
     // Extract values for each variable by group
     let mut variable_values: HashMap<String, HashMap<String, Vec<f64>>> = HashMap::new();
@@ -761,11 +814,29 @@ pub fn filter_valid_cases(
         None => None,
     };
 
+    // File row of every surviving row, so per-case output can print the case's
+    // own row number. Rows of later group_data blocks are offset by the earlier
+    // blocks' lengths, matching the flattened row order used everywhere else.
+    let mut row_numbers = Vec::new();
+    let mut offset = 0;
+    for (group_idx, group) in data.group_data.iter().enumerate() {
+        if let Some(indices) = valid_indices.get(group_idx) {
+            for &idx in indices {
+                let row = offset + idx;
+                row_numbers.push(
+                    data.row_numbers.as_ref().and_then(|rn| rn.get(row).copied()).unwrap_or(row)
+                );
+            }
+        }
+        offset += group.len();
+    }
+
     Ok(AnalysisData {
         group_data: filtered_group_data,
         independent_data: filtered_independent_data,
         selection_data: filtered_selection_data,
         strata_data: filtered_strata_data,
+        row_numbers: Some(row_numbers),
         group_data_defs: data.group_data_defs.clone(),
         independent_data_defs: data.independent_data_defs.clone(),
         selection_data_defs: data.selection_data_defs.clone(),
@@ -780,6 +851,8 @@ pub fn filter_valid_cases(
 /// cross-validated (cross-validation covers only the cases in the analysis).
 #[derive(Debug, Clone)]
 pub struct MeanSubstitutedCase {
+    /// Data-file row (0-based) of the case.
+    pub row: usize,
     /// Group label, formatted like `AnalyzedDataset::group_labels`.
     pub group: String,
     /// One value per independent variable, missing ones already replaced by the mean.
@@ -900,7 +973,8 @@ pub fn mean_substituted_cases(
             values.insert((*var).clone(), value);
         }
 
-        cases.push(MeanSubstitutedCase { group, values });
+        let file_row = raw.row_numbers.as_ref().and_then(|rn| rn.get(row).copied()).unwrap_or(row);
+        cases.push(MeanSubstitutedCase { row: file_row, group, values });
     }
 
     Ok(cases)

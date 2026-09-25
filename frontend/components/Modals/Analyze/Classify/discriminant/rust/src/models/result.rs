@@ -224,6 +224,10 @@ pub struct BootstrapResults {
     /// resample lost a group or could not be fitted.
     #[serde(rename = "valid_samples")]
     pub valid_samples: i32,
+    /// Fitted resamples whose functions came out in a different order than the
+    /// original solution and were matched back to it.
+    #[serde(rename = "reordered_samples", default)]
+    pub reordered_samples: i32,
     pub level: f64,
     /// "Percentile" or "BCa"
     #[serde(rename = "ci_method")]
@@ -276,6 +280,16 @@ pub struct ProcessingSummary {
     pub both_missing_percent: Option<f64>,
     #[serde(rename = "total_excluded_percent")]
     pub total_excluded_percent: Option<f64>,
+    /// Cases left out by the selection variable (only selected cases enter the
+    /// analysis). Counted before any missing-value category.
+    #[serde(rename = "unselected", default)]
+    pub unselected: Option<usize>,
+    #[serde(rename = "unselected_percent", default)]
+    pub unselected_percent: Option<f64>,
+    /// Classification Processing Summary: cases processed for classification. The
+    /// classification tables cover the selected cases only.
+    #[serde(rename = "classification_processed", default)]
+    pub classification_processed: Option<usize>,
     /// Classification Processing Summary: cases excluded for a missing predictor.
     /// 0 when "Replace missing values with mean" is on, because those cases are still
     /// classified with the predictor means substituted.
@@ -440,19 +454,26 @@ pub struct StepwiseStatistics {
     pub f_to_enter: Vec<f64>,
     #[serde(rename = "f_to_enter_df1")]
     pub f_to_enter_df1: Vec<i32>,
+    /// f64: for the Wilks' Lambda method this is Rao's F df2, fractional when the
+    /// F is approximate.
     #[serde(rename = "f_to_enter_df2")]
-    pub f_to_enter_df2: Vec<i32>,
+    pub f_to_enter_df2: Vec<f64>,
     #[serde(rename = "significance")]
     pub significance: Vec<f64>,
-    /// Model's exact Wilks F (Rao approx) per step — for the Wilks' Lambda summary table
+    /// Model's Wilks F (Rao's F) per step — for the Wilks' Lambda summary table
     #[serde(rename = "wilks_exact_f")]
     pub wilks_exact_f: Vec<f64>,
     #[serde(rename = "wilks_exact_df1")]
     pub wilks_exact_df1: Vec<i32>,
+    /// Rao's F df2, kept fractional (not truncated) when the F is approximate.
     #[serde(rename = "wilks_exact_df2")]
-    pub wilks_exact_df2: Vec<i32>,
+    pub wilks_exact_df2: Vec<f64>,
     #[serde(rename = "wilks_exact_sig")]
     pub wilks_exact_sig: Vec<f64>,
+    /// Whether Rao's F is exact at this step (min(p, g − 1) ≤ 2). When false the
+    /// output heads it "Approximate F", as SPSS does.
+    #[serde(rename = "wilks_f_exact", default)]
+    pub wilks_f_exact: Vec<bool>,
     /// Rao's V cumulative statistic (for Rao's V method)
     #[serde(rename = "raos_v")]
     pub raos_v: Vec<f64>,
@@ -615,7 +636,8 @@ pub struct PriorProbabilities {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ClassificationFunctionCoefficients {
-    pub groups: Vec<usize>,
+    /// Group labels (the grouping variable's own codes), one per column.
+    pub groups: Vec<String>,
     pub variables: Vec<String>,
     pub coefficients: HashMap<String, Vec<f64>>,
     #[serde(rename = "constant_terms")]

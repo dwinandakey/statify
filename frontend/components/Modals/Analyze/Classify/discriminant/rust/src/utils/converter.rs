@@ -295,12 +295,13 @@ struct FormattedStepwiseStatistics {
     wilks_lambda: Vec<f64>,
     f_to_enter: Vec<f64>,
     f_to_enter_df1: Vec<i32>,
-    f_to_enter_df2: Vec<i32>,
+    f_to_enter_df2: Vec<f64>,
     significance: Vec<f64>,
     wilks_exact_f: Vec<f64>,
     wilks_exact_df1: Vec<i32>,
-    wilks_exact_df2: Vec<i32>,
+    wilks_exact_df2: Vec<f64>,
     wilks_exact_sig: Vec<f64>,
+    wilks_f_exact: Vec<bool>,
     raos_v: Vec<f64>,
     raos_v_sig: Vec<f64>,
     raos_v_df: Vec<f64>,
@@ -366,7 +367,7 @@ struct GroupCases {
 
 #[derive(Serialize)]
 struct FormattedClassificationFunctionCoefficients {
-    groups: Vec<usize>,
+    groups: Vec<String>,
     variables: Vec<String>,
     coefficients: Vec<GroupCoefficient>,
     constant_terms: Vec<f64>,
@@ -765,6 +766,7 @@ impl FormatResult {
                 wilks_exact_df1: stats.wilks_exact_df1.clone(),
                 wilks_exact_df2: stats.wilks_exact_df2.clone(),
                 wilks_exact_sig: stats.wilks_exact_sig.clone(),
+                wilks_f_exact: stats.wilks_f_exact.clone(),
                 raos_v: stats.raos_v.clone(),
                 raos_v_sig: stats.raos_v_sig.clone(),
                 raos_v_df: stats.raos_v_df.clone(),

@@ -1,6 +1,7 @@
 // discriminant-analysis-formatter.ts
 import { formatDisplayNumber } from "@/hooks/useFormatter";
 import {
+  compareGroupLabels,
   formatCount,
   formatPercent,
   formatSig,
@@ -69,6 +70,17 @@ export function transformDiscriminantResult(data: any): ResultJson {
       });
     }
 
+    // Cases left out by the selection variable: only selected cases enter the
+    // analysis, so they are excluded rather than counted as valid. Shown only when
+    // a selection variable actually left cases out.
+    if ((data.processing_summary.unselected ?? 0) > 0) {
+      table.rows.push({
+        rowHeader: ["", "Unselected"],
+        n: formatCount(data.processing_summary.unselected),
+        percent: formatPercent(data.processing_summary.unselected_percent),
+      });
+    }
+
     // Total excluded
     table.rows.push({
       rowHeader: ["", "Total"],
@@ -101,10 +113,12 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rows: [],
     };
 
-    // Processed = every case; Used in Output = Processed − Excluded. With "Replace
-    // missing values with mean", cases missing only a predictor are still classified,
-    // so Rust reports 0 for that exclusion (classification_missing_disc_vars).
+    // Processed = the cases the classification tables cover (the selected ones when
+    // a selection variable is used); Used in Output = Processed − Excluded. With
+    // "Replace missing values with mean", cases missing only a predictor are still
+    // classified, so Rust reports 0 for that exclusion (classification_missing_disc_vars).
     const ps = data.processing_summary;
+    const processed: number = ps.classification_processed ?? ps.total_count;
     const missingGroupExcluded =
       (ps.missing_group_codes ?? 0) + (ps.both_missing ?? 0);
     const missingDiscExcluded =
@@ -112,7 +126,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
     table.rows.push({
       rowHeader: ["Processed"],
-      value: formatCount(ps.total_count),
+      value: formatCount(processed),
     });
 
     table.rows.push({
@@ -129,7 +143,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rowHeader: ["Used in Output"],
       value: formatCount(
         ps.classification_used_count ??
-          ps.total_count - missingGroupExcluded - missingDiscExcluded,
+          processed - missingGroupExcluded - missingDiscExcluded,
       ),
     });
 
@@ -887,6 +901,37 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
   // 15. Stepwise Statistics
   if (data.stepwise_statistics?.variables_entered) {
+    // Rao's F (the F of Wilks' Lambda) is exact only while min(variables, groups − 1)
+    // ≤ 2. An approximate step goes under its own "Approximate F" block, with a
+    // fractional df2, so that block is added once any step needs it.
+    const wilksFExact: boolean[] = Array.isArray(
+      data.stepwise_statistics.wilks_f_exact,
+    )
+      ? data.stepwise_statistics.wilks_f_exact
+      : [];
+    const hasApproxF = wilksFExact.some((exact) => exact === false);
+
+    // Rao's F cells of step i, filled under the exact or the approximate keys.
+    const raoFCells = (
+      i: number,
+      exactKeys: string[],
+      approxKeys: string[],
+    ): Record<string, string> => {
+      const values = [
+        formatStat(data.stepwise_statistics.wilks_exact_f?.[i] ?? 0),
+        formatCount(data.stepwise_statistics.wilks_exact_df1?.[i] ?? 0),
+        formatCount(data.stepwise_statistics.wilks_exact_df2?.[i] ?? 0),
+        formatSig(data.stepwise_statistics.wilks_exact_sig?.[i] ?? 1),
+      ];
+      const isExact = wilksFExact[i] !== false;
+      const cells: Record<string, string> = {};
+      exactKeys.forEach((key, k) => (cells[key] = isExact ? values[k] : ""));
+      if (hasApproxF) {
+        approxKeys.forEach((key, k) => (cells[key] = isExact ? "" : values[k]));
+      }
+      return cells;
+    };
+
     const columnHeaders = isRaosVMethod
       ? [
           { header: "", key: "step_header" },
@@ -986,6 +1031,20 @@ export function transformDiscriminantResult(data: any): ResultJson {
                 { header: "Sig.", key: "exact_f_sig" },
               ],
             },
+            ...(hasApproxF
+              ? [
+                  {
+                    header: "Approximate F",
+                    key: "approx_f",
+                    children: [
+                      { header: "Statistic", key: "approx_f_statistic" },
+                      { header: "df1", key: "approx_f_df1" },
+                      { header: "df2", key: "approx_f_df2" },
+                      { header: "Sig.", key: "approx_f_sig" },
+                    ],
+                  },
+                ]
+              : []),
           ];
 
     const table: Table = {
@@ -1103,17 +1162,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
           lambda_df1: formatCount(wilksNumVars),
           lambda_df2: formatCount(numGroups - 1),
           lambda_df3: formatCount(wilksN - numGroups),
-          exact_f_statistic: formatStat(
-            data.stepwise_statistics.wilks_exact_f?.[i] ?? 0,
-          ),
-          exact_f_df1: formatCount(
-            data.stepwise_statistics.wilks_exact_df1?.[i] ?? 0,
-          ),
-          exact_f_df2: formatCount(
-            data.stepwise_statistics.wilks_exact_df2?.[i] ?? 0,
-          ),
-          exact_f_sig: formatSig(
-            data.stepwise_statistics.wilks_exact_sig?.[i] ?? 1,
+          ...raoFCells(
+            i,
+            ["exact_f_statistic", "exact_f_df1", "exact_f_df2", "exact_f_sig"],
+            ["approx_f_statistic", "approx_f_df1", "approx_f_df2", "approx_f_sig"],
           ),
         });
       }
@@ -1177,6 +1229,20 @@ export function transformDiscriminantResult(data: any): ResultJson {
               { header: "Sig.", key: "f_sig" },
             ],
           },
+          ...(hasApproxF
+            ? [
+                {
+                  header: "Approximate F",
+                  key: "approx_f_group",
+                  children: [
+                    { header: "Statistic", key: "approx_f_stat" },
+                    { header: "df1", key: "approx_f_df1" },
+                    { header: "df2", key: "approx_f_df2" },
+                    { header: "Sig.", key: "approx_f_sig" },
+                  ],
+                },
+              ]
+            : []),
         ],
         rows: [],
       };
@@ -1201,25 +1267,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
       )
         ? data.stepwise_statistics.wilks_lambda
         : [];
-      // Use the model's exact Wilks F (Rao approx), which is correct for every
-      // method — NOT f_to_enter, which holds the method-specific statistic
-      // (Min F / closest-pair F) for Smallest-F and Mahalanobis.
-      const swF: number[] = Array.isArray(data.stepwise_statistics.wilks_exact_f)
-        ? data.stepwise_statistics.wilks_exact_f
-        : [];
-      const swFdf1: number[] = Array.isArray(
-        data.stepwise_statistics.wilks_exact_df1,
-      )
-        ? data.stepwise_statistics.wilks_exact_df1
-        : [];
-      const swFdf2: number[] = Array.isArray(
-        data.stepwise_statistics.wilks_exact_df2,
-      )
-        ? data.stepwise_statistics.wilks_exact_df2
-        : [];
-      const swSig: number[] = Array.isArray(data.stepwise_statistics.wilks_exact_sig)
-        ? data.stepwise_statistics.wilks_exact_sig
-        : [];
       const swRemoved: any[] = Array.isArray(
         data.stepwise_statistics.variables_removed,
       )
@@ -1239,10 +1286,14 @@ export function transformDiscriminantResult(data: any): ResultJson {
           lambda_df1: formatCount(numVarsInModel),
           lambda_df2: formatCount(lambdaDf2),
           lambda_df3: formatCount(lambdaDf3),
-          f_stat: formatStat(swF[i] ?? 0),
-          f_df1: formatCount(swFdf1[i] ?? 0),
-          f_df2: formatCount(swFdf2[i] ?? 0),
-          f_sig: formatSig(swSig[i] ?? 1),
+          // The model's Wilks F (Rao's F), correct for every method — NOT
+          // f_to_enter, which holds the method-specific statistic (Min F /
+          // closest-pair F) for Smallest-F and Mahalanobis.
+          ...raoFCells(
+            i,
+            ["f_stat", "f_df1", "f_df2", "f_sig"],
+            ["approx_f_stat", "approx_f_df1", "approx_f_df2", "approx_f_sig"],
+          ),
         });
       }
 
@@ -1278,7 +1329,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
             ...e.comparisons.map((c) => c.group_name),
           ]),
         ),
-      ].sort();
+      ].sort(compareGroupLabels);
       const pairSteps = [...new Set(pairwiseEntries.map((e) => e.step))];
       const stepMarks = "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ";
 
@@ -1683,10 +1734,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
       });
     }
 
-    // Add footnote
+    // Footnote: the number of functions actually used (it was hard-coded to 1).
     table.rows.push({
       rowHeader: [
-        "a. First 1 canonical discriminant functions were used in the analysis.",
+        `a. First ${data.eigen_description.functions.length} canonical discriminant functions were used in the analysis.`,
       ],
     });
 
@@ -1826,8 +1877,9 @@ export function transformDiscriminantResult(data: any): ResultJson {
           ],
         ),
         group: data.casewise_statistics.highest_group.group[i],
+        // Second Highest Group shows the posterior P(G=g | D=d), not P(D>d | G=g).
         p_g_d: formatStat(
-          data.casewise_statistics.second_highest_group.p_value[i],
+          data.casewise_statistics.second_highest_group.p_g_equals_d[i],
         ),
         second_mahalanobis: formatStat(
           data.casewise_statistics.second_highest_group
@@ -1867,7 +1919,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
             cvData.highest_group.squared_mahalanobis_distance[i],
           ),
           group: cvData.highest_group.group[i],
-          p_g_d: formatStat(cvData.second_highest_group.p_value[i]),
+          p_g_d: formatStat(cvData.second_highest_group.p_g_equals_d[i]),
           second_mahalanobis: formatStat(
             cvData.second_highest_group.squared_mahalanobis_distance[i],
           ),
@@ -1888,14 +1940,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
     // Get the groups from original classification and sort them to ensure consistent ordering
     const groups = data.classification_results.original_classification
       .map((item: { group: string; counts: number[] }) => item.group)
-      .sort((a: string, b: string) => {
-        const numA = parseFloat(a);
-        const numB = parseFloat(b);
-        if (!isNaN(numA) && !isNaN(numB)) {
-          return numA - numB;
-        }
-        return a.localeCompare(b);
-      });
+      .sort(compareGroupLabels);
 
     const table: Table = {
       key: "classification_results",
@@ -2578,6 +2623,12 @@ export function transformDiscriminantResult(data: any): ResultJson {
       : ".";
     if (used < requested) {
       footnote += ` ${requested - used} of the ${requested} requested samples were dropped because a group was lost in the resample.`;
+    }
+    // Refits are matched to the original functions by reordering and reflection;
+    // say how often the order actually changed (functions with close eigenvalues).
+    const reordered: number = b.reordered_samples ?? 0;
+    if (reordered > 0) {
+      footnote += ` In ${reordered} samples the discriminant functions came out in a different order and were matched to the original functions.`;
     }
 
     table.rows.push({ rowHeader: [footnote] });
