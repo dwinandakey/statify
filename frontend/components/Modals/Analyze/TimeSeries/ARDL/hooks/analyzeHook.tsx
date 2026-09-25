@@ -126,28 +126,30 @@ export const useAnalyzeHook = (
                                     { header: "Prob.", key: "prob" }
                                 ],
                                 rows: uRows,
-                                footer: `R-squared: ${u.diagnostics.rSquared} | Adjusted R-squared: ${u.diagnostics.adjRSquared} | F-statistic: ${u.diagnostics.fStatistic} | Included observations: ${u.effObs}`
+                                footer: `R-squared: ${u.diagnostics?.rSquared ?? ''} | Adjusted R-squared: ${u.diagnostics?.adjRSquared ?? ''} | F-statistic: ${u.diagnostics?.fStatistic ?? ''} | Included observations: ${u.effObs ?? ''}`
                             });
 
-                            const d = u.diagnostics;
-                            tables.push({
-                                title: "Unrestricted ARDL Fit & Diagnostics",
-                                columnHeaders: [
-                                    { header: "Statistic", key: "col1" },
-                                    { header: "Value", key: "val1" },
-                                    { header: "Statistic", key: "col2" },
-                                    { header: "Value", key: "val2" }
-                                ],
-                                rows: [
-                                    { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
-                                    { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
-                                    { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
-                                    { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
-                                    { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
-                                    { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson },
-                                    { col1: "Prob(F-statistic)", val1: d.probFStatistic, col2: "Evaluated Models", val2: result.evaluatedModelsCount || 1 }
-                                ]
-                            });
+                            if (u.diagnostics) {
+                                const d = u.diagnostics;
+                                tables.push({
+                                    title: "Unrestricted ARDL Fit & Diagnostics",
+                                    columnHeaders: [
+                                        { header: "Statistic", key: "col1" },
+                                        { header: "Value", key: "val1" },
+                                        { header: "Statistic", key: "col2" },
+                                        { header: "Value", key: "val2" }
+                                    ],
+                                    rows: [
+                                        { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                        { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                        { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                        { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                        { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                        { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson },
+                                        { col1: "Prob(F-statistic)", val1: d.probFStatistic, col2: "Evaluated Models", val2: result.evaluatedModelsCount || 1 }
+                                    ]
+                                });
+                            }
                         }
 
                         // 1. Long Run Equation
