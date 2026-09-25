@@ -1,5 +1,5 @@
 ﻿import type { ResultJson, Row, Table } from "@/types/Table";
-import { formatDisplayNumber, formatSig } from "@/hooks/useFormatter";
+import { formatGlmNumber, formatGlmSig as formatSig, formatGlmStat } from "@/hooks/useFormatter";
 
 export type MultivariateFormatterOptions = {
     testValues?: number[] | null;
@@ -342,7 +342,9 @@ function formatSimultaneousCI(
     const shift: number[] = delta?.delta0 ?? zeros;
     const pct = Number((ci.confidence_level * 100).toFixed(6)).toString();
     const alpha = Number((1 - ci.confidence_level).toFixed(10)).toString();
-    const num = (v: number) => formatDisplayNumber(v) ?? "";
+    const num = (v: number) => formatGlmStat(v) ?? "";
+    // μ₀/δ₀ as entered and Welch df: integers unchanged.
+    const plain = (v: number) => formatGlmNumber(v) ?? "";
     const levelA = ci.levels?.[0];
     const levelB = ci.levels?.[1];
 
@@ -400,11 +402,11 @@ function formatSimultaneousCI(
             dependent_variable: relabelDv(iv.dependent_variable),
             estimate: num(iv.estimate + s),
             std_error: num(iv.std_error),
-            hypothesized: num(h),
+            hypothesized: plain(h),
             t2_lower: num(t2Lower),
             t2_upper: num(t2Upper),
             t2_contains: t2Lower <= h && h <= t2Upper ? "Yes" : "No",
-            ...(unequal ? { bonferroni_df: num(iv.bonferroni_df) } : {}),
+            ...(unequal ? { bonferroni_df: plain(iv.bonferroni_df) } : {}),
             bonferroni_lower: num(bonLower),
             bonferroni_upper: num(bonUpper),
             bonferroni_contains: bonLower <= h && h <= bonUpper ? "Yes" : "No",
@@ -632,8 +634,8 @@ function formatDescriptiveStatistics(
                     labelKeys.forEach((key, i) => {
                         row[key] = path[i] ?? "";
                     });
-                    row.mean = formatDisplayNumber(g.stats.mean);
-                    row.std_deviation = formatDisplayNumber(g.stats.std_deviation);
+                    row.mean = formatGlmStat(g.stats.mean);
+                    row.std_deviation = formatGlmStat(g.stats.std_deviation);
                     row.n = String(g.stats.n);
                     table.rows.push(row);
                     firstRow = false;
@@ -661,10 +663,10 @@ function formatBoxTest(data: any, resultJson: ResultJson) {
             { header: "", key: "stat_value" },
         ],
         rows: [
-            { rowHeader: [], stat_label: "Box's M", stat_value: formatDisplayNumber(b.box_m) },
-            { rowHeader: [], stat_label: "F",       stat_value: formatDisplayNumber(b.f) },
+            { rowHeader: [], stat_label: "Box's M", stat_value: formatGlmStat(b.box_m) },
+            { rowHeader: [], stat_label: "F",       stat_value: formatGlmStat(b.f) },
             { rowHeader: [], stat_label: "df1",     stat_value: String(b.df1) },
-            { rowHeader: [], stat_label: "df2",     stat_value: formatDisplayNumber(b.df2) },
+            { rowHeader: [], stat_label: "df2",     stat_value: formatGlmNumber(b.df2) },
             { rowHeader: [], stat_label: "Sig.",    stat_value: formatSig(b.significance) },
         ],
         note: b.description || "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups.",
@@ -688,8 +690,8 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
             { header: "", key: "stat_value" },
         ],
         rows: [
-            { rowHeader: [], stat_label: "Likelihood Ratio",   stat_value: formatDisplayNumber(b.likelihood_ratio) },
-            { rowHeader: [], stat_label: "Approx. Chi-Square", stat_value: formatDisplayNumber(b.approx_chi_square) },
+            { rowHeader: [], stat_label: "Likelihood Ratio",   stat_value: formatGlmStat(b.likelihood_ratio) },
+            { rowHeader: [], stat_label: "Approx. Chi-Square", stat_value: formatGlmStat(b.approx_chi_square) },
             { rowHeader: [], stat_label: "df",                 stat_value: String(b.df) },
             { rowHeader: [], stat_label: "Sig.",               stat_value: formatSig(b.significance) },
         ],
@@ -770,12 +772,12 @@ function formatLeveneTest(
             const df2Raw = Number(entry.df2);
             const df2Str = Number.isInteger(df2Raw)
                 ? String(df2Raw)
-                : formatDisplayNumber(df2Raw);
+                : formatGlmNumber(df2Raw);
             table.rows.push({
                 rowHeader: [],
                 dv_name: idx === 0 ? relabelDv(lt.dependent_variable) : "",
                 function: entry.test_basis || entry.function || "Mean",
-                levene_statistic: formatDisplayNumber(entry.levene_statistic),
+                levene_statistic: formatGlmStat(entry.levene_statistic),
                 df1: String(entry.df1),
                 df2: df2Str,
                 significance: formatSig(entry.significance),
@@ -959,19 +961,19 @@ function formatMultivariateTests(
                 rowHeader: [],
                 effect: isFirstRow ? displayedEffectName : "",
                 test_name: testName,
-                value: formatDisplayNumber(entry.value),
-                f: formatDisplayNumber(entry.f),
-                hypothesis_df: formatDisplayNumber(entry.hypothesis_df),
-                error_df: formatDisplayNumber(entry.error_df),
+                value: formatGlmStat(entry.value),
+                f: formatGlmStat(entry.f),
+                hypothesis_df: formatGlmNumber(entry.hypothesis_df),
+                error_df: formatGlmNumber(entry.error_df),
                 significance: formatSig(entry.significance),
-                partial_eta_squared: formatDisplayNumber(entry.partial_eta_squared),
-                noncent_parameter: formatDisplayNumber(entry.noncent_parameter),
-                observed_power: formatDisplayNumber(entry.observed_power),
+                partial_eta_squared: formatGlmStat(entry.partial_eta_squared),
+                noncent_parameter: formatGlmStat(entry.noncent_parameter),
+                observed_power: formatGlmStat(entry.observed_power),
             };
             if (showTSquaredColumn) {
                 row.t_squared =
                     testName === "Hotelling's Trace" && tSquared !== null
-                        ? formatDisplayNumber(tSquared)
+                        ? formatGlmStat(tSquared)
                         : "";
             }
             table.rows.push(row);
@@ -1064,9 +1066,9 @@ function formatTestsBetweenSubjectsEffects(
         if (rSq === undefined && adjRSq === undefined) return;
         const letter = noteLetters[idx] || "";
         const parts: string[] = [];
-        if (rSq !== undefined) parts.push(`R Squared = ${formatDisplayNumber(rSq)}`);
+        if (rSq !== undefined) parts.push(`R Squared = ${formatGlmStat(rSq)}`);
         if (adjRSq !== undefined)
-            parts.push(`(Adjusted R Squared = ${formatDisplayNumber(adjRSq)})`);
+            parts.push(`(Adjusted R Squared = ${formatGlmStat(adjRSq)})`);
         noteLines.push(
             `${letter ? letter + ". " : ""}${parts.join(" ")} — ${relabelDv(dvName)}`
         );
@@ -1114,20 +1116,20 @@ function formatTestsBetweenSubjectsEffects(
                 // Show source label only on the first DV row of the group (SPSS merges).
                 source: dvIdx === 0 ? sourceName : "",
                 dependent_variable: relabelDv(dvName),
-                sum_of_squares: formatDisplayNumber(entry.sum_of_squares),
+                sum_of_squares: formatGlmStat(entry.sum_of_squares),
                 df: entry.df !== undefined && entry.df !== null ? String(entry.df) : "",
-                mean_square: blankMeanSquare || noTest ? "" : formatDisplayNumber(entry.mean_square),
-                f_value: blankInferential || noTest ? "" : formatDisplayNumber(entry.f_value),
+                mean_square: blankMeanSquare || noTest ? "" : formatGlmStat(entry.mean_square),
+                f_value: blankInferential || noTest ? "" : formatGlmStat(entry.f_value),
                 significance: blankInferential || noTest ? "" : formatSig(entry.significance),
                 partial_eta_squared: blankInferential
                     ? ""
-                    : formatDisplayNumber(entry.partial_eta_squared),
+                    : formatGlmStat(entry.partial_eta_squared),
                 noncent_parameter: blankInferential
                     ? ""
-                    : formatDisplayNumber(entry.noncent_parameter),
+                    : formatGlmStat(entry.noncent_parameter),
                 observed_power: blankInferential || noTest
                     ? ""
-                    : formatDisplayNumber(entry.observed_power),
+                    : formatGlmStat(entry.observed_power),
             });
         });
     });
@@ -1193,20 +1195,20 @@ function formatParameterEstimates(
                 rowHeader: [],
                 dv_name: idx === 0 ? displayDvName : "",
                 parameter: entry.parameter,
-                b: formatDisplayNumber(entry.b),
-                std_error: formatDisplayNumber(entry.std_error),
-                t_value: formatDisplayNumber(entry.t_value),
+                b: formatGlmStat(entry.b),
+                std_error: formatGlmStat(entry.std_error),
+                t_value: formatGlmStat(entry.t_value),
                 significance: formatSig(entry.significance),
-                ci_lower: formatDisplayNumber(entry.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(entry.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(entry.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(entry.confidence_interval?.upper_bound),
                 partial_eta_squared: entry.partial_eta_squared !== null
-                    ? formatDisplayNumber(entry.partial_eta_squared)
+                    ? formatGlmStat(entry.partial_eta_squared)
                     : "",
                 noncent_parameter: entry.noncent_parameter !== null
-                    ? formatDisplayNumber(entry.noncent_parameter)
+                    ? formatGlmStat(entry.noncent_parameter)
                     : "",
                 observed_power: entry.observed_power !== null
-                    ? formatDisplayNumber(entry.observed_power)
+                    ? formatGlmStat(entry.observed_power)
                     : "",
             });
         });
@@ -1244,7 +1246,7 @@ function formatBetweenSubjectsSSCP(data: any, resultJson: ResultJson) {
         dvNames.forEach((rowDv) => {
             const row: Row = { rowHeader: [], row_dv: rowDv };
             dvNames.forEach((colDv) => {
-                row[`col_${colDv}`] = formatDisplayNumber(values[rowDv]?.[colDv]);
+                row[`col_${colDv}`] = formatGlmStat(values[rowDv]?.[colDv]);
             });
             table.rows.push(row);
         });
@@ -1277,7 +1279,7 @@ function formatResidualMatrix(data: any, resultJson: ResultJson) {
     dvNames.forEach((rowDv) => {
         const row: Row = { rowHeader: [], row_dv: rowDv };
         dvNames.forEach((colDv) => {
-            row[`col_${colDv}`] = formatDisplayNumber(values[rowDv]?.[colDv]);
+            row[`col_${colDv}`] = formatGlmStat(values[rowDv]?.[colDv]);
         });
         table.rows.push(row);
     });
@@ -1311,7 +1313,7 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
         dvNames.forEach((rowDv) => {
             const row: Row = { rowHeader: [], row_dv: rowDv };
             dvNames.forEach((colDv) => {
-                row[`col_${colDv}`] = formatDisplayNumber(matrixData[rowDv]?.[colDv]);
+                row[`col_${colDv}`] = formatGlmStat(matrixData[rowDv]?.[colDv]);
             });
             table.rows.push(row);
         });
@@ -1343,7 +1345,7 @@ function formatContrastCoefficients(data: any, resultJson: ResultJson) {
         table.rows.push({
             rowHeader: [],
             parameter: param,
-            coefficient: formatDisplayNumber(coefficients[idx]),
+            coefficient: formatGlmNumber(coefficients[idx]),
         });
     });
 
@@ -1508,7 +1510,7 @@ function formatContrastResultsKMatrix(
             dvNames.forEach((dv, dvIdx) => {
                 row[`dv_${dv}`] = b.sig
                     ? formatSig(b.values[dvIdx])
-                    : formatDisplayNumber(b.values[dvIdx]);
+                    : formatGlmStat(b.values[dvIdx]);
             });
             table.rows.push(row);
         });
@@ -1558,10 +1560,10 @@ function formatContrastMultivariateTests(
         table.rows.push({
             rowHeader: [],
             test_name: label,
-            value: formatDisplayNumber(e.value),
-            f: formatDisplayNumber(e.f),
-            hypothesis_df: formatDisplayNumber(e.hypothesis_df),
-            error_df: formatDisplayNumber(e.error_df),
+            value: formatGlmStat(e.value),
+            f: formatGlmStat(e.f),
+            hypothesis_df: formatGlmNumber(e.hypothesis_df),
+            error_df: formatGlmNumber(e.error_df),
             significance: formatSig(e.significance),
         });
     });
@@ -1632,10 +1634,10 @@ function formatContrastUnivariateTests(
                 rowHeader: [],
                 source: dvIdx === 0 ? (isSingleRow ? "Contrast" : cr.label) : "",
                 dependent_variable: dv,
-                sum_of_squares: formatDisplayNumber(ss),
+                sum_of_squares: formatGlmStat(ss),
                 df: "1",
-                mean_square: formatDisplayNumber(ms),
-                f_value: formatDisplayNumber(f),
+                mean_square: formatGlmStat(ms),
+                f_value: formatGlmStat(f),
                 significance: formatSig(p),
             });
         });
@@ -1651,9 +1653,9 @@ function formatContrastUnivariateTests(
             rowHeader: [],
             source: dvIdx === 0 ? "Error" : "",
             dependent_variable: dv,
-            sum_of_squares: formatDisplayNumber(err.sum_of_squares),
+            sum_of_squares: formatGlmStat(err.sum_of_squares),
             df: String(err.df),
-            mean_square: formatDisplayNumber(err.mean_square),
+            mean_square: formatGlmStat(err.mean_square),
             f_value: "",
             significance: "",
         });
@@ -1834,13 +1836,13 @@ function formatPosthocTests(
                     dependent_variable: rowIdx === 0 ? relabelDv(dvName) : "",
                     i_level: entry.i_level,
                     j_level: entry.j_level,
-                    mean_difference: formatDisplayNumber(entry.mean_difference),
-                    std_error: formatDisplayNumber(entry.std_error),
+                    mean_difference: formatGlmStat(entry.mean_difference),
+                    std_error: formatGlmStat(entry.std_error),
                     significance: formatSig(entry.significance),
-                    ci_lower: formatDisplayNumber(
+                    ci_lower: formatGlmStat(
                         entry.confidence_interval?.lower_bound
                     ),
-                    ci_upper: formatDisplayNumber(
+                    ci_upper: formatGlmStat(
                         entry.confidence_interval?.upper_bound
                     ),
                 };
@@ -1898,7 +1900,7 @@ function formatHomogeneousSubsets(
                 sortedSubsetKeys.forEach((k) => {
                     row[`subset_${k}`] =
                         g.subsets[k] !== undefined
-                            ? formatDisplayNumber(g.subsets[k])
+                            ? formatGlmStat(g.subsets[k])
                             : "";
                 });
                 table.rows.push(row);
@@ -1946,10 +1948,10 @@ function formatEmmeans(
                 rowHeader: [],
                 dependent_variable: relabelDv(entry.dependent_variable),
                 factor_value: entry.factor_value,
-                mean: formatDisplayNumber(entry.mean),
-                std_error: formatDisplayNumber(entry.std_error),
-                ci_lower: formatDisplayNumber(entry.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(entry.confidence_interval?.upper_bound),
+                mean: formatGlmStat(entry.mean),
+                std_error: formatGlmStat(entry.std_error),
+                ci_lower: formatGlmStat(entry.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(entry.confidence_interval?.upper_bound),
             });
         });
 
@@ -1980,8 +1982,8 @@ function formatSpreadVsLevel(data: any, resultJson: ResultJson) {
         points.forEach((p: any) => {
             table.rows.push({
                 rowHeader: [],
-                level_mean: formatDisplayNumber(p.level_mean),
-                spread_standard_deviation: formatDisplayNumber(p.spread_standard_deviation),
+                level_mean: formatGlmStat(p.level_mean),
+                spread_standard_deviation: formatGlmStat(p.spread_standard_deviation),
             });
         });
 
@@ -2121,7 +2123,7 @@ function formatSavedVariables(data: any, resultJson: ResultJson) {
     for (let i = 0; i < n; i++) {
         const row: Row = { rowHeader: [], case: String(i + 1) };
         varNames.forEach((v) => {
-            row[v] = formatDisplayNumber(varValues[v][i]);
+            row[v] = formatGlmNumber(varValues[v][i]);
         });
         table.rows.push(row);
     }

@@ -1,5 +1,5 @@
 import type { ResultJson, Row, Table } from "@/types/Table";
-import { formatDisplayNumber, formatSig } from "@/hooks/useFormatter";
+import { formatGlmNumber, formatGlmSig as formatSig, formatGlmStat } from "@/hooks/useFormatter";
 
 export function transformRepeatedMeasureResult(
     data: any,
@@ -31,9 +31,15 @@ export function transformRepeatedMeasureResult(
     return resultJson;
 }
 
+// v5: 4 decimals as the MV tables (was 3). df cells use dfFmt.
 function fmt3(v: number | null | undefined): string | null {
     if (v === null || v === undefined || isNaN(v as number)) return null;
-    return (v as number).toFixed(3);
+    return formatGlmStat(v as number);
+}
+// df: integers unchanged, fractional df (e.g. Greenhouse-Geisser) 4 decimals.
+function dfFmt(v: number | null | undefined): string | null {
+    if (v === null || v === undefined || isNaN(v as number)) return null;
+    return formatGlmNumber(v as number);
 }
 
 // ── 1. Within-Subjects Factors ───────────────────────────────────────────────
@@ -100,8 +106,8 @@ function formatDescriptiveStatistics(data: any, resultJson: ResultJson) {
                 table.rows.push({
                     rowHeader: [],
                     label: g.factor_value || "",
-                    mean: formatDisplayNumber(g.stats?.mean),
-                    std_dev: formatDisplayNumber(g.stats?.std_deviation),
+                    mean: formatGlmStat(g.stats?.mean),
+                    std_dev: formatGlmStat(g.stats?.std_deviation),
                     n: String(g.stats?.n ?? ""),
                 });
             });
@@ -129,8 +135,8 @@ function formatHomogeneityTests(data: any, resultJson: ResultJson) {
             rows: [
                 { rowHeader: [], label: "Box's M", value: fmt3(b.box_m) },
                 { rowHeader: [], label: "F", value: fmt3(b.f) },
-                { rowHeader: [], label: "df1", value: fmt3(b.df1) },
-                { rowHeader: [], label: "df2", value: fmt3(b.df2) },
+                { rowHeader: [], label: "df1", value: dfFmt(b.df1) },
+                { rowHeader: [], label: "df2", value: dfFmt(b.df2) },
                 { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
             ],
             note: `Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups. ${design}`.trim(),
@@ -165,7 +171,7 @@ function formatHomogeneityTests(data: any, resultJson: ResultJson) {
                     based_on: e.based_on,
                     statistic: fmt3(e.statistic),
                     df1: String(e.df1),
-                    df2: integerDf ? String(e.df2) : fmt3(e.df2),
+                    df2: integerDf ? String(e.df2) : dfFmt(e.df2),
                     sig: formatSig(e.significance),
                 });
             });
@@ -186,8 +192,8 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
             { header: "", key: "value" },
         ],
         rows: [
-            { rowHeader: [], label: "Likelihood Ratio", value: formatDisplayNumber(b.likelihood_ratio) },
-            { rowHeader: [], label: "Approx. Chi-Square", value: formatDisplayNumber(b.approx_chi_square) },
+            { rowHeader: [], label: "Likelihood Ratio", value: formatGlmStat(b.likelihood_ratio) },
+            { rowHeader: [], label: "Approx. Chi-Square", value: formatGlmStat(b.approx_chi_square) },
             { rowHeader: [], label: "df", value: String(b.df) },
             { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
         ],
@@ -275,8 +281,8 @@ function multivariateTable(tests: any, key: string, title: string, noteSuffix: s
                 test_name: name,
                 value: fmt3(entry.value),
                 f: fmt3(entry.f),
-                hyp_df: fmt3(entry.hypothesis_df),
-                err_df: fmt3(entry.error_df),
+                hyp_df: dfFmt(entry.hypothesis_df),
+                err_df: dfFmt(entry.error_df),
                 sig: formatSig(entry.significance),
                 eta2: fmt3(entry.partial_eta_squared),
                 noncent: fmt3(entry.noncent_parameter),
@@ -401,7 +407,7 @@ function formatTestsWithinSubjectsEffects(data: any, resultJson: ResultJson) {
                 const isSphericity = assumption === "Sphericity Assumed";
                 const dfVal = isSphericity
                     ? String(Math.round(row.df))
-                    : fmt3(row.df);
+                    : dfFmt(row.df);
 
                 table.rows.push({
                     rowHeader: [],
@@ -589,12 +595,12 @@ function formatParameterEstimates(data: any, resultJson: ResultJson) {
                 rowHeader: [],
                 dv: idx === 0 ? dvName : "",
                 param: e.parameter,
-                b: formatDisplayNumber(e.b),
-                se: formatDisplayNumber(e.std_error),
-                t: formatDisplayNumber(e.t_value),
+                b: formatGlmStat(e.b),
+                se: formatGlmStat(e.std_error),
+                t: formatGlmStat(e.t_value),
                 sig: formatSig(e.significance),
-                ci_lower: formatDisplayNumber(e.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(e.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(e.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(e.confidence_interval?.upper_bound),
                 eta2: fmt3(e.partial_eta_squared),
                 noncent: fmt3(e.noncent_parameter),
                 power: fmt3(e.observed_power),
@@ -669,7 +675,7 @@ function formatResidualMatrix(data: any, resultJson: ResultJson) {
         if (!vals) return;
         rowKeys.forEach((rk, i) => {
             const row: Row = { rowHeader: [], part: i === 0 ? part : "", row_label: display(rk) };
-            colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(vals[rk]?.[ck]); });
+            colKeys.forEach((ck) => { row[ck] = formatGlmStat(vals[rk]?.[ck]); });
             table.rows.push(row);
         });
     });
@@ -700,7 +706,7 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
 
         rowKeys.forEach((rk) => {
             const row: Row = { rowHeader: [], row_label: rk };
-            colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(catData[rk][ck]); });
+            colKeys.forEach((ck) => { row[ck] = formatGlmStat(catData[rk][ck]); });
             table.rows.push(row);
         });
 
@@ -787,11 +793,11 @@ function formatPosthocTests(data: any, resultJson: ResultJson) {
                 factor: t.factor_name,
                 i_level: t.i_level,
                 j_level: t.j_level,
-                mean_diff: formatDisplayNumber(t.mean_difference),
-                se: formatDisplayNumber(t.std_error),
+                mean_diff: formatGlmStat(t.mean_difference),
+                se: formatGlmStat(t.std_error),
                 sig: formatSig(t.significance),
-                ci_lower: formatDisplayNumber(t.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(t.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(t.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(t.confidence_interval?.upper_bound),
             });
         });
 
@@ -835,10 +841,10 @@ function formatEmmeans(data: any, resultJson: ResultJson) {
                 rowHeader: [],
                 factor: idx === 0 || list[idx - 1].factor_value !== m.factor_value ? m.factor_value : "",
                 ...(multiMeasure ? { measure: m.dependent_variable } : {}),
-                mean: formatDisplayNumber(m.mean),
-                se: formatDisplayNumber(m.std_error),
-                ci_lower: formatDisplayNumber(m.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(m.confidence_interval?.upper_bound),
+                mean: formatGlmStat(m.mean),
+                se: formatGlmStat(m.std_error),
+                ci_lower: formatGlmStat(m.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(m.confidence_interval?.upper_bound),
             });
         });
 
@@ -885,11 +891,11 @@ function formatEmmeansPairwise(data: any, resultJson: ResultJson) {
                 ...(multiMeasure ? { measure: newGroup ? r.dependent_variable : "" } : {}),
                 level_i: newGroup ? r.level_i : "",
                 level_j: r.level_j,
-                diff: formatDisplayNumber(r.mean_difference),
-                se: formatDisplayNumber(r.std_error),
+                diff: formatGlmStat(r.mean_difference),
+                se: formatGlmStat(r.std_error),
                 sig: formatSig(r.significance),
-                ci_lower: formatDisplayNumber(r.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(r.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(r.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(r.confidence_interval?.upper_bound),
             });
         });
 
