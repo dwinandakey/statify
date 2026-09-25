@@ -1,0 +1,25 @@
+mv1: identik (byte)
+mv2: identik (byte)
+mv3: identik (byte)
+mv4: identik (byte)
+mv4ph: identik (byte)
+mv5: identik (byte)
+mv6: identik (byte)
+mv7: identik (byte)
+mv8: identik (byte)
+mv2d: identik (byte)
+mv2s: identik (byte)
+mv2wd: 1 nilai berbeda
+   results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.13342131277199365 → 0.13345903494452505
+mv2ws: 1 nilai berbeda
+   results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.13342131277199365 → 0.13345903494452505
+mv3d: identik (byte)
+mv3s: identik (byte)
+mv1ci: identik (byte)
+mv1ci10: identik (byte)
+mv2ci: identik (byte)
+mv2wci: 1 nilai berbeda
+   results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.9999999999300158 → 0.9999999999309576
+mv2dci: identik (byte)
+mv3ci: identik (byte)
+mv3dci: identik (byte)

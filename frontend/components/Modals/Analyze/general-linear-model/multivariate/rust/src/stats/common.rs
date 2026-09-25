@@ -47,6 +47,18 @@ pub fn calculate_f_significance(df1: usize, df2: usize, f_value: f64) -> f64 {
         .unwrap_or(0.0)
 }
 
+/// F significance with real-valued df (v5: fractional df2 of Wilks' Lambda
+/// (Rao) and of the Welch test). For integer df it gives the same value as
+/// calculate_f_significance.
+pub fn calculate_f_significance_df(df1: f64, df2: f64, f_value: f64) -> f64 {
+    if !(df1 > 0.0) || !(df2 > 0.0) || f_value.is_nan() {
+        return 0.0;
+    }
+    FisherSnedecor::new(df1, df2)
+        .map(|dist| 1.0 - dist.cdf(f_value))
+        .unwrap_or(0.0)
+}
+
 /// Calculate t significance (p-value) for t statistic
 pub fn calculate_t_significance(df: usize, t_value: f64) -> f64 {
     if df == 0 || t_value.is_nan() {
@@ -97,10 +109,18 @@ pub fn calculate_t_critical(df: usize, alpha: f64) -> f64 {
 /// with F_crit the (1 − alpha) quantile of the central F(df1, df2) and
 /// noncentrality λ = F · df1 (the "Noncent. Parameter" SPSS prints).
 pub fn calculate_observed_power(df1: usize, df2: usize, f_value: f64, alpha: f64) -> f64 {
-    if df1 == 0 || df2 == 0 || !f_value.is_finite() || f_value <= 0.0 || alpha <= 0.0 || alpha >= 1.0 {
+    if df1 == 0 || df2 == 0 {
         return 0.0;
     }
-    let (d1, d2) = (df1 as f64, df2 as f64);
+    calculate_observed_power_df(df1 as f64, df2 as f64, f_value, alpha)
+}
+
+/// Observed power with real-valued df (v5: fractional df2 of Wilks' Lambda
+/// (Rao) and of the Welch test). Same computation as calculate_observed_power.
+pub fn calculate_observed_power_df(d1: f64, d2: f64, f_value: f64, alpha: f64) -> f64 {
+    if !(d1 > 0.0) || !(d2 > 0.0) || !f_value.is_finite() || f_value <= 0.0 || alpha <= 0.0 || alpha >= 1.0 {
+        return 0.0;
+    }
     let critical = match FisherSnedecor::new(d1, d2) {
         Ok(dist) => dist.inverse_cdf(1.0 - alpha),
         Err(_) => return 0.0,

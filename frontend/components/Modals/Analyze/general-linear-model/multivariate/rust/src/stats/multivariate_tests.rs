@@ -11,8 +11,8 @@ use crate::{
 
 use super::{
     common::{
-        calculate_f_significance,
-        calculate_observed_power,
+        calculate_f_significance_df,
+        calculate_observed_power_df,
         compute_per_group_covariances,
         generate_interaction_terms,
         matrix_inverse,
@@ -349,15 +349,9 @@ fn calculate_welch_two_sample_t2(
         .unwrap_or(0.0);
     let noncent = f_stat * df1;
     // Observed power from the noncentral F (λ = F · df1) at the configured
-    // alpha; calculate_observed_power takes integer df, so df are rounded
-    // here (not changed in v4).
+    // alpha with the fractional df2 = ν − p + 1 (v5; before: rounded df).
     let alpha = config.options.sig_level.unwrap_or(0.05);
-    let observed_power = calculate_observed_power(
-        df1.round().max(1.0) as usize,
-        df2.round().max(1.0) as usize,
-        f_stat,
-        alpha,
-    );
+    let observed_power = calculate_observed_power_df(df1, df2, f_stat, alpha);
 
     let entry = MultivariateTestEntry {
         value: t_squared,
@@ -614,6 +608,18 @@ fn eigenvalues_real(m: &[Vec<f64>]) -> Vec<f64> {
     complex_eigs.iter().map(|c| c.re).collect()
 }
 
+/// df for Sig. and Observed Power (v5): integer df (within 1e-9) as before
+/// (rounded, at least 1); fractional df — Wilks' Lambda (Rao's F) when p ≥ 3
+/// and df_h ≥ 3 — kept as they are (before v5: rounded).
+fn test_df(df: f64) -> f64 {
+    let r = df.round();
+    if (df - r).abs() < 1e-9 {
+        r.max(1.0)
+    } else {
+        df
+    }
+}
+
 /// Calculate multivariate test statistics from hypothesis and error matrices.
 ///
 /// Statistics derived from the eigenvalues λ₁,…,λ_s of HE^-1:
@@ -671,9 +677,9 @@ fn calculate_multivariate_test_statistics(
         let df2 = s * (2.0 * n_param + s + 1.0);
         (f, df1, df2)
     };
-    let sig_pillai = calculate_f_significance(
-        hyp_df_pillai.round().max(1.0) as usize,
-        error_df_pillai.round().max(1.0) as usize,
+    let sig_pillai = calculate_f_significance_df(
+        test_df(hyp_df_pillai),
+        test_df(error_df_pillai),
         f_pillai
     );
     let eta_squared_pillai = if s > 0.0 { pillai_trace / s } else { 0.0 };
@@ -703,9 +709,9 @@ fn calculate_multivariate_test_statistics(
         };
         (f, df1, df2)
     };
-    let sig_wilks = calculate_f_significance(
-        hyp_df_wilks.round().max(1.0) as usize,
-        error_df_wilks.round().max(1.0) as usize,
+    let sig_wilks = calculate_f_significance_df(
+        test_df(hyp_df_wilks),
+        test_df(error_df_wilks),
         f_wilks
     );
     let eta_squared_wilks = if s > 0.0 {
@@ -725,9 +731,9 @@ fn calculate_multivariate_test_statistics(
         };
         (f, df1, df2)
     };
-    let sig_hotelling = calculate_f_significance(
-        hyp_df_hotelling.round().max(1.0) as usize,
-        error_df_hotelling.round().max(1.0) as usize,
+    let sig_hotelling = calculate_f_significance_df(
+        test_df(hyp_df_hotelling),
+        test_df(error_df_hotelling),
         f_hotelling
     );
     // SPSS: η² = (T/s) / (T/s + 1), s = min(p, df_h).
@@ -747,9 +753,9 @@ fn calculate_multivariate_test_statistics(
         };
         (f, df1, df2)
     };
-    let sig_roy = calculate_f_significance(
-        hyp_df_roy.round().max(1.0) as usize,
-        error_df_roy.round().max(1.0) as usize,
+    let sig_roy = calculate_f_significance_df(
+        test_df(hyp_df_roy),
+        test_df(error_df_roy),
         f_roy
     );
     let eta_squared_roy = roys_root / (1.0 + roys_root);
@@ -768,11 +774,11 @@ fn calculate_multivariate_test_statistics(
         } else {
             0.0
         };
-        let sig = calculate_f_significance(
-            df1.round().max(1.0) as usize,
-            df2.round().max(1.0) as usize,
-            f_exact
-        );
+        let sig = calculate_f_significance_df(
+        test_df(df1),
+        test_df(df2),
+        f_exact
+    );
         (f_exact, df1, df2,
          f_exact, df1, df2,
          f_exact, df1, df2,
@@ -793,9 +799,7 @@ fn calculate_multivariate_test_statistics(
 
     // Observed power from the noncentral F (λ = F · df1) at the configured
     // alpha, with the same df as the significance above.
-    let power = |f: f64, df1: f64, df2: f64| {
-        calculate_observed_power(df1.round().max(1.0) as usize, df2.round().max(1.0) as usize, f, alpha)
-    };
+    let power = |f: f64, df1: f64, df2: f64| calculate_observed_power_df(test_df(df1), test_df(df2), f, alpha);
     let power_pillai = power(f_pillai, hyp_df_pillai, error_df_pillai);
     let power_wilks = power(f_wilks, hyp_df_wilks, error_df_wilks);
     let power_hotelling = power(f_hotelling, hyp_df_hotelling, error_df_hotelling);
