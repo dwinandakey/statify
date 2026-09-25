@@ -1,0 +1,1559 @@
+{
+ "config": "mv6",
+ "worker": "http://localhost:3101/_next/static/chunks/2609.40f927809ef64a83.js",
+ "request": {
+  "id": 1,
+  "payload": {
+   "dep_data": [
+    [
+     {
+      "Y1A1": 7.8
+     },
+     {
+      "Y1A1": 7.1
+     },
+     {
+      "Y1A1": 7.89
+     },
+     {
+      "Y1A1": 9
+     },
+     {
+      "Y1A1": 8.43
+     },
+     {
+      "Y1A1": 7.65
+     },
+     {
+      "Y1A1": 7.7
+     },
+     {
+      "Y1A1": 7.28
+     },
+     {
+      "Y1A1": 8.96
+     },
+     {
+      "Y1A1": 7.6
+     },
+     {
+      "Y1A1": 7
+     },
+     {
+      "Y1A1": 7.82
+     },
+     {
+      "Y1A1": 7.8
+     },
+     {
+      "Y1A1": 7.12
+     },
+     {
+      "Y1A1": 7.06
+     },
+     {
+      "Y1A1": 7.45
+     },
+     {
+      "Y1A1": 7.45
+     },
+     {
+      "Y1A1": 8.25
+     },
+     {
+      "Y1A1": 7.45
+     },
+     {
+      "Y1A1": 7.45
+     },
+     {
+      "Y1A1": 7.15
+     },
+     {
+      "Y1A1": 7.7
+     },
+     {
+      "Y1A1": 7.45
+     },
+     {
+      "Y1A1": 7.06
+     },
+     {
+      "Y1A1": 7.04
+     },
+     {
+      "Y1A1": 7.7
+     }
+    ],
+    [
+     {
+      "Y2A1": 90.4
+     },
+     {
+      "Y2A1": 88.9
+     },
+     {
+      "Y2A1": 85.9
+     },
+     {
+      "Y2A1": 82.5
+     },
+     {
+      "Y2A1": 92.4
+     },
+     {
+      "Y2A1": 82.4
+     },
+     {
+      "Y2A1": 87.4
+     },
+     {
+      "Y2A1": 79.6
+     },
+     {
+      "Y2A1": 95.1
+     },
+     {
+      "Y2A1": 94.1
+     },
+     {
+      "Y2A1": 86.6
+     },
+     {
+      "Y2A1": 85.9
+     },
+     {
+      "Y2A1": 88.8
+     },
+     {
+      "Y2A1": 85.1
+     },
+     {
+      "Y2A1": 89
+     },
+     {
+      "Y2A1": 75.9
+     },
+     {
+      "Y2A1": 77.9
+     },
+     {
+      "Y2A1": 74.5
+     },
+     {
+      "Y2A1": 83.1
+     },
+     {
+      "Y2A1": 86.4
+     },
+     {
+      "Y2A1": 81.2
+     },
+     {
+      "Y2A1": 79.9
+     },
+     {
+      "Y2A1": 71.9
+     },
+     {
+      "Y2A1": 81.2
+     },
+     {
+      "Y2A1": 79.9
+     },
+     {
+      "Y2A1": 76.4
+     }
+    ]
+   ],
+   "fix_factor_data": [
+    [
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 1
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     },
+     {
+      "faktorA": 2
+     }
+    ],
+    [
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 3
+     },
+     {
+      "faktorB": 3
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 1
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 2
+     },
+     {
+      "faktorB": 3
+     },
+     {
+      "faktorB": 3
+     },
+     {
+      "faktorB": 3
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 4
+     },
+     {
+      "faktorB": 4
+     }
+    ]
+   ],
+   "covar_data": [],
+   "wls_data": [],
+   "dep_data_defs": [
+    [
+     {
+      "id": 1,
+      "columnIndex": 0,
+      "name": "Y1A1",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 2,
+      "label": "",
+      "values": [],
+      "missing": [],
+      "columns": 72,
+      "align": "right",
+      "measure": "scale",
+      "role": "input"
+     }
+    ],
+    [
+     {
+      "id": 2,
+      "columnIndex": 1,
+      "name": "Y2A1",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 1,
+      "label": "",
+      "values": [],
+      "missing": [],
+      "columns": 72,
+      "align": "right",
+      "measure": "scale",
+      "role": "input"
+     }
+    ]
+   ],
+   "fix_factor_data_defs": [
+    [
+     {
+      "id": 3,
+      "columnIndex": 2,
+      "name": "faktorA",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 0,
+      "label": "",
+      "values": [],
+      "missing": [],
+      "columns": 72,
+      "align": "right",
+      "measure": "scale",
+      "role": "input"
+     }
+    ],
+    [
+     {
+      "id": 4,
+      "columnIndex": 3,
+      "name": "faktorB",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 0,
+      "label": "",
+      "values": [],
+      "missing": [],
+      "columns": 72,
+      "align": "right",
+      "measure": "scale",
+      "role": "input"
+     }
+    ]
+   ],
+   "covar_data_defs": [],
+   "wls_data_defs": [],
+   "config_data": {
+    "main": {
+     "DepVar": [
+      "Y1A1",
+      "Y2A1"
+     ],
+     "FixFactor": [
+      "faktorA",
+      "faktorB"
+     ],
+     "Covar": [],
+     "WlsWeight": null,
+     "TestValues": null,
+     "VarianceMode": "Pooled"
+    },
+    "model": {
+     "NonCust": true,
+     "Custom": false,
+     "BuildCustomTerm": false,
+     "FactorsVar": [
+      "faktorA",
+      "faktorB"
+     ],
+     "TermsVar": null,
+     "FactorsModel": null,
+     "CovModel": null,
+     "RandomModel": null,
+     "BuildTermMethod": "interaction",
+     "TermText": null,
+     "SumOfSquareMethod": "typeIII",
+     "Intercept": true
+    },
+    "contrast": {
+     "FactorList": [
+      "faktorA",
+      "faktorB"
+     ],
+     "ContrastMethod": "none",
+     "Last": true,
+     "First": false
+    },
+    "plots": {
+     "SrcList": [
+      "faktorA",
+      "faktorB"
+     ],
+     "AxisList": null,
+     "LineList": null,
+     "PlotList": null,
+     "FixFactorVars": null,
+     "RandFactorVars": null,
+     "LineChartType": true,
+     "BarChartType": false,
+     "IncludeErrorBars": false,
+     "ConfidenceInterval": true,
+     "StandardError": false,
+     "IncludeRefLineForGrandMean": false,
+     "YAxisStart0": false,
+     "Multiplier": 2
+    },
+    "posthoc": {
+     "SrcList": [
+      "faktorA",
+      "faktorB"
+     ],
+     "FixFactorVars": null,
+     "ErrorRatio": 100,
+     "Twosided": true,
+     "LtControl": false,
+     "GtControl": false,
+     "CategoryMethod": "last",
+     "Waller": false,
+     "Dunnett": false,
+     "Lsd": false,
+     "Bonfe": false,
+     "Sidak": false,
+     "Scheffe": false,
+     "Regwf": false,
+     "Regwq": false,
+     "Snk": false,
+     "Tu": false,
+     "Tub": false,
+     "Dun": false,
+     "Hoc": false,
+     "Gabriel": false,
+     "Tam": false,
+     "Dunt": false,
+     "Games": false,
+     "Dunc": false
+    },
+    "emmeans": {
+     "SrcList": [
+      "faktorA",
+      "faktorB"
+     ],
+     "TargetList": null,
+     "CompMainEffect": false,
+     "ConfiIntervalMethod": "lsdNone"
+    },
+    "save": {
+     "ResWeighted": false,
+     "PreWeighted": false,
+     "StdStatistics": false,
+     "CooksD": false,
+     "Leverage": false,
+     "UnstandardizedRes": false,
+     "WeightedRes": false,
+     "StandardizedRes": false,
+     "StudentizedRes": false,
+     "DeletedRes": false,
+     "CoeffStats": false,
+     "NewDataSet": true,
+     "FilePath": null,
+     "DatasetName": null,
+     "WriteNewDataSet": false
+    },
+    "options": {
+     "DescStats": true,
+     "HomogenTest": true,
+     "EstEffectSize": true,
+     "SprVsLevel": false,
+     "ObsPower": true,
+     "ResPlot": false,
+     "ParamEst": false,
+     "LackOfFit": false,
+     "SscpMat": false,
+     "GeneralFun": false,
+     "ResSscpMat": false,
+     "CoefficientMatrix": false,
+     "TransformMat": false,
+     "SigLevel": 0.05
+    },
+    "bootstrap": {
+     "PerformBootStrapping": false,
+     "NumOfSamples": 1000,
+     "Seed": false,
+     "SeedValue": 200000,
+     "Level": 95,
+     "Percentile": true,
+     "BCa": false,
+     "Simple": true,
+     "Stratified": false,
+     "Variables": [],
+     "StrataVariables": null
+    }
+   }
+  }
+ },
+ "response": {
+  "id": 1,
+  "ok": true,
+  "results": {
+   "between_subjects_factors": {
+    "faktorB": {
+     "value_counts": {
+      "1": 7,
+      "2": 7,
+      "3": 5,
+      "4": 7
+     },
+     "value_labels": {},
+     "n": 26
+    },
+    "faktorA": {
+     "value_counts": {
+      "1": 13,
+      "2": 13
+     },
+     "value_labels": {},
+     "n": 26
+    }
+   },
+   "descriptive_statistics": {
+    "Y1A1": {
+     "dependent_variable": "Y1A1",
+     "groups": [
+      {
+       "factor_name": "faktorA",
+       "factor_value": "1",
+       "stats": {
+        "mean": 7.848461538461537,
+        "std_deviation": 0.621380803182801,
+        "n": 13
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 7.596666666666667,
+          "std_deviation": 0.43247350593225176,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 8.195,
+          "std_deviation": 0.6442825467137844,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 8.120000000000001,
+          "std_deviation": 1.1879393923934003,
+          "n": 2
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 7.555000000000001,
+          "std_deviation": 0.38310137909783964,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 7.848461538461537,
+          "std_deviation": 0.621380803182801,
+          "n": 13
+         }
+        }
+       ]
+      },
+      {
+       "factor_name": "faktorA",
+       "factor_value": "2",
+       "stats": {
+        "mean": 7.410000000000001,
+        "std_deviation": 0.343438495221488,
+        "n": 13
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 7.27,
+          "std_deviation": 0.2092844953645637,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 7.716666666666666,
+          "std_deviation": 0.46188021535170054,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 7.433333333333334,
+          "std_deviation": 0.275378527364305,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 7.266666666666667,
+          "std_deviation": 0.3754108860080292,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 7.410000000000001,
+          "std_deviation": 0.343438495221488,
+          "n": 13
+         }
+        }
+       ]
+      },
+      {
+       "factor_name": "faktorA",
+       "factor_value": "Total",
+       "stats": {
+        "mean": 7.629230769230767,
+        "std_deviation": 0.5403104520693494,
+        "n": 26
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 7.410000000000001,
+          "std_deviation": 0.33872309241227316,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 7.990000000000001,
+          "std_deviation": 0.5865435476870692,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 7.708,
+          "std_deviation": 0.7294998286497403,
+          "n": 5
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 7.4314285714285715,
+          "std_deviation": 0.3796238740046334,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 7.629230769230767,
+          "std_deviation": 0.5403104520693494,
+          "n": 26
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "Y2A1": {
+     "dependent_variable": "Y2A1",
+     "groups": [
+      {
+       "factor_name": "faktorA",
+       "factor_value": "1",
+       "stats": {
+        "mean": 87.6923076923077,
+        "std_deviation": 4.621230272424133,
+        "n": 13
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 88.40000000000002,
+          "std_deviation": 2.29128784747792,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 86.17500000000001,
+          "std_deviation": 4.761214830971889,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 87.35,
+          "std_deviation": 10.960155108391486,
+          "n": 2
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 88.85000000000001,
+          "std_deviation": 3.7116932344506384,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 87.6923076923077,
+          "std_deviation": 4.621230272424133,
+          "n": 13
+         }
+        }
+       ]
+      },
+      {
+       "factor_name": "faktorA",
+       "factor_value": "2",
+       "stats": {
+        "mean": 80.1846153846154,
+        "std_deviation": 4.916612342159681,
+        "n": 13
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 81.975,
+          "std_deviation": 6.127193484785669,
+          "n": 4
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 81.33333333333333,
+          "std_deviation": 6.1435603141283925,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 77.66666666666667,
+          "std_deviation": 5.036202272877185,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 79.16666666666667,
+          "std_deviation": 2.4826061575153897,
+          "n": 3
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 80.1846153846154,
+          "std_deviation": 4.916612342159681,
+          "n": 13
+         }
+        }
+       ]
+      },
+      {
+       "factor_name": "faktorA",
+       "factor_value": "Total",
+       "stats": {
+        "mean": 83.93846153846155,
+        "std_deviation": 6.0422563284307556,
+        "n": 26
+       },
+       "subgroups": [
+        {
+         "factor_name": "faktorB",
+         "factor_value": "1",
+         "stats": {
+          "mean": 84.72857142857143,
+          "std_deviation": 5.684691221668445,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "2",
+         "stats": {
+          "mean": 84.10000000000001,
+          "std_deviation": 5.532931712332384,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "3",
+         "stats": {
+          "mean": 81.53999999999999,
+          "std_deviation": 8.416828381284718,
+          "n": 5
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "4",
+         "stats": {
+          "mean": 84.7,
+          "std_deviation": 5.977736472389301,
+          "n": 7
+         }
+        },
+        {
+         "factor_name": "faktorB",
+         "factor_value": "Total",
+         "stats": {
+          "mean": 83.93846153846155,
+          "std_deviation": 6.0422563284307556,
+          "n": 26
+         }
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "levene_test": [
+    {
+     "dependent_variable": "Y1A1",
+     "levene": [
+      {
+       "levene_statistic": 4.534875373758303,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.004526722572997688,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Mean"
+      },
+      {
+       "levene_statistic": 1.511601425019642,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.22573147928775406,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Median"
+      },
+      {
+       "levene_statistic": 1.511601425019642,
+       "df1": 7,
+       "df2": 11.13685754589761,
+       "significance": 0.25824518410127295,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Median and with adjusted df"
+      },
+      {
+       "levene_statistic": 4.163537842216616,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.006864308772828398,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on trimmed mean"
+      }
+     ]
+    },
+    {
+     "dependent_variable": "Y2A1",
+     "levene": [
+      {
+       "levene_statistic": 3.0094597907447915,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.028105117058397466,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Mean"
+      },
+      {
+       "levene_statistic": 1.4107428982984582,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.2609384480613499,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Median"
+      },
+      {
+       "levene_statistic": 1.4107428982984582,
+       "df1": 7,
+       "df2": 10.562583319023208,
+       "significance": 0.2956999094312911,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on Median and with adjusted df"
+      },
+      {
+       "levene_statistic": 2.8855420180272073,
+       "df1": 7,
+       "df2": 18,
+       "significance": 0.033058156631148305,
+       "design": "Design: Intercept + faktorA + faktorB",
+       "test_basis": "Based on trimmed mean"
+      }
+     ]
+    }
+   ],
+   "tests_of_between_subjects_effects": {
+    "effects": {
+     "Y1A1": {
+      "Error": {
+       "sum_of_squares": 4.462466666666667,
+       "df": 18,
+       "mean_square": 0.2479148148148148,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Intercept": {
+       "sum_of_squares": 1447.6374881720428,
+       "df": 1,
+       "mean_square": 1447.6374881720428,
+       "f_value": 5839.253653531702,
+       "significance": 0,
+       "partial_eta_squared": 0.9969268874006939,
+       "noncent_parameter": 5839.253653531702,
+       "observed_power": 1
+      },
+      "Corrected Model": {
+       "sum_of_squares": 2.835917948717949,
+       "df": 7,
+       "mean_square": 0.40513113553113556,
+       "f_value": 1.6341546019900295,
+       "significance": 0.1891646985152724,
+       "partial_eta_squared": 0.3885678952490365,
+       "noncent_parameter": 11.439082213930206,
+       "observed_power": 0.5030562621439079
+      },
+      "faktorA": {
+       "sum_of_squares": 1.226477419354838,
+       "df": 1,
+       "mean_square": 1.226477419354838,
+       "f_value": 4.947172762833803,
+       "significance": 0.03916759796081459,
+       "partial_eta_squared": 0.2155896420863859,
+       "noncent_parameter": 4.947172762833803,
+       "observed_power": 0.5575963021463071
+      },
+      "Corrected Total": {
+       "sum_of_squares": 7.298384615384616,
+       "df": 25,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "faktorA*faktorB": {
+       "sum_of_squares": 0.13563371943372005,
+       "df": 3,
+       "mean_square": 0.04521123981124001,
+       "f_value": 0.18236602699605306,
+       "significance": 0.906979832176195,
+       "partial_eta_squared": 0.02949777256793429,
+       "noncent_parameter": 0.5470980809881593,
+       "observed_power": 0.07752976084749708
+      },
+      "faktorB": {
+       "sum_of_squares": 1.4255559845559862,
+       "df": 3,
+       "mean_square": 0.4751853281853287,
+       "f_value": 1.9167282461125947,
+       "significance": 0.1630626183274314,
+       "partial_eta_squared": 0.2421111583631507,
+       "noncent_parameter": 5.750184738337785,
+       "observed_power": 0.41192968872113456
+      },
+      "Total": {
+       "sum_of_squares": 1520.6326000000001,
+       "df": 26,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     },
+     "Y2A1": {
+      "faktorB": {
+       "sum_of_squares": 20.748423423423503,
+       "df": 3,
+       "mean_square": 6.916141141141168,
+       "f_value": 0.25347777684226386,
+       "significance": 0.8578281609051682,
+       "partial_eta_squared": 0.040533889443237006,
+       "noncent_parameter": 0.7604333305267916,
+       "observed_power": 0.08902310065330377
+      },
+      "Corrected Total": {
+       "sum_of_squares": 912.7215384615378,
+       "df": 25,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Error": {
+       "sum_of_squares": 491.1299999999999,
+       "df": 18,
+       "mean_square": 27.284999999999993,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Corrected Model": {
+       "sum_of_squares": 421.5915384615379,
+       "df": 7,
+       "mean_square": 60.22736263736255,
+       "f_value": 2.2073433255401342,
+       "significance": 0.0833652728264761,
+       "partial_eta_squared": 0.46190598194073823,
+       "noncent_parameter": 15.451403278780942,
+       "observed_power": 0.6540755185523053
+      },
+      "Total": {
+       "sum_of_squares": 184100.02,
+       "df": 26,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "faktorA*faktorB": {
+       "sum_of_squares": 27.987496782496578,
+       "df": 3,
+       "mean_square": 9.329165594165525,
+       "f_value": 0.34191554312499645,
+       "significance": 0.7953133203642901,
+       "partial_eta_squared": 0.053913607142821805,
+       "noncent_parameter": 1.0257466293749893,
+       "observed_power": 0.10384502071329449
+      },
+      "Intercept": {
+       "sum_of_squares": 174243.5510752688,
+       "df": 1,
+       "mean_square": 174243.5510752688,
+       "f_value": 6386.056480676886,
+       "significance": 0,
+       "partial_eta_squared": 0.997189281503948,
+       "noncent_parameter": 6386.056480676886,
+       "observed_power": 1
+      },
+      "faktorA": {
+       "sum_of_squares": 363.25204301075314,
+       "df": 1,
+       "mean_square": 363.25204301075314,
+       "f_value": 13.313250614284524,
+       "significance": 0.0018368086195860167,
+       "partial_eta_squared": 0.4251634804152612,
+       "noncent_parameter": 13.313250614284524,
+       "observed_power": 0.9316380498909269
+      }
+     }
+    },
+    "r_squared": {
+     "Y1A1": 0.38856789524903645,
+     "Y2A1": 0.4619059819407383
+    },
+    "adjusted_r_squared": {
+     "Y2A1": 0.25264719713991424,
+     "Y1A1": 0.15078874340143966
+    }
+   },
+   "plots": {
+    "Y2A1": {
+     "title": "Estimated Marginal Means of Y2A1",
+     "x_label": "faktorA",
+     "y_label": "Y2A1",
+     "series": [],
+     "y_axis_starts_at_zero": false,
+     "includes_reference_line": false,
+     "dependent_variable": "Y2A1",
+     "plot_type": "Line",
+     "groups_label": "faktorB",
+     "model": "Intercept + faktorA + faktorB",
+     "legend": []
+    },
+    "Y1A1": {
+     "title": "Estimated Marginal Means of Y1A1",
+     "x_label": "faktorA",
+     "y_label": "Y1A1",
+     "series": [],
+     "y_axis_starts_at_zero": false,
+     "includes_reference_line": false,
+     "dependent_variable": "Y1A1",
+     "plot_type": "Line",
+     "groups_label": "faktorB",
+     "model": "Intercept + faktorA + faktorB",
+     "legend": []
+    }
+   },
+   "executed_functions": [
+    "basic_processing_summary",
+    "calculate_descriptive_statistics",
+    "calculate_box_test",
+    "calculate_bartlett_test",
+    "calculate_levene_test",
+    "calculate_tests_between_subjects_effects",
+    "calculate_multivariate_tests",
+    "calculate_univariate_tests",
+    "calculate_posthoc_tests",
+    "calculate_homogeneous_subsets",
+    "generate_plots"
+   ],
+   "box_test": {
+    "box_m": 25.91763361432172,
+    "f": 0.9010496028522726,
+    "df1": 18,
+    "df2": 891.8186147415217,
+    "significance": 0.5774145592750659,
+    "design": "Box's M Test of Equality of Covariance Matrices",
+    "description": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."
+   },
+   "bartlett_test": {
+    "likelihood_ratio": 0.9452537023236478,
+    "approx_chi_square": 1.323095107125409,
+    "df": 1,
+    "significance": 0.25003733029308184,
+    "description": "Tests the null hypothesis that the correlation matrix is an identity matrix.",
+    "design": "Bartlett's Test of Sphericity"
+   },
+   "multivariate_tests": {
+    "effects": {
+     "faktorA*faktorB": {
+      "Roy's Largest Root": {
+       "value": 0.05699493708695974,
+       "f": 0.3419696225217585,
+       "hypothesis_df": 3,
+       "error_df": 18,
+       "significance": 0.7952751868686908,
+       "partial_eta_squared": 0.053921674633594506,
+       "noncent_parameter": 1.0259088675652754,
+       "observed_power": 0.10385425319999686,
+       "is_exact_statistic": false
+      },
+      "Pillai's Trace": {
+       "value": 0.08335194229820121,
+       "f": 0.26093035274763887,
+       "hypothesis_df": 6,
+       "error_df": 36,
+       "significance": 0.9514320697049163,
+       "partial_eta_squared": 0.041675971149100606,
+       "noncent_parameter": 1.5655821164858332,
+       "observed_power": 0.10995543434594512,
+       "is_exact_statistic": false
+      },
+      "Hotelling's Trace": {
+       "value": 0.08731760910537448,
+       "f": 0.23284695761433194,
+       "hypothesis_df": 6,
+       "error_df": 32,
+       "significance": 0.9626874065543712,
+       "partial_eta_squared": 0.04183244980278725,
+       "noncent_parameter": 1.3970817456859916,
+       "observed_power": 0.10158578232012327,
+       "is_exact_statistic": false
+      },
+      "Wilks' Lambda": {
+       "value": 0.9182349870191894,
+       "f": 0.24691703754094757,
+       "hypothesis_df": 6,
+       "error_df": 34,
+       "significance": 0.957234840536585,
+       "partial_eta_squared": 0.041754213670005536,
+       "noncent_parameter": 1.4815022252456855,
+       "observed_power": 0.1057443980572289,
+       "is_exact_statistic": false
+      }
+     },
+     "Intercept": {
+      "Pillai's Trace": {
+       "value": 0.9984807315141556,
+       "f": 5586.297811708494,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0,
+       "partial_eta_squared": 0.9984807315141556,
+       "noncent_parameter": 11172.595623416988,
+       "observed_power": 1,
+       "is_exact_statistic": true
+      },
+      "Hotelling's Trace": {
+       "value": 657.2115072598228,
+       "f": 5586.297811708494,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0,
+       "partial_eta_squared": 0.9984807315141556,
+       "noncent_parameter": 11172.595623416988,
+       "observed_power": 1,
+       "is_exact_statistic": true
+      },
+      "Wilks' Lambda": {
+       "value": 0.0015192684858444131,
+       "f": 5586.297811708494,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0,
+       "partial_eta_squared": 0.9984807315141556,
+       "noncent_parameter": 11172.595623416988,
+       "observed_power": 1,
+       "is_exact_statistic": true
+      },
+      "Roy's Largest Root": {
+       "value": 657.2115072598228,
+       "f": 5586.297811708494,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0,
+       "partial_eta_squared": 0.9984807315141556,
+       "noncent_parameter": 11172.595623416988,
+       "observed_power": 1,
+       "is_exact_statistic": true
+      }
+     },
+     "faktorB": {
+      "Roy's Largest Root": {
+       "value": 0.340885716666733,
+       "f": 2.045314300000398,
+       "hypothesis_df": 3,
+       "error_df": 18,
+       "significance": 0.14351894171033386,
+       "partial_eta_squared": 0.2542242880430783,
+       "noncent_parameter": 6.1359429000011945,
+       "observed_power": 0.4370182248612947,
+       "is_exact_statistic": false
+      },
+      "Hotelling's Trace": {
+       "value": 0.3667031122095682,
+       "f": 0.9778749658921818,
+       "hypothesis_df": 6,
+       "error_df": 32,
+       "significance": 0.45614292701538606,
+       "partial_eta_squared": 0.15494259094762924,
+       "noncent_parameter": 5.867249795353091,
+       "observed_power": 0.3274695993008131,
+       "is_exact_statistic": false
+      },
+      "Wilks' Lambda": {
+       "value": 0.7270063026785358,
+       "f": 0.9793064269357762,
+       "hypothesis_df": 6,
+       "error_df": 34,
+       "significance": 0.4542663980303804,
+       "partial_eta_squared": 0.14735335415042194,
+       "noncent_parameter": 5.875838561614657,
+       "observed_power": 0.3313524041756919,
+       "is_exact_statistic": false
+      },
+      "Pillai's Trace": {
+       "value": 0.279391920854738,
+       "f": 0.9742785387600765,
+       "hypothesis_df": 6,
+       "error_df": 36,
+       "significance": 0.45659001685095424,
+       "partial_eta_squared": 0.139695960427369,
+       "noncent_parameter": 5.845671232560459,
+       "observed_power": 0.3327294366235054,
+       "is_exact_statistic": false
+      }
+     },
+     "faktorA": {
+      "Hotelling's Trace": {
+       "value": 0.9853920302766952,
+       "f": 8.375832257351908,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0.002939724752822781,
+       "partial_eta_squared": 0.49632113721105525,
+       "noncent_parameter": 16.751664514703815,
+       "observed_power": 0.9268018585780682,
+       "is_exact_statistic": true
+      },
+      "Pillai's Trace": {
+       "value": 0.4963211372110554,
+       "f": 8.375832257351908,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0.002939724752822781,
+       "partial_eta_squared": 0.4963211372110554,
+       "noncent_parameter": 16.751664514703815,
+       "observed_power": 0.9268018585780682,
+       "is_exact_statistic": true
+      },
+      "Wilks' Lambda": {
+       "value": 0.5036788627889447,
+       "f": 8.375832257351908,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0.002939724752822781,
+       "partial_eta_squared": 0.4963211372110553,
+       "noncent_parameter": 16.751664514703815,
+       "observed_power": 0.9268018585780682,
+       "is_exact_statistic": true
+      },
+      "Roy's Largest Root": {
+       "value": 0.985392030276695,
+       "f": 8.375832257351908,
+       "hypothesis_df": 2,
+       "error_df": 17,
+       "significance": 0.002939724752822781,
+       "partial_eta_squared": 0.4963211372110552,
+       "noncent_parameter": 16.751664514703815,
+       "observed_power": 0.9268018585780682,
+       "is_exact_statistic": true
+      }
+     }
+    },
+    "design": "Type III sum of squares",
+    "alpha": 0.05
+   },
+   "univariate_tests": {
+    "tests": {
+     "Y1A1": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 2.835917948717928,
+       "df": 7,
+       "mean_square": 0.40513113553113256,
+       "f": 1.6341546019900173,
+       "significance": 0.18916469851527629,
+       "partial_eta_squared": 0.38856789524903473,
+       "noncent_parameter": 11.43908221393012,
+       "observed_power": 0.5030562621439034
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 1513.3342153846145,
+       "df": 1,
+       "mean_square": 1513.3342153846145,
+       "f": 6104.25083517107,
+       "significance": 0,
+       "partial_eta_squared": 0.9970599048479697,
+       "noncent_parameter": 6104.25083517107,
+       "observed_power": 1
+      },
+      {
+       "source": "faktorA",
+       "sum_of_squares": 1.417958974358964,
+       "df": 4,
+       "mean_square": 0.354489743589741,
+       "f": 1.4298852767412653,
+       "significance": 0.2645946491860046,
+       "partial_eta_squared": 0.24113203038677514,
+       "noncent_parameter": 5.719541106965061,
+       "observed_power": 0.3541572501957334
+      },
+      {
+       "source": "faktorB",
+       "sum_of_squares": 1.417958974358964,
+       "df": 4,
+       "mean_square": 0.354489743589741,
+       "f": 1.4298852767412653,
+       "significance": 0.2645946491860046,
+       "partial_eta_squared": 0.24113203038677514,
+       "noncent_parameter": 5.719541106965061,
+       "observed_power": 0.3541572501957334
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 4.462466666666667,
+       "df": 18,
+       "mean_square": 0.2479148148148148
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 1520.632599999999,
+       "df": 26
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 7.298384615384595,
+       "df": 25
+      }
+     ],
+     "Y2A1": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 421.5915384615307,
+       "df": 7,
+       "mean_square": 60.22736263736153,
+       "f": 2.207343325540097,
+       "significance": 0.08336527282648021,
+       "partial_eta_squared": 0.461905981940734,
+       "noncent_parameter": 15.451403278780678,
+       "observed_power": 0.6540755185522957
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 183187.29846153854,
+       "df": 1,
+       "mean_square": 183187.29846153854,
+       "f": 6713.846379385691,
+       "significance": 0,
+       "partial_eta_squared": 0.997326142192561,
+       "noncent_parameter": 6713.846379385691,
+       "observed_power": 1
+      },
+      {
+       "source": "faktorA",
+       "sum_of_squares": 210.79576923076536,
+       "df": 4,
+       "mean_square": 52.69894230769134,
+       "f": 1.931425409847585,
+       "significance": 0.14882546070780733,
+       "partial_eta_squared": 0.300310628945529,
+       "noncent_parameter": 7.72570163939034,
+       "observed_power": 0.4695510951122185
+      },
+      {
+       "source": "faktorB",
+       "sum_of_squares": 210.79576923076536,
+       "df": 4,
+       "mean_square": 52.69894230769134,
+       "f": 1.931425409847585,
+       "significance": 0.14882546070780733,
+       "partial_eta_squared": 0.300310628945529,
+       "noncent_parameter": 7.72570163939034,
+       "observed_power": 0.4695510951122185
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 491.1299999999999,
+       "df": 18,
+       "mean_square": 27.284999999999993
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 184100.02000000008,
+       "df": 26
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 912.7215384615306,
+       "df": 25
+      }
+     ]
+    },
+    "alpha": 0.05
+   }
+  },
+  "errors": "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+ }
+}

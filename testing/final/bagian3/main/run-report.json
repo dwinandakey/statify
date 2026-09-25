@@ -1,0 +1,560 @@
+{
+  "base": "http://localhost:3101",
+  "mode": "main",
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-25T12:50:39.415Z",
+  "configs": {
+    "mv1": {
+      "modeActual": "main",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "mpg [mpg]",
+          "disp [disp]",
+          "hp [hp]",
+          "wt [wt]"
+        ],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv3": {
+      "modeActual": "main",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests — Hotelling T² Berpasangan",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv4": {
+      "modeActual": "main",
+      "dataRows": 8,
+      "dialog": {
+        "dep": [
+          "y1 [y1]",
+          "y2 [y2]"
+        ],
+        "fix": [
+          "treatment [treatment]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv4ph": {
+      "modeActual": "main",
+      "dataRows": 8,
+      "dialog": {
+        "dep": [
+          "y1 [y1]",
+          "y2 [y2]"
+        ],
+        "fix": [
+          "treatment [treatment]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "treatment",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv5": {
+      "modeActual": "main",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "Y1A1 [Y1A1]",
+          "Y2A1 [Y2A1]"
+        ],
+        "fix": [
+          "faktorA [faktorA]",
+          "faktorB [faktorB]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv6": {
+      "modeActual": "main",
+      "dataRows": 26,
+      "dialog": {
+        "dep": [
+          "Y1A1 [Y1A1]",
+          "Y2A1 [Y2A1]"
+        ],
+        "fix": [
+          "faktorA [faktorA]",
+          "faktorB [faktorB]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv7": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [
+        "2 case(s) with missing values were excluded (listwise)."
+      ],
+      "rawCaptured": false
+    },
+    "mv8": {
+      "modeActual": "main",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "Y1A1 [Y1A1]",
+          "Y2A1 [Y2A1]"
+        ],
+        "fix": [
+          "faktorA [faktorA]",
+          "faktorB [faktorB]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2d": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2s": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2wd": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2ws": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv3d": {
+      "modeActual": "main",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests — Hotelling T² Berpasangan",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv3s": {
+      "modeActual": "main",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests — Hotelling T² Berpasangan",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv1ci": {
+      "modeActual": "main",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "mpg [mpg]",
+          "disp [disp]",
+          "hp [hp]",
+          "wt [wt]"
+        ],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv1ci10": {
+      "modeActual": "main",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "mpg [mpg]",
+          "disp [disp]",
+          "hp [hp]",
+          "wt [wt]"
+        ],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2ci": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2wci": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv2dci": {
+      "modeActual": "main",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv3ci": {
+      "modeActual": "main",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests — Hotelling T² Berpasangan",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv3dci": {
+      "modeActual": "main",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests — Hotelling T² Berpasangan",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    },
+    "mv9": {
+      "modeActual": "main",
+      "dataRows": 26,
+      "dialog": {
+        "dep": [
+          "y1 [y1]",
+          "y2 [y2]",
+          "y3 [y3]"
+        ],
+        "fix": [
+          "kelompok [kelompok]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": false
+    }
+  }
+}

@@ -1,0 +1,10 @@
+gambar51: hash v5 65d0361fe7c8 | final 65d0361fe7c8 | catatan kandidat 0 | hash v5 terbentuk kembali setelah 0 titik tambahan 944238f0 dihapus (tidak ada catatan yang berubah)
+a: hash v5 05a38263ead6 | final 33fbd3c750a7 | catatan kandidat 6 | hash v5 terbentuk kembali setelah 5 titik tambahan 944238f0 dihapus
+b: hash v5 ec548b7db5e3 | final bacba7b1d57c | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+c: hash v5 cad88ef17941 | final e7d5e7d9ba21 | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+cEm: hash v5 123c6d3ff9e3 | final aeacfd765f86 | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+cPoly: hash v5 0b3140b3685e | final a9aa4dc1b949 | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+cRep: hash v5 678650679852 | final bc943d2d173f | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+exp5000n: hash v5 13d7c56765ec | final d18ef7263b9a | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+exp5000: hash v5 6fc65b7571a9 | final e0ce09d67d56 | catatan kandidat 3 | hash v5 terbentuk kembali setelah 3 titik tambahan 944238f0 dihapus
+desain: 9, tidak terjelaskan: 0

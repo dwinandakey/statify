@@ -1,0 +1,4 @@
+Jest penuh: 49 suite gagal dari 279; baseline 49
+tes: 6877 lulus, 210 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 0

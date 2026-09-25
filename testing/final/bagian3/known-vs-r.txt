@@ -1,0 +1,5 @@
+mvK1: known_covariance_test = harness K1 (divalidasi R) true
+mvK1n: known_covariance_test = harness K1 (divalidasi R) true
+mvK2: known_covariance_test = harness K2-d (divalidasi R) true
+mvK3: known_covariance_test = harness K3-d (divalidasi R) true
+mvK4: known_covariance_test = harness K4 (divalidasi R) true

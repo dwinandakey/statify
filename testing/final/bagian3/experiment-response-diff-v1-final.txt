@@ -1,0 +1,22 @@
+Respons worker v1 vs final (path JSON, v1 → final)
+
+multivariate-100: payload beda 0 path; respons beda 4 path
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.significance: 0.00009149637235428276 → 0.00009141165706461063
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.observed_power: 0.9983518121954822 → 0.9983526139002897
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.7075965560891849 → 0.7075987716703812
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.5015386523481444 → 0.5015632398487545
+multivariate-1000: payload beda 0 path; respons beda 2 path
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8232118822569756 → 0.8232118384768046
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4540028449335981 → 0.4540025703163685
+multivariate-2000: payload beda 0 path; respons beda 2 path
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.060175877191644966 → 0.060175860720141694
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.9101649225211892 → 0.9101649550775569
+multivariate-500: payload beda 0 path; respons beda 2 path
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8608002905747025 → 0.8608005058529429
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4209212096824211 → 0.4209224654402318
+repeated-measures-10000: payload beda 0 path; respons beda 0 path
+repeated-measures-20000: payload beda 0 path; respons beda 0 path
+repeated-measures-40000: payload beda 0 path; respons beda 0 path
+repeated-measures-5000: payload beda 0 path; respons beda 0 path
+
+total path respons berbeda: 10
