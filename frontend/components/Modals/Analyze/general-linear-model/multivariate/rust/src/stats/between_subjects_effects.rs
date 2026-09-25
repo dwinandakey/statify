@@ -136,8 +136,20 @@ pub fn calculate_tests_between_subjects_effects(
             // of running GLM on `d_var = var − μ₀`; the other effects do not
             // depend on the shift because the intercept is in both models.
             let y_shifted: Vec<f64> = y_vector.iter().map(|y| y - mu0_k).collect();
-            let intercept_ss = sse_without_columns(&x_deviation, &y_shifted, &[0])? -
-                sse_without_columns(&x_deviation, &y_shifted, &[])?;
+            // Type I and II (v5): R(μ) = n·ȳ² (weighted grand mean), as the
+            // first term of the sequential decomposition; Type II adjusts the
+            // intercept for no other effect, since every effect contains it
+            // (menunggu SPSS: mv6 Type II). Type III/IV unchanged.
+            let intercept_ss = match config.model.sum_of_square_method {
+                SumOfSquaresMethod::TypeI | SumOfSquaresMethod::TypeII => {
+                    let n_obs = y_shifted.len() as f64;
+                    let mean = y_shifted.iter().sum::<f64>() / n_obs;
+                    n_obs * mean * mean
+                }
+                _ =>
+                    sse_without_columns(&x_deviation, &y_shifted, &[0])? -
+                        sse_without_columns(&x_deviation, &y_shifted, &[])?,
+            };
             let intercept_df = 1;
             let intercept_ms = intercept_ss;
             let intercept_f = intercept_ms / ms_error;

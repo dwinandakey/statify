@@ -70,7 +70,7 @@ for (const c of cases) {
     try {
         const a = new mod.MultivariateAnalysis(p.dep_data, p.fix_factor_data, p.covar_data, p.wls_data, p.dep_data_defs, p.fix_factor_data_defs, p.covar_data_defs, p.wls_data_defs, p.config_data);
         const r = plain(a.get_formatted_results());
-        out[c.id] = { multivariate_tests: r.multivariate_tests ?? null, tests_between_subjects_effects: r.tests_between_subjects_effects ?? null, errors: plain(a.get_all_errors()) };
+        out[c.id] = { multivariate_tests: r.multivariate_tests ?? null, tests_between_subjects_effects: r.tests_of_between_subjects_effects ?? null, errors: plain(a.get_all_errors()) };
         a.free();
     } catch (e) {
         out[c.id] = { thrown: String(e && e.message ? e.message : e) };

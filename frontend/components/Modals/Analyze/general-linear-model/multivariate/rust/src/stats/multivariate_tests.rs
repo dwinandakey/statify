@@ -522,6 +522,17 @@ fn calculate_hypothesis_error_matrices(
                     h_matrix[i][j] = (n_obs as f64) * centered[i] * centered[j];
                 }
             }
+        } else if matches!(
+            config.model.sum_of_square_method,
+            SumOfSquaresMethod::TypeI | SumOfSquaresMethod::TypeII
+        ) {
+            // Type I and II (v5): R(μ) SSCP = N·(ȳ − μ₀)(ȳ − μ₀)ᵀ with the
+            // weighted grand mean, as the Intercept of the univariate tests.
+            for i in 0..p {
+                for j in 0..p {
+                    h_matrix[i][j] = (n_obs as f64) * centered[i] * centered[j];
+                }
+            }
         } else {
             // Factor case: Type III intercept SSCP.
             let mut sum_means = vec![0.0_f64; p];
@@ -1031,7 +1042,14 @@ fn effect_hypothesis_sscps(
         if config.model.intercept {
             let mu0 = config.main.test_values.clone().unwrap_or_else(|| vec![0.0; p]);
             let y0 = DMatrix::from_fn(n, p, |r, c| y_mat[(r, c)] - mu0.get(c).copied().unwrap_or(0.0));
-            let h_intercept = residual_sscp(&x_deviation_mat, &y0, &[0], false)? - residual_sscp(&x_deviation_mat, &y0, &[], false)?;
+            let h_intercept = match config.model.sum_of_square_method {
+                // Type I and II (v5): R(μ) SSCP n·ȳ₀ȳ₀ᵀ (weighted grand mean).
+                SumOfSquaresMethod::TypeI | SumOfSquaresMethod::TypeII => {
+                    let means: Vec<f64> = (0..p).map(|c| y0.column(c).sum() / (n as f64)).collect();
+                    DMatrix::from_fn(p, p, |i, j| (n as f64) * means[i] * means[j])
+                }
+                _ => residual_sscp(&x_deviation_mat, &y0, &[0], false)? - residual_sscp(&x_deviation_mat, &y0, &[], false)?,
+            };
             out.insert("Intercept".to_string(), (to_rows(&h_intercept), 1));
         }
         out.insert(MAIN_EFFECTS_ERROR_KEY.to_string(), (to_rows(&e), n.saturating_sub(n_cols)));
