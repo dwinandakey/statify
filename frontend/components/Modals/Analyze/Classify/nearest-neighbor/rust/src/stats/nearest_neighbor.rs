@@ -305,6 +305,10 @@ mod tests {
                 is_cate_target_var: true,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
             output: OutputConfig {
                 case_summary: true,

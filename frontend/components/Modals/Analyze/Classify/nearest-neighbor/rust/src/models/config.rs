@@ -112,6 +112,14 @@ pub struct SaveConfig {
     pub random_assign_to_partition: bool,
     #[serde(rename = "RandomAssignToFold")]
     pub random_assign_to_fold: bool,
+    #[serde(rename = "PredictedValueName", default)]
+    pub predicted_value_name: Option<String>,
+    #[serde(rename = "ProbabilityName", default)]
+    pub probability_name: Option<String>,
+    #[serde(rename = "PartitionName", default)]
+    pub partition_name: Option<String>,
+    #[serde(rename = "FoldName", default)]
+    pub fold_name: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

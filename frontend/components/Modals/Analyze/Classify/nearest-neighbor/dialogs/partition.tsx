@@ -15,6 +15,12 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { HelperIcon } from "./helper-icon";
+import {
+  isCrossValidationEnabled as computeIsCrossValidationEnabled,
+  isSeedUnavailable,
+  enforcePartitionRules,
+  applyCrossValidationDefaults,
+} from "@/components/Modals/Analyze/Classify/nearest-neighbor/hooks/useNearestNeighborPartitionRules";
 
 const helperText = {
   trainingAndHoldoutPartition:
@@ -51,18 +57,6 @@ const partitionStatesEqual = (
   right: KNNPartitionType,
 ) => partitionFields.every((field) => Object.is(left[field], right[field]));
 
-const isSeedUnavailable = (state: KNNPartitionType) =>
-  Boolean(state.UseVariable && state.VFoldUsePartitioningVar);
-
-const enforcePartitionRules = (state: KNNPartitionType): KNNPartitionType => {
-  if (!isSeedUnavailable(state) || !state.SetSeed) return state;
-
-  return {
-    ...state,
-    SetSeed: false,
-  };
-};
-
 export const KNNPartition = ({
   updateFormData,
   data,
@@ -75,7 +69,10 @@ export const KNNPartition = ({
     enforcePartitionRules(normalizePartitionState(data)),
   );
 
-  const isCrossValidationEnabled = isAutoK && !isFeatureSelectionActive;
+  const isCrossValidationEnabled = computeIsCrossValidationEnabled(
+    isAutoK,
+    isFeatureSelectionActive,
+  );
 
   useEffect(() => {
     const nextState = enforcePartitionRules(normalizePartitionState(data));
@@ -99,28 +96,15 @@ export const KNNPartition = ({
   const isSeedDisabled = isSeedUnavailable(partitionState);
 
   useEffect(() => {
-    if (isCrossValidationEnabled) {
-      setPartitionState((prev) => {
-        const nextState = enforcePartitionRules({
-          ...prev,
-          VFoldUseRandomly: prev.VFoldUseRandomly ?? true,
-          VFoldUsePartitioningVar: prev.VFoldUsePartitioningVar ?? false,
-          NumPartition: prev.NumPartition ?? 10, // biasanya default 10 folds
-        });
-        if (partitionStatesEqual(prev, nextState)) return prev;
-        return nextState;
-      });
-    } else if (isFeatureSelectionActive) {
-      setPartitionState((prev) => {
-        const nextState = enforcePartitionRules({
-          ...prev,
-          VFoldUseRandomly: false,
-          VFoldUsePartitioningVar: false,
-        });
-        if (partitionStatesEqual(prev, nextState)) return prev;
-        return nextState;
-      });
-    }
+    setPartitionState((prev) => {
+      const nextState = applyCrossValidationDefaults(
+        prev,
+        isCrossValidationEnabled,
+        isFeatureSelectionActive,
+      );
+      if (partitionStatesEqual(prev, nextState)) return prev;
+      return nextState;
+    });
   }, [isCrossValidationEnabled, isFeatureSelectionActive]);
 
   useEffect(() => {
@@ -296,6 +280,9 @@ export const KNNPartition = ({
                           <Input
                             id="TrainingNumber"
                             type="number"
+                            min={1}
+                            max={100}
+                            step={1}
                             className="min-w-2xl w-full"
                             placeholder=""
                             value={partitionState.TrainingNumber ?? 70}
@@ -421,7 +408,9 @@ export const KNNPartition = ({
                         <Label htmlFor="TrainingNumber">Number of Folds:</Label>
                         <Input
                           id="NumPartition"
-                          type="text"
+                          type="number"
+                          min={2}
+                          step={1}
                           className="min-w-2xl w-full"
                           placeholder=""
                           value={partitionState.NumPartition ?? ""}
@@ -527,6 +516,9 @@ export const KNNPartition = ({
                       <Input
                         id="Seed"
                         type="number"
+                        min={0}
+                        max={4294967295}
+                        step={1}
                         className="min-w-2xl w-full"
                         placeholder=""
                         value={partitionState.Seed ?? ""}

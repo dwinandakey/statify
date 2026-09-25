@@ -1,7 +1,7 @@
-import init, { KNNAnalysis } from "/workers/Classify/NearestNeighbor/pkg/wasm.js?v=knn-predictor-space-axis-picker-20260521";
+import init, { KNNAnalysis } from "/workers/Classify/NearestNeighbor/pkg/wasm.js?v=knn-custom-save-names-20260925";
 
 const WASM_URL =
-  "/workers/Classify/NearestNeighbor/pkg/wasm_bg.wasm?v=knn-predictor-space-axis-picker-20260521";
+  "/workers/Classify/NearestNeighbor/pkg/wasm_bg.wasm?v=knn-custom-save-names-20260925";
 
 self.onmessage = async (e) => {
   const {

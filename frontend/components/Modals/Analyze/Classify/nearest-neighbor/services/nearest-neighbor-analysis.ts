@@ -6,6 +6,10 @@ import { useDataStore, type CellUpdate } from "@/stores/useDataStore";
 import { useVariableStore } from "@/stores/useVariableStore";
 import type { Variable } from "@/types/Variable";
 import type { ResultJson } from "@/types/Table";
+import {
+  DEFAULT_SAVED_VARIABLE_NAMES,
+  resolveSavedVariableName,
+} from "@/components/Modals/Analyze/Classify/nearest-neighbor/hooks/useNearestNeighborSaveRules";
 
 type SavedVariableResult = {
   name: string;
@@ -36,7 +40,7 @@ const hiddenViewerOutputKeys = new Set([
   "neighbor_details",
 ]);
 
-function isResultJson(result: unknown): result is ResultJson {
+export function isResultJson(result: unknown): result is ResultJson {
   return (
     typeof result === "object" &&
     result !== null &&
@@ -44,18 +48,18 @@ function isResultJson(result: unknown): result is ResultJson {
   );
 }
 
-function hasWorkerErrors(errors: unknown): errors is string {
+export function hasWorkerErrors(errors: unknown): errors is string {
   return typeof errors === "string" && !errors.includes("No errors occurred.");
 }
 
-function filterViewerOutput(result: ResultJson): ResultJson {
+export function filterViewerOutput(result: ResultJson): ResultJson {
   return {
     ...result,
     tables: result.tables.filter((table) => !hiddenViewerOutputKeys.has(table.key)),
   };
 }
 
-function normalizeKnnVarDefsForWorker(defs: unknown[][]) {
+export function normalizeKnnVarDefsForWorker(defs: unknown[][]) {
   return defs.map((group) =>
     group.map((definition) => {
       const varDef = definition as VariableDefinitionPayload;
@@ -73,7 +77,7 @@ function normalizeKnnVarDefsForWorker(defs: unknown[][]) {
   );
 }
 
-function withInternalChartOutputs(configData: KNNAnalysisType["configData"]) {
+export function withInternalChartOutputs(configData: KNNAnalysisType["configData"]) {
   const needsKSelectionErrorChart =
     configData.neighbors.AutoSelection && !configData.features.PerformSelection;
   const needsKAndPredictorSelectionChart =
@@ -154,7 +158,7 @@ export async function analyzeKNN({
   const workerConfigData = withInternalChartOutputs(configData);
 
   const worker = new Worker(
-    "/workers/Classify/NearestNeighbor/nearest-neighbor.worker.js?v=knn-predictor-space-axis-picker-20260521",
+    "/workers/Classify/NearestNeighbor/nearest-neighbor.worker.js?v=knn-custom-save-names-20260925",
     { type: "module" },
   );
 
@@ -210,6 +214,10 @@ export async function analyzeKNN({
         await saveKnnVariablesToDataViewer(
           result.saved_variables,
           configData.save.CustomName,
+          [
+            resolveSavedVariableName(configData.save, "PartitionName"),
+            resolveSavedVariableName(configData.save, "FoldName"),
+          ],
         );
 
         worker.terminate();
@@ -228,9 +236,13 @@ export async function analyzeKNN({
 
 }
 
-async function saveKnnVariablesToDataViewer(
+export async function saveKnnVariablesToDataViewer(
   savedVariables: SavedVariablesResult | null | undefined,
   useCustomNames: boolean,
+  partitionRoleNames: string[] = [
+    DEFAULT_SAVED_VARIABLE_NAMES.PartitionName,
+    DEFAULT_SAVED_VARIABLE_NAMES.FoldName,
+  ],
 ) {
   const variablesToSave = savedVariables?.variables ?? [];
   if (!variablesToSave.length) return;
@@ -280,11 +292,9 @@ async function saveKnnVariablesToDataViewer(
       columns: 64,
       align: savedVariable.variable_type === "STRING" ? "left" : "right",
       measure: savedVariable.measure,
-      role:
-        savedVariable.name === "KNN_Partition" ||
-        savedVariable.name === "KNN_Fold"
-          ? "partition"
-          : "none",
+      role: partitionRoleNames.includes(savedVariable.name)
+        ? "partition"
+        : "none",
     });
 
     savedVariable.values.forEach((value, rowIndex) => {
@@ -308,7 +318,7 @@ async function saveKnnVariablesToDataViewer(
   }
 }
 
-function normalizeSavedValue(value: string | number | boolean | null | undefined) {
+export function normalizeSavedValue(value: string | number | boolean | null | undefined) {
   if (value === null || value === undefined) return "";
   if (typeof value === "boolean") return value ? "true" : "false";
   return value;

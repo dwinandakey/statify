@@ -216,7 +216,7 @@ export const KNNDialog = ({
                           }
                         />
                         <label htmlFor="normalize" className="text-sm">
-                          Normalize scale features
+                          Normalize scale features (min-max scaling to [-1,1])
                         </label>
                       </div>
                     </div>
