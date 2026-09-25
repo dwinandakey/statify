@@ -9,6 +9,7 @@ type ChartPoint = {
 
 type ChartPayload = {
   charts?: Array<{
+    chartType?: string;
     chartData: ChartPoint[];
     chartMetadata?: {
       title?: string;
@@ -39,12 +40,13 @@ function parsePayload(data: string | ChartPayload): ChartPayload {
 
 function formatClassificationValue(value: number) {
   if (!Number.isFinite(value)) return "";
-  return value.toFixed(2);
+  return value.toFixed(4);
 }
 
 function formatRegressionValue(value: number) {
   if (!Number.isFinite(value)) return "";
   return value.toLocaleString(undefined, {
+    minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   });
 }
@@ -125,11 +127,21 @@ export default function KNNKPredictorSelectionChart({
   const showPointLabels = Boolean(
     chart?.chartConfig?.kAndPredictorSelection?.showPointLabels,
   );
+  // Only the k selection chart plots k on the x-axis; the predictor selection
+  // chart plots model steps, so selectedK must not be matched against it.
+  const rawSelectedK = chart?.chartConfig?.kAndPredictorSelection?.selectedK;
+  const highlightedK =
+    chart?.chartType === "KNN k Selection Error Log" &&
+    rawSelectedK !== null &&
+    rawSelectedK !== undefined &&
+    Number.isFinite(Number(rawSelectedK))
+      ? Number(rawSelectedK)
+      : null;
   const [tooltip, setTooltip] = useState<TooltipState>(null);
 
   if (!chart || points.length === 0) return null;
 
-  const margin = { top: 96, right: 34, bottom: 70, left: 76 };
+  const margin = { top: 96, right: 34, bottom: 70, left: 92 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const modelValues = points.map((point) => point.model);
@@ -264,6 +276,7 @@ export default function KNNKPredictorSelectionChart({
         {points.map((point) => {
           const x = scaleX(point.model);
           const y = scaleY(point.value);
+          const isSelected = highlightedK !== null && point.model === highlightedK;
           return (
             <g key={`point-${point.model}-${point.predictor ?? "k"}`}>
               {showPointLabels && point.predictor && (
@@ -279,8 +292,8 @@ export default function KNNKPredictorSelectionChart({
               <circle
                 cx={x}
                 cy={y}
-                r={5}
-                fill="#2563eb"
+                r={isSelected ? 7 : 5}
+                fill={isSelected ? "#dc2626" : "#2563eb"}
                 stroke="#ffffff"
                 strokeWidth={2}
                 onMouseMove={(event) => handleMouseMove(event, point)}

@@ -5,6 +5,14 @@ import type { Table } from "@/types/Table";
 import { useResultStore } from "@/stores/useResultStore";
 import { ChartService } from "@/services/chart/ChartService";
 import { buildNeighborDetails } from "./nearest-neighbor-analysis-formatter";
+import {
+  describeClassificationTable,
+  describeErrorSummary,
+  describeFeatureSelection,
+  describeKSelection,
+  describePredictorImportance,
+  isRegressionResult,
+} from "./nearest-neighbor-analysis-interpretation";
 
 export async function resultNearestNeighbor({
   formattedResult,
@@ -55,7 +63,7 @@ export async function resultNearestNeighbor({
       if (kAndPredictorSelectionChart) {
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `k and Predictor Selection`,
-          description: `k and Predictor Selection`,
+          description: describeFeatureSelection(rawResult, configData),
           output_data: JSON.stringify(kAndPredictorSelectionChart),
           components: `k and Predictor Selection`,
         });
@@ -67,7 +75,7 @@ export async function resultNearestNeighbor({
       if (kSelectionErrorLogLineChart) {
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `k Selection Error Log`,
-          description: `k Selection Error Log`,
+          description: describeKSelection(rawResult?.k_selection_chart),
           output_data: JSON.stringify(kSelectionErrorLogLineChart),
           components: `k Selection Error Log`,
         });
@@ -75,9 +83,13 @@ export async function resultNearestNeighbor({
 
       const predictorImportance = findTable("predictor_importance");
       if (predictorImportance) {
+        const predictorImportanceDescription = describePredictorImportance(
+          rawResult?.predictor_importance,
+          isRegressionResult(rawResult),
+        );
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `Predictor Importance`,
-          description: `Predictor Importance`,
+          description: predictorImportanceDescription,
           output_data: predictorImportance,
           components: `Predictor Importance`,
         });
@@ -89,7 +101,7 @@ export async function resultNearestNeighbor({
         if (predictorImportanceChart) {
           await addStatistic(nearestNeighborAnalysisResultId, {
             title: `Predictor Importance Chart`,
-            description: `Predictor Importance Chart`,
+            description: predictorImportanceDescription,
             output_data: JSON.stringify(predictorImportanceChart),
             components: `Predictor Importance Chart`,
           });
@@ -100,7 +112,7 @@ export async function resultNearestNeighbor({
       if (confusionMatrix) {
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `Classification Table`,
-          description: `Classification Table`,
+          description: describeClassificationTable(rawResult?.classification_table),
           output_data: confusionMatrix,
           components: `Classification Table`,
         });
@@ -110,7 +122,10 @@ export async function resultNearestNeighbor({
       if (errorSummary) {
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `Error Summary`,
-          description: `Error Summary`,
+          description: describeErrorSummary(
+            rawResult?.error_summary,
+            rawResult?.classification_table,
+          ),
           output_data: errorSummary,
           components: `Error Summary`,
         });
