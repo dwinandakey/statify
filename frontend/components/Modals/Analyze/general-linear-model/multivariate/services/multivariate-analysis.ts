@@ -383,6 +383,10 @@ export async function analyzeMultivariate({
         contrastInfo,
         twoSampleDelta,
         sumOfSquareMethod: configData.model?.SumOfSquareMethod ?? null,
+        effectSizePower: {
+            effectSize: Boolean(configData.options?.EstEffectSize),
+            observedPower: Boolean(configData.options?.ObsPower),
+        },
         // Pass the user's DV selection order so per-DV tables (Descriptive
         // Statistics, Parameter Estimates) render in dialog order instead
         // of the non-deterministic Rust HashMap order. In paired mode the

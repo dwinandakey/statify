@@ -1,9 +1,17 @@
 import type { ResultJson, Row, Table } from "@/types/Table";
 import { formatGlmNumber, formatGlmSig as formatSig, formatGlmStat } from "@/hooks/useFormatter";
+import {
+    applyEffectSizePowerColumns,
+    type EffectSizePowerDisplay,
+} from "@/components/Modals/Analyze/general-linear-model/shared/effect-size-columns";
 
+/** `effectSizePower`: Options → Estimates of effect size / Observed power;
+ *  the Partial Eta Squared, Noncent. Parameter and Observed Power columns
+ *  appear only for the checked options (as SPSS). Absent: all columns kept. */
 export function transformRepeatedMeasureResult(
     data: any,
-    errors: string[] = []
+    errors: string[] = [],
+    effectSizePower: EffectSizePowerDisplay | null = null
 ): ResultJson {
     const resultJson: ResultJson = { tables: [] };
     if (!data) return resultJson;
@@ -27,6 +35,8 @@ export function transformRepeatedMeasureResult(
     formatEmmeans(data, resultJson);
     formatEmmeansPairwise(data, resultJson);
     formatErrors(errors, resultJson);
+
+    if (effectSizePower) applyEffectSizePowerColumns(resultJson, effectSizePower);
 
     return resultJson;
 }

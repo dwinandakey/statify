@@ -1,5 +1,9 @@
 ﻿import type { ResultJson, Row, Table } from "@/types/Table";
 import { formatGlmNumber, formatGlmSig as formatSig, formatGlmStat } from "@/hooks/useFormatter";
+import {
+    applyEffectSizePowerColumns,
+    type EffectSizePowerDisplay,
+} from "@/components/Modals/Analyze/general-linear-model/shared/effect-size-columns";
 
 export type MultivariateFormatterOptions = {
     testValues?: number[] | null;
@@ -35,6 +39,11 @@ export type MultivariateFormatterOptions = {
      *  "Type I Sum of Squares" / "Type III Sum of Squares" etc. so the user
      *  can confirm at a glance which decomposition is being shown. */
     sumOfSquareMethod?: string | null;
+    /** Options → Estimates of effect size / Observed power. When set, the
+     *  Partial Eta Squared, Noncent. Parameter and Observed Power columns
+     *  appear only for the checked options (as SPSS); when absent all
+     *  columns are kept. */
+    effectSizePower?: EffectSizePowerDisplay | null;
     /** Name → user-defined label map for the dependent variables in the
      *  analysis. SPSS displays the variable LABEL ("ultimate torque")
      *  wherever a DV appears in output; without this map Statify falls
@@ -310,6 +319,7 @@ export function transformMultivariateResult(
     formatSavedVariables(data, resultJson);
     formatErrors(errors, resultJson);
     annotateTwoSampleDelta(resultJson, options.twoSampleDelta ?? null);
+    if (options.effectSizePower) applyEffectSizePowerColumns(resultJson, options.effectSizePower);
 
     return resultJson;
 }

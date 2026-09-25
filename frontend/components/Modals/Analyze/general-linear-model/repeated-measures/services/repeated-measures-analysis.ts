@@ -184,7 +184,10 @@ export async function analyzeRepeatedMeasures({
         errors = [errorsString.trim()];
     }
 
-    const formattedResults = transformRepeatedMeasureResult(results, errors);
+    const formattedResults = transformRepeatedMeasureResult(results, errors, {
+        effectSize: Boolean(configData.options?.EstEffectSize),
+        observedPower: Boolean(configData.options?.ObsPower),
+    });
 
     /*
      * 🎉 Final Result Process 🎯
