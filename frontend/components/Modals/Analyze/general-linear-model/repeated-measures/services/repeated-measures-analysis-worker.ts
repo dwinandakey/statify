@@ -13,6 +13,7 @@ import type {
     GlmWorkerResponse,
 } from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 import init, { RepeatedMeasureAnalysis } from "../rust/pkg/wasm";
+import { errorMessage } from "../../shared/error-message";
 
 /** RepeatedMeasureAnalysis constructor arguments, keyed by their Rust parameter names. */
 export type RepeatedMeasuresWorkerPayload = {
@@ -55,7 +56,7 @@ self.onmessage = async (
             repeatedMeasure.free();
         }
     } catch (err) {
-        response = { id, ok: false, error: String(err) };
+        response = { id, ok: false, error: errorMessage(err) };
     }
 
     self.postMessage(response);

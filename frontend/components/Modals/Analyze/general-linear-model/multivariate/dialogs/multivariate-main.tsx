@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { errorMessage } from "@/components/Modals/Analyze/general-linear-model/shared/error-message";
 import type {
     MultivariateContainerProps,
     MultivariateMainType,
@@ -91,7 +92,7 @@ export const MultivariateContainer = ({
                     <span>
                         An error occurred while loading settings.
                         <br />
-                        Error: {String(err)}
+                        Error: {errorMessage(err)}
                     </span>
                 );
             },
@@ -236,7 +237,7 @@ export const MultivariateContainer = ({
                     <span>
                         An error occurred during Multivariate analysis.
                         <br />
-                        Error: {String(err)}
+                        Error: {errorMessage(err)}
                     </span>
                 );
             },

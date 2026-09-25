@@ -49,9 +49,10 @@ export class GlmWorkerUnavailableError extends Error {
 }
 
 /**
- * An analysis error reported by the worker. The worker sends `String(thrown)`
- * and `toString()` returns it unchanged, so the error toast shows the same
- * text as the main-thread path, which renders `String(err)`.
+ * An analysis error reported by the worker. The worker sends
+ * `errorMessage(thrown)` (shared/error-message.ts) and `toString()` returns it
+ * unchanged, so the error toast shows the same text as the main-thread path,
+ * which renders `errorMessage(err)`.
  */
 export class GlmWorkerTaskError extends Error {
     constructor(message: string) {

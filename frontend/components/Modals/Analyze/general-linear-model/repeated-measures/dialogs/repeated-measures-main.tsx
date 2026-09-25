@@ -43,6 +43,7 @@ import {
     analyzeRepeatedMeasures
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis";
 import {clearFormData, getFormData, saveFormData} from "@/hooks/useIndexedDB";
+import { errorMessage } from "@/components/Modals/Analyze/general-linear-model/shared/error-message";
 
 export const RepeatedMeasuresContainer = ({
     onClose,
@@ -312,7 +313,7 @@ export const RepeatedMeasuresContainer = ({
             });
         } catch (error) {
             console.error(error);
-            toast.error(`An error occurred during Repeated Measures analysis. Error: ${String(error)}`);
+            toast.error(`An error occurred during Repeated Measures analysis. Error: ${errorMessage(error)}`);
         }
 
         closeModal();

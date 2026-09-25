@@ -16,6 +16,7 @@ import type {
 // type check this import resolves to another GLM package's typings (all GLM
 // packages are named "wasm@0.1.0").
 import init, { MultivariateAnalysis } from "../rust/pkg";
+import { errorMessage } from "../../shared/error-message";
 
 /** MultivariateAnalysis constructor arguments, keyed by their Rust parameter names. */
 export type MultivariateWorkerPayload = {
@@ -70,7 +71,7 @@ self.onmessage = async (
             multivariate.free();
         }
     } catch (err) {
-        response = { id, ok: false, error: String(err) };
+        response = { id, ok: false, error: errorMessage(err) };
     }
 
     self.postMessage(response);
