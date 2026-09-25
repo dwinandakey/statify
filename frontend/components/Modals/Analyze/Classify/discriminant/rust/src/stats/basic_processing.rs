@@ -62,11 +62,17 @@ pub fn basic_processing_summary(
     let mut missing_group_codes = 0;
     let mut missing_disc_vars = 0;
     let mut both_missing = 0;
+    // The same three categories among the unselected cases. They stay out of the
+    // analysis (counted as Unselected above), but they are classified, so they
+    // enter the Classification Processing Summary.
+    let mut unselected_missing_group = 0;
+    let mut unselected_missing_disc = 0;
+    let mut unselected_both = 0;
 
     for (row, record) in data.group_data.iter().flatten().enumerate() {
-        if !is_selected(row) {
+        let selected = is_selected(row);
+        if !selected {
             unselected += 1;
-            continue;
         }
 
         let has_missing_group = match record.values.get(group_var) {
@@ -90,29 +96,37 @@ pub fn basic_processing_summary(
             }
         });
 
+        let (both, group_only, disc_only) = if selected {
+            (&mut both_missing, &mut missing_group_codes, &mut missing_disc_vars)
+        } else {
+            (&mut unselected_both, &mut unselected_missing_group, &mut unselected_missing_disc)
+        };
         if has_missing_group && has_missing_disc {
-            both_missing += 1;
+            *both += 1;
         } else if has_missing_group {
-            missing_group_codes += 1;
+            *group_only += 1;
         } else if has_missing_disc {
-            missing_disc_vars += 1;
+            *disc_only += 1;
         }
     }
 
     let excluded_cases = unselected + missing_group_codes + missing_disc_vars + both_missing;
     let valid_cases = total_cases - excluded_cases;
 
-    // Classification Processing Summary. The classification tables cover the
-    // selected cases. With "Replace missing values with mean", a case whose only
+    // Classification Processing Summary. Every case is processed: the selected ones
+    // and, with a selection variable, the unselected ones (classified as the testing
+    // part of a split). With "Replace missing values with mean", a case whose only
     // problem is a missing predictor is still classified, so it is not excluded.
-    let classification_processed = total_cases - unselected;
+    let classification_processed = total_cases;
+    let classification_missing_group_codes =
+        missing_group_codes + both_missing + unselected_missing_group + unselected_both;
     let classification_missing_disc_vars = if config.classify.replace {
         0
     } else {
-        missing_disc_vars
+        missing_disc_vars + unselected_missing_disc
     };
     let classification_used_cases =
-        classification_processed - missing_group_codes - both_missing - classification_missing_disc_vars;
+        classification_processed - classification_missing_group_codes - classification_missing_disc_vars;
 
     let calc_percent = |value: usize| -> f64 {
         if total_cases == 0 { 0.0 } else { ((value as f64) * 100.0) / (total_cases as f64) }
@@ -133,6 +147,7 @@ pub fn basic_processing_summary(
         unselected: Some(unselected),
         unselected_percent: Some(calc_percent(unselected)),
         classification_processed: Some(classification_processed),
+        classification_missing_group_codes: Some(classification_missing_group_codes),
         classification_missing_disc_vars: Some(classification_missing_disc_vars),
         classification_used_cases: Some(classification_used_cases),
     })

@@ -237,6 +237,8 @@ struct FormattedClassificationResults {
     cross_validated_classification: Option<Vec<GroupClassification>>,
     original_percentage: Vec<GroupPercentage>,
     cross_validated_percentage: Option<Vec<GroupPercentage>>,
+    unselected_classification: Option<Vec<GroupClassification>>,
+    unselected_percentage: Option<Vec<GroupPercentage>>,
 }
 
 #[derive(Serialize)]
@@ -578,11 +580,37 @@ impl FormatResult {
                         .collect()
                 });
 
+            let unselected_classification = results.unselected_classification
+                .as_ref()
+                .map(|unselected| {
+                    unselected
+                        .iter()
+                        .map(|(group, counts)| GroupClassification {
+                            group: group.clone(),
+                            counts: counts.clone(),
+                        })
+                        .collect()
+                });
+
+            let unselected_percentage = results.unselected_percentage
+                .as_ref()
+                .map(|unselected| {
+                    unselected
+                        .iter()
+                        .map(|(group, percentages)| GroupPercentage {
+                            group: group.clone(),
+                            percentages: percentages.clone(),
+                        })
+                        .collect()
+                });
+
             FormattedClassificationResults {
                 original_classification,
                 cross_validated_classification,
                 original_percentage,
                 cross_validated_percentage,
+                unselected_classification,
+                unselected_percentage,
             }
         });
 

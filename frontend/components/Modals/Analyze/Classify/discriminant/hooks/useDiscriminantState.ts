@@ -12,6 +12,74 @@ import { Variable } from "@/types/Variable";
 
 export type DiscriminantValueUnion = string | number | boolean | string[] | null;
 
+/** What the analysis sends to the engine (the worker message, or the main-thread call). */
+type EngineMessage = {
+    group_data: unknown;
+    independent_data: unknown;
+    selection_data: unknown;
+    strata_data?: unknown;
+    group_data_defs: unknown;
+    independent_data_defs: unknown;
+    selection_data_defs: unknown;
+    config_data: DiscriminantType;
+};
+
+/** The engine's reply, in the shape discriminant.worker.js posts back. */
+type EngineReply =
+    | { type: "SUCCESS"; payload: { formattedResults: any; log: unknown; errors: unknown } }
+    | { type: "ERROR"; error: string };
+
+const WASM_BASE = "/workers/Classify/Discriminant/pkg/";
+
+/**
+ * Developer switch for the responsiveness test (Web Worker vs main thread). With
+ * `localStorage.setItem("discriminant.noWorker", "1")` in the browser console the
+ * analysis runs on the main thread, so the page freezes while it computes; remove
+ * the key to go back to the worker. Read on every run, no reload needed.
+ */
+function isWorkerDisabled(): boolean {
+    try {
+        return typeof window !== "undefined" && window.localStorage.getItem("discriminant.noWorker") === "1";
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Run the engine on the main thread, doing what discriminant.worker.js does, and
+ * return the same reply it would post. The WASM call itself is synchronous and
+ * blocks the page until it returns.
+ */
+async function runEngineOnMainThread(message: EngineMessage): Promise<EngineReply> {
+    try {
+        const wasm = await import(/* webpackIgnore: true */ `${WASM_BASE}wasm.js`);
+        await wasm.default({ module_or_path: `${WASM_BASE}wasm_bg.wasm` });
+
+        // Let the browser paint the loading state before the synchronous call
+        // takes over the main thread.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+
+        const analysis = new wasm.DiscriminantAnalysis(
+            message.group_data,
+            message.independent_data,
+            message.selection_data,
+            message.group_data_defs,
+            message.independent_data_defs,
+            message.selection_data_defs,
+            message.config_data,
+            message.strata_data
+        );
+        const formattedResults = analysis.get_formatted_results();
+        const log = analysis.get_all_log();
+        const errors = analysis.get_all_errors();
+        analysis.free();
+        return { type: "SUCCESS", payload: { formattedResults, log, errors } };
+    } catch (error) {
+        const detail = (error as { message?: string })?.message || String(error);
+        return { type: "ERROR", error: detail };
+    }
+}
+
 export interface UseDiscriminantStateResult {
     formData: DiscriminantType;
     updateFormData: <T extends keyof DiscriminantType>(
@@ -185,11 +253,7 @@ export const useDiscriminantState = (
                 const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
                 const varDefsForSelection = getVarDefs(variables, SelectionVariable);
 
-                // Create WebWorker
-                const worker = new Worker('/workers/Classify/Discriminant/discriminant.worker.js', { type: 'module' });
-
-                // Send data to worker
-                worker.postMessage({
+                const message: EngineMessage = {
                     group_data: slicedDataForGrouping,
                     independent_data: slicedDataForIndependent,
                     selection_data: slicedDataForSelection,
@@ -198,14 +262,12 @@ export const useDiscriminantState = (
                     independent_data_defs: varDefsForIndependent,
                     selection_data_defs: varDefsForSelection,
                     config_data: configData
-                });
+                };
 
-                // Handle worker response
-                worker.onmessage = async (e) => {
-                    const { type, payload, error: workerError } = e.data;
-
-                    if (type === "SUCCESS") {
-                        const { formattedResults, log, errors } = payload;
+                // The engine's reply, from the worker or from the main-thread run.
+                const handleReply = async (reply: EngineReply) => {
+                    if (reply.type === "SUCCESS") {
+                        const { formattedResults, log, errors } = reply.payload;
 
                         console.log("executed", log);
                         console.log("errors", errors);
@@ -262,14 +324,35 @@ export const useDiscriminantState = (
                         }
 
                         setIsLoading(false);
-                        worker.terminate();
                     } else {
+                        const workerError = reply.error;
                         console.error("[Discriminant] Worker Error:", workerError);
                         // The dialog may already be closed when the worker replies, so
                         // the inline Alert alone is not enough — surface it as a toast.
                         toast.error(`Discriminant analysis failed: ${workerError || "Unknown worker error"}`);
                         setError(workerError || "Unknown worker error");
                         setIsLoading(false);
+                    }
+                };
+
+                // Responsiveness test: run on the main thread instead of the worker.
+                if (isWorkerDisabled()) {
+                    console.warn(
+                        "[Discriminant] Web Worker disabled (localStorage discriminant.noWorker = 1): running on the main thread."
+                    );
+                    await handleReply(await runEngineOnMainThread(message));
+                    return;
+                }
+
+                // Create WebWorker and send it the data
+                const worker = new Worker('/workers/Classify/Discriminant/discriminant.worker.js', { type: 'module' });
+                worker.postMessage(message);
+
+                // Handle worker response
+                worker.onmessage = async (e) => {
+                    try {
+                        await handleReply(e.data as EngineReply);
+                    } finally {
                         worker.terminate();
                     }
                 };
@@ -331,17 +414,29 @@ export const useDiscriminantState = (
             const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
             const varDefsForSelection = getVarDefs(variables, SelectionVariable);
 
+            const message: EngineMessage = {
+                group_data: slicedDataForGrouping,
+                independent_data: slicedDataForIndependent,
+                selection_data: slicedDataForSelection,
+                group_data_defs: varDefsForGrouping,
+                independent_data_defs: varDefsForIndependent,
+                selection_data_defs: varDefsForSelection,
+                config_data: configData,
+            };
+
+            // Responsiveness test: run on the main thread instead of the worker.
+            if (isWorkerDisabled()) {
+                const reply = await runEngineOnMainThread(message);
+                if (reply.type !== "SUCCESS") {
+                    throw new Error(reply.error || "Unknown engine error");
+                }
+                await saveDiscriminantAssumptions(reply.payload.formattedResults);
+                return;
+            }
+
             await new Promise<void>((resolve, reject) => {
                 const worker = new Worker('/workers/Classify/Discriminant/discriminant.worker.js', { type: 'module' });
-                worker.postMessage({
-                    group_data: slicedDataForGrouping,
-                    independent_data: slicedDataForIndependent,
-                    selection_data: slicedDataForSelection,
-                    group_data_defs: varDefsForGrouping,
-                    independent_data_defs: varDefsForIndependent,
-                    selection_data_defs: varDefsForSelection,
-                    config_data: configData,
-                });
+                worker.postMessage(message);
 
                 worker.onmessage = async (e) => {
                     const { type, payload, error: workerError } = e.data;

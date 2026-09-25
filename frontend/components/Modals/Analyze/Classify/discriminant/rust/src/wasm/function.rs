@@ -386,8 +386,18 @@ pub fn run_analysis(
     // does. calculate_classification_results only cross-validates under `leave`.
     let mut classification_results = None;
     if config.classify.summary || config.classify.leave {
+        // Testing part of a training/testing split: the cases the selection variable
+        // leaves out are classified with the functions from the selected cases and
+        // reported separately, as SPSS does. Empty without a selection variable.
+        let unselected = match core::unselected_cases(data, &filtered_data, config) {
+            Ok(cases) => cases,
+            Err(e) => {
+                error_collector.add_error("unselected_cases", &e);
+                Vec::new()
+            }
+        };
         logger.add_log("calculate_classification_results");
-        match core::calculate_classification_results(&filtered_data, config, &substituted_cases) {
+        match core::calculate_classification_results(&filtered_data, config, &substituted_cases, &unselected) {
             Ok(results) => {
                 web_sys::console::log_1(&format!("Classification Results: {:?}", results).into());
                 classification_results = Some(results);

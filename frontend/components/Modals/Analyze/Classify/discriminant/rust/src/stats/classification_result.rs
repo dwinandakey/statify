@@ -22,10 +22,15 @@ use super::core::{
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
 
 /// Calculate classification results for discriminant analysis
+///
+/// `unselected` are the cases the selection variable leaves out (the testing part of
+/// a training/testing split); they are classified with the same functions and
+/// reported in their own block, as SPSS does. Empty when no selection is in use.
 pub fn calculate_classification_results(
     data: &AnalysisData,
     config: &DiscriminantConfig,
     substituted: &[MeanSubstitutedCase],
+    unselected: &[MeanSubstitutedCase],
 ) -> Result<ClassificationResults, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -101,6 +106,40 @@ pub fn calculate_classification_results(
         }
     }
 
+    // --- CASES NOT SELECTED (testing part of a training/testing split) ---
+    // Classified with the functions, priors and rule of the selected cases, and never
+    // cross-validated. Only groups present in the analysis can be counted (their
+    // actual group must be a row of the table); unselected_cases guarantees that.
+    let (unselected_classification, unselected_percentage) = if unselected.is_empty() {
+        (None, None)
+    } else {
+        let mut counts: HashMap<String, Vec<i32>> = dataset
+            .group_labels
+            .iter()
+            .map(|g| (g.clone(), vec![0; dataset.group_labels.len()]))
+            .collect();
+        for case in unselected {
+            let case_values: Vec<f64> = variables_to_use
+                .iter()
+                .map(|var| case.values.get(var).copied().unwrap_or(f64::NAN))
+                .collect();
+            let predicted_idx = classify_case_safe(
+                &case_values,
+                &canonical_functions,
+                &eigen_stats,
+                &dataset,
+                &variables_to_use,
+                &priors,
+                separate_rule.as_ref(),
+            );
+            if let Some(row) = counts.get_mut(&case.group) {
+                row[predicted_idx] += 1;
+            }
+        }
+        let percentages = row_percentages(&counts);
+        (Some(counts), Some(percentages))
+    };
+
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     // A failed cross-validation keeps the original classification table and reports
     // why the cross-validated part is missing. It always uses the pooled (linear)
@@ -122,7 +161,24 @@ pub fn calculate_classification_results(
         cross_validated_classification,
         original_percentage,
         cross_validated_percentage,
+        unselected_classification,
+        unselected_percentage,
     })
+}
+
+/// Row percentages of a classification table: each count over its row total.
+fn row_percentages(counts: &HashMap<String, Vec<i32>>) -> HashMap<String, Vec<f64>> {
+    counts
+        .iter()
+        .map(|(group, row)| {
+            let total = row.iter().sum::<i32>() as f64;
+            let percentages = row
+                .iter()
+                .map(|&c| if total > 0.0 { (c as f64) * 100.0 / total } else { 0.0 })
+                .collect();
+            (group.clone(), percentages)
+        })
+        .collect()
 }
 
 /// Calculate cross-validation results using leave-one-out method

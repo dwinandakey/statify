@@ -843,12 +843,17 @@ pub fn filter_valid_cases(
     })
 }
 
-/// A case with a valid group code that passes the selection filter but has at least
-/// one missing predictor. It is left out of the analysis (listwise), but with
-/// "Replace missing values with mean" (SPSS /CLASSIFY=MEANSUB) it is still
-/// classified, each missing predictor replaced by that predictor's mean over the
-/// analysis cases. It is never used to estimate anything, and it is not
-/// cross-validated (cross-validation covers only the cases in the analysis).
+/// A case that is classified but never used to estimate anything, and never
+/// cross-validated (cross-validation covers only the cases in the analysis). Two kinds:
+///
+/// - a mean-substituted case: it passes the selection filter but has at least one
+///   missing predictor, so it is left out of the analysis (listwise); with "Replace
+///   missing values with mean" (SPSS /CLASSIFY=MEANSUB) it is still classified, each
+///   missing predictor replaced by that predictor's mean over the analysis cases;
+/// - an unselected case: the selection variable leaves it out of the analysis (the
+///   testing part of a training/testing split). SPSS classifies these too and
+///   reports them separately; a missing predictor is mean-substituted only with
+///   "Replace missing values with mean", otherwise the case is not classified.
 #[derive(Debug, Clone)]
 pub struct MeanSubstitutedCase {
     /// Data-file row (0-based) of the case.
@@ -859,17 +864,47 @@ pub struct MeanSubstitutedCase {
     pub values: HashMap<String, f64>,
 }
 
+/// Which extra cases `collect_extra_cases` returns.
+#[derive(Clone, Copy, PartialEq)]
+enum ExtraCases {
+    /// Selected cases with a missing predictor ("Replace missing values with mean").
+    MeanSubstituted,
+    /// Cases the selection variable leaves out (the testing part of a split).
+    Unselected,
+}
+
 /// Collect the mean-substituted cases from the raw (unfiltered) data.
+pub fn mean_substituted_cases(
+    raw: &AnalysisData,
+    filtered: &AnalysisData,
+    config: &DiscriminantConfig
+) -> Result<Vec<MeanSubstitutedCase>, String> {
+    collect_extra_cases(raw, filtered, config, ExtraCases::MeanSubstituted)
+}
+
+/// Collect the unselected cases from the raw (unfiltered) data: every case the
+/// selection variable leaves out whose group code is one of the analysis groups.
+/// Empty when no selection variable (with a value) is in use.
+pub fn unselected_cases(
+    raw: &AnalysisData,
+    filtered: &AnalysisData,
+    config: &DiscriminantConfig
+) -> Result<Vec<MeanSubstitutedCase>, String> {
+    collect_extra_cases(raw, filtered, config, ExtraCases::Unselected)
+}
+
+/// Shared scan behind `mean_substituted_cases` and `unselected_cases`.
 ///
 /// Uses the same rules as the analysis pipeline so no case is counted twice or
 /// dropped: the selection filter and "missing" test of `filter_valid_cases`, and the
 /// group-label formatting and range check of `extract_grouped_data`. Cases whose
 /// group is not one of the analysis groups are skipped. The means come from the
 /// analysis cases (`filtered`), i.e. the same `overall_means` the functions use.
-pub fn mean_substituted_cases(
+fn collect_extra_cases(
     raw: &AnalysisData,
     filtered: &AnalysisData,
-    config: &DiscriminantConfig
+    config: &DiscriminantConfig,
+    kind: ExtraCases
 ) -> Result<Vec<MeanSubstitutedCase>, String> {
     let dataset = extract_analyzed_dataset(filtered, config)?;
     let group_var = &config.main.grouping_variable;
@@ -919,22 +954,25 @@ pub fn mean_substituted_cases(
             continue;
         }
 
-        // Selection filter, as in filter_valid_cases.
-        if
-            let (Some(rows), Some(selection_var), Some(set_value)) = (
-                &selection_rows,
-                &config.main.selection_variable,
-                &config.set_value.value,
-            )
+        // Selection filter, as in filter_valid_cases. `None` when no selection
+        // variable (with a value) is in use, i.e. every case counts as selected.
+        let selected: Option<bool> = match
+            (&selection_rows, &config.main.selection_variable, &config.set_value.value)
         {
-            let selected = match rows.get(row).and_then(|r| r.values.get(selection_var)) {
-                Some(DataValue::Number(val)) => (val - set_value).abs() < EPSILON,
-                Some(DataValue::Text(s)) => s == &set_value.to_string(),
-                _ => false,
-            };
-            if !selected {
-                continue;
-            }
+            (Some(rows), Some(selection_var), Some(set_value)) =>
+                Some(match rows.get(row).and_then(|r| r.values.get(selection_var)) {
+                    Some(DataValue::Number(val)) => (val - set_value).abs() < EPSILON,
+                    Some(DataValue::Text(s)) => s == &set_value.to_string(),
+                    _ => false,
+                }),
+            _ => None,
+        };
+        let in_scope = match kind {
+            ExtraCases::MeanSubstituted => selected.unwrap_or(true),
+            ExtraCases::Unselected => selected == Some(false),
+        };
+        if !in_scope {
+            continue;
         }
 
         let cells: Vec<Option<&DataValue>> = columns
@@ -943,7 +981,7 @@ pub fn mean_substituted_cases(
             .map(|(column, var)| column.and_then(|c| c.get(row)).and_then(|r| r.values.get(*var)))
             .collect();
 
-        // "Missing", as in filter_valid_cases. A complete case is already in the analysis.
+        // "Missing", as in filter_valid_cases.
         let is_missing = |cell: &Option<&DataValue>| {
             match cell {
                 Some(DataValue::Number(val)) => val.is_nan(),
@@ -952,8 +990,17 @@ pub fn mean_substituted_cases(
                 _ => false,
             }
         };
-        if !cells.iter().any(is_missing) {
-            continue;
+        let any_missing = cells.iter().any(is_missing);
+        match kind {
+            // A complete selected case is already in the analysis.
+            ExtraCases::MeanSubstituted => if !any_missing {
+                continue;
+            }
+            // An unselected case with a missing predictor is classified only when
+            // "Replace missing values with mean" is on.
+            ExtraCases::Unselected => if any_missing && !config.classify.replace {
+                continue;
+            }
         }
 
         let mut values = HashMap::new();

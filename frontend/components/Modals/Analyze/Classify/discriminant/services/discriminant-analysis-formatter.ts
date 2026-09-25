@@ -113,13 +113,15 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rows: [],
     };
 
-    // Processed = the cases the classification tables cover (the selected ones when
-    // a selection variable is used); Used in Output = Processed − Excluded. With
-    // "Replace missing values with mean", cases missing only a predictor are still
-    // classified, so Rust reports 0 for that exclusion (classification_missing_disc_vars).
+    // Processed = every case: the selected ones and, with a selection variable, the
+    // unselected ones, which are classified as testing cases. Used in Output =
+    // Processed − Excluded. With "Replace missing values with mean", cases missing
+    // only a predictor are still classified, so Rust reports 0 for that exclusion
+    // (classification_missing_disc_vars).
     const ps = data.processing_summary;
     const processed: number = ps.classification_processed ?? ps.total_count;
     const missingGroupExcluded =
+      ps.classification_missing_group_codes ??
       (ps.missing_group_codes ?? 0) + (ps.both_missing ?? 0);
     const missingDiscExcluded =
       ps.classification_missing_disc_vars ?? ps.missing_disc_vars ?? 0;
@@ -1937,16 +1939,42 @@ export function transformDiscriminantResult(data: any): ResultJson {
     data.classification_results?.original_classification &&
     data.classification_results.original_classification.length > 0
   ) {
-    // Get the groups from original classification and sort them to ensure consistent ordering
-    const groups = data.classification_results.original_classification
-      .map((item: { group: string; counts: number[] }) => item.group)
+    type GroupCounts = { group: string; counts: number[] };
+    type GroupPercentages = { group: string; percentages: number[] };
+    const cr = data.classification_results;
+
+    // Columns and rows in group-code order; counts[j] follows the same order.
+    const groups: string[] = cr.original_classification
+      .map((item: GroupCounts) => item.group)
       .sort(compareGroupLabels);
+
+    // With a selection variable (e.g. a training/testing split), SPSS splits the
+    // table into "Cases Selected" (the analysis/training cases) and "Cases Not
+    // Selected" (the testing cases, classified with the training functions), each
+    // with its own hit ratio. Cross-validation covers the selected cases only.
+    const unselectedCounts: GroupCounts[] = Array.isArray(cr.unselected_classification)
+      ? cr.unselected_classification
+      : [];
+    const unselectedPercentages: GroupPercentages[] = Array.isArray(cr.unselected_percentage)
+      ? cr.unselected_percentage
+      : [];
+    const hasUnselected = unselectedCounts.length > 0;
+    const hasCrossValidated = Array.isArray(cr.cross_validated_classification);
+
+    // Footnote letters in the order the notes are printed.
+    const letters = "abcdefg";
+    let nextLetter = 0;
+    const originalNote = letters[nextLetter++];
+    const unselectedNote = hasUnselected ? letters[nextLetter++] : "";
+    const crossValidationNote = hasCrossValidated ? letters[nextLetter++] : "";
+    const crossValidatedNote = hasCrossValidated ? letters[nextLetter++] : "";
+    const superscript: Record<string, string> = { a: "ᵃ", b: "ᵇ", c: "ᶜ", d: "ᵈ", e: "ᵉ" };
 
     const table: Table = {
       key: "classification_results",
       title: "Classification Results",
       columnHeaders: [
-        // [PERBAIKAN 1]: Kita siapkan 3 kolom kosong di kiri untuk menampung rowHeader
+        ...(hasUnselected ? [{ header: "", key: "sample" }] : []),
         { header: "", key: "category" },
         { header: "", key: "subcategory" },
         { header: "Group", key: "group_label" },
@@ -1963,186 +1991,95 @@ export function transformDiscriminantResult(data: any): ResultJson {
       rows: [],
     };
 
-    // --- 1. Original Classification Counts ---
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      const classification =
-        data.classification_results.original_classification.find(
-          (item: { group: string; counts: number[] }) => item.group === group,
-        );
+    // One block (Count rows, then % rows) of the table. `sampleLabel` goes in the
+    // extra leading column when the table is split by the selection variable.
+    const pushBlock = (
+      sampleLabel: string,
+      blockLabel: string,
+      counts: GroupCounts[],
+      percentages: GroupPercentages[],
+    ) => {
+      const lead = (first: boolean) => (hasUnselected ? [first ? sampleLabel : ""] : []);
 
-      if (!classification) continue;
-
-      const rowData: any = {
-        // [PERBAIKAN 2]: Gabungkan 3 kolom kiri menjadi satu array.
-        // Trik i === 0 akan mencetak tulisan hanya di baris pertama.
-        rowHeader: [
-          i === 0 ? "Original" : "",
-          i === 0 ? "Count" : "",
-          classification.group,
-        ],
-        total: formatCount(
-          classification.counts.reduce(
-            (sum: number, count: number) => sum + count,
-            0,
-          ),
-        ),
-      };
-
-      for (let j = 0; j < classification.counts.length; j++) {
-        rowData[`group_${j}`] = formatCount(classification.counts[j]);
-      }
-      table.rows.push(rowData);
-    }
-
-    // --- 2. Original Classification Percentages ---
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      const percentage = data.classification_results.original_percentage.find(
-        (item: { group: string; percentages: number[] }) =>
-          item.group === group,
-      );
-
-      if (!percentage) continue;
-
-      const rowData: any = {
-        rowHeader: [
-          "", // Kosongkan karena 'Original' sudah dicetak di bagian Count atasnya
-          i === 0 ? "%" : "",
-          percentage.group,
-        ],
-        total: "100.0", // Total persentase selalu 100%
-      };
-
-      for (let j = 0; j < percentage.percentages.length; j++) {
-        rowData[`group_${j}`] = formatPercent(percentage.percentages[j]);
-      }
-      table.rows.push(rowData);
-    }
-
-    // --- 3. Cross-validated Classification (If Available) ---
-    if (data.classification_results.cross_validated_classification) {
-      // Counts
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        const classification =
-          data.classification_results.cross_validated_classification.find(
-            (item: { group: string; counts: number[] }) => item.group === group,
-          );
-
-        if (!classification) continue;
-
+      groups.forEach((group, i) => {
+        const row = counts.find((item) => item.group === group);
+        if (!row) return;
         const rowData: any = {
-          rowHeader: [
-            i === 0 ? "Cross-validatedᵇ" : "", // Gunakan huruf b kecil superscript
-            i === 0 ? "Count" : "",
-            classification.group,
-          ],
-          total: formatCount(
-            classification.counts.reduce(
-              (sum: number, count: number) => sum + count,
-              0,
-            ),
-          ),
+          rowHeader: [...lead(i === 0), i === 0 ? blockLabel : "", i === 0 ? "Count" : "", row.group],
+          total: formatCount(row.counts.reduce((sum, count) => sum + count, 0)),
         };
-
-        for (let j = 0; j < classification.counts.length; j++) {
-          rowData[`group_${j}`] = formatCount(classification.counts[j]);
-        }
+        row.counts.forEach((count, j) => (rowData[`group_${j}`] = formatCount(count)));
         table.rows.push(rowData);
-      }
-
-      // Percentages
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        const percentage =
-          data.classification_results.cross_validated_percentage.find(
-            (item: { group: string; percentages: number[] }) =>
-              item.group === group,
-          );
-
-        if (!percentage) continue;
-
-        const rowData: any = {
-          rowHeader: ["", i === 0 ? "%" : "", percentage.group],
-          total: "100.0",
-        };
-
-        for (let j = 0; j < percentage.percentages.length; j++) {
-          rowData[`group_${j}`] = formatPercent(
-            percentage.percentages[j],
-          );
-        }
-        table.rows.push(rowData);
-      }
-    }
-
-    // --- FOOTNOTES & PERCENTAGE CALCULATION ---
-    // Calculate original correct classification percentage
-    let originalCorrect = 0;
-    let classifiedCount = 0;
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      const classification =
-        data.classification_results.original_classification.find(
-          (item: { group: string; counts: number[] }) => item.group === group,
-        );
-
-      // Every classified case belongs in the denominator, including the rows of
-      // a group that got none of its own cases right. Gating on counts[i] > 0
-      // dropped that group's whole row and inflated the reported hit ratio.
-      if (classification) {
-        originalCorrect += classification.counts[i] ?? 0;
-        classifiedCount += classification.counts.reduce(
-          (sum: number, val: number) => sum + val,
-          0,
-        );
-      }
-    }
-
-    const originalCorrectPct =
-      classifiedCount > 0 ? (originalCorrect / classifiedCount) * 100 : 0;
-
-    table.rows.push({
-      rowHeader: [
-        `a. ${formatPercent(originalCorrectPct)}% of original grouped cases correctly classified.`,
-      ],
-    });
-
-    if (data.classification_results.cross_validated_classification) {
-      table.rows.push({
-        rowHeader: [
-          "b. Cross validation is done only for those cases in the analysis. In cross validation, each case is classified by the functions derived from all cases other than that case.",
-        ],
       });
 
-      // Calculate cross-validated correct classification percentage
-      let crossValidatedCorrect = 0;
-      let crossValidatedCount = 0;
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        const classification =
-          data.classification_results.cross_validated_classification.find(
-            (item: { group: string; counts: number[] }) => item.group === group,
-          );
+      groups.forEach((group, i) => {
+        const row = percentages.find((item) => item.group === group);
+        if (!row) return;
+        const rowData: any = {
+          rowHeader: [...lead(false), "", i === 0 ? "%" : "", row.group],
+          total: "100.0",
+        };
+        row.percentages.forEach((pct, j) => (rowData[`group_${j}`] = formatPercent(pct)));
+        table.rows.push(rowData);
+      });
+    };
 
-        if (classification) {
-          crossValidatedCorrect += classification.counts[i] ?? 0;
-          crossValidatedCount += classification.counts.reduce(
-            (sum: number, val: number) => sum + val,
-            0,
-          );
-        }
-      }
+    // Share of correctly classified cases: diagonal over all classified cases. Every
+    // classified case is in the denominator, including the rows of a group that got
+    // none of its own cases right (gating on counts[i] > 0 used to inflate it).
+    const hitRatio = (counts: GroupCounts[]): number => {
+      let correct = 0;
+      let total = 0;
+      groups.forEach((group, i) => {
+        const row = counts.find((item) => item.group === group);
+        if (!row) return;
+        correct += row.counts[i] ?? 0;
+        total += row.counts.reduce((sum, count) => sum + count, 0);
+      });
+      return total > 0 ? (correct / total) * 100 : 0;
+    };
 
-      const crossValidatedCorrectPct =
-        crossValidatedCount > 0
-          ? (crossValidatedCorrect / crossValidatedCount) * 100
-          : 0;
+    pushBlock(
+      "Cases Selected",
+      "Original",
+      cr.original_classification,
+      cr.original_percentage ?? [],
+    );
+    if (hasCrossValidated) {
+      pushBlock(
+        "",
+        `Cross-validated${superscript[crossValidationNote] ?? ""}`,
+        cr.cross_validated_classification,
+        cr.cross_validated_percentage ?? [],
+      );
+    }
+    if (hasUnselected) {
+      pushBlock("Cases Not Selected", "Original", unselectedCounts, unselectedPercentages);
+    }
 
+    // --- FOOTNOTES ---
+    const selectedWord = hasUnselected ? "selected " : "";
+    table.rows.push({
+      rowHeader: [
+        `${originalNote}. ${formatPercent(hitRatio(cr.original_classification))}% of ${selectedWord}original grouped cases correctly classified.`,
+      ],
+    });
+    if (hasUnselected) {
       table.rows.push({
         rowHeader: [
-          `c. ${formatPercent(crossValidatedCorrectPct)}% of cross-validated grouped cases correctly classified.`,
+          `${unselectedNote}. ${formatPercent(hitRatio(unselectedCounts))}% of unselected original grouped cases correctly classified.`,
+        ],
+      });
+    }
+    if (hasCrossValidated) {
+      table.rows.push({
+        rowHeader: [
+          `${crossValidationNote}. Cross validation is done only for those cases in the analysis. In cross validation, each case is classified by the functions derived from all cases other than that case.`,
+        ],
+      });
+      table.rows.push({
+        rowHeader: [
+          `${crossValidatedNote}. ${formatPercent(hitRatio(cr.cross_validated_classification))}% of ${selectedWord}cross-validated grouped cases correctly classified.`,
         ],
       });
     }

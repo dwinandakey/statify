@@ -286,10 +286,14 @@ pub struct ProcessingSummary {
     pub unselected: Option<usize>,
     #[serde(rename = "unselected_percent", default)]
     pub unselected_percent: Option<f64>,
-    /// Classification Processing Summary: cases processed for classification. The
-    /// classification tables cover the selected cases only.
+    /// Classification Processing Summary: cases processed for classification (every
+    /// case; unselected cases are classified too, as the testing part of a split).
     #[serde(rename = "classification_processed", default)]
     pub classification_processed: Option<usize>,
+    /// Classification Processing Summary: cases excluded for a missing or out-of-range
+    /// group code, selected and unselected together.
+    #[serde(rename = "classification_missing_group_codes", default)]
+    pub classification_missing_group_codes: Option<usize>,
     /// Classification Processing Summary: cases excluded for a missing predictor.
     /// 0 when "Replace missing values with mean" is on, because those cases are still
     /// classified with the predictor means substituted.
@@ -369,6 +373,13 @@ pub struct ClassificationResults {
     pub original_percentage: HashMap<String, Vec<f64>>,
     #[serde(rename = "cross_validated_percentage")]
     pub cross_validated_percentage: Option<HashMap<String, Vec<f64>>>,
+    /// Cases the selection variable leaves out (the testing part of a split),
+    /// classified with the functions from the selected cases. `None` when no
+    /// selection variable is in use or no unselected case could be classified.
+    #[serde(rename = "unselected_classification", default)]
+    pub unselected_classification: Option<HashMap<String, Vec<i32>>>,
+    #[serde(rename = "unselected_percentage", default)]
+    pub unselected_percentage: Option<HashMap<String, Vec<f64>>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
