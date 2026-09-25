@@ -117,8 +117,9 @@ pub fn calculate_observed_power(df1: usize, df2: usize, f_value: f64, alpha: f64
 
 /// Observed power with real-valued df (v5: fractional df2 of Wilks' Lambda
 /// (Rao) and of the Welch test). Same computation as calculate_observed_power.
+/// F = 0 gives λ = 0 and power α, as SPSS reports (before: 0).
 pub fn calculate_observed_power_df(d1: f64, d2: f64, f_value: f64, alpha: f64) -> f64 {
-    if !(d1 > 0.0) || !(d2 > 0.0) || !f_value.is_finite() || f_value <= 0.0 || alpha <= 0.0 || alpha >= 1.0 {
+    if !(d1 > 0.0) || !(d2 > 0.0) || !f_value.is_finite() || f_value < 0.0 || alpha <= 0.0 || alpha >= 1.0 {
         return 0.0;
     }
     let critical = match FisherSnedecor::new(d1, d2) {

@@ -16,7 +16,9 @@ const spss = JSON.parse(fs.readFileSync(path.join(OUT, "spss-values-bagian2.json
 const raw = (dir, cfg) => JSON.parse(fs.readFileSync(path.join(dir, `${cfg}.raw.json`), "utf8")).response.results;
 
 // Konfigurasi SPSS → run Statify (dan peta label SPSS → nama Statify).
-const B3 = "testing/final/bagian3/worker";
+// Run Statify: build final sesudah perbaikan temuan Bagian 2 (ui-run.cjs, worker).
+// Hasil sebelum perbaikan: compare-spss-bagian2-sebelum-perbaikan.* (run testing/final/bagian3/worker).
+const B3 = process.argv.find((a) => a.startsWith("--run="))?.slice(6) ?? "testing/final/bagian2/worker-final";
 const SRC = {
     mv9: { run: () => raw(B3, "mv9"), statify: "mv9 (build final)", map: { dv: {}, level: {} } },
     "mv6-typeI-II#1": { run: () => raw(path.join(OUT, "worker"), "mv6t1"), statify: "mv6t1 (Type I, lewat UI)", map: MAP.mv6 },

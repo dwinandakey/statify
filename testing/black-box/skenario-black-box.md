@@ -2,7 +2,7 @@
 
 - **Build yang diuji:** iterasi 1 `skripsi-final-v2` (commit `d863de09`), iterasi 2 `skripsi-final-v3`; keduanya dijalankan lokal dengan `npx next start -p 3001` (lihat `testing/RELEASE-NOTES.md`). Kelompok fitur v4 (17 skenario) diuji pada build `skripsi-final-v4` (`BUILD_ID` `1IBznO-olYCW5GfFOKskp`) lewat `next start -p 3102`. Iterasi 3 (semua 78 skenario: 50 asli, 17 fitur v4, 11 fitur final) diuji pada build final (`BUILD_ID` `LIBUcskLZhw3iEIArOeUX`, kode `73038fb3`) lewat `next start -p 3101`.
 - **Acuan kebutuhan:** Tabel 5 revisi; pemetaan ke kode ada di `pemetaan-kebutuhan.md`.
-- **Status:** iterasi 1 (2026-09-24, build v2) dan iterasi 2 (2026-09-24, build v3) sudah dieksekusi. Kelompok fitur v4 dieksekusi 2026-09-25 (build v4): 16 Sesuai, 1 Tidak Sesuai. Rinciannya di bagian "Kelompok baru: fitur v4". Iterasi 3 (2026-09-25, build final): 78 Sesuai, 0 Tidak Sesuai; rinciannya di bagian "Iterasi 3 (build final)". Kolom Hasil yang Diharapkan tidak diubah sejak penyusunan (commit `d598ebf0`), kecuali revisi R1–R2 untuk iterasi 2 (bagian "Revisi skenario").
+- **Status:** iterasi 1 (2026-09-24, build v2) dan iterasi 2 (2026-09-24, build v3) sudah dieksekusi. Kelompok fitur v4 dieksekusi 2026-09-25 (build v4): 16 Sesuai, 1 Tidak Sesuai. Rinciannya di bagian "Kelompok baru: fitur v4". Iterasi 3 (2026-09-25, build `LIBUcskLZhw3iEIArOeUX`): 78 Sesuai, 0 Tidak Sesuai; iterasi 4 (8 skenario terdampak perbaikan temuan SPSS, build final `IdywReo5MTivt50HHa3VO`): 8 Sesuai. Rinciannya di bagian "Iterasi 3 (build final)" dan "Iterasi 4". Kolom Hasil yang Diharapkan tidak diubah sejak penyusunan (commit `d598ebf0`), kecuali revisi R1–R2 untuk iterasi 2 (bagian "Revisi skenario").
 - **Salinan tabel:** `skenario-black-box.csv` (UTF-8 dengan BOM, dapat dibuka di Excel). Kolomnya sama dengan Tabel 7 dan Tabel 8, dengan kolom hasil dan keterangan terpisah untuk Iterasi 1, Iterasi 2, dan Iterasi 3. Kelompok v4 dan final: `skenario-black-box-v4.csv` dan `skenario-black-box-final.csv` (kolom Iterasi 3 ditambahkan).
 
 ## Ringkasan eksekusi
@@ -193,6 +193,29 @@ Tidak ada berkas yang perlu dijalankan ulang. Berkas build v2 yang tertulis keli
   3. BB-KF02-06: harness v4 membandingkan dengan BB-KF02-01 iterasi 2, padahal pembanding yang dimaksud adalah BB-KF02-01 iterasi yang sama. Pemeriksaan ulang offline menunjukkan tabel identik dengan BB-KF02-01 iterasi 3.
 - **Hasil yang Diharapkan:** tidak diubah untuk iterasi 3. Yang berlaku adalah teks sesudah revisi R1–R8 dan teks kelompok final yang disusun sebelum eksekusi.
 - **Uji coba harness kelompok final:** dijalankan sekali pada build uji Bagian 1 sebelum iterasi 3. Hasilnya dihapus dan tidak dipakai.
+
+## Iterasi 4 (skenario terdampak perbaikan sesudah iterasi 3)
+
+- **Alasan:** iterasi 3 tidak menghasilkan Tidak Sesuai. Pembanding SPSS dari sintaks yang semula tertunda (finalisasi bagian 2) menemukan dua selisih di crate Rust MV, lalu keduanya diperbaiki sesudah iterasi 3 (`testing/final/bagian2/RINGKASAN.md`):
+  - Noncent. Parameter dan Observed Power Wilks' Lambda bila p ≥ 3 dan df_h ≥ 3;
+  - Observed Power bila F = 0.
+- **Skenario yang dijalankan ulang:** hanya skenario yang respons worker-nya berubah karena perbaikan itu. Ini ditentukan dari replay payload (`testing/final/iterasi4/replay-v5-payload.txt`): δ₀ dua populasi dan berpasangan pada data dengan F = 0 di satu DV (x2, d1). Tidak ada skenario dengan p ≥ 3 dan df_h ≥ 3.
+- **Build:** `BUILD_ID` `IdywReo5MTivt50HHa3VO`; WASM MV `wasm_bg.6145c2bf.wasm` (md5 `43a77657…`), RM `wasm_bg.2bc2b212.wasm` (tidak berubah). `next start -p 3101`, 2026-09-25 21:18–21:21 WIB. Harness, alat, dan aturan sama dengan iterasi 3 (`bb-run-v4.cjs --iter=4 --only=…`).
+- **Bukti:** `bukti/iterasi-4/` (40 tangkapan) dan `hasil-eksekusi/iterasi-4/`. Pembanding dengan iterasi 3: `testing/final/iterasi4/bb-diff-iter3-iter4.txt`.
+- **Hasil yang Diharapkan:** tidak diubah.
+
+| ID | KF | Hasil Pengujian Iterasi 4 | Keterangan Iterasi 4 |
+|---|---|---|---|
+| BB-KF03-04 | KF3 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF03-04-1 s.d. -8. |
+| BB-KF03-05 | KF3 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF03-05-1 s.d. -4. |
+| BB-KF03-12 | KF3 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF03-12-1 s.d. -2. |
+| BB-KF04-03 | KF4 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF04-03-1 s.d. -6. |
+| BB-KF04-04 | KF4 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF04-04-1 s.d. -3. |
+| BB-KF03-14 | KF3 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF03-14-1 s.d. -6. |
+| BB-KF03-15 | KF3 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF03-15-1 s.d. -6. |
+| BB-KF04-05 | KF4 | Sesuai | Pengamatan (toast, isian dialog, checks, judul, kolom, baris, dan catatan tabel) identik dengan iterasi 3; nilai yang berubah (Observed Power baris F = 0) tidak tampil karena Observed power tidak dicentang di skenario ini. Bukti BB-KF04-05-1 s.d. -5. |
+
+**Total iterasi 4:** 8 Sesuai, 0 Tidak Sesuai, 0 kendala alat uji.
 
 ## Revisi skenario
 

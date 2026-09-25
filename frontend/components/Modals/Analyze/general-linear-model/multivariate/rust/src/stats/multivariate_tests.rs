@@ -696,7 +696,7 @@ fn calculate_multivariate_test_statistics(
     let eta_squared_pillai = if s > 0.0 { pillai_trace / s } else { 0.0 };
 
     // ── Wilks' Lambda (Rao's F) ───────────────────────────────────────────
-    let (f_wilks, hyp_df_wilks, error_df_wilks) = {
+    let (f_wilks, hyp_df_wilks, error_df_wilks, rao_t) = {
         let pq = p_f * hypothesis_df;
         let t_denom = (p_f * p_f + hypothesis_df * hypothesis_df) - 5.0;
         let t = if t_denom > 0.0 {
@@ -718,7 +718,7 @@ fn calculate_multivariate_test_statistics(
         } else {
             0.0
         };
-        (f, df1, df2)
+        (f, df1, df2, t)
     };
     let sig_wilks = calculate_f_significance_df(
         test_df(hyp_df_wilks),
@@ -804,7 +804,16 @@ fn calculate_multivariate_test_statistics(
     };
 
     let noncent_parameter_pillai = f_pillai * hyp_df_pillai;
-    let noncent_parameter_wilks = f_wilks * hyp_df_wilks;
+    // Wilks' Lambda noncentrality as SPSS computes it: λ = df2 · η²/(1 − η²)
+    // with η² = 1 − Λ^(1/s) (the Partial Eta Squared column). This equals
+    // F · df1 when Rao's t equals s (p ≤ 2 or df_h ≤ 2), where F · df1 is
+    // kept; it differs when t ≠ s (p ≥ 3 and df_h ≥ 3; mv9 vs SPSS 27).
+    let wilks_t_differs = !exact_when_s_one && (rao_t - s).abs() > 1e-12;
+    let noncent_parameter_wilks = if wilks_t_differs && eta_squared_wilks < 1.0 {
+        error_df_wilks * eta_squared_wilks / (1.0 - eta_squared_wilks)
+    } else {
+        f_wilks * hyp_df_wilks
+    };
     let noncent_parameter_hotelling = f_hotelling * hyp_df_hotelling;
     let noncent_parameter_roy = f_roy * hyp_df_roy;
 
@@ -812,7 +821,12 @@ fn calculate_multivariate_test_statistics(
     // alpha, with the same df as the significance above.
     let power = |f: f64, df1: f64, df2: f64| calculate_observed_power_df(test_df(df1), test_df(df2), f, alpha);
     let power_pillai = power(f_pillai, hyp_df_pillai, error_df_pillai);
-    let power_wilks = power(f_wilks, hyp_df_wilks, error_df_wilks);
+    // Power at the same λ (λ / df1 passed as "F", since λ = F · df1 there).
+    let power_wilks = if wilks_t_differs {
+        power(noncent_parameter_wilks / hyp_df_wilks, hyp_df_wilks, error_df_wilks)
+    } else {
+        power(f_wilks, hyp_df_wilks, error_df_wilks)
+    };
     let power_hotelling = power(f_hotelling, hyp_df_hotelling, error_df_hotelling);
     let power_roy = power(f_roy, hyp_df_roy, error_df_roy);
 

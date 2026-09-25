@@ -12,7 +12,7 @@
 set -u
 PORT=${PORT:-3101}
 ROOT=$(pwd)
-O=$ROOT/testing/final/bagian3
+O=${OUTDIR:-$ROOT/testing/final/bagian3}
 V5=$ROOT/testing/glm-mv-reference/results/fix-steps/step21-v5
 X=/d/claude-tmp-statify/exp-capture-final
 R=testing/glm-web-worker/results

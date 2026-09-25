@@ -57,6 +57,47 @@ Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/m
 - **Skenario black-box baru:** 11 skenario (BB-KF02-08 s.d. BB-KF02-13, BB-KF03-14 s.d. BB-KF03-16, BB-KF04-05, BB-KF04-06), dieksekusi di iterasi 3.
 - **Sebelum iterasi 3:** harness dicoba sekali pada build ini. Hasil uji coba dihapus dan tidak dipakai sebagai hasil.
 
+### F2. Pembanding SPSS untuk sintaks yang tertunda, dan perbaikannya
+
+- **Keluaran SPSS 27:** empat keluaran (`testing/SPSS-TODO.md`) diterima dari penulis dan dibandingkan dengan nilai mentah Statify (`testing/final/bagian2/RINGKASAN.md`):
+  - mv9, dengan Wilks df2 pecahan;
+  - mv6 Type I dan Type II;
+  - mv2 δ₀ dan mv3 δ₀.
+- **Status "menunggu SPSS" SS Intercept Type II (v5 B2):** selesai; nilainya cocok.
+- **Sebelum perbaikan:** 1081/1086 nilai cocok. Dua temuan di crate Rust MV:
+  1. Noncent. Parameter dan Observed Power Wilks' Lambda bila p ≥ 3 dan df_h ≥ 3: Statify memakai F·df₁, SPSS memakai df₂·η²/(1 − η²);
+  2. Observed Power bila F = 0: Statify 0, SPSS α.
+- **Perbaikan** (sesudah black-box iterasi 3; `stats/multivariate_tests.rs`, `stats/common.rs`; API publik dan glue tetap):
+  - λ Wilks = df₂·η²/(1 − η²) bila Rao t ≠ s, dengan power pada λ itu;
+  - `calculate_observed_power_df` menerima F = 0.
+- **Sesudah perbaikan:** 1086/1086 cocok.
+
+### F3. Regresi build final
+
+**Build final:** `BUILD_ID` `IdywReo5MTivt50HHa3VO`. WASM MV `wasm_bg.6145c2bf.wasm` (md5 `43a77657…`), WASM RM `wasm_bg.2bc2b212.wasm` (md5 `f4c34490…`).
+
+Regresi pertama dijalankan pada build `LIBUcskLZhw3iEIArOeUX` (kode `73038fb3`, sebelum perbaikan F2) dengan hasil di `testing/final/bagian3/`. Sesudah perbaikan F2, regresi yang sama diulang pada build final dengan hasil di `testing/final/iterasi4/regresi/`.
+
+| Pemeriksaan | Build sebelum F2 | Build final |
+|---|---|---|
+| SPSS MV (UI, worker, 23 konfigurasi) | 2339/2339 | 2339/2339 |
+| SPSS konfigurasi tambahan (F2) | 1081/1086 | 1086/1086 |
+| Main = worker MV | 28 konfigurasi byte-identik | 28 konfigurasi byte-identik |
+| Nilai mentah vs v5 (23 konfigurasi) | payload dan respons identik (23/23) | Payload identik (23/23). 14 konfigurasi respons identik. 9 konfigurasi berubah tepat sesuai replay: Observed Power baris F = 0 (mv2d, mv2dci, mv2s, mv2wd, mv2ws, mv3d, mv3dci, mv3s) dan Wilks mv9 (`raw-vs-v5-diharapkan.txt`) |
+| Uji acuan MV / RM | 2339 lulus (12 todo) / 1681 | 2339 lulus (12 todo) / 1681 |
+| Jest penuh | 49 gagal dari 279 = baseline | 49 gagal dari 279 = baseline |
+| 8 sel eksperimen | Payload identik v1–final. Respons = v5. v1 vs final: MV hanya Sig. dan Power Wilks (df2 pecahan) | Payload identik v1–final. RM respons identik. MV vs v5: hanya Noncent. Parameter dan Observed Power Wilks untuk efek df_h ≥ 3 (F1, F1*F2, F1*F3, F1*F2*F3) (`experiment-response-diff-v5-final.txt`) |
+| RM main = worker (9 desain) | identik; hash vs step20-v5 dijelaskan oleh `944238f0` | identik; hash = build sebelum F2 (9/9) |
+
+### F4. Black-box iterasi 3 dan 4
+
+- **Iterasi 3** (build `LIBUcskLZhw3iEIArOeUX`, semua 78 skenario):
+  - hasil 78 Sesuai, 0 Tidak Sesuai;
+  - nilai tampil vs SPSS 1536/1536;
+  - tiga kendala alat uji diperbaiki di harness dan diperiksa ulang offline.
+- **Iterasi 4** (build final, 8 skenario yang respons worker-nya berubah karena F2): 8 Sesuai, pengamatan identik dengan iterasi 3.
+- Rincian di `testing/black-box/skenario-black-box.md`.
+
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 
 **Dasar perubahan:**

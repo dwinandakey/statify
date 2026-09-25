@@ -17,4 +17,4 @@
 - **Uji khi-kuadrat Σ diketahui (skripsi-final-v5, Bagian 1):** SPSS GLM tidak menyediakan uji dengan matriks kovarians populasi yang diketahui, sehingga validasinya memakai R dasar.
 - **Uji Welch (Unequal):** tidak ada padanan di SPSS GLM.
 
-**Status keluaran di repo** (diperiksa saat berkas ini dibuat, 2026-09-25): keempat keluaran belum ada.
+**Status keluaran di repo:** keempat keluaran (`.xlsx` dan `.spv`) diterima dari penulis pada 2026-09-25 dan sudah dibandingkan: 1086/1086 nilai cocok setelah perbaikan dua temuan (`testing/final/bagian2/RINGKASAN.md`). Tidak ada sintaks yang masih tertunda.

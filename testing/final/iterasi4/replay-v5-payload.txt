@@ -1,0 +1,49 @@
+mv1: identik (byte)
+mv1ci: identik (byte)
+mv1ci10: identik (byte)
+mv2: identik (byte)
+mv2ci: identik (byte)
+mv2d: 4 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.x2.jk.observed_power: 0 → 0.05000000000004612
+   results.tests_of_between_subjects_effects.effects.x2.Corrected Model.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.0.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.2.observed_power: 0 → 0.05000000000004612
+mv2dci: 4 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.x2.Corrected Model.observed_power: 0 → 0.05000000000004612
+   results.tests_of_between_subjects_effects.effects.x2.jk.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.0.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.2.observed_power: 0 → 0.05000000000004612
+mv2s: 4 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.x2.jk.observed_power: 0 → 0.05000000000004612
+   results.tests_of_between_subjects_effects.effects.x2.Corrected Model.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.0.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.2.observed_power: 0 → 0.05000000000004612
+mv2wci: identik (byte)
+mv2wd: 4 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.x2.jk.observed_power: 0 → 0.05000000000004612
+   results.tests_of_between_subjects_effects.effects.x2.Corrected Model.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.0.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.2.observed_power: 0 → 0.05000000000004612
+mv2ws: 4 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.x2.jk.observed_power: 0 → 0.05000000000004612
+   results.tests_of_between_subjects_effects.effects.x2.Corrected Model.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.0.observed_power: 0 → 0.05000000000004612
+   results.univariate_tests.tests.x2.2.observed_power: 0 → 0.05000000000004612
+mv3: identik (byte)
+mv3ci: identik (byte)
+mv3d: 1 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.d_kedalaman1_minus_kedalaman2.Intercept.observed_power: 0 → 0.05000000000000138
+mv3dci: 1 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.d_kedalaman1_minus_kedalaman2.Intercept.observed_power: 0 → 0.05000000000000138
+mv3s: 2 nilai berbeda
+   results.tests_of_between_subjects_effects.effects.d_kedalaman1_minus_kedalaman2.Intercept.observed_power: 0 → 0.05000000000000138
+   results.univariate_tests.tests.d_kedalaman1_minus_kedalaman2.1.observed_power: 0 → 0.05000000000000138
+mv4: identik (byte)
+mv4ph: identik (byte)
+mv5: identik (byte)
+mv6: identik (byte)
+mv7: identik (byte)
+mv8: identik (byte)
+mv9: 2 nilai berbeda
+   results.multivariate_tests.effects.kelompok.Wilks' Lambda.noncent_parameter: 65.59148743263643 → 48.601845725406484
+   results.multivariate_tests.effects.kelompok.Wilks' Lambda.observed_power: 0.9999725463239606 → 0.9989196737741852

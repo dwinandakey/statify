@@ -1,0 +1,72 @@
+== 0. build
+IdywReo5MTivt50HHa3VO
+233726a0a8a20c2630d445119b9c6c1b *wasm_bg.1096746a.wasm
+be41ca5b5ad96571a089a5c52d37530a *wasm_bg.2b6d03d2.wasm
+f4c34490f7fe4152b5ffb9a8cf9de4f8 *wasm_bg.2bc2b212.wasm
+43a77657bcd238bb949797c7dccea200 *wasm_bg.6145c2bf.wasm
+30fd3f3c17dac500267b53f5c0e52b26 *wasm_bg.c0583b08.wasm
+3cd4a4fc283e8cc18c62b4219a32b5c6 *wasm_bg.d6d2fb1b.wasm
+61f1f62ae3a69134aaf201a9ba361885b9593ab9
+== 1. UI MV
+worker lama exit 0
+worker Σ exit 0
+main lama exit 0
+main Σ exit 0
+== 2. SPSS + regresi + main/worker
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+2351 nilai SPSS; dibandingkan 2339; lulus 2339; gagal 0; tanpa padanan 12
+main vs worker mv9.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true
+mvK1: main = worker true
+mvK1n: main = worker true
+mvK2: main = worker true
+mvK3: main = worker true
+mvK4: main = worker true
+konfigurasi Σ: 5, beda: 0
+== 3. nilai mentah vs v5
+konfigurasi: 23, tidak identik: 9
+mvK1: known_covariance_test = harness K1 (divalidasi R) true
+mvK1n: known_covariance_test = harness K1 (divalidasi R) true
+mvK2: known_covariance_test = harness K2-d (divalidasi R) true
+mvK3: known_covariance_test = harness K3-d (divalidasi R) true
+mvK4: known_covariance_test = harness K4 (divalidasi R) true
+== 4. uji acuan
+values 2339, not_covered 12 -> frontend\components\Modals\Analyze\general-linear-model\multivariate\__test__\fixtures\mv-reference-values.json
+warning: in the working copy of 'frontend/components/Modals/Analyze/general-linear-model/multivariate/__test__/fixtures/mv-reference-values.json', LF will be replaced by CRLF the next time Git touches it
+fixture diff: 0 baris
+Tests:       12 todo, 2339 passed, 2351 total
+Tests:       1681 passed, 1681 total
+== 5. Jest penuh
+Jest penuh: 49 suite gagal dari 279; baseline 49
+tes: 6877 lulus, 210 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 0
+== 6. sel eksperimen
+mv exit 0
+rm exit 0
+sel: 8, tidak identik: 4
+sel: 8, tidak identik: 4
+== 7. RM main/worker
+exit 0
+exit 0
+gambar51 final identik main/worker: true | hash tabel v5 65d0361fe7c8 final 65d0361fe7c8 sama true
+a final identik main/worker: true | hash tabel v5 05a38263ead6 final 33fbd3c750a7 sama false
+b final identik main/worker: true | hash tabel v5 ec548b7db5e3 final bacba7b1d57c sama false
+c final identik main/worker: true | hash tabel v5 cad88ef17941 final e7d5e7d9ba21 sama false
+cEm final identik main/worker: true | hash tabel v5 123c6d3ff9e3 final aeacfd765f86 sama false
+cPoly final identik main/worker: true | hash tabel v5 0b3140b3685e final a9aa4dc1b949 sama false
+cRep final identik main/worker: true | hash tabel v5 678650679852 final bc943d2d173f sama false
+exp5000n final identik main/worker: true | hash tabel v5 13d7c56765ec final d18ef7263b9a sama false
+exp5000 final identik main/worker: true | hash tabel v5 6fc65b7571a9 final e0ce09d67d56 sama false
+desain: 9, beda: 8
+== selesai
+== regresi selesai
+BB-KF03-04 selesai shots=8
+BB-KF03-05 selesai shots=4
+BB-KF03-12 selesai shots=2
+BB-KF04-03 selesai shots=6
+BB-KF04-04 selesai shots=3
+BB-KF03-14 selesai shots=6
+BB-KF03-15 selesai shots=6
+BB-KF04-05 selesai shots=5
+bb iterasi 4 exit 0
