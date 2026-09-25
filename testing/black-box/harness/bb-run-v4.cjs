@@ -12,6 +12,12 @@
 //
 // Pemakaian (root repo, server build v4 berjalan):
 //   node testing/black-box/harness/bb-run-v4.cjs --base=http://localhost:3102 [--only=BB-KF03-04,...]
+//
+// Finalisasi: kelompok "fitur final" (uji khi-kuadrat dengan Σ diketahui)
+// ditambahkan di berkas ini. --set=v4 (bawaan), final, atau all memilih
+// kelompok; --iter=N menulis ke bukti/iterasi-N dan hasil-eksekusi/iterasi-N
+// (tanpa --iter: folder v4 seperti eksekusi v4).
+//   node testing/black-box/harness/bb-run-v4.cjs --base=http://localhost:3101 --iter=3 --set=all
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("@playwright/test");
@@ -23,8 +29,9 @@ const PORT = new URL(BASE).port;
 const REPO = path.resolve(__dirname, "../../..");
 const BB = path.resolve(__dirname, "..");
 const ITER = 2; // gaya tangkapan iterasi 2 (seluruh kartu hasil)
-const SHOTS = path.join(BB, "bukti", "v4");
-const OBS = path.join(BB, "hasil-eksekusi", "v4");
+const RUN_DIR = args.iter ? `iterasi-${args.iter}` : "v4";
+const SHOTS = path.join(BB, "bukti", RUN_DIR);
+const OBS = path.join(BB, "hasil-eksekusi", RUN_DIR);
 const MVD = path.join(REPO, "testing/glm-mv-reference/data");
 const LONG = 10 * 60 * 1000;
 const BUILD_ID_FILE = fs.readFileSync(path.join(REPO, "frontend/.next/BUILD_ID"), "utf8").trim();
@@ -745,6 +752,271 @@ S["BB-KF06-10"] = async (c) => {
     await snapTable(c, "Errors Logs");
 };
 
+// ── Fitur final: uji khi-kuadrat dengan Σ diketahui ─────────────────────────
+const V4_IDS = Object.keys(S);
+// Σ sebagai segitiga atas termasuk diagonal (per baris), seperti diisi pengguna.
+const SA = [[36, -630, -320, -5], [15000, 6700, 107], [4700, 44], [1]];
+const SB = [[7, 6, 5, 5], [16, 8, 6], [29, 14], [22]];
+const S1 = [[5, 4.5, 6.5, 5], [13, 7, 6], [29, 14], [17]];
+const S2 = [[9, 7.5, 4.5, 4], [19, 9.5, 5.5], [29, 13], [28]];
+const SD = [[120, 17], [22]];
+const T_CHI = "Chi-Square Test (Known Covariance Matrix)";
+const T_KCI = "Simultaneous Confidence Intervals (Known Covariance Matrix)";
+const DLG_MU0 = "Test Values (μ₀) — Hotelling T² Satu Populasi";
+const R_KNOWN = readRcsv(path.join(REPO, "testing/final/bagian1/known-sigma-r.csv"));
+const CHK = { tv: "#known-sigma-checkbox", two: "#two-sample-known-sigma-checkbox", paired: "#paired-known-sigma-checkbox" };
+
+async function sigmaFill(scope, prefix, upper, skip = []) {
+    for (let i = 0; i < upper.length; i++) for (let j = i; j < upper.length; j++) {
+        if (skip.includes(`${i}-${j}`)) continue;
+        await scope.locator(`#${prefix}-${i}-${j}`).fill(String(upper[i][j - i]));
+    }
+}
+// Isi sel dan status (nonaktif) seluruh matriks, plus label baris/kolom.
+async function sigmaRead(scope, prefix, p) {
+    const cells = [];
+    for (let i = 0; i < p; i++) {
+        const row = [];
+        for (let j = 0; j < p; j++) {
+            const cell = scope.locator(`#${prefix}-${i}-${j}`);
+            row.push({ value: await cell.inputValue(), disabled: await cell.isDisabled() });
+        }
+        cells.push(row);
+    }
+    const table = scope.locator(`table#${prefix}`);
+    const heads = (await table.locator("thead th").allInnerTexts()).map((t) => t.trim()).filter(Boolean);
+    const rows = (await table.locator("tbody th").allInnerTexts()).map((t) => t.trim());
+    const title = await table.locator("xpath=../preceding-sibling::span[1]").innerText().catch(() => null);
+    return { title, columns: heads, rows, cells };
+}
+const checkState = (page, sel) => page.locator(sel).getAttribute("data-state");
+const errText = (page, id) => page.locator(`#${id}`).innerText().catch(() => null);
+// Nilai tampil tabel χ² dan CI Σ diketahui dibandingkan dengan R (4 desimal).
+function knownVsR(c, run, rCase) {
+    const r = Object.fromEntries(R_KNOWN.filter((x) => x.case === rCase).map((x) => [x.key, Number(x.r)]));
+    const f4 = (v) => Number(v).toFixed(4);
+    const sig = (v) => (v < 0.001 ? "<.001" : f4(v));
+    const diffs = [];
+    let n = 0;
+    const chi = tableOf(run, T_CHI)?.rows?.[0];
+    const cmp = (label, shown, expect) => { n += 1; if (String(shown) !== expect) diffs.push({ nilai: label, tampil: shown, R: expect }); };
+    if (chi) { cmp("Chi-Square", chi.chi_square, f4(r.chi)); cmp("Sig.", chi.significance, sig(r.sig)); }
+    else diffs.push({ nilai: T_CHI, tampil: "tidak ada" });
+    const ci = tableOf(run, T_KCI);
+    (ci?.rows || []).forEach((row, i) => {
+        const k = i + 1;
+        cmp(`${row.dependent_variable} estimate`, row.estimate, f4(r[`est${k}`]));
+        cmp(`${row.dependent_variable} std_error`, row.std_error, f4(r[`se${k}`]));
+        cmp(`${row.dependent_variable} chi_square_lower`, row.chi_square_lower, f4(r[`chiL${k}`]));
+        cmp(`${row.dependent_variable} chi_square_upper`, row.chi_square_upper, f4(r[`chiU${k}`]));
+        cmp(`${row.dependent_variable} bonferroni_lower`, row.bonferroni_lower, f4(r[`bonL${k}`]));
+        cmp(`${row.dependent_variable} bonferroni_upper`, row.bonferroni_upper, f4(r[`bonU${k}`]));
+    });
+    c.note(`nilaiVsR_${rCase}`, { nilaiDibandingkan: n, beda: diffs });
+    return diffs.length === 0;
+}
+async function knownResult(c, run, rCase) {
+    c.note("urutanTabel", titlesOf(run));
+    const chi = tableOf(run, T_CHI);
+    c.note("tabelChi", { kolom: chi?.columns, baris: chi?.rows, catatan: noteOf(chi) });
+    const ci = tableOf(run, T_KCI);
+    c.note("tabelCiSigma", { kolom: ci?.columns, baris: ci?.rows, catatan: noteOf(ci) });
+    c.note("nilaiSamaR", knownVsR(c, run, rCase));
+    await gotoResult(c.page);
+    await snapTable(c, T_CHI);
+    if (ci) await snapTable(c, T_KCI);
+    await snapTable(c, "Multivariate Tests");
+}
+async function mv1Open(c) {
+    await importCsv(c, path.join(MVD, "hotelling 1 populasi.csv"));
+    await mvOpen(c); await mvDV(c, ["mpg", "disp", "hp", "wt"]);
+    await mvTestValues(c, [20, 200, 150, 3]);
+    c.log("Test Values μ₀ = 20, 200, 150, 3");
+    return dialogTitled(c.page, DLG_MU0);
+}
+// Subdialog tetap terbuka sesudah Continue yang ditolak?
+async function stillOpen(c, dlg) { await c.page.waitForTimeout(600); return dlg.isVisible(); }
+
+S["BB-KF02-08"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    c.note("kotakAwal", await checkState(p, CHK.tv));
+    c.note("matriksTampilSebelumDicentang", await p.locator("#known-sigma-0-0").count());
+    await c.snap(dlg, "subdialog Test Values: kotak Σ belum dicentang");
+    await p.locator(CHK.tv).click();
+    await sigmaFill(p, "known-sigma", SA);
+    c.note("matriks", await sigmaRead(p, "known-sigma", 4));
+    await c.snap(dlg, "Σ diketahui terisi (segitiga bawah otomatis)");
+    await continueTo(c, MVOK);
+    c.log("Σ diketahui dicentang dan diisi → Continue");
+    await setChecks(c, "Options", ["DescStats", "SimultaneousCI"], MVOK);
+    const run = await mvRun(c, "OK dengan Σ diketahui dan CI simultan");
+    c.note("multivariateTests", tableOf(run, "Multivariate Tests")?.rows);
+    await knownResult(c, run, "K1");
+};
+S["BB-KF02-09"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    c.note("kotakAwal", await checkState(p, CHK.tv));
+    c.note("matriksTampil", await p.locator("#known-sigma-0-0").count());
+    await c.snap(dlg, "subdialog Test Values: kotak Σ tidak dicentang");
+    await continueTo(c, MVOK);
+    await setChecks(c, "Options", OPT, MVOK);
+    const run = await mvRun(c, "OK tanpa Σ diketahui");
+    c.note("urutanTabel", titlesOf(run));
+    const ref = path.join(OBS, "BB-KF02-01.json");
+    if (fs.existsSync(ref)) {
+        const r = JSON.parse(fs.readFileSync(ref, "utf8"));
+        const refRun = (r.runs || []).find((x) => x.output) || null;
+        const strip = (o) => (o || []).filter((s) => s.title !== "Errors Logs").map((s) => ({ title: s.title, tables: s.tables.map((t) => ({ title: t.title, rows: t.rows, footnote: t.footnote })) }));
+        c.note("samaDenganBBKF0201", refRun ? JSON.stringify(strip(refRun.output)) === JSON.stringify(strip(run.output)) : "BB-KF02-01 tanpa keluaran");
+    } else c.note("samaDenganBBKF0201", "BB-KF02-01 iterasi ini belum ada");
+    await gotoResult(p);
+    await snapTable(c, "Multivariate Tests");
+};
+S["BB-KF03-14"] = async (c) => {
+    const p = c.page;
+    await mv2Setup(c, "variance-pooled");
+    const d = await deltaOpen(c);
+    await deltaFill(c, d.dlg, [3, 2, 10, 1]);
+    c.note("kotakAwal", await checkState(p, CHK.two));
+    await p.locator(CHK.two).click();
+    await p.locator("#known-sigma-common").click();
+    await sigmaFill(p, "two-sample-known-sigma", SB);
+    c.note("matriks", await sigmaRead(p, "two-sample-known-sigma", 4));
+    await c.snap(d.dlg, "subdialog δ₀: Σ₁ = Σ₂ = Σ diketahui");
+    await deltaClose(c, d.dlg, "Continue");
+    c.note("ringkasan", await deltaSummary(c));
+    await snapSummary(c, "ringkasan δ₀ dan Σ");
+    await optionsCI(c); await continueTo(c, MVOK);
+    const run = await mvRun(c, "OK dua populasi, Σ diketahui");
+    await knownResult(c, run, "K2-d");
+};
+S["BB-KF03-15"] = async (c) => {
+    const p = c.page;
+    await mv2Setup(c, "variance-pooled");
+    const d = await deltaOpen(c);
+    await deltaFill(c, d.dlg, [3, 2, 10, 1]);
+    await p.locator(CHK.two).click();
+    await p.locator("#known-sigma-separate").click();
+    await sigmaFill(p, "two-sample-known-sigma1", S1);
+    await sigmaFill(p, "two-sample-known-sigma2", S2);
+    c.note("matriks1", await sigmaRead(p, "two-sample-known-sigma1", 4));
+    c.note("matriks2", await sigmaRead(p, "two-sample-known-sigma2", 4));
+    await c.snap(d.dlg, "subdialog δ₀: Σ₁ dan Σ₂ diketahui");
+    await deltaClose(c, d.dlg, "Continue");
+    c.note("ringkasan", await deltaSummary(c));
+    await snapSummary(c, "ringkasan δ₀ dan Σ₁, Σ₂");
+    await optionsCI(c); await continueTo(c, MVOK);
+    const run = await mvRun(c, "OK dua populasi, Σ₁ dan Σ₂ diketahui");
+    await knownResult(c, run, "K3-d");
+};
+async function pairedKnown(c, fill) {
+    await importCsv(c, path.join(MVD, "hotelling berpasangan (data asli).csv"));
+    await mvOpen(c);
+    const dlg = await pairedOpen(c);
+    const avail = dlg.locator("#multivariate-paired-available-variables");
+    for (const v of ["kedalaman1", "kedalaman2", "ukuran1", "ukuran2"]) await avail.getByText(v, { exact: true }).first().dblclick();
+    for (const [i, v] of [8, 3].entries()) await dlg.locator(`#delta0-${i}`).fill(String(v));
+    c.log("Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = 8, 3");
+    c.note("kotakAwal", await checkState(c.page, CHK.paired));
+    await dlg.locator(CHK.paired).click();
+    await fill(dlg);
+    await dlg.locator("table#paired-known-sigma").scrollIntoViewIfNeeded();
+    return dlg;
+}
+S["BB-KF04-05"] = async (c) => {
+    const dlg = await pairedKnown(c, (d) => sigmaFill(d, "paired-known-sigma", SD));
+    c.note("matriks", await sigmaRead(dlg, "paired-known-sigma", 2));
+    await c.snap(dlg, "subdialog Paired: Σd diketahui");
+    await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+    await c.page.locator(MVOK).waitFor();
+    await optionsCI(c); await continueTo(c, MVOK);
+    const run = await mvRun(c, "OK berpasangan, Σd diketahui");
+    await knownResult(c, run, "K4");
+};
+S["BB-KF02-10"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    await p.locator(CHK.tv).click();
+    await p.locator("#known-sigma-0-1").fill("-630");
+    const lower = p.locator("#known-sigma-1-0");
+    c.note("selBawah", { disabled: await lower.isDisabled(), editable: await lower.isEditable(), nilai: await lower.inputValue() });
+    // Upaya mengetik 999 di sel bawah diagonal seperti pengguna (klik lalu ketik).
+    await lower.click({ force: true, timeout: 3000 }).catch((e) => c.note("klikSelBawah", String(e.message).split(NL)[0]));
+    await p.keyboard.type("999");
+    c.note("selBawahSesudahKetik", await lower.inputValue());
+    c.note("selAtasSesudahKetik", await p.locator("#known-sigma-0-1").inputValue());
+    await c.snap(dlg, "sel disp–mpg nonaktif, menampilkan −630");
+    await sigmaFill(p, "known-sigma", SA, ["0-1"]);
+    await continueTo(c, MVOK);
+    await mvTestValues(c, null);
+    c.note("kotakSesudahDibukaLagi", await checkState(p, CHK.tv));
+    c.note("matriksSesudahDibukaLagi", await sigmaRead(p, "known-sigma", 4));
+    await c.snap(dialogTitled(p, DLG_MU0), "Test Values dibuka lagi");
+};
+S["BB-KF02-11"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    await p.locator(CHK.tv).click();
+    await sigmaFill(p, "known-sigma", [[1, 2, 2, 2], [1, 2, 2], [1, 2], [1]]);
+    await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+    c.note("pesan", await errText(p, "known-sigma-error"));
+    c.note("subdialogTetapTerbuka", await stillOpen(c, dlg));
+    await c.snap(dlg, "Σ tidak definit positif");
+};
+S["BB-KF02-12"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    await p.locator(CHK.tv).click();
+    await sigmaFill(p, "known-sigma", SA);
+    await p.locator("#known-sigma-2-3").fill("");
+    await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+    c.note("pesan", await errText(p, "known-sigma-error"));
+    c.note("subdialogTetapTerbuka", await stillOpen(c, dlg));
+    await c.snap(dlg, "sel hp–wt kosong");
+};
+S["BB-KF02-13"] = async (c) => {
+    const p = c.page;
+    const dlg = await mv1Open(c);
+    await p.locator(CHK.tv).click();
+    await sigmaFill(p, "known-sigma", SA);
+    for (const v of ["0", "-1"]) {
+        await p.locator("#known-sigma-3-3").fill(v);
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        c.note(`pesanDiagonal${v}`, await errText(p, "known-sigma-error"));
+        c.note(`subdialogTetapTerbuka${v}`, await stillOpen(c, dlg));
+        await c.snap(dlg, `diagonal wt = ${v}`);
+    }
+};
+S["BB-KF03-16"] = async (c) => {
+    const p = c.page;
+    await mv2Setup(c, "variance-pooled");
+    const d = await deltaOpen(c);
+    await deltaFill(c, d.dlg, [3, 2, 10, 1]);
+    await p.locator(CHK.two).click();
+    await p.locator("#known-sigma-separate").click();
+    await sigmaFill(p, "two-sample-known-sigma1", S1);
+    await sigmaFill(p, "two-sample-known-sigma2", S2);
+    await p.locator("#two-sample-known-sigma2-0-0").fill("1");
+    await d.dlg.getByRole("button", { name: "Continue", exact: true }).click();
+    c.note("pesan", await errText(p, "two-sample-known-sigma-error"));
+    c.note("subdialogTetapTerbuka", await stillOpen(c, d.dlg));
+    await p.locator("#two-sample-known-sigma-error").scrollIntoViewIfNeeded().catch(() => {});
+    await c.snap(d.dlg, "Σ₂ tidak definit positif");
+};
+S["BB-KF04-06"] = async (c) => {
+    const dlg = await pairedKnown(c, async (d) => {
+        await d.locator("#paired-known-sigma-0-0").fill("120");
+        await d.locator("#paired-known-sigma-1-1").fill("22");
+    });
+    await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+    c.note("pesan", await errText(c.page, "paired-known-sigma-error"));
+    c.note("subdialogTetapTerbuka", await stillOpen(c, dlg));
+    await dlg.locator("#paired-known-sigma-error").scrollIntoViewIfNeeded().catch(() => {});
+    await c.snap(dlg, "sel d1–d2 kosong");
+};
+const FINAL_IDS = Object.keys(S).filter((id) => !V4_IDS.includes(id));
 
 (async () => {
     fs.mkdirSync(SHOTS, { recursive: true });
@@ -755,7 +1027,8 @@ S["BB-KF06-10"] = async (c) => {
     const env = { base: BASE, port: PORT, buildIdFile: BUILD_ID_FILE, buildIdServed: served };
     if (served !== BUILD_ID_FILE) throw new Error(`BUILD_ID server ${served} != berkas ${BUILD_ID_FILE}`);
     const browser = await chromium.launch();
-    const ids = args.only ? args.only.split(",") : Object.keys(S);
+    const set = args.set || "v4";
+    const ids = args.only ? args.only.split(",") : set === "final" ? FINAL_IDS : set === "all" ? [...V4_IDS, ...FINAL_IDS] : V4_IDS;
     const report = { ...env, chromium: browser.version(), playwright: require("@playwright/test/package.json").version, startedAt: new Date().toISOString(), scenarios: {} };
     for (const id of ids) {
         for (const f of fs.readdirSync(SHOTS)) if (f === `${id}.png` || f.startsWith(`${id}-`)) fs.unlinkSync(path.join(SHOTS, f));

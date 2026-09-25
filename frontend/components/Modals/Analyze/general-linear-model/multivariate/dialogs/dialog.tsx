@@ -238,10 +238,11 @@ export const MultivariateDialog = ({
                 }
                 // δ₀ of the two-population test belongs to the factor it was
                 // entered for: any change of Fixed Factor(s) drops it.
+                // The same holds for the known Σ (Σ₁, Σ₂ are per level).
                 setMainState((prev) =>
-                    prev.TwoSampleTestValues == null
+                    prev.TwoSampleTestValues == null && prev.TwoSampleKnownSigma == null
                         ? prev
-                        : { ...prev, TwoSampleTestValues: null }
+                        : { ...prev, TwoSampleTestValues: null, TwoSampleKnownSigma: null }
                 );
             }
         },
@@ -520,6 +521,11 @@ export const MultivariateDialog = ({
                                 mainState.TwoSampleTestValues.some((v) => v !== 0)
                                     ? `δ₀ = [${mainState.TwoSampleTestValues.join(", ")}]`
                                     : "δ₀ = 0 (H₀: μ₁ = μ₂)"}
+                                {mainState.TwoSampleKnownSigma
+                                    ? mainState.TwoSampleKnownSigma.mode === "separate"
+                                        ? " · Σ₁, Σ₂ known"
+                                        : " · Σ known"
+                                    : ""}
                             </span>
                             <Button
                                 id="two-sample-delta-button"

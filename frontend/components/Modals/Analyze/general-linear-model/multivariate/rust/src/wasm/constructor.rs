@@ -1,13 +1,27 @@
 use serde::Serialize;
-use statrs::distribution::{ Continuous, ContinuousCDF, FisherSnedecor, StudentsT };
+use nalgebra::{ DMatrix, DVector };
+use statrs::distribution::{ ChiSquared, Continuous, ContinuousCDF, FisherSnedecor, Normal, StudentsT };
 use wasm_bindgen::prelude::*;
 
 use crate::models::{
     config::{ MultivariateConfig, VarianceMode },
     data::{ AnalysisData, DataRecord, DataValue, VariableDefinition },
-    result::{ MultivariateResult, SimultaneousConfidenceIntervals, SimultaneousInterval },
+    result::{
+        KnownCovarianceInput,
+        KnownCovarianceInterval,
+        KnownCovarianceTest,
+        MultivariateResult,
+        SimultaneousConfidenceIntervals,
+        SimultaneousInterval,
+    },
 };
-use crate::stats::common::{ compute_per_group_covariances, get_factor_levels, merge_records };
+use crate::stats::common::{
+    compute_per_group_covariances,
+    data_value_to_string,
+    extract_dependent_value,
+    get_factor_levels,
+    merge_records,
+};
 use crate::utils::{ converter::string_to_js_error, error::ErrorCollector };
 use crate::utils::log::FunctionLogger;
 use crate::wasm::function;
@@ -289,6 +303,33 @@ impl MultivariateAnalysis {
             }
         }
     }
+
+    /// Chi-square test of the mean vector with a known population covariance
+    /// matrix Σ ("Population covariance matrix (Σ) known" in Test Values,
+    /// Test Values (δ₀) or Paired), with the matching simultaneous
+    /// intervals. `known` is a KnownCovarianceInput. The frontend calls it
+    /// only when Σ was entered, after get_formatted_results(); like
+    /// get_simultaneous_ci it works on the stored (listwise-complete) data,
+    /// so an analysis without it is unchanged. On error the message goes to
+    /// the error collector (context "calculate_known_covariance_test") and
+    /// null is returned.
+    pub fn get_known_covariance_test(&mut self, known: JsValue) -> Result<JsValue, JsValue> {
+        self.logger.add_log("calculate_known_covariance_test");
+        let input: Result<KnownCovarianceInput, String> = serde_wasm_bindgen
+            ::from_value(known)
+            .map_err(|e| format!("Invalid known covariance matrix input: {}", e));
+        match input.and_then(|k| calculate_known_covariance_test(&self.data, &self.config, &k)) {
+            Ok(test) => {
+                let serializer = serde_wasm_bindgen::Serializer::new().serialize_maps_as_objects(true);
+                test.serialize(&serializer)
+                    .map_err(|e| JsValue::from_str(&format!("Failed to serialize the known covariance test: {}", e)))
+            }
+            Err(e) => {
+                self.error_collector.add_error("calculate_known_covariance_test", &e);
+                Ok(JsValue::NULL)
+            }
+        }
+    }
 }
 
 /// Listwise deletion as SPSS GLM does (/MISSING=EXCLUDE): keep only the rows
@@ -559,6 +600,215 @@ fn calculate_simultaneous_ci(
         }
         _ => Err(SIMULTANEOUS_CI_DESIGN_MESSAGE.to_string()),
     }
+}
+
+const KNOWN_COVARIANCE_DESIGN_MESSAGE: &str =
+    "The chi-square test with a known covariance matrix is available for the one-sample, paired, and two-sample designs (no Fixed Factor, or one Fixed Factor with two levels, without covariates or WLS weight).";
+
+/// Levels of a factor in output-table order (numeric when both parse as
+/// numbers), as calculate_simultaneous_ci orders them.
+fn sorted_levels(data: &AnalysisData, factor: &str) -> Result<Vec<String>, String> {
+    let mut levels = get_factor_levels(data, factor)?;
+    levels.sort_by(|a, b| match (a.parse::<f64>(), b.parse::<f64>()) {
+        (Ok(x), Ok(y)) => x.partial_cmp(&y).unwrap_or(std::cmp::Ordering::Equal),
+        _ => a.cmp(b),
+    });
+    Ok(levels)
+}
+
+/// (n, x̄) of the cases with `factor = level` (all cases when `level` is
+/// None). The stored data are listwise-complete; a case without a number
+/// for every dependent variable is skipped all the same.
+fn group_mean(
+    records: &[DataRecord],
+    dep_vars: &[String],
+    level: Option<(&str, &str)>,
+) -> (usize, DVector<f64>) {
+    let p = dep_vars.len();
+    let mut sum = DVector::<f64>::zeros(p);
+    let mut n = 0usize;
+    for record in records {
+        if let Some((factor, value)) = level {
+            if record.values.get(factor).map(data_value_to_string).as_deref() != Some(value) {
+                continue;
+            }
+        }
+        let row: Vec<f64> = dep_vars.iter().filter_map(|dv| extract_dependent_value(record, dv)).collect();
+        if row.len() != p {
+            continue;
+        }
+        for (i, v) in row.iter().enumerate() {
+            sum[i] += v;
+        }
+        n += 1;
+    }
+    if n > 0 {
+        sum /= n as f64;
+    }
+    (n, sum)
+}
+
+/// p × p matrix from the user's input: finite, symmetric (the dialog fills
+/// the lower triangle from the upper one), positive diagonal and positive
+/// definite (Cholesky). The dialog checks the same before Continue.
+fn known_matrix(rows: Option<&Vec<Vec<f64>>>, p: usize, label: &str) -> Result<DMatrix<f64>, String> {
+    let rows = rows.ok_or_else(|| format!("Known covariance matrix {} is missing.", label))?;
+    if rows.len() != p || rows.iter().any(|r| r.len() != p) {
+        return Err(format!("Known covariance matrix {} must be {} × {} (one row and column per dependent variable).", label, p, p));
+    }
+    let m = DMatrix::from_fn(p, p, |i, j| rows[i][j]);
+    if m.iter().any(|v| !v.is_finite()) {
+        return Err(format!("Known covariance matrix {}: every entry must be a number.", label));
+    }
+    if (0..p).any(|i| m[(i, i)] <= 0.0) {
+        return Err(format!("Known covariance matrix {}: the diagonal entries (variances) must be greater than 0.", label));
+    }
+    let scale = m.iter().fold(0.0f64, |a, v| a.max(v.abs()));
+    for i in 0..p {
+        for j in (i + 1)..p {
+            if (m[(i, j)] - m[(j, i)]).abs() > 1e-12 * scale {
+                return Err(format!("Known covariance matrix {} must be symmetric.", label));
+            }
+        }
+    }
+    if m.clone().cholesky().is_none() {
+        return Err(format!("Known covariance matrix {} is not positive definite.", label));
+    }
+    Ok(m)
+}
+
+/// Chi-square test of the mean vector with a known population covariance
+/// matrix (Johnson & Wichern, Applied Multivariate Statistical Analysis,
+/// 6th ed.: x̄ ~ N_p(μ, Σ/n), §4.4, and (x − μ)ᵀΣ⁻¹(x − μ) ~ χ²(p) for
+/// x ~ N_p(μ, Σ), §4.2; see testing/fitur-v4/rujukan-jw.md). With V the
+/// covariance matrix of the estimate, the statistic is (est − h)ᵀV⁻¹(est − h)
+/// ~ χ²(p) under H₀:
+///   one sample (and the paired test on d): est = x̄, h = μ₀, V = Σ/n
+///   two samples, Σ₁ = Σ₂ = Σ:  est = x̄₁ − x̄₂, h = δ₀, V = (1/n₁ + 1/n₂)Σ
+///   two samples, Σ₁ and Σ₂:    est = x̄₁ − x̄₂, h = δ₀, V = Σ₁/n₁ + Σ₂/n₂
+/// δ₀ is subtracted from the first level by the frontend before the
+/// analysis (two-sample-delta.ts), so here h = 0 and x̄₁ − x̄₂ already
+/// includes −δ₀. Simultaneous intervals for component i:
+///   χ²:         estᵢ ± √χ²(p; α) · √Vᵢᵢ
+///   Bonferroni: estᵢ ± z(α/(2p)) · √Vᵢᵢ
+/// χ²(p; α) and z(α/(2p)) are upper quantiles; α = Significance Level
+/// (Options).
+fn calculate_known_covariance_test(
+    data: &AnalysisData,
+    config: &MultivariateConfig,
+    known: &KnownCovarianceInput,
+) -> Result<KnownCovarianceTest, String> {
+    let alpha = config.options.sig_level.unwrap_or(0.05);
+    if !(alpha > 0.0 && alpha < 1.0) {
+        return Err("Significance Level must be greater than 0 and less than 1.".to_string());
+    }
+    let dep_vars = config.main.dep_var.clone().unwrap_or_default();
+    let p = dep_vars.len();
+    if p == 0 {
+        return Err("No dependent variables specified".to_string());
+    }
+    let has_covariates = config.main.covar.as_ref().map_or(false, |c| !c.is_empty());
+    if has_covariates || config.main.wls_weight.is_some() {
+        return Err(KNOWN_COVARIANCE_DESIGN_MESSAGE.to_string());
+    }
+    let factors = config.main.fix_factor.clone().unwrap_or_default();
+    let records = merge_records(data);
+
+    let (sample_sizes, factor, levels, estimate, hypothesized, v) = match known.design.as_str() {
+        "one_sample" => {
+            if !factors.is_empty() {
+                return Err(KNOWN_COVARIANCE_DESIGN_MESSAGE.to_string());
+            }
+            let sigma = known_matrix(known.sigma.as_ref(), p, "Σ")?;
+            let (n, mean) = group_mean(&records, &dep_vars, None);
+            if n == 0 {
+                return Err("No complete cases.".to_string());
+            }
+            let mu0 = config.main.test_values.clone().unwrap_or_else(|| vec![0.0; p]);
+            if mu0.len() != p {
+                return Err(format!("Test Values must have {} entries.", p));
+            }
+            (vec![n], None, Vec::new(), mean, DVector::from_vec(mu0), sigma / (n as f64))
+        }
+        "two_sample_common" | "two_sample_separate" => {
+            if factors.len() != 1 {
+                return Err(KNOWN_COVARIANCE_DESIGN_MESSAGE.to_string());
+            }
+            let factor = factors[0].clone();
+            let levels = sorted_levels(data, &factor)?;
+            if levels.len() != 2 {
+                return Err(format!(
+                    "The chi-square test with a known covariance matrix for two samples needs the Fixed Factor to have exactly two levels; '{}' has {}.",
+                    factor,
+                    levels.len()
+                ));
+            }
+            let (n1, m1) = group_mean(&records, &dep_vars, Some((&factor, &levels[0])));
+            let (n2, m2) = group_mean(&records, &dep_vars, Some((&factor, &levels[1])));
+            if n1 == 0 || n2 == 0 {
+                return Err(format!("Each level of '{}' needs at least one complete case.", factor));
+            }
+            let (f1, f2) = (n1 as f64, n2 as f64);
+            let v = if known.design == "two_sample_common" {
+                known_matrix(known.sigma.as_ref(), p, "Σ")? * (1.0 / f1 + 1.0 / f2)
+            } else {
+                let s1 = known_matrix(known.sigma1.as_ref(), p, &format!("Σ₁ ({} = {})", factor, levels[0]))?;
+                let s2 = known_matrix(known.sigma2.as_ref(), p, &format!("Σ₂ ({} = {})", factor, levels[1]))?;
+                s1 / f1 + s2 / f2
+            };
+            (vec![n1, n2], Some(factor), levels, m1 - m2, DVector::zeros(p), v)
+        }
+        other => {
+            return Err(format!("Unknown design '{}' for the known covariance test.", other));
+        }
+    };
+
+    let diff = &estimate - &hypothesized;
+    let chol = v
+        .clone()
+        .cholesky()
+        .ok_or_else(|| "The covariance matrix of the mean vector is not positive definite.".to_string())?;
+    let chi_square = diff.dot(&chol.solve(&diff));
+    let pf = p as f64;
+    let chi_dist = ChiSquared::new(pf).map_err(|e| format!("Chi-square distribution: {}", e))?;
+    let significance = chi_dist.sf(chi_square);
+    let chi_critical = polish_quantile(&chi_dist, 1.0 - alpha, chi_dist.inverse_cdf(1.0 - alpha)).sqrt();
+    let normal = Normal::new(0.0, 1.0).map_err(|e| format!("Normal distribution: {}", e))?;
+    let z_prob = 1.0 - alpha / (2.0 * pf);
+    let z_critical = polish_quantile(&normal, z_prob, normal.inverse_cdf(z_prob));
+
+    let intervals = dep_vars
+        .iter()
+        .enumerate()
+        .map(|(i, dv)| {
+            let se = v[(i, i)].sqrt();
+            KnownCovarianceInterval {
+                dependent_variable: dv.clone(),
+                estimate: estimate[i],
+                std_error: se,
+                chi_square_lower: estimate[i] - chi_critical * se,
+                chi_square_upper: estimate[i] + chi_critical * se,
+                bonferroni_lower: estimate[i] - z_critical * se,
+                bonferroni_upper: estimate[i] + z_critical * se,
+            }
+        })
+        .collect();
+
+    Ok(KnownCovarianceTest {
+        design: known.design.clone(),
+        p,
+        sample_sizes,
+        factor,
+        levels,
+        hypothesized: if known.design == "one_sample" { hypothesized.iter().copied().collect() } else { Vec::new() },
+        chi_square,
+        df: pf,
+        significance,
+        confidence_level: 1.0 - alpha,
+        chi_square_critical: chi_critical,
+        z_critical,
+        intervals,
+    })
 }
 
 /// Newton steps on the CDF from statrs' quantile, so the quantile is exact

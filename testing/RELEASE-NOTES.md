@@ -22,6 +22,41 @@ Tanggal: 2026-09-25.
 | Build Next.js repo utama | `BUILD_ID` `kltgqC9v3JB7sKHnE_leX`, memuat `wasm_bg.eb5b96b2.wasm` (MV) dan `wasm_bg.2bc2b212.wasm` (RM), nama dan md5-nya sama dengan build v5. Log: `testing/final/bagian0/`. |
 | Sintaks SPSS yang harus dijalankan | `testing/SPSS-TODO.md` |
 
+### F1. Uji khi-kuadrat dengan Σ diketahui
+
+Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/multivariate/`. Bukti di `testing/final/bagian1/`.
+
+**Isi:**
+- **UI:** kotak "Population covariance matrix (Σ) known" (bawaan tidak dicentang) di subdialog Test Values, Test Values (δ₀), dan Paired (`dialogs/known-sigma-matrix.tsx`).
+  - Matriks p × p berlabel nama DV, atau nama pasangan pada Paired. Pengguna mengisi segitiga atas termasuk diagonal; segitiga bawah terisi otomatis dan tidak dapat diubah.
+  - Test Values (δ₀) punya pilihan "Σ₁ = Σ₂ = Σ (one matrix)" atau "Σ₁ and Σ₂ (one matrix per level)", dengan judul matriks memuat level faktor.
+- **Validasi saat Continue** (`services/known-sigma.ts`): subdialog tetap terbuka bila gagal. Pesan persisnya:
+  - "Known covariance matrix Σ: every entry on and above the diagonal must be a number.";
+  - "Known covariance matrix Σ: the diagonal entries (variances) must be greater than 0.";
+  - "Known covariance matrix Σ is not positive definite." (Cholesky).
+  - Label lain: "Known covariance matrix Σ₁ (<faktor> = <level>)", "… Σ₂ (…)", dan "Known covariance matrix Σd". Pesan saat analisis ada di `testing/black-box/pemetaan-kebutuhan.md` ("Pesan baru final").
+- **Rust:** method baru `MultivariateAnalysis::get_known_covariance_test(known)` (`rust/src/wasm/constructor.rs`) dan struct `KnownCovarianceInput`, `KnownCovarianceTest`, `KnownCovarianceInterval` (`rust/src/models/result.rs`).
+  - Σ dikirim sebagai argumen method, tidak lewat config. Service dan worker memanggilnya hanya bila Σ diisi (field payload `known_covariance`), jadi payload tanpa Σ sama dengan v5.
+- **Keluaran:**
+  - Tabel "Chi-Square Test (Known Covariance Matrix)" (Hypothesis, Chi-Square, df = p, Sig.) sesudah Multivariate Tests. Catatannya memuat H₀ (μ₀/δ₀ dan arah μ(level 1) − μ(level 2)), keterangan bahwa Σ diketahui, rumus, dan rujukan J&W ed. 6 §4.2, §4.4. Tabel T² tetap ada.
+  - Bila Options → Simultaneous CI dicentang, juga tabel "Simultaneous Confidence Intervals (Known Covariance Matrix)": selang χ² estᵢ ± √χ²(p; α)·√Vᵢᵢ dan Bonferroni estᵢ ± z(α/(2p))·√Vᵢᵢ, pada skala data asli bila δ₀ ≠ 0.
+
+**Pemeriksaan:**
+
+| Pemeriksaan | Hasil | Bukti |
+|---|---|---|
+| R dasar (`testing/final/r/known-sigma.R`: `n*mahalanobis`, rumus langsung, `pchisq`, `qchisq`, `qnorm`) | 12 kasus (satu populasi, α 0,05 dan 0,10; dua populasi Σ₁ = Σ₂ dan Σ₁, Σ₂, masing-masing dengan δ₀ = 0 dan ≠ 0; berpasangan δ₀ = 0 dan [8, 3]), 300 nilai, selisih maks 3.6e-10 (< 1e-8) | `known-sigma-vs-r.txt`, `known-sigma-r.csv` |
+| Sifat Σ = S → χ² = T² | Satu populasi, dua populasi (S_pooled), dan berpasangan: χ² Statify = T² R = T² Multivariate Tests (selisih < 1e-12) | `known-sigma-vs-r.txt` |
+| Sifat Σ = I → χ² = n·Σ(x̄ − μ₀)² | Selisih relatif 1.8e-15 | `known-sigma-vs-r.txt` |
+| Jalur lama (kotak tidak dicentang) | 23 payload v5 (`step21-v5/worker`) di-replay ke WASM baru: 23/23 respons byte-identik dengan v5 | `replay-old-path.txt` |
+| API Rust | 4 perubahan publik, semuanya penambahan (3 struct, 1 method); glue hanya bertambah method baru | `rust-api.txt`, `testing/final/rust-api-allowed.json` |
+| Lewat UI (konfigurasi baru mvK1, mvK1n, mvK2, mvK3, mvK4) | Nilai mentah `known_covariance_test` di respons worker identik dengan harness yang divalidasi R; main = worker untuk kelima konfigurasi | `main-worker.txt`, `ui-worker/`, `ui-main/` |
+| Jest | `test/known-sigma.test.ts` 12 tes lulus; suite MV lain seperti baseline | — |
+
+- **Build uji Bagian 1:** `BUILD_ID` di `build-id.txt`, WASM MV md5 `03c58af4…`.
+- **Skenario black-box baru:** 11 skenario (BB-KF02-08 s.d. BB-KF02-13, BB-KF03-14 s.d. BB-KF03-16, BB-KF04-05, BB-KF04-06), dieksekusi di iterasi 3.
+- **Sebelum iterasi 3:** harness dicoba sekali pada build ini. Hasil uji coba dihapus dan tidak dipakai sebagai hasil.
+
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 
 **Dasar perubahan:**

@@ -38,6 +38,13 @@ export type MultivariateFormatterOptions = {
         levels: [string, string];
         delta0: number[];
     } | null;
+    /** Known Σ (chi-square test): where Σ was entered and whether the
+     *  simultaneous intervals are shown (Options → Simultaneous CI). The
+     *  values are in data.known_covariance_test. */
+    knownCovariance?: {
+        source: "Test Values" | "Test Values (δ₀)" | "Paired";
+        showIntervals: boolean;
+    } | null;
     /** Sum-of-Squares method the user picked in the Model dialog
      *  ("typeI" | "typeII" | "typeIII" | "typeIV"). Drives the column header
      *  of the Tests of Between-Subjects Effects table — SPSS prints
@@ -301,7 +308,9 @@ export function transformMultivariateResult(
         options.varianceMode === "Welch" ? options.factor ?? null : null,
         pairedMode
     );
+    formatKnownCovarianceTest(data, resultJson, options, relabelDv);
     formatSimultaneousCI(data, resultJson, options, relabelDv);
+    formatKnownCovarianceIntervals(data, resultJson, options, relabelDv);
     formatTestsBetweenSubjectsEffects(
         data,
         resultJson,
@@ -489,6 +498,191 @@ function formatSimultaneousCI(
     table.note = note;
     table.interpretation =
         "Simultaneous confidence intervals for the components of the mean vector (or of the difference of two mean vectors). T² intervals hold jointly for every linear combination; Bonferroni intervals are shorter when only these p components are of interest. \"Contains\" tells whether the hypothesised value lies inside the interval.";
+    resultJson.tables.push(table);
+}
+
+// ── Chi-square test with a known covariance matrix ───────────────────────────
+// Values computed in Rust (wasm/constructor.rs,
+// calculate_known_covariance_test); Johnson & Wichern, Applied Multivariate
+// Statistical Analysis, 6th ed., §4.2 and §4.4 (testing/fitur-v4/rujukan-jw.md).
+// For two populations the analysis ran on data in which δ₀ was subtracted
+// from the first level, so δ₀ is added back to the estimates and bounds.
+
+/** Hypothesis, formula and design lines shared by both known-Σ tables. */
+function knownCovarianceContext(
+    test: any,
+    options: MultivariateFormatterOptions
+) {
+    const p: number = test.p;
+    const zeros = new Array(p).fill(0);
+    const paired = options.knownCovariance?.source === "Paired";
+    const twoSample = String(test.design).startsWith("two_sample");
+    const separate = test.design === "two_sample_separate";
+    const factor = test.factor ?? "";
+    const [levelA, levelB] = test.levels ?? [];
+    const delta0: number[] = twoSample ? options.twoSampleDelta?.delta0 ?? zeros : zeros;
+    const hypothesised: number[] = twoSample
+        ? delta0
+        : (test.hypothesized ?? zeros).map((v: number) => (Number.isFinite(v) ? v : 0));
+    const [n1, n2] = test.sample_sizes ?? [];
+    const where = options.knownCovariance?.source ?? "Test Values";
+    let hypothesis: string;
+    let known: string;
+    let statistic: string;
+    let sizes: string;
+    if (twoSample) {
+        hypothesis = `H₀: μ(${factor} = ${levelA}) − μ(${factor} = ${levelB}) = δ₀, δ₀ = ${formatDeltaVector(delta0)}`;
+        known = separate
+            ? `Σ₁ (${factor} = ${levelA}) and Σ₂ (${factor} = ${levelB}) are known (entered in ${where})`
+            : `Σ₁ = Σ₂ = Σ is known (entered in ${where})`;
+        statistic = separate
+            ? "χ² = (x̄₁ − x̄₂ − δ₀)ᵀ(Σ₁/n₁ + Σ₂/n₂)⁻¹(x̄₁ − x̄₂ − δ₀)"
+            : "χ² = (x̄₁ − x̄₂ − δ₀)ᵀ[(1/n₁ + 1/n₂)Σ]⁻¹(x̄₁ − x̄₂ − δ₀)";
+        sizes = `n₁ = ${n1}, n₂ = ${n2}`;
+    } else if (paired) {
+        const pairs = options.pairedMode?.pairs ?? [];
+        const list = pairs.map(([a, b], i) => `d${i + 1} = ${a} − ${b}`).join(", ");
+        hypothesis = `H₀: μd = δ₀, d = M1 − M2${list ? ` (${list})` : ""}, δ₀ = ${formatDeltaVector(hypothesised)}`;
+        known = `Σd is known (entered in ${where})`;
+        statistic = "χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀)";
+        sizes = `n = ${n1}`;
+    } else {
+        hypothesis = `H₀: μ = μ₀, μ₀ = ${formatDeltaVector(hypothesised)}`;
+        known = `Σ is known (entered in ${where})`;
+        statistic = "χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀)";
+        sizes = `n = ${n1}`;
+    }
+    return { p, paired, twoSample, separate, factor, levelA, levelB, delta0, hypothesised, hypothesis, known, statistic, sizes };
+}
+
+function formatKnownCovarianceTest(
+    data: any,
+    resultJson: ResultJson,
+    options: MultivariateFormatterOptions,
+    _relabelDv: (name: string) => string
+) {
+    const test = data?.known_covariance_test;
+    if (!test || !options.knownCovariance) return;
+    const ctx = knownCovarianceContext(test, options);
+    const rowLabel = ctx.twoSample
+        ? `μ(${ctx.factor} = ${ctx.levelA}) − μ(${ctx.factor} = ${ctx.levelB}) = δ₀`
+        : ctx.paired
+            ? "μd = δ₀"
+            : "μ = μ₀";
+    const table: Table = {
+        key: "known_covariance_chi_square_test",
+        title: "Chi-Square Test (Known Covariance Matrix)",
+        columnHeaders: [
+            { header: "Hypothesis", key: "hypothesis" },
+            { header: "Chi-Square", key: "chi_square" },
+            { header: "df", key: "df" },
+            { header: "Sig.", key: "significance" },
+        ],
+        rows: [
+            {
+                rowHeader: [],
+                hypothesis: rowLabel,
+                chi_square: formatGlmStat(test.chi_square) ?? "",
+                df: formatGlmNumber(test.df) ?? "",
+                significance: formatSig(test.significance) ?? "",
+            },
+        ],
+    };
+    table.note =
+        `${ctx.hypothesis}. ${ctx.known}, so ${ctx.statistic} ~ χ²(p) under H₀ (Johnson & Wichern, 6th ed., §4.2, §4.4). ` +
+        `p = ${ctx.p}, ${ctx.sizes}. The Hotelling T² test in Multivariate Tests uses the sample covariance matrix instead.`;
+    table.interpretation =
+        "Chi-square test of the mean vector when the population covariance matrix is known. Reject H₀ when Sig. < α.";
+    resultJson.tables.push(table);
+}
+
+function formatKnownCovarianceIntervals(
+    data: any,
+    resultJson: ResultJson,
+    options: MultivariateFormatterOptions,
+    relabelDv: (name: string) => string
+) {
+    const test = data?.known_covariance_test;
+    if (!test || !options.knownCovariance?.showIntervals || !Array.isArray(test.intervals)) return;
+    const ctx = knownCovarianceContext(test, options);
+    const pct = Number((test.confidence_level * 100).toFixed(6)).toString();
+    const alpha = Number((1 - test.confidence_level).toFixed(10)).toString();
+    const num = (v: number) => formatGlmStat(v) ?? "";
+    const plain = (v: number) => formatGlmNumber(v) ?? "";
+    const estimateHeader = ctx.twoSample
+        ? `Mean Difference (${ctx.factor} = ${ctx.levelA} − ${ctx.factor} = ${ctx.levelB})`
+        : ctx.paired
+            ? "Mean Difference (d̄)"
+            : "Mean";
+    const hypothesisHeader = ctx.twoSample || ctx.paired ? "δ₀" : "Test Value (μ₀)";
+    const containsHeader = ctx.twoSample || ctx.paired ? "Contains δ₀" : "Contains μ₀";
+    const table: Table = {
+        key: "known_covariance_confidence_intervals",
+        title: "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+        columnHeaders: [
+            { header: "Dependent Variable", key: "dependent_variable" },
+            { header: estimateHeader, key: "estimate" },
+            { header: "Std. Error", key: "std_error" },
+            { header: hypothesisHeader, key: "hypothesized" },
+            {
+                header: `${pct}% Simultaneous χ² Interval`,
+                children: [
+                    { header: "Lower Bound", key: "chi_square_lower" },
+                    { header: "Upper Bound", key: "chi_square_upper" },
+                    { header: containsHeader, key: "chi_square_contains" },
+                ],
+            },
+            {
+                header: `${pct}% Bonferroni Interval (z)`,
+                children: [
+                    { header: "Lower Bound", key: "bonferroni_lower" },
+                    { header: "Upper Bound", key: "bonferroni_upper" },
+                    { header: containsHeader, key: "bonferroni_contains" },
+                ],
+            },
+        ],
+        rows: [],
+    };
+    test.intervals.forEach((iv: any, i: number) => {
+        const s = ctx.delta0[i] ?? 0;
+        const h = ctx.hypothesised[i] ?? 0;
+        const chiLower = iv.chi_square_lower + s;
+        const chiUpper = iv.chi_square_upper + s;
+        const bonLower = iv.bonferroni_lower + s;
+        const bonUpper = iv.bonferroni_upper + s;
+        table.rows.push({
+            rowHeader: [],
+            dependent_variable: relabelDv(iv.dependent_variable),
+            estimate: num(iv.estimate + s),
+            std_error: num(iv.std_error),
+            hypothesized: plain(h),
+            chi_square_lower: num(chiLower),
+            chi_square_upper: num(chiUpper),
+            chi_square_contains: chiLower <= h && h <= chiUpper ? "Yes" : "No",
+            bonferroni_lower: num(bonLower),
+            bonferroni_upper: num(bonUpper),
+            bonferroni_contains: bonLower <= h && h <= bonUpper ? "Yes" : "No",
+        });
+    });
+    const variance = ctx.twoSample
+        ? ctx.separate
+            ? "√(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂)"
+            : "√((1/n₁ + 1/n₂)σᵢᵢ)"
+        : ctx.paired
+            ? "√(σd,ᵢᵢ/n)"
+            : "√(σᵢᵢ/n)";
+    const estimate = ctx.twoSample ? "(x̄₁ᵢ − x̄₂ᵢ)" : ctx.paired ? "d̄ᵢ" : "x̄ᵢ";
+    const pValue = String(ctx.p);
+    table.note =
+        `${ctx.known}. χ² intervals: ${estimate} ± √χ²(${pValue}; α) · ${variance}, √χ²(${pValue}; α) = ${num(test.chi_square_critical)}; ` +
+        `Bonferroni: ${estimate} ± z(α/(2p)) · ${variance}, z(α/(2p)) = ${num(test.z_critical)}. ${ctx.sizes}. ` +
+        `The intervals hold simultaneously for all ${ctx.p} components at the ${pct}% confidence level (α = ${alpha} from Options → Significance Level). ` +
+        `Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4).` +
+        (ctx.twoSample && ctx.delta0.some((v) => v !== 0)
+            ? ` The intervals are for μ₁ − μ₂ on the original data (δ₀ = ${formatDeltaVector(ctx.delta0)} added back).`
+            : "");
+    table.interpretation =
+        "Simultaneous confidence intervals for the components of the mean vector (or of the difference of two mean vectors) when the population covariance matrix is known. \"Contains\" tells whether the hypothesised value lies inside the interval.";
     resultJson.tables.push(table);
 }
 

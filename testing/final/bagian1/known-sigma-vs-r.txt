@@ -1,0 +1,22 @@
+Validasi uji χ² Σ diketahui terhadap R dasar
+R 4.3.2; kriteria: selisih mutlak < 1e-08
+Statify: testing/final/bagian1/known-sigma-statify.json (WASM MV, get_known_covariance_test)
+
+K1      satu populasi, Σ_A                           n = 32      p = 4  χ² = 11.24943231  Sig. = 0.0238992  nilai = 28  selisih maks = 3.26e-10  LULUS
+K1-a10  satu populasi, Σ_A, α = 0,10                n = 32      p = 4  χ² = 11.24943231  Sig. = 0.0238992  nilai = 28  selisih maks = 3.64e-10  LULUS
+K1-S    sifat: Σ = S → χ² = T²                  n = 32      p = 4  χ² = 10.78587185  Sig. = 0.0290789  nilai = 28  selisih maks = 3.3e-10  LULUS
+        sifat Σ = S: χ² Statify = 10.7858718481, T² R = 10.7858718481, T² Multivariate Tests = 10.7858718481  LULUS
+K1-I    sifat: Σ = I → χ² = n·Σ(x̄ − μ₀)² n = 32      p = 4  χ² = 30555.57345  Sig. = 0  nilai = 28  selisih maks = 5.46e-11  LULUS
+        sifat Σ = I: χ² Statify = 30555.573447, n·Σ(x̄ − μ₀)² = 30555.573447 (selisih relatif 1.79e-15)  LULUS
+K2      dua populasi, Σ₁ = Σ₂ = Σ_B            n = 32/32   p = 4  χ² = 104.9043949  Sig. = 8.87699e-22  nilai = 28  selisih maks = 2.03e-11  LULUS
+K2-d    dua populasi, Σ_B, δ₀ = [3, 2, 10, 1]     n = 32/32   p = 4  χ² = 1.797065079  Sig. = 0.773019  nilai = 28  selisih maks = 2.03e-11  LULUS
+K2-S    sifat: Σ = S_pooled → χ² = T² dua populasi n = 32/32   p = 4  χ² = 98.22790942  Sig. = 2.34444e-20  nilai = 28  selisih maks = 2.02e-11  LULUS
+        sifat Σ = S_pooled: χ² Statify = 98.2279094209, T² R = 98.2279094209, T² Multivariate Tests = 98.2279094209  LULUS
+K3      dua populasi, Σ₁ dan Σ₂                 n = 32/32   p = 4  χ² = 95.94140977  Sig. = 7.18661e-20  nilai = 28  selisih maks = 2.03e-11  LULUS
+K3-d    dua populasi, Σ₁ dan Σ₂, δ₀ = [3, 2, 10, 1] n = 32/32   p = 4  χ² = 1.649730519  Sig. = 0.799828  nilai = 28  selisih maks = 2.03e-11  LULUS
+K4      berpasangan, Σd, δ₀ = [8, 3]              n = 15      p = 2  χ² = 0.003402807316  Sig. = 0.9983  nilai = 16  selisih maks = 4.75e-11  LULUS
+K4-0    berpasangan, Σd, δ₀ = 0                   n = 15      p = 2  χ² = 10.86176095  Sig. = 0.00437924  nilai = 16  selisih maks = 4.75e-11  LULUS
+K4-S    sifat: Σd = Sd → χ² = T² berpasangan    n = 15      p = 2  χ² = 0.003439310417  Sig. = 0.998282  nilai = 16  selisih maks = 4.78e-11  LULUS
+        sifat Σ = S: χ² Statify = 0.0034393104174, T² R = 0.0034393104174, T² Multivariate Tests = 0.0034393104174  LULUS
+
+Total 12 kasus, 300 nilai dibandingkan. Hasil: SEMUA LULUS

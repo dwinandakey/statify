@@ -113,6 +113,21 @@ export async function resultMultivariateAnalysis({
                 });
             }
 
+            // ── Chi-Square Test (Known Covariance Matrix) ─────────────────
+            const knownChiSquare = findTable("known_covariance_chi_square_test");
+            if (knownChiSquare) {
+                const analyticId = await addAnalytic(logId, {
+                    title: knownChiSquare.title,
+                    note: knownChiSquare.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: knownChiSquare.title,
+                    description: knownChiSquare.interpretation || knownChiSquare.title,
+                    output_data: JSON.stringify({ tables: [knownChiSquare] }),
+                    components: knownChiSquare.title,
+                });
+            }
+
             // ── Simultaneous Confidence Intervals (Options) ───────────────
             const simultaneousCI = findTable("simultaneous_confidence_intervals");
             if (simultaneousCI) {
@@ -125,6 +140,21 @@ export async function resultMultivariateAnalysis({
                     description: simultaneousCI.interpretation || simultaneousCI.title,
                     output_data: JSON.stringify({ tables: [simultaneousCI] }),
                     components: simultaneousCI.title,
+                });
+            }
+
+            // ── Simultaneous CI with a known covariance matrix (Options) ──
+            const knownCI = findTable("known_covariance_confidence_intervals");
+            if (knownCI) {
+                const analyticId = await addAnalytic(logId, {
+                    title: knownCI.title,
+                    note: knownCI.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: knownCI.title,
+                    description: knownCI.interpretation || knownCI.title,
+                    output_data: JSON.stringify({ tables: [knownCI] }),
+                    components: knownCI.title,
                 });
             }
 

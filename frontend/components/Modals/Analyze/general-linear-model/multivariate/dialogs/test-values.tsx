@@ -12,6 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { MultivariateTestValuesProps } from "@/components/Modals/Analyze/general-linear-model/multivariate/types/multivariate";
+import {
+    parseKnownSigma,
+    setSigmaCell,
+    sigmaCellsFrom,
+    type SigmaCells,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/services/known-sigma";
+import {
+    KnownSigmaCheckbox,
+    KnownSigmaError,
+    KnownSigmaHint,
+    KnownSigmaMatrix,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/known-sigma-matrix";
 
 // Resize a stored μ₀ vector to match the current Dependent Variables list.
 // Reuses existing values by position; pads new slots with 0.
@@ -32,16 +44,27 @@ export const MultivariateTestValues = ({
     depVar,
     testValues,
     onSave,
+    knownSigma,
+    onSaveKnownSigma,
 }: MultivariateTestValuesProps) => {
     const [values, setValues] = useState<number[]>(() =>
         resizeTestValues(depVar, testValues)
     );
+    // Known Σ (one-population chi-square test); unchecked by default.
+    const [sigmaKnown, setSigmaKnown] = useState<boolean>(Boolean(knownSigma));
+    const [sigmaCells, setSigmaCells] = useState<SigmaCells>(() =>
+        sigmaCellsFrom(knownSigma, depVar.length)
+    );
+    const [sigmaError, setSigmaError] = useState<string | null>(null);
 
     useEffect(() => {
         if (isTestValuesOpen) {
             setValues(resizeTestValues(depVar, testValues));
+            setSigmaKnown(Boolean(knownSigma));
+            setSigmaCells(sigmaCellsFrom(knownSigma, depVar.length));
+            setSigmaError(null);
         }
-    }, [isTestValuesOpen, depVar, testValues]);
+    }, [isTestValuesOpen, depVar, testValues, knownSigma]);
 
     const handleChange = (index: number, raw: string) => {
         const parsed = raw === "" || raw === "-" ? 0 : Number(raw);
@@ -58,11 +81,23 @@ export const MultivariateTestValues = ({
     };
 
     const handleContinue = () => {
+        // With Σ known the matrix is validated first; on an error the
+        // dialog stays open and shows the message.
+        let sigma: number[][] | null = null;
+        if (sigmaKnown && depVar.length > 0) {
+            const parsed = parseKnownSigma(sigmaCells, depVar.length, "Known covariance matrix Σ");
+            if (parsed.error !== undefined) {
+                setSigmaError(parsed.error);
+                return;
+            }
+            sigma = parsed.matrix;
+        }
         if (depVar.length === 0) {
             onSave(null);
         } else {
             onSave([...values]);
         }
+        onSaveKnownSigma(sigma);
         setIsTestValuesOpen(false);
     };
 
@@ -72,7 +107,7 @@ export const MultivariateTestValues = ({
 
     return (
         <Dialog open={isTestValuesOpen} onOpenChange={setIsTestValuesOpen}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className={sigmaKnown ? "sm:max-w-3xl max-h-[90vh] overflow-y-auto" : "sm:max-w-md"}>
                 <DialogHeader>
                     <DialogTitle>
                         Test Values (μ₀) — Hotelling T² Satu Populasi
@@ -124,6 +159,40 @@ export const MultivariateTestValues = ({
                                 ))}
                             </div>
                         </ScrollArea>
+                    )}
+
+                    {depVar.length > 0 && (
+                        <div className="flex flex-col gap-2 rounded-md border p-3">
+                            <KnownSigmaCheckbox
+                                id="known-sigma-checkbox"
+                                checked={sigmaKnown}
+                                onCheckedChange={(checked) => {
+                                    setSigmaKnown(checked);
+                                    setSigmaError(null);
+                                }}
+                            />
+                            {sigmaKnown && (
+                                <>
+                                    <p className="text-xs text-muted-foreground">
+                                        Uji khi-kuadrat χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀)
+                                        dengan df = p ditampilkan di samping uji
+                                        Hotelling T².
+                                    </p>
+                                    <KnownSigmaHint />
+                                    <KnownSigmaMatrix
+                                        idPrefix="known-sigma"
+                                        title="Σ"
+                                        names={depVar}
+                                        cells={sigmaCells}
+                                        onChange={(i, j, v) => {
+                                            setSigmaCells((prev) => setSigmaCell(prev, i, j, v));
+                                            setSigmaError(null);
+                                        }}
+                                    />
+                                    <KnownSigmaError id="known-sigma-error" message={sigmaError} />
+                                </>
+                            )}
+                        </div>
                     )}
                 </div>
                 <DialogFooter className="sm:justify-start">

@@ -32,6 +32,19 @@ import PairedVariablesTab, {
     type PairedHighlightedVariable,
 } from "@/components/Common/PairedVariablesTab";
 import { computeDifferencePreview } from "@/components/Modals/Analyze/general-linear-model/multivariate/services/paired-difference";
+import {
+    parseKnownSigma,
+    resizeSigmaCells,
+    setSigmaCell,
+    sigmaCellsFrom,
+    type SigmaCells,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/services/known-sigma";
+import {
+    KnownSigmaCheckbox,
+    KnownSigmaError,
+    KnownSigmaHint,
+    KnownSigmaMatrix,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/known-sigma-matrix";
 
 const formatPreviewCell = (
     value: number | string | null | undefined
@@ -86,6 +99,10 @@ export const MultivariatePaired = ({
     const [testVariables2, setTestVariables2] = useState<Variable[]>([]);
     const [pairNumbers, setPairNumbers] = useState<number[]>([]);
     const [delta0, setDelta0] = useState<number[]>([]);
+    // Known Σd of the differences (chi-square test); unchecked by default.
+    const [sigmaKnown, setSigmaKnown] = useState<boolean>(false);
+    const [sigmaCells, setSigmaCells] = useState<SigmaCells>([]);
+    const [sigmaError, setSigmaError] = useState<string | null>(null);
     const [highlightedVariable, setHighlightedVariable] =
         useState<PairedHighlightedVariable | null>(null);
     const [highlightedPair, setHighlightedPair] =
@@ -108,6 +125,9 @@ export const MultivariatePaired = ({
         setTestVariables2(v2);
         setPairNumbers(storedPairs.map((_, i) => i + 1));
         setDelta0(resizeDelta0(storedPairs, pairedMode?.delta0 ?? null));
+        setSigmaKnown(Boolean(pairedMode?.knownSigma));
+        setSigmaCells(sigmaCellsFrom(pairedMode?.knownSigma, storedPairs.length));
+        setSigmaError(null);
         setHighlightedVariable(null);
         setHighlightedPair(null);
     }, [isPairedOpen, pairedMode, allSelectableVariables]);
@@ -382,6 +402,12 @@ export const MultivariatePaired = ({
         return out;
     }, [testVariables1, testVariables2]);
 
+    // Σd follows the complete pairs (one row and column per difference).
+    useEffect(() => {
+        setSigmaCells((prev) => resizeSigmaCells(prev, completePairs.length));
+    }, [completePairs.length]);
+    const pairLabels = completePairs.map(([v1, v2], idx) => `d${idx + 1} = ${v1} − ${v2}`);
+
     const hasIncompletePair = useMemo(() => {
         const max = Math.max(testVariables1.length, testVariables2.length);
         for (let i = 0; i < max; i++) {
@@ -430,11 +456,23 @@ export const MultivariatePaired = ({
             toast.warning("Tambahkan minimal satu pasangan variabel.");
             return;
         }
+        // With Σd known the matrix is validated first; on an error the
+        // dialog stays open and shows the message.
+        let knownSigma: number[][] | null = null;
+        if (sigmaKnown) {
+            const parsed = parseKnownSigma(sigmaCells, completePairs.length, "Known covariance matrix Σd");
+            if (parsed.error !== undefined) {
+                setSigmaError(parsed.error);
+                return;
+            }
+            knownSigma = parsed.matrix;
+        }
         const trimmedDelta0 = delta0.slice(0, completePairs.length);
         const allZero = trimmedDelta0.every((v) => v === 0);
         const payload: PairedModeType = {
             pairs: completePairs,
             delta0: allZero ? null : trimmedDelta0,
+            ...(knownSigma ? { knownSigma } : {}),
         };
         onSave(payload);
         setIsPairedOpen(false);
@@ -597,6 +635,39 @@ export const MultivariatePaired = ({
                                     ))}
                                 </div>
                             </ScrollArea>
+                        )}
+                        {completePairs.length > 0 && (
+                            <div className="mt-3 flex flex-col gap-2 rounded-md border p-3">
+                                <KnownSigmaCheckbox
+                                    id="paired-known-sigma-checkbox"
+                                    checked={sigmaKnown}
+                                    onCheckedChange={(checked) => {
+                                        setSigmaKnown(checked);
+                                        setSigmaError(null);
+                                    }}
+                                />
+                                {sigmaKnown && (
+                                    <>
+                                        <p className="text-xs text-muted-foreground">
+                                            Uji khi-kuadrat χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀)
+                                            dengan df = p, ditampilkan di samping uji
+                                            Hotelling T² berpasangan.
+                                        </p>
+                                        <KnownSigmaHint />
+                                        <KnownSigmaMatrix
+                                            idPrefix="paired-known-sigma"
+                                            title="Σd"
+                                            names={pairLabels}
+                                            cells={sigmaCells}
+                                            onChange={(i, j, v) => {
+                                                setSigmaCells((prev) => setSigmaCell(prev, i, j, v));
+                                                setSigmaError(null);
+                                            }}
+                                        />
+                                        <KnownSigmaError id="paired-known-sigma-error" message={sigmaError} />
+                                    </>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>

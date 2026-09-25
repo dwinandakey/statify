@@ -1,0 +1,10 @@
+mvK1 worker main tables identik: true
+mvK1n worker main tables identik: true
+mvK2 worker main tables identik: true
+mvK3 worker main tables identik: true
+mvK4 worker main tables identik: true
+mvK1 raw UI = harness(K1, divalidasi R): true
+mvK1n raw UI = harness(K1, divalidasi R): true
+mvK2 raw UI = harness(K2-d, divalidasi R): true
+mvK3 raw UI = harness(K3-d, divalidasi R): true
+mvK4 raw UI = harness(K4, divalidasi R): true

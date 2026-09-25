@@ -412,3 +412,59 @@ pub struct SimultaneousInterval {
     pub bonferroni_lower: f64,
     pub bonferroni_upper: f64,
 }
+
+/// Known population covariance matrix Σ entered by the user (Test Values,
+/// Test Values (δ₀) or Paired dialog), passed to
+/// MultivariateAnalysis::get_known_covariance_test. `design` is
+/// "one_sample" (also the paired test on the differences),
+/// "two_sample_common" (Σ₁ = Σ₂ = Σ) or "two_sample_separate" (Σ₁, Σ₂ for
+/// the first and second factor level in output-table order).
+#[derive(Debug, Deserialize, Clone)]
+pub struct KnownCovarianceInput {
+    pub design: String,
+    #[serde(default)]
+    pub sigma: Option<Vec<Vec<f64>>>,
+    #[serde(default)]
+    pub sigma1: Option<Vec<Vec<f64>>>,
+    #[serde(default)]
+    pub sigma2: Option<Vec<Vec<f64>>>,
+}
+
+/// Chi-square test of the mean vector with a known Σ (and the matching
+/// simultaneous intervals). Returned by
+/// MultivariateAnalysis::get_known_covariance_test; it is not a field of
+/// MultivariateResult, so analyses without a known Σ are unchanged.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct KnownCovarianceTest {
+    /// Same values as KnownCovarianceInput::design.
+    pub design: String,
+    pub p: usize,
+    /// [n] or [n₁, n₂].
+    pub sample_sizes: Vec<usize>,
+    pub factor: Option<String>,
+    /// [level 1, level 2] of the factor, in output-table order.
+    pub levels: Vec<String>,
+    /// μ₀ of the one-sample test (Test Values; δ₀ for paired). Empty for
+    /// two samples: δ₀ is applied to the data by the frontend.
+    pub hypothesized: Vec<f64>,
+    pub chi_square: f64,
+    pub df: f64,
+    pub significance: f64,
+    pub confidence_level: f64,
+    /// √χ²(p; α) and z(α/(2p)) (upper quantiles).
+    pub chi_square_critical: f64,
+    pub z_critical: f64,
+    pub intervals: Vec<KnownCovarianceInterval>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct KnownCovarianceInterval {
+    pub dependent_variable: String,
+    pub estimate: f64,
+    /// √(σᵢᵢ/n), √((1/n₁ + 1/n₂)σᵢᵢ) or √(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂).
+    pub std_error: f64,
+    pub chi_square_lower: f64,
+    pub chi_square_upper: f64,
+    pub bonferroni_lower: f64,
+    pub bonferroni_upper: f64,
+}

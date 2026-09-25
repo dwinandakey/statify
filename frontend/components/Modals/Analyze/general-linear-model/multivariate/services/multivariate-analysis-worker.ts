@@ -29,6 +29,9 @@ export type MultivariateWorkerPayload = {
     covar_data_defs: unknown;
     wls_data_defs: unknown;
     config_data: unknown;
+    /** Known Σ (KnownCovarianceInput, services/known-sigma.ts): present only
+     *  when "Population covariance matrix (Σ) known" was checked. */
+    known_covariance?: unknown;
 };
 
 let wasmReady: Promise<unknown> | null = null;
@@ -63,6 +66,11 @@ self.onmessage = async (
             if ((payload.config_data as any)?.options?.SimultaneousCI) {
                 const ci = multivariate.get_simultaneous_ci();
                 if (ci) (results as any).simultaneous_confidence_intervals = ci;
+            }
+            // Chi-square test with a known Σ: only when Σ was entered.
+            if (payload.known_covariance) {
+                const test = multivariate.get_known_covariance_test(payload.known_covariance);
+                if (test) (results as any).known_covariance_test = test;
             }
             const errors = multivariate.get_all_errors();
             response = { id, ok: true, results, errors };

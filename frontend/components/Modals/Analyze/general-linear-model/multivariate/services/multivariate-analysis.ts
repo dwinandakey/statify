@@ -22,6 +22,7 @@ import {
 // @ts-ignore
 import init, { MultivariateAnalysis } from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
 import { emptyFactorCells, typeIvEmptyCellsMessage } from "./empty-cells";
+import { resolveKnownCovariance } from "./known-sigma";
 
 // Reused across analyses so WASM is initialised once per worker.
 const multivariateWorker = new GlmWorkerClient<MultivariateWorkerPayload, any>(
@@ -57,6 +58,11 @@ async function runMultivariateOnMainThread(payload: MultivariateWorkerPayload) {
         if ((payload.config_data as any)?.options?.SimultaneousCI) {
             const ci = multivariate.get_simultaneous_ci();
             if (ci) (results as any).simultaneous_confidence_intervals = ci;
+        }
+        // Same as the worker: chi-square test only with a known Σ.
+        if (payload.known_covariance) {
+            const test = multivariate.get_known_covariance_test(payload.known_covariance);
+            if (test) (results as any).known_covariance_test = test;
         }
         const errors = multivariate.get_all_errors();
         return { results, errors };
@@ -196,6 +202,28 @@ export async function analyzeMultivariate({
         twoSampleDelta = { factor, levels: [levels[0], levels[1]], delta0 };
     }
 
+    // Known Σ (chi-square test): Σd from Paired, Σ from Test Values (one
+    // population) or Test Values (δ₀) (two populations). Sent to Rust only as
+    // the argument of get_known_covariance_test, never in the analysis
+    // config, so a run without it sends the same payload as before.
+    const twoSampleKnown =
+        !pairedActive && FixFactorVariables.length === 1 ? configData.main.TwoSampleKnownSigma ?? null : null;
+    const knownCovariance = resolveKnownCovariance({
+        paired: pairedActive,
+        pairedSigma: pairedMode?.knownSigma ?? null,
+        p: (effectiveConfig.main.DepVar ?? []).length,
+        factors: FixFactorVariables,
+        hasCovariatesOrWls: CovariateVariables.length > 0 || WlsWeightVariable.length > 0,
+        oneSampleSigma: pairedActive ? null : configData.main.KnownSigma ?? null,
+        twoSample: twoSampleKnown,
+        factorLevelCount: twoSampleKnown
+            ? factorLevels(
+                  (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+                  FixFactorVariables[0]
+              ).length
+            : undefined,
+    });
+
     // Type IV (v5 B3): Statify computes Type IV as Type III, which equals SPSS
     // Type IV only without empty cells, so a design with empty cells is
     // refused (checked here, before the WASM analysis).
@@ -229,6 +257,8 @@ export async function analyzeMultivariate({
     const {
         PairedMode: _stripPaired,
         TwoSampleTestValues: _stripTwoSample,
+        KnownSigma: _stripKnownSigma,
+        TwoSampleKnownSigma: _stripTwoSampleKnownSigma,
         ...mainForRust
     } = effectiveConfig.main;
     // SimultaneousCI is sent only when checked, so a run without it sends
@@ -260,6 +290,7 @@ export async function analyzeMultivariate({
         covar_data_defs: varDefsForCovariate,
         wls_data_defs: varDefsForWlsWeight,
         config_data: configForRust,
+        ...(knownCovariance ? { known_covariance: knownCovariance.input } : {}),
     });
 
     // Determine whether the user actually requested post-hoc tests so we can
@@ -401,6 +432,12 @@ export async function analyzeMultivariate({
             : null,
         contrastInfo,
         twoSampleDelta,
+        knownCovariance: knownCovariance
+            ? {
+                  source: knownCovariance.source,
+                  showIntervals: Boolean(configData.options?.SimultaneousCI),
+              }
+            : null,
         sumOfSquareMethod: configData.model?.SumOfSquareMethod ?? null,
         effectSizePower: {
             effectSize: Boolean(configData.options?.EstEffectSize),

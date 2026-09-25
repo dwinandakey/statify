@@ -53,6 +53,13 @@ const CONFIGS = {
     mv3dci: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [8, 3] },
     // skripsi-final-v5 (B1): 3 DV, faktor 4 level tak seimbang, df2 Wilks pecahan (make_mv9.R).
     mv9: { csv: "one-way manova tiga dv empat level.csv", dep: ["y1", "y2", "y3"], fix: ["kelompok"], options: [...OPT, "HomogenTest"] },
+    // Final (Bagian 1): uji χ² Σ diketahui. Σ ditulis sebagai segitiga atas
+    // termasuk diagonal, seperti diisi di dialog (testing/final/harness/known-sigma-wasm.mjs).
+    mvK1: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: [...OPT, "SimultaneousCI"], testValues: [20, 200, 150, 3], knownSigma: [[36, -630, -320, -5], [15000, 6700, 107], [4700, 44], [1]] },
+    mvK1n: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: OPT, testValues: [20, 200, 150, 3], knownSigma: [[36, -630, -320, -5], [15000, 6700, 107], [4700, 44], [1]] },
+    mvK2: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1], twoSampleSigma: { mode: "common", sigma: [[7, 6, 5, 5], [16, 8, 6], [29, 14], [22]] } },
+    mvK3: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1], twoSampleSigma: { mode: "separate", sigma1: [[5, 4.5, 6.5, 5], [13, 7, 6], [29, 14], [17]], sigma2: [[9, 7.5, 4.5, 4], [19, 9.5, 5.5], [29, 13], [28]] } },
+    mvK4: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [8, 3], pairedSigma: [[120, 17], [22]] },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -81,6 +88,13 @@ async function dragBadge(dlg, name, dropLabel) {
     await source.dispatchEvent("dragend", { dataTransfer: dt });
 }
 
+// Known Σ grid: cell ids `${prefix}-${i}-${j}` for the upper triangle.
+async function fillSigma(scope, prefix, upper) {
+    for (let i = 0; i < upper.length; i++) {
+        for (let j = i; j < upper.length; j++) await scope.locator(`#${prefix}-${i}-${j}`).fill(String(upper[i][j - i]));
+    }
+}
+
 async function fillDialog(page, c) {
     await page.locator('[data-testid="analyze-menu-trigger"]').click();
     await page.getByRole("menuitem", { name: "General Linear Model" }).click();
@@ -93,6 +107,16 @@ async function fillDialog(page, c) {
         await page.locator("#two-sample-delta-button").click();
         await page.locator("#delta0-2s-0").waitFor({ state: "visible", timeout: 30000 });
         for (let i = 0; i < c.twoSampleDelta.length; i++) await page.locator(`#delta0-2s-${i}`).fill(String(c.twoSampleDelta[i]));
+        if (c.twoSampleSigma) {
+            await page.locator("#two-sample-known-sigma-checkbox").click();
+            await page.locator(`#known-sigma-${c.twoSampleSigma.mode}`).click();
+            if (c.twoSampleSigma.mode === "common") {
+                await fillSigma(page, "two-sample-known-sigma", c.twoSampleSigma.sigma);
+            } else {
+                await fillSigma(page, "two-sample-known-sigma1", c.twoSampleSigma.sigma1);
+                await fillSigma(page, "two-sample-known-sigma2", c.twoSampleSigma.sigma2);
+            }
+        }
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
     }
@@ -142,6 +166,10 @@ async function fillDialog(page, c) {
     if (c.testValues) {
         await page.getByRole("button", { name: "Test Values", exact: true }).click();
         for (let i = 0; i < c.testValues.length; i++) await page.locator(`#mu0-${i}`).fill(String(c.testValues[i]));
+        if (c.knownSigma) {
+            await page.locator("#known-sigma-checkbox").click();
+            await fillSigma(page, "known-sigma", c.knownSigma);
+        }
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
     }
@@ -159,6 +187,10 @@ async function fillDialog(page, c) {
             if (!(await dlg.getByText(label, { exact: true }).count())) throw new Error(`Paired: missing "${label}"`);
         }
         for (let i = 0; i < (c.delta0 ?? []).length; i++) await dlg.locator(`#delta0-${i}`).fill(String(c.delta0[i]));
+        if (c.pairedSigma) {
+            await dlg.locator("#paired-known-sigma-checkbox").click();
+            await fillSigma(dlg, "paired-known-sigma", c.pairedSigma);
+        }
         await dlg.getByRole("button", { name: "Continue", exact: true }).click();
         await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
     }

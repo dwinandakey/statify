@@ -505,6 +505,10 @@ export const MultivariateContainer = ({
                     onSave={(testValues) =>
                         updateFormData("main", "TestValues", testValues)
                     }
+                    knownSigma={formData.main.KnownSigma ?? null}
+                    onSaveKnownSigma={(knownSigma) =>
+                        updateFormData("main", "KnownSigma", knownSigma)
+                    }
                 />
             )}
 
@@ -525,6 +529,10 @@ export const MultivariateContainer = ({
                     delta0={formData.main.TwoSampleTestValues ?? null}
                     onSave={(delta0) =>
                         updateFormData("main", "TwoSampleTestValues", delta0)
+                    }
+                    knownSigma={formData.main.TwoSampleKnownSigma ?? null}
+                    onSaveKnownSigma={(knownSigma) =>
+                        updateFormData("main", "TwoSampleKnownSigma", knownSigma)
                     }
                 />
             )}

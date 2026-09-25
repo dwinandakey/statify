@@ -7,6 +7,7 @@ export const multivariateanalysis_get_all_errors: (a: number) => any;
 export const multivariateanalysis_get_all_log: (a: number) => [number, number, number];
 export const multivariateanalysis_get_executed_functions: (a: number) => [number, number, number];
 export const multivariateanalysis_get_formatted_results: (a: number) => [number, number, number];
+export const multivariateanalysis_get_known_covariance_test: (a: number, b: any) => [number, number, number];
 export const multivariateanalysis_get_results: (a: number) => [number, number, number];
 export const multivariateanalysis_get_simultaneous_ci: (a: number) => [number, number, number];
 export const multivariateanalysis_new: (a: any, b: any, c: any, d: any, e: any, f: any, g: any, h: any, i: any) => [number, number, number];

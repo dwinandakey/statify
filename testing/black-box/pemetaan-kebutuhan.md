@@ -41,6 +41,8 @@ Status di v3 sama dengan v2. Perbaikan v3 menyangkut perilaku dialog dan catatan
 
 Status di v4 sama dengan v3. Fitur v4 memperluas KF2, KF3, dan KF4 (belum ada di redaksi Tabel 5); rinciannya di bagian "Perubahan v4".
 
+Status di build final sama dengan v4. Uji khi-kuadrat dengan Σ diketahui memperluas KF2, KF3, dan KF4; rinciannya di bagian "Perubahan final".
+
 ## Perubahan v3 (hasil iterasi 1 black-box)
 
 Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`. Crate Rust MV dan RM tidak berubah.
@@ -92,6 +94,44 @@ Bila usulan disetujui, status KF2–KF4 tetap TERPENUHI. Fiturnya ada di v4, den
 | "Simultaneous confidence intervals for two samples need the Fixed Factor to have exactly two levels; '<faktor>' has <n>." | Errors Logs, konteks `calculate_simultaneous_ci` | CI dicentang, satu faktor dengan ≠ 2 level |
 | "Simultaneous confidence intervals are available for the one-sample, paired, and two-sample Hotelling T² designs (no Fixed Factor, or one Fixed Factor with two levels, without covariates or WLS weight)." | Errors Logs, konteks `calculate_simultaneous_ci` | CI dicentang pada desain lain (dua faktor, kovariat, WLS) |
 | "Simultaneous confidence intervals need more cases than dependent variables (…)." dan "… need at least two cases (…)." | Errors Logs | Pengaman bila kasus terlalu sedikit (n ≤ p, atau kurang dari dua kasus); tidak dijadikan skenario |
+
+## Perubahan final (uji khi-kuadrat dengan Σ diketahui)
+
+- **Path:** relatif terhadap `MV/`.
+- **Crate RM:** tidak berubah.
+- **Crate MV:** hanya menambah method `get_known_covariance_test` dan tiga struct (`KnownCovarianceInput`, `KnownCovarianceTest`, `KnownCovarianceInterval`). Jalur lama byte-identik dengan v5 (`testing/final/bagian1/replay-old-path.txt`).
+- **Rujukan:** Johnson & Wichern, ed. 6, §4.2 dan §4.4 (hanya subbab; `testing/fitur-v4/rujukan-jw.md`).
+- **Skenario:** kelompok "fitur final" di `skenario-black-box.md` (BB-KF02-08 s.d. BB-KF02-13, BB-KF03-14 s.d. BB-KF03-16, BB-KF04-05, BB-KF04-06).
+
+| KF | Fitur | Perilaku | Berkas | Skenario |
+|---|---|---|---|---|
+| KF2 | Σ diketahui satu populasi | Kotak "Population covariance matrix (Σ) known" di subdialog Test Values (bawaan tidak dicentang). Bila dicentang, tampil matriks p × p berlabel nama DV: pengguna mengisi segitiga atas termasuk diagonal, segitiga bawah terisi otomatis dan tidak dapat diubah. Continue memeriksa isian (angka, diagonal positif, definit positif lewat Cholesky); bila gagal, pesan tampil dan subdialog tetap terbuka. Keluaran: tabel "Chi-Square Test (Known Covariance Matrix)" (χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀), df = p, Sig.) sesudah Multivariate Tests; tabel T² tetap ada. | `dialogs/test-values.tsx`, `dialogs/known-sigma-matrix.tsx`, `services/known-sigma.ts`, `services/multivariate-analysis*.ts`, `rust/src/wasm/constructor.rs`, `rust/src/models/result.rs` | BB-KF02-08 s.d. BB-KF02-13 |
+| KF3 | Σ diketahui dua populasi | Kotak yang sama di subdialog Test Values (δ₀), dengan pilihan "Σ₁ = Σ₂ = Σ (one matrix)" atau "Σ₁ and Σ₂ (one matrix per level)" (matriks berjudul level faktor). χ² = (x̄₁ − x̄₂ − δ₀)ᵀV⁻¹(x̄₁ − x̄₂ − δ₀) dengan V = (1/n₁ + 1/n₂)Σ atau Σ₁/n₁ + Σ₂/n₂. Σ ikut dibuang bila Fixed Factor(s) diubah (sama dengan δ₀). | `dialogs/two-sample-delta.tsx`, `dialogs/dialog.tsx`, berkas KF2 | BB-KF03-14 s.d. BB-KF03-16 |
+| KF4 | Σd diketahui berpasangan | Kotak yang sama di bagian C subdialog Paired, matriks berlabel pasangan (d1 = … − …). χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀). | `dialogs/paired.tsx`, berkas KF2 | BB-KF04-05, BB-KF04-06 |
+| KF2, KF3, KF4 | CI simultan Σ diketahui | Bila Options → Simultaneous CI dicentang, tabel "Simultaneous Confidence Intervals (Known Covariance Matrix)": selang χ² estimasiᵢ ± √χ²(p; α)·√Vᵢᵢ dan Bonferroni estimasiᵢ ± z(α/(2p))·√Vᵢᵢ, pada skala data asli bila δ₀ ≠ 0. | `services/multivariate-analysis-formatter.ts` | BB-KF02-08, BB-KF03-14, BB-KF03-15, BB-KF04-05 |
+
+**Usulan redaksi Tabel 5 final (usulan penulis, menunggu konfirmasi pembimbing; menggabungkan usulan v4 dan menggantikannya bila disetujui):**
+
+| KF | Redaksi yang berlaku | Usulan redaksi |
+|---|---|---|
+| KF2 | Uji vektor rata-rata satu populasi | Sistem dapat melakukan uji vektor rata-rata satu populasi terhadap vektor hipotesis μ0 dengan matriks kovarians populasi tidak diketahui (uji T²) maupun diketahui (uji khi-kuadrat), dilengkapi selang kepercayaan simultan dan Bonferroni. |
+| KF3 | Dua populasi, kovarians sama dan tidak sama | Sistem dapat melakukan uji vektor rata-rata dua populasi dengan matriks kovarians sama dan tidak sama terhadap selisih hipotesis δ0, dengan matriks kovarians populasi tidak diketahui (uji T²) maupun diketahui (uji khi-kuadrat), dilengkapi selang kepercayaan simultan dan Bonferroni. |
+| KF4 | Uji berpasangan | Sistem dapat melakukan uji vektor rata-rata berpasangan terhadap selisih hipotesis δ0 dengan matriks kovarians populasi tidak diketahui (uji T²) maupun diketahui (uji khi-kuadrat), dilengkapi selang kepercayaan simultan dan Bonferroni. |
+
+Bila usulan disetujui, status KF2–KF4 tetap TERPENUHI. Frasa "selang kepercayaan simultan T² dan Bonferroni" pada usulan v4 diganti "selang kepercayaan simultan dan Bonferroni" karena dengan Σ diketahui selang simultannya berbasis χ², bukan T².
+
+**Pesan baru final** (disalin dari kode; `<label>` = "Known covariance matrix Σ", "Known covariance matrix Σ₁ (<faktor> = <level>)", "Known covariance matrix Σ₂ (<faktor> = <level>)", atau "Known covariance matrix Σd"):
+
+| Pesan | Tempat | Pemicu |
+|---|---|---|
+| "<label>: every entry on and above the diagonal must be a number." | Subdialog (di bawah matriks), subdialog tetap terbuka | Sel di atas diagonal atau diagonal kosong atau bukan angka |
+| "<label>: the diagonal entries (variances) must be greater than 0." | Subdialog | Diagonal 0 atau negatif |
+| "<label> is not positive definite." | Subdialog | Faktorisasi Cholesky gagal |
+| "The known covariance matrix Σ entered in Test Values is for the one-population test (no Fixed Factor, covariate or WLS weight). Clear "Population covariance matrix (Σ) known" in Test Values or change the model." | Toast galat analisis | Σ satu populasi tersimpan, lalu model diberi faktor, kovariat, atau WLS |
+| "Known covariance matrix <Σ, Σ₁, Σ₂, Σd> must be <p> × <p> (one row and column per <dependent variable/pair>). Enter <…> again in <subdialog>." | Toast galat analisis | Jumlah DV berubah sesudah Σ diisi |
+| "The chi-square test with a known covariance matrix for two populations requires the Fixed Factor to have exactly two levels; '<faktor>' has <n>." | Toast galat analisis | Σ dua populasi dengan faktor yang bukan 2 level |
+| "The chi-square test with a known covariance matrix is available for the one-sample, paired, and two-sample designs (…)." | Toast galat analisis (dan pengaman di Rust, Errors Logs konteks `calculate_known_covariance_test`) | Σ dua populasi dengan kovariat atau WLS |
+| Pesan Rust lain (`Known covariance matrix … must be symmetric.`, `… is missing.`, `Unknown design …`) | Errors Logs | Pengaman; tidak terjangkau lewat UI |
 
 ---
 
