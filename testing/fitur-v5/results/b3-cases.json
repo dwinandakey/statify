@@ -1,0 +1,6 @@
+[
+ { "id": "sel-kosong-typeIV", "csv": "testing/fitur-v5/data/two-way-sel-kosong.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeIV" },
+ { "id": "sel-kosong-typeIII", "csv": "testing/fitur-v5/data/two-way-sel-kosong.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeIII" },
+ { "id": "mv6-typeIV", "csv": "testing/glm-mv-reference/data/two-way manova tak seimbang.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeIV" },
+ { "id": "mv4-typeIV-satu-faktor", "csv": "testing/glm-mv-reference/data/one-way manova.csv", "dep": ["y1", "y2"], "fix": ["treatment"], "ssType": "typeIV" }
+]

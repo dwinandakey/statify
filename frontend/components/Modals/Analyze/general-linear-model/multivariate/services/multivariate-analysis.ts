@@ -21,6 +21,7 @@ import {
 } from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 // @ts-ignore
 import init, { MultivariateAnalysis } from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
+import { emptyFactorCells, typeIvEmptyCellsMessage } from "./empty-cells";
 
 // Reused across analyses so WASM is initialised once per worker.
 const multivariateWorker = new GlmWorkerClient<MultivariateWorkerPayload, any>(
@@ -193,6 +194,24 @@ export async function analyzeMultivariate({
             delta0
         );
         twoSampleDelta = { factor, levels: [levels[0], levels[1]], delta0 };
+    }
+
+    // Type IV (v5 B3): Statify computes Type IV as Type III, which equals SPSS
+    // Type IV only without empty cells, so a design with empty cells is
+    // refused (checked here, before the WASM analysis).
+    if (configData.model?.SumOfSquareMethod === "typeIV" && FixFactorVariables.length >= 2) {
+        const depVarsForCells = effectiveConfig.main.DepVar ?? [];
+        const cells = emptyFactorCells(
+            (slicedDataForFixFactor ?? []) as Record<string, unknown>[][],
+            FixFactorVariables,
+            [
+                ...depVarsForCells.map((name: string, k: number) => ({ slice: ((slicedDataForDependent ?? [])[k] ?? []) as Record<string, unknown>[], name })),
+                ...CovariateVariables.map((name: string, k: number) => ({ slice: ((slicedDataForCovariate ?? [])[k] ?? []) as Record<string, unknown>[], name })),
+            ]
+        );
+        if (cells && cells.empty > 0) {
+            throw new Error(typeIvEmptyCellsMessage(cells.empty, cells.total));
+        }
     }
 
     const varDefsForFixFactor = getVarDefs(variables, FixFactorVariables);
