@@ -1,0 +1,410 @@
+[INFO]: Checking for the Wasm target...
+[INFO]: Compiling to Wasm...
+warning: unused import: `crate::stats::summary_processing::*`
+  --> src\stats\core.rs:15:9
+   |
+15 | pub use crate::stats::summary_processing::*;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src\stats\between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+
+
+warning: unused import: `crate::models::config::ContrastMethod`
+ --> src\stats\common.rs:6:5
+  |
+6 | use crate::models::config::ContrastMethod;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused import: `matrix_transpose`
+  --> src\stats\multivariate_tests.rs:21:9
+   |
+21 |         matrix_transpose,
+   |         ^^^^^^^^^^^^^^^^
+   |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+  --> src\stats\mod.rs:11:1
+   |
+11 | pub mod multivariate_tests;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src\stats\residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src\stats\sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+
+warning: unused variable: `factor_name`
+   --> src\stats\between_subjects_effects.rs:113:10
+    |
+113 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:104:27
+    |
+104 |             for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:225:31
+    |
+225 |                 for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:288:35
+    |
+288 |                     for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+
+warning: unused variable: `i`
+   --> src\stats\between_subjects_sscp.rs:387:10
+    |
+387 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `j`
+   --> src\stats\between_subjects_sscp.rs:389:14
+    |
+389 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+
+warning: unused variable: `level`
+   --> src\stats\between_subjects_sscp.rs:450:34
+    |
+450 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+
+
+warning: unused variable: `dep_var_name`
+   --> src\stats\common.rs:519:5
+    |
+519 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+
+
+warning: unused variable: `factor_name`
+  --> src\stats\descriptive_statistics.rs:22:10
+   |
+22 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+
+warning: unused variable: `data`
+  --> src\stats\estimable_function.rs:11:5
+   |
+11 |     data: &AnalysisData,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+
+warning: unused variable: `config`
+   --> src\stats\multivariate_tests.rs:508:5
+    |
+508 |     config: &RepeatedMeasuresConfig,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:568:21
+    |
+568 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:637:25
+    |
+637 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:728:21
+    |
+728 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:797:25
+    |
+797 |                     let mut record_idx = 0;
+    |                         ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:888:25
+    |
+888 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:595:25
+    |
+595 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:764:25
+    |
+764 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:824:29
+    |
+824 | ...                   record_idx += 1;
+    |                       ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+
+warning: unused variable: `alpha`
+   --> src\stats\multivariate_tests.rs:961:5
+    |
+961 |     alpha: f64,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_alpha`
+
+
+warning: unused variable: `det_h`
+   --> src\stats\multivariate_tests.rs:986:9
+    |
+986 |     let det_h = match matrix_determinant(h_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_h`
+
+
+warning: unused variable: `det_e`
+   --> src\stats\multivariate_tests.rs:991:9
+    |
+991 |     let det_e = match matrix_determinant(e_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_e`
+
+
+warning: unused variable: `u`
+    --> src\stats\multivariate_tests.rs:1047:13
+     |
+1047 |         let u = ((p as f64) * hypothesis_df - 2.0) / 4.0;
+     |             ^ help: if this is intentional, prefix it with an underscore: `_u`
+
+
+warning: unused variable: `factor_name`
+  --> src\stats\parameter_estimates.rs:37:10
+   |
+37 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+
+warning: unused variable: `factor_name`
+   --> src\stats\parameter_estimates.rs:230:10
+    |
+230 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+
+warning: unused variable: `factor_name`
+  --> src\stats\parse_factors.rs:31:17
+   |
+31 |             let factor_name = captures.get(1).unwrap().as_str().to_string();
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+
+warning: unused variable: `factors`
+  --> src\stats\residual_sscp_matrix.rs:31:9
+   |
+31 |     let factors = config.main.factors_var.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+
+
+warning: unused variable: `i`
+  --> src\stats\residual_sscp_matrix.rs:80:10
+   |
+80 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `dependent_vars`
+  --> src\stats\sscp_matrix.rs:25:9
+   |
+25 |     let dependent_vars = config.main.sub_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+
+
+warning: unused variable: `i`
+  --> src\stats\sscp_matrix.rs:92:10
+   |
+92 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:362:10
+    |
+362 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:419:10
+    |
+419 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+
+warning: value assigned to `test_entries` is never read
+  --> src\stats\univariate_tests.rs:37:32
+   |
+37 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+
+warning: unused variable: `total_ss`
+  --> src\stats\univariate_tests.rs:81:9
+   |
+81 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:223:5
+    |
+223 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:225:5
+    |
+225 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:228:5
+    |
+228 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:229:5
+    |
+229 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:422:5
+    |
+422 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:424:5
+    |
+424 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:427:5
+    |
+427 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:428:5
+    |
+428 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+
+warning: unused variable: `noncentrality`
+   --> src\stats\within_subjects_effects.rs:327:9
+    |
+327 |     let noncentrality = f * df1;
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_noncentrality`
+
+
+warning: variable `X` should have a snake case name
+   --> src\stats\between_subjects_effects.rs:192:21
+    |
+192 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+
+warning: variable `X` should have a snake case name
+   --> src\stats\parameter_estimates.rs:115:21
+    |
+115 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+
+    Finished `release` profile [unoptimized] target(s) in 1.30s
+[INFO]: Installing wasm-bindgen...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: :-) Done in 2.21s
+[INFO]: :-) Your wasm pkg is ready to publish at D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\frontend\components\Modals\Analyze\general-linear-model\repeated-measures\rust\pkg.

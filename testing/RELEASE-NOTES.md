@@ -2,9 +2,25 @@
 
 Tanggal: 2026-09-24. Tidak di-merge ke `main` dan tidak di-deploy.
 
-- **Versi berlaku:** **`skripsi-final-v5`**, yaitu commit terakhir yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v5^{commit}`). Dikerjakan di worktree dan belum di-fast-forward ke `ilham`.
+- **Versi berlaku:** **`skripsi-final-v5`**, yaitu commit terakhir yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v5^{commit}`). `ilham` sudah di-fast-forward ke hasil v5, dan finalisasi (bagian F) dikerjakan langsung di `ilham`.
 - **Tag lama:** `skripsi-final-v1` (`e365897d`), `skripsi-final-v2` (`d863de09`), `skripsi-final-v3` (`426429d8`), dan `skripsi-final-v4` (`d2545117`) tetap ada.
-- **Isi:** bagian v5 langsung di bawah, lalu v4, v3, dan v2; §0–§5 adalah catatan v1. Semuanya tetap berlaku kecuali disebut lain.
+- **Isi:** bagian F (finalisasi) langsung di bawah, lalu v5, v4, v3, dan v2; §0–§5 adalah catatan v1. Semuanya tetap berlaku kecuali disebut lain.
+
+## F. Finalisasi di `ilham` (tag `skripsi-final-v5` dipindah ke commit terakhir)
+
+Tanggal: 2026-09-25.
+
+### F0. Merapikan repo
+
+| Langkah | Hasil |
+|---|---|
+| Server demo port 3001 | Dihentikan atas izin penulis. Saat diperiksa, proses sudah tidak ada dan port bebas. |
+| Fast-forward `ilham` | `git merge --ff-only skripsi-final-v5`: `397e5e55` → `1053fe22`, tanpa konflik. Empat `.sps` RM lokal (`gambar51`, `rm_a`, `rm_b`, `rm_c`) tetap tidak di-commit. |
+| Worktree `../statify-v5` | Tidak ada perubahan tracked. Dihapus dengan `git worktree remove --force` karena sisanya hanya artefak build dan berkas yang di-gitignore: `node_modules/` (akar, `frontend/`, `backend/`), `frontend/.next/`, `frontend/dist/`, `rust/target/` MV, salinan `Cargo.lock` MV/RM (identik dengan repo utama), serta `step20-v5/jest-full.log` dan `next-build.log`. Junction `node_modules/statify-frontend` dan `statify-backend` (menunjuk ke dalam worktree) dilepas lebih dulu. |
+| `Cargo.lock` MV dan RM | Di-commit dengan pengecualian `.gitignore` hanya untuk dua path itu. MV md5 `21245d75…` (wasm-bindgen 0.2.118), RM md5 `03bc095f…` (wasm-bindgen 0.2.120). `Cargo.lock` crate lain tetap diabaikan. |
+| Build ulang di repo utama | wasm-pack 0.14.0, rustc 1.95.0. MV `wasm_bg.wasm` md5 `5ec0c1ec1939f1c39e2546d2eee4e3cf` dan RM md5 `f4c34490f7fe4152b5ffb9a8cf9de4f8`, sama dengan build v5 di worktree. `pkg/wasm.js`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, dan `package.json` tidak berubah. |
+| Build Next.js repo utama | `BUILD_ID` `kltgqC9v3JB7sKHnE_leX`, memuat `wasm_bg.eb5b96b2.wasm` (MV) dan `wasm_bg.2bc2b212.wasm` (RM), nama dan md5-nya sama dengan build v5. Log: `testing/final/bagian0/`. |
+| Sintaks SPSS yang harus dijalankan | `testing/SPSS-TODO.md` |
 
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 
