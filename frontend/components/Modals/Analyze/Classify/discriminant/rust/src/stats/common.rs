@@ -87,9 +87,7 @@ pub fn extract_analyzed_dataset(
     let min_range = config.define_range.min_range;
     let max_range = config.define_range.max_range;
 
-    web_sys::console::log_1(
-        &format!("Extracting dataset with {} variables", independent_variables.len()).into()
-    );
+    crate::debug_log!("Extracting dataset with {} variables", independent_variables.len());
 
     // Extract grouped data with proper error handling
     let (group_data, group_labels, total_cases) = match
@@ -431,22 +429,18 @@ pub fn extract_case_values(record: &DataRecord, variables: &[String]) -> Vec<f64
                 Some(*value)
             } else {
                 // Log missing variables for debugging
-                web_sys::console::log_1(&format!(
-                    "[extract_case_values] Variable '{}' not found or not numeric in record. Available keys: {:?}",
+                crate::debug_log!("[extract_case_values] Variable '{}' not found or not numeric in record. Available keys: {:?}",
                     var_name,
-                    record.values.keys().collect::<Vec<_>>()
-                ).into());
+                    record.values.keys().collect::<Vec<_>>());
                 None
             }
         })
         .collect();
 
     if values.len() != variables.len() {
-        web_sys::console::log_1(&format!(
-            "[extract_case_values] Length mismatch! Expected {} variables, got {} values",
+        crate::debug_log!("[extract_case_values] Length mismatch! Expected {} variables, got {} values",
             variables.len(),
-            values.len()
-        ).into());
+            values.len());
     }
 
     values
@@ -628,7 +622,7 @@ pub fn filter_valid_cases(
     data: &AnalysisData,
     config: &DiscriminantConfig
 ) -> Result<AnalysisData, String> {
-    web_sys::console::log_1(&"Executing filter_valid_cases".into());
+    crate::debug_log!("Executing filter_valid_cases");
 
     let group_var = &config.main.grouping_variable;
     let independent_vars = &config.main.independent_variables;

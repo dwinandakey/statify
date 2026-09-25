@@ -39,7 +39,7 @@ pub fn calculate_box_m_test(
     data: &AnalysisData,
     config: &DiscriminantConfig,
 ) -> Result<BoxMTest, String> {
-    web_sys::console::log_1(&"Executing calculate_box_m_test".into());
+    crate::debug_log!("Executing calculate_box_m_test");
 
     // Extract analyzed dataset
     let dataset = match extract_analyzed_dataset(data, config) {
@@ -60,11 +60,9 @@ pub fn calculate_box_m_test(
             .collect()
     };
 
-    web_sys::console::log_1(&format!(
-        "Box M: using {} variables: {:?}",
+    crate::debug_log!("Box M: using {} variables: {:?}",
         variables.len(),
-        variables
-    ).into());
+        variables);
 
     box_m_test_for(
         &dataset,
@@ -202,10 +200,8 @@ pub fn box_m_test_for(
 
     let note = note.to_string();
 
-    web_sys::console::log_1(&format!(
-        "Box M Result: M={}, f_approx={}, df1={}, df2={}, p_value={}, c1={}, c2={}, b={}",
-        box_m, f_approx, v1, v2, p_value, c1, c2, b
-    ).into());
+    crate::debug_log!("Box M Result: M={}, f_approx={}, df1={}, df2={}, p_value={}, c1={}, c2={}, b={}",
+        box_m, f_approx, v1, v2, p_value, c1, c2, b);
 
     Ok(BoxMTest {
         box_m,

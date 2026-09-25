@@ -19,7 +19,7 @@ pub fn calculate_prior_probabilities(
     data: &AnalysisData,
     config: &DiscriminantConfig
 ) -> Result<PriorProbabilities, String> {
-    web_sys::console::log_1(&"Executing calculate_prior_probabilities".into());
+    crate::debug_log!("Executing calculate_prior_probabilities");
 
     // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;

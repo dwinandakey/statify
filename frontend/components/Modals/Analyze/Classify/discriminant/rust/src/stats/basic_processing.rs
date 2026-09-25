@@ -7,7 +7,7 @@ pub fn basic_processing_summary(
     data: &AnalysisData,
     config: &DiscriminantConfig
 ) -> Result<ProcessingSummary, String> {
-    web_sys::console::log_1(&"Executing basic_processing_summary".into());
+    crate::debug_log!("Executing basic_processing_summary");
 
     let total_cases: usize = data.group_data
         .iter()

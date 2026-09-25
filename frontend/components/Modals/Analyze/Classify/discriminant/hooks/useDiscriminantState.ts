@@ -212,9 +212,6 @@ export const useDiscriminantState = (
                     },
                 };
 
-                // DEBUG: Log method config before sending
-                console.log("[Discriminant] Method config to send:", configData.method);
-
                 const GroupingVariable = mainData.GroupingVariable
                     ? [mainData.GroupingVariable]
                     : [];
@@ -267,11 +264,7 @@ export const useDiscriminantState = (
                 // The engine's reply, from the worker or from the main-thread run.
                 const handleReply = async (reply: EngineReply) => {
                     if (reply.type === "SUCCESS") {
-                        const { formattedResults, log, errors } = reply.payload;
-
-                        console.log("executed", log);
-                        console.log("errors", errors);
-                        console.log("results", formattedResults);
+                        const { formattedResults, errors } = reply.payload;
 
                         // The WASM error collector always returns a summary string;
                         // "No errors occurred." is its empty state. Anything else means

@@ -400,17 +400,17 @@ impl FormatResult {
         // Transform GroupStatistics
         let group_statistics = result.group_statistics.as_ref().map(|stats| {
             // Debug: log raw stats to see if unweighted_n/weighted_n are populated
-            web_sys::console::log_1(&format!("Raw GroupStatistics - groups: {:?}", stats.groups).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - variables: {:?}", stats.variables).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - unweighted_n keys: {:?}", stats.unweighted_n.keys().collect::<Vec<_>>()).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - weighted_n keys: {:?}", stats.weighted_n.keys().collect::<Vec<_>>()).into());
+            crate::debug_log!("Raw GroupStatistics - groups: {:?}", stats.groups);
+            crate::debug_log!("Raw GroupStatistics - variables: {:?}", stats.variables);
+            crate::debug_log!("Raw GroupStatistics - unweighted_n keys: {:?}", stats.unweighted_n.keys().collect::<Vec<_>>());
+            crate::debug_log!("Raw GroupStatistics - weighted_n keys: {:?}", stats.weighted_n.keys().collect::<Vec<_>>());
 
             for var in &stats.variables {
                 if let Some(n_values) = stats.unweighted_n.get(var) {
-                    web_sys::console::log_1(&format!("  {} unweighted_n: {:?}", var, n_values).into());
+                    crate::debug_log!("  {} unweighted_n: {:?}", var, n_values);
                 }
                 if let Some(n_values) = stats.weighted_n.get(var) {
-                    web_sys::console::log_1(&format!("  {} weighted_n: {:?}", var, n_values).into());
+                    crate::debug_log!("  {} weighted_n: {:?}", var, n_values);
                 }
             }
 

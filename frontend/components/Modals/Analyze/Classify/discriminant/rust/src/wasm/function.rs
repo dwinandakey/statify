@@ -16,7 +16,7 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector,
     logger: &mut FunctionLogger
 ) -> Result<Option<DiscriminantResult>, JsValue> {
-    web_sys::console::log_1(&"Starting discriminant analysis".into());
+    crate::debug_log!("Starting discriminant analysis");
 
     // Reset the per-analysis stepwise-selection cache so this run never reuses a
     // selection from a previous analysis in the same worker instance.
@@ -24,10 +24,7 @@ pub fn run_analysis(
     core::clear_analysis_warnings();
 
     // Log configuration to track which methods will be executed
-    web_sys::console::log_1(&format!("Config: {:?}", config).into());
-
-    // Log data to track the input data
-    web_sys::console::log_1(&format!("Data: {:?}", data).into());
+    crate::debug_log!("Config: {:?}", config);
 
     // Step 1: Basic processing summary (always executed)
     logger.add_log("basic_processing_summary");
@@ -39,7 +36,7 @@ pub fn run_analysis(
         }
     };
 
-    web_sys::console::log_1(&format!("Processing Summary: {:?}", processing_summary).into());
+    crate::debug_log!("Processing Summary: {:?}", processing_summary);
 
     // Filter Data
     let filtered_data = match core::filter_valid_cases(data, config) {
@@ -49,8 +46,6 @@ pub fn run_analysis(
             return Err(string_to_js_error(e));
         }
     };
-
-    web_sys::console::log_1(&format!("Filtered Data: {:?}", filtered_data).into());
 
     // "Replace missing values with mean": cases left out of the analysis for a missing
     // predictor are still classified (casewise, classification results, plots), with
@@ -73,7 +68,7 @@ pub fn run_analysis(
     match core::calculate_group_statistics(&filtered_data, config) {
         Ok(stats) => {
             group_statistics = Some(stats);
-            web_sys::console::log_1(&format!("Group Statistics: {:?}", group_statistics).into());
+            crate::debug_log!("Group Statistics: {:?}", group_statistics);
         }
         Err(e) => {
             error_collector.add_error("calculate_group_statistics", &e);
@@ -88,7 +83,7 @@ pub fn run_analysis(
         match core::calculate_equality_tests(&filtered_data, config) {
             Ok(tests) => {
                 equality_tests = Some(tests);
-                web_sys::console::log_1(&format!("Equaltiy Test: {:?}", equality_tests).into());
+                crate::debug_log!("Equaltiy Test: {:?}", equality_tests);
             }
             Err(e) => {
                 error_collector.add_error("calculate_equality_tests", &e);
@@ -104,7 +99,7 @@ pub fn run_analysis(
         match core::calculate_pooled_matrices(&filtered_data, config) {
             Ok(matrices) => {
                 pooled_matrices = Some(matrices);
-                web_sys::console::log_1(&format!("Pooled Matrices: {:?}", pooled_matrices).into());
+                crate::debug_log!("Pooled Matrices: {:?}", pooled_matrices);
             }
             Err(e) => {
                 error_collector.add_error("calculate_pooled_matrices", &e);
@@ -120,9 +115,7 @@ pub fn run_analysis(
         match core::calculate_covariance_matrices(&filtered_data, config) {
             Ok(matrices) => {
                 covariance_matrices = Some(matrices);
-                web_sys::console::log_1(
-                    &format!("Covariance Matrices: {:?}", covariance_matrices).into()
-                );
+                crate::debug_log!("Covariance Matrices: {:?}", covariance_matrices);
             }
             Err(e) => {
                 error_collector.add_error("calculate_covariance_matrices", &e);
@@ -139,9 +132,7 @@ pub fn run_analysis(
         match core::calculate_log_determinants(&filtered_data, config) {
             Ok(determinants) => {
                 log_determinants = Some(determinants);
-                web_sys::console::log_1(
-                    &format!("Log Determinants: {:?}", log_determinants).into()
-                );
+                crate::debug_log!("Log Determinants: {:?}", log_determinants);
             }
             Err(e) => {
                 error_collector.add_error("calculate_log_determinants", &e);
@@ -153,7 +144,7 @@ pub fn run_analysis(
         match core::calculate_box_m_test(&filtered_data, config) {
             Ok(test) => {
                 box_m_test = Some(test);
-                web_sys::console::log_1(&format!("Box M: {:?}", box_m_test).into());
+                crate::debug_log!("Box M: {:?}", box_m_test);
             }
             Err(e) => {
                 error_collector.add_error("calculate_box_m_test", &e);
@@ -190,16 +181,14 @@ pub fn run_analysis(
             }
         }
         stepwise_statistics = Some(statistics);
-        web_sys::console::log_1(
-            &format!("Stepwise Statistics: {:?}", stepwise_statistics).into()
-        );
+        crate::debug_log!("Stepwise Statistics: {:?}", stepwise_statistics);
     }
 
     // Eigen Values
     logger.add_log("calculate_eigen_values");
     let eigen_description = match core::calculate_eigen_statistics(&filtered_data, config) {
         Ok(values) => {
-            web_sys::console::log_1(&format!("Eigen Values: {:?}", values).into());
+            crate::debug_log!("Eigen Values: {:?}", values);
             Some(values)
         }
         Err(e) => {
@@ -213,7 +202,7 @@ pub fn run_analysis(
     match core::calculate_wilks_lambda_test(&filtered_data, config) {
         Ok(test) => {
             wilks_lambda_test = Some(test);
-            web_sys::console::log_1(&format!("Wilks' Lambda Test: {:?}", wilks_lambda_test).into());
+            crate::debug_log!("Wilks' Lambda Test: {:?}", wilks_lambda_test);
         }
         Err(e) => {
             error_collector.add_error("calculate_wilks_lambda_test", &e);
@@ -225,7 +214,7 @@ pub fn run_analysis(
     logger.add_log("calculate_canonical_functions");
     let canonical_functions = match core::calculate_canonical_functions(&filtered_data, config) {
         Ok(functions) => {
-            web_sys::console::log_1(&format!("Canonical Functions: {:?}", functions).into());
+            crate::debug_log!("Canonical Functions: {:?}", functions);
             Some(functions)
         }
         Err(e) => {
@@ -238,7 +227,7 @@ pub fn run_analysis(
     logger.add_log("calculate_structure_matrix");
     let structure_matrix = match core::calculate_structure_matrix(&filtered_data, config) {
         Ok(matrix) => {
-            web_sys::console::log_1(&format!("Structure Matrix: {:?}", matrix).into());
+            crate::debug_log!("Structure Matrix: {:?}", matrix);
             Some(matrix)
         }
         Err(e) => {
@@ -262,9 +251,7 @@ pub fn run_analysis(
         match core::calculate_prior_probabilities(&filtered_data, config) {
             Ok(probabilities) => {
                 prior_probabilities = Some(probabilities);
-                web_sys::console::log_1(
-                    &format!("Prior Probabilities: {:?}", prior_probabilities).into()
-                );
+                crate::debug_log!("Prior Probabilities: {:?}", prior_probabilities);
             }
             Err(e) => {
                 error_collector.add_error("calculate_prior_probabilities", &e);
@@ -280,12 +267,7 @@ pub fn run_analysis(
         match core::calculate_summary_classification(&filtered_data, config) {
             Ok(functions) => {
                 classification_function_coefficients = Some(functions);
-                web_sys::console::log_1(
-                    &format!(
-                        "Summary Classification: {:?}",
-                        classification_function_coefficients
-                    ).into()
-                );
+                crate::debug_log!("Summary Classification: {:?}", classification_function_coefficients);
             }
             Err(e) => {
                 error_collector.add_error("calculate_summary_classification", &e);
@@ -316,9 +298,7 @@ pub fn run_analysis(
         match core::calculate_casewise_statistics(&filtered_data, config, &substituted_cases) {
             Ok(stats) => {
                 casewise_statistics = Some(stats);
-                web_sys::console::log_1(
-                    &format!("Casewise Statistics: {:?}", casewise_statistics).into()
-                );
+                crate::debug_log!("Casewise Statistics: {:?}", casewise_statistics);
             }
             Err(e) => {
                 error_collector.add_error("calculate_casewise_statistics", &e);
@@ -399,7 +379,7 @@ pub fn run_analysis(
         logger.add_log("calculate_classification_results");
         match core::calculate_classification_results(&filtered_data, config, &substituted_cases, &unselected) {
             Ok(results) => {
-                web_sys::console::log_1(&format!("Classification Results: {:?}", results).into());
+                crate::debug_log!("Classification Results: {:?}", results);
                 classification_results = Some(results);
             }
             Err(e) => {
@@ -461,14 +441,14 @@ pub fn get_results(result: &Option<DiscriminantResult>) -> Result<JsValue, JsVal
     match result {
         Some(result) => {
             if let Some(ref step_stats) = result.stepwise_statistics {
-                web_sys::console::log_1(&format!(
+                crate::debug_log!(
                     "[get_results] min_d_squared: {:?}, len={}",
                     step_stats.min_d_squared,
                     step_stats.min_d_squared.len()
-                ).into());
+                );
             }
             let js_val = serde_wasm_bindgen::to_value(result).unwrap();
-            web_sys::console::log_1(&format!("[get_results] serialized").into());
+            crate::debug_log!("[get_results] serialized");
             Ok(js_val)
         }
         None => Err(string_to_js_error("No analysis results available".to_string())),

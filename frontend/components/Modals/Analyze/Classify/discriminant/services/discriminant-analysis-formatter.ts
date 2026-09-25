@@ -857,19 +857,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
   // ==========================================
   // ROBUST METHOD DETECTION
   // ==========================================
-  console.log(
-    "[DEBUG] Full stepwise_statistics keys:",
-    data.stepwise_statistics
-      ? Object.keys(data.stepwise_statistics)
-      : "TIDAK ADA",
-  );
-  console.log("[DEBUG] change_in_v:", data.stepwise_statistics?.change_in_v);
-  console.log("[DEBUG] method field:", data.stepwise_statistics?.method);
-  console.log(
-    "[DEBUG] isRaosVMethod akan jadi:",
-    Array.isArray(data.stepwise_statistics?.change_in_v) &&
-      data.stepwise_statistics?.change_in_v.length > 0,
-  );
   let isMahalanobis = false;
   let isRaosVMethod = false;
   // Detected via the explicit method field emitted by Rust.
@@ -1748,26 +1735,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
   // 20. Casewise Statistics
   if (data.casewise_statistics) {
-    // Debug: Log what we're receiving from WASM
-    console.log("[Casewise] Raw data from WASM:", {
-      case_number: data.casewise_statistics.case_number,
-      case_number_length: data.casewise_statistics.case_number?.length,
-      actual_group: data.casewise_statistics.actual_group,
-      predicted_group: data.casewise_statistics.predicted_group,
-      discriminant_scores: data.casewise_statistics.discriminant_scores,
-      discriminant_scores_type:
-        typeof data.casewise_statistics.discriminant_scores,
-      discriminant_scores_keys: data.casewise_statistics.discriminant_scores
-        ? Array.isArray(data.casewise_statistics.discriminant_scores)
-          ? "Array with " +
-            data.casewise_statistics.discriminant_scores.length +
-            " items"
-          : "Object with keys: " +
-            Object.keys(data.casewise_statistics.discriminant_scores).join(", ")
-        : "null/undefined",
-      highest_group: data.casewise_statistics.highest_group,
-    });
-
     // Check if discriminant_scores exists and has entries
     // discriminant_scores from WASM is a Vec<ScoreValue> array with {function, values} entries
     const discriminantScoreEntries = Array.isArray(
@@ -1775,11 +1742,6 @@ export function transformDiscriminantResult(data: any): ResultJson {
     )
       ? data.casewise_statistics.discriminant_scores
       : [];
-
-    console.log(
-      "[Casewise] Discriminant score entries:",
-      discriminantScoreEntries,
-    );
 
     const numFunctions = discriminantScoreEntries.length;
 

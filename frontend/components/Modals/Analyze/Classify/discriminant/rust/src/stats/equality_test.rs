@@ -18,7 +18,7 @@ pub fn calculate_equality_tests(
     data: &AnalysisData,
     config: &DiscriminantConfig
 ) -> Result<EqualityTests, String> {
-    web_sys::console::log_1(&"Executing calculate_equality_tests".into());
+    crate::debug_log!("Executing calculate_equality_tests");
 
     // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;

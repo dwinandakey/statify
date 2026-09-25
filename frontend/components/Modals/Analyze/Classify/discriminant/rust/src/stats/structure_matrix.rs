@@ -29,7 +29,7 @@ pub fn calculate_structure_matrix(
     data: &AnalysisData,
     config: &DiscriminantConfig,
 ) -> Result<StructureMatrix, String> {
-    web_sys::console::log_1(&"Executing calculate_structure_matrix".into());
+    crate::debug_log!("Executing calculate_structure_matrix");
 
     // IMPORTANT: Filter out the grouping variable
     // SPSS menghitung Structure Matrix untuk SEMUA variabel kandidat

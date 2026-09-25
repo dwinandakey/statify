@@ -31,7 +31,7 @@ pub fn calculate_log_determinants(
     data: &AnalysisData,
     config: &DiscriminantConfig
 ) -> Result<LogDeterminants, String> {
-    web_sys::console::log_1(&"Executing calculate_log_determinants".into());
+    crate::debug_log!("Executing calculate_log_determinants");
 
     // Extract analyzed dataset
     let dataset = extract_analyzed_dataset(data, config)?;
@@ -48,11 +48,9 @@ pub fn calculate_log_determinants(
             .collect()
     };
 
-    web_sys::console::log_1(&format!(
-        "Log Determinants: using {} variables: {:?}",
+    crate::debug_log!("Log Determinants: using {} variables: {:?}",
         variables.len(),
-        variables
-    ).into());
+        variables);
 
     // Add explanatory note based on Box's M documentation
     let note =
@@ -144,10 +142,8 @@ pub fn log_determinants_for(
     // Calculate rank and log determinant of pooled matrix
     let (rank_pooled, pooled_log_det) = calculate_rank_and_log_det(&pooled_cov);
 
-    web_sys::console::log_1(&format!(
-        "Log Determinants Result: groups={:?}, ranks={:?}, log_dets={:?}, pooled_rank={}, pooled_log_det={}",
-        groups, ranks, log_determinants, rank_pooled, pooled_log_det
-    ).into());
+    crate::debug_log!("Log Determinants Result: groups={:?}, ranks={:?}, log_dets={:?}, pooled_rank={}, pooled_log_det={}",
+        groups, ranks, log_determinants, rank_pooled, pooled_log_det);
 
     LogDeterminants {
         groups,
