@@ -5,6 +5,7 @@ use nalgebra::DMatrix;
 use crate::models::{ result::LogDeterminants, AnalysisData, DiscriminantConfig };
 
 use super::core::{
+    AnalyzedDataset,
     calculate_covariance,
     calculate_rank_and_log_det,
     extract_analyzed_dataset,
@@ -53,6 +54,23 @@ pub fn calculate_log_determinants(
         variables
     ).into());
 
+    // Add explanatory note based on Box's M documentation
+    let note =
+        "Note: Log determinants are used in Box's M test to evaluate the homogeneity of covariance matrices. \
+                The test compares individual group determinants with the pooled determinant.".to_string();
+
+    Ok(log_determinants_for(&dataset, &variables, note))
+}
+
+/// Log Determinants table on `variables` of an already-extracted dataset.
+///
+/// Split out of `calculate_log_determinants` so Separate-groups classification can
+/// report the same table for the canonical discriminant function scores.
+pub fn log_determinants_for(
+    dataset: &AnalyzedDataset,
+    variables: &[String],
+    note: String,
+) -> LogDeterminants {
     let mut groups = Vec::new();
     let mut ranks = Vec::new();
     let mut log_determinants = Vec::new();
@@ -64,7 +82,7 @@ pub fn calculate_log_determinants(
 
         // Get variables values for this group
         let mut group_data = HashMap::new();
-        for var in &variables {
+        for var in variables {
             if let Some(group_values) = dataset.group_data.get(var.as_str()).and_then(|g| g.get(group)) {
                 if group_values.len() > 1 {
                     // We only need values for one group to construct its covariance matrix
@@ -121,28 +139,23 @@ pub fn calculate_log_determinants(
     }
 
     // Calculate pooled within-groups covariance matrix (no EPSILON — must match Box's M)
-    let pooled_cov = calculate_pooled_within_matrix_no_epsilon(&dataset, &variables);
+    let pooled_cov = calculate_pooled_within_matrix_no_epsilon(dataset, variables);
 
     // Calculate rank and log determinant of pooled matrix
     let (rank_pooled, pooled_log_det) = calculate_rank_and_log_det(&pooled_cov);
-
-    // Add explanatory note based on Box's M documentation
-    let note =
-        "Note: Log determinants are used in Box's M test to evaluate the homogeneity of covariance matrices. \
-                The test compares individual group determinants with the pooled determinant.".to_string();
 
     web_sys::console::log_1(&format!(
         "Log Determinants Result: groups={:?}, ranks={:?}, log_dets={:?}, pooled_rank={}, pooled_log_det={}",
         groups, ranks, log_determinants, rank_pooled, pooled_log_det
     ).into());
 
-    Ok(LogDeterminants {
+    LogDeterminants {
         groups,
         ranks,
         log_determinants,
         rank_pooled,
         pooled_log_determinant: pooled_log_det,
         note,
-        debug_variables: variables,
-    })
+        debug_variables: variables.to_vec(),
+    }
 }

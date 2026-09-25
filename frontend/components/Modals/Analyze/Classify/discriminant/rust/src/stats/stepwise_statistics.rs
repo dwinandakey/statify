@@ -584,6 +584,7 @@ fn convert_steps_to_output(
         wilks_exact_sig: Vec::new(),
         raos_v: Vec::new(),
         raos_v_sig: Vec::new(),
+        raos_v_df: Vec::new(),
         change_in_v: Vec::new(),
         change_sig: Vec::new(),
         variables_in_analysis: HashMap::new(),
@@ -611,8 +612,10 @@ fn convert_steps_to_output(
             continue;
         }
 
-        // Approx. sig. of cumulative Rao's V: chi-squared upper tail with df = step * (k-1)
-        let raos_v_df = step_idx as f64 * (k - 1.0);
+        // Approx. sig. of cumulative Rao's V: chi-squared upper tail with
+        // df = p * (k-1), p = variables in the model after this step. (Not
+        // step * (k-1): after a removal step the two differ.)
+        let raos_v_df = step.variables_in_analysis.len() as f64 * (k - 1.0);
         let raos_v_sig = if step.raos_v > 0.0 && raos_v_df > 0.0 {
             chi_squared_cdf_upper(step.raos_v, raos_v_df)
         } else {
@@ -634,6 +637,7 @@ fn convert_steps_to_output(
         result.wilks_exact_sig.push(step.wilks_exact_sig);
         result.raos_v.push(step.raos_v);
         result.raos_v_sig.push(raos_v_sig);
+        result.raos_v_df.push(raos_v_df);
         result.change_in_v.push(step.change_in_v);
         result.change_sig.push(step.change_sig);
 

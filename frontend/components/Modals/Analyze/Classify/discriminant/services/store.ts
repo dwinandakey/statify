@@ -48,6 +48,12 @@ const TABLE_INTERPRETATIONS: Record<string, string> = {
         "Fisher's classification coefficients; each case is assigned to the group with the highest score.",
     classification_processing_summary:
         "How many cases were processed and used in the classification step.",
+    separate_groups_covariance_matrices:
+        "Each group's covariance matrix of the discriminant scores. With the Separate-groups option these matrices, not the pooled one, are used to classify the cases.",
+    separate_groups_log_determinants:
+        "Log determinant of each group's covariance matrix of the discriminant functions; it enters the Separate-groups classification rule.",
+    separate_groups_box_m_test:
+        "Tests whether the groups' covariance matrices of the discriminant functions are equal. A small Sig. (< 0.05) supports classifying with separate-groups matrices.",
     casewise_statistics:
         "Per-case results: actual vs predicted group and the discriminant scores. ** marks a misclassified case.",
     classification_results:
@@ -204,6 +210,10 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         { key: "prior_probabilities", title: "Prior Probabilities for Groups", group: GROUP_CLASSIFICATION },
         { key: "classification_function_coefficients", title: "Classification Function Coefficients", group: GROUP_CLASSIFICATION },
         { key: "classification_processing_summary", title: "Classification Processing Summary", group: GROUP_CLASSIFICATION },
+        // Separate-groups covariance matrix only (Classify → Use Covariance Matrix).
+        { key: "separate_groups_covariance_matrices", title: "Covariance Matrices of Canonical Discriminant Functions", group: GROUP_CLASSIFICATION },
+        { key: "separate_groups_log_determinants", title: "Log Determinants (Canonical Discriminant Functions)", group: GROUP_CLASSIFICATION },
+        { key: "separate_groups_box_m_test", title: "Box's M Test Results (Canonical Discriminant Functions)", group: GROUP_CLASSIFICATION },
         { key: "casewise_statistics", title: "Casewise Statistics", group: GROUP_CLASSIFICATION },
         { key: "classification_results", title: "Classification Results", group: GROUP_CLASSIFICATION },
     ];
@@ -218,11 +228,15 @@ export async function saveDiscriminantResult(rawResults: unknown) {
     const combinedChart = scatterCharts.find(
         (c: any) => c.chartMetadata?.description === "Combined-Groups Plot"
     );
+    // With a single discriminant function the plots are histograms of the
+    // Function 1 scores (as in SPSS) instead of scatterplots.
     if (combinedChart) {
         await addStatistic(analyticId, {
             title: "Combined-Groups Plot",
             description:
-                "<p>Each case plotted on the first two discriminant functions, colored by group, with the group centroids (★). Tight, well-separated clusters indicate good discrimination.</p>",
+                combinedChart.chartType === "Stacked Histogram"
+                    ? "<p>There is only one discriminant function, so this is a histogram instead of a scatterplot: the Function 1 scores of all cases, stacked by group. Little overlap between the groups' bars indicates good discrimination.</p>"
+                    : "<p>Each case plotted on the first two discriminant functions, colored by group, with the group centroids (★). Tight, well-separated clusters indicate good discrimination.</p>",
             output_data: JSON.stringify({ charts: [combinedChart] }),
             components: GROUP_PLOTS,
         });
@@ -235,7 +249,9 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         await addStatistic(analyticId, {
             title: "Separate-Groups Plots",
             description:
-                "<p>One plot per group showing only that group's cases on the discriminant functions, with its centroid (★). Useful for spotting outliers or spread within a group.</p>",
+                separateCharts[0].chartType === "Histogram"
+                    ? "<p>There is only one discriminant function, so each group gets a histogram of its Function 1 scores, with the group's mean, standard deviation and N. Useful for spotting outliers or spread within a group.</p>"
+                    : "<p>One plot per group showing only that group's cases on the discriminant functions, with its centroid (★). Useful for spotting outliers or spread within a group.</p>",
             output_data: JSON.stringify({ charts: separateCharts }),
             components: GROUP_PLOTS,
         });

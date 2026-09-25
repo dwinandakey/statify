@@ -37,9 +37,8 @@ pub struct DiscriminantResult {
     pub classification_function_coefficients: Option<ClassificationFunctionCoefficients>,
     #[serde(rename = "discriminant_histograms")]
     pub discriminant_histograms: Option<DiscriminantHistograms>,
-    /// Per-case discriminant scores for scatter plots (combine/sep_grp).
-    /// Populated only when combine || sep_grp and case == false.
-    /// When case == true, casewise_statistics already contains the scores.
+    /// Per-case discriminant scores of every classified case for the Combined-/
+    /// Separate-groups plots. Populated whenever combine || sep_grp.
     #[serde(rename = "scatter_data")]
     pub scatter_data: Option<ScatterData>,
     /// Bootstrap results (bias, std. error, confidence intervals) for the
@@ -62,6 +61,51 @@ pub struct DiscriminantResult {
     /// True when the Separate-Groups plots were requested (Classify → Plots).
     #[serde(rename = "separate_groups_plot")]
     pub separate_groups_plot: bool,
+    /// True when Statistics → Function Coefficients → Unstandardized was checked.
+    /// The unstandardized coefficients are always computed (scores, centroids, Save
+    /// and the XML export need them); this only decides whether the Canonical
+    /// Discriminant Function Coefficients table is shown, as in SPSS (/STATISTICS=RAW).
+    #[serde(rename = "unstandardized_coefficients")]
+    pub unstandardized_coefficients: bool,
+    /// Classify → Use Covariance Matrix → Separate-groups. Populated only for that
+    /// option; its presence tells the frontend (Save, territorial map) to classify
+    /// with the per-group matrices instead of the pooled one.
+    #[serde(rename = "separate_groups_classification")]
+    pub separate_groups_classification: Option<SeparateGroupsClassification>,
+}
+
+/// Separate-groups classification (SPSS /CLASSIFY=SEPARATE): each group's covariance
+/// matrix of the canonical discriminant functions, which classifies the cases, and
+/// Box's test of those matrices — both of which SPSS displays for this option.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SeparateGroupsClassification {
+    /// Function labels ("1", "2", …) in matrix column order.
+    pub functions: Vec<String>,
+    /// One entry per group, in analysis group order.
+    pub groups: Vec<GroupFunctionCovariance>,
+    /// Log determinants of the group covariance matrices of the functions.
+    #[serde(rename = "log_determinants")]
+    pub log_determinants: LogDeterminants,
+    /// Box's M on those matrices; `None` when it cannot be computed (a warning says why).
+    #[serde(rename = "box_m_test")]
+    pub box_m_test: Option<BoxMTest>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GroupFunctionCovariance {
+    pub group: String,
+    /// Analysis cases in the group (the matrix is estimated from these only).
+    pub n: usize,
+    /// Σⱼ: covariance matrix of the discriminant scores, m × m, one Vec per row.
+    pub covariance: Vec<Vec<f64>>,
+    /// Inverse of Σⱼ* (the functions kept by SPSS's pseudo-inverse rule), padded to
+    /// m × m with zeros for the functions left out.
+    pub inverse: Vec<Vec<f64>>,
+    /// ln|Σⱼ*|.
+    #[serde(rename = "log_determinant")]
+    pub log_determinant: f64,
+    /// Number of functions kept in Σⱼ* — the df of the case's chi-square distance.
+    pub rank: usize,
 }
 
 /// Bundle of all requested assumption checks plus an at-a-glance summary used to
@@ -378,7 +422,7 @@ pub struct LogDeterminants {
 pub struct StepwiseStatistics {
     /// Which method was used: "wilks", "unexplained", "mahalanobis", "f_ratio", "raos_v"
     pub method: String,
-    /// Number of groups (k) — used by frontend to compute df = step × (k-1) for Rao's V
+    /// Number of groups (k)
     #[serde(rename = "num_groups")]
     pub num_groups: usize,
     #[serde(rename = "variables_entered")]
@@ -415,6 +459,9 @@ pub struct StepwiseStatistics {
     /// Chi-squared approx. significance of cumulative Rao's V (for Rao's V method)
     #[serde(rename = "raos_v_sig")]
     pub raos_v_sig: Vec<f64>,
+    /// df of that chi-square: (variables in the model after the step) × (k − 1)
+    #[serde(rename = "raos_v_df", default)]
+    pub raos_v_df: Vec<f64>,
     /// Change in V (ΔV) between steps (for Rao's V method)
     #[serde(rename = "change_in_v")]
     pub change_in_v: Vec<f64>,

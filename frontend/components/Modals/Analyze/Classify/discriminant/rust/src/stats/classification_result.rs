@@ -15,8 +15,8 @@ use crate::models::{result::ClassificationResults, AnalysisData, DiscriminantCon
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_pooled_within_matrix,
     calculate_prior_probabilities, classification_case_values, extract_analyzed_dataset,
-    get_stepwise_selected_variables, is_rank_deficient, push_analysis_warning, AnalyzedDataset,
-    MeanSubstitutedCase, EPSILON,
+    fit_groups, get_stepwise_selected_variables, is_rank_deficient, push_analysis_warning,
+    separate_groups_rule, AnalyzedDataset, MeanSubstitutedCase, SeparateGroupsRule, EPSILON,
 };
 
 use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
@@ -50,6 +50,8 @@ pub fn calculate_classification_results(
     let eigen_stats = calculate_eigen_statistics(data, config)?;
     let canonical_functions = calculate_canonical_functions(data, config)?;
     let priors = resolve_priors(data, config, &dataset)?;
+    // Some(..) under Classify → Use Covariance Matrix → Separate-groups.
+    let separate_rule = separate_groups_rule(data, config)?;
 
     let mut original_classification = HashMap::new();
     let mut original_percentage = HashMap::new();
@@ -76,6 +78,7 @@ pub fn calculate_classification_results(
                 &dataset,
                 &variables_to_use,
                 &priors,
+                separate_rule.as_ref(),
             );
 
             if let Some(counts) = original_classification.get_mut(group_name) {
@@ -100,7 +103,8 @@ pub fn calculate_classification_results(
 
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     // A failed cross-validation keeps the original classification table and reports
-    // why the cross-validated part is missing.
+    // why the cross-validated part is missing. It always uses the pooled (linear)
+    // rule, also under Separate-groups: SPSS cross-validates only the linear rule.
     let (cross_validated_classification, cross_validated_percentage) = if config.classify.leave {
         match calculate_cross_validation(&dataset, &variables_to_use, &priors) {
             Ok(cv) => cv,
@@ -310,9 +314,9 @@ fn classify_case_safe(
     dataset: &AnalyzedDataset,
     variables_to_use: &[String],
     priors: &[f64],
+    separate_rule: Option<&SeparateGroupsRule>,
 ) -> usize {
     let num_functions = eigen_stats.eigenvalue.len();
-    let num_groups = dataset.group_labels.len();
 
     let mut disc_scores = vec![0.0; num_functions];
     for (var_idx, var_name) in variables_to_use.iter().enumerate() {
@@ -331,25 +335,19 @@ fn classify_case_safe(
         }
     }
 
-    let mut group_probs = Vec::with_capacity(num_groups);
-
-    for (g_idx, target_group) in dataset.group_labels.iter().enumerate() {
-        let mut d2 = 0.0;
-        if let Some(centroid) = canonical_functions.function_at_centroids.get(target_group) {
-            for (fi, &score) in disc_scores.iter().enumerate() {
-                if fi < centroid.len() {
-                    d2 += (score - centroid[fi]).powi(2);
-                }
-            }
-        }
-        if d2.is_nan() {
-            d2 = f64::MAX;
-        }
-
-        let log_prior = priors[g_idx].ln();
-        let log_prob = log_prior - 0.5 * d2;
-        group_probs.push((g_idx, log_prob));
-    }
+    // ln(prior) − ½·d2 per group (pooled), or with each group's own covariance
+    // matrix of the functions under Separate-groups.
+    let mut group_probs: Vec<(usize, f64)> = fit_groups(
+        &disc_scores,
+        canonical_functions,
+        &dataset.group_labels,
+        priors,
+        separate_rule,
+    )
+    .iter()
+    .enumerate()
+    .map(|(g_idx, fit)| (g_idx, fit.log_score))
+    .collect();
 
     group_probs.sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
     group_probs[0].0

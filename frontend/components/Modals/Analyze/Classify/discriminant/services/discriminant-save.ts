@@ -13,8 +13,9 @@
  * numbered with a running counter (`casewise_statistics.case_number`), so there
  * is no way back to the dataset row a value came from. Walking the raw rows here
  * keeps the row index in hand. The arithmetic below mirrors `classify_case_safe`
- * in rust/src/stats/classification_result.rs exactly, so the saved columns agree
- * with the Classification Results and Casewise Statistics tables.
+ * in rust/src/stats/classification_result.rs (and `fit_groups` in
+ * separate_covariance.rs for the Separate-groups option) exactly, so the saved
+ * columns agree with the Classification Results and Casewise Statistics tables.
  */
 
 import type { Variable } from "@/types/Variable";
@@ -25,6 +26,10 @@ export type DiscriminantModelInfo = {
     canonical_functions?: {
         coefficients?: Array<{ variable: string; values: number[] }>;
         function_at_centroids?: Array<{ group: string; values: number[] }>;
+    } | null;
+    /** Present only for Classify → Use Covariance Matrix → Separate-groups. */
+    separate_groups_classification?: {
+        groups?: Array<{ group: string; inverse: number[][]; log_determinant: number }>;
     } | null;
 };
 
@@ -234,22 +239,41 @@ export function computeDiscriminantCaseResults(
         }
     }
 
+    // Separate-groups: each group's inverse covariance matrix of the functions and
+    // its log determinant, as computed by separate_covariance.rs.
+    const separateOf = new Map(
+        (model.separate_groups_classification?.groups ?? []).map((g) => [g.group, g]),
+    );
+    const useSeparate = config.classify.SepGroup && separateOf.size > 0;
+
     // Pass 2 — distances, posterior probabilities, predicted group.
     const rows: Array<CaseResult | null> = new Array(dataVariables.length).fill(null);
 
     for (const c of scored) {
         // log P(g|x) up to a constant: ln(prior) - 0.5 * squared distance to the
-        // group centroid in discriminant space.
+        // group centroid in discriminant space. Under Separate-groups the distance
+        // uses the group's own covariance matrix Σg, and -0.5 * ln|Σg| is added.
         const logProbs = groupLabels.map((g, gIdx) => {
             const centroid = centroidOf.get(g) ?? [];
+            const diff = new Array<number>(numFunctions);
+            for (let f = 0; f < numFunctions; f++) diff[f] = c.scores[f] - (centroid[f] ?? 0);
+
             let d2 = 0;
-            for (let f = 0; f < numFunctions; f++) {
-                const diff = c.scores[f] - (centroid[f] ?? 0);
-                d2 += diff * diff;
+            let logDet = 0;
+            const sep = useSeparate ? separateOf.get(g) : undefined;
+            if (sep) {
+                for (let i = 0; i < numFunctions; i++) {
+                    for (let j = 0; j < numFunctions; j++) {
+                        d2 += diff[i] * (sep.inverse[i]?.[j] ?? 0) * diff[j];
+                    }
+                }
+                logDet = sep.log_determinant;
+            } else {
+                for (let f = 0; f < numFunctions; f++) d2 += diff[f] * diff[f];
             }
             if (Number.isNaN(d2)) d2 = Number.MAX_VALUE;
             const prior = priors[gIdx];
-            return prior > 0 ? Math.log(prior) - 0.5 * d2 : -Infinity;
+            return prior > 0 ? Math.log(prior) - 0.5 * logDet - 0.5 * d2 : -Infinity;
         });
 
         // Softmax with the max subtracted out, the same underflow guard Rust uses.

@@ -11,7 +11,7 @@ use crate::models::{
 
 use super::core::{
     calculate_canonical_functions, calculate_eigen_statistics, calculate_p_value_from_chi_square,
-    classification_case_values, MeanSubstitutedCase,
+    classification_case_values, fit_groups, separate_groups_rule, MeanSubstitutedCase,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
     extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
     push_analysis_warning, EPSILON,
@@ -69,6 +69,8 @@ pub fn calculate_casewise_statistics(
         .collect();
 
     let prior_probs = calculate_prior_probabilities(data, config)?;
+    // Some(..) under Classify → Use Covariance Matrix → Separate-groups.
+    let separate_rule = separate_groups_rule(data, config)?;
 
     let limit = if config.classify.limit {
         let val = config.classify.limit_value.unwrap_or(i32::MAX);
@@ -117,35 +119,20 @@ pub fn calculate_casewise_statistics(
                 }
             }
 
-            let mut group_probs = Vec::new();
-            let mut group_distances = Vec::new();
-
-            for (g_idx, target_group) in dataset.group_labels.iter().enumerate() {
-                // Jarak Mahalanobis di dalam ruang Kanonikal adalah persis Jarak Euclidean
-                let mut d2 = 0.0;
-                if let Some(centroid) = canonical_functions.function_at_centroids.get(target_group)
-                {
-                    for (func_idx, &score) in disc_scores.iter().enumerate() {
-                        if func_idx < centroid.len() {
-                            d2 += (score - centroid[func_idx]).powi(2);
-                        }
-                    }
-                }
-                if d2.is_nan() {
-                    d2 = f64::MAX;
-                }
-                group_distances.push((g_idx, d2));
-
-                let prior = if g_idx < prior_probs.prior_probabilities.len() {
-                    prior_probs.prior_probabilities[g_idx]
-                } else {
-                    1.0 / (dataset.num_groups as f64)
-                };
-
-                let log_prior = prior.ln();
-                let log_prob = log_prior - 0.5 * d2;
-                group_probs.push((g_idx, log_prob));
-            }
+            // Jarak Mahalanobis di dalam ruang Kanonikal adalah persis Jarak Euclidean
+            // (pooled). Under Separate-groups each group's own covariance matrix of
+            // the functions is used instead, with its rank as the df.
+            let fits = fit_groups(
+                &disc_scores,
+                &canonical_functions,
+                &dataset.group_labels,
+                &prior_probs.prior_probabilities,
+                separate_rule.as_ref(),
+            );
+            let group_distances: Vec<(usize, f64)> =
+                fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.d2)).collect();
+            let mut group_probs: Vec<(usize, f64)> =
+                fits.iter().enumerate().map(|(g_idx, fit)| (g_idx, fit.log_score)).collect();
 
             group_probs
                 .sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
@@ -185,17 +172,19 @@ pub fn calculate_casewise_statistics(
             actual_group.push(group_name.clone());
             predicted_group.push(dataset.group_labels[highest.0].clone());
 
-            let p_val_highest = calculate_p_value_from_chi_square(highest_dist, num_functions);
-            let p_val_second = calculate_p_value_from_chi_square(second_dist, num_functions);
+            let highest_df_case = fits[highest.0].df;
+            let second_df_case = fits[second.0].df;
+            let p_val_highest = calculate_p_value_from_chi_square(highest_dist, highest_df_case);
+            let p_val_second = calculate_p_value_from_chi_square(second_dist, second_df_case);
 
             highest_p_value.push(p_val_highest);
-            highest_df.push(num_functions);
+            highest_df.push(highest_df_case);
             highest_p_g_equals_d.push(highest.1);
             highest_squared_mahalanobis_distance.push(highest_dist);
             highest_group.push(dataset.group_labels[highest.0].clone());
 
             second_p_value.push(p_val_second);
-            second_df.push(num_functions);
+            second_df.push(second_df_case);
             second_p_g_equals_d.push(second.1);
             second_squared_mahalanobis_distance.push(second_dist);
             second_group.push(dataset.group_labels[second.0].clone());
@@ -667,7 +656,7 @@ pub fn calculate_scatter_data(
 }
 
 /// Calculate discriminant scores for a case
-fn calculate_discriminant_scores(
+pub fn calculate_discriminant_scores(
     case_values: &[f64],
     canonical_functions: &CanonicalFunctions,
     variables: &[String],

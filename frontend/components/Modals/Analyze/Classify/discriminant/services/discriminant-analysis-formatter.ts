@@ -585,7 +585,12 @@ export function transformDiscriminantResult(data: any): ResultJson {
   }
 
   // 11. Canonical Discriminant Function Coefficients
-  if (data.canonical_functions?.coefficients) {
+  // Shown only for Statistics → Function Coefficients → Unstandardized, as in SPSS.
+  // The coefficients themselves stay in the payload: Save and the XML export use them.
+  if (
+    data.unstandardized_coefficients === true &&
+    data.canonical_functions?.coefficients
+  ) {
     // Get the number of functions from the first coefficient's values length
     const numFunctions =
       data.canonical_functions.coefficients.length > 0
@@ -1008,7 +1013,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
           raos_v_statistic: formatStat(
             data.stepwise_statistics.raos_v?.[i] ?? 0,
           ),
-          raos_v_df: formatCount(raosVdf * stepNum),
+          // df = variables in the model × (k − 1), from Rust (differs from
+          // step × (k − 1) after a removal step).
+          raos_v_df: formatCount(
+            data.stepwise_statistics.raos_v_df?.[i] ?? raosVdf * stepNum,
+          ),
           raos_v_sig: formatSig(
             data.stepwise_statistics.raos_v_sig?.[i] ?? 1,
           ),
@@ -2096,11 +2105,110 @@ export function transformDiscriminantResult(data: any): ResultJson {
     resultJson.tables.push(table);
   }
 
+  // 22. Separate-groups classification (Classify → Use Covariance Matrix →
+  // Separate-groups). SPSS then shows each group's covariance matrix of the
+  // canonical discriminant functions — the matrices that classify the cases — and
+  // Box's test of their equality.
+  const sep = data.separate_groups_classification;
+  if (sep && Array.isArray(sep.groups) && sep.groups.length > 0) {
+    const functions: string[] = sep.functions ?? [];
+
+    const covTable: Table = {
+      key: "separate_groups_covariance_matrices",
+      title: "Covariance Matrices of Canonical Discriminant Functions",
+      columnHeaders: [
+        { header: "Group", key: "category" },
+        { header: "Function", key: "func" },
+        ...functions.map((f: string, index: number) => ({
+          header: f,
+          key: `fn_${index}`,
+        })),
+      ],
+      rows: [],
+    };
+
+    for (const g of sep.groups) {
+      (g.covariance ?? []).forEach((row: number[], i: number) => {
+        const rowData: any = {
+          rowHeader: [i === 0 ? g.group : "", functions[i] ?? String(i + 1)],
+        };
+        row.forEach((value: number, j: number) => {
+          rowData[`fn_${j}`] = formatStat(value);
+        });
+        covTable.rows.push(rowData);
+      });
+    }
+
+    covTable.rows.push({
+      rowHeader: [
+        "Separate-groups covariance matrices of the canonical discriminant functions, used to classify the cases.",
+      ],
+    });
+    resultJson.tables.push(covTable);
+
+    const ld = sep.log_determinants;
+    if (ld) {
+      const ldTable: Table = {
+        key: "separate_groups_log_determinants",
+        title: "Log Determinants",
+        columnHeaders: [
+          { header: "Group", key: "category" },
+          { header: "Rank", key: "rank" },
+          { header: "Log Determinant", key: "log_determinant" },
+        ],
+        rows: [],
+      };
+
+      for (let i = 0; i < ld.groups.length; i++) {
+        ldTable.rows.push({
+          rowHeader: [ld.groups[i]],
+          rank: formatCount(ld.ranks[i]),
+          log_determinant: formatStat(ld.log_determinants[i]),
+        });
+      }
+      ldTable.rows.push({
+        rowHeader: ["Pooled within-groups"],
+        rank: formatCount(ld.rank_pooled),
+        log_determinant: formatStat(ld.pooled_log_determinant),
+      });
+      ldTable.rows.push({
+        rowHeader: [
+          "The ranks and natural logarithms of determinants printed are those of the group covariance matrices of the canonical discriminant functions.",
+        ],
+      });
+      resultJson.tables.push(ldTable);
+    }
+
+    const bm = sep.box_m_test;
+    if (bm) {
+      resultJson.tables.push({
+        key: "separate_groups_box_m_test",
+        title: "Test Results",
+        columnHeaders: [
+          { header: "", key: "test" },
+          { header: "" },
+          { header: "", key: "value" },
+        ],
+        rows: [
+          { rowHeader: ["Box's M"], value: formatStat(bm.box_m) },
+          { rowHeader: ["F", "Approx."], value: formatStat(bm.f_approx) },
+          { rowHeader: ["", "df1"], value: formatCount(bm.df1) },
+          { rowHeader: ["", "df2"], value: formatCount(bm.df2) },
+          { rowHeader: ["", "Sig."], value: formatSig(bm.p_value) },
+          {
+            rowHeader: [
+              "Tests null hypothesis of equal population covariance matrices of canonical discriminant functions.",
+            ],
+          },
+        ],
+      });
+    }
+  }
+
   // ── Scatter plots (Combined-Groups + Separate-Groups) ──────────────────────
-  // scatter_data is populated when combine||sep_grp and case==false.
-  // casewise_statistics has the same fields when case==true, so the scores are
-  // available whenever Casewise is on — each plot is therefore gated on its own
-  // Classify → Plots checkbox, not on the presence of the scores.
+  // scatter_data holds every classified case's scores whenever combine||sep_grp
+  // is on (casewise_statistics may stop at "Limit cases to first n", so it is only
+  // a fallback). Each plot is gated on its own Classify → Plots checkbox.
   const wantCombinedPlot = data?.combined_groups_plot === true;
   const wantSeparatePlots = data?.separate_groups_plot === true;
   const scatterSrc = data?.scatter_data ?? data?.casewise_statistics;
@@ -2113,12 +2221,81 @@ export function transformDiscriminantResult(data: any): ResultJson {
   // function_at_centroids is Vec<GroupCentroid> = [{group, values}], not a keyed object
   const centroidArr: Array<{ group: string; values: number[] }> | undefined =
     data?.canonical_functions?.function_at_centroids;
+  // Non-empty only under Classify → Use Covariance Matrix → Separate-groups.
+  const sepGroups: Array<{ group: string; covariance: number[][] }> =
+    data?.separate_groups_classification?.groups ?? [];
 
   const hasScatterData =
     Array.isArray(f1Scores) &&
     Array.isArray(f2Scores) &&
     Array.isArray(caseGroups) &&
     f1Scores.length > 0;
+
+  // One discriminant function (two groups, or a single predictor): as SPSS does,
+  // the Combined-groups plot becomes a histogram of the Function 1 scores stacked
+  // by group, and the Separate-groups plots become one histogram per group.
+  const hasOneFunction =
+    Array.isArray(f1Scores) &&
+    !Array.isArray(f2Scores) &&
+    Array.isArray(caseGroups) &&
+    f1Scores.length > 0;
+
+  if (hasOneFunction && (wantCombinedPlot || wantSeparatePlots)) {
+    const f1 = f1Scores as number[];
+    const grps = caseGroups as string[];
+
+    const combinedHistogram: Chart = {
+      chartType: "Stacked Histogram",
+      chartData: grps.map((g, i) => ({ category: g, value: f1[i] })),
+      chartMetadata: {
+        axisInfo: { x: "Function 1", y: "Frequency", category: "Group" },
+        description: "Combined-Groups Plot",
+        title: "Canonical Discriminant Function 1",
+        subtitle: "All groups",
+        notes: null,
+      },
+      chartConfig: {
+        width: 600,
+        height: 450,
+        useAxis: true,
+        useLegend: true,
+        axisLabels: { x: "Function 1", y: "Frequency" },
+      },
+    };
+
+    const separateHistograms: Chart[] = [...new Set(grps)].map((group) => {
+      const values = f1.filter((_, i) => grps[i] === group);
+      const n = values.length;
+      const mean = n > 0 ? values.reduce((s, v) => s + v, 0) / n : 0;
+      const sd =
+        n > 1
+          ? Math.sqrt(values.reduce((s, v) => s + (v - mean) ** 2, 0) / (n - 1))
+          : 0;
+      return {
+        chartType: "Histogram",
+        chartData: values,
+        chartMetadata: {
+          axisInfo: { x: "Function 1", y: "Frequency", category: "Group" },
+          description: `Separate-Groups Plot: Group ${group}`,
+          title: "Canonical Discriminant Function 1",
+          subtitle: `Group = ${group}   Mean = ${formatStat(mean)}, Std. Dev. = ${formatStat(sd)}, N = ${n}`,
+          notes: null,
+        },
+        chartConfig: {
+          width: 600,
+          height: 450,
+          useAxis: true,
+          useLegend: false,
+          axisLabels: { x: "Function 1", y: "Frequency" },
+        },
+      };
+    });
+
+    resultJson.charts = [
+      ...(wantCombinedPlot ? [combinedHistogram] : []),
+      ...(wantSeparatePlots ? separateHistograms : []),
+    ];
+  }
 
   if (hasScatterData && (wantCombinedPlot || wantSeparatePlots)) {
     const f1 = f1Scores as number[];
@@ -2139,10 +2316,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
 
     // Linear decision boundaries (perpendicular bisectors of centroid pairs, equal-prior LDA).
     // Each boundary is parameterised as a line segment extended far beyond the data range;
-    // the renderer clips it to the plot area.
+    // the renderer clips it to the plot area. Under Separate-groups classification
+    // the real boundaries are curved, so these straight lines are left out.
     const boundaryLines: Array<{ x1: number; y1: number; x2: number; y2: number; dashArray: string }> = [];
     const centroids = centroidArr ?? [];
-    if (centroids.length >= 2) {
+    if (centroids.length >= 2 && sepGroups.length === 0) {
       const allX = casePoints.map((p) => p.x);
       const allY = casePoints.map((p) => p.y);
       const xSpan = Math.max(...allX) - Math.min(...allX);
@@ -2187,7 +2365,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
         description: "Combined-Groups Plot",
         title: "Combined-Groups Plot",
         subtitle: "Canonical Discriminant Functions",
-        notes: "★ = Group Centroid  — — — = Decision Boundary",
+        notes:
+          boundaryLines.length > 0
+            ? "★ = Group Centroid  — — — = Decision Boundary"
+            : "★ = Group Centroid",
       },
       chartConfig: {
         width: 600,
@@ -2253,6 +2434,11 @@ export function transformDiscriminantResult(data: any): ResultJson {
       }
       const lnPrior = (g: string) => priorLog[String(g)] ?? 0;
 
+      // Separate-groups: each group's own covariance matrix of Functions 1–2
+      // replaces the identity, so the region boundaries are curved.
+      const sepRule = new Map<string, { inv: number[][]; logDet: number }>();
+      for (const g of sepGroups) sepRule.set(String(g.group), twoFunctionRule(g.covariance));
+
       // Plot range: cover the centroids (and case scores when available), padded.
       const xs = cents.map((c) => c.values[0]);
       const ys = cents.map((c) => c.values[1]);
@@ -2285,7 +2471,15 @@ export function transformDiscriminantResult(data: any): ResultJson {
           for (const c of cents) {
             const dx = gx - c.values[0];
             const dy = gy - c.values[1];
-            const score = -0.5 * (dx * dx + dy * dy) + lnPrior(c.group);
+            const rule = sepRule.get(String(c.group));
+            const score = rule
+              ? -0.5 *
+                  (dx * dx * rule.inv[0][0] +
+                    2 * dx * dy * rule.inv[0][1] +
+                    dy * dy * rule.inv[1][1]) -
+                0.5 * rule.logDet +
+                lnPrior(c.group)
+              : -0.5 * (dx * dx + dy * dy) + lnPrior(c.group);
             if (score > bestScore) {
               bestScore = score;
               bestGroup = c.group;
@@ -2311,7 +2505,9 @@ export function transformDiscriminantResult(data: any): ResultJson {
           title: "Territorial Map",
           subtitle: "Classification regions in discriminant space",
           notes:
-            "Each region is colored by the group a case there would be classified into (nearest centroid). ★ = group centroid.",
+            sepRule.size > 0
+              ? "Each region is colored by the group a case there would be classified into (separate-groups covariance matrices). ★ = group centroid."
+              : "Each region is colored by the group a case there would be classified into (nearest centroid). ★ = group centroid.",
         },
         chartConfig: {
           width: 640,
@@ -2508,4 +2704,35 @@ export function transformDiscriminantResult(data: any): ResultJson {
   }
 
   return resultJson;
+}
+
+/**
+ * Separate-groups rule on the territorial map's axes (Functions 1–2): inverse and
+ * log determinant of a group's 2 × 2 covariance block. As in SPSS (and
+ * separate_covariance.rs), a function whose variance is ~0, or that is linearly
+ * dependent on Function 1, is dropped from the block.
+ */
+function twoFunctionRule(cov: number[][]): { inv: number[][]; logDet: number } {
+  const EPS = 1e-10;
+  const a = cov?.[0]?.[0] ?? 0;
+  const b = cov?.[0]?.[1] ?? 0;
+  const d = cov?.[1]?.[1] ?? 0;
+
+  const keep1 = a > EPS;
+  const resid2 = keep1 ? d - (b * b) / a : d;
+  const keep2 = resid2 > EPS && resid2 > EPS * Math.abs(d);
+
+  if (keep1 && keep2) {
+    const det = a * d - b * b;
+    return {
+      inv: [
+        [d / det, -b / det],
+        [-b / det, a / det],
+      ],
+      logDet: Math.log(det),
+    };
+  }
+  if (keep1) return { inv: [[1 / a, 0], [0, 0]], logDet: Math.log(a) };
+  if (keep2) return { inv: [[0, 0], [0, 1 / d]], logDet: Math.log(d) };
+  return { inv: [[0, 0], [0, 0]], logDet: 0 };
 }

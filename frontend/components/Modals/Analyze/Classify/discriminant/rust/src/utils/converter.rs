@@ -59,6 +59,9 @@ struct FormatResult {
     territorial_map: bool,
     combined_groups_plot: bool,
     separate_groups_plot: bool,
+    unstandardized_coefficients: bool,
+    // Vec-based already; rows follow the analysis group order.
+    separate_groups_classification: Option<crate::models::result::SeparateGroupsClassification>,
 }
 
 /// Convert a `"Function k" → scores` map into a Vec ordered Function 1, 2, …
@@ -300,6 +303,7 @@ struct FormattedStepwiseStatistics {
     wilks_exact_sig: Vec<f64>,
     raos_v: Vec<f64>,
     raos_v_sig: Vec<f64>,
+    raos_v_df: Vec<f64>,
     change_in_v: Vec<f64>,
     change_sig: Vec<f64>,
     variables_in_analysis: Vec<StepVariables>,
@@ -763,6 +767,7 @@ impl FormatResult {
                 wilks_exact_sig: stats.wilks_exact_sig.clone(),
                 raos_v: stats.raos_v.clone(),
                 raos_v_sig: stats.raos_v_sig.clone(),
+                raos_v_df: stats.raos_v_df.clone(),
                 change_in_v: stats.change_in_v.clone(),
                 change_sig: stats.change_sig.clone(),
                 variables_in_analysis,
@@ -906,6 +911,8 @@ impl FormatResult {
             territorial_map: result.territorial_map,
             combined_groups_plot: result.combined_groups_plot,
             separate_groups_plot: result.separate_groups_plot,
+            unstandardized_coefficients: result.unstandardized_coefficients,
+            separate_groups_classification: result.separate_groups_classification.clone(),
         }
     }
 }

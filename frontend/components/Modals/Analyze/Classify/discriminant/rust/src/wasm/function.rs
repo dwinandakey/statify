@@ -251,8 +251,13 @@ pub fn run_analysis(
     let mut classification_function_coefficients = None;
     let mut prior_probabilities = None;
     // Prior Probabilities for Groups accompany any classification output, so
-    // compute them whenever a summary, casewise, or leave-one-out table is asked for.
-    if config.classify.summary || config.classify.case || config.classify.leave {
+    // compute them whenever a summary, casewise, leave-one-out, or Fisher's
+    // classification function table is asked for.
+    if config.classify.summary
+        || config.classify.case
+        || config.classify.leave
+        || config.statistics.fisher
+    {
         logger.add_log("calculate_prior_probabilities");
         match core::calculate_prior_probabilities(&filtered_data, config) {
             Ok(probabilities) => {
@@ -267,7 +272,10 @@ pub fn run_analysis(
             }
         }
     }
-    if config.classify.summary {
+    // Classification Function Coefficients (Fisher's linear discriminant functions)
+    // come from Statistics → Function Coefficients → Fisher's, as in SPSS
+    // (/STATISTICS=COEFF) — not from Classify → Summary table.
+    if config.statistics.fisher {
         logger.add_log("calculate_summary_classification");
         match core::calculate_summary_classification(&filtered_data, config) {
             Ok(functions) => {
@@ -284,6 +292,22 @@ pub fn run_analysis(
                 // Continue execution despite errors for non-critical functions
             }
         };
+    }
+
+    // Classify → Use Covariance Matrix → Separate-groups: SPSS displays each group's
+    // covariance matrix of the canonical discriminant functions (the matrices that
+    // now classify the cases) and Box's test of their equality.
+    let mut separate_groups_classification = None;
+    if config.classify.sep_group {
+        logger.add_log("calculate_separate_groups_classification");
+        match core::calculate_separate_groups_classification(&filtered_data, config) {
+            Ok(result) => {
+                separate_groups_classification = Some(result);
+            }
+            Err(e) => {
+                error_collector.add_error("calculate_separate_groups_classification", &e);
+            }
+        }
     }
 
     let mut casewise_statistics = None;
@@ -303,10 +327,12 @@ pub fn run_analysis(
         };
     }
 
-    // Compute lightweight scatter data for plot rendering when case==false
-    // but the user wants scatter plots (combine or sep_grp checked).
+    // Per-case scores for the Combined-/Separate-groups plots (scatterplots, or
+    // histograms with a single function). Computed whenever a plot is requested,
+    // also with Casewise on: the casewise table may stop at "Limit cases to first n",
+    // but the plots cover every classified case.
     let mut scatter_data = None;
-    if !config.classify.case && (config.classify.combine || config.classify.sep_grp) {
+    if config.classify.combine || config.classify.sep_grp {
         match core::calculate_scatter_data(&filtered_data, config, &substituted_cases) {
             Ok(sd) => {
                 scatter_data = Some(sd);
@@ -354,8 +380,12 @@ pub fn run_analysis(
         }
     }
 
+    // Classification Results (hit ratio): Classify → Summary table gives the
+    // Original block (SPSS /STATISTICS=TABLE); Leave-one-out adds the Cross-validated
+    // block (/STATISTICS=CROSSVALID), and on its own still shows both blocks, as SPSS
+    // does. calculate_classification_results only cross-validates under `leave`.
     let mut classification_results = None;
-    if config.classify.leave {
+    if config.classify.summary || config.classify.leave {
         logger.add_log("calculate_classification_results");
         match core::calculate_classification_results(&filtered_data, config, &substituted_cases) {
             Ok(results) => {
@@ -367,6 +397,16 @@ pub fn run_analysis(
                 // Continue execution despite errors for non-critical functions
             }
         };
+    }
+
+    // The territorial map is drawn on Functions 1 × 2; like SPSS, it is not
+    // displayed when there is only one discriminant function.
+    let num_functions = eigen_description.as_ref().map_or(0, |e| e.eigenvalue.len());
+    if config.classify.terr && num_functions < 2 {
+        core::push_analysis_warning(
+            "territorial_map",
+            "The territorial map is not displayed because there is only one discriminant function (it needs at least three groups and two predictors).".to_string(),
+        );
     }
 
     // Forward warnings raised inside the statistics routines (singular matrices,
@@ -400,6 +440,8 @@ pub fn run_analysis(
         territorial_map: config.classify.terr,
         combined_groups_plot: config.classify.combine,
         separate_groups_plot: config.classify.sep_grp,
+        unstandardized_coefficients: config.statistics.unstandardized,
+        separate_groups_classification,
     };
 
     Ok(Some(result))
