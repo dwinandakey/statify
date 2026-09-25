@@ -22,6 +22,7 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("@playwright/test");
 const runner = require("../../glm-web-worker/experiment/run-experiment.cjs");
+const { buildEnv, tapWasm } = require("./bb-env.cjs");
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const BASE = args.base || "http://localhost:3102";
@@ -1021,11 +1022,10 @@ const FINAL_IDS = Object.keys(S).filter((id) => !V4_IDS.includes(id));
 (async () => {
     fs.mkdirSync(SHOTS, { recursive: true });
     fs.mkdirSync(OBS, { recursive: true });
-    const html = await (await fetch(`${BASE}/dashboard/data`)).text();
-    // App Router: BUILD_ID ada di payload RSC HTML sebagai \"b\":\"<BUILD_ID>\".
-    const served = html.match(/\\?"b\\?":\\?"([A-Za-z0-9_-]+)/)?.[1] ?? null;
-    const env = { base: BASE, port: PORT, buildIdFile: BUILD_ID_FILE, buildIdServed: served };
-    if (served !== BUILD_ID_FILE) throw new Error(`BUILD_ID server ${served} != berkas ${BUILD_ID_FILE}`);
+    // BUILD_ID berkas = yang dilayani server (harness berhenti bila berbeda);
+    // nama dan md5 WASM MV/RM build ini (bb-env.cjs).
+    const env = await buildEnv(BASE);
+    if (env.buildIdFile !== BUILD_ID_FILE) throw new Error(`BUILD_ID berubah selama eksekusi: ${env.buildIdFile} != ${BUILD_ID_FILE}`);
     const browser = await chromium.launch();
     const set = args.set || "v4";
     const ids = args.only ? args.only.split(",") : set === "final" ? FINAL_IDS : set === "all" ? [...V4_IDS, ...FINAL_IDS] : V4_IDS;
@@ -1037,6 +1037,7 @@ const FINAL_IDS = Object.keys(S).filter((id) => !V4_IDS.includes(id));
         page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(m.text().slice(0, 300)); });
         page.on("pageerror", (e) => consoleErrors.push(`pageerror: ${String(e.message).slice(0, 300)}`));
         const c = new Ctx(id, page);
+        const wasmRequested = tapWasm(context);
         c.browser = browser;
         c.extraContexts = [];
         c.obs.env = { ...env };
@@ -1057,6 +1058,7 @@ const FINAL_IDS = Object.keys(S).filter((id) => !V4_IDS.includes(id));
         }
         c.obs.consoleErrors = consoleErrors.slice(0, 20);
         c.obs.finishedAt = new Date().toISOString();
+        c.obs.wasmRequested = [...new Set(wasmRequested)];
         c.obs.durationS = Math.round((Date.now() - t0) / 1000);
         fs.writeFileSync(path.join(OBS, `${id}.json`), JSON.stringify(c.obs, null, 1));
         report.scenarios[id] = { status: c.obs.status, error: c.obs.error, shots: c.shot, startedAt: c.obs.startedAt, finishedAt: c.obs.finishedAt };

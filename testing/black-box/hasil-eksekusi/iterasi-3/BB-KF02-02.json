@@ -1,0 +1,408 @@
+{
+ "id": "BB-KF02-02",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "hapus wt dari DepVar",
+  "DV: wt"
+ ],
+ "toasts": [
+  {
+   "label": "OK",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF02-02-3.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² (vs μ₀)",
+         "test_name": "Pillai's Trace",
+         "value": "0.9861",
+         "f": "497.2435",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "<.001",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0139",
+         "f": "497.2435",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "<.001",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "71.0348",
+         "f": "497.2435",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "<.001",
+         "t_squared": "2202.0784"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "71.0348",
+         "f": "497.2435",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "<.001",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "0.2628",
+         "df": "1",
+         "mean_square": "0.2628",
+         "f_value": "0.0072",
+         "significance": "0.9328"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "30202.6753",
+         "df": "1",
+         "mean_square": "30202.6753",
+         "f_value": "1.9662",
+         "significance": "0.1708"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "351.1250",
+         "df": "1",
+         "mean_square": "351.1250",
+         "f_value": "0.0747",
+         "significance": "0.7864"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "331.2223",
+         "df": "1",
+         "mean_square": "331.2223",
+         "f_value": "345.9678",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.0472",
+         "df": "31",
+         "mean_square": "36.3241",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "476184.7947",
+         "df": "31",
+         "mean_square": "15360.7998",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "145726.8750",
+         "df": "31",
+         "mean_square": "4700.8669",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "29.6787",
+         "df": "31",
+         "mean_square": "0.9574",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.3100",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "506387.4700",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "146078.0000",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "360.9011",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.0472",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "476184.7947",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "145726.8750",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "29.6787",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "langkah3": {
+   "n": 3,
+   "before": [
+    {
+     "id": "mu0-0",
+     "value": "20"
+    },
+    {
+     "id": "mu0-1",
+     "value": "200"
+    },
+    {
+     "id": "mu0-2",
+     "value": "150"
+    }
+   ]
+  },
+  "langkah4": {
+   "n": 4,
+   "before": [
+    {
+     "id": "mu0-0",
+     "value": "20"
+    },
+    {
+     "id": "mu0-1",
+     "value": "200"
+    },
+    {
+     "id": "mu0-2",
+     "value": "150"
+    },
+    {
+     "id": "mu0-3",
+     "value": "0"
+    }
+   ]
+  }
+ },
+ "notes": [
+  "BB-KF02-02-1.png: langkah 3: Test Values setelah wt dihapus",
+  "BB-KF02-02-2.png: langkah 4: Test Values setelah wt ditambah lagi",
+  "BB-KF02-02-3.png: toast: OK",
+  "BB-KF02-02-4.png: Multivariate Tests"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:19:00.764Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 13,
+ "finishedAt": "2026-09-25T13:19:13.812Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ]
+}

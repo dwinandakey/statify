@@ -1,0 +1,41 @@
+{
+ "id": "BB-KF03-16",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3, x4",
+  "FixFactor: jk",
+  "Covariance Matrices: variance-pooled"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "pesan": "Known covariance matrix Σ₂ (jk = 2) is not positive definite.",
+  "subdialogTetapTerbuka": true
+ },
+ "notes": [
+  "BB-KF03-16.png: Σ₂ tidak definit positif"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:42:07.959Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:42:13.974Z",
+ "wasmRequested": [],
+ "durationS": 6
+}

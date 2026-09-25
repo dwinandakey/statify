@@ -1,0 +1,481 @@
+{
+ "id": "BB-KF03-09",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3, x4",
+  "FixFactor: jk",
+  "hapus jk dari FixFactor",
+  "FixFactor: jk"
+ ],
+ "toasts": [
+  {
+   "label": "OK setelah faktor diubah",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF03-09-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK setelah faktor diubah",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Between-Subjects Factors",
+     "tables": [
+      {
+       "title": "Between-Subjects Factors",
+       "columns": [
+        "",
+        "",
+        "Value Label",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "factor": "jk",
+         "level": "1",
+         "value_label": "",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "2",
+         "value_label": "",
+         "n": "32"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Intercept",
+         "test_name": "Pillai's Trace",
+         "value": "0.9751",
+         "f": "576.9776",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0249",
+         "f": "576.9776",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "39.1171",
+         "f": "576.9776",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "39.1171",
+         "f": "576.9776",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "jk",
+         "test_name": "Pillai's Trace",
+         "value": "0.6131",
+         "f": "23.3687",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.3869",
+         "f": "23.3687",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "1.5843",
+         "f": "23.3687",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "1.5843",
+         "f": "23.3687",
+         "hypothesis_df": "4",
+         "error_df": "59",
+         "significance": "<.001"
+        }
+       ],
+       "footnote": "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "x1",
+         "sum_of_squares": "210.2500",
+         "df": "1",
+         "mean_square": "210.2500",
+         "f_value": "29.3468",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "64.0000",
+         "df": "1",
+         "mean_square": "64.0000",
+         "f_value": "4.0266",
+         "significance": "0.0492"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1753.5156",
+         "df": "1",
+         "mean_square": "1753.5156",
+         "f_value": "61.0314",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "10.5625",
+         "df": "1",
+         "mean_square": "10.5625",
+         "f_value": "0.4732",
+         "significance": "0.4941"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "x1",
+         "sum_of_squares": "12825.5625",
+         "df": "1",
+         "mean_square": "12825.5625",
+         "f_value": "1790.2009",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "14220.5625",
+         "df": "1",
+         "mean_square": "14220.5625",
+         "f_value": "894.7040",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "30844.1406",
+         "df": "1",
+         "mean_square": "30844.1406",
+         "f_value": "1073.5360",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "31951.5625",
+         "df": "1",
+         "mean_square": "31951.5625",
+         "f_value": "1431.4854",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "jk",
+         "dependent_variable": "x1",
+         "sum_of_squares": "210.2500",
+         "df": "1",
+         "mean_square": "210.2500",
+         "f_value": "29.3468",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "64.0000",
+         "df": "1",
+         "mean_square": "64.0000",
+         "f_value": "4.0266",
+         "significance": "0.0492"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1753.5156",
+         "df": "1",
+         "mean_square": "1753.5156",
+         "f_value": "61.0314",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "10.5625",
+         "df": "1",
+         "mean_square": "10.5625",
+         "f_value": "0.4732",
+         "significance": "0.4941"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "x1",
+         "sum_of_squares": "444.1875",
+         "df": "62",
+         "mean_square": "7.1643",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "985.4375",
+         "df": "62",
+         "mean_square": "15.8942",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "1781.3438",
+         "df": "62",
+         "mean_square": "28.7314",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1383.8750",
+         "df": "62",
+         "mean_square": "22.3206",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "13480.0000",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "15270.0000",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "34379.0000",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "33346.0000",
+         "df": "64",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "x1",
+         "sum_of_squares": "654.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x2",
+         "sum_of_squares": "1049.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x3",
+         "sum_of_squares": "3534.8594",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "x4",
+         "sum_of_squares": "1394.4375",
+         "df": "63",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "ringkasanSebelum": "δ₀ = [3, 2, 10, 1]",
+  "ringkasanSesudah": "δ₀ = 0 (H₀: μ₁ = μ₂)",
+  "catatanMT": "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic",
+  "catatanMTMemuatDelta": false
+ },
+ "notes": [
+  "BB-KF03-09-1.png: ringkasan δ₀ setelah jk dihapus dan ditambah lagi",
+  "BB-KF03-09-2.png: toast: OK setelah faktor diubah",
+  "BB-KF03-09-3.png: Multivariate Tests"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:37:37.333Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:37:50.604Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ],
+ "durationS": 13
+}

@@ -1,0 +1,437 @@
+{
+ "id": "BB-KF09-01",
+ "steps": [
+  "impor gambar51.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: perlakuan(4); measure anjing",
+  "slot within: anjing=perlakuan1,perlakuan2,perlakuan3,perlakuan4"
+ ],
+ "toasts": [],
+ "runs": [
+  {
+   "label": "OK",
+   "outcome": "log",
+   "toast": [],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "perlakuan",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "anjing",
+         "factor_level": "1",
+         "dep_var": "perlakuan1_(1,anjing)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "perlakuan2_(2,anjing)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "perlakuan3_(3,anjing)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "4",
+         "dep_var": "perlakuan4_(4,anjing)"
+        }
+       ],
+       "footnote": "Measure: anjing"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "perlakuan",
+         "test_name": "Pillai's Trace",
+         "value": "0.8677",
+         "f": "26.2234",
+         "hyp_df": "3",
+         "err_df": "12",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.1323",
+         "f": "26.2234",
+         "hyp_df": "3",
+         "err_df": "12",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "6.5558",
+         "f": "26.2234",
+         "hyp_df": "3",
+         "err_df": "12",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "6.5558",
+         "f": "26.2234",
+         "hyp_df": "3",
+         "err_df": "12",
+         "sig": "<.001"
+        }
+       ],
+       "footnote": "a. Design: Intercept\nWithin Subjects Design: perlakuan\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Mauchly's Test of Sphericity",
+     "tables": [
+      {
+       "title": "Mauchly's Test of Sphericity",
+       "columns": [
+        "Measure",
+        "Within Subjects Effect",
+        "Mauchly's W",
+        "Approx. Chi-Square",
+        "df",
+        "Sig.",
+        "Greenhouse-Geisser",
+        "Huynh-Feldt",
+        "Lower-bound"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "anjing",
+         "effect": "perlakuan",
+         "w": "0.6189",
+         "chi_sq": "6.1035",
+         "df": "5",
+         "sig": "0.2975",
+         "gg": "0.7467",
+         "hf": "0.8957",
+         "lb": "0.3333"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: perlakuan"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "perlakuan",
+         "assumption": "Sphericity Assumed",
+         "ss": "168181.6500",
+         "df": "3",
+         "ms": "56060.5500",
+         "f": "31.8562",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "168181.6500",
+         "df": "2.2400",
+         "ms": "75081.3873",
+         "f": "31.8562",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "168181.6500",
+         "df": "2.6871",
+         "ms": "62589.4272",
+         "f": "31.8562",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "168181.6500",
+         "df": "1",
+         "ms": "168181.6500",
+         "f": "31.8562",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(perlakuan)",
+         "assumption": "Sphericity Assumed",
+         "ss": "73911.6000",
+         "df": "42",
+         "ms": "1759.8000",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "73911.6000",
+         "df": "31.3599",
+         "ms": "2356.8842",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "73911.6000",
+         "df": "37.6189",
+         "ms": "1964.7484",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "73911.6000",
+         "df": "14",
+         "ms": "5279.4000",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: anjing"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "perlakuan",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "perlakuan",
+         "contrast": "Linear",
+         "ss": "165534.0300",
+         "df": "1",
+         "ms": "165534.0300",
+         "f": "78.0255",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "1.3500",
+         "df": "1",
+         "ms": "1.3500",
+         "f": "0.0009",
+         "sig": "0.9766"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Cubic",
+         "ss": "2646.2700",
+         "df": "1",
+         "ms": "2646.2700",
+         "f": "1.6112",
+         "sig": "0.2250"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(perlakuan)",
+         "contrast": "Linear",
+         "ss": "29701.5200",
+         "df": "14",
+         "ms": "2121.5371",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "21216.4000",
+         "df": "14",
+         "ms": "1515.4571",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Cubic",
+         "ss": "22993.6800",
+         "df": "14",
+         "ms": "1642.4057",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: anjing"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "10908164.8167",
+         "df": "1",
+         "ms": "10908164.8167",
+         "f": "716.8712",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "213028.9333",
+         "df": "14",
+         "ms": "15216.3524",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: anjing; Transformed Variable: Average"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "judulTampil": [
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy"
+  ]
+ },
+ "notes": [
+  "BB-KF09-01-1.png: Multivariate Tests",
+  "BB-KF09-01-2.png: Mauchly's Test of Sphericity",
+  "BB-KF09-01-3.png: Tests of Within-Subjects Effects",
+  "BB-KF09-01-4.png: Tests of Within-Subjects Contrasts"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:33:40.645Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 10,
+ "finishedAt": "2026-09-25T13:33:50.309Z",
+ "wasmRequested": [
+  "wasm_bg.2bc2b212.wasm"
+ ]
+}

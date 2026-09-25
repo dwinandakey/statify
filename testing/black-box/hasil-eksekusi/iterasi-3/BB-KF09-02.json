@@ -1,0 +1,1014 @@
+{
+ "id": "BB-KF09-02",
+ "steps": [
+  "impor rm_a.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: waktu(3); measure cemas, stres",
+  "slot within: cemas=cemas1,cemas2,cemas3; stres=stres1,stres2,stres3",
+  "Options: centang DescStats, EstEffectSize, ObsPower"
+ ],
+ "toasts": [],
+ "runs": [
+  {
+   "label": "OK",
+   "outcome": "log",
+   "toast": [],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "waktu",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "cemas",
+         "factor_level": "1",
+         "dep_var": "cemas1_(1,cemas)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "cemas2_(2,cemas)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "cemas3_(3,cemas)"
+        }
+       ],
+       "footnote": "Measure: cemas"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "waktu",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "stres",
+         "factor_level": "1",
+         "dep_var": "stres1_(1,stres)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "stres2_(2,stres)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "stres3_(3,stres)"
+        }
+       ],
+       "footnote": "Measure: stres"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "30.6875",
+         "std_dev": "5.6417",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: cemas1_(1,cemas)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "27.4375",
+         "std_dev": "3.3659",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: cemas2_(2,cemas)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "3",
+         "mean": "25.1875",
+         "std_dev": "4.5785",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: cemas3_(3,cemas)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "24.3750",
+         "std_dev": "2.7049",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: stres1_(1,stres)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "23.1250",
+         "std_dev": "2.1564",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: stres2_(2,stres)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "3",
+         "mean": "20.3750",
+         "std_dev": "3.4230",
+         "n": "16"
+        }
+       ],
+       "footnote": "Dependent Variable: stres3_(3,stres)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Intercept",
+         "test_name": "Pillai's Trace",
+         "value": "0.9907",
+         "f": "748.2548",
+         "hyp_df": "2",
+         "err_df": "14",
+         "sig": "<.001",
+         "eta2": "0.9907",
+         "noncent": "1496.5095",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0093",
+         "f": "748.2548",
+         "hyp_df": "2",
+         "err_df": "14",
+         "sig": "<.001",
+         "eta2": "0.9907",
+         "noncent": "1496.5095",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "106.8935",
+         "f": "748.2548",
+         "hyp_df": "2",
+         "err_df": "14",
+         "sig": "<.001",
+         "eta2": "0.9907",
+         "noncent": "1496.5095",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "106.8935",
+         "f": "748.2548",
+         "hyp_df": "2",
+         "err_df": "14",
+         "sig": "<.001",
+         "eta2": "0.9907",
+         "noncent": "1496.5095",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "waktu",
+         "test_name": "Pillai's Trace",
+         "value": "0.9046",
+         "f": "28.4444",
+         "hyp_df": "4",
+         "err_df": "12",
+         "sig": "<.001",
+         "eta2": "0.9046",
+         "noncent": "113.7776",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0954",
+         "f": "28.4444",
+         "hyp_df": "4",
+         "err_df": "12",
+         "sig": "<.001",
+         "eta2": "0.9046",
+         "noncent": "113.7776",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "9.4815",
+         "f": "28.4444",
+         "hyp_df": "4",
+         "err_df": "12",
+         "sig": "<.001",
+         "eta2": "0.9046",
+         "noncent": "113.7776",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "9.4815",
+         "f": "28.4444",
+         "hyp_df": "4",
+         "err_df": "12",
+         "sig": "<.001",
+         "eta2": "0.9046",
+         "noncent": "113.7776",
+         "power": "1.0000"
+        }
+       ],
+       "footnote": "a. Design: Intercept\nWithin Subjects Design: waktu\nb. Exact statistic\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Mauchly's Test of Sphericity",
+     "tables": [
+      {
+       "title": "Mauchly's Test of Sphericity",
+       "columns": [
+        "Measure",
+        "Within Subjects Effect",
+        "Mauchly's W",
+        "Approx. Chi-Square",
+        "df",
+        "Sig.",
+        "Greenhouse-Geisser",
+        "Huynh-Feldt",
+        "Lower-bound"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "cemas",
+         "effect": "waktu",
+         "w": "0.8590",
+         "chi_sq": "2.1277",
+         "df": "2",
+         "sig": "0.3451",
+         "gg": "0.8764",
+         "hf": "0.9831",
+         "lb": "0.5000"
+        },
+        {
+         "rowHeader": [],
+         "measure": "stres",
+         "effect": "waktu",
+         "w": "0.9975",
+         "chi_sq": "0.0346",
+         "df": "2",
+         "sig": "0.9829",
+         "gg": "0.9975",
+         "hf": "1.0000",
+         "lb": "0.5000"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: waktu"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects (Multivariate)",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects (Multivariate)",
+       "columns": [
+        "",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "waktu",
+         "test_name": "Pillai's Trace",
+         "value": "0.7200",
+         "f": "8.4368",
+         "hyp_df": "4",
+         "err_df": "60",
+         "sig": "<.001",
+         "eta2": "0.3600",
+         "noncent": "33.7473",
+         "power": "0.9979"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.3187",
+         "f": "11.1834",
+         "hyp_df": "4",
+         "err_df": "58",
+         "sig": "<.001",
+         "eta2": "0.4354",
+         "noncent": "44.7335",
+         "power": "0.9999"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "2.0160",
+         "f": "14.1118",
+         "hyp_df": "4",
+         "err_df": "56",
+         "sig": "<.001",
+         "eta2": "0.5020",
+         "noncent": "56.4472",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "1.9538",
+         "f": "29.3074",
+         "hyp_df": "2",
+         "err_df": "30",
+         "sig": "<.001",
+         "eta2": "0.6615",
+         "noncent": "58.6149",
+         "power": "1.0000"
+        }
+       ],
+       "footnote": "Tests are based on averaged variables.\na. Design: Intercept\nWithin Subjects Design: waktu\nb. The statistic is an upper bound on F that yields a lower bound on the significance level.\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "waktu",
+         "assumption": "Sphericity Assumed",
+         "ss": "244.6667",
+         "df": "2",
+         "ms": "122.3333",
+         "f": "15.7736",
+         "sig": "<.001",
+         "eta2": "0.5126",
+         "noncent": "31.5473",
+         "power": "0.9987"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "244.6667",
+         "df": "1.7529",
+         "ms": "139.5814",
+         "f": "15.7736",
+         "sig": "<.001",
+         "eta2": "0.5126",
+         "noncent": "27.6490",
+         "power": "0.9969"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "244.6667",
+         "df": "1.9661",
+         "ms": "124.4399",
+         "f": "15.7736",
+         "sig": "<.001",
+         "eta2": "0.5126",
+         "noncent": "31.0132",
+         "power": "0.9986"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "244.6667",
+         "df": "1",
+         "ms": "244.6667",
+         "f": "15.7736",
+         "sig": "0.0012",
+         "eta2": "0.5126",
+         "noncent": "15.7736",
+         "power": "0.9596"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(waktu)",
+         "assumption": "Sphericity Assumed",
+         "ss": "232.6667",
+         "df": "30",
+         "ms": "7.7556",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "232.6667",
+         "df": "26.2929",
+         "ms": "8.8490",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "232.6667",
+         "df": "29.4921",
+         "ms": "7.8891",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "232.6667",
+         "df": "15",
+         "ms": "15.5111",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: cemas.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "waktu",
+         "assumption": "Sphericity Assumed",
+         "ss": "134.0000",
+         "df": "2",
+         "ms": "67.0000",
+         "f": "17.5291",
+         "sig": "<.001",
+         "eta2": "0.5389",
+         "noncent": "35.0581",
+         "power": "0.9995"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "134.0000",
+         "df": "1.9951",
+         "ms": "67.1653",
+         "f": "17.5291",
+         "sig": "<.001",
+         "eta2": "0.5389",
+         "noncent": "34.9718",
+         "power": "0.9995"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "134.0000",
+         "df": "2",
+         "ms": "67.0000",
+         "f": "17.5291",
+         "sig": "<.001",
+         "eta2": "0.5389",
+         "noncent": "35.0581",
+         "power": "0.9995"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "134.0000",
+         "df": "1",
+         "ms": "134.0000",
+         "f": "17.5291",
+         "sig": "<.001",
+         "eta2": "0.5389",
+         "noncent": "17.5291",
+         "power": "0.9742"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(waktu)",
+         "assumption": "Sphericity Assumed",
+         "ss": "114.6667",
+         "df": "30",
+         "ms": "3.8222",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "114.6667",
+         "df": "29.9262",
+         "ms": "3.8317",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "114.6667",
+         "df": "30",
+         "ms": "3.8222",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "114.6667",
+         "df": "15",
+         "ms": "7.6444",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: stres.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "waktu",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "waktu",
+         "contrast": "Linear",
+         "ss": "242.0000",
+         "df": "1",
+         "ms": "242.0000",
+         "f": "45.3750",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "2.6667",
+         "df": "1",
+         "ms": "2.6667",
+         "f": "0.2620",
+         "sig": "0.6162"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(waktu)",
+         "contrast": "Linear",
+         "ss": "80.0000",
+         "df": "15",
+         "ms": "5.3333",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "152.6667",
+         "df": "15",
+         "ms": "10.1778",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: cemas.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "waktu",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "waktu",
+         "contrast": "Linear",
+         "ss": "128.0000",
+         "df": "1",
+         "ms": "128.0000",
+         "f": "32.5424",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "6.0000",
+         "df": "1",
+         "ms": "6.0000",
+         "f": "1.6168",
+         "sig": "0.2229"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(waktu)",
+         "contrast": "Linear",
+         "ss": "59.0000",
+         "df": "15",
+         "ms": "3.9333",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "55.6667",
+         "df": "15",
+         "ms": "3.7111",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: stres.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Measure",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "measure": "cemas",
+         "ss": "37018.5208",
+         "df": "1",
+         "ms": "37018.5208",
+         "f": "761.5456",
+         "sig": "<.001",
+         "eta2": "0.9807",
+         "noncent": "761.5456",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "measure": "stres",
+         "ss": "24570.7500",
+         "df": "1",
+         "ms": "24570.7500",
+         "f": "1531.9484",
+         "sig": "<.001",
+         "eta2": "0.9903",
+         "noncent": "1531.9484",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "measure": "cemas",
+         "ss": "729.1458",
+         "df": "15",
+         "ms": "48.6097",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "measure": "stres",
+         "ss": "240.5833",
+         "df": "15",
+         "ms": "16.0389",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Transformed Variable: Average.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "judulTampil": [
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy"
+  ]
+ },
+ "notes": [
+  "BB-KF09-02-1.png: Tests of Within-Subjects Effects (Multivariate)",
+  "BB-KF09-02-2.png: Multivariate Tests"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:33:50.916Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 10,
+ "finishedAt": "2026-09-25T13:34:01.099Z",
+ "wasmRequested": [
+  "wasm_bg.2bc2b212.wasm"
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "BB-KF02-12",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "Test Values μ₀ = 20, 200, 150, 3"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "pesan": "Known covariance matrix Σ: every entry on and above the diagonal must be a number.",
+  "subdialogTetapTerbuka": true
+ },
+ "notes": [
+  "BB-KF02-12.png: sel hp–wt kosong"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:41:55.916Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:42:00.955Z",
+ "wasmRequested": [],
+ "durationS": 5
+}

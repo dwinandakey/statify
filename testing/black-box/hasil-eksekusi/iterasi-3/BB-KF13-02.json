@@ -1,0 +1,60 @@
+{
+ "id": "BB-KF13-02",
+ "steps": [
+  "impor bb-mv-no-complete.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [
+  {
+   "label": "OK",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value.",
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value."
+   ],
+   "file": "BB-KF13-02.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value.",
+    "An error occurred during Multivariate analysis. | Error: No complete cases: every case has a missing value."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF13-02.png: toast: OK"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:30:57.217Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 12,
+ "finishedAt": "2026-09-25T13:31:09.605Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ]
+}

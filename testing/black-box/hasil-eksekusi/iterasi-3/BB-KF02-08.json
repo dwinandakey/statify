@@ -1,0 +1,827 @@
+{
+ "id": "BB-KF02-08",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "Test Values μ₀ = 20, 200, 150, 3",
+  "Σ diketahui dicentang dan diisi → Continue",
+  "Options: centang DescStats, SimultaneousCI"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan Σ diketahui dan CI simultan",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF02-08-3.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK dengan Σ diketahui dan CI simultan",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "mpg",
+         "group_label": "Total",
+         "mean": "20.0906",
+         "std_deviation": "6.0269",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "disp",
+         "group_label": "Total",
+         "mean": "230.7219",
+         "std_deviation": "123.9387",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "hp",
+         "group_label": "Total",
+         "mean": "146.6875",
+         "std_deviation": "68.5629",
+         "n": "32"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "wt",
+         "group_label": "Total",
+         "mean": "3.2172",
+         "std_deviation": "0.9785",
+         "n": "32"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² (vs μ₀)",
+         "test_name": "Pillai's Trace",
+         "value": "0.2581",
+         "f": "2.4355",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "0.0706",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.7419",
+         "f": "2.4355",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "0.0706",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.3479",
+         "f": "2.4355",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "0.0706",
+         "t_squared": "10.7859"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.3479",
+         "f": "2.4355",
+         "hypothesis_df": "4",
+         "error_df": "28",
+         "significance": "0.0706",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Chi-Square Test (Known Covariance Matrix)",
+     "tables": [
+      {
+       "title": "Chi-Square Test (Known Covariance Matrix)",
+       "columns": [
+        "Hypothesis",
+        "Chi-Square",
+        "df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "hypothesis": "μ = μ₀",
+         "chi_square": "11.2494",
+         "df": "4",
+         "significance": "0.0239"
+        }
+       ],
+       "footnote": "H₀: μ = μ₀, μ₀ = [20, 200, 150, 3]. Σ is known (entered in Test Values), so χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀) ~ χ²(p) under H₀ (Johnson & Wichern, 6th ed., §4.2, §4.4). p = 4, n = 32. The Hotelling T² test in Multivariate Tests uses the sample covariance matrix instead."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Simultaneous Confidence Intervals",
+     "tables": [
+      {
+       "title": "Simultaneous Confidence Intervals",
+       "columns": [
+        "Dependent Variable",
+        "Mean",
+        "Std. Error",
+        "Test Value (μ₀)",
+        "95% Simultaneous T² Interval",
+        "95% Bonferroni Interval"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dependent_variable": "mpg",
+         "estimate": "20.0906",
+         "std_error": "1.0654",
+         "hypothesized": "20",
+         "t2_lower": "16.3969",
+         "t2_upper": "23.7844",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "17.2652",
+         "bonferroni_upper": "22.9160",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "disp",
+         "estimate": "230.7219",
+         "std_error": "21.9095",
+         "hypothesized": "200",
+         "t2_lower": "154.7637",
+         "t2_upper": "306.6801",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "172.6199",
+         "bonferroni_upper": "288.8239",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "hp",
+         "estimate": "146.6875",
+         "std_error": "12.1203",
+         "hypothesized": "150",
+         "t2_lower": "104.6674",
+         "t2_upper": "188.7076",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "114.5455",
+         "bonferroni_upper": "178.8295",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "wt",
+         "estimate": "3.2172",
+         "std_error": "0.1730",
+         "hypothesized": "3",
+         "t2_lower": "2.6176",
+         "t2_upper": "3.8169",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "2.7586",
+         "bonferroni_upper": "3.6759",
+         "bonferroni_contains": "Yes"
+        }
+       ],
+       "footnote": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+     "tables": [
+      {
+       "title": "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+       "columns": [
+        "Dependent Variable",
+        "Mean",
+        "Std. Error",
+        "Test Value (μ₀)",
+        "95% Simultaneous χ² Interval",
+        "95% Bonferroni Interval (z)"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dependent_variable": "mpg",
+         "estimate": "20.0906",
+         "std_error": "1.0607",
+         "hypothesized": "20",
+         "chi_square_lower": "16.8236",
+         "chi_square_upper": "23.3577",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "17.4414",
+         "bonferroni_upper": "22.7398",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "disp",
+         "estimate": "230.7219",
+         "std_error": "21.6506",
+         "hypothesized": "200",
+         "chi_square_lower": "164.0332",
+         "chi_square_upper": "297.4105",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "176.6450",
+         "bonferroni_upper": "284.7988",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "hp",
+         "estimate": "146.6875",
+         "std_error": "12.1192",
+         "hypothesized": "150",
+         "chi_square_lower": "109.3578",
+         "chi_square_upper": "184.0172",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "116.4173",
+         "bonferroni_upper": "176.9577",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "wt",
+         "estimate": "3.2172",
+         "std_error": "0.1768",
+         "hypothesized": "3",
+         "chi_square_lower": "2.6727",
+         "chi_square_upper": "3.7618",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "2.7757",
+         "bonferroni_upper": "3.6588",
+         "bonferroni_contains": "Yes"
+        }
+       ],
+       "footnote": "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "0.2628",
+         "df": "1",
+         "mean_square": "0.2628",
+         "f_value": "0.0072",
+         "significance": "0.9328"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "30202.6753",
+         "df": "1",
+         "mean_square": "30202.6753",
+         "f_value": "1.9662",
+         "significance": "0.1708"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "351.1250",
+         "df": "1",
+         "mean_square": "351.1250",
+         "f_value": "0.0747",
+         "significance": "0.7864"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "1.5103",
+         "df": "1",
+         "mean_square": "1.5103",
+         "f_value": "1.5776",
+         "significance": "0.2185"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.0472",
+         "df": "31",
+         "mean_square": "36.3241",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "476184.7947",
+         "df": "31",
+         "mean_square": "15360.7998",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "145726.8750",
+         "df": "31",
+         "mean_square": "4700.8669",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "29.6787",
+         "df": "31",
+         "mean_square": "0.9574",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.3100",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "506387.4700",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "146078.0000",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "31.1891",
+         "df": "32",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "mpg",
+         "sum_of_squares": "1126.0472",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "disp",
+         "sum_of_squares": "476184.7947",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "hp",
+         "sum_of_squares": "145726.8750",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "wt",
+         "sum_of_squares": "29.6787",
+         "df": "31",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "kotakAwal": "unchecked",
+  "matriksTampilSebelumDicentang": 0,
+  "matriks": {
+   "title": "Σ",
+   "columns": [
+    "mpg",
+    "disp",
+    "hp",
+    "wt"
+   ],
+   "rows": [
+    "mpg",
+    "disp",
+    "hp",
+    "wt"
+   ],
+   "cells": [
+    [
+     {
+      "value": "36",
+      "disabled": false
+     },
+     {
+      "value": "-630",
+      "disabled": false
+     },
+     {
+      "value": "-320",
+      "disabled": false
+     },
+     {
+      "value": "-5",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-630",
+      "disabled": true
+     },
+     {
+      "value": "15000",
+      "disabled": false
+     },
+     {
+      "value": "6700",
+      "disabled": false
+     },
+     {
+      "value": "107",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-320",
+      "disabled": true
+     },
+     {
+      "value": "6700",
+      "disabled": true
+     },
+     {
+      "value": "4700",
+      "disabled": false
+     },
+     {
+      "value": "44",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-5",
+      "disabled": true
+     },
+     {
+      "value": "107",
+      "disabled": true
+     },
+     {
+      "value": "44",
+      "disabled": true
+     },
+     {
+      "value": "1",
+      "disabled": false
+     }
+    ]
+   ]
+  },
+  "multivariateTests": [
+   {
+    "rowHeader": [],
+    "effect": "Hotelling T² (vs μ₀)",
+    "test_name": "Pillai's Trace",
+    "value": "0.2581",
+    "f": "2.4355",
+    "hypothesis_df": "4",
+    "error_df": "28",
+    "significance": "0.0706",
+    "t_squared": ""
+   },
+   {
+    "rowHeader": [],
+    "effect": "",
+    "test_name": "Wilks' Lambda",
+    "value": "0.7419",
+    "f": "2.4355",
+    "hypothesis_df": "4",
+    "error_df": "28",
+    "significance": "0.0706",
+    "t_squared": ""
+   },
+   {
+    "rowHeader": [],
+    "effect": "",
+    "test_name": "Hotelling's Trace",
+    "value": "0.3479",
+    "f": "2.4355",
+    "hypothesis_df": "4",
+    "error_df": "28",
+    "significance": "0.0706",
+    "t_squared": "10.7859"
+   },
+   {
+    "rowHeader": [],
+    "effect": "",
+    "test_name": "Roy's Largest Root",
+    "value": "0.3479",
+    "f": "2.4355",
+    "hypothesis_df": "4",
+    "error_df": "28",
+    "significance": "0.0706",
+    "t_squared": ""
+   }
+  ],
+  "urutanTabel": [
+   "Descriptive Statistics",
+   "Multivariate Tests",
+   "Chi-Square Test (Known Covariance Matrix)",
+   "Simultaneous Confidence Intervals",
+   "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+   "Tests of Between-Subjects Effects",
+   "Errors Logs"
+  ],
+  "tabelChi": {
+   "kolom": [
+    "Hypothesis",
+    "Chi-Square",
+    "df",
+    "Sig."
+   ],
+   "baris": [
+    {
+     "rowHeader": [],
+     "hypothesis": "μ = μ₀",
+     "chi_square": "11.2494",
+     "df": "4",
+     "significance": "0.0239"
+    }
+   ],
+   "catatan": "H₀: μ = μ₀, μ₀ = [20, 200, 150, 3]. Σ is known (entered in Test Values), so χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀) ~ χ²(p) under H₀ (Johnson & Wichern, 6th ed., §4.2, §4.4). p = 4, n = 32. The Hotelling T² test in Multivariate Tests uses the sample covariance matrix instead."
+  },
+  "tabelCiSigma": {
+   "kolom": [
+    "Dependent Variable",
+    "Mean",
+    "Std. Error",
+    "Test Value (μ₀)",
+    "95% Simultaneous χ² Interval",
+    "95% Bonferroni Interval (z)"
+   ],
+   "baris": [
+    {
+     "rowHeader": [],
+     "dependent_variable": "mpg",
+     "estimate": "20.0906",
+     "std_error": "1.0607",
+     "hypothesized": "20",
+     "chi_square_lower": "16.8236",
+     "chi_square_upper": "23.3577",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "17.4414",
+     "bonferroni_upper": "22.7398",
+     "bonferroni_contains": "Yes"
+    },
+    {
+     "rowHeader": [],
+     "dependent_variable": "disp",
+     "estimate": "230.7219",
+     "std_error": "21.6506",
+     "hypothesized": "200",
+     "chi_square_lower": "164.0332",
+     "chi_square_upper": "297.4105",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "176.6450",
+     "bonferroni_upper": "284.7988",
+     "bonferroni_contains": "Yes"
+    },
+    {
+     "rowHeader": [],
+     "dependent_variable": "hp",
+     "estimate": "146.6875",
+     "std_error": "12.1192",
+     "hypothesized": "150",
+     "chi_square_lower": "109.3578",
+     "chi_square_upper": "184.0172",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "116.4173",
+     "bonferroni_upper": "176.9577",
+     "bonferroni_contains": "Yes"
+    },
+    {
+     "rowHeader": [],
+     "dependent_variable": "wt",
+     "estimate": "3.2172",
+     "std_error": "0.1768",
+     "hypothesized": "3",
+     "chi_square_lower": "2.6727",
+     "chi_square_upper": "3.7618",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "2.7757",
+     "bonferroni_upper": "3.6588",
+     "bonferroni_contains": "Yes"
+    }
+   ],
+   "catatan": "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+  },
+  "nilaiVsR_K1": {
+   "nilaiDibandingkan": 26,
+   "beda": []
+  },
+  "nilaiSamaR": true
+ },
+ "notes": [
+  "BB-KF02-08-1.png: subdialog Test Values: kotak Σ belum dicentang",
+  "BB-KF02-08-2.png: Σ diketahui terisi (segitiga bawah otomatis)",
+  "BB-KF02-08-3.png: toast: OK dengan Σ diketahui dan CI simultan",
+  "BB-KF02-08-4.png: Chi-Square Test (Known Covariance Matrix)",
+  "BB-KF02-08-5.png: Simultaneous Confidence Intervals (Known Covariance Matrix)",
+  "BB-KF02-08-6.png: Multivariate Tests"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:40:35.531Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:40:49.162Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ],
+ "durationS": 14
+}

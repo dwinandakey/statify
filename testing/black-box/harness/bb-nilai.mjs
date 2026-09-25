@@ -134,7 +134,8 @@ function rmRows(run, re) {
         const keys = [...new Set(rows.flatMap((r) => Object.keys(r)))].filter((k) => k !== "rowHeader");
         // level_i (Pairwise Comparisons) berisi angka level, tetapi tetap label baris.
         const labelKeys = keys.filter((k) => k === "level_i" || rows.some((r) => isLabel(r[k])));
-        const measure = (String(t.footnote ?? "").match(/Measure:\s*([^;\s]+)/) || [])[1] || null;
+        // Sejak v5 catatan Statify ditutup titik sebelum catatan kaki ("Measure: skor.").
+        const measure = ((String(t.footnote ?? "").match(/Measure:\s*([^;\s]+)/) || [])[1] || "").replace(/\.$/, "") || null;
         for (const r of carry(rows, labelKeys)) out.push({ row: r, labelKeys, measure, title: t.title, factorI: (String((t.columns || [])[0] || "").match(/^\(I\)\s*(.+)$/) || [])[1] || null });
     }
     return out;

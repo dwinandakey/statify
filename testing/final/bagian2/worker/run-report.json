@@ -1,0 +1,54 @@
+{
+  "base": "http://localhost:3101",
+  "mode": "worker",
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-25T13:30:58.767Z",
+  "configs": {
+    "mv6t1": {
+      "modeActual": "worker",
+      "dataRows": 26,
+      "dialog": {
+        "dep": [
+          "Y1A1 [Y1A1]",
+          "Y2A1 [Y2A1]"
+        ],
+        "fix": [
+          "faktorA [faktorA]",
+          "faktorB [faktorB]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv6t2": {
+      "modeActual": "worker",
+      "dataRows": 26,
+      "dialog": {
+        "dep": [
+          "Y1A1 [Y1A1]",
+          "Y2A1 [Y2A1]"
+        ],
+        "fix": [
+          "faktorA [faktorA]",
+          "faktorB [faktorB]"
+        ],
+        "variance": null
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    }
+  }
+}

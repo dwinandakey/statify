@@ -55,6 +55,9 @@ const CONFIGS = {
     mv9: { csv: "one-way manova tiga dv empat level.csv", dep: ["y1", "y2", "y3"], fix: ["kelompok"], options: [...OPT, "HomogenTest"] },
     // Final (Bagian 1): uji χ² Σ diketahui. Σ ditulis sebagai segitiga atas
     // termasuk diagonal, seperti diisi di dialog (testing/final/harness/known-sigma-wasm.mjs).
+    // Bagian 2: pembanding SPSS mv6_type_i_ii.sps (/PRINT=ETASQ OPOWER, SSTYPE(1) dan (2)).
+    mv6t1: { csv: "two-way manova tak seimbang.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: ["EstEffectSize", "ObsPower"], ssType: "Type I" },
+    mv6t2: { csv: "two-way manova tak seimbang.csv", dep: ["Y1A1", "Y2A1"], fix: ["faktorA", "faktorB"], options: ["EstEffectSize", "ObsPower"], ssType: "Type II" },
     mvK1: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: [...OPT, "SimultaneousCI"], testValues: [20, 200, 150, 3], knownSigma: [[36, -630, -320, -5], [15000, 6700, 107], [4700, 44], [1]] },
     mvK1n: { csv: "hotelling 1 populasi.csv", dep: ["mpg", "disp", "hp", "wt"], fix: [], options: OPT, testValues: [20, 200, 150, 3], knownSigma: [[36, -630, -320, -5], [15000, 6700, 107], [4700, 44], [1]] },
     mvK2: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1], twoSampleSigma: { mode: "common", sigma: [[7, 6, 5, 5], [16, 8, 6], [29, 14], [22]] } },
@@ -132,6 +135,16 @@ async function fillDialog(page, c) {
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
 
+    if (c.ssType) {
+        await page.getByRole("button", { name: "Model", exact: true }).click();
+        const dlg = dialogTitled(page, "Multivariate: Model");
+        await dlg.waitFor({ state: "visible", timeout: 30000 });
+        await dlg.getByRole("combobox").last().click();
+        await page.getByRole("option", { name: c.ssType, exact: true }).click();
+        if ((await dlg.getByRole("combobox").last().innerText()).trim() !== c.ssType) throw new Error(`Model: Sum of Squares ${c.ssType} tidak terpilih`);
+        await dlg.getByRole("button", { name: "Continue", exact: true }).click();
+        await page.locator("#multivariate-ok-button").waitFor({ state: "visible", timeout: 60000 });
+    }
     if (c.buildTerms) {
         await page.getByRole("button", { name: "Model", exact: true }).click();
         const dlg = dialogTitled(page, "Multivariate: Model");

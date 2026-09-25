@@ -23,6 +23,7 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("@playwright/test");
 const runner = require("../../glm-web-worker/experiment/run-experiment.cjs");
+const { buildEnv, tapWasm } = require("./bb-env.cjs");
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const BASE = args.base || "http://localhost:3001";
@@ -1125,9 +1126,11 @@ S["BB-KF14-03"] = async (c) => {
 (async () => {
     fs.mkdirSync(SHOTS, { recursive: true });
     fs.mkdirSync(OBS, { recursive: true });
+    // Iterasi 3 dst.: BUILD_ID dan WASM dicatat di setiap berkas hasil.
+    const env = ITER >= 3 ? await buildEnv(BASE) : null;
     const browser = await chromium.launch();
     const ids = args.only ? args.only.split(",") : Object.keys(S);
-    const report = { base: BASE, chromium: browser.version(), playwright: require("@playwright/test/package.json").version, startedAt: new Date().toISOString(), scenarios: {} };
+    const report = { base: BASE, ...(env ? { env } : {}), chromium: browser.version(), playwright: require("@playwright/test/package.json").version, startedAt: new Date().toISOString(), scenarios: {} };
     for (const id of ids) {
         for (const f of fs.readdirSync(SHOTS)) if (f === `${id}.png` || f.startsWith(`${id}-`)) fs.unlinkSync(path.join(SHOTS, f));
         const { context, page } = await newPage(browser);
@@ -1135,6 +1138,8 @@ S["BB-KF14-03"] = async (c) => {
         page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(m.text().slice(0, 300)); });
         page.on("pageerror", (e) => consoleErrors.push(`pageerror: ${String(e.message).slice(0, 300)}`));
         const c = new Ctx(id, page);
+        const wasmRequested = env ? tapWasm(context) : null;
+        if (env) { c.obs.env = { ...env }; c.obs.startedAt = new Date().toISOString(); }
         const t0 = Date.now();
         try {
             await S[id](c);
@@ -1152,8 +1157,9 @@ S["BB-KF14-03"] = async (c) => {
         }
         c.obs.consoleErrors = consoleErrors.slice(0, 20);
         c.obs.durationS = Math.round((Date.now() - t0) / 1000);
+        if (env) { c.obs.finishedAt = new Date().toISOString(); c.obs.wasmRequested = [...new Set(wasmRequested)]; }
         fs.writeFileSync(path.join(OBS, `${id}.json`), JSON.stringify(c.obs, null, 1));
-        report.scenarios[id] = { status: c.obs.status, error: c.obs.error, shots: c.shot };
+        report.scenarios[id] = { status: c.obs.status, error: c.obs.error, shots: c.shot, ...(env ? { startedAt: c.obs.startedAt, finishedAt: c.obs.finishedAt } : {}) };
         console.log(`${id} ${c.obs.status} shots=${c.shot}${c.obs.error ? ` ERR ${c.obs.error.slice(0, 200)}` : ""}`);
         await context.close();
     }

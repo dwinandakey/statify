@@ -1,0 +1,71 @@
+{
+ "id": "BB-KF06-06",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3",
+  "FixFactor: jk",
+  "Covar: x4",
+  "Model: custom [\"jk\",\"x4\",\"jk * x4\"] → kotak Model: [\"jk\",\"x4\",\"jk * x4\"] (BB-KF06-06-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version."
+   ],
+   "file": "BB-KF06-06-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-custom-terms": [
+   "jk",
+   "x4",
+   "jk * x4"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-06-1.png: dialog Model (custom): jk; x4; jk * x4",
+  "BB-KF06-06-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:24:19.015Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72,
+ "finishedAt": "2026-09-25T13:25:30.887Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ]
+}

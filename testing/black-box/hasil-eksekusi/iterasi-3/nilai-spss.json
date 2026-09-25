@@ -1,0 +1,185 @@
+{
+ "BB-KF02-01": [
+  {
+   "run": 0,
+   "config": "mv1",
+   "checked": 20,
+   "passed": 20,
+   "failures": []
+  }
+ ],
+ "BB-KF03-01": [
+  {
+   "run": 0,
+   "config": "mv2",
+   "checked": 109,
+   "passed": 109,
+   "failures": []
+  }
+ ],
+ "BB-KF04-01": [
+  {
+   "run": 0,
+   "config": "mv3",
+   "checked": 20,
+   "passed": 20,
+   "failures": []
+  }
+ ],
+ "BB-KF05-01": [
+  {
+   "run": 0,
+   "config": "mv4",
+   "checked": 40,
+   "passed": 40,
+   "failures": []
+  }
+ ],
+ "BB-KF06-01": [
+  {
+   "run": 0,
+   "config": "mv5",
+   "checked": 112,
+   "passed": 112,
+   "failures": []
+  }
+ ],
+ "BB-KF06-02": [
+  {
+   "run": 0,
+   "config": "mv8",
+   "checked": 68,
+   "passed": 68,
+   "failures": []
+  }
+ ],
+ "BB-KF06-03": [
+  {
+   "run": 0,
+   "config": "mv8",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  },
+  {
+   "run": 1,
+   "config": "mv5",
+   "checked": 80,
+   "passed": 80,
+   "failures": []
+  }
+ ],
+ "BB-KF10-01": [
+  {
+   "run": 1,
+   "config": "mv4",
+   "checked": 77,
+   "passed": 77,
+   "failures": []
+  }
+ ],
+ "BB-KF10-02": [
+  {
+   "run": 0,
+   "config": "mv8",
+   "checked": 8,
+   "passed": 8,
+   "failures": []
+  }
+ ],
+ "BB-KF11-02": [
+  {
+   "run": 0,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  },
+  {
+   "run": 1,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  },
+  {
+   "run": 2,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  }
+ ],
+ "BB-KF11-03": [
+  {
+   "run": 0,
+   "config": "mv4ph",
+   "checked": 180,
+   "passed": 180,
+   "failures": []
+  }
+ ],
+ "BB-KF13-01": [
+  {
+   "run": 0,
+   "config": "mv7",
+   "checked": 109,
+   "passed": 109,
+   "failures": []
+  }
+ ],
+ "BB-KF09-01": [
+  {
+   "run": 0,
+   "config": "rm_gambar51",
+   "checked": 91,
+   "passed": 91,
+   "failures": []
+  }
+ ],
+ "BB-KF09-02": [
+  {
+   "run": 0,
+   "config": "rm_a",
+   "checked": 138,
+   "passed": 138,
+   "failures": []
+  }
+ ],
+ "BB-KF09-03": [
+  {
+   "run": 0,
+   "config": "rm_d",
+   "checked": 39,
+   "passed": 39,
+   "failures": []
+  }
+ ],
+ "BB-KF10-03": [
+  {
+   "run": 1,
+   "config": "rm_c",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  }
+ ],
+ "BB-KF11-05": [
+  {
+   "run": 0,
+   "config": "rm_c",
+   "checked": 40,
+   "passed": 40,
+   "failures": []
+  }
+ ],
+ "BB-KF12-01": [
+  {
+   "run": 0,
+   "config": "rm_b",
+   "checked": 105,
+   "passed": 105,
+   "failures": []
+  }
+ ]
+}

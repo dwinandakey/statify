@@ -1,0 +1,118 @@
+{
+ "id": "BB-KF08-02",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures"
+ ],
+ "toasts": [
+  {
+   "label": "nama faktor kosong",
+   "texts": [
+    "Factor name cannot be empty.",
+    "Factor name cannot be empty."
+   ],
+   "file": "BB-KF08-02-1.png"
+  },
+  {
+   "label": "nama faktor 'wak tu'",
+   "texts": [
+    "Factor name cannot contain spaces or special characters. Use only letters, numbers, and underscores.",
+    "Factor name cannot contain spaces or special characters. Use only letters, numbers, and underscores."
+   ],
+   "file": "BB-KF08-02-2.png"
+  },
+  {
+   "label": "level 'abc'",
+   "texts": [
+    "Number of levels must be a valid number.",
+    "Number of levels must be a valid number."
+   ],
+   "file": "BB-KF08-02-3.png"
+  },
+  {
+   "label": "level 1",
+   "texts": [
+    "Number of levels must be between 2 and 99.",
+    "Number of levels must be between 2 and 99."
+   ],
+   "file": "BB-KF08-02-4.png"
+  },
+  {
+   "label": "level 100",
+   "texts": [
+    "Number of levels must be between 2 and 99.",
+    "Number of levels must be between 2 and 99."
+   ],
+   "file": "BB-KF08-02-5.png"
+  },
+  {
+   "label": "measure kosong",
+   "texts": [
+    "Measure name cannot be empty.",
+    "Measure name cannot be empty."
+   ],
+   "file": "BB-KF08-02-6.png"
+  },
+  {
+   "label": "measure 'sk-or'",
+   "texts": [
+    "Measure name cannot contain spaces or special characters. Use only letters, numbers, and underscores.",
+    "Measure name cannot contain spaces or special characters. Use only letters, numbers, and underscores."
+   ],
+   "file": "BB-KF08-02-7.png"
+  },
+  {
+   "label": "measure skor pertama",
+   "texts": [],
+   "file": null
+  },
+  {
+   "label": "measure skor kedua",
+   "texts": [
+    "A measure with this name already exists.",
+    "A measure with this name already exists."
+   ],
+   "file": "BB-KF08-02-8.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "input level": "number",
+  "daftarAkhir": {
+   "faktor": [],
+   "skor": 1
+  }
+ },
+ "notes": [
+  "BB-KF08-02-1.png: toast: nama faktor kosong",
+  "BB-KF08-02-2.png: toast: nama faktor 'wak tu'",
+  "BB-KF08-02-3.png: toast: level 'abc'",
+  "BB-KF08-02-4.png: toast: level 1",
+  "BB-KF08-02-5.png: toast: level 100",
+  "BB-KF08-02-6.png: toast: measure kosong",
+  "BB-KF08-02-7.png: toast: measure 'sk-or'",
+  "BB-KF08-02-8.png: toast: measure skor kedua"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:32:33.776Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 39,
+ "finishedAt": "2026-09-25T13:33:12.297Z",
+ "wasmRequested": []
+}

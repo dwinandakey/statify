@@ -1,0 +1,48 @@
+{
+ "id": "BB-KF02-03",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan 1 DV",
+   "texts": [
+    "Please select at least two dependent variables for multivariate analysis.",
+    "Please select at least two dependent variables for multivariate analysis."
+   ],
+   "file": "BB-KF02-03.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "dialogMasihTerbuka": true,
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF02-03.png: toast: OK dengan 1 DV"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:19:14.382Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 9,
+ "finishedAt": "2026-09-25T13:19:23.438Z",
+ "wasmRequested": []
+}

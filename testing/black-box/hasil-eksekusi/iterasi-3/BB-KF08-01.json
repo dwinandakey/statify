@@ -1,0 +1,45 @@
+{
+ "id": "BB-KF08-01",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "slot within: skor=w1,w2,w3,w4"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "daftarDefine": {
+   "factor": 1,
+   "measure": 1
+  },
+  "slotKosong": "Within-Subjects Variables:\n?_(1,skor)\n?_(2,skor)\n?_(3,skor)\n?_(4,skor)",
+  "slotTerisi": "Within-Subjects Variables:\nw1_(1,skor)\nw2_(2,skor)\nw3_(3,skor)\nw4_(4,skor)"
+ },
+ "notes": [
+  "BB-KF08-01-1.png: Define: waktu(4), skor",
+  "BB-KF08-01-2.png: dialog utama: 4 slot",
+  "BB-KF08-01-3.png: slot terisi w1–w4"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:32:26.061Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7,
+ "finishedAt": "2026-09-25T13:32:33.181Z",
+ "wasmRequested": []
+}

@@ -1,0 +1,33 @@
+Statify (build final, respons worker lewat UI) vs SPSS 27, toleransi 0.001
+
+config | Statify | tabel | nilai | dibandingkan | lulus | gagal | tanpa padanan | selisih maks | di
+mv9 | mv9 (build final) | Between-Subjects Factors | 4 | 4 | 4 | 0 | 0 | 0.00e+0 | kelompok / 1 · N
+mv9 | mv9 (build final) | Descriptive Statistics | 45 | 45 | 45 | 0 | 0 | 3.55e-15 | y1 / 2 · Mean
+mv9 | mv9 (build final) | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.27e-12 |  · df2
+mv9 | mv9 (build final) | Multivariate Tests | 64 | 64 | 62 | 2 | 0 | 1.70e+1 | kelompok / Wilks' Lambda · Noncent. Parameter
+mv9 | mv9 (build final) | Levene's Test of Equality of Error Variances | 48 | 48 | 48 | 0 | 0 | 2.86e-14 | y1 / Based on Median and with adjusted df · Sig.
+mv9 | mv9 (build final) | Tests of Between-Subjects Effects | 93 | 93 | 93 | 0 | 0 | 4.77e-4 | Corrected Model / y3 · Type III Sum of Squares
+mv6-typeI-II#1 | mv6t1 (Type I, lewat UI) | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0.00e+0 | faktorA / 1 / A1 · N
+mv6-typeI-II#1 | mv6t1 (Type I, lewat UI) | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 4.53e-4 | faktorA / Pillai's Trace · F
+mv6-typeI-II#1 | mv6t1 (Type I, lewat UI) | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 4.62e-4 | Corrected Model / ultimate strain · Type I Sum of Squares
+mv6-typeI-II#2 | mv6t2 (Type II, lewat UI) | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0.00e+0 | faktorA / 1 / A1 · N
+mv6-typeI-II#2 | mv6t2 (Type II, lewat UI) | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 4.13e-4 | Intercept / Pillai's Trace · F
+mv6-typeI-II#2 | mv6t2 (Type II, lewat UI) | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 4.62e-4 | Corrected Model / ultimate strain · Type II Sum of Squares
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0.00e+0 | jk / 1 / laki-laki · N
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 3.55e-15 | x1 / Total · Mean
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.55e-11 |  · df2
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 2.41e-4 | Intercept / Pillai's Trace · F
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 1.57e-13 | x4 / Based on Median and with adjusted df · Sig.
+mv2-delta0 | mv2d (δ₀ = 3, 2, 10, 1, Pooled) | Tests of Between-Subjects Effects | 124 | 124 | 122 | 2 | 0 | 5.00e-2 | Corrected Model / x2 · Observed Power
+mv3-delta0 | mv3d (berpasangan, δ₀ = 8, 3) | Descriptive Statistics | 6 | 6 | 6 | 0 | 0 | 8.88e-16 | ukuran1 - ukuran2 - 3 · Std. Deviation
+mv3-delta0 | mv3d (berpasangan, δ₀ = 8, 3) | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 4.03e-4 | Intercept / Pillai's Trace · F
+mv3-delta0 | mv3d (berpasangan, δ₀ = 8, 3) | Tests of Between-Subjects Effects | 38 | 38 | 37 | 1 | 0 | 5.00e-2 | Intercept / kedalaman1 - kedalaman2 - 8 · Observed Power
+
+Total: 1086 nilai SPSS; dibandingkan 1086; lulus 1081; gagal 5; tanpa padanan 0
+
+Gagal:
+  mv9 | Multivariate Tests | kelompok / Wilks' Lambda · Noncent. Parameter: SPSS 48.60184572540661 Statify 65.59148743263643 (selisih 16.989641707229815)
+  mv9 | Multivariate Tests | kelompok / Wilks' Lambda · Observed Power: SPSS 0.9989196737766066 Statify 0.9999725463239606 (selisih 0.001052872547353978)
+  mv2-delta0 | Tests of Between-Subjects Effects | Corrected Model / x2 · Observed Power: SPSS 0.05000000000004101 Statify 0 (selisih 0.05000000000004101)
+  mv2-delta0 | Tests of Between-Subjects Effects | jk / x2 · Observed Power: SPSS 0.05000000000004101 Statify 0 (selisih 0.05000000000004101)
+  mv3-delta0 | Tests of Between-Subjects Effects | Intercept / kedalaman1 - kedalaman2 - 8 · Observed Power: SPSS 0.050000000000001044 Statify 0 (selisih 0.050000000000001044)
