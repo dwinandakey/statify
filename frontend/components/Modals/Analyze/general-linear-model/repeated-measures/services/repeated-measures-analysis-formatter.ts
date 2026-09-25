@@ -4,6 +4,7 @@ import {
     applyEffectSizePowerColumns,
     type EffectSizePowerDisplay,
 } from "@/components/Modals/Analyze/general-linear-model/shared/effect-size-columns";
+import { applyRmFootnotes } from "@/components/Modals/Analyze/general-linear-model/shared/spss-footnotes";
 
 /** `effectSizePower`: Options → Estimates of effect size / Observed power;
  *  the Partial Eta Squared, Noncent. Parameter and Observed Power columns
@@ -36,6 +37,13 @@ export function transformRepeatedMeasureResult(
     formatEmmeansPairwise(data, resultJson);
     formatErrors(errors, resultJson);
 
+    // SPSS footnotes (v5 A4): Design / exact / upper bound / alpha.
+    applyRmFootnotes(
+        resultJson,
+        data,
+        effectSizePower?.observedPower ?? true,
+        typeof data.multivariate_tests?.alpha === "number" ? data.multivariate_tests.alpha : 0.05
+    );
     if (effectSizePower) applyEffectSizePowerColumns(resultJson, effectSizePower);
 
     return resultJson;

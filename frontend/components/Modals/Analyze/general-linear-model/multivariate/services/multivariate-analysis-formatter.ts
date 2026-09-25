@@ -4,6 +4,11 @@ import {
     applyEffectSizePowerColumns,
     type EffectSizePowerDisplay,
 } from "@/components/Modals/Analyze/general-linear-model/shared/effect-size-columns";
+import {
+    addAlphaFootnote,
+    addMultivariateTestsFootnotes,
+    mvDesignLine,
+} from "@/components/Modals/Analyze/general-linear-model/shared/spss-footnotes";
 
 export type MultivariateFormatterOptions = {
     testValues?: number[] | null;
@@ -319,12 +324,36 @@ export function transformMultivariateResult(
     formatSavedVariables(data, resultJson);
     formatErrors(errors, resultJson);
     annotateTwoSampleDelta(resultJson, options.twoSampleDelta ?? null);
+    addSpssFootnotes(data, resultJson, options.effectSizePower?.observedPower ?? true);
     if (options.effectSizePower) applyEffectSizePowerColumns(resultJson, options.effectSizePower);
 
     return resultJson;
 }
 
 // ── 1. Between-Subjects Factors ──────────────────────────────────────────────
+// ── SPSS footnotes (v5 A4; texts in shared/spss-footnotes.ts) ───────────────
+// Multivariate Tests: "Design: …", "Exact statistic", Roy's upper bound and
+// "Computed using alpha = .05" (power shown); Tests of Between-Subjects
+// Effects: the alpha line after the R Squared lines.
+function addSpssFootnotes(data: any, resultJson: ResultJson, observedPower: boolean) {
+    const mt = data?.multivariate_tests;
+    const alpha = typeof mt?.alpha === "number" ? mt.alpha : 0.05;
+    for (const table of resultJson.tables) {
+        if (table.key === "multivariate_tests" && mt?.effects) {
+            addMultivariateTestsFootnotes(
+                table,
+                [`Design: ${mvDesignLine(Object.keys(mt.effects))}`],
+                mt.effects,
+                observedPower,
+                alpha
+            );
+        } else if (table.key === "tests_between_subjects_effects" && observedPower) {
+            const used = String(table.note ?? "").split("\n").filter((l) => /^[a-z]\. /.test(l)).length;
+            addAlphaFootnote(table, alpha, used);
+        }
+    }
+}
+
 // ── Simultaneous confidence intervals (Options) ───────────────────────────────
 // Values computed in Rust (wasm/constructor.rs, calculate_simultaneous_ci);
 // the formulas follow Johnson & Wichern, Applied Multivariate Statistical
