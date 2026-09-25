@@ -98,6 +98,10 @@ Regresi pertama dijalankan pada build `LIBUcskLZhw3iEIArOeUX` (kode `73038fb3`, 
 - **Iterasi 4** (build final, 8 skenario yang respons worker-nya berubah karena F2): 8 Sesuai, pengamatan identik dengan iterasi 3.
 - Rincian di `testing/black-box/skenario-black-box.md`.
 
+### F5. Bahan BAB V
+
+`testing/bab5/` (lihat `README.md` di folder itu): ringkasan black-box, validasi, responsivitas, fitur final dan keterbatasan, dampak ke naskah, tangkapan layar build final, dan contoh sleeping dog pada build final. Harness `testing/fitur-v4/harness/sleeping-dog.cjs` menerima `--out` (bawaan tidak berubah).
+
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 
 **Dasar perubahan:**

@@ -1,0 +1,93 @@
+{
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "IdywReo5MTivt50HHa3VO",
+  "buildIdServed": "IdywReo5MTivt50HHa3VO",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "createdAt": "2026-09-25T14:24:29.019Z",
+ "viewport": {
+  "width": 1600,
+  "height": 1000
+ },
+ "images": [
+  {
+   "file": "mv-01-dialog-utama.png",
+   "caption": "Dialog utama GLM Multivariate (satu populasi: DV mpg, disp, hp, wt)"
+  },
+  {
+   "file": "mv-02-test-values.png",
+   "caption": "Subdialog Test Values (μ₀), kotak Σ diketahui belum dicentang"
+  },
+  {
+   "file": "mv-03-sigma-diketahui-satu-populasi.png",
+   "caption": "Subdialog Test Values dengan Σ diketahui (segitiga bawah terisi otomatis)"
+  },
+  {
+   "file": "mv-04-options.png",
+   "caption": "Subdialog Options (Descriptive statistics, Estimates of effect size, Observed power, Simultaneous CI)"
+  },
+  {
+   "file": "hasil-03-uji-khi-kuadrat.png",
+   "caption": "Tabel Chi-Square Test (Known Covariance Matrix), satu populasi"
+  },
+  {
+   "file": "hasil-04-ci-sigma-diketahui.png",
+   "caption": "Tabel Simultaneous Confidence Intervals (Known Covariance Matrix)"
+  },
+  {
+   "file": "mv-05-delta0.png",
+   "caption": "Subdialog Test Values (δ₀) dua populasi"
+  },
+  {
+   "file": "mv-06-sigma-diketahui-dua-populasi.png",
+   "caption": "Subdialog Test Values (δ₀) dengan Σ₁ dan Σ₂ diketahui (berlabel level faktor)"
+  },
+  {
+   "file": "mv-07-dialog-utama-dua-populasi.png",
+   "caption": "Dialog utama dua populasi: panel Covariance Matrices dan ringkasan δ₀ · Σ₁, Σ₂ known"
+  },
+  {
+   "file": "hasil-01-multivariate-tests-catatan-kaki.png",
+   "caption": "Tabel Multivariate Tests dua populasi dengan catatan H₀ δ₀ dan catatan kaki gaya SPSS"
+  },
+  {
+   "file": "hasil-02-ci-simultan.png",
+   "caption": "Tabel Simultaneous Confidence Intervals (T² dan Bonferroni)"
+  },
+  {
+   "file": "mv-08-model.png",
+   "caption": "Subdialog Model (Full Factorial, Build Terms, Build Custom Terms; Sum of Squares)"
+  },
+  {
+   "file": "mv-09-post-hoc.png",
+   "caption": "Subdialog Post Hoc (LSD, Bonferroni, Sidak aktif; metode lain nonaktif)"
+  },
+  {
+   "file": "rm-01-define.png",
+   "caption": "Dialog Define GLM Repeated Measures (faktor waktu 4 level, measure skor)"
+  },
+  {
+   "file": "rm-02-dialog-utama.png",
+   "caption": "Dialog utama GLM Repeated Measures (w1–w4, faktor between kelompok)"
+  },
+  {
+   "file": "hasil-05-mauchly.png",
+   "caption": "Tabel Mauchly's Test of Sphericity (rm_b)"
+  },
+  {
+   "file": "hasil-06-within-subjects-effects.png",
+   "caption": "Tabel Tests of Within-Subjects Effects (rm_b) dengan catatan kaki alpha"
+  }
+ ]
+}

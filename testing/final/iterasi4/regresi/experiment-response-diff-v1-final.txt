@@ -1,0 +1,46 @@
+Respons worker v1 vs final (path JSON, v1 → final)
+
+multivariate-100: payload beda 0 path; respons beda 10 path
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.noncent_parameter: 30.49003635833872 → 24.145776660108876
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.observed_power: 0.8712683379587559 → 0.7503179173544623
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.significance: 0.00009149637235428276 → 0.00009141165706461063
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.noncent_parameter: 48.16712080850254 → 43.92811532140556
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.observed_power: 0.9983518121954822 → 0.9961537994779581
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.7075965560891849 → 0.7075987716703812
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.noncent_parameter: 11.58019028301957 → 10.631712121831438
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.5015386523481444 → 0.4592757820752983
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.noncent_parameter: 31.60226658106652 → 25.01764485875408
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.observed_power: 0.8866625173564056 → 0.7705023596572669
+multivariate-1000: payload beda 0 path; respons beda 8 path
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8232118822569756 → 0.8232118384768046
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.noncent_parameter: 9.938924264784447 → 9.144314597466629
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4540028449335981 → 0.41578313159608715
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.noncent_parameter: 21.243754391618097 → 16.98574255254445
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.observed_power: 0.714624695540917 → 0.5816833106214064
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.noncent_parameter: 479.0093039502399 → 437.82309477051746
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.noncent_parameter: 17.659633773819507 → 14.12130500849881
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.observed_power: 0.6045032802773385 → 0.47922991981540375
+multivariate-2000: payload beda 0 path; respons beda 8 path
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.noncent_parameter: 1026.687813851757 → 938.0745956616586
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.noncent_parameter: 23.437148540954226 → 18.744155858664204
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.observed_power: 0.7730354703455556 → 0.6416208717724085
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.noncent_parameter: 19.63639606936751 → 15.70521110422212
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.observed_power: 0.6694493039687563 → 0.5384246522850473
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.060175877191644966 → 0.060175860720141694
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.noncent_parameter: 24.324912674469022 → 22.379472923350555
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.9101649225211892 → 0.8789008578109367
+multivariate-500: payload beda 0 path; respons beda 8 path
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8608002905747025 → 0.8608005058529429
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.noncent_parameter: 9.296127076184943 → 8.551742628348668
+  response.results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4209212096824211 → 0.3850689682166679
+  response.results.multivariate_tests.effects.F1.Wilks' Lambda.noncent_parameter: 261.3478670021831 → 238.690412377965
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.noncent_parameter: 33.7457163730161 → 26.948711964988313
+  response.results.multivariate_tests.effects.F1*F2*F3.Wilks' Lambda.observed_power: 0.932507000789909 → 0.8421507361311755
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.noncent_parameter: 33.635473674651344 → 26.86082891145822
+  response.results.multivariate_tests.effects.F1*F2.Wilks' Lambda.observed_power: 0.9315000001074977 → 0.8405485789980843
+repeated-measures-10000: payload beda 0 path; respons beda 0 path
+repeated-measures-20000: payload beda 0 path; respons beda 0 path
+repeated-measures-40000: payload beda 0 path; respons beda 0 path
+repeated-measures-5000: payload beda 0 path; respons beda 0 path
+
+total path respons berbeda: 34

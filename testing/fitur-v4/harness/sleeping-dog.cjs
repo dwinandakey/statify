@@ -18,7 +18,8 @@ const runner = require("../../glm-web-worker/experiment/run-experiment.cjs");
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, "").split("=")));
 const BASE = args.base || "http://localhost:3101";
 const REPO = path.resolve(__dirname, "../../..");
-const OUT = path.join(REPO, "testing/fitur-v4/bukti/sleeping-dog");
+// --out: folder bukti (bawaan: bukti v4); finalisasi memakai testing/bab5/sleeping-dog.
+const OUT = args.out ? path.resolve(args.out) : path.join(REPO, "testing/fitur-v4/bukti/sleeping-dog");
 const DATA = path.join(REPO, "testing/fitur-v4/data");
 const LONG = 10 * 60 * 1000;
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
