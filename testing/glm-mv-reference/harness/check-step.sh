@@ -14,6 +14,8 @@ set -u
 LABEL=$1
 BEFORE=$2
 CONFIGS=${3:-mv1,mv2,mv3,mv4,mv5}
+# PORT (optional, default 3101): port of the test server (v5 worktree: 3201).
+PORT=${PORT:-3101}
 ROOT=$(pwd)
 OUT=$ROOT/testing/glm-mv-reference/results/fix-steps/$LABEL
 MV=$ROOT/frontend/components/Modals/Analyze/general-linear-model/multivariate
@@ -50,11 +52,11 @@ console.log("fungsi privat baru: " + j.private_added.length);
 echo "== 2. next build + UI runs"
 (cd frontend && npx next build > "$OUT/next-build.log" 2>&1) || { echo "NEXT BUILD FAILED"; tail -30 "$OUT/next-build.log"; exit 1; }
 git checkout -- frontend/next-env.d.ts 2>/dev/null
-(cd frontend && npx next start -p 3101 > /d/claude-tmp-statify/server.log 2>&1 &)
-for i in $(seq 1 60); do curl -s -o /dev/null http://localhost:3101/ && break; sleep 2; done
-node testing/glm-mv-reference/harness/ui-run.cjs --base=http://localhost:3101 --configs=$CONFIGS --mode=worker --out="$OUT/worker" > "$OUT/ui-worker.log" 2>&1; echo "worker exit $?"; cat "$OUT/ui-worker.log"
-node testing/glm-mv-reference/harness/ui-run.cjs --base=http://localhost:3101 --configs=$CONFIGS --mode=main --out="$OUT/main" > "$OUT/ui-main.log" 2>&1; echo "main exit $?"; cat "$OUT/ui-main.log"
-PID=$(netstat -ano | grep LISTENING | grep ":3101 " | awk '{print $5}' | head -1); [ -n "$PID" ] && taskkill //PID "$PID" //F > /dev/null
+(cd frontend && npx next start -p $PORT > /d/claude-tmp-statify/server.log 2>&1 &)
+for i in $(seq 1 60); do curl -s -o /dev/null http://localhost:$PORT/ && break; sleep 2; done
+node testing/glm-mv-reference/harness/ui-run.cjs --base=http://localhost:$PORT --configs=$CONFIGS --mode=worker --out="$OUT/worker" > "$OUT/ui-worker.log" 2>&1; echo "worker exit $?"; cat "$OUT/ui-worker.log"
+node testing/glm-mv-reference/harness/ui-run.cjs --base=http://localhost:$PORT --configs=$CONFIGS --mode=main --out="$OUT/main" > "$OUT/ui-main.log" 2>&1; echo "main exit $?"; cat "$OUT/ui-main.log"
+PID=$(netstat -ano | grep LISTENING | grep ":$PORT " | awk '{print $5}' | head -1); [ -n "$PID" ] && taskkill //PID "$PID" //F > /dev/null
 
 echo "== 3. SPSS comparison + regression + main/worker"
 node testing/glm-mv-reference/harness/compare-spss.mjs --run="$OUT/worker" --out="$OUT" | sed -n 1,2p

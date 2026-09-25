@@ -1,0 +1,574 @@
+{
+ "config": "mv3s",
+ "worker": "http://localhost:3201/_next/static/chunks/2609.923be849adb24289.js",
+ "request": {
+  "id": 1,
+  "payload": {
+   "dep_data": [
+    [
+     {
+      "d_kedalaman1_minus_kedalaman2": 14
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -6
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -4
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 4
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 3
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 7
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 20
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -13
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 0
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -4
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -9
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -18
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -10
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 17
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -1
+     }
+    ],
+    [
+     {
+      "d_ukuran1_minus_ukuran2": -7
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 2
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 0
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -6
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -1
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 1
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 7
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -4
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 7
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 3
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 2
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -3
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -7
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 5
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 2
+     }
+    ]
+   ],
+   "fix_factor_data": [],
+   "covar_data": [],
+   "wls_data": [],
+   "dep_data_defs": [
+    [
+     {
+      "columnIndex": 0,
+      "name": "d_kedalaman1_minus_kedalaman2",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 4,
+      "label": "kedalaman1 − kedalaman2",
+      "values": [],
+      "missing": [],
+      "columns": 0,
+      "align": "left",
+      "measure": "scale",
+      "role": "input"
+     }
+    ],
+    [
+     {
+      "columnIndex": 1,
+      "name": "d_ukuran1_minus_ukuran2",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 4,
+      "label": "ukuran1 − ukuran2",
+      "values": [],
+      "missing": [],
+      "columns": 0,
+      "align": "left",
+      "measure": "scale",
+      "role": "input"
+     }
+    ]
+   ],
+   "fix_factor_data_defs": [],
+   "covar_data_defs": [],
+   "wls_data_defs": [],
+   "config_data": {
+    "main": {
+     "DepVar": [
+      "d_kedalaman1_minus_kedalaman2",
+      "d_ukuran1_minus_ukuran2"
+     ],
+     "FixFactor": [],
+     "Covar": [],
+     "WlsWeight": null,
+     "TestValues": [
+      0,
+      0
+     ],
+     "VarianceMode": "Pooled"
+    },
+    "model": {
+     "NonCust": true,
+     "Custom": false,
+     "BuildCustomTerm": false,
+     "FactorsVar": [],
+     "TermsVar": null,
+     "FactorsModel": null,
+     "CovModel": null,
+     "RandomModel": null,
+     "BuildTermMethod": "interaction",
+     "TermText": null,
+     "SumOfSquareMethod": "typeIII",
+     "Intercept": true
+    },
+    "contrast": {
+     "FactorList": [],
+     "ContrastMethod": "none",
+     "Last": true,
+     "First": false
+    },
+    "plots": {
+     "SrcList": [],
+     "AxisList": null,
+     "LineList": null,
+     "PlotList": null,
+     "FixFactorVars": null,
+     "RandFactorVars": null,
+     "LineChartType": true,
+     "BarChartType": false,
+     "IncludeErrorBars": false,
+     "ConfidenceInterval": true,
+     "StandardError": false,
+     "IncludeRefLineForGrandMean": false,
+     "YAxisStart0": false,
+     "Multiplier": 2
+    },
+    "posthoc": {
+     "SrcList": [],
+     "FixFactorVars": null,
+     "ErrorRatio": 100,
+     "Twosided": true,
+     "LtControl": false,
+     "GtControl": false,
+     "CategoryMethod": "last",
+     "Waller": false,
+     "Dunnett": false,
+     "Lsd": false,
+     "Bonfe": false,
+     "Sidak": false,
+     "Scheffe": false,
+     "Regwf": false,
+     "Regwq": false,
+     "Snk": false,
+     "Tu": false,
+     "Tub": false,
+     "Dun": false,
+     "Hoc": false,
+     "Gabriel": false,
+     "Tam": false,
+     "Dunt": false,
+     "Games": false,
+     "Dunc": false
+    },
+    "emmeans": {
+     "SrcList": [],
+     "TargetList": null,
+     "CompMainEffect": false,
+     "ConfiIntervalMethod": "lsdNone"
+    },
+    "save": {
+     "ResWeighted": false,
+     "PreWeighted": false,
+     "StdStatistics": false,
+     "CooksD": false,
+     "Leverage": false,
+     "UnstandardizedRes": false,
+     "WeightedRes": false,
+     "StandardizedRes": false,
+     "StudentizedRes": false,
+     "DeletedRes": false,
+     "CoeffStats": false,
+     "NewDataSet": true,
+     "FilePath": null,
+     "DatasetName": null,
+     "WriteNewDataSet": false
+    },
+    "options": {
+     "DescStats": true,
+     "HomogenTest": false,
+     "EstEffectSize": true,
+     "SprVsLevel": false,
+     "ObsPower": true,
+     "ResPlot": false,
+     "ParamEst": false,
+     "LackOfFit": false,
+     "SscpMat": false,
+     "GeneralFun": false,
+     "ResSscpMat": false,
+     "CoefficientMatrix": false,
+     "TransformMat": false,
+     "SigLevel": 0.05
+    },
+    "bootstrap": {
+     "PerformBootStrapping": false,
+     "NumOfSamples": 1000,
+     "Seed": false,
+     "SeedValue": 200000,
+     "Level": 95,
+     "Percentile": true,
+     "BCa": false,
+     "Simple": true,
+     "Stratified": false,
+     "Variables": [
+      "lokasi",
+      "kedalaman1",
+      "ukuran1",
+      "kedalaman2",
+      "ukuran2",
+      "kd",
+      "uk"
+     ],
+     "StrataVariables": null
+    }
+   }
+  }
+ },
+ "response": {
+  "id": 1,
+  "ok": true,
+  "results": {
+   "between_subjects_factors": {},
+   "descriptive_statistics": {
+    "d_kedalaman1_minus_kedalaman2": {
+     "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+     "groups": [
+      {
+       "factor_name": "Overall",
+       "factor_value": "",
+       "stats": {
+        "mean": 0,
+        "std_deviation": 11.025943432261412,
+        "n": 15
+       }
+      }
+     ]
+    },
+    "d_ukuran1_minus_ukuran2": {
+     "dependent_variable": "d_ukuran1_minus_ukuran2",
+     "groups": [
+      {
+       "factor_name": "Overall",
+       "factor_value": "",
+       "stats": {
+        "mean": 0.06666666666666667,
+        "std_deviation": 4.667006790326363,
+        "n": 15
+       }
+      }
+     ]
+    }
+   },
+   "tests_of_between_subjects_effects": {
+    "effects": {
+     "d_ukuran1_minus_ukuran2": {
+      "Corrected Model": {
+       "sum_of_squares": 0,
+       "df": 0,
+       "mean_square": null,
+       "f_value": null,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Error": {
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 21.78095238095238,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Total": {
+       "sum_of_squares": 305,
+       "df": 15,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Intercept": {
+       "sum_of_squares": 0.06666666666666288,
+       "df": 1,
+       "mean_square": 0.06666666666666288,
+       "f_value": 0.0030607783121992136,
+       "significance": 0.9566618876016106,
+       "partial_eta_squared": 0.00021857923497266518,
+       "noncent_parameter": 0.0030607783121992136,
+       "observed_power": 0.05030552715573333
+      },
+      "Corrected Total": {
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     },
+     "d_kedalaman1_minus_kedalaman2": {
+      "Total": {
+       "sum_of_squares": 1702,
+       "df": 15,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Corrected Total": {
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Corrected Model": {
+       "sum_of_squares": 0,
+       "df": 0,
+       "mean_square": null,
+       "f_value": null,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Error": {
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 121.57142857142857,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Intercept": {
+       "sum_of_squares": 0,
+       "df": 1,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 1,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     }
+    },
+    "r_squared": {
+     "d_ukuran1_minus_ukuran2": 0,
+     "d_kedalaman1_minus_kedalaman2": 0
+    },
+    "adjusted_r_squared": {
+     "d_kedalaman1_minus_kedalaman2": 0,
+     "d_ukuran1_minus_ukuran2": 0
+    }
+   },
+   "executed_functions": [
+    "basic_processing_summary",
+    "calculate_descriptive_statistics",
+    "calculate_tests_between_subjects_effects",
+    "calculate_multivariate_tests",
+    "calculate_univariate_tests",
+    "calculate_homogeneous_subsets",
+    "generate_plots"
+   ],
+   "multivariate_tests": {
+    "effects": {
+     "Intercept": {
+      "Hotelling's Trace": {
+       "value": 0.00024566502981394846,
+       "f": 0.001596822693790665,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296392,
+       "noncent_parameter": 0.00319364538758133,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Wilks' Lambda": {
+       "value": 0.9997543953066704,
+       "f": 0.001596822693790665,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933295708,
+       "noncent_parameter": 0.00319364538758133,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Pillai's Trace": {
+       "value": 0.0002456046933296392,
+       "f": 0.001596822693790665,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296392,
+       "noncent_parameter": 0.00319364538758133,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Roy's Largest Root": {
+       "value": 0.00024566502981394846,
+       "f": 0.001596822693790665,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296392,
+       "noncent_parameter": 0.00319364538758133,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      }
+     }
+    },
+    "design": "Type III sum of squares",
+    "alpha": 0.05
+   },
+   "univariate_tests": {
+    "tests": {
+     "d_ukuran1_minus_ukuran2": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 0,
+       "df": 0,
+       "partial_eta_squared": 0
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 0.06666666666666667,
+       "df": 1,
+       "mean_square": 0.06666666666666667,
+       "f": 0.0030607783121993875,
+       "significance": 0.9566618876016094,
+       "partial_eta_squared": 0.0002185792349726776,
+       "noncent_parameter": 0.0030607783121993875,
+       "observed_power": 0.05030552715573333
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 21.78095238095238
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 305,
+       "df": 15
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 304.93333333333334,
+       "df": 14
+      }
+     ],
+     "d_kedalaman1_minus_kedalaman2": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 0,
+       "df": 0,
+       "partial_eta_squared": 0
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 0,
+       "df": 1,
+       "mean_square": 0,
+       "f": 0,
+       "significance": 1,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 121.57142857142857
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 1702,
+       "df": 15
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 1702,
+       "df": 14
+      }
+     ]
+    },
+    "alpha": 0.05
+   }
+  },
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ }
+}

@@ -1,0 +1,46 @@
+multivariate-100: 4 nilai berbeda
+   results.multivariate_tests.effects.F1.Wilks' Lambda.significance: 0.00009149637235428276 → 0.00009141165706461063
+   results.multivariate_tests.effects.F1.Wilks' Lambda.observed_power: 0.9983518121954822 → 0.9983526139002897
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.7075965560891849 → 0.7075987716703812
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.5015386523481444 → 0.5015632398487545
+   [info] F2*F3 Wilks df 10, 144
+   [info] F1*F2*F3 Wilks df 30, 290
+   [info] F2 Wilks df 10, 144
+   [info] F1 Wilks df 15, 199.16169492304758
+   [info] F1*F3 Wilks df 15, 199.16169492304758
+   [info] F3 Wilks df 5, 72
+   [info] F1*F2 Wilks df 30, 290
+   [info] Intercept Wilks df 5, 72
+multivariate-500: 2 nilai berbeda
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8608002905747025 → 0.8608005058529429
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4209212096824211 → 0.4209224654402318
+   [info] F3 Wilks df 5, 472
+   [info] F1*F3 Wilks df 15, 1303.3855602816923
+   [info] F2*F3 Wilks df 10, 944
+   [info] F1 Wilks df 15, 1303.3855602816923
+   [info] F2 Wilks df 10, 944
+   [info] F1*F2*F3 Wilks df 30, 1890
+   [info] F1*F2 Wilks df 30, 1890
+   [info] Intercept Wilks df 5, 472
+multivariate-1000: 2 nilai berbeda
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.8232118822569756 → 0.8232118384768046
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.4540028449335981 → 0.4540025703163685
+   [info] F1*F3 Wilks df 15, 2683.665391979998
+   [info] Intercept Wilks df 5, 972
+   [info] F3 Wilks df 5, 972
+   [info] F1*F2*F3 Wilks df 30, 3890
+   [info] F1 Wilks df 15, 2683.665391979998
+   [info] F2 Wilks df 10, 1944
+   [info] F1*F2 Wilks df 30, 3890
+   [info] F2*F3 Wilks df 10, 1944
+multivariate-2000: 2 nilai berbeda
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.significance: 0.060175877191644966 → 0.060175860720141694
+   results.multivariate_tests.effects.F1*F3.Wilks' Lambda.observed_power: 0.9101649225211892 → 0.9101649550775569
+   [info] F1 Wilks df 15, 5444.22505537661
+   [info] F2 Wilks df 10, 3944
+   [info] F1*F2 Wilks df 30, 7890
+   [info] F3 Wilks df 5, 1972
+   [info] Intercept Wilks df 5, 1972
+   [info] F1*F2*F3 Wilks df 30, 7890
+   [info] F2*F3 Wilks df 10, 3944
+   [info] F1*F3 Wilks df 15, 5444.22505537661

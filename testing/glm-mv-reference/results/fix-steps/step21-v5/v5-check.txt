@@ -1,0 +1,78 @@
+A/B. v5 vs v4: payload dan nilai respons worker
+OK   mv1: payload identik
+OK   mv1: respons identik (byte)
+OK   mv1ci: payload identik
+OK   mv1ci: respons identik (byte)
+OK   mv1ci10: payload identik
+OK   mv1ci10: respons identik (byte)
+OK   mv2: payload identik
+OK   mv2: respons identik (byte)
+OK   mv2ci: payload identik
+OK   mv2ci: respons identik (byte)
+OK   mv2d: payload identik
+OK   mv2d: respons identik (byte)
+OK   mv2dci: payload identik
+OK   mv2dci: respons identik (byte)
+OK   mv2s: payload identik
+OK   mv2s: respons identik (byte)
+OK   mv2wci: payload identik
+OK   mv2wci: respons 1 nilai berubah, 0 di luar perubahan disengaja
+      results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.9999999999300158 → 0.9999999999309576
+OK   mv2wd: payload identik
+OK   mv2wd: respons 1 nilai berubah, 0 di luar perubahan disengaja
+      results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.13342131277199365 → 0.13345903494452505
+OK   mv2ws: payload identik
+OK   mv2ws: respons 1 nilai berubah, 0 di luar perubahan disengaja
+      results.multivariate_tests.effects.jk.Hotelling's Trace.observed_power: 0.13342131277199365 → 0.13345903494452505
+OK   mv3: payload identik
+OK   mv3: respons identik (byte)
+OK   mv3ci: payload identik
+OK   mv3ci: respons identik (byte)
+OK   mv3d: payload identik
+OK   mv3d: respons identik (byte)
+OK   mv3dci: payload identik
+OK   mv3dci: respons identik (byte)
+OK   mv3s: payload identik
+OK   mv3s: respons identik (byte)
+OK   mv4: payload identik
+OK   mv4: respons identik (byte)
+OK   mv4ph: payload identik
+OK   mv4ph: respons identik (byte)
+OK   mv5: payload identik
+OK   mv5: respons identik (byte)
+OK   mv6: payload identik
+OK   mv6: respons identik (byte)
+OK   mv7: payload identik
+OK   mv7: respons identik (byte)
+OK   mv8: payload identik
+OK   mv8: respons identik (byte)
+
+C. mv9 vs R dasar (manova, R 4.3.2)
+OK   mv9: 28 nilai Multivariate Tests vs R, selisih maks 2.71e-10; df2 Wilks 48.82535052622494, Sig. Wilks 0.0000012436874258225927
+
+D. Tampilan v5
+OK   mv1: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv1ci: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv1ci10: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .1"]
+OK   mv2: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2ci: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2d: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2dci: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2s: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2wci: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2wd: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv2ws: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv3: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv3ci: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv3d: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv3dci: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv3s: catatan Multivariate Tests ["a. Design: Intercept","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv4: catatan Multivariate Tests ["a. Design: Intercept + treatment","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+OK   mv4ph: catatan Multivariate Tests ["a. Design: Intercept + treatment","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+OK   mv5: catatan Multivariate Tests ["a. Design: Intercept + faktorA + faktorB + faktorA * faktorB","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+OK   mv6: catatan Multivariate Tests ["a. Design: Intercept + faktorA + faktorB + faktorA * faktorB","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+OK   mv7: catatan Multivariate Tests ["a. Design: Intercept + jk","b. Exact statistic","c. Computed using alpha = .05"]
+OK   mv8: catatan Multivariate Tests ["a. Design: Intercept + faktorA + faktorB","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+OK   mv9: catatan Multivariate Tests ["a. Design: Intercept + kelompok","b. Exact statistic","c. The statistic is an upper bound on F that yields a lower bound on the significance level.","d. Computed using alpha = .05"]
+
+HASIL: semua pemeriksaan lulus

@@ -1,10 +1,90 @@
-# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v4`)
+# Release notes: build final skripsi (branch `ilham`, tag `skripsi-final-v5`)
 
 Tanggal: 2026-09-24. Tidak di-merge ke `main` dan tidak di-deploy.
 
-- **Versi berlaku:** **`skripsi-final-v4`**, yaitu commit terakhir `ilham` yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v4^{commit}`).
-- **Tag lama:** `skripsi-final-v1` (`e365897d`), `skripsi-final-v2` (`d863de09`), dan `skripsi-final-v3` (`426429d8`) tetap ada.
-- **Isi:** bagian v4 langsung di bawah, lalu v3 dan v2; §0–§5 adalah catatan v1. Semuanya tetap berlaku kecuali disebut lain.
+- **Versi berlaku:** **`skripsi-final-v5`**, yaitu commit terakhir yang memuat pembaruan berkas ini (`git rev-parse skripsi-final-v5^{commit}`). Dikerjakan di worktree dan belum di-fast-forward ke `ilham`.
+- **Tag lama:** `skripsi-final-v1` (`e365897d`), `skripsi-final-v2` (`d863de09`), `skripsi-final-v3` (`426429d8`), dan `skripsi-final-v4` (`d2545117`) tetap ada.
+- **Isi:** bagian v5 langsung di bawah, lalu v4, v3, dan v2; §0–§5 adalah catatan v1. Semuanya tetap berlaku kecuali disebut lain.
+
+## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
+
+**Dasar perubahan:**
+- investigasi masukan dosen APG (`testing/fitur-v4/investigasi-dosen-apg.md`);
+- eksekusi black-box kelompok v4 (BB-KF03-08 Tidak Sesuai).
+
+**Pengerjaan:**
+- Dikerjakan di worktree `../statify-v5` (HEAD terlepas, tanpa branch).
+- Server uji di port 3201.
+- Server demo port 3001 dan `frontend/.next` repo utama tidak disentuh.
+
+Dampak ke API dan naskah ada di `testing/fitur-v5/thesis-impact-v5.md`.
+
+### v5.1 Commit
+
+Path relatif terhadap `frontend/components/Modals/Analyze/general-linear-model/`.
+
+| Commit | Butir | Isi |
+|---|---|---|
+| `ac1b10ea` | A1 | Toast galat MV/RM tanpa "Error: Error:". Helper `shared/error-message.ts` dipakai di toast dan respons galat worker. |
+| `a6c18a78` | A2 | Jumlah desimal tetap: statistik 4 desimal ("1.1" → "1.1000", "268.118" → "268.1180", Observed Power 1 → "1.0000"); df, n, koefisien bulat apa adanya, pecahan 4 desimal; Sig. "<.001" atau 4 desimal. RM dari 3 menjadi 4 desimal; df RM "3.000" → "3". `formatDisplayNumber` modul lain tidak berubah. |
+| `446f50fc` | A3 | Partial Eta Squared hanya bila Estimates of effect size dicentang; Noncent. Parameter dan Observed Power hanya bila Observed power dicentang (MV dan RM, semua tabel). Respons worker tidak berubah. |
+| `28ab0f8a` | A4 | Catatan kaki gaya SPSS (teks dari keluaran SPSS 27 di repo): Multivariate Tests "a. Design: …", "Exact statistic", batas atas F Roy, "Computed using alpha = .05"; Tests of Between-Subjects/Within-Subjects Effects/Contrasts: baris alpha. |
+| `4a3df927` | B1 | Sig. dan Observed Power dengan df pecahan (Wilks' Lambda Rao bila p ≥ 3 dan df_h ≥ 3; power Welch dengan ν). Konfigurasi uji baru mv9 (3 DV, faktor 4 level tak seimbang), pembanding R, sintaks SPSS. |
+| `bc892112` | B2 | SS dan SSCP Intercept Type I dan II = R(μ) = n·ȳ² (sebelumnya selalu Type III). Type II "menunggu SPSS". |
+| `2e799cbc` | B3 | Type IV MV ditolak bila ada sel kosong (pemeriksaan di service TypeScript; pesan bahasa Inggris). Tanpa sel kosong Type IV = Type III. |
+| `35e7bd89` | B4 | Dialog Model RM: hanya Type III aktif, dengan keterangan. |
+| `944238f0` | A4 (lanjutan) | Pemisah catatan kaki: catatan Statify sebelumnya ditutup dengan titik, karena halaman Result menampilkan baris baru sebagai spasi. |
+| commit berikutnya | dokumen/tes | `check-step.sh` (variabel PORT), `ui-run.cjs` (mv9), `testing/fitur-v5/` (alat uji, hasil, bukti, dampak), revisi skenario R6–R8, bagian v5 berkas ini, hasil `step20-v5` dan `step21-v5`. **Tag `skripsi-final-v5`.** |
+
+**Belum dikerjakan:** Bagian C (uji khi-kuadrat untuk Σ diketahui), karena waktu sesi terbatas.
+
+### v5.2 Perubahan API publik Rust (crate MV)
+
+Ada 2 fungsi publik baru di `stats/common.rs`: `calculate_f_significance_df` dan `calculate_observed_power_df`.
+- `calculate_observed_power` mendelegasikan ke fungsi baru, dan hasil untuk df bulat identik bit.
+- Daftar lengkap (3 item v4 dan 2 item v5) ada di `testing/fitur-v5/rust-api-allowed.json`, diperiksa oleh `check-step.sh` lewat `RUST_API_ALLOWED`.
+- Glue `pkg/wasm.js` dan `wasm.d.ts` identik dengan v4.
+- Crate RM tidak berubah.
+
+### v5.3 Hasil pemeriksaan (kode `35e7bd89` untuk `step20-v5`; build akhir dengan perbaikan pemisah catatan kaki untuk `step21-v5`)
+
+| Pemeriksaan | Hasil | Bukti (`testing/glm-mv-reference/results/fix-steps/step20-v5/`) |
+|---|---|---|
+| WASM dan API | wasm-pack MV md5 `5ec0c1ec…` (sama dengan `rust/pkg` yang di-commit); glue tidak berubah; 5 perubahan API sesuai daftar | `api-check.txt`, `rust-api.txt` |
+| Uji acuan SPSS MV (nilai mentah) | 2339 lulus (12 todo), regresi 0 terhadap v4 | `compare-spss.txt`, `regress.txt`, `jest-reference.log` |
+| Nilai mentah v5 vs v4 | 22 konfigurasi. Payload identik, respons identik kecuali perubahan disengaja B1: Observed Power Welch mv2wd/mv2ws 0.13342131 → 0.13345903, mv2wci 0.99999999993002 → 0.99999999993096. Konfigurasi dengan Type I/II atau Wilks df pecahan tidak ada di set lama. | `v5-check.txt` |
+| B1 mv9 vs R | 28 nilai Multivariate Tests, selisih maks 2.71e-10; df2 Wilks 48.8254; Sig. Wilks v4 1.22136e-6 → v5 1.24369e-6 (R 1.24369e-6) | `v5-check.txt`, `testing/fitur-v5/results/b1-mv9-vs-r.txt` |
+| B2 mv6 Type I/II vs R | SS Intercept Y1A1 1447.6375 → 1513.3342 (R n·ȳ² 1513.3342), Y2A1 174243.5511 → 183187.2985; Multivariate Tests Intercept Type I = R `summary(manova, intercept = TRUE)`; Type III/IV identik dengan v4 | `testing/fitur-v5/results/b2-mv6-vs-r.txt` |
+| Main = worker | 23 konfigurasi byte-identik | `regress.txt` |
+| Main = worker, RM | 9 desain × 4 run byte-identik. Hash tabel tampil berbeda dari v4 karena tampilan A2–A4; nilai mentah RM tidak berubah (crate RM tidak berubah, respons worker sel RM identik). | `rm/rm-ui-main-worker*.json`, `rm/rm-hash-v4-v5.txt` |
+| Sel eksperimen Web Worker | 8/8 payload identik dengan v1–v4. Respons RM (4 sel) identik. Respons MV (4 sel) berbeda hanya pada Sig. dan Observed Power Wilks' Lambda untuk efek dengan df2 pecahan (F1, F1*F3; perubahan disengaja B1), misalnya multivariate-100 F1 Sig. 9.149637e-5 → 9.141166e-5. Beban komputasi sama: df yang sama diteruskan tanpa pembulatan. | `experiment-output-check.txt`, `experiment-response-diff.txt` |
+| Uji acuan RM | **1681 lulus** (sama dengan v4) | `rm/rm-reference.log` |
+| Jest penuh | 49 suite gagal dari 278 = baseline 49 (2 suite baru lulus: `shared/__test__/effect-size-columns.test.ts`, `multivariate/test/empty-cells.test.ts`); tidak ada tes yang perlu diperbarui karena perubahan tampilan | `jest-summary.txt` |
+| Tampilan (A1–A4, B3, B4) lewat UI | A1: toast BB-KF03-08 "Error: Test Values (δ₀) …" (satu awalan). A2: 4 desimal, df bulat. A3: kolom effect size/power hilang tanpa opsi dan tampil dengan opsi. A4: catatan kaki SPSS di MV dan RM. B3: toast penolakan Type IV sel kosong. B4: Type I/II/IV nonaktif di dialog Model RM. Pemeriksaan ulang di build akhir (`step21-v5`): SPSS 2339/2339, regresi 0, main = worker 23 konfigurasi, `v5-check` lulus. | `testing/fitur-v5/bukti/`, `…/step21-v5/` |
+
+### v5.4 Build produksi v5 (worktree)
+
+| Item | Nilai |
+|---|---|
+| `BUILD_ID` | `KPIl1x_WhkjNTIUnjio8c` (build akhir sesudah perbaikan pemisah catatan kaki; `step20-v5` memakai `5LuI-DK6j3-g2QeX8RZRF`) |
+| WASM MV | `wasm_bg.eb5b96b2.wasm` (md5 `5ec0c1ec…`) |
+| WASM RM | `wasm_bg.2bc2b212.wasm` (sama dengan v2–v4) |
+
+### v5.5 Validasi yang menunggu penulis (sintaks SPSS)
+
+1. `testing/glm-mv-reference/spss/mv9_tiga_dv_empat_level.sps`: mv9 (B1: df2 pecahan Wilks, Sig. dan power).
+2. `testing/glm-mv-reference/spss/mv6_type_i_ii.sps`: mv6 Type I dan Type II (B2: SS Intercept; Type II "menunggu SPSS").
+3. Dari v4, masih menunggu: `testing/fitur-v4/spss/mv2_delta0.sps` dan `mv3_delta0.sps`.
+
+### v5.6 Catatan
+
+- **Build WASM di worktree:** `Cargo.lock` (di-gitignore) repo utama disalin, supaya versi wasm-bindgen (0.2.118) dan crate lain sama. Tanpa langkah ini, glue berbeda.
+- **Tampilan Sig.:** 4 desimal dengan nol di depan ("0.3480"); SPSS menampilkan ".348".
+- **Teks alpha:** "Computed using alpha = .1" untuk α = 0.1 mengikuti pola teks SPSS ".05". Teks SPSS untuk α selain .05 belum dicek.
+- **Huruf superskrip:** sel tabel Statify tidak diberi huruf superskrip seperti SPSS; catatan kakinya berupa baris berhuruf.
+- **Skenario black-box:** belum dieksekusi ulang untuk v5. Revisi R6–R8 tercatat di `skenario-black-box.md`.
+
+---
 
 ## v4. Perubahan dan pemeriksaan skripsi-final-v3 → skripsi-final-v4
 

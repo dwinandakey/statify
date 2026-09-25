@@ -51,6 +51,8 @@ const CONFIGS = {
     mv2dci: { csv: "hotelling 2 populasi independen.csv", dep: ["x1", "x2", "x3", "x4"], fix: ["jk"], options: [...OPT, "SimultaneousCI"], variance: "variance-pooled", twoSampleDelta: [3, 2, 10, 1] },
     mv3ci: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]] },
     mv3dci: { csv: "hotelling berpasangan (data asli).csv", dep: [], fix: [], options: [...OPT, "SimultaneousCI"], pairs: [["kedalaman1", "kedalaman2"], ["ukuran1", "ukuran2"]], delta0: [8, 3] },
+    // skripsi-final-v5 (B1): 3 DV, faktor 4 level tak seimbang, df2 Wilks pecahan (make_mv9.R).
+    mv9: { csv: "one-way manova tiga dv empat level.csv", dep: ["y1", "y2", "y3"], fix: ["kelompok"], options: [...OPT, "HomogenTest"] },
 };
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
