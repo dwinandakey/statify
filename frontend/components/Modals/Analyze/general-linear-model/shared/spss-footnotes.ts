@@ -29,11 +29,18 @@ const EXACT = "Exact statistic";
 const UPPER_BOUND = "The statistic is an upper bound on F that yields a lower bound on the significance level.";
 const alphaLine = (alpha: number) => `Computed using alpha = ${spssAlpha(alpha)}`;
 
-/** Existing note, then the lettered lines (one per line). */
+/** Existing note, then the lettered lines (one per line). The Result page
+ *  shows line breaks as spaces, so an existing note without a final period
+ *  (e.g. "Type III sum of squares") is closed with one first. */
 function appendLettered(table: Table, lines: string[], startLetter = 0) {
     if (lines.length === 0) return;
     const lettered = lines.map((line, i) => `${LETTERS[startLetter + i]}. ${line}`).join("\n");
-    table.note = table.note ? `${table.note}\n${lettered}` : lettered;
+    const base = String(table.note ?? "").trimEnd();
+    if (!base) {
+        table.note = lettered;
+        return;
+    }
+    table.note = `${/[.!?]$/.test(base) ? base : `${base}.`}\n${lettered}`;
 }
 
 type TestEntry = { is_exact_statistic?: boolean };
