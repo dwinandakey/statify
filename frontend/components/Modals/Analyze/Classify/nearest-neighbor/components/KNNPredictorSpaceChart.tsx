@@ -103,20 +103,17 @@ function createNiceTicks(min: number, max: number) {
   );
 }
 
-// Rounds to the nearest 1/2/5 step (geometric midpoints, as d3 does) instead
-// of always rounding up, which could stretch the axis far past the data
-// (1..110 gave a step of 50 and an axis up to 150; now 20 and 120).
-export function niceTickStep(rawStep: number) {
+function niceTickStep(rawStep: number) {
   if (!Number.isFinite(rawStep) || rawStep <= 0) return 1;
 
   const exponent = Math.floor(Math.log10(rawStep));
   const magnitude = 10 ** exponent;
   const fraction = rawStep / magnitude;
 
-  if (fraction >= Math.sqrt(50)) return 10 * magnitude;
-  if (fraction >= Math.sqrt(10)) return 5 * magnitude;
-  if (fraction >= Math.sqrt(2)) return 2 * magnitude;
-  return magnitude;
+  if (fraction <= 1) return magnitude;
+  if (fraction <= 2) return 2 * magnitude;
+  if (fraction <= 5) return 5 * magnitude;
+  return 10 * magnitude;
 }
 
 function roundTick(value: number, step: number) {
@@ -196,13 +193,7 @@ export default function KNNPredictorSpaceChart({
 
   const [currentK, setCurrentK] = useState(maxK);
   const [selectedId, setSelectedId] = useState<number | string | null>(null);
-  // Tooltip state lives in TooltipLayer: keeping it here re-rendered every
-  // point of the chart on each mouse move.
-  const tooltipLayerRef = useRef<TooltipLayerHandle>(null);
-  const setTooltip = useCallback(
-    (value: TooltipState) => tooltipLayerRef.current?.setTooltip(value),
-    [],
-  );
+  const [tooltip, setTooltip] = useState<TooltipState>(null);
   const availableAxes = useMemo(() => {
     const configuredAxes = config?.availableAxes?.filter(Boolean) ?? [];
     if (configuredAxes.length) return configuredAxes;
@@ -226,32 +217,18 @@ export default function KNNPredictorSpaceChart({
     );
   }, [availableAxes.length]);
 
-  const displayedDimensions = Math.max(
-    1,
-    Math.min(3, Number(config?.displayedDimensions ?? 2)),
-  );
-
-  // Only displayed dimensions read predictor values. With one predictor the
-  // Y slot falls back to the X predictor, and reading it put every point at
-  // y = its X value, far outside the fixed [-1, 1] Y domain of the 1D chart.
   const points = useMemo(
     () =>
       sourcePoints
         .map((point) => ({
           ...point,
           x: pointAxisValue(point, selectedAxisIndexes[0], point.x),
-          y:
-            displayedDimensions >= 2
-              ? pointAxisValue(point, selectedAxisIndexes[1], point.y)
-              : 0,
-          z:
-            displayedDimensions >= 3
-              ? pointAxisValue(point, selectedAxisIndexes[2], finiteNumber(point.z, 0))
-              : 0,
+          y: pointAxisValue(point, selectedAxisIndexes[1], point.y),
+          z: pointAxisValue(point, selectedAxisIndexes[2], finiteNumber(point.z, 0)),
         }))
         .filter((point) => !(isNumericTarget && point.type === "Holdout"))
         .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y)),
-    [displayedDimensions, isNumericTarget, selectedAxisIndexes, sourcePoints],
+    [isNumericTarget, selectedAxisIndexes, sourcePoints],
   );
 
   const targetCategories = useMemo(
@@ -304,6 +281,10 @@ export default function KNNPredictorSpaceChart({
   const rawYMax = Math.max(...rawYValues);
   const rawZMin = Math.min(...rawZValues);
   const rawZMax = Math.max(...rawZValues);
+  const displayedDimensions = Math.max(
+    1,
+    Math.min(3, Number(config?.displayedDimensions ?? 2)),
+  );
   const hasZAxis =
     displayedDimensions >= 3 &&
     Boolean(chart?.chartConfig?.axisLabels?.z) &&
@@ -825,7 +806,14 @@ export default function KNNPredictorSpaceChart({
           {config?.instruction ?? "Select points to use as focal records"}
         </div>
 
-        <TooltipLayer ref={tooltipLayerRef} />
+        {tooltip && (
+          <div
+            className="pointer-events-none absolute z-20 rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-900 shadow-lg"
+            style={{ left: tooltip.x, top: tooltip.y }}
+          >
+            {tooltip.html}
+          </div>
+        )}
         </div>
       </div>
       {peersChartNode}
@@ -1463,28 +1451,6 @@ function PredictorSpace2DFallback({
     </div>
   );
 }
-
-type TooltipLayerHandle = {
-  setTooltip: (value: TooltipState) => void;
-};
-
-const TooltipLayer = React.forwardRef<TooltipLayerHandle>(function TooltipLayer(
-  _props,
-  ref,
-) {
-  const [tooltip, setTooltip] = useState<TooltipState>(null);
-  React.useImperativeHandle(ref, () => ({ setTooltip }), []);
-
-  if (!tooltip) return null;
-  return (
-    <div
-      className="pointer-events-none absolute z-20 rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-900 shadow-lg"
-      style={{ left: tooltip.x, top: tooltip.y }}
-    >
-      {tooltip.html}
-    </div>
-  );
-});
 
 function pointTooltip(point: Point) {
   const shownLabel = point.type === "Holdout" ? "Predicted" : "Target";
