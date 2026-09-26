@@ -4,6 +4,7 @@ import type { KNNFinalResultType } from "@/components/Modals/Analyze/Classify/ne
 import type { Table } from "@/types/Table";
 import { useResultStore } from "@/stores/useResultStore";
 import { ChartService } from "@/services/chart/ChartService";
+import { KNN_RESULT_ANALYTIC_TITLE } from "../constants/nearest-neighbor-output";
 import { buildNeighborDetails } from "./nearest-neighbor-analysis-formatter";
 import {
   describeClassificationTable,
@@ -34,7 +35,7 @@ export async function resultNearestNeighbor({
       const logId = await addLog({ log: titleMessage });
 
       const nearestNeighborAnalysisResultId = await addAnalytic(logId, {
-        title: `Nearest Neighbor Analysis Result`,
+        title: KNN_RESULT_ANALYTIC_TITLE,
         note: "",
       });
 
