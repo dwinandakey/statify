@@ -86,6 +86,7 @@ export const useAnalyzeHook = (
             }
 
             console.log(`Running ARDL Analysis (AutoSelect=${autoSelect}) with ${nObs} observations`);
+            console.time("Statify ARDL Execution Time");
             
             // Ensure qOrders matches number of X variables
             const qOrdersArray = qOrders.length === independentVariables.length 
@@ -98,6 +99,7 @@ export const useAnalyzeHook = (
                 const { status, result, error } = e.data;
                 
                 if (status === "success") {
+                    console.timeEnd("Statify ARDL Execution Time");
                     console.log("ARDL Results:", result);
                     
                     toast.success("ARDL estimation completed!");
