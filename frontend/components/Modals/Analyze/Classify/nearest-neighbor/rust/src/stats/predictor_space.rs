@@ -797,6 +797,7 @@ mod tests {
                 partition_name: None,
                 fold_name: None,
             },
+            run: Default::default(),
             output: OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,

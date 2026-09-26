@@ -317,7 +317,7 @@ fn candidate_k_values(config: &KnnConfig) -> Vec<usize> {
     (start..=end).collect()
 }
 
-fn feature_universe(config: &KnnConfig) -> Vec<String> {
+pub(crate) fn feature_universe(config: &KnnConfig) -> Vec<String> {
     let mut features = Vec::new();
 
     for feature in config.main.feature_var.as_deref().unwrap_or(&[]) {
@@ -545,7 +545,219 @@ fn removed_features(all_features: &[String], selected_features: &[String]) -> Ve
 
 #[cfg(test)]
 mod tests {
-    use super::minimum_change_stop_reason;
+    use std::collections::HashMap;
+
+    use crate::models::{
+        config::KnnConfig,
+        data::{
+            AnalysisData, DataRecord, DataValue, VariableAlign, VariableDefinition,
+            VariableMeasure, VariableRole, VariableType,
+        },
+    };
+    use crate::stats::{common::prepare_run_config, preprocess_data::preprocess_knn_data};
+
+    use super::{calculate_feature_selection, evaluate_subset, minimum_change_stop_reason};
+
+    const CASES: usize = 60;
+
+    fn variable_def(name: &str, measure: VariableMeasure) -> VariableDefinition {
+        VariableDefinition {
+            id: None,
+            column_index: 0,
+            name: name.to_string(),
+            r#type: VariableType::Numeric,
+            width: 8,
+            decimals: 0,
+            label: None,
+            values: Vec::new(),
+            missing: Vec::new(),
+            columns: 8,
+            align: VariableAlign::Right,
+            measure,
+            role: VariableRole::Input,
+        }
+    }
+
+    fn column(name: &str, values: impl Iterator<Item = DataValue>) -> Vec<DataRecord> {
+        values
+            .map(|value| DataRecord {
+                values: HashMap::from([(name.to_string(), value)]),
+            })
+            .collect()
+    }
+
+    /// x1 separates the classes, x2 and x3 are noise; x3 is missing on some cases.
+    fn data() -> AnalysisData {
+        let number = |value: usize| DataValue::Number(value as f64);
+        AnalysisData {
+            target_data: vec![column(
+                "y",
+                (0..CASES).map(|i| DataValue::Number(if i < CASES / 2 { 1.0 } else { 2.0 })),
+            )],
+            features_data: vec![
+                column("x1", (0..CASES).map(number)),
+                column("x2", (0..CASES).map(|i| number(i * 7 % 13))),
+                column(
+                    "x3",
+                    (0..CASES).map(|i| if i % 9 == 4 { DataValue::Null } else { number(i * 3 % 5) }),
+                ),
+            ],
+            focal_case_data: Vec::new(),
+            case_data: None,
+            target_data_defs: vec![vec![variable_def("y", VariableMeasure::Nominal)]],
+            features_data_defs: vec![
+                vec![variable_def("x1", VariableMeasure::Scale)],
+                vec![variable_def("x2", VariableMeasure::Scale)],
+                vec![variable_def("x3", VariableMeasure::Scale)],
+            ],
+            focal_case_data_defs: Vec::new(),
+            case_data_defs: None,
+        }
+    }
+
+    /// Default dialog settings: random partition without a user seed.
+    fn unseeded_selection_config() -> KnnConfig {
+        serde_json::from_value(serde_json::json!({
+            "main": {"TargetVar": "y", "FeatureVar": ["x1", "x2", "x3"], "CaseIdenVar": null,
+                     "FocalCaseIdenVar": null, "NormCovar": true},
+            "neighbors": {"Specify": true, "AutoSelection": false, "SpecifyK": 3, "MinK": null,
+                          "MaxK": null, "MetricEucli": true, "MetricManhattan": false,
+                          "Weight": false, "PredictionsMean": true, "PredictionsMedian": false},
+            "features": {"ForwardSelection": ["x1", "x2", "x3"], "ForcedEntryVar": null,
+                         "FeaturesToEvaluate": 0, "ForcedFeatures": 0, "PerformSelection": true,
+                         "MaxReached": true, "BelowMin": false, "MaxToSelect": 2,
+                         "MinChange": 0.01},
+            "partition": {"SrcVar": null, "PartitioningVariable": null, "UseRandomly": true,
+                          "UseVariable": false, "VFoldPartitioningVariable": null,
+                          "VFoldUseRandomly": true, "VFoldUsePartitioningVar": false,
+                          "TrainingNumber": 70, "NumPartition": 10, "SetSeed": false,
+                          "Seed": null},
+            "save": {"AutoName": true, "CustomName": false, "MaxCatsToSave": null,
+                     "HasTargetVar": false, "IsCateTargetVar": false,
+                     "RandomAssignToPartition": false, "RandomAssignToFold": false},
+            "output": {"CaseSummary": true, "ChartAndTable": true}
+        }))
+        .unwrap()
+    }
+
+    fn raw_indices(features: &[&str], config: &KnnConfig) -> (Vec<usize>, Vec<usize>) {
+        raw_indices_for(&data(), features, config)
+    }
+
+    fn raw_indices_for(
+        data: &AnalysisData,
+        features: &[&str],
+        config: &KnnConfig,
+    ) -> (Vec<usize>, Vec<usize>) {
+        let mut subset_config = config.clone();
+        subset_config.main.feature_var = Some(features.iter().map(|f| f.to_string()).collect());
+        let knn_data = preprocess_knn_data(data, &subset_config).unwrap();
+        let raw = |indices: &[usize]| {
+            indices
+                .iter()
+                .map(|&idx| knn_data.processed_case_indices[idx])
+                .collect::<Vec<_>>()
+        };
+        (raw(&knn_data.training_indices), raw(&knn_data.holdout_indices))
+    }
+
+    #[test]
+    fn unseeded_run_keeps_one_training_holdout_split_for_every_feature_subset() {
+        let config = prepare_run_config(&unseeded_selection_config());
+        let reference = raw_indices(&["x1", "x2", "x3"], &config);
+
+        assert!(!reference.0.is_empty() && !reference.1.is_empty());
+        for subset in [&["x1"][..], &["x2"], &["x3"], &["x1", "x2"], &["x2", "x3"]] {
+            assert_eq!(raw_indices(subset, &config), reference, "subset {subset:?}");
+        }
+        // Listwise deletion covers x3 even for subsets that do not use it.
+        assert!(!reference.0.contains(&4) && !reference.1.contains(&4));
+    }
+
+    #[test]
+    fn feature_selection_with_partition_variable_uses_training_cases_only() {
+        // Partition variable: 1 = training, 0 = holdout (every third case).
+        let with_partition = |mut data: AnalysisData| {
+            data.case_data = Some(vec![column(
+                "part",
+                (0..CASES).map(|i| DataValue::Number(if i % 3 == 0 { 0.0 } else { 1.0 })),
+            )]);
+            data
+        };
+        let mut config = unseeded_selection_config();
+        config.partition.use_randomly = false;
+        config.partition.use_variable = true;
+        config.partition.partitioning_variable = Some("part".to_string());
+        let config = prepare_run_config(&config);
+
+        let (training, holdout) = raw_indices_for(&with_partition(data()), &["x1"], &config);
+        assert!(training.iter().all(|case_idx| case_idx % 3 != 0));
+        assert!(holdout.iter().all(|case_idx| case_idx % 3 == 0));
+
+        // Scramble every holdout target and feature value.
+        let mut tampered = with_partition(data());
+        for &case_idx in &holdout {
+            tampered.target_data[0][case_idx]
+                .values
+                .insert("y".to_string(), DataValue::Number(3.0));
+            for (dataset, name) in tampered.features_data.iter_mut().zip(["x1", "x2", "x3"]) {
+                dataset[case_idx]
+                    .values
+                    .insert(name.to_string(), DataValue::Number(-500.0 - case_idx as f64));
+            }
+        }
+
+        let original = calculate_feature_selection(&with_partition(data()), &config).unwrap();
+        let with_tampered_holdout = calculate_feature_selection(&tampered, &config).unwrap();
+        assert_eq!(original.selected_features, with_tampered_holdout.selected_features);
+        assert_eq!(
+            original.steps.iter().map(|step| step.trial_error).collect::<Vec<_>>(),
+            with_tampered_holdout
+                .steps
+                .iter()
+                .map(|step| step.trial_error)
+                .collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn feature_selection_is_unaffected_by_holdout_values() {
+        let config = prepare_run_config(&unseeded_selection_config());
+        let (_, holdout) = raw_indices(&["x1", "x2", "x3"], &config);
+
+        // Scramble every holdout target and feature value.
+        let mut tampered = data();
+        for &case_idx in &holdout {
+            tampered.target_data[0][case_idx]
+                .values
+                .insert("y".to_string(), DataValue::Number(3.0));
+            for (dataset, name) in tampered.features_data.iter_mut().zip(["x1", "x2", "x3"]) {
+                dataset[case_idx]
+                    .values
+                    .insert(name.to_string(), DataValue::Number(1000.0 + case_idx as f64));
+            }
+        }
+
+        for subset in [vec!["x1".to_string()], vec!["x2".to_string(), "x3".to_string()]] {
+            assert_eq!(
+                evaluate_subset(&data(), &config, &subset).unwrap(),
+                evaluate_subset(&tampered, &config, &subset).unwrap(),
+                "subset {subset:?}"
+            );
+        }
+
+        let original = calculate_feature_selection(&data(), &config).unwrap();
+        let with_tampered_holdout = calculate_feature_selection(&tampered, &config).unwrap();
+        assert_eq!(original.selected_features, with_tampered_holdout.selected_features);
+        assert_eq!(
+            original.steps.iter().map(|step| step.trial_error).collect::<Vec<_>>(),
+            with_tampered_holdout
+                .steps
+                .iter()
+                .map(|step| step.trial_error)
+                .collect::<Vec<_>>()
+        );
+    }
 
     #[test]
     fn minimum_change_stops_when_next_error_is_zero() {
