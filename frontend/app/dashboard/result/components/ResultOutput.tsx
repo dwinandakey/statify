@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
 import { Card } from "@/components/ui/card";
 import dynamic from "next/dynamic";
@@ -10,6 +10,7 @@ import KNNOutputDownloadMenu, {
   getKnnDownloadKind,
 } from "@/components/Modals/Analyze/Classify/nearest-neighbor/components/KNNOutputDownloadMenu";
 import { KNN_RESULT_ANALYTIC_TITLE } from "@/components/Modals/Analyze/Classify/nearest-neighbor/constants/nearest-neighbor-output";
+import type { Statistic } from "@/types/Result";
 // KNN predictor space chart is a bit heavy to load, so we dynamically import it with a loading state
 const KNNPredictorSpaceChart = dynamic(
   () => import("@/components/Modals/Analyze/Classify/nearest-neighbor/components/KNNPredictorSpaceChart"),
@@ -40,8 +41,73 @@ import TextRenderer from "@/components/Output/text/text-renderer";
 import { getStatisticsComponent } from "@/components/Output/Statistics";
 import { checkRenderCompletionTargets } from "@/lib/analysisTiming";
 
+// Height reserved for an output that has not been mounted yet.
+const DEFERRED_OUTPUT_MIN_HEIGHT = 320;
+// Outputs this far below/above the visible area are mounted in advance.
+const DEFERRED_OUTPUT_ROOT_MARGIN = "800px 0px";
+
+function findScrollParent(element: HTMLElement | null): HTMLElement | null {
+  let current = element?.parentElement ?? null;
+  while (current) {
+    const { overflowY } = window.getComputedStyle(current);
+    if (overflowY === "auto" || overflowY === "scroll") return current;
+    current = current.parentElement;
+  }
+  return null;
+}
+
+/**
+ * True once the element has come near the visible part of its scroll
+ * container, and stays true afterwards. Rendering every table, chart and
+ * editor of every analysis at once froze the UI whenever the output viewer
+ * was opened, most visibly with large KNN outputs.
+ */
+function useMountWhenNearViewport<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [isNear, setIsNear] = useState(
+    () => typeof window === "undefined" || typeof IntersectionObserver === "undefined",
+  );
+
+  useEffect(() => {
+    if (isNear) return;
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsNear(true);
+          observer.disconnect();
+        }
+      },
+      { root: findScrollParent(element), rootMargin: DEFERRED_OUTPUT_ROOT_MARGIN },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [isNear]);
+
+  return [ref, isNear] as const;
+}
+
+type ParsedOutput =
+  | { ok: true; data: any }
+  | { ok: false };
+
+function parseOutputData(outputData: unknown): ParsedOutput {
+  try {
+    return {
+      ok: true,
+      data: typeof outputData === "string" ? JSON.parse(outputData) : outputData,
+    };
+  } catch (error) {
+    console.error("Failed to parse output_data:", error);
+    return { ok: false };
+  }
+}
+
 const ResultOutput: React.FC = () => {
-  const { logs, updateStatistic } = useResultStore();
+  const logs = useResultStore((state) => state.logs);
+  const updateStatistic = useResultStore((state) => state.updateStatistic);
 
   const [editingDescriptionId, setEditingDescriptionId] = useState<
     number | null
@@ -49,17 +115,19 @@ const ResultOutput: React.FC = () => {
   const [descriptionValues, setDescriptionValues] = useState<
     Record<number, string>
   >({});
+  const descriptionValuesRef = useRef(descriptionValues);
+  descriptionValuesRef.current = descriptionValues;
   const [saveStatus, setSaveStatus] = useState<Record<number, string>>({});
 
   // Track which tables are expanded to full height
   const [expandedTables, setExpandedTables] = useState<Record<number, boolean>>({});
 
-  const toggleTable = (statId: number) => {
+  const toggleTable = useCallback((statId: number) => {
     setExpandedTables((prev) => ({
       ...prev,
       [statId]: !prev[statId],
     }));
-  };
+  }, []);
 
   // Effect to load results when component mounts
   useEffect(() => {
@@ -96,7 +164,7 @@ const ResultOutput: React.FC = () => {
     checkRenderCompletionTargets(logs);
   }, [logs]);
 
-  const handleDescriptionChange = (statId: number, value: string) => {
+  const handleDescriptionChange = useCallback((statId: number, value: string) => {
     // Trim leading/trailing whitespace but keep empty paragraphs for line breaks
     const trimmed = value.trim();
 
@@ -104,11 +172,11 @@ const ResultOutput: React.FC = () => {
       ...prev,
       [statId]: trimmed,
     }));
-  };
+  }, []);
 
-  const handleSaveDescription = async (statId: number) => {
+  const handleSaveDescription = useCallback(async (statId: number) => {
     try {
-      const description = descriptionValues[statId];
+      const description = descriptionValuesRef.current[statId];
       if (description !== undefined) {
         setSaveStatus((prev) => ({ ...prev, [statId]: "saving" }));
         // Save to database
@@ -125,15 +193,15 @@ const ResultOutput: React.FC = () => {
       console.error("Failed to update description:", error);
       setSaveStatus((prev) => ({ ...prev, [statId]: "error" }));
     }
-  };
+  }, [updateStatistic]);
 
-  const handleEditClick = (statId: number, currentDescription: string) => {
+  const handleEditClick = useCallback((statId: number, currentDescription: string) => {
     setDescriptionValues((prev) => ({
       ...prev,
       [statId]: currentDescription || "",
     }));
     setEditingDescriptionId(statId);
-  };
+  }, []);
 
   return (
     <div className="p-4 md:p-6 w-full max-w-full" data-testid="results-content">
@@ -179,240 +247,23 @@ const ResultOutput: React.FC = () => {
                         }
                         const statId = stat.id ?? 0;
                         const isEditing = editingDescriptionId === statId;
-                        const status = saveStatus[statId] ?? "";
-                        const isFactorAnalysisChart = (stat.components === 'ScreePlot' || stat.components === 'LoadingPlot') &&
-                          analytic.title?.toLowerCase().includes('factor analysis');
-                        const outputElementId = `output-${analytic.id}-${stat.id}`;
-                        const knnDownloadKind =
-                          analytic.title === KNN_RESULT_ANALYTIC_TITLE
-                            ? getKnnDownloadKind(stat.output_data)
-                            : null;
 
                         return (
-                          <div key={stat.id} className={`space-y-4 ${
-                            isFactorAnalysisChart ? 'mt-16' : ''
-                          }`}>
-                            {isFirstAppearance && (
-                              <div className={`text-base font-semibold text-card-foreground mb-3 flex items-center ${
-                                isFactorAnalysisChart ? 'mt-8' : 'mt-8'
-                              }`} data-testid={`component-header-${stat.components.replace(/\s+/g, '-').toLowerCase()}`}>
-                                <div className="h-4 w-1 bg-primary rounded-full mr-2"></div>
-                                {stat.components}
-                              </div>
-                            )}
-                            {knnDownloadKind && (
-                              <KNNOutputDownloadMenu
-                                kind={knnDownloadKind}
-                                title={stat.title}
-                                targetId={outputElementId}
-                              />
-                            )}
-                            <div
-                              id={outputElementId}
-                              className={`${
-                                isFactorAnalysisChart ? 'mb-16' : 'mb-6'
-                              } rounded-md ${
-                                !isFirstAppearance ? "mt-8" : ""
-                              }`}
-                              style={{
-                                marginBottom: isFactorAnalysisChart ? '4rem' : undefined
-                              }}
-                              data-testid={`result-output-${analytic.id}-${stat.id}`}
-                            >
-                              {(() => {
-                                // Check if there is a specific component for this statistic
-                                const SpecificComponent = getStatisticsComponent(stat.components);
-                                if (SpecificComponent) {
-                                  return (
-                                    <div data-testid={`result-component-${stat.id}`}>
-                                      <SpecificComponent data={stat.output_data} />
-                                    </div>
-                                  );
-                                }
-
-                                let parsedData;
-                                try {
-                                  parsedData =
-                                    typeof stat.output_data === "string"
-                                      ? JSON.parse(stat.output_data)
-                                      : stat.output_data;
-                                } catch (error) {
-                                  console.error(
-                                    "Failed to parse output_data:",
-                                    error
-                                  );
-                                  return (
-                                    <div className="text-sm text-destructive p-2 bg-destructive/10 rounded-md">
-                                      Invalid data: JSON format is incorrect
-                                    </div>
-                                  );
-                                }
-
-                                if (parsedData.tables) {
-                                  const isExpandedTable = expandedTables[statId] ?? false;
-
-                                  // Determine if the rendered table is "long" enough to warrant a toggle (simple heuristic)
-                                  const isLongTable = parsedData.tables.some(
-                                    (tbl: { rows?: unknown[] }) => (tbl.rows?.length ?? 0) > 15
-                                  );
-
-                                  return (
-                                    <div>
-                                      <div
-                                        className={`${
-                                          !isExpandedTable && isLongTable
-                                            ? "max-h-[500px] overflow-y-hidden"
-                                            : ""
-                                        } overflow-x-auto pb-2`}
-                                        data-testid={`result-table-${stat.id}`}
-                                      >
-                                        <DataTableRenderer data={stat.output_data} />
-                                      </div>
-                                      {isLongTable && (
-                                        <button
-                                          type="button"
-                                          onClick={() => toggleTable(statId)}
-                                          className="mt-2 text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-                                          data-testid={`toggle-table-${statId}`}
-                                        >
-                                          {isExpandedTable ? (
-                                            <>
-                                              <ChevronUp className="h-3 w-3" />
-                                              Show Less
-                                            </>
-                                          ) : (
-                                            <>
-                                              <ChevronDown className="h-3 w-3" />
-                                              Show Full
-                                            </>
-                                          )}
-                                        </button>
-                                      )}
-                                    </div>
-                                  );
-                                } else if (
-                                  parsedData.charts?.[0]?.chartType ===
-                                  "KNN Predictor Space"
-                                ) {
-                                  return (
-                                    <div data-testid={`result-chart-${stat.id}`}>
-                                      <KNNPredictorSpaceChart
-                                        data={stat.output_data}
-                                      />
-                                    </div>
-                                  );
-                                } else if (
-                                  parsedData.charts?.[0]?.chartType ===
-                                  "KNN k and Predictor Selection" ||
-                                  parsedData.charts?.[0]?.chartType ===
-                                  "KNN k Selection Error Log"
-                                ) {
-                                  return (
-                                    <div data-testid={`result-chart-${stat.id}`}>
-                                      <KNNKPredictorSelectionChart
-                                        data={stat.output_data}
-                                      />
-                                    </div>
-                                  );
-                                } else if (parsedData.charts) {
-                                  return (
-                                    <div 
-                                      data-testid={`result-chart-${stat.id}`}
-                                      className="w-full min-h-[500px] pb-12 mb-12 overflow-visible"
-                                      style={{ display: 'block', marginBottom: '3rem' }}
-                                    >
-                                      <GeneralChartContainer
-                                        data={stat.output_data}
-                                      />
-                                    </div>
-                                  );
-                                } else if (parsedData.text) {
-                                  return (
-                                    <div data-testid={`result-text-${stat.id}`}>
-                                      <TextRenderer textData={parsedData.text} />
-                                    </div>
-                                  );
-                                } else if (parsedData.customRenderer === "KMedoidsOutputRenderer" && parsedData.data) {
-                                  return (
-                                    <div data-testid={`result-kmedoids-${stat.id}`}>
-                                      <KMedoidsOutputRenderer
-                                        output={parsedData.data}
-                                        variables={parsedData.data.variables ?? []}
-                                      />
-                                    </div>
-                                  );
-                                } else {
-                                  return (
-                                    <div className="text-sm text-destructive p-2 bg-destructive/10 rounded-md">
-                                      Invalid data: Unrecognized format
-                                    </div>
-                                  );
-                                }
-                              })()}
-                            </div>
-                            {!isFactorAnalysisChart && (
-                              <div className="mt-4 mb-10 relative">
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="text-xs font-medium text-muted-foreground" data-testid={`description-label-${stat.id}`}>
-                                    Description
-                                  </div>
-                                  {!isEditing ? (
-                                    <button
-                                      className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-muted/50"
-                                      onClick={() =>
-                                        handleEditClick(
-                                          statId,
-                                          stat.description || ""
-                                        )
-                                      }
-                                      type="button"
-                                      data-testid={`edit-description-button-${stat.id}`}
-                                    >
-                                    <Edit className="h-3 w-3" />
-                                    Edit
-                                  </button>
-                                ) : (
-                                  <div className="text-xs" data-testid={`save-status-${stat.id}`}>
-                                    {status === "saving" && (
-                                      <span className="text-yellow-500">
-                                        Saving...
-                                      </span>
-                                    )}
-                                    {status === "saved" && (
-                                      <span className="text-green-500">
-                                        Saved!
-                                      </span>
-                                    )}
-                                    {status === "error" && (
-                                      <span className="text-red-500">
-                                        Failed to save
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <TiptapEditor
-                                value={
-                                  isEditing
-                                    ? descriptionValues[statId] || ""
-                                    : stat.description || ""
-                                }
-                                onChange={(value) =>
-                                  handleDescriptionChange(statId, value)
-                                }
-                                editable={isEditing}
-                                onSave={
-                                  isEditing
-                                    ? () => handleSaveDescription(statId)
-                                    : undefined
-                                }
-                                placeholder="Write description here..."
-                                id={`editor-${statId}`}
-                                data-testid={`description-editor-${stat.id}`}
-                              />
-                            </div>
-                            )}
-                          </div>
+                          <StatisticOutput
+                            key={stat.id}
+                            stat={stat}
+                            analyticId={analytic.id ?? 0}
+                            analyticTitle={analytic.title}
+                            isFirstAppearance={isFirstAppearance}
+                            isEditing={isEditing}
+                            editingValue={isEditing ? descriptionValues[statId] ?? "" : ""}
+                            saveStatus={saveStatus[statId] ?? ""}
+                            isExpandedTable={expandedTables[statId] ?? false}
+                            onToggleTable={toggleTable}
+                            onEditClick={handleEditClick}
+                            onDescriptionChange={handleDescriptionChange}
+                            onSaveDescription={handleSaveDescription}
+                          />
                         );
                       }) ?? null
                     );
@@ -426,5 +277,274 @@ const ResultOutput: React.FC = () => {
     </div>
   );
 };
+
+type StatisticOutputProps = {
+  stat: Statistic;
+  analyticId: number;
+  analyticTitle: string;
+  isFirstAppearance: boolean;
+  isEditing: boolean;
+  editingValue: string;
+  saveStatus: string;
+  isExpandedTable: boolean;
+  onToggleTable: (statId: number) => void;
+  onEditClick: (statId: number, currentDescription: string) => void;
+  onDescriptionChange: (statId: number, value: string) => void;
+  onSaveDescription: (statId: number) => void;
+};
+
+/**
+ * One statistic of an analysis. Memoized so that adding a statistic (an
+ * analysis adds them one by one) or editing another description does not
+ * re-parse and re-render every output already on the page.
+ */
+const StatisticOutput = React.memo(function StatisticOutput({
+  stat,
+  analyticId,
+  analyticTitle,
+  isFirstAppearance,
+  isEditing,
+  editingValue,
+  saveStatus: status,
+  isExpandedTable,
+  onToggleTable,
+  onEditClick,
+  onDescriptionChange,
+  onSaveDescription,
+}: StatisticOutputProps) {
+  const statId = stat.id ?? 0;
+  const [contentRef, isNearViewport] = useMountWhenNearViewport<HTMLDivElement>();
+  const parsedOutput = useMemo(
+    () => parseOutputData(stat.output_data),
+    [stat.output_data],
+  );
+  const isFactorAnalysisChart = (stat.components === 'ScreePlot' || stat.components === 'LoadingPlot') &&
+    analyticTitle?.toLowerCase().includes('factor analysis');
+  const outputElementId = `output-${analyticId}-${stat.id}`;
+  const knnDownloadKind =
+    analyticTitle === KNN_RESULT_ANALYTIC_TITLE && parsedOutput.ok
+      ? getKnnDownloadKind(parsedOutput.data)
+      : null;
+
+  const renderOutput = () => {
+    // Check if there is a specific component for this statistic
+    const SpecificComponent = getStatisticsComponent(stat.components);
+    if (SpecificComponent) {
+      return (
+        <div data-testid={`result-component-${stat.id}`}>
+          <SpecificComponent data={stat.output_data} />
+        </div>
+      );
+    }
+
+    if (!parsedOutput.ok) {
+      return (
+        <div className="text-sm text-destructive p-2 bg-destructive/10 rounded-md">
+          Invalid data: JSON format is incorrect
+        </div>
+      );
+    }
+    const parsedData = parsedOutput.data;
+
+    if (parsedData.tables) {
+      // Determine if the rendered table is "long" enough to warrant a toggle (simple heuristic)
+      const isLongTable = parsedData.tables.some(
+        (tbl: { rows?: unknown[] }) => (tbl.rows?.length ?? 0) > 15
+      );
+
+      return (
+        <div>
+          <div
+            className={`${
+              !isExpandedTable && isLongTable
+                ? "max-h-[500px] overflow-y-hidden"
+                : ""
+            } overflow-x-auto pb-2`}
+            data-testid={`result-table-${stat.id}`}
+          >
+            <DataTableRenderer data={stat.output_data} />
+          </div>
+          {isLongTable && (
+            <button
+              type="button"
+              onClick={() => onToggleTable(statId)}
+              className="mt-2 text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+              data-testid={`toggle-table-${statId}`}
+            >
+              {isExpandedTable ? (
+                <>
+                  <ChevronUp className="h-3 w-3" />
+                  Show Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3 w-3" />
+                  Show Full
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      );
+    } else if (
+      parsedData.charts?.[0]?.chartType ===
+      "KNN Predictor Space"
+    ) {
+      return (
+        <div data-testid={`result-chart-${stat.id}`}>
+          <KNNPredictorSpaceChart
+            data={parsedData}
+          />
+        </div>
+      );
+    } else if (
+      parsedData.charts?.[0]?.chartType ===
+      "KNN k and Predictor Selection" ||
+      parsedData.charts?.[0]?.chartType ===
+      "KNN k Selection Error Log"
+    ) {
+      return (
+        <div data-testid={`result-chart-${stat.id}`}>
+          <KNNKPredictorSelectionChart
+            data={stat.output_data}
+          />
+        </div>
+      );
+    } else if (parsedData.charts) {
+      return (
+        <div
+          data-testid={`result-chart-${stat.id}`}
+          className="w-full min-h-[500px] pb-12 mb-12 overflow-visible"
+          style={{ display: 'block', marginBottom: '3rem' }}
+        >
+          <GeneralChartContainer
+            data={stat.output_data}
+          />
+        </div>
+      );
+    } else if (parsedData.text) {
+      return (
+        <div data-testid={`result-text-${stat.id}`}>
+          <TextRenderer textData={parsedData.text} />
+        </div>
+      );
+    } else if (parsedData.customRenderer === "KMedoidsOutputRenderer" && parsedData.data) {
+      return (
+        <div data-testid={`result-kmedoids-${stat.id}`}>
+          <KMedoidsOutputRenderer
+            output={parsedData.data}
+            variables={parsedData.data.variables ?? []}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className="text-sm text-destructive p-2 bg-destructive/10 rounded-md">
+          Invalid data: Unrecognized format
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className={`space-y-4 ${
+      isFactorAnalysisChart ? 'mt-16' : ''
+    }`}>
+      {isFirstAppearance && (
+        <div className={`text-base font-semibold text-card-foreground mb-3 flex items-center ${
+          isFactorAnalysisChart ? 'mt-8' : 'mt-8'
+        }`} data-testid={`component-header-${stat.components.replace(/\s+/g, '-').toLowerCase()}`}>
+          <div className="h-4 w-1 bg-primary rounded-full mr-2"></div>
+          {stat.components}
+        </div>
+      )}
+      {knnDownloadKind && (
+        <KNNOutputDownloadMenu
+          kind={knnDownloadKind}
+          title={stat.title}
+          targetId={outputElementId}
+        />
+      )}
+      <div
+        ref={contentRef}
+        id={outputElementId}
+        className={`${
+          isFactorAnalysisChart ? 'mb-16' : 'mb-6'
+        } rounded-md ${
+          !isFirstAppearance ? "mt-8" : ""
+        }`}
+        style={{
+          marginBottom: isFactorAnalysisChart ? '4rem' : undefined,
+          minHeight: isNearViewport ? undefined : DEFERRED_OUTPUT_MIN_HEIGHT,
+        }}
+        data-testid={`result-output-${analyticId}-${stat.id}`}
+      >
+        {isNearViewport ? renderOutput() : null}
+      </div>
+      {!isFactorAnalysisChart && isNearViewport && (
+        <div className="mt-4 mb-10 relative">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-xs font-medium text-muted-foreground" data-testid={`description-label-${stat.id}`}>
+              Description
+            </div>
+            {!isEditing ? (
+              <button
+                className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-muted/50"
+                onClick={() =>
+                  onEditClick(
+                    statId,
+                    stat.description || ""
+                  )
+                }
+                type="button"
+                data-testid={`edit-description-button-${stat.id}`}
+              >
+              <Edit className="h-3 w-3" />
+              Edit
+            </button>
+          ) : (
+            <div className="text-xs" data-testid={`save-status-${stat.id}`}>
+              {status === "saving" && (
+                <span className="text-yellow-500">
+                  Saving...
+                </span>
+              )}
+              {status === "saved" && (
+                <span className="text-green-500">
+                  Saved!
+                </span>
+              )}
+              {status === "error" && (
+                <span className="text-red-500">
+                  Failed to save
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+        <TiptapEditor
+          value={
+            isEditing
+              ? editingValue
+              : stat.description || ""
+          }
+          onChange={(value) =>
+            onDescriptionChange(statId, value)
+          }
+          editable={isEditing}
+          onSave={
+            isEditing
+              ? () => onSaveDescription(statId)
+              : undefined
+          }
+          placeholder="Write description here..."
+          id={`editor-${statId}`}
+          data-testid={`description-editor-${stat.id}`}
+        />
+      </div>
+      )}
+    </div>
+  );
+});
 
 export default ResultOutput;

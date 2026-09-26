@@ -3,7 +3,8 @@
 import "@/app/globals.css";
 import Header from "@/app/dashboard/components/layout/Header";
 import Footer from "@/app/dashboard/components/layout/Footer";
-import React, { useState, lazy, Suspense, useEffect } from "react";
+import React, { useState, lazy, Suspense, useEffect, useRef } from "react";
+import type { ImperativePanelGroupHandle } from "react-resizable-panels";
 import DataLoader from "@/components/ui/DataLoader";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import { useMobile } from "@/hooks/useMobile";
@@ -63,13 +64,20 @@ export default function DashboardLayout({
     const isKNNModalOpen = topModalType === ModalType.ModalNearestNeighbor;
     const activeSidebarWidth = isKNNModalOpen ? KNN_SIDEBAR_WIDTH : sidebarWidth;
 
-    // Key untuk memaksa ResizablePanelGroup re-mount saat perubahan state
-    // Ini memastikan defaultSize diterapkan dengan benar selama transisi
-    const desktopPanelGroupKey = isMobile
-        ? 'mobile'
-        : hasOpenModal
-            ? `desktop-sidebar-open-${topModalId}-${isKNNModalOpen ? 'knn' : 'default'}`
-            : 'desktop-sidebar-closed';
+    // Ukuran panel diatur lewat setLayout, bukan dengan re-mount memakai key.
+    // Re-mount membongkar seluruh halaman aktif (data viewer, output viewer)
+    // setiap kali modal dibuka/ditutup, sehingga UI freeze sesudah klik OK.
+    const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
+    const sidebarWidthRef = useRef(sidebarWidth);
+    sidebarWidthRef.current = sidebarWidth;
+
+    useEffect(() => {
+        if (isMobile) return;
+        const width = isKNNModalOpen ? KNN_SIDEBAR_WIDTH : sidebarWidthRef.current;
+        panelGroupRef.current?.setLayout(
+            hasOpenModal ? [100 - width, width] : [100, 0]
+        );
+    }, [hasOpenModal, isKNNModalOpen, isMobile, topModalId]);
 
     // Filter untuk hanya menampilkan modal teratas
     const showOnlyTopModal = (modalId: string) => {
@@ -142,9 +150,9 @@ export default function DashboardLayout({
                             </div>
                         ) : (
                             // Tampilan Desktop: Panel yang dapat diubah ukurannya untuk konten utama dan sidebar
-                            <ResizablePanelGroup 
+                            <ResizablePanelGroup
                                 direction="horizontal"
-                                key={desktopPanelGroupKey}
+                                ref={panelGroupRef}
                                 className="overflow-hidden w-full"
                                 data-testid="desktop-resizable-panels"
                             >
