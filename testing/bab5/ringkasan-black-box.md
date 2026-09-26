@@ -1,6 +1,7 @@
 # Ringkasan pengujian black-box (bahan BAB V)
 
 - **Cakupan:** GLM Multivariate dan GLM Repeated Measures, 78 skenario: 50 skenario asli (Tabel 7 dan 8), 17 skenario fitur v4 (δ₀ dan CI simultan), dan 11 skenario fitur final (uji khi-kuadrat dengan Σ diketahui).
+- **Iterasi 5:** 10 skenario yang mengutip teks tampilan yang dirapikan (revisi R9) dijalankan ulang pada build final, dan semuanya Sesuai: BB-KF03-02, BB-KF03-04, BB-KF03-05, BB-KF03-14, BB-KF03-15, BB-KF04-01, BB-KF04-03, BB-KF11-02, BB-KF11-03, BB-KF14-01.
 - **Hasil per skenario:** "Sesuai" atau "Tidak Sesuai" terhadap Hasil yang Diharapkan; "—" berarti skenario tidak dijalankan pada iterasi itu.
 - **Sumber rinci:** langkah, data uji, dan keterangan per skenario ada di `testing/black-box/skenario-black-box.md` dan salinan CSV-nya.
 
@@ -114,7 +115,8 @@
 | Iterasi 2 | v3 | 50 asli | 50 | 0 | 0 |
 | Eksekusi v4 | v4 | 17 fitur v4 | 16 | 1 | 0 |
 | Iterasi 3 | final sebelum perbaikan temuan SPSS | 78 (50 + 17 + 11) | 78 | 0 | 3 (harness; diperiksa ulang offline) |
-| Iterasi 4 | final | 8 terdampak perbaikan | 8 | 0 | 0 |
+| Iterasi 4 | final sebelum perapian teks | 8 terdampak perbaikan temuan SPSS | 8 | 0 | 0 |
+| Iterasi 5 | final | 10 yang mengutip teks yang dirapikan (R9) | 10 | 0 | 0 |
 
 | KF | Kebutuhan fungsional | Jumlah skenario | Iterasi 1 (Sesuai/Tidak) | Iterasi 2 | Eksekusi v4 | Iterasi 3 | Iterasi 4 |
 |---|---|---|---|---|---|---|---|
@@ -162,6 +164,7 @@ Temuan 7 dan 8 tidak memengaruhi hasil skenario mana pun, karena kolom yang beru
 | R5 | BB-KF03-02, BB-KF03-05 | Diperiksa, tidak direvisi. | Sig. uji Welch kini memakai df pecahan; Hasil yang Diharapkan tidak menyebut angka Sig. atau df Welch. |
 | R6 | BB-KF03-06 | Langkah 4 dilengkapi tombol penutup subdialog (Continue). | Hasil yang diharapkan langkah berikutnya mengandaikan Continue. |
 | R7 | BB-KF03-02 | Catatan tabel tidak lagi "diakhiri" kalimat Welch, tetapi memuatnya, diikuti catatan kaki gaya SPSS. | Catatan kaki gaya SPSS ditambahkan sesudah catatan yang sudah ada. |
+| R9 | BB-KF03-02, BB-KF03-04, BB-KF03-05, BB-KF03-14, BB-KF03-15, BB-KF04-01, BB-KF04-03, BB-KF11-02, BB-KF11-03, BB-KF14-01 | Kutipan judul, label, dan catatan disesuaikan dengan teks tampilan baru (misalnya "Multivariate: Test Values (δ₀)", "jk (Welch-Satterthwaite)", "Multiple Comparisons: treatment", "Residual Plots: y1"); perilaku yang diharapkan tidak berubah. | Teks tampilan dirapikan sesudah iterasi 4 (tanda "—" dan deskripsi generik diganti). |
 | R8 | Skenario dengan nilai SPSS | Catatan umum, teks tidak diubah. | Angka tampil dengan 4 desimal tetap, dan kolom effect size/power hanya tampil bila opsinya dicentang; pencocokan nilai kolom itu hanya berlaku bila opsinya dicentang. |
 
 ## f. Fakta metode
@@ -172,7 +175,8 @@ Temuan 7 dan 8 tidak memengaruhi hasil skenario mana pun, karena kolom yang beru
 | Iterasi 2 | 2026-09-24 | v3 (`LHuNzRz16C8sj4tUeFT-j`) | `wasm_bg.4c7b0023.wasm` / `wasm_bg.2bc2b212.wasm` | 145 |
 | Eksekusi v4 | 2026-09-25 | v4 (`1IBznO-olYCW5GfFOKskp`) | `wasm_bg.aeff7f82.wasm` / `wasm_bg.2bc2b212.wasm` | 54 |
 | Iterasi 3 | 2026-09-25, 20:18–20:42 WIB | final sebelum perbaikan temuan SPSS (`LIBUcskLZhw3iEIArOeUX`) | `wasm_bg.f735bd9b.wasm` / `wasm_bg.2bc2b212.wasm` | 233 |
-| Iterasi 4 | 2026-09-25, 21:18–21:21 WIB | final (`IdywReo5MTivt50HHa3VO`) | `wasm_bg.6145c2bf.wasm` / `wasm_bg.2bc2b212.wasm` | 40 |
+| Iterasi 4 | 2026-09-25, 21:18–21:21 WIB | final sebelum perapian teks (`IdywReo5MTivt50HHa3VO`) | `wasm_bg.6145c2bf.wasm` / `wasm_bg.2bc2b212.wasm` | 40 |
+| Iterasi 5 | 2026-09-26 | final (`OrpyJfBOluV37xa0aqmFr`) | `wasm_bg.6145c2bf.wasm` / `wasm_bg.2bc2b212.wasm` | 46 |
 
 - **Alat:** Playwright 1.57.0 dengan Chromium 143.0.7499.4 bawaan Playwright.
 - **Cara eksekusi:** lewat antarmuka aplikasi build produksi (`next build`, `next start`): impor data dari menu File, menu Analyze, isi dialog, klik tombol. Service, WASM, dan worker tidak dipanggil langsung.

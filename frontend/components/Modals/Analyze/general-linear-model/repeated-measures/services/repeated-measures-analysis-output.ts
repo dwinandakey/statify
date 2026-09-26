@@ -246,7 +246,7 @@ export async function resultRepeatedMeasures({
                 const analyticId = await addAnalytic(logId, { title: errorTable.title, note: errorTable.note || "" });
                 await addStatistic(analyticId, {
                     title: errorTable.title,
-                    description: errorTable.interpretation || "Errors logs from the analysis.",
+                    description: errorTable.interpretation || "Messages and warnings produced during the analysis.",
                     output_data: JSON.stringify({ tables: [errorTable] }),
                     components: "Errors Logs",
                 });

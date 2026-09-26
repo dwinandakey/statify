@@ -159,8 +159,8 @@ describe("Custom Hypothesis Tests — Modul 4A APG STIS", () => {
         expect(parseFloat(String(sig.dv_ukuran))).toBeCloseTo(0.31, 2);
 
         // 95% CI: −8 ± 2.0484×4.083 = (−16.364, .364)
-        const lower = byLabel("95% Confidence Interval — Lower Bound")!;
-        const upper = byLabel("95% Confidence Interval — Upper Bound")!;
+        const lower = byLabel("95% Confidence Interval, Lower Bound")!;
+        const upper = byLabel("95% Confidence Interval, Upper Bound")!;
         // CI bounds depend on the same SE rounded in the SPSS fixture; allow
         // 0.01 tolerance for the ukuran DV whose mean carries only 3 decimals.
         expect(num(lower.dv_kedalaman)).toBeCloseTo(-16.364, 3);

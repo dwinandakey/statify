@@ -13,7 +13,7 @@ export const multivariateTourSteps: TourStep[] = [
     {
         title: "Dependent Variables",
         content:
-            "Select two or more dependent variables for the multivariate analysis. Unlike univariate GLM, multiple dependent variables are analysed simultaneously.",
+            "Select two or more dependent variables for the multivariate analysis. Unlike univariate GLM, multiple dependent variables are analyzed together.",
         targetId: "multivariate-dependent-variables",
         defaultPosition: "bottom",
         defaultHorizontalPosition: "left",

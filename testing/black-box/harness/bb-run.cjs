@@ -495,7 +495,7 @@ S["BB-KF03-03"] = async (c) => {
 async function pairedOpen(c) {
     const p = c.page;
     await p.getByRole("button", { name: "Paired", exact: true }).click();
-    const dlg = p.getByRole("dialog").filter({ hasText: "Paired (Hotelling T²)" });
+    const dlg = p.getByRole("dialog").filter({ hasText: "Multivariate: Paired" });
     await dlg.waitFor({ state: "visible", timeout: 30000 });
     return dlg;
 }

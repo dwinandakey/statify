@@ -146,15 +146,15 @@ export const MultivariateTwoSampleDelta = ({
             <DialogContent className={sigmaKnown ? "sm:max-w-3xl max-h-[90vh] overflow-y-auto" : "sm:max-w-md"}>
                 <DialogHeader>
                     <DialogTitle>
-                        Test Values (δ₀) — Hotelling T² Dua Populasi
+                        Multivariate: Test Values (δ₀)
                     </DialogTitle>
                 </DialogHeader>
                 <Separator />
                 <div className="flex flex-col gap-3">
                     <p className="text-sm text-muted-foreground">
                         Masukkan selisih vektor rata-rata hipotesis (δ₀) untuk
-                        uji dua populasi (Equal maupun Unequal). Biarkan 0 untuk
-                        uji standar μ₁ = μ₂.
+                        uji Hotelling T² dua populasi (Equal maupun Unequal).
+                        Biarkan 0 untuk menguji μ₁ = μ₂.
                     </p>
                     <p id="two-sample-delta-hypothesis" className="text-sm font-medium">
                         {hypothesis}

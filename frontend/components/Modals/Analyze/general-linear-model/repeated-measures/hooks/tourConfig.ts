@@ -8,7 +8,7 @@ export const repeatedMeasuresDefineTourSteps: TourStep[] = [
     {
         title: "Within-Subject Factor Name",
         content:
-            "Give a name to the within-subjects factor (e.g. \"time\"). This is the repeated dimension measured on every subject.",
+            "Name the within-subjects factor, such as \"time\". Every subject is measured at each level of this factor.",
         targetId: "repeated-measures-define-factor-name",
         defaultPosition: "bottom",
         defaultHorizontalPosition: null,
@@ -17,7 +17,7 @@ export const repeatedMeasuresDefineTourSteps: TourStep[] = [
     {
         title: "Number of Levels",
         content:
-            "Enter how many levels the factor has (e.g. 3 for pre / post / follow-up), then click Add.",
+            "Enter the number of levels of the factor, such as 3 for pre, post, and follow-up, then click Add.",
         targetId: "repeated-measures-define-factor-levels",
         defaultPosition: "bottom",
         defaultHorizontalPosition: null,
@@ -59,7 +59,7 @@ export const repeatedMeasuresTourSteps: TourStep[] = [
     {
         title: "Within-Subjects Variables",
         content:
-            "Map each variable to a cell of the within-subjects design (level × measure). The order must follow the factor levels you defined.",
+            "Assign one variable to each slot of the within-subjects design (one slot per level and measure), in the order of the factor levels.",
         targetId: "repeated-measures-within-subjects-variables",
         defaultPosition: "bottom",
         defaultHorizontalPosition: "left",

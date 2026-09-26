@@ -110,14 +110,14 @@ export const MultivariateTestValues = ({
             <DialogContent className={sigmaKnown ? "sm:max-w-3xl max-h-[90vh] overflow-y-auto" : "sm:max-w-md"}>
                 <DialogHeader>
                     <DialogTitle>
-                        Test Values (μ₀) — Hotelling T² Satu Populasi
+                        Multivariate: Test Values (μ₀)
                     </DialogTitle>
                 </DialogHeader>
                 <Separator />
                 <div className="flex flex-col gap-3">
                     <p className="text-sm text-muted-foreground">
-                        Masukkan vektor rata-rata hipotesis (μ₀) yang ingin
-                        diuji. Kosongkan atau biarkan 0 untuk uji standar
+                        Masukkan vektor rata-rata hipotesis (μ₀) untuk uji
+                        Hotelling T² satu populasi. Biarkan 0 untuk menguji
                         terhadap vektor nol.
                     </p>
 

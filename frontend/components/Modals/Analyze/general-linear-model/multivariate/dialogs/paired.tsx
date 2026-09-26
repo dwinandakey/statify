@@ -492,20 +492,20 @@ export const MultivariatePaired = ({
             <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        Paired (Hotelling T²) — Vektor Selisih
+                        Multivariate: Paired
                     </DialogTitle>
                 </DialogHeader>
                 <Separator />
 
                 <div className="flex flex-col gap-4">
                     <p className="text-sm text-muted-foreground">
-                        Pilih pasangan variabel (Measurement 1 vs Measurement 2)
-                        untuk membentuk vektor selisih d = M1 − M2. Sistem akan
-                        menjalankan Hotelling T² Satu Populasi pada vektor d
-                        terhadap δ₀.
+                        Pilih pasangan variabel (Measurement 1 dan Measurement 2)
+                        untuk membentuk vektor selisih d = M1 − M2. Uji Hotelling
+                        T² berpasangan dijalankan sebagai uji satu populasi pada
+                        vektor d terhadap δ₀.
                     </p>
 
-                    {/* Bagian A — Pemilihan Pasangan Variabel */}
+                    {/* Bagian A: pemilihan pasangan variabel */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
                             A. Pemilihan Pasangan Variabel
@@ -529,7 +529,7 @@ export const MultivariatePaired = ({
                         />
                     </div>
 
-                    {/* Bagian B — Preview Vektor Selisih */}
+                    {/* Bagian B: preview vektor selisih */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
                             B. Preview Vektor Selisih (10 baris pertama)
@@ -588,7 +588,7 @@ export const MultivariatePaired = ({
                         )}
                     </div>
 
-                    {/* Bagian C — Input δ₀ */}
+                    {/* Bagian C: isian δ₀ */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
                             C. Nilai Selisih Hipotesis (δ₀)

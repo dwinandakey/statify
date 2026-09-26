@@ -468,16 +468,16 @@ function formatSimultaneousCI(
     const first = ci.intervals[0] ?? {};
     const b = num(first.bonferroni_critical);
     const bDf = df(first.bonferroni_df);
-    const simultaneous = `The intervals hold simultaneously for all ${p} components at the ${pct}% confidence level (α = ${alpha} from Options → Significance Level).`;
+    const simultaneous = `The intervals hold simultaneously for all ${p} components at the ${pct}% confidence level (α = ${alpha} the Significance Level in Options).`;
     let note: string;
     if (unequal) {
         // ν of the Welch test (Krishnamoorthy–Yu), not rounded: df2 = ν − p + 1.
         const nu = df(ci.t2_df[1] + ci.t2_df[0] - 1);
         note =
             `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). ` +
-            `T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = ${nu}): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), ` +
+            `T² (Krishnamoorthy-Yu, as in the Welch test of Multivariate Tests, ν = ${nu}): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), ` +
             `c = √(νp/(ν−p+1) · F(${df(ci.t2_df[0])}, ${df(ci.t2_df[1])}; α)) = ${c}; ` +
-            `Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch–Satterthwaite df νᵢ in the df column. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
+            `Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch-Satterthwaite df νᵢ in the df column. n₁ = ${n1}, n₂ = ${n2}. ${simultaneous}`;
     } else if (twoSample) {
         note =
             `Components of μ(${ci.factor} = ${levelA}) − μ(${ci.factor} = ${levelB}), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): ` +
@@ -497,7 +497,7 @@ function formatSimultaneousCI(
     }
     table.note = note;
     table.interpretation =
-        "Simultaneous confidence intervals for the components of the mean vector (or of the difference of two mean vectors). T² intervals hold jointly for every linear combination; Bonferroni intervals are shorter when only these p components are of interest. \"Contains\" tells whether the hypothesised value lies inside the interval.";
+        "Simultaneous confidence intervals for each component of the mean vector, or of the difference between two mean vectors. The T² intervals hold jointly for all linear combinations; the Bonferroni intervals are shorter when only these p components are of interest. The Contains columns show whether the hypothesized value lies inside each interval.";
     resultJson.tables.push(table);
 }
 
@@ -676,13 +676,13 @@ function formatKnownCovarianceIntervals(
     table.note =
         `${ctx.known}. χ² intervals: ${estimate} ± √χ²(${pValue}; α) · ${variance}, √χ²(${pValue}; α) = ${num(test.chi_square_critical)}; ` +
         `Bonferroni: ${estimate} ± z(α/(2p)) · ${variance}, z(α/(2p)) = ${num(test.z_critical)}. ${ctx.sizes}. ` +
-        `The intervals hold simultaneously for all ${ctx.p} components at the ${pct}% confidence level (α = ${alpha} from Options → Significance Level). ` +
+        `The intervals hold simultaneously for all ${ctx.p} components at the ${pct}% confidence level (α = ${alpha} the Significance Level in Options). ` +
         `Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4).` +
         (ctx.twoSample && ctx.delta0.some((v) => v !== 0)
             ? ` The intervals are for μ₁ − μ₂ on the original data (δ₀ = ${formatDeltaVector(ctx.delta0)} added back).`
             : "");
     table.interpretation =
-        "Simultaneous confidence intervals for the components of the mean vector (or of the difference of two mean vectors) when the population covariance matrix is known. \"Contains\" tells whether the hypothesised value lies inside the interval.";
+        "Simultaneous confidence intervals for each component when the population covariance matrix is known, based on the chi-square distribution (simultaneous intervals) and the normal distribution (Bonferroni intervals). The Contains columns show whether the hypothesized value lies inside each interval.";
     resultJson.tables.push(table);
 }
 
@@ -755,7 +755,7 @@ function formatBetweenSubjectsFactors(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         interpretation:
-            "This table displays the levels of each between-subjects factor and the number of cases (N) at each level. It provides a summary of the categorical structure of the data used in the analysis.",
+            "Number of cases (N) at each level of each between-subjects factor.",
     };
 
     // Sort factor entries alphabetically with numeric awareness so the
@@ -844,7 +844,7 @@ function formatDescriptiveStatistics(
         ],
         rows: [],
         interpretation:
-            "This table displays the mean, standard deviation, and count (N) for each dependent variable, broken down by each level of the specified factors.",
+            "Mean, standard deviation, and N of each dependent variable for each factor level and for the total sample.",
     };
 
     entries.forEach(([dvName, stat]: [string, any]) => {
@@ -904,7 +904,7 @@ function formatBoxTest(data: any, resultJson: ResultJson) {
         ],
         note: b.description || "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups.",
         interpretation:
-            "Tests the assumption of homogeneity of covariance matrices across groups. A non-significant result (Sig. > .05) supports the multivariate assumption that the variance-covariance matrices are equal across groups.",
+            "Tests whether the covariance matrices of the dependent variables are equal across groups. Sig. at or above the Significance Level in Options is consistent with equal covariance matrices.",
     };
 
     resultJson.tables.push(table);
@@ -930,7 +930,7 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
         ],
         note: b.description,
         interpretation:
-            "Tests the sphericity of the residual covariance matrix. A significant result (Sig. < .05) indicates that the dependent variables are sufficiently correlated to justify a multivariate analysis.",
+            "Tests whether the residual correlation matrix is an identity matrix.",
     };
 
     resultJson.tables.push(table);
@@ -996,7 +996,7 @@ function formatLeveneTest(
             "Tests the null hypothesis that the error variance of the dependent variable is equal across groups." +
             (design ? ` ${design}` : ""),
         interpretation:
-            "Tests the assumption of homogeneity of variance. A non-significant result (Sig. > .05) supports the assumption that error variances are equal across groups.",
+            "Tests whether the error variance of each dependent variable is equal across groups. Sig. at or above the Significance Level in Options is consistent with equal error variances.",
     };
 
     tests.forEach((lt: any) => {
@@ -1082,7 +1082,7 @@ function formatMultivariateTests(
             "One-Sample Hotelling's T² tests H₀: μ = μ₀. For the intercept-only model (no between-subjects factors), T² = (n − 1) × Hotelling's Trace, and F = ((n − p) / (p(n − 1))) · T² ~ F(p, n − p). Reject H₀ when Sig. < α.";
     } else {
         interpretation =
-            "Tests the joint effect of each predictor on the combined dependent variables using four multivariate statistics (Pillai's Trace, Wilks' Lambda, Hotelling's Trace, Roy's Largest Root). A significant Sig. (< .05) indicates that the effect significantly influences the joint distribution of the dependent variables.";
+            "Pillai's Trace, Wilks' Lambda, Hotelling's Trace, and Roy's Largest Root for each effect, tested on all dependent variables together. Sig. below the Significance Level in Options indicates that the effect is significant for the combination of dependent variables.";
     }
 
     let tableNote: string | undefined;
@@ -1100,7 +1100,7 @@ function formatMultivariateTests(
             tableNote += ` H₀: μd = δ₀ (d = M1 − M2).`;
         }
     } else if (welchMode) {
-        tableNote = `${mt.design ?? ""} — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.`;
+        tableNote = `${mt.design ? `${mt.design}. ` : ""}The ${welchFactor} effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices.`;
     } else {
         tableNote = mt.design;
     }
@@ -1108,7 +1108,7 @@ function formatMultivariateTests(
     const table: Table = {
         key: "multivariate_tests",
         title: pairedActive
-            ? "Multivariate Tests — Hotelling T² Berpasangan"
+            ? "Multivariate Tests"
             : "Multivariate Tests",
         columnHeaders,
         rows: [],
@@ -1154,7 +1154,7 @@ function formatMultivariateTests(
         if (effectName === "Intercept") {
             displayedEffectName = interceptLabel;
         } else if (isWelchEffect) {
-            displayedEffectName = `${effectName} — Welch-Satterthwaite`;
+            displayedEffectName = `${effectName} (Welch-Satterthwaite)`;
         } else {
             displayedEffectName = effectName;
         }
@@ -1303,7 +1303,7 @@ function formatTestsBetweenSubjectsEffects(
         if (adjRSq !== undefined)
             parts.push(`(Adjusted R Squared = ${formatGlmStat(adjRSq)})`);
         noteLines.push(
-            `${letter ? letter + ". " : ""}${parts.join(" ")} — ${relabelDv(dvName)}`
+            `${letter ? letter + ". " : ""}${parts.join(" ")} for ${relabelDv(dvName)}`
         );
     });
 
@@ -1325,7 +1325,7 @@ function formatTestsBetweenSubjectsEffects(
         rows: [],
         note: noteLines.join("\n"),
         interpretation:
-            "This table tests the hypothesis that each effect (e.g., factor or interaction) in the model is null. A significant F-value (Sig. < .05) suggests that the effect significantly contributes to explaining the variance in the dependent variable. The Partial Eta Squared indicates the proportion of variance uniquely explained by that effect.",
+            "Univariate F test of each effect for each dependent variable. Sig. below the Significance Level in Options indicates that the effect is significant for that dependent variable. Partial Eta Squared is the proportion of variance explained by the effect after the other effects are removed.",
     };
 
     sourceNames.forEach((sourceName) => {
@@ -1418,7 +1418,7 @@ function formatParameterEstimates(
         ],
         rows: [],
         interpretation:
-            "Displays the regression coefficient (B), standard error, t-statistic, significance, and 95% confidence interval for each model parameter, grouped by dependent variable. A significant Sig. (< .05) indicates that the parameter contributes significantly to predicting the dependent variable.",
+            "Regression coefficient (B), standard error, t, Sig., and 95% confidence interval of each model parameter for each dependent variable.",
     };
 
     orderedEntries.forEach(([dvName, entries]: [string, any[]]) => {
@@ -1465,7 +1465,7 @@ function formatBetweenSubjectsSSCP(data: any, resultJson: ResultJson) {
 
         const table: Table = {
             key: `between_subjects_sscp_${termName}`,
-            title: `Between-Subjects SSCP Matrix — ${termName}`,
+            title: `Between-Subjects SSCP Matrix: ${termName}`,
             columnHeaders: [
                 { header: "", key: "row_dv" },
                 ...dvNames.map((dv) => ({ header: dv, key: `col_${dv}` })),
@@ -1473,7 +1473,7 @@ function formatBetweenSubjectsSSCP(data: any, resultJson: ResultJson) {
             rows: [],
             note: sscp.based_on,
             interpretation:
-                "Sums-of-squares-and-cross-products (SSCP) matrix for the specified effect. Diagonal entries are sums of squares; off-diagonal entries are cross-products between dependent variables. These matrices form the basis of the multivariate test statistics.",
+                "Sums of squares and cross-products (SSCP) of the effect. Diagonal entries are sums of squares and off-diagonal entries are cross-products between dependent variables. This is the hypothesis matrix H used in the multivariate tests.",
         };
 
         dvNames.forEach((rowDv) => {
@@ -1506,7 +1506,7 @@ function formatResidualMatrix(data: any, resultJson: ResultJson) {
         rows: [],
         note: rm.description,
         interpretation:
-            "Sums-of-squares-and-cross-products matrix of the residuals (the E matrix). It serves as the error term for multivariate test statistics and provides the basis for examining correlations among the dependent variables after fitting the model.",
+            "Sums of squares and cross-products of the residuals (the error matrix E), used as the error term of the multivariate tests.",
     };
 
     dvNames.forEach((rowDv) => {
@@ -1533,14 +1533,14 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
 
         const table: Table = {
             key: `sscp_matrix_${categoryName}`,
-            title: `SSCP Matrix — ${categoryName}`,
+            title: `SSCP Matrix: ${categoryName}`,
             columnHeaders: [
                 { header: "", key: "row_dv" },
                 ...dvNames.map((dv) => ({ header: dv, key: `col_${dv}` })),
             ],
             rows: [],
             interpretation:
-                "Sums-of-squares-and-cross-products matrix per effect category, showing how the variability for that effect is distributed across and between the dependent variables.",
+                "Sums of squares and cross-products of this source for each pair of dependent variables.",
         };
 
         dvNames.forEach((rowDv) => {
@@ -1569,7 +1569,7 @@ function formatContrastCoefficients(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         interpretation:
-            "This matrix provides the coefficients for the linear combinations of model parameters that form the basis for testing the hypothesis for the chosen contrast. Each row corresponds to a specific contrast.",
+            "Coefficients of the linear combinations of model parameters tested by the chosen contrast. Each row is one contrast.",
     };
 
     const params: string[] = cc.parameter || [];
@@ -1696,7 +1696,7 @@ function formatContrastResultsKMatrix(
         ],
         rows: [],
         interpretation:
-            "K-Matrix table: for each user-specified contrast row, shows the per-DV contrast estimate (linear combination of group means), hypothesised value (0), standard error using pooled MSE, two-sided p-value from the Student-t distribution, and 95% confidence interval.",
+            "For each contrast and dependent variable: contrast estimate (a linear combination of group means), hypothesized value (0), standard error based on the pooled error mean square, two-sided Sig. from the t distribution, and 95% confidence interval.",
     };
 
     rows.forEach((cr) => {
@@ -1730,8 +1730,8 @@ function formatContrastResultsKMatrix(
             { label: "Difference (Estimate − Hypothesized)", values: estimates },
             { label: "Std. Error", values: ses },
             { label: "Sig.", values: pVals, sig: true },
-            { label: "95% Confidence Interval — Lower Bound", values: ciLower },
-            { label: "95% Confidence Interval — Upper Bound", values: ciUpper },
+            { label: "95% Confidence Interval, Lower Bound", values: ciLower },
+            { label: "95% Confidence Interval, Upper Bound", values: ciUpper },
         ];
 
         block.forEach((b, bIdx) => {
@@ -1778,7 +1778,7 @@ function formatContrastMultivariateTests(
         ],
         rows: [],
         interpretation:
-            "Multivariate test of the joint null hypothesis defined by all contrast rows for this factor. Equivalent to the factor's main multivariate test for between-subjects effects.",
+            "Multivariate test of all contrasts of this factor together. It is equal to the multivariate test of the factor's main effect.",
     };
 
     const order: [string, string][] = [
@@ -1830,7 +1830,7 @@ function formatContrastUnivariateTests(
         ],
         rows: [],
         interpretation:
-            "Per-dependent-variable univariate F-test for each contrast row, partitioning the contrast SSCP per DV against pooled error.",
+            "Univariate F test of the contrasts for each dependent variable, against the pooled error.",
     };
 
     // For 2-level (single contrast row), the contrast equals the factor effect
@@ -1932,7 +1932,7 @@ function formatGeneralEstimableFunction(data: any, resultJson: ResultJson) {
         rows: [],
         note: gef.design,
         interpretation:
-            "Displays the linear combinations of model parameters that are estimable, given the chosen model and Sum of Squares method. Each row defines an estimable function used in hypothesis testing.",
+            "Linear combinations of model parameters that are estimable under the chosen model and Sum of Squares type. Each row defines one estimable function used in the hypothesis tests.",
     };
 
     rowKeys.forEach((rowKey) => {
@@ -2026,7 +2026,7 @@ function formatPosthocTests(
             : "";
         const table: Table = {
             key: `posthoc_tests_${factor}`,
-            title: `Multiple Comparisons — ${factor}${titleSuffix}`,
+            title: `Multiple Comparisons: ${factor}${titleSuffix}`,
             columnHeaders: [
                 { header: "Dependent Variable", key: "dependent_variable" },
                 ...(singleTestType
@@ -2055,7 +2055,7 @@ function formatPosthocTests(
                 .filter(Boolean)
                 .join("\n") || undefined,
             interpretation:
-                "Pairwise comparisons of factor level means with adjusted significance values and confidence intervals. A significant Sig. (< .05) indicates a statistically significant difference between the two means after correcting for multiple comparisons.",
+                "Pairwise comparisons of the factor level means, with Sig. and confidence intervals adjusted by the chosen method. Sig. below the Significance Level in Options indicates that the two means differ.",
         };
 
         dvOrder.forEach((dvName) => {
@@ -2109,7 +2109,7 @@ function formatHomogeneousSubsets(
 
             const table: Table = {
                 key: `homogeneous_subsets_${dvName}_${testName}`,
-                title: `${testName} — Dependent Variable: ${relabelDv(dvName)}`,
+                title: `${testName}, Dependent Variable: ${relabelDv(dvName)}`,
                 columnHeaders: [
                     { header: subsets.test_name || testName, key: "factor_value" },
                     { header: "N", key: "n" },
@@ -2121,7 +2121,7 @@ function formatHomogeneousSubsets(
                 rows: [],
                 note: subsets.notes?.join(" "),
                 interpretation:
-                    "Groups factor levels into subsets whose means are not statistically different from one another. Levels appearing in the same subset are not significantly different at the chosen alpha level.",
+                    "Factor levels grouped into subsets whose means do not differ significantly at the Significance Level in Options.",
             };
 
             groups.forEach((g: any) => {
@@ -2157,7 +2157,7 @@ function formatEmmeans(
     Object.entries(emmeans).forEach(([factorKey, entries]: [string, any[]]) => {
         const table: Table = {
             key: `emmeans_${factorKey}`,
-            title: `Estimated Marginal Means — ${factorKey}`,
+            title: `Estimated Marginal Means: ${factorKey}`,
             columnHeaders: [
                 { header: "Dependent Variable", key: "dependent_variable" },
                 { header: factorKey, key: "factor_value" },
@@ -2173,7 +2173,7 @@ function formatEmmeans(
             ],
             rows: [],
             interpretation:
-                "This table shows the Estimated Marginal Means (EMMs) — the adjusted means for each level of the factor, controlling for other variables in the model. Useful for interpreting effects after accounting for covariates.",
+                "Estimated marginal means of each level of the factor, adjusted for the other terms in the model, with standard errors and 95% confidence intervals.",
         };
 
         entries.forEach((entry: any) => {
@@ -2202,14 +2202,14 @@ function formatSpreadVsLevel(data: any, resultJson: ResultJson) {
         const points: any[] = plotData.points || [];
         const table: Table = {
             key: `spread_vs_level_${dvName}`,
-            title: `Spread vs. Level — Dependent Variable: ${dvName}`,
+            title: `Spread vs. Level, Dependent Variable: ${dvName}`,
             columnHeaders: [
                 { header: "Level Mean", key: "level_mean" },
                 { header: "Spread (Std. Deviation)", key: "spread_standard_deviation" },
             ],
             rows: [],
             interpretation:
-                "Pairs each group's mean against its standard deviation. A systematic relationship between spread and level suggests that variance differs by group, which violates the homogeneity-of-variance assumption.",
+                "Mean and standard deviation of each group. A systematic relationship between spread and level indicates unequal variances across groups.",
         };
 
         points.forEach((p: any) => {
@@ -2310,9 +2310,9 @@ function formatResidualPlots(
             chartMetadata: {
                 axisInfo: { x: "", y: "", category: "" },
                 description:
-                    "Scatter plot matrix of Observed, Predicted, and Standardised Residual for the dependent variable. Diagonals are blank with axis labels; off-diagonal cells show each pair with shared axes. The lower and upper triangles are the same pairs with axes swapped — pure visual convention, no added statistical information. Use the Predicted × Std. Residual cell to check homoscedasticity, the Observed × Predicted cell to check fit/linearity, and the Observed × Std. Residual cell to spot outliers.",
+                    "Scatter plot matrix of observed values, predicted values, and standardized residuals of the dependent variable. Each pair of variables appears twice, with the axes swapped.",
                 notes: modelNote,
-                title: `Observed × Predicted × Std. Residual — ${displayName}`,
+                title: `Residual Plots: ${displayName}`,
                 subtitle: modelNote,
             },
             chartData,
@@ -2350,7 +2350,7 @@ function formatSavedVariables(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         interpretation:
-            "Per-case predicted values, residuals, and diagnostic measures saved as new variables based on the fitted model. Useful for inspecting the model's fit and identifying influential observations.",
+            "Predicted values, residuals, and diagnostic measures saved as new variables for each case.",
     };
 
     for (let i = 0; i < n; i++) {
@@ -2374,7 +2374,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             title: "Errors Logs",
             columnHeaders: [{ header: "Message", key: "message" }],
             rows: [{ rowHeader: [], message: "No errors occurred." }],
-            interpretation: "Errors logs from the analysis.",
+            interpretation: "Messages and warnings produced during the analysis.",
         });
         return;
     }
@@ -2387,7 +2387,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             { header: "Message", key: "message" },
         ],
         rows: [],
-        interpretation: "Errors logs from the analysis.",
+        interpretation: "Messages and warnings produced during the analysis.",
     };
 
     let currentContext = "";

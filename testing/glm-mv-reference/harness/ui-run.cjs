@@ -188,7 +188,7 @@ async function fillDialog(page, c) {
     }
     if (c.pairs) {
         await page.getByRole("button", { name: "Paired", exact: true }).click();
-        const dlg = page.getByRole("dialog").filter({ hasText: "Paired (Hotelling T²)" });
+        const dlg = page.getByRole("dialog").filter({ hasText: "Multivariate: Paired" });
         await dlg.waitFor({ state: "visible", timeout: 30000 });
         const avail = dlg.locator("#multivariate-paired-available-variables");
         // Double-click fills Variable 1, then Variable 2 of the same pair.

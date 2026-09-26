@@ -1,0 +1,43 @@
+{
+ "BB-KF04-01": [
+  {
+   "run": 0,
+   "config": "mv3",
+   "checked": 20,
+   "passed": 20,
+   "failures": []
+  }
+ ],
+ "BB-KF11-02": [
+  {
+   "run": 0,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  },
+  {
+   "run": 1,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  },
+  {
+   "run": 2,
+   "config": "mv4ph",
+   "checked": 60,
+   "passed": 60,
+   "failures": []
+  }
+ ],
+ "BB-KF11-03": [
+  {
+   "run": 0,
+   "config": "mv4ph",
+   "checked": 180,
+   "passed": 180,
+   "failures": []
+  }
+ ]
+}

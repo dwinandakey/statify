@@ -189,7 +189,7 @@
       },
       {
         "title": "Simultaneous Confidence Intervals",
-        "note": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(3, 16; α)) = 3.3062; Bonferroni: t(18; α/(2p)) = 2.6391. n = 19. The intervals hold simultaneously for all 3 components at the 95% confidence level (α = 0.05 from Options → Significance Level).",
+        "note": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(3, 16; α)) = 3.3062; Bonferroni: t(18; α/(2p)) = 2.6391. n = 19. The intervals hold simultaneously for all 3 components at the 95% confidence level (α = 0.05 the Significance Level in Options).",
         "columns": [
           "Dependent Variable",
           "Mean",

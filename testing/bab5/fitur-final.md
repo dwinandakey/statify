@@ -1,6 +1,6 @@
 # Fitur final per kebutuhan fungsional dan keterbatasan (bahan BAB V–VI)
 
-- **Build:** branch `ilham`, tag `skripsi-final-v5` (build final `IdywReo5MTivt50HHa3VO`; WASM di `ringkasan-black-box.md`, bagian fakta metode).
+- **Build:** branch `ilham`, tag `skripsi-final-v5` (build final `OrpyJfBOluV37xa0aqmFr`; WASM di `ringkasan-black-box.md`, bagian fakta metode).
 - **Redaksi KF:** Tabel 5 revisi (`testing/black-box/pemetaan-kebutuhan.md`). Untuk KF2–KF4 dipakai **usulan redaksi final** (menunggu konfirmasi pembimbing), yang memuat uji T² dan uji khi-kuadrat.
 - **Dokumen ini:** hanya memuat fakta dari kode dan hasil uji. Rincian pesan dan path ada di `pemetaan-kebutuhan.md`.
 

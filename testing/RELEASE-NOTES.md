@@ -102,6 +102,18 @@ Regresi pertama dijalankan pada build `LIBUcskLZhw3iEIArOeUX` (kode `73038fb3`, 
 
 `testing/bab5/` (lihat `README.md` di folder itu): ringkasan black-box, validasi, responsivitas, fitur final dan keterbatasan, dampak ke naskah, tangkapan layar build final, dan contoh sleeping dog pada build final. Harness `testing/fitur-v4/harness/sleeping-dog.cjs` menerima `--out` (bawaan tidak berubah).
 
+### F6. Perapian teks tampilan GLM Multivariate dan Repeated Measures (2026-09-26)
+
+- **Cakupan:** hanya modul `multivariate/` dan `repeated-measures/` (dialog, tur panduan, formatter, service output). Modul lain tidak disentuh.
+- **Isi:** tanda pisah panjang "—", pemisah " · ", tanda panah dalam kalimat, ejaan Inggris-Britania pada teks tampilan, dan deskripsi tabel yang generik diganti. Daftar lengkap ada di `testing/bab5/thesis-impact-final.md` §7.
+- **Tidak berubah:** perhitungan, payload, respons WASM, urutan tabel, dan pesan validasi.
+- **Pemeriksaan:**
+  - tujuh konfigurasi sampel lewat UI: payload dan respons WASM identik dengan build sebelumnya, dan isi tabel identik selain judul, catatan, deskripsi, dan label baris Welch (`testing/final/teks/`);
+  - Jest modul GLM: hanya suite baseline yang gagal; `contrast-results.test.ts` disesuaikan dengan label baru;
+  - black-box iterasi 5 (10 skenario, revisi R9): 10 Sesuai.
+- **Build:** `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`, WASM sama dengan F3. Tangkapan layar `testing/bab5/gambar/` dan `sleeping-dog/` dibuat ulang dari build ini.
+- **Tag `skripsi-final-v5` tidak dipindah** (sudah di-push). Perubahan ini ada di commit sesudah tag.
+
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 
 **Dasar perubahan:**

@@ -1,6 +1,6 @@
 # Ringkasan validasi numerik (bahan BAB V)
 
-- **Build:** final (`BUILD_ID` `IdywReo5MTivt50HHa3VO`; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`). Nilai mentah Statify MV diambil dari respons worker yang dihasilkan lewat dialog asli (`testing/final/iterasi4/regresi/worker/`; konfigurasi tambahan: `testing/final/bagian2/`). Angka §1 identik pada build sebelum perbaikan temuan SPSS (`testing/final/bagian3/`).
+- **Build:** angka diperoleh pada build `IdywReo5MTivt50HHa3VO`. Build final `OrpyJfBOluV37xa0aqmFr` memakai WASM yang sama dan hanya berbeda pada teks tampilan (respons WASM identik; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`). Nilai mentah Statify MV diambil dari respons worker yang dihasilkan lewat dialog asli (`testing/final/iterasi4/regresi/worker/`; konfigurasi tambahan: `testing/final/bagian2/`). Angka §1 identik pada build sebelum perbaikan temuan SPSS (`testing/final/bagian3/`).
 - **Kriteria SPSS:** |Statify − SPSS| ≤ 0,001 (presisi penuh Statify vs nilai SPSS di berkas .xlsx).
 - **Kriteria R:** selisih mutlak < 1·10⁻⁸.
 - **Pembanding:**

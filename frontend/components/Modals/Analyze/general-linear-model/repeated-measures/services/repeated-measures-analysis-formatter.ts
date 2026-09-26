@@ -158,7 +158,7 @@ function formatHomogeneityTests(data: any, resultJson: ResultJson) {
                 { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
             ],
             note: `Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups. ${design}`.trim(),
-            interpretation: "If significant (Sig. < .05), the covariance matrices of the dependent variables differ across the between-subjects groups.",
+            interpretation: "Sig. below the Significance Level in Options indicates that the covariance matrices of the dependent variables differ across the between-subjects groups.",
         });
     }
 
@@ -178,7 +178,7 @@ function formatHomogeneityTests(data: any, resultJson: ResultJson) {
             ],
             rows: [],
             note: `Tests the null hypothesis that the error variance of the dependent variable is equal across groups. ${design}`.trim(),
-            interpretation: "If significant (Sig. < .05), the error variances differ across the between-subjects groups.",
+            interpretation: "Sig. below the Significance Level in Options indicates that the error variances differ across the between-subjects groups.",
         };
         dvs.forEach((dv) => {
             (levene[dv] || []).forEach((e: any, idx: number) => {
@@ -340,7 +340,7 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
                     : ` Design: Intercept; Within Subjects Design: ${data.mauchly_test.design}`
                 : ""),
         interpretation:
-            "If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.",
+            "Sig. below the Significance Level in Options indicates that sphericity is violated; use the Greenhouse-Geisser or Huynh-Feldt rows of Tests of Within-Subjects Effects.",
     };
 
     // Keyed by measure (one test per measure); the within-subjects effect
@@ -394,7 +394,7 @@ function formatTestsWithinSubjectsEffects(data: any, resultJson: ResultJson) {
             rows: [],
             note: `Measure: ${measureName}`,
             interpretation:
-                "Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.",
+                "Tests the within-subjects effects. When sphericity is violated (Mauchly's test), read the Greenhouse-Geisser or Huynh-Feldt row instead of Sphericity Assumed.",
         };
 
         const sources = result.sources as any[];
@@ -473,7 +473,7 @@ function formatTestsWithinSubjectsContrasts(data: any, resultJson: ResultJson) {
             rows: [],
             note: `Measure: ${measureName}`,
             interpretation:
-                "Pairwise contrasts between adjacent levels of the within-subjects factor.",
+                "Tests of the contrasts of the within-subjects factor (Polynomial or Repeated), for each source.",
         };
 
         const effectSources = sources.filter((s) => !s.source.startsWith("Error("));
@@ -539,7 +539,7 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         interpretation:
-            "Tests of between-subjects effects using the average of the repeated measurements as the transform variable.",
+            "Tests of the between-subjects effects on the average of the repeated measurements.",
     };
 
     // All sources in result order (Intercept, covariates, factors,
@@ -605,7 +605,7 @@ function formatParameterEstimates(data: any, resultJson: ResultJson) {
             ],
             rows: [],
             note: `Dependent Variable: ${dvName}`,
-            interpretation: "OLS parameter estimates for each predictor.",
+            interpretation: "Parameter estimates of the model for each dependent variable.",
         };
 
         (Array.isArray(entryList) ? entryList : []).forEach((e: any, idx: number) => {
@@ -713,7 +713,7 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
 
         const table: Table = {
             key: `sscp_matrix_${catName}`,
-            title: `SSCP Matrix — ${catName}`,
+            title: `SSCP Matrix: ${catName}`,
             columnHeaders: [
                 { header: "", key: "row_label" },
                 ...colKeys.map((k) => ({ header: k, key: k })),
@@ -931,7 +931,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             title: "Errors Logs",
             columnHeaders: [{ header: "Message", key: "message" }],
             rows: [{ rowHeader: [], message: "No errors occurred." }],
-            interpretation: "Errors logs from the analysis.",
+            interpretation: "Messages and warnings produced during the analysis.",
         });
         return;
     }
@@ -944,7 +944,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             { header: "Message", key: "message" },
         ],
         rows: [],
-        interpretation: "Errors logs from the analysis.",
+        interpretation: "Messages and warnings produced during the analysis.",
     };
 
     let currentContext = "";

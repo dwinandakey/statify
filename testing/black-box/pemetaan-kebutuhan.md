@@ -133,6 +133,29 @@ Bila usulan disetujui, status KF2–KF4 tetap TERPENUHI. Frasa "selang kepercaya
 | "The chi-square test with a known covariance matrix is available for the one-sample, paired, and two-sample designs (…)." | Toast galat analisis (dan pengaman di Rust, Errors Logs konteks `calculate_known_covariance_test`) | Σ dua populasi dengan kovariat atau WLS |
 | Pesan Rust lain (`Known covariance matrix … must be symmetric.`, `… is missing.`, `Unknown design …`) | Errors Logs | Pengaman; tidak terjangkau lewat UI |
 
+## Perubahan teks tampilan (2026-09-26)
+
+Teks yang terlihat pengguna di MV dan RM dirapikan sesudah iterasi 4. Perilaku dan pesan validasi tidak berubah. Bagian lain dokumen ini masih mengutip teks sebelum perubahan; teks yang berlaku adalah kolom "Sesudah".
+
+| Tempat | Sebelum | Sesudah |
+|---|---|---|
+| Judul subdialog μ₀ | Test Values (μ₀) — Hotelling T² Satu Populasi | Multivariate: Test Values (μ₀) |
+| Judul subdialog δ₀ | Test Values (δ₀) — Hotelling T² Dua Populasi | Multivariate: Test Values (δ₀) |
+| Judul subdialog Paired | Paired (Hotelling T²) — Vektor Selisih | Multivariate: Paired |
+| Tooltip Covariance Matrices | … tidak terpenuhi — misal saat Box's M test signifikan. | … tidak terpenuhi, misalnya bila uji Box's M signifikan. |
+| Ringkasan δ₀ dan Σ | δ₀ = [3, 2, 10, 1] · Σ known / · Σ₁, Σ₂ known | δ₀ = [3, 2, 10, 1]; Σ known / ; Σ₁ and Σ₂ known |
+| Judul Multivariate Tests berpasangan | Multivariate Tests — Hotelling T² Berpasangan | Multivariate Tests (baris efek tetap "Hotelling T² Berpasangan") |
+| Baris efek Welch | jk — Welch-Satterthwaite | jk (Welch-Satterthwaite) |
+| Catatan Welch | … (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. | … (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices. |
+| Catatan R Squared (Tests of Between-Subjects Effects) | a. R Squared = … (Adjusted R Squared = …) — x1 | a. R Squared = … (Adjusted R Squared = …) for x1 |
+| Judul tabel lain | Multiple Comparisons — f (m), Estimated Marginal Means — f, Between-Subjects SSCP Matrix — t, SSCP Matrix — c (MV dan RM), &lt;uji&gt; — Dependent Variable: y, Spread vs. Level — Dependent Variable: y | Multiple Comparisons: f (m), Estimated Marginal Means: f, Between-Subjects SSCP Matrix: t, SSCP Matrix: c, &lt;uji&gt;, Dependent Variable: y, Spread vs. Level, Dependent Variable: y |
+| Grafik residual | Observed × Predicted × Std. Residual — y1 (entri "Observed × Predicted × Std. Residual Plots") | Residual Plots: y1 (entri "Residual Plots") |
+| Label K-Matrix | 95% Confidence Interval — Lower/Upper Bound | 95% Confidence Interval, Lower/Upper Bound |
+| Catatan CI simultan | … (α = 0.05 from Options → Significance Level). Krishnamoorthy–Yu, Welch–Satterthwaite | … (α = 0.05, the Significance Level in Options). Krishnamoorthy-Yu, Welch-Satterthwaite |
+| Deskripsi tabel (halaman Result) | Kalimat generik, misalnya "A significant Sig. (< .05) indicates that the effect significantly influences …", "Useful for interpreting …", "— pure visual convention …", "Errors logs from the analysis." | Kalimat pendek yang menyebut isi tabel; batas Sig. merujuk ke Significance Level di Options (bukan ".05" tetap); "Messages and warnings produced during the analysis." (MV 24 deskripsi, RM 9) |
+| Pesan pasangan belum lengkap (service) | Pair n is incomplete — both … | Pair n is incomplete: both … |
+| Teks tur panduan RM/MV | (e.g. "time"), (e.g. 3 for pre / post / follow-up), (level × measure), analysed | such as "time", such as 3 for pre, post, and follow-up, one slot per level and measure, analyzed |
+
 ---
 
 ## KF1. Pemilihan analisis pada kelompok GLM Multivariate — TERPENUHI

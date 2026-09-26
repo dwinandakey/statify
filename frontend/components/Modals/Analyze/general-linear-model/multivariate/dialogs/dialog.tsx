@@ -467,8 +467,8 @@ export const MultivariateDialog = ({
                                         <p className="text-xs">
                                             Pilih <b>Unequal</b>{" "}
                                             (Welch-Satterthwaite) jika
-                                            asumsi Σ₁ = Σ₂ tidak terpenuhi
-                                            — misal saat Box's M test
+                                            asumsi Σ₁ = Σ₂ tidak terpenuhi,
+                                            misalnya bila uji Box's M
                                             signifikan. Hanya berlaku
                                             untuk Fixed Factor dengan
                                             tepat 2 level.
@@ -523,8 +523,8 @@ export const MultivariateDialog = ({
                                     : "δ₀ = 0 (H₀: μ₁ = μ₂)"}
                                 {mainState.TwoSampleKnownSigma
                                     ? mainState.TwoSampleKnownSigma.mode === "separate"
-                                        ? " · Σ₁, Σ₂ known"
-                                        : " · Σ known"
+                                        ? "; Σ₁ and Σ₂ known"
+                                        : "; Σ known"
                                     : ""}
                             </span>
                             <Button

@@ -1,7 +1,7 @@
 # Tangkapan layar build final untuk naskah
 
-- **Build:** `BUILD_ID` `IdywReo5MTivt50HHa3VO`; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`; server `http://localhost:3101`.
-- **Pembuatan:** 2026-09-25, lewat UI asli dengan `testing/final/harness/bab5-gambar.cjs` (Playwright, Chromium bawaan, profil bersih per bagian, mode worker).
+- **Build:** `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`; server `http://localhost:3101`. Dibuat ulang sesudah perapian teks tampilan (2026-09-26).
+- **Pembuatan:** 2026-09-26, lewat UI asli dengan `testing/final/harness/bab5-gambar.cjs` (Playwright, Chromium bawaan, profil bersih per bagian, mode worker).
 - **Ukuran:** dialog dipotret selebar viewport 1600 × 1000 px; kartu hasil dipotret dengan klip selebar halaman (1600 px).
 - **Data:**
   - satu populasi: `hotelling 1 populasi.csv`;
@@ -13,7 +13,7 @@
 | Berkas | Isi | Ukuran (px) |
 |---|---|---|
 | `hasil-01-multivariate-tests-catatan-kaki.png` | Tabel Multivariate Tests dua populasi dengan catatan H₀ δ₀ dan catatan kaki gaya SPSS | 1600 × 743 |
-| `hasil-02-ci-simultan.png` | Tabel Simultaneous Confidence Intervals (T² dan Bonferroni) | 1600 × 676 |
+| `hasil-02-ci-simultan.png` | Tabel Simultaneous Confidence Intervals (T² dan Bonferroni) | 1600 × 704 |
 | `hasil-03-uji-khi-kuadrat.png` | Tabel Chi-Square Test (Known Covariance Matrix), satu populasi | 1600 × 512 |
 | `hasil-04-ci-sigma-diketahui.png` | Tabel Simultaneous Confidence Intervals (Known Covariance Matrix) | 1600 × 676 |
 | `hasil-05-mauchly.png` | Tabel Mauchly's Test of Sphericity (rm_b) | 1600 × 512 |

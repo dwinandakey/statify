@@ -341,7 +341,7 @@ const S = {};
 async function pairedOpen(c) {
     const p = c.page;
     await p.getByRole("button", { name: "Paired", exact: true }).click();
-    const dlg = p.getByRole("dialog").filter({ hasText: "Paired (Hotelling T²)" });
+    const dlg = p.getByRole("dialog").filter({ hasText: "Multivariate: Paired" });
     await dlg.waitFor({ state: "visible", timeout: 30000 });
     return dlg;
 }
@@ -352,7 +352,7 @@ async function mvTwoWay(c) {
 
 // ── Fitur v4: δ₀ dua populasi dan CI simultan ───────────────────────────────
 const FV4 = path.join(REPO, "testing/fitur-v4");
-const DLG_DELTA = "Test Values (δ₀) — Hotelling T² Dua Populasi";
+const DLG_DELTA = "Multivariate: Test Values (δ₀)"; // sebelumnya "Test Values (δ₀) — Hotelling T² Dua Populasi"
 const readRcsv = (f) => {
     const [head, ...body] = fs.readFileSync(f, "utf8").trim().split(/\r?\n/);
     const cols = head.split(",").map((s) => s.replace(/"/g, ""));
@@ -596,7 +596,7 @@ async function pairedSetup(c, csv, delta0) {
     await c.page.locator(MVOK).waitFor();
     c.log(`Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = ${delta0 ? delta0.join(", ") : "0"}`);
 }
-const MT_PAIRED = "Multivariate Tests — Hotelling T² Berpasangan";
+const MT_PAIRED = "Multivariate Tests"; // sebelum penghapusan "—" (2026-09-26): "Multivariate Tests — Hotelling T² Berpasangan"
 S["BB-KF04-03"] = async (c) => {
     await pairedSetup(c, path.join(MVD, "hotelling berpasangan (data asli).csv"), [8, 3]);
     const run1 = await mvRun(c, "OK Paired δ₀ = (8, 3)");
@@ -763,7 +763,7 @@ const S2 = [[9, 7.5, 4.5, 4], [19, 9.5, 5.5], [29, 13], [28]];
 const SD = [[120, 17], [22]];
 const T_CHI = "Chi-Square Test (Known Covariance Matrix)";
 const T_KCI = "Simultaneous Confidence Intervals (Known Covariance Matrix)";
-const DLG_MU0 = "Test Values (μ₀) — Hotelling T² Satu Populasi";
+const DLG_MU0 = "Multivariate: Test Values (μ₀)"; // sebelumnya "Test Values (μ₀) — Hotelling T² Satu Populasi"
 const R_KNOWN = readRcsv(path.join(REPO, "testing/final/bagian1/known-sigma-r.csv"));
 const CHK = { tv: "#known-sigma-checkbox", two: "#two-sample-known-sigma-checkbox", paired: "#paired-known-sigma-checkbox" };
 
