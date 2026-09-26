@@ -159,7 +159,7 @@ export async function analyzeKNN({
   const workerConfigData = withInternalChartOutputs(configData);
 
   const worker = new Worker(
-    "/workers/Classify/NearestNeighbor/nearest-neighbor.worker.js?v=knn-focal-positive-20260925",
+    "/workers/Classify/NearestNeighbor/nearest-neighbor.worker.js?v=knn-spss-feature-selection-20260926",
     { type: "module" },
   );
 

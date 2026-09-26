@@ -1,7 +1,7 @@
-import init, { KNNAnalysis } from "/workers/Classify/NearestNeighbor/pkg/wasm.js?v=knn-focal-positive-20260925";
+import init, { KNNAnalysis } from "/workers/Classify/NearestNeighbor/pkg/wasm.js?v=knn-spss-feature-selection-20260926";
 
 const WASM_URL =
-  "/workers/Classify/NearestNeighbor/pkg/wasm_bg.wasm?v=knn-focal-positive-20260925";
+  "/workers/Classify/NearestNeighbor/pkg/wasm_bg.wasm?v=knn-spss-feature-selection-20260926";
 
 self.onmessage = async (e) => {
   const {

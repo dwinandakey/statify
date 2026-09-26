@@ -10,7 +10,7 @@ use super::{
     core::{determine_effective_k, find_k_nearest_neighbors, preprocess_knn_data},
     prediction::{
         calculate_categorical_prediction, calculate_mean_prediction, calculate_median_prediction,
-        category_key,
+        category_key, CategoryTieBreaker,
     },
 };
 
@@ -144,7 +144,10 @@ fn calculate_forward_feature_selection(
         Some(evaluate_subset(data, config, &selected_features)?)
     };
 
-    if let Some(error) = previous_error {
+    // SPSS: with the minimum-change criterion, a zero error for the forced
+    // features means no features are added. The fixed-number criterion still
+    // adds J_add features.
+    if let (true, Some(error)) = (uses_minimum_change, previous_error) {
         if error <= f64::EPSILON {
             let removed_features = removed_features(&all_features, &selected_features);
             return Ok(FeatureSelectionResult {
@@ -456,6 +459,8 @@ fn evaluate_k(
 }
 
 fn training_error_rate(knn_data: &KnnData, config: &KnnConfig, k: usize) -> f64 {
+    let tie_breaker =
+        CategoryTieBreaker::from_training(&knn_data.target_values, &knn_data.training_indices);
     let mut total = 0usize;
     let mut correct = 0usize;
 
@@ -473,7 +478,7 @@ fn training_error_rate(knn_data: &KnnData, config: &KnnConfig, k: usize) -> f64 
             config.neighbors.metric_eucli,
             Some(&knn_data.processed_case_indices),
         );
-        let predicted = calculate_categorical_prediction(&neighbors, &knn_data.target_values);
+        let predicted = calculate_categorical_prediction(&neighbors, &knn_data.target_values, &tie_breaker);
 
         if category_key(Some(&knn_data.target_values[idx])) == category_key(Some(&predicted)) {
             correct += 1;

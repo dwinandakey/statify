@@ -40,13 +40,13 @@ export function useNearestNeighborValidation(formData: KNNType) {
     ).length;
     const usesFixedNumber = f.MaxReached && !f.BelowMin;
 
+    // A blank number to select is valid: SPSS then computes it automatically.
     if (
       usesFixedNumber &&
-      (!f.MaxToSelect ||
-        f.MaxToSelect <= 0 ||
-        !Number.isInteger(f.MaxToSelect))
+      f.MaxToSelect !== null &&
+      (f.MaxToSelect <= 0 || !Number.isInteger(f.MaxToSelect))
     ) {
-      return "Enter a positive whole number for the number of features to select.";
+      return "Enter a positive whole number for the number of features to select, or leave it blank to select automatically.";
     }
 
     if (

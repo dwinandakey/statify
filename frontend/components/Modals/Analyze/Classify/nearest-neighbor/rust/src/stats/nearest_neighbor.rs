@@ -8,7 +8,7 @@ use super::core::{
     calculate_mean_prediction, calculate_median_prediction, calculate_predictor_importance,
     determine_effective_k, find_k_nearest_neighbors_with_weights, preprocess_knn_data,
 };
-use super::prediction::calculate_categorical_prediction;
+use super::prediction::{calculate_categorical_prediction, CategoryTieBreaker};
 
 /// Calculates nearest neighbors for the whole dataset
 pub fn calculate_nearest_neighbors(
@@ -54,6 +54,9 @@ pub fn calculate_nearest_neighbors(
     let prediction_method = numeric_prediction_method(&knn_data, config);
 
     // Process each focal point and find their neighbors
+    let tie_breaker =
+        CategoryTieBreaker::from_training(&knn_data.target_values, &knn_data.training_indices);
+
     let focal_neighbor_sets = focal_indices
         .iter()
         .map(|&focal_idx| {
@@ -84,7 +87,7 @@ pub fn calculate_nearest_neighbors(
             let mut neighbor_details = Vec::with_capacity(neighbors.len());
             let mut distances = Vec::with_capacity(neighbors.len());
 
-            let predicted_value = calculate_neighbor_prediction(&neighbors, &knn_data, config);
+            let predicted_value = calculate_neighbor_prediction(&neighbors, &knn_data, config, &tie_breaker);
 
             for (idx, distance) in neighbors {
                 let neighbor_id = knn_data.case_identifiers[idx];
@@ -146,6 +149,7 @@ fn calculate_neighbor_prediction(
     neighbors: &[(usize, f64)],
     knn_data: &crate::models::data::KnnData,
     config: &KnnConfig,
+    tie_breaker: &CategoryTieBreaker,
 ) -> Option<DataValue> {
     let prediction = if knn_data.target_is_numeric_scale() {
         if config.neighbors.predictions_median {
@@ -154,7 +158,7 @@ fn calculate_neighbor_prediction(
             calculate_mean_prediction(neighbors, &knn_data.target_values)
         }
     } else {
-        calculate_categorical_prediction(neighbors, &knn_data.target_values)
+        calculate_categorical_prediction(neighbors, &knn_data.target_values, tie_breaker)
     };
 
     match prediction {

@@ -141,16 +141,14 @@ describe("useNearestNeighborValidation — validasi menu (tab Features, opsi Fea
     expect(result.current.validateFeatureSelection()).toBeNull();
   });
 
-  it("TCV06: Feature Selection aktif, jumlah fitur yang ingin dipilih belum diisi -> menu meminta diisi angka positif", () => {
+  it("TCV06: Feature Selection aktif, jumlah fitur yang ingin dipilih dikosongkan -> diterima, jumlah fitur dihitung otomatis (J_add SPSS)", () => {
     const { result } = renderHook(() =>
       useNearestNeighborValidation(
         makeFormData({ features: { PerformSelection: true, MaxReached: true, BelowMin: false, MaxToSelect: null } }),
       ),
     );
 
-    expect(result.current.validateFeatureSelection()).toBe(
-      "Enter a positive whole number for the number of features to select.",
-    );
+    expect(result.current.validateFeatureSelection()).toBeNull();
   });
 
   it("TCV07: Feature Selection aktif, jumlah fitur diisi 0 -> tetap ditolak dengan pesan yang sama (batas nilai positif)", () => {
@@ -161,7 +159,7 @@ describe("useNearestNeighborValidation — validasi menu (tab Features, opsi Fea
     );
 
     expect(result.current.validateFeatureSelection()).toBe(
-      "Enter a positive whole number for the number of features to select.",
+      "Enter a positive whole number for the number of features to select, or leave it blank to select automatically.",
     );
   });
 

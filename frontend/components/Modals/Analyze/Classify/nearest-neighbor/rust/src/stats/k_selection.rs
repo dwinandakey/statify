@@ -11,7 +11,7 @@ use super::{
     partition::EXCLUDED_FOLD,
     prediction::{
         calculate_categorical_prediction, calculate_mean_prediction, calculate_median_prediction,
-        category_key,
+        category_key, CategoryTieBreaker,
     },
 };
 
@@ -198,6 +198,8 @@ fn evaluate_fold(
         ));
     }
 
+    let tie_breaker =
+        CategoryTieBreaker::from_training(&knn_data.target_values, &cv_training_indices);
     let mut correct = 0usize;
     let mut evaluated = 0usize;
     let mut sse = 0.0;
@@ -226,7 +228,7 @@ fn evaluate_fold(
                 evaluated += 1;
             }
         } else {
-            let predicted = calculate_categorical_prediction(&neighbors, &knn_data.target_values);
+            let predicted = calculate_categorical_prediction(&neighbors, &knn_data.target_values, &tie_breaker);
             if category_key(Some(&knn_data.target_values[validation_idx]))
                 == category_key(Some(&predicted))
             {
