@@ -530,6 +530,7 @@ mod tests {
                 partition_name: None,
                 fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,

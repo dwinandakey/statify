@@ -68,7 +68,7 @@ pub fn calculate_nearest_neighbors(
             // Holdout/focal cases are compared only to training cases.
             let candidate_indices: Vec<usize> = candidate_pool
                 .iter()
-                .filter(|&&idx| knn_data.case_identifiers[idx] != focal_record)
+                .filter(|&&idx| idx != focal_idx)
                 .copied()
                 .collect();
 
@@ -232,6 +232,61 @@ mod tests {
         );
     }
 
+    #[test]
+    fn leave_one_out_excludes_only_the_focal_row_when_case_ids_are_duplicated() {
+        let data = AnalysisData {
+            target_data: vec![vec![
+                record("target", DataValue::Text("A".to_string())),
+                record("target", DataValue::Text("B".to_string())),
+                record("target", DataValue::Text("A".to_string())),
+            ]],
+            features_data: vec![vec![
+                record("x", DataValue::Number(0.0)),
+                record("x", DataValue::Number(1.0)),
+                record("x", DataValue::Number(5.0)),
+            ]],
+            focal_case_data: Vec::new(),
+            case_data: Some(vec![
+                vec![
+                    record("partition", DataValue::Number(1.0)),
+                    record("partition", DataValue::Number(1.0)),
+                    record("partition", DataValue::Number(1.0)),
+                ],
+                vec![
+                    record("id", DataValue::Number(7.0)),
+                    record("id", DataValue::Number(7.0)),
+                    record("id", DataValue::Number(7.0)),
+                ],
+            ]),
+            target_data_defs: vec![vec![variable_def("target", VariableMeasure::Nominal)]],
+            features_data_defs: vec![vec![variable_def("x", VariableMeasure::Scale)]],
+            focal_case_data_defs: Vec::new(),
+            case_data_defs: None,
+        };
+        let mut config = config();
+        config.main.case_iden_var = Some("id".to_string());
+
+        let result = calculate_nearest_neighbors(&data, &config).unwrap();
+        let nearest_rows = result
+            .focal_neighbor_sets
+            .iter()
+            .map(|set| {
+                (
+                    set.focal_row_number.unwrap(),
+                    set.neighbors
+                        .iter()
+                        .filter_map(|case| case.row_number)
+                        .collect::<Vec<_>>(),
+                )
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            nearest_rows,
+            vec![(1, vec![2]), (2, vec![1]), (3, vec![2])]
+        );
+    }
+
     fn record(name: &str, value: DataValue) -> DataRecord {
         let mut values = HashMap::new();
         values.insert(name.to_string(), value);
@@ -314,6 +369,7 @@ mod tests {
                 partition_name: None,
                 fold_name: None,
             },
+            run: Default::default(),
             output: OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,
