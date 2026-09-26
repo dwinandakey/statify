@@ -513,7 +513,7 @@ S["BB-KF04-01"] = async (c) => {
     await setChecks(c, "Options", OPT, MVOK);
     await mvRun(c, "OK Paired");
     await gotoResult(p);
-    await snapTable(c, "Hotelling T² Berpasangan");
+    await snapTable(c, "Hotelling T² (Paired)");
 };
 S["BB-KF04-02"] = async (c) => {
     const p = c.page;
@@ -521,14 +521,14 @@ S["BB-KF04-02"] = async (c) => {
     await mvOpen(c);
     let dlg = await pairedOpen(c);
     await dlg.getByRole("button", { name: "Continue", exact: true }).click();
-    await waitToast(c, /Tambahkan minimal/, "Continue tanpa pasangan");
+    await waitToast(c, /Add at least one variable pair/, "Continue tanpa pasangan");
     c.note("terbuka1", await dlg.isVisible());
     await dismissToasts(p);
     const avail = dlg.locator("#multivariate-paired-available-variables");
     await avail.getByText("kedalaman1", { exact: true }).first().dblclick();
     await dlg.getByRole("button", { name: "Continue", exact: true }).click();
     // Toast apa pun yang benar-benar tampil dicatat (tidak diasumsikan).
-    await waitToast(c, /Tambahkan minimal|belum lengkap|Pasangan harus/, "Continue dengan Variable 1 saja");
+    await waitToast(c, /Add at least one|incomplete|two different/, "Continue dengan Variable 1 saja");
     c.note("terbuka2", await dlg.isVisible());
     await dismissToasts(p);
     // Langkah 3: kedalaman1 juga sebagai Variable 2. Double-click dari daftar
@@ -554,7 +554,7 @@ S["BB-KF04-02"] = async (c) => {
     if (ITER === 1) {
         await c.snap(dlg, "pasangan (kedalaman1, kedalaman1)");
         await dlg.getByRole("button", { name: "Continue", exact: true }).click();
-        await waitToast(c, /Pasangan harus|belum lengkap|Tambahkan/, "Continue dengan variabel sama", 5000).catch(() => c.obs.notes.push("tidak ada toast setelah Continue langkah 3"));
+        await waitToast(c, /two different|incomplete|Add at least/, "Continue dengan variabel sama", 5000).catch(() => c.obs.notes.push("tidak ada toast setelah Continue langkah 3"));
     } else {
         // Revisi R2: pasangan dengan variabel yang sama tidak dapat dibentuk.
         await c.snap(dlg, "langkah 3: kedalaman1 tidak ada di Available Variables; pasangan tidak terbentuk");

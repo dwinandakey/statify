@@ -66,7 +66,7 @@ Sumber: `frontend/components/Modals/Analyze/general-linear-model/result_compare.
 
 ## 6. Konsistensi build
 
-Eksperimen dijalankan pada build 2026-09-23. Sesudah itu kode berubah di v3, v4, v5, dan final. Untuk memeriksa bahwa beban yang diukur masih mewakili build final (`IdywReo5MTivt50HHa3VO`; build `OrpyJfBOluV37xa0aqmFr` sesudahnya hanya mengubah teks tampilan, dengan WASM, payload, dan respons worker identik), 8 sel eksperimen dijalankan ulang lewat dialog asli build final dengan konfigurasi dialog yang sama, dan payload serta respons worker ditangkap. Hasilnya di `testing/final/iterasi4/regresi/`.
+Eksperimen dijalankan pada build 2026-09-23. Sesudah itu kode berubah di v3, v4, v5, dan final. Untuk memeriksa bahwa beban yang diukur masih mewakili build final (`IdywReo5MTivt50HHa3VO`; build `OrpyJfBOluV37xa0aqmFr` dan `JyX0CCEXNcyYSCxSLCIPP` sesudahnya hanya mengubah teks tampilan, dengan WASM, payload, dan respons worker identik), 8 sel eksperimen dijalankan ulang lewat dialog asli build final dengan konfigurasi dialog yang sama, dan payload serta respons worker ditangkap. Hasilnya di `testing/final/iterasi4/regresi/`.
 
 | Pemeriksaan | Hasil |
 |---|---|

@@ -196,7 +196,7 @@ export const MultivariatePaired = ({
                     counterpart.columnIndex === variable.columnIndex
                 ) {
                     toast.error(
-                        "Pasangan harus berisi dua variabel yang berbeda."
+                        "A pair must contain two different variables."
                     );
                     return;
                 }
@@ -231,7 +231,7 @@ export const MultivariatePaired = ({
                     counterpart.columnIndex === variable.columnIndex
                 ) {
                     toast.error(
-                        "Pasangan harus berisi dua variabel yang berbeda."
+                        "A pair must contain two different variables."
                     );
                     return;
                 }
@@ -320,7 +320,7 @@ export const MultivariatePaired = ({
                 testVariables1[index].columnIndex ===
                     testVariables2[index].columnIndex
             ) {
-                toast.error("Pasangan harus berisi dua variabel yang berbeda.");
+                toast.error("A pair must contain two different variables.");
                 return;
             }
             const temp = testVariables1[index];
@@ -448,12 +448,12 @@ export const MultivariatePaired = ({
         // Variable 1 filled asks for Variable 2 instead of "add a pair".
         if (hasIncompletePair) {
             toast.warning(
-                "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris."
+                "Some pairs are incomplete. Select Variable 1 and Variable 2 in every row."
             );
             return;
         }
         if (completePairs.length === 0) {
-            toast.warning("Tambahkan minimal satu pasangan variabel.");
+            toast.warning("Add at least one variable pair.");
             return;
         }
         // With Σd known the matrix is validated first; on an error the
@@ -499,16 +499,16 @@ export const MultivariatePaired = ({
 
                 <div className="flex flex-col gap-4">
                     <p className="text-sm text-muted-foreground">
-                        Pilih pasangan variabel (Measurement 1 dan Measurement 2)
-                        untuk membentuk vektor selisih d = M1 − M2. Uji Hotelling
-                        T² berpasangan dijalankan sebagai uji satu populasi pada
-                        vektor d terhadap δ₀.
+                        Select pairs of variables (Measurement 1 and Measurement
+                        2) to form the difference vector d = M1 − M2. The paired
+                        Hotelling T² test is run as a one-sample test of d against
+                        δ₀.
                     </p>
 
                     {/* Bagian A: pemilihan pasangan variabel */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            A. Pemilihan Pasangan Variabel
+                            A. Variable Pairs
                         </Label>
                         <PairedVariablesTab
                             availableVariables={availableVariables}
@@ -532,12 +532,12 @@ export const MultivariatePaired = ({
                     {/* Bagian B: preview vektor selisih */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            B. Preview Vektor Selisih (10 baris pertama)
+                            B. Difference Vector Preview (first 10 rows)
                         </Label>
                         {completePairs.length === 0 ? (
                             <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                                Pilih minimal satu pasangan lengkap untuk
-                                menampilkan preview.
+                                Select at least one complete pair to show the
+                                preview.
                             </div>
                         ) : (
                             <ScrollArea className="max-h-[320px] pr-2 border rounded-md">
@@ -563,7 +563,7 @@ export const MultivariatePaired = ({
                                                     }
                                                     className="text-center text-muted-foreground text-sm"
                                                 >
-                                                    Tidak ada data pada dataset.
+                                                    The dataset has no data.
                                                 </TableCell>
                                             </TableRow>
                                         ) : (
@@ -591,16 +591,15 @@ export const MultivariatePaired = ({
                     {/* Bagian C: isian δ₀ */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            C. Nilai Selisih Hipotesis (δ₀)
+                            C. Hypothesized Difference (δ₀)
                         </Label>
                         <p className="text-xs text-muted-foreground mb-2">
-                            Masukkan nilai selisih hipotesis (δ₀) untuk setiap
-                            pasangan. Biarkan 0 untuk menguji tidak ada
-                            perbedaan.
+                            Enter the hypothesized difference (δ₀) for each
+                            pair. Leave 0 to test for no difference.
                         </p>
                         {completePairs.length === 0 ? (
                             <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                                Tambahkan pasangan lengkap untuk mengatur δ₀.
+                                Add a complete pair to set δ₀.
                             </div>
                         ) : (
                             <ScrollArea className="max-h-[240px] pr-2">
@@ -649,9 +648,9 @@ export const MultivariatePaired = ({
                                 {sigmaKnown && (
                                     <>
                                         <p className="text-xs text-muted-foreground">
-                                            Uji khi-kuadrat χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀)
-                                            dengan df = p, ditampilkan di samping uji
-                                            Hotelling T² berpasangan.
+                                            The chi-square test χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀),
+                                            df = p, is shown next to the paired
+                                            Hotelling T² test.
                                         </p>
                                         <KnownSigmaHint />
                                         <KnownSigmaMatrix

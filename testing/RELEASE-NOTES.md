@@ -111,8 +111,20 @@ Regresi pertama dijalankan pada build `LIBUcskLZhw3iEIArOeUX` (kode `73038fb3`, 
   - tujuh konfigurasi sampel lewat UI: payload dan respons WASM identik dengan build sebelumnya, dan isi tabel identik selain judul, catatan, deskripsi, dan label baris Welch (`testing/final/teks/`);
   - Jest modul GLM: hanya suite baseline yang gagal; `contrast-results.test.ts` disesuaikan dengan label baru;
   - black-box iterasi 5 (10 skenario, revisi R9): 10 Sesuai.
-- **Build:** `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`, WASM sama dengan F3. Tangkapan layar `testing/bab5/gambar/` dan `sleeping-dog/` dibuat ulang dari build ini.
+- **Build:** `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`, WASM sama dengan F3.
 - **Tag `skripsi-final-v5` tidak dipindah** (sudah di-push). Perubahan ini ada di commit sesudah tag.
+
+### F7. Penyeragaman teks GLM Multivariate ke bahasa Inggris (2026-09-26)
+
+- **Cakupan:** hanya modul `multivariate/`: subdialog Test Values (μ₀), Test Values (δ₀), Paired, petunjuk matriks Σ, tooltip Covariance Matrices, toast Paired, serta label baris dan catatan uji berpasangan. Modul Repeated Measures sudah berbahasa Inggris; modul lain tidak disentuh.
+- **Isi:** misalnya "Hotelling T² Berpasangan" menjadi "Hotelling T² (Paired)", "Tambahkan minimal satu pasangan variabel." menjadi "Add at least one variable pair.", dan "δ₀ hanya berlaku bila …" menjadi "δ₀ applies only when …". Daftar lengkap ada di `testing/bab5/thesis-impact-final.md` §8.
+- **Tidak berubah:** perhitungan, payload, respons WASM, urutan tabel, dan kapan pesan validasi muncul.
+- **Pemeriksaan:**
+  - tujuh konfigurasi sampel lewat UI (mv3, mv3d, mv3dci, mv3ci, mv2d, mv1ci, mvK4): payload dan respons WASM identik dengan build `IdywReo5MTivt50HHa3VO`, dan isi tabel identik selain judul, catatan, deskripsi, serta label efek dan CI (`testing/final/teks/pembanding-en.txt`);
+  - Jest modul Multivariate: hanya dua suite baseline yang gagal;
+  - black-box iterasi 6 (4 skenario, revisi R10): 4 Sesuai.
+- **Build:** `BUILD_ID` `JyX0CCEXNcyYSCxSLCIPP`, WASM sama dengan F3. Tangkapan layar `testing/bab5/gambar/` dan `sleeping-dog/` dibuat ulang dari build ini.
+- **Tag `skripsi-final-v5` tidak dipindah.** Perubahan ini ada di commit sesudah tag.
 
 ## v5. Perubahan dan pemeriksaan skripsi-final-v4 → skripsi-final-v5
 

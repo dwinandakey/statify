@@ -558,7 +558,7 @@ S["BB-KF03-08"] = async (c) => {
     await importCsv(c, path.join(MVD, "one-way manova.csv"));
     await mvOpen(c); await mvDV(c, ["y1", "y2"]); await mvTo(c, ["treatment"], "FixFactor");
     const d = await deltaOpen(c);
-    c.note("pesanSubdialog", d.text.match(/δ₀ hanya berlaku[^.]*\)?\./)?.[0] ?? null);
+    c.note("pesanSubdialog", d.text.match(/δ₀ applies only[^.]*\)?\./)?.[0] ?? null);
     await deltaFill(c, d.dlg, [1, 1]);
     await c.snap(d.dlg, "subdialog δ₀ dengan faktor 3 level, isian 1, 1");
     await deltaClose(c, d.dlg, "Continue");
@@ -601,12 +601,12 @@ S["BB-KF04-03"] = async (c) => {
     await pairedSetup(c, path.join(MVD, "hotelling berpasangan (data asli).csv"), [8, 3]);
     const run1 = await mvRun(c, "OK Paired δ₀ = (8, 3)");
     await gotoResult(c.page);
-    await snapTable(c, "Hotelling T² Berpasangan");
+    await snapTable(c, "Hotelling T² (Paired)");
     await secondProfile(c);
     await pairedSetup(c, path.join(FV4, "data/mv3-geser.csv"), null);
     const run2 = await mvRun(c, "langkah 4: mv3-geser.csv, δ₀ = 0");
     await gotoResult(c.page);
-    await snapTable(c, "Hotelling T² Berpasangan", "langkah 4: data geser");
+    await snapTable(c, "Hotelling T² (Paired)", "langkah 4: data geser");
     const t1 = tableOf(run1, MT_PAIRED), t2 = tableOf(run2, MT_PAIRED);
     c.note("catatan", noteOf(t1));
     c.note("nilaiSamaDenganLangkah4", JSON.stringify(t1?.rows) === JSON.stringify(t2?.rows));

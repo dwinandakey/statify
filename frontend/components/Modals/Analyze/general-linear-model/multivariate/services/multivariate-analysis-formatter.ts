@@ -1045,7 +1045,7 @@ function formatMultivariateTests(
     // surface an extra T² column derived from Hotelling-Lawley trace.
     const hotellingT2Mode = testValues !== null;
     const interceptLabel = pairedActive
-        ? "Hotelling T² Berpasangan"
+        ? "Hotelling T² (Paired)"
         : hotellingT2Mode
         ? "Hotelling T² (vs μ₀)"
         : "Intercept";
@@ -1093,7 +1093,7 @@ function formatMultivariateTests(
         const delta0Str = `[${pairedMode.delta0
             .map((v) => Number(v.toFixed(4)).toString())
             .join(", ")}]`;
-        tableNote = `Analisis dilakukan pada vektor selisih ${pairList}. δ₀ = ${delta0Str}.`;
+        tableNote = `Computed on the difference vector ${pairList}. δ₀ = ${delta0Str}.`;
         // δ₀ ≠ 0 (v4): state the hypothesis explicitly. δ₀ = 0 keeps the
         // note unchanged.
         if (pairedMode.delta0.some((v) => Number.isFinite(v) && v !== 0)) {

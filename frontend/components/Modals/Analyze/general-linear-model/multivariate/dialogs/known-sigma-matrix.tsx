@@ -109,8 +109,9 @@ export const KnownSigmaMatrix = ({
 
 export const KnownSigmaHint = () => (
     <p className="text-xs text-muted-foreground">
-        Isi segitiga atas termasuk diagonal; segitiga bawah terisi otomatis
-        (Σ simetris). Diagonal (varians) harus positif dan Σ definit positif.
+        Fill in the upper triangle including the diagonal; the lower triangle
+        is filled in automatically (Σ is symmetric). The diagonal entries
+        (variances) must be positive and Σ must be positive definite.
     </p>
 );
 

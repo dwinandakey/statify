@@ -116,15 +116,15 @@ export const MultivariateTestValues = ({
                 <Separator />
                 <div className="flex flex-col gap-3">
                     <p className="text-sm text-muted-foreground">
-                        Masukkan vektor rata-rata hipotesis (μ₀) untuk uji
-                        Hotelling T² satu populasi. Biarkan 0 untuk menguji
-                        terhadap vektor nol.
+                        Enter the hypothesized mean vector (μ₀) for the
+                        one-sample Hotelling T² test. Leave 0 to test against
+                        the zero vector.
                     </p>
 
                     {depVar.length === 0 ? (
                         <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                            Pilih Dependent Variables terlebih dahulu di
-                            dialog utama.
+                            Select the Dependent Variables in the main dialog
+                            first.
                         </div>
                     ) : (
                         <ScrollArea className="max-h-[320px] pr-2">
@@ -174,9 +174,9 @@ export const MultivariateTestValues = ({
                             {sigmaKnown && (
                                 <>
                                     <p className="text-xs text-muted-foreground">
-                                        Uji khi-kuadrat χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀)
-                                        dengan df = p ditampilkan di samping uji
-                                        Hotelling T².
+                                        The chi-square test χ² = n(x̄ − μ₀)ᵀΣ⁻¹(x̄ − μ₀),
+                                        df = p, is shown next to the Hotelling
+                                        T² test.
                                     </p>
                                     <KnownSigmaHint />
                                     <KnownSigmaMatrix

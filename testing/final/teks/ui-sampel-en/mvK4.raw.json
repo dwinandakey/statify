@@ -1,0 +1,666 @@
+{
+ "config": "mvK4",
+ "worker": "http://localhost:3101/_next/static/chunks/2609.a7eabd6c63404352.js",
+ "request": {
+  "id": 1,
+  "payload": {
+   "dep_data": [
+    [
+     {
+      "d_kedalaman1_minus_kedalaman2": 22
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 2
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 4
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 12
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 11
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 15
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 28
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -5
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 8
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 4
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -1
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -10
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": -2
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 25
+     },
+     {
+      "d_kedalaman1_minus_kedalaman2": 7
+     }
+    ],
+    [
+     {
+      "d_ukuran1_minus_ukuran2": -4
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 5
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 3
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -3
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 2
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 4
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 10
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -1
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 10
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 6
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 5
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 0
+     },
+     {
+      "d_ukuran1_minus_ukuran2": -4
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 8
+     },
+     {
+      "d_ukuran1_minus_ukuran2": 5
+     }
+    ]
+   ],
+   "fix_factor_data": [],
+   "covar_data": [],
+   "wls_data": [],
+   "dep_data_defs": [
+    [
+     {
+      "columnIndex": 0,
+      "name": "d_kedalaman1_minus_kedalaman2",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 4,
+      "label": "kedalaman1 − kedalaman2",
+      "values": [],
+      "missing": [],
+      "columns": 0,
+      "align": "left",
+      "measure": "scale",
+      "role": "input"
+     }
+    ],
+    [
+     {
+      "columnIndex": 1,
+      "name": "d_ukuran1_minus_ukuran2",
+      "type": "NUMERIC",
+      "width": 8,
+      "decimals": 4,
+      "label": "ukuran1 − ukuran2",
+      "values": [],
+      "missing": [],
+      "columns": 0,
+      "align": "left",
+      "measure": "scale",
+      "role": "input"
+     }
+    ]
+   ],
+   "fix_factor_data_defs": [],
+   "covar_data_defs": [],
+   "wls_data_defs": [],
+   "config_data": {
+    "main": {
+     "DepVar": [
+      "d_kedalaman1_minus_kedalaman2",
+      "d_ukuran1_minus_ukuran2"
+     ],
+     "FixFactor": [],
+     "Covar": [],
+     "WlsWeight": null,
+     "TestValues": [
+      8,
+      3
+     ],
+     "VarianceMode": "Pooled"
+    },
+    "model": {
+     "NonCust": true,
+     "Custom": false,
+     "BuildCustomTerm": false,
+     "FactorsVar": [],
+     "TermsVar": null,
+     "FactorsModel": null,
+     "CovModel": null,
+     "RandomModel": null,
+     "BuildTermMethod": "interaction",
+     "TermText": null,
+     "SumOfSquareMethod": "typeIII",
+     "Intercept": true
+    },
+    "contrast": {
+     "FactorList": [],
+     "ContrastMethod": "none",
+     "Last": true,
+     "First": false
+    },
+    "plots": {
+     "SrcList": [],
+     "AxisList": null,
+     "LineList": null,
+     "PlotList": null,
+     "FixFactorVars": null,
+     "RandFactorVars": null,
+     "LineChartType": true,
+     "BarChartType": false,
+     "IncludeErrorBars": false,
+     "ConfidenceInterval": true,
+     "StandardError": false,
+     "IncludeRefLineForGrandMean": false,
+     "YAxisStart0": false,
+     "Multiplier": 2
+    },
+    "posthoc": {
+     "SrcList": [],
+     "FixFactorVars": null,
+     "ErrorRatio": 100,
+     "Twosided": true,
+     "LtControl": false,
+     "GtControl": false,
+     "CategoryMethod": "last",
+     "Waller": false,
+     "Dunnett": false,
+     "Lsd": false,
+     "Bonfe": false,
+     "Sidak": false,
+     "Scheffe": false,
+     "Regwf": false,
+     "Regwq": false,
+     "Snk": false,
+     "Tu": false,
+     "Tub": false,
+     "Dun": false,
+     "Hoc": false,
+     "Gabriel": false,
+     "Tam": false,
+     "Dunt": false,
+     "Games": false,
+     "Dunc": false
+    },
+    "emmeans": {
+     "SrcList": [],
+     "TargetList": null,
+     "CompMainEffect": false,
+     "ConfiIntervalMethod": "lsdNone"
+    },
+    "save": {
+     "ResWeighted": false,
+     "PreWeighted": false,
+     "StdStatistics": false,
+     "CooksD": false,
+     "Leverage": false,
+     "UnstandardizedRes": false,
+     "WeightedRes": false,
+     "StandardizedRes": false,
+     "StudentizedRes": false,
+     "DeletedRes": false,
+     "CoeffStats": false,
+     "NewDataSet": true,
+     "FilePath": null,
+     "DatasetName": null,
+     "WriteNewDataSet": false
+    },
+    "options": {
+     "DescStats": true,
+     "HomogenTest": false,
+     "EstEffectSize": true,
+     "SprVsLevel": false,
+     "ObsPower": true,
+     "ResPlot": false,
+     "ParamEst": false,
+     "LackOfFit": false,
+     "SscpMat": false,
+     "GeneralFun": false,
+     "ResSscpMat": false,
+     "CoefficientMatrix": false,
+     "TransformMat": false,
+     "SigLevel": 0.05,
+     "SimultaneousCI": true
+    },
+    "bootstrap": {
+     "PerformBootStrapping": false,
+     "NumOfSamples": 1000,
+     "Seed": false,
+     "SeedValue": 200000,
+     "Level": 95,
+     "Percentile": true,
+     "BCa": false,
+     "Simple": true,
+     "Stratified": false,
+     "Variables": [
+      "lokasi",
+      "kedalaman1",
+      "ukuran1",
+      "kedalaman2",
+      "ukuran2",
+      "kd",
+      "uk"
+     ],
+     "StrataVariables": null
+    }
+   },
+   "known_covariance": {
+    "design": "one_sample",
+    "sigma": [
+     [
+      120,
+      17
+     ],
+     [
+      17,
+      22
+     ]
+    ]
+   }
+  }
+ },
+ "response": {
+  "id": 1,
+  "ok": true,
+  "results": {
+   "between_subjects_factors": {},
+   "descriptive_statistics": {
+    "d_kedalaman1_minus_kedalaman2": {
+     "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+     "groups": [
+      {
+       "factor_name": "Overall",
+       "factor_value": "",
+       "stats": {
+        "mean": 8,
+        "std_deviation": 11.025943432261412,
+        "n": 15
+       }
+      }
+     ]
+    },
+    "d_ukuran1_minus_ukuran2": {
+     "dependent_variable": "d_ukuran1_minus_ukuran2",
+     "groups": [
+      {
+       "factor_name": "Overall",
+       "factor_value": "",
+       "stats": {
+        "mean": 3.066666666666667,
+        "std_deviation": 4.667006790326363,
+        "n": 15
+       }
+      }
+     ]
+    }
+   },
+   "tests_of_between_subjects_effects": {
+    "effects": {
+     "d_ukuran1_minus_ukuran2": {
+      "Corrected Model": {
+       "sum_of_squares": 0,
+       "df": 0,
+       "mean_square": null,
+       "f_value": null,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Error": {
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 21.78095238095238,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Total": {
+       "sum_of_squares": 305,
+       "df": 15,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Intercept": {
+       "sum_of_squares": 0.06666666666666288,
+       "df": 1,
+       "mean_square": 0.06666666666666288,
+       "f_value": 0.0030607783121992136,
+       "significance": 0.9566618876016106,
+       "partial_eta_squared": 0.00021857923497266518,
+       "noncent_parameter": 0.0030607783121992136,
+       "observed_power": 0.05030552715573333
+      },
+      "Corrected Total": {
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     },
+     "d_kedalaman1_minus_kedalaman2": {
+      "Total": {
+       "sum_of_squares": 1702,
+       "df": 15,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Corrected Total": {
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Corrected Model": {
+       "sum_of_squares": 0,
+       "df": 0,
+       "mean_square": null,
+       "f_value": null,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Error": {
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 121.57142857142857,
+       "f_value": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      "Intercept": {
+       "sum_of_squares": 0,
+       "df": 1,
+       "mean_square": 0,
+       "f_value": 0,
+       "significance": 1,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0.05000000000000138
+      }
+     }
+    },
+    "r_squared": {
+     "d_ukuran1_minus_ukuran2": 0,
+     "d_kedalaman1_minus_kedalaman2": 0
+    },
+    "adjusted_r_squared": {
+     "d_kedalaman1_minus_kedalaman2": 0,
+     "d_ukuran1_minus_ukuran2": 0
+    }
+   },
+   "executed_functions": [
+    "basic_processing_summary",
+    "calculate_descriptive_statistics",
+    "calculate_tests_between_subjects_effects",
+    "calculate_multivariate_tests",
+    "calculate_univariate_tests",
+    "calculate_homogeneous_subsets",
+    "generate_plots"
+   ],
+   "multivariate_tests": {
+    "effects": {
+     "Intercept": {
+      "Hotelling's Trace": {
+       "value": 0.00024566502981395003,
+       "f": 0.0015968226937906752,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296408,
+       "noncent_parameter": 0.0031936453875813504,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Wilks' Lambda": {
+       "value": 0.9997543953066704,
+       "f": 0.0015968226937906752,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933295708,
+       "noncent_parameter": 0.0031936453875813504,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Pillai's Trace": {
+       "value": 0.0002456046933296408,
+       "f": 0.0015968226937906752,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296408,
+       "noncent_parameter": 0.0031936453875813504,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      },
+      "Roy's Largest Root": {
+       "value": 0.00024566502981395003,
+       "f": 0.0015968226937906752,
+       "hypothesis_df": 2,
+       "error_df": 13,
+       "significance": 0.9984046473459766,
+       "partial_eta_squared": 0.0002456046933296408,
+       "noncent_parameter": 0.0031936453875813504,
+       "observed_power": 0.050191699399032896,
+       "is_exact_statistic": true
+      }
+     }
+    },
+    "design": "Type III sum of squares",
+    "alpha": 0.05
+   },
+   "univariate_tests": {
+    "tests": {
+     "d_ukuran1_minus_ukuran2": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 2.9582283945787943e-30,
+       "df": 0,
+       "partial_eta_squared": 9.701229977849128e-33
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 141.0666666666667,
+       "df": 1,
+       "mean_square": 141.0666666666667,
+       "f": 6.476606908613905,
+       "significance": 0.02334632433222572,
+       "partial_eta_squared": 0.3162929745889388,
+       "noncent_parameter": 6.476606908613905,
+       "observed_power": 0.6583435150161449
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 304.93333333333334,
+       "df": 14,
+       "mean_square": 21.78095238095238
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 446,
+       "df": 15
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 304.93333333333334,
+       "df": 14
+      }
+     ],
+     "d_kedalaman1_minus_kedalaman2": [
+      {
+       "source": "Corrected Model",
+       "sum_of_squares": 0,
+       "df": 0,
+       "partial_eta_squared": 0
+      },
+      {
+       "source": "Intercept",
+       "sum_of_squares": 960,
+       "df": 1,
+       "mean_square": 960,
+       "f": 7.896592244418332,
+       "significance": 0.013901493950119082,
+       "partial_eta_squared": 0.3606311044327573,
+       "noncent_parameter": 7.896592244418332,
+       "observed_power": 0.7433019459275134
+      },
+      {
+       "source": "Error",
+       "sum_of_squares": 1702,
+       "df": 14,
+       "mean_square": 121.57142857142857
+      },
+      {
+       "source": "Total",
+       "sum_of_squares": 2662,
+       "df": 15
+      },
+      {
+       "source": "Corrected Total",
+       "sum_of_squares": 1702,
+       "df": 14
+      }
+     ]
+    },
+    "alpha": 0.05
+   },
+   "simultaneous_confidence_intervals": {
+    "design": "one_sample",
+    "confidence_level": 0.95,
+    "p": 2,
+    "sample_sizes": [
+     15
+    ],
+    "levels": [],
+    "t2_critical": 2.862970849194504,
+    "t2_reference": "F",
+    "t2_df": [
+     2,
+     13
+    ],
+    "bonferroni_reference": "t",
+    "intervals": [
+     {
+      "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+      "estimate": 8,
+      "std_error": 2.8468863526248995,
+      "t2_lower": -0.15055263853475154,
+      "t2_upper": 16.15055263853475,
+      "bonferroni_critical": 2.509569411493326,
+      "bonferroni_df": 14,
+      "bonferroni_lower": 0.8555410914547492,
+      "bonferroni_upper": 15.14445890854525
+     },
+     {
+      "dependent_variable": "d_ukuran1_minus_ukuran2",
+      "estimate": 3.066666666666667,
+      "std_error": 1.2050159717047288,
+      "t2_lower": -0.38325893313776094,
+      "t2_upper": 6.516592266471095,
+      "bonferroni_critical": 2.509569411493326,
+      "bonferroni_df": 14,
+      "bonferroni_lower": 0.04259544371557222,
+      "bonferroni_upper": 6.0907378896177615
+     }
+    ]
+   },
+   "known_covariance_test": {
+    "design": "one_sample",
+    "p": 2,
+    "sample_sizes": [
+     15
+    ],
+    "levels": [],
+    "hypothesized": [
+     8,
+     3
+    ],
+    "chi_square": 0.00340280731603575,
+    "df": 2,
+    "significance": 0.9983000429086716,
+    "confidence_level": 0.95,
+    "chi_square_critical": 2.447746830680816,
+    "z_critical": 2.241402727588145,
+    "intervals": [
+     {
+      "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+      "estimate": 8,
+      "std_error": 2.8284271247461903,
+      "chi_square_lower": 1.0767264695908594,
+      "chi_square_upper": 14.92327353040914,
+      "bonferroni_lower": 1.660355727809594,
+      "bonferroni_upper": 14.339644272190405
+     },
+     {
+      "dependent_variable": "d_ukuran1_minus_ukuran2",
+      "estimate": 3.066666666666667,
+      "std_error": 1.2110601416389966,
+      "chi_square_lower": 0.10229804320595282,
+      "chi_square_upper": 6.031035290127381,
+      "bonferroni_lower": 0.3521931619237346,
+      "bonferroni_upper": 5.781140171409599
+     }
+    ]
+   }
+  },
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ }
+}

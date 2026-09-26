@@ -1,0 +1,354 @@
+{
+ "id": "BB-KF04-01",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "Options: centang DescStats, EstEffectSize, ObsPower"
+ ],
+ "toasts": [
+  {
+   "label": "OK Paired",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF04-01-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK Paired",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv_name": "kedalaman1 − kedalaman2",
+         "group_label": "Total",
+         "mean": "8.0000",
+         "std_deviation": "11.0259",
+         "n": "15"
+        },
+        {
+         "rowHeader": [],
+         "dv_name": "ukuran1 − ukuran2",
+         "group_label": "Total",
+         "mean": "3.0667",
+         "std_deviation": "4.6670",
+         "n": "15"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² (Paired)",
+         "test_name": "Pillai's Trace",
+         "value": "0.4359",
+         "f": "5.0231",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.0242",
+         "partial_eta_squared": "0.4359",
+         "noncent_parameter": "10.0461",
+         "observed_power": "0.7130",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.5641",
+         "f": "5.0231",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.0242",
+         "partial_eta_squared": "0.4359",
+         "noncent_parameter": "10.0461",
+         "observed_power": "0.7130",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.7728",
+         "f": "5.0231",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.0242",
+         "partial_eta_squared": "0.4359",
+         "noncent_parameter": "10.0461",
+         "observed_power": "0.7130",
+         "t_squared": "10.8189"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.7728",
+         "f": "5.0231",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.0242",
+         "partial_eta_squared": "0.4359",
+         "noncent_parameter": "10.0461",
+         "observed_power": "0.7130",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [0, 0].\na. Design: Intercept\nb. Exact statistic\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "0.0000",
+         "noncent_parameter": "0.0000",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "0.0000",
+         "noncent_parameter": "0.0000",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "960.0000",
+         "df": "1",
+         "mean_square": "960.0000",
+         "f_value": "7.8966",
+         "significance": "0.0139",
+         "partial_eta_squared": "0.3606",
+         "noncent_parameter": "7.8966",
+         "observed_power": "0.7433"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "141.0667",
+         "df": "1",
+         "mean_square": "141.0667",
+         "f_value": "6.4766",
+         "significance": "0.0233",
+         "partial_eta_squared": "0.3163",
+         "noncent_parameter": "6.4766",
+         "observed_power": "0.6583"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "121.5714",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "21.7810",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "2662.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "446.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": "",
+         "partial_eta_squared": "",
+         "noncent_parameter": "",
+         "observed_power": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2.\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "labelSelisih": [
+   "d1 = kedalaman1 − kedalaman2",
+   "d2 = ukuran1 − ukuran2"
+  ]
+ },
+ "notes": [
+  "BB-KF04-01-1.png: subdialog Paired dengan preview vektor selisih",
+  "BB-KF04-01-2.png: toast: OK Paired",
+  "BB-KF04-01-3.png: Hotelling T² (Paired)"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "JyX0CCEXNcyYSCxSLCIPP",
+  "buildIdServed": "JyX0CCEXNcyYSCxSLCIPP",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-26T04:48:11.635Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 13,
+ "finishedAt": "2026-09-26T04:48:24.965Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ]
+}

@@ -1,6 +1,6 @@
 # Tangkapan layar build final untuk naskah
 
-- **Build:** `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`; server `http://localhost:3101`. Dibuat ulang sesudah perapian teks tampilan (2026-09-26).
+- **Build:** `BUILD_ID` `JyX0CCEXNcyYSCxSLCIPP`; WASM MV `wasm_bg.6145c2bf.wasm`, RM `wasm_bg.2bc2b212.wasm`; server `http://localhost:3101`. Dibuat ulang sesudah penyeragaman teks ke bahasa Inggris (2026-09-26).
 - **Pembuatan:** 2026-09-26, lewat UI asli dengan `testing/final/harness/bab5-gambar.cjs` (Playwright, Chromium bawaan, profil bersih per bagian, mode worker).
 - **Ukuran:** dialog dipotret selebar viewport 1600 × 1000 px; kartu hasil dipotret dengan klip selebar halaman (1600 px).
 - **Data:**

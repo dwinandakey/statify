@@ -1,0 +1,11 @@
+{
+ "BB-KF04-01": [
+  {
+   "run": 0,
+   "config": "mv3",
+   "checked": 20,
+   "passed": 20,
+   "failures": []
+  }
+ ]
+}

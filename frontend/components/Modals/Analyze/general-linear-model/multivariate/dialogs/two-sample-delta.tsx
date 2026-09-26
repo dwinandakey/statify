@@ -152,30 +152,30 @@ export const MultivariateTwoSampleDelta = ({
                 <Separator />
                 <div className="flex flex-col gap-3">
                     <p className="text-sm text-muted-foreground">
-                        Masukkan selisih vektor rata-rata hipotesis (δ₀) untuk
-                        uji Hotelling T² dua populasi (Equal maupun Unequal).
-                        Biarkan 0 untuk menguji μ₁ = μ₂.
+                        Enter the hypothesized difference of the mean vectors
+                        (δ₀) for the two-sample Hotelling T² test (Equal or
+                        Unequal). Leave 0 to test μ₁ = μ₂.
                     </p>
                     <p id="two-sample-delta-hypothesis" className="text-sm font-medium">
                         {hypothesis}
                     </p>
                     {twoLevels ? (
                         <p className="text-xs text-muted-foreground">
-                            μ₁ adalah level pertama {factor} ({levels[0]}) dan μ₂
-                            level kedua ({levels[1]}), sesuai urutan pada tabel
-                            Descriptive Statistics.
+                            μ₁ is the first level of {factor} ({levels[0]}) and
+                            μ₂ the second level ({levels[1]}), in the order of
+                            the Descriptive Statistics table.
                         </p>
                     ) : (
                         <div className="rounded border border-dashed p-3 text-center text-xs text-muted-foreground">
-                            δ₀ hanya berlaku bila Fixed Factor memiliki tepat 2
-                            level{factor ? ` (${factor} memiliki ${levels.length} level)` : ""}.
+                            δ₀ applies only when the Fixed Factor has exactly 2
+                            levels{factor ? ` (${factor} has ${levels.length} levels)` : ""}.
                         </div>
                     )}
 
                     {depVar.length === 0 ? (
                         <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                            Pilih Dependent Variables terlebih dahulu di
-                            dialog utama.
+                            Select the Dependent Variables in the main dialog
+                            first.
                         </div>
                     ) : (
                         <ScrollArea className="max-h-[320px] pr-2">
@@ -243,9 +243,9 @@ export const MultivariateTwoSampleDelta = ({
                                         </div>
                                     </RadioGroup>
                                     <p className="text-xs text-muted-foreground">
-                                        Uji khi-kuadrat χ² = (x̄₁ − x̄₂ − δ₀)ᵀV⁻¹(x̄₁ − x̄₂ − δ₀)
-                                        dengan V = (1/n₁ + 1/n₂)Σ atau Σ₁/n₁ + Σ₂/n₂ dan
-                                        df = p, ditampilkan di samping uji Hotelling T².
+                                        The chi-square test χ² = (x̄₁ − x̄₂ − δ₀)ᵀV⁻¹(x̄₁ − x̄₂ − δ₀),
+                                        with V = (1/n₁ + 1/n₂)Σ or Σ₁/n₁ + Σ₂/n₂ and
+                                        df = p, is shown next to the Hotelling T² test.
                                     </p>
                                     <KnownSigmaHint />
                                     {sigmaMode === "common" ? (

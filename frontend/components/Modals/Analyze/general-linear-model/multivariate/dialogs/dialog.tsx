@@ -465,13 +465,13 @@ export const MultivariateDialog = ({
                                         className="max-w-sm"
                                     >
                                         <p className="text-xs">
-                                            Pilih <b>Unequal</b>{" "}
-                                            (Welch-Satterthwaite) jika
-                                            asumsi Σ₁ = Σ₂ tidak terpenuhi,
-                                            misalnya bila uji Box's M
-                                            signifikan. Hanya berlaku
-                                            untuk Fixed Factor dengan
-                                            tepat 2 level.
+                                            Choose <b>Unequal</b>{" "}
+                                            (Welch-Satterthwaite) when the
+                                            assumption Σ₁ = Σ₂ does not hold,
+                                            for example when Box's M test is
+                                            significant. Applies only to a
+                                            Fixed Factor with exactly 2
+                                            levels.
                                         </p>
                                     </TooltipContent>
                                 </Tooltip>

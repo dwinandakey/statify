@@ -1,0 +1,5 @@
+﻿ID,KF,Hasil Pengujian Iterasi 6,Keterangan Iterasi 6
+BB-KF03-08,KF3,Sesuai,"Subdialog Test Values (δ₀) menampilkan ""δ₀ applies only when the Fixed Factor has exactly 2 levels (treatment has 3 levels)."" tanpa isian (R10); perilaku identik dengan iterasi 3."
+BB-KF04-01,KF4,Sesuai,"Tabel ""Multivariate Tests"" dengan baris ""Hotelling T² (Paired)"" (R10). Nilai tampil = SPSS 20/20."
+BB-KF04-02,KF4,Sesuai,"Toast ""Add at least one variable pair."" dan ""Some pairs are incomplete. Select Variable 1 and Variable 2 in every row."" (R10); variabel yang sudah dipakai tidak tersedia lagi, sama dengan iterasi 3."
+BB-KF04-03,KF4,Sesuai,"Tabel ""Multivariate Tests"" berbaris ""Hotelling T² (Paired)"" dengan catatan ""Computed on the difference vector … δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2)."" (R10); nilai sama dengan iterasi 5."

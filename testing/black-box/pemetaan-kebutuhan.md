@@ -156,6 +156,26 @@ Teks yang terlihat pengguna di MV dan RM dirapikan sesudah iterasi 4. Perilaku d
 | Pesan pasangan belum lengkap (service) | Pair n is incomplete — both … | Pair n is incomplete: both … |
 | Teks tur panduan RM/MV | (e.g. "time"), (e.g. 3 for pre / post / follow-up), (level × measure), analysed | such as "time", such as 3 for pre, post, and follow-up, one slot per level and measure, analyzed |
 
+## Penyeragaman teks ke bahasa Inggris (2026-09-26)
+
+Teks tampilan GLM Multivariate yang masih berbahasa Indonesia, termasuk pesan validasi subdialog Paired dan Test Values (δ₀), diganti dengan bahasa Inggris. Kapan pesan muncul tidak berubah. Kutipan berbahasa Indonesia di bagian lain dokumen ini adalah teks sebelum perubahan; teks yang berlaku adalah kolom "Sesudah".
+
+| Tempat | Sebelum | Sesudah |
+|---|---|---|
+| Subdialog Test Values (μ₀): keterangan | Masukkan vektor rata-rata hipotesis (μ₀) untuk uji Hotelling T² satu populasi. Biarkan 0 untuk menguji terhadap vektor nol. | Enter the hypothesized mean vector (μ₀) for the one-sample Hotelling T² test. Leave 0 to test against the zero vector. |
+| Subdialog Test Values (μ₀) dan (δ₀): tanpa DV | Pilih Dependent Variables terlebih dahulu di dialog utama. | Select the Dependent Variables in the main dialog first. |
+| Subdialog Test Values (δ₀): keterangan | Masukkan selisih vektor rata-rata hipotesis (δ₀) untuk uji Hotelling T² dua populasi (Equal maupun Unequal). Biarkan 0 untuk menguji μ₁ = μ₂. | Enter the hypothesized difference of the mean vectors (δ₀) for the two-sample Hotelling T² test (Equal or Unequal). Leave 0 to test μ₁ = μ₂. |
+| Subdialog Test Values (δ₀): urutan level | μ₁ adalah level pertama jk (1) dan μ₂ level kedua (2), sesuai urutan pada tabel Descriptive Statistics. | μ₁ is the first level of jk (1) and μ₂ the second level (2), in the order of the Descriptive Statistics table. |
+| Subdialog Test Values (δ₀): faktor bukan 2 level | δ₀ hanya berlaku bila Fixed Factor memiliki tepat 2 level (treatment memiliki 3 level). | δ₀ applies only when the Fixed Factor has exactly 2 levels (treatment has 3 levels). |
+| Subdialog Paired: keterangan | Pilih pasangan variabel (Measurement 1 dan Measurement 2) untuk membentuk vektor selisih d = M1 − M2. Uji Hotelling T² berpasangan dijalankan sebagai uji satu populasi pada vektor d terhadap δ₀. | Select pairs of variables (Measurement 1 and Measurement 2) to form the difference vector d = M1 − M2. The paired Hotelling T² test is run as a one-sample test of d against δ₀. |
+| Subdialog Paired: judul bagian | A. Pemilihan Pasangan Variabel; B. Preview Vektor Selisih (10 baris pertama); C. Nilai Selisih Hipotesis (δ₀) | A. Variable Pairs; B. Difference Vector Preview (first 10 rows); C. Hypothesized Difference (δ₀) |
+| Subdialog Paired: teks bantu | Pilih minimal satu pasangan lengkap untuk menampilkan preview. / Tidak ada data pada dataset. / Masukkan nilai selisih hipotesis (δ₀) untuk setiap pasangan. Biarkan 0 untuk menguji tidak ada perbedaan. / Tambahkan pasangan lengkap untuk mengatur δ₀. | Select at least one complete pair to show the preview. / The dataset has no data. / Enter the hypothesized difference (δ₀) for each pair. Leave 0 to test for no difference. / Add a complete pair to set δ₀. |
+| Toast Paired | Tambahkan minimal satu pasangan variabel. / Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris. / Pasangan harus berisi dua variabel yang berbeda. | Add at least one variable pair. / Some pairs are incomplete. Select Variable 1 and Variable 2 in every row. / A pair must contain two different variables. |
+| Kotak Σ diketahui (tiga subdialog) | Uji khi-kuadrat χ² = … dengan df = p ditampilkan di samping uji Hotelling T². / Isi segitiga atas termasuk diagonal; segitiga bawah terisi otomatis (Σ simetris). Diagonal (varians) harus positif dan Σ definit positif. | The chi-square test χ² = …, df = p, is shown next to the Hotelling T² test. / Fill in the upper triangle including the diagonal; the lower triangle is filled in automatically (Σ is symmetric). The diagonal entries (variances) must be positive and Σ must be positive definite. |
+| Tooltip Covariance Matrices | Pilih Unequal (Welch-Satterthwaite) bila asumsi Σ₁ = Σ₂ tidak terpenuhi, misalnya bila uji Box's M signifikan. Hanya berlaku untuk Fixed Factor dengan tepat 2 level. | Choose Unequal (Welch-Satterthwaite) when the assumption Σ₁ = Σ₂ does not hold, for example when Box's M test is significant. Applies only to a Fixed Factor with exactly 2 levels. |
+| Baris efek uji berpasangan (Multivariate Tests) | Hotelling T² Berpasangan | Hotelling T² (Paired) |
+| Catatan uji berpasangan | Analisis dilakukan pada vektor selisih d1 = …; d2 = …. δ₀ = [8, 3]. | Computed on the difference vector d1 = …; d2 = …. δ₀ = [8, 3]. |
+
 ---
 
 ## KF1. Pemilihan analisis pada kelompok GLM Multivariate — TERPENUHI

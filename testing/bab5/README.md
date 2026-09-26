@@ -1,6 +1,6 @@
 # Bahan BAB V dan BAB VI (build final)
 
-Semua dokumen di folder ini berbahasa Indonesia dan hanya memuat fakta dari kode serta hasil uji. Build final: branch `ilham`, tag `skripsi-final-v5`, `BUILD_ID` `OrpyJfBOluV37xa0aqmFr`.
+Semua dokumen di folder ini berbahasa Indonesia dan hanya memuat fakta dari kode serta hasil uji. Build final: branch `ilham`, tag `skripsi-final-v5`, `BUILD_ID` `JyX0CCEXNcyYSCxSLCIPP`.
 
 | Berkas | Isi |
 |---|---|
