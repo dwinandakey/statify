@@ -7,7 +7,10 @@ use crate::models::{
 };
 
 use super::{
-    core::{determine_effective_k, find_k_nearest_neighbors, preprocess_knn_data},
+    core::{
+        determine_effective_k, error_rate_percent, errors_equal, find_k_nearest_neighbors,
+        lowest_error_smallest_k, preprocess_knn_data, ERROR_TOLERANCE,
+    },
     prediction::{
         calculate_categorical_prediction, calculate_mean_prediction, calculate_median_prediction,
         category_key, CategoryTieBreaker,
@@ -65,17 +68,11 @@ fn calculate_feature_selection_with_auto_k(
         trials.push((k, trial));
     }
 
-    let Some((best_index, _)) =
+    let Some(best_index) = lowest_error_smallest_k(
         trials
             .iter()
-            .enumerate()
-            .min_by(|(_, (left_k, left)), (_, (right_k, right))| {
-                left.summary
-                    .final_error
-                    .total_cmp(&right.summary.final_error)
-                    .then_with(|| left_k.cmp(right_k))
-            })
-    else {
+            .map(|(k, trial)| (*k, trial.summary.final_error)),
+    ) else {
         return Err("No k candidates could be evaluated for feature selection".to_string());
     };
 
@@ -379,7 +376,12 @@ fn best_candidate(
         };
 
         best = match best {
-            Some(current) if current.error <= trial.error => Some(current),
+            // Ties (up to rounding) keep the earlier candidate.
+            Some(current)
+                if current.error <= trial.error || errors_equal(current.error, trial.error) =>
+            {
+                Some(current)
+            }
             _ => Some(trial),
         };
     }
@@ -408,16 +410,20 @@ fn minimum_change_stop_reason(
         return Some("zero_error".to_string());
     }
 
-    let relative_change = ((previous_error - next_error).abs()) / previous_error;
-    if previous_error > next_error && relative_change <= min_change {
-        return Some("minimum_change_reached".to_string());
-    }
-
-    if (previous_error - next_error).abs() <= f64::EPSILON {
+    if errors_equal(previous_error, next_error) {
         return Some("no_error_change".to_string());
     }
 
-    if previous_error < next_error && relative_change > 2.0 * min_change {
+    // The tolerance makes a change of exactly Δmin (or 2Δmin) follow the
+    // formula instead of the rounding in the computed errors: 10 -> 9
+    // misclassified cases out of 70 is a change of exactly 0.1, but computes
+    // as 0.10000000000000037.
+    let relative_change = ((previous_error - next_error).abs()) / previous_error;
+    if previous_error > next_error && relative_change <= min_change + ERROR_TOLERANCE {
+        return Some("minimum_change_reached".to_string());
+    }
+
+    if previous_error < next_error && relative_change > 2.0 * min_change + ERROR_TOLERANCE {
         return Some("error_deteriorated".to_string());
     }
 
@@ -489,7 +495,7 @@ fn training_error_rate(knn_data: &KnnData, config: &KnnConfig, k: usize) -> f64 
     if total == 0 {
         100.0
     } else {
-        (1.0 - (correct as f64 / total as f64)) * 100.0
+        error_rate_percent(total - correct, total)
     }
 }
 
@@ -798,5 +804,66 @@ mod tests {
     #[test]
     fn minimum_change_continues_for_meaningful_improvement() {
         assert_eq!(minimum_change_stop_reason(Some(0.20), 0.10, 0.05), None);
+    }
+
+    #[test]
+    fn minimum_change_decides_exact_boundaries_by_formula_not_rounding() {
+        use crate::stats::common::error_rate_percent;
+
+        // 70 training cases, Δmin = 0.1: 10 -> 9 misclassified is a change of
+        // exactly 0.1 (stop, keep feature); 5 -> 6 is an increase of exactly
+        // 0.2 = 2Δmin (continue).
+        assert_eq!(
+            minimum_change_stop_reason(
+                Some(error_rate_percent(10, 70)),
+                error_rate_percent(9, 70),
+                0.1
+            ),
+            Some("minimum_change_reached".to_string())
+        );
+        assert_eq!(
+            minimum_change_stop_reason(
+                Some(error_rate_percent(5, 70)),
+                error_rate_percent(6, 70),
+                0.1
+            ),
+            None
+        );
+
+        // Every training size and misclassification count whose change sits
+        // exactly on Δmin or 2Δmin, for common Δmin values (num / den).
+        for (min_change, num, den) in [(0.01, 1, 100), (0.05, 1, 20), (0.1, 1, 10), (0.2, 1, 5)] {
+            for n in 10..=300usize {
+                for before in 1..=n {
+                    for after in 1..=n {
+                        let previous = error_rate_percent(before, n);
+                        let next = error_rate_percent(after, n);
+                        let reason = minimum_change_stop_reason(Some(previous), next, min_change);
+
+                        if after < before && (before - after) * den == before * num {
+                            assert_eq!(
+                                reason.as_deref(),
+                                Some("minimum_change_reached"),
+                                "Δmin={min_change} n={n} {before}->{after}"
+                            );
+                        }
+                        if after > before && (after - before) * den == 2 * before * num {
+                            assert_eq!(
+                                reason, None,
+                                "2Δmin={min_change} n={n} {before}->{after}"
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn minimum_change_treats_rounding_level_differences_as_no_change() {
+        assert_eq!(
+            minimum_change_stop_reason(Some(1234.5678), 1234.5678 + 1e-10, 0.01),
+            Some("no_error_change".to_string())
+        );
     }
 }
