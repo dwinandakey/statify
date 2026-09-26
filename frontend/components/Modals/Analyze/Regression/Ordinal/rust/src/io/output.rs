@@ -284,7 +284,7 @@ pub fn build_plum_output(
     };
     let saved_variables = build_saved_variables(input, spec, &fit_with_cov, &mut warnings);
 
-    let test_of_parallel_lines = if want_parallel && spec.model_type == ModelType::LocationOnly {
+    let test_of_parallel_lines = if want_parallel {
         let options = EstimationOptions::from_payload(Some(&input.estimation_options));
         println!(
             "[ORDINAL][PARALLEL_LINES][PARALLEL_LL] {{\"logLikelihood\":{},\"minus2LogLikelihood\":{}}}",
