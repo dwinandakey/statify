@@ -222,7 +222,7 @@ export const useAnalyzeHook = (
                             ]
                         });
                         
-                        // 3. Short Run ARDL-ECM Table
+                        // 3. Short Run ARDL Table
                         const srRows = [];
                         let srVarIdx = 0;
                         srRows.push({
@@ -243,8 +243,13 @@ export const useAnalyzeHook = (
                         });
                         srVarIdx++;
 
+                        const actualP = result.selectedP !== undefined ? result.selectedP : pOrder;
+                        const actualQ = result.selectedQ !== undefined 
+                            ? (Array.isArray(result.selectedQ) ? result.selectedQ : [result.selectedQ])
+                            : qOrdersArray;
+
                         // Lags of D(Y)
-                        for (let i = 1; i <= pOrder; i++) {
+                        for (let i = 1; i <= actualP; i++) {
                             srRows.push({
                                 var: `D(${yVar.name}(-${i}))`,
                                 coef: result.shortRun.coefficients[srVarIdx],
@@ -257,7 +262,8 @@ export const useAnalyzeHook = (
 
                         // Lags of D(X)
                         for (let k = 0; k < independentVariables.length; k++) {
-                            for (let j = 0; j <= qOrdersArray[k]; j++) {
+                            const qVal = actualQ[k] !== undefined ? actualQ[k] : 1;
+                            for (let j = 0; j <= qVal; j++) {
                                 const lagSuffix = j === 0 ? "" : `(-${j})`;
                                 srRows.push({
                                     var: `D(${independentVariables[k].name}${lagSuffix})`,
@@ -271,7 +277,7 @@ export const useAnalyzeHook = (
                         }
 
                         let srFormulaStr = `D(${yVar.name}) ~ C + ECT(-1)`;
-                        if (pOrder > 0) srFormulaStr += ` + D(${yVar.name}) lags`;
+                        if (actualP > 0) srFormulaStr += ` + D(${yVar.name}) lags`;
                         srFormulaStr += ` + D(Xs) lags`;
 
                         tables.push({
