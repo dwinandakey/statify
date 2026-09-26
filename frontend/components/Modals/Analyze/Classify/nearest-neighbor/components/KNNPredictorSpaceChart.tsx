@@ -326,14 +326,23 @@ export default function KNNPredictorSpaceChart({
   const zTicks = hasZAxis ? createNiceTicks(rawZMin, rawZMax) : [];
 
   const plot = { left: 58, right: 24, top: 28, bottom: 58 };
-  const spanX = xAxis.max - xAxis.min || 1;
-  const spanY = yAxis.max - yAxis.min || 1;
+  // Keeps points (and their markers) off the axis lines.
+  const plotInset = 12;
+  const [xDomainMin, xDomainMax] = plotDomain(xAxis, chartAxisInfo.x, rawXValues);
+  const [yDomainMin, yDomainMax] = isSinglePredictorSpace
+    ? [yAxis.min, yAxis.max]
+    : plotDomain(yAxis, chartAxisInfo.y, rawYValues);
   const scaleX = (value: number) =>
-    plot.left + ((value - xAxis.min) / spanX) * (svgWidth - plot.left - plot.right);
+    plot.left +
+    plotInset +
+    ((value - xDomainMin) / (xDomainMax - xDomainMin)) *
+      (svgWidth - plot.left - plot.right - plotInset * 2);
   const scaleY = (value: number) =>
     svgHeight -
     plot.bottom -
-    ((value - yAxis.min) / spanY) * (svgHeight - plot.top - plot.bottom);
+    plotInset -
+    ((value - yDomainMin) / (yDomainMax - yDomainMin)) *
+      (svgHeight - plot.top - plot.bottom - plotInset * 2);
   const pointById = new Map(points.map((point) => [String(point.id), point]));
   const selectedPoint =
     selectedId === null ? null : pointById.get(String(selectedId)) ?? null;
@@ -341,16 +350,20 @@ export default function KNNPredictorSpaceChart({
     ? [selectedPoint]
     : points.filter((point) => point.focal);
 
+  // Depth only applies when a Z axis is drawn. With two predictors the third
+  // axis slot falls back to one of the plotted axes, and projecting that as
+  // depth pushed every point off the X/Y axes.
+  const depthOf = (zValue: number) => (hasZAxis ? zValue : 0);
   const projectedOf = (point: Point) => {
-    const z = finiteNumber(point.z, 0);
+    const z = depthOf(finiteNumber(point.z, 0));
     return {
       x: scaleX(point.x + z * 0.45),
       y: scaleY(point.y - z * 0.35),
     };
   };
   const projectedCoord = (xValue: number, yValue: number, zValue = 0) => ({
-    x: scaleX(xValue + zValue * 0.45),
-    y: scaleY(yValue - zValue * 0.35),
+    x: scaleX(xValue + depthOf(zValue) * 0.45),
+    y: scaleY(yValue - depthOf(zValue) * 0.35),
   });
 
   const showTooltip = (event: React.MouseEvent, html: React.ReactNode) => {
@@ -403,7 +416,7 @@ export default function KNNPredictorSpaceChart({
             </div>
           </div>
 
-          <div className="mb-2 flex items-center justify-center gap-3">
+          <div data-export-ignore className="mb-2 flex items-center justify-center gap-3">
             <label htmlFor="knn-predictor-space-k-3d" className="text-xs font-semibold">
               K
             </label>
@@ -496,7 +509,7 @@ export default function KNNPredictorSpaceChart({
           </div>
         </div>
 
-        <div className="mb-2 flex items-center justify-center gap-3">
+        <div data-export-ignore className="mb-2 flex items-center justify-center gap-3">
           <label htmlFor="knn-predictor-space-k-2d" className="text-xs font-semibold">
             K
           </label>
@@ -861,7 +874,11 @@ function ThreePredictorSpace({
 
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        // Keeps the last frame readable so the chart can be exported as an image.
+        preserveDrawingBuffer: true,
+      });
     } catch {
       setWebglUnavailable(true);
       return;
@@ -1420,7 +1437,7 @@ function PredictorSpace2DFallback({
           );
         })}
       </svg>
-      <div className="absolute left-3 top-2 rounded border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-800">
+      <div data-export-ignore className="absolute left-3 top-2 rounded border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-800">
         3D rendering unavailable. Showing a 2D projection.
       </div>
       {tooltip && (
@@ -1536,6 +1553,34 @@ function buildAxisTicks(
     max: range[1],
     ticks: ticks.map((value) => ({ value, label: formatTick(value) })),
   };
+}
+
+/**
+ * Value range drawn by the 2D chart. It covers every point and every tick
+ * (nice ticks can extend past the data), and gives discrete axes half a
+ * category of room so the first and last categories are not on the axis.
+ */
+export function plotDomain(
+  axis: RenderAxis,
+  info: AxisInfo | undefined,
+  values: number[],
+): [number, number] {
+  const covered = [...values, ...axis.ticks.map((tick) => tick.value)].filter(
+    (value) => Number.isFinite(value),
+  );
+  if (covered.length === 0) return [axis.min, axis.max > axis.min ? axis.max : axis.min + 1];
+
+  let min = Math.min(...covered);
+  let max = Math.max(...covered);
+  const isDiscrete =
+    info?.measure === "nominal" ||
+    info?.measure === "ordinal" ||
+    (info?.categories?.filter(Boolean).length ?? 0) > 0;
+  if (isDiscrete || max - min < Number.EPSILON) {
+    min -= 0.5;
+    max += 0.5;
+  }
+  return [min, max];
 }
 
 function drawDashedGrid(
@@ -1656,7 +1701,7 @@ function AxisPicker({
   const axisSlots = ["X", "Y", "Z"];
 
   return (
-    <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-xs">
+    <div data-export-ignore className="mb-3 flex flex-wrap items-center justify-center gap-2 text-xs">
       {axisSlots.map((slot, slotIndex) => {
         const selectedIndex = selectedAxisIndexes[slotIndex] ?? slotIndex;
         const replacementIndexes = axes
