@@ -338,18 +338,21 @@ describe("normalizeKnnVarDefsForWorker — basis path testing (V(G)=4)", () => {
 });
 
 // =============================================================================
-// 5) withInternalChartOutputs(configData)  ->  V(G) = 5
-//    (2 x "&&" untuk needsKSelectionErrorChart / needsKAndPredictorSelectionChart,
-//     2 x "||" untuk KSelectionChart / FeatureSelectionSummary output)
+// 5) withInternalChartOutputs(configData)  ->  V(G) = 4
+//    (1 x "&&" untuk needsKSelectionErrorChart,
+//     2 x "||" untuk KSelectionChart / FeatureSelectionSummary output;
+//     needsKAndPredictorSelectionChart = PerformSelection, berlaku untuk k tetap maupun k otomatis)
 // Independent paths (baseline + 1 flip per predikat):
-//   P1 (baseline): AutoSelection=false                    -> KSelectionChart=false, FeatureSelectionSummary=false
+//   P1 (baseline): AutoSelection=false, PerformSelection=false -> KSelectionChart=false, FeatureSelectionSummary=false
 //   P2: AutoSelection=true, PerformSelection=false         -> KSelectionChart=true  (needsKSelectionErrorChart)
-//   P3: AutoSelection=true, PerformSelection=true          -> FeatureSelectionSummary=true (needsKAndPredictorSelectionChart)
+//   P3: AutoSelection=false, PerformSelection=true         -> FeatureSelectionSummary=true (seleksi fitur dengan k tetap)
 //   P4: output.KSelectionChart sudah true (AutoSelection=false) -> tetap true lewat OR
+// Tambahan (bukan basis path):
 //   P5: output.FeatureSelectionSummary sudah true (AutoSelection=false) -> tetap true lewat OR
+//   P6: AutoSelection=true, PerformSelection=true          -> FeatureSelectionSummary=true, KSelectionChart=false
 // PredictorSpace selalu dipaksa true pada seluruh path (diverifikasi tiap test).
 // =============================================================================
-describe("withInternalChartOutputs — basis path testing (V(G)=5)", () => {
+describe("withInternalChartOutputs — basis path testing (V(G)=4)", () => {
   it("P1 (baseline): AutoSelection=false -> tidak ada chart tambahan yang dipaksa", () => {
     const cfg = makeConfig({ neighbors: { AutoSelection: false }, features: { PerformSelection: false } });
     const out = withInternalChartOutputs(cfg);
@@ -369,13 +372,13 @@ describe("withInternalChartOutputs — basis path testing (V(G)=5)", () => {
     record("withInternalChartOutputs", "P2: needsKSelectionErrorChart", ok ? "PASS" : "FAIL");
   });
 
-  it("P3: AutoSelection=true, PerformSelection=true -> FeatureSelectionSummary dipaksa true", () => {
-    const cfg = makeConfig({ neighbors: { AutoSelection: true }, features: { PerformSelection: true } });
+  it("P3: AutoSelection=false, PerformSelection=true -> FeatureSelectionSummary dipaksa true (k tetap)", () => {
+    const cfg = makeConfig({ neighbors: { AutoSelection: false }, features: { PerformSelection: true } });
     const out = withInternalChartOutputs(cfg);
     const ok = out.output.FeatureSelectionSummary === true && out.output.KSelectionChart === false;
     expect(out.output.FeatureSelectionSummary).toBe(true);
     expect(out.output.KSelectionChart).toBe(false);
-    record("withInternalChartOutputs", "P3: needsKAndPredictorSelectionChart", ok ? "PASS" : "FAIL");
+    record("withInternalChartOutputs", "P3: needsKAndPredictorSelectionChart (fixed k)", ok ? "PASS" : "FAIL");
   });
 
   it("P4: output.KSelectionChart sudah true meski AutoSelection=false -> tetap true (OR)", () => {
@@ -392,6 +395,15 @@ describe("withInternalChartOutputs — basis path testing (V(G)=5)", () => {
     const ok = out.output.FeatureSelectionSummary === true;
     expect(out.output.FeatureSelectionSummary).toBe(true);
     record("withInternalChartOutputs", "P5: FeatureSelectionSummary existing true (OR)", ok ? "PASS" : "FAIL");
+  });
+
+  it("P6: AutoSelection=true, PerformSelection=true -> FeatureSelectionSummary dipaksa true (k otomatis)", () => {
+    const cfg = makeConfig({ neighbors: { AutoSelection: true }, features: { PerformSelection: true } });
+    const out = withInternalChartOutputs(cfg);
+    const ok = out.output.FeatureSelectionSummary === true && out.output.KSelectionChart === false;
+    expect(out.output.FeatureSelectionSummary).toBe(true);
+    expect(out.output.KSelectionChart).toBe(false);
+    record("withInternalChartOutputs", "P6: needsKAndPredictorSelectionChart (auto k)", ok ? "PASS" : "FAIL");
   });
 });
 

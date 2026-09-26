@@ -80,8 +80,9 @@ export function normalizeKnnVarDefsForWorker(defs: unknown[][]) {
 export function withInternalChartOutputs(configData: KNNAnalysisType["configData"]) {
   const needsKSelectionErrorChart =
     configData.neighbors.AutoSelection && !configData.features.PerformSelection;
-  const needsKAndPredictorSelectionChart =
-    configData.neighbors.AutoSelection && configData.features.PerformSelection;
+  // Feature selection always needs its summary for the selection chart, both
+  // with fixed k and automatic k; the dialog has no toggle for this output.
+  const needsKAndPredictorSelectionChart = configData.features.PerformSelection;
 
   return {
     ...configData,

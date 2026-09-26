@@ -11,7 +11,6 @@ import {
   describeFeatureSelection,
   describeKSelection,
   describePredictorImportance,
-  isRegressionResult,
 } from "./nearest-neighbor-analysis-interpretation";
 
 export async function resultNearestNeighbor({
@@ -59,13 +58,21 @@ export async function resultNearestNeighbor({
         });
       }
 
-      const kAndPredictorSelectionChart = createKAndPredictorSelectionChart(rawResult);
+      // SPSS names this chart "k and Predictor Selection" when k is chosen
+      // automatically and "Predictor Selection Error Log" when k is fixed.
+      const predictorSelectionTitle = configData?.neighbors?.AutoSelection
+        ? "k and Predictor Selection"
+        : "Predictor Selection Error Log";
+      const kAndPredictorSelectionChart = createKAndPredictorSelectionChart(
+        rawResult,
+        predictorSelectionTitle,
+      );
       if (kAndPredictorSelectionChart) {
         await addStatistic(nearestNeighborAnalysisResultId, {
-          title: `k and Predictor Selection`,
-          description: describeFeatureSelection(rawResult, configData),
+          title: predictorSelectionTitle,
+          description: describeFeatureSelection(rawResult),
           output_data: JSON.stringify(kAndPredictorSelectionChart),
-          components: `k and Predictor Selection`,
+          components: predictorSelectionTitle,
         });
       }
 
@@ -85,7 +92,6 @@ export async function resultNearestNeighbor({
       if (predictorImportance) {
         const predictorImportanceDescription = describePredictorImportance(
           rawResult?.predictor_importance,
-          isRegressionResult(rawResult),
         );
         await addStatistic(nearestNeighborAnalysisResultId, {
           title: `Predictor Importance`,
@@ -341,7 +347,10 @@ function createPredictorImportanceChart(table?: Table) {
   });
 }
 
-function createKAndPredictorSelectionChart(rawResult?: any) {
+function createKAndPredictorSelectionChart(
+  rawResult?: any,
+  title = "k and Predictor Selection",
+) {
   const steps = rawResult?.feature_selection_steps;
 
   if (!Array.isArray(steps) || !steps.length) return null;
@@ -378,7 +387,7 @@ function createKAndPredictorSelectionChart(rawResult?: any) {
         chartType: "KNN k and Predictor Selection",
         chartData,
         chartMetadata: {
-          title: "k and Predictor Selection",
+          title,
           subtitle: `k = ${selectedK}`,
           description: isRegression
             ? "Feature selection SSE by model"
