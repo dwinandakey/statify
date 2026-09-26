@@ -266,7 +266,7 @@ fn perform_stepwise_analysis(
     Ok(steps_data)
 }
 
-fn should_enter_variable(
+pub fn should_enter_variable(
     var_opt: &Option<String>,
     stats: &VariableNotInAnalysis,
     dataset: &AnalyzedDataset,

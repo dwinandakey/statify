@@ -512,7 +512,7 @@ fn ln_std_normal_cdf(normal: &Normal, z: f64) -> f64 {
 /// statistic and the p-value from the small-sample-corrected A*². The sample
 /// standard deviation uses the (n−1) denominator, as in R. Returns `None` when
 /// n < 8 or the column is constant.
-fn anderson_darling(values: &[f64]) -> Option<(f64, f64)> {
+pub fn anderson_darling(values: &[f64]) -> Option<(f64, f64)> {
     let n = values.len();
     if n < 8 {
         return None;
