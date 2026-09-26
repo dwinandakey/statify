@@ -19,7 +19,16 @@ export async function resultNearestNeighbor({
   rawResult,
   configData,
 }: KNNFinalResultType) {
-  const { addLog, addAnalytic, addStatistic } = useResultStore.getState();
+  const { addLog, addAnalytic, addStatistic: storeAddStatistic } =
+    useResultStore.getState();
+  // Each added statistic re-renders the output viewer. Yielding after each one
+  // lets the browser handle input and paint between them instead of running
+  // all of them as one long task.
+  const addStatistic: typeof storeAddStatistic = async (...args) => {
+    const statisticId = await storeAddStatistic(...args);
+    await yieldToMain();
+    return statisticId;
+  };
 
     const findTable = (key: string) => {
       const foundTable = formattedResult.tables.find(
@@ -169,7 +178,19 @@ export async function resultNearestNeighbor({
   await nearestNeighborAnalysisResult();
 }
 
-function createPredictorSpaceChart(
+function yieldToMain() {
+  return new Promise<void>((resolve) => setTimeout(resolve, 0));
+}
+
+/** Seven significant digits: far below one pixel and the 4-decimal tooltips. */
+function chartNumber(value: unknown) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue)
+    ? Number(numericValue.toPrecision(7))
+    : Number.NaN;
+}
+
+export function createPredictorSpaceChart(
   predictorSpace?: any,
   peersChartEnabled = false,
   quadrantMapEnabled = false,
@@ -188,26 +209,38 @@ function createPredictorSpaceChart(
     displayedDimensions >= 3 &&
     Boolean(axes[2]?.name ?? labels[2]) &&
     dimension.points.some((point: any) => Number.isFinite(Number(point.z)));
+  // Only the fields the chart reads, with coordinates at chart precision. The
+  // payload is parsed and stored on the main thread, and with every case as a
+  // point (plus k neighbors each) full-precision numbers and unused fields
+  // made it several times larger than needed.
   const chartData = dimension.points
-    .map((point: any) => ({
-      id: point.id,
-      label: point.label ?? point.id,
-      x: Number(point.x),
-      y: Number(point.y),
-      z: Number(point.z),
-      type: point.point_type,
-      target: point.target_label || String(point.target_value),
-      targetNumber: Number.isFinite(Number(point.target_number))
-        ? Number(point.target_number)
-        : null,
-      observed: point.actual_label || point.target_label || String(point.target_value),
-      predicted: point.predicted_label || "",
-      predictorValues: Array.isArray(point.predictor_values)
-        ? point.predictor_values.map((value: any) => Number(value))
-        : [Number(point.x), Number(point.y), Number(point.z)],
-      focal: Boolean(point.focal),
-      neighbors: Array.isArray(point.neighbors) ? point.neighbors : [],
-    }))
+    .map((point: any) => {
+      const label = point.label ?? point.id;
+      // Number(null) is 0, which would store a z for every 1D/2D point.
+      const z = point.z == null ? Number.NaN : chartNumber(point.z);
+      return {
+        id: point.id,
+        ...(String(label) !== String(point.id) ? { label } : {}),
+        x: chartNumber(point.x),
+        y: chartNumber(point.y),
+        ...(Number.isFinite(z) ? { z } : {}),
+        type: point.point_type,
+        target: point.target_label || String(point.target_value),
+        targetNumber: Number.isFinite(Number(point.target_number))
+          ? Number(point.target_number)
+          : null,
+        predictorValues: Array.isArray(point.predictor_values)
+          ? point.predictor_values.map(chartNumber)
+          : [chartNumber(point.x), chartNumber(point.y), z],
+        ...(point.focal ? { focal: true } : {}),
+        neighbors: Array.isArray(point.neighbors)
+          ? point.neighbors.map((neighbor: any) => ({
+              id: neighbor.id,
+              distance: chartNumber(neighbor.distance),
+            }))
+          : [],
+      };
+    })
     .filter((point: any) => Number.isFinite(point.x) && Number.isFinite(point.y));
 
   if (!chartData.length) return null;

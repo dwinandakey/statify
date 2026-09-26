@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import KNNPeersChart from "./KNNPeersChart";
+import { useMountWhenNearViewport } from "../hooks/useMountWhenNearViewport";
 
 type Neighbor = {
   id: number | string;
@@ -172,7 +173,33 @@ function interpolateColor(start: string, end: string, ratio: number) {
   )}${toHex(b1 + (b2 - b1) * clamped)}`;
 }
 
-export default function KNNPredictorSpaceChart({
+/**
+ * Memoized so the output viewer re-rendering (once per added statistic) skips
+ * this chart when its data is unchanged, and deferred until the chart is near
+ * the visible area so opening the viewer does not draw every point at once.
+ */
+const KNNPredictorSpaceChart = React.memo(function KNNPredictorSpaceChart({
+  data,
+}: {
+  data: string | ChartPayload;
+}) {
+  const [placeholderRef, isNearViewport] = useMountWhenNearViewport<HTMLDivElement>();
+
+  if (isNearViewport) return <PredictorSpaceChartContent data={data} />;
+  return (
+    <div
+      ref={placeholderRef}
+      className="p-4 text-sm text-muted-foreground"
+      style={{ minHeight: 640 }}
+    >
+      Loading predictor space...
+    </div>
+  );
+});
+
+export default KNNPredictorSpaceChart;
+
+function PredictorSpaceChartContent({
   data,
 }: {
   data: string | ChartPayload;
@@ -226,9 +253,22 @@ export default function KNNPredictorSpaceChart({
     );
   }, [availableAxes.length]);
 
+  // Capped by the predictor axes that exist: a payload without
+  // displayedDimensions (or saved by an older version) defaulted to 2 and drew
+  // a single predictor as a diagonal running off the plot.
+  const configuredDimensions = finiteNumber(config?.displayedDimensions, 2);
+  const predictorCount = sourcePoints.reduce(
+    (count, point) => Math.max(count, point.predictorValues?.length ?? 0),
+    0,
+  );
   const displayedDimensions = Math.max(
     1,
-    Math.min(3, Number(config?.displayedDimensions ?? 2)),
+    Math.min(
+      3,
+      configuredDimensions,
+      config?.availableAxes?.length || configuredDimensions,
+      predictorCount || configuredDimensions,
+    ),
   );
 
   // Only displayed dimensions read predictor values. With one predictor the
