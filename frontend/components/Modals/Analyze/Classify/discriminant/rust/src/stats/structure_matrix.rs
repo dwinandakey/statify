@@ -77,13 +77,11 @@ pub fn calculate_structure_matrix(
         for m in 0..num_functions {
             let mut cov_xz = 0.0;
 
-            // Hitung Cov(X_i, Z_m) menggunakan Unstandardized Coefficients (b)
-            for (var_k_name, coefs) in &canonical_functions.coefficients {
-                if var_k_name == "(Constant)" {
-                    continue; // Abaikan konstanta
-                }
-
-                if let Some(k) = all_variables.iter().position(|v| v == var_k_name) {
+            // Hitung Cov(X_i, Z_m) menggunakan Unstandardized Coefficients (b), summed
+            // in variable order: iterating the coefficient map would sum in hash order,
+            // which differs between builds and moves the last bit of the result.
+            for (k, var_k_name) in all_variables.iter().enumerate() {
+                if let Some(coefs) = canonical_functions.coefficients.get(var_k_name) {
                     if m < coefs.len() {
                         // S_pooled[i][k] * b_k[m]
                         cov_xz += s_pooled[(i, k)] * coefs[m];

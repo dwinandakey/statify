@@ -74,12 +74,13 @@ function groupLabelOf(value: string | number): string {
  * Recompute each dataset row's predicted group, discriminant scores, and
  * posterior probabilities from the fitted model.
  *
- * A row takes part only when its grouping value falls inside the defined range
- * and every analyzed predictor holds a number — the same listwise rule the
- * analysis itself applies. With "Replace missing values with mean", a row missing
- * a predictor is still classified, with that predictor's mean over the analysis
- * rows substituted (as Rust does). Everything else comes back as `null` and is
- * left blank in the saved columns.
+ * A row is classified when every analyzed predictor holds a number — the same
+ * listwise rule the analysis itself applies. With "Replace missing values with
+ * mean", a row missing a predictor is still classified, with that predictor's mean
+ * over the analysis rows substituted (as Rust does). A row whose group code is
+ * missing or outside the defined range is classified too (an ungrouped case, as in
+ * SPSS), but never counts as an analysis row. Everything else comes back as `null`
+ * and is left blank in the saved columns.
  */
 export function computeDiscriminantCaseResults(
     dataVariables: string[][],
@@ -146,29 +147,50 @@ export function computeDiscriminantCaseResults(
         return false;
     };
 
-    // Pass 1a — collect the rows with a valid group code, with each predictor cell
-    // read as a number or `null` when missing.
+    // The rows the engine receives as cases: up to the last row holding a value in
+    // the grouping, independent or selection variables (the rule of getSlicedData,
+    // whose slices the discriminant hook pads to that common length). Rows after it
+    // are empty, not cases, and must not be classified as ungrouped ones.
+    const caseColumns = [
+        groupingColumn,
+        ...(config.main.IndependentVariables ?? []).map((name) => columnOf.get(name)),
+        selectionName ? columnOf.get(selectionName) : undefined,
+    ].filter((col): col is number => col !== undefined);
+    let lastRow = -1;
+    dataVariables.forEach((row, rowIndex) => {
+        if (row && caseColumns.some((col) => row[col] !== undefined && row[col] !== null && row[col] !== "")) {
+            lastRow = rowIndex;
+        }
+    });
+
+    // Pass 1a — collect the rows, with each predictor cell read as a number or `null`
+    // when missing. `label` is `null` for an ungrouped row (missing or out-of-range
+    // group code).
     type Candidate = {
         rowIndex: number;
-        label: string;
+        label: string | null;
         cells: Array<number | null>;
         selected: boolean;
     };
     const candidates: Candidate[] = [];
 
-    for (let rowIndex = 0; rowIndex < dataVariables.length; rowIndex++) {
+    for (let rowIndex = 0; rowIndex <= lastRow; rowIndex++) {
         const row = dataVariables[rowIndex];
         if (!row) continue;
 
         const groupValue = parseCell(row[groupingColumn]);
-        if (groupValue === null) continue;
-        if (typeof groupValue === "number") {
-            if (minRange !== null && groupValue < minRange) continue;
-            if (maxRange !== null && groupValue > maxRange) continue;
+        const inRange =
+            groupValue !== null &&
+            !(
+                typeof groupValue === "number" &&
+                ((minRange !== null && groupValue < minRange) ||
+                    (maxRange !== null && groupValue > maxRange))
+            );
+        let label: string | null = null;
+        if (inRange) {
+            label = groupLabelOf(groupValue as string | number);
+            if (!centroidOf.has(label)) continue;
         }
-
-        const label = groupLabelOf(groupValue);
-        if (!centroidOf.has(label)) continue;
 
         const cells = predictorColumns.map((col) => {
             const cell = parseCell(row[col]);
@@ -178,10 +200,10 @@ export function computeDiscriminantCaseResults(
         candidates.push({ rowIndex, label, cells, selected: isSelected(row) });
     }
 
-    // Analysis rows are the selected, complete ones — the cases Rust estimates the
-    // functions, the priors and the substituted means from.
+    // Analysis rows are the selected, complete ones with a valid group code — the
+    // cases Rust estimates the functions, the priors and the substituted means from.
     const isComplete = (c: Candidate) => c.cells.every((v) => v !== null);
-    const isAnalysisRow = (c: Candidate) => c.selected && isComplete(c);
+    const isAnalysisRow = (c: Candidate) => c.label !== null && c.selected && isComplete(c);
 
     const predictorMeans = predictors.map((_, v) => {
         let sum = 0;
@@ -196,7 +218,7 @@ export function computeDiscriminantCaseResults(
 
     // Pass 1b — score the rows. Incomplete rows are scored only with "Replace
     // missing values with mean", each missing predictor replaced by its mean.
-    type Scored = { rowIndex: number; label: string; scores: number[]; analysis: boolean };
+    type Scored = { rowIndex: number; label: string | null; scores: number[]; analysis: boolean };
     const scored: Scored[] = [];
 
     for (const c of candidates) {
@@ -229,7 +251,7 @@ export function computeDiscriminantCaseResults(
         const counts = new Map<string, number>(groupLabels.map((g) => [g, 0]));
         let analysisCases = 0;
         for (const c of scored) {
-            if (!c.analysis) continue;
+            if (!c.analysis || c.label === null) continue;
             counts.set(c.label, (counts.get(c.label) ?? 0) + 1);
             analysisCases++;
         }

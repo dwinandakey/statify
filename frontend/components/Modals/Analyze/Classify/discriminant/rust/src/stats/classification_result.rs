@@ -26,11 +26,15 @@ use crate::stats::matrix_calculation::calculate_pooled_within_matrix_no_epsilon;
 /// `unselected` are the cases the selection variable leaves out (the testing part of
 /// a training/testing split); they are classified with the same functions and
 /// reported in their own block, as SPSS does. Empty when no selection is in use.
+/// `ungrouped` are the cases with a missing or out-of-range group code
+/// (`ungrouped_cases`); SPSS classifies them too and reports them in an "Ungrouped
+/// cases" row of the Original block they belong to (selected or not selected).
 pub fn calculate_classification_results(
     data: &AnalysisData,
     config: &DiscriminantConfig,
     substituted: &[MeanSubstitutedCase],
     unselected: &[MeanSubstitutedCase],
+    ungrouped: &[MeanSubstitutedCase],
 ) -> Result<ClassificationResults, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -106,39 +110,68 @@ pub fn calculate_classification_results(
         }
     }
 
+    // Predicted group (index into dataset.group_labels) of a case classified
+    // outside the analysis: an unselected or an ungrouped case.
+    let predict = |case: &MeanSubstitutedCase| -> usize {
+        let case_values: Vec<f64> = variables_to_use
+            .iter()
+            .map(|var| case.values.get(var).copied().unwrap_or(f64::NAN))
+            .collect();
+        classify_case_safe(
+            &case_values,
+            &canonical_functions,
+            &eigen_stats,
+            &dataset,
+            &variables_to_use,
+            &priors,
+            separate_rule.as_ref(),
+        )
+    };
+    let (selected_ungrouped, unselected_ungrouped): (Vec<&MeanSubstitutedCase>, Vec<&MeanSubstitutedCase>) =
+        ungrouped.iter().partition(|case| case.selected);
+
     // --- CASES NOT SELECTED (testing part of a training/testing split) ---
     // Classified with the functions, priors and rule of the selected cases, and never
     // cross-validated. Only groups present in the analysis can be counted (their
     // actual group must be a row of the table); unselected_cases guarantees that.
-    let (unselected_classification, unselected_percentage) = if unselected.is_empty() {
-        (None, None)
-    } else {
-        let mut counts: HashMap<String, Vec<i32>> = dataset
-            .group_labels
-            .iter()
-            .map(|g| (g.clone(), vec![0; dataset.group_labels.len()]))
-            .collect();
-        for case in unselected {
-            let case_values: Vec<f64> = variables_to_use
+    // The block also exists when its only cases are ungrouped ones.
+    let (unselected_classification, unselected_percentage) =
+        if unselected.is_empty() && unselected_ungrouped.is_empty() {
+            (None, None)
+        } else {
+            let mut counts: HashMap<String, Vec<i32>> = dataset
+                .group_labels
                 .iter()
-                .map(|var| case.values.get(var).copied().unwrap_or(f64::NAN))
+                .map(|g| (g.clone(), vec![0; dataset.group_labels.len()]))
                 .collect();
-            let predicted_idx = classify_case_safe(
-                &case_values,
-                &canonical_functions,
-                &eigen_stats,
-                &dataset,
-                &variables_to_use,
-                &priors,
-                separate_rule.as_ref(),
-            );
-            if let Some(row) = counts.get_mut(&case.group) {
-                row[predicted_idx] += 1;
+            for case in unselected {
+                let predicted_idx = predict(case);
+                if let Some(row) = counts.get_mut(&case.group) {
+                    row[predicted_idx] += 1;
+                }
             }
+            let percentages = row_percentages(&counts);
+            (Some(counts), Some(percentages))
+        };
+
+    // --- UNGROUPED CASES ---
+    // One row per block: how the ungrouped cases were classified. They have no actual
+    // group, so they never count toward the share of correctly classified cases.
+    let ungrouped_row = |cases: &[&MeanSubstitutedCase]| -> (Option<Vec<i32>>, Option<Vec<f64>>) {
+        if cases.is_empty() {
+            return (None, None);
         }
-        let percentages = row_percentages(&counts);
+        let mut counts = vec![0; dataset.group_labels.len()];
+        for case in cases {
+            counts[predict(case)] += 1;
+        }
+        let total = counts.iter().sum::<i32>() as f64;
+        let percentages = counts.iter().map(|&c| (c as f64) * 100.0 / total).collect();
         (Some(counts), Some(percentages))
     };
+    let (ungrouped_classification, ungrouped_percentage) = ungrouped_row(&selected_ungrouped);
+    let (unselected_ungrouped_classification, unselected_ungrouped_percentage) =
+        ungrouped_row(&unselected_ungrouped);
 
     // --- MENGHITUNG CROSS-VALIDATED CLASSIFICATION (SPSS Matching) ---
     // A failed cross-validation keeps the original classification table and reports
@@ -163,6 +196,10 @@ pub fn calculate_classification_results(
         cross_validated_percentage,
         unselected_classification,
         unselected_percentage,
+        ungrouped_classification,
+        ungrouped_percentage,
+        unselected_ungrouped_classification,
+        unselected_ungrouped_percentage,
     })
 }
 

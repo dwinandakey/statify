@@ -11,17 +11,23 @@ use crate::models::{
 
 use super::core::{
     analysis_case_rows, calculate_canonical_functions, calculate_eigen_statistics,
-    calculate_p_value_from_chi_square, classification_case_values, group_row_indices, fit_groups, separate_groups_rule, MeanSubstitutedCase,
+    calculate_p_value_from_chi_square, classification_case_values, group_row_indices, fit_groups, separate_groups_rule, MeanSubstitutedCase, UNGROUPED_LABEL,
     calculate_pooled_within_matrix_no_epsilon, calculate_prior_probabilities,
     extract_analyzed_dataset, get_stepwise_selected_variables, is_rank_deficient,
     push_analysis_warning, EPSILON,
 };
 
 /// Calculate detailed statistics for each case
+///
+/// `ungrouped` are the cases with a missing or out-of-range group code
+/// (`ungrouped_cases`); the selected ones are listed with "ungrouped" as their actual
+/// group, as SPSS does. They have no cross-validated row: cross-validation covers only
+/// the cases in the analysis.
 pub fn calculate_casewise_statistics(
     data: &AnalysisData,
     config: &DiscriminantConfig,
     substituted: &[MeanSubstitutedCase],
+    ungrouped: &[MeanSubstitutedCase],
 ) -> Result<CasewiseStatistics, String> {
 
     if !config.classify.case {
@@ -107,6 +113,9 @@ pub fn calculate_casewise_statistics(
         for (row, case_values) in rows.zip(group_cases) {
             all_cases.push((row, group_name.clone(), case_values));
         }
+    }
+    for case in ungrouped.iter().filter(|case| case.selected) {
+        all_cases.push((case.row, UNGROUPED_LABEL.to_string(), predictor_values(case, &variables_to_use)));
     }
     if rows_known {
         all_cases.sort_by_key(|(row, _, _)| *row);
@@ -615,12 +624,23 @@ struct CrossValidatedCaseResult {
     original_idx: usize,
 }
 
+/// Predictor values of a case classified outside the analysis, in `variables` order.
+fn predictor_values(case: &MeanSubstitutedCase, variables: &[String]) -> Vec<f64> {
+    variables
+        .iter()
+        .map(|var| case.values.get(var).copied().unwrap_or(f64::NAN))
+        .collect()
+}
+
 /// Compute per-case discriminant scores for scatter plot rendering.
 /// Does NOT require config.classify.case — called when combine || sep_grp is true.
+/// The selected ungrouped cases are included with "ungrouped" as their group, as in
+/// the casewise table (SPSS plots them as "Ungrouped Cases").
 pub fn calculate_scatter_data(
     data: &AnalysisData,
     config: &DiscriminantConfig,
     substituted: &[MeanSubstitutedCase],
+    ungrouped: &[MeanSubstitutedCase],
 ) -> Result<ScatterData, String> {
     let dataset = extract_analyzed_dataset(data, config)?;
     let grouping_var = &config.main.grouping_variable;
@@ -646,25 +666,34 @@ pub fn calculate_scatter_data(
         .map(|i| (format!("Function {}", i), Vec::new()))
         .collect();
 
+    // Same cases as the casewise table: per group the analysis cases, then the
+    // mean-substituted ones; then the selected ungrouped cases.
+    let mut cases: Vec<(String, Vec<f64>)> = Vec::new();
     for group_name in &dataset.group_labels {
-        // Same cases as the casewise table: analysis cases, then mean-substituted ones.
         for case_values in
             classification_case_values(&dataset, group_name, &variables_to_use, substituted)
         {
-            actual_group.push(group_name.clone());
+            cases.push((group_name.clone(), case_values));
+        }
+    }
+    for case in ungrouped.iter().filter(|case| case.selected) {
+        cases.push((UNGROUPED_LABEL.to_string(), predictor_values(case, &variables_to_use)));
+    }
 
-            let scores = calculate_discriminant_scores(
-                &case_values,
-                &canonical_functions,
-                &variables_to_use,
-                num_functions,
-            );
+    for (group, case_values) in cases {
+        actual_group.push(group);
 
-            for (func_idx, score) in scores.iter().enumerate() {
-                let key = format!("Function {}", func_idx + 1);
-                if let Some(sv) = discriminant_scores.get_mut(&key) {
-                    sv.push(if score.is_nan() { 0.0 } else { *score });
-                }
+        let scores = calculate_discriminant_scores(
+            &case_values,
+            &canonical_functions,
+            &variables_to_use,
+            num_functions,
+        );
+
+        for (func_idx, score) in scores.iter().enumerate() {
+            let key = format!("Function {}", func_idx + 1);
+            if let Some(sv) = discriminant_scores.get_mut(&key) {
+                sv.push(if score.is_nan() { 0.0 } else { *score });
             }
         }
     }

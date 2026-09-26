@@ -239,6 +239,11 @@ struct FormattedClassificationResults {
     cross_validated_percentage: Option<Vec<GroupPercentage>>,
     unselected_classification: Option<Vec<GroupClassification>>,
     unselected_percentage: Option<Vec<GroupPercentage>>,
+    // "Ungrouped cases" rows; counts and percentages are in group order.
+    ungrouped_classification: Option<Vec<i32>>,
+    ungrouped_percentage: Option<Vec<f64>>,
+    unselected_ungrouped_classification: Option<Vec<i32>>,
+    unselected_ungrouped_percentage: Option<Vec<f64>>,
 }
 
 #[derive(Serialize)]
@@ -611,6 +616,10 @@ impl FormatResult {
                 cross_validated_percentage,
                 unselected_classification,
                 unselected_percentage,
+                ungrouped_classification: results.ungrouped_classification.clone(),
+                ungrouped_percentage: results.ungrouped_percentage.clone(),
+                unselected_ungrouped_classification: results.unselected_ungrouped_classification.clone(),
+                unselected_ungrouped_percentage: results.unselected_ungrouped_percentage.clone(),
             }
         });
 

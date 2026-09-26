@@ -847,16 +847,30 @@ pub fn filter_valid_cases(
 /// - an unselected case: the selection variable leaves it out of the analysis (the
 ///   testing part of a training/testing split). SPSS classifies these too and
 ///   reports them separately; a missing predictor is mean-substituted only with
-///   "Replace missing values with mean", otherwise the case is not classified.
+///   "Replace missing values with mean", otherwise the case is not classified;
+/// - an ungrouped case: its group code is missing or outside the defined range.
+///   SPSS (GROUPS subcommand): "Cases with values outside the value range or missing
+///   are ignored during the analysis phase but are classified during the
+///   classification phase." Its group is `UNGROUPED_LABEL`; a missing predictor is
+///   handled as for an unselected case.
 #[derive(Debug, Clone)]
 pub struct MeanSubstitutedCase {
     /// Data-file row (0-based) of the case.
     pub row: usize,
-    /// Group label, formatted like `AnalyzedDataset::group_labels`.
+    /// Group label, formatted like `AnalyzedDataset::group_labels`, or
+    /// `UNGROUPED_LABEL` for an ungrouped case.
     pub group: String,
     /// One value per independent variable, missing ones already replaced by the mean.
     pub values: HashMap<String, f64>,
+    /// Whether the case passes the selection filter (true when no selection
+    /// variable is in use). Ungrouped cases are reported with the selected or the
+    /// unselected cases accordingly.
+    pub selected: bool,
 }
+
+/// Actual-group label of an ungrouped case (missing or out-of-range group code), as
+/// SPSS prints it in the Casewise Statistics.
+pub const UNGROUPED_LABEL: &str = "ungrouped";
 
 /// Which extra cases `collect_extra_cases` returns.
 #[derive(Clone, Copy, PartialEq)]
@@ -865,6 +879,8 @@ enum ExtraCases {
     MeanSubstituted,
     /// Cases the selection variable leaves out (the testing part of a split).
     Unselected,
+    /// Cases with a missing or out-of-range group code, selected or not.
+    Ungrouped,
 }
 
 /// Collect the mean-substituted cases from the raw (unfiltered) data.
@@ -887,13 +903,28 @@ pub fn unselected_cases(
     collect_extra_cases(raw, filtered, config, ExtraCases::Unselected)
 }
 
-/// Shared scan behind `mean_substituted_cases` and `unselected_cases`.
+/// Collect the ungrouped cases from the raw (unfiltered) data: every case whose group
+/// code is missing or outside the defined range, selected or not. They never enter the
+/// analysis, but are classified, as SPSS does ("Ungrouped cases" in the Classification
+/// Results). A case with a missing predictor is classified only with "Replace missing
+/// values with mean".
+pub fn ungrouped_cases(
+    raw: &AnalysisData,
+    filtered: &AnalysisData,
+    config: &DiscriminantConfig
+) -> Result<Vec<MeanSubstitutedCase>, String> {
+    collect_extra_cases(raw, filtered, config, ExtraCases::Ungrouped)
+}
+
+/// Shared scan behind `mean_substituted_cases`, `unselected_cases` and
+/// `ungrouped_cases`.
 ///
 /// Uses the same rules as the analysis pipeline so no case is counted twice or
 /// dropped: the selection filter and "missing" test of `filter_valid_cases`, and the
-/// group-label formatting and range check of `extract_grouped_data`. Cases whose
-/// group is not one of the analysis groups are skipped. The means come from the
-/// analysis cases (`filtered`), i.e. the same `overall_means` the functions use.
+/// group-label formatting and range check of `extract_grouped_data`. Outside
+/// `ExtraCases::Ungrouped`, cases whose group is not one of the analysis groups are
+/// skipped. The means come from the analysis cases (`filtered`), i.e. the same
+/// `overall_means` the functions use.
 fn collect_extra_cases(
     raw: &AnalysisData,
     filtered: &AnalysisData,
@@ -930,23 +961,32 @@ fn collect_extra_cases(
     let mut cases = Vec::new();
 
     for (row, record) in raw.group_data.iter().flatten().enumerate() {
-        // Group label and range check, as in extract_grouped_data.
+        // Group label and range check, as in extract_grouped_data. `None` is a
+        // missing or out-of-range group code (a blank text code counts as missing,
+        // as in basic_processing_summary).
         let group = match record.values.get(group_var) {
-            Some(DataValue::Number(num)) => {
+            Some(DataValue::Number(num)) if !num.is_nan() => {
                 if min_range.map_or(true, |min| *num >= min) && max_range.map_or(true, |max| *num <= max) {
-                    num.to_string()
+                    Some(num.to_string())
                 } else {
-                    continue;
+                    None
                 }
             }
-            Some(DataValue::Text(text)) => text.clone(),
-            _ => {
+            Some(DataValue::Text(text)) if !text.trim().is_empty() => Some(text.clone()),
+            _ => None,
+        };
+        let group = match (kind, group) {
+            (ExtraCases::Ungrouped, None) => UNGROUPED_LABEL.to_string(),
+            (ExtraCases::Ungrouped, Some(_)) | (_, None) => {
                 continue;
             }
+            (_, Some(group)) => {
+                if !dataset.group_labels.contains(&group) {
+                    continue;
+                }
+                group
+            }
         };
-        if !dataset.group_labels.contains(&group) {
-            continue;
-        }
 
         // Selection filter, as in filter_valid_cases. `None` when no selection
         // variable (with a value) is in use, i.e. every case counts as selected.
@@ -964,6 +1004,7 @@ fn collect_extra_cases(
         let in_scope = match kind {
             ExtraCases::MeanSubstituted => selected.unwrap_or(true),
             ExtraCases::Unselected => selected == Some(false),
+            ExtraCases::Ungrouped => true,
         };
         if !in_scope {
             continue;
@@ -990,9 +1031,9 @@ fn collect_extra_cases(
             ExtraCases::MeanSubstituted => if !any_missing {
                 continue;
             }
-            // An unselected case with a missing predictor is classified only when
-            // "Replace missing values with mean" is on.
-            ExtraCases::Unselected => if any_missing && !config.classify.replace {
+            // An unselected or ungrouped case with a missing predictor is classified
+            // only when "Replace missing values with mean" is on.
+            ExtraCases::Unselected | ExtraCases::Ungrouped => if any_missing && !config.classify.replace {
                 continue;
             }
         }
@@ -1015,7 +1056,7 @@ fn collect_extra_cases(
         }
 
         let file_row = raw.row_numbers.as_ref().and_then(|rn| rn.get(row).copied()).unwrap_or(row);
-        cases.push(MeanSubstitutedCase { row: file_row, group, values });
+        cases.push(MeanSubstitutedCase { row: file_row, group, values, selected: selected.unwrap_or(true) });
     }
 
     Ok(cases)

@@ -115,15 +115,16 @@ pub fn basic_processing_summary(
 
     // Classification Processing Summary. Every case is processed: the selected ones
     // and, with a selection variable, the unselected ones (classified as the testing
-    // part of a split). With "Replace missing values with mean", a case whose only
-    // problem is a missing predictor is still classified, so it is not excluded.
+    // part of a split). A missing or out-of-range group code does not exclude a case
+    // from classification: SPSS (GROUPS subcommand) classifies it as an ungrouped
+    // case, so that count stays 0. A missing predictor does exclude it, also when the
+    // group code is missing too, unless "Replace missing values with mean" is on.
     let classification_processed = total_cases;
-    let classification_missing_group_codes =
-        missing_group_codes + both_missing + unselected_missing_group + unselected_both;
+    let classification_missing_group_codes = 0;
     let classification_missing_disc_vars = if config.classify.replace {
         0
     } else {
-        missing_disc_vars + unselected_missing_disc
+        missing_disc_vars + both_missing + unselected_missing_disc + unselected_both
     };
     let classification_used_cases =
         classification_processed - classification_missing_group_codes - classification_missing_disc_vars;

@@ -1,6 +1,14 @@
 import { transformDiscriminantResult } from "@/components/Modals/Analyze/Classify/discriminant/services/formatter";
+import { comparisonDecimals } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-number-format";
 import { useResultStore } from "@/stores/useResultStore";
 import type { Table } from "@/types/Table";
+
+// Output formatted in precision mode (see discriminant-number-format.ts) says so in
+// its title, so it is never mistaken for the normal SPSS-style output.
+function withPrecisionNote(title: string): string {
+    const decimals = comparisonDecimals();
+    return decimals ? `${title} (precision mode: ${decimals} decimals)` : title;
+}
 
 // Plain-language, one-line interpretation per table, shown in the section
 // "Description". Assumption tables (and Box's M) are intentionally omitted —
@@ -162,7 +170,7 @@ export async function saveDiscriminantResult(rawResults: unknown) {
 
     const logId = await addLog({ log: "Discriminant Analysis" });
     const analyticId = await addAnalytic(logId, {
-        title: "Discriminant Analysis",
+        title: withPrecisionNote("Discriminant Analysis"),
         note: "",
     });
 
@@ -296,7 +304,7 @@ export async function saveDiscriminantAssumptions(rawResults: unknown) {
     const { addLog, addAnalytic } = useResultStore.getState();
     const logId = await addLog({ log: "Discriminant Assumption Checks" });
     const analyticId = await addAnalytic(logId, {
-        title: "Discriminant Analysis: Assumption Checks",
+        title: withPrecisionNote("Discriminant Analysis: Assumption Checks"),
         note: "",
     });
 

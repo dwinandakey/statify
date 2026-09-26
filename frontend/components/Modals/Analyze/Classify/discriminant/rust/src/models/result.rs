@@ -291,7 +291,7 @@ pub struct ProcessingSummary {
     #[serde(rename = "classification_processed", default)]
     pub classification_processed: Option<usize>,
     /// Classification Processing Summary: cases excluded for a missing or out-of-range
-    /// group code, selected and unselected together.
+    /// group code. Always 0: such cases are classified as ungrouped cases, as SPSS does.
     #[serde(rename = "classification_missing_group_codes", default)]
     pub classification_missing_group_codes: Option<usize>,
     /// Classification Processing Summary: cases excluded for a missing predictor.
@@ -380,6 +380,18 @@ pub struct ClassificationResults {
     pub unselected_classification: Option<HashMap<String, Vec<i32>>>,
     #[serde(rename = "unselected_percentage", default)]
     pub unselected_percentage: Option<HashMap<String, Vec<f64>>>,
+    /// "Ungrouped cases" row of the (selected) Original block: predicted-group counts
+    /// of the cases with a missing or out-of-range group code, in group order. `None`
+    /// when there is no such case.
+    #[serde(rename = "ungrouped_classification", default)]
+    pub ungrouped_classification: Option<Vec<i32>>,
+    #[serde(rename = "ungrouped_percentage", default)]
+    pub ungrouped_percentage: Option<Vec<f64>>,
+    /// The same row of the "Cases Not Selected" block.
+    #[serde(rename = "unselected_ungrouped_classification", default)]
+    pub unselected_ungrouped_classification: Option<Vec<i32>>,
+    #[serde(rename = "unselected_ungrouped_percentage", default)]
+    pub unselected_ungrouped_percentage: Option<Vec<f64>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

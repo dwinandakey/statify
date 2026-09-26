@@ -2,6 +2,7 @@
 import { formatDisplayNumber } from "@/hooks/useFormatter";
 import {
   compareGroupLabels,
+  comparisonDecimals,
   formatCount,
   formatPercent,
   formatSig,
@@ -9,6 +10,19 @@ import {
 } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-number-format";
 import type { ResultJson, Table } from "@/types/Table";
 import type { Chart } from "@/types/Chart";
+
+// Actual group the engine gives a case with a missing or out-of-range group code
+// (UNGROUPED_LABEL in common.rs), as SPSS prints it in the Casewise Statistics, and
+// the name of those cases in the plot legend.
+const UNGROUPED_GROUP = "ungrouped";
+const UNGROUPED_CASES = "Ungrouped Cases";
+
+// The assumption tables keep the app-wide number style, except in precision mode
+// (see discriminant-number-format.ts), where they follow the other tables.
+const assumptionStat = (value: number) =>
+  comparisonDecimals() ? formatStat(value) : formatDisplayNumber(value);
+const assumptionSig = (value: number) =>
+  comparisonDecimals() ? formatSig(value) : formatDisplayNumber(value);
 
 export function transformDiscriminantResult(data: any): ResultJson {
   const resultJson: ResultJson = {
@@ -1807,7 +1821,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       // Check if this is a misclassified case (add asterisk)
       const predictedGroup = data.casewise_statistics.predicted_group[i];
       const actualGroup = data.casewise_statistics.actual_group[i];
-      const isMisclassified = predictedGroup !== actualGroup;
+      const isMisclassified = actualGroup !== UNGROUPED_GROUP && predictedGroup !== actualGroup;
 
       // Discriminant scores: discriminant_scores is a Vec<ScoreValue> array of
       // { function, values }, so read the per-case value from each entry's
@@ -1922,12 +1936,23 @@ export function transformDiscriminantResult(data: any): ResultJson {
       : [];
     const hasUnselected = unselectedCounts.length > 0;
     const hasCrossValidated = Array.isArray(cr.cross_validated_classification);
+    // Cases with a missing or out-of-range group code, classified as SPSS does and
+    // shown as an "Ungrouped cases" row of the Original block they belong to.
+    const numbers = (value: unknown): number[] | null => (Array.isArray(value) ? value : null);
+    const ungroupedCounts = numbers(cr.ungrouped_classification);
+    const ungroupedPercentages = numbers(cr.ungrouped_percentage);
+    const unselectedUngroupedCounts = numbers(cr.unselected_ungrouped_classification);
+    const unselectedUngroupedPercentages = numbers(cr.unselected_ungrouped_percentage);
+    const groupedTotal = (counts: GroupCounts[]): number =>
+      counts.reduce((sum, row) => sum + row.counts.reduce((s, c) => s + c, 0), 0);
 
-    // Footnote letters in the order the notes are printed.
+    // Footnote letters in the order the notes are printed. The unselected hit ratio
+    // is left out when every unselected case is ungrouped (there is nothing to score).
     const letters = "abcdefg";
     let nextLetter = 0;
     const originalNote = letters[nextLetter++];
-    const unselectedNote = hasUnselected ? letters[nextLetter++] : "";
+    const unselectedNote =
+      hasUnselected && groupedTotal(unselectedCounts) > 0 ? letters[nextLetter++] : "";
     const crossValidationNote = hasCrossValidated ? letters[nextLetter++] : "";
     const crossValidatedNote = hasCrossValidated ? letters[nextLetter++] : "";
     const superscript: Record<string, string> = { a: "ᵃ", b: "ᵇ", c: "ᶜ", d: "ᵈ", e: "ᵉ" };
@@ -1954,12 +1979,14 @@ export function transformDiscriminantResult(data: any): ResultJson {
     };
 
     // One block (Count rows, then % rows) of the table. `sampleLabel` goes in the
-    // extra leading column when the table is split by the selection variable.
+    // extra leading column when the table is split by the selection variable. The
+    // optional `ungrouped` row closes each part of an Original block.
     const pushBlock = (
       sampleLabel: string,
       blockLabel: string,
       counts: GroupCounts[],
       percentages: GroupPercentages[],
+      ungrouped?: { counts: number[] | null; percentages: number[] | null },
     ) => {
       const lead = (first: boolean) => (hasUnselected ? [first ? sampleLabel : ""] : []);
 
@@ -1973,17 +2000,35 @@ export function transformDiscriminantResult(data: any): ResultJson {
         row.counts.forEach((count, j) => (rowData[`group_${j}`] = formatCount(count)));
         table.rows.push(rowData);
       });
+      if (ungrouped?.counts) {
+        const rowData: any = {
+          rowHeader: [...lead(false), "", "", "Ungrouped cases"],
+          total: formatCount(ungrouped.counts.reduce((sum, count) => sum + count, 0)),
+        };
+        ungrouped.counts.forEach((count, j) => (rowData[`group_${j}`] = formatCount(count)));
+        table.rows.push(rowData);
+      }
 
       groups.forEach((group, i) => {
         const row = percentages.find((item) => item.group === group);
         if (!row) return;
+        const rowCount = counts.find((item) => item.group === group)?.counts
+          .reduce((sum, count) => sum + count, 0) ?? 0;
         const rowData: any = {
           rowHeader: [...lead(false), "", i === 0 ? "%" : "", row.group],
-          total: "100.0",
+          total: formatPercent(rowCount > 0 ? 100 : 0),
         };
         row.percentages.forEach((pct, j) => (rowData[`group_${j}`] = formatPercent(pct)));
         table.rows.push(rowData);
       });
+      if (ungrouped?.percentages) {
+        const rowData: any = {
+          rowHeader: [...lead(false), "", "", "Ungrouped cases"],
+          total: formatPercent(100),
+        };
+        ungrouped.percentages.forEach((pct, j) => (rowData[`group_${j}`] = formatPercent(pct)));
+        table.rows.push(rowData);
+      }
     };
 
     // Share of correctly classified cases: diagonal over all classified cases. Every
@@ -2006,6 +2051,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       "Original",
       cr.original_classification,
       cr.original_percentage ?? [],
+      { counts: ungroupedCounts, percentages: ungroupedPercentages },
     );
     if (hasCrossValidated) {
       pushBlock(
@@ -2016,7 +2062,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
       );
     }
     if (hasUnselected) {
-      pushBlock("Cases Not Selected", "Original", unselectedCounts, unselectedPercentages);
+      pushBlock("Cases Not Selected", "Original", unselectedCounts, unselectedPercentages, {
+        counts: unselectedUngroupedCounts,
+        percentages: unselectedUngroupedPercentages,
+      });
     }
 
     // --- FOOTNOTES ---
@@ -2026,7 +2075,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
         `${originalNote}. ${formatPercent(hitRatio(cr.original_classification))}% of ${selectedWord}original grouped cases correctly classified.`,
       ],
     });
-    if (hasUnselected) {
+    if (unselectedNote) {
       table.rows.push({
         rowHeader: [
           `${unselectedNote}. ${formatPercent(hitRatio(unselectedCounts))}% of unselected original grouped cases correctly classified.`,
@@ -2161,7 +2210,10 @@ export function transformDiscriminantResult(data: any): ResultJson {
     scatterSrc?.discriminant_scores;
   const f1Scores: number[] | undefined = scoreArr?.find((s: any) => s.function === "Function 1")?.values;
   const f2Scores: number[] | undefined = scoreArr?.find((s: any) => s.function === "Function 2")?.values;
-  const caseGroups: string[] | undefined = scatterSrc?.actual_group;
+  // Ungrouped cases are named as in SPSS's legend; they get no Separate-groups plot.
+  const caseGroups: string[] | undefined = scatterSrc?.actual_group?.map((g: string) =>
+    g === UNGROUPED_GROUP ? UNGROUPED_CASES : g,
+  );
   // function_at_centroids is Vec<GroupCentroid> = [{group, values}], not a keyed object
   const centroidArr: Array<{ group: string; values: number[] }> | undefined =
     data?.canonical_functions?.function_at_centroids;
@@ -2207,7 +2259,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
       },
     };
 
-    const separateHistograms: Chart[] = [...new Set(grps)].map((group) => {
+    const separateHistograms: Chart[] = [...new Set(grps)].filter((g) => g !== UNGROUPED_CASES).map((group) => {
       const values = f1.filter((_, i) => grps[i] === group);
       const n = values.length;
       const mean = n > 0 ? values.reduce((s, v) => s + v, 0) / n : 0;
@@ -2325,7 +2377,7 @@ export function transformDiscriminantResult(data: any): ResultJson {
     };
 
     // Separate-Groups Plots (one per group)
-    const uniqueGroups = [...new Set(grps)];
+    const uniqueGroups = [...new Set(grps)].filter((g) => g !== UNGROUPED_CASES);
     const separateCharts: Chart[] = uniqueGroups.map((group) => {
       const groupCases = casePoints.filter((p) => p.category === group);
       const groupCentroid = centroidPoints.find((p) => p.category === group + " ★");
@@ -2585,8 +2637,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
       for (let i = 0; i < mc.variables.length; i++) {
         table.rows.push({
           rowHeader: [mc.variables[i]],
-          tolerance: formatDisplayNumber(mc.tolerance[i]),
-          vif: formatDisplayNumber(mc.vif[i]),
+          tolerance: assumptionStat(mc.tolerance[i]),
+          vif: assumptionStat(mc.vif[i]),
         });
       }
       (table as Table & { footer?: string }).footer = mc.note;
@@ -2615,8 +2667,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
         table.rows.push({
           rowHeader: [mv.groups[i]],
           n: String(mv.n[i]),
-          hz: tested ? formatDisplayNumber(mv.hz[i]) : "",
-          p_value: tested ? formatDisplayNumber(mv.p_value[i]) : "",
+          hz: tested ? assumptionStat(mv.hz[i]) : "",
+          p_value: tested ? assumptionSig(mv.p_value[i]) : "",
           mvn: !tested ? "Not tested (n ≤ p)" : mv.normal[i] ? "YES" : "⚠ NO",
         });
       }
@@ -2643,8 +2695,8 @@ export function transformDiscriminantResult(data: any): ResultJson {
       for (let i = 0; i < uv.variables.length; i++) {
         table.rows.push({
           rowHeader: [uv.groups[i], uv.variables[i]],
-          statistic: formatDisplayNumber(uv.statistic[i]),
-          p_value: formatDisplayNumber(uv.p_value[i]),
+          statistic: assumptionStat(uv.statistic[i]),
+          p_value: assumptionSig(uv.p_value[i]),
           normality: uv.normal[i] ? "YES" : "⚠ NO",
         });
       }

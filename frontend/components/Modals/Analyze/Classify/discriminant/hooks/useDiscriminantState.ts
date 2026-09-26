@@ -31,6 +31,28 @@ type EngineReply =
 
 const WASM_BASE = "/workers/Classify/Discriminant/pkg/";
 
+type SlicedColumns = ReturnType<typeof getSlicedData>;
+
+/**
+ * Pad the sliced columns to one common length. getSlicedData stops each slice at the
+ * last row holding a value in *its own* variables, so the grouping column can end
+ * before the predictors do: cases without a group code at the end of the file (e.g.
+ * bankloan's prospective customers) would never reach the engine, which counts cases
+ * by the grouping column. Padded rows are empty cells, so those cases count as
+ * missing group codes and are classified as ungrouped cases, as in SPSS. `names`
+ * are each slice's variables in slice order (getSlicedData keeps that order).
+ */
+export function padSlices(slices: Array<{ columns: SlicedColumns; names: string[] }>): SlicedColumns[] {
+    const length = Math.max(0, ...slices.flatMap(({ columns }) => columns.map((column) => column.length)));
+    return slices.map(({ columns, names }) =>
+        columns.map((column, k) => {
+            const padded = column.slice();
+            while (padded.length < length) padded.push({ [names[k]]: null });
+            return padded;
+        })
+    );
+}
+
 /**
  * Developer switch for the responsiveness test (Web Worker vs main thread). With
  * `localStorage.setItem("discriminant.noWorker", "1")` in the browser console the
@@ -245,16 +267,22 @@ export const useDiscriminantState = (
                     variables,
                     selectedVariables: StrataVariables,
                 });
+                const [groupData, independentData, selectionData, strataData] = padSlices([
+                    { columns: slicedDataForGrouping, names: GroupingVariable },
+                    { columns: slicedDataForIndependent, names: IndependentVariables },
+                    { columns: slicedDataForSelection, names: SelectionVariable },
+                    { columns: slicedDataForStrata, names: StrataVariables },
+                ]);
 
                 const varDefsForGrouping = getVarDefs(variables, GroupingVariable);
                 const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
                 const varDefsForSelection = getVarDefs(variables, SelectionVariable);
 
                 const message: EngineMessage = {
-                    group_data: slicedDataForGrouping,
-                    independent_data: slicedDataForIndependent,
-                    selection_data: slicedDataForSelection,
-                    strata_data: slicedDataForStrata,
+                    group_data: groupData,
+                    independent_data: independentData,
+                    selection_data: selectionData,
+                    strata_data: strataData,
                     group_data_defs: varDefsForGrouping,
                     independent_data_defs: varDefsForIndependent,
                     selection_data_defs: varDefsForSelection,
@@ -403,14 +431,19 @@ export const useDiscriminantState = (
             const slicedDataForGrouping = getSlicedData({ dataVariables, variables, selectedVariables: GroupingVariable });
             const slicedDataForIndependent = getSlicedData({ dataVariables, variables, selectedVariables: IndependentVariables });
             const slicedDataForSelection = getSlicedData({ dataVariables, variables, selectedVariables: SelectionVariable });
+            const [groupData, independentData, selectionData] = padSlices([
+                { columns: slicedDataForGrouping, names: GroupingVariable },
+                { columns: slicedDataForIndependent, names: IndependentVariables },
+                { columns: slicedDataForSelection, names: SelectionVariable },
+            ]);
             const varDefsForGrouping = getVarDefs(variables, GroupingVariable);
             const varDefsForIndependent = getVarDefs(variables, IndependentVariables);
             const varDefsForSelection = getVarDefs(variables, SelectionVariable);
 
             const message: EngineMessage = {
-                group_data: slicedDataForGrouping,
-                independent_data: slicedDataForIndependent,
-                selection_data: slicedDataForSelection,
+                group_data: groupData,
+                independent_data: independentData,
+                selection_data: selectionData,
                 group_data_defs: varDefsForGrouping,
                 independent_data_defs: varDefsForIndependent,
                 selection_data_defs: varDefsForSelection,

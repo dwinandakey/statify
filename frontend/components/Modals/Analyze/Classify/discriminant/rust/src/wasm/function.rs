@@ -62,6 +62,26 @@ pub fn run_analysis(
         Vec::new()
     };
 
+    // Cases with a missing or out-of-range group code are left out of the analysis
+    // but classified, as SPSS does ("Ungrouped cases"), wherever cases are classified:
+    // Classification Results, Casewise Statistics and the plots.
+    let classifies_cases = config.classify.summary
+        || config.classify.leave
+        || config.classify.case
+        || config.classify.combine
+        || config.classify.sep_grp;
+    let ungrouped = if classifies_cases {
+        match core::ungrouped_cases(data, &filtered_data, config) {
+            Ok(cases) => cases,
+            Err(e) => {
+                error_collector.add_error("ungrouped_cases", &e);
+                Vec::new()
+            }
+        }
+    } else {
+        Vec::new()
+    };
+
     // Step 2: Group statistics if requested
     let mut group_statistics = None;
     logger.add_log("calculate_group_statistics");
@@ -295,7 +315,7 @@ pub fn run_analysis(
     let mut casewise_statistics = None;
     if config.classify.case {
         logger.add_log("Casewise Statistics");
-        match core::calculate_casewise_statistics(&filtered_data, config, &substituted_cases) {
+        match core::calculate_casewise_statistics(&filtered_data, config, &substituted_cases, &ungrouped) {
             Ok(stats) => {
                 casewise_statistics = Some(stats);
                 crate::debug_log!("Casewise Statistics: {:?}", casewise_statistics);
@@ -313,7 +333,7 @@ pub fn run_analysis(
     // but the plots cover every classified case.
     let mut scatter_data = None;
     if config.classify.combine || config.classify.sep_grp {
-        match core::calculate_scatter_data(&filtered_data, config, &substituted_cases) {
+        match core::calculate_scatter_data(&filtered_data, config, &substituted_cases, &ungrouped) {
             Ok(sd) => {
                 scatter_data = Some(sd);
             }
@@ -377,7 +397,7 @@ pub fn run_analysis(
             }
         };
         logger.add_log("calculate_classification_results");
-        match core::calculate_classification_results(&filtered_data, config, &substituted_cases, &unselected) {
+        match core::calculate_classification_results(&filtered_data, config, &substituted_cases, &unselected, &ungrouped) {
             Ok(results) => {
                 crate::debug_log!("Classification Results: {:?}", results);
                 classification_results = Some(results);
