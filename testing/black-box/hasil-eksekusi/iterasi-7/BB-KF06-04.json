@@ -1,0 +1,68 @@
+{
+ "id": "BB-KF06-04",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: build [] → kotak Model: [\"Drop variables here.\"] (BB-KF06-04-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.",
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial."
+   ],
+   "file": "BB-KF06-04-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.",
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-build-terms": [
+   "Drop variables here."
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-04-1.png: dialog Model (build): Drop variables here.",
+  "BB-KF06-04-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "0aGhUdQPbhuxcAe295aG-",
+  "buildIdServed": "0aGhUdQPbhuxcAe295aG-",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T13:25:55.639Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 73,
+ "finishedAt": "2026-09-30T13:27:08.142Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "id": "BB-KF11-04",
+ "steps": [
+  "impor rm_c.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: sesi(3); measure nilai"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "postHocDisabled": true,
+  "dialogPostHocTerbuka": 0,
+  "catatan": 1
+ },
+ "notes": [
+  "BB-KF11-04.png: tombol Post Hoc RM nonaktif"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "0aGhUdQPbhuxcAe295aG-",
+  "buildIdServed": "0aGhUdQPbhuxcAe295aG-",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T13:38:28.431Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7,
+ "finishedAt": "2026-09-30T13:38:35.651Z",
+ "wasmRequested": []
+}

@@ -1,0 +1,40 @@
+{
+ "id": "BB-KF04-06",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = 8, 3"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "kotakAwal": "unchecked",
+  "pesan": "Known covariance matrix Σd: every entry on and above the diagonal must be a number.",
+  "subdialogTetapTerbuka": true
+ },
+ "notes": [
+  "BB-KF04-06.png: sel d1–d2 kosong"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "0aGhUdQPbhuxcAe295aG-",
+  "buildIdServed": "0aGhUdQPbhuxcAe295aG-",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T13:46:20.804Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-30T13:46:25.149Z",
+ "wasmRequested": [],
+ "durationS": 4
+}
