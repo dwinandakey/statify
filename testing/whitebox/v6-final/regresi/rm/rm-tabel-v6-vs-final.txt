@@ -1,0 +1,16 @@
+Tabel RM lewat UI (rm-ui-main-worker*.json): v6 (testing/whitebox/v6/regresi/rm) vs build gabungan ilham (v6-final)
+Sel angka dibandingkan persis; sel teks dilaporkan (lama -> baru, unik).
+
+gambar51: 1 sel angka, berbeda 0
+a: 1 sel angka, berbeda 0
+b: 1 sel angka, berbeda 0
+c: 1 sel angka, berbeda 0
+cEm: 1 sel angka, berbeda 0
+cPoly: 1 sel angka, berbeda 0
+cRep: 1 sel angka, berbeda 0
+exp5000n: 1 sel angka, berbeda 0
+exp5000: 1 sel angka, berbeda 0
+
+Total sel angka: 9, berbeda: 0; desain dengan struktur tabel berbeda: 0
+
+Perubahan teks unik (0):

@@ -1,0 +1,136 @@
+{
+ "id": "BB-KF02-10",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "Test Values μ₀ = 20, 200, 150, 3"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "selBawah": {
+   "disabled": true,
+   "editable": false,
+   "nilai": "-630"
+  },
+  "selBawahSesudahKetik": "-630",
+  "selAtasSesudahKetik": "-630",
+  "kotakSesudahDibukaLagi": "checked",
+  "matriksSesudahDibukaLagi": {
+   "title": "Σ",
+   "columns": [
+    "mpg",
+    "disp",
+    "hp",
+    "wt"
+   ],
+   "rows": [
+    "mpg",
+    "disp",
+    "hp",
+    "wt"
+   ],
+   "cells": [
+    [
+     {
+      "value": "36",
+      "disabled": false
+     },
+     {
+      "value": "-630",
+      "disabled": false
+     },
+     {
+      "value": "-320",
+      "disabled": false
+     },
+     {
+      "value": "-5",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-630",
+      "disabled": true
+     },
+     {
+      "value": "15000",
+      "disabled": false
+     },
+     {
+      "value": "6700",
+      "disabled": false
+     },
+     {
+      "value": "107",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-320",
+      "disabled": true
+     },
+     {
+      "value": "6700",
+      "disabled": true
+     },
+     {
+      "value": "4700",
+      "disabled": false
+     },
+     {
+      "value": "44",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "-5",
+      "disabled": true
+     },
+     {
+      "value": "107",
+      "disabled": true
+     },
+     {
+      "value": "44",
+      "disabled": true
+     },
+     {
+      "value": "1",
+      "disabled": false
+     }
+    ]
+   ]
+  }
+ },
+ "notes": [
+  "BB-KF02-10-1.png: sel disp–mpg nonaktif, menampilkan −630",
+  "BB-KF02-10-2.png: Test Values dibuka lagi"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "EXcw4k8lfhzpWjMN3Mjc7",
+  "buildIdServed": "EXcw4k8lfhzpWjMN3Mjc7",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T16:05:23.785Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-30T16:05:28.777Z",
+ "wasmRequested": [],
+ "durationS": 5
+}

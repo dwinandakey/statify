@@ -1,0 +1,7 @@
+a1-rm-define.png: RM Define: faktor within perlakuan(4), measure anjing
+a2-rm-dialog.png: RM: y1–y4 di slot perlakuan 1–4
+a3-rm-multivariate-tests.png: RM Multivariate Tests (Hotelling's Trace, F, df, Sig.)
+b1-mv-test-values.png: MV: DV d1, d2, d3; Test Values μ₀ = 0, 0, 0
+b2-mv-options.png: MV Options: Simultaneous CI dicentang, Significance Level 0.05 (95%)
+b3-mv-multivariate-tests.png: MV satu populasi: Multivariate Tests (Hotelling T² vs μ₀ = 0)
+b4-mv-ci-simultan.png: MV satu populasi: CI simultan T² dan Bonferroni 95% untuk d1, d2, d3

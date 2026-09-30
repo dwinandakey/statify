@@ -1,0 +1,6 @@
+mvK1: main = worker true
+mvK1n: main = worker true
+mvK2: main = worker true
+mvK3: main = worker true
+mvK4: main = worker true
+konfigurasi Σ: 5, beda: 0

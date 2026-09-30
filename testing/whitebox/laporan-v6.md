@@ -1,12 +1,14 @@
 # Laporan rilis skripsi-final-v6: perbaikan epsilon Mauchly (T1, T2)
 
 - **Tanggal:** 30 September 2026
-- **Branch:** `fix-epsilon-v6`, dibuat dari tag `skripsi-final-v5` (commit `8940ec0f`). Branch ini belum di-merge ke `main` atau `ilham`.
-- **Commit:**
-  - `8831627e`: test white-box, dibawa dari `whitebox-testing` (`75f8df25`);
-  - `04ab154c`: perbaikan T1 dan T2;
-  - commit berikutnya: hasil evaluasi dan laporan ini. Tag `skripsi-final-v6` dipasang di commit terakhir.
-- **Build produksi v6:** `BUILD_ID` `0aGhUdQPbhuxcAe295aG-` (`next build`, Next.js 15.5.9, server `next start -p 3101`).
+- **Build final (tag `skripsi-final-v6`):** branch `ilham`, yaitu v5 + dua commit teks tampilan (`a345ded6`, `ff9e9a03`) + perbaikan v6. `BUILD_ID` **`EXcw4k8lfhzpWjMN3Mjc7`**; hasil jalankan ulang di §7. Branch `ilham` belum di-push dan tidak di-merge ke `main`.
+- **Commit di `ilham`** (cherry-pick, urutan):
+  - `8d4e7179`: test white-box (dari `whitebox-testing`, `75f8df25`);
+  - `14f6b116`: perbaikan T1 dan T2 (dari `04ab154c`);
+  - `06928c80`: evaluasi v6 dan laporan (dari `e38a6c1d`);
+  - `7b383f0c`: hasil black-box v6 dipindah ke `iterasi-7-uji-awal-v6`;
+  - commit berikutnya: jalankan ulang pada build final (§7) dan laporan ini; tag `skripsi-final-v6` dipindah ke commit ini.
+- **Uji awal v6** (§1–§5): branch `fix-epsilon-v6`, dibuat dari tag `skripsi-final-v5` (`8940ec0f`), commit `8831627e`, `04ab154c`, `e38a6c1d`; build `0aGhUdQPbhuxcAe295aG-` (`next build`, Next.js 15.5.9, server `next start -p 3101`). Tag `skripsi-final-v6` semula dipasang di `e38a6c1d` (tag belum pernah di-push).
 - **Dasar perbaikan:** temuan T1 dan T2 white-box testing (`ringkasan-white-box.md` §8), dikonfirmasi oleh keluaran SPSS 27 dari penulis: `spss-tertunda/wb_rm_konfirmasi.xlsx` (dan `.spv`, dari `wb_rm_konfirmasi.sps`). Ada 78 nilai, diekstrak dengan presisi penuh oleh `spss-tertunda/ekstrak_konfirmasi.R` ke `wb_rm_konfirmasi-values.json`.
 
 ## 1. Perubahan kode
@@ -180,7 +182,7 @@ node testing/black-box/harness/bb-nilai.mjs  --iter=7
 
 - **Waktu dan lingkungan:** 30 September 2026, 20:22–20:46 WIB; Chromium 143.0.7499.4, Playwright 1.57.0.
 - **WASM yang dilayani:** `run-report.json` mencatat MV `wasm_bg.6145c2bf.wasm` (md5 `43a77657…`) dan RM `wasm_bg.241dc806.wasm` (md5 `889473e9…`), sama dengan build v6.
-- **Keluaran** (di `ilham` dipindahkan dari `iterasi-7/` agar iterasi 7 resmi dijalankan pada build gabungan, §8):
+- **Keluaran** (di `ilham` dipindahkan dari `iterasi-7/` agar iterasi 7 resmi dijalankan pada build gabungan, §7):
   - `testing/black-box/hasil-eksekusi/iterasi-7-uji-awal-v6/` (78 berkas pengamatan, `nilai-spss.json`, `run-report.json`);
   - `testing/black-box/bukti/iterasi-7-uji-awal-v6/` (233 tangkapan layar);
   - log `v6/bb-iter7.log`.
@@ -231,11 +233,95 @@ Keduanya tetap memenuhi Hasil yang Diharapkan. Penilaian di bawah ini penilaian 
 
 1. **T1 dan T2 diperbaiki di jalur produksi** dan cocok dengan SPSS 27: 39 + 39 nilai konfirmasi dan 60 nilai uji skala.
 2. **Tidak ada nilai regresi v5 yang berubah:** RM 1.318 SPSS + 353 R, MV 2.339, sleeping dog, 8 sel eksperimen, dan 9 hash tabel RM.
-3. **Test modul lama `mau_j20` dan `mau_j21` tetap gagal.** Keduanya menguji pola T1/T2 yang sama di `mauchly_test.rs`, modul lama yang tidak dipanggil produksi (T5) dan sesuai instruksi tidak disentuh. Bila modul itu ingin diperbaiki atau dihapus, diperlukan keputusan terpisah.
-4. **Black-box uji awal v6:** 78 skenario Sesuai, 76 identik dengan v5 final. BB-KF13-04 dan BB-KF13-07 dinilai Sesuai oleh penguji.
+3. **Test modul lama `mau_j20` dan `mau_j21` tetap gagal (keputusan penulis).** Keduanya menguji pola T1/T2 yang sama di `mauchly_test.rs`, modul lama yang tidak dipanggil produksi: `run_analysis` selalu memakai `RmModel`, dan cabang fallback `None => core::calculate_mauchly_test(..)` di `wasm/function.rs` tidak dapat dicapai (temuan T5, `ringkasan-white-box.md` §8). Modul lama tidak disentuh dan test tidak diberi `#[ignore]`.
+4. **Black-box uji awal v6:** 78 skenario Sesuai, 76 identik dengan v5 final. BB-KF13-04 dan BB-KF13-07 dinilai Sesuai oleh penguji (tangkapan: `testing/black-box/bukti/iterasi-7-uji-awal-v6/BB-KF13-04-1…3.png`, `BB-KF13-07-1…2.png`).
 5. Ambang W (`mean_eig.abs() < 1e-12`) masih absolut (lihat §1). Ambang ini tidak memengaruhi epsilon dan hanya aktif pada skala data yang sangat kecil.
 
-## 7. Berkas
+## 7. Jalankan ulang pada build final gabungan (`ilham`, iterasi 7 resmi)
+
+**Build.**
+- `next build` di `ilham` (commit `7b383f0c`): `BUILD_ID` **`EXcw4k8lfhzpWjMN3Mjc7`** (`v6-final/log/next-build.log`).
+- WASM di `.next/static/media`: MV `wasm_bg.6145c2bf.wasm` md5 **`43a77657…`**, RM `wasm_bg.241dc806.wasm` md5 **`889473e9…`**. Keduanya sama dengan v6; WASM lain juga identik.
+
+**Isi dua commit teks.** `a345ded6` dan `ff9e9a03` mengubah teks tampilan: judul subdialog dan tabel, catatan kaki, label efek, deskripsi tabel, toast, dan tur panduan. Perubahan yang mengikuti teks:
+- pola judul di `multivariate-analysis-output.ts` (pengelompokan Multiple Comparisons dan Residual Plots);
+- selector harness black-box dan `ui-run.cjs`;
+- label di `contrast-results.test.ts`.
+
+Penulis menerima kedua commit (opsi A); black-box memakai harness versi `ilham`.
+
+### 7.1 Regresi (skrip v5, keluaran `v6-final/regresi/`)
+
+Sumber: `v6-final/regresi-ringkas.txt`; tangkapan `ss/14`.
+
+| Pemeriksaan | Uji awal v6 | Build final | Beda terhadap v6 |
+|---|---|---|---|
+| MV lewat UI vs SPSS 27 (worker) | 2.339/2.339 | **2.339/2.339**, regresi 0, main = worker | tidak ada (`regress-vs-v6.txt`) |
+| Nilai mentah MV (payload dan respons worker, 23 konfigurasi) | — | 23/23 identik dengan v5 final **dan** dengan v6 | tidak ada |
+| MV Σ diketahui (5 konfigurasi) | main = worker; = harness R | sama | tidak ada |
+| Uji acuan MV / RM (1.318 SPSS + 353 R + 10) | 2.339 / 1.681 lulus | **2.339 / 1.681 lulus**, fixture diff 0 | tidak ada |
+| RM langsung vs SPSS 27 (`compare-spss.mjs`, 1.318 nilai) | selisih maks per desain: gambar51 3,85·10⁻⁴; a 4,41·10⁻⁴; b 2,95·10⁻⁴; c 4,26·10⁻⁴; d 2,95·10⁻⁴ | sama | `compare-spss.json` identik isinya (`v6-final/regresi-rm/`) |
+| Jest penuh | 47 suite gagal dari 280, 0 di luar baseline | **sama** (6.888 lulus, 204 gagal, 12 todo) | tidak ada |
+| 8 sel eksperimen (payload dan respons worker) | identik dengan v5 final | identik dengan v5 final dan v6 | tidak ada |
+| RM lewat UI: main = worker (9 desain) | 9/9 | 9/9 | — |
+| RM lewat UI: hash tabel (9 desain) | = v5 final | berbeda dari v6 di 9/9 desain | **hanya teks**, lihat di bawah |
+
+**Hash tabel RM.** Hash dihitung dari `output_data` tabel lengkap, termasuk teks deskripsi. Kesembilan desain ditangkap ulang dengan `--saveTables=1` pada build v6 dan build final (36 berkas per build, `v6-final/regresi/rm-tabel/`; tangkapan `ss/15`).
+- **10.780 sel angka identik**; struktur dan judul tabel sama.
+- Hash tangkapan ulang sama dengan hash regresi masing-masing build.
+- Yang berbeda hanya 7 teks deskripsi (`interpretation`) dari `a345ded6`, misalnya "Errors logs from the analysis." → "Messages and warnings produced during the analysis." dan "If significant (Sig. < .05), sphericity is violated …" → "Sig. below the Significance Level in Options indicates that sphericity is violated; …".
+
+Catatan eksekusi:
+- `OUT` mula-mula diberikan sebagai path relatif, sehingga langkah 4–5 `regress-final.sh` (yang menulis log sesudah `cd frontend`) tidak menghasilkan keluaran. Kedua langkah diulang dengan blok perintah yang sama dan path absolut (`v6-final/regresi-langkah45.log`).
+- Langkah 9 (hash RM vs v6) gagal karena galat sintaks di `run-v6.sh`. Skrip diperbaiki dan langkah itu dijalankan ulang (`rm-hash-v6-vs-final.txt`).
+- Di langkah 8, teks "v6" pada `run-v6.sh` merujuk ke build yang sedang diuji (di sini build final).
+
+### 7.2 Sleeping dog
+
+Build final vs v6 (`v6-final/sleeping-dog/v6-vs-final.txt`; tangkapan `ss/16`):
+- RM: 24 nilai angka identik, tanpa perubahan teks.
+- MV: 105 nilai angka identik. Satu teks berubah: catatan CI simultan "(α = 0.05 from Options → Significance Level)" → "(α = 0.05 the Significance Level in Options)" (`a345ded6`).
+
+### 7.3 Black-box iterasi 7 resmi (78 skenario)
+
+Harness versi `ilham` dijalankan pada build final (`--iter=7`, 30 September 2026, 22:41–23:05 WIB):
+- **Keluaran:** `testing/black-box/hasil-eksekusi/iterasi-7/`, `bukti/iterasi-7/` (233 tangkapan layar), log `v6-final/bb-iter7.log`.
+- **WASM yang dilayani:** `run-report.json` mencatat MV `43a77657…` dan RM `889473e9…`.
+- **Tangkapan terminal:** `ss/17`–`ss/19`.
+
+| Pemeriksaan | Hasil |
+|---|---|
+| Nilai tampil vs SPSS 27 (`bb-nilai.mjs`) | semua cocok (MV 20/20 … 180/180; RM 91/91, 138/138, 39/39, 60/60, 40/40, 105/105) |
+| **Nilai** tabel vs uji awal v6 (sel angka, berurutan) | **78/78 skenario identik** |
+| **Teks** vs pengamatan terbaru `ilham` (iterasi 3 ditimpa 4, 5, 6) | 49 identik, termasuk ke-14 skenario yang diulang di iterasi 5/6 sesudah perubahan teks. 29 berbeda: skenario yang belum dijalankan ulang sejak kedua commit teks. |
+| Asal perbedaan teks (`v6-final/bb-iter7-verifikasi-teks.txt`) | **57/57 perbedaan persis dijelaskan** oleh penggantian teks `a345ded6`/`ff9e9a03`, ditambah BB-KF13-07 (jumlah pengamatan saat analisis berjalan 1 → 2, keduanya halaman responsif) |
+
+Penggantian teks yang teramati:
+
+| Teks lama | Teks baru | Skenario |
+|---|---|---|
+| "R Squared = … (Adjusted R Squared = …) — y1" | "… for y1" | BB-KF01-02, KF02-01/02/04/05/06/08/09, KF03-01/03/07/09/10/11/12/13, KF04-04/05, KF05-01, KF06-01/02/03/10, KF10-01/02, KF13-01/03/04 |
+| "(α = … from Options → Significance Level)" | "(α = … the Significance Level in Options)" | BB-KF02-04/05/08, KF03-10/12, KF04-04/05 |
+| "Krishnamoorthy–Yu", "Welch–Satterthwaite" | "Krishnamoorthy-Yu", "Welch-Satterthwaite" | BB-KF03-11 |
+| "jk — Welch-Satterthwaite"; "… — Computed using Welch-Satterthwaite approximation …" | "jk (Welch-Satterthwaite)"; "…. The jk effect is computed with the Welch-Satterthwaite approximation …" | BB-KF03-11 |
+| "Multivariate Tests — Hotelling T² Berpasangan"; "Hotelling T² Berpasangan"; "Analisis dilakukan pada vektor selisih …" | "Multivariate Tests"; "Hotelling T² (Paired)"; "Computed on the difference vector …" | BB-KF04-04, KF04-05 |
+
+**Kutipan teks di "Hasil yang Diharapkan"** (`skenario-black-box.md`). Ada 10 skenario yang mengutip teks lama:
+- Sembilan sudah punya catatan revisi R9/R10 yang menyebut teks barunya: BB-KF03-02, KF03-04, KF03-05, KF03-08, KF04-01, KF04-02, KF04-03, KF11-03, KF14-01. Pengamatan teksnya identik dengan iterasi 5/6.
+- Satu belum punya catatan revisi: **BB-KF03-11**. Kutipan "Krishnamoorthy–Yu" (tanda pisah en) kini tampil "Krishnamoorthy-Yu" (tanda hubung). Isi catatan lainnya (§6.3, ν = 58.268, c, Bonferroni Welch t, 95%) tetap.
+
+**Penilaian.**
+- Semua skenario memenuhi Hasil yang Diharapkan.
+- BB-KF03-11 memenuhi isi hasil yang diharapkan; perbedaannya hanya tanda baca kutipan, sehingga dinilai **Sesuai dengan catatan** dan menunggu konfirmasi penguji (atau revisi R11 pada kutipan).
+- BB-KF13-04 dan BB-KF13-07 Sesuai. Tangkapan: `testing/black-box/bukti/iterasi-7/BB-KF13-04-1…3.png`, `BB-KF13-07-1…2.png`.
+
+### 7.4 Berkas milik penulis yang belum di-commit
+
+`glm-rm-reference/spss/{gambar51,rm_a,rm_b,rm_c}.sps` dan `performance-results-univariate-all-runs.json` tidak di-stage.
+- Jest penuh menulis ulang `performance-results-univariate-all-runs.json`, dan `regress-final.sh` langkah 5 menjalankan `git checkout` pada berkas itu.
+- Karena itu kelima berkas dicadangkan sebelum regresi dan dipulihkan byte per byte sesudahnya (md5 cocok).
+
+## 8. Berkas
 
 ```
 testing/whitebox/
@@ -247,6 +333,10 @@ testing/whitebox/
   v6/regresi/                        keluaran regress-final.sh dan pembanding v5 final
   v6/regresi-rm/                     compare-spss v5 dan v6, keluaran penuh WASM RM v5 vs v6
   v6/sleeping-dog/                   tangkapan UI dan hasil.json
-  v6/bb-iter7.log, bb-diff-*.txt     eksekusi dan pembanding black-box iterasi 7
+  v6/bb-iter7.log, bb-diff-*.txt     eksekusi dan pembanding black-box uji awal v6
+  v6-final/                          jalankan ulang pada build final gabungan (§7): log build, regresi,
+                                     rm-tabel (tabel RM lengkap v6 dan final), sleeping dog, black-box iterasi 7
+  v6/harness/bb-banding-final.py     pembanding teks (vs iterasi 3/4/5/6) dan nilai (vs uji awal v6)
 testing/black-box/bukti/iterasi-7-uji-awal-v6/, hasil-eksekusi/iterasi-7-uji-awal-v6/   uji awal v6 (branch fix-epsilon-v6)
+testing/black-box/bukti/iterasi-7/, hasil-eksekusi/iterasi-7/                         iterasi 7 resmi (build final)
 ```

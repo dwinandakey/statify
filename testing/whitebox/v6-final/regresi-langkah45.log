@@ -1,0 +1,14 @@
+# Ulang langkah 4-5 regress-final.sh (blok yang sama) dengan OUTDIR absolut: /d/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/testing/whitebox/v6-final/regresi
+== 4. uji acuan
+values 2339, not_covered 12 -> frontend\components\Modals\Analyze\general-linear-model\multivariate\__test__\fixtures\mv-reference-values.json
+warning: in the working copy of 'frontend/components/Modals/Analyze/general-linear-model/multivariate/__test__/fixtures/mv-reference-values.json', LF will be replaced by CRLF the next time Git touches it
+fixture diff: 0 baris
+Tests:       12 todo, 2339 passed, 2351 total
+Tests:       1681 passed, 1681 total
+== 5. Jest penuh
+Jest penuh: 47 suite gagal dari 280; baseline 49
+tes: 6888 lulus, 204 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 2
+  - components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate.test.ts
+  - components/Modals/Analyze/general-linear-model/multivariate/test/multivariate.test.ts

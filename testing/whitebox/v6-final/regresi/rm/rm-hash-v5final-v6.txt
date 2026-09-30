@@ -1,0 +1,10 @@
+gambar51 v6 identik main/worker: true | hash tabel v5final 65d0361fe7c8 v6 5e2f51f2086f sama false
+a v6 identik main/worker: true | hash tabel v5final 33fbd3c750a7 v6 7025238ece39 sama false
+b v6 identik main/worker: true | hash tabel v5final bacba7b1d57c v6 03ab7c9d59c1 sama false
+c v6 identik main/worker: true | hash tabel v5final e7d5e7d9ba21 v6 a40e7903fc12 sama false
+cEm v6 identik main/worker: true | hash tabel v5final aeacfd765f86 v6 af07ad7ca17f sama false
+cPoly v6 identik main/worker: true | hash tabel v5final a9aa4dc1b949 v6 b1d05e9c0683 sama false
+cRep v6 identik main/worker: true | hash tabel v5final bc943d2d173f v6 c76e53b53b3f sama false
+exp5000n v6 identik main/worker: true | hash tabel v5final d18ef7263b9a v6 9322e1d5389d sama false
+exp5000 v6 identik main/worker: true | hash tabel v5final e0ce09d67d56 v6 d71d15752b6d sama false
+desain: 9, beda: 9

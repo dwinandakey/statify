@@ -1,0 +1,142 @@
+Perubahan teks unik black-box iterasi 7 vs pengamatan terbaru ilham (iterasi 3/4/5/6)
+
+1. [footnote] skenario: BB-KF01-02
+   lama: "a. R Squared = 0.1520 (Adjusted R Squared = 0.1237) — Y1A1\nb. R Squared = 0.4214 (Adjusted R Squared = 0.4021) — Y2A1"
+   baru: "a. R Squared = 0.1520 (Adjusted R Squared = 0.1237) for Y1A1\nb. R Squared = 0.4214 (Adjusted R Squared = 0.4021) for Y2A1"
+
+2. [footnote] skenario: BB-KF02-01, BB-KF02-06, BB-KF02-09
+   lama: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt.\ne. Computed using alpha = .05"
+   baru: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt.\ne. Computed using alpha = .05"
+
+3. [footnote] skenario: BB-KF02-02, BB-KF02-04, BB-KF02-05, BB-KF02-08
+   lama: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+   baru: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt"
+
+4. [checks] skenario: BB-KF02-04
+   lama: {"urutanTabel": ["Multivariate Tests", "Simultaneous Confidence Intervals", "Tests of Between-Subjects Effects", "Errors Logs"], "kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "barisMpg": {"rowHeader": [], "dependent_variable": "mpg", "estimate": "20.0906", "std_error": "1.0654", "hypothesized": "20", "t2_lower":
+   baru: {"urutanTabel": ["Multivariate Tests", "Simultaneous Confidence Intervals", "Tests of Between-Subjects Effects", "Errors Logs"], "kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "barisMpg": {"rowHeader": [], "dependent_variable": "mpg", "estimate": "20.0906", "std_error": "1.0654", "hypothesized": "20", "t2_lower":
+
+5. [footnote] skenario: BB-KF02-04, BB-KF02-08
+   lama: "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+   baru: "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+
+6. [checks] skenario: BB-KF02-05
+   lama: {"kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "90% Simultaneous T² Interval", "90% Bonferroni Interval"], "catatan": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 fr
+   baru: {"kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "90% Simultaneous T² Interval", "90% Bonferroni Interval"], "catatan": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 th
+
+7. [footnote] skenario: BB-KF02-05
+   lama: "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 from Options → Significance Level)."
+   baru: "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 the Significance Level in Options)."
+
+8. [checks] skenario: BB-KF02-08
+   lama: {"kotakAwal": "unchecked", "matriksTampilSebelumDicentang": 0, "matriks": {"title": "Σ", "columns": ["mpg", "disp", "hp", "wt"], "rows": ["mpg", "disp", "hp", "wt"], "cells": [[{"value": "36", "disabled": false}, {"value": "-630", "disabled": false}, {"value": "-320", "disabled": false}, {"value": "-5", "disabled": false}], [{"value": "-630", "disabled": true}, {"value": "15000", "disabled": false
+   baru: {"kotakAwal": "unchecked", "matriksTampilSebelumDicentang": 0, "matriks": {"title": "Σ", "columns": ["mpg", "disp", "hp", "wt"], "rows": ["mpg", "disp", "hp", "wt"], "cells": [[{"value": "36", "disabled": false}, {"value": "-630", "disabled": false}, {"value": "-320", "disabled": false}, {"value": "-5", "disabled": false}], [{"value": "-630", "disabled": true}, {"value": "15000", "disabled": false
+
+9. [footnote] skenario: BB-KF02-08
+   lama: "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th 
+   baru: "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th 
+
+10. [footnote] skenario: BB-KF03-01, BB-KF03-07, BB-KF03-09, BB-KF03-10, BB-KF03-11
+   lama: "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+   baru: "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+
+11. [footnote] skenario: BB-KF03-03, BB-KF03-13
+   lama: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+   baru: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+
+12. [checks] skenario: BB-KF03-10
+   lama: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 3
+   baru: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 3
+
+13. [footnote] skenario: BB-KF03-10
+   lama: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+   baru: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+
+14. [checks] skenario: BB-KF03-11
+   lama: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval (Welch t)"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 5
+   baru: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval (Welch t)"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy-Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 5
+
+15. [footnote] skenario: BB-KF03-11
+   lama: "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+   baru: "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+
+16. [] skenario: BB-KF03-11
+   lama: "jk — Welch-Satterthwaite"
+   baru: "jk (Welch-Satterthwaite)"
+
+17. [footnote] skenario: BB-KF03-11
+   lama: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch–Satterthwaite df νᵢ in the df column. n₁ = 32, n₂ = 32. The intervals hold simultaneous
+   baru: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy-Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch-Satterthwaite df νᵢ in the df column. n₁ = 32, n₂ = 32. The intervals hold simultaneous
+
+18. [checks] skenario: BB-KF03-12
+   lama: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 3
+   baru: {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 3
+
+19. [footnote] skenario: BB-KF03-12
+   lama: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). The intervals are for μ₁ − μ₂
+   baru: "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). The intervals are for μ₁ − μ₂
+
+20. [footnote] skenario: BB-KF03-12
+   lama: "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+   baru: "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+
+21. [checks] skenario: BB-KF04-04
+   lama: {"kolom": ["Dependent Variable", "Mean Difference (d̄)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confiden
+   baru: {"kolom": ["Dependent Variable", "Mean Difference (d̄)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confiden
+
+22. [title] skenario: BB-KF04-04, BB-KF04-05
+   lama: "Multivariate Tests — Hotelling T² Berpasangan"
+   baru: "Multivariate Tests"
+
+23. [footnote] skenario: BB-KF04-04, BB-KF04-05
+   lama: "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+   baru: "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+
+24. [] skenario: BB-KF04-04, BB-KF04-05
+   lama: "Hotelling T² Berpasangan"
+   baru: "Hotelling T² (Paired)"
+
+25. [footnote] skenario: BB-KF04-04, BB-KF04-05
+   lama: "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+   baru: "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+
+26. [footnote] skenario: BB-KF04-04, BB-KF04-05
+   lama: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+   baru: "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+
+27. [checks] skenario: BB-KF04-05
+   lama: {"kotakAwal": "unchecked", "matriks": {"title": "Σd", "columns": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "rows": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "cells": [[{"value": "120", "disabled": false}, {"value": "17", "disabled": false}], [{"value": "17", "disabled": true}, {"value": "22", "disabled": false}]]}, "urutanTabel": ["Multivariate Tests — Hotelling
+   baru: {"kotakAwal": "unchecked", "matriks": {"title": "Σd", "columns": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "rows": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "cells": [[{"value": "120", "disabled": false}, {"value": "17", "disabled": false}], [{"value": "17", "disabled": true}, {"value": "22", "disabled": false}]]}, "urutanTabel": ["Multivariate Tests", "Chi-Squa
+
+28. [footnote] skenario: BB-KF04-05
+   lama: "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th 
+   baru: "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th 
+
+29. [footnote] skenario: BB-KF05-01, BB-KF10-01
+   lama: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2.\nc. Computed using alpha = .05"
+   baru: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2.\nc. Computed using alpha = .05"
+
+30. [footnote] skenario: BB-KF06-01, BB-KF06-03, BB-KF06-10
+   lama: "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) — Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) — Y2A1"
+   baru: "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) for Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) for Y2A1"
+
+31. [footnote] skenario: BB-KF06-02, BB-KF06-03, BB-KF10-02
+   lama: "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) — Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) — Y2A1"
+   baru: "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) for Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) for Y2A1"
+
+32. [footnote] skenario: BB-KF13-01
+   lama: "a. R Squared = 0.3164 (Adjusted R Squared = 0.3050) — x1\nb. R Squared = 0.0498 (Adjusted R Squared = 0.0340) — x2\nc. R Squared = 0.5073 (Adjusted R Squared = 0.4991) — x3\nd. R Squared = 0.0088 (Adjusted R Squared = -0.0077) — x4.\ne. Computed using alpha = .05"
+   baru: "a. R Squared = 0.3164 (Adjusted R Squared = 0.3050) for x1\nb. R Squared = 0.0498 (Adjusted R Squared = 0.0340) for x2\nc. R Squared = 0.5073 (Adjusted R Squared = 0.4991) for x3\nd. R Squared = 0.0088 (Adjusted R Squared = -0.0077) for x4.\ne. Computed using alpha = .05"
+
+33. [footnote] skenario: BB-KF13-03
+   lama: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2\nc. R Squared = 0.7391 (Adjusted R Squared = 0.6348) — y3"
+   baru: "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2\nc. R Squared = 0.7391 (Adjusted R Squared = 0.6348) for y3"
+
+34. [footnote] skenario: BB-KF13-04
+   lama: "a. R Squared = 0.2101 (Adjusted R Squared = 0.2009) — Y1\nb. R Squared = 0.2373 (Adjusted R Squared = 0.2284) — Y2\nc. R Squared = 0.0904 (Adjusted R Squared = 0.0798) — Y3\nd. R Squared = 0.2422 (Adjusted R Squared = 0.2334) — Y4\ne. R Squared = 0.2508 (Adjusted R Squared = 0.2421) — Y5.\nf. Computed using alpha = .05"
+   baru: "a. R Squared = 0.2101 (Adjusted R Squared = 0.2009) for Y1\nb. R Squared = 0.2373 (Adjusted R Squared = 0.2284) for Y2\nc. R Squared = 0.0904 (Adjusted R Squared = 0.0798) for Y3\nd. R Squared = 0.2422 (Adjusted R Squared = 0.2334) for Y4\ne. R Squared = 0.2508 (Adjusted R Squared = 0.2421) for Y5.\nf. Computed using alpha = .05"
+
+35. [checks] skenario: BB-KF13-07
+   lama: {"toastSaatBerjalan": [], "probe": [{"t": 0, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}]}
+   baru: {"toastSaatBerjalan": [], "probe": [{"t": 0, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}, {"t": 1, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}]}
+

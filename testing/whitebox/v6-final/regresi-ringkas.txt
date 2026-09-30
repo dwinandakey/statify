@@ -1,0 +1,97 @@
+$ OUT=$PWD/testing/whitebox/v6-final/regresi ... bash testing/whitebox/v6/harness/run-v6.sh  (langkah 1-3, 6-9)
+== 0. build
+EXcw4k8lfhzpWjMN3Mjc7
+233726a0a8a20c2630d445119b9c6c1b *wasm_bg.1096746a.wasm
+889473e96259ef9e9f99cd8bba9c1d53 *wasm_bg.241dc806.wasm
+be41ca5b5ad96571a089a5c52d37530a *wasm_bg.2b6d03d2.wasm
+43a77657bcd238bb949797c7dccea200 *wasm_bg.6145c2bf.wasm
+30fd3f3c17dac500267b53f5c0e52b26 *wasm_bg.c0583b08.wasm
+3cd4a4fc283e8cc18c62b4219a32b5c6 *wasm_bg.d6d2fb1b.wasm
+7b383f0c74544d702e08627a8c72947bf1e6fba7
+== 1. UI MV
+worker lama exit 0
+worker Σ exit 0
+main lama exit 0
+main Σ exit 0
+== 2. SPSS + regresi + main/worker
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+2351 nilai SPSS; dibandingkan 2339; lulus 2339; gagal 0; tanpa padanan 12
+main vs worker mv9.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true
+mvK1: main = worker true
+mvK1n: main = worker true
+mvK2: main = worker true
+mvK3: main = worker true
+mvK4: main = worker true
+konfigurasi Σ: 5, beda: 0
+== 3. nilai mentah vs v5
+konfigurasi: 23, tidak identik: 9
+mvK1: known_covariance_test = harness K1 (divalidasi R) true
+mvK1n: known_covariance_test = harness K1 (divalidasi R) true
+mvK2: known_covariance_test = harness K2-d (divalidasi R) true
+mvK3: known_covariance_test = harness K3-d (divalidasi R) true
+mvK4: known_covariance_test = harness K4 (divalidasi R) true
+(langkah 4-5 diulang dengan path absolut, regresi-langkah45.log)
+== 4. uji acuan
+values 2339, not_covered 12 -> frontend\components\Modals\Analyze\general-linear-model\multivariate\__test__\fixtures\mv-reference-values.json
+fixture diff: 0 baris
+Tests:       12 todo, 2339 passed, 2351 total
+Tests:       1681 passed, 1681 total
+== 5. Jest penuh
+Jest penuh: 47 suite gagal dari 280; baseline 49
+tes: 6888 lulus, 204 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 2
+  - components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate.test.ts
+  - components/Modals/Analyze/general-linear-model/multivariate/test/multivariate.test.ts
+== 6. sel eksperimen
+mv exit 0
+rm exit 0
+sel: 8, tidak identik: 4
+sel: 8, tidak identik: 4
+== 7. RM main/worker
+exit 0
+exit 0
+gambar51 final identik main/worker: true | hash tabel v5 65d0361fe7c8 final 5e2f51f2086f sama false
+a final identik main/worker: true | hash tabel v5 05a38263ead6 final 7025238ece39 sama false
+b final identik main/worker: true | hash tabel v5 ec548b7db5e3 final 03ab7c9d59c1 sama false
+c final identik main/worker: true | hash tabel v5 cad88ef17941 final a40e7903fc12 sama false
+cEm final identik main/worker: true | hash tabel v5 123c6d3ff9e3 final af07ad7ca17f sama false
+cPoly final identik main/worker: true | hash tabel v5 0b3140b3685e final b1d05e9c0683 sama false
+cRep final identik main/worker: true | hash tabel v5 678650679852 final c76e53b53b3f sama false
+exp5000n final identik main/worker: true | hash tabel v5 13d7c56765ec final 9322e1d5389d sama false
+exp5000 final identik main/worker: true | hash tabel v5 6fc65b7571a9 final d71d15752b6d sama false
+desain: 9, beda: 9
+== selesai
+== 8. v6 vs v5 final (/d/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/testing/final/iterasi4/regresi)
+main vs worker mv9.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true
+konfigurasi: 23, tidak identik: 0
+sel: 8, tidak identik: 0
+gambar51 v6 identik main/worker: true | hash tabel v5final 65d0361fe7c8 v6 5e2f51f2086f sama false
+a v6 identik main/worker: true | hash tabel v5final 33fbd3c750a7 v6 7025238ece39 sama false
+b v6 identik main/worker: true | hash tabel v5final bacba7b1d57c v6 03ab7c9d59c1 sama false
+c v6 identik main/worker: true | hash tabel v5final e7d5e7d9ba21 v6 a40e7903fc12 sama false
+cEm v6 identik main/worker: true | hash tabel v5final aeacfd765f86 v6 af07ad7ca17f sama false
+cPoly v6 identik main/worker: true | hash tabel v5final a9aa4dc1b949 v6 b1d05e9c0683 sama false
+cRep v6 identik main/worker: true | hash tabel v5final bc943d2d173f v6 c76e53b53b3f sama false
+exp5000n v6 identik main/worker: true | hash tabel v5final d18ef7263b9a v6 9322e1d5389d sama false
+exp5000 v6 identik main/worker: true | hash tabel v5final e0ce09d67d56 v6 d71d15752b6d sama false
+desain: 9, beda: 9
+== 9. build ini vs v6 (/d/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/testing/whitebox/v6/regresi)
+main vs worker mv9.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true
+konfigurasi: 23, tidak identik: 0
+sel: 8, tidak identik: 0
+== selesai v6
+== 9 (hash RM vs v6, diulang setelah perbaikan skrip)
+gambar51 identik main/worker: true | hash tabel v6 65d0361fe7c8 build ini 5e2f51f2086f sama false
+a identik main/worker: true | hash tabel v6 33fbd3c750a7 build ini 7025238ece39 sama false
+b identik main/worker: true | hash tabel v6 bacba7b1d57c build ini 03ab7c9d59c1 sama false
+c identik main/worker: true | hash tabel v6 e7d5e7d9ba21 build ini a40e7903fc12 sama false
+cEm identik main/worker: true | hash tabel v6 aeacfd765f86 build ini af07ad7ca17f sama false
+cPoly identik main/worker: true | hash tabel v6 a9aa4dc1b949 build ini b1d05e9c0683 sama false
+cRep identik main/worker: true | hash tabel v6 bc943d2d173f build ini c76e53b53b3f sama false
+exp5000n identik main/worker: true | hash tabel v6 d18ef7263b9a build ini 9322e1d5389d sama false
+exp5000 identik main/worker: true | hash tabel v6 e0ce09d67d56 build ini d71d15752b6d sama false
+desain: 9, beda: 9

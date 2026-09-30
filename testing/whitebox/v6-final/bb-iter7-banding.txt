@@ -1,0 +1,255 @@
+Black-box iterasi-7 (build gabungan ilham)
+skenario: 78; teks identik dengan pengamatan terbaru ilham (iterasi 3/4/5/6): 49; nilai identik dengan uji awal v6: 78
+
+## BB-KF01-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF01-02: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (88 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.1520 (Adjusted R Squared = 0.1237) — Y1A1\nb. R Squared = 0.4214 (Adjusted R Squared = 0.4021) — Y2A1"
+      baru "a. R Squared = 0.1520 (Adjusted R Squared = 0.1237) for Y1A1\nb. R Squared = 0.4214 (Adjusted R Squared = 0.4021) for Y2A1"
+## BB-KF02-01: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (121 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt.\ne. Computed using alpha = .05"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt.\ne. Computed using alpha = .05"
+## BB-KF02-02: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (77 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt"
+## BB-KF02-03: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF02-04: teks vs iterasi-3: 3 beda; nilai vs uji awal v6: identik (105 nilai)
+  - [teks] checks:
+      lama {"urutanTabel": ["Multivariate Tests", "Simultaneous Confidence Intervals", "Tests of Between-Subjects Effects", "Errors Logs"], "kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "barisMpg": {"rowHeader": [], "dependent_variable": "mpg", "estimate": "20.0906", "std_error": "1.0654", "hypothesized": "20", "t2_lower": "16.3969", "t2_upper": "23.7844", "t2_contains": "Yes", "bonferroni_lower": "17.2652", "bonferroni_
+      baru {"urutanTabel": ["Multivariate Tests", "Simultaneous Confidence Intervals", "Tests of Between-Subjects Effects", "Errors Logs"], "kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "barisMpg": {"rowHeader": [], "dependent_variable": "mpg", "estimate": "20.0906", "std_error": "1.0654", "hypothesized": "20", "t2_lower": "16.3969", "t2_upper": "23.7844", "t2_contains": "Yes", "bonferroni_lower": "17.2652", "bonferroni_
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt"
+## BB-KF02-05: teks vs iterasi-3: 3 beda; nilai vs uji awal v6: identik (105 nilai)
+  - [teks] checks:
+      lama {"kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "90% Simultaneous T² Interval", "90% Bonferroni Interval"], "catatan": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 from Options → Significance Level).", "ciVsR_mv1ci10": {"baris": 4, "nilaiDibandingkan": 24, "beda": [
+      baru {"kolom": ["Dependent Variable", "Mean", "Std. Error", "Test Value (μ₀)", "90% Simultaneous T² Interval", "90% Bonferroni Interval"], "catatan": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 the Significance Level in Options).", "ciVsR_mv1ci10": {"baris": 4, "nilaiDibandingkan": 24, "beda": [
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 from Options → Significance Level)."
+      baru "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.0908; Bonferroni: t(31; α/(2p)) = 2.3556. n = 32. The intervals hold simultaneously for all 4 components at the 90% confidence level (α = 0.1 the Significance Level in Options)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt"
+## BB-KF02-06: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (121 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt.\ne. Computed using alpha = .05"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt.\ne. Computed using alpha = .05"
+## BB-KF02-07: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF02-08: teks vs iterasi-3: 4 beda; nilai vs uji awal v6: identik (148 nilai)
+  - [teks] checks:
+      lama {"kotakAwal": "unchecked", "matriksTampilSebelumDicentang": 0, "matriks": {"title": "Σ", "columns": ["mpg", "disp", "hp", "wt"], "rows": ["mpg", "disp", "hp", "wt"], "cells": [[{"value": "36", "disabled": false}, {"value": "-630", "disabled": false}, {"value": "-320", "disabled": false}, {"value": "-5", "disabled": false}], [{"value": "-630", "disabled": true}, {"value": "15000", "disabled": false}, {"value": "6700", "disabled": false}, {"value": "107", "disabled": false}], [{"value": "-320", "d
+      baru {"kotakAwal": "unchecked", "matriksTampilSebelumDicentang": 0, "matriks": {"title": "Σ", "columns": ["mpg", "disp", "hp", "wt"], "rows": ["mpg", "disp", "hp", "wt"], "cells": [[{"value": "36", "disabled": false}, {"value": "-630", "disabled": false}, {"value": "-320", "disabled": false}, {"value": "-5", "disabled": false}], [{"value": "-630", "disabled": true}, {"value": "15000", "disabled": false}, {"value": "6700", "disabled": false}, {"value": "107", "disabled": false}], [{"value": "-320", "d
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(4, 28; α)) = 3.4669; Bonferroni: t(31; α/(2p)) = 2.6519. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Simultaneous Confidence Intervals (Known Covariance Matrix)' footnote:
+      lama "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+      baru "Σ is known (entered in Test Values). χ² intervals: x̄ᵢ ± √χ²(4; α) · √(σᵢᵢ/n), √χ²(4; α) = 3.0802; Bonferroni: x̄ᵢ ± z(α/(2p)) · √(σᵢᵢ/n), z(α/(2p)) = 2.4977. n = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt"
+## BB-KF02-09: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (121 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt.\ne. Computed using alpha = .05"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for wt.\ne. Computed using alpha = .05"
+## BB-KF02-10: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF02-11: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF02-12: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF02-13: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF03-01: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (245 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF03-02: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (231 nilai)
+## BB-KF03-03: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (50 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+## BB-KF03-04: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (490 nilai)
+## BB-KF03-05: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (236 nilai)
+## BB-KF03-06: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF03-07: teks vs iterasi-3: 2 beda; nilai vs uji awal v6: identik (264 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF03-08: teks vs iterasi-6: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF03-09: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (132 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF03-10: teks vs iterasi-3: 3 beda; nilai vs uji awal v6: identik (160 nilai)
+  - [teks] checks:
+      lama {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from
+      baru {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the 
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF03-11: teks vs iterasi-3: 5 beda; nilai vs uji awal v6: identik (150 nilai)
+  - [teks] checks:
+      lama {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval (Welch t)"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch–Satterthwaite df
+      baru {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval (Welch t)"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy-Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch-Satterthwaite df
+  - [teks] tabel 'Multivariate Tests' footnote:
+      lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+      baru "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+  - [teks] tabel 'Multivariate Tests' sel (4, 'effect'):
+      lama "jk — Welch-Satterthwaite"
+      baru "jk (Welch-Satterthwaite)"
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy–Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch–Satterthwaite df νᵢ in the df column. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μ(jk = 1) − μ(jk = 2), Σ₁ ≠ Σ₂ (Johnson & Wichern, 6th ed., §6.3). T² (Krishnamoorthy-Yu, as in the Welch test of Multivariate Tests, ν = 58.268): (x̄₁ᵢ − x̄₂ᵢ) ± c · √(s₁ᵢᵢ/n₁ + s₂ᵢᵢ/n₂), c = √(νp/(ν−p+1) · F(4, 55.268; α)) = 3.2721; Bonferroni: Welch t per variable, t(νᵢ; α/(2p)) with the Welch-Satterthwaite df νᵢ in the df column. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+      baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF03-12: teks vs iterasi-4: 3 beda; nilai vs uji awal v6: identik (160 nilai)
+  - [teks] checks:
+      lama {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from
+      baru {"kolom": ["Dependent Variable", "Mean Difference (jk = 1 − jk = 2)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the 
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). The intervals are for μ₁ − μ₂ on the original data (δ₀ = [3, 2, 10, 1] added back)."
+      baru "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). The intervals are for μ₁ − μ₂ on the original data (δ₀ = [3, 2, 10, 1] added back)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+      baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+## BB-KF03-13: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (90 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+## BB-KF03-14: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (191 nilai)
+## BB-KF03-15: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (191 nilai)
+## BB-KF03-16: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF04-01: teks vs iterasi-6: identik; nilai vs uji awal v6: identik (77 nilai)
+## BB-KF04-02: teks vs iterasi-6: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF04-03: teks vs iterasi-6: identik; nilai vs uji awal v6: identik (98 nilai)
+## BB-KF04-04: teks vs iterasi-4: 6 beda; nilai vs uji awal v6: identik (63 nilai)
+  - [teks] checks:
+      lama {"kolom": ["Dependent Variable", "Mean Difference (d̄)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level).", "baris": [["kedalaman1 − kedalaman2", "8.00
+      baru {"kolom": ["Dependent Variable", "Mean Difference (d̄)", "Std. Error", "δ₀", "95% Simultaneous T² Interval", "95% Bonferroni Interval"], "catatan": "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options).", "baris": [["kedalaman1 − kedalaman2", "8.00
+  - [teks] tabel 'Multivariate Tests' title:
+      lama "Multivariate Tests — Hotelling T² Berpasangan"
+      baru "Multivariate Tests"
+  - [teks] tabel 'Multivariate Tests' footnote:
+      lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+      baru "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+  - [teks] tabel 'Multivariate Tests' sel (0, 'effect'):
+      lama "Hotelling T² Berpasangan"
+      baru "Hotelling T² (Paired)"
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+## BB-KF04-05: teks vs iterasi-4: 7 beda; nilai vs uji awal v6: identik (80 nilai)
+  - [teks] checks:
+      lama {"kotakAwal": "unchecked", "matriks": {"title": "Σd", "columns": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "rows": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "cells": [[{"value": "120", "disabled": false}, {"value": "17", "disabled": false}], [{"value": "17", "disabled": true}, {"value": "22", "disabled": false}]]}, "urutanTabel": ["Multivariate Tests — Hotelling T² Berpasangan", "Chi-Square Test (Known Covariance Matrix)", "Simultaneous Confidence Intervals", 
+      baru {"kotakAwal": "unchecked", "matriks": {"title": "Σd", "columns": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "rows": ["d1 = kedalaman1 − kedalaman2", "d2 = ukuran1 − ukuran2"], "cells": [[{"value": "120", "disabled": false}, {"value": "17", "disabled": false}], [{"value": "17", "disabled": true}, {"value": "22", "disabled": false}]]}, "urutanTabel": ["Multivariate Tests", "Chi-Square Test (Known Covariance Matrix)", "Simultaneous Confidence Intervals", "Simultaneous Confidence In
+  - [teks] tabel 'Multivariate Tests' title:
+      lama "Multivariate Tests — Hotelling T² Berpasangan"
+      baru "Multivariate Tests"
+  - [teks] tabel 'Multivariate Tests' footnote:
+      lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+      baru "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+  - [teks] tabel 'Multivariate Tests' sel (0, 'effect'):
+      lama "Hotelling T² Berpasangan"
+      baru "Hotelling T² (Paired)"
+  - [teks] tabel 'Simultaneous Confidence Intervals' footnote:
+      lama "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      baru "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options)."
+  - [teks] tabel 'Simultaneous Confidence Intervals (Known Covariance Matrix)' footnote:
+      lama "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+      baru "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+      baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+## BB-KF04-06: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF05-01: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (162 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2.\nc. Computed using alpha = .05"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2.\nc. Computed using alpha = .05"
+## BB-KF05-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-01: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (311 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) — Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) — Y2A1"
+      baru "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) for Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) for Y2A1"
+## BB-KF06-02: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (257 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) — Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) — Y2A1"
+      baru "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) for Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) for Y2A1"
+## BB-KF06-03: teks vs iterasi-3: 2 beda; nilai vs uji awal v6: identik (568 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) — Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) — Y2A1"
+      baru "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) for Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) for Y2A1"
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) — Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) — Y2A1"
+      baru "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) for Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) for Y2A1"
+## BB-KF06-04: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-05: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-06: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-07: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-08: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-09: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF06-10: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (156 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) — Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) — Y2A1"
+      baru "a. R Squared = 0.3824 (Adjusted R Squared = 0.2022) for Y1A1\nb. R Squared = 0.4948 (Adjusted R Squared = 0.3475) for Y2A1"
+## BB-KF07-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF07-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (243 nilai)
+## BB-KF08-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF08-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF08-03: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF08-04: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF08-05: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF09-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (95 nilai)
+## BB-KF09-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (282 nilai)
+## BB-KF09-03: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (393 nilai)
+## BB-KF10-01: teks vs iterasi-3: 2 beda; nilai vs uji awal v6: identik (361 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2.\nc. Computed using alpha = .05"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2.\nc. Computed using alpha = .05"
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2.\nc. Computed using alpha = .05"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2.\nc. Computed using alpha = .05"
+## BB-KF10-02: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (257 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) — Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) — Y2A1"
+      baru "a. R Squared = 0.3657 (Adjusted R Squared = 0.2717) for Y1A1\nb. R Squared = 0.4727 (Adjusted R Squared = 0.3946) for Y2A1"
+## BB-KF10-03: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (695 nilai)
+## BB-KF11-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF11-02: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (396 nilai)
+## BB-KF11-03: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (216 nilai)
+## BB-KF11-04: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF11-05: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (1197 nilai)
+## BB-KF12-01: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (243 nilai)
+## BB-KF13-01: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (305 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.3164 (Adjusted R Squared = 0.3050) — x1\nb. R Squared = 0.0498 (Adjusted R Squared = 0.0340) — x2\nc. R Squared = 0.5073 (Adjusted R Squared = 0.4991) — x3\nd. R Squared = 0.0088 (Adjusted R Squared = -0.0077) — x4.\ne. Computed using alpha = .05"
+      baru "a. R Squared = 0.3164 (Adjusted R Squared = 0.3050) for x1\nb. R Squared = 0.0498 (Adjusted R Squared = 0.0340) for x2\nc. R Squared = 0.5073 (Adjusted R Squared = 0.4991) for x3\nd. R Squared = 0.0088 (Adjusted R Squared = -0.0077) for x4.\ne. Computed using alpha = .05"
+## BB-KF13-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF13-03: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (72 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2\nc. R Squared = 0.7391 (Adjusted R Squared = 0.6348) — y3"
+      baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2\nc. R Squared = 0.7391 (Adjusted R Squared = 0.6348) for y3"
+## BB-KF13-04: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (1560 nilai)
+  - [teks] tabel 'Tests of Between-Subjects Effects' footnote:
+      lama "a. R Squared = 0.2101 (Adjusted R Squared = 0.2009) — Y1\nb. R Squared = 0.2373 (Adjusted R Squared = 0.2284) — Y2\nc. R Squared = 0.0904 (Adjusted R Squared = 0.0798) — Y3\nd. R Squared = 0.2422 (Adjusted R Squared = 0.2334) — Y4\ne. R Squared = 0.2508 (Adjusted R Squared = 0.2421) — Y5.\nf. Computed using alpha = .05"
+      baru "a. R Squared = 0.2101 (Adjusted R Squared = 0.2009) for Y1\nb. R Squared = 0.2373 (Adjusted R Squared = 0.2284) for Y2\nc. R Squared = 0.0904 (Adjusted R Squared = 0.0798) for Y3\nd. R Squared = 0.2422 (Adjusted R Squared = 0.2334) for Y4\ne. R Squared = 0.2508 (Adjusted R Squared = 0.2421) for Y5.\nf. Computed using alpha = .05"
+## BB-KF13-05: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (243 nilai)
+## BB-KF13-06: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (127 nilai)
+## BB-KF13-07: teks vs iterasi-3: 1 beda; nilai vs uji awal v6: identik (149 nilai)
+  - [teks] checks:
+      lama {"toastSaatBerjalan": [], "probe": [{"t": 0, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}]}
+      baru {"toastSaatBerjalan": [], "probe": [{"t": 0, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}, {"t": 1, "running": true, "scrolled": true, "menuOpened": true, "stillRunning": true}]}
+## BB-KF14-01: teks vs iterasi-5: identik; nilai vs uji awal v6: identik (90 nilai)
+## BB-KF14-02: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)
+## BB-KF14-03: teks vs iterasi-3: identik; nilai vs uji awal v6: identik (0 nilai)

@@ -1,0 +1,56 @@
+{
+ "id": "BB-KF08-03",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures"
+ ],
+ "toasts": [
+  {
+   "label": "Define tanpa faktor",
+   "texts": [
+    "Add a within-subjects factor (name and number of levels) before clicking Define.",
+    "Add a within-subjects factor (name and number of levels) before clicking Define."
+   ],
+   "file": "BB-KF08-03-1.png"
+  },
+  {
+   "label": "Define tanpa measure",
+   "texts": [
+    "Add a measure name before clicking Define.",
+    "Add a measure name before clicking Define."
+   ],
+   "file": "BB-KF08-03-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "defineTerbuka1": true,
+  "defineTerbuka2": true
+ },
+ "notes": [
+  "BB-KF08-03-1.png: toast: Define tanpa faktor",
+  "BB-KF08-03-2.png: toast: Define tanpa measure"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "EXcw4k8lfhzpWjMN3Mjc7",
+  "buildIdServed": "EXcw4k8lfhzpWjMN3Mjc7",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T15:56:30.000Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 11,
+ "finishedAt": "2026-09-30T15:56:41.277Z",
+ "wasmRequested": []
+}

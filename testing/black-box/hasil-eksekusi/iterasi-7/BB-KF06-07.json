@@ -1,0 +1,68 @@
+{
+ "id": "BB-KF06-07",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: build [\"faktorA\"] → kotak Model: [\"faktorA\"] (BB-KF06-07-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing).",
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing)."
+   ],
+   "file": "BB-KF06-07-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing).",
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing)."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-build-terms": [
+   "faktorA"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-07-1.png: dialog Model (build): faktorA",
+  "BB-KF06-07-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "EXcw4k8lfhzpWjMN3Mjc7",
+  "buildIdServed": "EXcw4k8lfhzpWjMN3Mjc7",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T15:48:47.253Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 73,
+ "finishedAt": "2026-09-30T15:49:59.838Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ]
+}
