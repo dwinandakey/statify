@@ -168,9 +168,9 @@ Payload dan respons worker ditangkap lalu dibandingkan (`capture-exp-payloads.cj
 - Data, konfigurasi, dan hasil komputasi di kedelapan sel sama persis dengan v5 final. Karena itu angka responsivitas final (`testing/bab5/ringkasan-responsivitas.md` §4) tetap mewakili v6.
 - Waktu tidak diukur ulang, sama seperti pada v5. Perubahan RM hanya menambah satu SSCP galat k × k per measure pada `mauchly()`, yaitu 10 × 10 pada sel eksperimen.
 
-## 5. Black-box iterasi 7 (78 skenario, Playwright)
+## 5. Black-box uji awal v6 (78 skenario, Playwright)
 
-Iterasi ini dijalankan dengan harness v5, tanpa perubahan, terhadap build v6 (`BUILD_ID` `0aGhUdQPbhuxcAe295aG-`) lewat antarmuka asli. Setiap skenario memakai browser context baru dengan mode eksekusi bawaan (worker).
+Uji ini semula dijalankan sebagai "iterasi 7" (`--iter=7`) di branch `fix-epsilon-v6`, dengan harness v5 tanpa perubahan, terhadap build v6 (`BUILD_ID` `0aGhUdQPbhuxcAe295aG-`) lewat antarmuka asli. Setiap skenario memakai browser context baru dengan mode eksekusi bawaan (worker).
 
 ```
 node testing/black-box/harness/bb-run.cjs    --base=http://localhost:3101 --iter=7            # 50 skenario
@@ -180,9 +180,9 @@ node testing/black-box/harness/bb-nilai.mjs  --iter=7
 
 - **Waktu dan lingkungan:** 30 September 2026, 20:22–20:46 WIB; Chromium 143.0.7499.4, Playwright 1.57.0.
 - **WASM yang dilayani:** `run-report.json` mencatat MV `wasm_bg.6145c2bf.wasm` (md5 `43a77657…`) dan RM `wasm_bg.241dc806.wasm` (md5 `889473e9…`), sama dengan build v6.
-- **Keluaran:**
-  - `testing/black-box/hasil-eksekusi/iterasi-7/` (78 berkas pengamatan, `nilai-spss.json`, `run-report.json`);
-  - `testing/black-box/bukti/iterasi-7/` (233 tangkapan layar);
+- **Keluaran** (di `ilham` dipindahkan dari `iterasi-7/` agar iterasi 7 resmi dijalankan pada build gabungan, §8):
+  - `testing/black-box/hasil-eksekusi/iterasi-7-uji-awal-v6/` (78 berkas pengamatan, `nilai-spss.json`, `run-report.json`);
+  - `testing/black-box/bukti/iterasi-7-uji-awal-v6/` (233 tangkapan layar);
   - log `v6/bb-iter7.log`.
 - **Tangkapan terminal:** `ss/11` dan `ss/12`.
 
@@ -232,7 +232,7 @@ Keduanya tetap memenuhi Hasil yang Diharapkan. Penilaian di bawah ini penilaian 
 1. **T1 dan T2 diperbaiki di jalur produksi** dan cocok dengan SPSS 27: 39 + 39 nilai konfirmasi dan 60 nilai uji skala.
 2. **Tidak ada nilai regresi v5 yang berubah:** RM 1.318 SPSS + 353 R, MV 2.339, sleeping dog, 8 sel eksperimen, dan 9 hash tabel RM.
 3. **Test modul lama `mau_j20` dan `mau_j21` tetap gagal.** Keduanya menguji pola T1/T2 yang sama di `mauchly_test.rs`, modul lama yang tidak dipanggil produksi (T5) dan sesuai instruksi tidak disentuh. Bila modul itu ingin diperbaiki atau dihapus, diperlukan keputusan terpisah.
-4. **Black-box iterasi 7:** 78 skenario Sesuai (penilaian saya; mohon konfirmasi penguji untuk BB-KF13-04 dan BB-KF13-07), 76 identik dengan v5 final.
+4. **Black-box uji awal v6:** 78 skenario Sesuai, 76 identik dengan v5 final. BB-KF13-04 dan BB-KF13-07 dinilai Sesuai oleh penguji.
 5. Ambang W (`mean_eig.abs() < 1e-12`) masih absolut (lihat §1). Ambang ini tidak memengaruhi epsilon dan hanya aktif pada skala data yang sangat kecil.
 
 ## 7. Berkas
@@ -248,5 +248,5 @@ testing/whitebox/
   v6/regresi-rm/                     compare-spss v5 dan v6, keluaran penuh WASM RM v5 vs v6
   v6/sleeping-dog/                   tangkapan UI dan hasil.json
   v6/bb-iter7.log, bb-diff-*.txt     eksekusi dan pembanding black-box iterasi 7
-testing/black-box/bukti/iterasi-7/, hasil-eksekusi/iterasi-7/
+testing/black-box/bukti/iterasi-7-uji-awal-v6/, hasil-eksekusi/iterasi-7-uji-awal-v6/   uji awal v6 (branch fix-epsilon-v6)
 ```
