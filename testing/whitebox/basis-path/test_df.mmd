@@ -1,0 +1,9 @@
+flowchart TD
+    n1{{"1: r = df.round(); if |df - r| < 1e-9 (P1)"}}
+    n2["2: r.max(1.0)"]
+    n3["3: df"]
+    n4["4: keluar"]
+    n1 --> n2
+    n1 --> n3
+    n2 --> n4
+    n3 --> n4

@@ -1,0 +1,2676 @@
+{
+  "generated_with": "R version 4.3.2 (2023-10-31 ucrt) ; car 3.1.3",
+  "validation": {
+    "n": 240,
+    "pass": 240,
+    "max_abs_diff": 0.000436713113593834,
+    "rows": [
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.613051183005053,
+        "r": 0.613051183005052,
+        "abs_diff": 2.22044604925031e-16,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Pillai's Trace"],
+        "field": "F",
+        "spss": 23.369,
+        "r": 23.3687365154617,
+        "abs_diff": 0.000263484538333358,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 59,
+        "r": 59,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 1.30758920111188e-11,
+        "r": 1.30758920111191e-11,
+        "abs_diff": 2.66571877092284e-25,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.386948816994947,
+        "r": 0.386948816994947,
+        "abs_diff": 1.11022302462516e-16,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 23.369,
+        "r": 23.3687365154617,
+        "abs_diff": 0.000263484538329806,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 59,
+        "r": 59,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 1.30758920111189e-11,
+        "r": 1.3075892011119e-11,
+        "abs_diff": 1.29246970711411e-25,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 1.58432111969232,
+        "r": 1.58432111969232,
+        "abs_diff": 1.77635683940025e-15,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 23.369,
+        "r": 23.3687365154617,
+        "abs_diff": 0.000263484538344017,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 59,
+        "r": 59,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 1.30758920111189e-11,
+        "r": 1.30758920111192e-11,
+        "abs_diff": 3.15039491109063e-25,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 1.58432111969232,
+        "r": 1.58432111969232,
+        "abs_diff": 1.99840144432528e-15,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 23.369,
+        "r": 23.3687365154617,
+        "abs_diff": 0.000263484538347569,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 59,
+        "r": 59,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Multivariate Tests",
+        "labels": ["jk", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 1.30758920111189e-11,
+        "r": 1.30758920111193e-11,
+        "abs_diff": 3.60275930858057e-25,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Box's M",
+        "spss": 14.7502901116884,
+        "r": 14.7502901116886,
+        "abs_diff": 2.27373675443232e-13,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "F",
+        "spss": 1.37192599259635,
+        "r": 1.37192599259637,
+        "abs_diff": 2.1316282072803e-14,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df1",
+        "spss": 10,
+        "r": 10,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df2",
+        "spss": 18377.6892430278,
+        "r": 18377.6892430279,
+        "abs_diff": 2.5465851649642e-11,
+        "pass": true
+      },
+      {
+        "config": "mv2",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Sig.",
+        "spss": 0.186289721125907,
+        "r": 0.186289721126848,
+        "abs_diff": 9.40636457613664e-13,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 1.5407884151247,
+        "r": 1.5407884151247,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Pillai's Trace"],
+        "field": "F",
+        "spss": 8.38822704975473,
+        "r": 8.38822704975473,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 10,
+        "r": 10,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.00309622419831657,
+        "r": 0.00309622419831658,
+        "abs_diff": 4.33680868994202e-18,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.0384553499597748,
+        "r": 0.0384553499597747,
+        "abs_diff": 4.85722573273506e-17,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 8.199,
+        "r": 8.19885956377838,
+        "abs_diff": 0.000140436221618856,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 8,
+        "r": 8,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.00623408593678756,
+        "r": 0.00623408593678754,
+        "abs_diff": 1.90819582357449e-17,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 9.94142259414226,
+        "r": 9.94142259414227,
+        "abs_diff": 1.4210854715202e-14,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 7.45606694560669,
+        "r": 7.4560669456067,
+        "abs_diff": 1.06581410364015e-14,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 4,
+        "r": 4,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.0164318090802108,
+        "r": 0.0164318090802108,
+        "abs_diff": 5.89805981832114e-17,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 8.07638502310134,
+        "r": 8.07638502310136,
+        "abs_diff": 1.4210854715202e-14,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 20.191,
+        "r": 20.1909625577534,
+        "abs_diff": 3.74422466009605e-05,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 5,
+        "r": 5,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Multivariate Tests",
+        "labels": ["treatment", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.00402918978021996,
+        "r": 0.00402918978021994,
+        "abs_diff": 1.73472347597681e-17,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Box's M",
+        "spss": 3.05411190928698,
+        "r": 3.05411190928698,
+        "abs_diff": 8.88178419700125e-16,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "F",
+        "spss": 0.465539975061453,
+        "r": 0.465539975061453,
+        "abs_diff": 1.66533453693773e-16,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df1",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df2",
+        "spss": 2880.0000000001,
+        "r": 2880.0000000001,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv4",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Sig.",
+        "spss": 0.706349782485116,
+        "r": 0.706349782484622,
+        "abs_diff": 4.94382312865582e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.526038357808321,
+        "r": 0.52603835780832,
+        "abs_diff": 1.22124532708767e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "F",
+        "spss": 12.764,
+        "r": 12.7635668718296,
+        "abs_diff": 0.000433128170396202,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 23,
+        "r": 23,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.000186658060507576,
+        "r": 0.000186658060507581,
+        "abs_diff": 5.2583805365547e-18,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.473961642191679,
+        "r": 0.47396164219168,
+        "abs_diff": 1.22124532708767e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 12.764,
+        "r": 12.7635668718296,
+        "abs_diff": 0.000433128170396202,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 23,
+        "r": 23,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.000186658060507575,
+        "r": 0.000186658060507581,
+        "abs_diff": 5.58364118830035e-18,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 1.1098753801591,
+        "r": 1.1098753801591,
+        "abs_diff": 5.32907051820075e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 12.764,
+        "r": 12.7635668718296,
+        "abs_diff": 0.000433128170396202,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 23,
+        "r": 23,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.000186658060507576,
+        "r": 0.000186658060507581,
+        "abs_diff": 5.2583805365547e-18,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 1.1098753801591,
+        "r": 1.1098753801591,
+        "abs_diff": 5.55111512312578e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 12.764,
+        "r": 12.7635668718296,
+        "abs_diff": 0.000433128170397978,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 23,
+        "r": 23,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.000186658060507576,
+        "r": 0.000186658060507581,
+        "abs_diff": 5.2583805365547e-18,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.314101894204922,
+        "r": 0.314101894204918,
+        "abs_diff": 4.16333634234434e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "F",
+        "spss": 1.49049052549609,
+        "r": 1.49049052549607,
+        "abs_diff": 2.33146835171283e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 48,
+        "r": 48,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.201593648278445,
+        "r": 0.201593648278451,
+        "abs_diff": 5.82867087928207e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.69157945385955,
+        "r": 0.691579453859555,
+        "abs_diff": 4.10782519111308e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 1.552,
+        "r": 1.55236995417893,
+        "abs_diff": 0.000369954178931708,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 46,
+        "r": 46,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.182786203442653,
+        "r": 0.182786203442662,
+        "abs_diff": 9.43689570931383e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 0.437750422437303,
+        "r": 0.437750422437295,
+        "abs_diff": 8.21565038222616e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 1.60508488227011,
+        "r": 1.60508488227008,
+        "abs_diff": 2.99760216648792e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 44,
+        "r": 44,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.168445401431398,
+        "r": 0.168445401431409,
+        "abs_diff": 1.06581410364015e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 0.41810202930354,
+        "r": 0.418102029303532,
+        "abs_diff": 7.99360577730113e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 3.345,
+        "r": 3.34481623442826,
+        "abs_diff": 0.000183765571740491,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 24,
+        "r": 24,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.035908048144582,
+        "r": 0.0359080481445842,
+        "abs_diff": 2.2065682614425e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.068525967959386,
+        "r": 0.0685259679593891,
+        "abs_diff": 3.15025783237388e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "F",
+        "spss": 0.283828689685205,
+        "r": 0.283828689685219,
+        "abs_diff": 1.34892097491957e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 48,
+        "r": 48,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.941828721619368,
+        "r": 0.941828721619362,
+        "abs_diff": 6.66133814775094e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.93192877864322,
+        "r": 0.931928778643217,
+        "abs_diff": 2.99760216648792e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 0.275,
+        "r": 0.275065192452625,
+        "abs_diff": 6.51924526246517e-05,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 46,
+        "r": 46,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.945830351994338,
+        "r": 0.945830351994332,
+        "abs_diff": 5.99520433297585e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 0.0725554101383325,
+        "r": 0.0725554101383359,
+        "abs_diff": 3.40005801291454e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 0.266036503840552,
+        "r": 0.266036503840565,
+        "abs_diff": 1.2490009027033e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 44,
+        "r": 44,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.949808746524976,
+        "r": 0.94980874652497,
+        "abs_diff": 5.88418203051333e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 0.0650545891391973,
+        "r": 0.0650545891391992,
+        "abs_diff": 1.97064586870965e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 0.52,
+        "r": 0.520436713113594,
+        "abs_diff": 0.000436713113593834,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 24,
+        "r": 24,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.672281946749035,
+        "r": 0.672281946749024,
+        "abs_diff": 1.12132525487141e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Box's M",
+        "spss": 34.2107429344056,
+        "r": 34.2107429344056,
+        "abs_diff": 2.8421709430404e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "F",
+        "spss": 1.17130305072445,
+        "r": 1.17130305072445,
+        "abs_diff": 1.11022302462516e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df1",
+        "spss": 21,
+        "r": 21,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df2",
+        "spss": 2064.62337662337,
+        "r": 2064.62337662338,
+        "abs_diff": 5.45696821063757e-12,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Sig.",
+        "spss": 0.266527574177722,
+        "r": 0.266527574177918,
+        "abs_diff": 1.95898852695109e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 1.20512812500003,
+        "r": 1.20512812499999,
+        "abs_diff": 3.35287353436797e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "df",
+        "spss": 1,
+        "r": 1,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 1.20512812500003,
+        "r": 1.20512812499999,
+        "abs_diff": 3.35287353436797e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "F",
+        "spss": 5.90685741418672,
+        "r": 5.90685741418656,
+        "abs_diff": 1.58983937126322e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.0229276119151153,
+        "r": 0.022927611915117,
+        "abs_diff": 1.72431513512095e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 1.69408437500004,
+        "r": 1.69408437500001,
+        "abs_diff": 3.530509218308e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 0.564694791666681,
+        "r": 0.564694791666669,
+        "abs_diff": 1.17683640610267e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "F",
+        "spss": 2.76781492997592,
+        "r": 2.76781492997586,
+        "abs_diff": 5.50670620214078e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.0636801354110855,
+        "r": 0.0636801354110891,
+        "abs_diff": 3.58046925441613e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 0.132384374999987,
+        "r": 0.132384375,
+        "abs_diff": 1.31561428418081e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 0.0441281249999956,
+        "r": 0.044128125,
+        "abs_diff": 4.38538094726937e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "F",
+        "spss": 0.216291145250947,
+        "r": 0.216291145250969,
+        "abs_diff": 2.16771045558062e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.884120218485757,
+        "r": 0.884120218485742,
+        "abs_diff": 1.55431223447522e-14,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 614.251249999999,
+        "r": 614.251249999998,
+        "abs_diff": 4.54747350886464e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "df",
+        "spss": 1,
+        "r": 1,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 614.251249999999,
+        "r": 614.251249999998,
+        "abs_diff": 4.54747350886464e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "F",
+        "spss": 20.0193239995111,
+        "r": 20.0193239995111,
+        "abs_diff": 3.5527136788005e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.000158118227852434,
+        "r": 0.000158118227852434,
+        "abs_diff": 4.87890977618477e-19,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 74.8737500000003,
+        "r": 74.8737499999994,
+        "abs_diff": 9.09494701772928e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 24.9579166666668,
+        "r": 24.9579166666665,
+        "abs_diff": 3.05533376376843e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "F",
+        "spss": 0.813414087643779,
+        "r": 0.81341408764377,
+        "abs_diff": 9.32587340685131e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.49901760206807,
+        "r": 0.499017602068074,
+        "abs_diff": 3.66373598126302e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 32.2437499999999,
+        "r": 32.2437500000003,
+        "abs_diff": 3.97903932025656e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 10.7479166666666,
+        "r": 10.7479166666668,
+        "abs_diff": 1.33226762955019e-13,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "F",
+        "spss": 0.35028992789147,
+        "r": 0.350289927891474,
+        "abs_diff": 4.55191440096314e-15,
+        "pass": true
+      },
+      {
+        "config": "mv5",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.789276840299065,
+        "r": 0.789276840299061,
+        "abs_diff": 3.66373598126302e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.496321137211054,
+        "r": 0.496321137211055,
+        "abs_diff": 1.4432899320127e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "F",
+        "spss": 8.376,
+        "r": 8.37583225735191,
+        "abs_diff": 0.000167742648084612,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 17,
+        "r": 17,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.00293972475282289,
+        "r": 0.00293972475282282,
+        "abs_diff": 7.54604712049911e-17,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.503678862788946,
+        "r": 0.503678862788945,
+        "abs_diff": 1.22124532708767e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 8.376,
+        "r": 8.37583225735191,
+        "abs_diff": 0.000167742648091718,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 17,
+        "r": 17,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.00293972475282289,
+        "r": 0.00293972475282283,
+        "abs_diff": 5.98479599211998e-17,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 0.98539203027669,
+        "r": 0.985392030276695,
+        "abs_diff": 4.66293670342566e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 8.376,
+        "r": 8.3758322573519,
+        "abs_diff": 0.00016774264809527,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 17,
+        "r": 17,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.00293972475282289,
+        "r": 0.00293972475282283,
+        "abs_diff": 5.98479599211998e-17,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 0.98539203027669,
+        "r": 0.985392030276694,
+        "abs_diff": 4.32986979603811e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 8.376,
+        "r": 8.3758322573519,
+        "abs_diff": 0.000167742648097047,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 2,
+        "r": 2,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 17,
+        "r": 17,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.00293972475282289,
+        "r": 0.00293972475282284,
+        "abs_diff": 4.68375338513738e-17,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.279391920854741,
+        "r": 0.279391920854737,
+        "abs_diff": 3.38618022510673e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "F",
+        "spss": 0.974278538760088,
+        "r": 0.974278538760074,
+        "abs_diff": 1.37667655053519e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 36,
+        "r": 36,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.456590016850904,
+        "r": 0.456590016850911,
+        "abs_diff": 7.21644966006352e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.727006302678533,
+        "r": 0.727006302678536,
+        "abs_diff": 3.77475828372553e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 0.979,
+        "r": 0.979306426935773,
+        "abs_diff": 0.000306426935772652,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 34,
+        "r": 34,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.454266398030376,
+        "r": 0.454266398030386,
+        "abs_diff": 9.54791801177635e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 0.366703112209574,
+        "r": 0.366703112209567,
+        "abs_diff": 7.16093850883226e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 0.977874965892198,
+        "r": 0.977874965892179,
+        "abs_diff": 1.89848137210902e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 32,
+        "r": 32,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.456142927015352,
+        "r": 0.456142927015361,
+        "abs_diff": 9.2148511043888e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 0.340885716666741,
+        "r": 0.340885716666732,
+        "abs_diff": 8.54871728961371e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 2.045,
+        "r": 2.04531430000039,
+        "abs_diff": 0.000314300000391565,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 18,
+        "r": 18,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorB", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.143518941710322,
+        "r": 0.14351894171033,
+        "abs_diff": 7.99360577730113e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Value",
+        "spss": 0.0833519422981963,
+        "r": 0.0833519422982012,
+        "abs_diff": 4.95437024738976e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "F",
+        "spss": 0.260930352747623,
+        "r": 0.260930352747639,
+        "abs_diff": 1.6153745008296e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Error df",
+        "spss": 36,
+        "r": 36,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Pillai's Trace"],
+        "field": "Sig.",
+        "spss": 0.95143206970492,
+        "r": 0.951432069704912,
+        "abs_diff": 7.21644966006352e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Value",
+        "spss": 0.918234987019194,
+        "r": 0.918234987019189,
+        "abs_diff": 4.77395900588817e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "F",
+        "spss": 0.247,
+        "r": 0.246917037540949,
+        "abs_diff": 8.29624590512335e-05,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Error df",
+        "spss": 34,
+        "r": 34,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Wilks' Lambda"],
+        "field": "Sig.",
+        "spss": 0.957234840536591,
+        "r": 0.957234840536585,
+        "abs_diff": 6.55031584528842e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Value",
+        "spss": 0.087317609105369,
+        "r": 0.0873176091053745,
+        "abs_diff": 5.49560397189452e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "F",
+        "spss": 0.232846957614317,
+        "r": 0.232846957614332,
+        "abs_diff": 1.46826995006677e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Hypothesis df",
+        "spss": 6,
+        "r": 6,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Error df",
+        "spss": 32,
+        "r": 32,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Hotelling's Trace"],
+        "field": "Sig.",
+        "spss": 0.962687406554375,
+        "r": 0.962687406554369,
+        "abs_diff": 5.88418203051333e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Value",
+        "spss": 0.0569949370869555,
+        "r": 0.0569949370869599,
+        "abs_diff": 4.38538094726937e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "F",
+        "spss": 0.342,
+        "r": 0.341969622521759,
+        "abs_diff": 3.03774782405841e-05,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Hypothesis df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Error df",
+        "spss": 18,
+        "r": 18,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Multivariate Tests",
+        "labels": ["faktorA * faktorB", "Roy's Largest Root"],
+        "field": "Sig.",
+        "spss": 0.795275186868717,
+        "r": 0.795275186868697,
+        "abs_diff": 1.95399252334028e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Box's M",
+        "spss": 25.9176336143217,
+        "r": 25.9176336143217,
+        "abs_diff": 3.5527136788005e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "F",
+        "spss": 0.901049602852273,
+        "r": 0.901049602852273,
+        "abs_diff": 4.44089209850063e-16,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df1",
+        "spss": 18,
+        "r": 18,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "df2",
+        "spss": 891.818614741518,
+        "r": 891.818614741522,
+        "abs_diff": 3.29691829392686e-12,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Box's Test of Equality of Covariance Matrices",
+        "labels": [],
+        "field": "Sig.",
+        "spss": 0.577414559275296,
+        "r": 0.577414559275107,
+        "abs_diff": 1.89182003396127e-13,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 1.22647741935486,
+        "r": 1.22647741935484,
+        "abs_diff": 2.04281036531029e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "df",
+        "spss": 1,
+        "r": 1,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 1.22647741935486,
+        "r": 1.22647741935484,
+        "abs_diff": 2.04281036531029e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "F",
+        "spss": 4.94717276283389,
+        "r": 4.94717276283381,
+        "abs_diff": 8.08242361927114e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.0391675979608141,
+        "r": 0.0391675979608157,
+        "abs_diff": 1.57512891618694e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 1.42555598455601,
+        "r": 1.42555598455598,
+        "abs_diff": 2.8643754035329e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 0.475185328185337,
+        "r": 0.475185328185328,
+        "abs_diff": 9.54791801177635e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "F",
+        "spss": 1.91672824611263,
+        "r": 1.91672824611259,
+        "abs_diff": 3.79696274421804e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.16306261832742,
+        "r": 0.163062618327426,
+        "abs_diff": 6.68909372336657e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Type III Sum of Squares",
+        "spss": 0.135633719433716,
+        "r": 0.135633719433719,
+        "abs_diff": 3.5527136788005e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Mean Square",
+        "spss": 0.0452112398112385,
+        "r": 0.0452112398112397,
+        "abs_diff": 1.18655085756814e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "F",
+        "spss": 0.182366026996047,
+        "r": 0.182366026996052,
+        "abs_diff": 4.82947015711943e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate torque"],
+        "field": "Sig.",
+        "spss": 0.906979832176203,
+        "r": 0.906979832176199,
+        "abs_diff": 3.44169137633799e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 363.252043010748,
+        "r": 363.252043010752,
+        "abs_diff": 3.97903932025656e-12,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "df",
+        "spss": 1,
+        "r": 1,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 363.252043010748,
+        "r": 363.252043010752,
+        "abs_diff": 3.97903932025656e-12,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "F",
+        "spss": 13.3132506142843,
+        "r": 13.3132506142845,
+        "abs_diff": 1.52766688188422e-13,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.00183680861958614,
+        "r": 0.00183680861958606,
+        "abs_diff": 8.08814820674186e-17,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 20.7484234234235,
+        "r": 20.7484234234234,
+        "abs_diff": 1.49213974509621e-13,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 6.91614114114118,
+        "r": 6.91614114114113,
+        "abs_diff": 4.9737991503207e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "F",
+        "spss": 0.253477776842264,
+        "r": 0.253477776842263,
+        "abs_diff": 1.72084568816899e-15,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorB", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.857828160905174,
+        "r": 0.857828160905174,
+        "abs_diff": 4.44089209850063e-16,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Type III Sum of Squares",
+        "spss": 27.9874967824945,
+        "r": 27.9874967824966,
+        "abs_diff": 2.16715534406831e-12,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "df",
+        "spss": 3,
+        "r": 3,
+        "abs_diff": 0,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Mean Square",
+        "spss": 9.32916559416482,
+        "r": 9.32916559416554,
+        "abs_diff": 7.22977233635902e-13,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "F",
+        "spss": 0.341915543124971,
+        "r": 0.341915543124997,
+        "abs_diff": 2.6700863742235e-14,
+        "pass": true
+      },
+      {
+        "config": "mv6",
+        "table": "Tests of Between-Subjects Effects",
+        "labels": ["faktorA * faktorB", "ultimate strain"],
+        "field": "Sig.",
+        "spss": 0.795313320364316,
+        "r": 0.795313320364297,
+        "abs_diff": 1.95399252334028e-14,
+        "pass": true
+      }
+    ]
+  },
+  "dataset_a": {
+    "effects": {
+      "(Intercept)": {
+        "Pillai's Trace": {
+          "value": 0.999997810670877,
+          "f": 5937879.05383078,
+          "df1": 2,
+          "df2": 26,
+          "sig": 2.65487271022691e-74
+        },
+        "Wilks' Lambda": {
+          "value": 2.18932912257777e-06,
+          "f": 5937879.05375092,
+          "df1": 2,
+          "df2": 26,
+          "sig": 2.65487271069104e-74
+        },
+        "Hotelling's Trace": {
+          "value": 456759.927211609,
+          "f": 5937879.05375092,
+          "df1": 2,
+          "df2": 26,
+          "sig": 2.65487271069104e-74
+        },
+        "Roy's Largest Root": {
+          "value": 456759.927211609,
+          "f": 5937879.05375092,
+          "df1": 2,
+          "df2": 26,
+          "sig": 2.65487271069104e-74
+        }
+      },
+      "Group": {
+        "Pillai's Trace": {
+          "value": 0.999902085763296,
+          "f": 13.497356574438,
+          "df1": 4,
+          "df2": 54,
+          "sig": 1.08309514197475e-07
+        },
+        "Wilks' Lambda": {
+          "value": 9.79142367044406e-05,
+          "f": 1300.77329868145,
+          "df1": 4,
+          "df2": 52,
+          "sig": 2.0333007750086e-51
+        },
+        "Hotelling's Trace": {
+          "value": 10212.0194102269,
+          "f": 63825.1213139179,
+          "df1": 4,
+          "df2": 50,
+          "sig": 5.13717656719471e-92
+        },
+        "Roy's Largest Root": {
+          "value": 10212.0194102269,
+          "f": 137862.262038063,
+          "df1": 2,
+          "df2": 27,
+          "sig": 7.52348182979211e-55
+        }
+      }
+    },
+    "box": {
+      "box_m": 2.04636307898909e-12,
+      "f": 3.04455811947516e-13,
+      "df1": 6,
+      "df2": 18168.9230769231,
+      "sig": 1
+    }
+  },
+  "dataset_b": {
+    "rank_error_sscp": 2,
+    "multivariate_error": "The error SSP matrix is apparently of deficient rank = 2 < 3",
+    "univariate": {
+      "Y1": {
+        "(Intercept)": {
+          "ss": 1769.02109835463,
+          "df": 1,
+          "ms": 1769.02109835463,
+          "f": 654403.10935328,
+          "sig": 4.07612257879367e-110
+        },
+        "Cov1": {
+          "ss": 50.0182272727272,
+          "df": 1,
+          "ms": 50.0182272727272,
+          "f": 18502.935596447,
+          "sig": 4.13872938535585e-69
+        },
+        "Group": {
+          "ss": 168.356774943366,
+          "df": 2,
+          "ms": 84.1783874716832,
+          "f": 31139.5938426347,
+          "sig": 4.29964646870509e-82
+        },
+        "Treatment": {
+          "ss": 43.35,
+          "df": 1,
+          "ms": 43.35,
+          "f": 16036.199238579,
+          "sig": 1.81381189221972e-67
+        },
+        "Group:Treatment": {
+          "ss": 0,
+          "df": 2,
+          "ms": 0,
+          "f": 0,
+          "sig": 1
+        }
+      },
+      "Y2": {
+        "(Intercept)": {
+          "ss": 3628.79095092035,
+          "df": 1,
+          "ms": 3628.79095092035,
+          "f": 1342376.34796103,
+          "sig": 2.19760374574548e-118
+        },
+        "Cov1": {
+          "ss": 41.0227272727272,
+          "df": 1,
+          "ms": 41.0227272727272,
+          "f": 15175.2855329951,
+          "sig": 7.79008022418739e-67
+        },
+        "Group": {
+          "ss": 316.264705604255,
+          "df": 2,
+          "ms": 158.132352802127,
+          "f": 58496.9300023104,
+          "sig": 2.40866669185909e-89
+        },
+        "Treatment": {
+          "ss": 67.734375,
+          "df": 1,
+          "ms": 67.734375,
+          "f": 25056.5613102794,
+          "sig": 1.36700323645651e-72
+        },
+        "Group:Treatment": {
+          "ss": 0,
+          "df": 2,
+          "ms": 0,
+          "f": 0,
+          "sig": 1
+        }
+      },
+      "Y3": {
+        "(Intercept)": {
+          "ss": 384.322540766615,
+          "df": 1,
+          "ms": 384.322540766615,
+          "f": 568680.307784117,
+          "sig": 1.68269015873939e-108
+        },
+        "Cov1": {
+          "ss": 51.9436818181818,
+          "df": 1,
+          "ms": 51.9436818181818,
+          "f": 76860.8286802049,
+          "sig": 1.78686220559445e-85
+        },
+        "Group": {
+          "ss": 92.0562576578351,
+          "df": 2,
+          "ms": 46.0281288289175,
+          "f": 68107.6119473594,
+          "sig": 4.28404245538833e-91
+        },
+        "Treatment": {
+          "ss": 18.15,
+          "df": 1,
+          "ms": 18.15,
+          "f": 26856.4720812189,
+          "sig": 2.18267739342264e-73
+        },
+        "Group:Treatment": {
+          "ss": 0,
+          "df": 2,
+          "ms": 0,
+          "f": 0,
+          "sig": 1
+        }
+      }
+    },
+    "box": {
+      "box_m": 7.95807864051312e-13,
+      "f": 2.26809358606649e-14,
+      "df1": 30,
+      "df2": 6589.95978420794,
+      "sig": 1
+    }
+  },
+  "dataset_c": {
+    "effects": {
+      "(Intercept)": {
+        "Pillai's Trace": {
+          "value": 0.999888424624963,
+          "f": 125461.715365863,
+          "df1": 2,
+          "df2": 28,
+          "sig": 4.63401008129688e-56
+        },
+        "Wilks' Lambda": {
+          "value": 0.000111575375037192,
+          "f": 125461.715365809,
+          "df1": 2,
+          "df2": 28,
+          "sig": 4.6340100813252e-56
+        },
+        "Hotelling's Trace": {
+          "value": 8961.55109755776,
+          "f": 125461.715365809,
+          "df1": 2,
+          "df2": 28,
+          "sig": 4.6340100813252e-56
+        },
+        "Roy's Largest Root": {
+          "value": 8961.55109755776,
+          "f": 125461.715365809,
+          "df1": 2,
+          "df2": 28,
+          "sig": 4.6340100813252e-56
+        }
+      },
+      "Species": {
+        "Pillai's Trace": {
+          "value": 0.971522736636843,
+          "f": 13.6970258682909,
+          "df1": 4,
+          "df2": 58,
+          "sig": 6.344267249419e-08
+        },
+        "Wilks' Lambda": {
+          "value": 0.0296588604662094,
+          "f": 67.2925609439625,
+          "df1": 4,
+          "df2": 56,
+          "sig": 9.85328893732076e-21
+        },
+        "Hotelling's Trace": {
+          "value": 32.6768974666073,
+          "f": 220.569057899599,
+          "df1": 4,
+          "df2": 54,
+          "sig": 9.31173179936735e-33
+        },
+        "Roy's Largest Root": {
+          "value": 32.6756782233962,
+          "f": 473.797334239245,
+          "df1": 2,
+          "df2": 29,
+          "sig": 7.14353059104668e-23
+        }
+      }
+    },
+    "box": {
+      "box_m": 10.3932827213135,
+      "f": 1.54849939811271,
+      "df1": 6,
+      "df2": 8348.70665061528,
+      "sig": 0.158014391042943
+    }
+  }
+}

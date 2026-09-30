@@ -1188,3 +1188,8 @@ fn containing_effect_columns(
     }
     cols
 }
+
+// White-box testing (testing/whitebox/): hanya dikompilasi saat `cargo test`.
+#[cfg(test)]
+#[path = "../test/wb_multivariate_tests_internal.rs"]
+mod wb_internal;

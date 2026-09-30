@@ -1,0 +1,14 @@
+digraph G {
+  graph [rankdir=TB, fontname="Helvetica", labelloc=t, fontsize=16, nodesep=0.35, ranksep=0.35,
+         label="test_df  (multivariate/rust/src/stats/multivariate_tests.rs:625)\nN = 4, E = 4, V(G) = E - N + 2 = 2 = predikat + 1 = 2"];
+  node [shape=circle, fontname="Helvetica", fontsize=11, width=0.42, fixedsize=true];
+  edge [arrowsize=0.6];
+  n1 [label="1", style=filled, fillcolor="#d9e6f5"];
+  n2 [label="2"];
+  n3 [label="3"];
+  n4 [label="4", shape=doublecircle, width=0.36];
+  n1 -> n2;
+  n1 -> n3;
+  n2 -> n4;
+  n3 -> n4;
+}

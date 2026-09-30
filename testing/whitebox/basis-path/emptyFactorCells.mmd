@@ -1,0 +1,22 @@
+flowchart TD
+    n1{{"1: if factors.length < 2 (P1)"}}
+    n2["2: return null"]
+    n3["3: n, cells, levels"]
+    n4{{"4: for i < n (P2)"}}
+    n5{{"5: values; if values.some(missing) (P3)"}}
+    n6{{"6: if otherSlices.some(missing) (P4)"}}
+    n7["7: levels.add, cells.add"]
+    n8["8: total; return {empty, total}"]
+    n9["9: keluar"]
+    n1 --> n2
+    n1 --> n3
+    n2 --> n9
+    n3 --> n4
+    n4 --> n5
+    n4 --> n8
+    n5 --> n4
+    n5 --> n6
+    n6 --> n4
+    n6 --> n7
+    n7 --> n4
+    n8 --> n9

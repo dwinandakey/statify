@@ -305,6 +305,12 @@ const getMapOrObjectValue = (container: any, key: string): any => {
 const getNestedValue = (container: any, keys: string[]): any =>
     keys.reduce((acc, key) => getMapOrObjectValue(acc, key), container);
 
+// Nilai harapan numerik dataset A, B, C berasal dari R 4.3.2 (car 3.1.3;
+// stats:::Pillai/Wilks/HL/Roy, Type III sum-to-zero, Box's M aproksimasi F),
+// bukan dari keluaran Statify. Prosedur R itu lebih dulu dicocokkan dengan
+// 240 nilai SPSS 27 (mv2, mv4, mv5, mv6; semua |R - SPSS| <= 0,001):
+// testing/whitebox/oracle/oracle-jest-mv.R, .txt, .json. Dataset A/B/C tidak
+// punya keluaran SPSS (fixtures/spss/dataset-*/README.md).
 describe("GLM Multivariate - Wasm smoke and numeric regression", () => {
     beforeAll(async () => {
         const wasmPath = path.join(__dirname, "../rust/pkg/wasm_bg.wasm");
@@ -335,7 +341,12 @@ describe("GLM Multivariate - Wasm smoke and numeric regression", () => {
             "Pillai's Trace",
         ]);
         expect(groupPillai).toBeDefined();
-        expect(groupPillai.value).toBeCloseTo(0, 6);
+        // Oracle R (oracle-jest-mv.txt, Dataset A): V = 0.999902085763296,
+        // F = 13.497356574438, df 4 dan 54. Nilai lama 0 tanpa sumber.
+        expect(groupPillai.value).toBeCloseTo(0.999902085763296, 6);
+        expect(groupPillai.f).toBeCloseTo(13.497356574438, 6);
+        expect(groupPillai.hypothesis_df).toBe(4);
+        expect(groupPillai.error_df).toBe(54);
     });
 
     it("Dataset B includes interaction effect and stable Box test dimensions", () => {
@@ -362,7 +373,14 @@ describe("GLM Multivariate - Wasm smoke and numeric regression", () => {
             "Pillai's Trace",
         ]);
         expect(groupPillai).toBeDefined();
-        expect(groupPillai.f).toBeCloseTo(0, 6);
+        // SSCP galat dataset B singular (rank 2 dari 3): Y1 - 2*Y3 =
+        // -1.0*g + 3.9*t - 1.1*Cov1 persis, sehingga uji multivariat tidak
+        // terdefinisi (car::Anova menolak) dan tidak ada oracle untuk
+        // Pillai F (nilai lama 0 tanpa sumber). Yang diuji: univariat
+        // Type III Y3 x Group (oracle R: SS 92.0562576578351,
+        // F 68107.6119473594).
+        expect(y3Group.sum_of_squares).toBeCloseTo(92.0562576578351, 6);
+        expect(Math.abs(y3Group.f_value / 68107.6119473594 - 1)).toBeLessThan(1e-6);
     });
 
     it("Dataset C reproduces deterministic Box's M baseline", () => {
@@ -382,7 +400,10 @@ describe("GLM Multivariate - Wasm smoke and numeric regression", () => {
         expect(sepalLengthSpecies.df).toBe(2);
 
         expect(result.box_test.box_m).toBeCloseTo(10.393282721313454, 6);
-        expect(result.box_test.f).toBeCloseTo(1.5497442954550478, 6);
-        expect(result.box_test.significance).toBeCloseTo(0.1975627435596765, 6);
+        // Oracle R (oracle-jest-mv.txt, Dataset C): F = 1.54849939811271,
+        // df 6 dan 8348.706651, Sig. = 0.158014391042943. Nilai lama
+        // (F 1.5497442954550478, Sig. 0.1975627435596765) tanpa sumber.
+        expect(result.box_test.f).toBeCloseTo(1.54849939811271, 6);
+        expect(result.box_test.significance).toBeCloseTo(0.158014391042943, 6);
     });
 });

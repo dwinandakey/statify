@@ -878,3 +878,8 @@ fn krishnamoorthy_yu_nu(
     }
     Ok(1.0 / inv_nu)
 }
+
+// White-box testing (testing/whitebox/): hanya dikompilasi saat `cargo test`.
+#[cfg(test)]
+#[path = "../test/wb_constructor_internal.rs"]
+mod wb_internal;
