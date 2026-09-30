@@ -577,13 +577,19 @@ impl RmModel {
             };
             let sum: f64 = eig.iter().sum();
             let sum_sq: f64 = eig.iter().map(|e| e * e).sum();
-            let gg = if sum_sq < 1e-12 { 1.0 } else { (sum * sum) / (p_f * sum_sq) };
-            // Huynh-Feldt: (n·p·ε − 2) / (p·(n − r − p·ε)), at most 1.
-            let hf = if self.n <= self.k {
-                gg.min(1.0)
+            // S is taken as zero (epsilons 1) only relative to the error
+            // covariance of the untransformed cells of the measure: with C
+            // orthonormal, tr S ≤ tr S_y, and both scale with c² when the data
+            // are multiplied by c, so the epsilons do not depend on the scale.
+            let scale = self.error(&m.y).trace() / v;
+            let (gg, hf) = if !(sum > 1e-12 * scale) {
+                (1.0, 1.0)
             } else {
+                let gg = (sum * sum) / (p_f * sum_sq);
+                // Huynh-Feldt as SPSS: min(1, (n·p·ε − 2) / (p·(n − r − p·ε))).
                 let den = p_f * (v - p_f * gg);
-                if den.abs() < 1e-12 { gg.min(1.0) } else { ((n * p_f * gg - 2.0) / den).min(1.0).max(gg) }
+                let hf = if den.abs() < 1e-12 { gg.min(1.0) } else { ((n * p_f * gg - 2.0) / den).min(1.0) };
+                (gg, hf)
             };
             tests.insert(m.name.clone(), MauchlyTestEntry {
                 effect: self.factor.clone(),
