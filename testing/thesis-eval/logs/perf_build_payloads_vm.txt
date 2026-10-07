@@ -1,0 +1,25 @@
+[statify_wasm] node=v22.23.2 linux/x64 (Linux 6.8.0-138-generic) repo=/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+== pilkada_900: 900 dokumen
+  pilkada_900.stwv.json  0.11 MB  build=22 ms  sha256=4113a0e064e2
+  pilkada_900.nb.json  0.12 MB  build=2 ms  sha256=52b251744d31
+  pilkada_900.am.json  0.19 MB  build=1 ms  sha256=dd2372e28ab4
+== sms_5574: 5574 dokumen
+  sms_5574.stwv.json  0.48 MB  build=0 ms  sha256=b4347162df02
+  sms_5574.nb.json  0.56 MB  build=4 ms  sha256=65f34cbbecef
+  sms_5574.am.json  0.62 MB  build=2 ms  sha256=a2fee4f783ab
+== smsa_11000: 11000 dokumen
+  smsa_11000.stwv.json  2.12 MB  build=1 ms  sha256=73537bfa4a51
+  smsa_11000.nb.json  2.34 MB  build=10 ms  sha256=40e0784ca1c2
+  smsa_11000.am.json  2.43 MB  build=4 ms  sha256=7977de856d0c
+== gabungan: 17974 dokumen
+  gabungan.stwv.json  2.76 MB  build=1 ms  sha256=2ce60d137f4a
+  gabungan.nb.json  3.10 MB  build=11 ms  sha256=546c7915aee2
+  gabungan.am.json  3.23 MB  build=7 ms  sha256=9890570f064f
+== sms_5574_ascii: 5574 dokumen
+  sms_5574_ascii.stwv.json  0.48 MB  build=0 ms  sha256=6dc96978614d
+== gabungan_ascii: 17974 dokumen
+  gabungan_ascii.stwv.json  2.76 MB  build=1 ms  sha256=33500eba6bd6
+index -> testing/thesis-eval/perf/data/payloads_index.json

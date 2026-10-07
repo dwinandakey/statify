@@ -1,0 +1,505 @@
+{
+ "delimiters": "[\\s.,;:'\\\"()?!]+",
+ "stopword_cases": [
+  {
+   "name": "id_kalimat_1",
+   "method": "indonesian",
+   "doc": "Saya tidak suka makan nasi goreng yang pedas dan asin",
+   "lowercase": true,
+   "expected_tokens": [
+    "suka",
+    "makan",
+    "nasi",
+    "goreng",
+    "pedas",
+    "asin"
+   ]
+  },
+  {
+   "name": "id_kalimat_2",
+   "method": "indonesian",
+   "doc": "Pemerintah akan membangun jalan baru di kota itu",
+   "lowercase": true,
+   "expected_tokens": [
+    "pemerintah",
+    "membangun",
+    "jalan",
+    "kota"
+   ]
+  },
+  {
+   "name": "en_kalimat_1",
+   "method": "english",
+   "doc": "The quick brown fox jumps over the lazy dog and it is not here",
+   "lowercase": true,
+   "expected_tokens": [
+    "quick",
+    "brown",
+    "fox",
+    "jumps",
+    "lazy",
+    "dog"
+   ]
+  },
+  {
+   "name": "en_kalimat_2",
+   "method": "english",
+   "doc": "This product was very good but the delivery was slow",
+   "lowercase": true,
+   "expected_tokens": [
+    "product",
+    "delivery",
+    "slow"
+   ]
+  },
+  {
+   "name": "id_huruf_besar_tanpa_lowercase",
+   "method": "indonesian",
+   "doc": "SAYA Tidak Suka NASI",
+   "lowercase": false,
+   "expected_tokens": [
+    "Suka",
+    "NASI"
+   ]
+  }
+ ],
+ "ngram_cases": [
+  {
+   "min": 1,
+   "max": 1,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ]
+  },
+  {
+   "min": 1,
+   "max": 2,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g"
+   ]
+  },
+  {
+   "min": 1,
+   "max": 3,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g"
+   ]
+  },
+  {
+   "min": 1,
+   "max": 4,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g"
+   ]
+  },
+  {
+   "min": 1,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g",
+    "a b c d e",
+    "b c d e f",
+    "c d e f g"
+   ]
+  },
+  {
+   "min": 2,
+   "max": 2,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g"
+   ]
+  },
+  {
+   "min": 2,
+   "max": 3,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g"
+   ]
+  },
+  {
+   "min": 2,
+   "max": 4,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g"
+   ]
+  },
+  {
+   "min": 2,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b",
+    "b c",
+    "c d",
+    "d e",
+    "e f",
+    "f g",
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g",
+    "a b c d e",
+    "b c d e f",
+    "c d e f g"
+   ]
+  },
+  {
+   "min": 3,
+   "max": 3,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g"
+   ]
+  },
+  {
+   "min": 3,
+   "max": 4,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g"
+   ]
+  },
+  {
+   "min": 3,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c",
+    "b c d",
+    "c d e",
+    "d e f",
+    "e f g",
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g",
+    "a b c d e",
+    "b c d e f",
+    "c d e f g"
+   ]
+  },
+  {
+   "min": 4,
+   "max": 4,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g"
+   ]
+  },
+  {
+   "min": 4,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c d",
+    "b c d e",
+    "c d e f",
+    "d e f g",
+    "a b c d e",
+    "b c d e f",
+    "c d e f g"
+   ]
+  },
+  {
+   "min": 5,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g"
+   ],
+   "expected": [
+    "a b c d e",
+    "b c d e f",
+    "c d e f g"
+   ]
+  },
+  {
+   "min": 3,
+   "max": 3,
+   "tokens": [
+    "a",
+    "b"
+   ],
+   "expected": []
+  },
+  {
+   "min": 2,
+   "max": 4,
+   "tokens": [
+    "a",
+    "b",
+    "c"
+   ],
+   "expected": [
+    "a b",
+    "b c",
+    "a b c"
+   ]
+  },
+  {
+   "min": 5,
+   "max": 5,
+   "tokens": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e"
+   ],
+   "expected": [
+    "a b c d e"
+   ]
+  }
+ ]
+}

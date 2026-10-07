@@ -1,0 +1,1318 @@
+@relation 'pilkada_train-weka.filters.unsupervised.attribute.StringToWordVector-R1-W1000-prune-rate-1.0-N0-L-stemmerweka.core.stemmers.NullStemmer-stopwords-handlerweka.core.stopwords.Null-M1-O-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\n\\t.,;:\\\'\\\"()?!\"-weka.filters.unsupervised.attribute.NumericToNominal-R2-last'
+
+@attribute sentiment {negative,positive}
+@attribute #3 {0,1}
+@attribute #adaaqua {0,1}
+@attribute #agussilvy {0,1}
+@attribute #ahok {0,1}
+@attribute #ahok-djarot {0,1}
+@attribute #ahokdicintairakyat {0,1}
+@attribute #ahokdjarot {0,1}
+@attribute #ahokdjarotdirosi {0,1}
+@attribute #ahokdjarothttps {0,1}
+@attribute #ahokers {0,1}
+@attribute #ahokforbali1 {0,1}
+@attribute #ahokfree {0,1}
+@attribute #ahokishope {0,1}
+@attribute #ahokpenistaagama {0,1}
+@attribute #ahoktakbersalah {0,1}
+@attribute #ahoktumbang {0,1}
+@attribute #ahy {0,1}
+@attribute #akucoblosaniessandi {0,1}
+@attribute #amanatnasional {0,1}
+@attribute #anies {0,1}
+@attribute #aniesbaswedan {0,1}
+@attribute #aniessandi {0,1}
+@attribute #aniessandigubernurkita {0,1}
+@attribute #aniessandimenang {0,1}
+@attribute #aniessandy {0,1}
+@attribute #anisa {0,1}
+@attribute #badja {0,1}
+@attribute #badjauntukjakarta {0,1}
+@attribute #basukidjarot {0,1}
+@attribute #debatfinalpilkadadki {0,1}
+@attribute #debatfinalpilkadajkt {0,1}
+@attribute #debatpilkadadki {0,1}
+@attribute #demokrat {0,1}
+@attribute #djarot {0,1}
+@attribute #dki {0,1}
+@attribute #dkijakarta {0,1}
+@attribute #dp0 {0,1}
+@attribute #fokus {0,1}
+@attribute #fpi {0,1}
+@attribute #freeahok {0,1}
+@attribute #gombalinahok {0,1}
+@attribute #gubernurbaru {0,1}
+@attribute #gubernurgu3 {0,1}
+@attribute #gue2 {0,1}
+@attribute #indoharian {0,1}
+@attribute #indonesia {0,1}
+@attribute #islam {0,1}
+@attribute #jakarta {0,1}
+@attribute #jakartapunyasemua {0,1}
+@attribute #kalahpilkada {0,1}
+@attribute #karanganbungaahok {0,1}
+@attribute #merahputih {0,1}
+@attribute #moshing {0,1}
+@attribute #nasional {0,1}
+@attribute #news {0,1}
+@attribute #okeoce {0,1}
+@attribute #okoce {0,1}
+@attribute #olahraga {0,1}
+@attribute #partaidemokrat {0,1}
+@attribute #penjarakanahok {0,1}
+@attribute #pilgubdki {0,1}
+@attribute #pilkada {0,1}
+@attribute #pilkadadki {0,1}
+@attribute #pilkadadki2017 {0,1}
+@attribute #pilkadajakarta {0,1}
+@attribute #pilkadaserentak2017 {0,1}
+@attribute #pks {0,1}
+@attribute #putaran2menang {0,1}
+@attribute #quickcount {0,1}
+@attribute #riphukum {0,1}
+@attribute #ripjustice {0,1}
+@attribute #ripjusticeindonesia {0,1}
+@attribute #ripjusticeinindonesia {0,1}
+@attribute #salambersama {0,1}
+@attribute #saveahok {0,1}
+@attribute #savejakarta {0,1}
+@attribute #savenkri {0,1}
+@attribute #sby {0,1}
+@attribute #sembako {0,1}
+@attribute #seruji {0,1}
+@attribute #temanahok {0,1}
+@attribute #tetapahok {0,1}
+@attribute #tolakjakartabersyariah {0,1}
+@attribute #voteahok {0,1}
+@attribute & {0,1}
+@attribute - {0,1}
+@attribute //bit {0,1}
+@attribute //dlvr {0,1}
+@attribute //fb {0,1}
+@attribute //goo {0,1}
+@attribute //m {0,1}
+@attribute //merahputih {0,1}
+@attribute //obsessionnews {0,1}
+@attribute //ow {0,1}
+@attribute //twitter {0,1}
+@attribute //www {0,1}
+@attribute //youtu {0,1}
+@attribute '0\%' {0,1}
+@attribute 1 {0,1}
+@attribute '100\%' {0,1}
+@attribute 1000 {0,1}
+@attribute '17\%' {0,1}
+@attribute 2 {0,1}
+@attribute 2017 {0,1}
+@attribute 2019 {0,1}
+@attribute 3 {0,1}
+@attribute 3x {0,1}
+@attribute 4 {0,1}
+@attribute 5 {0,1}
+@attribute '58\%' {0,1}
+@attribute <clapping {0,1}
+@attribute <face {0,1}
+@attribute <fire> {0,1}
+@attribute <folded {0,1}
+@attribute <frowning {0,1}
+@attribute <glowing {0,1}
+@attribute <grimacing {0,1}
+@attribute <grining {0,1}
+@attribute <heavy {0,1}
+@attribute <hugging {0,1}
+@attribute <lovered> {0,1}
+@attribute <lying {0,1}
+@attribute <ok {0,1}
+@attribute <oncoming {0,1}
+@attribute <persevering {0,1}
+@attribute <person {0,1}
+@attribute <pig {0,1}
+@attribute <raising {0,1}
+@attribute <smiling {0,1}
+@attribute <thinking {0,1}
+@attribute <thumbs {0,1}
+@attribute <tongue> {0,1}
+@attribute <victory {0,1}
+@attribute <zipper-mouth {0,1}
+@attribute @ {0,1}
+@attribute @addiems {0,1}
+@attribute @agusyudhoyono {0,1}
+@attribute @ahok {0,1}
+@attribute @ahokdjarot {0,1}
+@attribute @ahycenter {0,1}
+@attribute @ahyfansclub {0,1}
+@attribute @aniesbaswedan {0,1}
+@attribute @basuki_btp {0,1}
+@attribute @beritasatu {0,1}
+@attribute @edhie_baskoro {0,1}
+@attribute @fadlizon {0,1}
+@attribute @gerindra {0,1}
+@attribute @gunromli {0,1}
+@attribute @hincapandjaitan {0,1}
+@attribute @isari68 {0,1}
+@attribute @jktmajubersama {0,1}
+@attribute @jokowi {0,1}
+@attribute @kompastv {0,1}
+@attribute @marissaanita {0,1}
+@attribute @metro_tv {0,1}
+@attribute @nu_online {0,1}
+@attribute @panca66 {0,1}
+@attribute @pdemokrat {0,1}
+@attribute @prabowo {0,1}
+@attribute @ranabaja {0,1}
+@attribute @sahal_as {0,1}
+@attribute @sandiuno {0,1}
+@attribute @sbyudhoyono {0,1}
+@attribute @temanahok {0,1}
+@attribute @wagubdki {0,1}
+@attribute @zarazettirazz {0,1}
+@attribute a {0,1}
+@attribute aa {0,1}
+@attribute aamiin {0,1}
+@attribute abang {0,1}
+@attribute abis {0,1}
+@attribute acara {0,1}
+@attribute ada {0,1}
+@attribute adalah {0,1}
+@attribute adil {0,1}
+@attribute agama {0,1}
+@attribute agar {0,1}
+@attribute agus {0,1}
+@attribute agus-sylvi {0,1}
+@attribute ah {0,1}
+@attribute ahok {0,1}
+@attribute ahok-djarot {0,1}
+@attribute ahoker {0,1}
+@attribute ahokers {0,1}
+@attribute ahy {0,1}
+@attribute ahy-silvy {0,1}
+@attribute aja {0,1}
+@attribute akal {0,1}
+@attribute akan {0,1}
+@attribute akhirnya {0,1}
+@attribute akibat {0,1}
+@attribute aku {0,1}
+@attribute akun {0,1}
+@attribute alhamdulillah {0,1}
+@attribute allah {0,1}
+@attribute allahuakbar {0,1}
+@attribute ama {0,1}
+@attribute aman {0,1}
+@attribute amanah {0,1}
+@attribute ambil {0,1}
+@attribute amin {0,1}
+@attribute anak {0,1}
+@attribute and {0,1}
+@attribute anda {0,1}
+@attribute aneh {0,1}
+@attribute anies {0,1}
+@attribute anies- {0,1}
+@attribute anies-sandi {0,1}
+@attribute aniessandi {0,1}
+@attribute anis {0,1}
+@attribute antasari {0,1}
+@attribute anti {0,1}
+@attribute apa {0,1}
+@attribute apakah {0,1}
+@attribute apalagi {0,1}
+@attribute apbd {0,1}
+@attribute artinya {0,1}
+@attribute artis {0,1}
+@attribute asal {0,1}
+@attribute asli {0,1}
+@attribute atas {0,1}
+@attribute atau {0,1}
+@attribute awas {0,1}
+@attribute ayo {0,1}
+@attribute baca {0,1}
+@attribute badja {0,1}
+@attribute bagaimana {0,1}
+@attribute bagi {0,1}
+@attribute bagi2 {0,1}
+@attribute bagian {0,1}
+@attribute bagus {0,1}
+@attribute bahasa {0,1}
+@attribute bahwa {0,1}
+@attribute baik {0,1}
+@attribute baju {0,1}
+@attribute bakal {0,1}
+@attribute balai {0,1}
+@attribute balaikota {0,1}
+@attribute band {0,1}
+@attribute bang {0,1}
+@attribute banget {0,1}
+@attribute bangga {0,1}
+@attribute bangsa {0,1}
+@attribute banjir {0,1}
+@attribute banyak {0,1}
+@attribute bapak {0,1}
+@attribute baper {0,1}
+@attribute barisan {0,1}
+@attribute baru {0,1}
+@attribute barusan {0,1}
+@attribute basukibtp {0,1}
+@attribute bayaran {0,1}
+@attribute beberapa {0,1}
+@attribute begini {0,1}
+@attribute begitu {0,1}
+@attribute bekerja {0,1}
+@attribute beliau {0,1}
+@attribute beliin {0,1}
+@attribute belom {0,1}
+@attribute belum {0,1}
+@attribute benar {0,1}
+@attribute bener {0,1}
+@attribute berada {0,1}
+@attribute berani {0,1}
+@attribute berat {0,1}
+@attribute berbeda {0,1}
+@attribute berbentuk {0,1}
+@attribute berdasarkan {0,1}
+@attribute berdemokrasi {0,1}
+@attribute berdoa {0,1}
+@attribute beretorika {0,1}
+@attribute bergabung {0,1}
+@attribute berharap {0,1}
+@attribute beri {0,1}
+@attribute berita {0,1}
+@attribute berjalan {0,1}
+@attribute berjuang {0,1}
+@attribute berkata {0,1}
+@attribute berkati {0,1}
+@attribute berlaku {0,1}
+@attribute bermain {0,1}
+@attribute bermartabat {0,1}
+@attribute berpihak {0,1}
+@attribute bersama {0,1}
+@attribute bersatu {0,1}
+@attribute bersih {0,1}
+@attribute bersikap {0,1}
+@attribute bersyukur {0,1}
+@attribute besar {0,1}
+@attribute besarnya {0,1}
+@attribute betul {0,1}
+@attribute biar {0,1}
+@attribute biarkan {0,1}
+@attribute biasa {0,1}
+@attribute bijaksana {0,1}
+@attribute bikin {0,1}
+@attribute bilang {0,1}
+@attribute bini {0,1}
+@attribute bisa {0,1}
+@attribute blowing {0,1}
+@attribute bogor {0,1}
+@attribute boleh {0,1}
+@attribute bpk {0,1}
+@attribute buat {0,1}
+@attribute bukan {0,1}
+@attribute bukti {0,1}
+@attribute buktinya {0,1}
+@attribute bulan {0,1}
+@attribute bully {0,1}
+@attribute bunga {0,1}
+@attribute bunganya {0,1}
+@attribute buruh {0,1}
+@attribute busuk {0,1}
+@attribute butuh {0,1}
+@attribute buzzer {0,1}
+@attribute caci {0,1}
+@attribute cagub {0,1}
+@attribute calon {0,1}
+@attribute cara {0,1}
+@attribute cari {0,1}
+@attribute catatan {0,1}
+@attribute cc {0,1}
+@attribute cek {0,1}
+@attribute cepat {0,1}
+@attribute cerdas {0,1}
+@attribute check {0,1}
+@attribute cinta {0,1}
+@attribute closed {0,1}
+@attribute coblos {0,1}
+@attribute cocok {0,1}
+@attribute com {0,1}
+@attribute com/ {0,1}
+@attribute count {0,1}
+@attribute cuitan {0,1}
+@attribute cuma {0,1}
+@attribute curang {0,1}
+@attribute curiga {0,1}
+@attribute dada {0,1}
+@attribute dagang {0,1}
+@attribute dalam {0,1}
+@attribute dan {0,1}
+@attribute dapat {0,1}
+@attribute darah {0,1}
+@attribute dari {0,1}
+@attribute daripada {0,1}
+@attribute datang {0,1}
+@attribute debat {0,1}
+@attribute deh {0,1}
+@attribute demi {0,1}
+@attribute demo {0,1}
+@attribute demokrat {0,1}
+@attribute dengan {0,1}
+@attribute depan {0,1}
+@attribute di {0,1}
+@attribute dia {0,1}
+@attribute diberi {0,1}
+@attribute didukung {0,1}
+@attribute diharapkan {0,1}
+@attribute dihati {0,1}
+@attribute dijual {0,1}
+@attribute dilakukan {0,1}
+@attribute diminta {0,1}
+@attribute dipakai {0,1}
+@attribute dipastikan {0,1}
+@attribute dipecat {0,1}
+@attribute diperhitungkan {0,1}
+@attribute dipimpin {0,1}
+@attribute diri {0,1}
+@attribute disaat {0,1}
+@attribute disebar {0,1}
+@attribute disini {0,1}
+@attribute diyakini {0,1}
+@attribute djarot {0,1}
+@attribute dki {0,1}
+@attribute doa {0,1}
+@attribute dong {0,1}
+@attribute down> {0,1}
+@attribute dp {0,1}
+@attribute 'dp0\%' {0,1}
+@attribute dprd {0,1}
+@attribute dua {0,1}
+@attribute duit {0,1}
+@attribute dukung {0,1}
+@attribute dukungan {0,1}
+@attribute dukungannya {0,1}
+@attribute dulu {0,1}
+@attribute dunia {0,1}
+@attribute dusta {0,1}
+@attribute efek {0,1}
+@attribute ekstrimis {0,1}
+@attribute elektabilitas {0,1}
+@attribute emang {0,1}
+@attribute enak {0,1}
+@attribute eye> {0,1}
+@attribute eyes> {0,1}
+@attribute face {0,1}
+@attribute face> {0,1}
+@attribute fakta {0,1}
+@attribute faktor {0,1}
+@attribute fear> {0,1}
+@attribute fist> {0,1}
+@attribute fitnah {0,1}
+@attribute fokus {0,1}
+@attribute foto {0,1}
+@attribute fpi {0,1}
+@attribute from {0,1}
+@attribute ga {0,1}
+@attribute gagal {0,1}
+@attribute gak {0,1}
+@attribute gara {0,1}
+@attribute gara-gara {0,1}
+@attribute gara2 {0,1}
+@attribute garansi {0,1}
+@attribute gembira {0,1}
+@attribute gerakan {0,1}
+@attribute gerindra {0,1}
+@attribute gimana {0,1}
+@attribute gitu {0,1}
+@attribute gmana {0,1}
+@attribute goal {0,1}
+@attribute goreng {0,1}
+@attribute gratis {0,1}
+@attribute gub {0,1}
+@attribute gubenur {0,1}
+@attribute gubernur {0,1}
+@attribute gubernurnya {0,1}
+@attribute gue {0,1}
+@attribute gunakan {0,1}
+@attribute gusur {0,1}
+@attribute haha {0,1}
+@attribute haji {0,1}
+@attribute hampir {0,1}
+@attribute hand> {0,1}
+@attribute hands> {0,1}
+@attribute hangat {0,1}
+@attribute hanya {0,1}
+@attribute harap {0,1}
+@attribute harapan {0,1}
+@attribute harga {0,1}
+@attribute hari {0,1}
+@attribute harianbernas {0,1}
+@attribute harus {0,1}
+@attribute hasil {0,1}
+@attribute hati {0,1}
+@attribute heart-eyes> {0,1}
+@attribute heboh {0,1}
+@attribute heran {0,1}
+@attribute hitam2 {0,1}
+@attribute hoax {0,1}
+@attribute hrs {0,1}
+@attribute ht {0,1}
+@attribute http {0,1}
+@attribute https {0,1}
+@attribute hukum {0,1}
+@attribute ibu {0,1}
+@attribute ikut {0,1}
+@attribute in {0,1}
+@attribute indah {0,1}
+@attribute indonesia {0,1}
+@attribute ingat {0,1}
+@attribute ingin {0,1}
+@attribute ini {0,1}
+@attribute instagram {0,1}
+@attribute insya {0,1}
+@attribute insyaalloh {0,1}
+@attribute integritas {0,1}
+@attribute isis {0,1}
+@attribute islam {0,1}
+@attribute isu {0,1}
+@attribute itu {0,1}
+@attribute iya {0,1}
+@attribute jadi {0,1}
+@attribute jago {0,1}
+@attribute jakarta {0,1}
+@attribute jalan {0,1}
+@attribute jangan {0,1}
+@attribute janji {0,1}
+@attribute janji2 {0,1}
+@attribute janjinya {0,1}
+@attribute jari {0,1}
+@attribute jatim {0,1}
+@attribute jauh {0,1}
+@attribute jd {0,1}
+@attribute jelang {0,1}
+@attribute jelas {0,1}
+@attribute jika {0,1}
+@attribute jiwa {0,1}
+@attribute jkt {0,1}
+@attribute jokowi {0,1}
+@attribute joy> {0,1}
+@attribute jpnn {0,1}
+@attribute jualan {0,1}
+@attribute juga {0,1}
+@attribute jujur {0,1}
+@attribute justru {0,1}
+@attribute juta {0,1}
+@attribute kafir {0,1}
+@attribute kagak {0,1}
+@attribute kagum {0,1}
+@attribute kak {0,1}
+@attribute kalah {0,1}
+@attribute kalau {0,1}
+@attribute kali {0,1}
+@attribute kalian {0,1}
+@attribute kalo {0,1}
+@attribute kami {0,1}
+@attribute kampanye {0,1}
+@attribute kamu {0,1}
+@attribute kamvreetttt {0,1}
+@attribute kan {0,1}
+@attribute kaos {0,1}
+@attribute karangan {0,1}
+@attribute karena {0,1}
+@attribute karwo {0,1}
+@attribute kasian {0,1}
+@attribute kasih {0,1}
+@attribute kasihan {0,1}
+@attribute kasus {0,1}
+@attribute kata {0,1}
+@attribute kata-kata {0,1}
+@attribute kau {0,1}
+@attribute kaum {0,1}
+@attribute kawal {0,1}
+@attribute kaya {0,1}
+@attribute kayak {0,1}
+@attribute ke {0,1}
+@attribute keadilan {0,1}
+@attribute kebanjiran {0,1}
+@attribute kebenaran {0,1}
+@attribute keberhasilan {0,1}
+@attribute kebhinekaan {0,1}
+@attribute kecewa {0,1}
+@attribute kecil {0,1}
+@attribute kedua {0,1}
+@attribute kehidupan {0,1}
+@attribute kehilangan {0,1}
+@attribute keinginan {0,1}
+@attribute kekalahan {0,1}
+@attribute kekuatan {0,1}
+@attribute keliling {0,1}
+@attribute keluar {0,1}
+@attribute kemajuan {0,1}
+@attribute kemarin {0,1}
+@attribute kemaslahatan {0,1}
+@attribute kematian {0,1}
+@attribute kembali {0,1}
+@attribute kemenangan {0,1}
+@attribute kemungkinan {0,1}
+@attribute kena {0,1}
+@attribute kenapa {0,1}
+@attribute kepada {0,1}
+@attribute kepemimpinan {0,1}
+@attribute keputusan {0,1}
+@attribute keramaian {0,1}
+@attribute keras {0,1}
+@attribute keren {0,1}
+@attribute kerja {0,1}
+@attribute kerjanya {0,1}
+@attribute ketika {0,1}
+@attribute khususnya {0,1}
+@attribute kicauan {0,1}
+@attribute kini {0,1}
+@attribute kira {0,1}
+@attribute kiriman {0,1}
+@attribute kiss> {0,1}
+@attribute kita {0,1}
+@attribute klakuan {0,1}
+@attribute ko {0,1}
+@attribute kok {0,1}
+@attribute komando {0,1}
+@attribute komitmen {0,1}
+@attribute kompas {0,1}
+@attribute konferensi {0,1}
+@attribute korupsi {0,1}
+@attribute kota {0,1}
+@attribute kpu {0,1}
+@attribute kpud {0,1}
+@attribute kristen {0,1}
+@attribute kritik {0,1}
+@attribute ksatria {0,1}
+@attribute kualitas {0,1}
+@attribute kualitasnya {0,1}
+@attribute kubu {0,1}
+@attribute kunci {0,1}
+@attribute kuota {0,1}
+@attribute kurang {0,1}
+@attribute kutu {0,1}
+@attribute lagi {0,1}
+@attribute lagi2 {0,1}
+@attribute lah {0,1}
+@attribute lain {0,1}
+@attribute lakukan {0,1}
+@attribute lalu {0,1}
+@attribute lama {0,1}
+@attribute langkah {0,1}
+@attribute lanjutkan {0,1}
+@attribute lari {0,1}
+@attribute lebay {0,1}
+@attribute lebih {0,1}
+@attribute lepas {0,1}
+@attribute lewat {0,1}
+@attribute lho {0,1}
+@attribute liat {0,1}
+@attribute lihat {0,1}
+@attribute lilin {0,1}
+@attribute lompat {0,1}
+@attribute lovers {0,1}
+@attribute loyalis {0,1}
+@attribute lsi {0,1}
+@attribute luar {0,1}
+@attribute lucu {0,1}
+@attribute lumayan {0,1}
+@attribute lupa {0,1}
+@attribute maaf {0,1}
+@attribute mabuk {0,1}
+@attribute macet {0,1}
+@attribute maju {0,1}
+@attribute maka {0,1}
+@attribute maki {0,1}
+@attribute makin {0,1}
+@attribute malah {0,1}
+@attribute malam {0,1}
+@attribute mampu {0,1}
+@attribute mana {0,1}
+@attribute manado {0,1}
+@attribute mantan {0,1}
+@attribute manusia {0,1}
+@attribute mari {0,1}
+@attribute mark> {0,1}
+@attribute mas {0,1}
+@attribute masa {0,1}
+@attribute masalah {0,1}
+@attribute masih {0,1}
+@attribute masjid {0,1}
+@attribute masuk {0,1}
+@attribute masyarakat {0,1}
+@attribute matang {0,1}
+@attribute mati {0,1}
+@attribute mau {0,1}
+@attribute mayor {0,1}
+@attribute mayoritas {0,1}
+@attribute mbak {0,1}
+@attribute melanggar {0,1}
+@attribute melanjutkan {0,1}
+@attribute melihat {0,1}
+@attribute memakai {0,1}
+@attribute memang {0,1}
+@attribute membangun {0,1}
+@attribute membantu {0,1}
+@attribute membawa {0,1}
+@attribute memberikan {0,1}
+@attribute membicarakan {0,1}
+@attribute membuat {0,1}
+@attribute membuktikan {0,1}
+@attribute memenangkan {0,1}
+@attribute memilih {0,1}
+@attribute memo {0,1}
+@attribute memperjuangkan {0,1}
+@attribute menang {0,1}
+@attribute menangkan {0,1}
+@attribute menanti {0,1}
+@attribute menata {0,1}
+@attribute mencari {0,1}
+@attribute mencintaimu {0,1}
+@attribute mencoba {0,1}
+@attribute mencoblos {0,1}
+@attribute mendadak {0,1}
+@attribute mending {0,1}
+@attribute menerapkan {0,1}
+@attribute mengemban {0,1}
+@attribute menghadirkan {0,1}
+@attribute menjadi {0,1}
+@attribute menjaga {0,1}
+@attribute menjalankan {0,1}
+@attribute mental {0,1}
+@attribute mentang {0,1}
+@attribute menteri {0,1}
+@attribute menuju {0,1}
+@attribute menunjukkan {0,1}
+@attribute menyongsong {0,1}
+@attribute merajut {0,1}
+@attribute merangkul {0,1}
+@attribute merasa {0,1}
+@attribute mereka {0,1}
+@attribute meski {0,1}
+@attribute mewujudkan {0,1}
+@attribute milih {0,1}
+@attribute minta {0,1}
+@attribute mirip {0,1}
+@attribute mobil {0,1}
+@attribute modal {0,1}
+@attribute moga {0,1}
+@attribute monas {0,1}
+@attribute mouth {0,1}
+@attribute move {0,1}
+@attribute mu {0,1}
+@attribute muda {0,1}
+@attribute mui {0,1}
+@attribute mulai {0,1}
+@attribute mulu {0,1}
+@attribute mulut {0,1}
+@attribute mumpung {0,1}
+@attribute mungkin {0,1}
+@attribute murah {0,1}
+@attribute muslim {0,1}
+@attribute musuh {0,1}
+@attribute naik {0,1}
+@attribute nama {0,1}
+@attribute nanti {0,1}
+@attribute negatif {0,1}
+@attribute nenen {0,1}
+@attribute netizen {0,1}
+@attribute netral {0,1}
+@attribute ngawur {0,1}
+@attribute ngeles {0,1}
+@attribute nggak {0,1}
+@attribute ngiri {0,1}
+@attribute ngomong {0,1}
+@attribute ni {0,1}
+@attribute nih {0,1}
+@attribute nkri {0,1}
+@attribute no {0,1}
+@attribute nose> {0,1}
+@attribute nunggu {0,1}
+@attribute nurani {0,1}
+@attribute nya {0,1}
+@attribute nyanyian {0,1}
+@attribute nyata {0,1}
+@attribute nyinyir {0,1}
+@attribute nyoblos {0,1}
+@attribute nyungsep {0,1}
+@attribute of {0,1}
+@attribute oh {0,1}
+@attribute ok-oce {0,1}
+@attribute olahraga {0,1}
+@attribute oleh {0,1}
+@attribute om {0,1}
+@attribute on {0,1}
+@attribute open {0,1}
+@attribute orang {0,1}
+@attribute orang-orang {0,1}
+@attribute orang2 {0,1}
+@attribute otomatis {0,1}
+@attribute pada {0,1}
+@attribute pak {0,1}
+@attribute pakai {0,1}
+@attribute pake {0,1}
+@attribute paling {0,1}
+@attribute pan {0,1}
+@attribute pandai {0,1}
+@attribute papua {0,1}
+@attribute para {0,1}
+@attribute partai {0,1}
+@attribute pas {0,1}
+@attribute pasang {0,1}
+@attribute pasangan {0,1}
+@attribute paska {0,1}
+@attribute paslon {0,1}
+@attribute pasti {0,1}
+@attribute pastilah {0,1}
+@attribute pecundang {0,1}
+@attribute pegawai {0,1}
+@attribute pekerja {0,1}
+@attribute pelaku {0,1}
+@attribute pelayan {0,1}
+@attribute pemberian {0,1}
+@attribute pemenang {0,1}
+@attribute pemenangan {0,1}
+@attribute pemilih {0,1}
+@attribute pemilihan {0,1}
+@attribute pemilu {0,1}
+@attribute pemimpin {0,1}
+@attribute pencoblosan {0,1}
+@attribute pendidikan {0,1}
+@attribute pendukung {0,1}
+@attribute pendukungnya {0,1}
+@attribute pengamat {0,1}
+@attribute pengaruhi {0,1}
+@attribute pengusiran {0,1}
+@attribute penista {0,1}
+@attribute penting {0,1}
+@attribute penuh {0,1}
+@attribute pepo {0,1}
+@attribute percaya {0,1}
+@attribute perhatikan {0,1}
+@attribute periode {0,1}
+@attribute perlu {0,1}
+@attribute pernah {0,1}
+@attribute pernyataan {0,1}
+@attribute pers {0,1}
+@attribute persatuan {0,1}
+@attribute persija {0,1}
+@attribute persis {0,1}
+@attribute pertama {0,1}
+@attribute perubahan {0,1}
+@attribute pesan {0,1}
+@attribute pidato {0,1}
+@attribute pikir {0,1}
+@attribute pilgub {0,1}
+@attribute pilih {0,1}
+@attribute pilihan {0,1}
+@attribute pilkada {0,1}
+@attribute pilpres {0,1}
+@attribute pindah {0,1}
+@attribute pks {0,1}
+@attribute politik {0,1}
+@attribute polling {0,1}
+@attribute positif {0,1}
+@attribute potong {0,1}
+@attribute prabowo {0,1}
+@attribute presiden {0,1}
+@attribute pribadi {0,1}
+@attribute prihatin {0,1}
+@attribute pro {0,1}
+@attribute program {0,1}
+@attribute programnya {0,1}
+@attribute pun {0,1}
+@attribute punya {0,1}
+@attribute purnama {0,1}
+@attribute putaran {0,1}
+@attribute qc {0,1}
+@attribute quick {0,1}
+@attribute rakyat {0,1}
+@attribute ramalan {0,1}
+@attribute rame {0,1}
+@attribute rapatkan {0,1}
+@attribute rasa {0,1}
+@attribute rasanya {0,1}
+@attribute reklamasi {0,1}
+@attribute relawan {0,1}
+@attribute remuk {0,1}
+@attribute rencana {0,1}
+@attribute respon {0,1}
+@attribute rizieq {0,1}
+@attribute rp {0,1}
+@attribute rt {0,1}
+@attribute rumah {0,1}
+@attribute running> {0,1}
+@attribute rusak {0,1}
+@attribute rw {0,1}
+@attribute saat {0,1}
+@attribute saatnya {0,1}
+@attribute sabun {0,1}
+@attribute saja {0,1}
+@attribute salah {0,1}
+@attribute salam {0,1}
+@attribute saling {0,1}
+@attribute sama {0,1}
+@attribute sampai {0,1}
+@attribute sandi {0,1}
+@attribute sandiaga {0,1}
+@attribute sang {0,1}
+@attribute sangat {0,1}
+@attribute santun {0,1}
+@attribute sara {0,1}
+@attribute saran {0,1}
+@attribute satu {0,1}
+@attribute saya {0,1}
+@attribute sayang {0,1}
+@attribute sby {0,1}
+@attribute screaming {0,1}
+@attribute sdh {0,1}
+@attribute sebagai {0,1}
+@attribute sebagian {0,1}
+@attribute sebatas {0,1}
+@attribute sebelah {0,1}
+@attribute sebelumnya {0,1}
+@attribute sebenarnya {0,1}
+@attribute sebut {0,1}
+@attribute secara {0,1}
+@attribute sedih {0,1}
+@attribute sedikit {0,1}
+@attribute segala {0,1}
+@attribute segera {0,1}
+@attribute sehat {0,1}
+@attribute sejak {0,1}
+@attribute sejarah {0,1}
+@attribute sekali {0,1}
+@attribute sekarang {0,1}
+@attribute selalu {0,1}
+@attribute selamat {0,1}
+@attribute selanjutnya {0,1}
+@attribute semakin {0,1}
+@attribute semangat {0,1}
+@attribute sembako {0,1}
+@attribute sementara {0,1}
+@attribute semoga {0,1}
+@attribute semua {0,1}
+@attribute sendiri {0,1}
+@attribute sentimen {0,1}
+@attribute seorang {0,1}
+@attribute seperti {0,1}
+@attribute sepertinya {0,1}
+@attribute serta {0,1}
+@attribute sesama {0,1}
+@attribute sesuai {0,1}
+@attribute sesuatu {0,1}
+@attribute setelah {0,1}
+@attribute setia {0,1}
+@attribute setuju {0,1}
+@attribute si {0,1}
+@attribute siap {0,1}
+@attribute siapa {0,1}
+@attribute sibuk {0,1}
+@attribute sih {0,1}
+@attribute sikap {0,1}
+@attribute silvy {0,1}
+@attribute simpati {0,1}
+@attribute simpatik {0,1}
+@attribute sindir {0,1}
+@attribute sisi {0,1}
+@attribute situ {0,1}
+@attribute skenario {0,1}
+@attribute smile {0,1}
+@attribute smiling {0,1}
+@attribute smua {0,1}
+@attribute soal {0,1}
+@attribute sok {0,1}
+@attribute solusi {0,1}
+@attribute sosok {0,1}
+@attribute spanduk {0,1}
+@attribute stadion {0,1}
+@attribute star> {0,1}
+@attribute steam {0,1}
+@attribute stop {0,1}
+@attribute strategi {0,1}
+@attribute stuck-out {0,1}
+@attribute suara {0,1}
+@attribute suaranya {0,1}
+@attribute suatu {0,1}
+@attribute sudah {0,1}
+@attribute suka {0,1}
+@attribute sukses {0,1}
+@attribute suku {0,1}
+@attribute sulit {0,1}
+@attribute sungguh {0,1}
+@attribute sunglasses> {0,1}
+@attribute surat {0,1}
+@attribute survei {0,1}
+@attribute survey {0,1}
+@attribute susah {0,1}
+@attribute swt {0,1}
+@attribute syukur {0,1}
+@attribute syukuran {0,1}
+@attribute tagih {0,1}
+@attribute tahu {0,1}
+@attribute tak {0,1}
+@attribute takut {0,1}
+@attribute tambah {0,1}
+@attribute tangan {0,1}
+@attribute tanpa {0,1}
+@attribute tanya {0,1}
+@attribute tapi {0,1}
+@attribute target {0,1}
+@attribute tau {0,1}
+@attribute team {0,1}
+@attribute tears {0,1}
+@attribute tegas {0,1}
+@attribute telah {0,1}
+@attribute telak {0,1}
+@attribute teman {0,1}
+@attribute tempat {0,1}
+@attribute tenang {0,1}
+@attribute tendemnya {0,1}
+@attribute tentang {0,1}
+@attribute tepat {0,1}
+@attribute terbaik {0,1}
+@attribute terbukti {0,1}
+@attribute terhadap {0,1}
+@attribute terima {0,1}
+@attribute terimakasih {0,1}
+@attribute terlalu {0,1}
+@attribute termasuk {0,1}
+@attribute ternyata {0,1}
+@attribute terpilih {0,1}
+@attribute tertunda {0,1}
+@attribute terus {0,1}
+@attribute tetap {0,1}
+@attribute tetep {0,1}
+@attribute tiap {0,1}
+@attribute tidak {0,1}
+@attribute tim {0,1}
+@attribute timses {0,1}
+@attribute tinggal {0,1}
+@attribute tinggi {0,1}
+@attribute tipis {0,1}
+@attribute tolak {0,1}
+@attribute tolong {0,1}
+@attribute tongue {0,1}
+@attribute tounges> {0,1}
+@attribute tps {0,1}
+@attribute tugas {0,1}
+@attribute tuh {0,1}
+@attribute tuhan {0,1}
+@attribute tukang {0,1}
+@attribute tulus {0,1}
+@attribute tunggu {0,1}
+@attribute turun {0,1}
+@attribute tv {0,1}
+@attribute u {0,1}
+@attribute ucapan {0,1}
+@attribute ucapkan {0,1}
+@attribute udah {0,1}
+@attribute umat {0,1}
+@attribute unggul {0,1}
+@attribute uno {0,1}
+@attribute untuk {0,1}
+@attribute up> {0,1}
+@attribute urusan {0,1}
+@attribute usah {0,1}
+@attribute usaha {0,1}
+@attribute usai {0,1}
+@attribute usir {0,1}
+@attribute usung {0,1}
+@attribute utk {0,1}
+@attribute versi {0,1}
+@attribute via {0,1}
+@attribute video {0,1}
+@attribute vs {0,1}
+@attribute wacana {0,1}
+@attribute waduh {0,1}
+@attribute wagub {0,1}
+@attribute wah {0,1}
+@attribute wakil {0,1}
+@attribute waktu {0,1}
+@attribute walaupun {0,1}
+@attribute waras {0,1}
+@attribute warga {0,1}
+@attribute warganya {0,1}
+@attribute waspada {0,1}
+@attribute wilayah {0,1}
+@attribute with {0,1}
+@attribute wkwkwk {0,1}
+@attribute ya {0,1}
+@attribute yaa {0,1}
+@attribute yaaaa {0,1}
+@attribute yakin {0,1}
+@attribute yang {0,1}
+@attribute ye {0,1}
+@attribute yg {0,1}
+@attribute yudhoyono {0,1}
+@attribute | {0,1}
+
+@data
+
+{3 1,213 1,470 1,517 1,1035 1}
+{3 1,22 1,103 1,383 1,614 1,775 1,1034 1}
+{17 1,137 1,221 1,516 1,590 1,830 1,1040 1}
+{17 1,35 1,106 1,192 1,493 1,543 1,758 1,1015 1}
+{17 1,234 1,470 1,981 1,1034 1,1038 1}
+{17 1,91 1,137 1,142 1,163 1,355 1,452 1,879 1}
+{17 1,96 1,211 1,354 1,355 1,453 1,463 1,501 1,720 1,1038 1}
+{17 1,85 1,263 1,354 1,438 1,546 1,559 1,562 1,588 1,610 1,663 1,823 1}
+{4 1,17 1,46 1,78 1,97 1,211 1,453 1}
+{17 1,104 1,802 1,967 1}
+{17 1,137 1,305 1,386 1,823 1,928 1,929 1}
+{4 1,17 1,20 1,85 1,178 1,181 1,185 1,206 1,601 1,928 1,1007 1}
+{17 1,102 1,314 1,341 1,354 1,386 1,442 1,470 1,688 1,740 1,848 1,879 1,928 1,953 1,1034 1,1038 1}
+{17 1,102 1,341 1,450 1,462 1,504 1,619 1,633 1,639 1,657 1,688 1,726 1,742 1,783 1,928 1,1038 1}
+{17 1,64 1,345 1,599 1,769 1,985 1,1034 1}
+{17 1,22 1,173 1,352 1,386 1,442 1,462 1,470 1,502 1,513 1,688 1,703 1,830 1,841 1,1038 1}
+{1 1,17 1,95 1,98 1,192 1,378 1,453 1,476 1,502 1,687 1,728 1,769 1,815 1,952 1}
+{104 1,347 1,349 1,374 1,425 1,472 1,476 1,802 1}
+{17 1,173 1,240 1,296 1,501 1,513 1,1038 1}
+{17 1,844 1}
+{17 1,788 1,981 1,982 1,1038 1}
+{17 1,275 1,341 1,344 1,352 1,384 1,461 1,476 1,653 1,899 1}
+{17 1,341 1,352 1,478 1,507 1,613 1,640 1,841 1,852 1,981 1}
+{85 1,157 1,185 1,344 1,368 1,374 1,470 1,501 1,559 1,593 1,684 1,802 1,888 1,898 1}
+{62 1,185 1,193 1,208 1,344 1,354 1,513 1,683 1,775 1,841 1,974 1}
+{63 1,90 1,185 1,354 1,374 1,408 1,453 1,474 1,481 1,526 1,617 1,799 1,802 1}
+{63 1,181 1,185 1,206 1}
+{63 1,185 1,195 1,375 1,470 1,496 1,501 1,517 1,713 1,931 1,974 1,981 1,1004 1,1026 1}
+{63 1,185 1,294 1,341 1,344 1,346 1,354 1,374 1,501 1,802 1,823 1,863 1,881 1,898 1}
+{17 1,63 1,69 1,137 1,178 1,354 1,501 1,991 1}
+{17 1,181 1,261 1,351 1,383 1,456 1,502 1,639 1,800 1,887 1,981 1,1035 1,1038 1}
+{472 1,613 1,633 1,635 1}
+{112 1,344 1,444 1,549 1,621 1,684 1,738 1,927 1,990 1,1032 1}
+{63 1,69 1,185 1,219 1,299 1,374 1,386 1,569 1,659 1,738 1,799 1}
+{8 1,17 1,117 1,153 1,206 1,347 1,354 1,397 1,1034 1}
+{17 1,129 1,192 1,395 1,396 1,526 1,844 1,915 1,1032 1}
+{115 1,185 1,354 1,397 1,871 1}
+{17 1,131 1,377 1,462 1,775 1,892 1,935 1}
+{1 1,85 1,112 1,129 1,221 1,244 1,296 1,328 1,341 1,354 1,395 1,396 1,575 1,694 1,739 1,927 1,989 1,1016 1,1018 1,1032 1}
+{185 1,341 1,462 1,951 1}
+{17 1,111 1,112 1,178 1,434 1,879 1,906 1,969 1,984 1,997 1,1032 1}
+{0 positive,17 1,173 1,319 1,344 1,374 1,591 1,802 1,1007 1}
+{0 positive,185 1,200 1,341 1,342 1,374 1,470 1,802 1,888 1,1038 1}
+{0 positive,185 1,341 1,351 1,354 1,459 1,474 1,502 1,526 1,699 1,802 1,879 1,931 1}
+{0 positive,341 1,552 1,655 1,802 1,853 1,977 1}
+{0 positive,185 1,374 1,794 1,802 1,1012 1,1038 1}
+{0 positive,185 1,206 1,270 1,374 1,659 1,802 1,850 1,1038 1}
+{0 positive,185 1,284 1,344 1,374 1,566 1,588 1,628 1,699 1,802 1}
+{0 positive,105 1,137 1,169 1,185 1,206 1,341 1,459 1,472 1,659 1,802 1,811 1,887 1}
+{0 positive,186 1,208 1,284 1,285 1,341 1,374 1,617 1,660 1,802 1,977 1}
+{0 positive,186 1,189 1,249 1,425 1,474 1,504 1,951 1,971 1,981 1}
+{0 positive,3 1,526 1,599 1,858 1}
+{0 positive,3 1,22 1,341 1,775 1}
+{0 positive,3 1,96 1,179 1,208 1,441 1,453 1,526 1,808 1}
+{0 positive,3 1,470 1,538 1,590 1,808 1,953 1,1007 1,1038 1}
+{0 positive,3 1,63 1,85 1,137 1,352 1,547 1,591 1,758 1,907 1}
+{0 positive,3 1,22 1,248 1,249 1,261 1,443 1,502 1,510 1,570 1,577 1,822 1,849 1,857 1,888 1,902 1}
+{0 positive,3 1,506 1,521 1,978 1}
+{0 positive,17 1,172 1,173 1,185 1,213 1,352 1,438 1,462 1,645 1,726 1,823 1,1015 1,1040 1}
+{0 positive,17 1,174 1,234 1,305 1,353 1,354 1,538 1,588 1,599 1,631 1,933 1,953 1,976 1,1007 1,1040 1}
+{0 positive,17 1,33 1,327 1,341 1,351 1,352 1,721 1,1007 1}
+{0 positive}
+{0 positive,17 1,346 1,516 1,970 1}
+{0 positive,145 1,149 1,158 1,160 1,163 1}
+{0 positive,17 1,178 1,516 1,630 1,720 1}
+{0 positive,17 1,353 1,631 1,1007 1}
+{0 positive,17 1,99 1,106 1,249 1,381 1,425 1,462 1,474 1,503 1,526 1,656 1,722 1,744 1,758 1,769 1,818 1,820 1,881 1,928 1}
+{0 positive,17 1,63 1,185 1,526 1,991 1}
+{0 positive,17 1,189 1,227 1,547 1,758 1,775 1,817 1,845 1,857 1,928 1}
+{0 positive,440 1,474 1,772 1,887 1,896 1,942 1,1038 1}
+{0 positive,174 1,222 1,287 1,340 1,1015 1}
+{0 positive,178 1,234 1,336 1,341 1,345 1,352 1,383 1,455 1,501 1,513 1,599 1,630 1,659 1,794 1,820 1,858 1}
+{0 positive,173 1,255 1,475 1,996 1}
+{0 positive,17 1,104 1,979 1}
+{0 positive,17 1,137 1,162 1,257 1,444 1,470 1,685 1,846 1,858 1,876 1,1025 1}
+{0 positive,17 1,289 1,352 1,740 1,858 1,880 1,932 1,1038 1}
+{0 positive,17 1,54 1,90 1,341 1,351 1,453 1,499 1,858 1,869 1}
+{0 positive,17 1,242 1,462 1,580 1,645 1,789 1}
+{0 positive,17 1,383 1}
+{0 positive,17 1,260 1,299 1,341 1,352 1,487 1,788 1,1026 1,1038 1}
+{0 positive,17 1,104 1,179 1,219 1,239 1,354 1,384 1,474 1,651 1,744 1,756 1,802 1}
+{0 positive,17 1,341 1,349 1,351 1,354 1,384 1,683 1,684 1,806 1,860 1,951 1}
+{0 positive,17 1,55 1,90 1,185 1,453 1,985 1,1007 1}
+{0 positive,17 1,178 1,340 1,806 1,860 1,926 1,1041 1}
+{41 1,64 1,325 1,340 1,374 1,485 1,502 1,569 1,618 1,844 1,855 1,947 1,953 1,1028 1}
+{64 1,305 1,334 1,336 1,348 1,470 1,590 1}
+{299 1,437 1,474 1,476 1,502 1,574 1,633 1,844 1}
+{64 1,181 1,354 1,639 1,931 1,943 1,950 1,981 1}
+{4 1,176 1,780 1}
+{64 1,340 1,341 1,485 1,748 1,853 1,903 1,981 1,1038 1}
+{181 1,192 1,234 1,341 1,373 1,502 1,513 1,599 1,647 1,703 1,787 1,800 1}
+{28 1,44 1,64 1,293 1,462 1,476 1}
+{64 1,317 1,373 1,800 1}
+{7 1,90 1,136 1,173 1,213 1,323 1,373 1,452 1,745 1,1034 1}
+{4 1,7 1,81 1,96 1,181 1,246 1,453 1,463 1,506 1,536 1,827 1,853 1}
+{7 1,173 1,249 1,423 1,470 1,472 1,513 1,588 1,684 1,977 1,981 1,1034 1}
+{4 1,7 1,72 1,75 1,96 1,341 1,452 1,1034 1}
+{7 1,85 1,139 1,143 1,296 1,303 1,373 1,604 1}
+{4 1,7 1,23 1,79 1,93 1,95 1,331 1,452 1,910 1,1017 1}
+{4 1,6 1,7 1,299 1,354 1,392 1,409 1,903 1,951 1,1038 1}
+{4 1,7 1,20 1,22 1,63 1,65 1,93 1,331 1,452 1,814 1}
+{7 1,167 1,304 1,493 1,627 1,748 1,932 1,1038 1}
+{7 1,146 1,310 1,327 1,335 1,382 1,526 1,620 1,835 1,953 1,1003 1}
+{146 1,222 1,296 1,310 1,344 1,354 1,398 1,472 1,512 1,744 1,858 1,982 1,1007 1}
+{7 1,51 1,86 1,88 1,181 1,310 1,373 1,452 1,512 1,910 1,1038 1}
+{7 1,181 1,213 1,588 1,630 1,720 1,744 1}
+{7 1,27 1,221 1,304 1,403 1,414 1,493 1,504 1,550 1,566 1,848 1,917 1,953 1,979 1,1038 1}
+{299 1,444 1,513 1,526 1,645 1,659 1,719 1,744 1,752 1,775 1,823 1,981 1,1034 1,1038 1}
+{7 1,299 1,409 1,525 1,709 1,1038 1}
+{7 1,41 1,51 1,245 1,327 1,487 1,513 1,599 1,699 1,1028 1,1038 1}
+{7 1,76 1,99 1,241 1,455 1,470 1,526 1,848 1,871 1}
+{7 1,173 1,245 1,310 1,430 1,588 1,720 1}
+{7 1,14 1,310 1,512 1,518 1,936 1,1007 1,1038 1}
+{7 1,27 1,302 1,745 1,1007 1}
+{7 1,55 1,90 1,182 1,252 1,453 1,507 1,688 1,896 1,1018 1}
+{7 1,22 1,234 1,352 1,354 1,418 1,569 1,614 1,688 1,758 1}
+{63 1,98 1,181 1,245 1,378 1,462 1,510 1,522 1,550 1,775 1,912 1,931 1}
+{18 1,48 1,64 1,173 1,386 1,740 1,788 1,876 1,953 1,981 1}
+{63 1,64 1,113 1,189 1,356 1,497 1,741 1,772 1,978 1,981 1}
+{63 1,64 1,195 1,476 1,497 1,504 1,656 1,705 1,742 1,772 1,849 1,1038 1}
+{182 1,208 1,305 1,655 1,889 1,1007 1}
+{91 1,182 1,254 1,452 1,704 1,771 1,885 1,928 1,983 1,1028 1}
+{17 1,20 1,39 1,134 1,297 1,317 1,386 1,397 1,684 1,806 1,879 1}
+{63 1,64 1,113 1,497 1,772 1,978 1}
+{7 1,34 1,64 1,87 1,452 1,779 1,898 1}
+{7 1,22 1,46 1,63 1,84 1,275 1,585 1,588 1,981 1}
+{7 1,212 1,234 1,397 1,474 1,557 1,575 1,620 1,728 1}
+{4 1,7 1,46 1,84 1,85 1,112 1,134 1,155 1,305 1,397 1,410 1,490 1,510 1,667 1,732 1,854 1,957 1,1032 1}
+{7 1,22 1,96 1,331 1,452 1,459 1,841 1}
+{7 1,212 1,256 1,354 1,470 1,474 1,494 1,555 1,574 1,663 1,740 1,932 1,935 1,1038 1}
+{7 1,112 1,173 1,187 1,348 1,365 1,443 1,462 1,470 1,472 1,490 1,557 1,603 1,668 1,718 1,732 1,815 1,957 1,1003 1,1032 1,1038 1}
+{7 1,112 1,245 1,340 1,490 1,502 1,659 1,732 1,759 1,807 1,957 1,1032 1,1038 1}
+{0 positive,64 1,182 1,547 1}
+{0 positive,64 1,177 1,344 1,442 1,474 1,684 1,736 1,767 1,806 1,855 1,981 1,1038 1}
+{0 positive,7 1,64 1,174 1,340 1,442 1,684 1,767 1,858 1,953 1,1007 1}
+{0 positive,29 1,64 1,65 1,143 1,204 1,659 1,745 1,881 1,898 1,959 1}
+{0 positive,63 1,64 1,181 1,198 1,354 1,501 1,659 1,693 1,744 1,872 1,981 1}
+{0 positive,62 1,109 1,189 1,506 1,516 1,588 1,599 1,970 1,977 1,985 1,1007 1}
+{0 positive,138 1,352 1,354 1,444 1,462 1,659 1,802 1,858 1,887 1}
+{0 positive,4 1,64 1,65 1,181 1,373 1,374 1,383 1,423 1,474 1,685 1,858 1,1007 1,1028 1}
+{0 positive,64 1,213 1,299 1,305 1,425 1,436 1,474 1,800 1,1038 1}
+{0 positive,64 1,174 1,227 1,234 1,319 1,344 1,552 1,599 1,740 1,744 1,772 1,857 1,946 1,1038 1}
+{0 positive,5 1,64 1,352 1,869 1}
+{0 positive,64 1,139 1,305 1,314 1,341 1,354 1,566 1,659 1,709 1,772 1,865 1,887 1,933 1}
+{0 positive,64 1,181 1,373 1,510 1,574 1,800 1,844 1,946 1}
+{0 positive,4 1,7 1,299 1,354 1,459 1,462 1,844 1,1007 1}
+{0 positive,7 1,187 1,241 1,262 1,335 1,1038 1}
+{0 positive,7 1,27 1,344 1,373 1,452 1}
+{0 positive,4 1,7 1,40 1,75 1,96 1,453 1,463 1}
+{0 positive,7 1,470 1,663 1,772 1,974 1,981 1,1038 1}
+{0 positive,9 1,10 1,75 1,96 1,101 1,181 1,463 1,605 1,745 1,1007 1}
+{0 positive,7 1,96 1,349 1,453 1,463 1,527 1,605 1}
+{0 positive,181 1,341 1,354 1,373 1,462 1,622 1,744 1,745 1,846 1,858 1}
+{0 positive,7 1,75 1,181 1,341 1,344 1,375 1,384 1,459 1,605 1,625 1,1007 1}
+{0 positive,4 1,7 1,40 1,143 1,181 1,284 1,341 1,506 1,745 1,880 1,994 1}
+{0 positive,4 1,7 1,34 1,189 1,373 1,459 1,745 1,880 1,884 1,978 1,1007 1,1038 1}
+{0 positive,7 1,237 1,354 1,575 1,928 1,1028 1}
+{0 positive,182 1,310 1,383 1,512 1}
+{0 positive,7 1,173 1,181 1,341 1,354 1,459 1,494 1,557 1,728 1,772 1,958 1,981 1}
+{0 positive,7 1,249 1,341 1,425 1,823 1,1038 1}
+{0 positive,7 1,20 1,359 1,635 1,677 1,880 1}
+{0 positive,6 1,7 1,174 1,299 1,304 1,444 1,501 1,633 1,767 1,823 1,995 1,1003 1}
+{0 positive,7 1,787 1}
+{0 positive,85 1,213 1,354 1,474 1,501 1,513 1,516 1,633 1,659 1,684 1,844 1,859 1,970 1,994 1,1040 1}
+{0 positive,7 1,41 1,192 1,255 1,294 1,508 1,610 1,745 1,859 1,1040 1}
+{0 positive,7 1,249 1,284 1,310 1,341 1,354 1,404 1,459 1,512 1,1007 1}
+{0 positive,7 1,51 1,85 1,139 1,143 1,310 1,512 1,526 1,636 1,693 1,745 1,849 1,971 1,1001 1}
+{0 positive,4 1,34 1,63 1,354 1,978 1}
+{0 positive,7 1,27 1,96 1,453 1,463 1}
+{0 positive,143 1,234 1,296 1,352 1,659 1,888 1,931 1,984 1,1007 1}
+{0 positive,63 1,64 1,251 1,291 1,383 1,489 1,590 1,745 1,981 1,1034 1}
+{0 positive,4 1,7 1,10 1,62 1,63 1,64 1,96 1,453 1,463 1}
+{0 positive,133 1,354 1,374 1,391 1,433 1,474 1,538 1,802 1,981 1}
+{0 positive,103 1,133 1,182 1,192 1,253 1,374 1,433 1,440 1,456 1,526 1,651 1,784 1,802 1,808 1,858 1,894 1}
+{0 positive,119 1,181 1,234 1,326 1,336 1,345 1,354 1,374 1,494 1,501 1,513 1,599 1,629 1,633 1,659 1,802 1,848 1,970 1,981 1}
+{0 positive,32 1,133 1,139 1,176 1,234 1,245 1,286 1,335 1,341 1,433 1,494 1,557 1,728 1,765 1,772 1,953 1,1028 1,1038 1}
+{0 positive,7 1,86 1,133 1,433 1,453 1,468 1,571 1,650 1,1004 1,1007 1,1017 1}
+{0 positive,63 1,96 1,235 1,304 1,453 1,463 1,720 1,730 1,902 1,931 1}
+{0 positive,7 1,44 1,96 1,453 1,463 1}
+{0 positive,4 1,7 1,34 1,62 1,64 1,96 1,133 1,182 1,433 1,453 1,463 1}
+{0 positive,4 1,7 1,462 1}
+{0 positive,7 1,99 1,101 1,181 1,245 1,474 1,588 1,595 1,599 1,617 1,745 1,1007 1,1026 1,1038 1}
+{0 positive,4 1,7 1,96 1,118 1,181 1,394 1,396 1,453 1,463 1,745 1,914 1,1032 1}
+{0 positive,7 1,49 1,181 1,354 1,462 1}
+{64 1,234 1,273 1,319 1,341 1,344 1,352 1,368 1,425 1,472 1,599 1,744 1,823 1,889 1,1038 1}
+{64 1,249 1,354 1,378 1,409 1,474 1,477 1,502 1,521 1,709 1,726 1,837 1,1038 1}
+{64 1,338 1,352 1,442 1,443 1,462 1}
+{63 1,64 1,98 1,192 1,208 1,344 1,378 1,418 1,505 1,639 1,815 1,945 1}
+{106 1,206 1,349 1,354 1,477 1,800 1,837 1,840 1,858 1,961 1,965 1,1028 1}
+{206 1,341 1,354 1,442 1,452 1,572 1,703 1}
+{64 1,142 1,229 1,246 1,310 1,510 1,557 1,569 1,588 1,631 1,633 1,745 1,873 1,879 1,933 1,956 1,963 1,1034 1}
+{64 1,447 1,470 1,476 1,486 1,513 1,627 1,709 1,744 1,772 1,817 1,818 1,994 1,1038 1}
+{64 1,219 1,254 1,718 1,815 1,1028 1}
+{29 1,64 1,139 1,355 1,462 1,505 1,800 1,845 1,931 1,974 1}
+{187 1,344 1,363 1,365 1,472 1,699 1,876 1,953 1,962 1,1007 1,1038 1}
+{64 1,305 1,341 1,352 1,402 1,466 1,476 1,697 1,740 1}
+{20 1,22 1,176 1,319 1,354 1,485 1,507 1,653 1,659 1,677 1,837 1,855 1,862 1}
+{22 1,89 1,288 1,354 1,452 1,547 1,683 1,746 1,953 1,981 1}
+{22 1,87 1,208 1,452 1,555 1}
+{22 1,187 1,215 1,320 1,505 1,508 1,956 1,993 1}
+{4 1,22 1,181 1,189 1,206 1,208 1,373 1,381 1,815 1,1038 1}
+{22 1,224 1,229 1,305 1,341 1,383 1,493 1,588 1,788 1,802 1,858 1,981 1}
+{22 1,90 1,208 1,453 1,815 1}
+{22 1,206 1,349 1,402 1,547 1,775 1,902 1,982 1}
+{22 1,151 1,260 1,322 1,331 1,449 1,452 1,633 1,703 1,787 1,1007 1}
+{22 1,65 1,282 1,336 1,341 1,501 1,538 1,853 1,931 1,981 1,1038 1}
+{22 1,222 1,344 1,352 1,378 1,510 1,974 1}
+{22 1,470 1,730 1,981 1,984 1}
+{22 1,63 1,331 1,453 1,516 1,810 1,834 1,970 1}
+{22 1,175 1,222 1,283 1,299 1,344 1,354 1,374 1,569 1,709 1,981 1}
+{22 1,95 1,320 1,331 1,453 1}
+{22 1,85 1,775 1,968 1}
+{22 1,515 1,634 1,775 1,962 1,1007 1}
+{22 1,85 1,184 1,193 1,230 1,305 1,344 1,599 1,983 1}
+{56 1,176 1,443 1,476 1,775 1,780 1,815 1}
+{56 1,147 1,176 1,302 1,492 1,748 1,781 1,953 1,981 1,1038 1}
+{117 1,189 1,208 1,226 1,336 1,374 1,397 1,472 1,486 1,501 1,505 1,659 1,759 1,802 1,810 1,869 1,981 1}
+{134 1,206 1,208 1,384 1,397 1,501 1,507 1,526 1,550 1,621 1,688 1,802 1,850 1,1025 1}
+{187 1,208 1,213 1,245 1,284 1,501 1,511 1,569 1,633 1,684 1,746 1,768 1,802 1,846 1,931 1,982 1}
+{206 1,374 1,659 1,802 1,850 1}
+{56 1,112 1,341 1,846 1}
+{305 1,397 1,462 1,468 1,806 1,961 1,1034 1}
+{56 1,524 1,740 1}
+{44 1,56 1,74 1,82 1,341 1}
+{30 1,56 1,142 1,222 1}
+{56 1,74 1,82 1,173 1,215 1,283 1,639 1,848 1,1038 1}
+{30 1,56 1,173 1,557 1}
+{56 1,85 1,129 1,249 1,328 1,395 1,396 1,557 1,694 1,739 1,844 1,1032 1}
+{56 1,569 1,844 1}
+{32 1,56 1,759 1}
+{0 positive,64 1,208 1,354 1,474 1,576 1,1005 1}
+{0 positive,64 1,194 1,198 1,474 1,556 1,862 1,881 1,975 1,1000 1}
+{0 positive,64 1,249 1,285 1,425 1,516 1,551 1,594 1,617 1,628 1,842 1,970 1,1007 1}
+{0 positive,64 1,476 1,501 1,659 1,1038 1}
+{0 positive,64 1,233 1,354 1,459 1,474 1,887 1,967 1}
+{0 positive,64 1,96 1,135 1,354 1,381 1,453 1,463 1,502 1,510 1,639 1,740 1,981 1}
+{0 positive,64 1,90 1,142 1,206 1,453 1,730 1,962 1,991 1}
+{0 positive,22 1,48 1,87 1,208 1,236 1,312 1,354 1,452 1,462 1,474 1,1007 1}
+{0 positive,22 1,74 1,96 1,453 1,463 1,604 1}
+{0 positive,20 1,21 1,22 1,96 1,206 1,221 1,332 1,374 1,452 1,708 1,1017 1,1028 1}
+{0 positive,22 1,96 1,206 1,216 1,331 1,374 1,441 1,453 1,477 1,507 1,1037 1}
+{0 positive,22 1,173 1,310 1,383 1,493 1,512 1,556 1,611 1,1007 1,1034 1}
+{0 positive,21 1,22 1,86 1,189 1,206 1,341 1,452 1,850 1}
+{0 positive,22 1,344 1,474 1,575 1,756 1,1007 1,1038 1}
+{0 positive,22 1,212 1,354 1,449 1,462 1,569 1,633 1,931 1,982 1}
+{0 positive,22 1,85 1,89 1,151 1,443 1,452 1,523 1,576 1,724 1,916 1}
+{0 positive,22 1,284 1,462 1,506 1,507 1,516 1,846 1,970 1,1038 1}
+{0 positive,22 1,63 1,103 1,305 1,354 1,374 1,459 1,526 1,547 1,820 1,823 1,1028 1}
+{0 positive,22 1,42 1,89 1,174 1,206 1,208 1,354 1,452 1,459 1,474 1,566 1,571 1,575 1,748 1}
+{0 positive,22 1,341 1,454 1,527 1,547 1,823 1,1038 1}
+{0 positive,19 1,22 1,64 1,199 1,256 1,342 1,555 1,599 1,628 1,670 1}
+{0 positive,22 1}
+{0 positive,22 1,177 1,352 1,829 1,856 1,1007 1}
+{0 positive,56 1,74 1,162 1,240 1,344 1,347 1,593 1,851 1,998 1}
+{0 positive,87 1,452 1,522 1,851 1,858 1,1006 1,1007 1}
+{0 positive,56 1,173 1,425 1,462 1,887 1}
+{0 positive,208 1,374 1,442 1,555 1,557 1,659 1,802 1,810 1}
+{0 positive,89 1,208 1,374 1,443 1,452 1,659 1,802 1,978 1}
+{0 positive,25 1,123 1,234 1,433 1,474 1,599 1,1007 1,1038 1}
+{0 positive,25 1,121 1,173 1,187 1,188 1,1007 1,1034 1}
+{0 positive,25 1,123 1,206 1,294 1,305 1,425 1,433 1,610 1,647 1,823 1}
+{0 positive,7 1,25 1,46 1}
+{0 positive,56 1,131 1,142 1,240 1,354 1,493 1,1008 1,1023 1,1034 1}
+{0 positive,1 1,56 1,96 1,123 1,433 1,453 1,463 1}
+{0 positive,56 1,106 1,123 1,433 1,758 1,983 1}
+{0 positive,1 1,22 1,56 1,131 1,195 1,206 1,354 1,472 1,475 1,526 1,617 1,745 1,977 1,1008 1,1038 1}
+{0 positive,22 1,56 1,106 1,123 1,433 1,476 1,613 1,1034 1}
+{0 positive,31 1,56 1}
+{0 positive,56 1,96 1,106 1,123 1,354 1,433 1,453 1,460 1,463 1,709 1,722 1,800 1,1034 1}
+{0 positive,43 1,56 1}

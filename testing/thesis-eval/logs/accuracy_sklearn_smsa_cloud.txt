@@ -1,0 +1,7 @@
+=== sk_compare.py dataset=smsa train=11000 test=500 configs=['K1', 'K4', 'K1w', 'K4w']
+python=3.13.16 numpy=2.5.3 scipy=1.18.1 pandas=3.0.5 scikit-learn=1.9.1
+K1: acc=0.598000 kappa=0.350288 macroF1=0.531114 vocab=1000 {'only_ours': 2, 'only_native': 2} empty_test_docs=0
+K4: acc=0.624000 kappa=0.377714 macroF1=0.546609 vocab=1000 {'only_ours': 2, 'only_native': 2} empty_test_docs=0
+K1w: acc=0.646000 kappa=0.414140 macroF1=0.565987 vocab=17898  empty_test_docs=0
+K4w: acc=0.650000 kappa=0.405199 macroF1=0.488640 vocab=17898  empty_test_docs=0
+tulis: /home/claude/statify64/testing/thesis-eval/accuracy/out/smsa/sklearn_results.json

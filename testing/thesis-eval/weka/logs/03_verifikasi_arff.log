@@ -1,0 +1,60 @@
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/pilkada_train.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/pilkada_train_roundtrip.csv
+relation=pilkada_train
+numInstances=630
+numAttributes=2
+attr[0]=text type=string
+attr[1]=sentiment type=nominal values=[negative, positive]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI pilkada_train: n_csv=630 n_arff=630 identik=True first_diff=None
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/pilkada_test.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/pilkada_test_roundtrip.csv
+relation=pilkada_test
+numInstances=270
+numAttributes=2
+attr[0]=text type=string
+attr[1]=sentiment type=nominal values=[negative, positive]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI pilkada_test: n_csv=270 n_arff=270 identik=True first_diff=None
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/sms_spam_train.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/sms_spam_train_roundtrip.csv
+relation=sms_spam_train
+numInstances=3901
+numAttributes=2
+attr[0]=text type=string
+attr[1]=class label type=nominal values=[ham, spam]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI sms_spam_train: n_csv=3901 n_arff=3901 identik=True first_diff=None
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/sms_spam_test.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/sms_spam_test_roundtrip.csv
+relation=sms_spam_test
+numInstances=1673
+numAttributes=2
+attr[0]=text type=string
+attr[1]=class label type=nominal values=[ham, spam]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI sms_spam_test: n_csv=1673 n_arff=1673 identik=True first_diff=None
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/smsa_train.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/smsa_train_roundtrip.csv
+relation=smsa_train
+numInstances=11000
+numAttributes=2
+attr[0]=text type=string
+attr[1]=sentiment type=nominal values=[negative, neutral, positive]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI smsa_train: n_csv=11000 n_arff=11000 identik=True first_diff=None
+$ java -Dfile.encoding=UTF-8 -Xmx2g -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/tools DumpArff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/smsa_test.arff /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/statify64/testing/thesis-eval/weka/data/weka_roundtrip/smsa_test_roundtrip.csv
+relation=smsa_test
+numInstances=500
+numAttributes=2
+attr[0]=text type=string
+attr[1]=sentiment type=nominal values=[negative, neutral, positive]
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+
+VERIFIKASI smsa_test: n_csv=500 n_arff=500 identik=True first_diff=None

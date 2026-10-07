@@ -1,0 +1,24 @@
+=== run_headless.mjs run_id=headless_vm_20261007T153421 device=vm (VM-LOKAL (UJI ASAP, BUKAN PERANGKAT SKRIPSI))
+env: AMD Ryzen 5 4600H with Radeon Graphics x2; RAM 3.8 GiB; Linux 6.8.0-138-generic; Node v22.23.2
+protokol: 1 pemanasan + 5 pengukuran; ms; simpangan baku sampel (n-1)
+keluaran mentah: testing/thesis-eval/perf/raw/headless_vm.csv
+[statify_wasm] node=v22.23.2 linux/x64 (Linux 6.8.0-138-generic) repo=/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+[pilkada_900 | stwv_default] n=900 term=1000 warmup=231 ms  mean=83.6 sd=17.3 ms  (OK)  wall=1s
+[pilkada_900 | stwv_sw_stem] n=900 term=1000 warmup=228 ms  mean=84.9 sd=11.3 ms  (OK)  wall=1s
+[pilkada_900 | nb_holdout70] n=900 term=1000 warmup=154 ms  mean=43.8 sd=15.0 ms  (OK)  wall=1s
+[pilkada_900 | nb_kfold10] n=900 term=1000 warmup=304 ms  mean=109.2 sd=34.8 ms  (OK)  wall=1s
+[pilkada_900 | am_raw] n=900 term=1000 warmup=129 ms  mean=42.9 sd=16.5 ms  (OK)  wall=1s
+[sms_5574 | stwv_default] n=5574 term=1000 warmup=721 ms  mean=425.2 sd=15.4 ms  (OK)  wall=3s
+[sms_5574 | stwv_sw_stem] n=5574 term=- warmup=151 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=1s
+[sms_5574 | nb_holdout70] n=5574 term=1000 warmup=353 ms  mean=137.0 sd=16.4 ms  (OK)  wall=1s
+[sms_5574 | nb_kfold10] n=5574 term=1000 warmup=765 ms  mean=462.3 sd=6.2 ms  (OK)  wall=3s
+[sms_5574 | am_raw] n=5574 term=1000 warmup=240 ms  mean=117.9 sd=43.8 ms  (OK)  wall=1s
+[smsa_11000 | stwv_default] n=11000 term=1000 warmup=1379 ms  mean=908.4 sd=11.7 ms  (OK)  wall=6s
+[smsa_11000 | stwv_sw_stem] n=11000 term=1000 warmup=1347 ms  mean=969.8 sd=31.2 ms  (OK)  wall=7s
+[smsa_11000 | nb_holdout70] n=11000 term=1000 warmup=602 ms  mean=360.1 sd=23.5 ms  (OK)  wall=3s
+[smsa_11000 | nb_kfold10] n=11000 term=1000 warmup=1785 ms  mean=1499.3 sd=16.0 ms  (OK)  wall=10s
+[smsa_11000 | am_raw] n=11000 term=1000 warmup=477 ms  mean=242.0 sd=32.0 ms  (OK)  wall=2s
+=== selesai ===

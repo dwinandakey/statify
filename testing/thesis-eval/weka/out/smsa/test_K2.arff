@@ -1,0 +1,1509 @@
+@relation 'smsa_train-weka.filters.unsupervised.attribute.StringToWordVector-R1-W1000-prune-rate-1.0-N0-L-stemmerweka.core.stemmers.NullStemmer-stopwords-handlerweka.core.stopwords.Null-M1-O-tokenizerweka.core.tokenizers.WordTokenizer -delimiters \" \\r\\n\\t.,;:\\\'\\\"()?!\"-weka.filters.unsupervised.attribute.NumericToNominal-R2-last'
+
+@attribute sentiment {negative,neutral,positive}
+@attribute '\%' {0,1}
+@attribute - {0,1}
+@attribute / {0,1}
+@attribute 000 {0,1}
+@attribute 1 {0,1}
+@attribute 10 {0,1}
+@attribute 100 {0,1}
+@attribute 15 {0,1}
+@attribute 18 {0,1}
+@attribute 2 {0,1}
+@attribute 20 {0,1}
+@attribute 2018 {0,1}
+@attribute 2019 {0,1}
+@attribute 3 {0,1}
+@attribute 30 {0,1}
+@attribute 4 {0,1}
+@attribute 5 {0,1}
+@attribute 50 {0,1}
+@attribute 6 {0,1}
+@attribute 7 {0,1}
+@attribute 8 {0,1}
+@attribute __laugh__ {0,1}
+@attribute a {0,1}
+@attribute acara {0,1}
+@attribute ada {0,1}
+@attribute adalah {0,1}
+@attribute adem {0,1}
+@attribute agak {0,1}
+@attribute agama {0,1}
+@attribute agar {0,1}
+@attribute ahok {0,1}
+@attribute air {0,1}
+@attribute aja {0,1}
+@attribute akal {0,1}
+@attribute akan {0,1}
+@attribute akhir {0,1}
+@attribute akhirnya {0,1}
+@attribute akses {0,1}
+@attribute aku {0,1}
+@attribute ala {0,1}
+@attribute alam {0,1}
+@attribute alami {0,1}
+@attribute alas {0,1}
+@attribute alasan {0,1}
+@attribute alternatif {0,1}
+@attribute amat {0,1}
+@attribute ambil {0,1}
+@attribute ampera {0,1}
+@attribute an {0,1}
+@attribute anak {0,1}
+@attribute anak-anak {0,1}
+@attribute anda {0,1}
+@attribute andalan {0,1}
+@attribute aneh {0,1}
+@attribute aneka {0,1}
+@attribute anggota {0,1}
+@attribute anies {0,1}
+@attribute anjing {0,1}
+@attribute antara {0,1}
+@attribute antre {0,1}
+@attribute antrean {0,1}
+@attribute apa {0,1}
+@attribute apabila {0,1}
+@attribute apalagi {0,1}
+@attribute arah {0,1}
+@attribute area {0,1}
+@attribute asal {0,1}
+@attribute asam {0,1}
+@attribute asik {0,1}
+@attribute asin {0,1}
+@attribute asli {0,1}
+@attribute asri {0,1}
+@attribute asyik {0,1}
+@attribute atas {0,1}
+@attribute atau {0,1}
+@attribute ataupun {0,1}
+@attribute awal {0,1}
+@attribute ayam {0,1}
+@attribute ayo {0,1}
+@attribute babi {0,1}
+@attribute bagaimana {0,1}
+@attribute bagi {0,1}
+@attribute bagian {0,1}
+@attribute bagus {0,1}
+@attribute bahan {0,1}
+@attribute bahkan {0,1}
+@attribute bahwa {0,1}
+@attribute baik {0,1}
+@attribute bakal {0,1}
+@attribute bakar {0,1}
+@attribute bakmi {0,1}
+@attribute bakmoy {0,1}
+@attribute bakso {0,1}
+@attribute bali {0,1}
+@attribute balik {0,1}
+@attribute bambu {0,1}
+@attribute bandung {0,1}
+@attribute banget {0,1}
+@attribute bangsa {0,1}
+@attribute bangunan {0,1}
+@attribute bank {0,1}
+@attribute banyak {0,1}
+@attribute bapak {0,1}
+@attribute barang {0,1}
+@attribute barat {0,1}
+@attribute bareng {0,1}
+@attribute baru {0,1}
+@attribute baswedan {0,1}
+@attribute batagor {0,1}
+@attribute bau {0,1}
+@attribute bawa {0,1}
+@attribute bawah {0,1}
+@attribute bawang {0,1}
+@attribute bayar {0,1}
+@attribute bebek {0,1}
+@attribute beberapa {0,1}
+@attribute beda {0,1}
+@attribute beef {0,1}
+@attribute begini {0,1}
+@attribute begitu {0,1}
+@attribute belakang {0,1}
+@attribute belanda {0,1}
+@attribute belanja {0,1}
+@attribute beli {0,1}
+@attribute beliau {0,1}
+@attribute belum {0,1}
+@attribute benar {0,1}
+@attribute benar-benar {0,1}
+@attribute berada {0,1}
+@attribute beragam {0,1}
+@attribute berani {0,1}
+@attribute berasa {0,1}
+@attribute berat {0,1}
+@attribute berbagai {0,1}
+@attribute berbeda {0,1}
+@attribute berdua {0,1}
+@attribute berkualitas {0,1}
+@attribute berkumpul {0,1}
+@attribute berkunjung {0,1}
+@attribute berlokasi {0,1}
+@attribute bermain {0,1}
+@attribute bersahabat {0,1}
+@attribute bersama {0,1}
+@attribute bersantai {0,1}
+@attribute bersantap {0,1}
+@attribute bersih {0,1}
+@attribute berubah {0,1}
+@attribute berupa {0,1}
+@attribute bervariasi {0,1}
+@attribute besar {0,1}
+@attribute betah {0,1}
+@attribute biar {0,1}
+@attribute biasa {0,1}
+@attribute biasanya {0,1}
+@attribute bikin {0,1}
+@attribute bila {0,1}
+@attribute bilang {0,1}
+@attribute bingung {0,1}
+@attribute bisa {0,1}
+@attribute boleh {0,1}
+@attribute bosan {0,1}
+@attribute braga {0,1}
+@attribute bu {0,1}
+@attribute buah {0,1}
+@attribute buat {0,1}
+@attribute buatan {0,1}
+@attribute bubur {0,1}
+@attribute buka {0,1}
+@attribute bukan {0,1}
+@attribute bukit {0,1}
+@attribute bulan {0,1}
+@attribute bumbu {0,1}
+@attribute buntut {0,1}
+@attribute burger {0,1}
+@attribute buruk {0,1}
+@attribute butuh {0,1}
+@attribute cabang {0,1}
+@attribute cabe {0,1}
+@attribute campur {0,1}
+@attribute cantik {0,1}
+@attribute cara {0,1}
+@attribute cari {0,1}
+@attribute cek {0,1}
+@attribute cemilan {0,1}
+@attribute cenderung {0,1}
+@attribute cepat {0,1}
+@attribute chicken {0,1}
+@attribute cina {0,1}
+@attribute cinta {0,1}
+@attribute cita {0,1}
+@attribute coba {0,1}
+@attribute cocok {0,1}
+@attribute coklat {0,1}
+@attribute court {0,1}
+@attribute cream {0,1}
+@attribute cukup {0,1}
+@attribute cuma {0,1}
+@attribute cumi {0,1}
+@attribute d {0,1}
+@attribute daerah {0,1}
+@attribute daftar {0,1}
+@attribute daging {0,1}
+@attribute dago {0,1}
+@attribute dah {0,1}
+@attribute dahulu {0,1}
+@attribute dalam {0,1}
+@attribute dan {0,1}
+@attribute danau {0,1}
+@attribute dapat {0,1}
+@attribute dari {0,1}
+@attribute daripada {0,1}
+@attribute dasar {0,1}
+@attribute datang {0,1}
+@attribute daun {0,1}
+@attribute deh {0,1}
+@attribute dekat {0,1}
+@attribute dekorasi {0,1}
+@attribute demokrat {0,1}
+@attribute dengan {0,1}
+@attribute depan {0,1}
+@attribute desain {0,1}
+@attribute dessert {0,1}
+@attribute di {0,1}
+@attribute dia {0,1}
+@attribute dibanding {0,1}
+@attribute dibandingkan {0,1}
+@attribute dibawa {0,1}
+@attribute diberi {0,1}
+@attribute diberikan {0,1}
+@attribute dibilang {0,1}
+@attribute dibuat {0,1}
+@attribute dicoba {0,1}
+@attribute digoreng {0,1}
+@attribute digunakan {0,1}
+@attribute dijadikan {0,1}
+@attribute dijamin {0,1}
+@attribute dijangkau {0,1}
+@attribute dijual {0,1}
+@attribute dikasih {0,1}
+@attribute dikunjungi {0,1}
+@attribute dimakan {0,1}
+@attribute dingin {0,1}
+@attribute dinikmati {0,1}
+@attribute dipakai {0,1}
+@attribute dipesan {0,1}
+@attribute dipilih {0,1}
+@attribute direkomendasikan {0,1}
+@attribute diri {0,1}
+@attribute disajikan {0,1}
+@attribute disarankan {0,1}
+@attribute disediakan {0,1}
+@attribute ditambah {0,1}
+@attribute ditawarkan {0,1}
+@attribute ditemukan {0,1}
+@attribute dll {0,1}
+@attribute doang {0,1}
+@attribute dong {0,1}
+@attribute dpr {0,1}
+@attribute dua {0,1}
+@attribute duduk {0,1}
+@attribute dulu {0,1}
+@attribute dunia {0,1}
+@attribute dusun {0,1}
+@attribute eh {0,1}
+@attribute empuk {0,1}
+@attribute enak {0,1}
+@attribute enak-enak {0,1}
+@attribute enggak {0,1}
+@attribute entah {0,1}
+@attribute eropa {0,1}
+@attribute es {0,1}
+@attribute fasilitas {0,1}
+@attribute favorit {0,1}
+@attribute film {0,1}
+@attribute food {0,1}
+@attribute foto {0,1}
+@attribute foto-foto {0,1}
+@attribute fpi {0,1}
+@attribute gagal {0,1}
+@attribute ganti {0,1}
+@attribute gaya {0,1}
+@attribute gede {0,1}
+@attribute gedung {0,1}
+@attribute gelas {0,1}
+@attribute gerindra {0,1}
+@attribute gila {0,1}
+@attribute goblok {0,1}
+@attribute gojek {0,1}
+@attribute goreng {0,1}
+@attribute gratis {0,1}
+@attribute gua {0,1}
+@attribute gubernur {0,1}
+@attribute gue {0,1}
+@attribute gurame {0,1}
+@attribute gurih {0,1}
+@attribute habis {0,1}
+@attribute hal {0,1}
+@attribute halal {0,1}
+@attribute hampir {0,1}
+@attribute handphone {0,1}
+@attribute hangat {0,1}
+@attribute hanya {0,1}
+@attribute harga {0,1}
+@attribute hari {0,1}
+@attribute harus {0,1}
+@attribute hasil {0,1}
+@attribute hati {0,1}
+@attribute hehe {0,1}
+@attribute hehehe {0,1}
+@attribute hidangan {0,1}
+@attribute hidup {0,1}
+@attribute hijau {0,1}
+@attribute hingga {0,1}
+@attribute hitam {0,1}
+@attribute hot {0,1}
+@attribute hotel {0,1}
+@attribute hujan {0,1}
+@attribute hutan {0,1}
+@attribute ibu {0,1}
+@attribute ice {0,1}
+@attribute iga {0,1}
+@attribute ikan {0,1}
+@attribute ikut {0,1}
+@attribute in {0,1}
+@attribute indah {0,1}
+@attribute indihome {0,1}
+@attribute indomie {0,1}
+@attribute indonesia {0,1}
+@attribute indosat {0,1}
+@attribute ingin {0,1}
+@attribute ini {0,1}
+@attribute interior {0,1}
+@attribute internet {0,1}
+@attribute isi {0,1}
+@attribute islam {0,1}
+@attribute istimewa {0,1}
+@attribute istri {0,1}
+@attribute it {0,1}
+@attribute itu {0,1}
+@attribute iya {0,1}
+@attribute jadi {0,1}
+@attribute jajanan {0,1}
+@attribute jakarta {0,1}
+@attribute jalan {0,1}
+@attribute jalanan {0,1}
+@attribute jam {0,1}
+@attribute jamur {0,1}
+@attribute jangan {0,1}
+@attribute jaringan {0,1}
+@attribute jatuh {0,1}
+@attribute jauh {0,1}
+@attribute jawa {0,1}
+@attribute jelas {0,1}
+@attribute jelek {0,1}
+@attribute jenis {0,1}
+@attribute jepang {0,1}
+@attribute jika {0,1}
+@attribute jne {0,1}
+@attribute jokowi {0,1}
+@attribute jual {0,1}
+@attribute juara {0,1}
+@attribute juga {0,1}
+@attribute jus {0,1}
+@attribute kacang {0,1}
+@attribute kadang {0,1}
+@attribute kafe {0,1}
+@attribute kaki {0,1}
+@attribute kalah {0,1}
+@attribute kalau {0,1}
+@attribute kali {0,1}
+@attribute kalian {0,1}
+@attribute kamar {0,1}
+@attribute kambing {0,1}
+@attribute kami {0,1}
+@attribute kamil {0,1}
+@attribute kampung {0,1}
+@attribute kampus {0,1}
+@attribute kamu {0,1}
+@attribute kan {0,1}
+@attribute kangen {0,1}
+@attribute kangkung {0,1}
+@attribute kantong {0,1}
+@attribute kantor {0,1}
+@attribute karena {0,1}
+@attribute kartu {0,1}
+@attribute karyawan {0,1}
+@attribute kasih {0,1}
+@attribute kata {0,1}
+@attribute kau {0,1}
+@attribute kawasan {0,1}
+@attribute kayak {0,1}
+@attribute kayu {0,1}
+@attribute ke {0,1}
+@attribute kebanyakan {0,1}
+@attribute kebersihan {0,1}
+@attribute kebetulan {0,1}
+@attribute kebun {0,1}
+@attribute kecap {0,1}
+@attribute kecewa {0,1}
+@attribute kecil {0,1}
+@attribute kedai {0,1}
+@attribute kedua {0,1}
+@attribute keju {0,1}
+@attribute keluar {0,1}
+@attribute keluarga {0,1}
+@attribute kemarin {0,1}
+@attribute kembali {0,1}
+@attribute kemudian {0,1}
+@attribute kenapa {0,1}
+@attribute kendaraan {0,1}
+@attribute kental {0,1}
+@attribute kentang {0,1}
+@attribute kenyang {0,1}
+@attribute kepada {0,1}
+@attribute kepiting {0,1}
+@attribute keras {0,1}
+@attribute keren {0,1}
+@attribute kering {0,1}
+@attribute kerja {0,1}
+@attribute kesal {0,1}
+@attribute kesan {0,1}
+@attribute keseluruhan {0,1}
+@attribute ketagihan {0,1}
+@attribute ketika {0,1}
+@attribute ketua {0,1}
+@attribute kfc {0,1}
+@attribute khas {0,1}
+@attribute khusus {0,1}
+@attribute kingsley {0,1}
+@attribute kita {0,1}
+@attribute kok {0,1}
+@attribute kolam {0,1}
+@attribute kondisi {0,1}
+@attribute konsep {0,1}
+@attribute kopi {0,1}
+@attribute kosong {0,1}
+@attribute kota {0,1}
+@attribute kotor {0,1}
+@attribute kpk {0,1}
+@attribute krim {0,1}
+@attribute ku {0,1}
+@attribute kuah {0,1}
+@attribute kualitas {0,1}
+@attribute kue {0,1}
+@attribute kuliah {0,1}
+@attribute kuliner {0,1}
+@attribute kumpul {0,1}
+@attribute kunjungan {0,1}
+@attribute kurang {0,1}
+@attribute kursi {0,1}
+@attribute lagi {0,1}
+@attribute lain {0,1}
+@attribute lain-lain {0,1}
+@attribute lainnya {0,1}
+@attribute lalapan {0,1}
+@attribute lalu {0,1}
+@attribute lama {0,1}
+@attribute lampu {0,1}
+@attribute langsung {0,1}
+@attribute lanjutan {0,1}
+@attribute lantai {0,1}
+@attribute lapar {0,1}
+@attribute lauk {0,1}
+@attribute layak {0,1}
+@attribute layanan {0,1}
+@attribute lebih {0,1}
+@attribute lemah {0,1}
+@attribute lembang {0,1}
+@attribute lembut {0,1}
+@attribute lengkap {0,1}
+@attribute lesehan {0,1}
+@attribute letak {0,1}
+@attribute level {0,1}
+@attribute lewat {0,1}
+@attribute lezat {0,1}
+@attribute lgbt {0,1}
+@attribute liburan {0,1}
+@attribute lidah {0,1}
+@attribute lihat {0,1}
+@attribute lima {0,1}
+@attribute live {0,1}
+@attribute liwet {0,1}
+@attribute lo {0,1}
+@attribute loh {0,1}
+@attribute lokal {0,1}
+@attribute lokasi {0,1}
+@attribute lotek {0,1}
+@attribute lu {0,1}
+@attribute luar {0,1}
+@attribute luas {0,1}
+@attribute lucu {0,1}
+@attribute lumayan {0,1}
+@attribute lupa {0,1}
+@attribute maaf {0,1}
+@attribute macam {0,1}
+@attribute macam-macam {0,1}
+@attribute macet {0,1}
+@attribute mah {0,1}
+@attribute mahal {0,1}
+@attribute mahasiswa {0,1}
+@attribute main {0,1}
+@attribute maka {0,1}
+@attribute makan {0,1}
+@attribute makanan {0,1}
+@attribute makin {0,1}
+@attribute mal {0,1}
+@attribute malah {0,1}
+@attribute malam {0,1}
+@attribute malang {0,1}
+@attribute malas {0,1}
+@attribute malu {0,1}
+@attribute mampir {0,1}
+@attribute mana {0,1}
+@attribute manis {0,1}
+@attribute mantap {0,1}
+@attribute manusia {0,1}
+@attribute marah {0,1}
+@attribute mas {0,1}
+@attribute masa {0,1}
+@attribute masak {0,1}
+@attribute masakan {0,1}
+@attribute masalah {0,1}
+@attribute masih {0,1}
+@attribute masuk {0,1}
+@attribute masyarakat {0,1}
+@attribute mata {0,1}
+@attribute mati {0,1}
+@attribute mau {0,1}
+@attribute maupun {0,1}
+@attribute mbak {0,1}
+@attribute meja {0,1}
+@attribute melakukan {0,1}
+@attribute melalui {0,1}
+@attribute melayani {0,1}
+@attribute melihat {0,1}
+@attribute memang {0,1}
+@attribute membawa {0,1}
+@attribute membeli {0,1}
+@attribute memberikan {0,1}
+@attribute membuat {0,1}
+@attribute memesan {0,1}
+@attribute memilih {0,1}
+@attribute memiliki {0,1}
+@attribute mempunyai {0,1}
+@attribute memuaskan {0,1}
+@attribute menambah {0,1}
+@attribute menang {0,1}
+@attribute menarik {0,1}
+@attribute menawarkan {0,1}
+@attribute mencari {0,1}
+@attribute mencicipi {0,1}
+@attribute mencoba {0,1}
+@attribute mendapatkan {0,1}
+@attribute mending {0,1}
+@attribute mendukung {0,1}
+@attribute menemukan {0,1}
+@attribute menengah {0,1}
+@attribute mengambil {0,1}
+@attribute mengecewakan {0,1}
+@attribute mengenyangkan {0,1}
+@attribute menggunakan {0,1}
+@attribute menghabiskan {0,1}
+@attribute menginap {0,1}
+@attribute mengobrol {0,1}
+@attribute mengunjungi {0,1}
+@attribute menikmati {0,1}
+@attribute menit {0,1}
+@attribute menjadi {0,1}
+@attribute menjadikan {0,1}
+@attribute menjelang {0,1}
+@attribute menjual {0,1}
+@attribute menteri {0,1}
+@attribute menu {0,1}
+@attribute menuju {0,1}
+@attribute menunggu {0,1}
+@attribute menurut {0,1}
+@attribute menyajikan {0,1}
+@attribute menyediakan {0,1}
+@attribute menyegarkan {0,1}
+@attribute menyenangkan {0,1}
+@attribute menyesal {0,1}
+@attribute menyukai {0,1}
+@attribute merah {0,1}
+@attribute merasa {0,1}
+@attribute merasakan {0,1}
+@attribute merayakan {0,1}
+@attribute mereka {0,1}
+@attribute meresap {0,1}
+@attribute meriah {0,1}
+@attribute merokok {0,1}
+@attribute merupakan {0,1}
+@attribute meski {0,1}
+@attribute meskipun {0,1}
+@attribute mi {0,1}
+@attribute mie {0,1}
+@attribute minggu {0,1}
+@attribute minimal {0,1}
+@attribute minta {0,1}
+@attribute minum {0,1}
+@attribute minuman {0,1}
+@attribute mirip {0,1}
+@attribute mobil {0,1}
+@attribute mohon {0,1}
+@attribute mu {0,1}
+@attribute muda {0,1}
+@attribute mudah {0,1}
+@attribute muka {0,1}
+@attribute mulai {0,1}
+@attribute mulut {0,1}
+@attribute mungkin {0,1}
+@attribute murah {0,1}
+@attribute musik {0,1}
+@attribute muslim {0,1}
+@attribute naik {0,1}
+@attribute nama {0,1}
+@attribute namun {0,1}
+@attribute nanti {0,1}
+@attribute naripan {0,1}
+@attribute nasi {0,1}
+@attribute negara {0,1}
+@attribute negeri {0,1}
+@attribute ngobrol {0,1}
+@attribute nih {0,1}
+@attribute nikmat {0,1}
+@attribute nilai {0,1}
+@attribute njungi {0,1}
+@attribute nkri {0,1}
+@attribute nomor {0,1}
+@attribute non {0,1}
+@attribute nongkrong {0,1}
+@attribute novanto {0,1}
+@attribute nuansa {0,1}
+@attribute nya {0,1}
+@attribute nyaman {0,1}
+@attribute nyobain {0,1}
+@attribute oke {0,1}
+@attribute oleh {0,1}
+@attribute oleh-oleh {0,1}
+@attribute orang {0,1}
+@attribute orang-orang {0,1}
+@attribute order {0,1}
+@attribute otak {0,1}
+@attribute out {0,1}
+@attribute pacar {0,1}
+@attribute pada {0,1}
+@attribute padahal {0,1}
+@attribute padang {0,1}
+@attribute padma {0,1}
+@attribute pagi {0,1}
+@attribute pak {0,1}
+@attribute pakai {0,1}
+@attribute pakar {0,1}
+@attribute paket {0,1}
+@attribute paling {0,1}
+@attribute panas {0,1}
+@attribute pangsit {0,1}
+@attribute panjang {0,1}
+@attribute pantas {0,1}
+@attribute papua {0,1}
+@attribute para {0,1}
+@attribute parah {0,1}
+@attribute parkir {0,1}
+@attribute parkiran {0,1}
+@attribute partai {0,1}
+@attribute pas {0,1}
+@attribute pasangan {0,1}
+@attribute pasar {0,1}
+@attribute pasta {0,1}
+@attribute pasti {0,1}
+@attribute patut {0,1}
+@attribute payah {0,1}
+@attribute pdip {0,1}
+@attribute peak {0,1}
+@attribute pecinta {0,1}
+@attribute pedas {0,1}
+@attribute pekan {0,1}
+@attribute pelanggan {0,1}
+@attribute pelayan {0,1}
+@attribute pelayanan {0,1}
+@attribute pemandangan {0,1}
+@attribute pemerintah {0,1}
+@attribute pemimpin {0,1}
+@attribute penasaran {0,1}
+@attribute penataan {0,1}
+@attribute pengalaman {0,1}
+@attribute penggemar {0,1}
+@attribute pengunjung {0,1}
+@attribute penting {0,1}
+@attribute penuh {0,1}
+@attribute penutup {0,1}
+@attribute penyajian {0,1}
+@attribute per {0,1}
+@attribute pergi {0,1}
+@attribute perjalanan {0,1}
+@attribute perlu {0,1}
+@attribute permai {0,1}
+@attribute permainan {0,1}
+@attribute pernah {0,1}
+@attribute pertama {0,1}
+@attribute pertemuan {0,1}
+@attribute perut {0,1}
+@attribute pesan {0,1}
+@attribute pesanan {0,1}
+@attribute pilgub {0,1}
+@attribute pilih {0,1}
+@attribute pilihan {0,1}
+@attribute pilkada {0,1}
+@attribute pinggir {0,1}
+@attribute pintu {0,1}
+@attribute piring {0,1}
+@attribute pisang {0,1}
+@attribute pizza {0,1}
+@attribute pki {0,1}
+@attribute pks {0,1}
+@attribute plaza {0,1}
+@attribute plus {0,1}
+@attribute pohon {0,1}
+@attribute pokok {0,1}
+@attribute polisi {0,1}
+@attribute politik {0,1}
+@attribute porsi {0,1}
+@attribute posisi {0,1}
+@attribute potong {0,1}
+@attribute potongan {0,1}
+@attribute prabowo {0,1}
+@attribute presiden {0,1}
+@attribute pribadi {0,1}
+@attribute produk {0,1}
+@attribute promo {0,1}
+@attribute puas {0,1}
+@attribute puasa {0,1}
+@attribute pula {0,1}
+@attribute pulang {0,1}
+@attribute pulsa {0,1}
+@attribute pun {0,1}
+@attribute punya {0,1}
+@attribute pusat {0,1}
+@attribute putih {0,1}
+@attribute pvj {0,1}
+@attribute rakyat {0,1}
+@attribute ramah {0,1}
+@attribute ramai {0,1}
+@attribute ramen {0,1}
+@attribute rasa {0,1}
+@attribute rasanya {0,1}
+@attribute rata-rata {0,1}
+@attribute raya {0,1}
+@attribute rekan {0,1}
+@attribute rekomendasi {0,1}
+@attribute relatif {0,1}
+@attribute reservasi {0,1}
+@attribute resto {0,1}
+@attribute restoran {0,1}
+@attribute riau {0,1}
+@attribute ribu {0,1}
+@attribute rica {0,1}
+@attribute ridwan {0,1}
+@attribute ringan {0,1}
+@attribute romantis {0,1}
+@attribute roti {0,1}
+@attribute rp {0,1}
+@attribute ruang {0,1}
+@attribute ruangan {0,1}
+@attribute rumah {0,1}
+@attribute s {0,1}
+@attribute saat {0,1}
+@attribute saja {0,1}
+@attribute saji {0,1}
+@attribute sajian {0,1}
+@attribute salah {0,1}
+@attribute salmon {0,1}
+@attribute sama {0,1}
+@attribute sambal {0,1}
+@attribute sambel {0,1}
+@attribute sambil {0,1}
+@attribute sampah {0,1}
+@attribute sampai {0,1}
+@attribute samping {0,1}
+@attribute sana {0,1}
+@attribute sangat {0,1}
+@attribute santai {0,1}
+@attribute saos {0,1}
+@attribute sapi {0,1}
+@attribute sarapan {0,1}
+@attribute sari {0,1}
+@attribute sate {0,1}
+@attribute satu {0,1}
+@attribute saung {0,1}
+@attribute saus {0,1}
+@attribute sawah {0,1}
+@attribute say {0,1}
+@attribute saya {0,1}
+@attribute sayang {0,1}
+@attribute sayur {0,1}
+@attribute sayuran {0,1}
+@attribute sby {0,1}
+@attribute seafood {0,1}
+@attribute sebagai {0,1}
+@attribute sebaiknya {0,1}
+@attribute sebanding {0,1}
+@attribute sebelah {0,1}
+@attribute sebelum {0,1}
+@attribute sebelumnya {0,1}
+@attribute sebenarnya {0,1}
+@attribute seberang {0,1}
+@attribute sebuah {0,1}
+@attribute secara {0,1}
+@attribute sedang {0,1}
+@attribute sedap {0,1}
+@attribute sederhana {0,1}
+@attribute sedikit {0,1}
+@attribute segala {0,1}
+@attribute segar {0,1}
+@attribute segi {0,1}
+@attribute sehat {0,1}
+@attribute sehingga {0,1}
+@attribute sejak {0,1}
+@attribute sejuk {0,1}
+@attribute sekadar {0,1}
+@attribute sekali {0,1}
+@attribute sekarang {0,1}
+@attribute sekeluarga {0,1}
+@attribute sekitar {0,1}
+@attribute selain {0,1}
+@attribute selalu {0,1}
+@attribute selama {0,1}
+@attribute selamat {0,1}
+@attribute selera {0,1}
+@attribute seluruh {0,1}
+@attribute semakin {0,1}
+@attribute semoga {0,1}
+@attribute sempat {0,1}
+@attribute sempit {0,1}
+@attribute semua {0,1}
+@attribute semuanya {0,1}
+@attribute senang {0,1}
+@attribute sendiri {0,1}
+@attribute sengaja {0,1}
+@attribute sensasi {0,1}
+@attribute seorang {0,1}
+@attribute sepadan {0,1}
+@attribute seperti {0,1}
+@attribute sepertinya {0,1}
+@attribute sepi {0,1}
+@attribute sering {0,1}
+@attribute serta {0,1}
+@attribute sesat {0,1}
+@attribute sesuai {0,1}
+@attribute setelah {0,1}
+@attribute setengah {0,1}
+@attribute setiap {0,1}
+@attribute setimpal {0,1}
+@attribute setya {0,1}
+@attribute si {0,1}
+@attribute siang {0,1}
+@attribute siap {0,1}
+@attribute siapa {0,1}
+@attribute sih {0,1}
+@attribute sini {0,1}
+@attribute sinyal {0,1}
+@attribute siomay {0,1}
+@attribute sisi {0,1}
+@attribute situ {0,1}
+@attribute soal {0,1}
+@attribute sok {0,1}
+@attribute sop {0,1}
+@attribute sore {0,1}
+@attribute soto {0,1}
+@attribute soup {0,1}
+@attribute spesial {0,1}
+@attribute staf {0,1}
+@attribute standar {0,1}
+@attribute stasiun {0,1}
+@attribute steak {0,1}
+@attribute strategis {0,1}
+@attribute stroberi {0,1}
+@attribute suami {0,1}
+@attribute suara {0,1}
+@attribute suasana {0,1}
+@attribute sudah {0,1}
+@attribute suka {0,1}
+@attribute suki {0,1}
+@attribute sulit {0,1}
+@attribute sunda {0,1}
+@attribute sungai {0,1}
+@attribute sungguh {0,1}
+@attribute sup {0,1}
+@attribute super {0,1}
+@attribute surabaya {0,1}
+@attribute susah {0,1}
+@attribute sushi {0,1}
+@attribute susu {0,1}
+@attribute tadi {0,1}
+@attribute tahu {0,1}
+@attribute tahun {0,1}
+@attribute tak {0,1}
+@attribute takut {0,1}
+@attribute taman {0,1}
+@attribute tambah {0,1}
+@attribute tambahan {0,1}
+@attribute tamu {0,1}
+@attribute tangan {0,1}
+@attribute tanggal {0,1}
+@attribute tanpa {0,1}
+@attribute tapi {0,1}
+@attribute tea {0,1}
+@attribute teh {0,1}
+@attribute telah {0,1}
+@attribute telepon {0,1}
+@attribute telkomsel {0,1}
+@attribute telur {0,1}
+@attribute teman {0,1}
+@attribute teman-teman {0,1}
+@attribute tempat {0,1}
+@attribute tempe {0,1}
+@attribute tempo {0,1}
+@attribute tenang {0,1}
+@attribute tenderloin {0,1}
+@attribute tengah {0,1}
+@attribute tentang {0,1}
+@attribute tentu {0,1}
+@attribute tentunya {0,1}
+@attribute tepat {0,1}
+@attribute terakhir {0,1}
+@attribute terasa {0,1}
+@attribute terbaik {0,1}
+@attribute terbatas {0,1}
+@attribute terbuka {0,1}
+@attribute terdapat {0,1}
+@attribute tergolong {0,1}
+@attribute terima {0,1}
+@attribute terjangkau {0,1}
+@attribute terjun {0,1}
+@attribute terkenal {0,1}
+@attribute terkesan {0,1}
+@attribute terlalu {0,1}
+@attribute terletak {0,1}
+@attribute terlihat {0,1}
+@attribute termasuk {0,1}
+@attribute ternyata {0,1}
+@attribute tersebut {0,1}
+@attribute tersedia {0,1}
+@attribute terus {0,1}
+@attribute terutama {0,1}
+@attribute tetap {0,1}
+@attribute tetapi {0,1}
+@attribute the {0,1}
+@attribute tiap {0,1}
+@attribute tiba {0,1}
+@attribute tidak {0,1}
+@attribute tiket {0,1}
+@attribute tim {0,1}
+@attribute timbel {0,1}
+@attribute tinggal {0,1}
+@attribute tinggi {0,1}
+@attribute to {0,1}
+@attribute toko {0,1}
+@attribute tol {0,1}
+@attribute tolol {0,1}
+@attribute tolong {0,1}
+@attribute top {0,1}
+@attribute tradisional {0,1}
+@attribute trans {0,1}
+@attribute tua {0,1}
+@attribute tugas {0,1}
+@attribute tujuan {0,1}
+@attribute tunggu {0,1}
+@attribute turun {0,1}
+@attribute tutup {0,1}
+@attribute uang {0,1}
+@attribute udang {0,1}
+@attribute udara {0,1}
+@attribute ukuran {0,1}
+@attribute ulang {0,1}
+@attribute umat {0,1}
+@attribute umum {0,1}
+@attribute unik {0,1}
+@attribute untuk {0,1}
+@attribute untung {0,1}
+@attribute usah {0,1}
+@attribute utama {0,1}
+@attribute valley {0,1}
+@attribute varian {0,1}
+@attribute variasi {0,1}
+@attribute variatif {0,1}
+@attribute via {0,1}
+@attribute wah {0,1}
+@attribute wajib {0,1}
+@attribute waktu {0,1}
+@attribute walau {0,1}
+@attribute walaupun {0,1}
+@attribute wangi {0,1}
+@attribute warga {0,1}
+@attribute warna {0,1}
+@attribute warung {0,1}
+@attribute wifi {0,1}
+@attribute wisata {0,1}
+@attribute wow {0,1}
+@attribute ya {0,1}
+@attribute yaitu {0,1}
+@attribute yamin {0,1}
+@attribute yang {0,1}
+@attribute zaman {0,1}
+
+@data
+
+{25 1,74 1,98 1,107 1,203 1,213 1,215 1,223 1,266 1,293 1,303 1,339 1,362 1,384 1,393 1,406 1,451 1,499 1,503 1,504 1,513 1,528 1,633 1,634 1,833 1,880 1,914 1,936 1,940 1,950 1,1002 1}
+{25 1,35 1,62 1,95 1,120 1,215 1,268 1,286 1,293 1,305 1,317 1,339 1,360 1,369 1,391 1,393 1,409 1,438 1,451 1,528 1,587 1,633 1,655 1,732 1,753 1,858 1,880 1,894 1,914 1,950 1,999 1,1002 1}
+{25 1,159 1,210 1,224 1,359 1,369 1,399 1,402 1,441 1,633 1,699 1,740 1,804 1,825 1,880 1,950 1,1002 1}
+{2 1,98 1,101 1,102 1,107 1,165 1,291 1,331 1,339 1,362 1,370 1,379 1,393 1,587 1,615 1,633 1,639 1,646 1,677 1,679 1,699 1,881 1,950 1,965 1,999 1}
+{25 1,152 1,159 1,165 1,207 1,219 1,223 1,293 1,304 1,319 1,367 1,369 1,388 1,451 1,459 1,528 1,633 1,698 1,699 1,777 1,821 1,905 1,950 1,989 1}
+{98 1,153 1,223 1,272 1,293 1,316 1,362 1,388 1,391 1,393 1,399 1,451 1,480 1,528 1,633 1,646 1,679 1,779 1,858 1,950 1,1002 1}
+{25 1,62 1,98 1,219 1,224 1,305 1,391 1,409 1,950 1}
+{25 1,102 1,206 1,268 1,293 1,339 1,341 1,362 1,365 1,391 1,393 1,430 1,516 1,633 1,645 1,688 1,772 1,776 1,804 1,858 1,880 1,944 1,950 1,1002 1}
+{25 1,120 1,126 1,169 1,207 1,210 1,302 1,331 1,384 1,399 1,522 1,633 1,677 1,679 1,735 1,767 1,777 1,792 1,808 1,837 1,842 1,880 1,904 1,978 1,989 1,1002 1}
+{207 1,219 1,304 1,331 1,353 1,532 1,633 1,646 1,677 1,679 1,780 1,792 1,880 1,905 1,931 1,950 1,951 1}
+{2 1,25 1,102 1,207 1,255 1,296 1,353 1,362 1,370 1,457 1,541 1,633 1,646 1,677 1,679 1,734 1,755 1,780 1,792 1,880 1,946 1,950 1,951 1,970 1,989 1}
+{2 1,14 1,25 1,37 1,47 1,124 1,126 1,304 1,331 1,339 1,393 1,407 1,451 1,459 1,523 1,541 1,575 1,598 1,633 1,767 1,792 1,880 1,943 1,950 1,951 1,970 1}
+{2 1,25 1,114 1,207 1,210 1,302 1,306 1,507 1,559 1,633 1,677 1,679 1,736 1,767 1,780 1,792 1,880 1,909 1,945 1,946 1,950 1}
+{25 1,126 1,175 1,207 1,223 1,348 1,353 1,559 1,633 1,679 1,702 1,777 1,780 1,792 1,821 1,859 1,905 1,950 1,951 1,970 1,1002 1}
+{26 1,191 1,219 1,331 1,399 1,554 1,633 1,651 1,703 1,780 1,792 1,880 1,909 1,943 1,946 1,950 1,978 1}
+{1 1,84 1,165 1,223 1,341 1,452 1,535 1,550 1,554 1,633 1,767 1,859 1,880 1,951 1,1002 1}
+{25 1,219 1,247 1,290 1,302 1,393 1,503 1,677 1,679 1,729 1,735 1,767 1,780 1,857 1,950 1,978 1}
+{2 1,7 1,25 1,114 1,209 1,223 1,303 1,388 1,559 1,633 1,729 1,755 1,792 1,849 1,880 1,905 1,940 1,950 1}
+{2 1,25 1,35 1,77 1,95 1,114 1,183 1,210 1,304 1,316 1,324 1,331 1,362 1,528 1,614 1,633 1,677 1,679 1,719 1,767 1,772 1,777 1,792 1,821 1,880 1,905 1,945 1,950 1,978 1}
+{126 1,207 1,293 1,384 1,399 1,507 1,623 1,677 1,792 1,880 1,909 1,943 1}
+{126 1,207 1,305 1,331 1,362 1,755 1,792 1,848 1,880 1,905 1,951 1}
+{25 1,116 1,304 1,456 1,677 1,679 1,767 1,777 1,792 1,821 1,880 1,950 1,1002 1}
+{25 1,44 1,101 1,207 1,219 1,305 1,399 1,451 1,633 1,702 1,767 1,777 1,880 1,946 1,950 1,951 1,960 1,970 1,978 1,999 1}
+{2 1,25 1,86 1,114 1,153 1,183 1,207 1,219 1,313 1,331 1,384 1,393 1,399 1,489 1,633 1,737 1,766 1,780 1,792 1,880 1,950 1,951 1,978 1,1002 1}
+{114 1,126 1,207 1,239 1,302 1,339 1,393 1,456 1,474 1,507 1,513 1,559 1,633 1,646 1,665 1,702 1,767 1,777 1,780 1,792 1,820 1,821 1,880 1,905 1,951 1,970 1,989 1}
+{98 1,331 1,348 1,362 1,369 1,399 1,507 1,528 1,641 1,651 1,677 1,679 1,703 1,880 1,950 1,951 1,960 1}
+{2 1,16 1,25 1,126 1,207 1,210 1,331 1,341 1,346 1,466 1,507 1,532 1,533 1,616 1,677 1,679 1,702 1,703 1,777 1,780 1,792 1,821 1,848 1,880 1,951 1,1002 1}
+{25 1,223 1,296 1,299 1,339 1,348 1,369 1,371 1,581 1,633 1,698 1,702 1,734 1,737 1,777 1,792 1,820 1,821 1,842 1,859 1,880 1,909 1,950 1,951 1,970 1}
+{2 1,25 1,76 1,126 1,207 1,245 1,250 1,331 1,353 1,507 1,633 1,777 1,821 1,834 1,880 1,946 1,950 1,951 1,970 1,980 1,1002 1}
+{2 1,25 1,62 1,175 1,223 1,239 1,304 1,331 1,339 1,362 1,369 1,431 1,459 1,513 1,559 1,628 1,633 1,677 1,679 1,702 1,703 1,780 1,792 1,880 1,949 1,950 1,951 1,970 1}
+{25 1,134 1,181 1,207 1,219 1,331 1,362 1,457 1,584 1,633 1,766 1,772 1,777 1,780 1,792 1,820 1,824 1,880 1,905 1,946 1,950 1,970 1}
+{10 1,17 1,25 1,62 1,207 1,210 1,219 1,272 1,331 1,384 1,399 1,766 1,792 1,820 1,1002 1}
+{25 1,44 1,62 1,71 1,124 1,126 1,207 1,219 1,223 1,331 1,393 1,528 1,532 1,558 1,639 1,728 1,776 1,880 1,946 1,950 1,951 1,970 1}
+{25 1,107 1,126 1,207 1,331 1,348 1,474 1,651 1,698 1,702 1,767 1,792 1,880 1,896 1,905 1,950 1,951 1,970 1}
+{19 1,124 1,154 1,183 1,639 1,641 1,702 1,767 1,802 1,880 1,924 1,946 1,951 1,978 1,989 1}
+{102 1,209 1,223 1,393 1,449 1,451 1,457 1,528 1,651 1,677 1,679 1,702 1,734 1,859 1,880 1,905 1,909 1,950 1,1002 1}
+{2 1,126 1,155 1,159 1,362 1,393 1,399 1,515 1,528 1,633 1,646 1,665 1,677 1,679 1,698 1,767 1,880 1,950 1,951 1,970 1}
+{25 1,116 1,126 1,175 1,207 1,209 1,305 1,331 1,362 1,369 1,370 1,407 1,467 1,633 1,642 1,677 1,679 1,702 1,766 1,777 1,780 1,792 1,848 1,880 1,888 1,905 1,950 1,1002 1}
+{25 1,157 1,159 1,207 1,223 1,393 1,561 1,633 1,636 1,677 1,679 1,729 1,749 1,950 1}
+{102 1,223 1,230 1,296 1,581 1,677 1,679 1,702 1,734 1,880 1,951 1,978 1}
+{1 1,10 1,18 1,25 1,126 1,159 1,171 1,197 1,223 1,339 1,362 1,522 1,633 1,766 1,770 1,792 1,880 1,946 1,950 1,951 1,970 1}
+{25 1,126 1,207 1,219 1,393 1,399 1,633 1,646 1,679 1,777 1,780 1,792 1,821 1,880 1,905 1}
+{2 1,15 1,183 1,331 1,346 1,399 1,646 1,772 1,792 1,970 1}
+{2 1,84 1,114 1,207 1,348 1,369 1,419 1,528 1,633 1,646 1,677 1,679 1,792 1,880 1,950 1,951 1,989 1}
+{384 1,399 1,494 1,532 1,633 1,780 1,792 1,880 1,946 1,950 1,986 1,999 1}
+{223 1,331 1,353 1,535 1,554 1,651 1,685 1,702 1,767 1,859 1,880 1,1002 1}
+{25 1,41 1,88 1,210 1,384 1,559 1,598 1,633 1,677 1,780 1,905 1,950 1}
+{291 1,598 1,820 1,890 1}
+{102 1,107 1,207 1,209 1,231 1,304 1,331 1,339 1,374 1,384 1,399 1,406 1,409 1,457 1,459 1,466 1,499 1,598 1,633 1,677 1,679 1,735 1,766 1,770 1,792 1,842 1,849 1,880 1,905 1,909 1,940 1,950 1,951 1,1002 1}
+{75 1,169 1,171 1,207 1,259 1,331 1,370 1,522 1,559 1,633 1,755 1,772 1,780 1,787 1,792 1,820 1,880 1,950 1,960 1,999 1}
+{2 1,25 1,86 1,126 1,207 1,362 1,465 1,481 1,524 1,532 1,633 1,792 1,880 1,905 1,950 1}
+{28 1,38 1,126 1,207 1,209 1,331 1,384 1,393 1,399 1,409 1,540 1,561 1,598 1,634 1,792 1,803 1,820 1,821 1,836 1,946 1,950 1}
+{10 1,14 1,25 1,95 1,157 1,171 1,197 1,209 1,259 1,299 1,331 1,362 1,370 1,393 1,524 1,614 1,677 1,679 1,767 1,777 1,792 1,821 1,880 1,905 1,950 1,1002 1}
+{14 1,25 1,98 1,107 1,124 1,207 1,239 1,304 1,305 1,354 1,384 1,451 1,457 1,507 1,633 1,639 1,679 1,702 1,767 1,780 1,792 1,820 1,905 1,950 1,951 1,964 1,967 1}
+{25 1,69 1,107 1,191 1,210 1,391 1,421 1,466 1,513 1,554 1,633 1,636 1,792 1,801 1,820 1,880 1,894 1,950 1}
+{10 1,88 1,209 1,210 1,219 1,223 1,272 1,372 1,374 1,399 1,464 1,608 1,651 1,777 1,780 1,950 1,1002 1}
+{75 1,81 1,98 1,293 1,303 1,315 1,331 1,391 1,443 1,531 1,584 1,633 1,669 1,767 1,772 1,858 1,894 1,905 1,950 1,1002 1}
+{54 1,159 1,189 1,219 1,311 1,462 1,627 1,946 1,950 1}
+{119 1,155 1,341 1,391 1,658 1,682 1,881 1,946 1,950 1,1002 1}
+{155 1,165 1,182 1,211 1,268 1,302 1,369 1,378 1,393 1,452 1,466 1,479 1,554 1,639 1,834 1,980 1,999 1,1002 1}
+{29 1,135 1,153 1,182 1,207 1,219 1,223 1,230 1,297 1,323 1,341 1,348 1,359 1,374 1,393 1,633 1,704 1,705 1,720 1,802 1,817 1,821 1,881 1,950 1,999 1,1002 1}
+{75 1,98 1,152 1,207 1,219 1,224 1,293 1,371 1,379 1,384 1,409 1,420 1,607 1,633 1,651 1,772 1,787 1,792 1,842 1,881 1,950 1,1002 1}
+{98 1,181 1,207 1,219 1,223 1,269 1,305 1,331 1,339 1,369 1,409 1,451 1,507 1,522 1,535 1,664 1,736 1,744 1,792 1,858 1,878 1,880 1,881 1,936 1,950 1,1002 1}
+{62 1,75 1,88 1,160 1,181 1,196 1,220 1,223 1,268 1,291 1,305 1,393 1,489 1,529 1,605 1,633 1,740 1,772 1,779 1,881 1,913 1,950 1,1002 1}
+{2 1,13 1,126 1,159 1,323 1,374 1,399 1,720 1,945 1,991 1}
+{75 1,99 1,197 1,207 1,304 1,331 1,339 1,399 1,406 1,424 1,633 1,664 1,669 1,720 1,767 1,864 1,950 1,978 1,1002 1}
+{81 1,107 1,120 1,125 1,224 1,359 1,399 1,633 1,669 1,735 1,772 1,792 1,798 1,821 1,849 1,894 1,939 1,989 1,1002 1}
+{2 1,46 1,57 1,209 1,219 1,259 1,293 1,305 1,343 1,370 1,399 1,451 1,633 1,725 1,943 1}
+{133 1,141 1,159 1,165 1,223 1,328 1,369 1,371 1,374 1,384 1,399 1,414 1,430 1,535 1,633 1,730 1,740 1,764 1,831 1,834 1,837 1,842 1,873 1,950 1,1002 1}
+{62 1,129 1,159 1,210 1,219 1,297 1,305 1,328 1,331 1,341 1,374 1,376 1,384 1,399 1,428 1,639 1,650 1,735 1,780 1,792 1,804 1,1002 1}
+{39 1,331 1,376 1,399 1,584 1,787 1,927 1,978 1,1002 1}
+{169 1,328 1,339 1,348 1,371 1,399 1,507 1,540 1,650 1,740 1,825 1,965 1,970 1,978 1,1002 1}
+{26 1,44 1,62 1,87 1,156 1,181 1,207 1,210 1,219 1,339 1,348 1,374 1,399 1,428 1,536 1,659 1,780 1,993 1}
+{86 1,102 1,211 1,219 1,223 1,362 1,384 1,399 1,523 1,570 1,584 1,614 1,633 1,792 1,798 1,824 1,950 1,1002 1}
+{71 1,75 1,150 1,159 1,169 1,328 1,331 1,353 1,384 1,391 1,399 1,466 1,568 1,740 1,821 1,950 1}
+{62 1,64 1,207 1,219 1,270 1,331 1,355 1,362 1,369 1,430 1,452 1,501 1,650 1,727 1,792 1,807 1,834 1,905 1,945 1,950 1,961 1,978 1,1002 1}
+{3 1,50 1,207 1,399 1,466 1,499 1,513 1,611 1,633 1,784 1,792 1,848 1,950 1}
+{219 1,328 1,331 1,399 1,409 1,414 1,584 1,633 1,674 1,780 1,792 1,798 1}
+{5 1,18 1,124 1,207 1,305 1,369 1,387 1,399 1,633 1,729 1,755 1,772 1,820 1,843 1,948 1,950 1,980 1,1002 1}
+{39 1,98 1,120 1,209 1,231 1,399 1,426 1,495 1,633 1,693 1,880 1,893 1,950 1}
+{62 1,98 1,165 1,173 1,293 1,330 1,353 1,399 1,426 1,745 1,950 1,970 1}
+{35 1,39 1,369 1,399 1,426 1,430 1,536 1,645 1,780 1,787 1,896 1,920 1}
+{107 1,223 1,297 1,331 1,339 1,362 1,370 1,383 1,384 1,399 1,451 1,556 1,633 1,641 1,699 1,792 1,826 1,831 1,842 1,858 1,864 1,880 1,893 1,950 1,969 1,1002 1}
+{44 1,81 1,107 1,169 1,182 1,207 1,210 1,219 1,374 1,399 1,449 1,457 1,522 1,543 1,633 1,780 1,792 1,978 1,1002 1}
+{17 1,31 1,209 1,219 1,224 1,293 1,399 1,425 1,439 1,645 1,654 1,698 1,767 1,792 1,880 1,881 1,895 1,950 1}
+{74 1,87 1,219 1,331 1,339 1,439 1,457 1,633 1,720 1,767 1,792 1,858 1,881 1,905 1,950 1}
+{26 1,112 1,210 1,223 1,384 1,409 1,439 1,507 1,531 1,587 1,714 1,766 1,772 1,792 1,821 1,881 1,950 1,1002 1,1003 1}
+{24 1,98 1,128 1,197 1,331 1,419 1,633 1,639 1,772 1,854 1,881 1,950 1}
+{111 1,127 1,165 1,192 1,197 1,266 1,304 1,452 1,466 1,507 1,523 1,594 1,633 1,646 1,772 1,792 1,881 1,909 1,948 1,950 1,1002 1}
+{39 1,207 1,210 1,224 1,261 1,280 1,300 1,303 1,339 1,362 1,384 1,441 1,587 1,594 1,601 1,633 1,772 1,832 1,881 1,905 1,943 1,950 1}
+{1 1,20 1,28 1,98 1,117 1,165 1,168 1,197 1,210 1,266 1,280 1,300 1,331 1,351 1,362 1,393 1,449 1,456 1,466 1,581 1,646 1,651 1,767 1,814 1,845 1,858 1,881 1,950 1}
+{5 1,25 1,28 1,39 1,120 1,207 1,215 1,339 1,344 1,369 1,391 1,523 1,612 1,617 1,633 1,646 1,651 1,845 1,878 1,881 1,950 1,1002 1}
+{117 1,120 1,157 1,219 1,223 1,224 1,303 1,351 1,362 1,387 1,399 1,431 1,547 1,615 1,633 1,767 1,780 1,792 1,880 1,946 1,1002 1}
+{5 1,10 1,14 1,26 1,75 1,153 1,197 1,331 1,346 1,399 1,451 1,466 1,567 1,615 1,633 1,661 1,718 1,826 1}
+{21 1,219 1,368 1,393 1,399 1,633 1,720 1,766 1,772 1}
+{39 1,219 1,286 1,331 1,399 1,457 1,651 1}
+{39 1,219 1,399 1,698 1,820 1}
+{62 1,77 1,98 1,209 1,219 1,223 1,257 1,331 1,369 1,399 1,406 1,584 1,792 1,950 1,1002 1}
+{39 1,300 1,330 1,339 1,399 1,451 1,581 1,651 1,880 1,950 1}
+{35 1,156 1,224 1,331 1,399 1,451 1,633 1,777 1,787 1,792 1,837 1,872 1,1002 1}
+{153 1,219 1,221 1,399 1,767 1,848 1,936 1,950 1}
+{95 1,98 1,239 1,305 1,379 1,393 1,399 1,430 1,519 1,737 1,772 1,859 1,950 1,978 1,989 1}
+{26 1,87 1,107 1,169 1,331 1,368 1,384 1,399 1,637 1,686 1,792 1,826 1,940 1,975 1,1002 1}
+{34 1,39 1,150 1,153 1,159 1,219 1,221 1,302 1,334 1,339 1,399 1,409 1,610 1,633 1,639 1,640 1,767 1}
+{1 1,98 1,197 1,221 1,399 1,633 1,765 1,777 1,792 1,872 1,880 1}
+{33 1,84 1,98 1,183 1,204 1,239 1,293 1,316 1,324 1,331 1,372 1,393 1,399 1,457 1,459 1,528 1,699 1,779 1,943 1,950 1,1002 1}
+{81 1,98 1,172 1,206 1,223 1,289 1,327 1,331 1,369 1,399 1,584 1,792 1,798 1,940 1,950 1}
+{39 1,88 1,104 1,210 1,219 1,220 1,238 1,330 1,383 1,399 1,443 1,523 1,979 1}
+{98 1,107 1,133 1,266 1,289 1,339 1,399 1,595 1,646 1,880 1,894 1,926 1,999 1}
+{159 1,210 1,357 1,374 1,393 1,399 1,430 1,654 1,735 1,780 1,923 1,950 1,978 1,989 1}
+{155 1,204 1,248 1,362 1,393 1,399 1,649 1,693 1,767 1,780 1,954 1}
+{4 1,11 1,124 1,209 1,210 1,223 1,399 1,451 1,528 1,594 1,728 1,734 1,946 1,950 1}
+{25 1,39 1,98 1,207 1,273 1,299 1,304 1,339 1,399 1,451 1,503 1,646 1,851 1,880 1,950 1}
+{2 1,69 1,223 1,331 1,340 1,388 1,399 1,498 1,514 1,633 1,675 1,772 1,773 1,859 1,905 1,950 1}
+{219 1,223 1,327 1,331 1,399 1,436 1,519 1,633 1,792 1,868 1}
+{25 1,230 1,316 1,369 1,399 1,519 1,536 1,772 1,894 1,950 1}
+{59 1,75 1,215 1,223 1,266 1,268 1,339 1,384 1,399 1,404 1,633 1,665 1,772 1,819 1,983 1,999 1}
+{3 1,89 1,124 1,239 1,268 1,305 1,399 1,728 1,772 1,777 1,907 1,951 1}
+{49 1,206 1,210 1,219 1,348 1,384 1,399 1,452 1,602 1,603 1,639 1,780 1,792 1,950 1}
+{10 1,25 1,62 1,165 1,171 1,213 1,219 1,279 1,385 1,393 1,399 1,507 1,646 1,737 1,803 1,880 1}
+{1 1,18 1,128 1,159 1,191 1,197 1,215 1,223 1,331 1,385 1,399 1,407 1,430 1,452 1,651 1,766 1,767 1,777 1,893 1,905 1,950 1,999 1}
+{5 1,10 1,25 1,86 1,126 1,171 1,219 1,299 1,362 1,393 1,399 1,428 1,466 1,523 1,559 1,633 1,679 1,792 1,880 1,886 1,950 1,1002 1}
+{25 1,88 1,219 1,331 1,370 1,384 1,399 1,502 1,699 1,728 1,780 1,808 1,950 1}
+{81 1,152 1,207 1,223 1,330 1,331 1,340 1,399 1,451 1,650 1,767 1,792 1,803 1,834 1,835 1,842 1,880 1,950 1,969 1,999 1,1002 1}
+{11 1,81 1,101 1,159 1,169 1,209 1,210 1,223 1,296 1,399 1,406 1,414 1,466 1,539 1,584 1,633 1,637 1,792 1,798 1,880 1,903 1,950 1,970 1,1002 1}
+{0 positive,206 1,219 1,305 1,331 1,393 1,404 1,451 1,513 1,532 1,539 1,702 1,735 1,780 1,792 1,816 1,820 1,825 1,831 1,851 1,950 1,951 1,956 1,999 1}
+{0 positive,10 1,259 1,331 1,370 1,459 1,474 1,515 1,633 1,767 1,777 1,792 1,880 1,912 1,950 1,951 1}
+{0 positive,26 1,159 1,207 1,219 1,331 1,561 1,606 1,654 1,798 1,881 1,951 1}
+{0 positive,28 1,37 1,98 1,124 1,197 1,223 1,341 1,384 1,387 1,452 1,483 1,492 1,541 1,633 1,665 1,698 1,702 1,729 1,767 1,832 1,859 1,897 1,905 1,912 1,931 1,951 1,979 1,1002 1}
+{0 positive,191 1,206 1,545 1,633 1,718 1,780 1,792 1,851 1,1002 1}
+{0 positive,26 1,102 1,331 1,362 1,470 1,561 1,580 1,633 1,654 1,729 1,780 1,824 1,1002 1}
+{0 positive,1 1,17 1,18 1,19 1,25 1,49 1,64 1,74 1,98 1,159 1,207 1,209 1,210 1,219 1,223 1,252 1,261 1,268 1,303 1,316 1,346 1,369 1,387 1,430 1,451 1,477 1,505 1,508 1,541 1,611 1,624 1,634 1,651 1,665 1,669 1,702 1,777 1,792 1,825 1,842 1,880 1,931 1,951 1,978 1,998 1,1002 1}
+{0 positive,98 1,159 1,209 1,343 1,393 1,457 1,489 1,633 1,755 1,880 1,881 1,951 1}
+{0 positive,17 1,39 1,62 1,84 1,98 1,102 1,186 1,207 1,331 1,378 1,505 1,515 1,611 1,633 1,654 1,792 1,881 1}
+{0 positive,159 1,196 1,206 1,339 1,470 1,542 1,606 1,633 1,824 1}
+{0 positive,84 1,102 1,186 1,207 1,234 1,362 1,606 1,633 1,729 1,780 1,950 1}
+{0 positive,98 1,124 1,186 1,223 1,633 1,636 1,669 1,780 1,792 1,881 1,951 1,1002 1}
+{0 positive,207 1,303 1,611 1,780 1,951 1}
+{0 positive,25 1,75 1,155 1,159 1,186 1,207 1,210 1,219 1,369 1,387 1,452 1,633 1,634 1,679 1,730 1,780 1,825 1,859 1,931 1,950 1,951 1,1002 1}
+{0 positive,135 1,219 1,223 1,303 1,452 1,466 1,529 1,611 1,702 1,792 1,825 1,859 1,951 1}
+{0 positive,26 1,106 1,168 1,207 1,240 1,316 1,325 1,331 1,355 1,369 1,504 1,548 1,573 1,580 1,633 1,731 1,741 1,770 1,780 1,787 1,871 1,879 1,914 1,988 1,1002 1}
+{0 positive,84 1,143 1,146 1,192 1,207 1,259 1,267 1,272 1,316 1,405 1,422 1,470 1,508 1,563 1,633 1,634 1,706 1,735 1,780 1,792 1,807 1,818 1,879 1,922 1,978 1,1002 1}
+{0 positive,72 1,97 1,102 1,120 1,183 1,186 1,207 1,219 1,223 1,316 1,324 1,372 1,376 1,378 1,470 1,478 1,504 1,633 1,706 1,741 1,780 1,818 1,856 1,871 1,914 1,917 1,926 1,929 1,978 1,1002 1}
+{0 positive,10 1,55 1,88 1,102 1,146 1,150 1,207 1,223 1,266 1,372 1,374 1,545 1,633 1,679 1,749 1,753 1,780 1,813 1,944 1,983 1}
+{0 positive,207 1,219 1,223 1,247 1,252 1,272 1,324 1,339 1,362 1,372 1,451 1,470 1,633 1,780 1,824 1,834 1,842 1}
+{0 positive,59 1,69 1,102 1,207 1,215 1,223 1,290 1,304 1,339 1,362 1,369 1,451 1,452 1,523 1,633 1,718 1,766 1,824 1,842 1,1002 1}
+{0 positive,159 1,339 1,362 1,384 1,430 1,441 1,576 1,633 1,669 1,749 1,764 1,824 1,864 1,932 1,950 1,980 1}
+{0 positive,69 1,98 1,102 1,134 1,159 1,183 1,206 1,215 1,223 1,303 1,316 1,430 1,459 1,621 1,651 1,729 1,777 1,787 1,870 1,978 1}
+{0 positive,123 1,159 1,186 1,207 1,209 1,223 1,272 1,290 1,339 1,362 1,369 1,430 1,542 1,699 1,728 1,775 1,824 1,897 1,904 1,950 1,970 1,980 1,1002 1}
+{0 positive,25 1,29 1,31 1,62 1,75 1,86 1,102 1,107 1,146 1,206 1,207 1,219 1,224 1,339 1,384 1,633 1,792 1,881 1,894 1,896 1,950 1,1002 1}
+{2 1,117 1,169 1,181 1,305 1,339 1,348 1,362 1,391 1,452 1,483 1,488 1,613 1,636 1,639 1,706 1,881 1,904 1,946 1,950 1,1002 1}
+{0 positive,25 1,98 1,159 1,197 1,206 1,223 1,224 1,261 1,273 1,341 1,391 1,441 1,493 1,633 1,654 1,665 1,772 1,831 1,834 1,878 1,881 1,895 1,950 1,1002 1}
+{0 positive,25 1,88 1,89 1,102 1,197 1,210 1,215 1,339 1,369 1,388 1,441 1,466 1,502 1,587 1,639 1,772 1,820 1,880 1,881 1,950 1,991 1,1002 1}
+{0 positive,39 1,197 1,276 1,881 1,945 1,946 1}
+{0 positive,2 1,124 1,220 1,331 1,362 1,492 1,515 1,581 1,633 1,950 1}
+{0 positive,98 1,219 1,293 1,384 1,466 1,633 1,651 1,730 1,767 1,803 1,821 1,858 1,881 1}
+{0 positive,10 1,124 1,159 1,223 1,224 1,293 1,339 1,384 1,407 1,409 1,483 1,523 1,633 1,646 1,665 1,767 1,881 1,909 1,1002 1}
+{0 positive,26 1,98 1,155 1,210 1,251 1,339 1,428 1,634 1,654 1,777 1,792 1,858 1,881 1,1002 1}
+{0 positive,28 1,199 1,515 1,524 1,528 1,587 1,633 1,667 1,792 1,825 1,881 1,950 1}
+{0 positive,39 1,209 1,223 1,399 1,431 1,441 1,688 1,821 1,836 1,880 1,902 1,950 1,1002 1}
+{0 positive,103 1,207 1,223 1,359 1,374 1,387 1,451 1,546 1,563 1,726 1,880 1,931 1,978 1,993 1}
+{0 positive,26 1,32 1,35 1,220 1,223 1,384 1,387 1,430 1,519 1,650 1,681 1,908 1,931 1,1002 1}
+{0 positive,30 1,74 1,156 1,186 1,374 1,387 1,522 1,633 1,650 1,695 1,726 1,831 1,931 1}
+{0 positive,13 1,35 1,223 1,306 1,359 1,384 1,387 1,525 1,542 1,555 1,585 1,650 1,659 1,766 1,931 1,1002 1}
+{0 positive,125 1,189 1,223 1,387 1,650 1,740 1,931 1}
+{0 positive,103 1,159 1,259 1,555 1,792 1,815 1,825 1,831 1}
+{0 positive,17 1,57 1,74 1,108 1,207 1,292 1,371 1,387 1,414 1,542 1,633 1,792 1,826 1,895 1,931 1,950 1,978 1}
+{0 positive,57 1,207 1,325 1,339 1,387 1,464 1,486 1,650 1,792 1,842 1,881 1,931 1,1002 1}
+{0 positive,84 1,257 1,387 1,650 1,825 1,880 1,931 1}
+{0 positive,52 1,57 1,107 1,331 1,343 1,370 1,387 1,417 1,479 1,633 1,650 1,931 1,978 1,1002 1}
+{0 positive,57 1,103 1,143 1,374 1,604 1,650 1,725 1,831 1,978 1}
+{0 positive,57 1,143 1,164 1,223 1,341 1,343 1,362 1,387 1,604 1,650 1,818 1,931 1,978 1,1002 1}
+{0 positive,98 1,159 1,197 1,266 1,293 1,327 1,369 1,442 1,507 1,562 1,633 1,651 1,654 1,858 1,881 1,892 1,1002 1}
+{0 positive,33 1,39 1,64 1,98 1,166 1,220 1,223 1,239 1,266 1,289 1,293 1,327 1,368 1,409 1,431 1,442 1,515 1,594 1,615 1,633 1,656 1,745 1,764 1,772 1,837 1,881 1,911 1,1002 1}
+{0 positive,39 1,62 1,78 1,133 1,309 1,327 1,369 1,384 1,393 1,431 1,441 1,466 1,524 1,633 1,686 1,701 1,767 1,804 1,858 1,880 1,881 1,905 1}
+{0 positive,27 1,39 1,98 1,207 1,224 1,257 1,266 1,305 1,327 1,340 1,362 1,456 1,494 1,498 1,598 1,633 1,639 1,646 1,767 1,770 1,864 1,880 1,881 1,905 1,907 1,926 1,950 1,1002 1}
+{0 positive,25 1,98 1,152 1,160 1,257 1,327 1,387 1,424 1,528 1,598 1,633 1,651 1,772 1,792 1,881 1,902 1,931 1,950 1,1002 1}
+{0 positive,2 1,98 1,210 1,327 1,328 1,421 1,485 1,587 1,633 1,744 1,792 1,881 1,1002 1}
+{0 positive,2 1,39 1,84 1,165 1,210 1,225 1,339 1,369 1,452 1,466 1,502 1,633 1,1002 1}
+{0 positive,10 1,17 1,75 1,84 1,282 1,651 1,767 1,880 1}
+{0 positive,50 1,98 1,266 1,331 1,362 1,369 1,401 1,435 1,528 1,599 1,612 1,633 1,736 1,777 1,820 1,907 1,926 1,1002 1}
+{0 positive,39 1,98 1,124 1,164 1,369 1,451 1,503 1,528 1,723 1,881 1}
+{0 positive,39 1,98 1,120 1,224 1,307 1,339 1,362 1,387 1,409 1,606 1,615 1,633 1,772 1,793 1,881 1,1002 1}
+{0 positive,14 1,17 1,21 1,25 1,97 1,126 1,165 1,168 1,192 1,210 1,223 1,303 1,312 1,316 1,330 1,339 1,344 1,346 1,369 1,446 1,618 1,633 1,639 1,749 1,755 1,767 1,777 1,801 1,820 1,867 1,886 1,994 1,1002 1}
+{0 positive,98 1,159 1,197 1,207 1,223 1,232 1,295 1,301 1,303 1,305 1,339 1,348 1,362 1,371 1,437 1,446 1,451 1,508 1,514 1,611 1,633 1,699 1,744 1,755 1,881 1,1002 1}
+{0 positive,25 1,98 1,207 1,223 1,266 1,267 1,303 1,339 1,503 1,504 1,530 1,611 1,615 1,633 1,654 1,665 1,688 1,820 1,914 1,978 1,995 1,1002 1}
+{0 positive,74 1,78 1,107 1,155 1,159 1,207 1,259 1,266 1,293 1,301 1,330 1,339 1,370 1,393 1,423 1,451 1,495 1,503 1,599 1,615 1,619 1,633 1,655 1,661 1,699 1,745 1,772 1,773 1,858 1,914 1,943 1}
+{0 positive,25 1,126 1,189 1,223 1,264 1,293 1,339 1,350 1,362 1,459 1,504 1,552 1,615 1,633 1,635 1,698 1,820 1,894 1,911 1,961 1,989 1,1002 1}
+{0 positive,2 1,69 1,89 1,98 1,165 1,223 1,339 1,362 1,391 1,393 1,451 1,503 1,630 1,633 1,770 1,779 1,787 1,858 1,914 1,996 1,1002 1}
+{0 positive,107 1,120 1,256 1,341 1,369 1,417 1,451 1,507 1,526 1,633 1,727 1,792 1,858 1,880 1,881 1,938 1,950 1,1002 1}
+{0 positive,26 1,88 1,98 1,127 1,159 1,165 1,293 1,339 1,365 1,417 1,466 1,536 1,633 1,858 1}
+{0 positive,98 1,107 1,273 1,331 1,441 1,466 1,633 1,772 1,793 1,820 1,858 1,905 1,999 1,1002 1}
+{0 positive,39 1,98 1,117 1,165 1,219 1,224 1,252 1,266 1,303 1,339 1,351 1,391 1,452 1,466 1,600 1,611 1,633 1,639 1,881 1,950 1,1002 1}
+{0 positive,98 1,207 1,261 1,266 1,286 1,339 1,341 1,393 1,538 1,745 1,766 1,792 1,817 1,849 1,881 1}
+{0 positive,98 1,169 1,184 1,197 1,209 1,224 1,304 1,339 1,362 1,386 1,417 1,633 1,677 1,679 1,767 1,772 1,824 1,851 1,858 1,905 1}
+{0 positive,71 1,98 1,107 1,207 1,211 1,223 1,266 1,293 1,351 1,466 1,514 1,552 1,609 1,842 1,905 1,936 1,950 1,999 1}
+{0 positive,39 1,98 1,124 1,266 1,339 1,393 1,423 1,698 1,745 1,772 1,793 1,892 1,948 1,950 1}
+{0 positive,17 1,98 1,121 1,124 1,146 1,210 1,220 1,293 1,331 1,456 1,515 1,576 1,581 1,608 1,614 1,633 1,651 1,689 1,803 1,858 1,943 1,950 1,1002 1}
+{0 positive,2 1,88 1,102 1,165 1,207 1,223 1,242 1,266 1,293 1,316 1,362 1,372 1,492 1,528 1,563 1,633 1,706 1,784 1,858 1,1002 1}
+{0 positive,50 1,51 1,146 1,186 1,207 1,219 1,266 1,293 1,316 1,331 1,337 1,339 1,402 1,432 1,492 1,576 1,669 1,699 1,741 1,784 1,792 1,820 1,871 1,881 1,920 1,939 1,978 1,999 1,1002 1}
+{0 positive,32 1,98 1,146 1,155 1,223 1,316 1,432 1,528 1,633 1,634 1,914 1,950 1}
+{0 positive,159 1,362 1,417 1,555 1,792 1,831 1,987 1,999 1}
+{0 positive,98 1,107 1,179 1,223 1,241 1,266 1,339 1,369 1,451 1,466 1,619 1,647 1,651 1,834 1,902 1,943 1}
+{0 positive,124 1,165 1,266 1,282 1,330 1,409 1,423 1,457 1,584 1,599 1,665 1,744 1,745 1,820 1,821 1,837 1,876 1,880 1,894 1,950 1}
+{0 positive,88 1,206 1,207 1,215 1,417 1,454 1,505 1,633 1,679 1,831 1,859 1,999 1}
+{0 positive,25 1,154 1,169 1,176 1,305 1,362 1,371 1,374 1,384 1,555 1,679 1,780 1,792 1,819 1,842 1,945 1,1002 1}
+{0 positive,2 1,25 1,84 1,94 1,219 1,223 1,305 1,536 1,545 1,633 1,679 1,780 1,792 1,830 1,836 1,943 1}
+{0 positive,369 1,503 1,558 1,679 1,782 1,792 1,900 1,950 1,978 1}
+{0 positive,26 1,44 1,102 1,126 1,159 1,210 1,219 1,339 1,452 1,584 1,625 1,637 1,679 1,698 1,716 1,730 1,792 1,921 1,950 1,1002 1}
+{0 positive,82 1,207 1,223 1,328 1,341 1,633 1,677 1,679 1,825 1,851 1,978 1,989 1}
+{0 positive,155 1,165 1,224 1,316 1,362 1,677 1,679 1,772 1,825 1,881 1,901 1,926 1,978 1,1002 1}
+{0 positive,88 1,163 1,210 1,319 1,414 1,679 1,792 1,798 1,827 1,830 1,831 1,965 1,1002 1}
+{0 positive,35 1,74 1,123 1,374 1,378 1,387 1,466 1,580 1,679 1,685 1,825 1,931 1,978 1,999 1,1002 1}
+{0 positive,2 1,35 1,74 1,82 1,124 1,207 1,360 1,374 1,378 1,387 1,580 1,679 1,685 1,780 1,825 1,834 1,931 1,978 1,999 1,1002 1}
+{0 positive,39 1,210 1,443 1,536 1,679 1,705 1,735 1,770 1,926 1,950 1}
+{0 positive,98 1,192 1,207 1,290 1,293 1,362 1,513 1,651 1,880 1}
+{0 positive,39 1,88 1,124 1,210 1,215 1,223 1,362 1,369 1,452 1,466 1,528 1,633 1,679 1,698 1,767 1,826 1,880 1,950 1,1002 1}
+{0 positive,39 1,104 1,153 1,169 1,224 1,339 1,384 1,489 1,633 1,636 1,654 1,679 1,736 1,914 1,1002 1}
+{0 positive,88 1,123 1,169 1,223 1,256 1,305 1,339 1,384 1,539 1,679 1,819 1,842 1,1002 1}
+{0 positive,123 1,127 1,207 1,210 1,223 1,305 1,339 1,384 1,545 1,559 1,677 1,679 1}
+{0 positive,104 1,302 1,362 1,384 1,515 1,545 1,633 1,669 1,679 1,1002 1}
+{0 positive,88 1,206 1,219 1,539 1,559 1,633 1,677 1,679 1,698 1,718 1,825 1,926 1,950 1,1002 1}
+{0 positive,26 1,39 1,219 1,339 1,545 1,548 1,654 1,679 1,737 1,881 1,1002 1}
+{0 positive,25 1,159 1,186 1,207 1,219 1,223 1,305 1,353 1,362 1,369 1,459 1,545 1,606 1,633 1,679 1,737 1,825 1,957 1,1002 1}
+{0 positive,2 1,25 1,165 1,293 1,339 1,362 1,369 1,459 1,633 1,669 1,679 1,706 1,825 1,834 1,926 1,957 1,999 1}
+{0 positive,123 1,161 1,165 1,186 1,219 1,223 1,293 1,305 1,341 1,539 1,633 1,669 1,679 1,698 1,766 1,820 1,836 1,950 1,990 1,999 1,1002 1}
+{0 positive,10 1,42 1,74 1,207 1,210 1,341 1,384 1,387 1,539 1,545 1,584 1,633 1,780 1,792 1,880 1,931 1,1002 1}
+{0 positive,39 1,62 1,98 1,159 1,266 1,293 1,339 1,406 1,451 1,552 1,699 1,735 1,828 1,858 1,950 1,1002 1}
+{0 positive,25 1,26 1,78 1,98 1,164 1,210 1,223 1,271 1,286 1,293 1,297 1,342 1,367 1,480 1,489 1,594 1,619 1,777 1,786 1,787 1,859 1,868 1,881 1,884 1,906 1,915 1,1002 1}
+{0 positive,25 1,98 1,159 1,210 1,266 1,293 1,340 1,459 1,480 1,536 1,633 1,745 1,772 1,837 1,849 1,858 1,881 1,950 1,1002 1}
+{0 positive,186 1,207 1,340 1,387 1,407 1,417 1,515 1,931 1}
+{0 positive,39 1,98 1,209 1,223 1,323 1,331 1,406 1,451 1,515 1,836 1,943 1}
+{0 positive,25 1,107 1,159 1,223 1,515 1,623 1,702 1,821 1,951 1,1002 1}
+{0 positive,33 1,73 1,154 1,311 1,341 1,365 1,466 1,513 1,515 1,541 1,606 1,651 1,654 1,842 1,986 1,1002 1}
+{0 positive,98 1,210 1,346 1,387 1,449 1,515 1,623 1,679 1,749 1,931 1}
+{0 positive,10 1,74 1,107 1,186 1,304 1,387 1,515 1,787 1,880 1,905 1,931 1,989 1,1002 1}
+{0 positive,102 1,210 1,303 1,331 1,339 1,452 1,505 1,515 1,606 1,611 1,633 1,706 1,772 1,792 1,821 1,899 1,1002 1}
+{0 positive,2 1,25 1,219 1,316 1,470 1,505 1,515 1,573 1,633 1,669 1,702 1,729 1,792 1,821 1,831 1,845 1,880 1,943 1,999 1}
+{0 positive,2 1,5 1,186 1,303 1,328 1,515 1,611 1,628 1,751 1,792 1,880 1,931 1,951 1}
+{0 positive,39 1,182 1,207 1,304 1,331 1,369 1,451 1,515 1,528 1,552 1,611 1,633 1,950 1,951 1,989 1}
+{0 positive,25 1,32 1,89 1,207 1,328 1,356 1,417 1,849 1}
+{0 positive,32 1,98 1,165 1,223 1,290 1,311 1,331 1,387 1,417 1,951 1}
+{0 positive,32 1,215 1,304 1,305 1,331 1,515 1,545 1,633 1,780 1,820 1,943 1,961 1}
+{0 positive,163 1,515 1,536 1,572 1,633 1,726 1,831 1,945 1}
+{0 positive,35 1,146 1,152 1,163 1,219 1,309 1,323 1,362 1,369 1,393 1,430 1,438 1,507 1,515 1,617 1,792 1}
+{0 positive,3 1,24 1,35 1,153 1,206 1,207 1,220 1,223 1,331 1,358 1,362 1,374 1,387 1,489 1,515 1,660 1,780 1,830 1,831 1,895 1,931 1,978 1,1002 1}
+{0 positive,3 1,25 1,26 1,210 1,223 1,261 1,358 1,369 1,393 1,417 1,459 1,515 1,653 1,654 1,854 1,904 1,909 1,914 1,950 1,1002 1}
+{0 positive,207 1,386 1,515 1,633 1,645 1,815 1,825 1,827 1,880 1,895 1,974 1}
+{0 positive,128 1,223 1,304 1,393 1,515 1,653 1,820 1,945 1,966 1}
+{0 positive,34 1,104 1,207 1,303 1,358 1,362 1,524 1,545 1,561 1,679 1,741 1,777 1,780 1,848 1,903 1,932 1}
+{0 neutral,2 1,11 1,32 1,62 1,101 1,126 1,210 1,219 1,304 1,331 1,346 1,387 1,393 1,407 1,603 1,616 1,633 1,650 1,702 1,735 1,777 1,792 1,880 1,903 1,931 1,951 1,978 1,986 1}
+{0 neutral,2 1,12 1,25 1,26 1,32 1,35 1,52 1,102 1,112 1,201 1,219 1,223 1,303 1,331 1,591 1,633 1,695 1,728 1,766 1,770 1,787 1,816 1,926 1,950 1,1002 1}
+{0 neutral,130 1,134 1,207 1,219 1,355 1,454 1,495 1,908 1,1002 1}
+{0 neutral,207 1,304 1,328 1,374 1,386 1,747 1,827 1}
+{331 1,348 1,359 1,362 1,528 1,596 1,620 1,705 1,706 1,725 1,736 1,950 1}
+{0 neutral,3 1,169 1,206 1,348 1,374 1}
+{0 neutral,3 1,207 1,223 1,339 1,353 1,430 1,431 1,532 1,543 1,633 1,772 1,881 1,950 1,978 1,1002 1}
+{0 neutral,88 1,111 1,159 1,305 1,328 1,339 1,351 1,369 1,430 1,466 1,518 1,576 1,688 1,767 1,881 1,950 1,1002 1}
+{0 neutral,159 1,206 1,207 1,209 1,219 1,223 1,362 1,378 1,451 1,538 1,633 1,736 1,824 1,942 1}
+{159 1,223 1,257 1,352 1,369 1,399 1,474 1,489 1,526 1,651 1,669 1,950 1,1002 1}
+{0 neutral,25 1,117 1,215 1,305 1,378 1,484 1,633 1,699 1,864 1,881 1,943 1,999 1}
+{0 neutral,25 1,39 1,75 1,81 1,120 1,159 1,168 1,181 1,207 1,331 1,339 1,369 1,409 1,451 1,494 1,547 1,583 1,633 1,792 1,881 1,894 1,950 1,1002 1}
+{0 neutral,181 1,223 1,227 1,328 1,369 1,379 1,452 1,633 1,705 1,706 1,767 1,781 1,881 1,950 1,954 1,999 1}
+{0 neutral,25 1,89 1,207 1,220 1,313 1,393 1,451 1,610 1,633 1,914 1}
+{0 neutral,25 1,219 1,220 1,223 1,276 1,523 1,779 1}
+{0 neutral,35 1,177 1,393 1,574 1,636 1,792 1}
+{0 neutral,126 1,160 1,334 1,346 1,387 1,524 1,734 1,777 1,821 1,893 1,931 1,960 1,986 1}
+{0 neutral,62 1,127 1,331 1,343 1,383 1,385 1,528 1,633 1,792 1,967 1,999 1,1002 1}
+{0 neutral,101 1,385 1,393 1,459 1,518 1,792 1,880 1,978 1,999 1}
+{0 neutral,83 1,126 1,159 1,210 1,223 1,331 1,334 1,374 1,378 1,387 1,441 1,470 1,533 1,626 1,766 1,931 1,999 1}
+{0 neutral,101 1,159 1,207 1,210 1,378 1,561 1,729 1,827 1,842 1,846 1,855 1,978 1}
+{0 neutral,25 1,102 1,207 1,223 1,316 1,362 1,446 1,451 1,454 1,523 1,667 1,697 1,753 1,926 1,962 1,1002 1}
+{0 positive,12 1,97 1,150 1,219 1,223 1,328 1,584 1,633 1,780 1,952 1}
+{0 neutral,19 1,25 1,52 1,171 1,209 1,357 1,502 1,616 1,761 1,826 1,827 1,855 1,880 1,929 1,950 1,978 1}
+{0 neutral,10 1,35 1,52 1,209 1,219 1,374 1,385 1,408 1,456 1,465 1,535 1,617 1,649 1,827 1,978 1}
+{0 neutral,177 1,207 1,210 1,213 1,219 1,339 1,383 1,385 1,393 1,532 1,537 1,633 1,649 1,827 1,849 1,978 1,999 1}
+{0 neutral,4 1,15 1,25 1,74 1,107 1,126 1,183 1,207 1,451 1,524 1,615 1,633 1,792 1,867 1,880 1,893 1,905 1,986 1}
+{0 neutral,2 1,7 1,223 1,316 1,343 1,679 1,737 1,806 1,807 1,854 1,978 1,1002 1}
+{0 neutral,12 1,97 1,105 1,206 1,207 1,210 1,223 1,328 1,352 1,385 1,393 1,419 1,437 1,448 1,633 1,679 1,726 1,764 1,815 1,855 1,976 1}
+{0 neutral,304 1,331 1,895 1}
+{0 neutral,12 1,168 1,304 1,344 1,407 1,532 1,645 1,679 1,903 1,950 1}
+{0 neutral,87 1,223 1,330 1,374 1,506 1}
+{0 neutral,9 1,17 1,35 1,207 1,304 1,331 1,542 1,617 1,660 1,903 1,908 1,999 1,1002 1}
+{0 neutral,10 1,20 1,35 1,87 1,103 1,206 1,357 1,385 1,502 1,568 1,569 1,755 1,761 1,808 1,900 1,941 1,950 1,978 1,1002 1}
+{0 neutral,5 1,12 1,25 1,177 1,191 1,210 1,223 1,451 1,456 1,617 1,623 1,639 1,870 1,978 1,1002 1}
+{0 positive,74 1,102 1,316 1,331 1,393 1,448 1,465 1,766 1,895 1}
+{0 neutral,3 1,6 1,12 1,20 1,207 1,223 1,316 1,331 1,465 1,533 1,649 1,770 1,787 1,807 1}
+{0 neutral,2 1,3 1,12 1,16 1,17 1,105 1,223 1,290 1,316 1,331 1,352 1,419 1,895 1,903 1,950 1}
+{0 positive,12 1,171 1,210 1,259 1,316 1,331 1,352 1,393 1,448 1,456 1,645 1,689 1,826 1,908 1,919 1,998 1}
+{0 neutral,88 1,94 1,207 1,223 1,316 1,328 1,362 1,428 1,529 1,539 1,633 1,726 1,978 1,997 1}
+{0 neutral,6 1,12 1,32 1,57 1,108 1,200 1,206 1,207 1,219 1,292 1,311 1,331 1,343 1,425 1,599 1,628 1,895 1,952 1,1002 1}
+{0 neutral,25 1,26 1,35 1,59 1,143 1,207 1,223 1,270 1,331 1,339 1,523 1,766 1,777 1,880 1,888 1,1002 1}
+{0 neutral,11 1,12 1,207 1,339 1,428 1,620 1,628 1,633 1,637 1,645 1,726 1,846 1,895 1,908 1,920 1,1002 1}
+{0 neutral,52 1,63 1,74 1,75 1,116 1,207 1,219 1,374 1,388 1,465 1,539 1,542 1,633 1,637 1,658 1,727 1,837 1,846 1,950 1,977 1,978 1,1002 1}
+{0 neutral,3 1,21 1,25 1,107 1,143 1,207 1,210 1,223 1,296 1,299 1,376 1,633 1,645 1,764 1,767 1,806 1,829 1,834 1,867 1,1002 1}
+{0 neutral,32 1,56 1,107 1,169 1,207 1,223 1,302 1,305 1,333 1,362 1,633 1,766 1,842 1,895 1,946 1,1003 1}
+{0 neutral,30 1,88 1,127 1,206 1,207 1,414 1,525 1,533 1,633 1,688 1,798 1,981 1,1002 1}
+{0 neutral,169 1,206 1,207 1,219 1,533 1,620 1,978 1,1002 1}
+{0 neutral,75 1,126 1,135 1,207 1,209 1,219 1,331 1,346 1,393 1,434 1,573 1,633 1,712 1,753 1,766 1,777 1,819 1,999 1}
+{0 neutral,35 1,206 1,216 1,223 1,359 1,439 1,470 1,726 1,908 1,989 1}
+{224 1,331 1,341 1,620 1,658 1,682 1,950 1}
+{39 1,224 1,451 1,536 1,639 1,695 1,735 1,772 1,834 1,950 1}
+{181 1,207 1,223 1,224 1,331 1,522 1,620 1,654 1,772 1,825 1,865 1,881 1,950 1}
+{223 1,339 1,671 1,679 1}
+{39 1,219 1,316 1,372 1,399 1,438 1,678 1,679 1,741 1,950 1,1002 1}
+{101 1,155 1,339 1,614 1,622 1,661 1,677 1,679 1,772 1,849 1,858 1}
+{192 1,210 1,224 1,384 1,391 1,499 1,536 1,633 1,639 1,651 1,779 1,880 1,950 1}
+{98 1,120 1,223 1,266 1,303 1,451 1,499 1,504 1,633 1,753 1,880 1,893 1,950 1}
+{98 1,124 1,215 1,223 1,443 1,633 1,893 1,957 1}
+{98 1,102 1,223 1,438 1,503 1,633 1,639 1,698 1,767 1,776 1,779 1,914 1,940 1,950 1}
+{25 1,54 1,78 1,93 1,215 1,223 1,266 1,393 1,451 1,503 1,514 1,528 1,594 1,595 1,633 1,745 1,779 1,907 1,950 1}
+{25 1,98 1,223 1,339 1,633 1,679 1,764 1,772 1,950 1}
+{224 1,391 1,451 1,528 1,639 1,772 1,792 1,950 1}
+{224 1,387 1,405 1,639 1,735 1,772 1,777 1,792 1,837 1,894 1,931 1,950 1,1002 1}
+{98 1,223 1,293 1,386 1,406 1,419 1,679 1,730 1,772 1,914 1,950 1}
+{62 1,224 1,293 1,341 1,354 1,528 1,633 1,735 1,858 1,880 1,881 1,945 1,950 1}
+{223 1,225 1,328 1,452 1,620 1,654 1,849 1,944 1,950 1}
+{98 1,137 1,223 1,328 1,451 1,772 1,950 1}
+{159 1,165 1,244 1,268 1,293 1,633 1,772 1,821 1,881 1,950 1,1002 1}
+{120 1,223 1,293 1,328 1,339 1,536 1,633 1,640 1,682 1,772 1,881 1,943 1,950 1}
+{54 1,158 1,159 1,365 1,409 1,609 1,633 1,645 1,858 1,943 1,950 1}
+{498 1}
+{159 1,197 1,223 1,369 1,451 1,501 1,550 1,633 1,767 1,772 1,820 1,950 1}
+{98 1,293 1,391 1,523 1,536 1,639 1,651 1,772 1,881 1,950 1,999 1,1002 1,1003 1}
+{29 1,50 1,155 1,197 1,223 1,305 1,328 1,384 1,493 1,605 1,633 1}
+{25 1,155 1,430 1,516 1,526 1,633 1,943 1,1002 1}
+{98 1,159 1,219 1,248 1,268 1,269 1,293 1,303 1,409 1,740 1,772 1,878 1,881 1,1002 1}
+{84 1,124 1,293 1,581 1,633 1,950 1}
+{552 1,728 1,880 1,881 1,945 1,950 1}
+{485 1,536 1,728 1}
+{137 1,204 1,223 1,328 1,950 1}
+{25 1,226 1,328 1,339 1,356 1,369 1,633 1,772 1,950 1}
+{609 1,633 1,776 1,834 1,950 1}
+{33 1,89 1,293 1,328 1,334 1,369 1,576 1,633 1,642 1,858 1,890 1}
+{13 1,25 1,164 1,280 1,391 1,503 1,633 1,726 1,950 1,979 1}
+{25 1,88 1,159 1,197 1,223 1,328 1,362 1,391 1,498 1,633 1,740 1,767 1,772 1,950 1,1002 1}
+{98 1,215 1,343 1,772 1,950 1}
+{169 1,223 1,328 1,660 1,671 1,740 1,772 1,804 1,1002 1}
+{98 1,155 1,223 1,293 1,328 1,507 1,633 1,772 1,878 1,999 1}
+{354 1,501 1,633 1}
+{834 1}
+{223 1,303 1,443 1,633 1,772 1,800 1,950 1}
+{25 1,223 1,950 1,1002 1}
+{215 1,266 1,303 1,339 1,393 1,451 1,499 1,504 1,528 1,633 1,732 1,753 1,880 1,950 1}
+{50 1,165 1,197 1,220 1,268 1,519 1,605 1,821 1,1003 1}
+{98 1,339 1,359 1,642 1,736 1,950 1}
+{98 1,223 1,354 1,859 1,860 1}
+{84 1,256 1,329 1,443 1,633 1,905 1}
+{57 1,98 1,391 1,535 1,639 1,865 1,894 1,999 1,1002 1}
+{98 1,153 1,223 1,303 1,499 1,767 1,905 1}
+{300 1,354 1}
+{211 1,331 1,341 1,511 1,554 1,614 1,725 1,726 1,895 1,950 1,980 1}
+{121 1,159 1,197 1,210 1,224 1,339 1,767 1}
+{39 1,159 1,772 1,881 1,950 1,1002 1}
+{98 1,224 1,293 1,369 1,430 1,451 1,479 1,528 1,607 1,622 1,639 1,772 1,804 1,858 1,950 1,1002 1}
+{25 1,59 1,223 1,293 1,445 1,526 1,654 1,772 1,881 1,950 1,1002 1}
+{339 1,639 1,651 1,938 1,1002 1}
+{2 1,24 1,62 1,84 1,293 1,339 1,633 1,858 1,999 1}
+{25 1,84 1,223 1,328 1,513 1,1002 1}
+{268 1,293 1,576 1,675 1,881 1,936 1}
+{268 1,293 1,341 1,881 1}
+{20 1,821 1}
+{62 1,380 1,505 1,767 1,821 1,843 1,999 1}
+{25 1,633 1,698 1,834 1,950 1,999 1,1002 1}
+{102 1,169 1,182 1,305 1,328 1,339 1,507 1,522 1,633 1,639 1}
+{25 1,226 1,369 1,633 1,950 1}
+{102 1,127 1,341 1,441 1,505 1,584 1,639 1,654 1,821 1,825 1,905 1,1002 1}
+{29 1,44 1,165 1,223 1,262 1,268 1,293 1,339 1,547 1,640 1,651 1,720 1,772 1,881 1,1002 1}
+{2 1,159 1,204 1,420 1,511 1,633 1,767 1,772 1}
+{186 1,772 1,881 1,950 1}
+{46 1,303 1,633 1,646 1,909 1,950 1}
+{300 1,698 1,772 1,881 1,950 1}
+{223 1,244 1,354 1,369 1,825 1,914 1,950 1}
+{25 1,59 1,223 1,293 1,654 1,881 1,950 1,1002 1}
+{215 1,261 1,293 1,451 1,528 1,552 1,698 1,821 1,905 1,943 1,950 1}
+{0 positive,102 1,223 1,251 1,339 1,341 1,384 1,466 1,503 1,630 1,804 1}
+{0 positive,178 1,293 1,312 1,327 1,654 1,772 1,881 1,926 1}
+{0 positive,5 1,123 1,223 1,293 1,369 1,466 1,628 1,633 1,679 1,881 1}
+{0 positive,104 1,266 1,293 1,369 1,393 1,489 1,528 1,576 1,621 1,654 1,880 1}
+{0 positive,89 1,293 1,341 1,359 1,726 1,826 1,895 1}
+{0 positive,89 1,98 1,224 1,293 1,836 1,978 1}
+{0 positive,98 1,213 1,266 1,303 1,362 1,369 1,393 1,488 1,528 1,633 1,767 1,932 1}
+{0 positive,266 1,303 1,362 1,443 1,515 1,633 1,654 1,858 1,880 1}
+{0 positive,102 1,159 1,210 1,359 1,625 1,1002 1}
+{0 positive,98 1,210 1,261 1,293 1,341 1,384 1,642 1,881 1}
+{0 positive,346 1,362 1,387 1,633 1,706 1,825 1,902 1,994 1,1002 1}
+{0 positive,223 1,274 1,293 1,328 1,339 1,369 1,505 1,881 1}
+{0 positive,274 1,299 1,328 1,434 1,489 1,621 1,633 1,670 1,772 1,880 1}
+{0 positive,71 1,98 1,209 1,274 1,293 1,633 1,772 1,810 1,881 1,905 1,999 1}
+{0 positive,64 1,98 1,189 1,274 1,369 1,451 1,501 1,772 1}
+{0 positive,125 1,215 1,259 1,341 1,380 1,451 1,725 1,726 1,772 1,831 1,895 1,999 1}
+{0 positive,98 1,266 1,403 1,1002 1}
+{0 positive,124 1,330 1,369 1,554 1,600 1,651 1,813 1,888 1}
+{0 positive,98 1,159 1,223 1,293 1,343 1,409 1,836 1,894 1,950 1,954 1}
+{0 positive,25 1,94 1,223 1,293 1,328 1,339 1,576 1,1002 1}
+{0 positive,26 1,98 1,210 1,293 1,328 1,411 1,633 1,881 1,1002 1}
+{0 positive,98 1,102 1,159 1,207 1,223 1,293 1,325 1,328 1,339 1,341 1,633 1,772 1,842 1,920 1}
+{0 positive,98 1,224 1,307 1,393 1,654 1,698 1,772 1,878 1,881 1,950 1,989 1}
+{0 positive,266 1,339 1,825 1}
+{0 positive,39 1,69 1,576 1,612 1,654 1,858 1}
+{0 positive,25 1,89 1,126 1,159 1,223 1,293 1,328 1,369 1,443 1,633 1,926 1,950 1,1002 1}
+{0 positive,62 1,165 1,215 1,261 1,293 1,328 1,391 1,777 1,858 1,950 1,1002 1,1003 1}
+{0 positive,98 1,143 1,189 1,206 1,207 1,219 1,223 1,293 1,328 1,339 1,384 1,525 1,625 1,772 1,780 1,804 1,848 1,880 1}
+{0 positive,39 1,59 1,88 1,98 1,159 1,219 1,220 1,328 1,359 1,369 1,393 1,419 1,466 1,587 1,633 1,772 1}
+{0 positive,98 1,293 1,384 1,469 1,654 1,881 1}
+{0 positive,5 1,165 1,293 1,628 1,858 1}
+{0 positive,26 1,184 1,293 1,339 1,364 1,576 1}
+{0 positive,221 1,293 1,299 1,633 1,835 1,881 1}
+{0 positive,266 1,633 1,825 1}
+{0 positive,50 1,99 1,223 1,328 1,825 1}
+{0 positive,25 1,98 1,159 1,223 1,248 1,535 1,633 1,640 1,682 1,716 1,772 1,823 1,825 1,858 1,1002 1}
+{0 positive,215 1,359 1,650 1,772 1,943 1}
+{0 positive,62 1,103 1,159 1,339 1,359 1,362 1,726 1,772 1,787 1,834 1,950 1,980 1}
+{0 positive,48 1,146 1,207 1,223 1,266 1,293 1,391 1,466 1,503 1,504 1,633 1,753 1,1002 1}
+{0 positive,102 1,159 1,210 1,307 1,340 1,732 1,840 1,999 1,1002 1}
+{0 positive,98 1,101 1,545 1,633 1,639 1,679 1,825 1}
+{0 positive,159 1,197 1,219 1,384 1,417 1,633 1,639 1,821 1,858 1,878 1,880 1}
+{0 positive,50 1,155 1,159 1,219 1,772 1,950 1,1002 1}
+{0 positive,369 1,419 1,451 1,639 1,654 1,698 1,772 1,881 1,950 1,1002 1}
+{0 positive,98 1,210 1,261 1,293 1,423 1,745 1,825 1,881 1}
+{0 positive,111 1,159 1,165 1,196 1,197 1,268 1,293 1,327 1,451 1,515 1,614 1,767 1,858 1,880 1,980 1}
+{0 positive,399 1,698 1,772 1,825 1,950 1}
+{0 positive,69 1,98 1,124 1,339 1,536 1,852 1,858 1}
+{0 positive,165 1,207 1,223 1,950 1,968 1,1002 1}
+{0 positive,98 1,155 1,279 1,293 1,633 1,698 1,878 1,950 1}
+{0 positive,59 1,303 1,361 1,369 1,393 1,554 1,611 1,744 1,772 1}
+{0 positive,89 1,105 1,293 1,352 1,361 1,772 1}
+{0 positive,25 1,59 1,223 1,293 1,654 1,881 1,1002 1}
+{0 positive,197 1,293 1,359 1,528 1,772 1}
+{0 positive,266 1,293 1,435 1,576 1,654 1}
+{0 positive,90 1,223 1,286 1,321 1,661 1,744 1,854 1,858 1,926 1}
+{0 positive,97 1,165 1,339 1,437 1,634 1,654 1}
+{0 positive,97 1,215 1,223 1,303 1,362 1,633 1,848 1,940 1}
+{0 positive,25 1,180 1,213 1,223 1,369 1,393 1,528 1,535 1,654 1,767 1,1002 1}
+{0 positive,39 1,50 1,328 1,341 1}
+{0 positive,163 1,215 1,772 1}
+{0 positive,98 1,153 1,163 1,489 1,633 1,642 1}
+{0 positive,98 1,155 1,221 1,526 1,772 1,813 1,881 1,957 1}
+{0 positive,98 1,102 1,123 1,223 1,293 1,633 1,729 1,836 1}
+{0 positive,98 1,124 1,247 1,369 1,528 1,858 1,947 1}
+{0 positive,223 1,272 1,316 1,536 1,926 1}
+{0 positive,75 1,97 1,98 1,165 1,405 1,634 1,772 1,912 1}
+{0 positive,39 1,98 1,117 1,221 1,332 1,452 1,772 1}
+{0 positive,25 1,78 1,159 1,412 1,772 1,950 1,1002 1}
+{0 positive,293 1,339 1,426 1,600 1,698 1,1002 1}
+{0 positive,97 1,223 1,293 1,506 1,576 1,739 1,858 1}
+{0 positive,78 1,223 1,293 1,744 1,834 1,881 1}
+{0 positive,98 1,266 1,289 1,327 1,744 1,745 1}
+{0 positive,102 1,104 1,124 1,165 1,223 1,247 1,339 1,706 1,779 1,914 1}
+{0 positive,223 1,328 1,417 1,505 1,736 1}
+{0 neutral,305 1,328 1,339 1,369 1,528 1,620 1,682 1,772 1}
+{0 neutral,102 1,223 1,328 1,451 1}
+{0 neutral,102 1,223 1,388 1,451 1,633 1,729 1}
+{0 neutral,102 1,288 1,505 1,633 1}
+{0 neutral,13 1,207 1,328 1,341 1,725 1,772 1,895 1}
+{0 neutral,219 1,341 1,359 1,633 1}
+{0 neutral,17 1,25 1,223 1,316 1,633 1,770 1,787 1,1002 1}
+{0 neutral,25 1,159 1,223 1,339 1,480 1,506 1,633 1,770 1,787 1,1002 1}
+{0 neutral,168 1,223 1,362 1,821 1}
+{0 neutral,89 1,164 1,223 1,339 1,388 1,391 1,633 1,1002 1}
+{36 1,497 1,536 1,676 1,881 1,948 1}
+{0 neutral,25 1,223 1,304 1,344 1,880 1,950 1}
+{0 neutral,102 1,223 1,304 1,369 1,397 1,596 1,747 1,772 1,993 1,1002 1}
+{0 neutral,102 1,223 1,339 1,388 1,633 1,858 1}
+{0 neutral,223 1,328 1,393 1,505 1,859 1}
+{0 neutral,25 1,107 1,176 1,261 1,339 1,362 1,639 1,820 1,880 1,948 1,1002 1}
+{0 neutral,94 1,102 1,159 1,240 1,736 1,1002 1}
+{0 neutral,23 1,159 1,526 1,1002 1}
+{0 neutral,6 1,21 1,32 1,284 1,304 1,348 1,493 1,599 1,633 1,692 1}
+{0 neutral,451 1,821 1}
+{0 neutral,633 1,686 1,772 1,849 1}
+{0 neutral,223 1,259 1,331 1,370 1,880 1}
+{0 neutral,208 1,223 1,374 1,451 1,633 1,698 1,880 1,950 1}
+{0 neutral,2 1,49 1,339 1,374 1,449 1,466 1,633 1,639 1}
+{0 neutral,223 1,299 1,384 1,406 1,639 1,880 1,1002 1}
+{0 neutral,167 1,614 1,880 1}
+{0 neutral,25 1,223 1,262 1,787 1,1002 1}
+{0 positive,102 1,155 1,159 1,307 1,341 1,466 1,522 1,917 1,1002 1}
+{0 neutral,369 1,462 1,503 1,999 1}
+{0 neutral,89 1,197 1,210 1,248 1,339 1,341 1,369 1,419 1,451 1,649 1,777 1,837 1,864 1,950 1,980 1}
+{0 neutral,339 1,509 1,821 1,880 1,969 1,1002 1}
+{0 neutral,25 1,219 1,223 1,339 1,522 1,633 1,840 1,854 1,1002 1}
+{0 positive,124 1,207 1,213 1,223 1,303 1,369 1,384 1,393 1,470 1,528 1,767 1,779 1,932 1}
+{0 neutral,164 1,223 1,241 1,293 1,391 1,406 1,479 1,633 1,717 1,772 1,880 1,1002 1}
+{0 positive,75 1,239 1,633 1,644 1,772 1,834 1,881 1}
+{0 neutral,155 1,159 1,196 1,304 1,633 1,813 1,948 1,1002 1}
+{0 neutral,26 1,62 1,223 1,239 1,328 1,339 1,639 1,654 1,740 1,772 1,894 1,1002 1}
+{0 neutral,223 1,328 1,639 1,770 1,787 1}
+{0 positive,97 1,102 1,159 1,165 1,223 1,405 1,633 1,772 1,914 1,997 1,1002 1}
+{0 positive,98 1,102 1,130 1,207 1,328 1,339 1,369 1,430 1,620 1,633 1,736 1,780 1,1002 1}
+{0 neutral,159 1,305 1,339 1,341 1,369 1,682 1}
+{0 neutral,102 1,223 1,328 1,339 1,341 1,633 1,682 1}
+{0 neutral,102 1,223 1,339 1,397 1,747 1,770 1,787 1,914 1,1002 1}
+{0 neutral,159 1,223 1,369 1,387 1,430 1,451 1,459 1,503 1,633 1,823 1}
+{0 neutral,39 1,406 1,435 1,633 1,635 1,849 1,995 1}
+{0 neutral,88 1,339 1,346 1,388 1,597 1,633 1,1002 1}
+{0 neutral,25 1,223 1,328 1,339 1}
+{0 neutral,26 1,50 1,328 1,770 1,787 1,821 1}
+{0 positive,155 1,159 1,312 1,341 1,466 1,526 1,535 1,781 1,994 1}
+{0 neutral,157 1,821 1,880 1,881 1,1002 1}
