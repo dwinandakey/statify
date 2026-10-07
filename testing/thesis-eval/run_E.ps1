@@ -1,4 +1,4 @@
-# run_E.ps1 - Track E: pengujian waktu eksekusi Text Analytics (STWV, Naive Bayes, Apply Model) di PERANGKAT SKRIPSI.
+﻿# run_E.ps1 - Track E: pengujian waktu eksekusi Text Analytics (STWV, Naive Bayes, Apply Model) di PERANGKAT SKRIPSI.
 # Satu perintah (dari akar repo):
 #     powershell -ExecutionPolicy Bypass -File testing\thesis-eval\run_E.ps1
 # Langkah (idempoten; TIDAK menghapus apa pun; berkas CSV mentah bertambah per eksekusi, agregasi memakai run_id terbaru):

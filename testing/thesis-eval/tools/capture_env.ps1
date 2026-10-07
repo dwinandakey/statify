@@ -1,4 +1,4 @@
-# Mencatat lingkungan perangkat skripsi ke logs\env_windows.txt (UTF-8). Dipanggil oleh run_all.ps1.
+﻿# Mencatat lingkungan perangkat skripsi ke logs\env_windows.txt (UTF-8). Dipanggil oleh run_all.ps1.
 . "$PSScriptRoot\common.ps1"
 $out = Join-Path $LogDir 'env_windows.txt'
 $lines = New-Object System.Collections.Generic.List[string]

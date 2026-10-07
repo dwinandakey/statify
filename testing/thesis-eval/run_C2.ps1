@@ -1,4 +1,4 @@
-# Track C2 (black-box menu Naive Bayes, BB-14..BB-28): jalankan tes Rust dan Jest standar di Windows.
+﻿# Track C2 (black-box menu Naive Bayes, BB-14..BB-28): jalankan tes Rust dan Jest standar di Windows.
 # Pemakaian (dari folder repo):  powershell -ExecutionPolicy Bypass -File testing\thesis-eval\run_C2.ps1
 # Idempoten; tidak menghapus apa pun. Log yang dihasilkan:
 #   testing\thesis-eval\logs\rust_thesis_blackbox_nb.txt   (cargo test --test thesis_blackbox_nb)

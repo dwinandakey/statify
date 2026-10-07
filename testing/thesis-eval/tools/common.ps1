@@ -1,4 +1,4 @@
-# Fungsi bantu bersama untuk skrip evaluasi (PowerShell 5.1+ / 7).
+﻿# Fungsi bantu bersama untuk skrip evaluasi (PowerShell 5.1+ / 7).
 # Semua log ditulis sebagai UTF-8 (BUKAN UTF-16 seperti Tee-Object di PowerShell 5.1).
 $ErrorActionPreference = 'Continue'
 $script:EvalRoot = Split-Path -Parent $PSScriptRoot              # ...\testing\thesis-eval

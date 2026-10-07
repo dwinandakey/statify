@@ -1,4 +1,4 @@
-# run_all.ps1 — SATU PERINTAH untuk menjalankan seluruh paket evaluasi di Windows (perangkat skripsi).
+﻿# run_all.ps1 — SATU PERINTAH untuk menjalankan seluruh paket evaluasi di Windows (perangkat skripsi).
 #
 #   powershell -ExecutionPolicy Bypass -File testing\thesis-eval\run_all.ps1
 #

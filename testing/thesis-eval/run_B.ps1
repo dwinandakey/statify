@@ -1,4 +1,4 @@
-# Track B (white-box, basis path): jalankan tes thesis whitebox dengan Jest standar (config produksi, Windows).
+﻿# Track B (white-box, basis path): jalankan tes thesis whitebox dengan Jest standar (config produksi, Windows).
 # Pemakaian (dari folder repo): powershell -ExecutionPolicy Bypass -File testing\thesis-eval\run_B.ps1
 # Idempoten; tidak menghapus apa pun. Log: testing\thesis-eval\logs\jest_B_win.txt dan jest_B_win.json
 . (Join-Path $PSScriptRoot 'tools\common.ps1')

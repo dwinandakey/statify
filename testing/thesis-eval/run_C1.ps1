@@ -1,4 +1,4 @@
-# run_C1.ps1 - Track C1: Black-box String to Word Vector (BB-01..BB-13)
+﻿# run_C1.ps1 - Track C1: Black-box String to Word Vector (BB-01..BB-13)
 # Menjalankan (1) tes Rust thesis_blackbox_stwv dan (2) tes Jest blackbox.stwv.* dengan konfigurasi produksi.
 # Idempoten, tidak menghapus apa pun. Log:
 #   logs\rust_thesis_blackbox_stwv.txt   (cargo test --test thesis_blackbox_stwv)

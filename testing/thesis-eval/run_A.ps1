@@ -1,4 +1,4 @@
-# Track A (pengujian unit tambahan): jalankan tes Rust thesis_* dan Jest thesis Track A di Windows.
+﻿# Track A (pengujian unit tambahan): jalankan tes Rust thesis_* dan Jest thesis Track A di Windows.
 # Pemakaian (dari folder repo): powershell -ExecutionPolicy Bypass -File testing\thesis-eval\run_A.ps1
 # Idempoten; tidak menghapus apa pun (log lama ditimpa oleh log baru dengan nama yang sama).
 # Log: testing\thesis-eval\logs\rust_<target>.txt, jest_A_win.txt|json, rust_llvm_cov_*.txt, reference_values.txt, static_gap_rust.txt

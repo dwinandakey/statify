@@ -1,4 +1,4 @@
-# run_F.ps1 - Track F: pengujian integrasi antarmenu IT-01..IT-05 (STWV -> Naive Bayes -> Apply Model -> berkas model).
+﻿# run_F.ps1 - Track F: pengujian integrasi antarmenu IT-01..IT-05 (STWV -> Naive Bayes -> Apply Model -> berkas model).
 # Semua langkah idempoten dan TIDAK menghapus berkas. Langkah:
 #   1. Skrip Node integration\it01..it05 (memanggil wasm YANG SAMA dengan aplikasi lewat pustaka headless Track D):
 #        logs\integration_it01_win.txt ... logs\integration_it05_win.txt

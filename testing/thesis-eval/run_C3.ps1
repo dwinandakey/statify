@@ -1,4 +1,4 @@
-# run_C3.ps1 - Track C3: Black-box Apply Model dan persistensi Naive Bayes (BB-29..BB-36)
+﻿# run_C3.ps1 - Track C3: Black-box Apply Model dan persistensi Naive Bayes (BB-29..BB-36)
 # Menjalankan (1) tes Rust thesis_blackbox_am (komputasi BB-33, BB-35 pada tingkat crate) dan
 # (2) tes Jest blackbox.am.* dan blackbox.nb.persistence dengan konfigurasi produksi (frontend\jest.config.js).
 # Idempoten, tidak menghapus apa pun. Log:

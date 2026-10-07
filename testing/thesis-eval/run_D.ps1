@@ -1,4 +1,4 @@
-# run_D.ps1 - Track D: perbandingan akurasi numerik Statify vs scikit-learn vs WEKA (di Windows).
+﻿# run_D.ps1 - Track D: perbandingan akurasi numerik Statify vs scikit-learn vs WEKA (di Windows).
 # Langkah (semua idempoten; tidak menghapus apa pun; berkas keluaran ditimpa dengan nama yang sama):
 #   1. node headless\selftest.mjs                        -> logs\accuracy_selftest_win.txt
 #   2. node accuracy\run_statify.mjs (pilkada, K1..K6 + varian w/m) -> accuracy\out\pred_statify_<K>.csv, model_*.json
