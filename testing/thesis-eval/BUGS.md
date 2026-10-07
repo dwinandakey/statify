@@ -39,9 +39,9 @@ Tingkat mengikuti catatan masing-masing temuan (sedang/tinggi = memengaruhi hasi
 
 ## BUGS_A - pengamatan Track A (pengujian unit tambahan)
 
-Seluruh 105 tes Jest Track A lulus di VM (`logs/jest_A_vm.json`). `cargo test` Rust Track A BELUM DIJALANKAN (crate serde/wasm-bindgen tidak dapat diunduh di sandbox). Catatan penulis tentang percobaan `rustc` langsung terhadap modul sumber (harness dengan stub serde) TIDAK dapat ditelusuri: skrip dan keluarannya tidak disimpan di `logs/`, dan jumlah tes yang disebut (18) tidak sama dengan angka di komentar berkas tes (15 dari 15). Karena itu percobaan itu tidak dihitung sebagai hasil; status tes Rust Track A tetap BELUM DIJALANKAN dan keyakinan sisi Rust adalah analisis kode, menunggu `cargo test` di Windows.
+Seluruh 105 tes Jest Track A lulus di Windows (`logs/jest_A_win.json`) dan di VM (`logs/jest_A_vm.json`). Seluruh 66 fungsi tes Rust Track A dikompilasi dan lulus pada `cargo test` di Windows (`logs/rust_thesis_formulas.txt` 15, `rust_thesis_vocab_limit.txt` 13, `rust_thesis_text_pipeline.txt` 20, `rust_thesis_partition.txt` 18; 8 Oktober 2026). Percobaan `rustc` awal pada harness sandbox tidak punya log yang dapat ditelusuri dan tidak dihitung sebagai hasil; yang dipakai hanya log Windows.
 
-Skala keyakinan yang dipakai: **terverifikasi dengan tes yang dijalankan** (Jest di VM), **analisis kode, menunggu cargo test** (dibaca baris demi baris, belum dieksekusi), **dugaan** (inferensi tanpa pembuktian).
+Skala keyakinan yang dipakai: **terverifikasi dengan tes yang dijalankan** (Jest dan `cargo test` di Windows), **analisis kode** (dibaca baris demi baris, tidak ada tes yang mengeksekusinya), **dugaan** (inferensi tanpa pembuktian).
 
 ### A-1 (sedang): `KFolds = 1` lolos validasi dan menghasilkan evaluasi tanpa data latih
 
@@ -61,10 +61,10 @@ Ringkas: formulir Naive Bayes dan engine Rust sama-sama menerima jumlah fold 1. 
 #### Langkah reproduksi
 1. Antarmuka: buka Naive Bayes, pilih Validation = K-Fold, isi Number of folds = 1, jalankan analisis pada dataset kelas biner mana pun. Tidak ada pesan galat; hasil muncul.
 2. Sisi TS (tanpa antarmuka): `getNumericInputError` dengan `ValidationMethod = "kfold"`, `KFolds = 1` mengembalikan `null`. Tes: `kfold.thesis.test.ts` > "thesis A(e): batas jumlah fold pada getNumericInputError KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak)". DIJALANKAN dan lulus.
-3. Sisi Rust: `cargo test --test thesis_partition` di `.../naive-bayes/rust` (`k1_lolos_validate_fold_count_tanpa_peringatan`, `k1_menghasilkan_satu_fold_berisi_semua_indeks`, `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data`, `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama`). Belum dieksekusi pada jalur yang terdokumentasi (lihat catatan di awal berkas): ekspektasinya kini dinyatakan sebagai "PERILAKU SAAT INI" (bukan perilaku yang seharusnya) di komentar tes. `cargo test` Windows BELUM DIJALANKAN.
+3. Sisi Rust: `cargo test --test thesis_partition` di `.../naive-bayes/rust` (`k1_lolos_validate_fold_count_tanpa_peringatan`, `k1_menghasilkan_satu_fold_berisi_semua_indeks`, `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data`, `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama`). Dijalankan di Windows dan lulus (`logs/rust_thesis_partition.txt`, 18 dari 18); ekspektasinya dinyatakan sebagai "PERILAKU SAAT INI" (bukan perilaku yang seharusnya) di komentar tes, sehingga lulusnya tes membuktikan bahwa perilaku itu benar-benar terjadi.
 
 #### Dampak
-- Data latih tiap evaluasi k = 1 kosong. Analisis kode, menunggu `cargo test` (jalur numerik/kategorik): semua kelas mendapat prior 0, skor sama, argmax memakai `score > best` pada kelas terurut alfabetis sehingga SEMUA prediksi jatuh ke kelas alfabetis pertama. Akurasi yang dilaporkan sama dengan proporsi kelas itu (mis. 3/9 pada fixture tes) dan Kappa 0, tanpa galat. Pengguna bisa menyalin angka itu sebagai hasil validasi silang.
+- Data latih tiap evaluasi k = 1 kosong. Terverifikasi oleh tes Rust yang dijalankan (jalur numerik/kategorik): semua kelas mendapat prior 0, skor sama, argmax memakai `score > best` pada kelas terurut alfabetis sehingga SEMUA prediksi jatuh ke kelas alfabetis pertama. Akurasi yang dilaporkan sama dengan proporsi kelas itu (mis. 3/9 pada fixture tes) dan Kappa 0, tanpa galat. Pengguna bisa menyalin angka itu sebagai hasil validasi silang.
 - Jalur teks mentah (Raw text): kosakata data latih kosong sehingga galat `NB_E_TEXT_EMPTY_VOCAB_FOLD` muncul (`raw_text.rs:105`). Galat itu benar menghentikan analisis, tetapi petunjuknya "or use fewer folds" menyesatkan untuk k = 1 (penyebabnya terlalu sedikit fold, bukan terlalu banyak). Pemeta pesan (`naive-bayes-error-messages.ts:57-77`) meneruskan petunjuk yang sama.
 - Pesan batas minimum yang ditampilkan ("at least 1") justru menyatakan 1 sah, sehingga pengguna tidak punya petunjuk.
 - Koreksi catatan `BUGS_B.md` B-2: pada k = 1 yang kosong adalah data LATIH (seluruh data menjadi data uji), bukan data uji.
@@ -78,21 +78,21 @@ Batas minimum 2 di kedua lapisan, dengan pesan diperbarui:
 
 #### Keyakinan
 - Sisi TS (k = 1 diterima): **terverifikasi dengan tes yang dijalankan**.
-- Sisi Rust (partisi satu fold dengan latih kosong, prediksi seragam, akurasi 3/9, kappa 0 pada fixture 9 baris): **analisis kode, menunggu `cargo test`** (percobaan harness `rustc` di sandbox tidak punya log yang dapat ditelusuri, jadi tidak dihitung). Jalur teks mentah (`NB_E_TEXT_EMPTY_VOCAB_FOLD`) tetap **analisis kode**: `fit_split` memanggil `fit_transform` dengan daftar dokumen kosong, galat `EMPTY_INPUT` pemeta `map_core_error` menjadi kode itu (tidak dieksekusi).
+- Sisi Rust (partisi satu fold dengan latih kosong, prediksi seragam, akurasi 3/9, kappa 0 pada fixture 9 baris): **terverifikasi dengan tes yang dijalankan** (`cargo test --test thesis_partition` di Windows, 18 dari 18 lulus). Jalur teks mentah (`NB_E_TEXT_EMPTY_VOCAB_FOLD`) tetap **analisis kode**: `fit_split` memanggil `fit_transform` dengan daftar dokumen kosong, galat `EMPTY_INPUT` pemeta `map_core_error` menjadi kode itu (tidak dieksekusi).
 
 ### A-2 (informasi): ukuran fold total tidak seimbang pada k-fold bertingkat
 
 - Lokasi: `partition.rs:236-244` (loop `offset % folds_count`). Tiap kelas dibagi round-robin mulai dari fold 0, sehingga sisa tiap kelas selalu jatuh pada fold-fold awal.
-- Contoh terkarakterisasi di `thesis_partition.rs` (`kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar`): 3 kelas x 11 data pada k = 5 menghasilkan ukuran fold [9, 6, 6, 6, 6] (turunan dari kode; belum dieksekusi pada jalur yang terdokumentasi); `StratifiedKFold` scikit-learn (shuffle, seed 42) memberi [7, 7, 7, 6, 6] untuk data yang sama (DIJALANKAN: `unit/sklearn_kfold_check.py`, `logs/sklearn_kfold_check.txt`). Selisih per kelas tetap <= 1 (properti yang diminta terpenuhi), hanya selisih total antarfold bisa mencapai jumlah kelas.
+- Contoh terkarakterisasi di `thesis_partition.rs` (`kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar`): 3 kelas x 11 data pada k = 5 menghasilkan ukuran fold [9, 6, 6, 6, 6] (dijalankan di Windows, `logs/rust_thesis_partition.txt`); `StratifiedKFold` scikit-learn (shuffle, seed 42) memberi [7, 7, 7, 6, 6] untuk data yang sama (DIJALANKAN: `unit/sklearn_kfold_check.py`, `logs/sklearn_kfold_check.txt`). Selisih per kelas tetap <= 1 (properti yang diminta terpenuhi), hanya selisih total antarfold bisa mencapai jumlah kelas.
 - Dampak: kecil; evaluasi gabungan (pooled) tidak terpengaruh. Hanya relevan bila fold dilaporkan satu per satu.
-- Keyakinan: analisis kode, menunggu `cargo test`. Usulan opsional: geser fold awal per kelas (offset berputar).
+- Keyakinan: terverifikasi dengan tes yang dijalankan (Windows). Usulan opsional: geser fold awal per kelas (offset berputar).
 
 ### A-3 (informasi): peringatan fold kosong tidak terpicu untuk k > ukuran kelas terbesar
 
 - Lokasi: `partition.rs:201-206` hanya membandingkan dengan kelas TERKECIL; blokir keras hanya untuk `folds > n_instance` (`:194-199`).
 - Contoh terkarakterisasi: 6 instance dengan k = 6 menghasilkan fold [2, 2, 2, 0, 0, 0] (tiga fold uji kosong) dengan peringatan, bukan galat. Untuk k = n tiap fold seharusnya satu instance; round-robin per kelas tidak menjamin itu.
 - Dampak: fold uji kosong menyumbang nol prediksi; model tetap dilatih ulang untuk fold itu (sia-sia) dan akurasi gabungan tetap terdefinisi. Peringatan sudah muncul (karena k > kelas terkecil), jadi dampak praktis rendah.
-- Keyakinan: analisis kode, menunggu `cargo test` (`kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan`: ukuran [2, 2, 2, 0, 0, 0] dan peringatan ada, belum dieksekusi pada jalur yang terdokumentasi).
+- Keyakinan: terverifikasi dengan tes yang dijalankan (`kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan`: ukuran [2, 2, 2, 0, 0, 0] dan peringatan ada; lulus di Windows).
 
 ### A-4 (informasi, tes lama): asersi tautologi pada `s3_formulas.rs`
 
@@ -131,7 +131,7 @@ Format: lokasi, langkah reproduksi, dampak, usulan perbaikan. Kode produksi tida
 - **Reproduksi**: pada Options isi Delimiters dengan satu spasi (` `), jalankan pada teks yang memuat tanda hubung, mis. "a-b c". Panjang string 1 sehingga lolos validasi antarmuka, tetapi inti menganggapnya kosong.
 - **Hasil**: token menjadi `a`, `b`, `c` (dipecah juga pada tanda baca) padahal pengguna meminta pemisah spasi saja, yang seharusnya menghasilkan `a-b`, `c`. Pemakai tidak diberi tahu bahwa pola diganti.
 - **Dampak**: kosakata berbeda dari yang diminta; hanya muncul bila pengguna memasukkan delimiter yang seluruhnya spasi (nilai bawaan tidak terpengaruh). Tidak mengubah hasil BB-01..BB-13 pada pengaturan normal.
-- **Bukti**: tes Rust `bb06_temuan_c1_01_delimiter_hanya_spasi_jatuh_ke_pola_bawaan_inti` (BELUM DIJALANKAN; perilaku ditarik dari pembacaan kode). Langkah manual: M-06 langkah 5.
+- **Bukti**: tes Rust `bb06_temuan_c1_01_delimiter_hanya_spasi_jatuh_ke_pola_bawaan_inti` (dijalankan dan lulus di Windows, `logs/rust_thesis_blackbox_stwv.txt`). Langkah manual: M-06 langkah 5.
 - **Usulan**: validasi antarmuka memakai `config.delimiters.trim().length === 0` agar pola yang seluruhnya spasi ditolak dengan "Delimiters cannot be empty.", atau inti menolak pola kosong-setelah-trim dengan galat yang jelas (bukan fallback diam-diam) bila `delimiters` tidak kosong.
 
 ### C1-02 — Galat awalan kolom tidak tercantum di kotak galat bawah panel
@@ -195,7 +195,7 @@ Folder dasar: `frontend/components/Modals/Analyze/Classify/naive-bayes/` (selanj
 2. Number of Folds = `6`, klik OK: toast generik `The Naive Bayes analysis could not be completed. …` (tanpa kata fold, tanpa kode).
 3. Number of Folds = `3` (> kelas terkecil 2): analisis selesai tanpa peringatan apa pun, padahal Rust menyatakan `Number of folds (3) exceeds the smallest class size (2). … The analysis will still run.`
 
-Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karakterisasi pesan generik); Rust `bb24_*` (belum dijalankan).
+Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karakterisasi pesan generik); Rust `bb24_*` (lulus di Windows, `logs/rust_thesis_blackbox_nb.txt`).
 
 **Dampak.** Pengguna tidak dapat mengetahui bahwa jumlah fold penyebab kegagalan atau bahwa fold per kelas tidak seimbang. Menyimpang dari AGENTS.md §4.2 ("tampilkan peringatan") dan dari harapan prompt (pesan kesalahan berkode).
 
@@ -280,14 +280,14 @@ Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karak
 
 - **BB-28**: resep (`text.recipe`) hanya ada pada ekspor jalur Raw Text. Jalur Word-Vector menghasilkan schema 2.0 tanpa resep (`text.recipe = null`, hanya `columns`) karena vektorisasi terjadi di luar Naive Bayes; model tanpa Text dan tanpa Gaussian min-std tetap schema 1.1. Rumusan prompt "schema 2.0 berisi resep" berlaku untuk jalur Raw Text.
 - **BB-24**: istilah "pesan kesalahan berkode" pada prompt tidak sesuai kode; tidak ada kode `NB_E_*` untuk fold (lihat C2-01).
-- **Batas lingkungan**: `cargo test` untuk tes Rust paket ini belum dijalankan (crate serde/wasm-bindgen/regex tidak dapat diunduh di sandbox). Percobaan `rustc` pada potongan fungsi-murni (partisi, k-fold, `validate_fold_count`, metrik BB-25) yang pernah dicatat penulis tidak punya log tersimpan dan tidak dihitung; tes yang memanggil `run_analysis` hanya ditinjau dari pembacaan kode; bila `cargo test --test thesis_blackbox_nb` gagal kompilasi di Windows, perbaiki hanya berkas `rust/tests/thesis_blackbox_nb.rs`.
+- **Batas lingkungan**: tes Rust paket ini ditulis tanpa kompiler dan baru dikompilasi di Windows; `cargo test --test thesis_blackbox_nb` lulus 24 dari 24 (`logs/rust_thesis_blackbox_nb.txt`).
 
 
 <!-- sumber: BUGS_C3.md -->
 
 ## BUGS_C3 — temuan Track C3 (black-box Apply Model dan persistensi Naive Bayes, BB-29 sampai BB-36)
 
-Tidak ada tes thesis Track C3 yang gagal (95 dari 95 lulus di VM, `logs/jest_C3_vm.json`); tes Rust BELUM DIJALANKAN. Tiga temuan berikut berasal dari pembacaan kode sumber dan perilaku yang diamati lewat tes, dan seluruhnya berkeparahan rendah (ketidaksesuaian dokumen atau pesan, bukan perhitungan salah).
+Tidak ada tes thesis Track C3 yang gagal (95 dari 95 lulus di Windows, `logs/jest_C3_win.json`; tes Rust `thesis_blackbox_am` 12 dari 12 lulus, `logs/rust_thesis_blackbox_am.txt`). Tiga temuan berikut berasal dari pembacaan kode sumber dan perilaku yang diamati lewat tes, dan seluruhnya berkeparahan rendah (ketidaksesuaian dokumen atau pesan, bukan perhitungan salah).
 
 ### C3-01 (rendah): dokumentasi menyebut penyimpanan "otomatis", kode menyimpan hanya saat OK
 - Lokasi: `frontend/components/Modals/Analyze/Classify/naive-bayes/DOKUMENTASI.md`, baris 44 ("Pengaturan terakhir disimpan otomatis (IndexedDB, key `"NaiveBayes"`)"); perilaku sebenarnya di `frontend/components/Modals/Analyze/Classify/naive-bayes/dialogs/naive-bayes-main.tsx`, `handleOK` (penyimpanan di baris 426, `saveFormData("NaiveBayes", payload)`), dan tidak ada penyimpanan pada perubahan nilai maupun pada Cancel.
@@ -328,7 +328,7 @@ Tidak ada selisih numerik antara Statify dan scikit-learn: kelas prediksi sama p
 ### D-02 (informasi): probabilitas Apply Model dibulatkan 4 desimal
 - Lokasi: `frontend/components/Modals/Analyze/Classify/apply-model/rust/src/stats/posterior.rs` baris 65–67 (`round4`), dipakai di `stats/summary.rs` baris 115 dan 118; sesuai spesifikasi (komentar menyebut AGENTS.md §5.5).
 - Dampak: probabilitas dan probabilitas maksimum keluaran hanya akurat sampai 5,0e-5; galat absolut terhadap scikit-learn pada tabel `D_accuracy.md` mencapai 5,000e-05 sebagai akibatnya, bukan karena rumus. Dokumen yang probabilitasnya berbeda di bawah 1e-4 tampak seri. Metrik berbasis peringkat probabilitas (mis. AUC, log-loss) tidak dapat dihitung teliti dari keluaran ini.
-- Usulan: tidak perlu diubah bila pembulatan memang dikehendaki; catat batas ini di bab hasil dan, bila presisi penuh diperlukan, sediakan opsi tanpa pembulatan. Tes `thesis_compare.rs` (belum dijalankan) membaca probabilitas presisi penuh dari sumber Rust.
+- Usulan: tidak perlu diubah bila pembulatan memang dikehendaki; catat batas ini di bab hasil dan, bila presisi penuh diperlukan, sediakan opsi tanpa pembulatan. Tes `thesis_compare.rs` (lulus di Windows, `logs/rust_thesis_compare.txt`) membaca probabilitas presisi penuh dari sumber Rust.
 
 ### D-03 (informasi): K1 dan K3 identik pada dua kelas seimbang; Complement tanpa prior
 - Lokasi: `frontend/public/workers/TextAnalytics/statify-text-core/src/nb_text.rs` (bobot dan skor Complement `Σ x·L`, tanpa prior untuk K ≥ 2; baris 127–152 menurut catatan agen WEKA) dan `apply-model/rust/src/stats/posterior.rs` baris 16 (`normalize_log_scores`, normalisasi log-sum-exp seluruh skor).

@@ -1,0 +1,53 @@
+IT-05 orkestrator pid=740; folder kerja sementara: C:\Users\DIJASAN\AppData\Local\Temp\statify-it05-h7aV6U
+
+--- K1: Weka default (lowercase, delimiter default, W=1000, TF hitungan, tanpa IDF/normalisasi) + Multinomial, alpha 1
+  [statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+  [statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+  [statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+  [statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+  [fase 1] pid=17112 node=v24.13.1 K=K1
+  [fase 1] model 137288 B ditulis; 6017 angka; prediksi 270 baris
+LULUS  K1 proses 1 (latih + ekspor ke berkas) keluar dengan kode 0
+  [statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+  [statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+  [statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+  [statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+  [fase 2] pid=33528 node=v24.13.1 K=K1 (proses baru; tidak melatih)
+  [fase 2] model dimuat dari berkas (137288 B); 6017 angka; prediksi 270 baris
+LULUS  K1 proses 2 (muat dari berkas + terapkan) keluar dengan kode 0
+LULUS  K1 dua proses berbeda: pid 17112 != 33528
+LULUS  K1 sha256 wasm sama pada kedua proses (NB/AM/STWV)
+LULUS  K1 berkas prediksi proses 1 dan 2 IDENTIK byte-per-byte (34048 B; sha256 341295f9686dd375… vs 341295f9686dd375…)
+LULUS  K1 270 baris prediksi, tidak ada baris tak-diskor  :: 270 baris
+LULUS  K1 6017 angka model: jejak bit IEEE-754 proses 1 (langsung dari wasm NB) == proses 2 (setelah tulis/baca berkas JSON): 0 selisih
+  INFO K1 berkas model: 137288 B, sha256 a3cb1e8e812acadfd8b253834fee0b7554ced4a932250a80e30e8abc085c5302
+LULUS  K1 berkas model: JSON.stringify(JSON.parse(berkas), null, 2) == isi berkas (stabil)
+
+--- K5: Weka: TF log(1+f), IDF ln(N/df), normalisasi panjang dokumen + Multinomial
+  [statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+  [statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+  [statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+  [statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+  [fase 1] pid=8608 node=v24.13.1 K=K5
+  [fase 1] model 179238 B ditulis; 6018 angka; prediksi 270 baris
+LULUS  K5 proses 1 (latih + ekspor ke berkas) keluar dengan kode 0
+  [statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+  [statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+  [statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+  [statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+  [fase 2] pid=37420 node=v24.13.1 K=K5 (proses baru; tidak melatih)
+  [fase 2] model dimuat dari berkas (179238 B); 6018 angka; prediksi 270 baris
+LULUS  K5 proses 2 (muat dari berkas + terapkan) keluar dengan kode 0
+LULUS  K5 dua proses berbeda: pid 8608 != 37420
+LULUS  K5 sha256 wasm sama pada kedua proses (NB/AM/STWV)
+LULUS  K5 berkas prediksi proses 1 dan 2 IDENTIK byte-per-byte (32195 B; sha256 4b7fd0db1a379df0… vs 4b7fd0db1a379df0…)
+LULUS  K5 270 baris prediksi, tidak ada baris tak-diskor  :: 270 baris
+LULUS  K5 6018 angka model: jejak bit IEEE-754 proses 1 (langsung dari wasm NB) == proses 2 (setelah tulis/baca berkas JSON): 0 selisih
+  INFO K5 berkas model: 179238 B, sha256 91df4a1e0b1f487a767c9d62af7eceb490712a21042a7dc20c13f47f4dceecf3
+LULUS  K5 berkas model: JSON.stringify(JSON.parse(berkas), null, 2) == isi berkas (stabil)
+LULUS  JS: JSON.parse(JSON.stringify(x)) === x untuk 1,999,029 double acak/tepi: 0 selisih
+LULUS  contoh pergeseran 1 ulp dari catatan S4 (avg_doc_norm ...6971 vs ...6973) dibedakan oleh JSON JS: 3ff1c43baa600c38 vs 3ff1c43baa600c39
+
+=== IT-05: 18 lulus, 0 gagal dari 18 pemeriksaan ===
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=2.53 started=2026-10-08 00:18:32 +07:00 cmd=node testing\thesis-eval\integration\it05_persist.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

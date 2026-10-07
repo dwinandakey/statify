@@ -1,0 +1,39 @@
+=== run_headless.mjs run_id=headless_skripsi_20261008T001904 device=skripsi (PERANGKAT-SKRIPSI (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11))
+env: AMD Ryzen 5 4600H with Radeon Graphics x12; RAM 15.4 GiB; Windows_NT 10.0.26300; Node v24.13.1
+protokol: 1 pemanasan + 5 pengukuran; ms; simpangan baku sampel (n-1)
+keluaran mentah: testing\thesis-eval\perf\raw\headless_skripsi.csv
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+[pilkada_900 | stwv_default] n=900 term=1000 warmup=111 ms  mean=47.2 sd=4.3 ms  (OK)  wall=0s
+[pilkada_900 | stwv_sw_stem] n=900 term=1000 warmup=135 ms  mean=61.7 sd=8.9 ms  (OK)  wall=1s
+[pilkada_900 | nb_holdout70] n=900 term=1000 warmup=109 ms  mean=27.5 sd=2.7 ms  (OK)  wall=0s
+[pilkada_900 | nb_kfold10] n=900 term=1000 warmup=177 ms  mean=87.5 sd=5.4 ms  (OK)  wall=1s
+[pilkada_900 | am_raw] n=900 term=1000 warmup=74 ms  mean=22.7 sd=2.0 ms  (OK)  wall=0s
+[sms_5574 | stwv_default] n=5574 term=1000 warmup=436 ms  mean=266.2 sd=6.1 ms  (OK)  wall=2s
+[sms_5574 | stwv_sw_stem] n=5574 term=- warmup=77 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=0s
+[sms_5574 | nb_holdout70] n=5574 term=1000 warmup=246 ms  mean=124.8 sd=5.8 ms  (OK)  wall=1s
+[sms_5574 | nb_kfold10] n=5574 term=1000 warmup=595 ms  mean=489.1 sd=37.1 ms  (OK)  wall=3s
+[sms_5574 | am_raw] n=5574 term=1000 warmup=225 ms  mean=109.1 sd=22.3 ms  (OK)  wall=1s
+[smsa_11000 | stwv_default] n=11000 term=1000 warmup=1645 ms  mean=688.6 sd=65.4 ms  (OK)  wall=5s
+[smsa_11000 | stwv_sw_stem] n=11000 term=1000 warmup=1708 ms  mean=813.8 sd=53.7 ms  (OK)  wall=6s
+[smsa_11000 | nb_holdout70] n=11000 term=1000 warmup=643 ms  mean=370.5 sd=35.2 ms  (OK)  wall=3s
+[smsa_11000 | nb_kfold10] n=11000 term=1000 warmup=2655 ms  mean=1829.0 sd=138.8 ms  (OK)  wall=12s
+[smsa_11000 | am_raw] n=11000 term=1000 warmup=394 ms  mean=225.8 sd=6.7 ms  (OK)  wall=2s
+[gabungan | stwv_default] n=17974 term=1000 warmup=4141 ms  mean=1146.2 sd=21.4 ms  (OK)  wall=10s
+[gabungan | stwv_sw_stem] n=17974 term=- warmup=198 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=0s
+[gabungan | nb_holdout70] n=17974 term=1000 warmup=703 ms  mean=500.5 sd=24.8 ms  (OK)  wall=3s
+[gabungan | nb_kfold10] n=17974 term=1000 warmup=2239 ms  mean=2358.0 sd=106.8 ms  (OK)  wall=14s
+[gabungan | am_raw] n=17974 term=1000 warmup=549 ms  mean=322.8 sd=4.8 ms  (OK)  wall=2s
+[besar_ge20000 | stwv_default] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | stwv_sw_stem] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | nb_holdout70] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | nb_kfold10] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | am_raw] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[sms_5574_ascii | stwv_sw_stem] n=5574 term=1000 warmup=495 ms  mean=307.7 sd=5.0 ms  (OK)  wall=2s
+[gabungan_ascii | stwv_sw_stem] n=17974 term=1000 warmup=4185 ms  mean=1239.4 sd=11.8 ms  (OK)  wall=11s
+[besar_ge20000_ascii | stwv_sw_stem] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+=== selesai ===
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=81.05 started=2026-10-08 00:19:04 +07:00 cmd=node testing\thesis-eval\perf\run_headless.mjs --device skripsi --runs 5 cwd=E:\KULIAH\Skripsi\statify64 ===

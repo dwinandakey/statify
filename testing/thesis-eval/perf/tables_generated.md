@@ -1,56 +1,145 @@
 ### Tabel perangkat skripsi (hasil yang masuk buku)
 
-Status: **BELUM DIJALANKAN (perangkat skripsi)**. Jalankan `testing\thesis-eval\run_E.ps1` di perangkat skripsi, lalu `python testing\thesis-eval\perf\aggregate_perf.py --inject testing\thesis-eval\E_performance.md` (dijalankan otomatis oleh skrip bila Python ada).
+Label perangkat: PERANGKAT-SKRIPSI (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11)
+
+Lingkungan tercatat: AMD Ryzen 5 4600H with Radeon Graphics x12; RAM 15.4 GiB; Windows_NT 10.0.26300; Node v24.13.1
+
+Peramban: chrome 154.0.8037.98 headless
 
 **Jalur (a): di peramban (Worker asli aplikasi + harness statis)**
 
 | Menu dan konfigurasi | Dataset | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |
 |---|---|---|---|---|
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | 1.000 | 68,2 | 7,6 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | 1.000 | 425,4 | 14,6 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | 1.000 | 983,0 | 25,9 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | 1.000 | 74,5 | 8,1 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam (5.574) | - | GALAT: {"code":"WORKER_ERROR","message":"unreachable"} | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | 1.000 | 822,2 | 22,7 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | 1.000 | 118,0 | 11,4 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | 1.000 | 277,8 | 38,9 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | 1.000 | 486,3 | 12,6 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | 1.000 | 193,7 | 17,7 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | 1.000 | 813,0 | 108,3 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | 1.000 | 1.619,7 | 56,4 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | 1.000 | 91,5 | 10,0 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | 1.000 | 190,1 | 25,8 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | 1.000 | 332,9 | 12,3 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+
+Baris tambahan (bukan baris utama buku):
+
+| Menu dan konfigurasi | Dataset | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |
+|---|---|---|---|---|
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 1.168,4 | 10,6 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Gabungan Pilkada+SMS+SmSA (17.974) | - | GALAT: {"code":"WORKER_ERROR","message":"unreachable"} | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam, varian ASCII (5.574) | 1.000 | 392,0 | 6,7 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Gabungan, varian ASCII (17.974) | 1.000 | 1.293,0 | 18,7 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | ≥ 20.000 dokumen, varian ASCII | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 663,8 | 19,7 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 2.212,0 | 56,6 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 474,1 | 10,2 |
 
 **Jalur (b): headless (Node + wasm yang sama, tanpa Worker)**
 
 | Menu dan konfigurasi | Dataset | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |
 |---|---|---|---|---|
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| String to Word Vector, stopword Indonesia + stemming Sastrawi | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, holdout 70% (seed 42) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
-| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Dataset ≥ 20.000 dokumen | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) | BELUM DIJALANKAN (perangkat skripsi) |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | 1.000 | 47,2 | 4,3 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | 1.000 | 266,2 | 6,1 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | 1.000 | 688,6 | 65,4 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | 1.000 | 61,7 | 8,9 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam (5.574) | - | GALAT: unreachable | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | 1.000 | 813,8 | 53,7 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | 1.000 | 27,5 | 2,7 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | 1.000 | 124,8 | 5,8 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | 1.000 | 370,5 | 35,2 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | 1.000 | 87,5 | 5,4 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | 1.000 | 489,1 | 37,1 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | 1.000 | 1.829,0 | 138,8 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | 1.000 | 22,7 | 2,0 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | 1.000 | 109,1 | 22,3 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | 1.000 | 225,8 | 6,7 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Dataset ≥ 20.000 dokumen | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+
+Baris tambahan (bukan baris utama buku):
+
+| Menu dan konfigurasi | Dataset | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |
+|---|---|---|---|---|
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 1.146,2 | 21,4 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Gabungan Pilkada+SMS+SmSA (17.974) | - | GALAT: unreachable | - |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam, varian ASCII (5.574) | 1.000 | 307,7 | 5,0 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Gabungan, varian ASCII (17.974) | 1.000 | 1.239,4 | 11,8 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | ≥ 20.000 dokumen, varian ASCII | NOT RUN | NOT RUN (dataset tidak tersedia) | - |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 500,5 | 24,8 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 2.358,0 | 106,8 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Gabungan Pilkada+SMS+SmSA (17.974) | 1.000 | 322,8 | 4,8 |
+
+**Responsivitas UI (jalur peramban)**
+
+| Menu dan konfigurasi | Dataset | Long task (rata-rata jumlah per proses) | Long task terpanjang (ms) | Jeda frame p95 (ms) | Jeda frame terpanjang (ms) | Jeda frame p95 saat diam (ms) | UI responsif (long task < 200 ms)? |
+|---|---|---|---|---|---|---|---|
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | 0,0 | 0 | 10,2 | 10 | 10,3 | Ya |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | 0,8 | 77 | 10,2 | 70 | 10,1 | Ya |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | 1,0 | 133 | 10,2 | 120 | 10,1 | Ya |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Gabungan Pilkada+SMS+SmSA (17.974) | 1,0 | 180 | 10,2 | 180 | 10,2 | Ya |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | 1,0 | 101 | 10,1 | 90 | 10,1 | Ya |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SMS Spam, varian ASCII (5.574) | 0,2 | 52 | 10,2 | 40 | 10,2 | Ya |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Gabungan, varian ASCII (17.974) | 1,0 | 174 | 10,2 | 180 | 10,2 | Ya |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | 0,0 | 0 | 10,1 | 10 | 10,1 | Ya |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | 0,0 | 0 | 10,2 | 10 | 10,2 | Ya |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | 0,0 | 0 | 10,1 | 10 | 10,1 | Ya |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | 0,0 | 0 | 10,2 | 10 | 10,1 | Ya |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | 0,0 | 0 | 10,2 | 10 | 10,2 | Ya |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | 0,0 | 0 | 10,1 | 10 | 10,1 | Ya |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Gabungan Pilkada+SMS+SmSA (17.974) | 0,0 | 0 | 10,1 | 10 | 10,2 | Ya |
+
+**Overhead tetap Worker (jalur peramban, 40 dokumen)**
+
+| Menu dan konfigurasi | Dokumen | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |
+|---|---|---|---|---|
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | 40 (subsampel merata pilkada_900) | 393 | 2,5 | 0,5 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | 40 (subsampel merata pilkada_900) | 287 | 3,3 | 0,6 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | 40 (subsampel merata pilkada_900) | 393 | 57,1 | 0,9 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | 40 (subsampel merata pilkada_900) | 393 | 73,0 | 3,4 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | 40 (subsampel merata pilkada_900) | 1.000 | 52,9 | 1,1 |
+
+**Run pemanasan (run 0) dibanding rata-rata run 1–5** (pemanasan bukan bagian tabel buku; pada headless run 0 = panggilan pertama pada proses baru)
+
+| Menu dan konfigurasi | Dataset | Headless: pemanasan (ms) | Headless: rata-rata (ms) | Peramban: pemanasan (ms) | Peramban: rata-rata (ms) |
+|---|---|---|---|---|---|
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Pilkada (900) | 110,8 | 47,2 | 130,1 | 68,2 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SMS Spam (5.574) | 436,0 | 266,2 | 544,0 | 425,4 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | SmSA (11.000) | 1.644,8 | 688,6 | 2.046,2 | 983,0 |
+| String to Word Vector, default Weka (W=1000, TF hitungan, tanpa IDF/normalisasi) | Gabungan Pilkada+SMS+SmSA (17.974) | 4.141,5 | 1.146,2 | 3.017,9 | 1.168,4 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | Pilkada (900) | 134,6 | 61,7 | 138,1 | 74,5 |
+| String to Word Vector, stopword Indonesia + stemming Sastrawi | SmSA (11.000) | 1.707,9 | 813,8 | 1.561,2 | 822,2 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Pilkada (900) | 109,4 | 27,5 | 123,6 | 118,0 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SMS Spam (5.574) | 245,6 | 124,8 | 259,3 | 277,8 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | SmSA (11.000) | 643,3 | 370,5 | 503,3 | 486,3 |
+| Naive Bayes, Raw Text, holdout 70% (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 703,5 | 500,5 | 697,3 | 663,8 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Pilkada (900) | 177,3 | 87,5 | 200,4 | 193,7 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SMS Spam (5.574) | 595,5 | 489,1 | 1.191,0 | 813,0 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | SmSA (11.000) | 2.654,6 | 1.829,0 | 1.675,4 | 1.619,7 |
+| Naive Bayes, Raw Text, 10-fold CV (seed 42) | Gabungan Pilkada+SMS+SmSA (17.974) | 2.239,3 | 2.358,0 | 2.214,6 | 2.212,0 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Pilkada (900) | 74,3 | 22,7 | 85,9 | 91,5 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SMS Spam (5.574) | 225,1 | 109,1 | 173,0 | 190,1 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | 393,5 | 225,8 | 331,4 | 332,9 |
+| Apply Model, Raw Text (model NB Multinomial, data yang sama) | Gabungan Pilkada+SMS+SmSA (17.974) | 548,7 | 322,8 | 508,2 | 474,1 |
+
 
 ### UJI ASAP — BUKAN HASIL PERANGKAT SKRIPSI: SANDBOX-CLOUD (UJI ASAP, BUKAN PERANGKAT SKRIPSI)
 

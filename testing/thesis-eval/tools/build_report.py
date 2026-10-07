@@ -233,8 +233,9 @@ def auto_notrun():
     if os.path.exists(ep) and "BELUM DIJALANKAN (perangkat skripsi)" in read(ep):
         rows.append("| Tabel waktu eksekusi Track E pada perangkat skripsi (peramban dan headless) | NOT RUN | Harus diukur di Lenovo IdeaPad Gaming 3 "
                     "(Windows 11); hasil sandbox/VM hanya uji asap dan tidak dipakai sebagai angka buku. |")
-    rows.append("| Dataset >= 20.000 dokumen (Track E) | NOT RUN | Sumber nyata yang tersedia hanya 17.974 dokumen; 20 Newsgroups tidak dapat diunduh "
-                "(tanpa jaringan). Skrip mencoba mengunduhnya di Windows. |")
+    if os.path.exists(ep) and re.search(r"Dataset ≥ 20\.000 dokumen \| NOT RUN", read(ep)):
+        rows.append("| Dataset >= 20.000 dokumen (Track E) | NOT RUN | Sumber nyata yang tersedia hanya 17.974 dokumen; 20 Newsgroups belum terunduh "
+                    "(butuh Python dengan scikit-learn dan jaringan; lihat `logs/perf_prepare_datasets.txt`). Tidak ada penggandaan data untuk mencapai 20.000. |")
     rows.append("| Pengujian manual M-01..M-36 (`C_manual_checklist.md`) dan MF-01..MF-05 (`F_manual_checklist.md`) | MANUAL, belum dijalankan | "
                 "Memerlukan aplikasi nyata (WASM, Data Editor, Output Viewer) dan tangkapan layar oleh Yedija. |")
     rows.append("| Playwright end-to-end aplikasi penuh (`perf/e2e_full_app.spec.ts`) | NOT RUN | Ditulis tetapi tidak divalidasi: server Next.js tidak dijalankan di sandbox. |")

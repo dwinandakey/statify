@@ -1,0 +1,12 @@
+   Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.24s
+     Running tests\thesis_integration.rs (target\debug\deps\thesis_integration-bde38b5d643e4a34.exe)
+
+running 2 tests
+test f64_acak_json_roundtrip_bit_identik ... ok
+test model_k1_k5_json_rapi_dimuat_ulang_transform_identik ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=2.57 started=2026-10-08 00:18:54 +07:00 cmd=cargo test --test thesis_integration -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

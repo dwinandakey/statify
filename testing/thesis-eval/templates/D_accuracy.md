@@ -1,11 +1,11 @@
 # D. Perbandingan akurasi numerik: Statify, scikit-learn, dan WEKA
 
-Dokumen ini melaporkan Track D evaluasi modul Text Analytics Statify: apakah jalur Raw Text Naive Bayes -> Export Model -> Apply Model pada Statify menghasilkan prediksi dan probabilitas yang sama dengan scikit-learn dan WEKA pada data dan konfigurasi yang setara. Semua angka pada tabel berasal dari eksekusi nyata; log mentah ada di `testing/thesis-eval/logs/` (nama berawalan `accuracy_`). Eksekusi di Windows (laptop skripsi), tes Rust `thesis_compare`, dan Jest konfigurasi produksi **BELUM DIJALANKAN**; lihat bagian 9.
+Dokumen ini melaporkan Track D evaluasi modul Text Analytics Statify: apakah jalur Raw Text Naive Bayes -> Export Model -> Apply Model pada Statify menghasilkan prediksi dan probabilitas yang sama dengan scikit-learn dan WEKA pada data dan konfigurasi yang setara. Semua angka pada tabel berasal dari eksekusi nyata; log mentah ada di `testing/thesis-eval/logs/` (nama berawalan `accuracy_`). Seluruh alur juga dijalankan ulang di Windows (laptop skripsi, `run_D.ps1`, Node 24, Python 3.13, scikit-learn 1.9.1) bersama tes Rust `thesis_compare` dan Jest konfigurasi produksi; hasilnya sama (kelas prediksi dan metrik identik, hanya dua nilai galat parameter pada K5 yang berbeda pada digit terakhir), lihat bagian 9. Tabel di bawah dibangun dari eksekusi VM dan dicocokkan dengan log Windows.
 
 ## 1. Ringkasan
 
 - Prediksi kelas Statify sama dengan scikit-learn pada **seluruh 24 konfigurasi** yang dijalankan (pilkada 13 konfigurasi x 270 dokumen, SMS Spam 7 x 1.673, SmSA 4 x 500; 17.221 prediksi, 0 selisih). Akurasi, Kappa, dan Macro F1 identik sampai 6 desimal pada semuanya.
-- Probabilitas posterior keluaran Apply Model dibulatkan 4 desimal oleh wasm (`round4`), sehingga galat absolut maksimum terhadap scikit-learn selalu di bawah atau sama dengan 5,0e-5 (batas pembulatan) dan LRE terhadap `round4` scikit-learn adalah "≥ 15 (identik)". Untuk memeriksa presisi penuh, parameter model Statify (log-likelihood dan prior) dibandingkan langsung dengan `feature_log_prob_` scikit-learn: galat absolut maksimum 1,776e-15, LRE minimum 15,21 (2.000 sampai 6.202 elemen per konfigurasi). Matriks bobot hasil STWV (K4, K5) cocok dengan scikit-learn/numpy dengan galat absolut maksimum 7,105e-15 (LRE minimum 14,96) dan tanpa selisih posisi elemen tak-nol.
+- Probabilitas posterior keluaran Apply Model dibulatkan 4 desimal oleh wasm (`round4`), sehingga galat absolut maksimum terhadap scikit-learn selalu di bawah atau sama dengan 5,0e-5 (batas pembulatan) dan LRE terhadap `round4` scikit-learn adalah "≥ 15 (identik)". Untuk memeriksa presisi penuh, parameter model Statify (log-likelihood dan prior) dibandingkan langsung dengan `feature_log_prob_` scikit-learn: galat absolut maksimum 1,776e-15 pada VM (2,665e-15 pada Windows, konfigurasi K5), LRE minimum 15,21 (2.000 sampai 6.202 elemen per konfigurasi). Matriks bobot hasil STWV (K4, K5) cocok dengan scikit-learn/numpy dengan galat absolut maksimum 7,105e-15 (LRE minimum 14,96) dan tanpa selisih posisi elemen tak-nol.
 - Terhadap WEKA 3.9.6: pada konfigurasi bawaan Words to Keep = 1.000, kelas prediksi sama pada 264 sampai 267 dari 270 dokumen (pilkada). Sebabnya terukur: WEKA mempertahankan **semua** kata yang berhitungan sama dengan ambang (1.042 kata), Statify memotong tepat 1.000. Bila kosakata disamakan (varian `m`: W = 1.042; varian `w`: seluruh kosakata), kelas prediksi sama pada 270/270 dan metrik identik pada semua pasangan yang diuji.
 - K1 dan K3 identik byte demi byte pada pilkada (dua kelas seimbang: Complement setara Multinomial secara analitik). K6 (stopword Indonesia dan stemming Sastrawi) tidak punya pembanding eksternal; ditemukan **selisih kosakata 8 kata antara STWV mandiri dan resep yang dipakai Naive Bayes** (`BUGS_D.md`, D-01).
 
@@ -60,7 +60,7 @@ Akurasi, Kappa Cohen (`(po - pe)/(1 - pe)` dari matriks konfusi), dan Macro F1 (
 3. **Parameter model pada presisi penuh**: `log_weights` dan prior pada model hasil Export Model dibandingkan dengan `feature_log_prob_` dan prior scikit-learn.
 4. **Vektor**: matriks bobot latih keluaran STWV wasm dibandingkan dengan perhitungan scikit-learn/numpy (K4, K5).
 
-Probabilitas posterior presisi penuh dari sumber Rust diperiksa oleh tes opsional `thesis_compare.rs`, yang **BELUM DIJALANKAN** (tidak dapat dikompilasi di sandbox; bagian 9).
+Probabilitas posterior presisi penuh dari sumber Rust diperiksa oleh tes opsional `thesis_compare.rs`, yang dijalankan di Windows dan lulus (bagian 9).
 
 ## 4. Hasil dataset pilkada (630 latih, 270 uji)
 
@@ -175,7 +175,7 @@ Tabel 6. Model hasil Export Model Statify (wasm Naive Bayes) terhadap `feature_l
 | K3 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K4 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,75 |
 | K4 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
-| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 1,776e-15 | 15,47 |
+| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 1,776e-15 (VM); 2,665e-15 (Windows) | 15,47 (VM); 15,33 (Windows) |
 | K5 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K1w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
 | K1w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
@@ -191,7 +191,7 @@ Tabel 6. Model hasil Export Model Statify (wasm Naive Bayes) terhadap `feature_l
 | K1m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K2m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,21 |
 | K2m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
-| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,48 |
+| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,48 (VM); 15,52 (Windows) |
 | K5m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
 
 ### 4.4 Tingkat vektor (presisi penuh)
@@ -370,7 +370,7 @@ Pada seluruh 24 konfigurasi dan tiga dataset, kelas yang diprediksi Statify sama
 
 ## 8. Keterbatasan
 
-1. Seluruh eksekusi dilakukan di Linux (sandbox cloud dan VM), bukan di Windows 11 laptop skripsi; hasil Windows (Node 24 pengguna, `run_D.ps1`) BELUM DIJALANKAN. Kekonsistenan antara Node 22.22 dan 22.23 (byte identik) menunjukkan hasil deterministik, tetapi belum dibuktikan untuk Windows.
+1. Tabel utama dibangun dari eksekusi Linux (sandbox cloud dan VM). Eksekusi ulang di Windows 11 laptop skripsi (Node 24, Python 3.13, numpy 2.4.4, scikit-learn 1.9.1; `logs/accuracy_*_win.txt`) memberi kelas prediksi dan metrik identik pada ketiga dataset; satu-satunya selisih pada keluaran perbandingan adalah galat parameter K5 (2,665e-15 pada Windows, 1,776e-15 pada VM) dan K5m (LRE 15,52 pada Windows, 15,48 pada VM), yaitu selisih urutan operasi floating-point di numpy/scipy.
 2. Biner wasm yang dipakai adalah yang ada di perangkat; apakah dibangun dari sumber Rust saat ini tidak dapat diverifikasi di sini. Tes `thesis_compare.rs` dirancang untuk memeriksanya, tetapi tidak dikompilasi dan tidak dijalankan.
 3. Probabilitas Apply Model hanya tersedia pada 4 desimal; ketepatan presisi penuh jalur posterior (log-sum-exp) hanya diperiksa secara tidak langsung (kesamaan parameter, vektor, dan hasil `round4`).
 4. Satu pembagian data (seed 42 untuk SMS; pembagian tetap untuk pilkada dan SmSA); tidak ada validasi silang dan tidak ada uji signifikansi antarkonfigurasi.
@@ -392,9 +392,9 @@ Pada seluruh 24 konfigurasi dan tiga dataset, kelas yang diprediksi Statify sama
 | Kesetaraan payload headless dan TypeScript, NB: payload yang dikirim ke worker identik dengan golden headless (`payload_equivalence.nb.test.ts`) | ⟦jest:payload_equivalence.nb.test.ts::Track D: payload NB headless == payload TS aplikasi (Raw Text) payload yang dikirim ke worker identik dengan golden headless⟧ (ts-jest) | `logs/jest_D_vm.json` |
 | NB: konfigurasi Text (toRustConfig) memuat daftar stopword Indonesia lengkap dan semua opsi vektorisasi | ⟦jest:payload_equivalence.nb.test.ts::Track D: payload NB headless == payload TS aplikasi (Raw Text) konfigurasi Text (toRustConfig) memuat daftar stopword Indonesia lengkap dan semua opsi vektorisasi⟧ | idem |
 | AM: payload ke worker identik dengan golden headless; kolom prediksi sama dengan prediksi golden (`payload_equivalence.am.test.ts`) | ⟦jest:payload_equivalence.am.test.ts::Track D: payload AM headless == payload TS aplikasi (Raw Text) dan prediksi sama payload ke worker identik dengan golden headless; kolom prediksi sama dengan prediksi golden⟧ | idem |
-| Tes Rust `thesis_compare` (`thesis_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi`) | ⟦rust:thesis_compare::thesis_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi⟧ (alasan bila belum terisi: tidak ada toolchain/crate di sandbox; berkas belum pernah dikompilasi) | - |
-| `run_D.ps1` di Windows (Node 24, Python bila ada) | BELUM DIJALANKAN: perlu dijalankan pengguna | - |
-| Jest konfigurasi produksi di Windows (`payload_equivalence`) | BELUM DIJALANKAN | - |
+| Tes Rust `thesis_compare` (`thesis_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi`) | ⟦rust:thesis_compare::thesis_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi⟧ | `logs/rust_thesis_compare.txt` |
+| `run_D.ps1` di Windows (Node 24, Python 3.13) | DIJALANKAN, semua langkah keluar 0 (selftest, Statify, scikit-learn, perbandingan untuk tiga dataset, `thesis_compare`, Jest) | `logs/accuracy_*_win.txt` |
+| Jest konfigurasi produksi di Windows (`payload_equivalence`) | DIJALANKAN, 3 dari 3 lulus | `logs/jest_D_win.json` |
 
 ## 10. Berkas dan cara menjalankan ulang
 

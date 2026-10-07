@@ -12,8 +12,8 @@ $codes = [ordered]@{}
 # --- 0. Nilai acuan Python independen (butuh python + numpy + scikit-learn). Opsional: dilewati bila python tidak ada. ---
 $py = Get-Command python -ErrorAction SilentlyContinue
 if ($py) {
-    $codes['reference_values'] = Invoke-Logged -Name 'reference_values' -Command 'python -X utf8 -I testing\thesis-eval\unit\reference_values.py' -WorkDir $RepoRoot
-    $codes['static_gap_rust']  = Invoke-Logged -Name 'static_gap_rust'  -Command 'python -X utf8 -I testing\thesis-eval\unit\static_gap_rust.py'  -WorkDir $RepoRoot
+    $codes['reference_values'] = Invoke-Logged -Name 'reference_values' -Command 'python -X utf8 testing\thesis-eval\unit\reference_values.py' -WorkDir $RepoRoot
+    $codes['static_gap_rust']  = Invoke-Logged -Name 'static_gap_rust'  -Command 'python -X utf8 testing\thesis-eval\unit\static_gap_rust.py'  -WorkDir $RepoRoot
 } else {
     Write-Host 'python tidak terpasang: reference_values.py dan static_gap_rust.py dilewati (log lama dipertahankan).'
 }

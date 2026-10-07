@@ -12,11 +12,11 @@ Setiap skenario diuji pada tiga lapis, dan lapis yang dipakai dicatat pada kolom
 
 | Lapis | Status | Keterangan |
 |---|---|---|
-| Jest (3 berkas, 63 tes) | **Dijalankan: 63 lulus, 0 gagal** pada VM Linux (config `testing/thesis-eval/jest.thesis.config.js`, ts-jest, jsdom, `--runInBand`) | Log: `logs/jest_C2_vm.json` dan `logs/jest_C2_vm.txt`. Bukan perangkat uji skripsi; belum dijalankan dengan config produksi (SWC/next-jest) di Windows. |
-| Rust (`thesis_blackbox_nb`, 24 tes) | **BELUM DIJALANKAN** | Tidak ada crates.io di sandbox, sehingga `cargo test` penuh belum pernah dijalankan; berkas hanya ditinjau manual terhadap sumber. Percobaan `rustc` pada potongan fungsi-murni yang pernah dicatat penulis tidak punya skrip atau log tersimpan di `logs/`, sehingga tidak dihitung sebagai hasil (lihat "Asumsi dan keterbatasan"). Dijalankan oleh `run_C2.ps1` di Windows; log: `logs/rust_thesis_blackbox_nb.txt`. |
+| Jest (3 berkas, 63 tes) | **Dijalankan: 63 lulus, 0 gagal** di Windows dengan konfigurasi produksi (`next/jest`, `--runInBand`) | Log: `logs/jest_C2_win.json` dan `logs/jest_C2_win.txt`. Hasil yang sama di VM Linux (ts-jest): `logs/jest_C2_vm.json`. |
+| Rust (`thesis_blackbox_nb`, 24 tes) | **Dijalankan: 24 lulus, 0 gagal** di Windows (`cargo test --test thesis_blackbox_nb`, rustc 1.93.0) | Log: `logs/rust_thesis_blackbox_nb.txt`. Berkas ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
 | Manual (15 skenario) | **MANUAL — belum dijalankan** | Menunggu Yedija; lihat `C_manual_checklist_C2.md`. |
 
-Sel "Status" di tabel berisi penanda `⟦jest:…⟧` dan `⟦rust:…⟧`; `tools/apply_results.py` menggantinya dengan `Lulus`, `Gagal`, atau `BELUM DIJALANKAN` dari log. Sebelum skrip itu dijalankan, semua penanda `⟦rust:…⟧` berarti BELUM DIJALANKAN, dan penanda `⟦jest:…⟧` berarti lulus pada log `jest_C2_vm.json` (lihat tabel di atas).
+Sel "Status" di tabel berisi penanda `⟦jest:…⟧` dan `⟦rust:…⟧`; `tools/apply_results.py` menggantinya dengan `Lulus`, `Gagal`, atau `BELUM DIJALANKAN` dari log. Hasil Windows diutamakan atas hasil VM.
 
 ## Tabel hasil
 

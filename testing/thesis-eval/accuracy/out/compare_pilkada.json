@@ -584,11 +584,11 @@
     "kelas_identik": true,
     "log_weights": {
      "n": 2000,
-     "max_abs": 1.7763568394002505e-15,
-     "n_diff": 1061,
+     "max_abs": 2.6645352591003757e-15,
+     "n_diff": 1776,
      "n_c0_mismatch": 0,
      "n_excluded": 0,
-     "lre_min": 15.467464565234678
+     "lre_min": 15.33191991542065
     },
     "class_priors": {
      "n": 2,
@@ -1314,7 +1314,7 @@
      "kelas_sama": 270,
      "n": 270,
      "kelas_beda_Id": [],
-     "max_abs": 4.96229399120085e-05,
+     "max_abs": 4.962293991201544e-05,
      "lre": {
       "n": 540,
       "max_abs": 0.0,
@@ -1348,7 +1348,7 @@
     "lre": {
      "n": 540,
      "max_abs": 1.3100631690576847e-14,
-     "n_diff": 525,
+     "n_diff": 527,
      "n_c0_mismatch": 0,
      "n_excluded": 1,
      "lre_min": 9.788748359854822
@@ -1610,14 +1610,14 @@
    },
    "sklearn_vs_weka": {
     "kelas_sama": 270,
-    "max_abs": 3.859511923387515e-07,
+    "max_abs": 3.8595118151407704e-07,
     "lre": {
      "n": 540,
-     "max_abs": 3.859511923387515e-07,
+     "max_abs": 3.8595118151407704e-07,
      "n_diff": 528,
      "n_c0_mismatch": 10,
      "n_excluded": 33,
-     "lre_min": 5.280660686198064
+     "lre_min": 5.280660683841713
     }
    },
    "parameter_level": {
@@ -1629,10 +1629,10 @@
     "log_weights": {
      "n": 2084,
      "max_abs": 1.7763568394002505e-15,
-     "n_diff": 979,
+     "n_diff": 974,
      "n_c0_mismatch": 0,
      "n_excluded": 0,
-     "lre_min": 15.477527499129135
+     "lre_min": 15.517506147039276
     },
     "class_priors": {
      "n": 2,

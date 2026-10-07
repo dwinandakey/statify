@@ -1,15 +1,15 @@
 {
  "versions": {
-  "python": "3.13.16",
-  "numpy": "2.5.3",
-  "scipy": "1.18.1",
-  "pandas": "3.0.5",
+  "python": "3.13.12",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
   "scikit_learn": "1.9.1",
-  "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39"
+  "platform": "Windows-11-10.0.26300-SP0"
  },
  "dataset": "sms_spam",
- "train_file": "testing/thesis-eval/accuracy/datasets/sms_spam_train.csv",
- "test_file": "testing/thesis-eval/accuracy/datasets/sms_spam_test.csv",
+ "train_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_train.csv",
+ "test_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_test.csv",
  "n_train": 3901,
  "n_test": 1673,
  "train_class": {

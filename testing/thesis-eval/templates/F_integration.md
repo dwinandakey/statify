@@ -9,7 +9,7 @@ Dokumen ini melaporkan Track F evaluasi modul Text Analytics Statify: apakah kel
 - IT-03: **Lulus dengan catatan**. Kelas prediksi sama pada 630/630 baris untuk K1 sampai K5 dan parameter model yang diterima Apply Model identik bit demi bit dengan model Naive Bayes (selisih 0). Tetapi probabilitas keluaran Apply Model dibulatkan 4 desimal (`round4`), sehingga selisih terhadap skor acuan presisi penuh mencapai 4,992e-5 sampai 5,000e-5 dan kriteria 1e-9 tidak terpenuhi secara harfiah pada kolom probabilitas (bagian 4).
 - IT-04: kelas prediksi sama dengan scikit-learn pada 270/270 dokumen untuk K1 sampai K5; akurasi 0,7630 (K1 dan K3), 0,7296 (K2), 0,7667 (K4), 0,7556 (K5); keluaran identik byte demi byte dengan berkas Track D.
 - IT-05: dua proses Node terpisah menghasilkan berkas prediksi identik byte demi byte (K1 dan K5) dan seluruh angka model (6.017 dan 6.018 angka) sama bit demi bit setelah tulis dan baca berkas.
-- Belum dijalankan: tes Rust `thesis_integration.rs` (tidak ada cargo), pemeriksaan di peramban nyata (`F_manual_checklist.md`), dan Jest dengan konfigurasi produksi di Windows.
+- Dijalankan ulang di Windows (`run_F.ps1`): lima skrip Node keluar 0 (`logs/integration_it0N_win.txt`), Jest konfigurasi produksi 98 dari 98 lulus (`logs/jest_F_win.json`), dan tes Rust `thesis_integration.rs` 2 dari 2 lulus (`logs/rust_thesis_integration.txt`). Belum dijalankan: pemeriksaan di peramban nyata (`F_manual_checklist.md`).
 - Temuan: F-01 (rendah) dan F-02 (informasi, sama dengan D-02) di `BUGS_F.md`. Tidak ada kode produksi yang diubah.
 
 ## 2. Lingkungan dan versi
@@ -101,7 +101,7 @@ Putusan: **Lulus dengan catatan**. Yang tidak terpenuhi secara harfiah: selisih 
 ## 8. Keterbatasan
 
 1. Eksekusi di VM Linux (Node 22.23.2) dengan ts-jest, bukan Windows 11 dengan `next/jest`; hasil Windows menyusul lewat `run_F.ps1`. Tidak ada waktu eksekusi sandbox yang dilaporkan sebagai hasil perangkat skripsi.
-2. Tes memakai wasm yang sudah dibangun di repositori; wasm tidak dibangun ulang. Rust tidak dapat dikompilasi di sandbox, sehingga `thesis_integration.rs` BELUM DIJALANKAN.
+2. Tes memakai wasm yang sudah dibangun di repositori; wasm tidak dibangun ulang. `thesis_integration.rs` ditulis tanpa kompiler dan dikompilasi pertama kali di Windows; hasilnya 2 dari 2 lulus.
 3. `Worker` diganti kelas yang memanggil wasm langsung; penyalinan pesan (structured clone) dan penjadwalan Worker sungguhan tidak diuji. Store hasil dan variabel diganti tiruan; penulisan ke Data Editor dan IndexedDB tidak diuji. Hook `useStringToWordVector` tidak dijalankan; penamaan kolom memakai `buildColumnData` dan `processVariableName` asli.
 4. Antarmuka hanya diuji di jsdom pada tab Variables Naive Bayes. Dialog pemilih berkas, kartu Model Summary, tampilan Output Viewer, unduhan berkas, dan muat ulang halaman nyata hanya ada di `F_manual_checklist.md`.
 5. Satu dataset (pilkada, dua kelas seimbang) dan lima konfigurasi; model fitur biasa dan Word-Vector pada Apply Model tidak dicakup di Track F (lihat Track C3).

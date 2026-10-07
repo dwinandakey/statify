@@ -1,0 +1,30 @@
+   Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.03s
+     Running tests\thesis_text_pipeline.rs (target\debug\deps\thesis_text_pipeline-e172481c86570574.exe)
+
+running 20 tests
+test daftar_stopword_bawaan_dimuat_utuh_oleh_build_set ... ok
+test ngram_di_luar_rentang_1_sampai_5_ditolak_invalid_config ... ok
+test ngram_dibentuk_setelah_stopword_dan_stemming_dan_tidak_melintasi_kata_terbuang ... ok
+test ngram_generate_semua_rentang_1_sampai_5_sesuai_acuan_python ... ok
+test ngram_hanya_bigram_tanpa_unigram_dan_token_kurang_dari_minimum_menghasilkan_kosong ... ok
+test ngram_jumlah_term_sama_dengan_rumus_untuk_tujuh_kata_berbeda ... ok
+test ngram_melalui_pipeline_penuh_semua_rentang_sah ... ok
+test stemmer_indonesia_pasangan_yang_terbukti_di_tes_lama ... ok
+test stemmer_indonesia_sifat_umum_pada_kata_berimbuhan ... ok
+test stemmer_inggris_contoh_porter2_klasik ... ok
+test stemmer_inggris_melalui_pipeline_dan_batch_sejajar ... ok
+test stemmer_memaksa_lowercase_dan_metode_lain_mengembalikan_token_apa_adanya ... ok
+test stopword_bawaan_indonesia_dan_inggris_sesuai_acuan_python ... ok
+test stopword_disaring_sebelum_stemming ... ok
+test stopword_indonesia_membuang_kata_negasi_tidak ... ok
+test stopword_inggris_tidak_peka_huruf_besar_kecil_walau_lowercase_mati ... ok
+test stopword_json_bukan_array_string_ditolak_invalid_stopwords ... ok
+test stopword_kustom_dinormalkan_lowercase_unik_dan_terurut_pada_resep ... ok
+test stopword_metode_none_mengabaikan_daftar_yang_dikirim ... ok
+test stopword_tanpa_daftar_atau_daftar_kosong_tidak_menyaring_apa_pun ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=1.6 started=2026-10-08 00:16:41 +07:00 cmd=cargo test --test thesis_text_pipeline -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

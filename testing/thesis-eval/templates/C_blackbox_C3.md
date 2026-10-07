@@ -5,9 +5,9 @@ Dokumen ini adalah hasil Track C3 untuk skenario BB-29 s.d. BB-36 pada modul Tex
 ## Cara membaca status
 
 - Penanda `⟦jest:<berkas>::<nama tes>⟧` dan `⟦rust:<target>::<fungsi>⟧` diganti menjadi Lulus, Gagal, atau BELUM DIJALANKAN oleh `tools/apply_results.py` berdasarkan `logs/jest_*.json` dan `logs/rust_*.txt`.
-- Tes Jest dijalankan di sandbox (VM Linux, `tools/run_jest_linux.sh`, ts-jest) dan seluruhnya lulus: 95 dari 95 tes pada 7 berkas (`logs/jest_C3_vm.json`, `logs/jest_C3_vm.txt`). Hasil ini bukan hasil perangkat uji skripsi; hasil final berasal dari `run_C3.ps1` di Windows (`logs/jest_C3_win.json`, konfigurasi Jest produksi).
+- Tes Jest dijalankan di Windows dengan konfigurasi Jest produksi (`run_C3.ps1`) dan seluruhnya lulus: 95 dari 95 tes pada 7 berkas (`logs/jest_C3_win.json`, `logs/jest_C3_win.txt`); hasil yang sama di VM Linux (ts-jest, `logs/jest_C3_vm.json`).
 - Komputasi BB-33 dan BB-35 pada tes Jest dijalankan oleh biner WASM Apply Model yang sudah dibangun dan dilacak git (`public/workers/Classify/ApplyModel/pkg`), dimuat lewat pengganti Worker; angka acuannya berasal dari oracle Python independen (`tools/c3_am_oracle.py`), bukan dari keluaran aplikasi.
-- Tes Rust (`apply-model/rust/tests/thesis_blackbox_am.rs`, 12 fungsi) BELUM DIJALANKAN: sandbox tidak dapat mengunduh crate sehingga tidak ada kompilasi. Penanda Rust akan terisi setelah Yedija menjalankan `run_C3.ps1`.
+- Tes Rust (`apply-model/rust/tests/thesis_blackbox_am.rs`, 12 fungsi) dijalankan di Windows oleh `run_C3.ps1`: 12 dari 12 lulus (`logs/rust_thesis_blackbox_am.txt`).
 - Bagian yang membutuhkan peramban sungguhan (pemilih berkas, Data Editor, Output Viewer, unduhan, muat ulang halaman) ditandai "MANUAL — belum dijalankan" dan dirinci pada `C_manual_checklist_C3.md` (M-29 s.d. M-36).
 
 ## Tabel hasil
@@ -35,4 +35,4 @@ Dokumen ini adalah hasil Track C3 untuk skenario BB-29 s.d. BB-36 pada modul Tex
 8. **BB-35 (Output).** Tiga tabel yang disebut di prompt adalah subset: hasil selalu memuat juga Saved Variables, dan Evaluation Metrics, Cohen's Kappa, serta Confusion Matrix bila Actual target dipetakan.
 9. **BB-36 (persistensi).** Persistensi berlaku untuk menu Naive Bayes dan terjadi hanya saat OK, bukan otomatis (BUGS_C3.md, C3-01). Penyimpanan ikut fingerprint variabel; dataset berbeda mereset form dan menghapus penyimpanan.
 10. **Provenans WASM.** Tes BB-33/BB-35 memakai biner `pkg/wasm_bg.wasm` yang sudah ada di repositori. Biner ini dapat tertinggal dari sumber Rust; `cargo test --test thesis_blackbox_am` pada `run_C3.ps1` memeriksa sumber Rust yang berlaku. Nilai acuan kedua jalur identik (oracle Python), sehingga bila salah satunya gagal, itu menunjuk ketidaksinkronan biner dan sumber.
-11. **Jest standar Windows.** Hasil VM memakai ts-jest; konfigurasi produksi (`frontend/jest.config.js` dengan `next/jest`) belum dijalankan oleh agen ini. Hasilnya akan masuk lewat `logs/jest_C3_win.json`.
+11. **Jest standar Windows.** Konfigurasi produksi (`frontend/jest.config.js` dengan `next/jest`) dijalankan di Windows: 95 dari 95 lulus (`logs/jest_C3_win.json`), sama dengan hasil VM (ts-jest).

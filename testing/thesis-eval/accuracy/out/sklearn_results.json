@@ -1,15 +1,15 @@
 {
  "versions": {
-  "python": "3.13.16",
-  "numpy": "2.5.3",
-  "scipy": "1.18.1",
-  "pandas": "3.0.5",
+  "python": "3.13.12",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
   "scikit_learn": "1.9.1",
-  "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39"
+  "platform": "Windows-11-10.0.26300-SP0"
  },
  "dataset": "pilkada",
- "train_file": "Claude outputs/pilkada_train.csv",
- "test_file": "Claude outputs/pilkada_test.csv",
+ "train_file": "Claude outputs\\pilkada_train.csv",
+ "test_file": "Claude outputs\\pilkada_test.csv",
  "n_train": 630,
  "n_test": 270,
  "train_class": {
@@ -26,8 +26,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 26,
-    "only_native": 26
+    "only_ours": 19,
+    "only_native": 19
    },
    "accuracy": 0.762962962962963,
    "kappa": 0.5259259259259259,
@@ -68,8 +68,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 26,
-    "only_native": 26
+    "only_ours": 19,
+    "only_native": 19
    },
    "accuracy": 0.7296296296296296,
    "kappa": 0.45925925925925926,
@@ -110,8 +110,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 26,
-    "only_native": 26
+    "only_ours": 19,
+    "only_native": 19
    },
    "accuracy": 0.762962962962963,
    "kappa": 0.5259259259259259,
@@ -152,8 +152,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 26,
-    "only_native": 26
+    "only_ours": 19,
+    "only_native": 19
    },
    "accuracy": 0.7666666666666667,
    "kappa": 0.5333333333333333,
@@ -194,8 +194,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 26,
-    "only_native": 26
+    "only_ours": 19,
+    "only_native": 19
    },
    "avg_doc_norm": 9.348103734768971,
    "n_train_zero_norm": 0,

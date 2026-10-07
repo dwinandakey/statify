@@ -1,0 +1,22 @@
+   Compiling wasm v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\apply-model\rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.07s
+     Running tests\thesis_blackbox_am.rs (target\debug\deps\thesis_blackbox_am-778fa5dc44872234.exe)
+
+running 12 tests
+test bb33_actual_tidak_lengkap_ditolak_dengan_am_e_payload ... ok
+test bb33_d1_d3_skor_log_cocok_oracle_dan_rumus_independen ... ok
+test bb35_model_summary_d1_memuat_metadata_fitur_dan_parameter ... ok
+test bb33_d1_d3_peringatan_actual_kelas_tak_dikenal ... ok
+test bb35_prediction_distribution_d1_d3 ... ok
+test bb35_case_processing_summary_d1_d3 ... ok
+test bb33_d1_d3_evaluasi_matriks_konfusi_dan_metrik_cocok_oracle ... ok
+test bb33_d1_d3_prediksi_dan_probabilitas_cocok_oracle ... ok
+test bb33_tanpa_actual_prediksi_tetap_ada_dan_evaluasi_none ... ok
+test bb35_hasil_dapat_diserialisasi_dan_kuncinya_lengkap ... ok
+test bb35_ringkasan_model_teks_raw ... ok
+test bb33_teks_raw_actual_prediksi_dan_evaluasi_cocok_oracle ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=3.59 started=2026-10-08 00:17:36 +07:00 cmd=cargo test --test thesis_blackbox_am cwd=E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\apply-model\rust ===

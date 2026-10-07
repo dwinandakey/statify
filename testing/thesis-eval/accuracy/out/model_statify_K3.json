@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "model_type": "naive_bayes",
-  "trained_at": "2026-10-07T14:54:00.967Z",
+  "trained_at": "2026-10-07T17:17:56.498Z",
   "target": {
     "name": "Sentiment",
     "classes": [

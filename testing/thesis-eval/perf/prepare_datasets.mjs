@@ -92,7 +92,7 @@ if (try20ng) {
   ].join("\n");
   let done = false;
   for (const exe of process.platform === "win32" ? ["python", "py"] : ["python3", "python"]) {
-    const r = spawnSync(exe, ["-I", "-c", code, out], { encoding: "utf8", timeout: 600000 });
+    const r = spawnSync(exe, ["-c", code, out], { encoding: "utf8", timeout: 600000 });
     if (r.status === 0 && fs.existsSync(out)) {
       console.log((r.stdout ?? "").trim());
       const lines = fs.readFileSync(out, "utf8");

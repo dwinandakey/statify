@@ -1,15 +1,15 @@
 {
  "versions": {
-  "python": "3.13.16",
-  "numpy": "2.5.3",
-  "scipy": "1.18.1",
-  "pandas": "3.0.5",
+  "python": "3.13.12",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
   "scikit_learn": "1.9.1",
-  "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39"
+  "platform": "Windows-11-10.0.26300-SP0"
  },
  "dataset": "smsa",
- "train_file": "testing/thesis-eval/accuracy/datasets/smsa_train.csv",
- "test_file": "testing/thesis-eval/accuracy/datasets/smsa_test.csv",
+ "train_file": "testing\\thesis-eval\\accuracy\\datasets\\smsa_train.csv",
+ "test_file": "testing\\thesis-eval\\accuracy\\datasets\\smsa_test.csv",
  "n_train": 11000,
  "n_test": 500,
  "train_class": {
@@ -28,8 +28,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 2,
-    "only_native": 2
+    "only_ours": 3,
+    "only_native": 3
    },
    "accuracy": 0.598,
    "kappa": 0.350288329756148,
@@ -82,8 +82,8 @@
    "vocab_size": 1000,
    "words_to_keep": 1000,
    "vocab_vs_native_max_features": {
-    "only_ours": 2,
-    "only_native": 2
+    "only_ours": 3,
+    "only_native": 3
    },
    "accuracy": 0.624,
    "kappa": 0.3777142251880098,

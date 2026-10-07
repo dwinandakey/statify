@@ -91,7 +91,7 @@ Tambahan (tanpa Statify): scikit-learn terhadap WEKA pada resolusi penuh
 | K3 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K4 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,75 |
 | K4 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
-| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 1,776e-15 | 15,47 |
+| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 2,665e-15 | 15,33 |
 | K5 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K1w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
 | K1w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
@@ -107,7 +107,7 @@ Tambahan (tanpa Statify): scikit-learn terhadap WEKA pada resolusi penuh
 | K1m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
 | K2m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,21 |
 | K2m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
-| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,48 |
+| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,52 |
 | K5m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
 
 ### Tingkat vektor (resolusi penuh): matriks latih STWV (wasm) vs scikit-learn/numpy

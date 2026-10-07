@@ -6,14 +6,14 @@ Dokumen ini dibangkitkan oleh `testing/thesis-eval/unit/build_A_unit.py` dari `u
 
 | Hal | Hasil |
 |---|---|
-| Tes Jest Track A (4 berkas) | **105 kasus, 105 lulus, 0 gagal** (VM Linux, `logs/jest_A_vm.json`, `logs/jest_A_vm.txt`) |
-| Tes Rust Track A (4 target) | **66 fungsi tes ditulis; BELUM DIJALANKAN** (toolchain Rust tidak dapat dipakai di sesi penulisan; perintah ada di `run_A.ps1`) |
+| Tes Jest Track A (4 berkas) | **105 kasus, 105 lulus, 0 gagal** (Windows dengan konfigurasi Jest produksi, `logs/jest_A_win.json`; VM Linux sebagai pembanding, `logs/jest_A_vm.json`) |
+| Tes Rust Track A (4 target) | **66 fungsi tes; 66 lulus, 0 gagal di Windows** (`cargo test --test thesis_formulas` 15, `thesis_vocab_limit` 13, `thesis_text_pipeline` 20, `thesis_partition` 18; log `logs/rust_thesis_*.txt`, rustc 1.93.0). Tes ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
 | Nilai acuan independen | `unit/reference_values.py` (Python + numpy, 80 kombinasi TF x IDF x normalisasi, 16 skenario Words to Keep/Min term frequency, 5 skenario stopword, 18 skenario n-gram); log `logs/reference_values.txt`. Kombinasi sah-sklearn (27) dibandingkan langsung dengan scikit-learn: selisih maksimum 0. Nilai golden lama PLAN_FIX 3.6 cocok. |
 | Cakupan Jest | Diukur di VM per menu, sebelum dan sesudah Track A (bagian 4). STWV 51,37% menjadi 53,39%; Naive Bayes 87,01% (tidak berubah); Apply Model 97,50% menjadi 97,77% (cakupan baris). |
 | Cakupan Rust | **Tidak terukur**, lihat `run_A.ps1` (`cargo llvm-cov` bila terpasang). Hanya ada estimasi statis celah (bagian 4.2), bukan cakupan terukur. |
-| Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS terverifikasi dengan tes yang dijalankan; sisi Rust menunggu `cargo test`); tiga catatan informasional (A-2 sampai A-4). |
+| Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS dan sisi Rust terverifikasi dengan tes yang dijalankan di Windows); tiga catatan informasional (A-2 sampai A-4). |
 
-Catatan lingkungan: Jest dijalankan dengan `jest.thesis.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), sehingga hasil Windows tetap harus dicek pengguna. Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
+Catatan lingkungan: Jest dijalankan dengan `jest.thesis.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), dan hasilnya 105 dari 105 lulus (`logs/jest_A_win.json`). Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
 
 ## 2. Cakupan tugas dan berkas yang dibuat
 
@@ -141,9 +141,9 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 | `stopwords.thesis.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | thesis A(c): rentang n-gram 1-5 pada konfigurasi | ⟦jest:stopwords.thesis.test.ts::thesis A(c): rentang n-gram 1-5 pada konfigurasi pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram⟧ |
 | `stopwords.thesis.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | thesis A(c): rentang n-gram 1-5 pada konfigurasi | ⟦jest:stopwords.thesis.test.ts::thesis A(c): rentang n-gram 1-5 pada konfigurasi mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain⟧ |
 
-### 3.2 Rust (66 fungsi tes; BELUM DIJALANKAN)
+### 3.2 Rust (66 fungsi tes; DIJALANKAN di Windows)
 
-Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi. Pengecekan yang dilakukan sebagai pengganti: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `thesis_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kesalahan kompilasi tetap mungkin; bila ada, perbaiki di berkas tes saja.
+Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya terjadi di Windows (`run_A.ps1`, rustc 1.93.0) dan seluruhnya lulus tanpa perubahan berkas. Sebelum itu hanya dilakukan: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `thesis_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kekhawatiran kesalahan kompilasi tidak terbukti pada kompilasi Windows.
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
@@ -285,7 +285,7 @@ Tes baru sengaja tidak menduplikasi hal berikut; rujukan ke berkas dan nama tes 
 
 ## 6. Baseline pengujian
 
-Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026 12:43 UTC; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A": jumlah dihitung statis dari kemunculan `#[test]` (bukan hasil eksekusi); Lulus/Gagal BELUM DIJALANKAN karena berkas tes baru belum pernah dikompilasi; cakupan Rust tidak terukur.
+Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A" berasal dari `logs/rust_thesis_*.txt` (8 Oktober 2026, Windows); cakupan Rust tidak terukur.
 
 | Lapisan | Lokasi pengujian | Jumlah kasus | Lulus | Gagal | Cakupan baris |
 |---|---|---|---|---|---|
@@ -297,9 +297,9 @@ Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label
 | Jest Apply Model (sesudah) | idem + `model-loader.thesis.test.ts` (27 suite; `logs/jest_covA_am_run.json`) | 520 | 520 | 0 | 97,77% (1448/1481) |
 | Jest Track A saja | 4 berkas `*.thesis.test.ts` (4 suite; `logs/jest_A_vm.json`) | 105 | 105 | 0 | (tidak diukur terpisah) |
 | Rust statify-text-core (tes lama) [Win] | `statify-text-core/tests/{characterization,nb_text,s2_pipeline,s3_formulas,s4_fit_transform}.rs` (`logs/unit_core.txt`) | 91 | 91 | 0 | tidak terukur, lihat `run_A.ps1` |
-| Rust statify-text-core (Track A) | `tests/thesis_{formulas,vocab_limit,text_pipeline}.rs` | 48 (hitungan statis) | BELUM DIJALANKAN | BELUM DIJALANKAN | tidak terukur, lihat `run_A.ps1` |
+| Rust statify-text-core (Track A) | `tests/thesis_{formulas,vocab_limit,text_pipeline}.rs` | 48 | 48 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust naive-bayes (tes lama inline) [Win] | `naive-bayes/rust/src/**` blok `#[cfg(test)]` (`logs/unit_nb.txt`) | 203 | 203 | 0 | tidak terukur, lihat `run_A.ps1` |
-| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/thesis_partition.rs` | 18 (hitungan statis) | BELUM DIJALANKAN | BELUM DIJALANKAN | tidak terukur, lihat `run_A.ps1` |
+| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/thesis_partition.rs` | 18 | 18 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust apply-model (tes lama) [Win] | `apply-model/rust/src/**` blok `#[cfg(test)]` (117) + `rust/tests/text_scoring.rs` (39) (`logs/unit_am.txt`) | 156 | 156 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust wrapper STWV | `StringToWordVector/rust` | 0 | tidak ada tes | tidak ada tes | tidak terukur |
 

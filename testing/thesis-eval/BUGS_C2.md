@@ -39,7 +39,7 @@ Folder dasar: `frontend/components/Modals/Analyze/Classify/naive-bayes/` (selanj
 2. Number of Folds = `6`, klik OK: toast generik `The Naive Bayes analysis could not be completed. …` (tanpa kata fold, tanpa kode).
 3. Number of Folds = `3` (> kelas terkecil 2): analisis selesai tanpa peringatan apa pun, padahal Rust menyatakan `Number of folds (3) exceeds the smallest class size (2). … The analysis will still run.`
 
-Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karakterisasi pesan generik); Rust `bb24_*` (belum dijalankan).
+Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karakterisasi pesan generik); Rust `bb24_*` (lulus di Windows, `logs/rust_thesis_blackbox_nb.txt`).
 
 **Dampak.** Pengguna tidak dapat mengetahui bahwa jumlah fold penyebab kegagalan atau bahwa fold per kelas tidak seimbang. Menyimpang dari AGENTS.md §4.2 ("tampilkan peringatan") dan dari harapan prompt (pesan kesalahan berkode).
 
@@ -124,4 +124,4 @@ Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karak
 
 - **BB-28**: resep (`text.recipe`) hanya ada pada ekspor jalur Raw Text. Jalur Word-Vector menghasilkan schema 2.0 tanpa resep (`text.recipe = null`, hanya `columns`) karena vektorisasi terjadi di luar Naive Bayes; model tanpa Text dan tanpa Gaussian min-std tetap schema 1.1. Rumusan prompt "schema 2.0 berisi resep" berlaku untuk jalur Raw Text.
 - **BB-24**: istilah "pesan kesalahan berkode" pada prompt tidak sesuai kode; tidak ada kode `NB_E_*` untuk fold (lihat C2-01).
-- **Batas lingkungan**: `cargo test` untuk tes Rust paket ini belum dijalankan (crate serde/wasm-bindgen/regex tidak dapat diunduh di sandbox). Percobaan `rustc` pada potongan fungsi-murni (partisi, k-fold, `validate_fold_count`, metrik BB-25) yang pernah dicatat penulis tidak punya log tersimpan dan tidak dihitung; tes yang memanggil `run_analysis` hanya ditinjau dari pembacaan kode; bila `cargo test --test thesis_blackbox_nb` gagal kompilasi di Windows, perbaiki hanya berkas `rust/tests/thesis_blackbox_nb.rs`.
+- **Batas lingkungan**: tes Rust paket ini ditulis tanpa kompiler dan baru dikompilasi di Windows; `cargo test --test thesis_blackbox_nb` lulus 24 dari 24 (`logs/rust_thesis_blackbox_nb.txt`).

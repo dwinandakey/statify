@@ -6,14 +6,14 @@ Dokumen ini dibangkitkan oleh `testing/thesis-eval/unit/build_A_unit.py` dari `u
 
 | Hal | Hasil |
 |---|---|
-| Tes Jest Track A (4 berkas) | **105 kasus, 105 lulus, 0 gagal** (VM Linux, `logs/jest_A_vm.json`, `logs/jest_A_vm.txt`) |
-| Tes Rust Track A (4 target) | **66 fungsi tes ditulis; BELUM DIJALANKAN** (toolchain Rust tidak dapat dipakai di sesi penulisan; perintah ada di `run_A.ps1`) |
+| Tes Jest Track A (4 berkas) | **105 kasus, 105 lulus, 0 gagal** (Windows dengan konfigurasi Jest produksi, `logs/jest_A_win.json`; VM Linux sebagai pembanding, `logs/jest_A_vm.json`) |
+| Tes Rust Track A (4 target) | **66 fungsi tes; 66 lulus, 0 gagal di Windows** (`cargo test --test thesis_formulas` 15, `thesis_vocab_limit` 13, `thesis_text_pipeline` 20, `thesis_partition` 18; log `logs/rust_thesis_*.txt`, rustc 1.93.0). Tes ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
 | Nilai acuan independen | `unit/reference_values.py` (Python + numpy, 80 kombinasi TF x IDF x normalisasi, 16 skenario Words to Keep/Min term frequency, 5 skenario stopword, 18 skenario n-gram); log `logs/reference_values.txt`. Kombinasi sah-sklearn (27) dibandingkan langsung dengan scikit-learn: selisih maksimum 0. Nilai golden lama PLAN_FIX 3.6 cocok. |
 | Cakupan Jest | Diukur di VM per menu, sebelum dan sesudah Track A (bagian 4). STWV 51,37% menjadi 53,39%; Naive Bayes 87,01% (tidak berubah); Apply Model 97,50% menjadi 97,77% (cakupan baris). |
 | Cakupan Rust | **Tidak terukur**, lihat `run_A.ps1` (`cargo llvm-cov` bila terpasang). Hanya ada estimasi statis celah (bagian 4.2), bukan cakupan terukur. |
-| Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS terverifikasi dengan tes yang dijalankan; sisi Rust menunggu `cargo test`); tiga catatan informasional (A-2 sampai A-4). |
+| Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS dan sisi Rust terverifikasi dengan tes yang dijalankan di Windows); tiga catatan informasional (A-2 sampai A-4). |
 
-Catatan lingkungan: Jest dijalankan dengan `jest.thesis.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), sehingga hasil Windows tetap harus dicek pengguna. Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
+Catatan lingkungan: Jest dijalankan dengan `jest.thesis.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), dan hasilnya 105 dari 105 lulus (`logs/jest_A_win.json`). Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
 
 ## 2. Cakupan tugas dan berkas yang dibuat
 
@@ -141,78 +141,78 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 | `stopwords.thesis.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [VM] |
 | `stopwords.thesis.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [VM] |
 
-### 3.2 Rust (66 fungsi tes; BELUM DIJALANKAN)
+### 3.2 Rust (66 fungsi tes; DIJALANKAN di Windows)
 
-Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi. Pengecekan yang dilakukan sebagai pengganti: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `thesis_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kesalahan kompilasi tetap mungkin; bila ada, perbaiki di berkas tes saja.
+Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya terjadi di Windows (`run_A.ps1`, rustc 1.93.0) dan seluruhnya lulus tanpa perubahan berkas. Sebelum itu hanya dilakukan: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `thesis_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kekhawatiran kesalahan kompilasi tidak terbukti pada kompilasi Windows.
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
-| `thesis_formulas.rs` (statify-text-core) | `tf_binary_pada_korpus_d` | tf binary pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `tf_raw_pada_korpus_d` | tf raw pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `tf_log1p_pada_korpus_d` | tf log1p pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `tf_sublinear_pada_korpus_d` | tf sublinear pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `tf_normalized_pada_korpus_d` | tf normalized pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `idf_standard_pada_korpus_d` | idf standard pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `idf_smooth_pada_korpus_d` | idf smooth pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `idf_plus1_pada_korpus_d` | idf plus1 pada korpus d | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `normalisasi_l1_nilai_acuan_dan_jumlah_satu` | normalisasi l1 nilai acuan dan jumlah satu | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `normalisasi_l2_nilai_acuan_dan_norma_satu` | normalisasi l2 nilai acuan dan norma satu | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `normalisasi_doc_length_semua_baris_bernorma_rata_rata` | normalisasi doc length semua baris bernorma rata rata | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `grid_80_kombinasi_pada_standar_custom` | grid 80 kombinasi pada standar custom | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `grid_preset_weka_hanya_kombinasi_sah_dan_hasil_sama` | grid preset weka hanya kombinasi sah dan hasil sama | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `grid_preset_sklearn_hanya_kombinasi_sah_dan_hasil_sama` | grid preset sklearn hanya kombinasi sah dan hasil sama | BELUM DIJALANKAN |
-| `thesis_formulas.rs` (statify-text-core) | `tf_normalized_memakai_total_token_termasuk_ngram_sebelum_pemangkasan` | tf normalized memakai total token termasuk ngram sebelum pemangkasan | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `skenario_acuan_words_to_keep_dan_min_term_freq` | skenario acuan words to keep dan min term freq | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan` | words to keep seri tiga arah di batas dipilih alfabetis bukan urutan kemunculan | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_memotong_ketat_walau_banyak_term_seri` | words to keep memotong ketat walau banyak term seri | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil` | words to keep seri diurutkan bytewise huruf besar sebelum huruf kecil | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak` | words to keep hasil stabil pada pengulangan walau urutan hashmap acak | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong` | words to keep sama dengan atau melebihi jumlah kandidat tidak memotong | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_3_pada_korpus_d_memilih_makan_nasi_saya` | words to keep 3 pada korpus d memilih makan nasi saya | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `custom_ranking_memakai_skor_bukan_total_count_dan_seri_alfabetis` | custom ranking memakai skor bukan total count dan seri alfabetis | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_batas_inklusif_count_sama_dipertahankan` | min term freq batas inklusif count sama dipertahankan | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen` | min term freq menghitung total kemunculan bukan jumlah dokumen | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_lalu_words_to_keep_dengan_seri` | min term freq lalu words to keep dengan seri | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_dihitung_pada_token_ngram_juga` | min term freq dihitung pada token ngram juga | BELUM DIJALANKAN |
-| `thesis_vocab_limit.rs` (statify-text-core) | `pemangkasan_kosakata_tidak_mengubah_n_dokumen_dan_df_term_yang_tersisa` | pemangkasan kosakata tidak mengubah n dokumen dan df term yang tersisa | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `daftar_stopword_bawaan_dimuat_utuh_oleh_build_set` | daftar stopword bawaan dimuat utuh oleh build set | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_bawaan_indonesia_dan_inggris_sesuai_acuan_python` | stopword bawaan indonesia dan inggris sesuai acuan python | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_indonesia_membuang_kata_negasi_tidak` | stopword indonesia membuang kata negasi tidak | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_inggris_tidak_peka_huruf_besar_kecil_walau_lowercase_mati` | stopword inggris tidak peka huruf besar kecil walau lowercase mati | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_kustom_dinormalkan_lowercase_unik_dan_terurut_pada_resep` | stopword kustom dinormalkan lowercase unik dan terurut pada resep | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_metode_none_mengabaikan_daftar_yang_dikirim` | stopword metode none mengabaikan daftar yang dikirim | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_tanpa_daftar_atau_daftar_kosong_tidak_menyaring_apa_pun` | stopword tanpa daftar atau daftar kosong tidak menyaring apa pun | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_json_bukan_array_string_ditolak_invalid_stopwords` | stopword json bukan array string ditolak invalid stopwords | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_disaring_sebelum_stemming` | stopword disaring sebelum stemming | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_generate_semua_rentang_1_sampai_5_sesuai_acuan_python` | ngram generate semua rentang 1 sampai 5 sesuai acuan python | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_melalui_pipeline_penuh_semua_rentang_sah` | ngram melalui pipeline penuh semua rentang sah | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_jumlah_term_sama_dengan_rumus_untuk_tujuh_kata_berbeda` | ngram jumlah term sama dengan rumus untuk tujuh kata berbeda | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_hanya_bigram_tanpa_unigram_dan_token_kurang_dari_minimum_menghasilkan_kosong` | ngram hanya bigram tanpa unigram dan token kurang dari minimum menghasilkan kosong | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_dibentuk_setelah_stopword_dan_stemming_dan_tidak_melintasi_kata_terbuang` | ngram dibentuk setelah stopword dan stemming dan tidak melintasi kata terbuang | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_di_luar_rentang_1_sampai_5_ditolak_invalid_config` | ngram di luar rentang 1 sampai 5 ditolak invalid config | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_pasangan_yang_terbukti_di_tes_lama` | stemmer indonesia pasangan yang terbukti di tes lama | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_sifat_umum_pada_kata_berimbuhan` | stemmer indonesia sifat umum pada kata berimbuhan | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_contoh_porter2_klasik` | stemmer inggris contoh porter2 klasik | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_memaksa_lowercase_dan_metode_lain_mengembalikan_token_apa_adanya` | stemmer memaksa lowercase dan metode lain mengembalikan token apa adanya | BELUM DIJALANKAN |
-| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_melalui_pipeline_dan_batch_sejajar` | stemmer inggris melalui pipeline dan batch sejajar | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_jumlah_training_tiap_kelas_sama_dengan_pembulatan_70_persen` | holdout 70 30 jumlah training tiap kelas sama dengan pembulatan 70 persen | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_proporsi_tiap_kelas_menyimpang_paling_banyak_setengah_data_dari_70_persen` | holdout 70 30 proporsi tiap kelas menyimpang paling banyak setengah data dari 70 persen | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_indeks_training_dan_holdout_saling_lepas_dan_lengkap` | holdout indeks training dan holdout saling lepas dan lengkap | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_persentase_lain_80_20_dan_60_40` | holdout persentase lain 80 20 dan 60 40 | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_kelas_beranggota_satu_masuk_training_dan_holdout_tidak_memuatnya` | holdout kelas beranggota satu masuk training dan holdout tidak memuatnya | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `mt19937_seed_42_dua_keluaran_awal_sama_dengan_numpy` | mt19937 seed 42 dua keluaran awal sama dengan numpy | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_seed_42_indeks_eksak_sama_dengan_replika_python` | holdout 70 seed 42 indeks eksak sama dengan replika python | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_seed_42_indeks_eksak_sama_dengan_replika_python` | kfold seed 42 indeks eksak sama dengan replika python | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_selisih_jumlah_per_kelas_antar_fold_paling_banyak_satu` | kfold selisih jumlah per kelas antar fold paling banyak satu | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_setiap_indeks_tepat_satu_fold` | kfold setiap indeks tepat satu fold | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_ukuran_total_fold_berselisih_paling_banyak_jumlah_kelas` | kfold ukuran total fold berselisih paling banyak jumlah kelas | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar` | kfold karakterisasi ukuran fold tidak seimbang pada tiga kelas sama besar | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan` | kfold k sama dengan jumlah instance menghasilkan fold kosong dan peringatan | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_lolos_validate_fold_count_tanpa_peringatan` | k1 lolos validate fold count tanpa peringatan | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_menghasilkan_satu_fold_berisi_semua_indeks` | k1 menghasilkan satu fold berisi semua indeks | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data` | k1 fold latih kosong dan fold uji adalah seluruh data | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k2_sebagai_pembanding_fold_latih_tidak_kosong` | k2 sebagai pembanding fold latih tidak kosong | BELUM DIJALANKAN |
-| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama` | k1 evaluasi end to end tanpa panic tanpa nan tetapi semua prediksi kelas alfabetis pertama | BELUM DIJALANKAN |
+| `thesis_formulas.rs` (statify-text-core) | `tf_binary_pada_korpus_d` | tf binary pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `tf_raw_pada_korpus_d` | tf raw pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `tf_log1p_pada_korpus_d` | tf log1p pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `tf_sublinear_pada_korpus_d` | tf sublinear pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `tf_normalized_pada_korpus_d` | tf normalized pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `idf_standard_pada_korpus_d` | idf standard pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `idf_smooth_pada_korpus_d` | idf smooth pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `idf_plus1_pada_korpus_d` | idf plus1 pada korpus d | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `normalisasi_l1_nilai_acuan_dan_jumlah_satu` | normalisasi l1 nilai acuan dan jumlah satu | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `normalisasi_l2_nilai_acuan_dan_norma_satu` | normalisasi l2 nilai acuan dan norma satu | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `normalisasi_doc_length_semua_baris_bernorma_rata_rata` | normalisasi doc length semua baris bernorma rata rata | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `grid_80_kombinasi_pada_standar_custom` | grid 80 kombinasi pada standar custom | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `grid_preset_weka_hanya_kombinasi_sah_dan_hasil_sama` | grid preset weka hanya kombinasi sah dan hasil sama | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `grid_preset_sklearn_hanya_kombinasi_sah_dan_hasil_sama` | grid preset sklearn hanya kombinasi sah dan hasil sama | Lulus [Win] |
+| `thesis_formulas.rs` (statify-text-core) | `tf_normalized_memakai_total_token_termasuk_ngram_sebelum_pemangkasan` | tf normalized memakai total token termasuk ngram sebelum pemangkasan | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `skenario_acuan_words_to_keep_dan_min_term_freq` | skenario acuan words to keep dan min term freq | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan` | words to keep seri tiga arah di batas dipilih alfabetis bukan urutan kemunculan | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_memotong_ketat_walau_banyak_term_seri` | words to keep memotong ketat walau banyak term seri | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil` | words to keep seri diurutkan bytewise huruf besar sebelum huruf kecil | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak` | words to keep hasil stabil pada pengulangan walau urutan hashmap acak | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong` | words to keep sama dengan atau melebihi jumlah kandidat tidak memotong | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `words_to_keep_3_pada_korpus_d_memilih_makan_nasi_saya` | words to keep 3 pada korpus d memilih makan nasi saya | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `custom_ranking_memakai_skor_bukan_total_count_dan_seri_alfabetis` | custom ranking memakai skor bukan total count dan seri alfabetis | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_batas_inklusif_count_sama_dipertahankan` | min term freq batas inklusif count sama dipertahankan | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen` | min term freq menghitung total kemunculan bukan jumlah dokumen | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_lalu_words_to_keep_dengan_seri` | min term freq lalu words to keep dengan seri | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `min_term_freq_dihitung_pada_token_ngram_juga` | min term freq dihitung pada token ngram juga | Lulus [Win] |
+| `thesis_vocab_limit.rs` (statify-text-core) | `pemangkasan_kosakata_tidak_mengubah_n_dokumen_dan_df_term_yang_tersisa` | pemangkasan kosakata tidak mengubah n dokumen dan df term yang tersisa | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `daftar_stopword_bawaan_dimuat_utuh_oleh_build_set` | daftar stopword bawaan dimuat utuh oleh build set | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_bawaan_indonesia_dan_inggris_sesuai_acuan_python` | stopword bawaan indonesia dan inggris sesuai acuan python | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_indonesia_membuang_kata_negasi_tidak` | stopword indonesia membuang kata negasi tidak | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_inggris_tidak_peka_huruf_besar_kecil_walau_lowercase_mati` | stopword inggris tidak peka huruf besar kecil walau lowercase mati | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_kustom_dinormalkan_lowercase_unik_dan_terurut_pada_resep` | stopword kustom dinormalkan lowercase unik dan terurut pada resep | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_metode_none_mengabaikan_daftar_yang_dikirim` | stopword metode none mengabaikan daftar yang dikirim | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_tanpa_daftar_atau_daftar_kosong_tidak_menyaring_apa_pun` | stopword tanpa daftar atau daftar kosong tidak menyaring apa pun | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_json_bukan_array_string_ditolak_invalid_stopwords` | stopword json bukan array string ditolak invalid stopwords | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stopword_disaring_sebelum_stemming` | stopword disaring sebelum stemming | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_generate_semua_rentang_1_sampai_5_sesuai_acuan_python` | ngram generate semua rentang 1 sampai 5 sesuai acuan python | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_melalui_pipeline_penuh_semua_rentang_sah` | ngram melalui pipeline penuh semua rentang sah | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_jumlah_term_sama_dengan_rumus_untuk_tujuh_kata_berbeda` | ngram jumlah term sama dengan rumus untuk tujuh kata berbeda | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_hanya_bigram_tanpa_unigram_dan_token_kurang_dari_minimum_menghasilkan_kosong` | ngram hanya bigram tanpa unigram dan token kurang dari minimum menghasilkan kosong | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_dibentuk_setelah_stopword_dan_stemming_dan_tidak_melintasi_kata_terbuang` | ngram dibentuk setelah stopword dan stemming dan tidak melintasi kata terbuang | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `ngram_di_luar_rentang_1_sampai_5_ditolak_invalid_config` | ngram di luar rentang 1 sampai 5 ditolak invalid config | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_pasangan_yang_terbukti_di_tes_lama` | stemmer indonesia pasangan yang terbukti di tes lama | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_sifat_umum_pada_kata_berimbuhan` | stemmer indonesia sifat umum pada kata berimbuhan | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_contoh_porter2_klasik` | stemmer inggris contoh porter2 klasik | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_memaksa_lowercase_dan_metode_lain_mengembalikan_token_apa_adanya` | stemmer memaksa lowercase dan metode lain mengembalikan token apa adanya | Lulus [Win] |
+| `thesis_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_melalui_pipeline_dan_batch_sejajar` | stemmer inggris melalui pipeline dan batch sejajar | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_jumlah_training_tiap_kelas_sama_dengan_pembulatan_70_persen` | holdout 70 30 jumlah training tiap kelas sama dengan pembulatan 70 persen | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_proporsi_tiap_kelas_menyimpang_paling_banyak_setengah_data_dari_70_persen` | holdout 70 30 proporsi tiap kelas menyimpang paling banyak setengah data dari 70 persen | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_indeks_training_dan_holdout_saling_lepas_dan_lengkap` | holdout indeks training dan holdout saling lepas dan lengkap | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_persentase_lain_80_20_dan_60_40` | holdout persentase lain 80 20 dan 60 40 | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_kelas_beranggota_satu_masuk_training_dan_holdout_tidak_memuatnya` | holdout kelas beranggota satu masuk training dan holdout tidak memuatnya | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `mt19937_seed_42_dua_keluaran_awal_sama_dengan_numpy` | mt19937 seed 42 dua keluaran awal sama dengan numpy | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_seed_42_indeks_eksak_sama_dengan_replika_python` | holdout 70 seed 42 indeks eksak sama dengan replika python | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_seed_42_indeks_eksak_sama_dengan_replika_python` | kfold seed 42 indeks eksak sama dengan replika python | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_selisih_jumlah_per_kelas_antar_fold_paling_banyak_satu` | kfold selisih jumlah per kelas antar fold paling banyak satu | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_setiap_indeks_tepat_satu_fold` | kfold setiap indeks tepat satu fold | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_ukuran_total_fold_berselisih_paling_banyak_jumlah_kelas` | kfold ukuran total fold berselisih paling banyak jumlah kelas | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar` | kfold karakterisasi ukuran fold tidak seimbang pada tiga kelas sama besar | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan` | kfold k sama dengan jumlah instance menghasilkan fold kosong dan peringatan | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_lolos_validate_fold_count_tanpa_peringatan` | k1 lolos validate fold count tanpa peringatan | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_menghasilkan_satu_fold_berisi_semua_indeks` | k1 menghasilkan satu fold berisi semua indeks | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data` | k1 fold latih kosong dan fold uji adalah seluruh data | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k2_sebagai_pembanding_fold_latih_tidak_kosong` | k2 sebagai pembanding fold latih tidak kosong | Lulus [Win] |
+| `thesis_partition.rs` (naive-bayes (crate wasm)) | `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama` | k1 evaluasi end to end tanpa panic tanpa nan tetapi semua prediksi kelas alfabetis pertama | Lulus [Win] |
 
 Pernyataan harapan yang tidak berasal dari nilai acuan Python independen (jujur dicatat):
 - Stemmer Indonesia (Sastrawi): hanya `memakan` menjadi `makan` dan `makan` menjadi `makan` yang diperiksa persis (pasangan pertama sudah terbukti oleh tes lama `characterization.rs`). Untuk kata lain hanya properti (tidak kosong, tidak lebih panjang, huruf kecil, deterministik) dan bahwa `dimakan`, `berlari`, `membanggakan` berubah.
@@ -285,7 +285,7 @@ Tes baru sengaja tidak menduplikasi hal berikut; rujukan ke berkas dan nama tes 
 
 ## 6. Baseline pengujian
 
-Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026 12:43 UTC; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A": jumlah dihitung statis dari kemunculan `#[test]` (bukan hasil eksekusi); Lulus/Gagal BELUM DIJALANKAN karena berkas tes baru belum pernah dikompilasi; cakupan Rust tidak terukur.
+Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A" berasal dari `logs/rust_thesis_*.txt` (8 Oktober 2026, Windows); cakupan Rust tidak terukur.
 
 | Lapisan | Lokasi pengujian | Jumlah kasus | Lulus | Gagal | Cakupan baris |
 |---|---|---|---|---|---|
@@ -297,9 +297,9 @@ Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label
 | Jest Apply Model (sesudah) | idem + `model-loader.thesis.test.ts` (27 suite; `logs/jest_covA_am_run.json`) | 520 | 520 | 0 | 97,77% (1448/1481) |
 | Jest Track A saja | 4 berkas `*.thesis.test.ts` (4 suite; `logs/jest_A_vm.json`) | 105 | 105 | 0 | (tidak diukur terpisah) |
 | Rust statify-text-core (tes lama) [Win] | `statify-text-core/tests/{characterization,nb_text,s2_pipeline,s3_formulas,s4_fit_transform}.rs` (`logs/unit_core.txt`) | 91 | 91 | 0 | tidak terukur, lihat `run_A.ps1` |
-| Rust statify-text-core (Track A) | `tests/thesis_{formulas,vocab_limit,text_pipeline}.rs` | 48 (hitungan statis) | BELUM DIJALANKAN | BELUM DIJALANKAN | tidak terukur, lihat `run_A.ps1` |
+| Rust statify-text-core (Track A) | `tests/thesis_{formulas,vocab_limit,text_pipeline}.rs` | 48 | 48 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust naive-bayes (tes lama inline) [Win] | `naive-bayes/rust/src/**` blok `#[cfg(test)]` (`logs/unit_nb.txt`) | 203 | 203 | 0 | tidak terukur, lihat `run_A.ps1` |
-| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/thesis_partition.rs` | 18 (hitungan statis) | BELUM DIJALANKAN | BELUM DIJALANKAN | tidak terukur, lihat `run_A.ps1` |
+| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/thesis_partition.rs` | 18 | 18 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust apply-model (tes lama) [Win] | `apply-model/rust/src/**` blok `#[cfg(test)]` (117) + `rust/tests/text_scoring.rs` (39) (`logs/unit_am.txt`) | 156 | 156 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust wrapper STWV | `StringToWordVector/rust` | 0 | tidak ada tes | tidak ada tes | tidak terukur |
 

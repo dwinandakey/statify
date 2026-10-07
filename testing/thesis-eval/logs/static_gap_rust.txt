@@ -2,76 +2,76 @@ ESTIMASI STATIS celah cakupan Rust (BUKAN cakupan terukur) - lihat docstring sta
 Cakupan terukur Rust: tidak terukur di sesi ini, lihat run_A.ps1 (cargo llvm-cov bila terpasang).
 
 ==============================================================================================================
-Crate core  (frontend/public/workers/TextAnalytics/statify-text-core)
+Crate core  (frontend\public\workers\TextAnalytics\statify-text-core)
   pub fn terdeteksi: 34; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 27; wasm_bindgen: 0
   TIDAK dirujuk tes SEBELUM Track A: 12   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 10
   Daftar celah yang masih tersisa (estimasi statis):
-    - src/config.rs                                 pub fn v1_label
-    - src/config.rs                                 pub fn v1_label
-    - src/error.rs                                  pub fn to_json_string
-    - src/stopwords.rs                              pub fn filter_with_set
-    - src/tokenizer.rs                              pub fn tokenize
-    - src/tokenizer.rs                              pub fn compile_regex
-    - src/validator.rs                              pub fn validate_formula
-    - src/validator.rs                              pub fn validate_config
-    - src/validator.rs                              pub fn validate
-    - src/vectorizer.rs                             pub fn vectorize
+    - src\config.rs                                 pub fn v1_label
+    - src\config.rs                                 pub fn v1_label
+    - src\error.rs                                  pub fn to_json_string
+    - src\stopwords.rs                              pub fn filter_with_set
+    - src\tokenizer.rs                              pub fn tokenize
+    - src\tokenizer.rs                              pub fn compile_regex
+    - src\validator.rs                              pub fn validate_formula
+    - src\validator.rs                              pub fn validate_config
+    - src\validator.rs                              pub fn validate
+    - src\vectorizer.rs                             pub fn vectorize
   Celah yang ditutup tes tesis Track A (kini dirujuk):
-    + src/stemmer.rs                                pub fn stem_batch
-    + src/stopwords.rs                              pub fn build_set
-  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src/config.rs, src/error.rs, src/tokenizer.rs, src/validator.rs
+    + src\stemmer.rs                                pub fn stem_batch
+    + src\stopwords.rs                              pub fn build_set
+  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src\config.rs, src\error.rs, src\tokenizer.rs, src\validator.rs
 ==============================================================================================================
-Crate naive-bayes  (frontend/components/Modals/Analyze/Classify/naive-bayes/rust)
+Crate naive-bayes  (frontend\components\Modals\Analyze\Classify\naive-bayes\rust)
   pub fn terdeteksi: 86; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 83; wasm_bindgen: 1
   TIDAK dirujuk tes SEBELUM Track A: 13   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 13
   Daftar celah yang masih tersisa (estimasi statis):
-    - src/stats/save.rs                             pub fn export_validation_config
-    - src/stats/save.rs                             pub fn retrain_final_model
-    - src/stats/save.rs                             pub fn build_export_text
-    - src/stats/save.rs                             pub fn build_exported_model_v2
-    - src/stats/text_feature_table.rs               pub fn likelihood_name
-    - src/stats/text_feature_table.rs               pub fn top_as_map
-    - src/stats/text_features.rs                    pub fn build_text_feature_data_with_config
-    - src/utils/converter.rs                        pub fn string_to_js_error
-    - src/utils/error.rs                            pub fn add_error
-    - src/wasm/constructor.rs                       pub fn get_formatted_results
-    - src/wasm/constructor.rs                       pub fn get_all_errors
-    - src/wasm/function.rs                          pub fn get_formatted_results
-    - src/wasm/function.rs                          pub fn get_all_errors
+    - src\stats\save.rs                             pub fn export_validation_config
+    - src\stats\save.rs                             pub fn retrain_final_model
+    - src\stats\save.rs                             pub fn build_export_text
+    - src\stats\save.rs                             pub fn build_exported_model_v2
+    - src\stats\text_feature_table.rs               pub fn likelihood_name
+    - src\stats\text_feature_table.rs               pub fn top_as_map
+    - src\stats\text_features.rs                    pub fn build_text_feature_data_with_config
+    - src\utils\converter.rs                        pub fn string_to_js_error
+    - src\utils\error.rs                            pub fn add_error
+    - src\wasm\constructor.rs                       pub fn get_formatted_results
+    - src\wasm\constructor.rs                       pub fn get_all_errors
+    - src\wasm\function.rs                          pub fn get_formatted_results
+    - src\wasm\function.rs                          pub fn get_all_errors
   Fungsi #[wasm_bindgen] (tidak dapat diuji secara native):
-    * src/wasm/constructor.rs                       pub fn new
-  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src/utils/converter.rs, src/wasm/constructor.rs
+    * src\wasm\constructor.rs                       pub fn new
+  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src\utils\converter.rs, src\wasm\constructor.rs
 ==============================================================================================================
-Crate apply-model  (frontend/components/Modals/Analyze/Classify/apply-model/rust)
+Crate apply-model  (frontend\components\Modals\Analyze\Classify\apply-model\rust)
   pub fn terdeteksi: 45; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 42; wasm_bindgen: 1
   TIDAK dirujuk tes SEBELUM Track A: 16   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 16
   Daftar celah yang masih tersisa (estimasi statis):
-    - src/scoring/text.rs                           pub fn likelihood_name
-    - src/scoring/text.rs                           pub fn is_v2
-    - src/scoring/text.rs                           pub fn has_text_block
-    - src/scoring/text.rs                           pub fn validate_feature_likelihoods
-    - src/scoring/text.rs                           pub fn validate_text_block
-    - src/scoring/text.rs                           pub fn extract_text_model
-    - src/stats/value_label.rs                      pub fn format_number_label
-    - src/utils/converter.rs                        pub fn string_to_js_error
-    - src/utils/error.rs                            pub fn add_error
-    - src/utils/error.rs                            pub fn has_errors
-    - src/utils/error.rs                            pub fn get_error_summary
-    - src/utils/error.rs                            pub fn clear
-    - src/wasm/constructor.rs                       pub fn get_formatted_results
-    - src/wasm/constructor.rs                       pub fn get_all_errors
-    - src/wasm/function.rs                          pub fn get_formatted_results
-    - src/wasm/function.rs                          pub fn get_all_errors
+    - src\scoring\text.rs                           pub fn likelihood_name
+    - src\scoring\text.rs                           pub fn is_v2
+    - src\scoring\text.rs                           pub fn has_text_block
+    - src\scoring\text.rs                           pub fn validate_feature_likelihoods
+    - src\scoring\text.rs                           pub fn validate_text_block
+    - src\scoring\text.rs                           pub fn extract_text_model
+    - src\stats\value_label.rs                      pub fn format_number_label
+    - src\utils\converter.rs                        pub fn string_to_js_error
+    - src\utils\error.rs                            pub fn add_error
+    - src\utils\error.rs                            pub fn has_errors
+    - src\utils\error.rs                            pub fn get_error_summary
+    - src\utils\error.rs                            pub fn clear
+    - src\wasm\constructor.rs                       pub fn get_formatted_results
+    - src\wasm\constructor.rs                       pub fn get_all_errors
+    - src\wasm\function.rs                          pub fn get_formatted_results
+    - src\wasm\function.rs                          pub fn get_all_errors
   Fungsi #[wasm_bindgen] (tidak dapat diuji secara native):
-    * src/wasm/constructor.rs                       pub fn new
-  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src/utils/converter.rs, src/utils/error.rs, src/wasm/constructor.rs
+    * src\wasm\constructor.rs                       pub fn new
+  Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src\utils\converter.rs, src\utils\error.rs, src\wasm\constructor.rs
 ==============================================================================================================
-Crate stwv-wrapper  (frontend/components/Modals/Transform/StringToWordVector/rust)
+Crate stwv-wrapper  (frontend\components\Modals\Transform\StringToWordVector\rust)
   pub fn terdeteksi: 2; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 0; wasm_bindgen: 2
   TIDAK dirujuk tes SEBELUM Track A: 0   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 0
   Fungsi #[wasm_bindgen] (tidak dapat diuji secara native):
-    * src/lib.rs                                    pub fn init_panic_hook
-    * src/lib.rs                                    pub fn process_text_data
+    * src\lib.rs                                    pub fn init_panic_hook
+    * src\lib.rs                                    pub fn process_text_data
 
 ==============================================================================================================
 RINGKASAN (estimasi statis)
@@ -80,3 +80,5 @@ core                34        27     0             12             10
 naive-bayes         86        83     1             13             13
 apply-model         45        42     1             16             16
 stwv-wrapper         2         0     2              0              0
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=2.37 started=2026-10-08 00:16:34 +07:00 cmd=python -X utf8 -I testing\thesis-eval\unit\static_gap_rust.py cwd=E:\KULIAH\Skripsi\statify64 ===

@@ -5,8 +5,8 @@ Dokumen ini adalah hasil Track C1 untuk skenario BB-01 s.d. BB-13 pada modul Tex
 ## Cara membaca status
 
 - Penanda `⟦jest:<berkas>::<nama tes>⟧` dan `⟦rust:<target>::<fungsi>⟧` diganti menjadi Lulus, Gagal, atau BELUM DIJALANKAN oleh `tools/apply_results.py` berdasarkan `logs/jest_*.json` dan `logs/rust_*.txt`.
-- Tes Jest dijalankan di sandbox (VM Linux, `tools/run_jest_linux.sh`, ts-jest) dan seluruhnya lulus: 35 dari 35 tes (`logs/jest_C1_vm.json`, `logs/jest_C1_vm.txt`). Hasil ini bukan hasil perangkat uji skripsi; hasil final berasal dari `run_C1.ps1` di Windows (`logs/jest_C1_win.json`).
-- Tes Rust (`thesis_blackbox_stwv.rs`) BELUM DIJALANKAN: sandbox tidak dapat mengunduh crate sehingga tidak ada kompilasi. Penanda Rust akan terisi setelah Yedija menjalankan `run_C1.ps1`.
+- Tes Jest dijalankan di Windows dengan konfigurasi Jest produksi (`run_C1.ps1`) dan seluruhnya lulus: 35 dari 35 tes (`logs/jest_C1_win.json`, `logs/jest_C1_win.txt`); hasil yang sama didapat di VM Linux (ts-jest, `logs/jest_C1_vm.json`).
+- Tes Rust (`thesis_blackbox_stwv.rs`) dijalankan di Windows oleh `run_C1.ps1`: 31 dari 31 lulus (`logs/rust_thesis_blackbox_stwv.txt`).
 - Bagian yang butuh WASM sungguhan, Data Editor, atau Output Viewer ditandai "MANUAL — belum dijalankan" dan dirinci pada `C_manual_checklist_C1.md` (M-01 s.d. M-13).
 
 ## Tabel hasil
