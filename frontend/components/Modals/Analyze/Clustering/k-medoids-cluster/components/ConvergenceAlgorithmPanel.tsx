@@ -1,10 +1,3 @@
-/**
- * ConvergenceAlgorithmPanel
- * Combined iteration table (Iteration | Active Medoids | Total Cost | Status)
- * followed by a simple D3 Total-Cost line chart — matches the "Iteration Process
- * K-Medoids (PAM)" design with Init row, Changed / Converged status badges.
- */
-
 import React, { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
@@ -15,8 +8,6 @@ interface ConvergenceAlgorithmPanelProps {
     medoids: MedoidInfo[];
     converged?: boolean;
 }
-
-// ── helpers ─────────────────────────────────────────────────────────────────
 
 function fmtCost(n: number): string {
     if (!isFinite(n)) return "—";
@@ -30,8 +21,6 @@ function medoidLabel(m: MedoidInfo): string {
     return `ID_${String(m.objectId).padStart(3, "0")}`;
 }
 
-// ── component ────────────────────────────────────────────────────────────────
-
 export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps> = ({
     data = [],
     medoids = [],
@@ -39,28 +28,22 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
-    // Row 0 = Init state (improvement always 0 from builder), rows 1+ = iterations
     const initEntry  = data[0];
     const iterEntries = data.slice(1);
     const numIterations = iterEntries.length;
 
-    // Helper: turn a medoid index array into a readable "Case X, Case Y" string.
-    // Prefers per-iteration snapshot (row.medoids) over the final medoid list.
     const medoidStr = (indices?: number[]): string => {
         if (indices && indices.length > 0) {
             return indices.map(idx => `Case ${idx + 1}`).join(", ");
         }
-        // Fallback to final medoids info (for non-PAM paths without history)
         return medoids.length > 0 ? medoids.map(medoidLabel).join(", ") : "—";
     };
 
-    // Chart data: Init + each iteration
     const chartData = data.map((d, i) => ({
         label: i === 0 ? "Init" : `Iter ${i}`,
         cost: d.totalCost,
     }));
 
-    // ── D3 chart ─────────────────────────────────────────────────────────────
     const chartW = 580;
     const chartH = 200;
 
@@ -99,7 +82,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Horizontal grid
         g.append("g")
             .call(d3.axisLeft(yScale).ticks(4).tickSize(-innerW).tickFormat(() => ""))
             .call(s => s.select(".domain").remove())
@@ -107,7 +89,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .attr("stroke", borderColor)
                 .attr("stroke-opacity", 0.55));
 
-        // Area fill
         g.append("path")
             .datum(chartData)
             .attr("fill", "#10b981")
@@ -118,7 +99,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .y1(d => yScale(d.cost))
                 .curve(d3.curveMonotoneX));
 
-        // Line
         g.append("path")
             .datum(chartData)
             .attr("fill", "none")
@@ -129,7 +109,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .y(d => yScale(d.cost))
                 .curve(d3.curveMonotoneX));
 
-        // Dots
         g.selectAll(".dot")
             .data(chartData)
             .enter().append("circle")
@@ -140,7 +119,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
             .attr("stroke", "#fff")
             .attr("stroke-width", 1.5);
 
-        // Cost labels above dots
         g.selectAll(".cost-lbl")
             .data(chartData)
             .enter().append("text")
@@ -151,7 +129,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
             .attr("fill", mutedColor)
             .text(d => fmtCost(d.cost));
 
-        // X axis
         g.append("g")
             .attr("transform", `translate(0,${innerH})`)
             .call(d3.axisBottom(xScale).tickSize(0))
@@ -161,7 +138,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
                 .attr("font-size", "11px")
                 .attr("dy", "1.3em"));
 
-        // Y axis
         g.append("g")
             .call(d3.axisLeft(yScale).ticks(4).tickFormat(v => fmtCost(v as number)))
             .call(s => s.select(".domain").remove())
@@ -209,7 +185,6 @@ export const ConvergenceAlgorithmPanel: React.FC<ConvergenceAlgorithmPanelProps>
         });
     }, [numIterations, initEntry, iterEntries, converged]);
 
-    // ── render ───────────────────────────────────────────────────────────────
     if (data.length === 0) {
         return (
             <div className="flex items-center justify-center h-20 text-sm text-muted-foreground">

@@ -1,8 +1,3 @@
-/**
- * Distance Matrix Heatmap Component
- * Visualizes distances between cluster medoids
- */
-
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";

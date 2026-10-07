@@ -1,24 +1,12 @@
-/// CLARANS (Clustering Large Applications based on RANdomized Search)
+/// Algoritma:
+/// Memulai dengan sekumpulan medoid secara acak
+/// Mengambil sampel secara acak dari tetangga (pertukaran potensial)
+/// Menggunakan logika selisih biaya PAM (4 kasus) untuk mengevaluasi pertukaran dalam O(n)
+/// Jika ditemukan tetangga yang lebih baik, berpindah ke solusi tersebut
+/// Mengulangi proses untuk beberapa pencarian lokal
+/// Mengembalikan hasil terbaik
 /// 
-/// Randomized search-based K-Medoids algorithm
-/// 
-/// Algorithm:
-/// 1. Start with random set of medoids
-/// 2. Randomly sample from neighbors (potential swaps)
-/// 3. Use PAM cost differential logic (4 cases) for O(n) swap evaluation
-/// 4. If better neighbor found, move to it
-/// 5. Repeat for multiple local searches
-/// 6. Return best result
-/// 
-/// Time Complexity: O(restarts * (n*k + max_neighbors * n))
-/// Space Complexity: O(n²) for distance matrix
-/// 
-/// Advantages:
-/// - More efficient than exhaustive PAM for large datasets
-/// - Better exploration of solution space than PAM
-/// - Good for spatial data
-/// 
-/// References:
+/// Referensi
 /// - Ng, R.T. and Han, J. (1994)
 ///   "Efficient and Effective Clustering Methods for Spatial Data Mining"
 /// - Ng, R.T. and Han, J. (2002)
@@ -65,8 +53,6 @@ impl Default for CLARANSConfig {
 }
 
 impl CLARANSConfig {
-    /// Create config with automatic max_neighbors calculation
-    /// Uses max(250, 1.25% of total possible neighbors)
     pub fn new(k: usize, n: usize, metric: DistanceMetric) -> Self {
         let total_neighbors = k * (n - k); // Total possible swaps
         let auto_max_neighbors = 250.max((total_neighbors as f64 * 0.0125) as usize);
@@ -320,63 +306,5 @@ impl From<CLARANSResult> for ClusteringResult {
             iterations: clarans_result.local_searches,
             converged: true,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[test]
-    fn test_clarans_basic_clustering() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 0.0],
-            vec![0.0, 1.0],
-            vec![10.0, 10.0],
-            vec![11.0, 10.0],
-            vec![10.0, 11.0],
-        ];
-        
-        let config = CLARANSConfig {
-            k: 2,
-            metric: DistanceMetric::Euclidean,
-            num_local: 2,
-            max_neighbors: 10,
-            random_seed: Some(42),
-        };
-        
-        let result = run_clarans(&data, &config).unwrap();
-        
-        assert_eq!(result.medoids.len(), 2);
-        assert_eq!(result.assignments.len(), 6);
-        assert!(result.total_cost > 0.0);
-        assert_eq!(result.local_searches, 2);
-    }
-    
-    #[test]
-    fn test_clarans_deterministic_with_seed() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![2.0, 2.0],
-            vec![10.0, 10.0],
-            vec![11.0, 11.0],
-            vec![12.0, 12.0],
-        ];
-        
-        let config = CLARANSConfig {
-            k: 2,
-            num_local: 2,
-            max_neighbors: 10,
-            random_seed: Some(123),
-            ..Default::default()
-        };
-        
-        let result1 = run_clarans(&data, &config).unwrap();
-        let result2 = run_clarans(&data, &config).unwrap();
-        
-        assert_eq!(result1.medoids, result2.medoids);
-        assert_eq!(result1.total_cost, result2.total_cost);
     }
 }

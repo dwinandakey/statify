@@ -1,18 +1,7 @@
-/**
- * K-Medoids Visualization Charts
- * Comprehensive chart components for clustering visualization
- * Uses existing chart system but with K-Medoids specific formatting
- */
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { KMedoidsOutput, IterationHistory } from "../types/output";
 
-/**
- * Format K-Medoids data for scatter plot visualization
- * Creates chart data compatible with GeneralChartContainer's "Grouped Scatter Plot"
- * Separates regular points and medoids for distinct visualization
- */
 export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar: string) {
     // Separate regular points and medoids for distinct visualization
     const dataPoints = output.assignments
@@ -84,10 +73,6 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
     };
 }
 
-/**
- * Convert CLARA sampling data to IterationHistory format
- * so it can be reused with the existing ConvergenceChart component
- */
 export function formatClaraSamplingAsConvergenceData(
     samples: { sampleIndex: number; cost: number; sampleSize?: number; pamIterations?: number }[]
 ): IterationHistory[] {
@@ -102,9 +87,6 @@ export function formatClaraSamplingAsConvergenceData(
     });
 }
 
-/**
- * Format data for donut chart (cluster sizes)
- */
 export function formatDonutChartData(output: KMedoidsOutput) {
     const labels = output.clusterProfiles.map(p => `Cluster ${p.clusterLabel}`);
     const data = output.clusterProfiles.map(p => p.size);
@@ -206,9 +188,6 @@ export function formatConvergenceChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Format data for silhouette bar chart
- */
 export function formatSilhouetteBarChartData(output: KMedoidsOutput) {
     const labels = output.silhouetteScores.perCluster.map(s => `Cluster ${s.clusterLabel}`);
     const scores = output.silhouetteScores.perCluster.map(s => s.averageScore);
@@ -269,9 +248,6 @@ export function formatSilhouetteBarChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Format data for elbow chart
- */
 export function formatElbowChartData(output: KMedoidsOutput) {
     if (!output.elbowData) return null;
 
@@ -324,9 +300,6 @@ export function formatElbowChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Chart container wrapper component
- */
 interface ChartCardProps {
     title: string;
     description?: string;

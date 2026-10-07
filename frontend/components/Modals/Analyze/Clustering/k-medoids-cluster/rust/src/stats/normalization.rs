@@ -1,26 +1,23 @@
-// Data Normalization and Standardization for K-Medoids
-
-/// Normalization/Standardization methods
+/// Metode normalisasi/standardisasi data.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum NormalizationMethod {
-    /// Z-score normalization: (x - mean) / std_dev
+    /// Z-score: (x - mean) / std_dev
     ZScore,
-    /// Min-Max scaling: (x - min) / (max - min)
+    /// Min-Max: (x - min) / (max - min)
     MinMax,
-    /// Min-Max to range [a, b]
+    /// Min-Max ke rentang [a, b]
     MinMaxRange(f64, f64),
-    /// Robust scaling using median and IQR (resistant to outliers)
+    /// Robust scaling dengan median dan IQR (tahan terhadap outlier)
     Robust,
-    /// No normalization
+    /// Tanpa normalisasi
     None,
 }
 
 impl NormalizationMethod {
-    /// Resolve a method name ("zscore" | "minmax" | anything else -> None)
-    /// into the matching variant. Case-insensitive. This is the single
-    /// dispatch logic used by `wasm::standardize_data` so the routing
-    /// between z-score and min-max can be unit tested without going through
-    /// the JsValue/WASM boundary.
+    /// Mengubah nama metode ("zscore" | "minmax" | selain itu -> None) menjadi
+    /// varian yang sesuai, tanpa membedakan huruf besar/kecil. Ini satu-satunya
+    /// logika pemilihan yang dipakai `wasm::standardize_data`, sehingga bisa
+    /// di-unit-test tanpa melewati batas JsValue/WASM.
     pub fn from_str(s: &str) -> Self {
         match s.to_lowercase().as_str() {
             "zscore" => NormalizationMethod::ZScore,
@@ -30,7 +27,7 @@ impl NormalizationMethod {
     }
 }
 
-/// Statistics for a single variable/feature
+/// Statistik untuk satu fitur/variabel.
 #[derive(Debug, Clone)]
 pub struct FeatureStatistics {
     pub mean: f64,
@@ -38,12 +35,12 @@ pub struct FeatureStatistics {
     pub min: f64,
     pub max: f64,
     pub median: f64,
-    pub q1: f64,  // First quartile
-    pub q3: f64,  // Third quartile
-    pub iqr: f64, // Interquartile range
+    pub q1: f64,
+    pub q3: f64,
+    pub iqr: f64,
 }
 
-/// Calculate statistics for each feature
+/// Menghitung statistik untuk setiap fitur. Nilai NaN/infinite diabaikan.
 pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics> {
     if data.is_empty() {
         return vec![];
@@ -56,11 +53,11 @@ pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics>
         let mut values: Vec<f64> = data
             .iter()
             .map(|row| row[feature_idx])
-            .filter(|v| v.is_finite()) // Filter out NaN and infinite values
+            .filter(|v| v.is_finite())
             .collect();
 
         if values.is_empty() {
-            // All values are invalid, use defaults
+            // Semua nilai tidak valid, pakai nilai default
             stats.push(FeatureStatistics {
                 mean: 0.0,
                 std_dev: 1.0,
@@ -78,8 +75,8 @@ pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics>
 
         let n = values.len();
         let mean = values.iter().sum::<f64>() / n as f64;
-        // Sample variance (n-1 denominator), matching R's scale() and the
-        // TypeScript standardizeZScore() implementation this replaces.
+        // Varians sampel (pembagi n-1), sama dengan scale() di R dan
+        // standardizeZScore() versi TypeScript yang digantikan.
         let variance = if n > 1 {
             values.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / (n - 1) as f64
         } else {
@@ -96,7 +93,8 @@ pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics>
 
         stats.push(FeatureStatistics {
             mean,
-            std_dev: if std_dev > 1e-10 { std_dev } else { 1.0 }, // Avoid division by zero
+            // Hindari pembagian dengan nol
+            std_dev: if std_dev > 1e-10 { std_dev } else { 1.0 },
             min,
             max,
             median,
@@ -109,7 +107,7 @@ pub fn calculate_feature_statistics(data: &[Vec<f64>]) -> Vec<FeatureStatistics>
     stats
 }
 
-/// Calculate percentile from sorted values
+/// Menghitung persentil dari nilai yang sudah terurut (interpolasi linear).
 fn calculate_percentile(sorted_values: &[f64], percentile: f64) -> f64 {
     if sorted_values.is_empty() {
         return 0.0;
@@ -128,7 +126,7 @@ fn calculate_percentile(sorted_values: &[f64], percentile: f64) -> f64 {
     }
 }
 
-/// Normalize data using specified method
+/// Menormalisasi data dengan metode tertentu; mengembalikan data dan statistiknya.
 pub fn normalize_data(
     data: &[Vec<f64>],
     method: NormalizationMethod,
@@ -138,7 +136,8 @@ pub fn normalize_data(
     (normalized, stats)
 }
 
-/// Normalize data using pre-calculated statistics
+/// Menormalisasi data memakai statistik yang sudah dihitung sebelumnya.
+/// Nilai tidak valid (NaN/infinite) diganti 0.
 pub fn normalize_with_statistics(
     data: &[Vec<f64>],
     stats: &[FeatureStatistics],
@@ -157,7 +156,7 @@ pub fn normalize_with_statistics(
                         .enumerate()
                         .map(|(idx, &value)| {
                             if !value.is_finite() {
-                                return 0.0; // Replace invalid values with 0
+                                return 0.0;
                             }
                             
                             let stat = &stats[idx];
@@ -171,7 +170,8 @@ pub fn normalize_with_statistics(
                                     if range > 1e-10 {
                                         (value - stat.min) / range
                                     } else {
-                                        0.5 // If all values are the same, map to middle
+                                        // Semua nilai sama, petakan ke tengah
+                                        0.5
                                     }
                                 }
                                 NormalizationMethod::MinMaxRange(a, b) => {
@@ -195,7 +195,7 @@ pub fn normalize_with_statistics(
     }
 }
 
-/// Denormalize a single value back to original scale
+/// Mengembalikan satu nilai ternormalisasi ke skala aslinya.
 pub fn denormalize_value(
     normalized_value: f64,
     stat: &FeatureStatistics,
@@ -234,13 +234,11 @@ mod tests {
 
         let (_normalized, stats) = normalize_data(&data, NormalizationMethod::ZScore);
 
-        // Check that mean is approximately 0 and std is approximately 1
         for col in 0..2 {
             let mean: f64 = _normalized.iter().map(|row| row[col]).sum::<f64>() / 5.0;
             assert!((mean).abs() < 1e-10, "Mean should be ~0, got {}", mean);
         }
 
-        // Check statistics
         assert!((stats[0].mean - 3.0).abs() < 1e-10);
         assert!((stats[1].mean - 30.0).abs() < 1e-10);
     }
@@ -255,16 +253,14 @@ mod tests {
 
         let (normalized, _) = normalize_data(&data, NormalizationMethod::MinMax);
 
-        // Check that values are in [0, 1]
         for row in &normalized {
             for &val in row {
                 assert!(val >= 0.0 && val <= 1.0, "Value {} should be in [0,1]", val);
             }
         }
 
-        // Check extremes
-        assert_eq!(normalized[0][0], 0.0); // Min value
-        assert_eq!(normalized[2][0], 1.0); // Max value
+        assert_eq!(normalized[0][0], 0.0);
+        assert_eq!(normalized[2][0], 1.0);
     }
 
     #[test]
@@ -274,12 +270,12 @@ mod tests {
             vec![2.0],
             vec![3.0],
             vec![4.0],
-            vec![100.0], // Outlier
+            vec![100.0], // outlier
         ];
 
         let (_normalized, stats) = normalize_data(&data, NormalizationMethod::Robust);
 
-        // Robust normalization should be less affected by outlier
+        // Median dan IQR tidak terpengaruh outlier
         assert_eq!(stats[0].median, 3.0);
         assert!((stats[0].iqr - 2.0).abs() < 1e-10);
     }

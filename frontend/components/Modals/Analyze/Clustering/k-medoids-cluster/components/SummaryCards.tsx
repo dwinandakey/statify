@@ -1,8 +1,3 @@
-/**
- * K-Medoids Summary Cards Component
- * Displays key metrics in card format following existing UI design
- */
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { KMedoidsSummary } from "../types/output";

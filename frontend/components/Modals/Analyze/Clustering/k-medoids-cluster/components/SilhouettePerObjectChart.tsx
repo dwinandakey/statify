@@ -1,15 +1,3 @@
-/**
- * SilhouettePerObjectChart
- * Silhouette plot in the classic R style (cluster::silhouette / factoextra::fviz_silhouette):
- * objects are sorted descending inside each cluster and drawn as a solid band, with the
- * cluster size and mean silhouette annotated on the right and the overall mean as a
- * dashed reference line.
- *
- * The plot height is fixed, so the chart stays readable for any n: each cluster gets a band
- * proportional to its size and the objects inside it are binned down to one bar per pixel row.
- * There is no per-object interaction — hovering summarises a whole cluster instead.
- */
-
 import React, { useEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import type { ObjectAssignment } from "../types/output";
@@ -18,11 +6,9 @@ interface SilhouettePerObjectChartProps {
     assignments: ObjectAssignment[];
     overall: number;
     width?: number;
-    /** Total SVG height. Fixed — it does not grow with the number of objects. */
     height?: number;
 }
 
-// Same palette as other k-medoids charts
 function clusterColor(idx: number, total: number): string {
     const palette = [
         "#4e9af1", "#f1714e", "#4ef19a", "#f1d44e",
@@ -49,7 +35,6 @@ function qualityColor(score: number): string {
 
 interface ClusterGroup {
     label: number;
-    /** Silhouette scores, sorted descending. */
     scores: number[];
     count: number;
     mean: number;
@@ -69,7 +54,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
-    // ── Aggregate once per data change (n can be very large) ─────────────────
     const { groups, total, dataMin } = useMemo(() => {
         const byCluster = new Map<number, number[]>();
         let min = Infinity;
@@ -118,7 +102,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
         const svg = d3.select(svgEl);
         svg.selectAll("*").remove();
 
-        // ── CSS tokens ────────────────────────────────────────────────────────
         const style = getComputedStyle(svgEl);
         const tok = (name: string, fallback: string) => {
             const v = style.getPropertyValue(name).trim();
@@ -134,7 +117,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
         const innerH = height - margin.top - margin.bottom;
         if (innerW <= 0 || innerH <= 0) return;
 
-        // ── X scale: R keeps 0..1 and lets negatives run left of zero ─────────
         const xScale = d3.scaleLinear()
             .domain([Math.min(0, dataMin), 1])
             .range([0, innerW]);
@@ -142,7 +124,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ── Band heights: proportional to cluster size, with a floor ──────────
         const available = innerH - Math.max(0, numClusters - 1) * GAP_BETWEEN_CLUSTERS;
         const rawBands = groups.map(gr => (available * gr.count) / total);
         const pinned = rawBands.map(h => h < MIN_BAND_H);
@@ -153,7 +134,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             pinned[i] ? MIN_BAND_H : (flexibleRaw > 0 ? (flexibleRoom * h) / flexibleRaw : 0)
         );
 
-        // ── Negative region tint ──────────────────────────────────────────────
         const x0 = xScale(0);
         if (x0 > 0) {
             g.append("rect")
@@ -163,7 +143,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                 .attr("opacity", 0.06);
         }
 
-        // ── Grid ─────────────────────────────────────────────────────────────
         g.append("g")
             .call(d3.axisTop(xScale).ticks(6).tickSize(-innerH).tickFormat(() => ""))
             .call(ax => {
@@ -173,7 +152,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                     .attr("stroke-opacity", 0.45);
             });
 
-        // ── Bars: one rect per pixel row, never one per object ────────────────
         interface BarDatum { x: number; y: number; w: number; h: number; fill: string }
         const bars: BarDatum[] = [];
         const bandTops: number[] = [];
@@ -184,7 +162,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             const bandH = bands[ci];
             const color = clusterColor(ci, numClusters);
 
-            // At most one bar per pixel row; fewer objects than rows means one bar each.
             const rows = Math.max(1, Math.min(gr.count, Math.floor(bandH)));
             const barH = bandH / rows;
             const inset = barH > 3 ? 1 : 0;
@@ -220,14 +197,12 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("fill", d => d.fill)
             .attr("shape-rendering", "crispEdges");
 
-        // ── Zero line ─────────────────────────────────────────────────────────
         g.append("line")
             .attr("x1", x0).attr("x2", x0)
             .attr("y1", 0).attr("y2", innerH)
             .attr("stroke", borderColor)
             .attr("stroke-width", 1.5);
 
-        // ── Overall mean line ─────────────────────────────────────────────────
         const xOverall = xScale(overall);
         g.append("line")
             .attr("x1", xOverall).attr("x2", xOverall)
@@ -236,7 +211,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("stroke-width", 1.5)
             .attr("stroke-dasharray", "6,4");
 
-        // ── Cluster labels (left) and R-style annotation (right) ──────────────
         const annotationX = innerW + 12;
         g.append("text")
             .attr("x", annotationX)
@@ -269,7 +243,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
                 .text(`${gr.count} | ${gr.mean.toFixed(2)}`);
         });
 
-        // ── X axis ────────────────────────────────────────────────────────────
         g.append("g")
             .attr("transform", `translate(0,${innerH + 6})`)
             .call(d3.axisBottom(xScale).ticks(6).tickFormat(d => String(+d % 1 === 0 ? d : (+d).toFixed(1))))
@@ -286,7 +259,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("fill", mutedColor)
             .text("Silhouette Score (sᵢ)");
 
-        // ── Header ────────────────────────────────────────────────────────────
         svg.append("text")
             .attr("x", margin.left)
             .attr("y", 18)
@@ -302,7 +274,6 @@ export const SilhouettePerObjectChart: React.FC<SilhouettePerObjectChartProps> =
             .attr("fill", "#6366f1")
             .text(`Overall mean silhouette: ${overall.toFixed(3)} (${qualityLabel(overall)})`);
 
-        // ── Cluster-level hover (one overlay per cluster, not per object) ─────
         const parent = svgEl.parentElement;
         if (!parent) return;
 

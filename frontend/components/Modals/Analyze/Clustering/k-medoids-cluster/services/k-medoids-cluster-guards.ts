@@ -68,11 +68,6 @@ export function buildCaseProcessingSummary(
     nTotal: number,
     details?: CaseProcessingDetails
 ): CaseProcessingSummary {
-    // `nTotal` (dataVariables.length as seen by the caller) is measured AFTER
-    // missing-value rows have already been dropped upstream, so it is not a
-    // reliable "original data" count. `details.initialN`, when supplied, is
-    // captured before any preprocessing and is the true original row count —
-    // prefer it for the Total row and for percentage denominators.
     const safeValid = Math.max(0, nValid);
     const outlierRowsRemoved = Math.max(0, details?.outlierRowsRemoved ?? 0);
     const missingRowsRemoved = Math.max(

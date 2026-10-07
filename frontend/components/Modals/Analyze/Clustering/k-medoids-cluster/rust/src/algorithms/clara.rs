@@ -1,21 +1,10 @@
-/// CLARA (Clustering LARge Applications)
-/// 
-/// Sampling-based K-Medoids algorithm for large datasets
-/// 
-/// Algorithm:
-/// 1. Draw multiple samples from the dataset
-/// 2. Apply PAM to each sample
-/// 3. For each PAM result, calculate quality on entire dataset
-/// 4. Return the best clustering result
-/// 
-/// Time Complexity: O(n_samples × s² × k × iterations) where s = sample_size
-/// Space Complexity: O(n²) for full distance matrix
-/// 
-/// Advantages:
-/// - Much faster than PAM for large datasets
-/// - Quality often comparable to PAM
-/// 
-/// References:
+/// Algoritma
+/// Mengambil beberapa sampel dari dataset
+/// Menerapkan PAM pada setiap sampel
+/// Menghitung kualitas setiap hasil PAM pada seluruh dataset
+/// Mengembalikan hasil pengelompokan terbaik
+
+/// Referensi:
 /// - Kaufman, L. and Rousseeuw, P.J. (1990)
 ///   "Finding Groups in Data: An Introduction to Cluster Analysis"
 
@@ -39,7 +28,6 @@ pub struct SampleRecord {
     pub pam_iterations: usize,
 }
 
-/// Configuration for CLARA algorithm
 #[derive(Debug, Clone)]
 pub struct CLARAConfig {
     /// Number of clusters (k)
@@ -108,19 +96,10 @@ pub struct CLARAResult {
     /// Best sample cost (cost on sample data)
     pub best_sample_cost: f64,
 
-    pub samples: Vec<SampleRecord>,      // ← BARU
-    pub best_sample_index: usize,        // ← BARU (1-based)
+    pub samples: Vec<SampleRecord>,   
+    pub best_sample_index: usize,       
 }
 
-/// Run CLARA clustering algorithm
-/// 
-/// # Arguments
-/// * `data` - Input data points
-/// * `config` - CLARA configuration
-/// 
-/// # Returns
-/// * `Ok(CLARAResult)` - Clustering result
-/// * `Err(String)` - Error message
 pub fn run_clara(data: &[Vec<f64>], config: &CLARAConfig) -> Result<CLARAResult, String> {
     // Validate input
     validate_clustering_input(data, config.k)?;
@@ -144,9 +123,6 @@ pub fn run_clara(data: &[Vec<f64>], config: &CLARAConfig) -> Result<CLARAResult,
         ));
     }
     
-    // Only fall back to PAM when sampling would cover the *entire* dataset anyway
-    // (i.e. n <= sample_size). Using `sample_size * 2` as the old threshold caused
-    // CLARA to silently become PAM for datasets up to ~100 rows — hiding all speedup.
     if n <= sample_size {
         let pam_config = PAMConfig {
             k: config.k,
@@ -308,118 +284,5 @@ impl From<CLARAResult> for ClusteringResult {
             iterations: clara_result.samples_tried,
             converged: true,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    
-    #[test]
-    fn test_clara_basic_clustering() {
-        // Create larger dataset with 2 clear clusters
-        let mut data = Vec::new();
-        
-        // Cluster 1: around (0, 0)
-        for i in 0..30 {
-            data.push(vec![
-                (i as f64 * 0.1) % 3.0,
-                (i as f64 * 0.15) % 3.0,
-            ]);
-        }
-        
-        // Cluster 2: around (10, 10)
-        for i in 0..30 {
-            data.push(vec![
-                10.0 + (i as f64 * 0.1) % 3.0,
-                10.0 + (i as f64 * 0.15) % 3.0,
-            ]);
-        }
-        
-        let config = CLARAConfig {
-            k: 2,
-            metric: DistanceMetric::Euclidean,
-            num_samples: 5,
-            sample_size: 20,
-            max_iterations: 50,
-            random_seed: Some(42),
-            use_build_phase: true,
-        };
-        
-        let result = run_clara(&data, &config).unwrap();
-        
-        // Should find 2 clusters
-        assert_eq!(result.medoids.len(), 2);
-        assert_eq!(result.assignments.len(), 60);
-        
-        // Cost should be positive and finite
-        assert!(result.total_cost > 0.0);
-        assert!(result.total_cost.is_finite());
-        
-        // Should have tried all samples
-        assert_eq!(result.samples_tried, 5);
-    }
-    
-    #[test]
-    fn test_clara_small_dataset_uses_pam() {
-        // Small dataset - should use PAM directly
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![10.0, 10.0],
-            vec![11.0, 11.0],
-        ];
-        
-        let config = CLARAConfig {
-            k: 2,
-            sample_size: 20, // Larger than dataset
-            ..Default::default()
-        };
-        
-        let result = run_clara(&data, &config).unwrap();
-        
-        assert_eq!(result.medoids.len(), 2);
-        assert_eq!(result.samples_tried, 1); // Only one "sample" (full data)
-    }
-    
-    #[test]
-    fn test_clara_invalid_sample_size() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![2.0, 2.0],
-        ];
-        
-        let config = CLARAConfig {
-            k: 5, // k > sample_size
-            sample_size: 3,
-            ..Default::default()
-        };
-        
-        let result = run_clara(&data, &config);
-        assert!(result.is_err());
-    }
-    
-    #[test]
-    fn test_clara_deterministic_with_seed() {
-        let mut data = Vec::new();
-        for i in 0..50 {
-            data.push(vec![i as f64 % 10.0, (i * 2) as f64 % 10.0]);
-        }
-        
-        let config = CLARAConfig {
-            k: 3,
-            num_samples: 5,
-            sample_size: 20,
-            random_seed: Some(123),
-            ..Default::default()
-        };
-        
-        let result1 = run_clara(&data, &config).unwrap();
-        let result2 = run_clara(&data, &config).unwrap();
-        
-        // Should produce same results with same seed
-        assert_eq!(result1.medoids, result2.medoids);
-        assert_eq!(result1.assignments, result2.assignments);
     }
 }

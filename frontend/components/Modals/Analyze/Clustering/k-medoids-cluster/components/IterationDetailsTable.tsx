@@ -1,12 +1,3 @@
-/**
- * IterationDetailsTable
- * Standard data table showing k-medoids iteration history:
- *   – Total Cost per iteration
- *   – Improvement (Δ cost)
- *   – Swaps Made
- *   – Final converged row marked
- */
-
 import React, { useMemo } from "react";
 import DataTableRenderer from "@/components/Output/Table/DataTableRenderer";
 import type { IterationHistory } from "../types/output";
