@@ -1,9 +1,3 @@
-/**
- * K-Medoids Comprehensive Output Renderer
- * Main component that displays all analysis results
- * Integrates with existing ResultOutput infrastructure
- */
-
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import * as XLSX from "xlsx";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,11 +19,9 @@ interface KMedoidsOutputRendererProps {
     variables: { name: string; label?: string }[];
 }
 
-// Max data points to render in SVG charts (display only – analysis uses all data)
 const MAX_DISPLAY_POINTS = 500;
 const ASSIGNMENTS_PAGE_SIZE = 25;
 
-/** Stratified sample: pick up to `max` points while preserving cluster ratios. */
 function samplePoints<T extends { cluster: number }>(pts: T[], max: number): T[] {
     if (pts.length <= max) return pts;
     const byCluster = new Map<number, T[]>();
@@ -81,14 +73,6 @@ function sanitizeFilename(value: string): string {
     return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-/**
- * Charts style themselves with `hsl(var(--border))`-style CSS custom
- * properties resolved against the app's :root. A downloaded/exported SVG
- * is opened outside that context (a standalone file, or an <img> loaded
- * from a blob URL for PNG conversion), so those vars are undefined and the
- * strokes/text silently disappear. Bake the current computed values in
- * before serializing so the export looks the same as on screen.
- */
 function inlineCssVars(svgText: string): string {
     const rootStyle = getComputedStyle(document.documentElement);
     const varNames = new Set<string>();
@@ -116,7 +100,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
     const silhouetteKChartRef = useRef<HTMLDivElement>(null);
     const convergenceChartRef = useRef<HTMLDivElement>(null);
 
-    // Use variables from output if not provided as prop
     const effectiveVariables = useMemo(
         () =>
             variables && variables.length > 0
@@ -137,19 +120,13 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
     const showOverallQualityAssessment =
         output?.visualizationOptions?.showOverallQualityAssessment ?? true;
 
-    // Determine which charts to show based on cluster mode
     const clusterMode = output?.clusterMode ?? "automatic";
     const autoKMethod = output?.autoKMethod ?? "silhouette";
 
-    // Logic for determining which optimal K chart to display:
-    // - Automatic Silhouette: show SilhouetteKChart only
-    // - Automatic Elbow: show ElbowChart only
-    // - Manual: show ElbowChart only (with silhouette annotation)
     const showOnlySilhouetteKChart = clusterMode === "automatic" && autoKMethod === "silhouette";
     const showOnlyElbowChart = clusterMode === "automatic" && autoKMethod === "elbow";
     const showElbowChartWithSilhouetteAnnotation = clusterMode === "manual";
 
-    // Prepare silhouette K chart data
     const silhouetteKChartData = useMemo(() => {
         if (!output?.elbowData) return [];
         return output.elbowData.map(point => ({
@@ -158,7 +135,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         }));
     }, [output?.elbowData]);
 
-    // Calculate k optimal from silhouette method
     const silhouetteOptimalK = useMemo(() => {
         if (!output?.elbowData || output.elbowData.length === 0) return undefined;
         const best = output.elbowData.reduce((a, b) =>
@@ -177,7 +153,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         setCurrentAssignmentsPage(1);
     }, [totalAssignmentsRows]);
 
-    // Memoize PCA points to avoid recreating on every render
     const pcaPoints = useMemo(() => {
         if (!output?.assignments) return [];
         return samplePoints(
@@ -256,8 +231,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         ? "Min-Max"
         : "Standardized";
 
-    // Builds the paginated assignments table JSON, parameterized by title so it can be
-    // reused both for the "Cluster Assignments" tab and the standalone "Cluster Membership" view.
     const buildAssignmentsTableJson = useCallback((titleBase: string) => {
         if (!output?.assignments) return "{}";
         return JSON.stringify({
@@ -574,8 +547,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Cluster Membership" statistic: just the paginated membership table,
-    // without the full dashboard (summary cards, tabs, visualizations).
     if (output.viewMode === "clusterMembershipOnly") {
         return (
             <div>
@@ -624,7 +595,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Silhouette Score" statistic: just the silhouette plot (one bar per object).
     if (output.viewMode === "silhouettePerObjectOnly") {
         return (
             <div>
@@ -641,7 +611,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Optimal K Chart" statistic: just the optimal-K chart (silhouette or elbow).
     if (output.viewMode === "optimalKChartOnly") {
         if (!hasOptimalKChartData) {
             return (
@@ -700,8 +669,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Overall Quality Assessment" statistic: just the overall silhouette score
-    // and its interpretation guide.
     if (output.viewMode === "overallQualityOnly") {
         return (
             <div className="space-y-4">
@@ -735,7 +702,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "PCA Projection" statistic: just the PCA projection scatter plot.
     if (output.viewMode === "pcaProjectionOnly") {
         return (
             <div>
@@ -753,8 +719,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Cluster Scatter Plot" statistic: just the 2D cluster scatter plot
-    // with its X/Y variable selectors.
     if (output.viewMode === "clusterScatterPlotOnly") {
         return (
             <div>
@@ -795,7 +759,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Cluster Size Distribution" statistic: just the donut chart.
     if (output.viewMode === "clusterSizeDistributionOnly") {
         return (
             <div>
@@ -811,8 +774,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Algorithm Convergence Chart" statistic: dual-axis total-cost/improvement
-    // line chart. Independent of the "Algorithm Convergence" table (see the Results tab).
     if (output.viewMode === "convergenceChartOnly") {
         return (
             <div>
@@ -829,8 +790,6 @@ export const KMedoidsOutputRenderer: React.FC<KMedoidsOutputRendererProps> = ({ 
         );
     }
 
-    // Standalone "Distance Matrix Table (All Objects)" statistic: just the full pairwise
-    // distance matrix table, sorted by cluster, with its Excel/CSV download buttons.
     if (output.viewMode === "distanceMatrixTableOnly") {
         if (!output.distanceMatrix) {
             return (

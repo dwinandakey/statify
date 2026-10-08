@@ -9,14 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Label } from "@/components/ui/label";
 
-/**
- * ========================================
- * EVALUATION DIALOG
- * ========================================
- * Metrik evaluasi kualitas clustering:
- * - Silhouette (plot per objek + ringkasan kualitas)
- * - K Optimal (grafik + tabel, satu grup)
- */
 export const KMedoidsClusterEvaluation = ({
     data,
     updateFormData,

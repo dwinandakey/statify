@@ -9,17 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Label } from "@/components/ui/label";
 
-/**
- * ========================================
- * RESULTS DIALOG
- * ========================================
- * Clustering result output configuration:
- * - Final medoids (equivalent to SPSS Final Cluster Centers)
- * - Cluster membership
- * - Case count per cluster
- * - Iteration history
- * - Total cost/dissimilarity
- */
 export const KMedoidsClusterResults = ({
     updateFormData,
     data,

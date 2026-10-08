@@ -17,22 +17,8 @@ import {
     MissingValueMethod,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 
-/**
- * PAM membangun matriks jarak n×n bertipe f64 (n² × 8 B).
- * - PAM_WARN_ROWS: di atas ini pengguna diperingatkan dan disarankan memakai CLARA,
- *   tetapi tetap boleh memaksa PAM.
- * - PAM_HARD_MAX_ROWS: batas mutlak (~763 MB), ditolak karena hampir pasti gagal alokasi.
- *   Harus sama dengan PAM_HARD_MAX_N di rust/src/wasm/function.rs.
- */
 export const PAM_WARN_ROWS = 2500;
 export const PAM_HARD_MAX_ROWS = 10000;
-
-/**
- * ========================================
- * K-MEDOIDS DEFAULT VALUES
- * ========================================
- * Default values berdasarkan best practices clustering statistik
- */
 
 export const KMedoidsClusterMainDefault: KMedoidsClusterMainType = {
     TargetVar: null,
@@ -55,9 +41,6 @@ export const KMedoidsClusterMainDefault: KMedoidsClusterMainType = {
     NewData: null,
 };
 
-/**
- * Iterate defaults - mengikuti best practices PAM
- */
 export const KMedoidsClusterIterateDefault: KMedoidsClusterIterateType = {
     Method: KMedoidsMethod.PAM, // PAM sebagai default (optimal quality)
     InitialStrategy: InitialMedoidsStrategy.Random, // Random initialization
@@ -74,9 +57,6 @@ export const KMedoidsClusterIterateDefault: KMedoidsClusterIterateType = {
     NormalizationMethod: NormalizationMethod.None,
 };
 
-/**
- * Results defaults - tampilkan output utama
- */
 export const KMedoidsClusterResultsDefault: KMedoidsClusterResultsType = {
     ShowFinalMedoids: true, // Wajib tampilkan (setara Final Cluster Centers)
     ShowClusterMedoids: true, // Tabel Cluster Medoids pada Data Tables
@@ -89,9 +69,6 @@ export const KMedoidsClusterResultsDefault: KMedoidsClusterResultsType = {
     ShowSamplingHistory: true, // Default on: tampilkan histori sampling khusus untuk CLARA
 };
 
-/**
- * Evaluation defaults - minimal Silhouette wajib
- */
 export const KMedoidsClusterEvaluationDefault: KMedoidsClusterEvaluationType = {
     ComputeSilhouette: true,   // Wajib (pengganti ANOVA untuk clustering)
     ShowSilhouettePlot: true,  // Optional: silhouette plot (satu bar per objek, gaya R)

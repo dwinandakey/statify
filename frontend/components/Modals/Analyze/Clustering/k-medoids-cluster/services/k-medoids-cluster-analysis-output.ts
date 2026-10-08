@@ -1,4 +1,3 @@
-// k-medoids-cluster-analysis-output.ts
 import { useResultStore } from "@/stores/useResultStore";
 import type { Table } from "@/types/Table";
 import type { Variable } from "@/types/Variable";
@@ -77,22 +76,18 @@ export async function resultKMedoidsCluster(
         const { addLog, addAnalytic, addStatistic } = useResultStore.getState();
         const { result, config, automaticKSelection } = analysisResult;
 
-        // Validate result structure
         if (!result?.labels || !Array.isArray(result.labels)) {
             throw new Error("Clustering result is missing required fields (labels, medoids, etc.)");
         }
 
-        // Create main log
         const method = config.iterate.Method ?? "PAM";
         const titleMessage = `K-Medoids Cluster Analysis (${method})`;
         const logId = await addLog({ log: titleMessage });
         const normalizationLabel = resolveNormalizationLabel(config);
         const distanceMetricLabel = resolveDistanceMetricLabel(config.main.DistanceMetric);
 
-        // Collect all tables
         const allTables: Table[] = [];
 
-        // 📊 Case Processing Summary
         const validCases = dataVariables.length;
         const missingCases = 0;
         const outlierCases = 0;
@@ -132,7 +127,6 @@ export async function resultKMedoidsCluster(
             ],
         });
 
-        // 📈 Number of Cases per Cluster (Cluster Summary)
         if (config.results.ShowCaseCount) {
             const clusterCounts: Record<number, number> = {};
             result.labels.forEach(label => {
@@ -156,7 +150,6 @@ export async function resultKMedoidsCluster(
             });
         }
 
-        // 📋 Cluster Profiles (always shown)
         const clusterProfiles = Array.from({ length: config.main.Cluster }, (_, clusterIdx) => {
             const clusterMembers = dataVariables.filter((_, rowIndex) => result.labels[rowIndex] === clusterIdx);
             const size = clusterMembers.length;
@@ -246,7 +239,6 @@ export async function resultKMedoidsCluster(
             ]
         });
 
-        // 📊 Iteration History & Convergence Information
         if (config.results.ShowIterationHistory) {
             allTables.push({
                 key: "iteration_history",
@@ -265,7 +257,6 @@ export async function resultKMedoidsCluster(
             });
         }
 
-        // 🔍 Automatic K Selection Results
         if (automaticKSelection) {
             const kSelectionData = automaticKSelection.scores.map(({ k, score }) => ({
                 rowHeader: [] as string[],
@@ -284,7 +275,6 @@ export async function resultKMedoidsCluster(
             });
         }
 
-        // Create single analytic with all results
         const analyticId = await addAnalytic(logId, {
             title: `K-Medoids Cluster Analysis`,
             note: [
@@ -298,7 +288,6 @@ export async function resultKMedoidsCluster(
                 .join(", "),
         });
 
-        // Add single statistic containing all tables
         await addStatistic(analyticId, {
             title: `K-Medoids Clustering Results`,
             description: `Complete clustering analysis with ${result.medoids.length} clusters`,

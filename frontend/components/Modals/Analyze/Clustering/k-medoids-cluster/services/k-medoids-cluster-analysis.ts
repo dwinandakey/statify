@@ -72,7 +72,6 @@ function getInitializedWasmModule(): WasmModule {
 }
 
 
-/** Per-feature median, computed over the finite values of each column. */
 function calculateFeatureMedians(matrix: number[][], d: number): number[] {
     return Array.from({ length: d }, (_, j) => {
         const valid = matrix
@@ -85,21 +84,12 @@ function calculateFeatureMedians(matrix: number[][], d: number): number[] {
     });
 }
 
-/** Impute missing entries with the median of their own feature/column. */
 function imputeMedian(matrix: number[][]): number[][] {
     const d = matrix[0].length;
     const medians = calculateFeatureMedians(matrix, d);
     return matrix.map(row => row.map((v, j) => (Number.isFinite(v) ? v : medians[j])));
 }
 
-/**
- * Impute missing entries using the average of the k nearest rows (default k=5).
- * Distance between two rows is the Euclidean distance computed over the
- * features both rows have available (NaN-aware, à la scikit-learn's
- * KNNImputer), scaled up to the full feature count so rows sharing few
- * features aren't unfairly favored. Rows with no comparable neighbor for a
- * given feature fall back to that feature's median.
- */
 export function imputeKnn(matrix: number[][], k: number = 5): number[][] {
     const n = matrix.length;
     const d = matrix[0].length;
@@ -145,14 +135,6 @@ export function imputeKnn(matrix: number[][], k: number = 5): number[][] {
     return result;
 }
 
-/**
- * After imputation, `rows` still holds the original source objects — the
- * cells that were filled in only exist in the numeric `matrix`. Patch those
- * imputed values back into cloned copies of the source rows so downstream
- * consumers (output tables, saved attributes) display the filled-in value
- * instead of a blank/0 for cells that were originally missing. No-op for
- * listwise deletion, since no missing values remain in the kept rows.
- */
 function patchImputedAttributes(
     rows: any[],
     matrix: number[][],
@@ -174,13 +156,6 @@ function patchImputedAttributes(
     });
 }
 
-/**
- * Missing value handling per Options → Missing Values:
- * - Listwise: keep rows only when all selected vars are valid.
- * - Median / Knn: keep rows with at least one valid value, drop rows that are
- *   entirely missing, then impute the remaining empty cells so the matrix
- *   stays numeric.
- */
 export function applyMissingHandling(
     rowsWithNumeric: Array<{ source: any; numeric: number[] }>,
     method: MissingValueMethod
@@ -198,7 +173,6 @@ export function applyMissingHandling(
         };
     }
 
-    // Median / Knn imputation: keep rows with at least one valid value.
     const kept = rowsWithNumeric.filter(item => item.numeric.some(v => Number.isFinite(v)));
     if (kept.length === 0) {
         return { matrix: [], rows: [], removedCount: rowsWithNumeric.length };
@@ -218,12 +192,6 @@ export function applyMissingHandling(
 
 type NormalizationKind = "none" | "zscore" | "minmax";
 
-/**
- * Standardize/normalize a matrix via the WASM `standardize_data` export, so
- * the scaling formula (Z-score with sample std n-1, or Min-Max) has a single
- * implementation in Rust (`stats::normalization`) instead of being duplicated
- * in TypeScript.
- */
 async function standardizeMatrixWasm(
     matrix: number[][],
     method: NormalizationKind
@@ -258,9 +226,6 @@ function resolveNormalizationMethod(config: any): NormalizationKind {
     return "none";
 }
 
-/**
- * Calculate Euclidean distance between two points
- */
 function euclideanDistance(p1: number[], p2: number[]): number {
     let sum = 0;
     for (let i = 0; i < p1.length; i++) {
@@ -289,12 +254,6 @@ function calculateDistance(p1: number[], p2: number[], metric: DistanceMetric): 
     return metric === "manhattan" ? manhattanDistance(p1, p2) : euclideanDistance(p1, p2);
 }
 
-/**
- * Calculate Silhouette Score for a clustering result
- * Returns average silhouette score across all points.
- * For large datasets, sub-samples up to MAX_SILHOUETTE_SAMPLE points
- * (stratified by cluster) to keep the O(n²) cost manageable.
- */
 const MAX_SILHOUETTE_SAMPLE = 300;
 
 function calculateSilhouetteScore(
@@ -395,9 +354,6 @@ function wcssFromWasm(
     return calculateWCSS(matrix, labels, medoidIndices, metric);
 }
 
-/**
- * Calculate within-cluster sum of squares (WCSS) for Elbow method
- */
 function calculateWCSS(
     data: number[][],
     labels: number[],
@@ -414,10 +370,6 @@ function calculateWCSS(
     return wcss;
 }
 
-/**
- * Find optimal k using Elbow method
- * Returns the k where the rate of decrease sharply changes
- */
 function findOptimalKElbow(kValues: number[], wcssValues: number[]): number {
     if (kValues.length < 3) return kValues[0];
     
@@ -444,9 +396,6 @@ function findOptimalKElbow(kValues: number[], wcssValues: number[]): number {
     return kValues[maxChangeIdx + 1];
 }
 
-/**
- * Initialize WASM module (direct execution mode)
- */
 async function initializeWasm() {
     if (!wasmInitialized) {
         try {
@@ -460,10 +409,6 @@ async function initializeWasm() {
     }
 }
 
-/**
- * Warm up clustering runtime ahead of execution to reduce first-run latency.
- * This is intentionally idempotent and safe to call multiple times.
- */
 export async function warmupKMedoidsRuntime(preferWorker: boolean = true): Promise<void> {
     if (warmupPromise) {
         return warmupPromise;
@@ -492,9 +437,6 @@ export async function warmupKMedoidsRuntime(preferWorker: boolean = true): Promi
     }
 }
 
-/**
- * Handle saving clustering variables to dataset if user selected save options
- */
 async function saveClusteringVariables(
     result: ClusteringResult,
     saveConfig: KMedoidsClusterType["save"],
@@ -571,12 +513,6 @@ async function saveClusteringVariables(
     }
 }
 
-/**
- * Must be awaited before navigating to the result page — the result page loads
- * its data once on mount (see ResultOutput's loadResults effect) and does not
- * re-fetch afterwards, so navigating before this settles can leave the newly
- * computed output invisible until some unrelated remount/refetch happens.
- */
 async function persistComprehensiveOutput(
     analysisResult: any,
     processedDataRows: any[],
@@ -597,17 +533,9 @@ async function persistComprehensiveOutput(
     }
 }
 
-/**
- * Initialize Web Worker
- * webpack 5 requires `new Worker(new URL(...))` at the *call site* to statically
- * bundle the worker as a separate chunk. We create the raw Worker here and pass
- * it to ClusterWorker so the URL pattern is visible to webpack's analyzer.
- */
 function initializeWorker(): ClusterWorker | null {
     if (!worker) {
         try {
-            // webpack 5 / Next.js native worker bundling.
-            // Use the source worker module so URL generation stays stable across builds.
             const rawWorker = new Worker(
                 new URL("./cluster-worker.ts", import.meta.url),
                 { type: "module" }
@@ -621,9 +549,6 @@ function initializeWorker(): ClusterWorker | null {
     return worker;
 }
 
-/**
- * Cleanup worker on page unload
- */
 if (typeof window !== "undefined") {
     window.addEventListener("beforeunload", () => {
         if (worker) {
@@ -633,13 +558,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-/**
- * Map WASM output format to TypeScript ClusteringResult format
- * WASM returns: cluster_assignments, medoids_indices, total_distance
- * TypeScript expects: labels, medoids, cost
- */
 export function mapWasmOutputToResult(wasmOutput: any): ClusteringResult {
-    // Build iteration_history from cost_history if present
     const costHistory: number[] = wasmOutput.cost_history || [];
     const iterationHistory = costHistory.length > 0
         ? costHistory.map((cost: number, idx: number) => ({
@@ -648,8 +567,6 @@ export function mapWasmOutputToResult(wasmOutput: any): ClusteringResult {
           }))
         : undefined;
 
-    // Some WASM paths omit `iterations` but still provide history.
-    // Derive swap-iteration count from history shape: [init, iter1, ...].
     const explicitIterations = wasmOutput.iterations;
     const inferredIterations = costHistory.length > 0
         ? Math.max(costHistory.length - 1, 0)
@@ -745,18 +662,10 @@ export async function analyzeKMedoidsCluster({
                 };
             });
 
-        // Preprocessing flow:
-        // 1) non-numeric -> NaN (already done above),
-        // 2) missing handling per Options → Missing Values:
-        //    listwise = drop rows with any NaN/Inf,
-        //    median/knn = keep rows with at least one valid value, impute rest,
-        // 3) optional Z-score standardization.
         const missingValueMethod = configData.options?.MissingValueMethod ?? MissingValueMethod.Listwise;
         const missingHandled = applyMissingHandling(parsedRows, missingValueMethod);
 
         const dataMatrix = missingHandled.matrix;
-        // Reflect imputed cells (Median/Knn) back into the row objects so
-        // output tables show the filled-in value instead of the original blank.
         const processedDataRows = patchImputedAttributes(missingHandled.rows, dataMatrix, variables);
 
         const normalizationMethod = resolveNormalizationMethod(configData);
@@ -770,7 +679,6 @@ export async function analyzeKMedoidsCluster({
             missingByVariable,
         };
         
-        // Early validation: need at least 2 valid data points
         if (standardizedMatrix.length < 2) {
             throw new Error(`Not enough valid data points for clustering (found ${standardizedMatrix.length}). Check that the selected variables contain numeric values.`);
         }
@@ -783,17 +691,12 @@ export async function analyzeKMedoidsCluster({
             ? (sourceVariables.find(v => v.name === caseLabelVariableName)?.columnIndex ?? null)
             : null;
         
-        // Use the selected method for manual runs; auto-k range stays PAM-only.
         const method: ClusteringMethod = configData.iterate.Method || "PAM";
         const autoKMethod: ClusteringMethod = "PAM";
         const distanceMetric = normalizeDistanceMetric(configData.main.DistanceMetric);
 
-        // Check if automatic k selection is enabled
         const isAutomatic = configData.main.ClusterMode === ClusterMode.Automatic;
 
-        // Automatic k always ends with a full-data PAM run, so it is bound by the PAM limit too.
-        // Above PAM_WARN_ROWS the dialog only warns (the user may force PAM); this hard limit is
-        // where the n×n distance matrix is practically guaranteed to fail to allocate.
         const usesFullPam = isAutomatic || String(method).toUpperCase() === "PAM";
         if (usesFullPam && finalMatrix.length > PAM_HARD_MAX_ROWS) {
             const matrixMb = Math.round((finalMatrix.length ** 2 * 8) / 1_048_576);
@@ -818,7 +721,6 @@ export async function analyzeKMedoidsCluster({
         }
         
         if (isAutomatic) {
-            // ========== AUTOMATIC K SELECTION ==========
             
             const kMin = configData.main.AutoKMin || 2;
             const kMax = Math.min(configData.main.AutoKMax || 10, dataMatrix.length - 1);
@@ -828,11 +730,9 @@ export async function analyzeKMedoidsCluster({
                 throw new Error(`AutoKMin (${kMin}) must be less than the effective AutoKMax (${kMax}). Dataset has ${dataMatrix.length} valid data points.`);
             }
             
-            // Use Web Worker if available (non-blocking), fall back to direct WASM
             const autoWorker = useWorker ? initializeWorker() : null;
             if (autoWorker) {
                 await autoWorker.init(); // ensure WASM in worker is ready
-                // Cache data matrix in the worker once — avoids re-serializing on every k iteration
                 await autoWorker.setData(finalMatrix);
             } else {
                 await initializeWasm(); // direct WASM fallback (blocks main thread)
@@ -842,7 +742,6 @@ export async function analyzeKMedoidsCluster({
             const scores: number[] = [];
             const silhouetteScoresPerK: number[] = [];
 
-            // ── Single WASM range call — builds dist matrix once, runs PAM for all k ──
             const rangeInput: ClusteringRangeInput = {
                 k_min: kMin,
                 k_max: kMax,
@@ -878,8 +777,6 @@ export async function analyzeKMedoidsCluster({
                     iterations: item.iterations || 0,
                     converged: item.converged || false,
                     cost_history: item.cost_history || [],
-                    // Prefer the WASM-computed silhouette_overall (reuses the shared
-                    // distance matrix); only recompute in JS for older WASM builds.
                     silhouetteScore: typeof item.silhouette_overall === "number"
                         ? item.silhouette_overall
                         : calculateSilhouetteScore(finalMatrix, item.cluster_assignments || [], item.k, distanceMetric),
@@ -887,7 +784,6 @@ export async function analyzeKMedoidsCluster({
                 }));
             }
 
-            // Map range results into the existing arrays shapes
             for (const item of rangeResults) {
                 if (!item.labels || item.labels.length === 0) {
                     const fallback = autoMethod === AutoKMethod.Silhouette ? -1 : Infinity;
@@ -908,18 +804,14 @@ export async function analyzeKMedoidsCluster({
                 }
             }
             
-            // Find optimal k
-            // kRange is derived from the actual returned range results (preserves order)
             const kRange = rangeResults.map(r => r.k);
             let optimalK: number;
             let optimalIdx: number;
             
             if (autoMethod === AutoKMethod.Silhouette) {
-                // Higher silhouette is better
                 optimalIdx = scores.indexOf(Math.max(...scores));
                 optimalK = kRange[optimalIdx];
             } else {
-                // Elbow method - find the elbow point
                 optimalK = findOptimalKElbow(kRange, scores);
                 optimalIdx = kRange.indexOf(optimalK);
             }
@@ -932,11 +824,6 @@ export async function analyzeKMedoidsCluster({
                 });
             }
 
-            // Run final clustering on the full dataset.
-            // The range scan used subsampled data (≤300 pts) so its labels only cover
-            // the subsample. We must cluster the full matrix to get assignments for
-            // every row.  PAM with BUILD phase is deterministic (effective n_init=1 in
-            // Rust regardless of what n_init says), so this is a single fast run.
             const finalInput: ClusteringInput = {
                 data: finalMatrix,
                 n_clusters: optimalK,
@@ -971,7 +858,6 @@ export async function analyzeKMedoidsCluster({
                 automaticKSelection: {
                     method: autoMethod,
                     testedRange: { min: kMin, max: kMax },
-                    // Store both metrics so output can render Silhouette + Elbow charts together.
                     scores: rangeResults.map((item, i) => ({
                         k: item.k ?? (kRange[i] ?? (kMin + i)),
                         // Keep primary score for backward compatibility (selected by autoMethod).
@@ -986,7 +872,6 @@ export async function analyzeKMedoidsCluster({
                 }
             };
             
-            // Save clustering variables if requested
             await saveClusteringVariables(
                 finalResult,
                 configData.save,
@@ -994,8 +879,6 @@ export async function analyzeKMedoidsCluster({
                 processedDataRows
             );
             
-            // Persist comprehensive output before returning so the result page
-            // (which loads its data once on navigation) already has it available.
             await persistComprehensiveOutput(
                 analysisResult,
                 processedDataRows,
@@ -1006,11 +889,7 @@ export async function analyzeKMedoidsCluster({
 
             return analysisResult;
         } else {
-            // ========== MANUAL K SELECTION ==========
             const manualK = configData.main.Cluster ?? 2;
-            // Manual mode still needs the k-range sweep when either "Grafik K Optimal" or
-            // "Tabel K Optimal" (keduanya di tab Evaluation) aktif. Field Options lama tetap
-            // dibaca sebagai fallback untuk konfigurasi yang tersimpan sebelum reorganisasi.
             const shouldBuildManualKChart =
                 configData.evaluation?.ShowOptimalKChart === true ||
                 configData.options?.ShowOptimalKChart === true ||
@@ -1025,7 +904,6 @@ export async function analyzeKMedoidsCluster({
                 random_seed: resolvedSeed,
                 n_init: userNInit,
                 convergence_tolerance: configData.iterate.ConvergenceCriterion || 0.0,
-                // BUILD phase only for default mode; random/custom use random init.
                 use_build_phase: seedMode === "default",
                 use_r_implementation: false,
                 clara_num_samples: configData.iterate.NumSamples ?? 5,
@@ -1036,14 +914,12 @@ export async function analyzeKMedoidsCluster({
             let workerInstance: ClusterWorker | null = null;
 
             if (useWorker) {
-                // Try to use Web Worker for background execution
                 workerInstance = initializeWorker();
                 
                 if (workerInstance) {
                     await workerInstance.init(); // ensure WASM is ready before clustering
                     result = await workerInstance.cluster(clusteringInput, onProgress);
                 } else {
-                    // Worker not available, fallback to direct execution
                     await initializeWasm();
                     
                     if (onProgress) {
@@ -1195,8 +1071,6 @@ export async function analyzeKMedoidsCluster({
                 processedDataRows
             );
             
-            // Persist comprehensive output before returning so the result page
-            // (which loads its data once on navigation) already has it available.
             await persistComprehensiveOutput(
                 analysisResult,
                 processedDataRows,
@@ -1219,18 +1093,12 @@ export async function analyzeKMedoidsCluster({
     }
 }
 
-/**
- * Cancel ongoing clustering (worker mode only)
- */
 export function cancelClustering(): void {
     if (worker) {
         worker.cancel();
     }
 }
 
-/**
- * Terminate worker and cleanup resources
- */
 export function cleanupWorker(): void {
     if (worker) {
         worker.terminate();

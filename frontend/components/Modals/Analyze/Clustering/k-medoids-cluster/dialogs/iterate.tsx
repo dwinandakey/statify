@@ -27,15 +27,6 @@ import {
     TooltipContent,
 } from "@/components/ui/tooltip";
 
-/**
- * ========================================
- * ITERATE DIALOG
- * ========================================
- * Konfigurasi parameter algoritma K-Medoids:
- * - Metode (PAM/CLARA/CLARANS)
- * - Initial medoids strategy
- * - Iteration & convergence parameters
- */
 export const KMedoidsClusterIterate = ({
     updateFormData,
     data,

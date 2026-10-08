@@ -1,11 +1,3 @@
-/**
- * ConvergenceChart
- * Dual-axis D3 line chart:
- *   – Left Y  : Total Cost              — solid blue line + area fill
- *   – Right Y : Improvement per step    — dashed orange line (bar-style)
- * Iteration where cost stops changing is annotated as "converged".
- */
-
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import type { IterationHistory } from "../types/output";
@@ -32,12 +24,10 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        // ── Margins ──────────────────────────────────────────────────────────
         const margin = { top: 36, right: 64, bottom: 92, left: 72 };
         const innerW = width - margin.left - margin.right;
         const innerH = chartHeight - margin.top - margin.bottom;
 
-        // ── CSS tokens ────────────────────────────────────────────────────────
         const style = getComputedStyle(svgRef.current);
         const tok = (name: string, fallback: string) => {
             const v = style.getPropertyValue(name).trim();
@@ -52,7 +42,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
         const impColor   = "#f59e0b";  // amber — improvement
         const convColor  = "#16a34a";  // green — converged annotation
 
-        // ── Scales ────────────────────────────────────────────────────────────
         const xExtent = d3.extent(data, d => d.iteration) as [number, number];
         const xScale = d3.scaleLinear()
             .domain([xExtent[0], xExtent[1]])
@@ -71,11 +60,9 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .range([innerH, 0])
             .nice();
 
-        // ── Root group ────────────────────────────────────────────────────────
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ── Grid ─────────────────────────────────────────────────────────────
         g.append("g")
             .call(d3.axisLeft(yCost).ticks(6).tickSize(-innerW).tickFormat(() => ""))
             .call(ax => {
@@ -85,7 +72,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
                     .attr("stroke-opacity", 0.45);
             });
 
-        // ── Tooltip ───────────────────────────────────────────────────────────
         const parent = svgRef.current.parentElement;
         if (!parent) return;
 
@@ -124,7 +110,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
         };
         const hideTip = () => tooltip.style("opacity", "0");
 
-        // ── Improvement bars (drawn first, behind cost line) ─────────────────
         const barW = Math.max(2, (innerW / (data.length + 1)) * 0.6);
         g.selectAll(".imp-bar")
             .data(data)
@@ -138,7 +123,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("fill", impColor)
             .attr("opacity", 0.25);
 
-        // ── Cost area fill ────────────────────────────────────────────────────
         const areaFn = d3.area<IterationHistory>()
             .x(d => xScale(d.iteration))
             .y0(innerH)
@@ -151,7 +135,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("fill", costColor)
             .attr("opacity", 0.08);
 
-        // ── Cost line ─────────────────────────────────────────────────────────
         const lineFn = d3.line<IterationHistory>()
             .x(d => xScale(d.iteration))
             .y(d => yCost(d.totalCost))
@@ -164,7 +147,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("stroke", costColor)
             .attr("stroke-width", 2.5);
 
-        // ── Cost dots ─────────────────────────────────────────────────────────
         g.selectAll(".cost-dot")
             .data(data)
             .join("circle")
@@ -180,7 +162,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .on("mousemove", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
             .on("mouseleave", () => hideTip());
 
-        // ── Improvement line (dashed) ─────────────────────────────────────────
         const impLineFn = d3.line<IterationHistory>()
             .x(d => xScale(d.iteration))
             .y(d => yImp(Math.abs(d.improvement)))
@@ -194,7 +175,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("stroke-width", 2)
             .attr("stroke-dasharray", "7,4");
 
-        // ── Improvement dots ──────────────────────────────────────────────────
         g.selectAll(".imp-dot")
             .data(data)
             .join("circle")
@@ -210,7 +190,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .on("mousemove", (e: MouseEvent, d: IterationHistory) => showTip(e, d))
             .on("mouseleave", () => hideTip());
 
-        // ── Converged annotation ──────────────────────────────────────────────
         if (converged && data.length > 0) {
             const last = data[data.length - 1];
             const cx2 = xScale(last.iteration);
@@ -228,7 +207,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
                 .text("✓ Converged");
         }
 
-        // ── Cost labels (first + last + min) ─────────────────────────────────
         const labelPoints = [data[0], data[data.length - 1]];
         if (data.length > 2) {
             const minCost = data.reduce((a, b) => b.totalCost < a.totalCost ? b : a);
@@ -249,8 +227,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
                     : d.totalCost.toFixed(2));
         });
 
-        // ── Axes ──────────────────────────────────────────────────────────────
-        // X
         const xTicks = data.length <= 12
             ? data.map(d => d.iteration)
             : d3.ticks(xExtent[0], xExtent[1], 8);
@@ -269,7 +245,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("font-size", "12").attr("fill", mutedColor)
             .text("Iteration");
 
-        // Left Y (Total Cost)
         g.append("g")
             .call(d3.axisLeft(yCost).ticks(6).tickFormat(d => {
                 const v = +d;
@@ -289,7 +264,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("font-size", "12").attr("fill", costColor)
             .text("Total Cost");
 
-        // Right Y (Improvement)
         g.append("g")
             .attr("transform", `translate(${innerW},0)`)
             .call(d3.axisRight(yImp).ticks(5).tickFormat(d => {
@@ -309,7 +283,6 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({
             .attr("font-size", "12").attr("fill", impColor)
             .text("Improvement");
 
-        // ── Legend ────────────────────────────────────────────────────────────
         const legendG = svg.append("g")
             .attr("transform", `translate(${margin.left + 8},${chartHeight - 28})`);
 

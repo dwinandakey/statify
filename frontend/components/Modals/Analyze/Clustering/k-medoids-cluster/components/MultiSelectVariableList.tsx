@@ -19,14 +19,6 @@ import {
 import type { Variable } from "@/types/Variable";
 import { useMobile } from "@/hooks/useMobile";
 
-/**
- * Daftar variabel khusus K-Medoids yang mendukung pemilihan banyak variabel
- * sekaligus (Ctrl/Cmd + klik, Shift + klik, dan drag beberapa item sekaligus).
- *
- * Komponen ini sengaja dibuat lokal di folder k-medoids-cluster agar
- * VariableListManager bersama (single-select) tidak ikut berubah.
- */
-
 export interface MultiSelectTargetList {
     id: string;
     title: string;
@@ -109,7 +101,6 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         [selection, selectedNames]
     );
 
-    // Variabel terpilih, diurutkan sesuai urutan tampil pada daftar sumbernya
     const getSelectedVariables = useCallback((): Variable[] => {
         if (!selection) return [];
         const sourceList = getList(selection.source);
@@ -118,7 +109,6 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         return sourceList.variables.filter((variable) => names.has(variable.name));
     }, [getList, selection]);
 
-    // --- Pemilihan ---
     const handleVariableClick = useCallback(
         (event: React.MouseEvent, variable: Variable, listId: string, index: number) => {
             const isRangeClick = event.shiftKey;

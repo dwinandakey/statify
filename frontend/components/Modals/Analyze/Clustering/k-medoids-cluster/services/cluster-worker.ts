@@ -1,13 +1,6 @@
-/* eslint-disable no-console */
-/**
- * K-Medoids Clustering Web Worker
- * Runs WASM clustering algorithms in background thread
- */
-
 import type { WorkerRequestMessage, WorkerResponseMessage, ClusteringInput, ClusteringRangeInput, ClusteringRangeItem } from "../types/worker";
 import { recoverMedoidsFromMismatch } from "./k-medoids-cluster-guards";
 
-// Import WASM module - will be initialized when worker starts
 type WasmModule = {
     test_connection: () => string;
     run_k_medoids: (input: unknown) => Record<string, unknown>;
@@ -25,10 +18,8 @@ type WasmModule = {
 let wasmModule: WasmModule | null = null;
 let wasmInitialized = false;
 let currentOperation: AbortController | null = null;
-/** Data matrix cached via setData – avoids re-serialization in auto-k loops */
 let cachedData: number[][] | null = null;
 
-// ── Lightweight silhouette & WCSS helpers (run inside worker thread) ─────────
 
 const MAX_SILHOUETTE_SAMPLE = 300;
 
@@ -200,9 +191,6 @@ function computeSilhouettePerObject(
     return scores;
 }
 
-/**
- * Initialize WASM module
- */
 async function initializeWasm(wasmPath?: string, requestId?: number): Promise<void> {
     if (wasmInitialized) {
         // Already ready — reply immediately so init() callers don't hang
@@ -246,14 +234,6 @@ async function initializeWasm(wasmPath?: string, requestId?: number): Promise<vo
         wasmModule = moduleInstance;
         wasmInitialized = true;
 
-        // ── Rayon thread pool (wasm-bindgen-rayon, `threading` feature) ────────
-        // When the WASM module was compiled with `--features threading`, it
-        // exports `initThreadPool(n)` which spawns n WebWorker threads and
-        // initialises rayon's global pool.  This requires the page to be served
-        // with Cross-Origin-Opener-Policy / Cross-Origin-Embedder-Policy headers
-        // so SharedArrayBuffer is available.  If the module was built without
-        // the feature (or SAB is unavailable) the function won't exist — we
-        // fall through silently and run single-threaded.
         if (typeof moduleInstance.initThreadPool === "function") {
             try {
                 const numThreads = navigator.hardwareConcurrency || 4;
@@ -288,10 +268,6 @@ function sendProgress(stage: string, progress: number, message: string): void {
     } as WorkerResponseMessage);
 }
 
-// ── Typed-array fast path helper ─────────────────────────────────────────────
-// Flattens a row-major number[][] into a Float64Array so we can call
-// run_k_medoids_typed() instead of the serde-based run_k_medoids().
-// Measured speedup for n=1000, d=10: ~35 ms serde → ~2 ms typed arrays.
 function flattenMatrix(data: number[][]): Float64Array {
     const n = data.length;
     const d = n > 0 ? data[0].length : 0;
@@ -356,16 +332,9 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             return;
         }
 
-        // ── Choose fast typed-array path vs serde-JSON path ──────────────────
-        // The typed path avoids serde_wasm_bindgen overhead for the data matrix
-        // AND allows live per-iteration progress callbacks from Rust to JS.
-        // Fallback to the serde path for CLARA/CLARANS (not yet in typed API).
         const normalizedMetric = normalizeDistanceMetric(input.distance_metric);
         const isPAM = (input.method || "pam").toLowerCase() === "pam";
-        // Typed path currently hardcodes R-style BUILD initialization in WASM.
-        // If caller requests non-R/random init, force serde path so those flags apply.
         const requiresCustomPamInit = input.use_build_phase === false || input.use_r_implementation === false;
-        // Typed path is known to be unreliable for Manhattan in some builds — use serde path instead.
         const typedMetricSupported = normalizedMetric === "euclidean";
         const hasTypedApi = isPAM && typedMetricSupported && !requiresCustomPamInit && typeof wasmModule.run_k_medoids_typed === "function";
 
@@ -383,17 +352,12 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             const d = resolvedData[0]?.length ?? 0;
             const flatData = flattenMatrix(resolvedData);
 
-            // Progress callback: fired from Rust after each SWAP iteration.
-            // Clamps the displayed progress to 40..89 range (matching the serde path).
             const maxIter = input.max_iterations || 100;
             const onProgress = (iter: number, cost: number) => {
                 const pct = 40 + Math.min(49, Math.round((iter / maxIter) * 49));
                 sendProgress("clustering", pct, `Iteration ${iter} — cost ${cost.toFixed(4)}`);
             };
 
-            // ── Streaming: send initial medoids before the SWAP phase ────────
-            // Fired by Rust once after the BUILD phase.  Lets the UI show cluster
-            // centres immediately instead of waiting for all SWAP iterations.
             const onInitialMedoids = (medoidsArr: Uint32Array) => {
                 const initial_medoids = Array.from(medoidsArr);
                 postMessage({
@@ -422,8 +386,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
                 onInitialMedoids,
             );
 
-            // cluster_assignments and silhouette_scores come back as typed arrays.
-            // Convert to plain arrays for downstream code compatibility.
             if (result.cluster_assignments instanceof Uint32Array) {
                 result.cluster_assignments = Array.from(result.cluster_assignments as Uint32Array);
             }
@@ -439,7 +401,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             if (result.cost_history instanceof Float64Array) {
                 result.cost_history = Array.from(result.cost_history as Float64Array);
             }
-            // medoid_history is a JS Array of Uint32Arrays from the typed path
             if (Array.isArray(result.medoid_history)) {
                 result.medoid_history = (result.medoid_history as (Uint32Array | number[])[]).map((arr) =>
     arr instanceof Uint32Array ? Array.from(arr) : (Array.isArray(arr) ? arr : [])
@@ -447,7 +408,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             }
 
         } else {
-            // ── Serde-JSON fallback path (CLARA / CLARANS / old build) ────────
             const wasmInput = {
                 data: resolvedData,
                 n_clusters: input.n_clusters,
@@ -480,13 +440,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
         const labels: number[] = (result.cluster_assignments ?? result.labels ?? []) as number[];
         const rawMedoids: number[] = (result.medoids_indices ?? result.medoid_indices ?? result.medoids ?? []) as number[];
 
-        // ── k-integrity guard ────────────────────────────────────────────────────
-        // If the WASM binary is stale (compiled before the pam_build destructuring
-        // fix), `medoids_indices` may contain the full n-length assignment vector
-        // instead of the k-length medoid-index vector.  Detect this and truncate
-        // so downstream TypeScript always receives exactly n_clusters medoids.
-        // Root cause: kmedoids::pam_build returns (loss, assi[n], meds[k]);
-        // old code accidentally took element [1] (assi) instead of element [2] (meds).
         let medoids: number[];
         if (rawMedoids.length !== input.n_clusters) {
             console.error(
@@ -504,22 +457,15 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             medoids = rawMedoids;
         }
 
-        // Compute silhouette + WCSS here in the worker thread (off main thread).
-        // Per-object scores are always computed so generateComprehensiveKMedoidsOutput
-        // can skip the expensive O(n²) JS fallback on the main thread.
         let silhouetteScore: number;
         let silhouettePerObject: number[] = [];
 
         sendProgress("silhouette", 92, "Computing silhouette scores...");
 
-        // Priority 1: WASM embeds per-object scores inside the PAM result itself
-        // (added in the cache-optimisation refactor — reuses the dist matrix already
-        //  built by PAM, so no extra distance computation is needed).
         const wasmEmbeddedScores: number[] = (result.silhouette_scores ?? []) as number[];
         if (wasmEmbeddedScores.length === resolvedData.length) {
             silhouettePerObject = wasmEmbeddedScores;
         } else if (typeof wasmModule.run_silhouette === "function") {
-            // Priority 2: dedicated WASM silhouette function (legacy path)
             try {
                 const silResult = wasmModule.run_silhouette({
                     data: resolvedData,
@@ -534,7 +480,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             }
         }
 
-        // Priority 3: JS fallback (O(n²) in worker thread — non-blocking for main UI)
         if (silhouettePerObject.length !== resolvedData.length) {
             silhouettePerObject = computeSilhouettePerObject(
                 resolvedData,
@@ -554,8 +499,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             normalizedMetric
         );
 
-        // distances_to_medoids from WASM is the authoritative source — computed
-        // from the exact same distance matrix used for PAM (matches R pam() output).
         const rawDist = result.distances_to_medoids;
         const distances_to_medoids: number[] | undefined =
             rawDist instanceof Float64Array
@@ -602,8 +545,6 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
             converged: (result.converged ?? false) as boolean,
             cost_history: (result.cost_history ?? []) as number[],
             medoid_history: (result.medoid_history ?? []) as (number[] | Uint32Array)[],
-            // Use WASM per-object scores (fast) so generateComprehensiveKMedoidsOutput
-            // skips the O(n²) JavaScript fallback in calculateSilhouetteScoresAsync
             silhouette_scores: silhouettePerObject.length > 0 ? silhouettePerObject : ((result.silhouette_scores ?? []) as number[]),
             distances_to_medoids,
             silhouetteScore,
@@ -638,19 +579,12 @@ async function runClustering(input: ClusteringInput, requestId?: number): Promis
     }
 }
 
-/**
- * Cancel current operation
- */
 function cancelOperation(): void {
     if (currentOperation) {
         currentOperation.abort();
     }
 }
 
-/**
- * Run clustering for a range of k values using a single WASM call.
- * The distance matrix is built once inside WASM — no JS overhead per k.
- */
 async function runClusteringRange(input: ClusteringRangeInput, requestId?: number): Promise<void> {
     if (!wasmInitialized || !wasmModule) {
         postMessage({ type: "error", error: "WASM not initialized", requestId } as WorkerResponseMessage);
@@ -667,10 +601,6 @@ async function runClusteringRange(input: ClusteringRangeInput, requestId?: numbe
             throw new Error("No data provided and no cached data available");
         }
 
-        // For the exploration pass we only need a relative ranking of k values,
-        // not optimal assignments for all n points.  Subsample to ≤RANGE_SAMPLE
-        // points so the O(k×n²) SWAP phase stays fast regardless of dataset size.
-        // The final single-k clustering always uses the full dataset.
         const RANGE_SAMPLE = MAX_SILHOUETTE_SAMPLE; // 300 — same cap used for silhouette
         let rangeData = resolvedData;
         if (resolvedData.length > RANGE_SAMPLE) {

@@ -1,4 +1,3 @@
-// k-medoids-cluster-comprehensive-output.ts
 import { useResultStore } from "@/stores/useResultStore";
 import type { Table } from "@/types/Table";
 import type { Variable } from "@/types/Variable";
@@ -15,17 +14,12 @@ interface ClusteringResult {
     total_cost_swap?: number;
     iterations: number;
     converged: boolean;
-    silhouette_scores?: number[]; // Per-object silhouette scores from WASM
+    silhouette_scores?: number[];
     iteration_history?: { iteration: number; cost: number }[];
-    /** Raw cost per step: [0]=BUILD cost, [1..n]=cost after each swap (sent by worker). */
     cost_history?: number[];
-    /** Medoid indices at each step: [0]=initial, [i]=after swap i. */
     medoid_history?: number[][];
-    /** CLARA: cost per sample on the full dataset (length = num_samples). Empty for PAM/CLARANS. */
     sample_costs?: number[];
-    /** CLARA: pam iterations per sample. */
     sample_pam_iterations?: number[];
-    /** CLARA: 1-based index of the best sample. 0 means N/A (PAM/CLARANS). */
     clara_best_sample_index?: number;
 }
 
@@ -81,10 +75,6 @@ function resolveNormalizationMethod(config: any): NormalizationKind {
     return "none";
 }
 
-/**
- * Calculate Euclidean distance between two points
- * Returns 0 if points are invalid
- */
 function euclideanDistance(p1: number[], p2: number[]): number {
     if (!p1 || !p2 || p1.length !== p2.length) return 0;
     let sum = 0;
@@ -95,9 +85,6 @@ function euclideanDistance(p1: number[], p2: number[]): number {
     return Math.sqrt(sum);
 }
 
-/**
- * Calculate Manhattan distance between two points
- */
 function manhattanDistance(p1: number[], p2: number[]): number {
     if (!p1 || !p2 || p1.length !== p2.length) return 0;
     let sum = 0;
@@ -119,9 +106,6 @@ function calculateDistance(
         : euclideanDistance(p1, p2);
 }
 
-/**
- * Calculate silhouette score for a single object (TypeScript fallback)
- */
 function calculateObjectSilhouette(
     objectIdx: number,
     cluster: number,
@@ -132,7 +116,6 @@ function calculateObjectSilhouette(
     const n = dataMatrix.length;
     const point = dataMatrix[objectIdx];
     
-    // Calculate a(i): average distance to points in same cluster
     let sameClusterDistances: number[] = [];
     for (let j = 0; j < n; j++) {
         if (labels[j] === cluster && j !== objectIdx) {
@@ -144,7 +127,7 @@ function calculateObjectSilhouette(
         ? sameClusterDistances.reduce((a, b) => a + b, 0) / sameClusterDistances.length
         : 0;
     
-    // Calculate b(i): minimum average distance to other clusters
+    // b(i): rata-rata jarak minimum ke cluster lain
     const uniqueClusters = Array.from(new Set(labels)).filter(c => c !== cluster);
     let minAvgDistance = Infinity;
     
@@ -166,15 +149,10 @@ function calculateObjectSilhouette(
     
     const b_i = minAvgDistance === Infinity ? 0 : minAvgDistance;
     
-    // Silhouette score
     if (a_i === 0 && b_i === 0) return 0;
     return (b_i - a_i) / Math.max(a_i, b_i);
 }
 
-/**
- * Calculate silhouette scores in chunks to avoid blocking UI
- * Yields control back to browser between chunks
- */
 async function calculateSilhouetteScoresAsync(
     dataMatrix: number[][],
     labels: number[],
@@ -187,12 +165,10 @@ async function calculateSilhouetteScoresAsync(
     for (let i = 0; i < n; i += chunkSize) {
         const end = Math.min(i + chunkSize, n);
         
-        // Calculate chunk
         for (let j = i; j < end; j++) {
             scores[j] = calculateObjectSilhouette(j, labels[j], dataMatrix, labels, metric);
         }
         
-        // Yield to browser to keep UI responsive
         if (end < n) {
             await new Promise(resolve => setTimeout(resolve, 0));
         }
@@ -201,9 +177,6 @@ async function calculateSilhouetteScoresAsync(
     return scores;
 }
 
-/**
- * Calculate distance matrix between medoids
- */
 function calculateMedoidDistanceMatrix(
     standardizedMatrix: number[][],
     medoidFilteredIndices: number[],
@@ -231,9 +204,6 @@ function calculateMedoidDistanceMatrix(
     };
 }
 
-/**
- * Build full distance matrix for all valid rows (sorted by cluster label)
- */
 async function buildDistanceMatrix(
     clusteringMatrix: number[][],
     orderedFilteredIndices: number[],
@@ -263,14 +233,10 @@ async function buildDistanceMatrix(
     return { labels, clusters, distances };
 }
 
-/**
- * Generate descriptive label for cluster based on attributes
- */
 function generateClusterLabel(
     meanAttributes: Record<string, number>,
     clusterIdx: number
 ): string {
-    // Simple heuristic: find dominant attribute
     const entries = Object.entries(meanAttributes);
     if (entries.length === 0) return `Cluster ${clusterIdx + 1}`;
     
@@ -287,8 +253,6 @@ export async function generateComprehensiveKMedoidsOutput(
     caseLabelColumnIndex: number | null = null,
     standardizedMatrix?: number[][]
 ) {
-    // Tiny helper: yield the main thread so the browser can paint/handle events
-    // between heavy synchronous sections.  Costs ~1 ms but prevents "frozen" UI.
     const yieldToUI = () => new Promise<void>(resolve => setTimeout(resolve, 0));
 
     try {
@@ -312,19 +276,12 @@ export async function generateComprehensiveKMedoidsOutput(
             ? "Min-Max"
             : "Tanpa normalisasi";
 
-        // ── Authoritative k: prefer config value over WASM-derived medoid count ──
-        // result.medoids.length MUST equal the configured k.  If they differ it
-        // means the WASM binary is stale (old pam_build destructuring bug where
-        // the n-length assignment vector was mistakenly used as the medoid list).
-        // Using the config value protects table generation from reporting k = N.
         const configK: number = (() => {
-            // Automatic k: the actual chosen k is stored in automaticKSelection.
             if (automaticKSelection?.optimalK && automaticKSelection.optimalK >= 2) {
                 return automaticKSelection.optimalK;
             }
             const manualK = config?.main?.Cluster;
             if (typeof manualK === 'number' && manualK >= 2) return manualK;
-            // Last resort: trust the medoid count (correct when WASM is up-to-date).
             return result.medoids.length;
         })();
 
@@ -337,31 +294,19 @@ export async function generateComprehensiveKMedoidsOutput(
             );
         }
         const k = configK;
-        // ── Valid-row mapping ─────────────────────────────────────────────────
-        // `dataVariables` here is already the post-preprocessing row set built
-        // by analyzeKMedoidsCluster: rows with missing values were either
-        // dropped (listwise) or imputed and patched back into the row object
-        // (median/knn — see patchImputedAttributes), so every row is already
-        // finite for every selected variable and lines up 1:1 with what WASM
-        // received (0..N-1). No re-filtering needed here.
+
         const validRowIndices: number[] = dataVariables.map((_: any, idx: number) => idx);
 
-        // n = number of cases actually sent to WASM (= result.labels.length).
-        // nTotal = total rows after preprocessing (used for display only).
         const n = validRowIndices.length;
         const nTotal = dataVariables.length;
 
-        // Reverse map: original index → filtered index (-1 = row excluded due to missing values).
         const origToFiltered = new Array(nTotal).fill(-1);
         validRowIndices.forEach((origIdx, filtIdx) => { origToFiltered[origIdx] = filtIdx; });
 
-        // Re-map labels early (needed by medoid recovery logic below).
         const safeLabels: number[] = result.labels.map(l =>
             (typeof l === 'number' && l >= 0 && l < k) ? l : 0
         );
 
-        // Clamp result.medoids to the first k entries and recover if invalid.
-        // safeMedoids[j] is an index into the FILTERED matrix (0..n-1).
         const rawMedoids = Array.isArray(result.medoids) ? result.medoids : [];
         const slicedMedoids = rawMedoids.slice(0, k);
         const hasInvalidMedoid = slicedMedoids.some(
@@ -381,13 +326,8 @@ export async function generateComprehensiveKMedoidsOutput(
                   })()
                 : slicedMedoids;
 
-        // Map WASM medoid indices (filtered) → original row indices.
-        // This is what matches R's id.med output (1-based case numbers).
         const safeMedoidsOrig: number[] = safeMedoids.map(fi => validRowIndices[fi] ?? fi);
 
-        // safeLabels[i] is the cluster for the i-th VALID row (filtIdx i).
-
-        // Build data matrix aligned with safeLabels (valid rows only, same order as WASM input).
         const dataMatrix = validRowIndices.map((origIdx: number) =>
             variables.map(v => {
                 const val = dataVariables[origIdx][v.columnIndex as number];
@@ -399,11 +339,9 @@ export async function generateComprehensiveKMedoidsOutput(
             ? standardizedMatrix
             : dataMatrix;
 
-        // Yield after building the data matrix (O(n×d) work)
         await yieldToUI();
 
-        // Use pre-computed per-object silhouette scores from the worker when available.
-        // Fallback: compute asynchronously on main thread (chunked to stay non-blocking).
+        // Pakai silhouette per objek dari worker jika ada; jika tidak, hitung di main thread (per chunk).
         let silhouetteScores: number[];
         if (result.silhouette_scores && result.silhouette_scores.length === n) {
             silhouetteScores = result.silhouette_scores;
@@ -417,7 +355,6 @@ export async function generateComprehensiveKMedoidsOutput(
 
         const averageSilhouette = silhouetteScores.reduce((a, b) => a + b, 0) / silhouetteScores.length;
 
-        // Calculate cluster sizes — iterate safeLabels (N_valid, not N_total)
         const clusterSizes = Array(k).fill(0);
         safeLabels.forEach((label: number) => {
             if (label >= 0 && label < k) clusterSizes[label]++;
@@ -433,7 +370,6 @@ export async function generateComprehensiveKMedoidsOutput(
             { id: 1, size: clusterSizes[0] }
         );
 
-        // Pre-group data rows by cluster — iterate valid rows only so indices align.
         const dataByCluster: Map<number, any[]> = new Map();
         validRowIndices.forEach((origIdx, filtIdx) => {
             const label = safeLabels[filtIdx];
@@ -444,10 +380,9 @@ export async function generateComprehensiveKMedoidsOutput(
             }
         });
 
-        // Yield before building assignment objects (O(n) object allocations)
         await yieldToUI();
 
-        // medoidSet contains ORIGINAL row indices so isMedoid checks work correctly.
+        // Berisi indeks baris ASLI agar pengecekan isMedoid benar.
         const medoidSet = new Set<number>(safeMedoidsOrig);
 
         const getCaseLabel = (row: any, fallbackCaseNumber: number): string => {
@@ -462,18 +397,16 @@ export async function generateComprehensiveKMedoidsOutput(
             return label.length > 0 ? label : `Case ${fallbackCaseNumber}`;
         };
 
-        // Prefer the per-object distances already computed by WASM from the exact
-        // same distance matrix used for PAM.  This matches R pam() precisely.
-        // Fall back to JS Euclidean re-computation only if WASM did not supply them
-        // (e.g. old WASM binary, CLARA/CLARANS path that skips the field).
+        // Utamakan jarak per objek dari WASM (dihitung dari distance matrix yang sama
+        // dengan PAM, sehingga cocok dengan pam() di R). Fallback ke hitung ulang di JS
+        // hanya jika WASM tidak menyediakannya (binary lama, atau jalur CLARA/CLARANS).
         const wasmDistances: number[] | undefined =
             Array.isArray((result as any).distances_to_medoids) &&
             (result as any).distances_to_medoids.length === n
                 ? (result as any).distances_to_medoids
                 : undefined;
 
-        // Build object assignments — iterate valid rows only.
-        // objectId/objectName use the ORIGINAL row index so case numbers match R.
+        // objectId/objectName memakai indeks baris ASLI agar nomor kasus sama dengan R.
         const assignments: ObjectAssignment[] = validRowIndices.map((origIdx, filtIdx) => {
             const clusterLabel = safeLabels[filtIdx];
             const medoidOrigIdx = safeMedoidsOrig[clusterLabel];
@@ -481,14 +414,10 @@ export async function generateComprehensiveKMedoidsOutput(
 
             let distanceToMedoid: number;
             if (wasmDistances) {
-                // Authoritative: from Rust distance matrix (correct metric, no JS rounding).
-                // filtIdx aligns with WASM output (both indexed over valid rows only).
                 distanceToMedoid = wasmDistances[filtIdx] ?? 0;
             } else if (isMedoid) {
                 distanceToMedoid = 0;
             } else {
-                // Fallback: JS Euclidean re-computation.
-                // safeMedoids[clusterLabel] is the filtered index of the medoid.
                 const medoidFiltIdx = safeMedoids[clusterLabel];
                 const medoidPoint = medoidFiltIdx != null && clusteringMatrix[medoidFiltIdx] ? clusteringMatrix[medoidFiltIdx] : [];
                 const objectPoint = clusteringMatrix[filtIdx] || [];
@@ -558,8 +487,6 @@ export async function generateComprehensiveKMedoidsOutput(
             );
         }
 
-        // Single source of truth (R-compatible): gunakan nilai dari WASM.
-        // Jangan hitung ulang total cost di JS agar tidak menyimpang dari R.
         const buildCost: number | undefined = typeof result.total_cost_build === "number"
             ? result.total_cost_build
             : Array.isArray(result.cost_history) && result.cost_history.length > 0
@@ -584,8 +511,8 @@ export async function generateComprehensiveKMedoidsOutput(
             ? swapCost / n
             : 0;
 
-        // Prefer explicit iteration count, but infer from history when absent.
-        // History shape is [init, iter1, iter2, ...], so subtract 1 for swap iterations.
+        // Utamakan jumlah iterasi eksplisit; jika tidak ada, simpulkan dari history.
+        // Bentuk history [init, iter1, iter2, ...], jadi iterasi swap = panjang - 1.
         const inferredIterations = Array.isArray(result.cost_history) && result.cost_history.length > 0
             ? Math.max(result.cost_history.length - 1, 0)
             : Array.isArray(result.iteration_history) && result.iteration_history.length > 0
@@ -596,7 +523,6 @@ export async function generateComprehensiveKMedoidsOutput(
                 ? result.iterations
                 : inferredIterations;
 
-        // Build summary with calculated total cost
         const summary: KMedoidsSummary = {
             numClusters: k,
             totalCost: swapCost,
@@ -616,8 +542,6 @@ export async function generateComprehensiveKMedoidsOutput(
             numVariables: variables.length
         };
 
-        // Build medoid information
-        // safeMedoidsOrig[j] is the ORIGINAL row index of the j-th medoid → matches R's id.med.
         const medoids: MedoidInfo[] = safeMedoidsOrig.map((medoidOrigIdx, clusterIdx) => {
             const medoidRow = dataVariables[medoidOrigIdx];
             const medoidFiltIdx = safeMedoids[clusterIdx];
@@ -631,7 +555,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 standardizedAttributes[v.name] = value != null && isFinite(value) ? value : 0;
             });
 
-            // Calculate within-cluster distance from already-computed assignments (avoids O(k×n) euclidean recomputation)
+            // Dihitung dari assignments yang sudah ada (menghindari hitung ulang O(k×n))
             let withinClusterDist = 0;
             let count = 0;
             assignments.forEach(a => {
@@ -652,7 +576,6 @@ export async function generateComprehensiveKMedoidsOutput(
             };
         });
 
-        // Build cluster profiles
         const clusterProfiles: ClusterProfile[] = Array.from({ length: k }, (_, clusterIdx) => {
             const clusterMembers = dataByCluster.get(clusterIdx) || [];
             const size = clusterMembers.length;
@@ -671,7 +594,6 @@ export async function generateComprehensiveKMedoidsOutput(
                     : 0;
             });
 
-            // Calculate silhouette for this cluster
             const clusterSilhouettes = silhouetteScores.filter((_, idx) => safeLabels[idx] === clusterIdx);
             const avgSilhouette = clusterSilhouettes.length > 0
                 ? clusterSilhouettes.reduce((a, b) => a + b, 0) / clusterSilhouettes.length
@@ -689,15 +611,6 @@ export async function generateComprehensiveKMedoidsOutput(
             };
         });
 
-        // Build iteration history
-        // cost_history layout from Rust: [0]=init_cost, [1..n_iter]=cost after each swap.
-        // item.iteration is 0-based (0=Init, 1=first swap, ...) — use ?? (not ||) to
-        // preserve iteration=0 for Init and avoid duplicate React keys (0||1==1||2==1).
-        //
-        // The worker path sends `cost_history` (plain number[]) rather than
-        // `iteration_history` ({iteration,cost}[]).  Normalise both sources into
-        // the same [{iteration, cost}] shape before mapping so that either path
-        // produces the full per-iteration table.
         const rawIterHistory: { iteration: number; cost: number }[] | undefined =
             result.iteration_history
                 ? result.iteration_history
@@ -718,8 +631,7 @@ export async function generateComprehensiveKMedoidsOutput(
                       iteration: item.iteration ?? idx,
                       totalCost: finalCost,
                       improvement: idx > 0 ? prevCost - cost : 0,
-                      // Every entry in cost_history[1..] represents an actual swap;
-                      // Init (idx=0) has no swap.
+                      // Setiap entri cost_history[1..] adalah satu swap; Init (idx=0) tidak ada swap.
                       swapsMade: idx === 0 ? 0 : 1,
                       medoids: result.medoid_history?.[idx],
                   };
@@ -735,9 +647,6 @@ export async function generateComprehensiveKMedoidsOutput(
                 false) ||
                 (config?.evaluation?.ShowOptimalKTable ?? false));
 
-        // Build optimal-k chart data.
-        // Automatic mode gets full k-range scores; manual mode gets the selected k point
-        // so the chart can still be shown in output when user chooses k manually.
         const elbowData = chartSelection
             ? chartSelection.scores.map((item: any) => {
                   const isSilhouetteMethod =
@@ -751,9 +660,7 @@ export async function generateComprehensiveKMedoidsOutput(
                           : (item.score ?? 0);
                   return {
                       k: item.k,
-                      // totalCost always carries the elbow/WCSS curve if available.
                       totalCost: resolvedTotalCost,
-                      // silhouetteScore is always the actual silhouette value
                       silhouetteScore:
                           item.silhouetteScore != null && isFinite(item.silhouetteScore)
                               ? item.silhouetteScore
@@ -770,15 +677,12 @@ export async function generateComprehensiveKMedoidsOutput(
                             }]
             : undefined;
 
-        // Calculate medoid distance matrix in standardized space
-        // (same space used for PAM clustering).
         const medoidDistanceMatrix = calculateMedoidDistanceMatrix(
             clusteringMatrix,
             safeMedoids,
             distanceMetric
         );
 
-        // Silhouette scores per cluster
         const silhouettePerCluster: SilhouetteClusterScore[] = clusterProfiles.map(profile => {
             const clusterIdx = profile.clusterLabel - 1;
             const clusterScores = silhouetteScores
@@ -793,28 +697,21 @@ export async function generateComprehensiveKMedoidsOutput(
             };
         });
 
-        // Yield before building comprehensive output object + tables
         await yieldToUI();
 
         const claraNumSamples = config?.iterate?.NumSamples ?? 5;
         const claraConfiguredSampleSize = config?.iterate?.SampleSize ?? (40 + 2 * k);
         const claraEffectiveSampleSize = Math.min(claraConfiguredSampleSize, n);
 
-        // ── Priority 1: dedicated sample_costs field (new WASM builds) ──
-        // ── Priority 2: cost_history fallback (also populated by new WASM for CLARA) ──
         const rawSampleCosts: number[] | undefined =
             normalizedMethod === "CLARA"
                 ? (() => {
-                    // Primary: result.sample_costs sent by new WASM builds
                     if (Array.isArray(result.sample_costs) && result.sample_costs.length > 0) {
-                        console.log("[ComprehensiveOutput] CLARA: using result.sample_costs =", result.sample_costs);
                         return (result.sample_costs as number[]).filter(
                             (c: unknown) => typeof c === "number" && isFinite(c as number)
                         );
                     }
-                    // Fallback: cost_history is also set to per-sample costs by the same WASM update
                     if (Array.isArray(result.cost_history) && result.cost_history.length > 0) {
-                        console.log("[ComprehensiveOutput] CLARA: falling back to result.cost_history =", result.cost_history);
                         return (result.cost_history as number[]).filter(
                             (c: unknown) => typeof c === "number" && isFinite(c as number)
                         );
@@ -830,18 +727,16 @@ export async function generateComprehensiveKMedoidsOutput(
                 ? claraSamplingCosts.length
                 : claraNumSamples;
 
-        // Prefer the 1-based best-sample index sent by WASM; compute from min cost as fallback.
+        // Utamakan indeks sampel terbaik dari WASM; fallback ke sampel dengan cost minimum.
         const claraBestSampleIndex: number | undefined =
             normalizedMethod === "CLARA"
                 ? (() => {
-                    // Primary: WASM-computed best sample index
                     if (
                         typeof result.clara_best_sample_index === "number" &&
                         result.clara_best_sample_index > 0
                     ) {
                         return result.clara_best_sample_index;
                     }
-                    // Fallback: derive from minimum cost
                     if (claraSamplingCosts && claraSamplingCosts.length > 0) {
                         return claraSamplingCosts.findIndex(
                             (cost) => cost === Math.min(...claraSamplingCosts)
@@ -851,14 +746,6 @@ export async function generateComprehensiveKMedoidsOutput(
                 })()
                 : undefined;
 
-        console.log("[ComprehensiveOutput] CLARA convergence summary:", {
-            claraSamplingCosts,
-            claraBestSampleIndex,
-            claraNumSamples,
-            claraEffectiveSampleSize,
-        });
-
-        // Build comprehensive output
         const resolvedOptimalKMethod: "silhouette" | "elbow" | undefined = chartSelection
             ? (
             chartSelection.method === "Silhouette" ||
@@ -904,7 +791,6 @@ export async function generateComprehensiveKMedoidsOutput(
                                 sampleIndex: idx + 1,
                                 sampleSize: claraEffectiveSampleSize,
                                 cost,
-                                // Use the per-sample PAM iterations sent from WASM
                                 pamIterations: (Array.isArray(result.sample_pam_iterations) && result.sample_pam_iterations.length > idx)
                                     ? result.sample_pam_iterations[idx]
                                     : (result.iterations ?? 0),
@@ -924,9 +810,9 @@ export async function generateComprehensiveKMedoidsOutput(
                 perCluster: silhouettePerCluster,
                 perObject: silhouetteScores.map(s => s != null && isFinite(s) ? s : 0)
             },
-            tables: [], // Will be populated below
+            tables: [], // diisi di bawah
             visualizationOptions: {
-                // Convergence mode always exposes iteration history details.
+                // Mode konvergensi selalu menampilkan detail iteration history
                 showIterationHistory:
                     (config?.results?.ShowConvergenceAlgorithm ?? true)
                         ? true
@@ -939,11 +825,9 @@ export async function generateComprehensiveKMedoidsOutput(
                 showClusterMedoids: config?.results?.ShowClusterMedoids ?? true,
                 showObjectAssignments: config?.results?.ShowClusterMembership ?? false,
                 showCaseCount: config?.results?.ShowCaseCount ?? true,
-                // Total Cost is always shown in output.
                 showTotalCost: true,
                 showSilhouettePerObject: config?.evaluation?.ShowSilhouettePlot ?? false,
-                // "Optimal K Chart" and its companion table both live in the Evaluation tab.
-                // Falls back to the pre-reorg Options field so saved configs keep working.
+                // Fallback ke field Options lama agar config tersimpan sebelum reorganisasi tetap jalan
                 showOptimalKChart:
                     config?.evaluation?.ShowOptimalKChart ??
                     config?.options?.ShowOptimalKChart ??
@@ -953,7 +837,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 showConvergenceAlgorithm: config?.results?.ShowConvergenceAlgorithm ?? true,
                 showSamplingHistory: config?.results?.ShowSamplingHistory ?? true,
                 // Grafik konvergensi kini satu grup dengan tabelnya di tab Results.
-                // Falls back to the pre-reorg Options field so saved configs keep working.
+                // Fallback ke field Options lama agar config tersimpan tetap jalan.
                 showConvergenceChart:
                     config?.results?.ShowConvergenceChart ??
                     config?.options?.ShowConvergenceChart ??
@@ -962,7 +846,6 @@ export async function generateComprehensiveKMedoidsOutput(
             variables: variables.map(v => ({ name: v.name, label: v.label || v.name }))
         };
 
-        // Create tables (keeping existing format for compatibility)
         const allTables: Table[] = [];
         const caseSummary = buildCaseProcessingSummary(n, nTotal, {
             initialN: analysisResult.preprocessingSummary?.initialN,
@@ -972,7 +855,6 @@ export async function generateComprehensiveKMedoidsOutput(
             missingByVariable: analysisResult.preprocessingSummary?.missingByVariable,
         });
 
-        // Case Processing Summary table (should be first) - SPSS format
         allTables.push({
             key: "case_processing_summary",
             title: "Case Processing Summary",
@@ -989,7 +871,6 @@ export async function generateComprehensiveKMedoidsOutput(
             ],
         });
 
-        // Number of Cases per Cluster table - SPSS format
         allTables.push({
             key: "number_of_cases_per_cluster",
             title: "Number of Cases per Cluster",
@@ -1010,7 +891,6 @@ export async function generateComprehensiveKMedoidsOutput(
             ],
         });
 
-        // Analysis Settings table
         allTables.push({
             key: "analysis_settings",
             title: "Analysis Settings",
@@ -1028,7 +908,6 @@ export async function generateComprehensiveKMedoidsOutput(
 
         const hideBuildAverage = normalizedMethod === "CLARA" || normalizedMethod === "CLARANS";
 
-        // Summary table
         allTables.push({
             key: "summary",
             title: "Clustering Summary",
@@ -1048,7 +927,6 @@ export async function generateComprehensiveKMedoidsOutput(
             ]
         });
 
-        // Cluster profiles table
         allTables.push({
             key: "cluster_profiles",
             title: "Cluster Profiles",
@@ -1073,8 +951,6 @@ export async function generateComprehensiveKMedoidsOutput(
             }))
         });
 
-        // Total Cost / Dissimilarity table — same metrics shown in the Total Cost / Dissimilarity
-        // summary card, as its own titled table section.
         allTables.push({
             key: "total_cost_dissimilarity",
             title: "Total Cost / Dissimilarity",
@@ -1089,9 +965,6 @@ export async function generateComprehensiveKMedoidsOutput(
             ],
         });
 
-        // Cluster membership table — same shape as the "Cluster Assignments" table
-        // shown in the Data Tables tab (ID, Cluster, Distance, Silhouette, variables,
-        // plus standardized variables when normalization is enabled).
         const membershipNormalizationLabel = normalizationMethod === "zscore"
             ? "Z-score"
             : normalizationMethod === "minmax"
@@ -1142,7 +1015,6 @@ export async function generateComprehensiveKMedoidsOutput(
             })),
         });
 
-        // Medoids table
         const medoidStandardizedValues = useNormalization
             ? medoids.flatMap((medoid) =>
                   variables.map((v) => medoid.standardizedAttributes?.[v.name] ?? 0)
@@ -1193,9 +1065,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 : {}),
         });
 
-        // Convergence Algorithm table — same shape as the table
-        // rendered by ConvergenceAlgorithmPanel in the Convergence tab. Not applicable to
-        // CLARA, which shows a Sampling History table instead.
+        // Tidak berlaku untuk CLARA, yang menampilkan tabel Sampling History
         if (normalizedMethod !== "CLARA" && iterationHistory.length > 0) {
             const fmtConvergenceCost = (val: number): string => {
                 if (!isFinite(val)) return "—";
@@ -1247,7 +1117,6 @@ export async function generateComprehensiveKMedoidsOutput(
             });
         }
 
-        // Distance Matrix Between Medoids table — mirrors DistanceMatrixHeatmap's own table.
         allTables.push({
             key: "distance_matrix_medoids",
             title: "Distance Matrix Between Medoids",
@@ -1272,12 +1141,9 @@ export async function generateComprehensiveKMedoidsOutput(
 
         comprehensiveOutput.tables = allTables;
 
-        console.log("💾 Saving to result store...");
 
-        // Save to result store THE NEW COMPREHENSIVE FORMAT
         const titleMessage = `K-Medoids Cluster Analysis (${method})`;
         const logId = await addLog({ log: titleMessage });
-        console.log("✅ Log created:", logId);
 
         const analyticId = await addAnalytic(logId, {
             title: `K-Medoids Clustering Results`,
@@ -1285,79 +1151,47 @@ export async function generateComprehensiveKMedoidsOutput(
                 ? `Automatic k selection: k=${automaticKSelection.optimalK} (${automaticKSelection.method})`
                 : `Manual k selection: k=${k}, Algorithm: ${method}`,
         });
-        console.log("✅ Analytic created:", analyticId);
 
-        // Save Case Processing Summary as separate statistic (first output)
         const caseProcessingSummaryTable = allTables.find(t => t.key === "case_processing_summary");
         if (caseProcessingSummaryTable) {
-            const statId1 = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Case Processing Summary`,
                 description: `Case Processing Summary`,
                 output_data: JSON.stringify({ tables: [caseProcessingSummaryTable] }),
-                // Deliberately not the shared "Case Processing Summary" key: that name is
-                // registered in the global StatisticsComponents registry (outside this module)
-                // to a component with no Copy/SVG buttons. Using a distinct components value
-                // here makes ResultOutput fall back to the generic DataTableRenderer path,
-                // which matches the standard table template (title + Copy/SVG buttons).
                 components: `K-Medoids Case Processing Summary`,
             });
-            console.log("✅ Case Processing Summary saved:", statId1);
         }
 
-        // Save Number of Cases per Cluster as separate statistic (own titled section, like Case Processing Summary)
-        // Gated by the "Number of Cases per Cluster" checkbox in the Results tab.
         const numberOfCasesPerClusterTable = allTables.find(t => t.key === "number_of_cases_per_cluster");
         if (numberOfCasesPerClusterTable && (comprehensiveOutput.visualizationOptions?.showCaseCount ?? true)) {
-            const statId1a = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Number of Cases per Cluster`,
                 description: `Number of Cases per Cluster`,
                 output_data: JSON.stringify({ tables: [numberOfCasesPerClusterTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Number of Cases per Cluster`,
             });
-            console.log("✅ Number of Cases per Cluster saved:", statId1a);
         }
 
-        // Save Cluster Profiles as separate statistic (own titled section, like Case Processing Summary)
         const clusterProfilesTable = allTables.find(t => t.key === "cluster_profiles");
         if (clusterProfilesTable) {
-            const statId1b = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Cluster Profiles`,
                 description: `Cluster Profiles`,
                 output_data: JSON.stringify({ tables: [clusterProfilesTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Cluster Profiles`,
             });
-            console.log("✅ Cluster Profiles saved:", statId1b);
         }
 
-        // Save Total Cost / Dissimilarity as separate statistic (own titled section, like Case
-        // Processing Summary)
         const totalCostDissimilarityTable = allTables.find(t => t.key === "total_cost_dissimilarity");
         if (totalCostDissimilarityTable) {
-            const statId1cost = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Total Cost / Dissimilarity`,
                 description: `Total Cost / Dissimilarity`,
                 output_data: JSON.stringify({ tables: [totalCostDissimilarityTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Total Cost Dissimilarity`,
             });
-            console.log("✅ Total Cost / Dissimilarity saved:", statId1cost);
         }
 
-        // Save Cluster Membership as separate statistic (own titled section, like Case Processing Summary).
-        // Uses the same customRenderer hook as the comprehensive analysis (below) so the table
-        // gets real pagination (Prev/Next) instead of rendering all rows at once via the generic
-        // DataTableRenderer path. `tables`/`distanceMatrix` are dropped to avoid duplicating the
-        // (potentially large) formatted tables and full distance matrix already stored in the
-        // comprehensive analysis statistic — the membership view only needs `assignments`.
-        // Gated by the "Cluster Membership" checkbox in the Results tab.
         const clusterMembershipTable = allTables.find(t => t.key === "cluster_membership");
         if (clusterMembershipTable && (comprehensiveOutput.visualizationOptions?.showObjectAssignments ?? true)) {
             const clusterMembershipOutput: KMedoidsOutput = {
@@ -1366,7 +1200,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "clusterMembershipOnly",
             };
-            const statId1c = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Cluster Membership`,
                 description: `Cluster Membership`,
                 output_data: JSON.stringify({
@@ -1375,55 +1209,35 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Cluster Membership`,
             });
-            console.log("✅ Cluster Membership saved:", statId1c);
         }
 
-        // Save Cluster Medoids as separate statistic (own titled section, like Case Processing Summary)
-        // Gated by the "Cluster Medoids" checkbox in the Results tab.
         const medoidsTable = allTables.find(t => t.key === "medoids");
         if (medoidsTable && (comprehensiveOutput.visualizationOptions?.showClusterMedoids ?? true)) {
-            const statId1d = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Cluster Medoids`,
                 description: `Cluster Medoids`,
                 output_data: JSON.stringify({ tables: [medoidsTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Cluster Medoids`,
             });
-            console.log("✅ Cluster Medoids saved:", statId1d);
         }
 
-        // Save Distance Matrix Between Medoids as separate statistic (own titled section, like
-        // Case Processing Summary)
         const distanceMatrixMedoidsTable = allTables.find(t => t.key === "distance_matrix_medoids");
         if (distanceMatrixMedoidsTable && (comprehensiveOutput.visualizationOptions?.showDistanceMatrixBetweenMedoids ?? true)) {
-            const statId1m = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Distance Matrix Between Medoids`,
                 description: `Distance Matrix Between Medoids`,
                 output_data: JSON.stringify({ tables: [distanceMatrixMedoidsTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Distance Matrix Between Medoids`,
             });
-            console.log("✅ Distance Matrix Between Medoids saved:", statId1m);
         }
 
-        // Save Distance Matrix Table (All Objects) as separate statistic (own titled section, like
-        // Case Processing Summary). Uses the same customRenderer hook so the section renders the
-        // actual full pairwise distance matrix table (paginated, sorted by cluster) with its
-        // Excel/CSV download buttons, instead of a flat data table. Only saved when the matrix
-        // was actually built (opt-in, since it's O(n²) and can be large). Unlike the other
-        // customRenderer statistics, `distanceMatrix` is deliberately kept (not cleared) here —
-        // it's the whole point of this section.
         if (comprehensiveOutput.distanceMatrix) {
             const distanceMatrixTableOutput: KMedoidsOutput = {
                 ...comprehensiveOutput,
                 tables: [],
                 viewMode: "distanceMatrixTableOnly",
             };
-            const statId1n = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Distance Matrix Table (All Objects)`,
                 description: `Distance Matrix Table (All Objects)`,
                 output_data: JSON.stringify({
@@ -1432,33 +1246,18 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Distance Matrix Table`,
             });
-            console.log("✅ Distance Matrix Table (All Objects) saved:", statId1n);
         }
 
-        // Save Algorithm Convergence (table) as separate statistic (own titled section, like Case
-        // Processing Summary). Gated by the "Algorithm Convergence" checkbox in the Results tab.
-        // Plain table only — the cost-per-iteration chart is a separate, independently-toggled
-        // section below (see "Algorithm Convergence Chart"), controlled by its own checkbox in
-        // the Options/Visualization tab so users can opt into the table without the chart or vice versa.
         const convergenceAlgorithmTable = allTables.find(t => t.key === "convergence_algorithm");
         if (convergenceAlgorithmTable && (comprehensiveOutput.visualizationOptions?.showConvergenceAlgorithm ?? true)) {
-            const statId1e = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Algorithm Convergence`,
                 description: `Algorithm Convergence`,
                 output_data: JSON.stringify({ tables: [convergenceAlgorithmTable] }),
-                // Distinct components value (not the shared registry key) so ResultOutput
-                // falls back to the generic DataTableRenderer path, matching the standard
-                // table template (title + Copy/SVG buttons) — same approach as above.
                 components: `K-Medoids Algorithm Convergence`,
             });
-            console.log("✅ Algorithm Convergence saved:", statId1e);
         }
 
-        // Save Algorithm Convergence Chart as a separate, independently-toggled statistic.
-        // Gated by the "Algorithm Convergence Chart" checkbox in the Options/Visualization tab
-        // (not the Results-tab table checkbox above) so the chart can be shown/hidden on its own.
-        // Uses the same customRenderer hook so the section renders the actual ConvergenceChart
-        // (dual-axis: total cost + improvement per iteration) instead of a flat data table.
         if (
             normalizedMethod !== "CLARA" &&
             iterationHistory.length > 0 &&
@@ -1470,7 +1269,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "convergenceChartOnly",
             };
-            const statId1eChart = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Algorithm Convergence Chart`,
                 description: `Algorithm Convergence Chart`,
                 output_data: JSON.stringify({
@@ -1479,12 +1278,9 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Algorithm Convergence Chart`,
             });
-            console.log("✅ Algorithm Convergence Chart saved:", statId1eChart);
         }
 
-        // Save Sampling History (CLARA) as separate statistic (own titled section, like Case
-        // Processing Summary). Only applicable to the CLARA method, and gated by the
-        // "Sampling History (CLARA)" checkbox in the Results tab.
+        // Hanya untuk metode CLARA
         if (
             normalizedMethod === "CLARA" &&
             claraSamplingCosts &&
@@ -1515,19 +1311,14 @@ export async function generateComprehensiveKMedoidsOutput(
                     };
                 }),
             };
-            const statId1sh = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Sampling History (CLARA)`,
                 description: `Sampling History (CLARA)`,
                 output_data: JSON.stringify({ tables: [samplingHistoryTable] }),
                 components: `K-Medoids Sampling History`,
             });
-            console.log("✅ Sampling History (CLARA) saved:", statId1sh);
         }
 
-        // Save Silhouette Score as separate statistic (own titled section, like Case Processing
-        // Summary). Uses the same customRenderer hook as Cluster Membership so the section renders
-        // the actual silhouette plot (one bar per object, R style) instead of a flat data table.
-        // Gated by the "Silhouette Score" checkbox in the Evaluation tab.
         if (comprehensiveOutput.visualizationOptions?.showSilhouettePerObject ?? false) {
             const silhouetteOutput: KMedoidsOutput = {
                 ...comprehensiveOutput,
@@ -1535,7 +1326,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "silhouettePerObjectOnly",
             };
-            const statId1f = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Silhouette Score`,
                 description: `Silhouette Score`,
                 output_data: JSON.stringify({
@@ -1544,9 +1335,8 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Silhouette Score`,
             });
-            console.log("✅ Silhouette Score saved:", statId1f);
 
-            // Companion plain-table statistic — see the Cluster Membership comment above.
+            // Tabel ringkasan pendamping, dipakai untuk cetak PDF
             const silhouettePrintTable: Table = {
                 key: "silhouette_by_cluster_print",
                 title: "Silhouette Score",
@@ -1565,20 +1355,16 @@ export async function generateComprehensiveKMedoidsOutput(
                     Count: s.count.toString(),
                 })),
             };
-            const statId1fTable = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Silhouette Score (Table)`,
                 description: `Summary table of silhouette values per cluster, used for PDF printing.`,
                 output_data: JSON.stringify({ tables: [silhouettePrintTable] }),
                 components: `K-Medoids Silhouette Score Table`,
             });
-            console.log("✅ Silhouette Score (print table) saved:", statId1fTable);
         }
 
-        // Save Optimal K Chart as separate statistic (own titled section, like Case Processing
-        // Summary). Uses the same customRenderer hook so the section renders the actual optimal-K
-        // chart (silhouette curve, elbow curve, or elbow with silhouette annotation) instead of a
-        // flat data table. Gated by the "Optimal K Chart" checkbox in the Options tab
-        // (Visualization); the data table below has its own checkbox in the Evaluation tab.
+        // Chart dikontrol checkbox "Optimal K Chart" di tab Options (Visualization);
+        // tabelnya punya checkbox sendiri di tab Evaluation.
         const hasOptimalKData =
             Boolean(comprehensiveOutput.elbowData && comprehensiveOutput.elbowData.length > 0) ||
             Boolean(comprehensiveOutput.optimalKMethod);
@@ -1591,7 +1377,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "optimalKChartOnly",
             };
-            const statId1h = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Optimal K Chart`,
                 description: `Optimal K Chart`,
                 output_data: JSON.stringify({
@@ -1600,11 +1386,8 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Optimal K Chart`,
             });
-            console.log("✅ Optimal K Chart saved:", statId1h);
         }
 
-        // Save Optimal K Table as its own statistic — gated by the "Optimal K Table" checkbox
-        // in the Evaluation tab, independent of the chart above.
         const shouldShowOptimalKTable =
             comprehensiveOutput.visualizationOptions?.showOptimalKTable ?? false;
         if (shouldShowOptimalKTable && elbowData && elbowData.length > 0) {
@@ -1622,18 +1405,15 @@ export async function generateComprehensiveKMedoidsOutput(
                     SilhouetteScore: point.silhouetteScore.toFixed(4),
                 })),
             };
-            const statId1hTable = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Optimal K Table`,
                 description: `Optimal K data table (cost & silhouette for each candidate k).`,
                 output_data: JSON.stringify({ tables: [optimalKPrintTable] }),
                 components: `K-Medoids Optimal K Table`,
             });
-            console.log("✅ Optimal K Table saved:", statId1hTable);
         }
 
-        // Save PCA Projection as separate statistic (own titled section, like Case Processing
-        // Summary). Uses the same customRenderer hook so the section renders the actual PCA
-        // projection scatter plot instead of a flat data table. Only meaningful with >2 variables.
+        // PCA hanya bermakna jika variabel lebih dari 2
         const shouldShowPCAProjection =
             (comprehensiveOutput.visualizationOptions?.showPCAProjection ?? true) &&
             variables.length > 2;
@@ -1644,7 +1424,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "pcaProjectionOnly",
             };
-            const statId1j = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `PCA Projection`,
                 description: `PCA Projection`,
                 output_data: JSON.stringify({
@@ -1653,12 +1433,8 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids PCA Projection`,
             });
-            console.log("✅ PCA Projection saved:", statId1j);
         }
 
-        // Save Cluster Scatter Plot as separate statistic (own titled section, like Case
-        // Processing Summary). Uses the same customRenderer hook so the section renders the
-        // actual 2D scatter plot (with its X/Y variable selectors) instead of a flat data table.
         if (comprehensiveOutput.visualizationOptions?.showClusterScatterPlot ?? true) {
             const clusterScatterPlotOutput: KMedoidsOutput = {
                 ...comprehensiveOutput,
@@ -1666,7 +1442,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "clusterScatterPlotOnly",
             };
-            const statId1k = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Cluster Scatter Plot`,
                 description: `Cluster Scatter Plot`,
                 output_data: JSON.stringify({
@@ -1675,12 +1451,8 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Cluster Scatter Plot`,
             });
-            console.log("✅ Cluster Scatter Plot saved:", statId1k);
         }
 
-        // Save Cluster Size Distribution as separate statistic (own titled section, like Case
-        // Processing Summary). Uses the same customRenderer hook so the section renders the
-        // actual donut chart instead of a flat data table.
         if (comprehensiveOutput.visualizationOptions?.showClusterSizeDistribution ?? true) {
             const clusterSizeDistributionOutput: KMedoidsOutput = {
                 ...comprehensiveOutput,
@@ -1688,7 +1460,7 @@ export async function generateComprehensiveKMedoidsOutput(
                 distanceMatrix: undefined,
                 viewMode: "clusterSizeDistributionOnly",
             };
-            const statId1l = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `Cluster Size Distribution`,
                 description: `Cluster Size Distribution`,
                 output_data: JSON.stringify({
@@ -1697,24 +1469,12 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `K-Medoids Cluster Size Distribution`,
             });
-            console.log("✅ Cluster Size Distribution saved:", statId1l);
         }
 
-        // Yield to UI before the large JSON.stringify + IndexedDB write.
-        // The comprehensiveOutput object can be 200 KB–2 MB for large datasets;
-        // serialising it synchronously would freeze the main thread for 50–400 ms.
         await yieldToUI();
 
-        // Save comprehensive output - Use custom renderer approach.
-        // Store as a special marker that will trigger custom OutputRenderer.
-        // This entry's only visible content is the Overall Quality Assessment card (the "full"
-        // viewMode branch in OutputRenderer renders nothing else), so it must be skipped entirely
-        // when the checkbox is off — ResultOutput renders `components` as a section header for
-        // ANY statistic sharing that name regardless of the card's own internal visibility check,
-        // so merely hiding the card left a bare "Overall Quality Assessment" header + description
-        // behind even when unchecked.
         if (comprehensiveOutput.visualizationOptions?.showOverallQualityAssessment ?? true) {
-            const statId2 = await addStatistic(analyticId, {
+            await addStatistic(analyticId, {
                 title: `K-Medoids Comprehensive Analysis`,
                 description: `Complete clustering analysis with ${k} clusters (Silhouette: ${averageSilhouette.toFixed(3)})`,
                 output_data: JSON.stringify({
@@ -1723,7 +1483,6 @@ export async function generateComprehensiveKMedoidsOutput(
                 }),
                 components: `Overall Quality Assessment`,
             });
-            console.log("✅ Comprehensive Analysis saved:", statId2);
         }
 
         return { success: true, output: comprehensiveOutput };
