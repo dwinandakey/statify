@@ -13,4 +13,4 @@ LULUS  prediksi dok. 7 = pos, dok. 8 = neg
 LULUS  dokumen kosong -> NotScored (null)
 SEMUA LULUS
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=0.23 started=2026-10-08 00:17:55 +07:00 cmd=node testing\thesis-eval\headless\selftest.mjs cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.24 started=2026-10-08 10:29:54 +07:00 cmd=node testing\text_analytics_eval\headless\selftest.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

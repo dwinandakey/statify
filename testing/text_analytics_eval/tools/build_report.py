@@ -182,12 +182,18 @@ def auto_counts():
 
 def auto_jestfull():
     out = []
-    for plat, pat in (("Windows", "jest_final_*_win.json"), ("VM Linux", "jest_final_*_vm.json")):
-        s, t, p, f, n = jest_counts(pat)
-        if n:
-            out.append(f"| {plat} | {n} | {s} | {fmt(t)} | {fmt(p)} | {f} |")
-        else:
-            out.append(f"| {plat} | 0 | NOT RUN | NOT RUN | NOT RUN | NOT RUN |")
+    # Windows: eksekusi penuh = tes lama (baseline_jest_*_win.json) + tes evaluasi (jest_<track>_win.json), dijalankan terpisah oleh run_all.ps1
+    s1, t1, p1, f1, n1 = jest_counts("baseline_jest_*_win.json")
+    s2, t2, p2, f2, n2 = jest_counts("jest_[A-F]*_win.json")
+    if n1 + n2:
+        out.append(f"| Windows (baseline {fmt(t1)} + evaluasi {fmt(t2)}) | {n1 + n2} | {s1 + s2} | {fmt(t1 + t2)} | {fmt(p1 + p2)} | {f1 + f2} |")
+    else:
+        out.append("| Windows | 0 | NOT RUN | NOT RUN | NOT RUN | NOT RUN |")
+    s, t, p, f, n = jest_counts("jest_final_*_vm.json")
+    if n:
+        out.append(f"| VM Linux | {n} | {s} | {fmt(t)} | {fmt(p)} | {f} |")
+    else:
+        out.append("| VM Linux | 0 | NOT RUN | NOT RUN | NOT RUN | NOT RUN |")
     head = ["| Platform | Jumlah potongan eksekusi | Suite | Tes | Lulus | Gagal |", "|---|---|---|---|---|---|"]
     return "\n".join(head + out) + "\n"
 
@@ -233,15 +239,20 @@ def auto_notrun():
     if os.path.exists(ep) and "BELUM DIJALANKAN (perangkat skripsi)" in read(ep):
         rows.append("| Tabel waktu eksekusi Track E pada perangkat skripsi (peramban dan headless) | NOT RUN | Harus diukur di Lenovo IdeaPad Gaming 3 "
                     "(Windows 11); hasil sandbox/VM hanya uji asap dan tidak dipakai sebagai angka buku. |")
-    if os.path.exists(ep) and re.search(r"Dataset ≥ 20\.000 dokumen \| NOT RUN", read(ep)):
+    # hanya blok "Tabel perangkat skripsi" (tabel VM/sandbox memang NOT RUN dan bukan angka buku)
+    ep_txt = read(ep) if os.path.exists(ep) else ""
+    i0 = ep_txt.find("### Tabel perangkat skripsi")
+    i1 = ep_txt.find("### UJI ASAP", i0 + 1) if i0 >= 0 else -1
+    skripsi_blk = ep_txt[i0:i1] if i0 >= 0 and i1 > i0 else ""
+    if re.search(r"Dataset ≥ 20\.000 dokumen[^|]*\| NOT RUN", skripsi_blk) or (i0 < 0 and os.path.exists(ep)):
         rows.append("| Dataset >= 20.000 dokumen (Track E) | NOT RUN | Sumber nyata yang tersedia hanya 17.974 dokumen; 20 Newsgroups belum terunduh "
                     "(butuh Python dengan scikit-learn dan jaringan; lihat `logs/perf_prepare_datasets.txt`). Tidak ada penggandaan data untuk mencapai 20.000. |")
     rows.append("| Pengujian manual M-01..M-36 (`C_manual_checklist.md`) dan MF-01..MF-05 (`F_manual_checklist.md`) | MANUAL, belum dijalankan | "
                 "Memerlukan aplikasi nyata (WASM, Data Editor, Output Viewer) dan tangkapan layar oleh Yedija. |")
-    rows.append("| Playwright end-to-end aplikasi penuh (`perf/e2e_full_app.spec.ts`) | NOT RUN | Ditulis tetapi tidak divalidasi: server Next.js tidak dijalankan di sandbox. |")
+    rows.append("| Playwright end-to-end aplikasi penuh (`perf/e2e_full_app.spec.ts`) | NOT RUN | Ditulis tetapi tidak pernah dijalankan: tidak dipanggil oleh `run_E.ps1` dan butuh server Next.js penuh; pengukuran waktu memakai jalur peramban (harness) dan headless. |")
     rows.append("| Cakupan Rust (`cargo llvm-cov`) | NOT RUN | `cargo-llvm-cov` belum terpasang di Windows; hanya estimasi statis celah (A_unit.md 4.2), bukan cakupan terukur. |")
     rows.append("| SMS Spam dan SmSA pada WEKA di Windows (Track D) | NOT RUN | Hanya dijalankan pada OpenJDK 11 di VM Linux; pengulangan di Windows hanya untuk pilkada (catatan agen WEKA, log tidak ada di salinan ini). |")
-    rows.append("| STWV + Sastrawi pada SMS Spam dan gabungan (Track E) | GAGAL (bukan NOT RUN) | Wasm panic `unreachable` pada sastrawi-rs 0.5.1, lihat BUGS.md E-01. |")
+    rows.append("| STWV + Sastrawi pada SMS Spam, gabungan, dan dataset >= 20.000 dokumen (Track E) | GAGAL (bukan NOT RUN) | Wasm panic `unreachable` pada sastrawi-rs 0.5.1, lihat BUGS.md E-01. |")
     return "\n".join(rows) + "\n"
 
 

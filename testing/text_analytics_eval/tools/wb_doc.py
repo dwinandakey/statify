@@ -5,12 +5,16 @@ sys.path.insert(0, os.path.dirname(__file__))
 from wb_synth import *
 from wb_gen import TESTFILES, EVAL, WB
 
-LOG = os.path.join(EVAL, "logs", "jest_B_vm.json")
+_LOGW = os.path.join(EVAL, "logs", "jest_B_win.json")
+_LOGV = os.path.join(EVAL, "logs", "jest_B_vm.json")
+LOG = _LOGW if os.path.exists(_LOGW) else _LOGV      # Windows (config produksi) diutamakan
+LABEL = "Win" if LOG == _LOGW else "VM"
+LOGNAME = "jest_B_win.json" if LABEL == "Win" else "jest_B_vm.json"
 res = {}
 if os.path.exists(LOG):
     d = json.load(open(LOG, encoding="utf-8"))
     for s in d["testResults"]:
-        fn = re.sub(r"\.thesis(?![A-Za-z_])", ".eval", os.path.basename(s["name"]))  # log lama memakai nama lama
+        fn = re.sub(r"\.thesis(?![A-Za-z_])", ".eval", re.split(r"[\\/]", s["name"])[-1])  # log lama memakai nama lama
         for a in s["assertionResults"]:
             res[(fn, re.sub(r"(?<![A-Za-z_.-])thesis(?= [A-F][(:\s])", "eval", a["fullName"]))] = a["status"]
 
@@ -63,7 +67,7 @@ def basis_table(key, a):
 
 
 def actual(key, a):
-    fn = os.path.basename(TESTFILES[key][1])
+    fn = re.split(r"[\\/]", TESTFILES[key][1])[-1]
     ps = [res.get((fn, r["title"])) for r in a["rows"]]
     npass = sum(1 for x in ps if x == "passed")
     return npass, len(ps), ps
@@ -82,8 +86,9 @@ def section(key, a, intro, decisions, extra):
            "### Basis set jalur independen", "", extra["basis_note"], "", basis_table(key, a), ""]
     if extra.get("after_basis"):
         out += [extra["after_basis"], ""]
-    out += [f"Hasil eksekusi di VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi): {npass} dari {n} tes jalur lulus"
-            + ("" if npass == n else "; ada yang tidak lulus, lihat log") + ".", ""]
+    _src = ("Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi)" if LABEL == "Win"
+            else "VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi)")
+    out += [f"Hasil eksekusi di {_src}: {npass} dari {n} tes jalur lulus" + ("" if npass == n else "; ada yang tidak lulus, lihat log") + ".", ""]
     return "\n".join(out)
 
 
@@ -91,7 +96,7 @@ def main():
     A = {k: f() for k, f in ANALYZERS.items()}
     S = []
     S.append("# Track B — White-box testing dengan basis path (modul Text Analytics Statify)\n")
-    S.append("""Dokumen ini memuat analisis basis path untuk empat fungsi (WB-1 sampai WB-4). Seluruh angka (N, E, P, V(G), rank, jumlah jalur) dihitung oleh skrip `tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py` (Python + numpy) dari edge list yang ditulis tangan dari kode sumber; DOT, PNG, CSV, dan berkas tes dihasilkan oleh `tools/wb_gen.py`, dokumen ini oleh `tools/wb_doc.py`. Status "Lulus/Gagal" pada kolom Hasil berasal dari penanda `⟦jest:...⟧` yang diisi dari `logs/jest_B_vm.json` (lihat bagian Hasil eksekusi).
+    S.append("""Dokumen ini memuat analisis basis path untuk empat fungsi (WB-1 sampai WB-4). Seluruh angka (N, E, P, V(G), rank, jumlah jalur) dihitung oleh skrip `tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py` (Python + numpy) dari edge list yang ditulis tangan dari kode sumber; DOT, PNG, CSV, dan berkas tes dihasilkan oleh `tools/wb_gen.py`, dokumen ini oleh `tools/wb_doc.py`. Status "Lulus/Gagal" pada kolom Hasil berasal dari penanda `⟦jest:...⟧` yang diisi dari `logs/jest_B_win.json`, dengan `logs/jest_B_vm.json` sebagai cadangan (lihat bagian Hasil eksekusi).
 
 ## Konvensi dan keputusan metodologis
 
@@ -146,10 +151,10 @@ def main():
     tp = tn = 0
     for k in ("WB-1", "WB-2", "WB-3", "WB-4"):
         a = A[k]; npass, n, _ = actual(k, a); tp += npass; tn += n
-        rows.append(f"| {k} `{TESTFILES[k][0]}` | {MENU[k]} | {a['g'].metrics()['VG']} | {n} (rank {a['rank']}) | {npass} dari {n} [VM] |")
-    rows.append(f"| Total | | {sum(A[k]['g'].metrics()['VG'] for k in A)} | {tn} | {tp} dari {tn} [VM] |")
+        rows.append(f"| {k} `{TESTFILES[k][0]}` | {MENU[k]} | {a['g'].metrics()['VG']} | {n} (rank {a['rank']}) | {npass} dari {n} [{LABEL}] |")
+    rows.append(f"| Total | | {sum(A[k]['g'].metrics()['VG'] for k in A)} | {tn} | {tp} dari {tn} [{LABEL}] |")
     S.append("\n".join(rows) + "\n")
-    S.append("""Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama dengan rank). Pada WB-3 jumlah ini 12 < V(G) = 13 karena satu jalur basis infeasible. Angka "Kasus lulus" dibaca dari `logs/jest_B_vm.json` (eksekusi di VM Linux dengan ts-jest, 54 tes); angka dari perangkat Windows (config produksi) menunggu `run_B.ps1` dan akan ditulis ke `logs/jest_B_win.json`.
+    S.append("""Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama dengan rank). Pada WB-3 jumlah ini 12 < V(G) = 13 karena satu jalur basis infeasible. Angka "Kasus lulus" dibaca dari `logs/jest_B_win.json` (eksekusi di Windows dengan konfigurasi Jest produksi, 54 tes); `logs/jest_B_vm.json` (VM Linux, ts-jest) hanya pembanding dan dipakai bila log Windows tidak ada.
 
 ## Hubungan dengan tes whitebox lama
 

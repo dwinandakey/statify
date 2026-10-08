@@ -1,8 +1,273 @@
-# REPORT — Evaluasi modul Text Analytics Statify (String to Word Vector, Naive Bayes, Apply Model)
+# HANDOFF — Paket evaluasi modul Text Analytics Statify untuk penulisan skripsi (Bab V)
+
+| Butir | Isi |
+|---|---|
+| Penerima | Agen penulis skripsi (model Opus, penalaran tinggi) yang bekerja untuk Yedija Lewi Suryadi |
+| Pemilik skripsi | Yedija Lewi Suryadi (yedijalewisuryadi@gmail.com) |
+| Objek evaluasi | Modul Text Analytics aplikasi Statify: String to Word Vector (STWV), Naive Bayes (NB), Apply Model (AM), dan pustaka inti Rust `statify-text-core` |
+| Repo | `E:\KULIAH\Skripsi\statify64`; paket evaluasi di `testing/text_analytics_eval/` |
+| Cabang kerja | `text-analytics-eval` (semula `thesis-eval`); pencatatan lingkungan Windows mencatat commit `33b1b7e02cf6f47209020be61fdcd460f6817de1` |
+| Dibangun | 8 Oktober 2026, oleh `tools/build_handoff.py` dari berkas-berkas paket evaluasi (tidak ada angka diketik ulang di lampiran) |
+| Status paket | Semua track A–F sudah dieksekusi penuh di perangkat uji skripsi (Windows 11). Yang belum: pengujian manual di antarmuka nyata (M-01..M-36, MF-01..MF-05) dan beberapa butir pada Bagian 9 |
+
+## 0. Cara memakai dokumen ini
+
+Dokumen ini punya dua lapis. **Bagian 1 sampai 11** adalah arahan ringkas yang ditulis tangan: aturan, hasil, peta penempatan ke Bab V, daftar klaim yang boleh dan tidak boleh ditulis, temuan, keterbatasan, serta tugas yang tersisa. **Lampiran A sampai F** menyalin utuh dokumen sumber (laporan gabungan, temuan, lingkungan, dan dokumen track) sehingga semua angka dapat diperiksa tanpa membuka berkas lain. Cari lampiran dengan mencari judul `# LAMPIRAN A`, `# LAMPIRAN B`, dan seterusnya. Gambar flow graph (`whitebox/*.png`) tidak ikut tertanam; tabel simpul dan daftar sisi sudah ada dalam teks.
+
+Urutan kepercayaan bila ada angka yang tampak bertentangan: (1) log mentah di `logs/` berlabel Windows, (2) `REPORT.md` (Lampiran A), (3) dokumen track (Lampiran D sampai F), (4) arahan di Bagian 1 sampai 11. Bila Anda menemukan konflik yang tidak terjelaskan, **jangan memilih sendiri**: catat dan tanyakan kepada Yedija.
+
+## 1. Aturan integritas data (wajib dipatuhi)
+
+1. **Jangan mengarang atau membulatkan sendiri angka.** Setiap angka di buku harus dapat ditelusuri ke tabel di Lampiran A atau log yang disebut di sana. Bila suatu angka tidak ada, tulis "belum diukur" dan tanyakan.
+2. **Yang tidak dieksekusi ditulis NOT RUN beserta alasannya**, tidak dilunakkan menjadi "diperkirakan lulus". Daftar lengkapnya ada di Bagian 9 dan Lampiran A bagian 11.
+3. **Label perangkat.** Hanya hasil berlabel **[Win]** (Lenovo IdeaPad Gaming 3, Ryzen 5 4600H, Windows 11, konfigurasi Jest produksi) yang boleh menjadi angka resmi di buku. Label **[VM]** (VM Linux, ts-jest, 2 vCPU) dan sandbox cloud hanya pembanding atau uji asap; angka waktu dari keduanya tidak boleh masuk tabel buku.
+4. **Kode produksi tidak diubah** oleh paket ini. Perbandingan cabang evaluasi dengan `dija-v2` (diserahkan Yedija) menunjukkan 702 berkas, seluruhnya berstatus Added, tanpa berkas produksi yang dimodifikasi. Temuan hanya dilaporkan, perbaikannya tidak diterapkan.
+5. **Seed acak 42** di semua tempat; toleransi numerik 1e-6 kecuali ditentukan lain.
+6. **Format tabel.** Kolom tabel buku harus persis seperti spesifikasi asli (Bagian 4). Angka memakai **koma desimal** dan titik pemisah ribuan pada tabel buku (contoh `4.138,3`). Angka di log mentah tetap memakai titik desimal; jangan mencampur.
+7. **Perilaku saat ini bukan berarti perilaku yang benar.** Beberapa tes Rust (misalnya `k1_*` untuk A-1) mengunci perilaku kode apa adanya (tes karakterisasi). Tes itu lulus berarti perilaku tersebut terjadi, bukan berarti perilaku itu diinginkan. Jangan menulis "terbukti benar" untuk hal seperti ini.
+8. **Kesetaraan dengan pembanding bukan bukti kebenaran mutlak.** "Sama dengan scikit-learn" berarti keluaran Statify cocok dengan implementasi acuan itu pada data dan konfigurasi yang diuji.
+9. **Jangan menjalankan atau menyarankan perintah git** kepada Yedija atas nama agen lain; commit dan push dilakukan Yedija sendiri.
+
+## 2. Konteks singkat
+
+**Statify** adalah aplikasi statistik berbasis web (Next.js 15 dan TypeScript) dengan komputasi Rust yang dikompilasi ke WebAssembly dan dijalankan di Web Worker. Modul Text Analytics terdiri dari tiga menu dan satu pustaka:
+
+- **String to Word Vector (STWV)**: mengubah kolom teks menjadi kolom vektor kata `VEC_<kata>` (pembersihan, n-gram, stopword, stemming Sastrawi untuk Indonesia atau Porter untuk Inggris, TF/IDF/normalisasi, Words to Keep, Min term frequency). Sasaran perbandingan: preset "Default Weka" dan preset "scikit-learn".
+- **Naive Bayes (NB)**: Multinomial, Bernoulli, Complement, dan Gaussian; dapat memakai Raw Text (pipeline STWV tertanam) atau kolom Word-Vector; evaluasi holdout atau k-fold; ekspor model JSON.
+- **Apply Model (AM)**: memuat model JSON, memetakan variabel, memprediksi data baru, membulatkan probabilitas keluaran ke 4 desimal (`round4`).
+- **`statify-text-core`**: crate Rust yang dipakai bersama oleh NB dan AM (pipeline teks, formula, model). Versi `sastrawi-rs` berbeda antar-crate (0.5.1 pada STWV; 0.5.3 pada core, NB, AM), lihat temuan D-01.
+
+**Tujuan evaluasi (Bab V skripsi).** Menunjukkan, dengan bukti yang dapat diulang, bahwa modul ini (A) teruji pada tingkat unit, (B) teruji pada tingkat jalur logika, (C) berperilaku sesuai spesifikasi dari sisi pengguna, (D) menghasilkan angka yang sama dengan scikit-learn dan dapat dibandingkan dengan WEKA, (E) berjalan dalam waktu wajar pada ukuran data realistis, dan (F) konsisten ketika ketiga menu dipakai berantai; sekaligus mencatat temuan dan keterbatasannya apa adanya.
+
+**Perangkat uji skripsi.** Lenovo IdeaPad Gaming 3 15ARH05 (kode model 82EY), AMD Ryzen 5 4600H (6 inti, 12 thread), RAM 15,4 GB, Windows 11 Home 10.0.26300, rustc/cargo 1.93.0, Node 24.13.1, Jest 30.0.4, scikit-learn 1.9.1 (Python 3.13.12), WEKA 3.9.6, Chrome 154.0.8037.98, paket daya Balanced, adaptor tersambung. Rincian di Lampiran C.
+
+**Dataset.** `pilkada_train.csv` (630 dokumen) dan `pilkada_test.csv` (270 dokumen), korpus acuan; SMS Spam (5.574 dokumen; 3.901 latih dan 1.673 uji pada Track D); SmSA (11.000 latih dan 500 uji pada Track D; tiga kelas); gabungan ketiganya 17.974 dokumen; dan dataset 36.305 dokumen (gabungan 17.974 ditambah 20 Newsgroups 18.331 dokumen, label campuran 25 kelas) yang **hanya dipakai untuk beban waktu pada Track E**, bukan untuk akurasi. Asal dan lisensi SMS Spam, SmSA, dan 20 Newsgroups belum diverifikasi (Bagian 8).
+
+## 3. Hasil dalam satu halaman
+
+| Track | Apa yang dikerjakan | Hasil utama (semua [Win] kecuali disebut) | Sumber (Lampiran A) |
+|---|---|---|---|
+| Baseline | Menjalankan tes yang sudah ada sebelum paket ini | Rust 450 lulus (inti 91, NB 203, AM 156, STWV 0 tes); Jest 830 lulus (STWV 111, NB 253, AM 466); 0 gagal. Cakupan baris Jest: STWV 52,24%, NB 86,64%, AM 97,21%. Cakupan Rust tidak terukur (`cargo-llvm-cov` tidak terpasang) | Bagian 3 |
+| A. Unit | Tes unit tambahan | 105 tes Jest dan 66 fungsi tes Rust, semua lulus. Mengunci formula (TF, IDF, normalisasi), batas kosakata, pipeline teks, partisi holdout/k-fold MT19937 seed 42, pemuat model | Bagian 4 |
+| B. White-box | Basis path pada 4 fungsi | V(G): WB-1 = 7, WB-2 = 29, WB-3 = 13, WB-4 = 6 (jumlah 55). 54 jalur layak, 54 tes Jest lulus. WB-3 hanya 12 jalur layak independen (rank 12) karena dua predikat membaca variabel yang sama | Bagian 5 |
+| C. Black-box | BB-01..BB-36 | 36 skenario punya pemeriksaan otomatis yang lulus (Jest 35 + 63 + 95 = 193 tes; Rust 31 + 24 + 12 = 67 tes). Komponen manual (M-01..M-36) **belum dijalankan** | Bagian 6 |
+| D. Akurasi | Statify vs scikit-learn vs WEKA | Kelas prediksi Statify = scikit-learn pada **17.221 dari 17.221** prediksi (24 konfigurasi, 3 dataset); metrik identik sampai 6 desimal. WEKA: 264–267 dari 270 pada W=1.000, **270 dari 270** bila kosakata disamakan. Selisih probabilitas ≤ 5,0e-5 dijelaskan seluruhnya oleh pembulatan `round4` | Bagian 7 |
+| E. Waktu | Peramban (Worker asli) dan headless (Node) | STWV default di peramban: 61,1 ms (900 dok) sampai 4.138,3 ms (36.305 dok). NB 10-fold 36.305 dok: 26.624,7 ms (peramban), 17.960,9 ms (headless). Sastrawi gagal pada 3 dataset (E-01) | Bagian 8 |
+| F. Integrasi | IT-01..IT-05 | IT-01, 02, 04, 05 terpenuhi; IT-03 **Lulus dengan catatan** (kriteria 1e-9 tidak terpenuhi secara harfiah pada probabilitas keluaran karena `round4`; terpenuhi pada parameter dan skor acuan) | Bagian 9 |
+| Temuan | `BUGS.md` | 25 butir: 1 tinggi (E-01), 5 sedang (A-1, C2-01, C2-02, C2-03, D-01), sisanya rendah atau informasi | Bagian 10 |
+
+Eksekusi penuh Jest di Windows: 1.283 tes (baseline 830 + evaluasi 453), 75 suite, semua lulus. Seluruh 136 fungsi tes Rust baru (`eval_*.rs`) dikompilasi pada percobaan pertama dan lulus. Eksekusi ulang menyeluruh `run_all.ps1` di Windows pada 8 Oktober 2026 selesai dengan kode keluar 0 pada setiap langkah.
+
+Angka tes per track (Jest [Win] / fungsi tes Rust [Win]): A 105 / 66; B 54 / –; C1 35 / 31; C2 63 / 24; C3 95 / 12; D 3 / 1; F 98 / 2. Jumlah: 453 / 136.
+
+
+## 4. Peta penempatan ke Bab V
+
+Usulan struktur. Sesuaikan dengan template buku Yedija; yang tidak boleh diubah adalah **kolom tabel** dan **angkanya**. "Lampiran A §n" berarti bagian bernomor n di `REPORT.md` yang disalin di Lampiran A.
+
+| Usulan subbab | Isi | Format kolom tabel (persis) | Sumber |
+|---|---|---|---|
+| V.1 Lingkungan dan baseline | Perangkat, versi alat, hasil tes yang sudah ada | `\| Lapisan \| Lokasi pengujian \| Jumlah kasus \| Lulus \| Gagal \| Cakupan baris \|` | Lampiran A §2–3, Lampiran C |
+| V.2 Pengujian unit (Track A) | Cakupan unit baru, tes karakterisasi, estimasi celah | tabel baseline sesudah Track A; daftar tes per area | Lampiran A §4 |
+| V.3 Pengujian white-box (Track B) | Flow graph, V(G), basis set jalur | `\| Simpul \| Pernyataan \|`; `\| Jalur \| Simpul \| Masukan \| Keluaran yang diharapkan \| Hasil \|`; rekap `\| Fungsi \| Menu \| V(G) \| Jalur independen \| Kasus lulus \|` | Lampiran A §5 |
+| V.4 Pengujian black-box (Track C) | 36 skenario | `\| ID \| Fitur \| Skenario \| Hasil yang diharapkan \| Hasil aktual \| Status \| Cara uji (otomatis/manual) \| Bukti \|` | Lampiran A §6 |
+| V.5 Akurasi numerik (Track D) | Perbandingan dengan scikit-learn dan WEKA | `\| Konfigurasi \| Perangkat \| Akurasi \| Kappa \| Macro F1 \|` (6 desimal); `\| Konfigurasi \| Pembanding \| Kelas prediksi sama (x/270) \| Galat absolut maksimum probabilitas \| LRE minimum \|` | Lampiran A §7, Lampiran D |
+| V.6 Waktu eksekusi (Track E) | Skalabilitas menurut ukuran data | `\| Menu dan konfigurasi \| Dataset \| Jumlah term \| Rata-rata (ms) \| Simpangan baku (ms) \|` | Lampiran A §8, Lampiran E |
+| V.7 Integrasi antarmenu (Track F) | IT-01..IT-05 | `\| ID \| Skenario \| Hasil yang diharapkan \| Hasil aktual \| Status \| Bukti \|` | Lampiran A §9, Lampiran F |
+| V.8 Temuan dan pembahasan | Daftar temuan, dampak, usulan | tabel indeks temuan (ID, tingkat, judul) | Lampiran A §10, Lampiran B |
+| V.9 Keterbatasan | Ancaman validitas, NOT RUN | daftar bernomor | Lampiran A §11–12, Bagian 8–9 di sini |
+
+Catatan tata letak. Tabel BB (8 kolom) lebar; pecah per menu (BB-01..13, BB-14..28, BB-29..36) atau pindahkan ke lampiran buku dan beri ringkasan di badan bab. Tabel simpul WB-2 punya puluhan baris; letakkan di lampiran buku dan kutip flow graph serta rekap di badan bab. Tabel Track E ada dua jalur (peramban dan headless): buku boleh memuat keduanya, dengan syarat label jalurnya tetap ditulis.
+
+## 5. Buku klaim: apa yang boleh ditulis
+
+### 5.1 Boleh ditulis tegas (didukung bukti [Win])
+
+1. Seluruh tes lama (Rust 450, Jest 830) lulus sebelum paket evaluasi, sehingga evaluasi dimulai dari baseline hijau. Pustaka STWV Rust tidak memiliki tes sendiri.
+2. 453 tes Jest dan 136 fungsi tes Rust baru lulus; jumlah per track seperti pada Bagian 3.
+3. Kompleksitas siklomatik keempat fungsi white-box: 7, 29, 13, 6, diverifikasi dengan skrip (jumlah sisi, simpul, predikat, dan rank matriks jalur). 54 dari 55 jalur struktural layak dan semuanya lulus; satu jalur WB-3 tidak layak karena `TargetVar` tidak berubah antara dua pemeriksaan.
+4. Kelas prediksi Statify sama dengan scikit-learn 1.9.1 pada 17.221 dari 17.221 prediksi (24 konfigurasi; pilkada, SMS Spam, SmSA); akurasi, Kappa, dan Macro F1 identik sampai 6 desimal; parameter model cocok sampai galat absolut maksimum 2,665e-15 (Windows; 1,776e-15 di VM).
+5. Selisih probabilitas keluaran Apply Model terhadap scikit-learn paling besar sekitar 5,0e-5 dan seluruhnya dijelaskan oleh pembulatan 4 desimal (`round4`) pada wasm Apply Model, bukan oleh galat rumus.
+6. Pada pilkada, kelas prediksi sama dengan WEKA 3.9.6 pada 264–267 dari 270 dokumen dengan Words to Keep bawaan (1.000); selisihnya berasal dari perbedaan definisi (WEKA mempertahankan semua kata seri di batas, 1.042 kata, sedangkan Statify memotong tepat 1.000), dan bila kosakata disamakan hasilnya 270 dari 270.
+7. IT-01, IT-02, IT-04, IT-05 terpenuhi: jumlah term model sama dengan jumlah kolom `VEC_`; Model Summary sama dengan model asal (6.017 angka model sama bit demi bit); kelas prediksi sama dengan scikit-learn pada 270/270 dokumen; prediksi identik byte demi byte setelah tulis-baca berkas.
+8. Waktu eksekusi seperti pada tabel Track E Windows (Lampiran A §8). Contoh kalimat yang aman: "STWV default di peramban memerlukan 61,1 ms untuk 900 dokumen dan 4.138,3 ms untuk 36.305 dokumen (rata-rata lima pengukuran setelah satu pemanasan, Chrome 154 headless, Windows 11)".
+9. Temuan E-01: STWV dengan stemming Sastrawi membatalkan seluruh proses (panic wasm `unreachable`) pada SMS Spam, gabungan 17.974, dan dataset 36.305 dokumen; varian ASCII berjalan. Reproduksi ada di `BUGS.md` E-01.
+
+### 5.2 Boleh ditulis dengan catatan wajib
+
+| Klaim | Catatan wajib |
+|---|---|
+| "Perilaku `KFolds = 1` terdokumentasi" (A-1) | Tes `k1_*` adalah tes karakterisasi: data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, Kappa 0. Itu perilaku saat ini yang dinilai sebagai cacat validasi, bukan perilaku yang dikehendaki. |
+| "IT-03 lulus" | Tulis **"Lulus dengan catatan"**. Kriteria asli (selisih ≤ 1e-9) tidak terpenuhi secara harfiah pada kolom probabilitas keluaran karena `round4` pada desain; terpenuhi pada kelas (630/630), parameter model (selisih 0, 6.017–8.017 angka), dan skor acuan. Kriteria tidak dilonggarkan diam-diam; kontrol negatif membuktikan keluaran tidak dapat membedakan 1e-9 dari 5e-5. |
+| "Statify sama dengan WEKA" | Hanya untuk pilkada, hanya K1, K2, K3, K5 yang punya pembanding WEKA, dan harus menyebut perbedaan definisi (aturan seri Words to Keep, prior ber-Laplace, keluaran Complement WEKA berupa distribusi 0/1). OpenJDK 11 dipakai pada sebagian run WEKA di VM, bukan JRE Zulu 17 bawaan WEKA. Tidak ada pembanding WEKA untuk K4 dan K6, dan stemming Sastrawi (K6) tidak punya pembanding eksternal. |
+| "Akurasi konfigurasi X lebih baik dari Y" | Data uji pilkada hanya 270 dokumen (galat baku akurasi sekitar 2,6 poin persentase), satu pembagian data, tanpa uji signifikansi. Tulis sebagai pengamatan, jangan sebagai peringkat. Contoh: K6 (0,722222) lebih rendah dari K1 (0,762963) pada data ini. |
+| "Peramban lebih lambat daripada headless" | Rasio peramban/headless: STWV default 1,2–1,4×, NB holdout 1,6–4,1×, NB 10-fold 1,2–2,2×, AM 1,8–3,9×. Overhead tetap Worker hanya 54,6–74,5 ms (STWV 2,6 ms). Selisih 4,8–8,7 detik pada 36.305 dokumen **tidak** dijelaskan oleh overhead tetap; penyebabnya tidak diisolasi. Jangan menyebut sebab tanpa data. |
+| "Waktu tumbuh linear" | Hanya STWV default hampir linear terhadap dokumen (sekitar 0,07 ms/dokumen sampai 17.974 dokumen; 0,114 ms/dokumen pada 36.305 karena dokumennya lebih panjang: rata-rata 114,0 token vs 14,8–29,1). NB 10-fold headless hampir proporsional dengan jumlah **token** (4,34–4,72 ms per 1.000 token). Hubungkan dengan token, bukan hanya dokumen. |
+| "UI responsif" | Hanya STWV menghasilkan Long Task di main thread (101 ms pada 11.000 dokumen, 195 ms pada 17.974, 441 ms pada 36.305; ambang 200 ms terlewati pada ukuran terbesar). NB dan AM tidak menghasilkan Long Task. Pengukuran hanya mencakup Worker dan wasm, bukan klik sampai Output Viewer. |
+| "Tidak ada regresi" | Berlaku untuk tes otomatis (Jest dan Rust) yang ada. Antarmuka nyata belum diuji manual. |
+| "Cakupan kode" | Cakupan Jest sesudah Track A diukur hanya di VM (STWV 51,37 → 53,39%; NB 87,01 → 87,01%; AM 97,50 → 97,77%); cakupan baseline Windows STWV 52,24%, NB 86,64%, AM 97,21%. Cakupan Rust **tidak terukur**; yang ada hanya estimasi statis celah (A_unit §4.2, yaitu bagian 4 di Lampiran A). Jangan menulis persentase cakupan Rust. |
+| "Dataset 36.305 dokumen" | Hanya untuk beban waktu. Label campuran (25 kelas), bukan untuk akurasi. Lisensi 20 Newsgroups belum diverifikasi. |
+| "Kesetaraan biner wasm dengan sumber" | Biner `pkg/*.wasm` yang sudah ada di repo dipakai apa adanya; kesesuaiannya dengan sumber Rust terkini diperiksa oleh tes `eval_compare.rs` (lulus di Windows), bukan oleh build ulang. |
+
+### 5.3 Jangan ditulis (tidak didukung data)
+
+1. Persentase cakupan Rust, atau klaim "semua baris Rust teruji".
+2. Hasil pengujian manual dan end-to-end di peramban nyata (M-01..M-36, MF-01..MF-05, Playwright aplikasi penuh): belum dijalankan.
+3. Kesimpulan bahwa Statify "lebih akurat" atau "lebih cepat" dari scikit-learn atau WEKA. Yang diukur: kesetaraan numerik terhadap scikit-learn; kesamaan terbatas terhadap WEKA; waktu Statify saja (scikit-learn dan WEKA tidak diukur waktunya).
+4. Waktu eksekusi Rust native (tidak diukur) dan waktu pada perangkat selain perangkat skripsi.
+5. Penyebab pasti selisih peramban vs headless, dan penyebab pasti E-01 di dalam pustaka `sastrawi-rs` (yang tercatat: gejala, reproduksi, dan pemicu token berkarakter kedua multibita).
+6. Bahwa 36.305 dokumen mewakili korpus Indonesia: sebagian besar tambahan berbahasa Inggris (20 Newsgroups).
+7. Hasil WEKA untuk SMS Spam dan SmSA di Windows: hanya dijalankan di VM (OpenJDK 11); di Windows hanya pilkada yang diulang.
+8. Klaim tentang pengalaman pengguna (kemudahan, kepuasan): tidak ada pengujian pengguna.
+
+
+## 6. Metode per track (ringkas, untuk Bab IV atau pembuka tiap subbab Bab V)
+
+**Prinsip umum.** Tes memanggil kode asli aplikasi; yang ditiru hanya batas luar (store, modal, kelas `Worker`). Komputasi inti diuji lewat wasm yang sama dengan aplikasi atau lewat crate Rust yang sama. Tidak ada kode produksi yang diubah; semua berkas baru berada di folder `__tests__/eval/` (Jest), `tests/eval_*.rs` (Rust), dan `testing/text_analytics_eval/`.
+
+**Baseline.** `cargo test` untuk empat crate (inti, NB, AM, STWV) dan `npx jest` untuk tiga menu dengan `--testPathIgnorePatterns=__tests__/eval` serta pengecualian dua berkas whitebox lama (`hooks/__tests__/whitebox`), sehingga yang dihitung hanyalah tes yang sudah ada. Cakupan baris Jest diukur dengan `--collectCoverageFrom` terbatas pada folder tiga menu. Angka diekstrak dari log oleh `tools/build_baseline.py`, bukan diketik.
+
+**Track A (unit).** Empat berkas Jest (`model-loader`, `kfold`, `stopwords`, `formula-output`; 105 tes) dan empat berkas Rust (`eval_formulas` 15, `eval_vocab_limit` 13, `eval_text_pipeline` 20, `eval_partition` 18). Nilai harapan dihitung mandiri (tangan atau replika Python independen), termasuk keluaran awal MT19937 seed 42 yang sama dengan `numpy.random.RandomState(42)`, dan indeks partisi holdout/k-fold seed 42. Estimasi statis celah cakupan Rust ada di `unit/static_gap_rust.py` (bukan pengukuran).
+
+**Track B (white-box basis path).** Untuk WB-1 `validateColumnPrefix`, WB-2 `getNumericInputError`, WB-3 blok `useMemo` validasi pada `useNaiveBayesValidation`, WB-4 `loadModelFromFile` (dengan `finalizeLoad` diperluas): graf alir ditulis tangan dari kode sumber, kondisi majemuk (`||`, `&&`, `??`) dipecah menjadi simpul predikat per operan; V(G) = E − N + 2 dan P + 1 dihitung dan dicocokkan oleh skrip (`tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py`), jalur independen dipilih dan **rank matriks vektor-sisi** diperiksa; satu tes Jest per jalur (nama tes memuat ID jalur). Flow graph dibangkitkan dengan Graphviz. Jalur infeasible ditandai eksplisit.
+
+**Track C (black-box).** BB-01..BB-36 dari spesifikasi. Tiap skenario diotomatiskan semaksimal mungkin: React Testing Library (antarmuka dan dialog), hook, service dengan wasm sungguhan di Jest, dan tes Rust untuk komputasi inti. Setiap baris memisahkan komponen otomatis (hasil [Win]) dari komponen yang butuh antarmuka nyata (MANUAL, rujukan M-01..M-36 di `C_manual_checklist.md`). Kolom "Hasil yang diharapkan" adalah versi yang diverifikasi terhadap kode sumber; selisih terhadap spesifikasi dicatat pada "Catatan penyesuaian" per bagian C1, C2, C3. Temuan perilaku dikunci sebagai tes karakterisasi dan diberi ID temuan.
+
+**Track D (akurasi numerik).** Jalur headless `headless/statify_wasm.mjs` memakai wasm yang sama dengan aplikasi: Naive Bayes dengan Raw Text dan resep STWV dari data latih saja, Export Model, lalu Apply Model pada data uji; keluaran `pred_statify_<K>.csv`. Pembanding scikit-learn 1.9.1 (`accuracy/sk_compare.py`) memakai kosakata eksplisit dengan aturan Statify, tokenisasi disamakan, dan fungsi `assert_no_leak`. WEKA 3.9.6 dikerjakan terpisah (`weka/`). Konfigurasi: K1 Weka bawaan Multinomial; K2 Bernoulli; K3 Complement; K4 standar scikit-learn (hitungan, IDF smooth, L2); K5 TF log(1+f) × IDF ln(N/df) × normalisasi panjang dokumen; K6 K1 + stopword Indonesia + stemming Sastrawi (tanpa pembanding). Varian `w` (seluruh kosakata) dan `m` (W = 1.042) menyamakan kosakata dengan WEKA. Empat tingkat perbandingan: kelas prediksi, probabilitas Apply Model, parameter model presisi penuh, dan vektor. Metrik: akurasi, Kappa Cohen, Macro F1 (6 desimal) dan LRE = −log10(|x−c|/|c|).
+
+**Track E (waktu).** Dua jalur. (a) **Peramban**: harness statis menyajikan Worker asli aplikasi (NB, AM) dan Worker pengganti yang memuat wasm yang sama untuk STWV (aplikasi membundel prosesornya lewat webpack); waktu diukur dengan `performance.now()` dari sebelum `postMessage` sampai `onmessage`; NB dan AM membuat Worker baru tiap run seperti di aplikasi, STWV memakai ulang satu Worker. (b) **Headless**: wasm dipanggil sinkron di Node, satu proses per sel, GC sebelum tiap run. Protokol 1 pemanasan + 5 pengukuran, rata-rata dan simpangan baku sampel (n−1). Lima skenario (STWV default, STWV stopword + Sastrawi, NB holdout 70%, NB 10-fold, Apply Model) pada empat dataset utama buku (900; 5.574; 11.000; 36.305 dokumen), ditambah "baris tambahan" yang bukan baris utama buku: dataset gabungan 17.974 dokumen dan varian ASCII untuk STWV + Sastrawi. Responsivitas UI: Long Task dan jeda frame. Skenario NB memakai Raw Text, seed 42; Apply Model memakai model NB Multinomial dan data yang sama.
+
+**Track F (integrasi).** IT-01..IT-05 diotomatiskan di tingkat service dan Rust: lima skrip Node (`integration/it0N_*.mjs`), lima berkas Jest (98 tes) dengan wasm sungguhan, dan dua tes Rust `eval_integration.rs` (`float_roundtrip` pada f64 acak seed 42 dan model K1, K4, K5). Pemeriksaan di peramban nyata (MF-01..MF-05) manual dan belum dijalankan. IT-03 diperlakukan khusus karena `round4` (Bagian 5.2).
+
+## 7. Temuan
+
+Indeks lengkap 25 butir ada di Lampiran A §10 dan rincian (lokasi `file:baris`, reproduksi, dampak, usulan, tingkat keyakinan) di Lampiran B. Usulan perbaikan **tidak diterapkan** karena paket ini dilarang mengubah kode produksi. Untuk buku, kelompokkan sebagai berikut.
+
+| ID | Tingkat | Inti temuan | Saran penempatan |
+|---|---|---|---|
+| E-01 | Tinggi | `sastrawi-rs 0.5.1` pada wasm STWV panik (`unreachable`) bila ada token yang karakter keduanya multibita (contoh `I‘m` dengan petik tipografis, `résumé`). Satu dokumen membatalkan seluruh korpus. Terukur: 34 dokumen memicu panik pada SMS Spam 5.574 dan pada gabungan 17.974; 0 pada pilkada dan SmSA. NB/AM (0.5.3) tidak panik pada masukan yang sama. Pesan ke pengguna hanya `unreachable` | Pembahasan Track E (sel GALAT) dan Bab saran |
+| D-01 | Sedang | Versi `sastrawi-rs` berbeda antar-crate (0.5.1 STWV vs 0.5.3 lainnya); pada K6 kosakata STWV mandiri berbeda 8 kata dari resep NB/AM (1.000 vs 1.000 kata). Penyebab mekanisme belum diverifikasi di kode; pengaruh pada akurasi tidak diukur | Pembahasan Track D |
+| A-1 | Sedang | `KFolds = 1` diterima di TS dan Rust; data latih kosong, semua prediksi ke kelas alfabetis pertama, akurasi 3/9 pada fixture, Kappa 0, tanpa galat. Terverifikasi dengan tes yang dijalankan di Windows | Pembahasan Track A/B |
+| C2-01 | Sedang | Galat/peringatan jumlah fold tidak berkode dan tidak sampai ke pengguna (BB-24) | Pembahasan Track C |
+| C2-02 | Sedang | Pesan validasi NB tidak pernah ditampilkan; OK hanya nonaktif (BB-14) | Pembahasan Track C |
+| C2-03 | Sedang | Validasi numerik tidak menonaktifkan OK; Alpha tidak sah dibuang diam-diam (BB-18, BB-21). Klaim "analisis berjalan dengan alpha sah terakhir saat OK diklik" berasal dari pembacaan kode, bukan dari tes | Pembahasan Track C |
+| lainnya | Rendah atau informasi | A-2..A-4, B-1, B-2, C1-01, C1-02, C2-04, C2-05, C3-01..C3-03, D-02..D-04, E-02, E-03, F-01, F-02. Antara lain: `round4` pada Apply Model (D-02/F-02), matriks padat melalui `postMessage` yang memblokir main thread (E-02), Worker NB/AM dibuat baru tiap analisis dengan overhead tetap 54,6–74,5 ms (E-03), kolom STWV bernama `VEC` lolos filter `VEC_` (F-01) | Lampiran temuan |
+
+Tingkat keyakinan tiap temuan dicatat di `BUGS.md`: ada yang **terverifikasi dengan tes yang dijalankan** (A-1 sisi TS dan Rust, E-01 lewat skrip reproduksi) dan ada yang **analisis kode** (misalnya jalur teks mentah A-1 `NB_E_TEXT_EMPTY_VOCAB_FOLD` dan sebagian C2-03). Pertahankan pembedaan itu saat menulis.
+
+## 8. Keterbatasan dan ancaman validitas (tulis di Bab V.9)
+
+1. **Tes Rust baru ditulis tanpa kompiler dan baru dikompilasi di Windows**; semuanya lulus pada percobaan pertama. Sebagian nilai harapan bersifat karakterisasi perilaku saat ini (`k1_*`), sehingga lulus berarti perilaku itu terjadi, bukan benar.
+2. **Hasil [VM] memakai ts-jest dan resolver pengganti**, bukan konfigurasi produksi (next/jest dengan SWC); hanya hasil [Win] yang berlaku. Cakupan Jest sesudah Track A hanya terukur di VM.
+3. **Satu perangkat, lima pengukuran per sel.** Median simpangan baku 3,0% terhadap rata-rata (30 dari 50 sel di bawah 5%; 46 dari 50 di bawah 10%; maksimum 16,5% pada sel kecil). Selisih beberapa ms pada sel kecil tidak bermakna. Chrome headless; harness mengukur Worker dan wasm saja; program latar belakang tidak diperiksa; paket daya Balanced.
+4. **Data uji pilkada 270 dokumen**: tidak cukup untuk memeringkat konfigurasi (galat baku akurasi ± 2,6 poin persentase); satu pembagian data; tanpa uji signifikansi.
+5. **Perbandingan WEKA terbatas**: perbedaan definisi (aturan seri Words to Keep, prior ber-Laplace, keluaran Complement), versi Java (OpenJDK 11 di VM, bukan Zulu 17 bawaan WEKA), presisi cetak WEKA (16 desimal; ARFF K5 menulis 6 desimal). K6 tidak punya pembanding eksternal.
+6. **Dataset**: SMS Spam dan SmSA berasal dari salinan di `weka/data`; asal dan lisensi belum diverifikasi (URL unduhan tidak dapat diperiksa dari sandbox tanpa jaringan). Dataset 36.305 dokumen bercampur bahasa dan label (25 kelas) dan hanya sah untuk beban waktu; lisensi 20 Newsgroups belum diverifikasi.
+7. **Biner wasm** yang diuji adalah yang sudah ada di repo; kesesuaiannya dengan sumber Rust terkini hanya diperiksa lewat `eval_compare.rs`. Versi `sastrawi-rs` berbeda antar-crate (D-01).
+8. **Probabilitas Apply Model hanya 4 desimal** sehingga kriteria 1e-9 pada probabilitas keluaran tidak dapat diukur langsung; parameter dan skor acuan diperiksa pada presisi penuh.
+9. **Pengujian antarmuka memakai jsdom** dengan batas luar ditiru; perilaku peramban nyata (WASM, Data Editor, Output Viewer) hanya tercakup oleh daftar periksa manual yang belum dijalankan.
+10. **Cakupan Rust tidak terukur** (`cargo-llvm-cov` tidak terpasang); STWV Rust tidak punya tes sendiri sehingga diuji lewat jalur NB/AM dan headless.
+11. **Waktu**: tidak ada pembanding waktu dengan scikit-learn atau WEKA; Rust native tidak diukur; Playwright aplikasi penuh tidak dijalankan.
+12. **Penyebab selisih peramban vs headless pada dataset besar tidak diisolasi** (E-03 dikoreksi: tidak hanya overhead tetap).
+
+## 9. Yang belum dijalankan dan tugas Yedija (NOT RUN)
+
+| Butir | Status | Catatan untuk penulisan |
+|---|---|---|
+| Pengujian manual M-01..M-36 (`C_manual_checklist.md`) dan MF-01..MF-05 (`F_manual_checklist.md`) | MANUAL, belum dijalankan | Tulis sebagai "komponen manual belum dilaksanakan" pada kolom Status BB dan IT. Bila Yedija menjalankannya, minta tangkapan layar dan hasilnya, lalu perbarui kolom Hasil aktual dan Status. |
+| Playwright end-to-end aplikasi penuh (`perf/e2e_full_app.spec.ts`) | NOT RUN | Ditulis tetapi tidak pernah dijalankan; tidak dipanggil `run_E.ps1`. |
+| Cakupan Rust (`cargo llvm-cov`) | NOT RUN | Alat tidak terpasang. Opsi: Yedija memasangnya (`cargo install cargo-llvm-cov`) lalu `run_all.ps1 -Only A`. Sampai itu terjadi, jangan menulis persentase. |
+| WEKA SMS Spam dan SmSA di Windows | NOT RUN | Hanya dijalankan di VM (OpenJDK 11); pilkada diulang di Windows dengan hasil sama (`weka/logs/09_bandingkan_windows_vs_linux_pilkada.log`). |
+| STWV + Sastrawi pada SMS Spam, gabungan, 36.305 dokumen | GAGAL (bukan NOT RUN) | Panic wasm (E-01); varian ASCII (non-ASCII dilipat atau dibuang) terukur hanya untuk waktu: 411,1 / 1.406,3 / 6.166,2 ms di peramban (sekitar 1,49× STWV default pada 36.305 dokumen). |
+| Verifikasi asal dan lisensi dataset | Belum | Yedija perlu mencatat sumber dan lisensi SMS Spam (UCI id 228), SmSA (IndoNLU), 20 Newsgroups sebelum dicantumkan di buku. |
+| Eksekusi ulang VM dengan nama berkas baru | Opsional | Log VM lama masih bernama `thesis`; `tools/apply_results.py` memetakannya (`_legacy`). Tidak memengaruhi angka. |
+| Commit dan push | Tugas Yedija | Agen mana pun dilarang menjalankan perintah git di repo ini. |
+
+Tugas lain untuk Yedija yang memengaruhi buku: memutuskan apakah temuan E-01, D-01, A-1, C2-01..C2-03 hanya dilaporkan atau juga diperbaiki di versi aplikasi berikutnya; menyediakan tangkapan layar untuk daftar periksa manual; menyetujui penempatan tabel panjang di lampiran buku.
+
+## 10. Peta berkas dan cara mengulang
+
+Semua jalur relatif terhadap `testing/text_analytics_eval/` di repo.
+
+| Berkas atau folder | Isi |
+|---|---|
+| `REPORT.md` | Laporan gabungan (Lampiran A di dokumen ini). Dibangkitkan; jangan disunting langsung |
+| `BUGS.md`, `BUGS_A..F.md` | Temuan (Lampiran B) |
+| `ENV.md` | Lingkungan dan penyimpangan (Lampiran C) |
+| `01_baseline.md`, `A_unit.md`, `B_whitebox.md`, `C_blackbox.md`, `D_accuracy.md`, `E_performance.md`, `F_integration.md` | Dokumen per track; D, E, F disalin sebagian di Lampiran D–F |
+| `C_manual_checklist.md`, `F_manual_checklist.md` | Daftar periksa manual (belum dijalankan) |
+| `AUDIT_DOCS.md` | Audit konsistensi dokumen |
+| `PROMPT_Evaluasi_Modul_Text_Analytics.md` | Spesifikasi asli (sengaja tidak diubah; masih memakai nama lama `thesis-eval`) |
+| `logs/` | Log mentah. Nama berakhiran `_win` atau berkas `rust_*.txt`, `baseline_*`, `integration_*_win.txt` adalah Windows; `_vm` adalah VM |
+| `perf/raw/*.csv` | Pengukuran waktu mentah per run (Track E) |
+| `accuracy/out/`, `weka/out/` | Prediksi dan model per konfigurasi (Track D) |
+| `whitebox/` | DOT, PNG, CSV sisi untuk Track B |
+| `tools/` | `apply_results.py`, `merge_docs.py`, `build_report.py`, `build_handoff.py`, dan generator track |
+| Tes di repo | `frontend/components/Modals/{Transform/StringToWordVector, Analyze/Classify/naive-bayes, Analyze/Classify/apply-model}/**/__tests__/eval/`; `rust/tests/eval_*.rs` pada NB dan AM; `frontend/public/workers/TextAnalytics/statify-text-core/tests/eval_*.rs` dan `tests/eval_data/` |
+
+**Satu perintah (Windows, dari akar repo):**
+
+```
+powershell -ExecutionPolicy Bypass -File testing\text_analytics_eval\run_all.ps1
+```
+
+Opsi: `-SkipE`, `-SkipRust`, `-SkipBaseline`, `-SkipTracks`, `-Only A,B,C1,C2,C3,D,E,F`. Track E dijalankan terakhir dan tidak boleh ada kegiatan berat di komputer selama pengukuran. Setelah selesai, bangun ulang dokumen:
+
+```
+python testing\text_analytics_eval\tools\apply_results.py
+python testing\text_analytics_eval\tools\merge_docs.py
+python testing\text_analytics_eval\tools\build_report.py
+python testing\text_analytics_eval\tools\build_handoff.py
+```
+
+Penanda berbentuk `⟦jest:<berkas>::<nama tes>⟧` dan `⟦rust:<target>::<fungsi>⟧` di dokumen diganti menjadi Lulus, Gagal, atau BELUM DIJALANKAN oleh `apply_results.py` dari `logs/jest_*.json` dan `logs/rust_*.txt` (Windows menimpa VM). Karena itu status tidak pernah diketik manual.
+
+## 11. Panduan penulisan
+
+1. Bahasa Indonesia baku-akademik, kalimat pasif atau netral seperti lazimnya skripsi. Hindari bahasa promosi ("sangat baik", "unggul") dan hindari klaim mutlak ("terbukti benar", "bebas bug").
+2. Selalu sebut perangkat dan label: "pada perangkat uji skripsi (Windows 11, Ryzen 5 4600H)". Angka [VM] hanya dengan label eksplisit sebagai pembanding.
+3. Tulis angka dengan koma desimal dan titik ribuan; satuan waktu ms; metrik akurasi 6 desimal pada tabel, 4 desimal di kalimat.
+4. Pisahkan **fakta terukur**, **interpretasi**, dan **dugaan**. Setiap dugaan (misalnya mekanisme D-01, penyebab selisih peramban vs headless) diberi kata "diduga" dan dicatat belum diverifikasi.
+5. Setiap tabel diberi sumber (nama dokumen atau log) dan tanggal eksekusi (8 Oktober 2026 untuk eksekusi penuh Windows; baseline Windows awal 7 Oktober 2026).
+6. Selisih terhadap spesifikasi asli (misalnya `BB` yang hasil harapannya diverifikasi ulang terhadap kode, dan IT-03) ditulis terbuka, tidak disembunyikan.
+7. Jangan menambahkan butir baru ke tabel dari ingatan. Bila perlu data tambahan, minta Yedija menjalankan skrip yang relevan.
+
+### Pertanyaan yang mungkin diajukan penguji, dan jawaban berbasis data
+
+| Pertanyaan | Jawaban yang didukung data |
+|---|---|
+| Mengapa hasil Statify sama persis dengan scikit-learn? | Rumus Multinomial, Bernoulli, dan Complement sama; kosakata dan tokenisasi disamakan; 17.221 dari 17.221 kelas prediksi sama; parameter cocok sampai ~1e-15 (selisih urutan operasi floating-point). Kesamaan ini bukti kesesuaian terhadap implementasi acuan, bukan bukti kebenaran mutlak. |
+| Mengapa berbeda dengan WEKA? | Bukan galat: WEKA mempertahankan semua kata seri pada batas Words to Keep (1.042 kata), prior ber-Laplace berbeda, dan Complement WEKA mengeluarkan distribusi 0/1. Dengan kosakata disamakan, 270 dari 270 sama (pilkada). |
+| Mengapa probabilitas tidak memenuhi 1e-9? | Apply Model membulatkan probabilitas ke 4 desimal secara desain (`round4`); selisih maksimum 5,0e-5. Parameter dan skor acuan memenuhi ketelitian jauh lebih baik; kontrol negatif membuktikan keluaran tidak dapat membedakan 1e-9 dari 5e-5. |
+| Mengapa peramban lebih lambat dari headless? | Sebagian karena overhead tetap Worker (54,6–74,5 ms untuk NB/AM), tetapi selisih 4,8–8,7 detik pada 36.305 dokumen tidak dijelaskan oleh itu; penyebabnya tidak diisolasi. |
+| Mengapa Sastrawi gagal pada sebagian dataset? | Panic di `sastrawi-rs 0.5.1` pada token yang karakter keduanya multibita (E-01). Versi 0.5.3 yang dipakai NB/AM tidak panik pada masukan yang sama. |
+| Apakah semua fitur sudah diuji? | Semua skenario BB punya komponen otomatis yang lulus; komponen yang membutuhkan antarmuka nyata (navigasi menu, tampilan Output Viewer) belum diuji manual. |
+| Mengapa jalur WB-3 hanya 12 padahal V(G) 13? | Dua predikat (`!TargetVar` pada dua tempat) membaca variabel yang sama, sehingga jalur independen ke-13 infeasible; rank vektor-sisi himpunan layak adalah 12. |
+
+
+---
+
+# DAFTAR LAMPIRAN
+
+- **Lampiran A**: REPORT.md — laporan gabungan Track baseline dan A–F (sumber utama semua tabel buku) (212 KB)
+- **Lampiran B**: BUGS.md — temuan lengkap (lokasi, reproduksi, dampak, usulan) (50 KB)
+- **Lampiran C**: ENV.md — lingkungan pengujian dan penyimpangan (6 KB)
+- **Lampiran D**: D_accuracy.md — Track D lengkap (metode, tabel parameter dan vektor, penjelasan selisih, keterbatasan) (34 KB)
+- **Lampiran E**: E_performance.md — Track E (status, skenario, metode, pembacaan hasil, keterbatasan, instruksi); tabel ada di Lampiran A (23 KB)
+- **Lampiran F**: F_integration.md — Track F (ringkasan, lingkungan, IT-03, IT-05, penyesuaian prompt, keterbatasan); tabel ada di Lampiran A (12 KB)
+
+
+---
+
+# LAMPIRAN A — REPORT.md — laporan gabungan Track baseline dan A–F (sumber utama semua tabel buku)
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### REPORT — Evaluasi modul Text Analytics Statify (String to Word Vector, Naive Bayes, Apply Model)
 
 Dokumen ini digenerate oleh `tools/build_report.py` dari `report/REPORT.template.md`. Tabel disalin dari dokumen track yang sudah diisi `tools/apply_results.py`; angka jumlah tes dihitung dari `logs/`. Jangan menyunting `REPORT.md` langsung: ubah templat atau dokumen sumber, lalu jalankan ulang perintah di Bagian 1. Angka memakai koma desimal; angka di dalam log mentah tetap titik desimal.
 
-## Ringkasan eksekutif
+#### Ringkasan eksekutif
 
 Paket evaluasi menambahkan tes unit (Track A), white-box basis path (B), black-box BB-01..BB-36 (C), perbandingan numerik dengan scikit-learn dan WEKA (D), pengukuran waktu (E), dan tes integrasi IT-01..IT-05 (F) tanpa mengubah satu baris pun kode produksi. Seluruh pengerjaan dilakukan di lingkungan tanpa akses jaringan (tidak ada crates.io, npm, PyPI), sehingga pembagian hasil sebagai berikut harus dibaca apa adanya.
 
@@ -14,7 +279,7 @@ Saat REPORT.md ini dibangun, log eksekusi Windows tersedia untuk 9 dari 9 target
 - **Temuan.** 25 butir di `BUGS.md` (Bagian 10): satu berkategori tinggi (E-01, panic wasm pada stemming Sastrawi dengan token berkarakter kedua multibita), lima berkategori sedang (A-1 `KFolds = 1`; C2-01..C2-03 pada antarmuka Naive Bayes; D-01 beda versi `sastrawi-rs` antar-crate), sisanya rendah atau informasi.
 - **Kesetaraan numerik.** Pada 24 konfigurasi dan tiga dataset, kelas prediksi Statify sama dengan scikit-learn pada 17.221 dari 17.221 prediksi; selisih probabilitas keluaran Apply Model sepenuhnya akibat pembulatan 4 desimal (Track D, Bagian 7).
 
-### Jumlah tes per track
+##### Jumlah tes per track
 
 | Track | Tes Jest | Lulus | Gagal | Sumber Jest | Fungsi tes Rust ditulis | Hasil Rust |
 |---|---|---|---|---|---|---|
@@ -29,7 +294,7 @@ Saat REPORT.md ini dibangun, log eksekusi Windows tersedia untuk 9 dari 9 target
 
 Kolom "Sumber Jest" menunjukkan asal angka: Windows bila `jest_<track>_win.json` ada, jika tidak VM Linux. Tes Rust: kolom "Fungsi tes Rust ditulis" menghitung `#[test]` pada berkas `eval_*.rs`; hasilnya hanya tercatat bila ada `logs/rust_<target>.txt` dari Windows.
 
-### Eksekusi penuh Jest (regresi)
+##### Eksekusi penuh Jest (regresi)
 
 | Platform | Jumlah potongan eksekusi | Suite | Tes | Lulus | Gagal |
 |---|---|---|---|---|---|
@@ -38,7 +303,7 @@ Kolom "Sumber Jest" menunjukkan asal angka: Windows bila `jest_<track>_win.json`
 
 Eksekusi penuh = semua berkas tes di tiga menu (tes lama dan tes baru) dalam potongan `tools/vm_chunk.sh`. Konfigurasi VM: ts-jest dan penyesuaian resolver (lihat `ENV.md`); bukan konfigurasi produksi. Di Windows tes lama (baseline: 830 lulus) dan tes baru (453 lulus) dijalankan terpisah dengan konfigurasi produksi oleh `run_all.ps1`, sehingga baris Windows di atas dijumlahkan dari dua kelompok itu (`baseline_jest_*_win.json` dan `jest_<track>_win.json`). Selisih 39 tes terhadap baris VM (1.322) berasal dari dua berkas whitebox lama milik pengguna (`hooks/__tests__/whitebox.getNumericInputError.test.ts` 29 tes dan `whitebox.useNaiveBayesValidation.test.ts` 10 tes) yang ikut dihitung di VM tetapi dikecualikan dari baseline Windows (`--testPathIgnorePatterns=hooks/__tests__/whitebox`); angka itu dicocokkan per berkas dari log. Yang berlaku untuk buku adalah baris Windows.
 
-## 1. Cara menjalankan ulang (satu perintah)
+#### 1. Cara menjalankan ulang (satu perintah)
 
 Di Windows, dari akar repo `statify64`:
 
@@ -58,13 +323,13 @@ Skrip tidak menghapus berkas, tidak mengubah kode produksi, dan tidak melakukan 
 
 **Catatan penamaan.** Paket ini semula bernama `thesis-eval`. Penamaan sekarang mengikuti cakupannya (khusus modul Text Analytics, karena modul lain memiliki evaluasi sendiri): folder `testing/text_analytics_eval/`, folder tes `__tests__/eval/`, berkas Rust `tests/eval_*.rs` beserta data `tests/eval_data/`, konfigurasi `jest.eval.config.js`, dan variabel lingkungan berawalan `TA_EVAL_`. Log yang dibuat sebelum penggantian nama masih memuat nama lama; `tools/apply_results.py` memetakannya ke nama baru saat dibaca (fungsi `_legacy`, berkas log tidak diubah). Eksekusi ulang penuh akan menghasilkan log bernama baru, setelah itu pemetaan tersebut boleh dihapus.
 
-## 2. Lingkungan
+#### 2. Lingkungan
 
 Perangkat uji skripsi: Lenovo IdeaPad Gaming 3, Ryzen 5 4600H, RAM 16 GB, Windows 11, rustc 1.93.0, WEKA 3.9.6. Pengerjaan, scikit-learn, dan graphviz dijalankan di sandbox cloud; Jest dan skrip headless di VM Linux (Ryzen 5 4600H terlihat dari VM, 2 vCPU, 3,9 GB). Hanya perangkat Windows yang boleh dipakai untuk angka waktu di buku. Daftar versi lengkap, termasuk penyimpangan dari prompt (tanpa jaringan; ts-jest menggantikan SWC pada VM; biner wasm yang sudah dibangun dipakai apa adanya), ada di `ENV.md`.
 
-## 3. Baseline (tes yang sudah ada)
+#### 3. Baseline (tes yang sudah ada)
 
-### 01 — Baseline pengujian yang sudah ada
+##### 01 — Baseline pengujian yang sudah ada
 
 **Tanggal eksekusi:** 7 Oktober 2026, sekitar pukul 12:43–12:46 UTC (19:43–19:46 WIB), pada komputer Windows pengguna, dengan HEAD repo `f82ddf0c85aaf69d5618baaee274b01b3ab8e4a9` (branch `dija-v2`; HEAD itu tidak berubah sejak log direkam sampai sesi ini; branch kerja evaluasi `text_analytics_eval` dibuat dari commit yang sama).
 
@@ -84,7 +349,7 @@ Tabel dibangun oleh `tools/build_baseline.py` langsung dari log eksekusi (tidak 
 | Jest Naive Bayes | `Classify/naive-bayes/**/__tests__/` (13 suite) | 253 | 253 | 0 | 86,64% |
 | Jest Apply Model | `Classify/apply-model/**/__tests__/` (26 suite) | 466 | 466 | 0 | 97,21% |
 
-#### Sumber dan tanggal eksekusi
+###### Sumber dan tanggal eksekusi
 
 | Lapisan | Berkas log | Waktu berkas log (UTC) | Rincian |
 |---|---|---|---|
@@ -96,11 +361,11 @@ Tabel dibangun oleh `tools/build_baseline.py` langsung dari log eksekusi (tidak 
 | Jest Naive Bayes | `logs/jest_nb.txt` | 2026-10-07 12:45 UTC | 13 suite |
 | Jest Apply Model | `logs/jest_am.txt` | 2026-10-07 12:45 UTC | 26 suite |
 
-#### Pembanding silang di VM Linux (bukan perangkat skripsi)
+###### Pembanding silang di VM Linux (bukan perangkat skripsi)
 
 Jest dijalankan ulang di VM lokal (Linux, Node 22.23.2) dengan `ts-jest` sebagai pengganti transformer SWC bawaan `next/jest` (biner SWC yang terpasang hanya versi Windows). Hasilnya konsisten dengan log Windows pada jumlah kasus: STWV 111 tes (9 suite, identik), Apply Model 466 tes (identik). Naive Bayes: 292 tes di VM karena menyertakan 39 tes white-box lama milik pengguna (`hooks/__tests__/whitebox.*.test.ts`, belum dilacak git) yang belum ada saat log Windows direkam (253 + 39 = 292). Cakupan baris di VM berbeda tipis karena instrumentasi berbeda: STWV 51,37% (Windows 52,24%), Naive Bayes 87,01% (86,64%), Apply Model 97,50% (97,21%). Sumber: `logs/coverage_jest_summary_vm.txt`. Angka resmi untuk buku tetap angka Windows di tabel atas.
 
-#### Berkas dengan cakupan di bawah 70% (terukur, Jest)
+###### Berkas dengan cakupan di bawah 70% (terukur, Jest)
 
 Dari pengukuran VM: STWV — `OptionsTab.tsx`, `StringToWordVectorModal.tsx`, `VariablesTab.tsx`, `stringToWord.processor.ts`, `hooks/useStringToWordVector.ts` (semuanya 0% baris, komponen UI dan hook yang memuat Worker); Naive Bayes — `components/export-model-output.tsx` (0%), `dialogs/validation.tsx` (17,94%); Apply Model — tidak ada. Pembahasan celah dan tes tambahan ada di `A_unit.md`.
 
@@ -108,11 +373,11 @@ Dari pengukuran VM: STWV — `OptionsTab.tsx`, `StringToWordVectorModal.tsx`, `V
 
 Interpretasi. Seluruh tes lama lulus pada eksekusi Windows (Rust 450, Jest 830, tidak ada kegagalan), sehingga paket evaluasi dimulai dari baseline hijau. Pustaka STWV Rust tidak punya satu pun tes, dan cakupan Rust tidak terukur karena `cargo-llvm-cov` belum terpasang. Cakupan baris Jest paling rendah ada pada menu STWV (52,24%) karena komponen UI (`OptionsTab.tsx`, `VariablesTab.tsx`, `StringToWordVectorModal.tsx`, `useStringToWordVector.ts`) tidak punya tes; Naive Bayes 86,64% dan Apply Model 97,21%. Pengukuran VM (cakupan 51,37 / 87,01 / 97,50%) berbeda tipis karena instrumen dan himpunan berkas berbeda, dan hanya dipakai sebagai pembanding.
 
-## 4. Track A — Pengujian unit tambahan
+#### 4. Track A — Pengujian unit tambahan
 
 Kolom tabel: `| Berkas | Nama tes | Perilaku yang diuji | Status |`. Status [Win] adalah hasil eksekusi di Windows (perangkat skripsi); [VM] hasil di VM Linux; BELUM DIJALANKAN berarti belum ada log eksekusi.
 
-### Track A — Jest (105 kasus; DIJALANKAN di Windows dan di VM)
+##### Track A — Jest (105 kasus; DIJALANKAN di Windows dan di VM)
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
@@ -222,7 +487,7 @@ Kolom tabel: `| Berkas | Nama tes | Perilaku yang diuji | Status |`. Status [Win
 | `stopwords.eval.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
 | `stopwords.eval.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
 
-### Track A — Rust (66 fungsi tes; DIJALANKAN di Windows)
+##### Track A — Rust (66 fungsi tes; DIJALANKAN di Windows)
 
 Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya terjadi di Windows (`run_A.ps1`, rustc 1.93.0) dan seluruhnya lulus tanpa perubahan berkas. Sebelum itu hanya dilakukan: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `eval_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kekhawatiran kesalahan kompilasi tidak terbukti pada kompilasi Windows.
 
@@ -301,7 +566,7 @@ Pernyataan harapan yang tidak berasal dari nilai acuan Python independen (jujur 
 - Tes `k1_*` pada `eval_partition.rs` menegaskan PERILAKU SAAT INI kode sumber (bukan perilaku yang seharusnya; lihat `BUGS_A.md` A-1): data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0. Perilaku ini dikunci sebagai tes karakterisasi dan sudah dieksekusi: `cargo test` di Windows lulus (`logs/rust_eval_partition.txt`; status per tes ada pada kolom Status di bagian Rust). Percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log tersimpan dan tidak dihitung.
 - Ukuran fold [9, 6, 6, 6, 6] dan [2, 2, 2, 0, 0, 0] pada `eval_partition.rs` diturunkan dari algoritma round-robin di kode dan dikunci oleh tes Rust yang dieksekusi di Windows (`logs/rust_eval_partition.txt`, lulus). Tiga tes tambahan mengunci keluaran awal MT19937 seed 42 (sama dengan `numpy.random.RandomState(42)`) dan indeks eksak partisi holdout/k-fold seed 42 terhadap replika Python independen.
 
-### Track A — Jest (TERUKUR di VM, cakupan baris istanbul/babel; `logs/coverage_jest_summary_vm.txt`, `logs/coverage_jest_<menu>_vm.json`, `logs/coverage_jest_<menu>_A_vm.json`)
+##### Track A — Jest (TERUKUR di VM, cakupan baris istanbul/babel; `logs/coverage_jest_summary_vm.txt`, `logs/coverage_jest_<menu>_vm.json`, `logs/coverage_jest_<menu>_A_vm.json`)
 
 Pengukuran memakai tes lama masing-masing menu (baseline) dan tes lama ditambah berkas `*.eval.test` milik Track A (sesudah). Tes evaluasi milik track lain sengaja dikecualikan dari kedua pengukuran agar angka Track A tidak tercampur.
 
@@ -328,11 +593,11 @@ Berkas Naive Bayes yang di atas 70% tetapi relatif lemah: `naive-bayes-main.tsx`
 
 Interpretasi. Tes Jest baru Track A seluruhnya lulus pada VM dan menutup celah yang terukur: cakupan baris STWV naik dari 51,37% ke 53,39%, Apply Model dari 97,50% ke 97,77%, Naive Bayes tidak berubah (87,01%) karena tes baru menyasar fungsi murni, bukan komponen React. Nilai harapan numerik dihitung independen dengan Python (80 kombinasi TF × IDF × normalisasi, 16 skenario batas kosakata, 5 skenario stopword, 18 skenario n-gram); 27 kombinasi yang sah menurut scikit-learn dibandingkan langsung dengan `TfidfVectorizer` tanpa selisih. Tes Rust Track A (66 fungsi) lulus di Windows. Temuan utama: `KFolds = 1` diterima oleh antarmuka dan validator Rust (BUGS.md A-1); kedua sisi terbukti oleh tes yang dijalankan (tes karakterisasi `k1_*` lulus, artinya perilaku itu benar-benar terjadi).
 
-## 5. Track B — White-box basis path
+#### 5. Track B — White-box basis path
 
 Kolom tabel rekap: `| Fungsi | Menu | V(G) | Jalur independen | Kasus lulus |`. Tabel simpul, daftar sisi, dan basis set jalur per fungsi diambil dari `B_whitebox.md`; graf alir (DOT dan PNG) ada di `whitebox/`.
 
-### Track B — Rekap
+##### Track B — Rekap
 
 | Fungsi | Menu | V(G) | Jalur independen | Kasus lulus |
 |---|---|---|---|---|
@@ -344,13 +609,13 @@ Kolom tabel rekap: `| Fungsi | Menu | V(G) | Jalur independen | Kasus lulus |`. 
 
 Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama dengan rank). Pada WB-3 jumlah ini 12 < V(G) = 13 karena satu jalur basis infeasible. Angka "Kasus lulus" dibaca dari `logs/jest_B_win.json` (eksekusi di Windows dengan konfigurasi Jest produksi, 54 tes); `logs/jest_B_vm.json` (VM Linux, ts-jest) hanya pembanding dan dipakai bila log Windows tidak ada.
 
-### Track B — WB-1 — `validateColumnPrefix` (String to Word Vector)
+##### Track B — WB-1 — `validateColumnPrefix` (String to Word Vector)
 
 Sumber: `frontend/components/Modals/Transform/StringToWordVector/utils/columnPrefix.ts`. Berkas tes: `frontend/components/Modals/Transform/StringToWordVector/__tests__/eval/whitebox.validateColumnPrefix.test.ts`.
 
 Fungsi memeriksa awalan nama kolom vektor dengan lima pemeriksaan berurutan (kosong, spasi, panjang, awal, karakter).
 
-#### Tabel simpul
+###### Tabel simpul
 
 Keputusan pemecahan: kondisi `prefix !== prefix.trim() || /\s/.test(prefix)` pada baris 16 dipecah menjadi dua simpul predikat (3 dan 4) karena `||` hubung-singkat; keempat pemeriksaan lain masing-masing satu predikat (regex dihitung satu predikat).
 
@@ -371,19 +636,19 @@ Keputusan pemecahan: kondisi `prefix !== prefix.trim() || /\s/.test(prefix)` pad
 | 12 | `return null` (return, baris 28) |
 | X | Simpul akhir (exit, sintetis): semua `return` bermuara ke sini |
 
-#### Daftar sisi (edge list)
+###### Daftar sisi (edge list)
 
 S→1; 1→2 (T); 1→3 (F); 3→5 (T); 3→4 (F); 4→5 (T); 4→6 (F); 6→7 (T); 6→8 (F); 8→9 (T); 8→10 (F); 10→11 (T); 10→12 (F); 2→X; 5→X; 7→X; 9→X; 11→X; 12→X
 
 Berkas CSV: [edges_WB-1_validateColumnPrefix.csv](whitebox/edges_WB-1_validateColumnPrefix.csv).
 
-#### Flow graph
+###### Flow graph
 
 DOT: [WB-1_validateColumnPrefix.dot](whitebox/WB-1_validateColumnPrefix.dot); PNG: [WB-1_validateColumnPrefix.png](whitebox/WB-1_validateColumnPrefix.png).
 
 ![Flow graph WB-1](whitebox/WB-1_validateColumnPrefix.png)
 
-#### Kompleksitas siklomatik
+###### Kompleksitas siklomatik
 
 | N | E | P | V(G) = E − N + 2 | P + 1 | Verifikasi |
 |---|---|---|---|---|---|
@@ -391,7 +656,7 @@ DOT: [WB-1_validateColumnPrefix.dot](whitebox/WB-1_validateColumnPrefix.dot); PN
 
 V(G) = 7 sesuai klaim awal. Alasannya: ada 6 simpul predikat (1, 3, 4, 6, 8, 10) setelah `||` pada baris 16 dipecah menjadi dua; bila kondisi majemuk itu dihitung sebagai satu predikat, hasilnya 5 predikat dan V(G) = 6, jadi angka 7 bergantung pada keputusan pemecahan tersebut. Dengan pemecahan, E − N + 2 = P + 1 = 7.
 
-#### Basis set jalur independen
+###### Basis set jalur independen
 
 Semua 7 jalur layak. Jalur 3 dan 4 sama-sama berakhir di simpul 5 tetapi berbeda sisi (3→5 vs 4→5): jalur 3 diwakili awalan dengan spasi di tepi (`prefix !== prefix.trim()` benar), jalur 4 spasi di tengah saja (`/\s/` benar). Jalur 2 memakai string kosong; string hanya-spasi juga melewati jalur yang sama.
 
@@ -409,13 +674,13 @@ Hubungan dengan tes lama: `StringToWordVector/__tests__/columnPrefix.test.ts` me
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 7 dari 7 tes jalur lulus.
 
-### Track B — WB-2 — `getNumericInputError` (Naive Bayes)
+##### Track B — WB-2 — `getNumericInputError` (Naive Bayes)
 
 Sumber: `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/useNaiveBayesValidation.ts`. Berkas tes: `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/eval/whitebox.getNumericInputError.test.ts`.
 
 Fungsi memvalidasi angka lintas tab Options dan Validation dan mengembalikan pesan galat pertama atau `null`. Percabangan berurutan: Smoothing Alpha, Text Features (Text Alpha, Top-k), Training Percentage (holdout), jumlah fold (kfold), seed.
 
-#### Tabel simpul
+###### Tabel simpul
 
 Keputusan pemecahan: setiap `||` pada guard `typeof ... || !Number.isFinite(...)` / `typeof ... || !Number.isInteger(...) || x < a || x > b` dipecah per operan (2 predikat untuk Smoothing Alpha dan Text Alpha, 4 untuk Top-k, Training Percentage, dan seed, 3 untuk fold), sehingga setiap operan punya sisi sendiri. Pemanggilan `getEffectiveTextSource` pada baris 188 tidak diperluas.
 
@@ -467,19 +732,19 @@ Keputusan pemecahan: setiap `||` pada guard `typeof ... || !Number.isFinite(...)
 | 43 | `return null` (return, baris 274) |
 | X | Simpul akhir (exit, sintetis): semua `return` bermuara ke sini |
 
-#### Daftar sisi (edge list)
+###### Daftar sisi (edge list)
 
 S→1; 1→2; 2→4 (T); 2→3 (F); 3→4 (T); 3→5 (F); 5→6 (T); 5→7 (F); 7→8 (T); 7→9 (F); 9→10 (T); 9→24 (F); 10→12 (T); 10→11 (F); 11→12 (T); 11→13 (F); 13→14 (T); 13→15 (F); 15→16 (T); 15→17 (F); 17→18 (T); 17→24 (F); 18→19; 19→23 (T); 19→20 (F); 20→23 (T); 20→21 (F); 21→23 (T); 21→22 (F); 22→23 (T); 22→24 (F); 24→25 (T); 24→31 (F); 25→26; 26→30 (T); 26→27 (F); 27→30 (T); 27→28 (F); 28→30 (T); 28→29 (F); 29→30 (T); 29→31 (F); 31→32 (T); 31→37 (F); 32→33; 33→36 (T); 33→34 (F); 34→36 (T); 34→35 (F); 35→36 (T); 35→37 (F); 37→38 (T); 37→43 (F); 38→42 (T); 38→39 (F); 39→42 (T); 39→40 (F); 40→42 (T); 40→41 (F); 41→42 (T); 41→43 (F); 4→X; 6→X; 8→X; 12→X; 14→X; 16→X; 23→X; 30→X; 36→X; 42→X; 43→X
 
 Berkas CSV: [edges_WB-2_getNumericInputError.csv](whitebox/edges_WB-2_getNumericInputError.csv).
 
-#### Flow graph
+###### Flow graph
 
 DOT: [WB-2_getNumericInputError.dot](whitebox/WB-2_getNumericInputError.dot); PNG: [WB-2_getNumericInputError.png](whitebox/WB-2_getNumericInputError.png).
 
 ![Flow graph WB-2](whitebox/WB-2_getNumericInputError.png)
 
-#### Kompleksitas siklomatik
+###### Kompleksitas siklomatik
 
 | N | E | P | V(G) = E − N + 2 | P + 1 | Verifikasi |
 |---|---|---|---|---|---|
@@ -487,7 +752,7 @@ DOT: [WB-2_getNumericInputError.dot](whitebox/WB-2_getNumericInputError.dot); PN
 
 V(G) = 29 = P + 1 dengan P = 28 predikat. Dari 114 jalur struktural (enumerasi graf), 27 tidak layak karena menuntut `ValidationMethod` sekaligus `"holdout"` dan `"kfold"` (simpul 25 dan 32 pada satu jalur); sisanya 87 layak dan membentang rank 29.
 
-#### Basis set jalur independen
+###### Basis set jalur independen
 
 Jalur dasar (1) adalah nilai bawaan formulir. Jalur 2–29 dibangun dengan membalik predikat. Membalik simpul 31 (`method = kfold`) dari jalur dasar **infeasible** (menuntut holdout dan kfold bersamaan); sisi `kfold` dicapai lewat jalur 20–22 dan 28 (kfold sah/tidak sah), dan sisi "bukan holdout dan bukan kfold" lewat jalur 27 (lihat catatan). Jalur 27 adalah satu-satunya jalur yang hanya layak lewat pelanggaran tipe: `ValidationMethod` di luar union `"holdout" | "kfold"` (diberi `"none"` lewat type assertion) sehingga kedua cabang `if` dilewati dan fungsi mengembalikan `null`. Tanpa jalur 27 rank hanya 28 (tes lama memuat 28 jalur bernomor dan tidak punya jalur seperti ini).
 
@@ -527,13 +792,13 @@ Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.getNumericInputE
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 29 dari 29 tes jalur lulus.
 
-### Track B — WB-3 — `useNaiveBayesValidation` (Naive Bayes)
+##### Track B — WB-3 — `useNaiveBayesValidation` (Naive Bayes)
 
 Sumber: `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/useNaiveBayesValidation.ts`. Berkas tes: `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/eval/whitebox.useNaiveBayesValidation.test.ts`.
 
 Blok `useMemo` pada `useNaiveBayesValidation` (baris 120–170) membangun daftar `errors` untuk tombol OK: target kosong, predictor kosong (dengan aturan N5-8), Complement bercampur predictor, dan konfigurasi Text Preprocessing.
 
-#### Tabel simpul
+###### Tabel simpul
 
 Keputusan pemecahan: (a) `!TargetVar && (SpecificationMode ?? "exclude") === "exclude"` (baris 139–140) dipecah menjadi simpul 5 (`!TargetVar`), simpul 6 (cabang `??`, dengan dua pernyataan penetapan 7 dan 8), simpul 9 (`=== "exclude"`), dan penetapan `predictorBelumBermakna` (10 dan 11); (b) `(len === 0 || belumBermakna) && !hasText` (baris 142–143) menjadi simpul 12, 13, 14; (c) `hasText && complement && len > 0` (baris 152–156) menjadi simpul 16, 17, 18; (d) `for...of` atas hasil `validateStwvConfig` menjadi simpul predikat loop 21 (jalur dibatasi paling banyak satu iterasi). Pemanggilan `getEffectivePredictors`, `getEffectiveTextSource`, dan `validateStwvConfig` tidak diperluas. `errors.length === 0` pada `return` hanya ekspresi nilai, bukan percabangan.
 
@@ -565,19 +830,19 @@ Keputusan pemecahan: (a) `!TargetVar && (SpecificationMode ?? "exclude") === "ex
 | 23 | `return { isValid: errors.length === 0, errors }` (return, baris 169) |
 | X | Simpul akhir (exit, sintetis): semua `return` bermuara ke sini |
 
-#### Daftar sisi (edge list)
+###### Daftar sisi (edge list)
 
 S→1; 1→2; 2→3 (T); 2→4 (F); 3→4; 4→5; 5→6 (T); 5→11 (F); 6→7 (T); 6→8 (F); 7→9; 8→9; 9→10 (T); 9→11 (F); 10→12; 11→12; 12→14 (T); 12→13 (F); 13→14 (T); 13→16 (F); 14→15 (T); 14→16 (F); 15→16; 16→17 (T); 16→20 (F); 17→18 (T); 17→20 (F); 18→19 (T); 18→20 (F); 19→20; 20→21 (T); 20→23 (F); 21→22 (T); 21→23 (F); 22→21; 23→X
 
 Berkas CSV: [edges_WB-3_useNaiveBayesValidation.csv](whitebox/edges_WB-3_useNaiveBayesValidation.csv).
 
-#### Flow graph
+###### Flow graph
 
 DOT: [WB-3_useNaiveBayesValidation.dot](whitebox/WB-3_useNaiveBayesValidation.dot); PNG: [WB-3_useNaiveBayesValidation.png](whitebox/WB-3_useNaiveBayesValidation.png).
 
 ![Flow graph WB-3](whitebox/WB-3_useNaiveBayesValidation.png)
 
-#### Kompleksitas siklomatik
+###### Kompleksitas siklomatik
 
 | N | E | P | V(G) = E − N + 2 | P + 1 | Verifikasi |
 |---|---|---|---|---|---|
@@ -585,7 +850,7 @@ DOT: [WB-3_useNaiveBayesValidation.dot](whitebox/WB-3_useNaiveBayesValidation.do
 
 V(G) = 13 = P + 1 dengan P = 12. Dari 600 jalur struktural (loop ≤ 1 iterasi) hanya 56 yang layak (simulasi 2·2·2·2·3·2·2 = 192 keadaan abstrak masukan), dan rank vektor-sisi himpunan jalur layak itu adalah **12**, bukan 13. Penyebabnya: simpul 2 dan simpul 5 membaca nilai yang sama (`formData.main.TargetVar`) sehingga selalu bernilai sama. Uji tandingan dengan skrip: bila simpul 5 dianggap independen dari simpul 2, rank himpunan jalur layak menjadi 13; jadi korelasi inilah yang menghilangkan satu derajat kebebasan.
 
-#### Basis set jalur independen
+###### Basis set jalur independen
 
 Jalur dasar (1): target terisi, ada predictor, tanpa fitur teks. Jalur 2–12 dipilih secara greedy dari himpunan jalur layak (urut dari masukan paling sederhana) dan diperiksa rank-nya (12 jalur layak independen). **Jalur 13 infeasible**: jalur independen ke-13 secara struktural adalah membalik simpul 5 saja dari jalur dasar, yaitu `S-1-2-4-5-6-7-9-10-12-13-16-20-23-X` (simpul 2 salah, simpul 5 benar). Ini mustahil karena `TargetVar` tidak berubah di antara baris 123 dan 139: `!TargetVar` tidak mungkin salah di simpul 2 lalu benar di simpul 5. Dari jalur dasar ada 3 pembalikan tunggal yang infeasible (simpul 5, 13, 20: masing-masing memaksa nilai bertentangan dengan keadaan sebelumnya, mis. `belumBermakna` benar padahal target terisi, atau `textSource = raw` padahal `hasText` salah). Selama pembangkitan basis tercatat 33 pembalikan predikat infeasible dari seluruh jalur yang ditelusuri; semuanya berasal dari ketergantungan antarpredikat (target kosong pada simpul 2/5/9, `belumBermakna` pada simpul 13, `hasText` pada simpul 14/16/20, jumlah predictor pada simpul 12/18) dan hanya ketergantungan simpul 2 dan 5 yang menurunkan rank.
 
@@ -608,13 +873,13 @@ Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.useNaiveBayesVal
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 12 dari 12 tes jalur lulus.
 
-### Track B — WB-4 — `loadModelFromFile` (Apply Model)
+##### Track B — WB-4 — `loadModelFromFile` (Apply Model)
 
 Sumber: `frontend/components/Modals/Analyze/Classify/apply-model/services/model-loader.ts`. Berkas tes: `frontend/components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/whitebox.loadModelFromFile.test.ts`.
 
 `loadModelFromFile` memvalidasi ekstensi dan ukuran file, membaca dan mem-parse JSON, lalu memanggil `finalizeLoad` (validasi umum `validateAnyModel` dan penyusunan hasil).
 
-#### Tabel simpul
+###### Tabel simpul
 
 Keputusan pemecahan: blok `try/catch` dimodelkan dengan dua predikat eksepsi implisit (simpul 6: `file.text()` menolak; simpul 7: `JSON.parse` melempar) karena keduanya adalah sumber percabangan ke `catch` dengan sebab berbeda. `finalizeLoad` diperluas (inline) sehingga predikat `!validation.ok` menjadi simpul 10. `validateAnyModel` dan adapter tidak diperluas.
 
@@ -635,19 +900,19 @@ Keputusan pemecahan: blok `try/catch` dimodelkan dengan dua predikat eksepsi imp
 | 12 | `return { ok: true, model, descriptor, sourceRef, sourceLabel }` (return, baris 72-77) |
 | X | Simpul akhir (exit, sintetis): semua `return` bermuara ke sini |
 
-#### Daftar sisi (edge list)
+###### Daftar sisi (edge list)
 
 S→1; 1→2 (T); 1→3 (F); 3→4 (T); 3→5 (F); 5→6; 6→8 (T); 6→7 (F); 7→8 (T); 7→9 (F); 9→10; 10→11 (T); 10→12 (F); 2→X; 4→X; 8→X; 11→X; 12→X
 
 Berkas CSV: [edges_WB-4_loadModelFromFile.csv](whitebox/edges_WB-4_loadModelFromFile.csv).
 
-#### Flow graph
+###### Flow graph
 
 DOT: [WB-4_loadModelFromFile.dot](whitebox/WB-4_loadModelFromFile.dot); PNG: [WB-4_loadModelFromFile.png](whitebox/WB-4_loadModelFromFile.png).
 
 ![Flow graph WB-4](whitebox/WB-4_loadModelFromFile.png)
 
-#### Kompleksitas siklomatik
+###### Kompleksitas siklomatik
 
 | N | E | P | V(G) = E − N + 2 | P + 1 | Verifikasi |
 |---|---|---|---|---|---|
@@ -655,7 +920,7 @@ DOT: [WB-4_loadModelFromFile.dot](whitebox/WB-4_loadModelFromFile.dot); PNG: [WB
 
 V(G) = 6 = P + 1 dengan P = 5. Untuk perbandingan: `loadModelFromFile` saja (tanpa memperluas `finalizeLoad`) V(G) = 5 dan `finalizeLoad` sendiri V(G) = 2; hasil gabungan 5 + 2 − 1 = 6.
 
-#### Basis set jalur independen
+###### Basis set jalur independen
 
 Semua 6 jalur layak. Jalur 5 memakai `"[]"` (JSON sah tetapi bukan objek): `validateAnyModel` mengembalikan `AM_E_NOT_OBJECT` (tanpa `detail`). Jalur 6 memakai fixture NB asli `nb-model-v1_1.json`; `validateAnyModel` dan adapter dipakai asli (tidak dimock).
 
@@ -674,13 +939,13 @@ Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, pe
 
 Interpretasi. Empat fungsi dianalisis: `validateColumnPrefix` (V(G) = 7), `getNumericInputError` (29), `useNaiveBayesValidation` (13), dan `loadModelFromFile` (6), dengan V(G) diverifikasi lewat jumlah sisi, simpul, dan rank matriks jalur. Dari 55 jalur basis, 54 layak dan seluruhnya lulus sebagai tes Jest [Win] (konfigurasi produksi); satu jalur pada WB-3 tidak layak (infeasible) dan ditandai eksplisit. Setiap kondisi majemuk dipecah per operan agar jalur mencerminkan pencabangan nyata. Tidak ada kegagalan tes; dua pengamatan berprioritas rendah dicatat pada BUGS.md B-1 dan B-2.
 
-## 6. Track C — Pengujian black-box (BB-01 sampai BB-36)
+#### 6. Track C — Pengujian black-box (BB-01 sampai BB-36)
 
 Kolom tabel: `| ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | Status | Cara uji (otomatis/manual) | Bukti |`. Kolom "Hasil yang diharapkan" adalah versi yang sudah dicocokkan dengan kode sumber (kode galat dan pesan dibaca dari kode, bukan dari tabel prompt); selisihnya dijelaskan pada "Catatan penyesuaian" di `C_blackbox.md`. Skenario yang butuh antarmuka nyata berstatus MANUAL dan ada di `C_manual_checklist.md`.
 
-### 6.1 String to Word Vector (BB-01..BB-13)
+##### 6.1 String to Word Vector (BB-01..BB-13)
 
-#### Tabel hasil
+###### Tabel hasil
 
 | ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | Status | Cara uji (otomatis/manual) | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -698,9 +963,9 @@ Kolom tabel: `| ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | S
 | BB-12 | F18 | Sel kosong pada kolom teks | Setiap sel kosong (null/""/hanya spasi) menjadi vektor nol dan jumlah baris tetap sama dengan jumlah baris dataset (baris sejajar). Pada korpus D yang disisipi sel "" (baris 2) dan "   " (baris 4) matriks 5 baris: [1,1,1,1,0], [0,0,0,0,0], [0,1,1,1,1], [0,0,0,0,0], [3,0,0,0,0]; `empty_documents` = 2. Nilai tetap hingga (tanpa NaN) pada normalisasi L2. Bila seluruh sel kosong, antarmuka menolak lebih dahulu: "The selected variable has no text data. Select a variable that contains text and try again. (EMPTY_DATA)" tanpa memanggil worker; inti sendiri menolak dengan `EMPTY_INPUT`. | Acuan independen Python (`logs/reference_bb_c1_extra.txt`, BB-12) memberi matriks di atas. Jest (VM): sel null dikirim sebagai "" pada indeks yang sama (sel hanya spasi dikirim apa adanya), lima kolom masing-masing berisi 5 nilai dengan nilai 0 pada baris 2 dan 4, ringkasan menunjukkan Documents (Rows) 5 dan Documents with Zero Vector 2; kolom seluruhnya kosong menampilkan galat EMPTY_DATA dan worker tidak dipanggil. Perilaku inti (vektor nol, baris tetap, L2 tanpa NaN, EMPTY_INPUT): diperiksa oleh tes Rust (hasil pada kolom Status). Manual: M-12. | Antarmuka: Lulus (2/2) [Win]<br>Inti Rust: Lulus (4/4) [Win]<br>E2E: MANUAL — belum dijalankan (M-12) | Otomatis (Jest/RTL + Rust) + manual | `frontend/components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.modal.test.tsx` › "BB-12 sel kosong menjadi vektor nol dan jumlah baris tetap sel kosong (null) dikirim sebagai string kosong pada indeks yang sama dan semua kolom tetap berisi 5 baris"<br>`frontend/components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.modal.test.tsx` › "BB-12 sel kosong menjadi vektor nol dan jumlah baris tetap bila seluruh sel kosong, worker tidak dipanggil dan galat EMPTY_DATA tampil"<br>`frontend/public/workers/TextAnalytics/statify-text-core/tests/eval_blackbox_stwv.rs` › `bb12_sel_kosong_menjadi_vektor_nol_dan_jumlah_baris_tetap`<br>`frontend/public/workers/TextAnalytics/statify-text-core/tests/eval_blackbox_stwv.rs` › `bb12_sel_kosong_di_awal_dan_akhir_tetap_sejajar`<br>`frontend/public/workers/TextAnalytics/statify-text-core/tests/eval_blackbox_stwv.rs` › `bb12_baris_nol_tetap_nol_dan_terbatas_pada_normalisasi_l2_sklearn`<br>`frontend/public/workers/TextAnalytics/statify-text-core/tests/eval_blackbox_stwv.rs` › `bb12_seluruh_sel_kosong_ditolak_inti_dengan_empty_input`<br>log: `logs/jest_C1_vm.json` (Jest, VM)<br>log: `logs/rust_eval_blackbox_stwv.txt` (belum ada; dihasilkan `run_C1.ps1`) |
 | BB-13 | F19 | Output Viewer setelah transformasi (korpus acuan D, opsi bawaan) | Satu log "STRING TO WORD VECTOR teks /PREFIX=VEC_", satu analytic "String to Word Vector", ringkasan teks (komponen Executed: "5 vector columns were created from variable `teks` and added as the last variables in the dataset (3 documents, 0 with a zero vector)."), dan tiga tabel: Processing Summary (Source Variable, Documents (Rows) 3, Documents with Zero Vector 0, Vocabulary Size 5, Columns Added to Dataset 5, Column Name Prefix, First – Last Column "VEC_makan – VEC_tidak", Processing Time (ms)), Settings (Formula Standard Weka, TF Word count, IDF None, Normalization None, Convert to Lowercase Yes, dst.), dan Vocabulary (No, Term, Dataset Column, Documents (Non-zero)): makan 2, nasi 2, saya 2, suka 2, tidak 1; ditampilkan paling banyak 200 baris. Tiap item disertai interpretasi otomatis berawalan "What this shows." | Jest (VM): setelah OK, `addLog`, `addAnalytic`, dan empat `addStatistic` dipanggil dengan judul String to Word Vector, Processing Summary, Settings, Vocabulary; isi ketiga tabel sesuai kolom harapan (termasuk nama kolom dan jumlah dokumen non-nol per term) ringkasan Executed berbunyi "5 vector columns were created from variable `teks` and added as the last variables in the dataset (3 documents, 0 with a zero vector)." dan setiap deskripsi berawalan "What this shows."; awalan kustom TKS_ tercermin pada nama kolom dan baris Column Name Prefix. Yang diuji hanya data yang ditulis ke penyimpanan hasil; penampilan visual item di Output Viewer: MANUAL — belum dijalankan (M-13). | Antarmuka: Lulus (2/2) [Win]<br>Tampilan: MANUAL — belum dijalankan (M-13) | Otomatis (Jest/RTL, isi yang ditulis) + manual (tampilan Output Viewer) | `frontend/components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.modal.test.tsx` › "BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer) BB-13 Output Viewer menerima Processing Summary, Settings, dan Vocabulary dengan isi yang benar"<br>`frontend/components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.modal.test.tsx` › "BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer) awalan kolom kustom TKS_ dipakai pada nama kolom dan ringkasan"<br>log: `logs/jest_C1_vm.json` (Jest, VM) |
 
-### 6.2 Naive Bayes (BB-14..BB-28)
+##### 6.2 Naive Bayes (BB-14..BB-28)
 
-#### Tabel hasil
+###### Tabel hasil
 
 | ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | Status | Cara uji (otomatis/manual) | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -720,9 +985,9 @@ Kolom tabel: `| ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | S
 | BB-27 | F30 | Jalur Word-Vector | Peringatan kebocoran tampil | Pada tab Variables, peringatan non-blokir `The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slightly optimistic.` tampil saat Word-Vector Variables terisi dan hilang saat dikosongkan; tidak tampil pada jalur Raw Text. Case Processing Summary jalur vector menambah baris `Note` yang sama. Rust: `leakage_note` sama persis dengan `TEXT_LEAKAGE_NOTE` pada jalur vector dan `null` pada jalur raw. | UI: Lulus (3/3) [Win]; TS: Lulus [Win]. Rust: Lulus [Win]. Manual: MANUAL — belum dijalankan | Otomatis (RTL, Rust) + manual | `logs/jest_C2_vm.json`; `logs/rust_eval_blackbox_nb.txt`; `hooks/useNaiveBayesTextRules.ts:36,157-159`; `rust/src/stats/case_summary.rs:141`; `components/variables-tab.tsx:575-581` |
 | BB-28 | F31 | Export Model | JSON schema 2.0 berisi resep | Tombol Export Model mengunduh `Naive_Bayes_Model_Export.json` (nama dapat diubah, `.json` ditambahkan bila belum ada). Jalur Raw Text: `schema_version` = `2.0` dan `text.recipe` ada (`recipe_version` 1.0, `vocabulary` sama dengan `terms`, `idf` dan `doc_freq` sepanjang kosakata, `n_docs` = 20); hasil serialisasi dapat dibaca ulang tanpa selisih. **Selisih dengan prompt**: jalur Word-Vector juga schema 2.0 tetapi tanpa resep (hanya `columns`); model numerik/kategorik biasa tetap schema 1.1 tanpa blok `text`. Model rusak atau kosong: tombol nonaktif, data bukan JSON memberi pesan galat. | TS: Lulus (4/4) [Win]. Rust: Lulus (2/2) [Win]. Manual: MANUAL — belum dijalankan | Otomatis (RTL, Rust) + manual | `logs/jest_C2_vm.json`; `logs/rust_eval_blackbox_nb.txt`; `rust/src/stats/save.rs:516-605,671`; `components/export-model-action.tsx:12` |
 
-### 6.3 Apply Model dan persistensi Naive Bayes (BB-29..BB-36)
+##### 6.3 Apply Model dan persistensi Naive Bayes (BB-29..BB-36)
 
-#### Tabel hasil
+###### Tabel hasil
 
 | ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | Status | Cara uji (otomatis/manual) | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -737,11 +1002,11 @@ Kolom tabel: `| ID | Fitur | Skenario | Hasil yang diharapkan | Hasil aktual | S
 
 Interpretasi. Skenario diuji pada tiga lapis: komponen React asli dirender di jsdom, fungsi inti dipanggil lewat Jest atau Rust native, dan langkah manual di aplikasi. Seluruh tes Jest Track C lulus di Windows (35 untuk C1, 63 untuk C2, 95 untuk C3) dan tes Rust C1/C2/C3 lulus (31, 24, 12); semua langkah manual belum dijalankan. Kode galat yang diperiksa terhadap sumber (mis. `INVALID_REGEX`, `EMPTY_VOCABULARY`) sesuai tabel prompt; selisih lain dicatat pada bagian "Catatan penyesuaian" di `C_blackbox.md`. Temuan antarmuka yang terkonfirmasi lewat tes Jest: pesan validasi Naive Bayes tidak pernah dirender (C2-02), validasi numerik tidak menonaktifkan tombol OK (C2-03), dan galat fold tidak berkode (C2-01).
 
-## 7. Track D — Akurasi numerik terhadap scikit-learn dan WEKA
+#### 7. Track D — Akurasi numerik terhadap scikit-learn dan WEKA
 
 Kolom tabel metrik: `| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |`. Statify dijalankan lewat biner wasm yang sama dengan aplikasi (pustaka headless `headless/statify_wasm.mjs`), tanpa menulis ulang rumus. scikit-learn 1.9.1 dijalankan di sandbox cloud; WEKA 3.9.6 pada OpenJDK 11 di VM.
 
-### Track D — K1 sampai K6 (Words to Keep = 1.000)
+##### Track D — K1 sampai K6 (Words to Keep = 1.000)
 
 Tabel 1. Metrik per konfigurasi dan perangkat.
 
@@ -781,7 +1046,7 @@ Tabel 2. Kesamaan Statify terhadap pembanding.
 
 K6 tidak memiliki pembanding scikit-learn maupun WEKA. Statify K6 menghasilkan akurasi 0,722222 (195/270), lebih rendah daripada K1 (0,762963) pada data ini.
 
-### Track D — SMS Spam (3.901 latih, 1.673 uji; ham 1.449, spam 224 pada data uji)
+##### Track D — SMS Spam (3.901 latih, 1.673 uji; ham 1.449, spam 224 pada data uji)
 
 Konfigurasi K1 sampai K4 (K5 dan K6 tidak dijalankan pada dataset ini sesuai rancangan) ditambah varian `w`. WEKA hanya tersedia untuk K1, K2, K3 dan varian `w`-nya.
 
@@ -850,7 +1115,7 @@ Matriks konfusi (urutan kelas: ham, spam).
 | K4w | Statify | [1449, 0] ; [69, 155] |
 | K4w | scikit-learn | [1449, 0] ; [69, 155] |
 
-### Track D — SmSA (11.000 latih, 500 uji; tiga kelas)
+##### Track D — SmSA (11.000 latih, 500 uji; tiga kelas)
 
 Konfigurasi K1 dan K4 ditambah varian `w`. WEKA tersedia untuk K1 dan K1w.
 
@@ -897,11 +1162,11 @@ Matriks konfusi (urutan kelas: negative, neutral, positive).
 
 Interpretasi. Pada seluruh 24 konfigurasi dan tiga dataset, kelas yang diprediksi Statify sama dengan scikit-learn (17.221 dari 17.221 prediksi); akurasi, Kappa, dan Macro F1 identik sampai 6 desimal, dan parameter model cocok sampai galat absolut maksimum 1,776e-15 pada VM dan 2,665e-15 pada Windows (selisih urutan operasi floating-point di numpy). Eksekusi ulang di Windows memberi kelas prediksi dan metrik yang identik. Probabilitas keluaran Apply Model dibulatkan 4 desimal oleh wasm (`round4`), sehingga selisih probabilitas terhadap scikit-learn paling besar 5,0e-5 dan sepenuhnya dijelaskan oleh pembulatan. Terhadap WEKA 3.9.6 pada Words to Keep bawaan (1.000), kelas prediksi sama pada 264 sampai 267 dari 270 dokumen pilkada karena WEKA mempertahankan semua kata yang seri pada batas (1.042 kata) sedangkan Statify memotong tepat 1.000; bila kosakata disamakan, 270 dari 270 sama. Data uji 270 dokumen terlalu kecil untuk memeringkat konfigurasi (galat baku akurasi sekitar 2,6 poin persentase).
 
-## 8. Track E — Waktu eksekusi
+#### 8. Track E — Waktu eksekusi
 
 Kolom tabel: `| Menu dan konfigurasi | Dataset | Jumlah term | Rata-rata (ms) | Simpangan baku (ms) |`. Protokol: 1 pemanasan dan 5 pengukuran. Hanya tabel perangkat skripsi (Windows 11, Ryzen 5 4600H) yang masuk buku; tabel uji asap di bawahnya berasal dari VM Linux dan tidak mewakili perangkat skripsi.
 
-### Track E — Tabel perangkat skripsi (hasil yang masuk buku)
+##### Track E — Tabel perangkat skripsi (hasil yang masuk buku)
 
 Label perangkat: PERANGKAT-SKRIPSI (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11)
 
@@ -1048,7 +1313,7 @@ Baris tambahan (bukan baris utama buku):
 | Apply Model, Raw Text (model NB Multinomial, data yang sama) | SmSA (11.000) | 373,6 | 221,1 | 326,1 | 388,7 |
 | Apply Model, Raw Text (model NB Multinomial, data yang sama) | Gabungan Pilkada+SMS+SmSA (17.974) | 544,0 | 322,2 | 502,7 | 600,8 |
 
-### Track E — UJI ASAP — BUKAN HASIL PERANGKAT SKRIPSI: VM-LOKAL (UJI ASAP, BUKAN PERANGKAT SKRIPSI)
+##### Track E — UJI ASAP — BUKAN HASIL PERANGKAT SKRIPSI: VM-LOKAL (UJI ASAP, BUKAN PERANGKAT SKRIPSI)
 
 Lingkungan tercatat: AMD Ryzen 5 4600H with Radeon Graphics x2; RAM 3.8 GiB; Linux 6.8.0-138-generic; Node v22.23.2
 
@@ -1116,11 +1381,11 @@ Baris tambahan (bukan baris utama buku):
 
 Interpretasi. Pengukuran di perangkat skripsi (Ryzen 5 4600H, Windows 11, Chrome 154 headless dan Node 24.13.1; 1 pemanasan dan 5 pengukuran per sel; adaptor daya tersambung, paket daya Balanced) mencakup dataset hingga 36.305 dokumen (gabungan 17.974 dokumen ditambah 20 Newsgroups 18.331 dokumen; label campuran, hanya untuk beban waktu). Waktu STWV default di peramban 61,1; 376,2; 769,1; 4.138,3 ms untuk 900; 5.574; 11.000; 36.305 dokumen: sekitar 0,07 ms per dokumen sampai 17.974 dokumen (1.229,6 ms), lalu 0,114 ms per dokumen pada 36.305 dokumen, yang dokumennya jauh lebih panjang (rata-rata 114,0 token dibanding 14,8 sampai 29,1). Naive Bayes dan Apply Model tumbuh lebih cepat daripada jumlah dokumen pada ukuran terbesar (10,7 sampai 12,7 kali lipat untuk 2,02 kali dokumen dibanding 17.974 dokumen, di peramban), tetapi NB 10-fold di headless hampir proporsional dengan jumlah token (4,34 sampai 4,72 ms per 1.000 token dari SMS Spam sampai 36.305 dokumen). Pada 36.305 dokumen, NB 10-fold memakan 26.624,7 ms di peramban (17.960,9 ms headless), NB holdout 10.297,3 ms, dan Apply Model 6.500,9 ms. Peramban lebih lambat daripada headless 1,2 sampai 1,4 kali untuk STWV default, 1,6 sampai 4,1 kali untuk NB holdout, 1,2 sampai 2,2 kali untuk NB 10-fold, dan 1,8 sampai 3,9 kali untuk Apply Model; selisih pada dataset terbesar masih 4,8 sampai 8,7 detik sehingga tidak hanya overhead tetap Worker (54,6 sampai 74,5 ms; BUGS.md E-03), dan penyebabnya tidak diisolasi di sini. Hanya STWV yang menghasilkan Long Task di main thread (satu per proses karena hasilnya matriks padat, BUGS.md E-02): terpanjang 101 ms pada 11.000 dokumen, 195 ms pada 17.974 dokumen, dan 441 ms pada 36.305 dokumen, sehingga ambang 200 ms terlewati pada ukuran terbesar; NB dan Apply Model tidak menghasilkan Long Task. STWV dengan stemming Sastrawi gagal (panic wasm) pada SMS Spam, dataset gabungan, dan dataset 36.305 dokumen sehingga selnya berisi GALAT, bukan waktu (BUGS.md E-01); pada varian ASCII terukur 411,1; 1.406,3; 6.166,2 ms di peramban (sekitar 1,49 kali STWV default pada 36.305 dokumen). Keterbatasan: satu perangkat, lima pengukuran per sel (median simpangan baku 3,0 persen, terbesar 16,5 persen pada sel kecil), Chrome headless, harness hanya mengukur Worker dan wasm (bukan klik sampai Output Viewer), dan program latar belakang tidak diperiksa.
 
-## 9. Track F — Integrasi antarmenu
+#### 9. Track F — Integrasi antarmenu
 
 Kolom tabel: `| ID | Skenario | Hasil yang diharapkan | Hasil aktual | Status | Bukti |`. Tes memanggil kode asli aplikasi (penamaan kolom STWV, `analyzeNaiveBayes`, `loadModelFromFile`, `applyModel`) dengan wasm sungguhan; hanya store dan kelas `Worker` yang diganti.
 
-### Track F — Hasil per skenario
+##### Track F — Hasil per skenario
 
 Angka berasal dari log yang disebut di kolom Bukti. Status "Lulus (VM Linux)" berarti lulus pada eksekusi nyata di VM; penanda ⟦…⟧ memungkinkan status diisi ulang dari `logs/jest_F_win.json` setelah Anda menjalankan `run_F.ps1`.
 
@@ -1152,7 +1417,7 @@ Cara pengujian: tes memanggil KODE ASLI aplikasi (`buildColumnData` dan `process
 | IT-05 Rust | Sisi Rust float_roundtrip: f64 acak (seed 42) dan model vectorizer K1, K4, K5 lewat `to_string_pretty` lalu `from_str` | Bit identik; `transform` model hasil muat sama dengan model asal. | Tes ada di `statify-text-core/tests/eval_integration.rs`; dikompilasi dan dijalankan di Windows lewat `run_F.ps1` (`logs/rust_eval_integration.txt`). | Hasil pada kolom Bukti (penanda diisi dari log Windows) | Lulus (2/2) [Win] |
 | IT-01..05 peramban | Pemeriksaan pada peramban nyata (dialog, kartu Model Summary, Output Viewer, unduhan, muat ulang halaman) | Sama dengan baris otomatis di atas. | Belum dilakukan. | BELUM DIJALANKAN: manual | `F_manual_checklist.md` (MF-01..MF-05) |
 
-### Track F — IT-03: kriteria 1e-9 dan pembulatan `round4`
+##### Track F — IT-03: kriteria 1e-9 dan pembulatan `round4`
 
 Kriteria asli: prediksi pada data latih yang sama identik dengan model akhir (selisih <= 1e-9). Wasm Apply Model membulatkan probabilitas keluaran ke 4 desimal (`round4`, `apply-model/rust/src/stats/posterior.rs` baris 65–67; sesuai spesifikasi, lihat D-02), sehingga kolom `NB_PredictedProbability` dan `NB_Probability_<kelas>` tidak mungkin mencapai selisih 1e-9 terhadap nilai presisi penuh. Kriteria tidak dilonggarkan diam-diam; dipakai empat tingkat bukti:
 
@@ -1167,7 +1432,7 @@ Putusan: **Lulus dengan catatan**. Yang tidak terpenuhi secara harfiah: selisih 
 
 Interpretasi. IT-01, IT-02, IT-04, dan IT-05 memenuhi kriteria (VM dan Windows): jumlah term sama dengan jumlah kolom `VEC_`, Model Summary sama dengan model asal (6.017 angka model sama bit demi bit), kelas prediksi sama dengan scikit-learn pada 270/270 dokumen, dan prediksi identik byte demi byte setelah tulis-baca berkas. IT-03 berstatus Lulus dengan catatan: kelas prediksi sama pada 630/630 baris, tetapi probabilitas keluaran dibulatkan 4 desimal sehingga kriteria 1e-9 tidak terpenuhi secara harfiah pada kolom probabilitas (selisih 4,992e-5 sampai 5,000e-5); parameter model identik bit demi bit. Satu kolom STWV bernama `VEC` lolos dari filter `VEC_` di antarmuka (F-01). Tes Rust `eval_integration.rs` lulus di Windows; pemeriksaan di peramban nyata (`F_manual_checklist.md`) belum dijalankan.
 
-## 10. Temuan (BUGS.md)
+#### 10. Temuan (BUGS.md)
 
 | ID | Tingkat | Judul | Berkas sumber |
 |---|---|---|---|
@@ -1199,7 +1464,7 @@ Interpretasi. IT-01, IT-02, IT-04, dan IT-05 memenuhi kriteria (VM dan Windows):
 
 Detail (lokasi file:baris, langkah reproduksi, dampak, usulan perbaikan) ada di `BUGS.md`. Usulan perbaikan tidak diterapkan karena aturan paket ini melarang perubahan kode produksi.
 
-## 11. Daftar NOT RUN
+#### 11. Daftar NOT RUN
 
 Daftar dibangkitkan dari keberadaan log saat REPORT.md dibangun.
 
@@ -1211,7 +1476,7 @@ Daftar dibangkitkan dari keberadaan log saat REPORT.md dibangun.
 | SMS Spam dan SmSA pada WEKA di Windows (Track D) | NOT RUN | Hanya dijalankan pada OpenJDK 11 di VM Linux; pengulangan di Windows hanya untuk pilkada (catatan agen WEKA, log tidak ada di salinan ini). |
 | STWV + Sastrawi pada SMS Spam, gabungan, dan dataset >= 20.000 dokumen (Track E) | GAGAL (bukan NOT RUN) | Wasm panic `unreachable` pada sastrawi-rs 0.5.1, lihat BUGS.md E-01. |
 
-## 12. Keterbatasan
+#### 12. Keterbatasan
 
 1. Tes Rust baru ditulis tanpa kompiler dan baru dikompilasi di Windows; semuanya lulus pada percobaan pertama. Sebagian nilai harapan bersifat karakterisasi perilaku kode saat ini (mis. `k1_*` untuk BUGS.md A-1), sehingga lulusnya tes membuktikan perilaku itu terjadi, bukan bahwa perilaku itu benar.
 2. Hasil Jest berlabel [VM] memakai ts-jest dan resolver pengganti, bukan konfigurasi produksi (next/jest dengan SWC); hasil Windows (konfigurasi produksi) yang berlaku untuk buku.
@@ -1223,6 +1488,1147 @@ Daftar dibangkitkan dari keberadaan log saat REPORT.md dibangun.
 8. Probabilitas Apply Model hanya tersedia pada 4 desimal, sehingga kriteria 1e-9 pada probabilitas keluaran tidak dapat diukur langsung (parameter dan vektor diperiksa pada presisi penuh).
 9. Pengujian antarmuka memakai jsdom dengan batas luar ditiru (store, modal, Worker); perilaku peramban nyata (WASM, Data Editor, Output Viewer) hanya tercakup oleh daftar periksa manual yang belum dijalankan.
 
-## 13. Berkas
+#### 13. Berkas
 
 `ENV.md`, `01_baseline.md`, `A_unit.md`, `B_whitebox.md`, `C_blackbox.md`, `C_manual_checklist.md`, `D_accuracy.md`, `E_performance.md`, `F_integration.md`, `F_manual_checklist.md`, `BUGS.md`, `AUDIT_DOCS.md`; log mentah di `logs/`; skrip di `run_*.ps1` dan `tools/`; tes di `__tests__/eval/` (Jest) dan `tests/eval_*.rs` (Rust) pada masing-masing menu.
+
+
+---
+
+# LAMPIRAN B — BUGS.md — temuan lengkap (lokasi, reproduksi, dampak, usulan)
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### BUGS — temuan paket evaluasi modul Text Analytics
+
+Seluruh temuan dari Track A sampai F. Setiap temuan memuat lokasi (berkas:baris), langkah reproduksi, dampak, usulan perbaikan, dan tingkat keyakinan. Kode produksi TIDAK diubah. Digenerate oleh `tools/merge_docs.py` dari `BUGS_A.md` .. `BUGS_F.md`.
+
+#### Indeks temuan
+
+| ID | Tingkat | Judul | Berkas sumber |
+|---|---|---|---|
+| A-1 | sedang | `KFolds = 1` lolos validasi dan menghasilkan evaluasi tanpa data latih | `BUGS_A.md` |
+| A-2 | informasi | ukuran fold total tidak seimbang pada k-fold bertingkat | `BUGS_A.md` |
+| A-3 | informasi | peringatan fold kosong tidak terpicu untuk k > ukuran kelas terbesar | `BUGS_A.md` |
+| A-4 | informasi, tes lama | asersi tautologi pada `s3_formulas.rs` | `BUGS_A.md` |
+| B-1 | rendah | `ValidationMethod` di luar union lolos validasi tanpa pemeriksaan | `BUGS_B.md` |
+| B-2 | informasi | `KFolds = 1` diterima | `BUGS_B.md` |
+| C1-01 | rendah | Delimiter yang hanya berisi spasi diam-diam diganti pola bawaan inti | `BUGS_C1.md` |
+| C1-02 | rendah | Galat awalan kolom tidak tercantum di kotak galat bawah panel | `BUGS_C1.md` |
+| C2-01 | sedang | Galat fold tidak berkode dan tidak sampai ke pengguna (BB-24) | `BUGS_C2.md` |
+| C2-02 | sedang | Pesan validasi tidak pernah ditampilkan (BB-14) | `BUGS_C2.md` |
+| C2-03 | sedang | Validasi numerik tidak menonaktifkan OK; Alpha tidak sah dibuang diam-diam (BB-18, BB-21) | `BUGS_C2.md` |
+| C2-04 | rendah | Tiga kalimat berbeda untuk konflik Complement (BB-17) | `BUGS_C2.md` |
+| C2-05 | rendah (saran) | Nilai negatif Word-Vector baru terdeteksi setelah analisis (BB-19) | `BUGS_C2.md` |
+| C3-01 | rendah | dokumentasi menyebut penyimpanan "otomatis", kode menyimpan hanya saat OK | `BUGS_C3.md` |
+| C3-02 | rendah | berkas non-.json dilaporkan sebagai "isi bukan JSON yang sah" | `BUGS_C3.md` |
+| C3-03 | informasi | batas ukuran 10 MiB, pesan dan spesifikasi menyebut 10 MB | `BUGS_C3.md` |
+| D-01 | sedang | kosakata STWV mandiri berbeda dari resep Naive Bayes/Apply Model bila stemming Indonesia aktif | `BUGS_D.md` |
+| D-02 | informasi | probabilitas Apply Model dibulatkan 4 desimal | `BUGS_D.md` |
+| D-03 | informasi | K1 dan K3 identik pada dua kelas seimbang; Complement tanpa prior | `BUGS_D.md` |
+| D-04 | informasi | perbedaan definisi dengan WEKA yang menimbulkan selisih prediksi, bukan galat | `BUGS_D.md` |
+| E-01 | tinggi | STWV dengan stemming Sastrawi membatalkan seluruh proses (wasm panic "unreachable") bila ada token yang karakter keduanya multibita | `BUGS_E.md` |
+| E-02 | informasi | hasil STWV berupa matriks padat dikirim lewat `postMessage`, sehingga main thread terblokir seiring jumlah dokumen | `BUGS_E.md` |
+| E-03 | informasi | Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap sekitar 55–75 ms (perangkat skripsi) | `BUGS_E.md` |
+| F-01 | rendah | kolom STWV untuk kata tanpa karakter sah bernama `VEC`, sehingga lolos dari filter `VEC_` pada tab Variables Naive Bayes | `BUGS_F.md` |
+| F-02 | informasi | probabilitas Apply Model dibulatkan 4 desimal, sehingga kriteria 1e-9 pada IT-03 tidak dapat diukur langsung | `BUGS_F.md` |
+
+Tingkat mengikuti catatan masing-masing temuan (sedang/tinggi = memengaruhi hasil atau menghentikan proses; rendah/informasi = ketidaksesuaian pesan, dokumentasi, atau karakterisasi perilaku). Tidak ada kode produksi yang diubah; semua usulan perbaikan menunggu persetujuan pemilik kode.
+
+
+<!-- sumber: BUGS_A.md -->
+
+#### BUGS_A - pengamatan Track A (pengujian unit tambahan)
+
+Seluruh 105 tes Jest Track A lulus di Windows (`logs/jest_A_win.json`) dan di VM (`logs/jest_A_vm.json`). Seluruh 66 fungsi tes Rust Track A dikompilasi dan lulus pada `cargo test` di Windows (`logs/rust_eval_formulas.txt` 15, `rust_eval_vocab_limit.txt` 13, `rust_eval_text_pipeline.txt` 20, `rust_eval_partition.txt` 18; 8 Oktober 2026). Percobaan `rustc` awal pada harness sandbox tidak punya log yang dapat ditelusuri dan tidak dihitung sebagai hasil; yang dipakai hanya log Windows.
+
+Skala keyakinan yang dipakai: **terverifikasi dengan tes yang dijalankan** (Jest dan `cargo test` di Windows), **analisis kode** (dibaca baris demi baris, tidak ada tes yang mengeksekusinya), **dugaan** (inferensi tanpa pembuktian).
+
+##### A-1 (sedang): `KFolds = 1` lolos validasi dan menghasilkan evaluasi tanpa data latih
+
+Ringkas: formulir Naive Bayes dan engine Rust sama-sama menerima jumlah fold 1. Satu fold berarti seluruh data menjadi data uji dan data latih kosong, sehingga metrik "cross-validation" yang dilaporkan tidak bermakna dan tidak disertai galat atau peringatan.
+
+###### Lokasi (file:baris)
+| Lapisan | Lokasi | Isi relevan |
+|---|---|---|
+| TS validasi | `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/useNaiveBayesValidation.ts:254-256` | `if (typeof folds !== "number" \|\| !Number.isInteger(folds) \|\| folds < 1) return "The number of folds must be at least 1."` |
+| Rust validasi | `.../naive-bayes/rust/src/stats/partition.rs:174-185` (`validate_fold_count`, cabang `folds < 1` di baris 179) | k = 1 lolos; tidak ada peringatan karena `1 <= ukuran kelas terkecil` (baris 201-206) |
+| Rust pembagian | `.../rust/src/stats/partition.rs:219-250` (`stratified_k_fold`) dan `:260-272` (`training_test_split_for_fold`) | satu bucket berisi semua indeks; indeks latih = gabungan bucket lain = kosong |
+| Rust evaluasi | `.../rust/src/wasm/function.rs:535-575` (loop fold), `:425-465` (`evaluate_split`, jalur setara-v1 memanggil `train_and_predict`) dan `:378-420` (`train_and_predict`) | `train_naive_bayes_model` dipanggil dengan 0 baris latih |
+| Rust prior | `.../rust/src/stats/class_prior.rs:34-52` | `total = 0` menghasilkan prior 0.0 untuk semua kelas (tidak panik; sudah ada tes lama `empty_cases_gives_zero_priors_without_panicking`) |
+| Rust prediksi | `.../rust/src/stats/prediction.rs:163-169` (`safe_ln`) dan `:207-290` (`predict_case_inner`, argmax `score > best_score`) | `ln(0)` dinaikkan ke `ln(MIN_POSITIVE)`; skor tiap kelas sama dan berhingga |
+| Spesifikasi | `AGENTS.md` bagian 4.2 (minimum 1) menurut `BUGS_B.md` B-2 | perilaku saat ini sesuai spesifikasi tertulis, tetapi spesifikasinya yang perlu ditinjau |
+
+###### Langkah reproduksi
+1. Antarmuka: buka Naive Bayes, pilih Validation = K-Fold, isi Number of folds = 1, jalankan analisis pada dataset kelas biner mana pun. Tidak ada pesan galat; hasil muncul.
+2. Sisi TS (tanpa antarmuka): `getNumericInputError` dengan `ValidationMethod = "kfold"`, `KFolds = 1` mengembalikan `null`. Tes: `kfold.eval.test.ts` > "eval A(e): batas jumlah fold pada getNumericInputError KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak)". DIJALANKAN dan lulus.
+3. Sisi Rust: `cargo test --test eval_partition` di `.../naive-bayes/rust` (`k1_lolos_validate_fold_count_tanpa_peringatan`, `k1_menghasilkan_satu_fold_berisi_semua_indeks`, `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data`, `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama`). Dijalankan di Windows dan lulus (`logs/rust_eval_partition.txt`, 18 dari 18); ekspektasinya dinyatakan sebagai "PERILAKU SAAT INI" (bukan perilaku yang seharusnya) di komentar tes, sehingga lulusnya tes membuktikan bahwa perilaku itu benar-benar terjadi.
+
+###### Dampak
+- Data latih tiap evaluasi k = 1 kosong. Terverifikasi oleh tes Rust yang dijalankan (jalur numerik/kategorik): semua kelas mendapat prior 0, skor sama, argmax memakai `score > best` pada kelas terurut alfabetis sehingga SEMUA prediksi jatuh ke kelas alfabetis pertama. Akurasi yang dilaporkan sama dengan proporsi kelas itu (mis. 3/9 pada fixture tes) dan Kappa 0, tanpa galat. Pengguna bisa menyalin angka itu sebagai hasil validasi silang.
+- Jalur teks mentah (Raw text): kosakata data latih kosong sehingga galat `NB_E_TEXT_EMPTY_VOCAB_FOLD` muncul (`raw_text.rs:105`). Galat itu benar menghentikan analisis, tetapi petunjuknya "or use fewer folds" menyesatkan untuk k = 1 (penyebabnya terlalu sedikit fold, bukan terlalu banyak). Pemeta pesan (`naive-bayes-error-messages.ts:57-77`) meneruskan petunjuk yang sama.
+- Pesan batas minimum yang ditampilkan ("at least 1") justru menyatakan 1 sah, sehingga pengguna tidak punya petunjuk.
+- Koreksi catatan `BUGS_B.md` B-2: pada k = 1 yang kosong adalah data LATIH (seluruh data menjadi data uji), bukan data uji.
+
+###### Usulan
+Batas minimum 2 di kedua lapisan, dengan pesan diperbarui:
+- TS: `useNaiveBayesValidation.ts:255` ubah `folds < 1` menjadi `folds < 2`; pesan menjadi "The number of folds must be at least 2.".
+- Rust: `partition.rs:179` ubah `folds < 1` menjadi `folds < 2`; pesan menjadi "Number of folds must be at least 2 (got {}).".
+- Sesuaikan tes yang mengkarakterisasi perilaku lama: `kfold.eval.test.ts` (KFolds = 1 menjadi ditolak), `eval_partition.rs` (k1_* menjadi `Err`), tes lama `folds_less_than_one_is_hard_blocked`, `whitebox.getNumericInputError`, `useNaiveBayesValidation.test.ts`, dan teks AGENTS.md 4.2.
+- Tidak mengubah kode produksi dalam paket ini (aturan Track A).
+
+###### Keyakinan
+- Sisi TS (k = 1 diterima): **terverifikasi dengan tes yang dijalankan**.
+- Sisi Rust (partisi satu fold dengan latih kosong, prediksi seragam, akurasi 3/9, kappa 0 pada fixture 9 baris): **terverifikasi dengan tes yang dijalankan** (`cargo test --test eval_partition` di Windows, 18 dari 18 lulus). Jalur teks mentah (`NB_E_TEXT_EMPTY_VOCAB_FOLD`) tetap **analisis kode**: `fit_split` memanggil `fit_transform` dengan daftar dokumen kosong, galat `EMPTY_INPUT` pemeta `map_core_error` menjadi kode itu (tidak dieksekusi).
+
+##### A-2 (informasi): ukuran fold total tidak seimbang pada k-fold bertingkat
+
+- Lokasi: `partition.rs:236-244` (loop `offset % folds_count`). Tiap kelas dibagi round-robin mulai dari fold 0, sehingga sisa tiap kelas selalu jatuh pada fold-fold awal.
+- Contoh terkarakterisasi di `eval_partition.rs` (`kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar`): 3 kelas x 11 data pada k = 5 menghasilkan ukuran fold [9, 6, 6, 6, 6] (dijalankan di Windows, `logs/rust_eval_partition.txt`); `StratifiedKFold` scikit-learn (shuffle, seed 42) memberi [7, 7, 7, 6, 6] untuk data yang sama (DIJALANKAN: `unit/sklearn_kfold_check.py`, `logs/sklearn_kfold_check.txt`). Selisih per kelas tetap <= 1 (properti yang diminta terpenuhi), hanya selisih total antarfold bisa mencapai jumlah kelas.
+- Dampak: kecil; evaluasi gabungan (pooled) tidak terpengaruh. Hanya relevan bila fold dilaporkan satu per satu.
+- Keyakinan: terverifikasi dengan tes yang dijalankan (Windows). Usulan opsional: geser fold awal per kelas (offset berputar).
+
+##### A-3 (informasi): peringatan fold kosong tidak terpicu untuk k > ukuran kelas terbesar
+
+- Lokasi: `partition.rs:201-206` hanya membandingkan dengan kelas TERKECIL; blokir keras hanya untuk `folds > n_instance` (`:194-199`).
+- Contoh terkarakterisasi: 6 instance dengan k = 6 menghasilkan fold [2, 2, 2, 0, 0, 0] (tiga fold uji kosong) dengan peringatan, bukan galat. Untuk k = n tiap fold seharusnya satu instance; round-robin per kelas tidak menjamin itu.
+- Dampak: fold uji kosong menyumbang nol prediksi; model tetap dilatih ulang untuk fold itu (sia-sia) dan akurasi gabungan tetap terdefinisi. Peringatan sudah muncul (karena k > kelas terkecil), jadi dampak praktis rendah.
+- Keyakinan: terverifikasi dengan tes yang dijalankan (`kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan`: ukuran [2, 2, 2, 0, 0, 0] dan peringatan ada; lulus di Windows).
+
+##### A-4 (informasi, tes lama): asersi tautologi pada `s3_formulas.rs`
+
+- Lokasi: `frontend/public/workers/TextAnalytics/statify-text-core/tests/s3_formulas.rs:277`, tes `words_to_keep_tie_break_alfabetis_weka_dan_sklearn`.
+- Pengamatan: argumen kedua `assert_eq!` dirangkai dari rantai iterator yang berakhir dengan `.chain(out.vocabulary.clone())` setelah beberapa `take(0)`/`filter(|_| false)`, sehingga ekspektasi selalu sama dengan `out.vocabulary`. Asersi seri tiga arah itu selalu benar dan tidak menguji apa pun.
+- Penanganan: tidak diubah (tes lama). Skenario yang sama diuji sungguhan di `eval_vocab_limit.rs` (`tie_tiga_arah...`), dengan nilai acuan dari `unit/reference_values.py`.
+- Keyakinan: analisis kode (bacaan sintaks), tidak memerlukan eksekusi.
+
+
+<!-- sumber: BUGS_B.md -->
+
+#### BUGS_B — pengamatan Track B (white-box)
+
+Tidak ada tes evaluasi Track B yang gagal (54 dari 54 lulus di VM, `logs/jest_B_vm.json`). Dua pengamatan berikut berasal dari analisis jalur, bukan dari kegagalan tes.
+
+##### B-1 (rendah): `ValidationMethod` di luar union lolos validasi tanpa pemeriksaan
+- Lokasi: `frontend/components/Modals/Analyze/Classify/naive-bayes/hooks/useNaiveBayesValidation.ts`, `getNumericInputError`, baris 240 dan 253 (`if (... === "holdout")`, `if (... === "kfold")`).
+- Reproduksi: `f.validation.ValidationMethod = "none" as unknown as "holdout"` lalu `getNumericInputError(f)`. Tes: `WB-2 jalur 27` (`whitebox.getNumericInputError.test.ts`).
+- Dampak: bila `ValidationMethod` bernilai selain `"holdout"`/`"kfold"` (mis. data lama atau rusak di IndexedDB), `TrainingPercentage` dan `KFolds` tidak divalidasi dan fungsi mengembalikan `null` (dianggap sah). Tidak terjangkau lewat tipe TypeScript; hanya relevan untuk data tersimpan yang rusak.
+- Usulan: tambahkan cabang `else` yang mengembalikan pesan galat, atau normalisasi `ValidationMethod` di `mergeWithDefaults`.
+
+##### B-2 (informasi): `KFolds = 1` diterima
+- Lokasi: baris 253–258 yang sama. Sesuai AGENTS.md §4.2 (minimum 1), sehingga bukan penyimpangan dari spesifikasi.
+- Catatan: k-fold dengan satu fold secara metodologis degenerate (tidak ada data uji). Tes lama (`whitebox.getNumericInputError.test.ts`, "Catatan temuan") sudah mencatatnya; di sini hanya dirujuk. Batas atas fold terhadap ukuran data memang sengaja diserahkan ke engine Rust (komentar baris 181–184).
+
+
+<!-- sumber: BUGS_C1.md -->
+
+#### BUGS_C1 — Temuan Track C1 (black-box String to Word Vector, BB-01 s.d. BB-13)
+
+Format: lokasi, langkah reproduksi, dampak, usulan perbaikan. Kode produksi tidak diubah. Tingkat keparahan: Low, kecuali dinyatakan lain. Bukti perilaku saat ini ada pada tes yang dinamai "temuan C1-xx" (tes itu mengunci perilaku sekarang, sehingga akan gagal bila perilakunya diperbaiki; ubah tesnya bersamaan dengan perbaikan).
+
+##### C1-01 — Delimiter yang hanya berisi spasi diam-diam diganti pola bawaan inti
+
+- **Lokasi**: `frontend/public/workers/TextAnalytics/statify-text-core/src/tokenizer.rs:25-26` (`compile_regex`: `delimiter_pattern.trim().is_empty()` → `r"[\s\p{P}]+"`); validasi antarmuka hanya memeriksa `delimiters.length === 0` di `frontend/components/Modals/Transform/StringToWordVector/config.ts:120`.
+- **Reproduksi**: pada Options isi Delimiters dengan satu spasi (` `), jalankan pada teks yang memuat tanda hubung, mis. "a-b c". Panjang string 1 sehingga lolos validasi antarmuka, tetapi inti menganggapnya kosong.
+- **Hasil**: token menjadi `a`, `b`, `c` (dipecah juga pada tanda baca) padahal pengguna meminta pemisah spasi saja, yang seharusnya menghasilkan `a-b`, `c`. Pemakai tidak diberi tahu bahwa pola diganti.
+- **Dampak**: kosakata berbeda dari yang diminta; hanya muncul bila pengguna memasukkan delimiter yang seluruhnya spasi (nilai bawaan tidak terpengaruh). Tidak mengubah hasil BB-01..BB-13 pada pengaturan normal.
+- **Bukti**: tes Rust `bb06_temuan_c1_01_delimiter_hanya_spasi_jatuh_ke_pola_bawaan_inti` (dijalankan dan lulus di Windows, `logs/rust_eval_blackbox_stwv.txt`). Langkah manual: M-06 langkah 5.
+- **Usulan**: validasi antarmuka memakai `config.delimiters.trim().length === 0` agar pola yang seluruhnya spasi ditolak dengan "Delimiters cannot be empty.", atau inti menolak pola kosong-setelah-trim dengan galat yang jelas (bukan fallback diam-diam) bila `delimiters` tidak kosong.
+
+##### C1-02 — Galat awalan kolom tidak tercantum di kotak galat bawah panel
+
+- **Lokasi**: `frontend/components/Modals/Transform/StringToWordVector/StringToWordVectorModal.tsx:43` (`hasValidationErrors` menyertakan `prefixError`) dan `:105-114` (kotak hanya memetakan `validationErrors`, bukan `prefixError`).
+- **Reproduksi**: pilih variabel teks, buka tab Options, isi Vector Column Name `1VEC_`, lalu pindah ke tab Variables.
+- **Hasil**: kotak merah di bawah panel menampilkan judul "Some options are invalid:" tanpa satu pun rincian; pesan "Vector column name must start with a letter, @, # or $." hanya ada di tab Options. Tombol OK nonaktif tanpa penjelasan di tab Variables. Jika diklik saat nonaktif, tidak terjadi apa-apa (tombol disabled).
+- **Dampak**: kebingungan pengguna (OK nonaktif tanpa alasan yang terlihat); fungsi tetap benar.
+- **Bukti**: tes Jest "temuan C1-02: bila hanya awalan yang tidak sah, kotak galat di bawah memuat judul tanpa rincian ..." (lulus di VM; lihat `logs/jest_C1_vm.json`). Langkah manual: M-03 langkah 2.
+- **Usulan**: sertakan `prefixError` pada daftar yang ditampilkan, mis. `[...validationErrors, ...(prefixError ? [prefixError] : [])].map(...)`.
+
+##### Observasi (bukan bug; dicatat agar penulisan Bab V akurat)
+
+- **O-1 (BB-03)**: kolom Vector Column Name memakai `maxLength={32}` sehingga skenario "lebih dari 32 karakter" tidak dapat dicapai lewat antarmuka; yang terjadi adalah pemotongan tanpa pesan. Pesan panjang maksimum hanya tercapai bila nilai melewati batas secara terprogram.
+- **O-2 (BB-05)**: ukuran n-gram di luar 1..5 dipotong (clamp) di kolom isian; pesan "N-gram min and max sizes must be whole numbers between 1 and 5." tidak pernah terlihat lewat antarmuka biasa, tetapi tetap berfungsi sebagai jaring pengaman, dan inti Rust menolak ukuran > 5 dengan `INVALID_CONFIG`.
+- **O-3 (BB-06)**: regex delimiter tidak divalidasi di antarmuka; galat `INVALID_REGEX` baru muncul setelah OK, dan pesan memuat rincian multibaris dari crate `regex`.
+- **O-4 (hanya pembacaan kode, belum diuji)**: mengosongkan kolom Words to Keep menghasilkan 0 (`parseNumberInput("")`), yang berarti "simpan semua kata" tanpa peringatan (`OptionsTab.tsx:55-58, 372`).
+- **O-5 (infrastruktur uji)**: `hooks/useStringToWordVector.ts:66` memakai `import.meta.url`, yang tidak dapat di-parse oleh ts-jest (keluaran CommonJS) sehingga modal tidak bisa diimpor langsung pada konfigurasi `jest.eval.config.js`. Tes C1 mengatasinya dengan pemuat `__tests__/eval/helpers/loadStwvHook.ts` tanpa mengubah kode produksi. Pemuat yang sama dipakai pula pada konfigurasi produksi `frontend/jest.config.js` (SWC lewat next/jest) sehingga hasilnya tidak bergantung pada cara `import.meta` ditangani; eksekusi di konfigurasi produksi itu belum dilakukan di sandbox (dijalankan oleh `run_C1.ps1` di Windows).
+
+
+<!-- sumber: BUGS_C2.md -->
+
+#### BUGS_C2 — Temuan Track C2 (black-box menu Naive Bayes, BB-14 s.d. BB-28)
+
+Seluruh temuan di bawah **belum diperbaiki**: sesuai aturan paket evaluasi, kode produksi tidak diubah. Bukti otomatis berupa tes karakterisasi yang lulus pada log `logs/jest_C2_vm.json` (tes itu mengunci perilaku yang ada sekarang, bukan perilaku yang diharapkan). Nomor baris merujuk kondisi berkas saat evaluasi.
+
+Folder dasar: `frontend/components/Modals/Analyze/Classify/naive-bayes/` (selanjutnya `nb/`).
+
+| ID | Skenario | Ringkasan | Keparahan |
+|---|---|---|---|
+| C2-01 | BB-24 | Galat/peringatan fold tidak berkode dan, pada run tanpa fitur Text, tidak sampai ke pengguna | Sedang |
+| C2-02 | BB-14 | Pesan validasi (`validation.errors`) tidak pernah ditampilkan; tombol OK nonaktif tanpa penjelasan | Sedang |
+| C2-03 | BB-18, BB-21 | Validasi numerik tidak menonaktifkan OK; Alpha tidak sah dibuang diam-diam sehingga analisis memakai nilai lama | Sedang |
+| C2-04 | BB-17 | Tiga kalimat berbeda untuk konflik Complement; yang terlihat pengguna tidak berkode | Rendah |
+| C2-05 | BB-19 | Nilai negatif Word-Vector baru terdeteksi setelah analisis dijalankan | Rendah (saran) |
+
+---
+
+##### C2-01 — Galat fold tidak berkode dan tidak sampai ke pengguna (BB-24)
+
+**Perilaku yang diamati (dikunci oleh tes).**
+
+1. `folds` lebih besar dari anggota kelas terkecil bukan galat: hanya `Some(warning)` dari `validate_fold_count` yang dicatat ke `ErrorCollector` dengan konteks `validation.kfold` lalu analisis berlanjut.
+2. `folds` lebih besar dari jumlah instance valid adalah `Err(String)` tanpa kode `NB_E_*`: `Number of folds (40) cannot be greater than the number of valid instances (30). Choose a smaller number of folds.`
+3. Pada run **tanpa** fitur Text, galat (2) tidak sampai ke pengguna: konstruktor tetap `Ok` dengan `result = None`, `get_formatted_results()` melempar `"No analysis results available"`, worker mengirim pesan itu, dan `getUserFriendlyNaiveBayesError` tidak mengenalinya sehingga yang tampil adalah `The Naive Bayes analysis could not be completed. Check the selected variables and settings, then try again.`
+4. Peringatan (1) juga tidak tampil: worker mengirim `errors` hanya pada pesan sukses dan `services/naive-bayes-analysis.ts` membuang `e.data.errors`.
+5. Run ber-Text membawa ringkasan galat konstruktor sehingga pesan fold sampai, tetapi dipetakan ke kalimat generik `Check the cross-validation settings. …` tanpa kode dan tanpa angka.
+
+**Lokasi.**
+
+- `nb/rust/src/stats/partition.rs:174-217` (`validate_fold_count`, pesan tanpa kode).
+- `nb/rust/src/wasm/function.rs:535-575` (peringatan dicatat di baris 538; galat dicatat dan `return None` di baris 573) dan `:762` (pesan generik).
+- `nb/rust/src/wasm/constructor.rs:211-218` (ringkasan galat hanya untuk `TextPayload` bukan `None`).
+- `frontend/public/workers/Classify/NaiveBayes/naive-bayes.worker.js:40-47` (`errors` hanya pada `success: true`).
+- `nb/services/naive-bayes-analysis.ts:271-277` (`e.data.errors` tidak dipakai).
+- `nb/services/naive-bayes-error-messages.ts` (satu cabang `fold`, tanpa kode, tanpa nilai).
+
+**Reproduksi.**
+
+1. Impor `dataset_untuk_text/uji_a2.csv` (5 baris; kelas A = 3, B = 2). Target = `kelas`; Validation → Cross-Validation Folds.
+2. Number of Folds = `6`, klik OK: toast generik `The Naive Bayes analysis could not be completed. …` (tanpa kata fold, tanpa kode).
+3. Number of Folds = `3` (> kelas terkecil 2): analisis selesai tanpa peringatan apa pun, padahal Rust menyatakan `Number of folds (3) exceeds the smallest class size (2). … The analysis will still run.`
+
+Otomatis: Jest `blackbox.nb.validation.test.ts` (BB-24, tiga tes, termasuk karakterisasi pesan generik); Rust `bb24_*` (lulus di Windows, `logs/rust_eval_blackbox_nb.txt`).
+
+**Dampak.** Pengguna tidak dapat mengetahui bahwa jumlah fold penyebab kegagalan atau bahwa fold per kelas tidak seimbang. Menyimpang dari AGENTS.md §4.2 ("tampilkan peringatan") dan dari harapan prompt (pesan kesalahan berkode).
+
+**Usulan perbaikan.**
+
+- Beri kode pada galat: mis. `NB_E_FOLD_COUNT` (fold < 1 atau > jumlah instance) dan `NB_W_FOLD_SMALL_CLASS` (peringatan), sertakan angka pada pesan.
+- Konstruktor: kembalikan `Err(error_summary)` untuk **semua** run saat `result` kosong (hapus syarat Text), atau bawa `errors` pada pesan gagal di worker.
+- Worker/service: teruskan `errors` pada pesan sukses dan tampilkan peringatan lewat `toast.warning`.
+- `naive-bayes-error-messages.ts`: petakan kode baru ke kalimat ramah dengan angka dan kode di akhir (pola E3).
+- Pencegahan di TS: karena jumlah baris dataset diketahui, `getNumericInputError` dapat menolak fold > jumlah baris sebelum worker dipanggil.
+
+---
+
+##### C2-02 — Pesan validasi tidak pernah ditampilkan (BB-14)
+
+**Perilaku.** `useNaiveBayesValidation` membangun `validation.errors` (mis. `Select a target variable.`, `Select at least one predictor variable …`, kalimat Complement, galat Text Preprocessing). Daftar itu hanya dibaca di `handleOK`, padahal tombol OK sudah `disabled={!validation.isValid}` sehingga cabang itu tidak dapat dicapai lewat klik. Akibatnya semua pesan itu tidak pernah terlihat. Tes karakterisasi `BB-14 (karakterisasi): teks pesan validasi tidak dirender di layar, hanya OK nonaktif` lulus.
+
+**Lokasi.**
+
+- `nb/hooks/useNaiveBayesValidation.ts:124` (pesan target), `:146` (pesan prediktor), `:158` (Complement), `:169` (`isValid`).
+- `nb/dialogs/naive-bayes-main.tsx:412-414` (pembaca `validation.errors`) dan `:521` (`disabled={!validation.isValid}`).
+
+**Reproduksi.** Buka Analyze → Classify → Naive Bayes pada dataset apa pun tanpa memilih Target: OK abu-abu, tidak ada kalimat penjelas di semua tab.
+
+**Dampak.** Pengguna baru tidak tahu apa yang kurang. Menyimpang dari AGENTS.md §2 (daftar galat di bawah panel dengan ikon `AlertCircle`) dan dari harapan BB-14 ("pesan validasi").
+
+**Usulan perbaikan.** Tampilkan `validation.errors[0]` di bawah panel/footer (atau sebagai tooltip pada OK yang nonaktif) memakai pola `AlertCircle` yang dipakai KNN; satukan kalimat dengan yang dipakai `options.tsx` (lihat C2-04).
+
+---
+
+##### C2-03 — Validasi numerik tidak menonaktifkan OK; Alpha tidak sah dibuang diam-diam (BB-18, BB-21)
+
+**Perilaku.**
+
+1. `validation.isValid` tidak memuat `getNumericInputError`; validasi numerik hanya dijalankan saat meninggalkan tab dan saat OK diklik (sesuai AGENTS.md §4.4, tetapi OK tetap tampak aktif). Training Percentage = 0 atau 100 hanya muncul sebagai toast (`Training percentage must be a whole number between 1 and 99.`), tidak ada pesan inline dan tidak ada gaya galat pada kolom.
+2. Pada Smoothing Alpha dan Text Alpha, nilai tidak sah hanya menghasilkan galat inline dan **tidak** diteruskan ke `formData` (`updateFormData` hanya dipanggil bila sah). Akibatnya `getNumericInputError` tidak pernah melihat nilai itu, jadi tidak ada toast saat pindah tab atau saat OK. Setelah pindah tab, kolom kembali ke nilai sah terakhir (tes `BB-18: Text Alpha 0 dan 1000 …` menunjukkan nilai kembali ke 999). Berdasarkan pembacaan kode (belum diuji otomatis), mengklik OK saat galat inline masih tampak akan menjalankan analisis dengan alpha sah terakhir tanpa peringatan.
+3. Input Number of Folds memakai `min={2}` pada elemen HTML, sedangkan `getNumericInputError` menerima fold ≥ 1 (sesuai AGENTS.md §4.2 "minimum 1"). Panah naik/turun peramban berhenti di 2, sehingga nilai 1 hanya bisa diketik.
+
+**Lokasi.**
+
+- `nb/dialogs/options.tsx:99-125` (`validateAlpha`/`handleAlphaChange`) dan `:127-141` (`handleTextAlphaChange`).
+- `nb/dialogs/validation.tsx:31-37` (`handleTrainingPercentChange` tanpa validasi), `:151-152` (`min={2}`, `max={25}`).
+- `nb/hooks/useNaiveBayesValidation.ts:106-169` (`isValid` tanpa validasi numerik), `:186-275` (`getNumericInputError`).
+- `nb/dialogs/naive-bayes-main.tsx:107-130` (`getTabLeaveError`), `:407-415` (`handleOK`).
+
+**Reproduksi.**
+
+1. Konfigurasi teks (DS-1) → Options → Text Alpha ketik `0` (galat inline), lalu klik OK langsung: OK aktif dan (menurut kode) analisis berjalan dengan alpha 1 (nilai bawaan) tanpa pesan.
+2. Validation → Training Percentage `0`: tidak ada pesan inline; OK aktif; toast baru muncul saat klik OK atau pindah tab.
+
+**Dampak.** Pengguna dapat mengira analisis memakai alpha yang diketik padahal nilai lama dipakai; pesan galat sebagian inline dan sebagian toast sehingga tidak konsisten.
+
+**Usulan perbaikan.** Simpan nilai mentah (termasuk yang tidak sah) di `formData` agar `getNumericInputError` dan `isValid` melihatnya, atau tambahkan `getNumericInputError(formData) === null` ke `validation.isValid` dan tampilkan pesannya inline; samakan `min` input fold dengan aturan TS (`min={1}`) atau ubah aturan TS.
+
+---
+
+##### C2-04 — Tiga kalimat berbeda untuk konflik Complement (BB-17)
+
+**Perilaku.** Konflik Complement + prediktor numerik/kategorik punya tiga redaksi: hook (`Complement Naive Bayes can only be used when the model contains Text Features only. Choose Multinomial or Bernoulli, or remove the numeric/categorical predictors.`, tidak pernah terlihat, lihat C2-02), tab Options (`Complement is selected, but the model also contains numeric or categorical variables. Choose Multinomial or Bernoulli.`, satu-satunya yang terlihat, tanpa kode), dan Rust/pesan ramah (`… (NB_E_COMPLEMENT_MIXED)`). Harapan prompt BB-17 ("Pesan NB_E_COMPLEMENT_MIXED") hanya terpenuhi pada lapis Rust.
+
+**Lokasi.** `nb/hooks/useNaiveBayesValidation.ts:157-159`; `nb/dialogs/options.tsx:350-355`; `nb/rust/src/stats/text_features.rs:165-168`; `nb/services/naive-bayes-error-messages.ts`.
+
+**Dampak.** Rendah: perilaku fungsional benar (OK diblokir, jalan keluar jelas); hanya konsistensi pesan dan kode.
+
+**Usulan perbaikan.** Satu konstanta pesan dipakai bersama dan, bila diinginkan, tambahkan `(NB_E_COMPLEMENT_MIXED)` di akhir sesuai pola E3.
+
+---
+
+##### C2-05 — Nilai negatif Word-Vector baru terdeteksi setelah analisis (BB-19)
+
+**Perilaku.** Antarmuka tidak memeriksa nilai negatif pada kolom Word-Vector Variables walau datanya sudah ada di klien; galat `NB_E_TEXT_NEGATIVE` baru muncul setelah worker dan WASM dimuat dan dijalankan. Pesan akhirnya benar dan menyebut kolom pertama serta jumlah kolom lain.
+
+**Lokasi.** `nb/hooks/useNaiveBayesValidation.ts` (tidak ada pemeriksaan); `nb/rust/src/models/data.rs:197-201,299`; tes `BB-19: UI tidak memblokir kolom negatif sebelum analisis`.
+
+**Dampak.** Rendah (umpan balik terlambat, beberapa detik pada dataset besar).
+
+**Usulan perbaikan (opsional).** Pemeriksaan ringan di TS saat Word-Vector Variables terisi atau saat OK, memakai `text_negative_message` yang sama; Rust tetap menjadi lapis akhir.
+
+---
+
+##### Catatan (bukan bug)
+
+- **BB-28**: resep (`text.recipe`) hanya ada pada ekspor jalur Raw Text. Jalur Word-Vector menghasilkan schema 2.0 tanpa resep (`text.recipe = null`, hanya `columns`) karena vektorisasi terjadi di luar Naive Bayes; model tanpa Text dan tanpa Gaussian min-std tetap schema 1.1. Rumusan prompt "schema 2.0 berisi resep" berlaku untuk jalur Raw Text.
+- **BB-24**: istilah "pesan kesalahan berkode" pada prompt tidak sesuai kode; tidak ada kode `NB_E_*` untuk fold (lihat C2-01).
+- **Batas lingkungan**: tes Rust paket ini ditulis tanpa kompiler dan baru dikompilasi di Windows; `cargo test --test eval_blackbox_nb` lulus 24 dari 24 (`logs/rust_eval_blackbox_nb.txt`).
+
+
+<!-- sumber: BUGS_C3.md -->
+
+#### BUGS_C3 — temuan Track C3 (black-box Apply Model dan persistensi Naive Bayes, BB-29 sampai BB-36)
+
+Tidak ada tes evaluasi Track C3 yang gagal (95 dari 95 lulus di Windows, `logs/jest_C3_win.json`; tes Rust `eval_blackbox_am` 12 dari 12 lulus, `logs/rust_eval_blackbox_am.txt`). Tiga temuan berikut berasal dari pembacaan kode sumber dan perilaku yang diamati lewat tes, dan seluruhnya berkeparahan rendah (ketidaksesuaian dokumen atau pesan, bukan perhitungan salah).
+
+##### C3-01 (rendah): dokumentasi menyebut penyimpanan "otomatis", kode menyimpan hanya saat OK
+- Lokasi: `frontend/components/Modals/Analyze/Classify/naive-bayes/DOKUMENTASI.md`, baris 44 ("Pengaturan terakhir disimpan otomatis (IndexedDB, key `"NaiveBayes"`)"); perilaku sebenarnya di `frontend/components/Modals/Analyze/Classify/naive-bayes/dialogs/naive-bayes-main.tsx`, `handleOK` (penyimpanan di baris 426, `saveFormData("NaiveBayes", payload)`), dan tidak ada penyimpanan pada perubahan nilai maupun pada Cancel.
+- Reproduksi: ubah beberapa pengaturan (mis. Smoothing Alpha 0,5), klik Cancel, buka menu lagi: pengaturan kembali ke nilai sebelumnya atau default. Tes: `BB-36-d` (`blackbox.nb.persistence.test.tsx`).
+- Dampak: pengguna yang membaca dokumentasi mengira perubahan yang dibatalkan tetap tersimpan; skenario BB-36 pada prompt ("tutup dan buka kembali menu NB, pengaturan terakhir pulih") hanya benar bila penutupan dilakukan lewat OK.
+- Usulan: ubah kalimat dokumentasi menjadi "disimpan saat OK ditekan", atau, bila perilaku otomatis memang diinginkan, simpan juga saat Cancel/penutupan.
+
+##### C3-02 (rendah): berkas non-.json dilaporkan sebagai "isi bukan JSON yang sah"
+- Lokasi: `frontend/components/Modals/Analyze/Classify/apply-model/services/model-loader.ts`, baris 166–167 (`if (!file.name.toLowerCase().endsWith(".json")) return fail("AM_E_PARSE", file.name)`); pesan di `constants/apply-model-codes.ts`, baris 71.
+- Reproduksi: pilih `c3_bukan_model.txt` pada Apply Model, sumber Upload file. Tes: `BB-29a` (`blackbox.am.loader.test.ts`) dan `BB-29-UI-b` (`blackbox.am.model-tab.test.tsx`).
+- Dampak: pesan "The model content could not be read as valid JSON. (AM_E_PARSE)" menyesatkan untuk berkas yang sebenarnya hanya salah ekstensi (isinya mungkin JSON model yang sah). Kontrol pilih berkas sudah memfilter `.json`, sehingga hanya terlihat bila pengguna memilih "All files".
+- Usulan: kode atau pesan terpisah, mis. "The model file must have a .json extension."
+
+##### C3-03 (informasi): batas ukuran 10 MiB, pesan dan spesifikasi menyebut 10 MB
+- Lokasi: `model-loader.ts`, baris 44 (`MAX_MODEL_FILE_BYTES = 10 * 1024 * 1024`); pesan `AM_E_FILE_TOO_LARGE` ("... larger than the 10 MB limit."); spesifikasi `apply-model/AGENTS.md` baris 384 ("≤ 10 MB").
+- Dampak: berkas 10.000.001 sampai 10.485.760 byte diterima walaupun lebih dari 10 MB desimal. Tidak berpengaruh praktis; dicatat agar batas yang diuji (tes `BB-29j`, `BB-29k`) tidak disalahbaca.
+- Usulan: tulis "10 MiB" pada pesan dan spesifikasi, atau samakan konstanta dengan 10.000.000.
+
+##### Pengamatan non-bug (penyimpangan tabel prompt yang sudah dicatat di `C_blackbox_C3.md`)
+- Pesan antarmuka berbahasa Inggris dengan kode di akhir kalimat (bukan bahasa Indonesia).
+- Model Word-Vector dengan kolom `VEC_` yang hilang tidak memblokir OK (hanya peringatan `AM_W_TEXT_ALL_ZERO_FILLED` dan info `AM_I_TEXT_ZERO_FILLED`), berbeda dari fitur kategorikal/numerik dan variabel teks Raw yang memblokir.
+- Bentrok nama kolom hasil dengan variabel dataset adalah penyesuaian otomatis (`AM_W_NAME_ADJUSTED`), bukan galat; hanya nama kustom kembar yang menjadi galat (`AM_E_NAME_DUPLICATE`).
+
+
+<!-- sumber: BUGS_D.md -->
+
+#### BUGS_D — temuan Track D (perbandingan akurasi numerik Statify, scikit-learn, WEKA)
+
+Tidak ada selisih numerik antara Statify dan scikit-learn: kelas prediksi sama pada 17.221 dari 17.221 prediksi (24 konfigurasi pada tiga dataset), parameter model dan matriks bobot STWV cocok sampai sekitar 1e-15 (`D_accuracy.md`). Satu ketidakkonsistenan antarmodul (D-01) ditemukan, ditambah tiga catatan informasi yang menjelaskan selisih terhadap WEKA dan keterbatasan keluaran. Tidak ada kode produksi yang diubah.
+
+##### D-01 (sedang): kosakata STWV mandiri berbeda dari resep Naive Bayes/Apply Model bila stemming Indonesia aktif
+- Lokasi (dugaan penyebab, belum diverifikasi karena kode Rust tidak dapat dibangun di sandbox): versi pustaka stemmer pada `Cargo.lock` berbeda antarmodul. `frontend/components/Modals/Transform/StringToWordVector/rust/Cargo.lock` baris 194–195: `sastrawi-rs` **0.5.1**; `frontend/components/Modals/Analyze/Classify/naive-bayes/rust/Cargo.lock` baris 183–184, `.../apply-model/rust/Cargo.lock` baris 183–184, dan `frontend/public/workers/TextAnalytics/statify-text-core/Cargo.lock` baris 130–131: **0.5.3**.
+- Reproduksi: `node testing/text_analytics_eval/accuracy/run_statify.mjs --dataset pilkada --configs K6` (konfigurasi: bawaan Weka + stopword Indonesia + stemming Indonesia, W = 1.000). Log memuat `STWV(train) vocab=1000 identik dengan resep NB: false`; sebaliknya `true` untuk K1 sampai K5, varian `w` dan `m`. Berkas pembanding: `accuracy/out/stwv_train_statify_K6.json` (kosakata STWV) dan `accuracy/out/model_statify_K6.json` (`text.terms`, kosakata Naive Bayes).
+- Hasil terukur pada `pilkada_train.csv`: kedua kosakata berukuran 1.000 tetapi berbeda 8 kata. Hanya di STWV: `#mencaripemimpin, #menolaklupa, anggap, apa, ilu, tua, ubah, uji`. Hanya di Naive Bayes: `malu, milu, nanti, nilai, rubah, sadar, sapa, tunjuk`. Contoh: kata `sapa` ada pada data latih satu kali, hasilnya `sapa` pada Naive Bayes tetapi `apa` pada STWV; `apa` termasuk dalam daftar stopword resep, jadi kemunculannya di kosakata STWV tampaknya hasil stemming yang terjadi setelah penyaringan stopword (belum diverifikasi di kode).
+- Dampak: pengguna yang membentuk kolom vektor lewat menu STWV (konfigurasi K6) lalu memakai kolom itu pada Naive Bayes mode Word-Vector atau Apply Model mendapat kosakata yang berbeda dari jalur Raw Text pada data dan konfigurasi yang sama. Pengaruh pada akurasi tidak diukur. Jalur Raw Text (Naive Bayes ke Apply Model) konsisten satu sama lain karena keduanya memakai versi 0.5.3. Pada konfigurasi tanpa stemming tidak ada selisih.
+- Usulan: samakan versi `sastrawi-rs` pada keempat `Cargo.lock` (atau gunakan satu crate bersama), bangun ulang wasm STWV, lalu ulangi perintah di atas; harapannya `identik dengan resep NB: true` untuk K6. Bila selisih tetap ada, bandingkan urutan penyaringan stopword dan stemming pada `pipeline.rs` STWV dan resep Naive Bayes.
+
+##### D-02 (informasi): probabilitas Apply Model dibulatkan 4 desimal
+- Lokasi: `frontend/components/Modals/Analyze/Classify/apply-model/rust/src/stats/posterior.rs` baris 65–67 (`round4`), dipakai di `stats/summary.rs` baris 115 dan 118; sesuai spesifikasi (komentar menyebut AGENTS.md §5.5).
+- Dampak: probabilitas dan probabilitas maksimum keluaran hanya akurat sampai 5,0e-5; galat absolut terhadap scikit-learn pada tabel `D_accuracy.md` mencapai 5,000e-05 sebagai akibatnya, bukan karena rumus. Dokumen yang probabilitasnya berbeda di bawah 1e-4 tampak seri. Metrik berbasis peringkat probabilitas (mis. AUC, log-loss) tidak dapat dihitung teliti dari keluaran ini.
+- Usulan: tidak perlu diubah bila pembulatan memang dikehendaki; catat batas ini di bab hasil dan, bila presisi penuh diperlukan, sediakan opsi tanpa pembulatan. Tes `eval_compare.rs` (lulus di Windows, `logs/rust_eval_compare.txt`) membaca probabilitas presisi penuh dari sumber Rust.
+
+##### D-03 (informasi): K1 dan K3 identik pada dua kelas seimbang; Complement tanpa prior
+- Lokasi: `frontend/public/workers/TextAnalytics/statify-text-core/src/nb_text.rs` (bobot dan skor Complement `Σ x·L`, tanpa prior untuk K ≥ 2; baris 127–152 menurut catatan agen WEKA) dan `apply-model/rust/src/stats/posterior.rs` baris 16 (`normalize_log_scores`, normalisasi log-sum-exp seluruh skor).
+- Pengamatan: pada pilkada (315/315) `pred_statify_K1.csv` dan `pred_statify_K3.csv` identik byte demi byte, begitu juga K1w dan K3w. Ini konsekuensi matematis (dengan dua kelas, selisih skor Complement sama dengan selisih log-likelihood Multinomial dan prior sama), bukan bug. Pada SMS Spam (kelas tak seimbang) keduanya berbeda.
+- Dampak: tabel K1 dan K3 pada pilkada tidak memberi informasi pembeda; pembeda baru terlihat pada data tak seimbang atau lebih dari dua kelas. Probabilitas Complement adalah softmax skor (sama dengan `ComplementNB.predict_proba` scikit-learn), bukan peluang terkalibrasi; WEKA hanya mengeluarkan vektor satu-nol sehingga probabilitasnya tidak dapat dibandingkan.
+- Usulan: sebutkan hal ini di naskah agar K3 tidak dibaca sebagai bukti independen pada data dua kelas seimbang.
+
+##### D-04 (informasi): perbedaan definisi dengan WEKA yang menimbulkan selisih prediksi, bukan galat
+- **Words to Keep**: Statify memotong tepat W kata (urut total kemunculan menurun, seri menurut alfabet byte). WEKA mempertahankan semua kata yang hitungannya sama dengan ambang (`DictionaryBuilder.java`, ambang `>=`), sehingga pada pilkada `-W 1000` menghasilkan 1.042 kata. Akibat pada bawaan W = 1.000: kelas prediksi berbeda pada 3 sampai 6 dari 270 dokumen (pilkada), 1 sampai 4 dari 1.673 (SMS Spam), 1 dari 500 (SmSA). Dengan W yang disamakan (varian `m`) atau seluruh kosakata (`w`) selisihnya nol dan probabilitas sama (pilkada). `max_features` scikit-learn memakai aturan seri lain lagi (berbeda 26 kata pada W = 1.000), karena itu `sk_compare.py` memilih kosakata dengan aturan Statify.
+- **Prior kelas**: Statify `count/N`; WEKA `(n_c + 1)/(N + K)`. Sama hanya pada kelas seimbang.
+- **Keluaran Complement WEKA**: satu-nol (tidak menimpa `distributionForInstance`).
+- Usulan: tidak ada perubahan kode; jelaskan perbedaan ini di naskah ketika membandingkan Statify dengan WEKA pada pengaturan bawaan.
+
+##### Pengamatan non-bug
+- Berkas model hasil Export Model berisi `trained_at`; model dari dua eksekusi (Node 22.22 cloud dan Node 22.23 VM) sama persis selain bidang itu (diperiksa untuk K1 dan K6). Prediksi seluruh konfigurasi identik byte antar-mesin.
+- Satu dokumen uji pilkada (Id 212) tidak berisi kata kosakata; posteriornya 0,5/0,5 pada model Multinomial/Complement dan kedua perangkat memilih kelas pertama (`negative`) sehingga salah klasifikasi; tidak ada perbedaan antarperangkat.
+
+
+<!-- sumber: BUGS_E.md -->
+
+#### BUGS_E — temuan Track E (pengujian waktu eksekusi)
+
+Satu cacat fungsional (E-01) ditemukan saat mengukur skenario "STWV + stopword Indonesia + stemming Sastrawi", ditambah dua catatan informasi tentang perilaku waktu eksekusi (E-02, E-03). Tidak ada kode produksi yang diubah. Semua angka di bawah berasal dari eksekusi nyata di sandbox cloud (lihat `E_performance.md` untuk spesifikasi sandbox dan `logs/perf_*` untuk lognya); angka waktu itu BUKAN waktu perangkat skripsi.
+
+##### E-01 (tinggi): STWV dengan stemming Sastrawi membatalkan seluruh proses (wasm panic "unreachable") bila ada token yang karakter keduanya multibita
+- Lokasi: pustaka pihak ketiga `sastrawi-rs 0.5.1`, `src/affixation.rs:24:46` (pesan panik tercetak di konsol: `byte index 2 is not a char boundary; it is inside '‘' (bytes 1..4) of `i‘m``). Versi itu dipakai wasm STWV: `frontend/components/Modals/Transform/StringToWordVector/rust/Cargo.toml` baris 22 (`sastrawi-rs = "0.5.1"`) dan `.../rust/Cargo.lock` baris 194–195 (lihat juga D-01 di `BUGS_D.md`). Wasm Naive Bayes dan Apply Model memakai 0.5.3 (`naive-bayes/rust/Cargo.lock` baris 183–184) dan TIDAK panik pada masukan yang sama.
+- Reproduksi (headless, wasm yang sama dengan aplikasi):
+  1. `node testing/text_analytics_eval/perf/prepare_datasets.mjs` lalu `node testing/text_analytics_eval/perf/run_headless.mjs --datasets sms_5574 --scenarios stwv_sw_stem` → sel berstatus `GALAT: unreachable` pada pemanasan (log: `logs/perf_headless_sandbox.txt`, baris `[sms_5574 | stwv_sw_stem]`).
+  2. Minimal: `process_text_data(["I‘m going"], {...toRustConfig(KONFIGURASI.K6.stwv)})` → `RuntimeError: unreachable`; `["café résumé"]` → panik (kata `résumé`: huruf pertama ASCII, huruf kedua `é` berukuran 2 bita); `["makan nasi"]`, `["3x£150pw"]`, `["makanan‘nya"]` berhasil. Dengan stopword saja (tanpa stemming) atau tanpa keduanya semua masukan berhasil, jadi pemicunya stemmer.
+  3. Di peramban: Worker mengirim `{status:"error", payload}`; `normalizeWorkerError` menampilkan pesan mentah `unreachable` (kode `WASM_ERROR`) kepada pengguna — pesan tidak informatif.
+- Cakupan terukur (per dokumen tunggal, `words_to_keep = 0`, konfigurasi K6): SMS Spam 5.574 dokumen → **34 dokumen** memicu panik (483 dokumen memuat karakter non-ASCII; contoh `I‘m going to try for 2 months ha ha only joking`, tanda petik tipografis U+2018); Gabungan 17.974 → 34 dokumen; Pilkada 900 (14 dokumen non-ASCII) dan SmSA 11.000 (0 non-ASCII) → 0. Satu dokumen saja cukup membatalkan seluruh korpus (fungsi memproses semua dokumen dalam satu panggilan).
+- Dampak: pada korpus berisi teks Inggris atau aksara bertanda (SMS Spam UCI, 20 Newsgroups, tweet dengan petik tipografis), pengguna tidak dapat memakai opsi "Indonesian (Sastrawi)" sama sekali dan mendapat galat tanpa petunjuk. Instans wasm sesudah panik tetap dapat dipakai lagi (diuji headless di Node: panggilan berikutnya dengan masukan sah berhasil; belum diuji di Worker peramban), jadi tidak ada keadaan rusak yang menetap. Pengukuran waktu skenario ini pada SMS Spam dan Gabungan karena itu dicatat GAGAL; sebagai gantinya disediakan varian ASCII (non-ASCII dilipat/dibuang) hanya untuk keperluan waktu.
+- Usulan: (1) samakan versi `sastrawi-rs` STWV ke ≥ 0.5.3 dan bangun ulang wasm STWV (sekaligus menutup D-01), lalu jalankan ulang langkah 1; (2) bila 0.5.3 pun rawan pada masukan lain, bungkus pemanggilan stemmer per token dengan `std::panic::catch_unwind` atau lewati stemming bila `!word.is_char_boundary(2)`; (3) tangkap panik di Worker dan tampilkan pesan yang berarti (mis. "Stemming gagal pada kata '…'").
+
+##### E-02 (informasi): hasil STWV berupa matriks padat dikirim lewat `postMessage`, sehingga main thread terblokir seiring jumlah dokumen
+- Lokasi: `frontend/components/Modals/Transform/StringToWordVector/stringToWord.processor.ts` (`self.postMessage({ status: 'success', payload: result })`, `result.matrix` = n × V angka) dan `hooks/useStringToWordVector.ts#runWorker`.
+- Pengukuran sandbox (harness peramban, `logs/perf_browser_sandbox.txt`): Long Task terpanjang pada main thread 110 ms (SMS Spam 5.574), 197 ms (SmSA 11.000), 285 ms (Gabungan 17.974) — melewati ambang 200 ms pada ±18 ribu dokumen; jeda frame terpanjang mengikuti (100/183/267 ms). Naive Bayes dan Apply Model tidak menghasilkan Long Task sama sekali (hasilnya ringkas). Biaya `structuredClone` hasil STWV di Node: 45,6 / 185,3 / 385,9 ms untuk Pilkada / SMS Spam / SmSA (`logs/perf_clone_cost_sandbox.txt`).
+- Pengukuran perangkat skripsi (Windows 11, Ryzen 5 4600H, Chrome 154 headless, `logs/perf_browser_skripsi.txt`): Long Task terpanjang STWV default 64 ms (SMS Spam 5.574), 101 ms (SmSA 11.000), 195 ms (gabungan 17.974), 441 ms (36.305 dokumen); STWV Sastrawi varian ASCII 214 ms (gabungan) dan 449 ms (36.305). Ambang 200 ms terlewati pada gabungan varian ASCII dan pada dataset 36.305; NB dan Apply Model tetap tanpa Long Task. Rincian: `E_performance.md` bagian 5.1.
+- Dampak: untuk korpus ≥ ±18 ribu dokumen antarmuka membeku ratusan ms saat hasil STWV diterima, belum termasuk penambahan ~1.000 kolom ke DataStore (tidak diukur di harness). Angka ini dari CPU sandbox; pada perangkat skripsi harus diukur ulang (`run_E.ps1`).
+- Usulan (opsional): kirim matriks sebagai `Float64Array` yang ditransfer (transferable) atau bentuk sparse, dan tulis kolom ke DataStore bertahap.
+
+##### E-03 (informasi): Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap sekitar 55–75 ms (perangkat skripsi)
+- Lokasi: `naive-bayes/services/naive-bayes-analysis.ts` baris 257 (`new Worker(...)` per analisis, `worker.terminate()` setelah hasil) dan `apply-model/services/apply-model-analysis.ts` baris 104; STWV memakai ulang Worker (`workerRef`).
+- Pengukuran sandbox (40 dokumen, sehingga komputasi ≈ 0): NB holdout rata-rata 98,3 ms, NB 10-fold 139,2 ms, Apply Model 75,5 ms, STWV 3,1 ms (Worker dipakai ulang). Berasal dari boot Worker, revalidasi berkas (304) dan kompilasi wasm 1,6–1,8 MB. Akibatnya sel kecil (Pilkada 900) NB dan Apply Model di peramban 3–5 kali lebih lama daripada headless (213,7 vs 46,3 ms; 322,0 vs 103,5 ms; 121,3 vs 32,2 ms), sedangkan sel besar didominasi komputasi.
+- Pengukuran perangkat skripsi (`E_performance.md`): overhead tetap 64,3 ms (NB holdout), 74,5 ms (NB 10-fold), 54,6 ms (Apply Model), 2,6 ms (STWV). Koreksi atas dugaan sandbox bahwa sel besar didominasi komputasi: pada 36.305 dokumen, peramban masih 6.587,0 ms (NB holdout), 8.663,8 ms (NB 10-fold), dan 4.839,4 ms (Apply Model) lebih lambat daripada headless, jadi selisih tidak hanya overhead tetap; penyebabnya belum diisolasi.
+- Dampak: kecil secara absolut; relevan hanya untuk interpretasi tabel (selisih peramban − headless pada dataset kecil bukan komputasi). Usulan (opsional): simpan `WebAssembly.Module` terkompilasi atau pakai ulang Worker.
+
+
+<!-- sumber: BUGS_F.md -->
+
+#### BUGS_F — temuan Track F (pengujian integrasi antarmenu IT-01..IT-05)
+
+Alur STWV, Naive Bayes, Export Model, Apply Model, dan penyimpanan model ke berkas berjalan konsisten pada seluruh pemeriksaan otomatis (`F_integration.md`). Ditemukan satu cacat kecil pada pertemuan antara STWV dan Naive Bayes (F-01) serta satu catatan informasi (F-02) yang menjelaskan mengapa kriteria 1e-9 pada IT-03 tidak dapat diukur langsung pada keluaran. Tidak ada kode produksi yang diubah.
+
+##### F-01 (rendah): kolom STWV untuk kata tanpa karakter sah bernama `VEC`, sehingga lolos dari filter `VEC_` pada tab Variables Naive Bayes
+- Lokasi: `frontend/stores/useVariableStore.ts` baris 36–42 (`processVariableName`: karakter tidak sah diganti `_`, lalu baris 42 `processedName.replace(/[._]+$/g, '')` membuang garis bawah di ujung nama) dan `frontend/components/Modals/Analyze/Classify/naive-bayes/components/dataset-variable-list.tsx` baris 46–54 (`filterVariablesByText`: pencocokan substring `includes`). Nama kolom dibentuk oleh `buildColumnData` (STWV, `utils/buildColumnData.ts`) dengan awalan `VEC_` yang diteruskan ke `processVariableName`.
+- Reproduksi (otomatis): `node testing/text_analytics_eval/integration/it01_stwv_to_nb.mjs` (baris INFO "kolom bernama tanpa 'VEC_'") dan tes Jest `integration.it01.leakage-ui.test.tsx` (IT-01-h dan IT-01-i). Data: `pilkada_train.csv`, kolom `Text Tweet`, konfigurasi STWV bawaan (Words to Keep 1.000). Kosakata memuat token `&`; nama kolomnya menjadi `VEC` (bukan `VEC_…`). Pada W = 1.000 terdapat 1.000 kolom STWV dan hanya 999 yang mengandung `VEC_`.
+- Dampak: pengguna yang memilih kolom vektor dengan mengetik `VEC_` pada kotak filter, memilih Select All (filtered), lalu menekan panah ke Word-Vector Variables hanya memindahkan 999 kolom; kolom `VEC` tertinggal di daftar Available dan tetap menjadi prediktor biasa (numerik) pada model. Model yang terbentuk memuat 999 term teks, bukan 1.000, ditambah satu prediktor numerik. Tidak ada galat atau peringatan. Pada tes IT-01 jumlah term model sama dengan jumlah kolom yang DIPINDAHKAN (999 pada skenario filter; 1.000 bila seluruh kolom dipindahkan), sehingga kriteria IT-01 terpenuhi; cacat ini hanya memengaruhi cara pengguna memilih kolom. Pengaruh pada akurasi tidak diukur.
+- Usulan: (a) STWV memberi nama cadangan yang tetap berawalan, misalnya `VEC_sym1`, bila hasil `processVariableName` tidak lagi mengandung awalan; atau (b) `processVariableName` tidak memangkas garis bawah ujung bila nama tersebut hanya awalan; atau (c) tambahkan tombol "pilih semua kolom hasil STWV" pada tab Variables. Setelah perbaikan, ulangi perintah di atas; harapannya semua nama kolom berawalan `VEC_`.
+
+##### F-02 (informasi): probabilitas Apply Model dibulatkan 4 desimal, sehingga kriteria 1e-9 pada IT-03 tidak dapat diukur langsung
+- Lokasi: sama dengan D-02 pada `BUGS_D.md` (`apply-model/rust/src/stats/posterior.rs` baris 65–67, `round4`).
+- Pengamatan Track F: pada lima konfigurasi (K1..K5) dan 630 baris, `round4(skor acuan presisi penuh)` sama persis dengan kolom `NB_Probability_*` pada 1.260 dari 1.260 sel per konfigurasi, selisih absolut maksimum antara 4,992e-05 dan 5,000e-05 menurut konfigurasi (batas pembulatan 5e-05), kelas sama 630 dari 630. Parameter model yang diterima Apply Model identik bit demi bit dengan model Naive Bayes (selisih 0). Satu `log_weight` yang sengaja digeser 1e-9 terdeteksi oleh pembanding bit, tetapi keluaran Apply Model tidak berubah (0 dari 2.520 sel), sehingga kriteria 1e-9 hanya dapat diuji pada parameter model dan skor acuan, tidak pada kolom keluaran.
+- Dampak: IT-03 diberi status "Lulus dengan catatan". Kriteria asli (selisih keluaran ≤ 1e-9) tidak dipenuhi secara harfiah karena pembulatan 4 desimal pada desain; keputusan kelas dan parameter tidak terdampak.
+- Usulan: tidak perlu mengubah kode; jelaskan di naskah, atau sediakan opsi keluaran tanpa pembulatan bila kriteria 1e-9 pada keluaran memang diperlukan.
+
+
+---
+
+# LAMPIRAN C — ENV.md — lingkungan pengujian dan penyimpangan
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### ENV — Lingkungan pengujian
+
+Semua versi di bawah berasal dari perintah/berkas yang benar-benar dibaca; sumbernya ditulis di kolom "Sumber". Yang tidak dapat diverifikasi ditulis apa adanya. Paket evaluasi dijalankan di **tiga lingkungan berbeda**; setiap angka di laporan menyebut lingkungannya.
+
+#### 1. Perangkat uji skripsi (Windows) — lingkungan acuan untuk hasil buku
+
+| Butir | Nilai | Sumber |
+|---|---|---|
+| Perangkat | Lenovo IdeaPad Gaming 3 15ARH05 | diberikan pengguna (prompt) |
+| CPU | AMD Ryzen 5 4600H, 6 inti / 12 thread | diberikan pengguna; model CPU juga terlihat dari VM (§3) |
+| RAM | 16 GB DDR4 3200 MHz | diberikan pengguna (belum diverifikasi sesi ini) |
+| OS | Windows 11 Home 64-bit | diberikan pengguna |
+| rustc / cargo | rustc 1.93.0 (254b59607 2026-01-19), host `x86_64-pc-windows-msvc`, toolchain `stable-x86_64-pc-windows-msvc` | berkas `target/.rustc_info.json` hasil build Windows di repo |
+| WEKA | 3.9.6, `C:\Program Files\Weka-3-9-6\` (JRE bawaan Zulu 17.0.2) | `testing/text_analytics_eval/weka/00_ENV_dan_pemetaan_opsi.md` (dibaca dari berkas `release` JRE) |
+| Peramban terpasang | Chrome 154.0.8037.98 (dipakai Track E), Edge 154.0.4258.62, Brave 155.1.97.56 | `logs/env_windows.txt` (dicatat `run_all.ps1`, 8 Oktober 2026 10:27 WIB) |
+| Node.js / npm / Jest (npx) | v24.13.1 / 11.8.0 / 30.0.4 | `logs/env_windows.txt` |
+| cargo / wasm-pack | cargo 1.93.0 (083ac5135 2025-12-15) / wasm-pack 0.14.0; `cargo-llvm-cov` dan `cargo-tarpaulin` tidak terpasang (cakupan Rust tidak terukur) | `logs/env_windows.txt` |
+| Python / numpy / pandas / scikit-learn / scipy | 3.13.12 / 2.4.4 / 3.0.2 / **1.9.1** / 1.17.1 | `logs/env_windows.txt` |
+| Java sistem | Java(TM) SE 25.0.4.1 LTS (WEKA memakai JRE bawaan sendiri, bukan Java sistem) | `logs/env_windows.txt` |
+| Graphviz `dot` | tidak terpasang di Windows (diagram flow graph dibuat di sandbox/VM) | `logs/env_windows.txt` |
+| git | 2.50.1.windows.1; cabang `text-analytics-eval`, commit `33b1b7e02cf6f47209020be61fdcd460f6817de1` saat lingkungan dicatat | `logs/env_windows.txt` |
+| Perangkat (hasil pencatatan otomatis) | LENOVO 82EY, Windows 11 Home Single Language 10.0.26300, RAM 15,4 GB, memori 3200 MHz, paket daya Balanced | `logs/env_windows.txt` |
+
+Versi paket Node yang dipakai (dari `node_modules` repo, berlaku di Windows maupun VM): jest 30.0.5, ts-jest 29.4.1, typescript 5.9.2, jest-environment-jsdom 30.0.5, @testing-library/react 16.3.0, react 18.3.1, next 15.5.9, @playwright/test 1.57.0, playwright 1.57.0, fake-indexeddb 6.0.1 (dibaca dari `node_modules/*/package.json`).
+
+#### 2. Sandbox cloud (penulisan, scikit-learn, graphviz) — bukan perangkat skripsi
+
+| Butir | Nilai | Sumber |
+|---|---|---|
+| OS / kernel | Linux 6.18.44-fc-v77 | `uname -sr` |
+| CPU / RAM | Intel Xeon @ 2,10 GHz, 2 vCPU; 8 GB | `lscpu`, `free -m` |
+| Node.js | v22.22.0 | `node -v` |
+| Python | 3.13.16 | `python3 -V` |
+| numpy / pandas / scikit-learn / scipy | 2.5.3 / 3.0.5 / **1.9.1** / 1.18.1 | `python3 -c "import …"` |
+| matplotlib | 3.11.2 | idem |
+| Graphviz `dot` | 2.43.0 | `dot -V` |
+| Playwright / Chromium | 1.56.0 (versi yang tercatat saat pengukuran Track E; instalasi global lain di sandbox melaporkan 1.56.1, tidak dipakai pengukuran) / Chromium 141.0.7390.37 (build `chromium-1194`) | `logs/perf_device_info_sandbox.txt` (baris `playwright`), `logs/perf_browser_sandbox.txt` |
+| rustc / cargo | 1.97.0 / 1.97.0 (terpasang tetapi **tidak dipakai**: tidak ada crate) | `rustc -V` |
+
+#### 3. VM Linux lokal (Jest, Node headless) — berjalan di laptop pengguna, bukan Windows asli
+
+VM ini adalah pembantu eksekusi Linux yang terhubung ke folder repo Windows; hypervisor tercatat "Microsoft" dan model CPU yang terlihat sama dengan laptop pengguna, tetapi hanya 2 vCPU dan ±3,9 GB RAM.
+
+| Butir | Nilai | Sumber |
+|---|---|---|
+| OS / kernel | Linux 6.8.0-138-generic (Ubuntu 22.04) | `uname -a` |
+| CPU / RAM | AMD Ryzen 5 4600H with Radeon Graphics, 2 vCPU, hypervisor Microsoft; 3,9 GB | `lscpu`, `free -m`; `logs/perf_device_info_vm.txt` |
+| Node.js / npm | v22.23.2 / 10.9.8 | `node -v`, `npm -v` |
+| Python | 3.10.12; numpy 2.2.6; pandas 2.3.3 (tanpa scikit-learn) | `python3 …` |
+| Java | OpenJDK 11.0.32.1 (Ubuntu) | `java -version` |
+| Graphviz / git | 2.43.0 / 2.34.1 | `dot -V`, `git --version` |
+| Jest runner | `testing/text_analytics_eval/tools/run_jest_linux.sh` (ts-jest, `unrs-resolver-shim.js`, salinan lokal `node_modules`) | berkas di repo |
+
+#### 4. Penyimpangan lingkungan yang berpengaruh pada hasil
+
+1. **Tidak ada akses jaringan** dari sandbox cloud dan VM ke npm, crates.io, PyPI, GitHub, UCI, HuggingFace (ditolak kebijakan egress: respons `403 host_not_allowed`/gagal resolusi DNS). Akibatnya: `cargo build/test` tidak dapat dijalankan di sesi penulisan; semua tes Rust baru dikompilasi dan dijalankan pertama kali di Windows (lihat `logs/rust_eval_*.txt`); dataset SMS Spam, SmSA, 20 Newsgroups tidak dapat diunduh (lihat `accuracy/datasets/MANIFEST.md` untuk asal berkas yang ada).
+2. **Jest di VM memakai `ts-jest`**, bukan transformer SWC dari `next/jest` (biner SWC terpasang hanya `swc-win32-x64-msvc`), dan shim resolver karena biner `unrs-resolver` Linux tidak terpasang. Kesetaraannya diuji: jumlah kasus Jest STWV (111 tes, 9 suite) dan Apply Model (466 tes) di VM sama dengan log Windows. Hasil final untuk buku sebaiknya dari `jest_*_win.json` (config produksi); `apply_results.py` mengutamakan hasil Windows.
+3. **Biner WebAssembly** yang dipakai skrip Node/Jest headless adalah `pkg/*.wasm` yang sudah ada di repo (sha256 dicatat di `headless/README.md` dan di tiap log), bukan hasil build baru. Kesesuaiannya dengan sumber Rust terkini diperiksa oleh `eval_compare.rs` (Apply Model), yang lulus di Windows (`logs/rust_eval_compare.txt`).
+4. **Waktu eksekusi** yang diukur di sandbox cloud/VM adalah uji asap dan bukan hasil perangkat skripsi (lihat `E_performance.md`).
+5. Pemasangan `npm install` di sandbox cloud sempat dicoba dan diblokir (403) untuk paket `eslint-plugin-testing-library`/`@types/node`; salinan kerja cloud tidak dipakai untuk menjalankan Jest. Repo pengguna tidak diubah oleh percobaan itu.
+
+
+---
+
+# LAMPIRAN D — D_accuracy.md — Track D lengkap (metode, tabel parameter dan vektor, penjelasan selisih, keterbatasan)
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### D. Perbandingan akurasi numerik: Statify, scikit-learn, dan WEKA
+
+Dokumen ini melaporkan Track D evaluasi modul Text Analytics Statify: apakah jalur Raw Text Naive Bayes -> Export Model -> Apply Model pada Statify menghasilkan prediksi dan probabilitas yang sama dengan scikit-learn dan WEKA pada data dan konfigurasi yang setara. Semua angka pada tabel berasal dari eksekusi nyata; log mentah ada di `testing/text_analytics_eval/logs/` (nama berawalan `accuracy_`). Seluruh alur juga dijalankan ulang di Windows (laptop skripsi, `run_D.ps1`, Node 24, Python 3.13, scikit-learn 1.9.1) bersama tes Rust `eval_compare` dan Jest konfigurasi produksi; hasilnya sama (kelas prediksi dan metrik identik, hanya dua nilai galat parameter pada K5 yang berbeda pada digit terakhir), lihat bagian 9. Tabel di bawah dibangun dari eksekusi VM dan dicocokkan dengan log Windows.
+
+#### 1. Ringkasan
+
+- Prediksi kelas Statify sama dengan scikit-learn pada **seluruh 24 konfigurasi** yang dijalankan (pilkada 13 konfigurasi x 270 dokumen, SMS Spam 7 x 1.673, SmSA 4 x 500; 17.221 prediksi, 0 selisih). Akurasi, Kappa, dan Macro F1 identik sampai 6 desimal pada semuanya.
+- Probabilitas posterior keluaran Apply Model dibulatkan 4 desimal oleh wasm (`round4`), sehingga galat absolut maksimum terhadap scikit-learn selalu di bawah atau sama dengan 5,0e-5 (batas pembulatan) dan LRE terhadap `round4` scikit-learn adalah "≥ 15 (identik)". Untuk memeriksa presisi penuh, parameter model Statify (log-likelihood dan prior) dibandingkan langsung dengan `feature_log_prob_` scikit-learn: galat absolut maksimum 1,776e-15 pada VM (2,665e-15 pada Windows, konfigurasi K5), LRE minimum 15,21 (2.000 sampai 6.202 elemen per konfigurasi). Matriks bobot hasil STWV (K4, K5) cocok dengan scikit-learn/numpy dengan galat absolut maksimum 7,105e-15 (LRE minimum 14,96) dan tanpa selisih posisi elemen tak-nol.
+- Terhadap WEKA 3.9.6: pada konfigurasi bawaan Words to Keep = 1.000, kelas prediksi sama pada 264 sampai 267 dari 270 dokumen (pilkada). Sebabnya terukur: WEKA mempertahankan **semua** kata yang berhitungan sama dengan ambang (1.042 kata), Statify memotong tepat 1.000. Bila kosakata disamakan (varian `m`: W = 1.042; varian `w`: seluruh kosakata), kelas prediksi sama pada 270/270 dan metrik identik pada semua pasangan yang diuji.
+- K1 dan K3 identik byte demi byte pada pilkada (dua kelas seimbang: Complement setara Multinomial secara analitik). K6 (stopword Indonesia dan stemming Sastrawi) tidak punya pembanding eksternal; ditemukan **selisih kosakata 8 kata antara STWV mandiri dan resep yang dipakai Naive Bayes** (`BUGS_D.md`, D-01).
+
+#### 2. Lingkungan dan versi
+
+| Butir | Nilai | Sumber |
+|---|---|---|
+| wasm STWV (`statify_string_to_word_bg.wasm`) | sha256 `94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669`, 1.464.043 B | `logs/accuracy_statify_pilkada_vm.txt` |
+| wasm Naive Bayes (`public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm`) | sha256 `163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8`, 1.843.034 B | idem |
+| wasm Apply Model (`public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm`) | sha256 `036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc`, 1.627.140 B | idem |
+| Menjalankan Statify | `testing/text_analytics_eval/headless/statify_wasm.mjs` (Node, tanpa npm); Node v22.23.2 (VM Linux perangkat), v22.22.0 (sandbox cloud) | log |
+| Mesin | VM Linux di perangkat (kernel 6.8.0-138, 2 vCPU; CPU yang dilaporkan: AMD Ryzen 5 4600H). Bukan Windows 11 laptop skripsi. | `/proc/cpuinfo` VM |
+| scikit-learn | 1.9.1; Python 3.13.16, numpy 2.5.3, scipy 1.18.1, pandas 3.0.5 (sandbox cloud, Linux) | `logs/accuracy_sklearn_*_cloud.txt`, `accuracy/out/sklearn_results.json` |
+| Perbandingan (`compare_predictions.py`) | Python 3.10.12, numpy 2.2.6, pandas 2.3.3 (VM) | `logs/accuracy_compare_*_vm.txt` |
+| WEKA | 3.9.6, OpenJDK 11.0.32.1 (VM), paket `complementNaiveBayes` 1.0.3; dijalankan agen WEKA (`weka/HASIL_WEKA.md`) | `weka/out/`, `weka/logs/` |
+
+Ketiga wasm di atas sama persis (sha256) pada sandbox cloud dan VM. Seluruh `pred_statify_*.csv` (14 pilkada dan 4 SmSA yang dibandingkan) identik byte demi byte antara Node 22.22 (cloud) dan Node 22.23 (VM) (diverifikasi ulang pada audit dokumen: jalan ulang `run_statify.mjs` di cloud lalu `cmp` terhadap `accuracy/out`, pilkada 14/14, SMS Spam 7/7, SmSA 4/4 identik; `logs/audit_rerun_trackD_cloud.txt`). `pred_sklearn_*.csv`, `sklearn_params_*.json`, dan `sklearn_train_matrix_*.json` (42 berkas di `accuracy/out`) identik byte demi byte dengan hasil jalan ulang `sk_compare.py` di sandbox cloud (scikit-learn 1.9.1; log audit yang sama). Bahwa salinan scikit-learn yang dipakai VM identik dengan salinan cloud tidak dapat diperiksa dari cloud.
+
+#### 3. Metode
+
+##### 3.1 Data
+- **Pilkada**: `Claude outputs/pilkada_train.csv` (630 baris; negative 315, positive 315) dan `pilkada_test.csv` (270 baris; 135 per kelas). Kolom teks `Text Tweet`, kelas `Sentiment`; `Id` dan `Pasangan Calon` dikeluarkan dari prediktor. Berkas data tidak diubah dan tidak ada pembagian baru.
+- **SMS Spam (UCI id 228)**: 5.574 pesan (ham 4.827, spam 747); pembagian berstrata 70/30, seed 42 (`train_test_split(test_size=0.30, stratify=label, random_state=42)` pada daftar indeks): 3.901 latih, 1.673 uji. CSV identik dengan yang dipakai agen WEKA.
+- **SmSA (IndoNLU)**: pembagian resmi, 11.000 latih dan 500 uji (negative 204, neutral 88, positive 208); data validasi tidak dipakai.
+- Asal berkas, sha256, dan lisensi: `accuracy/datasets/MANIFEST.md`. URL unduhan dan lisensi **belum diverifikasi dari sandbox** (jaringan keluar diblokir); berkas mentah diunduh pengguna.
+
+##### 3.2 Alur Statify (tanpa menulis ulang rumus)
+Setiap konfigurasi dijalankan lewat wasm yang sama dengan aplikasi: (1) Naive Bayes dengan sumber teks Raw Text dan resep STWV dari data latih saja (`new NaiveBayesAnalysis`, pustaka `statify_wasm.mjs` meniru pembentukan payload TypeScript), (2) Export Model (`JSON.stringify(trained_model, null, 2)`), (3) Apply Model pada data uji (`new ApplyModelAnalysis`), (4) `pred_statify_<K>.csv` berisi `Id, kelas_aktual, kelas_prediksi, prob_<kelas>...`. Model akhir dilatih ulang pada seluruh baris latih (validasi holdout hanya untuk evaluasi). Kesetaraan pembangun payload dengan kode TypeScript aplikasi diperiksa dengan tes Jest `payload_equivalence` (3 dari 3 lulus di VM, bagian 9).
+
+##### 3.3 Konfigurasi
+
+| Konfigurasi | Statify (STWV + Naive Bayes) | scikit-learn | WEKA 3.9.6 |
+|---|---|---|---|
+| K1 | Weka bawaan: huruf kecil, delimiter bawaan, Words to Keep (W) = 1.000, TF hitungan, tanpa IDF/normalisasi; Multinomial, alpha 1 | `MultinomialNB(alpha=1)` pada matriks hitungan | `StringToWordVector -W 1000 -O -L -C -M 1` + `NaiveBayesMultinomial` |
+| K2 | K1 + Bernoulli | `BernoulliNB(alpha=1, binarize=0)` | `NaiveBayes` pada atribut biner nominal |
+| K3 | K1 + Complement | `ComplementNB(alpha=1, norm=False)` | `ComplementNaiveBayes -S 1.0` (probabilitas satu-nol) |
+| K4 | scikit-learn standar: hitungan, IDF smooth, L2; Multinomial | `TfidfVectorizer(smooth_idf, l2)` dengan kosakata eksplisit + `MultinomialNB` | tidak ada padanan |
+| K5 | Weka: TF log(1+f), IDF ln(N/df), normalisasi panjang dokumen; Multinomial | numpy (log1p x ln(N/df) x normalisasi panjang dokumen) + `MultinomialNB` | `... -C -T -I -N 1` + `NaiveBayesMultinomial` |
+| K6 | K1 + stopword Indonesia + stemming Sastrawi | tidak ada padanan | tidak ada padanan (dibandingkan hanya antarjalur Statify) |
+
+Varian kosakata (pilkada; SMS dan SmSA hanya `w`): `w` = Words to Keep 0 (seluruh kosakata, 3.101 kata pada pilkada); `m` = Words to Keep 1.042 (jumlah kata yang dipertahankan WEKA pada `-W 1000 -O`; di WEKA, `K1m`, `K2m`, `K5m` adalah hasil K1, K2, K5 bawaan). Varian ditambahkan karena aturan seri di batas W berbeda (bagian 6.2).
+
+##### 3.4 scikit-learn (`accuracy/sk_compare.py`)
+Tidak ada kebocoran data: kosakata, IDF, dan parameter hanya dari data latih (fungsi `assert_no_leak` memastikan tiap kata kosakata ada di data latih; dipanggil sebelum pelatihan setiap konfigurasi). Tokenisasi disamakan dengan Statify (huruf kecil, pemisah `[spasi Unicode White_Space . , ; : ' " ( ) ? !]+`, token kosong dibuang). Kosakata dipilih eksplisit dengan aturan Statify (urut total kemunculan menurun, seri menurut urutan alfabet byte, dipotong tepat W) lalu diberikan ke vektorizer; pemilihan `max_features` bawaan scikit-learn berbeda 26 kata pada W = 1.000 (aturan seri berbeda) sehingga tidak dipakai (tercatat sebagai `vocab_vs_native_max_features`). Probabilitas disimpan pada presisi penuh.
+
+##### 3.5 Metrik dan LRE
+Akurasi, Kappa Cohen (`(po - pe)/(1 - pe)` dari matriks konfusi), dan Macro F1 (rata-rata tak berbobot F1 per kelas), semuanya dihitung dari berkas prediksi oleh `compare_predictions.py` untuk ketiga perangkat dengan kode yang sama; dinyatakan 6 desimal dengan koma desimal. LRE (log relative error) per elemen = -log10(|x - c| / |c|) dengan c nilai pembanding; yang dilaporkan adalah minimum atas semua elemen. Bila x = c LRE dilaporkan "≥ 15 (identik)"; bila c = 0 tidak ada pembagian dengan nol (elemen identik dilewati, elemen berbeda diberi LRE 0). Karena probabilitas Apply Model dibulatkan 4 desimal, LRE dihitung terhadap `round4(c)` (ditandai †) dan galat absolut terhadap c yang tidak dibulatkan.
+
+##### 3.6 Empat tingkat perbandingan
+1. **Kelas prediksi** (semua konfigurasi dan dataset).
+2. **Probabilitas Apply Model** (resolusi 4 desimal; tabel kesamaan).
+3. **Parameter model pada presisi penuh**: `log_weights` dan prior pada model hasil Export Model dibandingkan dengan `feature_log_prob_` dan prior scikit-learn.
+4. **Vektor**: matriks bobot latih keluaran STWV wasm dibandingkan dengan perhitungan scikit-learn/numpy (K4, K5).
+
+Probabilitas posterior presisi penuh dari sumber Rust diperiksa oleh tes opsional `eval_compare.rs`, yang dijalankan di Windows dan lulus (bagian 9).
+
+#### 4. Hasil dataset pilkada (630 latih, 270 uji)
+
+##### 4.1 K1 sampai K6 (Words to Keep = 1.000)
+
+Tabel 1. Metrik per konfigurasi dan perangkat.
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1 | Statify | 0,762963 | 0,525926 | 0,762963 |
+| K1 | scikit-learn | 0,762963 | 0,525926 | 0,762963 |
+| K1 | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K2 | Statify | 0,729630 | 0,459259 | 0,729537 |
+| K2 | scikit-learn | 0,729630 | 0,459259 | 0,729537 |
+| K2 | WEKA | 0,740741 | 0,481481 | 0,740513 |
+| K3 | Statify | 0,762963 | 0,525926 | 0,762963 |
+| K3 | scikit-learn | 0,762963 | 0,525926 | 0,762963 |
+| K3 | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K4 | Statify | 0,766667 | 0,533333 | 0,766510 |
+| K4 | scikit-learn | 0,766667 | 0,533333 | 0,766510 |
+| K5 | Statify | 0,755556 | 0,511111 | 0,755556 |
+| K5 | scikit-learn | 0,755556 | 0,511111 | 0,755556 |
+| K5 | WEKA | 0,748148 | 0,496296 | 0,748148 |
+| K6 | Statify | 0,722222 | 0,444444 | 0,721577 |
+
+Tabel 2. Kesamaan Statify terhadap pembanding.
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/270) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1 | scikit-learn | 270/270 | 4,996e-05 | ≥ 15 (identik)† |
+| K1 | WEKA | 264/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K2 | scikit-learn | 270/270 | 4,979e-05 | ≥ 15 (identik)† |
+| K2 | WEKA | 267/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K3 | scikit-learn | 270/270 | 4,996e-05 | ≥ 15 (identik)† |
+| K3 | WEKA | 264/270 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4 | scikit-learn | 270/270 | 4,940e-05 | ≥ 15 (identik)† |
+| K5 | scikit-learn | 270/270 | 4,960e-05 | ≥ 15 (identik)† |
+| K5 | WEKA | 264/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+
+† Probabilitas Statify dari Apply Model dibulatkan 4 desimal oleh wasm (round4), sehingga LRE dihitung terhadap round4(c); galat absolut dihitung terhadap c yang tidak dibulatkan (batas teoretis 5,0e-5). Untuk WEKA elemen dengan |c| < 1e-10 tidak diikutkan dalam LRE (WEKA mencetak 16 desimal).
+
+K6 tidak memiliki pembanding scikit-learn maupun WEKA. Statify K6 menghasilkan akurasi 0,722222 (195/270), lebih rendah daripada K1 (0,762963) pada data ini.
+
+##### 4.2 Varian kosakata `w` (seluruh kosakata) dan `m` (W = 1.042)
+
+Tabel 3. Metrik varian.
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1w | Statify | 0,785185 | 0,570370 | 0,784428 |
+| K1w | scikit-learn | 0,785185 | 0,570370 | 0,784428 |
+| K1w | WEKA | 0,785185 | 0,570370 | 0,784428 |
+| K2w | Statify | 0,759259 | 0,518519 | 0,755145 |
+| K2w | scikit-learn | 0,759259 | 0,518519 | 0,755145 |
+| K3w | Statify | 0,785185 | 0,570370 | 0,784428 |
+| K3w | scikit-learn | 0,785185 | 0,570370 | 0,784428 |
+| K3w | WEKA | 0,785185 | 0,570370 | 0,784428 |
+| K4w | Statify | 0,766667 | 0,533333 | 0,765247 |
+| K4w | scikit-learn | 0,766667 | 0,533333 | 0,765247 |
+| K5w | Statify | 0,740741 | 0,481481 | 0,740613 |
+| K5w | scikit-learn | 0,740741 | 0,481481 | 0,740613 |
+| K5w | WEKA | 0,740741 | 0,481481 | 0,740613 |
+| K1m | Statify | 0,762963 | 0,525926 | 0,762846 |
+| K1m | scikit-learn | 0,762963 | 0,525926 | 0,762846 |
+| K1m | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K2m | Statify | 0,740741 | 0,481481 | 0,740513 |
+| K2m | scikit-learn | 0,740741 | 0,481481 | 0,740513 |
+| K2m | WEKA | 0,740741 | 0,481481 | 0,740513 |
+| K5m | Statify | 0,748148 | 0,496296 | 0,748148 |
+| K5m | scikit-learn | 0,748148 | 0,496296 | 0,748148 |
+| K5m | WEKA | 0,748148 | 0,496296 | 0,748148 |
+
+Tabel 4. Kesamaan varian.
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/270) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1w | scikit-learn | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K1w | WEKA | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K2w | scikit-learn | 270/270 | 4,963e-05 | ≥ 15 (identik)† |
+| K3w | scikit-learn | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K3w | WEKA | 270/270 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4w | scikit-learn | 270/270 | 4,979e-05 | ≥ 15 (identik)† |
+| K5w | scikit-learn | 270/270 | 4,998e-05 | ≥ 15 (identik)† |
+| K5w | WEKA | 270/270 | 4,999e-05 | ≥ 15 (identik)† |
+| K1m | scikit-learn | 270/270 | 4,962e-05 | ≥ 15 (identik)† |
+| K1m | WEKA | 270/270 | 4,962e-05 | ≥ 15 (identik)† |
+| K2m | scikit-learn | 270/270 | 4,983e-05 | ≥ 15 (identik)† |
+| K2m | WEKA | 270/270 | 4,983e-05 | ≥ 15 (identik)† |
+| K5m | scikit-learn | 270/270 | 4,989e-05 | ≥ 15 (identik)† |
+| K5m | WEKA | 270/270 | 4,989e-05 | ≥ 15 (identik)† |
+
+Tabel 5. Tambahan tanpa Statify: scikit-learn terhadap WEKA pada resolusi penuh (WEKA mencetak probabilitas 16 desimal; berkas ARFF K5 menulis nilai bobot 6 desimal, sehingga K5 dibatasi sekitar 1e-7 oleh data masukan WEKA sendiri; LRE K1 sekitar 9 diduga karena probabilitas yang sangat kecil dicetak WEKA hanya 16 desimal, sehingga digit signifikannya berkurang, dan bukan karena perbedaan rumus).
+
+| Konfigurasi | Pembanding | Kelas prediksi sama | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1w | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 1,354e-14 | 8,98 |
+| K5w | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 3,031e-07 | 5,50 |
+| K1m | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 1,310e-14 | 9,79 |
+| K5m | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 3,860e-07 | 5,28 |
+
+##### 4.3 Tingkat parameter model (presisi penuh)
+
+Tabel 6. Model hasil Export Model Statify (wasm Naive Bayes) terhadap `feature_log_prob_` scikit-learn.
+
+| Konfigurasi | Kosakata identik | Jumlah kata | Besaran | Elemen | Galat absolut maksimum | LRE minimum |
+|---|---|---|---|---|---|---|
+| K1 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,66 |
+| K1 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,21 |
+| K2 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K3 | ya | 1000 | log-likelihood (log_weights) | 2000 | 0 | ≥ 15 (identik) |
+| K3 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K4 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,75 |
+| K4 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 1,776e-15 (VM); 2,665e-15 (Windows) | 15,47 (VM); 15,33 (Windows) |
+| K5 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K1w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
+| K1w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2w | ya | 3101 | log-likelihood (log_weights) | 6202 | 8,882e-16 | 15,21 |
+| K2w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K3w | ya | 3101 | log-likelihood (log_weights) | 6202 | 8,882e-16 | 15,83 |
+| K3w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K4w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,54 |
+| K4w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
+| K5w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K1m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,66 |
+| K1m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,21 |
+| K2m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,48 (VM); 15,52 (Windows) |
+| K5m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+
+##### 4.4 Tingkat vektor (presisi penuh)
+
+Tabel 7. Matriks bobot latih STWV (wasm) terhadap scikit-learn/numpy.
+
+| Konfigurasi | Kosakata identik | Elemen tak-nol bersama | Posisi tak-nol berbeda | Galat absolut maksimum | LRE minimum |
+|---|---|---|---|---|---|
+| K4 | ya | 6644 | 0 | 1,110e-16 | 15,43 |
+| K5 | ya | 6644 | 0 | 5,329e-15 | 14,96 |
+| K4w | ya | 8783 | 0 | 1,110e-16 | 15,53 |
+| K5w | ya | 8783 | 0 | 5,329e-15 | 14,99 |
+| K5m | ya | 6724 | 0 | 7,105e-15 | 14,96 |
+
+##### 4.5 Matriks konfusi K1 sampai K6
+
+Baris = aktual, kolom = prediksi; urutan kelas: negative, positive. Matriks varian ada di `accuracy/out/compare_pilkada.md`.
+
+| Konfigurasi | Perangkat | Matriks |
+|---|---|---|
+| K1 | Statify | [103, 32] ; [32, 103] |
+| K1 | scikit-learn | [103, 32] ; [32, 103] |
+| K1 | WEKA | [100, 35] ; [29, 106] |
+| K2 | Statify | [96, 39] ; [34, 101] |
+| K2 | scikit-learn | [96, 39] ; [34, 101] |
+| K2 | WEKA | [96, 39] ; [31, 104] |
+| K3 | Statify | [103, 32] ; [32, 103] |
+| K3 | scikit-learn | [103, 32] ; [32, 103] |
+| K3 | WEKA | [100, 35] ; [29, 106] |
+| K4 | Statify | [100, 35] ; [28, 107] |
+| K4 | scikit-learn | [100, 35] ; [28, 107] |
+| K5 | Statify | [102, 33] ; [33, 102] |
+| K5 | scikit-learn | [102, 33] ; [33, 102] |
+| K5 | WEKA | [101, 34] ; [34, 101] |
+| K6 | Statify | [91, 44] ; [31, 104] |
+
+#### 5. Dataset tambahan
+
+##### 5.1 SMS Spam (3.901 latih, 1.673 uji; ham 1.449, spam 224 pada data uji)
+
+Konfigurasi K1 sampai K4 (K5 dan K6 tidak dijalankan pada dataset ini sesuai rancangan) ditambah varian `w`. WEKA hanya tersedia untuk K1, K2, K3 dan varian `w`-nya.
+
+Tabel 8. Metrik.
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1 | Statify | 0,982666 | 0,925682 | 0,962841 |
+| K1 | scikit-learn | 0,982666 | 0,925682 | 0,962841 |
+| K1 | WEKA | 0,983264 | 0,928379 | 0,964189 |
+| K2 | Statify | 0,987448 | 0,944085 | 0,972036 |
+| K2 | scikit-learn | 0,987448 | 0,944085 | 0,972036 |
+| K2 | WEKA | 0,988643 | 0,949410 | 0,974699 |
+| K3 | Statify | 0,967723 | 0,869222 | 0,934556 |
+| K3 | scikit-learn | 0,967723 | 0,869222 | 0,934556 |
+| K3 | WEKA | 0,967723 | 0,869222 | 0,934556 |
+| K4 | Statify | 0,973102 | 0,874300 | 0,937062 |
+| K4 | scikit-learn | 0,973102 | 0,874300 | 0,937062 |
+| K1w | Statify | 0,984459 | 0,930906 | 0,965446 |
+| K1w | scikit-learn | 0,984459 | 0,930906 | 0,965446 |
+| K1w | WEKA | 0,984459 | 0,930906 | 0,965446 |
+| K3w | Statify | 0,980873 | 0,917529 | 0,958765 |
+| K3w | scikit-learn | 0,980873 | 0,917529 | 0,958765 |
+| K3w | WEKA | 0,980873 | 0,917529 | 0,958765 |
+| K4w | Statify | 0,958757 | 0,795552 | 0,897343 |
+| K4w | scikit-learn | 0,958757 | 0,795552 | 0,897343 |
+
+Tabel 9. Kesamaan.
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/1673) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1 | scikit-learn | 1673/1673 | 5,000e-05 | ≥ 15 (identik)† |
+| K1 | WEKA | 1672/1673 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K2 | scikit-learn | 1673/1673 | 4,987e-05 | ≥ 15 (identik)† |
+| K2 | WEKA | 1671/1673 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K3 | scikit-learn | 1673/1673 | 4,999e-05 | ≥ 15 (identik)† |
+| K3 | WEKA | 1669/1673 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4 | scikit-learn | 1673/1673 | 4,988e-05 | ≥ 15 (identik)† |
+| K1w | scikit-learn | 1673/1673 | 4,956e-05 | ≥ 15 (identik)† |
+| K1w | WEKA | 1673/1673 | tidak dapat dibandingkan (prior kelas Statify = count/N (tanpa Laplace) vs WEKA (n_c+1)/(N+K); hanya setara pada kelas seimbang) | tidak dapat dibandingkan |
+| K3w | scikit-learn | 1673/1673 | 4,987e-05 | ≥ 15 (identik)† |
+| K3w | WEKA | 1673/1673 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4w | scikit-learn | 1673/1673 | 4,999e-05 | ≥ 15 (identik)† |
+
+Matriks konfusi (urutan kelas: ham, spam).
+
+| Konfigurasi | Perangkat | Matriks |
+|---|---|---|
+| K1 | Statify | [1433, 16] ; [13, 211] |
+| K1 | scikit-learn | [1433, 16] ; [13, 211] |
+| K1 | WEKA | [1433, 16] ; [12, 212] |
+| K2 | Statify | [1447, 2] ; [19, 205] |
+| K2 | scikit-learn | [1447, 2] ; [19, 205] |
+| K2 | WEKA | [1448, 1] ; [18, 206] |
+| K3 | Statify | [1405, 44] ; [10, 214] |
+| K3 | scikit-learn | [1405, 44] ; [10, 214] |
+| K3 | WEKA | [1405, 44] ; [10, 214] |
+| K4 | Statify | [1447, 2] ; [43, 181] |
+| K4 | scikit-learn | [1447, 2] ; [43, 181] |
+| K1w | Statify | [1444, 5] ; [21, 203] |
+| K1w | scikit-learn | [1444, 5] ; [21, 203] |
+| K1w | WEKA | [1444, 5] ; [21, 203] |
+| K3w | Statify | [1433, 16] ; [16, 208] |
+| K3w | scikit-learn | [1433, 16] ; [16, 208] |
+| K3w | WEKA | [1433, 16] ; [16, 208] |
+| K4w | Statify | [1449, 0] ; [69, 155] |
+| K4w | scikit-learn | [1449, 0] ; [69, 155] |
+
+##### 5.2 SmSA (11.000 latih, 500 uji; tiga kelas)
+
+Konfigurasi K1 dan K4 ditambah varian `w`. WEKA tersedia untuk K1 dan K1w.
+
+Tabel 10. Metrik.
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1 | Statify | 0,598000 | 0,350288 | 0,531114 |
+| K1 | scikit-learn | 0,598000 | 0,350288 | 0,531114 |
+| K1 | WEKA | 0,600000 | 0,353504 | 0,533227 |
+| K4 | Statify | 0,624000 | 0,377714 | 0,546609 |
+| K4 | scikit-learn | 0,624000 | 0,377714 | 0,546609 |
+| K1w | Statify | 0,646000 | 0,414140 | 0,565987 |
+| K1w | scikit-learn | 0,646000 | 0,414140 | 0,565987 |
+| K1w | WEKA | 0,646000 | 0,414140 | 0,565987 |
+| K4w | Statify | 0,650000 | 0,405199 | 0,488640 |
+| K4w | scikit-learn | 0,650000 | 0,405199 | 0,488640 |
+
+Tabel 11. Kesamaan.
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/500) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1 | scikit-learn | 500/500 | 4,999e-05 | ≥ 15 (identik)† |
+| K1 | WEKA | 499/500 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K4 | scikit-learn | 500/500 | 5,000e-05 | ≥ 15 (identik)† |
+| K1w | scikit-learn | 500/500 | 4,993e-05 | ≥ 15 (identik)† |
+| K1w | WEKA | 500/500 | tidak dapat dibandingkan (prior kelas Statify = count/N (tanpa Laplace) vs WEKA (n_c+1)/(N+K); hanya setara pada kelas seimbang) | tidak dapat dibandingkan |
+| K4w | scikit-learn | 500/500 | 4,998e-05 | ≥ 15 (identik)† |
+
+Matriks konfusi (urutan kelas: negative, neutral, positive).
+
+| Konfigurasi | Perangkat | Matriks |
+|---|---|---|
+| K1 | Statify | [198, 3, 3] ; [34, 30, 24] ; [109, 28, 71] |
+| K1 | scikit-learn | [198, 3, 3] ; [34, 30, 24] ; [109, 28, 71] |
+| K1 | WEKA | [198, 3, 3] ; [34, 30, 24] ; [108, 28, 72] |
+| K4 | Statify | [183, 1, 20] ; [33, 20, 35] ; [88, 11, 109] |
+| K4 | scikit-learn | [183, 1, 20] ; [33, 20, 35] ; [88, 11, 109] |
+| K1w | Statify | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K1w | scikit-learn | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K1w | WEKA | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K4w | Statify | [152, 0, 52] ; [28, 2, 58] ; [37, 0, 171] |
+| K4w | scikit-learn | [152, 0, 52] ; [28, 2, 58] ; [37, 0, 171] |
+
+#### 6. Penjelasan selisih yang teramati
+
+##### 6.1 Selisih probabilitas Statify dan scikit-learn
+Galat absolut maksimum 4,94e-05 sampai 5,000e-05 adalah galat pembulatan 4 desimal (`round4`) pada Apply Model, bukan perbedaan perhitungan: setelah scikit-learn dibulatkan dengan cara yang sama, seluruh elemen sama (LRE ≥ 15), dan pada presisi penuh parameter berbeda paling banyak 1,776e-15 (Tabel 6).
+
+##### 6.2 Selisih Statify dan WEKA pada bawaan W = 1.000
+`StringToWordVector` WEKA menerapkan ambang `hitungan >= ambang`, sehingga semua kata yang berhitungan sama dengan ambang ikut dipertahankan: pada data latih pilkada diperoleh 1.042 kata (601 kata berhitungan ≥ 3 dan 441 kata berhitungan tepat 2). Statify mengurutkan berdasarkan total kemunculan menurun, memutus seri menurut urutan alfabet byte, dan memotong tepat pada W = 1.000. Kedua kosakata berbeda sehingga kelas prediksi berbeda pada 3 sampai 6 dari 270 dokumen pada pilkada (K1: 6, K2: 3, K3: 6, K5: 6), pada 1, 2, dan 4 dari 1.673 dokumen pada SMS Spam (K1, K2, K3), dan pada 1 dari 500 dokumen pada SmSA (K1) dan probabilitas tidak dibandingkan (ditandai "tidak dapat dibandingkan (kosakata berbeda ...)"). Dengan kosakata sama (varian `m` dan `w`) selisih ini hilang. Ini perbedaan perilaku fitur "Words to Keep", bukan galat hitung.
+
+##### 6.3 Prior kelas
+Statify memakai prior `count/N`, sedangkan WEKA `(n_c + 1)/(N + K)`. Keduanya sama hanya bila kelas seimbang (pilkada). Pada SMS Spam dan SmSA probabilitas Statify dan WEKA karenanya tidak dibandingkan walaupun kosakata sama; kelas prediksi tetap sama pada varian `w` (1.673/1.673 dan 500/500).
+
+##### 6.4 K1 sama dengan K3
+Pada pilkada (dua kelas seimbang, tanpa prior pada Complement) skor Complement dan Multinomial memiliki selisih antarkelas yang sama sehingga kelas dan probabilitas keduanya sama; `pred_statify_K1.csv` dan `pred_statify_K3.csv` identik byte demi byte (sha256 sama) dan K1w = K3w. Pada SMS Spam (kelas tak seimbang) K1 dan K3 berbeda (akurasi 0,982666 vs 0,967723).
+
+##### 6.5 ComplementNaiveBayes WEKA
+Kelas WEKA tidak mengganti `distributionForInstance`, sehingga keluarannya vektor satu-nol; probabilitas tidak setara dengan posterior Statify dan dilaporkan "tidak dapat dibandingkan". Kelas prediksi WEKA K3 sama dengan Statify pada varian `w` (270/270, 1.673/1.673).
+
+##### 6.6 K6: kosakata STWV mandiri berbeda dari resep Naive Bayes
+Pada data latih pilkada, resep yang dibuat Naive Bayes (dipakai Apply Model) dan keluaran STWV mandiri (konfigurasi yang sama) masing-masing 1.000 kata tetapi berbeda 8 kata: hanya di STWV `#mencaripemimpin, #menolaklupa, anggap, apa, ilu, tua, ubah, uji`; hanya di Naive Bayes `malu, milu, nanti, nilai, rubah, sadar, sapa, tunjuk`. Pada K1 sampai K5 (tanpa stemming) kosakata keduanya identik. Rincian dan dugaan penyebab (versi `sastrawi-rs` pada `Cargo.lock`) ada di `BUGS_D.md` D-01. Alur Raw Text (K6 pada tabel di atas) memakai wasm Naive Bayes dan Apply Model yang konsisten satu sama lain.
+
+#### 7. Interpretasi
+
+Pada seluruh 24 konfigurasi dan tiga dataset, kelas yang diprediksi Statify sama persis dengan scikit-learn (17.221 dari 17.221 prediksi), dan parameter model serta matriks bobot STWV cocok dengan scikit-learn pada sekitar 15 digit signifikan; selisih probabilitas pada keluaran Apply Model sepenuhnya dijelaskan oleh pembulatan 4 desimal. Terhadap WEKA, kelas prediksi sama pada 270/270 (pilkada) bila kosakata disamakan, dan hanya berbeda pada 1 sampai 6 dokumen bila memakai pengaturan Words to Keep bawaan, karena WEKA mempertahankan semua kata seri di batas. Perbedaan yang tersisa antara Statify dan WEKA adalah perbedaan definisi (aturan seri Words to Keep, prior ber-Laplace, keluaran satu-nol pada Complement), bukan galat numerik. Selisih akurasi antarkonfigurasi pada data uji 270 dokumen (galat baku sekitar 2,6 poin persentase pada akurasi 0,76) lebih kecil daripada beberapa selisih yang ditampilkan, sehingga tabel ini tidak dipakai untuk menyimpulkan konfigurasi terbaik.
+
+#### 8. Keterbatasan
+
+1. Tabel utama dibangun dari eksekusi Linux (sandbox cloud dan VM). Eksekusi ulang di Windows 11 laptop skripsi (Node 24, Python 3.13, numpy 2.4.4, scikit-learn 1.9.1; `logs/accuracy_*_win.txt`) memberi kelas prediksi dan metrik identik pada ketiga dataset; satu-satunya selisih pada keluaran perbandingan adalah galat parameter K5 (2,665e-15 pada Windows, 1,776e-15 pada VM) dan K5m (LRE 15,52 pada Windows, 15,48 pada VM), yaitu selisih urutan operasi floating-point di numpy/scipy.
+2. Biner wasm yang dipakai adalah yang ada di perangkat; apakah dibangun dari sumber Rust saat ini tidak dapat diverifikasi di sini. Tes `eval_compare.rs` dirancang untuk memeriksanya, tetapi tidak dikompilasi dan tidak dijalankan.
+3. Probabilitas Apply Model hanya tersedia pada 4 desimal; ketepatan presisi penuh jalur posterior (log-sum-exp) hanya diperiksa secara tidak langsung (kesamaan parameter, vektor, dan hasil `round4`).
+4. Satu pembagian data (seed 42 untuk SMS; pembagian tetap untuk pilkada dan SmSA); tidak ada validasi silang dan tidak ada uji signifikansi antarkonfigurasi.
+5. Satu dokumen uji pilkada (Id 212) tidak memuat satu pun kata kosakata pada semua konfigurasi (`empty_test_docs` = 1 pada `sklearn_results.json`). Pada model Multinomial/Complement posteriornya 0,5/0,5 dan kedua perangkat memilih kelas pertama (`negative`); pada Bernoulli (K2) posteriornya 0,4986/0,5014 (`positive`) karena kata yang tidak muncul ikut menyumbang skor. Kelas prediksi tetap sama pada kedua perangkat (270/270). Dokumen ini salah klasifikasi pada konfigurasi Multinomial dan Complement.
+6. Asal dan lisensi SMS Spam dan SmSA: URL belum diverifikasi dari sandbox, berkas diunduh pengguna; lisensi korpus SmSA perlu diperiksa sebelum dicantumkan.
+7. WEKA dijalankan pada OpenJDK 11 di VM Linux, bukan JRE Zulu 17 bawaan WEKA di Windows (`weka/00_ENV_dan_pemetaan_opsi.md`). Menurut `weka/00_ENV_dan_pemetaan_opsi.md` bagian 8.4 (catatan agen WEKA dari transkrip pengguna; log `weka/logs/windows_pilkada/` tidak ada di salinan cloud ini sehingga tidak diverifikasi ulang di sini), konfigurasi pilkada diulang oleh pengguna di Windows/Zulu 17 dan identik; SMS Spam dan SmSA di Windows: NOT RUN. Probabilitas WEKA dicetak 16 desimal dan ARFF K5 menulis 6 desimal, sehingga perbandingan scikit-learn dan WEKA K5 dibatasi sekitar 1e-7 (Tabel 5).
+8. K6 hanya dibandingkan antarjalur Statify; scikit-learn tidak memiliki stemmer Sastrawi dan WEKA tidak memakai daftar stopword Statify.
+9. Waktu eksekusi pada log adalah waktu sandbox, bukan pengukuran perangkat skripsi, dan tidak dilaporkan di sini.
+
+#### 9. Status eksekusi
+
+| Pemeriksaan | Status | Bukti |
+|---|---|---|
+| Uji kecil pustaka headless (`selftest.mjs`) | DIJALANKAN, lulus (VM) | `logs/accuracy_selftest_vm.txt` |
+| Statify pilkada (14 konfigurasi), SMS Spam, SmSA | DIJALANKAN (VM; cloud untuk silang) | `logs/accuracy_statify_{pilkada,sms_spam,smsa}_vm.txt` |
+| scikit-learn pilkada, SMS Spam, SmSA | DIJALANKAN (cloud) | `logs/accuracy_sklearn_{pilkada,sms_spam,smsa}_cloud.txt` |
+| Perbandingan (`compare_predictions.py`) | DIJALANKAN (VM) | `logs/accuracy_compare_{pilkada,sms_spam,smsa}_vm.txt` |
+| Orkestrator dataset tambahan (`run_dataset_eval.mjs`, tanpa langkah scikit-learn karena VM tidak punya scikit-learn) | DIJALANKAN (VM) | `logs/accuracy_{statify,compare}_{sms_spam,smsa}_vm_orch.txt` |
+| Kesetaraan payload headless dan TypeScript, NB: payload yang dikirim ke worker identik dengan golden headless (`payload_equivalence.nb.test.ts`) | Lulus [Win] (ts-jest) | `logs/jest_D_vm.json` |
+| NB: konfigurasi Text (toRustConfig) memuat daftar stopword Indonesia lengkap dan semua opsi vektorisasi | Lulus [Win] | idem |
+| AM: payload ke worker identik dengan golden headless; kolom prediksi sama dengan prediksi golden (`payload_equivalence.am.test.ts`) | Lulus [Win] | idem |
+| Tes Rust `eval_compare` (`eval_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi`) | Lulus [Win] | `logs/rust_eval_compare.txt` |
+| `run_D.ps1` di Windows (Node 24, Python 3.13) | DIJALANKAN, semua langkah keluar 0 (selftest, Statify, scikit-learn, perbandingan untuk tiga dataset, `eval_compare`, Jest) | `logs/accuracy_*_win.txt` |
+| Jest konfigurasi produksi di Windows (`payload_equivalence`) | DIJALANKAN, 3 dari 3 lulus | `logs/jest_D_win.json` |
+
+#### 10. Berkas dan cara menjalankan ulang
+
+- Pustaka: `testing/text_analytics_eval/headless/statify_wasm.mjs`, `README.md`, `selftest.mjs`, `make_payload_golden.mjs`, `payload_golden.json`.
+- `testing/text_analytics_eval/accuracy/`: `run_statify.mjs`, `sk_compare.py`, `compare_predictions.py`, `download_datasets.py`, `run_dataset_eval.mjs`, `datasets.mjs`, `datasets/` (CSV dan `MANIFEST.md`), `out/` (prediksi, model, parameter, `compare_*.md/.json`).
+- Tes: `frontend/components/Modals/Analyze/Classify/naive-bayes/services/__tests__/eval/payload_equivalence.nb.test.ts`, `.../apply-model/services/__tests__/eval/payload_equivalence.am.test.ts`, `.../apply-model/rust/tests/eval_compare.rs` (belum dikompilasi).
+- Windows: `powershell -ExecutionPolicy Bypass -File testing\text_analytics_eval\run_D.ps1` (opsi `-SkipRust`, `-SkipJest`, `-SkipDatasets`). Langkah scikit-learn membutuhkan `python` dengan numpy, scipy, pandas, scikit-learn; bila tidak ada, `pred_sklearn_*.csv` yang sudah tersedia dipakai. Rust: dari `apply-model/rust`, `cargo test --test eval_compare -- --nocapture`.
+- Temuan: `testing/text_analytics_eval/BUGS_D.md`.
+
+
+---
+
+# LAMPIRAN E — E_performance.md — Track E (status, skenario, metode, pembacaan hasil, keterbatasan, instruksi); tabel ada di Lampiran A
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### E_performance — Pengujian waktu eksekusi modul Text Analytics Statify (Track E)
+
+Skrip dan harness dibuat di sandbox cloud, lalu dijalankan pengguna di perangkat skripsi (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11) lewat `run_E.ps1`. Hanya tabel "Tabel perangkat skripsi" (bagian 6) yang merupakan hasil perangkat skripsi dan masuk Bab V. Angka pada bagian "UJI ASAP" berasal dari sandbox cloud dan VM Linux lokal; fungsinya hanya membuktikan bahwa skrip bekerja dan memberi gambaran orde besaran.
+
+#### 1. Status ringkas
+
+| Bagian | Status | Bukti |
+|---|---|---|
+| Harness peramban (Worker asli NB dan AM, worker pengganti STWV, server statis, Playwright) | Dijalankan di sandbox cloud (uji asap, Chromium 141) dan di perangkat skripsi (Windows 11, Chrome 154.0.8037.98 headless via Playwright; 5 pengukuran + 1 pemanasan per sel). | `logs/perf_browser_sandbox.txt`, `logs/perf_browser_skripsi.txt`, `perf/raw/browser_sandbox.csv`, `perf/raw/browser_skripsi.csv` |
+| Jalur headless (Node + wasm yang sama) | Dijalankan di sandbox cloud, VM Linux lokal (uji asap), dan di perangkat skripsi (Windows 11, Node 24.13.1). | `logs/perf_headless_sandbox.txt`, `logs/perf_headless_vm_part1.txt`, `logs/perf_headless_vm_part2.txt`, `logs/perf_headless_skripsi.txt`, `perf/raw/headless_*.csv` |
+| Peramban di VM lokal | NOT RUN: VM tidak punya Chromium/Chrome/Playwright dan tidak ada jaringan untuk memasangnya. | `logs/perf_device_info_vm.txt` |
+| Skenario 5 x dataset Pilkada 900, SMS Spam 5.574, SmSA 11.000 | Terukur (kecuali STWV + Sastrawi pada SMS Spam: GAGAL, lihat BUGS_E.md E-01). | tabel bagian 6 |
+| Dataset >= 20.000 dokumen | Terukur di perangkat skripsi: `besar_ge20000` = 36.305 dokumen (gabungan 17.974 + 20 Newsgroups 18.331 setelah dokumen kosong dibuang dari 18.846; diunduh lewat scikit-learn di Windows, `20ng_ok 18846 18331` pada log). **NOT RUN** di sandbox dan VM (20 Newsgroups tidak dapat diunduh: HTTP 403 pada proksi; sumber nyata di sana hanya 17.974 dokumen). | `logs/perf_prepare_datasets.txt`, `perf/data/PREPARE_STATUS.json`, `logs/perf_prepare_datasets_sandbox.txt` |
+| Rust native | **Belum diukur** (tidak ada toolchain Rust di sandbox; aplikasi menjalankan wasm, bukan biner native). | - |
+| Spesifikasi Playwright end-to-end aplikasi penuh (`e2e_full_app.spec.ts`) | Ditulis, **TIDAK DIVALIDASI DI SANDBOX** (server Next.js tidak dijalankan). | - |
+| Tabel perangkat skripsi | Terisi dari eksekusi Windows (peramban dan headless) pada 8 Oktober 2026, termasuk baris dataset >= 20.000 dokumen (36.305); satu-satunya sel yang berisi GALAT adalah STWV + Sastrawi pada dataset yang memuat token non-ASCII (SMS Spam, gabungan, 36.305; BUGS_E.md E-01). | bagian 6.1 |
+
+#### 2. Skenario dan dataset
+
+##### 2.1 Lima skenario (urutan tabel buku)
+
+| ID | Menu dan konfigurasi | Rincian |
+|---|---|---|
+| `stwv_default` | String to Word Vector, default Weka | Konfigurasi `K1` pustaka headless (`STWV_DEFAULT_CONFIG`): huruf kecil, pembatas bawaan, tanpa stopword/stemming, tokenisasi kata, Words to Keep 1.000, TF hitungan, tanpa IDF dan normalisasi. |
+| `stwv_sw_stem` | STWV + stopword Indonesia + stemming Sastrawi | `K6`: `K1` + `stopwords.method = indonesian` + `stemming.method = indonesian`. |
+| `nb_holdout70` | Naive Bayes, Raw Text, holdout 70% | Target `Label`, Raw Text Variable `Text`, mode Exclude (`Id` dikeluarkan), STWV `K1`, likelihood Multinomial, alpha 1, validasi holdout 70%, seed 42. |
+| `nb_kfold10` | Naive Bayes, Raw Text, 10-fold CV | Sama, validasi `kfold`, `KFolds = 10`, seed 42. |
+| `am_raw` | Apply Model, Raw Text | Model = hasil Export Model dari NB Multinomial `K1` yang dilatih pada **dataset yang sama** (model akhir NB dilatih pada seluruh data, `naive-bayes/AGENTS.md` baris 182), lalu diterapkan pada **seluruh dokumen dataset itu** (n dokumen). Yang diukur hanya Apply Model; pelatihan model tidak masuk waktu. Dipilih agar ukuran dokumen yang di-skor sama untuk semua dataset (untuk Pilkada berarti 900 dokumen, bukan 270 uji). Apply Model tidak membedakan dokumen yang pernah dilihat atau belum, sehingga waktunya tidak bergantung pada hal itu. |
+
+Konfigurasi NB dan AM memakai teks `K1` (bukan Sastrawi), sehingga waktu NB/AM tidak terpengaruh E-01.
+
+##### 2.2 Dataset
+
+Semua berkas CSV seragam (`Id,Label,Text`) dibangun oleh `perf/prepare_datasets.mjs` dari berkas yang sudah ada; tidak ada dokumen yang digandakan.
+
+| ID | Dokumen | Sumber |
+|---|---|---|
+| `pilkada_900` | 900 | `Claude outputs/pilkada_train.csv` (630) + `pilkada_test.csv` (270), digabung agar 900 dokumen diproses sekaligus (kolom `Pasangan Calon` tidak dipakai; di aplikasi dikeluarkan lewat mode Exclude) |
+| `sms_5574` | 5.574 | `accuracy/datasets/sms_spam_all.csv` (UCI SMS Spam Collection) |
+| `smsa_11000` | 11.000 | `accuracy/datasets/smsa_train.csv` (IndoNLU SmSA, berkas latih) |
+| `gabungan` | 17.974 | Pilkada 900 + SMS 5.574 + SmSA latih+uji 11.500. Label campuran, hanya untuk beban waktu. **Bukan** dataset >= 20.000 (kurang 2.026). Dilaporkan sebagai baris tambahan berlabel jelas. |
+| `besar_ge20000` | 36.305 | Gabungan (17.974) + 20 Newsgroups (`fetch_20newsgroups`, 18.846 dokumen, 18.331 setelah dokumen kosong dibuang). Label campuran (25 kelas), hanya untuk beban waktu. Dibuat di perangkat skripsi (`logs/perf_prepare_datasets.txt`); **NOT RUN** di sandbox dan VM karena unduhan gagal (`Tunnel connection failed: 403 Forbidden`). Rata-rata 114,0 token per dokumen dan 220.477 kata unik, jauh lebih panjang daripada dataset lain (14,8 sampai 29,1 token per dokumen). |
+| `*_ascii` | 5.574 / 17.974 | Varian ASCII untuk **hanya** skenario `stwv_sw_stem` (alasan: E-01). Tanda petik tipografis diganti ASCII, diakritik dilipat (NFKD), karakter non-ASCII sisanya dibuang. Jumlah dokumen sama dengan aslinya. |
+
+Catatan ukuran: SmSA validasi (1.260 dokumen) tidak tersedia, sehingga SmSA gabungan latih+uji = 11.500, bukan 12.760 (`perf/data/PREPARE_STATUS.json`, `accuracy/datasets/MANIFEST.md`). Bila `valid_preprocess.tsv` diletakkan di `testing/text_analytics_eval/weka/data/`, `prepare_datasets.mjs` menambahkannya (gabungan menjadi 19.234, masih < 20.000). Dataset >= 20.000 praktis hanya tercapai dengan menambahkan 20 Newsgroups (jaringan diperlukan; `run_E.ps1` mencobanya otomatis bila Python + scikit-learn ada).
+
+#### 3. Metode
+
+##### 3.1 Jalur (a): peramban, harness statis (tanpa `npm run dev`)
+
+- `perf/serve.mjs` (stdlib Node) menyajikan `frontend/public` sebagai akar, sehingga **Worker asli aplikasi** dipakai apa adanya: `/workers/Classify/NaiveBayes/naive-bayes.worker.js?v=<versi>` dan `/workers/Classify/ApplyModel/apply-model.worker.js?v=<versi>` (versi query diambil dari `naive-bayes-analysis.ts` dan `apply-model-analysis.ts` oleh `run_browser.mjs`). Header dirancang meniru berkas `public/` Next.js menurut pengetahuan penulis (`Cache-Control: public, max-age=0` + `ETag`, revalidasi 304; belum dibandingkan dengan respons server Next yang berjalan).
+- STWV tidak punya worker JS murni (aplikasi membundel `stringToWord.processor.ts` lewat webpack). Pengganti: `perf/stwv_bench.worker.js` memuat glue dan wasm yang sama (`statify_string_to_word.js` dan `_bg.wasm`, disajikan di `/__stwv/`), memanggil `init()` sekali per umur Worker, `process_text_data(data, config)` lalu `postMessage({status:'success', payload})`, sama dengan pemrosesnya. Perbedaan: tanpa bundler dan tanpa `normalizeWorkerError` (tidak memengaruhi waktu jalur sukses).
+- Payload dibangun di Node oleh pustaka headless (`buildNaiveBayesPayload`, `buildApplyModelPayload`, `toRustConfig`; `perf/build_payloads.mjs`), disimpan sebagai JSON (`perf/data/payloads/<dataset>.{stwv,nb,am}.json`), di-fetch oleh halaman lalu di-`postMessage` ke Worker. Yang diukur murni Worker + wasm + serialisasi pesan. Payload yang sama dibaca jalur headless (sha256 12 karakter pertama tercatat di CSV mentah kolom `payload_sha256_12`).
+- `perf/harness.js`: `performance.now()` di main thread dari tepat sebelum `postMessage` (untuk NB/AM termasuk pembuatan `new Worker`, seperti di aplikasi) sampai baris pertama handler `onmessage` (deserialisasi hasil sudah selesai). NB dan AM: Worker baru tiap run lalu `terminate()` (seperti `naive-bayes-analysis.ts` dan `apply-model-analysis.ts`); STWV: satu Worker dipakai ulang (seperti `workerRef` di hook), sehingga inisialisasi wasm STWV hanya ada di run 0.
+- Responsivitas UI selama komputasi: `PerformanceObserver({type:'longtask'})` (jumlah, terpanjang, total) dan jeda antar-frame `requestAnimationFrame` (p95 dan terpanjang), plus baseline p95 jeda frame saat halaman diam 1,2 detik. Halaman memuat spinner CSS agar frame terus digambar.
+- Penggerak: `perf/run_browser.mjs` (Playwright). Tiap sel dijalankan di konteks dan halaman baru; kegagalan (galat, batas waktu, renderer crash) dicatat dan sel berikutnya tetap jalan. Nama dan versi peramban dari `browser.version()` tercatat di kolom `peramban`. Di Windows: `--browser chrome` (channel `chrome`, Google Chrome terpasang), cadangan `msedge`, lalu Chromium bawaan Playwright; `run_E.ps1` memilih otomatis.
+- Overhead tetap Worker: skenario yang sama dengan subsampel merata 40 dokumen dari Pilkada 900 (komputasi mendekati nol), sehingga selisih peramban dan headless pada data kecil dapat dibaca.
+
+##### 3.2 Jalur (b): headless
+
+`perf/run_headless.mjs` memanggil `stwvTransform`, `naiveBayesRun`, `applyModelRun` dari `headless/statify_wasm.mjs` (biner wasm yang sama; sha256 di log). Waktu = `performance.now()` di sekitar pemanggilan wasm sinkron (konstruktor + `get_formatted_results()` + `get_all_errors()`), tanpa Worker, tanpa `postMessage`, tanpa pembentukan payload. Tiap sel berjalan di proses Node tersendiri (`--expose-gc`, GC dipanggil sebelum tiap run). Run 0 pada headless = panggilan pertama pada proses baru (termasuk kompilasi wasm). **Rust native belum diukur**; jalur headless adalah wasm di V8, bukan biner native.
+
+##### 3.3 Protokol
+
+1 pemanasan (run 0, dicatat tetapi tidak dipakai) + 5 pengukuran (run 1 sampai 5) per sel; satuan ms; **rata-rata dan simpangan baku sampel (n-1)** dihitung `perf/aggregate_perf.py` dari CSV mentah (`perf/raw/*.csv`; kolom: `run_id, perangkat_label, jalur, lingkungan, menu_konfigurasi, skenario_id, dataset, n_dokumen, jumlah_term, run, ms, status, pesan_galat, longtask_count, longtask_max_ms, longtask_total_ms, frame_p95_ms, frame_max_ms, frame_count, idle_frame_p95_ms, rss_mb, payload_sha256_12, wasm_sha256_12, peramban, timestamp`). Untuk tiap sel dipakai `run_id` terbaru. Urutan eksekusi dari dataset kecil ke besar. Jumlah term: STWV = panjang `vocabulary`; NB = `trained_model.text.terms.length`; AM = jumlah term pada model yang dimuat. Kriteria responsif: Long Task terpanjang < 200 ms (catatan: API Long Tasks hanya melaporkan tugas >= 50 ms).
+
+#### 4. Lingkungan uji asap (bukan perangkat skripsi)
+
+Sandbox cloud (`logs/perf_device_info_sandbox.txt`): Intel Xeon (model 207) @ 2,10 GHz, 2 vCPU (KVM), RAM 7,8 GiB tanpa swap, Ubuntu 24.04.5, kernel 6.18.44, Node v22.22.0, Python 3.13.16, Playwright 1.56.0, Chromium 141.0.7390.37 headless.
+
+VM Linux lokal (`logs/perf_device_info_vm.txt`): AMD Ryzen 5 4600H with Radeon Graphics (terlihat dari VM; hypervisor Microsoft), 2 vCPU, RAM 3,8 GiB, Ubuntu (kernel 6.8.0-138), Node v22.23.2, Python 3.10.12. Ini VM di atas perangkat skripsi, **bukan** Windows asli dan hanya 2 dari 12 thread yang terlihat.
+
+Versi biner wasm yang diukur (sha256 tercetak di tiap log): STWV `94ef9c8b...6669`, NB `163a5b8f...1fd8`, AM `036c9fd9...e3fc` (identik dengan `headless/README.md`).
+
+Perintah persis di sandbox (dari akar repo `/home/claude/statify64`):
+
+```
+node testing/text_analytics_eval/perf/prepare_datasets.mjs        > testing/text_analytics_eval/logs/perf_prepare_datasets_sandbox.txt
+node testing/text_analytics_eval/perf/build_payloads.mjs          > testing/text_analytics_eval/logs/perf_build_payloads_sandbox.txt
+node testing/text_analytics_eval/perf/run_headless.mjs --device sandbox                       > testing/text_analytics_eval/logs/perf_headless_sandbox.txt
+node testing/text_analytics_eval/perf/run_browser.mjs  --device sandbox --browser chromium    > testing/text_analytics_eval/logs/perf_browser_sandbox.txt
+python3 -I testing/text_analytics_eval/perf/aggregate_perf.py --inject testing/text_analytics_eval/E_performance.md
+```
+
+Di VM lokal: `build_payloads.mjs` lalu `run_headless.mjs --device vm --datasets pilkada_900,sms_5574,smsa_11000` dan `--datasets gabungan,besar_ge20000,sms_5574_ascii,gabungan_ascii` (dua panggilan karena batas waktu per panggilan).
+
+#### 5. Pembacaan hasil uji asap
+
+Semua pernyataan berikut hanya untuk sandbox/VM dan dapat berubah pada perangkat skripsi.
+
+1. **Skala linear terhadap jumlah dokumen.** STWV default di peramban sandbox: 60,6; 351,0; 741,1; 1.205,3 ms untuk 900; 5.574; 11.000; 17.974 dokumen, kira-kira 0,063 sampai 0,067 ms per dokumen. NB 10-fold pada jalur headless kira-kira 3,4 sampai 4,6 kali NB holdout untuk SMS Spam, SmSA, dan Gabungan (sandbox dan VM), dan 2,2 sampai 2,5 kali pada Pilkada 900 (sel terlalu kecil, didominasi tetapan awal).
+2. **Peramban vs headless.** Pada STWV selisihnya kecil (peramban 60,6 vs headless 54,9 ms pada Pilkada 900). Pada NB dan Apply Model dataset kecil selisihnya besar (NB holdout 213,7 vs 46,3 ms; AM 121,3 vs 32,2 ms) karena Worker baru tiap analisis menanggung overhead tetap sekitar 75 sampai 140 ms (tabel "Overhead tetap Worker") dan kompilasi wasm pada isolat baru. Run pemanasan headless (panggilan pertama pada proses baru) berada dekat angka peramban, mis. NB holdout SmSA: pemanasan headless 571,1 ms dan peramban 626,9 ms vs rata-rata headless 339,6 ms (tabel "Run pemanasan"). Penjelasan "peramban = kondisi dingin" adalah dugaan yang sesuai data, belum diuji terpisah. Pengiriman pesan (structured clone) bukan penyebab utama untuk NB dan AM: di Node, median lima kali `structuredClone` pada SmSA 11.000 adalah 18,7 ms (payload NB), 3,6 ms (hasil NB), 10,8 ms (payload AM), 2,3 ms (hasil AM) (`perf/clone_cost.mjs`, `logs/perf_clone_cost_sandbox.txt`; ini V8 di Node, bukan pengukuran di peramban). Sebaliknya, hasil STWV (matriks padat) 385,9 ms pada SmSA, sejalan dengan Long Task STWV di poin 3.
+3. **Responsivitas.** NB dan Apply Model tidak menghasilkan Long Task pada main thread di semua ukuran (hasilnya ringkas). STWV menghasilkan satu Long Task per proses karena hasilnya matriks padat n x V: terpanjang 110 ms (SMS Spam 5.574), 197 ms (SmSA 11.000, tepat di bawah ambang), 285 ms (Gabungan 17.974, melewati 200 ms), lihat BUGS_E.md E-02. P95 jeda frame tetap 16,7 ms (satu Long Task per ratusan frame tidak menggeser p95); jeda frame terpanjang mengikuti Long Task (100; 183; 267 ms).
+4. **STWV + Sastrawi pada SMS Spam dan Gabungan GAGAL** (`unreachable`, panik wasm di `sastrawi-rs 0.5.1`): BUGS_E.md E-01. Varian ASCII dapat diukur (sandbox peramban: 388,0 ms untuk SMS Spam ASCII, 1.418,3 ms untuk Gabungan ASCII). Pada Pilkada dan SmSA (tidak ada token yang memicu) berhasil.
+5. Simpangan baku sel kecil (puluhan ms) besar relatif terhadap rata-rata karena hanya lima pengukuran dan beban latar belakang sandbox; jangan membaca selisih beberapa ms sebagai perbedaan nyata.
+
+##### 5.1 Pembacaan hasil perangkat skripsi (Windows 11, Ryzen 5 4600H)
+
+Dihitung dari tabel di bagian 6 (eksekusi 8 Oktober 2026; Chrome 154.0.8037.98 headless dan Node v24.13.1; 1 pemanasan + 5 pengukuran per sel). Rasio dan "ms per dokumen" adalah turunan dari tabel, bukan pengukuran terpisah.
+
+1. **STWV default.** Peramban: 61,1; 376,2; 769,1; 1.229,6; 4.138,3 ms untuk 900; 5.574; 11.000; 17.974; 36.305 dokumen. Sekitar 0,067 sampai 0,070 ms per dokumen sampai 17.974 dokumen, lalu 0,114 ms per dokumen pada 36.305 dokumen (waktu 3,37 kali untuk 2,02 kali dokumen). Pada 36.305 dokumen rata-rata dokumen jauh lebih panjang (114,0 token versus 14,8 sampai 29,1), jadi kenaikan per dokumen sejalan dengan bertambahnya token, tetapi pengukuran ini tidak memisahkan faktor-faktor lain.
+2. **Naive Bayes dan Apply Model.** Pada 36.305 dokumen: NB holdout 10.297,3 ms, NB 10-fold 26.624,7 ms, Apply Model 6.500,9 ms di peramban (headless: 3.710,3; 17.960,9; 1.661,5 ms). Dibanding 17.974 dokumen, waktunya 10,7 sampai 12,7 kali lipat untuk 2,02 kali dokumen (peramban). Pada headless, NB 10-fold hampir proporsional dengan jumlah token: 4,65; 4,68; 4,72; 4,34 ms per 1.000 token untuk SMS Spam, SmSA, gabungan, dan 36.305 dokumen.
+3. **Peramban dibanding headless.** Rasio waktu peramban/headless pada lima ukuran dataset: STWV default 1,23 sampai 1,42; NB holdout 1,64 sampai 4,09; NB 10-fold 1,17 sampai 2,16; Apply Model 1,76 sampai 3,92. Overhead tetap Worker (40 dokumen) hanya 2,6 ms (STWV), 64,3 ms (NB holdout), 74,5 ms (NB 10-fold), dan 54,6 ms (Apply Model). Pada 36.305 dokumen selisih peramban − headless masih 6.587,0 ms (NB holdout), 8.663,8 ms (NB 10-fold), dan 4.839,4 ms (Apply Model), jadi bukan hanya overhead tetap; penyebabnya tidak diisolasi di Track E.
+4. **Responsivitas.** NB dan Apply Model tidak menghasilkan Long Task pada semua ukuran (jeda frame terpanjang 20 ms). STWV menghasilkan satu Long Task per proses (matriks padat, BUGS_E.md E-02): terpanjang 101 ms (11.000), 195 ms (17.974), 441 ms (36.305); ambang 200 ms terlewati pada ukuran terbesar (dan 214 ms pada gabungan varian ASCII dengan Sastrawi).
+5. **STWV + Sastrawi.** GALAT `unreachable` pada SMS Spam, gabungan, dan 36.305 dokumen (BUGS_E.md E-01); varian ASCII terukur: 411,1; 1.406,3; 6.166,2 ms di peramban, sekitar 1,49 kali STWV default pada 36.305 dokumen (headless: 303,5; 1.083,2; 4.907,5 ms).
+6. **Pemanasan.** Panggilan pertama pada proses headless baru lebih lambat daripada rata-rata lima pengukuran berikutnya (mis. STWV gabungan 3.913,8 versus 999,1 ms); tabel utama memakai rata-rata run 1 sampai 5.
+7. **Simpangan baku** (50 sel utama dan tambahan yang berisi waktu): median 3,0 persen dari rata-rata; 30 sel di bawah 5 persen dan 46 sel di bawah 10 persen. Terbesar pada sel kecil: NB holdout headless Pilkada (4,6 dari 27,8 ms; 16,5 persen), Apply Model headless SMS Spam (11,1 dari 94,6 ms; 11,7 persen), dan NB holdout peramban Pilkada (12,9 dari 113,6 ms; 11,4 persen). Dengan lima pengukuran, selisih beberapa persen tidak boleh dibaca sebagai perbedaan nyata.
+
+
+#### 6. Tabel hasil
+
+(Tabel hasil Track E disalin utuh di Lampiran A, bagian 8; tabel uji asap sandbox dan VM tidak disalin karena bukan hasil perangkat skripsi.)
+
+
+#### 7. Keterbatasan
+
+1. Angka pada bagian "UJI ASAP" dan bagian 4 sampai 5 berasal dari sandbox cloud (Xeon 2 vCPU, Linux) dan VM Linux 2 vCPU; **bukan** perangkat skripsi. Jangan memindahkannya ke buku. Hanya "Tabel perangkat skripsi" yang berasal dari perangkat skripsi. CPU, jumlah inti, sistem operasi, versi peramban, dan beban latar belakang berbeda, sehingga hanya orde besaran dan bentuk skala yang dapat dipelajari.
+2. Harness mengukur Worker + wasm + serialisasi pesan, **bukan** seluruh "klik OK sampai Output Viewer". Tidak termasuk: validasi form, pembacaan data dari IndexedDB (`getVariableData`), pembentukan payload di main thread (1 sampai 11 ms per payload pada sandbox, `perf/data/payloads_index.json`), penambahan ~1.000 kolom ke DataStore/VariableStore (STWV), `transformNaiveBayesResult` dan penulisan Output Viewer. Waktu aplikasi penuh karena itu lebih besar; `perf/e2e_full_app.spec.ts` (opsional, tidak divalidasi) mengukurnya untuk STWV.
+3. Worker STWV di harness adalah pengganti (bagian 3.1), dan tidak melalui bundler Next.js. Worker NB/AM adalah berkas asli, tetapi disajikan oleh server statis, bukan Next.js (header cache ditiru, perilaku dev server dan produksi tidak diukur).
+4. Pada Chromium headless di sandbox, jeda frame saat diam teramati 16,7 ms (60 Hz) dan bukan ritme layar nyata; pada perangkat skripsi gunakan `-Headed` bila ingin ritme layar sebenarnya (eksekusi 8 Oktober 2026 memakai Chrome headless: jeda frame p95 teramati 10,1 sampai 10,4 ms, bukan ritme layar nyata). Long Tasks hanya melaporkan tugas >= 50 ms dan hanya main thread; kerja di Worker tidak terlihat oleh API itu (memang tidak memblokir UI).
+5. Lima pengukuran per sel; run 0 dibuang; tidak ada koreksi untuk pelambatan termal atau penyetelan daya (perangkat skripsi diukur dengan adaptor daya tersambung dan paket daya Balanced, `logs/perf_device_info.txt`; tidak ada pemeriksaan program latar belakang). Memori puncak peramban tidak diukur (kolom `rss_mb` hanya terisi pada jalur headless: RSS proses Node).
+6. Dataset >= 20.000 dokumen (36.305) dan dataset gabungan memakai label campuran dan sumber berbeda (25 kelas pada 36.305); hanya untuk beban waktu. Dokumen 20 Newsgroups jauh lebih panjang (114,0 token per dokumen) sehingga ukuran terbesar tidak sebanding dengan dataset lain pada jumlah dokumen yang sama. Dataset ini NOT RUN di sandbox dan VM.
+7. Waktu NB 10-fold mencakup seluruh siklus validasi di dalam wasm; tidak ada pemisahan per fold.
+8. Rust native tidak diukur. Tidak ada pembanding eksternal (mis. scikit-learn atau WEKA) untuk waktu; Track E hanya mengukur Statify.
+
+#### 8. Instruksi satu perintah (perangkat skripsi, Windows)
+
+Dari akar repo `E:\KULIAH\Skripsi\statify64`, setelah mencolokkan daya dan menutup aplikasi lain:
+
+```
+powershell -ExecutionPolicy Bypass -File testing\text_analytics_eval\run_E.ps1
+```
+
+Skrip: mencatat spesifikasi perangkat ke `logs\perf_device_info.txt`; memeriksa node, python (opsional), Playwright dan peramban (Chrome, lalu Edge, lalu Chromium bawaan); membangun dataset dan payload; menjalankan jalur headless dan peramban (log `logs\perf_headless_skripsi.txt`, `logs\perf_browser_skripsi.txt`; CSV `perf\raw\headless_skripsi.csv`, `perf\raw\browser_skripsi.csv`); lalu menjalankan `aggregate_perf.py` yang menulis ulang tabel di bagian 6.1 dokumen ini. Opsi: `-Quick` (hanya Pilkada dan SMS Spam), `-SkipBrowser`, `-SkipHeadless`, `-Skip20NG`, `-Headed`, `-Browser chrome|msedge|chromium`. Jika Playwright tidak ditemukan: `cd frontend; npm install; npx playwright install chromium`. Jika Python tidak ada: jalankan `python testing\text_analytics_eval\perf\aggregate_perf.py --inject testing\text_analytics_eval\E_performance.md` di mesin lain yang memiliki Python (hanya pustaka standar) setelah menyalin `perf\raw\*.csv`.
+
+Agar baris ">= 20.000 dokumen" terisi: pastikan ada jaringan dan `pip install scikit-learn` (skrip mengunduh 20 Newsgroups), atau letakkan `valid_preprocess.tsv` di `testing\text_analytics_eval\weka\data\` (menambah SmSA validasi; total tetap 19.234 sehingga belum cukup tanpa 20 Newsgroups). Tanpa 20 Newsgroups, baris itu tetap `NOT RUN`.
+
+Rekomendasi pengukuran: jalankan dua kali (dengan `-Headed` sekali) dan bandingkan; yang masuk buku cukup satu eksekusi lengkap yang `status`-nya OK pada semua sel, dengan peramban, versi, dan spesifikasi dari `logs\perf_device_info.txt`.
+
+#### 9. Berkas
+
+| Berkas | Isi |
+|---|---|
+| `perf/common.mjs` | definisi skenario, urutan dataset, statistik, CSV mentah |
+| `perf/prepare_datasets.mjs` | membangun `perf/data/*.csv` (+ percobaan 20 Newsgroups, varian ASCII) |
+| `perf/build_payloads.mjs` | membangun payload JSON (pustaka headless) |
+| `perf/serve.mjs`, `perf/harness.html`, `perf/harness.js`, `perf/stwv_bench.worker.js` | server statis dan harness peramban |
+| `perf/run_browser.mjs`, `perf/run_headless.mjs` | penggerak jalur (a) dan (b) |
+| `perf/clone_cost.mjs` | biaya `structuredClone` payload/hasil di Node (orde besaran, bukan peramban) |
+| `perf/aggregate_perf.py` | agregasi CSV mentah ke tabel markdown (koma desimal) |
+| `perf/e2e_full_app.spec.ts` | opsional, aplikasi penuh, TIDAK DIVALIDASI |
+| `perf/raw/*.csv` | data mentah (sandbox, VM) |
+| `perf/tables_generated.md` | salinan tabel yang disuntikkan |
+| `run_E.ps1` | satu perintah di Windows |
+| `BUGS_E.md` | E-01 (tinggi), E-02, E-03 (informasi) |
+| `logs/perf_*` | log mentah dan spesifikasi perangkat |
+
+Berkas `perf/data/` (dataset turunan dan payload, puluhan MB) dibangkitkan ulang oleh skrip dan sebaiknya tidak dimasukkan ke git.
+
+
+---
+
+# LAMPIRAN F — F_integration.md — Track F (ringkasan, lingkungan, IT-03, IT-05, penyesuaian prompt, keterbatasan); tabel ada di Lampiran A
+
+Salinan utuh dari berkas sumber di `testing/text_analytics_eval/`; heading diturunkan dua tingkat. Jangan menyunting di sini.
+
+### F. Pengujian integrasi antarmenu: STWV, Naive Bayes, Apply Model, dan penyimpanan model (IT-01 sampai IT-05)
+
+Dokumen ini melaporkan Track F evaluasi modul Text Analytics Statify: apakah keluaran satu menu dapat dipakai menu berikutnya tanpa kehilangan atau pergeseran nilai. Semua skenario diperiksa terhadap KODE (nama kolom, pesan, kunci model), bukan terhadap tabel prompt, dan dijalankan ulang dengan wasm yang sama dengan aplikasi.
+
+#### 1. Ringkasan
+
+- Seluruh pemeriksaan otomatis lulus pada VM Linux perangkat: 5 skrip Node (24 + 36 + 45 + 41 + 18 = 164 pemeriksaan, tanpa gagal; `logs/integration_it01_vm.txt` sampai `integration_it05_vm.txt`) dan 98 tes Jest pada 5 berkas (`logs/jest_F_vm.json`, `logs/jest_F_vm.txt`). Hasil ini BUKAN hasil perangkat uji skripsi (Windows 11); hasil final berasal dari `run_F.ps1` di Windows (`logs/jest_F_win.json`, `logs/integration_it0N_win.txt`).
+- IT-01, IT-02, IT-04, IT-05: kriteria terpenuhi. IT-01 membawa catatan F-01 (satu kolom STWV bernama `VEC` lolos dari filter "VEC_" pada antarmuka).
+- IT-03: **Lulus dengan catatan**. Kelas prediksi sama pada 630/630 baris untuk K1 sampai K5 dan parameter model yang diterima Apply Model identik bit demi bit dengan model Naive Bayes (selisih 0). Tetapi probabilitas keluaran Apply Model dibulatkan 4 desimal (`round4`), sehingga selisih terhadap skor acuan presisi penuh mencapai 4,992e-5 sampai 5,000e-5 dan kriteria 1e-9 tidak terpenuhi secara harfiah pada kolom probabilitas (bagian 4).
+- IT-04: kelas prediksi sama dengan scikit-learn pada 270/270 dokumen untuk K1 sampai K5; akurasi 0,7630 (K1 dan K3), 0,7296 (K2), 0,7667 (K4), 0,7556 (K5); keluaran identik byte demi byte dengan berkas Track D.
+- IT-05: dua proses Node terpisah menghasilkan berkas prediksi identik byte demi byte (K1 dan K5) dan seluruh angka model (6.017 dan 6.018 angka) sama bit demi bit setelah tulis dan baca berkas.
+- Dijalankan ulang di Windows (`run_F.ps1`): lima skrip Node keluar 0 (`logs/integration_it0N_win.txt`), Jest konfigurasi produksi 98 dari 98 lulus (`logs/jest_F_win.json`), dan tes Rust `eval_integration.rs` 2 dari 2 lulus (`logs/rust_eval_integration.txt`). Belum dijalankan: pemeriksaan di peramban nyata (`F_manual_checklist.md`).
+- Temuan: F-01 (rendah) dan F-02 (informasi, sama dengan D-02) di `BUGS_F.md`. Tidak ada kode produksi yang diubah.
+
+#### 2. Lingkungan dan versi
+
+| Butir | Nilai | Sumber |
+|---|---|---|
+| wasm STWV (`statify_string_to_word_bg.wasm`) | sha256 `94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669`, 1.464.043 B | `logs/integration_it01_vm.txt` |
+| wasm Naive Bayes (`public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm`) | sha256 `163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8`, 1.843.034 B | idem |
+| wasm Apply Model (`public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm`) | sha256 `036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc`, 1.627.140 B | idem |
+| Mesin | VM Linux di perangkat (kernel 6.8.0-138), Node v22.23.2 (sandbox cloud: Node 22.22). Bukan Windows 11 laptop skripsi; waktu eksekusi sandbox tidak dilaporkan sebagai hasil perangkat itu. | log |
+| Jest | `tools/run_jest_linux.sh` (config `jest.eval.config.js`, ts-jest, `@jest-environment node` untuk tes service dan jsdom untuk tes antarmuka) | `logs/jest_F_vm.txt` |
+| Data | `Claude outputs/pilkada_train.csv` (630 baris) dan `pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`; kelas negative dan positive | log |
+| Konfigurasi | K1 sampai K5 seperti Track D (`headless/statify_wasm.mjs`, dibangun di atas `STWV_DEFAULT_CONFIG`); seed 42; alpha 1 | `integration/it_util.mjs`, `integration.drivers.ts` |
+
+Berkas wasm yang dipakai adalah yang ada di repositori (tidak dibangun ulang oleh Track F).
+
+#### 3. Hasil per skenario
+
+(Tabel hasil per skenario disalin utuh di Lampiran A, bagian 9.)
+
+
+#### 4. IT-03: kriteria 1e-9 dan pembulatan `round4`
+
+Kriteria asli: prediksi pada data latih yang sama identik dengan model akhir (selisih <= 1e-9). Wasm Apply Model membulatkan probabilitas keluaran ke 4 desimal (`round4`, `apply-model/rust/src/stats/posterior.rs` baris 65–67; sesuai spesifikasi, lihat D-02), sehingga kolom `NB_PredictedProbability` dan `NB_Probability_<kelas>` tidak mungkin mencapai selisih 1e-9 terhadap nilai presisi penuh. Kriteria tidak dilonggarkan diam-diam; dipakai empat tingkat bukti:
+
+1. **Kelas**: kelas prediksi sama dengan skor acuan presisi penuh pada 630/630 baris untuk K1 sampai K5.
+2. **Probabilitas**: `round4(acuan)` sama persis dengan keluaran pada 1.260/1.260 probabilitas per konfigurasi, dan \|acuan - keluaran\| <= 5e-5 (terukur 4,992e-5 sampai 5,000e-5). Skor acuan dihitung mandiri: matriks STWV dari wasm, lalu `ln(prior)` ditambah jumlah `x * log_weights` (Bernoulli: bobot absen ditambahkan), softmax, dan seri diputus menurut urutan abjad kelas.
+3. **Parameter**: objek model yang sampai ke wasm Apply Model identik bit demi bit dengan `trained_model` Naive Bayes (6.017 sampai 8.017 angka, selisih 0, jadi <= 1e-9 secara literal pada parameter).
+4. **Kekokohan keputusan**: selisih skor-log terkecil antarkelas pada 630 baris adalah 1,600e-4 (K4) sampai 4,154e-2 (K2), jauh di atas 1e-9, dan tidak ada seri persis; galat 1e-9 pada parameter tidak dapat membalik keputusan kelas.
+
+Kontrol negatif: menggeser satu `log_weight` sebesar 1e-9 membuat pembanding bit melaporkan tepat 1 selisih, tetapi keluaran Apply Model tidak berubah pada 2.520 dari 2.520 sel. Ini membuktikan bahwa pada keluaran, kriteria 1e-9 tidak dapat dibedakan dari 5e-5, sehingga pengujian harus dilakukan pada parameter dan skor acuan.
+
+Putusan: **Lulus dengan catatan**. Yang tidak terpenuhi secara harfiah: selisih probabilitas keluaran <= 1e-9. Alasan: pembulatan 4 desimal pada desain, bukan kesalahan rumus.
+
+#### 5. IT-05: peran `float_roundtrip` dan round-trip JSON JavaScript
+
+- Alur aplikasi: wasm Naive Bayes mengembalikan model sebagai objek JavaScript (`serde_wasm_bindgen`, angka berpindah sebagai double, tanpa teks). Export Model menulis `JSON.stringify(model, null, 2)`; memuat berkas memakai `JSON.parse`; objek hasilnya dikirim ke wasm Apply Model lagi sebagai objek. Di jalur ini tidak ada JSON teks yang di-parse oleh Rust (pemanggilan `serde_json::from_str` hanya ada di modul tes).
+- JavaScript: `JSON.stringify` menulis tiap double hingga sebagai representasi desimal terpendek yang kembali ke double yang sama, dan `JSON.parse` membulatkan dengan benar ke double terdekat; round-trip eksak bit demi bit. Diuji pada 1.999.029 double acak dan nilai tepi (skrip Node) dan 299.884 (Jest), 0 selisih; dua nilai yang berbeda 1 ulp (`1.1104084639816971` dan `...973`, contoh dari catatan fase S4) tetap dibedakan. Pengecualian yang diketahui: `-0` ditulis `0` (nilai sama, bit berbeda) dan nilai tak hingga/NaN menjadi `null`; tidak ada pada model yang diuji.
+- Rust: `serde_json` secara bawaan membaca teks desimal dengan algoritma cepat yang pada kasus langka dapat bergeser 1 ulp. Fitur `float_roundtrip` (aktif di `statify-text-core/Cargo.toml`, dan berlaku untuk crate Naive Bayes dan Apply Model lewat penyatuan fitur Cargo bila crate itu bergantung pada core) memakai algoritma yang membulatkan dengan benar. Fitur ini menjadi jaminan bagi kode Rust yang membaca model sebagai TEKS (tes Rust, alat baris perintah, kemungkinan integrasi masa depan), bukan bagi jalur browser saat ini. Tes pendukungnya: `statify-text-core/tests/s4_fit_transform.rs` (`model_json_roundtrip_menghasilkan_transform_identik`, sudah ada) dan `tests/eval_integration.rs` (baru; dijalankan di Windows lewat `run_F.ps1`).
+- Bukti dua proses: `it05_persist.mjs` menjalankan proses 1 (latih, ekspor ke berkas di folder sementara) dan proses 2 (proses Node baru, tanpa pelatihan, memuat berkas, menerapkan). Pid berbeda, sha256 wasm sama, berkas prediksi identik byte demi byte, dan jejak bit seluruh angka model sama.
+
+#### 6. Penyesuaian prompt terhadap kode
+
+| Butir prompt | Yang ada di kode | Tindakan |
+|---|---|---|
+| IT-01: "jumlah term model = jumlah kolom VEC_" | Pada model Word-Vector, term disimpan di `text.terms` dan `text.columns`; ringkasan Rust `text_features.n_terms`. Nama kolom STWV dibentuk `processVariableName("VEC_" + kata)`, bukan selalu `VEC_…` (F-01). | Diperiksa ketiganya; filter "VEC_" dipakai pada tes antarmuka dan memberi 999 dari 1.000. |
+| IT-01: "peringatan kebocoran tampil" | Dua tempat: peringatan W-LEAK di panel `nb-text-warnings` tab Variables (`WARNING_LEAKAGE`) dan baris "Note" pada Case Processing Summary di Output Viewer (`leakage_note`). Pesan dalam bahasa Inggris. | Keduanya diuji. |
+| IT-02: "Model Summary" | Kartu Model Summary pada tab Model Apply Model dibentuk dari descriptor adapter; tabel Output Viewer Apply Model juga memuat Model Summary. | Descriptor dan tabel Output Viewer diuji otomatis; tampilan kartu di peramban masuk daftar periksa manual. |
+| IT-03: kriteria 1e-9 | Probabilitas keluaran `round4`. | Bagian 4. |
+| IT-04: "kolom NB_" | Awalan bawaan `NB_`: `NB_PredictedValue`, `NB_PredictedProbability`, `NB_Probability_<kelas>` (kelas negative dan positive). | Nama diperiksa persis, bersama indeks kolom 4 sampai 7. |
+| IT-04: "Track D" | Berkas Track D dipakai hanya sebagai pembanding; alur dijalankan ulang di tes dan skrip. | Hasil ulang identik byte demi byte dengan `accuracy/out/pred_statify_K*.csv`. |
+| IT-05: "float_roundtrip" | Lihat bagian 5: jalur browser tidak mem-parse JSON di Rust. | Penjelasan dan tes diadaptasi. |
+| Export Model | Tombol Export Model di Output Viewer menulis `JSON.stringify(trained_model, null, 2)` (`export-model-output.tsx#downloadJson`). | Tes memakai persis rumus itu; klik tombol dan unduhan berkas masuk daftar periksa manual. |
+
+#### 7. Menjalankan ulang
+
+- Windows: `powershell -ExecutionPolicy Bypass -File testing\text_analytics_eval\run_F.ps1` (opsi `-SkipJest`, `-SkipRust`). Menghasilkan `logs/integration_it0N_win.txt`, `logs/jest_F_win.json|txt`, `logs/rust_eval_integration.txt` (bila ada cargo).
+- Satu skrip: `node testing/text_analytics_eval/integration/it05_persist.mjs`. Skrip menulis `integration/out/pred_it04_K*.csv` (ditimpa tiap jalan) dan, untuk IT-05, memakai folder sementara sistem (`IT05_DIR` untuk mengubahnya); tidak ada berkas yang dihapus.
+- Jest sendiri: dari `frontend`, `npx jest integration.it0 --runInBand`.
+- Berkas: tes Jest di `apply-model/services/__tests__/eval/integration.*.test.ts`, tes antarmuka di `naive-bayes/components/__tests__/eval/integration.it01.leakage-ui.test.tsx`, pembantu di `apply-model/__tests__/eval/integration.{helpers,mocks,drivers}.ts`, skrip Node di `testing/text_analytics_eval/integration/`, tes Rust di `statify-text-core/tests/eval_integration.rs`.
+
+#### 8. Keterbatasan
+
+1. Eksekusi di VM Linux (Node 22.23.2) dengan ts-jest, bukan Windows 11 dengan `next/jest`; hasil Windows menyusul lewat `run_F.ps1`. Tidak ada waktu eksekusi sandbox yang dilaporkan sebagai hasil perangkat skripsi.
+2. Tes memakai wasm yang sudah dibangun di repositori; wasm tidak dibangun ulang. `eval_integration.rs` ditulis tanpa kompiler dan dikompilasi pertama kali di Windows; hasilnya 2 dari 2 lulus.
+3. `Worker` diganti kelas yang memanggil wasm langsung; penyalinan pesan (structured clone) dan penjadwalan Worker sungguhan tidak diuji. Store hasil dan variabel diganti tiruan; penulisan ke Data Editor dan IndexedDB tidak diuji. Hook `useStringToWordVector` tidak dijalankan; penamaan kolom memakai `buildColumnData` dan `processVariableName` asli.
+4. Antarmuka hanya diuji di jsdom pada tab Variables Naive Bayes. Dialog pemilih berkas, kartu Model Summary, tampilan Output Viewer, unduhan berkas, dan muat ulang halaman nyata hanya ada di `F_manual_checklist.md`.
+5. Satu dataset (pilkada, dua kelas seimbang) dan lima konfigurasi; model fitur biasa dan Word-Vector pada Apply Model tidak dicakup di Track F (lihat Track C3).
+6. Kriteria 1e-9 pada IT-03 diuji tidak langsung (bagian 4).
+7. Berkas `logs/jest_F_try*.json` di perangkat adalah sisa percobaan penulisan (penghapusan tidak diizinkan); abaikan atau hapus manual. Log resmi: `jest_F_vm.json|txt` dan `integration_it0N_vm.txt`.

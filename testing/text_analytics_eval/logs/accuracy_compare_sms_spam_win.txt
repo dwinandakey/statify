@@ -66,4 +66,4 @@
 | K4w | scikit-learn | [1449, 0] ; [69, 155] |
 
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=1.27 started=2026-10-08 00:18:10 +07:00 cmd=python -X utf8 testing\thesis-eval\accuracy\compare_predictions.py --dataset sms_spam cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.21 started=2026-10-08 10:30:06 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\compare_predictions.py --dataset sms_spam cwd=E:\KULIAH\Skripsi\statify64 ===

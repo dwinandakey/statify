@@ -28,7 +28,7 @@ Seluruh temuan dari Track A sampai F. Setiap temuan memuat lokasi (berkas:baris)
 | D-04 | informasi | perbedaan definisi dengan WEKA yang menimbulkan selisih prediksi, bukan galat | `BUGS_D.md` |
 | E-01 | tinggi | STWV dengan stemming Sastrawi membatalkan seluruh proses (wasm panic "unreachable") bila ada token yang karakter keduanya multibita | `BUGS_E.md` |
 | E-02 | informasi | hasil STWV berupa matriks padat dikirim lewat `postMessage`, sehingga main thread terblokir seiring jumlah dokumen | `BUGS_E.md` |
-| E-03 | informasi | Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap ±75–100 ms | `BUGS_E.md` |
+| E-03 | informasi | Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap sekitar 55–75 ms (perangkat skripsi) | `BUGS_E.md` |
 | F-01 | rendah | kolom STWV untuk kata tanpa karakter sah bernama `VEC`, sehingga lolos dari filter `VEC_` pada tab Variables Naive Bayes | `BUGS_F.md` |
 | F-02 | informasi | probabilitas Apply Model dibulatkan 4 desimal, sehingga kriteria 1e-9 pada IT-03 tidak dapat diukur langsung | `BUGS_F.md` |
 
@@ -366,12 +366,14 @@ Satu cacat fungsional (E-01) ditemukan saat mengukur skenario "STWV + stopword I
 ### E-02 (informasi): hasil STWV berupa matriks padat dikirim lewat `postMessage`, sehingga main thread terblokir seiring jumlah dokumen
 - Lokasi: `frontend/components/Modals/Transform/StringToWordVector/stringToWord.processor.ts` (`self.postMessage({ status: 'success', payload: result })`, `result.matrix` = n × V angka) dan `hooks/useStringToWordVector.ts#runWorker`.
 - Pengukuran sandbox (harness peramban, `logs/perf_browser_sandbox.txt`): Long Task terpanjang pada main thread 110 ms (SMS Spam 5.574), 197 ms (SmSA 11.000), 285 ms (Gabungan 17.974) — melewati ambang 200 ms pada ±18 ribu dokumen; jeda frame terpanjang mengikuti (100/183/267 ms). Naive Bayes dan Apply Model tidak menghasilkan Long Task sama sekali (hasilnya ringkas). Biaya `structuredClone` hasil STWV di Node: 45,6 / 185,3 / 385,9 ms untuk Pilkada / SMS Spam / SmSA (`logs/perf_clone_cost_sandbox.txt`).
+- Pengukuran perangkat skripsi (Windows 11, Ryzen 5 4600H, Chrome 154 headless, `logs/perf_browser_skripsi.txt`): Long Task terpanjang STWV default 64 ms (SMS Spam 5.574), 101 ms (SmSA 11.000), 195 ms (gabungan 17.974), 441 ms (36.305 dokumen); STWV Sastrawi varian ASCII 214 ms (gabungan) dan 449 ms (36.305). Ambang 200 ms terlewati pada gabungan varian ASCII dan pada dataset 36.305; NB dan Apply Model tetap tanpa Long Task. Rincian: `E_performance.md` bagian 5.1.
 - Dampak: untuk korpus ≥ ±18 ribu dokumen antarmuka membeku ratusan ms saat hasil STWV diterima, belum termasuk penambahan ~1.000 kolom ke DataStore (tidak diukur di harness). Angka ini dari CPU sandbox; pada perangkat skripsi harus diukur ulang (`run_E.ps1`).
 - Usulan (opsional): kirim matriks sebagai `Float64Array` yang ditransfer (transferable) atau bentuk sparse, dan tulis kolom ke DataStore bertahap.
 
-### E-03 (informasi): Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap ±75–100 ms
+### E-03 (informasi): Worker Naive Bayes dan Apply Model dibuat baru pada setiap analisis sehingga tiap analisis menanggung overhead tetap sekitar 55–75 ms (perangkat skripsi)
 - Lokasi: `naive-bayes/services/naive-bayes-analysis.ts` baris 257 (`new Worker(...)` per analisis, `worker.terminate()` setelah hasil) dan `apply-model/services/apply-model-analysis.ts` baris 104; STWV memakai ulang Worker (`workerRef`).
 - Pengukuran sandbox (40 dokumen, sehingga komputasi ≈ 0): NB holdout rata-rata 98,3 ms, NB 10-fold 139,2 ms, Apply Model 75,5 ms, STWV 3,1 ms (Worker dipakai ulang). Berasal dari boot Worker, revalidasi berkas (304) dan kompilasi wasm 1,6–1,8 MB. Akibatnya sel kecil (Pilkada 900) NB dan Apply Model di peramban 3–5 kali lebih lama daripada headless (213,7 vs 46,3 ms; 322,0 vs 103,5 ms; 121,3 vs 32,2 ms), sedangkan sel besar didominasi komputasi.
+- Pengukuran perangkat skripsi (`E_performance.md`): overhead tetap 64,3 ms (NB holdout), 74,5 ms (NB 10-fold), 54,6 ms (Apply Model), 2,6 ms (STWV). Koreksi atas dugaan sandbox bahwa sel besar didominasi komputasi: pada 36.305 dokumen, peramban masih 6.587,0 ms (NB holdout), 8.663,8 ms (NB 10-fold), dan 4.839,4 ms (Apply Model) lebih lambat daripada headless, jadi selisih tidak hanya overhead tetap; penyebabnya belum diisolasi.
 - Dampak: kecil secara absolut; relevan hanya untuk interpretasi tabel (selisih peramban − headless pada dataset kecil bukan komputasi). Usulan (opsional): simpan `WebAssembly.Module` terkompilasi atau pakai ulang Worker.
 
 

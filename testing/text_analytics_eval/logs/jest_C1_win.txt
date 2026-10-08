@@ -1,61 +1,61 @@
-PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.modal.test.tsx (8.097 s)
+PASS components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.modal.test.tsx (6.6 s)
   BB-01 membuka panel String to Word Vector
-    √ panel menampilkan tab Variables dan Options (172 ms)
-    √ daftar variabel hanya memuat variabel STRING atau bersifat nominal (30 ms)
-    √ tab Options memuat bagian Vector Column Name, Stopwords, Stemming, Tokenizer, dan Vectorization Method (223 ms)
-    √ tanpa variabel terpilih tombol OK nonaktif; setelah memilih variabel OK aktif (161 ms)
+    √ panel menampilkan tab Variables dan Options (126 ms)
+    √ daftar variabel hanya memuat variabel STRING atau bersifat nominal (21 ms)
+    √ tab Options memuat bagian Vector Column Name, Stopwords, Stemming, Tokenizer, dan Vectorization Method (167 ms)
+    √ tanpa variabel terpilih tombol OK nonaktif; setelah memilih variabel OK aktif (173 ms)
   BB-03 Vector Column Name tidak sah (awalan kolom)
-    √ awalan dimulai angka menampilkan pesan dan menonaktifkan OK (342 ms)
-    √ awalan 33 karakter (melewati batas isian) menampilkan pesan panjang maksimum 32 dan OK nonaktif (294 ms)
-    √ kolom isian dibatasi maxLength 32 sehingga mengetik 40 karakter hanya menyimpan 32 dan tidak ada galat (1339 ms)
-    √ temuan C1-02: bila hanya awalan yang tidak sah, kotak galat di bawah memuat judul tanpa rincian (pesan hanya ada di tab Options) (378 ms)
-    √ awalan mengandung spasi atau simbol terlarang ditolak, awalan sah mengaktifkan kembali OK (343 ms)
+    √ awalan dimulai angka menampilkan pesan dan menonaktifkan OK (262 ms)
+    √ awalan 33 karakter (melewati batas isian) menampilkan pesan panjang maksimum 32 dan OK nonaktif (259 ms)
+    √ kolom isian dibatasi maxLength 32 sehingga mengetik 40 karakter hanya menyimpan 32 dan tidak ada galat (1034 ms)
+    √ temuan C1-02: bila hanya awalan yang tidak sah, kotak galat di bawah memuat judul tanpa rincian (pesan hanya ada di tab Options) (341 ms)
+    √ awalan mengandung spasi atau simbol terlarang ditolak, awalan sah mengaktifkan kembali OK (265 ms)
   BB-06 Delimiters regex tidak valid (galat INVALID_REGEX dari inti)
-    √ antarmuka tidak memvalidasi regex di muka; setelah OK galat INVALID_REGEX tampil lengkap dengan kodenya dan modal tetap terbuka (356 ms)
-    √ delimiter dikosongkan ditolak di sisi klien dengan pesan dan OK nonaktif (288 ms)
+    √ antarmuka tidak memvalidasi regex di muka; setelah OK galat INVALID_REGEX tampil lengkap dengan kodenya dan modal tetap terbuka (316 ms)
+    √ delimiter dikosongkan ditolak di sisi klien dengan pesan dan OK nonaktif (233 ms)
   BB-11 kosakata kosong (galat EMPTY_VOCABULARY dari inti)
-    √ galat EMPTY_VOCABULARY tampil dengan kalimat utama dan kode; tidak ada kolom ditambahkan (433 ms)
-    √ galat EMPTY_VOCABULARY akibat Min term frequency memakai kalimat utama yang berbeda (220 ms)
+    √ galat EMPTY_VOCABULARY tampil dengan kalimat utama dan kode; tidak ada kolom ditambahkan (373 ms)
+    √ galat EMPTY_VOCABULARY akibat Min term frequency memakai kalimat utama yang berbeda (202 ms)
   BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer)
-    √ OK mengirim default Weka ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel (225 ms)
-    √ BB-13 Output Viewer menerima Processing Summary, Settings, dan Vocabulary dengan isi yang benar (234 ms)
-    √ awalan kolom kustom TKS_ dipakai pada nama kolom dan ringkasan (357 ms)
+    √ OK mengirim default Weka ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel (187 ms)
+    √ BB-13 Output Viewer menerima Processing Summary, Settings, dan Vocabulary dengan isi yang benar (218 ms)
+    √ awalan kolom kustom TKS_ dipakai pada nama kolom dan ringkasan (280 ms)
   BB-12 sel kosong menjadi vektor nol dan jumlah baris tetap
-    √ sel kosong (null) dikirim sebagai string kosong pada indeks yang sama dan semua kolom tetap berisi 5 baris (218 ms)
-    √ bila seluruh sel kosong, worker tidak dipanggil dan galat EMPTY_DATA tampil (220 ms)
+    √ sel kosong (null) dikirim sebagai string kosong pada indeks yang sama dan semua kolom tetap berisi 5 baris (224 ms)
+    √ bila seluruh sel kosong, worker tidak dipanggil dan galat EMPTY_DATA tampil (224 ms)
   Reset dan Cancel pada panel
-    √ Cancel memanggil onClose dan Reset mengembalikan pilihan variabel serta awalan kolom (487 ms)
+    √ Cancel memanggil onClose dan Reset mengembalikan pilihan variabel serta awalan kolom (386 ms)
 
-PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.options.test.tsx
+PASS components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.options.test.tsx
   BB-04 n-gram min=1 max=2 (antarmuka ke payload)
-    √ memilih N-gram lalu max=2 dan min=1 menghasilkan ngram_min=1, ngram_max=2 tanpa galat (205 ms)
+    √ memilih N-gram lalu max=2 dan min=1 menghasilkan ngram_min=1, ngram_max=2 tanpa galat (211 ms)
   BB-05 n-gram tidak sah (antarmuka)
-    √ min lebih besar dari max menampilkan pesan dan menonaktifkan OK (155 ms)
-    √ max di atas 5 dipotong (clamp) menjadi 5 oleh kolom isian sehingga tidak ada pesan (132 ms)
-    √ validateStwvConfig menolak ukuran n-gram 6 (jaring pengaman bila clamp terlewati) (1 ms)
+    √ min lebih besar dari max menampilkan pesan dan menonaktifkan OK (154 ms)
+    √ max di atas 5 dipotong (clamp) menjadi 5 oleh kolom isian sehingga tidak ada pesan (135 ms)
+    √ validateStwvConfig menolak ukuran n-gram 6 (jaring pengaman bila clamp terlewati)
   BB-07 stopwords Indonesian lalu Custom (antarmuka ke payload)
-    √ Indonesian mengirim stopwords_method=indonesian dan seluruh daftar bawaan sebagai JSON (117 ms)
+    √ Indonesian mengirim stopwords_method=indonesian dan seluruh daftar bawaan sebagai JSON (112 ms)
     √ berkas acuan Rust c1_stopwords_indonesian.json identik dengan daftar bawaan aplikasi (3 ms)
-    √ Custom dengan daftar yang diketik mengirim array JSON (dipangkas, tanpa baris kosong) (125 ms)
-    √ mengetik di kotak teks saat Indonesian terpilih otomatis berpindah ke Custom (142 ms)
+    √ Custom dengan daftar yang diketik mengirim array JSON (dipangkas, tanpa baris kosong) (133 ms)
+    √ mengetik di kotak teks saat Indonesian terpilih otomatis berpindah ke Custom (134 ms)
   BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)
-    √ Indonesian (Sastrawi) mengirim stemming_method=indonesian (134 ms)
-    √ English (Porter) mengirim stemming_method=english dan catatan lowercase tampil (113 ms)
+    √ Indonesian (Sastrawi) mengirim stemming_method=indonesian (97 ms)
+    √ English (Porter) mengirim stemming_method=english dan catatan lowercase tampil (124 ms)
   BB-09 standar rumus scikit-learn (antarmuka ke payload)
-    √ default adalah Weka: Word count, IDF None, Normalization None (39 ms)
-    √ memilih scikit-learn otomatis menjadi hitungan (raw), smooth, dan L2 (137 ms)
-    √ opsi yang tampil mengikuti standar: sklearn tidak menawarkan log(1+f), Weka tidak menawarkan L2 (133 ms)
+    √ default adalah Weka: Word count, IDF None, Normalization None (65 ms)
+    √ memilih scikit-learn otomatis menjadi hitungan (raw), smooth, dan L2 (187 ms)
+    √ opsi yang tampil mengikuti standar: sklearn tidak menawarkan log(1+f), Weka tidak menawarkan L2 (132 ms)
   BB-10 Words to Keep dan Min term frequency (antarmuka ke payload)
-    √ Words to Keep=10 dan Min term frequency=2 dikirim sebagai words_to_keep=10, min_term_freq=2 (78 ms)
-    √ Min term frequency 0 menampilkan pesan dan menonaktifkan OK (63 ms)
+    √ Words to Keep=10 dan Min term frequency=2 dikirim sebagai words_to_keep=10, min_term_freq=2 (80 ms)
+    √ Min term frequency 0 menampilkan pesan dan menonaktifkan OK (71 ms)
   Kontrak payload default (dipakai juga oleh tes Rust BB-02)
     √ toRustConfig(default) identik dengan berkas c1_payload_default.json yang dibaca tes Rust (1 ms)
 
 Test Suites: 2 passed, 2 total
 Tests:       35 passed, 35 total
 Snapshots:   0 total
-Time:        11.155 s
-Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.
-Test results written to: ..\testing\thesis-eval\logs\jest_C1_win.json
+Time:        9.456 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv.
+Test results written to: ..\testing\text_analytics_eval\logs\jest_C1_win.json
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=16.34 started=2026-10-08 00:17:05 +07:00 cmd=npx jest components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv --runInBand --json --outputFile=..\testing\thesis-eval\logs\jest_C1_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=14.26 started=2026-10-08 10:29:07 +07:00 cmd=npx jest components/Modals/Transform/StringToWordVector/__tests__/eval/blackbox.stwv --runInBand --json --outputFile=..\testing\text_analytics_eval\logs\jest_C1_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===

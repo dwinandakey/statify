@@ -1,3 +1,3 @@
-[aggregate_perf] 985 baris mentah, 149 sel -> E:\KULIAH\Skripsi\statify64\testing\thesis-eval\perf\tables_generated.md; disuntikkan ke testing\thesis-eval\E_performance.md
+[aggregate_perf] 1622 baris mentah, 149 sel -> E:\KULIAH\Skripsi\statify64\testing\text_analytics_eval\perf\tables_generated.md; disuntikkan ke testing\text_analytics_eval\E_performance.md
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=0.26 started=2026-10-08 00:23:35 +07:00 cmd=python -X utf8 testing\thesis-eval\perf\aggregate_perf.py --inject testing\thesis-eval\E_performance.md --quiet cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.27 started=2026-10-08 10:45:54 +07:00 cmd=python -X utf8 testing\text_analytics_eval\perf\aggregate_perf.py --inject testing\text_analytics_eval\E_performance.md --quiet cwd=E:\KULIAH\Skripsi\statify64 ===

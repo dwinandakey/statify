@@ -1,4 +1,4 @@
-Dicatat: 2026-10-08 09:50:15 +07:00
+Dicatat: 2026-10-08 10:30:49 +07:00
 Komputer: DJ-RAID
 Model: LENOVO 82EY
 RAM fisik (GiB): 15.37
@@ -43,10 +43,10 @@ System Locale:                 3809
 Input Locale:                  en-us;English (United States)
 Time Zone:                     (UTC+07:00) Bangkok, Hanoi, Jakarta
 Total Physical Memory:         15.741 MB
-Available Physical Memory:     1.588 MB
-Virtual Memory: Max Size:      34.575 MB
-Virtual Memory: Available:     2.326 MB
-Virtual Memory: In Use:        32.249 MB
+Available Physical Memory:     2.015 MB
+Virtual Memory: Max Size:      35.618 MB
+Virtual Memory: Available:     2.244 MB
+Virtual Memory: In Use:        33.374 MB
 Page File Location(s):         C:\pagefile.sys
 Domain:                        WORKGROUP
 Logon Server:                  \\DJ-RAID

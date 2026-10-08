@@ -2,4 +2,4 @@ ditulis C_blackbox.md (177 baris)
 ditulis C_manual_checklist.md (627 baris)
 ditulis BUGS.md (395 baris)
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=0.13 started=2026-10-08 09:46:38 +07:00 cmd=python -X utf8 testing\thesis-eval\tools\merge_docs.py cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.14 started=2026-10-08 10:45:55 +07:00 cmd=python -X utf8 testing\text_analytics_eval\tools\merge_docs.py cwd=E:\KULIAH\Skripsi\statify64 ===

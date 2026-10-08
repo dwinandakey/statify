@@ -7,6 +7,6 @@ K4: acc=0.973102 kappa=0.874300 macroF1=0.937062 vocab=1000 {'only_ours': 3, 'on
 K1w: acc=0.984459 kappa=0.930906 macroF1=0.965446 vocab=7568  empty_test_docs=1
 K3w: acc=0.980873 kappa=0.917529 macroF1=0.958765 vocab=7568  empty_test_docs=1
 K4w: acc=0.958757 kappa=0.795552 macroF1=0.897343 vocab=7568  empty_test_docs=1
-tulis: E:\KULIAH\Skripsi\statify64\testing\thesis-eval\accuracy\out\sms_spam\sklearn_results.json
+tulis: E:\KULIAH\Skripsi\statify64\testing\text_analytics_eval\accuracy\out\sms_spam\sklearn_results.json
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=4.04 started=2026-10-08 00:18:06 +07:00 cmd=python -X utf8 testing\thesis-eval\accuracy\sk_compare.py --dataset sms_spam --no-params cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=3.52 started=2026-10-08 10:30:03 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\sk_compare.py --dataset sms_spam --no-params cwd=E:\KULIAH\Skripsi\statify64 ===

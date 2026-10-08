@@ -1,8 +1,8 @@
-=== run_browser.mjs run_id=browser_sandbox_20261008T095929 device=sandbox (SANDBOX-CLOUD (UJI ASAP, BUKAN PERANGKAT SKRIPSI))
+=== run_browser.mjs run_id=browser_sandbox_20261008T103634 device=sandbox (SANDBOX-CLOUD (UJI ASAP, BUKAN PERANGKAT SKRIPSI))
 env: AMD Ryzen 5 4600H with Radeon Graphics x12; RAM 15.4 GiB; Windows_NT 10.0.26300; Node v24.13.1
-playwright: playwright @ E:\KULIAH\Skripsi\statify64; server statis: http://127.0.0.1:61615; worker NB: /workers/Classify/NaiveBayes/naive-bayes.worker.js?v=naive-bayes-v3-20261005a; worker AM: /workers/Classify/ApplyModel/apply-model.worker.js?v=apply-model-v3-20261005a
+playwright: playwright @ E:\KULIAH\Skripsi\statify64; server statis: http://127.0.0.1:55871; worker NB: /workers/Classify/NaiveBayes/naive-bayes.worker.js?v=naive-bayes-v3-20261005a; worker AM: /workers/Classify/ApplyModel/apply-model.worker.js?v=apply-model-v3-20261005a
 wasm sha256: stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
 peramban: chrome 154.0.8037.98 headless
 CHECK_OK
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=7.82 started=2026-10-08 09:59:29 +07:00 cmd=node testing\thesis-eval\perf\run_browser.mjs --check --browser chrome cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.69 started=2026-10-08 10:36:34 +07:00 cmd=node testing\text_analytics_eval\perf\run_browser.mjs --check --browser chrome cwd=E:\KULIAH\Skripsi\statify64 ===

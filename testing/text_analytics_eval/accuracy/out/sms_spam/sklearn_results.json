@@ -8,8 +8,8 @@
   "platform": "Windows-11-10.0.26300-SP0"
  },
  "dataset": "sms_spam",
- "train_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_train.csv",
- "test_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_test.csv",
+ "train_file": "testing\\text_analytics_eval\\accuracy\\datasets\\sms_spam_train.csv",
+ "test_file": "testing\\text_analytics_eval\\accuracy\\datasets\\sms_spam_test.csv",
  "n_train": 3901,
  "n_test": 1673,
  "train_class": {

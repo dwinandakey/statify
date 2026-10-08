@@ -42,4 +42,4 @@
 | K4w | scikit-learn | [152, 0, 52] ; [28, 2, 58] ; [37, 0, 171] |
 
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=1.05 started=2026-10-08 00:18:19 +07:00 cmd=python -X utf8 testing\thesis-eval\accuracy\compare_predictions.py --dataset smsa cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.02 started=2026-10-08 10:30:14 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\compare_predictions.py --dataset smsa cwd=E:\KULIAH\Skripsi\statify64 ===

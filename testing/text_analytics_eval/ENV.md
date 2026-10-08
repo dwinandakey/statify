@@ -12,8 +12,14 @@ Semua versi di bawah berasal dari perintah/berkas yang benar-benar dibaca; sumbe
 | OS | Windows 11 Home 64-bit | diberikan pengguna |
 | rustc / cargo | rustc 1.93.0 (254b59607 2026-01-19), host `x86_64-pc-windows-msvc`, toolchain `stable-x86_64-pc-windows-msvc` | berkas `target/.rustc_info.json` hasil build Windows di repo |
 | WEKA | 3.9.6, `C:\Program Files\Weka-3-9-6\` (JRE bawaan Zulu 17.0.2) | `testing/text_analytics_eval/weka/00_ENV_dan_pemetaan_opsi.md` (dibaca dari berkas `release` JRE) |
-| Peramban terpasang | Google Chrome, Brave (daftar aplikasi komputer) | daftar aplikasi dari pengakses komputer; versi: lihat `logs/env_windows.txt` |
-| node, npm, jest, wasm-pack, python, scikit-learn, numpy, pandas, java, graphviz, git, versi peramban | **belum dicatat oleh sesi ini** | dicatat otomatis oleh `run_all.ps1` → `tools/capture_env.ps1` → `logs/env_windows.txt` |
+| Peramban terpasang | Chrome 154.0.8037.98 (dipakai Track E), Edge 154.0.4258.62, Brave 155.1.97.56 | `logs/env_windows.txt` (dicatat `run_all.ps1`, 8 Oktober 2026 10:27 WIB) |
+| Node.js / npm / Jest (npx) | v24.13.1 / 11.8.0 / 30.0.4 | `logs/env_windows.txt` |
+| cargo / wasm-pack | cargo 1.93.0 (083ac5135 2025-12-15) / wasm-pack 0.14.0; `cargo-llvm-cov` dan `cargo-tarpaulin` tidak terpasang (cakupan Rust tidak terukur) | `logs/env_windows.txt` |
+| Python / numpy / pandas / scikit-learn / scipy | 3.13.12 / 2.4.4 / 3.0.2 / **1.9.1** / 1.17.1 | `logs/env_windows.txt` |
+| Java sistem | Java(TM) SE 25.0.4.1 LTS (WEKA memakai JRE bawaan sendiri, bukan Java sistem) | `logs/env_windows.txt` |
+| Graphviz `dot` | tidak terpasang di Windows (diagram flow graph dibuat di sandbox/VM) | `logs/env_windows.txt` |
+| git | 2.50.1.windows.1; cabang `text-analytics-eval`, commit `33b1b7e02cf6f47209020be61fdcd460f6817de1` saat lingkungan dicatat | `logs/env_windows.txt` |
+| Perangkat (hasil pencatatan otomatis) | LENOVO 82EY, Windows 11 Home Single Language 10.0.26300, RAM 15,4 GB, memori 3200 MHz, paket daya Balanced | `logs/env_windows.txt` |
 
 Versi paket Node yang dipakai (dari `node_modules` repo, berlaku di Windows maupun VM): jest 30.0.5, ts-jest 29.4.1, typescript 5.9.2, jest-environment-jsdom 30.0.5, @testing-library/react 16.3.0, react 18.3.1, next 15.5.9, @playwright/test 1.57.0, playwright 1.57.0, fake-indexeddb 6.0.1 (dibaca dari `node_modules/*/package.json`).
 

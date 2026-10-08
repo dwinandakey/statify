@@ -31,7 +31,7 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 
 ## 3. Tes yang ditambahkan
 
-### 3.1 Jest (105 kasus; DIJALANKAN di VM)
+### 3.1 Jest (105 kasus; DIJALANKAN di Windows dan di VM)
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
@@ -217,8 +217,8 @@ Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya 
 Pernyataan harapan yang tidak berasal dari nilai acuan Python independen (jujur dicatat):
 - Stemmer Indonesia (Sastrawi): hanya `memakan` menjadi `makan` dan `makan` menjadi `makan` yang diperiksa persis (pasangan pertama sudah terbukti oleh tes lama `characterization.rs`). Untuk kata lain hanya properti (tidak kosong, tidak lebih panjang, huruf kecil, deterministik) dan bahwa `dimakan`, `berlari`, `membanggakan` berubah.
 - Stemmer Inggris (Porter2/Snowball): sembilan pasangan klasik (`running`, `cats`, `dogs`, `jumped`, `caresses`, `ponies`, `ties`, `cries`, `caress`) berasal dari dokumentasi algoritma Snowball English langkah 1a/1b, bukan dari eksekusi di sesi ini. Bila `cargo test` menunjukkan keluaran lain, periksa dulu versi crate `rust-stemmers` sebelum menyimpulkan ada bug.
-- Tes `k1_*` pada `eval_partition.rs` menegaskan PERILAKU SAAT INI kode sumber (bukan perilaku yang seharusnya; lihat `BUGS_A.md` A-1): data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0. Klaim itu HIPOTESIS dari pembacaan kode: percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log yang tersimpan di `logs/`, sehingga tidak dihitung; status resmi menunggu `cargo test` di Windows.
-- Ukuran fold [9, 6, 6, 6, 6] dan [2, 2, 2, 0, 0, 0] pada `eval_partition.rs` diturunkan dari algoritma round-robin di kode dan belum dieksekusi pada jalur yang terdokumentasi (menunggu `cargo test` di Windows). Tiga tes tambahan mengunci keluaran awal MT19937 seed 42 (sama dengan `numpy.random.RandomState(42)`) dan indeks eksak partisi holdout/k-fold seed 42 terhadap replika Python independen.
+- Tes `k1_*` pada `eval_partition.rs` menegaskan PERILAKU SAAT INI kode sumber (bukan perilaku yang seharusnya; lihat `BUGS_A.md` A-1): data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0. Perilaku ini dikunci sebagai tes karakterisasi dan sudah dieksekusi: `cargo test` di Windows lulus (`logs/rust_eval_partition.txt`; status per tes ada pada kolom Status di bagian Rust). Percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log tersimpan dan tidak dihitung.
+- Ukuran fold [9, 6, 6, 6, 6] dan [2, 2, 2, 0, 0, 0] pada `eval_partition.rs` diturunkan dari algoritma round-robin di kode dan dikunci oleh tes Rust yang dieksekusi di Windows (`logs/rust_eval_partition.txt`, lulus). Tiga tes tambahan mengunci keluaran awal MT19937 seed 42 (sama dengan `numpy.random.RandomState(42)`) dan indeks eksak partisi holdout/k-fold seed 42 terhadap replika Python independen.
 
 ## 4. Celah cakupan
 
@@ -285,7 +285,7 @@ Tes baru sengaja tidak menduplikasi hal berikut; rujukan ke berkas dan nama tes 
 
 ## 6. Baseline pengujian
 
-Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A" berasal dari `logs/rust_eval_*.txt` (8 Oktober 2026, Windows); cakupan Rust tidak terukur.
+Angka Jest Track A berasal dari Windows dengan konfigurasi Jest produksi (`logs/jest_A_win.json`, label [Win]); cakupan baris Jest hanya diukur di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A" berasal dari `logs/rust_eval_*.txt` (8 Oktober 2026, Windows); cakupan Rust tidak terukur.
 
 | Lapisan | Lokasi pengujian | Jumlah kasus | Lulus | Gagal | Cakupan baris |
 |---|---|---|---|---|---|
@@ -308,7 +308,7 @@ Catatan baseline: kolom Jest "sebelum" memuat hanya tes lama tiap menu pada konf
 ## 7. Temuan
 
 Rincian, lokasi file:baris, langkah reproduksi, dampak, usulan, dan label keyakinan ada di `BUGS_A.md`. Ringkas:
-- **A-1 (sedang):** `KFolds = 1` diterima di TS (`useNaiveBayesValidation.ts:255`) dan Rust (`partition.rs:179`); satu fold berarti data latih kosong dan hasil evaluasi tidak bermakna tanpa peringatan. Usulan: batas minimum 2 di kedua lapisan. TS terverifikasi dengan tes yang dijalankan; Rust menunggu `cargo test`.
+- **A-1 (sedang):** `KFolds = 1` diterima di TS (`useNaiveBayesValidation.ts:255`) dan Rust (`partition.rs:179`); satu fold berarti data latih kosong dan hasil evaluasi tidak bermakna tanpa peringatan. Usulan: batas minimum 2 di kedua lapisan. TS terverifikasi dengan tes yang dijalankan (Windows); Rust terverifikasi dengan `cargo test` di Windows (`logs/rust_eval_partition.txt`).
 - **A-2 (informasi):** ukuran total fold k-fold tidak seimbang ([9, 6, 6, 6, 6] untuk 3 kelas x 11 pada k = 5, pembanding scikit-learn [7, 7, 7, 6, 6]); syarat selisih per kelas <= 1 tetap terpenuhi.
 - **A-3 (informasi):** k lebih besar dari kelas terbesar menghasilkan fold uji kosong; peringatan tetap muncul.
 - **A-4 (informasi):** asersi tautologi pada tes lama `s3_formulas.rs:277`.

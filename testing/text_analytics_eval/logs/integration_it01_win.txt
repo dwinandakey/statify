@@ -40,4 +40,4 @@ RINGKASAN_IT01 [{"W":1000,"nVec":1000,"notPrefixed":1,"viaFilter":999,"terms":10
 
 === IT-01 (tingkat wasm): 24 lulus, 0 gagal dari 24 pemeriksaan ===
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=0.98 started=2026-10-08 00:18:29 +07:00 cmd=node testing\thesis-eval\integration\it01_stwv_to_nb.mjs cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.9 started=2026-10-08 10:30:24 +07:00 cmd=node testing\text_analytics_eval\integration\it01_stwv_to_nb.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

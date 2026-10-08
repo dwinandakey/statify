@@ -38,7 +38,8 @@ _M = r"⟦(?:jest|rust):(?:(?![⟦⟧<>]|\.\.\.)[^⟦⟧])*?::(?!<)[^⟦⟧]*?�
 MARK = re.compile(r"⟦(jest|rust):((?:(?![⟦⟧<>]|\.\.\.)[^⟦⟧])*?::(?!<)[^⟦⟧]*?)⟧")
 RUN_OF_MARKS = re.compile(_M + r"(?:[ \t,;]*" + _M + r")*")
 EXCLUDE_DOCS = {"AGENT_COMMON.md", "PROMPT_Evaluasi_Modul_Text_Analytics.md",
-                "C_blackbox.md", "C_manual_checklist.md", "BUGS.md", "REPORT.md", "AUDIT_DOCS.md"}  # dokumen turunan (merge_docs/build_report)
+                "C_blackbox.md", "C_manual_checklist.md", "BUGS.md", "REPORT.md", "AUDIT_DOCS.md",
+                "HANDOFF_PENULISAN_SKRIPSI.md"}  # dokumen turunan (merge_docs/build_report)
 
 PASS, FAIL, SKIP, NOTRUN, COMPILE = "Lulus", "Gagal", "Dilewati", "BELUM DIJALANKAN", "GAGAL KOMPILASI"
 

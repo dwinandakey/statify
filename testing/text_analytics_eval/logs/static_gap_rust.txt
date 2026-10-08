@@ -4,7 +4,7 @@ Cakupan terukur Rust: tidak terukur di sesi ini, lihat run_A.ps1 (cargo llvm-cov
 ==============================================================================================================
 Crate core  (frontend\public\workers\TextAnalytics\statify-text-core)
   pub fn terdeteksi: 34; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 27; wasm_bindgen: 0
-  TIDAK dirujuk tes SEBELUM Track A: 12   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 10
+  TIDAK dirujuk tes SEBELUM Track A: 12   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 10
   Daftar celah yang masih tersisa (estimasi statis):
     - src\config.rs                                 pub fn v1_label
     - src\config.rs                                 pub fn v1_label
@@ -23,7 +23,7 @@ Crate core  (frontend\public\workers\TextAnalytics\statify-text-core)
 ==============================================================================================================
 Crate naive-bayes  (frontend\components\Modals\Analyze\Classify\naive-bayes\rust)
   pub fn terdeteksi: 86; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 83; wasm_bindgen: 1
-  TIDAK dirujuk tes SEBELUM Track A: 13   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 13
+  TIDAK dirujuk tes SEBELUM Track A: 13   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 13
   Daftar celah yang masih tersisa (estimasi statis):
     - src\stats\save.rs                             pub fn export_validation_config
     - src\stats\save.rs                             pub fn retrain_final_model
@@ -44,7 +44,7 @@ Crate naive-bayes  (frontend\components\Modals\Analyze\Classify\naive-bayes\rust
 ==============================================================================================================
 Crate apply-model  (frontend\components\Modals\Analyze\Classify\apply-model\rust)
   pub fn terdeteksi: 45; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 42; wasm_bindgen: 1
-  TIDAK dirujuk tes SEBELUM Track A: 16   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 16
+  TIDAK dirujuk tes SEBELUM Track A: 16   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 16
   Daftar celah yang masih tersisa (estimasi statis):
     - src\scoring\text.rs                           pub fn likelihood_name
     - src\scoring\text.rs                           pub fn is_v2
@@ -68,7 +68,7 @@ Crate apply-model  (frontend\components\Modals\Analyze\Classify\apply-model\rust
 ==============================================================================================================
 Crate stwv-wrapper  (frontend\components\Modals\Transform\StringToWordVector\rust)
   pub fn terdeteksi: 2; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 0; wasm_bindgen: 2
-  TIDAK dirujuk tes SEBELUM Track A: 0   |   SETELAH Track A (termasuk 4 berkas thesis Track A): 0
+  TIDAK dirujuk tes SEBELUM Track A: 0   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 0
   Fungsi #[wasm_bindgen] (tidak dapat diuji secara native):
     * src\lib.rs                                    pub fn init_panic_hook
     * src\lib.rs                                    pub fn process_text_data
@@ -81,4 +81,4 @@ naive-bayes         86        83     1             13             13
 apply-model         45        42     1             16             16
 stwv-wrapper         2         0     2              0              0
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=3.3 started=2026-10-08 09:49:21 +07:00 cmd=python -X utf8 testing\thesis-eval\unit\static_gap_rust.py cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.26 started=2026-10-08 10:28:41 +07:00 cmd=python -X utf8 testing\text_analytics_eval\unit\static_gap_rust.py cwd=E:\KULIAH\Skripsi\statify64 ===

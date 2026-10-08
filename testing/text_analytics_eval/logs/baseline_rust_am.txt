@@ -1,17 +1,17 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.04s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.72s
      Running unittests src\lib.rs (target\debug\deps\wasm-0c7a7f5b4396d211.exe)
 
 running 117 tests
+test scoring::naive_bayes::tests::error_counts_inconsistent ... ok
+test scoring::naive_bayes::tests::error_categories_invalid ... ok
 test scoring::naive_bayes::tests::error_class_totals_missing_entirely ... ok
+test scoring::naive_bayes::tests::error_class_totals_class_missing ... ok
+test scoring::naive_bayes::tests::d1_parses_ok ... ok
+test scoring::naive_bayes::tests::d1_extracts_parameters_in_class_order ... ok
 test scoring::naive_bayes::tests::error_distribution_class_missing ... ok
+test scoring::naive_bayes::tests::error_counts_invalid_when_class_counts_missing_in_1_1 ... ok
 test scoring::naive_bayes::tests::d2_parses_ok_and_is_legacy ... ok
 test scoring::naive_bayes::tests::d2_has_no_counts_or_totals ... ok
-test scoring::naive_bayes::tests::error_counts_inconsistent ... ok
-test scoring::naive_bayes::tests::d1_parses_ok ... ok
-test scoring::naive_bayes::tests::error_counts_invalid_when_class_counts_missing_in_1_1 ... ok
-test scoring::naive_bayes::tests::error_categories_invalid ... ok
-test scoring::naive_bayes::tests::d1_extracts_parameters_in_class_order ... ok
-test scoring::naive_bayes::tests::error_class_totals_class_missing ... ok
 test scoring::naive_bayes::tests::error_classes_empty_and_duplicate ... ok
 test scoring::naive_bayes::tests::error_counts_invalid_variants ... ok
 test scoring::naive_bayes::tests::error_distribution_length ... ok
@@ -25,8 +25,8 @@ test scoring::naive_bayes::tests::error_model_type_missing ... ok
 test scoring::naive_bayes::tests::error_not_object ... ok
 test scoring::naive_bayes::tests::error_model_type_unsupported ... ok
 test scoring::naive_bayes::tests::error_param_invalid ... ok
-test scoring::naive_bayes::tests::error_priors_length ... ok
 test scoring::naive_bayes::tests::error_priors_invalid ... ok
+test scoring::naive_bayes::tests::error_priors_length ... ok
 test scoring::naive_bayes::tests::error_role_invalid ... ok
 test scoring::naive_bayes::tests::error_schema_version_unsupported ... ok
 test scoring::naive_bayes::tests::features_follow_feature_order_not_features_array ... ok
@@ -39,19 +39,19 @@ test scoring::naive_bayes::tests::non_finite_numeric_is_treated_as_missing ... o
 test scoring::naive_bayes::tests::schema_1_0_does_not_require_counts ... ok
 test scoring::naive_bayes::tests::schema_1_0_t6_missing_category_is_skipped_too ... ok
 test scoring::naive_bayes::tests::summary_parameters_kfold_and_no_seed ... ok
-test scoring::naive_bayes::tests::t1_overcast_85 ... ok
 test scoring::naive_bayes::tests::summary_parameters_match_contract_labels ... ok
+test scoring::naive_bayes::tests::t1_overcast_85 ... ok
 test scoring::naive_bayes::tests::t2_sunny_71 ... ok
 test scoring::naive_bayes::tests::t3_foggy_unseen_schema_1_1 ... ok
 test scoring::naive_bayes::tests::t4_sunny_temp_missing ... ok
 test scoring::naive_bayes::tests::t5_all_missing_is_not_scored ... ok
 test scoring::naive_bayes::tests::t6_missing_outlook_becomes_unseen_missing_category ... ok
 test scoring::naive_bayes::tests::t7_foggy_unseen_schema_1_0_is_skipped ... ok
-test stats::classification_table::tests::class_with_zero_support_does_not_panic_and_has_zero_recall ... ok
-test scoring::naive_bayes::tests::values_length_mismatch_is_not_scored_without_panic ... ok
 test scoring::naive_bayes::tests::unknown_extra_fields_are_ignored ... ok
 test stats::classification_table::tests::cohens_kappa_is_one_for_perfect_agreement ... ok
+test stats::classification_table::tests::class_with_zero_support_does_not_panic_and_has_zero_recall ... ok
 test stats::classification_table::tests::cohens_kappa_is_zero_not_nan_when_only_one_effective_class ... ok
+test scoring::naive_bayes::tests::values_length_mismatch_is_not_scored_without_panic ... ok
 test stats::classification_table::tests::cohens_kappa_is_zero_when_predictions_match_only_by_chance_level ... ok
 test stats::classification_table::tests::cohens_kappa_matches_hand_calculation ... ok
 test stats::classification_table::tests::compute_evaluation_metrics_wires_confusion_matrix_and_metrics_together ... ok
@@ -68,8 +68,8 @@ test stats::evaluation::tests::evaluation_json_has_the_shape_of_nb_raw_types ...
 test stats::evaluation::tests::missing_actual_values_are_excluded ... ok
 test stats::evaluation::tests::not_scored_takes_precedence_over_other_exclusions ... ok
 test stats::evaluation::tests::numeric_actual_uses_same_label_normalisation_as_classes ... ok
-test stats::evaluation::tests::unknown_class_warning_only_when_count_positive ... ok
 test stats::evaluation::tests::unknown_class_comparison_is_case_sensitive_and_trimmed ... ok
+test stats::evaluation::tests::unknown_class_warning_only_when_count_positive ... ok
 test stats::posterior::tests::argmax_higher_score_beats_alphabetical_order ... ok
 test stats::evaluation::tests::zero_evaluated_rows_gives_zero_matrix_not_error ... ok
 test stats::posterior::tests::argmax_orders_byte_wise_so_uppercase_precedes_lowercase ... ok
@@ -84,11 +84,11 @@ test stats::posterior::tests::round4_rounds_to_four_decimals ... ok
 test stats::summary::tests::resolve_row_not_scored_stays_not_scored ... ok
 test stats::summary::tests::resolve_row_tie_goes_to_alphabetically_first_class ... ok
 test stats::summary::tests::resolve_row_uses_raw_scores_for_argmax_and_softmax_for_probabilities ... ok
+test stats::summary::tests::summarize_all_not_scored_has_zero_percentages_not_nan ... ok
 test stats::summary::tests::summarize_counts_flags_and_distribution_follow_class_order ... ok
 test stats::summary::tests::summarize_counts_rows_with_skipped_unseen_per_row_not_per_feature ... ok
-test stats::value_label::tests::data_value_to_label_boolean_and_null ... ok
 test stats::summary::tests::warnings_follow_schema_kind_and_skip_zero_counts ... ok
-test stats::summary::tests::summarize_all_not_scored_has_zero_percentages_not_nan ... ok
+test stats::value_label::tests::data_value_to_label_boolean_and_null ... ok
 test stats::value_label::tests::data_value_to_label_number_fraction_kept ... ok
 test stats::value_label::tests::data_value_to_label_number_integer_has_no_decimal ... ok
 test stats::value_label::tests::data_value_to_label_text_is_trimmed ... ok
@@ -97,18 +97,18 @@ test stats::value_label::tests::numeric_value_only_finite_numbers ... ok
 test wasm::function::tests::actual_missing_cells_are_counted_as_excluded_actual_missing ... ok
 test wasm::function::tests::d1_d3_case_processing_summary_and_distribution ... ok
 test wasm::function::tests::actual_variable_is_looked_up_by_actual_def_name ... ok
-test wasm::function::tests::d1_d3_model_summary_comes_from_scorer_and_mapping ... ok
 test wasm::function::tests::d1_d3_predictions_match_expected_table ... ok
+test wasm::function::tests::d1_d3_model_summary_comes_from_scorer_and_mapping ... ok
 test wasm::function::tests::d1_d3_warnings_not_scored_and_unseen_category ... ok
-test wasm::function::tests::d1_d3_with_actual_adds_actual_unknown_class_warning_last ... ok
 test wasm::function::tests::actual_payload_with_inconsistent_shape_is_rejected ... ok
+test wasm::function::tests::d1_d3_with_actual_adds_actual_unknown_class_warning_last ... ok
 test wasm::function::tests::d2_d3_unseen_rows_are_skipped_with_legacy_warning ... ok
 test wasm::function::tests::d1_d3_with_actual_play_fills_evaluation ... ok
 test wasm::function::tests::evaluation_is_none_when_actual_is_empty ... ok
-test wasm::function::tests::d2_d3_with_actual_gives_same_evaluation_counts ... ok
-test wasm::function::tests::d1_d3_with_actual_keeps_predictions_identical_to_run_without_actual ... ok
-test wasm::function::tests::mapped_variable_uses_dataset_variable_name_not_feature_name ... ok
 test wasm::function::tests::evaluation_with_zero_evaluated_rows_is_filled_not_error ... ok
+test wasm::function::tests::d2_d3_with_actual_gives_same_evaluation_counts ... ok
+test wasm::function::tests::mapped_variable_uses_dataset_variable_name_not_feature_name ... ok
+test wasm::function::tests::d1_d3_with_actual_keeps_predictions_identical_to_run_without_actual ... ok
 test wasm::function::tests::model_errors_are_propagated_with_their_code ... ok
 test wasm::function::tests::ordinal_measure_is_accepted_for_categorical_feature ... ok
 test wasm::function::tests::payload_defs_with_wrong_length_is_rejected ... ok
@@ -117,55 +117,55 @@ test wasm::function::tests::payload_empty_defs_for_a_feature_is_rejected ... ok
 test wasm::function::tests::payload_mapping_not_aligned_with_model_feature_order_is_rejected ... ok
 test wasm::function::tests::payload_mapping_with_wrong_length_is_rejected ... ok
 test wasm::function::tests::payload_predictors_with_wrong_length_is_rejected ... ok
-test wasm::function::tests::shorter_slice_is_padded_with_missing_values ... ok
 test wasm::function::tests::zero_rows_is_rejected_with_no_rows ... ok
+test wasm::function::tests::shorter_slice_is_padded_with_missing_values ... ok
 
-test result: ok. 117 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 117 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests\text_scoring.rs (target\debug\deps\text_scoring-33f6ce22b940df1c.exe)
 
 running 39 tests
-test fixture_vector_a1_skor_cocok_golden_dalam_1e_6 ... ok
-test fixture_vector_tiga_dari_lima_kolom_terpetakan_sisanya_nol ... ok
+test alpha_harus_positif_dan_finite ... ok
 test feature_order_kosong_hanya_boleh_untuk_model_hanya_text_v2 ... ok
 test contoh_numerik_v1_t1_t2_identik_pada_schema_2_0_tanpa_text ... ok
-test alpha_harus_positif_dan_finite ... ok
+test fixture_vector_a1_skor_cocok_golden_dalam_1e_6 ... ok
+test fixture_vector_tiga_dari_lima_kolom_terpetakan_sisanya_nol ... ok
 test fixture_v2_valid_dan_text_null_tanpa_text_tetap_valid ... ok
 test bentuk_text_harus_konsisten ... ok
 test gaussian_minstd_dipakai_apa_adanya_variance_sudah_setelah_min_std ... ok
 test golden_vector_lewat_pipeline_penuh_menghasilkan_prediksi_dan_ringkasan ... ok
 test likelihood_fitur_numerik_v2_divalidasi ... ok
-test mapped_columns_tidak_valid_atau_baris_tidak_sejajar_ditolak ... ok
 test golden_vector_ketiga_likelihood_cocok_dengan_tabel_dan_komposisi_nb ... ok
+test mapped_columns_tidak_valid_atau_baris_tidak_sejajar_ditolak ... ok
 test log_weights_harus_finite_dan_bertanda_sesuai_likelihood ... ok
 test model_dengan_text_tanpa_payload_text_ditolak ... ok
-test model_v1_mengabaikan_payload_text_berlebih ... ok
 test negatif_satu_kolom_menyebut_nama_kolom_model ... ok
+test model_v1_mengabaikan_payload_text_berlebih ... ok
 test negatif_beberapa_kolom_menyebut_kolom_pertama_dan_jumlah ... ok
-test complement_dengan_fitur_numerik_ditolak ... ok
-test fixture_raw_a1_skor_cocok_golden_dalam_1e_6 ... ok
-test complement_hanya_text_dengan_teks_kosong_adalah_notscored_bukan_skor_nol ... ok
-test golden_raw_multinomial_p_pos_dokumen_makan_nasi_enak_0_849057 ... ok
-test baris_payload_text_lebih_pendek_dari_prediktor_dianggap_teks_missing ... ok
 test nilai_pecahan_tf_idf_diperbolehkan ... ok
 test payload_text_diparse_dari_json_bentuk_ts ... ok
-test tanpa_negatif_tidak_error_dan_kolom_zero_filled_tidak_diperiksa ... ok
+test fixture_raw_a1_skor_cocok_golden_dalam_1e_6 ... ok
+test complement_dengan_fitur_numerik_ditolak ... ok
 test sumber_dan_likelihood_tidak_dikenal_ditolak ... ok
-test uses_class_prior_harus_konsisten_dengan_likelihood_dan_k ... ok
+test tanpa_negatif_tidak_error_dan_kolom_zero_filled_tidak_diperiksa ... ok
 test urutan_mapped_columns_tidak_mempengaruhi_skor ... ok
+test complement_hanya_text_dengan_teks_kosong_adalah_notscored_bukan_skor_nol ... ok
+test baris_payload_text_lebih_pendek_dari_prediktor_dianggap_teks_missing ... ok
+test golden_raw_multinomial_p_pos_dokumen_makan_nasi_enak_0_849057 ... ok
+test uses_class_prior_harus_konsisten_dengan_likelihood_dan_k ... ok
 test vector_semua_kolom_terpetakan_null_dianggap_missing ... ok
 test vector_semua_kolom_tidak_terpetakan_adalah_missing_bukan_sekadar_nol ... ok
+test sumber_payload_harus_sama_dengan_sumber_model ... ok
+test vector_tidak_terpetakan_dengan_prediktor_lain_tetap_diskor_dari_prediktor_itu ... ok
+test resep_dengan_bilangan_bulat_bertipe_float_tetap_terbaca ... ok
 test raw_model_hanya_text_semua_teks_kosong_semua_notscored_tanpa_error ... ok
 test bernoulli_teks_kosong_dengan_prediktor_lain_tetap_menambah_sum_a_ct ... ok
-test vector_tidak_terpetakan_dengan_prediktor_lain_tetap_diskor_dari_prediktor_itu ... ok
-test raw_kosong_dengan_prediktor_lain_tetap_diprediksi_dan_semua_missing_notscored ... ok
-test sumber_payload_harus_sama_dengan_sumber_model ... ok
 test model_campuran_skor_adalah_jumlah_kontribusi_numerik_dan_text ... ok
-test resep_dengan_bilangan_bulat_bertipe_float_tetap_terbaca ... ok
+test raw_kosong_dengan_prediktor_lain_tetap_diprediksi_dan_semua_missing_notscored ... ok
 test raw_tanpa_recipe_atau_raw_variable_ditolak ... ok
 test golden_raw_ketiga_likelihood_cocok_dengan_tabel_dan_komposisi_nb ... ok
 
-test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=7.99 started=2026-10-08 00:14:48 +07:00 cmd=cargo test --lib --test text_scoring cwd=E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\apply-model\rust ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.48 started=2026-10-08 10:27:40 +07:00 cmd=cargo test --lib --test text_scoring cwd=E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\apply-model\rust ===

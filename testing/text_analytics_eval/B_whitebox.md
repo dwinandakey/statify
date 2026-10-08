@@ -1,6 +1,6 @@
 # Track B — White-box testing dengan basis path (modul Text Analytics Statify)
 
-Dokumen ini memuat analisis basis path untuk empat fungsi (WB-1 sampai WB-4). Seluruh angka (N, E, P, V(G), rank, jumlah jalur) dihitung oleh skrip `tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py` (Python + numpy) dari edge list yang ditulis tangan dari kode sumber; DOT, PNG, CSV, dan berkas tes dihasilkan oleh `tools/wb_gen.py`, dokumen ini oleh `tools/wb_doc.py`. Status "Lulus/Gagal" pada kolom Hasil berasal dari penanda `⟦jest:...⟧` yang diisi dari `logs/jest_B_vm.json` (lihat bagian Hasil eksekusi).
+Dokumen ini memuat analisis basis path untuk empat fungsi (WB-1 sampai WB-4). Seluruh angka (N, E, P, V(G), rank, jumlah jalur) dihitung oleh skrip `tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py` (Python + numpy) dari edge list yang ditulis tangan dari kode sumber; DOT, PNG, CSV, dan berkas tes dihasilkan oleh `tools/wb_gen.py`, dokumen ini oleh `tools/wb_doc.py`. Status "Lulus/Gagal" pada kolom Hasil berasal dari penanda `⟦jest:...⟧` yang diisi dari `logs/jest_B_win.json`, dengan `logs/jest_B_vm.json` sebagai cadangan (lihat bagian Hasil eksekusi).
 
 ## Konvensi dan keputusan metodologis
 
@@ -74,7 +74,7 @@ Semua 7 jalur layak. Jalur 3 dan 4 sama-sama berakhir di simpul 5 tetapi berbeda
 
 Hubungan dengan tes lama: `StringToWordVector/__tests__/columnPrefix.test.ts` menguji perilaku (nilai sah, tidak sah, batas 32) memakai `it.each`, tanpa pemetaan ke jalur; tes evaluasi ini mandiri dan memetakan satu tes ke satu jalur.
 
-Hasil eksekusi di VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi): 7 dari 7 tes jalur lulus.
+Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 7 dari 7 tes jalur lulus.
 
 ## WB-2 — `getNumericInputError` (Naive Bayes)
 
@@ -192,7 +192,7 @@ Jalur dasar (1) adalah nilai bawaan formulir. Jalur 2–29 dibangun dengan memba
 
 Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts` (28 jalur bernomor + 1 catatan temuan `KFolds = 1`) memuat masukan serupa untuk jalur galat; perbedaan yang dapat diverifikasi dari berkasnya: tidak ada jalur dengan `ValidationMethod` di luar union (jalur 27 di sini), dan jalur galat Training Percentage setelah blok Text Features dilewati dengan dua cara berbeda (jalur 18 dan 19 di sini) tidak ada di tes lama.
 
-Hasil eksekusi di VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi): 29 dari 29 tes jalur lulus.
+Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 29 dari 29 tes jalur lulus.
 
 ## WB-3 — `useNaiveBayesValidation` (Naive Bayes)
 
@@ -273,7 +273,7 @@ Jalur dasar (1): target terisi, ada predictor, tanpa fitur teks. Jalur 2–12 di
 
 Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.useNaiveBayesValidation.test.ts` memuat 10 jalur (WB-3 lama) tanpa pemecahan `??` dan `&&` per operan; tes evaluasi ini memakai pemecahan yang lebih halus (V(G) = 13) dan membuktikan bahwa 12 jalur layak.
 
-Hasil eksekusi di VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi): 12 dari 12 tes jalur lulus.
+Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 12 dari 12 tes jalur lulus.
 
 ## WB-4 — `loadModelFromFile` (Apply Model)
 
@@ -337,19 +337,19 @@ Semua 6 jalur layak. Jalur 5 memakai `"[]"` (JSON sah tetapi bukan objek): `vali
 
 Hubungan dengan tes lama: `apply-model/services/__tests__/model-loader.test.ts` memuat kasus fungsional (D1/D2, ekstensi, ukuran, parse, tipe model, dsb.) dan memberi pola mock `File`; tes evaluasi ini mengulang pola itu tetapi per jalur basis set.
 
-Hasil eksekusi di VM (`logs/jest_B_vm.json`, ts-jest, bukan perangkat uji skripsi): 6 dari 6 tes jalur lulus.
+Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 6 dari 6 tes jalur lulus.
 
 ## Rekap
 
 | Fungsi | Menu | V(G) | Jalur independen | Kasus lulus |
 |---|---|---|---|---|
-| WB-1 `validateColumnPrefix` | String to Word Vector | 7 | 7 (rank 7) | 7 dari 7 [VM] |
-| WB-2 `getNumericInputError` | Naive Bayes | 29 | 29 (rank 29) | 29 dari 29 [VM] |
-| WB-3 `useNaiveBayesValidation` | Naive Bayes | 13 | 12 (rank 12) | 12 dari 12 [VM] |
-| WB-4 `loadModelFromFile` | Apply Model | 6 | 6 (rank 6) | 6 dari 6 [VM] |
-| Total | | 55 | 54 | 54 dari 54 [VM] |
+| WB-1 `validateColumnPrefix` | String to Word Vector | 7 | 7 (rank 7) | 7 dari 7 [Win] |
+| WB-2 `getNumericInputError` | Naive Bayes | 29 | 29 (rank 29) | 29 dari 29 [Win] |
+| WB-3 `useNaiveBayesValidation` | Naive Bayes | 13 | 12 (rank 12) | 12 dari 12 [Win] |
+| WB-4 `loadModelFromFile` | Apply Model | 6 | 6 (rank 6) | 6 dari 6 [Win] |
+| Total | | 55 | 54 | 54 dari 54 [Win] |
 
-Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama dengan rank). Pada WB-3 jumlah ini 12 < V(G) = 13 karena satu jalur basis infeasible. Angka "Kasus lulus" dibaca dari `logs/jest_B_vm.json` (eksekusi di VM Linux dengan ts-jest, 54 tes); angka dari perangkat Windows (config produksi) menunggu `run_B.ps1` dan akan ditulis ke `logs/jest_B_win.json`.
+Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama dengan rank). Pada WB-3 jumlah ini 12 < V(G) = 13 karena satu jalur basis infeasible. Angka "Kasus lulus" dibaca dari `logs/jest_B_win.json` (eksekusi di Windows dengan konfigurasi Jest produksi, 54 tes); `logs/jest_B_vm.json` (VM Linux, ts-jest) hanya pembanding dan dipakai bila log Windows tidak ada.
 
 ## Hubungan dengan tes whitebox lama
 

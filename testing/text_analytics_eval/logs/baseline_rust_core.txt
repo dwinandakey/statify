@@ -1,4 +1,4 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.96s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src\lib.rs (target\debug\deps\statify_text_core-070da24fab6f13cd.exe)
 
 running 0 tests
@@ -8,60 +8,60 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests\characterization.rs (target\debug\deps\characterization-007c46252e16996e.exe)
 
 running 15 tests
-test stemming_inggris_running_menjadi_run ... ok
-test stemming_indonesia_memakan_menjadi_makan ... ok
-test validator_array_kosong_dan_semua_kosong_ditolak ... ok
 test regex_tidak_valid_menghasilkan_invalid_regex ... ok
+test stemming_indonesia_memakan_menjadi_makan ... ok
+test stemming_inggris_running_menjadi_run ... ok
+test validator_array_kosong_dan_semua_kosong_ditolak ... ok
 test validator_ngram_tidak_valid_ditolak ... ok
 test stemming_selalu_lowercase_walau_opsi_lowercase_mati ... ok
 test stopwords_custom_tidak_peka_huruf_besar_kecil ... ok
 test dokumen_kosong_di_tengah_menjadi_baris_nol_dan_sejajar ... ok
-test golden_lama_log_smooth_none_pada_korpus_d ... ok
-test semua_token_terbuang_menghasilkan_empty_vocabulary ... ok
-test stats_v1_dipertahankan ... ok
-test words_to_keep_2_pada_korpus_d_cara_lama ... ok
 test raw_none_menghasilkan_raw_count ... ok
-test ngram_unigram_vs_bigram ... ok
+test words_to_keep_2_pada_korpus_d_cara_lama ... ok
+test golden_lama_log_smooth_none_pada_korpus_d ... ok
+test stats_v1_dipertahankan ... ok
+test semua_token_terbuang_menghasilkan_empty_vocabulary ... ok
 test kontrak_json_lama_diparse_dan_error_diserialisasi ... ok
+test ngram_unigram_vs_bigram ... ok
 
-test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests\nb_text.rs (target\debug\deps\nb_text-1ada4a0d85206cca.exe)
 
 running 13 tests
-test label_di_luar_rentang_diabaikan_tanpa_panic ... ok
 test bernoulli_menghitung_term_absen_untuk_seluruh_kosakata ... ok
-test top_k_satu_kelas_memakai_log_weight_langsung ... ok
-test golden_bernoulli ... ok
-test score_rows_mengabaikan_indeks_di_luar_kosakata_dan_nilai_non_finite ... ok
-test golden_multinomial ... ok
-test top_k_multinomial_urut_dan_tiebreak_alfabetis ... ok
-test nilai_pecahan_tf_idf_diperbolehkan ... ok
 test golden_complement_tanpa_prior ... ok
 test top_k_membatasi_jumlah_dan_k_nol ... ok
 test kelas_tanpa_dokumen_tidak_menghasilkan_nan ... ok
+test label_di_luar_rentang_diabaikan_tanpa_panic ... ok
+test nilai_pecahan_tf_idf_diperbolehkan ... ok
+test score_rows_mengabaikan_indeks_di_luar_kosakata_dan_nilai_non_finite ... ok
+test top_k_multinomial_urut_dan_tiebreak_alfabetis ... ok
+test top_k_satu_kelas_memakai_log_weight_langsung ... ok
+test golden_bernoulli ... ok
+test golden_multinomial ... ok
 test top_k_tiebreak_memakai_nama_term_bukan_indeks ... ok
 test jalur_raw_end_to_end_cocok_dengan_golden ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
      Running tests\s2_pipeline.rs (target\debug\deps\s2_pipeline-2dda2720a34fdad1.exe)
 
 running 16 tests
-test field_baru_punya_default_dan_json_v1_tetap_diterima ... ok
-test field_wajib_hilang_menghasilkan_invalid_config ... ok
-test alias_nilai_lama_diterima ... ok
-test nilai_enum_tidak_dikenal_menghasilkan_invalid_config ... ok
 test nilai_enum_baru_diterima ... ok
+test alias_nilai_lama_diterima ... ok
+test field_wajib_hilang_menghasilkan_invalid_config ... ok
+test field_baru_punya_default_dan_json_v1_tetap_diterima ... ok
+test nilai_enum_tidak_dikenal_menghasilkan_invalid_config ... ok
 test text_error_diserialisasi_sebagai_objek_code_message ... ok
-test stopwords_json_rusak_diabaikan_bila_metode_none ... ok
-test validasi_rentang_config ... ok
-test pipeline_dipakai_ulang_hasilnya_konsisten_dan_sejajar ... ok
-test dokumen_kosong_dan_whitespace_di_tengah_menjadi_baris_nol ... ok
-test tf_log1p_dan_idf_plus1_dihitung_sesuai_rumus ... ok
 test pipeline_stopwords_dan_stemming_inggris ... ok
 test stopwords_tanpa_daftar_lanjut_tanpa_filter ... ok
+test stopwords_json_rusak_diabaikan_bila_metode_none ... ok
+test dokumen_kosong_dan_whitespace_di_tengah_menjadi_baris_nol ... ok
 test stopwords_metode_bawaan_dengan_daftar_dari_frontend_memfilter ... ok
+test pipeline_dipakai_ulang_hasilnya_konsisten_dan_sejajar ... ok
+test tf_log1p_dan_idf_plus1_dihitung_sesuai_rumus ... ok
+test validasi_rentang_config ... ok
 test t6_stopwords_json_rusak_menghasilkan_invalid_stopwords ... ok
 test alias_lama_menghasilkan_angka_v1_yang_sama ... ok
 
@@ -70,28 +70,28 @@ test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
      Running tests\s3_formulas.rs (target\debug\deps\s3_formulas-b68b5ef98c2cd980.exe)
 
 running 25 tests
+test golden_weka_raw_none_none_sama_dengan_raw_count ... ok
+test dokumen_dengan_norma_nol_tidak_menghasilkan_nan_pada_doc_length ... ok
+test golden_sklearn_raw_smooth_l2 ... ok
 test custom_menerima_semua_kombinasi_termasuk_normalized ... ok
 test golden_weka_log1p_standard_none ... ok
-test golden_sklearn_raw_smooth_l2 ... ok
-test golden_lama_sublinear_smooth_none_custom ... ok
-test dokumen_dengan_norma_nol_tidak_menghasilkan_nan_pada_doc_length ... ok
-test golden_sklearn_raw_plus1_l2 ... ok
-test golden_weka_raw_none_none_sama_dengan_raw_count ... ok
 test golden_weka_raw_standard_doc_length ... ok
+test golden_lama_sublinear_smooth_none_custom ... ok
 test dokumen_yang_tokennya_terpangkas_dihitung_sebagai_kosong ... ok
+test golden_sklearn_raw_plus1_l2 ... ok
 test kombinasi_tidak_sah_menghasilkan_invalid_config ... ok
 test golden_sklearn_raw_smooth_none_dan_nilai_idf ... ok
-test normalisasi_l1_menjumlah_satu_per_baris ... ok
-test min_term_freq_diterapkan_sebelum_words_to_keep ... ok
 test min_term_freq_2_membuang_tidak ... ok
+test normalisasi_l1_menjumlah_satu_per_baris ... ok
 test min_term_freq_terlalu_besar_menghasilkan_empty_vocabulary ... ok
-test normalisasi_l2_menghasilkan_norma_satu ... ok
-test df_satu_pass_sama_dengan_hitungan_naif ... ok
-test words_to_keep_0_menyimpan_semua_kata ... ok
 test words_to_keep_1_weka_adalah_makan_dengan_count_4 ... ok
+test df_satu_pass_sama_dengan_hitungan_naif ... ok
+test normalisasi_l2_menghasilkan_norma_satu ... ok
+test min_term_freq_diterapkan_sebelum_words_to_keep ... ok
+test words_to_keep_0_menyimpan_semua_kata ... ok
 test stats_format_baru ... ok
-test dokumen_kosong_tetap_baris_nol_tanpa_nan_pada_l1_l2_doc_length ... ok
 test words_to_keep_custom_memakai_skor_tf_idf_cara_lama ... ok
+test dokumen_kosong_tetap_baris_nol_tanpa_nan_pada_l1_l2_doc_length ... ok
 test words_to_keep_custom_idf_standar_membuang_kata_yang_ada_di_semua_dokumen ... ok
 test words_to_keep_tie_break_alfabetis_weka_dan_sklearn ... ok
 test kombinasi_sah_per_standar_diterima ... ok
@@ -101,23 +101,23 @@ test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
      Running tests\s4_fit_transform.rs (target\debug\deps\s4_fit_transform-b17b8e85f30c2d9f.exe)
 
 running 22 tests
-test isi_model_pada_korpus_d ... ok
 test csr_invarian_dan_to_dense_raw_count ... ok
 test csr_indeks_kolom_urut_menaik_per_baris ... ok
+test isi_model_pada_korpus_d ... ok
 test csr_json_roundtrip ... ok
 test model_json_memuat_kunci_sesuai_kontrak ... ok
-test fit_menerapkan_validasi_yang_sama_dengan_run_pipeline ... ok
-test doc_length_memakai_avg_doc_norm_tersimpan_bukan_dari_data_transform ... ok
-test dokumen_kosong_dan_oov_di_tengah_tetap_sejajar_dan_tanpa_nan ... ok
-test doc_length_tanpa_avg_doc_norm_pada_model_menghasilkan_invalid_data ... ok
-test keluaran_run_pipeline_sama_dengan_to_dense_fit_transform ... ok
-test idf_none_menyimpan_satu_dan_idf_plus1_sesuai_golden ... ok
 test to_dense_tidak_panic_pada_csr_rusak ... ok
+test fit_menerapkan_validasi_yang_sama_dengan_run_pipeline ... ok
+test doc_length_tanpa_avg_doc_norm_pada_model_menghasilkan_invalid_data ... ok
+test doc_length_memakai_avg_doc_norm_tersimpan_bukan_dari_data_transform ... ok
+test keluaran_run_pipeline_sama_dengan_to_dense_fit_transform ... ok
+test dokumen_kosong_dan_oov_di_tengah_tetap_sejajar_dan_tanpa_nan ... ok
+test idf_none_menyimpan_satu_dan_idf_plus1_sesuai_golden ... ok
 test resolved_stopwords_lowercase_unik_dan_urut_alfabetis ... ok
+test transform_dokumen_semua_kosong_diperbolehkan_menjadi_baris_nol ... ok
+test t14_dokumen_seluruhnya_oov_menjadi_baris_nol_tanpa_error ... ok
 test ngram_pada_resep_dipakai_saat_transform ... ok
 test transform_menolak_array_kosong_dan_model_tidak_valid ... ok
-test t14_dokumen_seluruhnya_oov_menjadi_baris_nol_tanpa_error ... ok
-test transform_dokumen_semua_kosong_diperbolehkan_menjadi_baris_nol ... ok
 test transform_memakai_resolved_stopwords_dari_model_bukan_config ... ok
 test t13_kosakata_tetap_oov_diabaikan_idf_memakai_n_latih ... ok
 test transform_fit_sama_dengan_fit_transform_untuk_konfigurasi_lain ... ok
@@ -127,4 +127,4 @@ test model_json_roundtrip_menghasilkan_transform_identik ... ok
 test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
 
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=9 started=2026-10-08 00:14:31 +07:00 cmd=cargo test --lib --test characterization --test nb_text --test s2_pipeline --test s3_formulas --test s4_fit_transform cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.29 started=2026-10-08 10:27:37 +07:00 cmd=cargo test --lib --test characterization --test nb_text --test s2_pipeline --test s3_formulas --test s4_fit_transform cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===
