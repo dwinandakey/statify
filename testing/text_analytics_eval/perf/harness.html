@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Harness waktu eksekusi Statify (Track E)</title>
+<style>
+  body { font: 14px system-ui, sans-serif; margin: 24px; }
+  .spin { width: 28px; height: 28px; border: 4px solid #ccc; border-top-color: #333; border-radius: 50%; animation: s 1s linear infinite; display: inline-block; vertical-align: middle; }
+  @keyframes s { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<p><span class="spin"></span> Harness Track E &mdash; <span id="status">siap</span></p>
+<p>Halaman ini hanya dipakai oleh <code>run_browser.mjs</code> (Playwright). Spinner di atas menjaga agar kerangka (frame) terus digambar
+sehingga jeda <code>requestAnimationFrame</code> mencerminkan responsivitas UI.</p>
+<script type="module" src="/__perf/harness.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+pilkada_900: 900 dokumen -> testing/thesis-eval/perf/data/pilkada_900.csv  {"negative":450,"positive":450}
+sms_5574: 5574 dokumen -> testing/thesis-eval/perf/data/sms_5574.csv  {"ham":4827,"spam":747}
+smsa_11000: 11000 dokumen -> testing/thesis-eval/perf/data/smsa_11000.csv  {"positive":6416,"neutral":1148,"negative":3436}
+SmSA gabungan: 11500 (latih 11000 + uji 500)
+gabungan: 17974 dokumen -> testing/thesis-eval/perf/data/gabungan.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236}
+20 Newsgroups: TIDAK tersedia (20 Newsgroups tidak tersedia via python: urllib.error.URLError: <urlopen error Tunnel connection failed: 403 Forbidden>)
+NOT RUN: seluruh sumber nyata yang tersedia hanya 17974 dokumen (< 20.000). Berkas tidak dibuat; tidak ada penggandaan data.
+sms_5574_ascii: 5574 dokumen -> testing/thesis-eval/perf/data/sms_5574_ascii.csv  {"ham":4827,"spam":747}
+gabungan_ascii: 17974 dokumen -> testing/thesis-eval/perf/data/gabungan_ascii.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236}
+status -> testing/thesis-eval/perf/data/PREPARE_STATUS.json

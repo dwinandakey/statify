@@ -1,0 +1,34 @@
+   Compiling wasm v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.00s
+     Running tests\eval_blackbox_nb.rs (target\debug\deps\eval_blackbox_nb-36e9bb6358cd7f56.exe)
+
+running 24 tests
+test bb22_partisi_holdout_70_seed_42_deterministik_dan_stratified ... ok
+test bb19_beberapa_kolom_negatif_menyebut_kolom_pertama_dan_jumlah ... ok
+test bb19_kolom_vektor_negatif_menghentikan_analisis_dengan_nb_e_text_negative_dan_nama_kolom ... ok
+test bb17_complement_dengan_prediktor_numerik_kategorik_menghasilkan_nb_e_complement_mixed ... ok
+test bb18_text_alpha_nol_dan_di_atas_999_ditolak_di_rust ... ok
+test bb20_gaussian_biasa_tidak_menandai_likelihood_dan_std_kelas_konstan_nyaris_nol ... ok
+test bb20_gaussian_weka_min_std_menaikkan_std_kelas_konstan_dan_menampilkan_atribut_distribusi ... ok
+test bb19_tanpa_nilai_negatif_analisis_berjalan ... ok
+test bb23_stratified_10_fold_saling_lepas_menutup_semua_baris_dan_tanpa_peringatan ... ok
+test bb24_stratified_k_fold_mengembalikan_err_untuk_fold_melebihi_instance ... ok
+test bb25_metrik_dan_confusion_matrix_nilai_acuan_buatan_tangan_cocok_dengan_sklearn ... ok
+test bb24_fold_melebihi_jumlah_instance_ditolak_tanpa_kode_nb_e ... ok
+test bb24_fold_melebihi_kelas_terkecil_hanya_peringatan_dan_analisis_tetap_berjalan ... ok
+test bb25_run_analysis_menghasilkan_cps_metrik_dan_confusion_matrix_konsisten ... ok
+test bb22_run_analysis_holdout_70_seed_42_dua_kali_menghasilkan_keluaran_identik ... ok
+test bb28_export_vector_schema_2_0_tanpa_resep_dan_export_numerik_biasa_schema_1_1 ... ok
+test bb23_run_analysis_10_fold_confusion_matrix_menghitung_semua_baris_valid_sekali ... ok
+test bb18_text_alpha_batas_atas_999_diterima ... ok
+test bb26_text_feature_table_lengkap_memuat_enam_kolom_untuk_csv_dan_tsv ... ok
+test bb27_jalur_vector_memuat_catatan_kebocoran_sedangkan_jalur_raw_tidak ... ok
+test bb17_complement_dengan_hanya_text_features_berhasil_tanpa_prior ... ok
+test bb28_export_raw_text_schema_2_0_memuat_resep_dan_dapat_diserialisasi_ulang ... ok
+test bb22_pilkada_holdout_70_seed_42_dua_kali_menghasilkan_keluaran_identik ... ok
+test bb23_pilkada_10_fold_cv_metrik_dari_gabungan_prediksi_semua_fold ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
+
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=3.03 started=2026-10-08 10:29:22 +07:00 cmd=cargo test --test eval_blackbox_nb cwd=E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\rust ===

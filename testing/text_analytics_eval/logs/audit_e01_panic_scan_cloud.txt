@@ -1,0 +1,4 @@
+AUDIT: verifikasi klaim BUGS_E E-01 di sandbox cloud (2026-10-07T16:09:04Z, node v22.22.0); skrip sementara di luar repo, wasm STWV repo (sha256 94ef9c8b...6669)
+metode: process_text_data per dokumen tunggal, konfigurasi K6 (stopword Indonesia + Sastrawi) dengan words_to_keep=0, dataset perf/data/sms_5574.csv kolom Text
+hasil: docs 5574; RuntimeError unreachable pada 34 dokumen; galat lain 2 (keduanya 'The vocabulary is empty after text preprocessing', bukan panik); dokumen non-ASCII di berkas = 483 (hitung Python)
+kesimpulan: angka 34 dan 483 pada BUGS_E.md E-01 sesuai

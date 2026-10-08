@@ -1,0 +1,12 @@
+(f) tokenisasi WEKA vs gaya-Rust (latih): 0 dari 3901 dokumen berbeda
+(f) tokenisasi WEKA vs gaya-Rust (uji): 0 dari 1673 dokumen berbeda
+(a) kosakata penuh: milik-sendiri=7568, WEKA=7568, urutan&isi identik=True
+(b) hitungan kata K1w (latih+uji) identik dengan ARFF WEKA: True
+(c) K5w: avg_norm semua dokumen=12.248966035208, hanya norma>0=12.252106795730 (selisih 3.141e-03; dokumen latih bernorma 0: 1)
+    maks|selisih| nilai K5w vs ARFF WEKA (latih/uji) memakai avg semua-dokumen (WEKA): 5.000e-07 / 5.000e-07
+    ... memakai avg hanya-norma>0 (gaya Statify): 3.141e-03 / 3.141e-03
+(d) Multinomial K1w: prior WEKA ['0.865744', '0.134256'] vs Statify ['0.865932', '0.134068']
+    maks|selisih peluang| vs WEKA: prior Laplace-WEKA=4.774e-15 ; prior count/N-Statify=4.032e-04
+    prediksi berbeda dari WEKA: prior-WEKA=0 ; prior-Statify=0 (dari 1673 dokumen uji)
+(e) Complement: maks|selisih bobot| (ln theta-tilde Statify vs W WEKA, 7568 kata): 0.000e+00
+    prediksi Complement Statify-formula vs WEKA K3w berbeda: 0 dari 1673

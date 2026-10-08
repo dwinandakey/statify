@@ -1,0 +1,51 @@
+=== run_statify.mjs  dataset=pilkada  configs=K1,K2,K3,K4,K5,K6,K1w,K2w,K3w,K4w,K5w,K1m,K2m,K5m  2026-10-08T03:29:54.431Z
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+train=630 baris (pilkada_train.csv)  test=270 baris (pilkada_test.csv)  header=["Id","Sentiment","Pasangan Calon","Text Tweet"]
+K1: acc=0.762963 (206/270) notScored=0 vocab=1000 likelihood=multinomial train_ms=101 apply_ms=67 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K1.csv
+   STWV(train) vocab=1000 identik dengan resep NB: true
+K2: acc=0.729630 (197/270) notScored=0 vocab=1000 likelihood=bernoulli train_ms=23 apply_ms=15 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K2.csv
+   STWV(train) vocab=1000 identik dengan resep NB: true
+K3: acc=0.762963 (206/270) notScored=0 vocab=1000 likelihood=complement train_ms=24 apply_ms=10 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K3.csv
+   STWV(train) vocab=1000 identik dengan resep NB: true
+K4: acc=0.766667 (207/270) notScored=0 vocab=1000 likelihood=multinomial train_ms=23 apply_ms=11 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K4.csv
+   STWV(train) vocab=1000 identik dengan resep NB: true
+K5: acc=0.755556 (204/270) notScored=0 vocab=1000 likelihood=multinomial train_ms=24 apply_ms=12 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K5.csv
+   STWV(train) vocab=1000 identik dengan resep NB: true
+K6: acc=0.722222 (195/270) notScored=0 vocab=1000 likelihood=multinomial train_ms=42 apply_ms=19 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K6.csv
+   STWV(train) vocab=1000 identik dengan resep NB: false
+K1w: acc=0.785185 (212/270) notScored=0 vocab=3101 likelihood=multinomial train_ms=28 apply_ms=14 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K1w.csv
+   STWV(train) vocab=3101 identik dengan resep NB: true
+K2w: acc=0.759259 (205/270) notScored=0 vocab=3101 likelihood=bernoulli train_ms=29 apply_ms=21 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K2w.csv
+   STWV(train) vocab=3101 identik dengan resep NB: true
+K3w: acc=0.785185 (212/270) notScored=0 vocab=3101 likelihood=complement train_ms=28 apply_ms=14 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K3w.csv
+   STWV(train) vocab=3101 identik dengan resep NB: true
+K4w: acc=0.766667 (207/270) notScored=0 vocab=3101 likelihood=multinomial train_ms=25 apply_ms=18 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K4w.csv
+   STWV(train) vocab=3101 identik dengan resep NB: true
+K5w: acc=0.740741 (200/270) notScored=0 vocab=3101 likelihood=multinomial train_ms=26 apply_ms=15 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K5w.csv
+   STWV(train) vocab=3101 identik dengan resep NB: true
+K1m: acc=0.762963 (206/270) notScored=0 vocab=1042 likelihood=multinomial train_ms=18 apply_ms=8 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K1m.csv
+   STWV(train) vocab=1042 identik dengan resep NB: true
+K2m: acc=0.740741 (200/270) notScored=0 vocab=1042 likelihood=bernoulli train_ms=19 apply_ms=8 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K2m.csv
+   STWV(train) vocab=1042 identik dengan resep NB: true
+K5m: acc=0.748148 (202/270) notScored=0 vocab=1042 likelihood=multinomial train_ms=22 apply_ms=8 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\pred_statify_K5m.csv
+   STWV(train) vocab=1042 identik dengan resep NB: true
+=== ringkasan ===
+K1	acc=0.762963	206/270	notScored=0	vocab=1000
+K2	acc=0.729630	197/270	notScored=0	vocab=1000
+K3	acc=0.762963	206/270	notScored=0	vocab=1000
+K4	acc=0.766667	207/270	notScored=0	vocab=1000
+K5	acc=0.755556	204/270	notScored=0	vocab=1000
+K6	acc=0.722222	195/270	notScored=0	vocab=1000
+K1w	acc=0.785185	212/270	notScored=0	vocab=3101
+K2w	acc=0.759259	205/270	notScored=0	vocab=3101
+K3w	acc=0.785185	212/270	notScored=0	vocab=3101
+K4w	acc=0.766667	207/270	notScored=0	vocab=3101
+K5w	acc=0.740741	200/270	notScored=0	vocab=3101
+K1m	acc=0.762963	206/270	notScored=0	vocab=1042
+K2m	acc=0.740741	200/270	notScored=0	vocab=1042
+K5m	acc=0.748148	202/270	notScored=0	vocab=1042
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.9 started=2026-10-08 10:29:54 +07:00 cmd=node testing\text_analytics_eval\accuracy\run_statify.mjs --dataset pilkada cwd=E:\KULIAH\Skripsi\statify64 ===

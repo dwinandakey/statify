@@ -1,0 +1,23 @@
+=== run_statify.mjs  dataset=sms_spam  configs=K1,K2,K3,K4,K1w,K3w,K4w  2026-10-07T15:01:01.619Z
+[statify_wasm] node=v22.23.2 linux/x64 (Linux 6.8.0-138-generic) repo=/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+train=3901 baris (sms_spam_train.csv)  test=1673 baris (sms_spam_test.csv)  header=["Id","Label","Text"]
+K1: acc=0.982666 (1644/1673) notScored=0 vocab=1000 likelihood=multinomial train_ms=341 apply_ms=181 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K1.csv
+K2: acc=0.987448 (1652/1673) notScored=0 vocab=1000 likelihood=bernoulli train_ms=207 apply_ms=92 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K2.csv
+K3: acc=0.967723 (1619/1673) notScored=0 vocab=1000 likelihood=complement train_ms=100 apply_ms=32 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K3.csv
+K4: acc=0.973102 (1628/1673) notScored=0 vocab=1000 likelihood=multinomial train_ms=87 apply_ms=39 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K4.csv
+K1w: acc=0.984459 (1647/1673) notScored=0 vocab=7568 likelihood=multinomial train_ms=180 apply_ms=100 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K1w.csv
+K3w: acc=0.980873 (1641/1673) notScored=0 vocab=7568 likelihood=complement train_ms=134 apply_ms=60 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K3w.csv
+K4w: acc=0.958757 (1604/1673) notScored=0 vocab=7568 likelihood=multinomial train_ms=174 apply_ms=70 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing/thesis-eval/accuracy/out/sms_spam/pred_statify_K4w.csv
+=== ringkasan ===
+K1	acc=0.982666	1644/1673	notScored=0	vocab=1000
+K2	acc=0.987448	1652/1673	notScored=0	vocab=1000
+K3	acc=0.967723	1619/1673	notScored=0	vocab=1000
+K4	acc=0.973102	1628/1673	notScored=0	vocab=1000
+K1w	acc=0.984459	1647/1673	notScored=0	vocab=7568
+K3w	acc=0.980873	1641/1673	notScored=0	vocab=7568
+K4w	acc=0.958757	1604/1673	notScored=0	vocab=7568
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=2.53 cmd=/usr/bin/node testing/thesis-eval/accuracy/run_statify.mjs --dataset sms_spam cwd=/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64 ===

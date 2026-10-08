@@ -1,0 +1,14 @@
+[statify_wasm] node=v22.23.2 linux/x64 (Linux 6.8.0-138-generic) repo=/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+LULUS  STWV kosakata = ["enak","makan","nasi","saya","suka","tidak"]
+LULUS  STWV TF hitungan: 'makan' x3 di dokumen 4
+LULUS  STWV dokumen kosong = 1
+LULUS  NB errors = "No errors occurred."
+LULUS  model ekspor schema 2.0, text.source=raw
+LULUS  kelas = ["neg","pos"]
+prediksi: ["pos","neg",null] maxProb: [0.8571,0.6,null]
+LULUS  prediksi dok. 7 = pos, dok. 8 = neg
+LULUS  dokumen kosong -> NotScored (null)
+SEMUA LULUS

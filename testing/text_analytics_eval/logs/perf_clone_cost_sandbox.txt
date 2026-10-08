@@ -1,0 +1,8 @@
+clone_cost.mjs Linux 6.18.44-fc-v77 linux/x64; CPU Intel(R) Xeon(R) Processor @ 2.10GHz x2; RAM 7.8 GiB; Node v22.22.0
+[statify_wasm] node=v22.22.0 linux/x64 (Linux 6.18.44-fc-v77) repo=/home/claude/statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+pilkada_900: median 5x structuredClone (ms)  NB payload=0.9 NB hasil=6.9 | AM payload=0.8 AM hasil=0.1 | STWV payload=0.1 STWV hasil=45.6
+sms_5574: median 5x structuredClone (ms)  NB payload=2.9 NB hasil=2.6 | AM payload=3.3 AM hasil=1.4 | STWV payload=0.6 STWV hasil=185.3
+smsa_11000: median 5x structuredClone (ms)  NB payload=18.7 NB hasil=3.6 | AM payload=10.8 AM hasil=2.3 | STWV payload=1.3 STWV hasil=385.9

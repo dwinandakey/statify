@@ -1,0 +1,622 @@
+{
+ "dataset": "sms_spam",
+ "configs": {
+  "K1": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1644,
+     "accuracy": 0.9826658696951583,
+     "kappa": 0.9256816890232785,
+     "macro_f1": 0.9628405883682012,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       13,
+       211
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1644,
+     "accuracy": 0.9826658696951583,
+     "kappa": 0.9256816890232785,
+     "macro_f1": 0.9628405883682012,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       13,
+       211
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "WEKA": {
+     "n": 1673,
+     "correct": 1645,
+     "accuracy": 0.9832635983263598,
+     "kappa": 0.9283787833383277,
+     "macro_f1": 0.9641889536483783,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       12,
+       212
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.9999953742274617e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    },
+    "WEKA": {
+     "pembanding": "WEKA",
+     "kelas_sama": 1672,
+     "n": 1673,
+     "kelas_beda_Id": [
+      "1941"
+     ],
+     "tidak_sebanding": "kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w"
+    }
+   }
+  },
+  "K2": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1652,
+     "accuracy": 0.9874476987447699,
+     "kappa": 0.9440848475395774,
+     "macro_f1": 0.972035992725044,
+     "confusion": [
+      [
+       1447,
+       2
+      ],
+      [
+       19,
+       205
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1652,
+     "accuracy": 0.9874476987447699,
+     "kappa": 0.9440848475395774,
+     "macro_f1": 0.972035992725044,
+     "confusion": [
+      [
+       1447,
+       2
+      ],
+      [
+       19,
+       205
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "WEKA": {
+     "n": 1673,
+     "correct": 1654,
+     "accuracy": 0.9886431560071728,
+     "kappa": 0.9494101001548558,
+     "macro_f1": 0.9746992315131351,
+     "confusion": [
+      [
+       1448,
+       1
+      ],
+      [
+       18,
+       206
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.987371758943606e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    },
+    "WEKA": {
+     "pembanding": "WEKA",
+     "kelas_sama": 1671,
+     "n": 1673,
+     "kelas_beda_Id": [
+      "1941",
+      "4542"
+     ],
+     "tidak_sebanding": "kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w"
+    }
+   }
+  },
+  "K3": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1619,
+     "accuracy": 0.9677226539151226,
+     "kappa": 0.8692215714488379,
+     "macro_f1": 0.9345560281879506,
+     "confusion": [
+      [
+       1405,
+       44
+      ],
+      [
+       10,
+       214
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1619,
+     "accuracy": 0.9677226539151226,
+     "kappa": 0.8692215714488379,
+     "macro_f1": 0.9345560281879506,
+     "confusion": [
+      [
+       1405,
+       44
+      ],
+      [
+       10,
+       214
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "WEKA": {
+     "n": 1673,
+     "correct": 1619,
+     "accuracy": 0.9677226539151226,
+     "kappa": 0.8692215714488379,
+     "macro_f1": 0.9345560281879506,
+     "confusion": [
+      [
+       1405,
+       44
+      ],
+      [
+       10,
+       214
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.998642918419005e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    },
+    "WEKA": {
+     "pembanding": "WEKA",
+     "kelas_sama": 1669,
+     "n": 1673,
+     "kelas_beda_Id": [
+      "1691",
+      "2154",
+      "3962",
+      "5205"
+     ],
+     "tidak_sebanding": "ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify"
+    }
+   }
+  },
+  "K4": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1628,
+     "accuracy": 0.9731022115959355,
+     "kappa": 0.8743002068699525,
+     "macro_f1": 0.9370617795252025,
+     "confusion": [
+      [
+       1447,
+       2
+      ],
+      [
+       43,
+       181
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1628,
+     "accuracy": 0.9731022115959355,
+     "kappa": 0.8743002068699525,
+     "macro_f1": 0.9370617795252025,
+     "confusion": [
+      [
+       1447,
+       2
+      ],
+      [
+       43,
+       181
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.987769636625311e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    }
+   }
+  },
+  "K1w": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1647,
+     "accuracy": 0.9844590555887627,
+     "kappa": 0.9309064223447784,
+     "macro_f1": 0.9654461857190066,
+     "confusion": [
+      [
+       1444,
+       5
+      ],
+      [
+       21,
+       203
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1647,
+     "accuracy": 0.9844590555887627,
+     "kappa": 0.9309064223447784,
+     "macro_f1": 0.9654461857190066,
+     "confusion": [
+      [
+       1444,
+       5
+      ],
+      [
+       21,
+       203
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "WEKA": {
+     "n": 1673,
+     "correct": 1647,
+     "accuracy": 0.9844590555887627,
+     "kappa": 0.9309064223447784,
+     "macro_f1": 0.9654461857190066,
+     "confusion": [
+      [
+       1444,
+       5
+      ],
+      [
+       21,
+       203
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.956315356550111e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    },
+    "WEKA": {
+     "pembanding": "WEKA",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "tidak_sebanding": "prior kelas Statify = count/N (tanpa Laplace) vs WEKA (n_c+1)/(N+K); hanya setara pada kelas seimbang"
+    }
+   }
+  },
+  "K3w": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1641,
+     "accuracy": 0.9808726838015541,
+     "kappa": 0.9175293305728089,
+     "macro_f1": 0.9587646652864044,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       16,
+       208
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1641,
+     "accuracy": 0.9808726838015541,
+     "kappa": 0.9175293305728089,
+     "macro_f1": 0.9587646652864044,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       16,
+       208
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "WEKA": {
+     "n": 1673,
+     "correct": 1641,
+     "accuracy": 0.9808726838015541,
+     "kappa": 0.9175293305728089,
+     "macro_f1": 0.9587646652864044,
+     "confusion": [
+      [
+       1433,
+       16
+      ],
+      [
+       16,
+       208
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.986617087138147e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    },
+    "WEKA": {
+     "pembanding": "WEKA",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "tidak_sebanding": "ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify"
+    }
+   }
+  },
+  "K4w": {
+   "metrics": {
+    "Statify": {
+     "n": 1673,
+     "correct": 1604,
+     "accuracy": 0.958756724447101,
+     "kappa": 0.795551753635586,
+     "macro_f1": 0.897343069276554,
+     "confusion": [
+      [
+       1449,
+       0
+      ],
+      [
+       69,
+       155
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    },
+    "scikit-learn": {
+     "n": 1673,
+     "correct": 1604,
+     "accuracy": 0.958756724447101,
+     "kappa": 0.795551753635586,
+     "macro_f1": 0.897343069276554,
+     "confusion": [
+      [
+       1449,
+       0
+      ],
+      [
+       69,
+       155
+      ]
+     ],
+     "labels": [
+      "ham",
+      "spam"
+     ],
+     "not_scored": 0
+    }
+   },
+   "kesamaan": {
+    "scikit-learn": {
+     "pembanding": "scikit-learn",
+     "kelas_sama": 1673,
+     "n": 1673,
+     "kelas_beda_Id": [],
+     "max_abs": 4.99878356557959e-05,
+     "lre": {
+      "n": 3346,
+      "max_abs": 0.0,
+      "n_diff": 0,
+      "n_c0_mismatch": 0,
+      "n_excluded": 0,
+      "lre_min": null
+     },
+     "n_elem": 3346
+    }
+   }
+  }
+ }
+}

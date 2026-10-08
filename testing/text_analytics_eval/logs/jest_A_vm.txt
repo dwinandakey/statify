@@ -1,0 +1,136 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/model-loader.thesis.test.ts (15.34 s)
+  thesis A(f): batas ukuran berkas 10 MB
+    ✓ konstanta batas = 10 x 1024 x 1024 byte dan pesan pengguna menyebut 10 MB (3 ms)
+    ✓ 10 MB + 1 byte ditolak AM_E_FILE_TOO_LARGE (detail = nama berkas) dan isi TIDAK dibaca (12 ms)
+    ✓ 10 MB - 1 byte dan tepat 10 MB diterima untuk model valid (isi dibaca) (14 ms)
+    ✓ urutan pemeriksaan: ekstensi lebih dulu (.txt besar -> AM_E_PARSE), lalu ukuran, baru isi (besar + rusak -> TOO_LARGE) (11 ms)
+    ✓ ekstensi: .JSON diterima; tanpa ekstensi atau .json.txt ditolak AM_E_PARSE (12 ms)
+  thesis A(f): JSON rusak
+    ✓ berkas kosong -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ hanya spasi -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ kurung buka saja -> AM_E_PARSE dengan detail nama berkas
+    ✓ objek terpotong setelah koma -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ array terpotong -> AM_E_PARSE dengan detail nama berkas
+    ✓ tanda kutip tunggal -> AM_E_PARSE dengan detail nama berkas
+    ✓ literal undefined -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ literal NaN -> AM_E_PARSE dengan detail nama berkas
+    ✓ koma di akhir objek -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ teks acak -> AM_E_PARSE dengan detail nama berkas (1 ms)
+    ✓ model valid yang dipotong separuh -> AM_E_PARSE (10 ms)
+    ✓ model valid dengan sampah di akhir -> AM_E_PARSE (8 ms)
+    ✓ pesan pengguna AM_E_PARSE menyebut JSON dan berakhiran kode
+  thesis A(f): JSON valid tetapi bukan model
+    ✓ null -> AM_E_NOT_OBJECT
+    ✓ [] -> AM_E_NOT_OBJECT (1 ms)
+    ✓ [1,2,3] -> AM_E_NOT_OBJECT
+    ✓ 42 -> AM_E_NOT_OBJECT (1 ms)
+    ✓ "teks" -> AM_E_NOT_OBJECT
+    ✓ true -> AM_E_NOT_OBJECT (1 ms)
+    ✓ objek kosong -> AM_E_MODEL_TYPE_MISSING
+    ✓ model_type angka -> AM_E_MODEL_TYPE_MISSING
+    ✓ model_type null -> AM_E_MODEL_TYPE_MISSING (1 ms)
+    ✓ model_type "decision_tree" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe)
+    ✓ model_type "Naive_Bayes" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe)
+    ✓ model_type "constructor" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) (1 ms)
+    ✓ model_type "__proto__" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) (2 ms)
+    ✓ model_type "toString" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) (1 ms)
+  thesis A(f): schema_version tidak dikenal (lewat loader)
+    ✓ schema_version "9.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) (1 ms)
+    ✓ schema_version "1.2" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) (1 ms)
+    ✓ schema_version "3.0" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi)
+    ✓ schema_version "0.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi)
+    ✓ schema_version "" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi)
+    ✓ schema_version "v1.1" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi)
+    ✓ schema_version hilang atau bukan string -> galat yang sama (detail kosong atau nilai teks)
+    ✓ versi yang didukung (1.0, 1.1, 2.0) berhasil; pesan pengguna menyebut ketiganya (66 ms)
+  thesis A(f): kelas kosong dan kosakata kosong (lewat loader)
+    ✓ target.classes = [] -> gagal dengan AM_E_CLASSES_EMPTY (10 ms)
+    ✓ kelas kosong dengan prior dan jumlah kasus juga kosong -> tetap gagal (bukan lolos tanpa kelas) (11 ms)
+    ✓ classes bukan array -> AM_E_FIELD_TYPE (bukan AM_E_CLASSES_EMPTY) (11 ms)
+    ✓ nb-model-v2_0-vector.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') (11 ms)
+    ✓ nb-model-v2_0-raw.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') (10 ms)
+    ✓ text.terms bukan array -> AM_E_FIELD_TYPE (detail text.terms) (9 ms)
+    ✓ model raw dengan recipe.vocabulary kosong -> gagal (kosakata resep tidak sama dengan terms) (9 ms)
+  thesis A(f): fixture ekspor model nyata dan konsistensi kode galat
+    ✓ ada fixture ekspor nyata untuk diuji (1 ms)
+    ✓ fixture Naive_Bayes_Model_Export (4).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) (71 ms)
+    ✓ fixture Naive_Bayes_Model_Export (5) minstd.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) (17 ms)
+    ✓ fixture Naive_Bayes_Model_Export (5).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) (15 ms)
+    ✓ fixture Naive_Bayes_Model_Export (5)17rbVEC.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) (63 ms)
+    ✓ fixture Naive_Bayes_Model_Export (6)complement.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) (22 ms)
+    ✓ setiap kode galat yang dihasilkan jalur file terdaftar di ALL_APPLY_MODEL_CODES dan punya pesan berakhiran kode (2 ms)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/formula-output.thesis.test.ts
+  thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust
+    ✓ Weka: 3 TF x 2 IDF x 2 normalisasi; sklearn: 3 x 3 x 3; custom: semua 5 x 4 x 4 (3 ms)
+    ✓ untuk ke-80 kombinasi pada grid acuan: sah-Weka/sah-sklearn menurut UI = menurut validator Rust (weka_ok/sklearn_ok) (23 ms)
+    ✓ rumus yang ditampilkan di tooltip sesuai definisi yang diimplementasikan Rust (1 ms)
+  thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py)
+    ✓ kolom 'Documents (Non-zero)' = document frequency acuan [2, 2, 2, 2, 1] dan tidak ada vektor nol (2 ms)
+    ✓ label pengaturan: tiga standar rumus dan opsinya (1 ms)
+    ✓ label stopword, stemming, tokenizer, huruf kecil, dan min term frequency (1 ms)
+    ✓ kosakata kosong: tabel kosakata tidak dibuat dan kolom pertama-terakhir '-' (1 ms)
+    ✓ satu kolom: kalimat tunggal; tepat MAX_VOCABULARY_ROWS istilah tidak memunculkan catatan pemotongan (1 ms)
+    ✓ dokumen kosong dihitung sebagai vektor nol dan durasi dibulatkan
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/stopwords.thesis.test.ts
+  thesis A(c): daftar stopword bawaan
+    ✓ Indonesia: 758 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat (140 ms)
+    ✓ Inggris: 1298 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat (211 ms)
+    ✓ memuat kata fungsi umum dan (sesuai keputusan pemilik) kata negasi Indonesia (1 ms)
+    ✓ salinan data tes Rust identik dengan konstanta TypeScript (penjaga sinkronisasi) (36 ms)
+  thesis A(c): payload stopword ke Rust (toRustConfig)
+    ✓ indonesian -> custom_stopwords = JSON array daftar bawaan Indonesia (3 ms)
+    ✓ english -> custom_stopwords = JSON array daftar bawaan Inggris (3 ms)
+    ✓ none -> custom_stopwords null walau customList terisi (1 ms)
+    ✓ custom -> satu kata per baris, di-trim, baris kosong/spasi dibuang, huruf asli dipertahankan
+    ✓ custom dengan daftar kosong -> array kosong '[]' (bukan null)
+    ✓ keluaran custom_stopwords selalu JSON valid berupa array string (kontrak yang diparse Rust)
+  thesis A(c): rentang n-gram 1-5 pada konfigurasi
+    ✓ 15 pasangan (min <= max) sah dan diteruskan ke payload sebagai ngram_min/ngram_max (2 ms)
+    ✓ pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram (1 ms)
+    ✓ mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain
+
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/kfold.thesis.test.ts
+  thesis A(e): batas jumlah fold pada getNumericInputError
+    ✓ nilai bawaan formulir: 10 fold, tanpa galat (1 ms)
+    ✓ KFolds = -5 ditolak dengan pesan batas minimum
+    ✓ KFolds = -1 ditolak dengan pesan batas minimum
+    ✓ KFolds = 0 ditolak dengan pesan batas minimum
+    ✓ KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak)
+    ✓ KFolds = 2 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) (9 ms)
+    ✓ KFolds = 3 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust)
+    ✓ KFolds = 10 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust)
+    ✓ KFolds = 100 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) (1 ms)
+    ✓ KFolds = 1000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust)
+    ✓ KFolds = 1000000000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust)
+    ✓ KFolds = 1.5 (bukan bilangan bulat berhingga) ditolak
+    ✓ KFolds = 2.5 (bukan bilangan bulat berhingga) ditolak
+    ✓ KFolds = 0.5 (bukan bilangan bulat berhingga) ditolak
+    ✓ KFolds = NaN (bukan bilangan bulat berhingga) ditolak (1 ms)
+    ✓ KFolds = Infinity (bukan bilangan bulat berhingga) ditolak
+    ✓ KFolds = -Infinity (bukan bilangan bulat berhingga) ditolak
+    ✓ KFolds bukan number ("5") ditolak (1 ms)
+    ✓ KFolds bukan number ("") ditolak (1 ms)
+    ✓ KFolds bukan number (null) ditolak
+    ✓ KFolds bukan number (undefined) ditolak
+    ✓ KFolds bukan number (true) ditolak
+    ✓ pada mode holdout nilai KFolds yang tidak sah diabaikan; sebaliknya TrainingPercentage tidak diperiksa pada kfold (2 ms)
+  thesis A(e): KFolds = 1 diteruskan apa adanya ke worker
+    ✓ buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust
+    ✓ nilai KFolds lain juga tidak diubah (2, 10) (1 ms)
+  thesis A(e): pemetaan pesan galat Rust terkait jumlah fold
+    ✓ galat Rust "Number of folds must be at least 1 (got 0)." dipetakan ke saran pengaturan cross-validation
+    ✓ galat Rust "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds." dipetakan ke saran pengaturan cross-validation
+    ✓ galat Rust "Cannot create cross-validation folds: there are no valid instances after missing-value handling." dipetakan ke saran pengaturan cross-validation (1 ms)
+    ✓ teks peringatan Rust yang memuat kata fold juga dipetakan ke saran yang sama (pemeta berbasis pencocokan kata)
+
+Test Suites: 4 passed, 4 total
+Tests:       105 passed, 105 total
+Snapshots:   0 total
+Time:        17.92 s, estimated 33 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/thesis/stopwords.thesis.test.ts|components/Modals/Transform/StringToWordVector/__tests__/thesis/formula-output.thesis.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/kfold.thesis.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/model-loader.thesis.test.ts.
+Test results written to: ../testing/thesis-eval/logs/jest_A_vm.json

@@ -1,0 +1,62 @@
+{
+ "WB-1": {
+  "name": "validateColumnPrefix",
+  "metrics": {
+   "N": 14,
+   "E": 19,
+   "P": 6,
+   "VG": 7,
+   "P1": 7
+  },
+  "rank": 7,
+  "nrows": 7,
+  "total_paths": null,
+  "infeasible_paths": null,
+  "n_infeasible_flips": 0
+ },
+ "WB-2": {
+  "name": "getNumericInputError",
+  "metrics": {
+   "N": 45,
+   "E": 72,
+   "P": 28,
+   "VG": 29,
+   "P1": 29
+  },
+  "rank": 29,
+  "nrows": 29,
+  "total_paths": 114,
+  "infeasible_paths": 27,
+  "n_infeasible_flips": 6
+ },
+ "WB-3": {
+  "name": "useNaiveBayesValidation",
+  "metrics": {
+   "N": 25,
+   "E": 36,
+   "P": 12,
+   "VG": 13,
+   "P1": 13
+  },
+  "rank": 12,
+  "nrows": 12,
+  "total_paths": 600,
+  "infeasible_paths": 544,
+  "n_infeasible_flips": 33
+ },
+ "WB-4": {
+  "name": "loadModelFromFile",
+  "metrics": {
+   "N": 14,
+   "E": 18,
+   "P": 5,
+   "VG": 6,
+   "P1": 6
+  },
+  "rank": 6,
+  "nrows": 6,
+  "total_paths": null,
+  "infeasible_paths": null,
+  "n_infeasible_flips": 0
+ }
+}
