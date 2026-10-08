@@ -6,7 +6,7 @@
 | Pemilik skripsi | Yedija Lewi Suryadi (yedijalewisuryadi@gmail.com) |
 | Objek evaluasi | Modul Text Analytics aplikasi Statify: String to Word Vector (STWV), Naive Bayes (NB), Apply Model (AM), dan pustaka inti Rust `statify-text-core` |
 | Repo | `E:\KULIAH\Skripsi\statify64`; paket evaluasi di `testing/text_analytics_eval/` |
-| Cabang kerja | `text-analytics-eval` (semula `thesis-eval`); pencatatan lingkungan Windows mencatat commit `33b1b7e02cf6f47209020be61fdcd460f6817de1` |
+| Cabang kerja | `text-analytics-eval` (semula `thesis-eval`). Seluruh paket evaluasi **hanya ada di cabang ini**; cabang `dija-v2` tidak memuatnya (perbandingan keduanya: 702 berkas, semuanya Added, tanpa perubahan kode produksi). Untuk membaca atau menjalankan ulang paket: `git switch text-analytics-eval`. `33b1b7e02cf6f47209020be61fdcd460f6817de1` adalah commit yang tercatat saat lingkungan Windows dicatat (8 Oktober 2026); commit akhir adalah HEAD cabang tersebut (lihat `git log`), karena mencantumkan hash commit akhir di dalam berkas yang di-commit tidak mungkin |
 | Dibangun | 8 Oktober 2026, oleh `tools/build_handoff.py` dari berkas-berkas paket evaluasi (tidak ada angka diketik ulang di lampiran) |
 | Status paket | Semua track A–F sudah dieksekusi penuh di perangkat uji skripsi (Windows 11). Yang belum: pengujian manual di antarmuka nyata (M-01..M-36, MF-01..MF-05) dan beberapa butir pada Bagian 9 |
 

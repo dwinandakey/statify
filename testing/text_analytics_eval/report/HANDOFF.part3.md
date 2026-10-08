@@ -60,6 +60,7 @@ Tingkat keyakinan tiap temuan dicatat di `BUGS.md`: ada yang **terverifikasi den
 | Verifikasi asal dan lisensi dataset | Belum | Yedija perlu mencatat sumber dan lisensi SMS Spam (UCI id 228), SmSA (IndoNLU), 20 Newsgroups sebelum dicantumkan di buku. |
 | Eksekusi ulang VM dengan nama berkas baru | Opsional | Log VM lama masih bernama `thesis`; `tools/apply_results.py` memetakannya (`_legacy`). Tidak memengaruhi angka. |
 | Commit dan push | Tugas Yedija | Agen mana pun dilarang menjalankan perintah git di repo ini. |
+| Penggabungan `text-analytics-eval` ke `dija-v2` | Keputusan Yedija | Belum dilakukan. Sampai digabung, tes `eval` dan folder `testing/text_analytics_eval/` tidak ada di `dija-v2`. Dua tes whitebox lama di `naive-bayes/hooks/__tests__/` masih belum dilacak git di kedua cabang. |
 
 Tugas lain untuk Yedija yang memengaruhi buku: memutuskan apakah temuan E-01, D-01, A-1, C2-01..C2-03 hanya dilaporkan atau juga diperbaiki di versi aplikasi berikutnya; menyediakan tangkapan layar untuk daftar periksa manual; menyetujui penempatan tabel panjang di lampiran buku.
 
