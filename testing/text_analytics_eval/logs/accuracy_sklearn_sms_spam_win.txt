@@ -1,0 +1,12 @@
+=== sk_compare.py dataset=sms_spam train=3901 test=1673 configs=['K1', 'K2', 'K3', 'K4', 'K1w', 'K3w', 'K4w']
+python=3.13.12 numpy=2.4.4 scipy=1.17.1 pandas=3.0.2 scikit-learn=1.9.1
+K1: acc=0.982666 kappa=0.925682 macroF1=0.962841 vocab=1000 {'only_ours': 3, 'only_native': 3} empty_test_docs=6
+K2: acc=0.987448 kappa=0.944085 macroF1=0.972036 vocab=1000 {'only_ours': 3, 'only_native': 3} empty_test_docs=6
+K3: acc=0.967723 kappa=0.869222 macroF1=0.934556 vocab=1000 {'only_ours': 3, 'only_native': 3} empty_test_docs=6
+K4: acc=0.973102 kappa=0.874300 macroF1=0.937062 vocab=1000 {'only_ours': 3, 'only_native': 3} empty_test_docs=6
+K1w: acc=0.984459 kappa=0.930906 macroF1=0.965446 vocab=7568  empty_test_docs=1
+K3w: acc=0.980873 kappa=0.917529 macroF1=0.958765 vocab=7568  empty_test_docs=1
+K4w: acc=0.958757 kappa=0.795552 macroF1=0.897343 vocab=7568  empty_test_docs=1
+tulis: E:\KULIAH\Skripsi\statify64\testing\thesis-eval\accuracy\out\sms_spam\sklearn_results.json
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=4.04 started=2026-10-08 00:18:06 +07:00 cmd=python -X utf8 testing\thesis-eval\accuracy\sk_compare.py --dataset sms_spam --no-params cwd=E:\KULIAH\Skripsi\statify64 ===

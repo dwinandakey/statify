@@ -1,0 +1,25 @@
+   Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running tests\thesis_formulas.rs (target\debug\deps\thesis_formulas-7e82cb8673040a55.exe)
+
+running 15 tests
+test grid_80_kombinasi_pada_standar_custom ... ok
+test grid_preset_sklearn_hanya_kombinasi_sah_dan_hasil_sama ... ok
+test grid_preset_weka_hanya_kombinasi_sah_dan_hasil_sama ... ok
+test idf_plus1_pada_korpus_d ... ok
+test idf_smooth_pada_korpus_d ... ok
+test idf_standard_pada_korpus_d ... ok
+test normalisasi_doc_length_semua_baris_bernorma_rata_rata ... ok
+test normalisasi_l1_nilai_acuan_dan_jumlah_satu ... ok
+test normalisasi_l2_nilai_acuan_dan_norma_satu ... ok
+test tf_binary_pada_korpus_d ... ok
+test tf_log1p_pada_korpus_d ... ok
+test tf_normalized_memakai_total_token_termasuk_ngram_sebelum_pemangkasan ... ok
+test tf_normalized_pada_korpus_d ... ok
+test tf_raw_pada_korpus_d ... ok
+test tf_sublinear_pada_korpus_d ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=5.54 started=2026-10-08 09:49:24 +07:00 cmd=cargo test --test thesis_formulas -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

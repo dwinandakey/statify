@@ -1,0 +1,14 @@
+pilkada_900: 900 dokumen -> testing\thesis-eval\perf\data\pilkada_900.csv  {"negative":450,"positive":450}
+sms_5574: 5574 dokumen -> testing\thesis-eval\perf\data\sms_5574.csv  {"ham":4827,"spam":747}
+smsa_11000: 11000 dokumen -> testing\thesis-eval\perf\data\smsa_11000.csv  {"positive":6416,"neutral":1148,"negative":3436}
+SmSA gabungan: 11500 (latih 11000 + uji 500)
+gabungan: 17974 dokumen -> testing\thesis-eval\perf\data\gabungan.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236}
+20ng_ok 18846 18331
+newsgroups20: 18331 dokumen -> testing\thesis-eval\perf\data\newsgroups20.csv  {"rec.sport.hockey":975,"comp.sys.ibm.pc.hardware":964,"talk.politics.mideast":919,"comp.sys.mac.hardware":929,"sci.electronics":958,"talk.religion.misc":606,"sci.crypt":962,"sci.med":960,"alt.atheism":779,"rec.motorcycles":969,"rec.autos":937,"comp.windows.x":982,"comp.graphics":955,"sci.space":955,"talk.politics.guns":886,"misc.forsale":959,"rec.sport.baseball":958,"talk.politics.misc":756,"comp.os.ms-windows.misc":947,"soc.religion.christian":975}
+besar_ge20000: 36305 dokumen -> testing\thesis-eval\perf\data\besar_ge20000.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236,"rec.sport.hockey":975,"comp.sys.ibm.pc.hardware":964,"talk.politics.mideast":919,"comp.sys.mac.hardware":929,"sci.electronics":958,"talk.religion.misc":606,"sci.crypt":962,"sci.med":960,"alt.atheism":779,"rec.motorcycles":969,"rec.autos":937,"comp.windows.x":982,"comp.graphics":955,"sci.space":955,"talk.politics.guns":886,"misc.forsale":959,"rec.sport.baseball":958,"talk.politics.misc":756,"comp.os.ms-windows.misc":947,"soc.religion.christian":975}
+sms_5574_ascii: 5574 dokumen -> testing\thesis-eval\perf\data\sms_5574_ascii.csv  {"ham":4827,"spam":747}
+gabungan_ascii: 17974 dokumen -> testing\thesis-eval\perf\data\gabungan_ascii.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236}
+besar_ge20000_ascii: 36305 dokumen -> testing\thesis-eval\perf\data\besar_ge20000_ascii.csv  {"negative":4090,"positive":7074,"ham":4827,"spam":747,"neutral":1236,"rec.sport.hockey":975,"comp.sys.ibm.pc.hardware":964,"talk.politics.mideast":919,"comp.sys.mac.hardware":929,"sci.electronics":958,"talk.religion.misc":606,"sci.crypt":962,"sci.med":960,"alt.atheism":779,"rec.motorcycles":969,"rec.autos":937,"comp.windows.x":982,"comp.graphics":955,"sci.space":955,"talk.politics.guns":886,"misc.forsale":959,"rec.sport.baseball":958,"talk.politics.misc":756,"comp.os.ms-windows.misc":947,"soc.religion.christian":975}
+status -> testing\thesis-eval\perf\data\PREPARE_STATUS.json
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=209.35 started=2026-10-08 09:50:22 +07:00 cmd=node testing\thesis-eval\perf\prepare_datasets.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

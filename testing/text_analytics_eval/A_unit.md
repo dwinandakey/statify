@@ -1,0 +1,320 @@
+# Track A - Pengujian unit tambahan (modul Text Analytics Statify)
+
+Dokumen ini dibangkitkan oleh `testing/text_analytics_eval/unit/build_A_unit.py` dari `unit/A_unit.template.md`, `logs/jest_A_vm.json`, dan fungsi `#[test]` pada `tests/eval_*.rs`. Kolom Status berisi penanda `⟦jest:...⟧` dan `⟦rust:...⟧` yang diganti oleh `tools/apply_results.py` dari log; status tidak diketik manual.
+
+## 1. Ringkasan
+
+| Hal | Hasil |
+|---|---|
+| Tes Jest Track A (4 berkas) | **105 kasus, 105 lulus, 0 gagal** (Windows dengan konfigurasi Jest produksi, `logs/jest_A_win.json`; VM Linux sebagai pembanding, `logs/jest_A_vm.json`) |
+| Tes Rust Track A (4 target) | **66 fungsi tes; 66 lulus, 0 gagal di Windows** (`cargo test --test eval_formulas` 15, `eval_vocab_limit` 13, `eval_text_pipeline` 20, `eval_partition` 18; log `logs/rust_eval_*.txt`, rustc 1.93.0). Tes ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
+| Nilai acuan independen | `unit/reference_values.py` (Python + numpy, 80 kombinasi TF x IDF x normalisasi, 16 skenario Words to Keep/Min term frequency, 5 skenario stopword, 18 skenario n-gram); log `logs/reference_values.txt`. Kombinasi sah-sklearn (27) dibandingkan langsung dengan scikit-learn: selisih maksimum 0. Nilai golden lama PLAN_FIX 3.6 cocok. |
+| Cakupan Jest | Diukur di VM per menu, sebelum dan sesudah Track A (bagian 4). STWV 51,37% menjadi 53,39%; Naive Bayes 87,01% (tidak berubah); Apply Model 97,50% menjadi 97,77% (cakupan baris). |
+| Cakupan Rust | **Tidak terukur**, lihat `run_A.ps1` (`cargo llvm-cov` bila terpasang). Hanya ada estimasi statis celah (bagian 4.2), bukan cakupan terukur. |
+| Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS dan sisi Rust terverifikasi dengan tes yang dijalankan di Windows); tiga catatan informasional (A-2 sampai A-4). |
+
+Catatan lingkungan: Jest dijalankan dengan `jest.eval.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), dan hasilnya 105 dari 105 lulus (`logs/jest_A_win.json`). Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
+
+## 2. Cakupan tugas dan berkas yang dibuat
+
+| Butir | Isi | Berkas |
+|---|---|---|
+| a | Rumus TF (5), IDF (3 variabel + none), normalisasi (L1, L2, doc_length), grid 80 kombinasi, preset Weka (12 sah) dan sklearn (27 sah), definisi T(d) | `statify-text-core/tests/eval_formulas.rs`, `tests/eval_data/formula_grid.json`; Jest `StringToWordVector/__tests__/eval/formula-output.eval.test.ts` |
+| b | Words to Keep dan Min term frequency pada nilai seri | `statify-text-core/tests/eval_vocab_limit.rs`, `tests/eval_data/vocab_limit_cases.json` |
+| c | Stopword Indonesia, Inggris, kustom; Sastrawi; Porter; n-gram 1-5 | `statify-text-core/tests/eval_text_pipeline.rs`, `tests/eval_data/{pipeline_cases,stopwords_id,stopwords_en}.json`; Jest `StringToWordVector/__tests__/eval/stopwords.eval.test.ts` |
+| d | Stratified holdout 70/30 dan k-fold (selisih per kelas <= 1) | `naive-bayes/rust/tests/eval_partition.rs` |
+| e | `KFolds = 1`: jalur kode, tes, laporan bug | `eval_partition.rs` (bagian e); Jest `naive-bayes/hooks/__tests__/eval/kfold.eval.test.ts`; `BUGS_A.md` |
+| f | Pemuatan model Apply Model: >10 MB, JSON rusak, schema tidak dikenal, kelas kosong, kosakata kosong | Jest `apply-model/services/__tests__/eval/model-loader.eval.test.ts` |
+| tambahan | Skrip dan log | `unit/reference_values.py`, `unit/static_gap_rust.py`, `unit/cov_table.js`, `unit/sklearn_kfold_check.py`, `unit/build_A_unit.py`, `run_A.ps1`, `logs/*` |
+
+Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam berkas Jest di atas (pemetaan opsi UI terhadap validator Rust, tooltip rumus, `buildStwvOutput` pada korpus D, batas 200 istilah, penerusan `KFolds` ke konfigurasi worker, pemetaan pesan galat fold) karena semuanya fungsi murni dan masing-masing kecil.
+
+## 3. Tes yang ditambahkan
+
+### 3.1 Jest (105 kasus; DIJALANKAN di VM)
+
+| Berkas | Nama tes | Perilaku yang diuji | Status |
+|---|---|---|---|
+| `model-loader.eval.test.ts` | konstanta batas = 10 x 1024 x 1024 byte dan pesan pengguna menyebut 10 MB | eval A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.eval.test.ts` | 10 MB + 1 byte ditolak AM_E_FILE_TOO_LARGE (detail = nama berkas) dan isi TIDAK dibaca | eval A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.eval.test.ts` | 10 MB - 1 byte dan tepat 10 MB diterima untuk model valid (isi dibaca) | eval A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.eval.test.ts` | urutan pemeriksaan: ekstensi lebih dulu (.txt besar -> AM_E_PARSE), lalu ukuran, baru isi (besar + rusak -> TOO_LARGE) | eval A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.eval.test.ts` | ekstensi: .JSON diterima; tanpa ekstensi atau .json.txt ditolak AM_E_PARSE | eval A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.eval.test.ts` | berkas kosong -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | hanya spasi -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | kurung buka saja -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | objek terpotong setelah koma -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | array terpotong -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | tanda kutip tunggal -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | literal undefined -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | literal NaN -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | koma di akhir objek -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | teks acak -> AM_E_PARSE dengan detail nama berkas | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | model valid yang dipotong separuh -> AM_E_PARSE | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | model valid dengan sampah di akhir -> AM_E_PARSE | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | pesan pengguna AM_E_PARSE menyebut JSON dan berakhiran kode | eval A(f): JSON rusak | Lulus [Win] |
+| `model-loader.eval.test.ts` | null -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | [] -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | [1,2,3] -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | 42 -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | "teks" -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | true -> AM_E_NOT_OBJECT | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | objek kosong -> AM_E_MODEL_TYPE_MISSING | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type angka -> AM_E_MODEL_TYPE_MISSING | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type null -> AM_E_MODEL_TYPE_MISSING | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type "decision_tree" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type "Naive_Bayes" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type "constructor" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type "__proto__" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | model_type "toString" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | eval A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "9.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "1.2" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "3.0" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "0.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version "v1.1" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | schema_version hilang atau bukan string -> galat yang sama (detail kosong atau nilai teks) | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | versi yang didukung (1.0, 1.1, 2.0) berhasil; pesan pengguna menyebut ketiganya | eval A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | target.classes = [] -> gagal dengan AM_E_CLASSES_EMPTY | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | kelas kosong dengan prior dan jumlah kasus juga kosong -> tetap gagal (bukan lolos tanpa kelas) | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | classes bukan array -> AM_E_FIELD_TYPE (bukan AM_E_CLASSES_EMPTY) | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | nb-model-v2_0-vector.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | nb-model-v2_0-raw.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | text.terms bukan array -> AM_E_FIELD_TYPE (detail text.terms) | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | model raw dengan recipe.vocabulary kosong -> gagal (kosakata resep tidak sama dengan terms) | eval A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.eval.test.ts` | ada fixture ekspor nyata untuk diuji | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | fixture Naive_Bayes_Model_Export (4).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | fixture Naive_Bayes_Model_Export (5) minstd.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | fixture Naive_Bayes_Model_Export (5).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | fixture Naive_Bayes_Model_Export (5)17rbVEC.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | fixture Naive_Bayes_Model_Export (6)complement.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.eval.test.ts` | setiap kode galat yang dihasilkan jalur file terdaftar di ALL_APPLY_MODEL_CODES dan punya pesan berakhiran kode | eval A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `kfold.eval.test.ts` | nilai bawaan formulir: 10 fold, tanpa galat | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = -5 ditolak dengan pesan batas minimum | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = -1 ditolak dengan pesan batas minimum | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 0 ditolak dengan pesan batas minimum | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 2 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 3 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 10 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 100 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 1000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 1000000000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 1.5 (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 2.5 (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = 0.5 (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = NaN (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = Infinity (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds = -Infinity (bukan bilangan bulat berhingga) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds bukan number ("5") ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds bukan number ("") ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds bukan number (null) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds bukan number (undefined) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | KFolds bukan number (true) ditolak | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | pada mode holdout nilai KFolds yang tidak sah diabaikan; sebaliknya TrainingPercentage tidak diperiksa pada kfold | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.eval.test.ts` | buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust | eval A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
+| `kfold.eval.test.ts` | nilai KFolds lain juga tidak diubah (2, 10) | eval A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
+| `kfold.eval.test.ts` | galat Rust "Number of folds must be at least 1 (got 0)." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.eval.test.ts` | galat Rust "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.eval.test.ts` | galat Rust "Cannot create cross-validation folds: there are no valid instances after missing-value handling." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.eval.test.ts` | teks peringatan Rust yang memuat kata fold juga dipetakan ke saran yang sama (pemeta berbasis pencocokan kata) | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `formula-output.eval.test.ts` | Weka: 3 TF x 2 IDF x 2 normalisasi; sklearn: 3 x 3 x 3; custom: semua 5 x 4 x 4 | eval A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.eval.test.ts` | untuk ke-80 kombinasi pada grid acuan: sah-Weka/sah-sklearn menurut UI = menurut validator Rust (weka_ok/sklearn_ok) | eval A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.eval.test.ts` | rumus yang ditampilkan di tooltip sesuai definisi yang diimplementasikan Rust | eval A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.eval.test.ts` | kolom 'Documents (Non-zero)' = document frequency acuan [2, 2, 2, 2, 1] dan tidak ada vektor nol | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.eval.test.ts` | label pengaturan: tiga standar rumus dan opsinya | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.eval.test.ts` | label stopword, stemming, tokenizer, huruf kecil, dan min term frequency | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.eval.test.ts` | kosakata kosong: tabel kosakata tidak dibuat dan kolom pertama-terakhir '-' | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.eval.test.ts` | satu kolom: kalimat tunggal; tepat MAX_VOCABULARY_ROWS istilah tidak memunculkan catatan pemotongan | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.eval.test.ts` | dokumen kosong dihitung sebagai vektor nol dan durasi dibulatkan | eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `stopwords.eval.test.ts` | Indonesia: 758 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | eval A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.eval.test.ts` | Inggris: 1298 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | eval A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.eval.test.ts` | memuat kata fungsi umum dan (sesuai keputusan pemilik) kata negasi Indonesia | eval A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.eval.test.ts` | salinan data tes Rust identik dengan konstanta TypeScript (penjaga sinkronisasi) | eval A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.eval.test.ts` | indonesian -> custom_stopwords = JSON array daftar bawaan Indonesia | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | english -> custom_stopwords = JSON array daftar bawaan Inggris | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | none -> custom_stopwords null walau customList terisi | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | custom -> satu kata per baris, di-trim, baris kosong/spasi dibuang, huruf asli dipertahankan | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | custom dengan daftar kosong -> array kosong '[]' (bukan null) | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | keluaran custom_stopwords selalu JSON valid berupa array string (kontrak yang diparse Rust) | eval A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.eval.test.ts` | 15 pasangan (min <= max) sah dan diteruskan ke payload sebagai ngram_min/ngram_max | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
+| `stopwords.eval.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
+| `stopwords.eval.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
+
+### 3.2 Rust (66 fungsi tes; DIJALANKAN di Windows)
+
+Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya terjadi di Windows (`run_A.ps1`, rustc 1.93.0) dan seluruhnya lulus tanpa perubahan berkas. Sebelum itu hanya dilakukan: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `eval_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kekhawatiran kesalahan kompilasi tidak terbukti pada kompilasi Windows.
+
+| Berkas | Nama tes | Perilaku yang diuji | Status |
+|---|---|---|---|
+| `eval_formulas.rs` (statify-text-core) | `tf_binary_pada_korpus_d` | tf binary pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `tf_raw_pada_korpus_d` | tf raw pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `tf_log1p_pada_korpus_d` | tf log1p pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `tf_sublinear_pada_korpus_d` | tf sublinear pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `tf_normalized_pada_korpus_d` | tf normalized pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `idf_standard_pada_korpus_d` | idf standard pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `idf_smooth_pada_korpus_d` | idf smooth pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `idf_plus1_pada_korpus_d` | idf plus1 pada korpus d | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `normalisasi_l1_nilai_acuan_dan_jumlah_satu` | normalisasi l1 nilai acuan dan jumlah satu | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `normalisasi_l2_nilai_acuan_dan_norma_satu` | normalisasi l2 nilai acuan dan norma satu | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `normalisasi_doc_length_semua_baris_bernorma_rata_rata` | normalisasi doc length semua baris bernorma rata rata | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `grid_80_kombinasi_pada_standar_custom` | grid 80 kombinasi pada standar custom | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `grid_preset_weka_hanya_kombinasi_sah_dan_hasil_sama` | grid preset weka hanya kombinasi sah dan hasil sama | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `grid_preset_sklearn_hanya_kombinasi_sah_dan_hasil_sama` | grid preset sklearn hanya kombinasi sah dan hasil sama | Lulus [Win] |
+| `eval_formulas.rs` (statify-text-core) | `tf_normalized_memakai_total_token_termasuk_ngram_sebelum_pemangkasan` | tf normalized memakai total token termasuk ngram sebelum pemangkasan | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `skenario_acuan_words_to_keep_dan_min_term_freq` | skenario acuan words to keep dan min term freq | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan` | words to keep seri tiga arah di batas dipilih alfabetis bukan urutan kemunculan | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_memotong_ketat_walau_banyak_term_seri` | words to keep memotong ketat walau banyak term seri | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil` | words to keep seri diurutkan bytewise huruf besar sebelum huruf kecil | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak` | words to keep hasil stabil pada pengulangan walau urutan hashmap acak | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong` | words to keep sama dengan atau melebihi jumlah kandidat tidak memotong | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `words_to_keep_3_pada_korpus_d_memilih_makan_nasi_saya` | words to keep 3 pada korpus d memilih makan nasi saya | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `custom_ranking_memakai_skor_bukan_total_count_dan_seri_alfabetis` | custom ranking memakai skor bukan total count dan seri alfabetis | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `min_term_freq_batas_inklusif_count_sama_dipertahankan` | min term freq batas inklusif count sama dipertahankan | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen` | min term freq menghitung total kemunculan bukan jumlah dokumen | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `min_term_freq_lalu_words_to_keep_dengan_seri` | min term freq lalu words to keep dengan seri | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `min_term_freq_dihitung_pada_token_ngram_juga` | min term freq dihitung pada token ngram juga | Lulus [Win] |
+| `eval_vocab_limit.rs` (statify-text-core) | `pemangkasan_kosakata_tidak_mengubah_n_dokumen_dan_df_term_yang_tersisa` | pemangkasan kosakata tidak mengubah n dokumen dan df term yang tersisa | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `daftar_stopword_bawaan_dimuat_utuh_oleh_build_set` | daftar stopword bawaan dimuat utuh oleh build set | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_bawaan_indonesia_dan_inggris_sesuai_acuan_python` | stopword bawaan indonesia dan inggris sesuai acuan python | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_indonesia_membuang_kata_negasi_tidak` | stopword indonesia membuang kata negasi tidak | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_inggris_tidak_peka_huruf_besar_kecil_walau_lowercase_mati` | stopword inggris tidak peka huruf besar kecil walau lowercase mati | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_kustom_dinormalkan_lowercase_unik_dan_terurut_pada_resep` | stopword kustom dinormalkan lowercase unik dan terurut pada resep | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_metode_none_mengabaikan_daftar_yang_dikirim` | stopword metode none mengabaikan daftar yang dikirim | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_tanpa_daftar_atau_daftar_kosong_tidak_menyaring_apa_pun` | stopword tanpa daftar atau daftar kosong tidak menyaring apa pun | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_json_bukan_array_string_ditolak_invalid_stopwords` | stopword json bukan array string ditolak invalid stopwords | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stopword_disaring_sebelum_stemming` | stopword disaring sebelum stemming | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_generate_semua_rentang_1_sampai_5_sesuai_acuan_python` | ngram generate semua rentang 1 sampai 5 sesuai acuan python | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_melalui_pipeline_penuh_semua_rentang_sah` | ngram melalui pipeline penuh semua rentang sah | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_jumlah_term_sama_dengan_rumus_untuk_tujuh_kata_berbeda` | ngram jumlah term sama dengan rumus untuk tujuh kata berbeda | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_hanya_bigram_tanpa_unigram_dan_token_kurang_dari_minimum_menghasilkan_kosong` | ngram hanya bigram tanpa unigram dan token kurang dari minimum menghasilkan kosong | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_dibentuk_setelah_stopword_dan_stemming_dan_tidak_melintasi_kata_terbuang` | ngram dibentuk setelah stopword dan stemming dan tidak melintasi kata terbuang | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `ngram_di_luar_rentang_1_sampai_5_ditolak_invalid_config` | ngram di luar rentang 1 sampai 5 ditolak invalid config | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_pasangan_yang_terbukti_di_tes_lama` | stemmer indonesia pasangan yang terbukti di tes lama | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stemmer_indonesia_sifat_umum_pada_kata_berimbuhan` | stemmer indonesia sifat umum pada kata berimbuhan | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_contoh_porter2_klasik` | stemmer inggris contoh porter2 klasik | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stemmer_memaksa_lowercase_dan_metode_lain_mengembalikan_token_apa_adanya` | stemmer memaksa lowercase dan metode lain mengembalikan token apa adanya | Lulus [Win] |
+| `eval_text_pipeline.rs` (statify-text-core) | `stemmer_inggris_melalui_pipeline_dan_batch_sejajar` | stemmer inggris melalui pipeline dan batch sejajar | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_jumlah_training_tiap_kelas_sama_dengan_pembulatan_70_persen` | holdout 70 30 jumlah training tiap kelas sama dengan pembulatan 70 persen | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_30_proporsi_tiap_kelas_menyimpang_paling_banyak_setengah_data_dari_70_persen` | holdout 70 30 proporsi tiap kelas menyimpang paling banyak setengah data dari 70 persen | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_indeks_training_dan_holdout_saling_lepas_dan_lengkap` | holdout indeks training dan holdout saling lepas dan lengkap | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_persentase_lain_80_20_dan_60_40` | holdout persentase lain 80 20 dan 60 40 | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_kelas_beranggota_satu_masuk_training_dan_holdout_tidak_memuatnya` | holdout kelas beranggota satu masuk training dan holdout tidak memuatnya | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `mt19937_seed_42_dua_keluaran_awal_sama_dengan_numpy` | mt19937 seed 42 dua keluaran awal sama dengan numpy | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `holdout_70_seed_42_indeks_eksak_sama_dengan_replika_python` | holdout 70 seed 42 indeks eksak sama dengan replika python | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_seed_42_indeks_eksak_sama_dengan_replika_python` | kfold seed 42 indeks eksak sama dengan replika python | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_selisih_jumlah_per_kelas_antar_fold_paling_banyak_satu` | kfold selisih jumlah per kelas antar fold paling banyak satu | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_setiap_indeks_tepat_satu_fold` | kfold setiap indeks tepat satu fold | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_ukuran_total_fold_berselisih_paling_banyak_jumlah_kelas` | kfold ukuran total fold berselisih paling banyak jumlah kelas | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar` | kfold karakterisasi ukuran fold tidak seimbang pada tiga kelas sama besar | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan` | kfold k sama dengan jumlah instance menghasilkan fold kosong dan peringatan | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_lolos_validate_fold_count_tanpa_peringatan` | k1 lolos validate fold count tanpa peringatan | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_menghasilkan_satu_fold_berisi_semua_indeks` | k1 menghasilkan satu fold berisi semua indeks | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data` | k1 fold latih kosong dan fold uji adalah seluruh data | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k2_sebagai_pembanding_fold_latih_tidak_kosong` | k2 sebagai pembanding fold latih tidak kosong | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama` | k1 evaluasi end to end tanpa panic tanpa nan tetapi semua prediksi kelas alfabetis pertama | Lulus [Win] |
+
+Pernyataan harapan yang tidak berasal dari nilai acuan Python independen (jujur dicatat):
+- Stemmer Indonesia (Sastrawi): hanya `memakan` menjadi `makan` dan `makan` menjadi `makan` yang diperiksa persis (pasangan pertama sudah terbukti oleh tes lama `characterization.rs`). Untuk kata lain hanya properti (tidak kosong, tidak lebih panjang, huruf kecil, deterministik) dan bahwa `dimakan`, `berlari`, `membanggakan` berubah.
+- Stemmer Inggris (Porter2/Snowball): sembilan pasangan klasik (`running`, `cats`, `dogs`, `jumped`, `caresses`, `ponies`, `ties`, `cries`, `caress`) berasal dari dokumentasi algoritma Snowball English langkah 1a/1b, bukan dari eksekusi di sesi ini. Bila `cargo test` menunjukkan keluaran lain, periksa dulu versi crate `rust-stemmers` sebelum menyimpulkan ada bug.
+- Tes `k1_*` pada `eval_partition.rs` menegaskan PERILAKU SAAT INI kode sumber (bukan perilaku yang seharusnya; lihat `BUGS_A.md` A-1): data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0. Klaim itu HIPOTESIS dari pembacaan kode: percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log yang tersimpan di `logs/`, sehingga tidak dihitung; status resmi menunggu `cargo test` di Windows.
+- Ukuran fold [9, 6, 6, 6, 6] dan [2, 2, 2, 0, 0, 0] pada `eval_partition.rs` diturunkan dari algoritma round-robin di kode dan belum dieksekusi pada jalur yang terdokumentasi (menunggu `cargo test` di Windows). Tiga tes tambahan mengunci keluaran awal MT19937 seed 42 (sama dengan `numpy.random.RandomState(42)`) dan indeks eksak partisi holdout/k-fold seed 42 terhadap replika Python independen.
+
+## 4. Celah cakupan
+
+### 4.1 Jest (TERUKUR di VM, cakupan baris istanbul/babel; `logs/coverage_jest_summary_vm.txt`, `logs/coverage_jest_<menu>_vm.json`, `logs/coverage_jest_<menu>_A_vm.json`)
+
+Pengukuran memakai tes lama masing-masing menu (baseline) dan tes lama ditambah berkas `*.eval.test` milik Track A (sesudah). Tes evaluasi milik track lain sengaja dikecualikan dari kedua pengukuran agar angka Track A tidak tercampur.
+
+| Menu | Kasus (baseline -> sesudah) | Baris baseline | Baris sesudah | Fungsi | Cabang |
+|---|---|---|---|---|---|
+| Text Analytics: String to Word Vector | 111 -> 133 | 280/545 = 51,37% | 291/545 = 53,39% | 48,00% -> 48,66% | 56,70% -> 63,40% |
+| Naive Bayes | 292 -> 321 | 1146/1317 = 87,01% | 1146/1317 = 87,01% | 82,11% (tetap) | 79,16% (tetap) |
+| Apply Model | 466 -> 520 | 1444/1481 = 97,50% | 1448/1481 = 97,77% | 97,04% (tetap) | 88,80% -> 88,95% |
+
+Berkas dengan cakupan baris < 70% (hanya dari data terukur; tidak berubah oleh Track A karena Track A menguji fungsi murni, bukan komponen React):
+
+| Menu | Berkas | Baris | Catatan |
+|---|---|---|---|
+| STWV | `StringToWordVector/OptionsTab.tsx` | 0/58 = 0% | komponen UI; tidak ada tes render |
+| STWV | `StringToWordVector/StringToWordVectorModal.tsx` | 0/37 = 0% | komponen UI |
+| STWV | `StringToWordVector/VariablesTab.tsx` | 0/15 = 0% | komponen UI |
+| STWV | `StringToWordVector/stringToWord.processor.ts` | 0/14 = 0% | pembungkus pemanggilan worker |
+| STWV | `StringToWordVector/hooks/useStringToWordVector.ts` | 0/128 = 0% | hook orkestrasi (banyak efek samping) |
+| Naive Bayes | `naive-bayes/components/export-model-output.tsx` | 0/22 = 0% | komponen UI |
+| Naive Bayes | `naive-bayes/dialogs/validation.tsx` | 7/39 = 17,94% | dialog validasi |
+| Apply Model | (tidak ada) | | semua berkas >= 70%; terendah `model-tab.tsx` 87,32% dan `apply-model-output.ts` 85,36% |
+
+Berkas Naive Bayes yang di atas 70% tetapi relatif lemah: `naive-bayes-main.tsx` 76,16%, `naive-bayes-analysis.ts` 70,00%, `dataset-variable-list.tsx` 82,69%. Catatan: cakupan dihitung atas berkas sumber yang tercantum pada `coverage_jest_<menu>_vm.json` (berkas yang tidak pernah dimuat tes pun tercantum dengan 0%); angka ini per menu, bukan seluruh aplikasi.
+
+### 4.2 Rust (ESTIMASI STATIS, BUKAN cakupan terukur)
+
+Metode (rinci di docstring `unit/static_gap_rust.py`, keluaran `logs/static_gap_rust.txt`): daftar `pub fn` tiap crate (di luar blok `#[cfg(test)]`), lalu cari nama itu sebagai kata utuh pada teks tes (berkas `tests/*.rs` dan blok `#[cfg(test)]` pada `src/`). Crate inti juga dicari pada tes crate yang bergantung padanya (Naive Bayes, Apply Model, wrapper STWV). Fungsi `#[wasm_bindgen]` dan nama umum (`new`, `default`, `from`, ...) tidak dihitung sebagai celah.
+
+**Batasan:** rujukan nama bukan cakupan baris. Fungsi yang dirujuk tes bisa hanya sebagian cabangnya dieksekusi; fungsi yang tidak dirujuk bisa saja tereksekusi tak langsung (contoh di bawah: `validate_config` dan `vectorize` dipanggil dari `run_pipeline`). Cakupan Rust terukur: **tidak terukur, lihat `run_A.ps1` (`cargo llvm-cov` bila terpasang)**.
+
+| Crate | `pub fn` terdeteksi | dihitung | `wasm_bindgen` | Tidak dirujuk tes sebelum Track A | Tidak dirujuk tes sesudah Track A |
+|---|---|---|---|---|---|
+| statify-text-core | 34 | 27 | 0 | 12 | 10 |
+| naive-bayes (crate `wasm`) | 86 | 83 | 1 | 13 | 13 |
+| apply-model (crate `wasm`) | 45 | 42 | 1 | 16 | 16 |
+| StringToWordVector/rust (wrapper) | 2 | 0 | 2 | 0 | 0 |
+
+Penutupan celah oleh Track A (estimasi statis, komentar tidak dihitung): `stemmer::stem_batch` dan `stopwords::build_set` (inti). Crate Naive Bayes tidak berubah menurut metode ini karena `eval_partition.rs` memakai fungsi yang sudah dirujuk tes inline; nilainya terletak pada kasus uji, bukan pada nama baru.
+
+Celah tersisa menurut estimasi (nama fungsi, bukan baris):
+- statify-text-core: `config.rs` (`v1_label` untuk `TfMethod` dan `IdfMethod`), `error.rs::to_json_string`, `stopwords.rs::filter_with_set`, `tokenizer.rs` (`tokenize`, `compile_regex`), `validator.rs` (`validate`, `validate_config`, `validate_formula`), `vectorizer.rs::vectorize`. Kecuali `v1_label` dan `to_json_string`, fungsi lainnya dijalankan tak langsung oleh `run_pipeline`/`prepare` (jalur yang diuji semua tes di atas), jadi "tidak dirujuk" tidak berarti "tidak tereksekusi". Kandidat tes langsung berikutnya: `tokenize` dengan delimiter kustom/regex tidak valid, `validate_formula` (matriks kombinasi sah per standar), dan `to_json_string`.
+- naive-bayes: `stats/save.rs` (`export_validation_config`, `retrain_final_model`, `build_export_text`, `build_exported_model_v2`), `stats/text_feature_table.rs` (`likelihood_name`, `top_as_map`), `stats/text_features.rs::build_text_feature_data_with_config`, `utils/converter.rs::string_to_js_error`, `utils/error.rs::add_error`, serta pembungkus `wasm/{constructor,function}.rs` (`get_formatted_results`, `get_all_errors`) yang hanya dapat diuji lewat wasm-bindgen-test.
+- apply-model: `scoring/text.rs` (`likelihood_name`, `is_v2`, `has_text_block`, `validate_feature_likelihoods`, `validate_text_block`, `extract_text_model`), `stats/value_label.rs::format_number_label`, `utils/{converter,error}.rs`, dan pembungkus `wasm/*`.
+
+Berkas yang tidak satu pun `pub fn`-nya dirujuk tes (estimasi): core `config.rs`, `error.rs`, `tokenizer.rs`, `validator.rs`; naive-bayes `utils/converter.rs`, `wasm/constructor.rs`; apply-model `utils/converter.rs`, `utils/error.rs`, `wasm/constructor.rs`.
+
+## 5. Sudah tercakup oleh tes lama (tidak diulang)
+
+Tes baru sengaja tidak menduplikasi hal berikut; rujukan ke berkas dan nama tes lama.
+
+| Butir | Tes lama | Isi yang sudah tercakup |
+|---|---|---|
+| a. Rumus | `statify-text-core/tests/s3_formulas.rs`: `golden_weka_raw_none_none_sama_dengan_raw_count`, `golden_weka_log1p_standard_none`, `golden_weka_raw_standard_doc_length`, `golden_sklearn_raw_smooth_l2`, `golden_sklearn_raw_plus1_l2`, `golden_sklearn_raw_smooth_none_dan_nilai_idf`, `golden_lama_sublinear_smooth_none_custom`, `normalisasi_l1_menjumlah_satu_per_baris`, `normalisasi_l2_menghasilkan_norma_satu`, `custom_menerima_semua_kombinasi_termasuk_normalized`, `kombinasi_sah_per_standar_diterima`, `kombinasi_tidak_sah_menghasilkan_invalid_config`, `dokumen_kosong_tetap_baris_nol_tanpa_nan_pada_l1_l2_doc_length`, `df_satu_pass_sama_dengan_hitungan_naif`; `characterization.rs::{golden_lama_log_smooth_none_pada_korpus_d, raw_none_menghasilkan_raw_count}`; `s2_pipeline.rs::tf_log1p_dan_idf_plus1_dihitung_sesuai_rumus` | Golden PLAN_FIX 3.6 untuk beberapa kombinasi, norma baris, validitas kombinasi per standar, dokumen kosong tanpa NaN. Track A menambahkan seluruh 80 kombinasi pada korpus D, nilai tiap rumus TF/IDF, T(d) dengan n-gram, dan nilai acuan Python independen. |
+| b. Kosakata | `s3_formulas.rs`: `min_term_freq_2_membuang_tidak`, `min_term_freq_diterapkan_sebelum_words_to_keep`, `min_term_freq_terlalu_besar_menghasilkan_empty_vocabulary`, `words_to_keep_1_weka_adalah_makan_dengan_count_4`, `words_to_keep_0_menyimpan_semua_kata`, `words_to_keep_tie_break_alfabetis_weka_dan_sklearn` (korpus D, keep = 2), `words_to_keep_custom_memakai_skor_tf_idf_cara_lama`, `words_to_keep_custom_idf_standar_membuang_kata_yang_ada_di_semua_dokumen`; `characterization.rs::words_to_keep_2_pada_korpus_d_cara_lama` | Keep 0/1/2, mtf 2, urutan mtf lalu keep, kasus seri pada korpus D. Catatan: pernyataan seri tiga arah pada `words_to_keep_tie_break_alfabetis_weka_dan_sklearn` berbentuk tautologi (`BUGS_A.md` A-4); kasus itu dijaga ulang di `eval_vocab_limit.rs`. |
+| c. Pipeline NLP | `characterization.rs`: `ngram_unigram_vs_bigram`, `stopwords_custom_tidak_peka_huruf_besar_kecil`, `stemming_indonesia_memakan_menjadi_makan`, `stemming_inggris_running_menjadi_run`, `stemming_selalu_lowercase_walau_opsi_lowercase_mati`, `validator_ngram_tidak_valid_ditolak`, `semua_token_terbuang_menghasilkan_empty_vocabulary`; `s2_pipeline.rs`: `t6_stopwords_json_rusak_menghasilkan_invalid_stopwords`, `stopwords_json_rusak_diabaikan_bila_metode_none`, `stopwords_metode_bawaan_dengan_daftar_dari_frontend_memfilter`, `stopwords_tanpa_daftar_lanjut_tanpa_filter`, `pipeline_stopwords_dan_stemming_inggris`, `validasi_rentang_config` | Satu contoh per perilaku. Track A menambahkan daftar bawaan utuh (758 dan 1298 entri), acuan Python stopword/n-gram, 15 rentang n-gram, urutan stopword terhadap stemming, dan sifat stemmer. |
+| c. TS STWV | `StringToWordVector/__tests__/config.test.ts`: default, preset sklearn, `words_to_keep` 0, `min_term_freq`, mode word memaksa n-gram 1..1, daftar kustom di-trim, validasi n-gram min > max dan ukuran 6, n-gram 1..5 (satu contoh); `buildStwvOutput.test.ts` | Konfigurasi dan pembuatan keluaran dasar. |
+| d. Partisi | tes inline `naive-bayes/rust/src/stats/partition.rs` (blok `#[cfg(test)]` setelah baris 280): holdout 80/20 (56/14), setiap indeks tepat sekali, determinisme per seed, `validate_fold_count` (0 dan negatif diblok, folds > instance diblok, peringatan, tanpa peringatan), k-fold menyekat tiap indeks tepat sekali, 3 kelas x 20 pada 5 fold = 4 per kelas per fold, peringatan bila fold > kelas terkecil, `training_test_split_for_fold` | Track A menambahkan 70/30 dan 60/40, properti selisih per kelas <= 1 pada beberapa komposisi kelas dan seed, kelas beranggota satu, serta karakterisasi ukuran fold. |
+| e. KFolds | Jest `whitebox.getNumericInputError.test.ts` (jalur 20-23 dan catatan "KFolds = 1 masih diterima"), `useNaiveBayesValidation.test.ts` ("menolak jumlah fold < 1 pada mode kfold"); Rust `partition.rs::folds_less_than_one_is_hard_blocked` | Hanya batas "< 1". Track A menambahkan tabel batas lengkap, penerusan ke worker, dan jalur Rust untuk k = 1 (latih kosong). |
+| f. Model loader | Jest `apply-model/services/__tests__/model-loader.test.ts`: `ukuran 11 MB -> AM_E_FILE_TOO_LARGE`, `ukuran tepat 10 MB masih diterima`, `isi "{bad" -> AM_E_PARSE`, `file .txt -> AM_E_PARSE`, `file.text() gagal dibaca -> AM_E_PARSE`, `JSON valid tetapi bukan objek -> AM_E_NOT_OBJECT`, `model_type "decision_tree" -> AM_E_MODEL_TYPE_UNSUPPORTED` | Satu contoh per jenis. Track A menambahkan batas +/- 1 byte tanpa membaca isi, urutan pemeriksaan, 10 varian JSON rusak, schema tidak dikenal, kelas kosong, kosakata kosong, dan lima fixture ekspor nyata. |
+
+## 6. Baseline pengujian
+
+Angka Jest berasal dari eksekusi di VM Linux (log disebut di kolom Lokasi; label [VM], bukan perangkat skripsi). Rust: baris "tes lama" berasal dari eksekusi nyata `cargo test` di Windows pengguna (`logs/unit_core.txt`, `logs/unit_nb.txt`, `logs/unit_am.txt`, 7 Oktober 2026; label [Win], sama dengan `01_baseline.md`). Baris Rust "Track A" berasal dari `logs/rust_eval_*.txt` (8 Oktober 2026, Windows); cakupan Rust tidak terukur.
+
+| Lapisan | Lokasi pengujian | Jumlah kasus | Lulus | Gagal | Cakupan baris |
+|---|---|---|---|---|---|
+| Jest STWV (sebelum Track A) | `Transform/StringToWordVector/**/__tests__` (9 suite; `logs/coverage_jest_stwv_vm.txt`) | 111 | 111 | 0 | 51,37% (280/545) |
+| Jest STWV (sesudah Track A) | idem + 2 berkas `*.eval.test.ts` Track A (11 suite; `logs/jest_covA_stwv_run.json`) | 133 | 133 | 0 | 53,39% (291/545) |
+| Jest Naive Bayes (sebelum) | `Classify/naive-bayes/**/__tests__` (15 suite; `logs/coverage_jest_nb_vm.txt`) | 292 | 292 | 0 | 87,01% (1146/1317) |
+| Jest Naive Bayes (sesudah) | idem + `kfold.eval.test.ts` (16 suite; `logs/jest_covA_nb_run.json`) | 321 | 321 | 0 | 87,01% (1146/1317) |
+| Jest Apply Model (sebelum) | `Classify/apply-model/**/__tests__` (26 suite; `logs/coverage_jest_am_vm.txt`) | 466 | 466 | 0 | 97,50% (1444/1481) |
+| Jest Apply Model (sesudah) | idem + `model-loader.eval.test.ts` (27 suite; `logs/jest_covA_am_run.json`) | 520 | 520 | 0 | 97,77% (1448/1481) |
+| Jest Track A saja | 4 berkas `*.eval.test.ts` (4 suite; `logs/jest_A_vm.json`) | 105 | 105 | 0 | (tidak diukur terpisah) |
+| Rust statify-text-core (tes lama) [Win] | `statify-text-core/tests/{characterization,nb_text,s2_pipeline,s3_formulas,s4_fit_transform}.rs` (`logs/unit_core.txt`) | 91 | 91 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust statify-text-core (Track A) | `tests/eval_{formulas,vocab_limit,text_pipeline}.rs` | 48 | 48 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust naive-bayes (tes lama inline) [Win] | `naive-bayes/rust/src/**` blok `#[cfg(test)]` (`logs/unit_nb.txt`) | 203 | 203 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/eval_partition.rs` | 18 | 18 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust apply-model (tes lama) [Win] | `apply-model/rust/src/**` blok `#[cfg(test)]` (117) + `rust/tests/text_scoring.rs` (39) (`logs/unit_am.txt`) | 156 | 156 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust wrapper STWV | `StringToWordVector/rust` | 0 | tidak ada tes | tidak ada tes | tidak terukur |
+
+Catatan baseline: kolom Jest "sebelum" memuat hanya tes lama tiap menu pada konfigurasi tesis (tes evaluasi track lain dikecualikan). Berkas `logs/jest_A_vm_part1.json` dan `logs/jest_A_vm_part2.json` adalah salinan identik `jest_A_vm.json` (berkas pecahan lama tidak dapat dihapus dari sandbox karena penghapusan tidak diizinkan); jangan dijumlahkan.
+
+## 7. Temuan
+
+Rincian, lokasi file:baris, langkah reproduksi, dampak, usulan, dan label keyakinan ada di `BUGS_A.md`. Ringkas:
+- **A-1 (sedang):** `KFolds = 1` diterima di TS (`useNaiveBayesValidation.ts:255`) dan Rust (`partition.rs:179`); satu fold berarti data latih kosong dan hasil evaluasi tidak bermakna tanpa peringatan. Usulan: batas minimum 2 di kedua lapisan. TS terverifikasi dengan tes yang dijalankan; Rust menunggu `cargo test`.
+- **A-2 (informasi):** ukuran total fold k-fold tidak seimbang ([9, 6, 6, 6, 6] untuk 3 kelas x 11 pada k = 5, pembanding scikit-learn [7, 7, 7, 6, 6]); syarat selisih per kelas <= 1 tetap terpenuhi.
+- **A-3 (informasi):** k lebih besar dari kelas terbesar menghasilkan fold uji kosong; peringatan tetap muncul.
+- **A-4 (informasi):** asersi tautologi pada tes lama `s3_formulas.rs:277`.
+
+## 8. Cara menjalankan ulang
+
+Di Windows (dari akar repo): `powershell -ExecutionPolicy Bypass -File testing\text_analytics_eval\run_A.ps1`. Skrip menjalankan nilai acuan Python (bila `python` ada), empat target `cargo test`, `cargo llvm-cov` (bila terpasang; bila tidak, mencatat "tidak terpasang" ke `logs/rust_llvm_cov_*.txt`), dan Jest standar untuk empat berkas Track A (`logs/jest_A_win.json`). Skrip idempoten dan tidak menghapus apa pun. Setelah itu jalankan `tools/apply_results.py` untuk mengganti penanda status.
+
+Di VM Linux (sudah dilakukan): `timeout 170 testing/text_analytics_eval/tools/run_jest_linux.sh --runInBand --json --outputFile=<ABSOLUT> <path tes>`; ringkasan cakupan: `node testing/text_analytics_eval/unit/cov_table.js [A]` dari folder `logs`.

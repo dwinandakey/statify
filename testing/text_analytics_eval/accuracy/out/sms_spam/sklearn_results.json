@@ -1,0 +1,308 @@
+{
+ "versions": {
+  "python": "3.13.12",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "scikit_learn": "1.9.1",
+  "platform": "Windows-11-10.0.26300-SP0"
+ },
+ "dataset": "sms_spam",
+ "train_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_train.csv",
+ "test_file": "testing\\thesis-eval\\accuracy\\datasets\\sms_spam_test.csv",
+ "n_train": 3901,
+ "n_test": 1673,
+ "train_class": {
+  "ham": 3378,
+  "spam": 523
+ },
+ "test_class": {
+  "spam": 224,
+  "ham": 1449
+ },
+ "tokenization": "lowercase (str.lower) + split regex [White_Space.,;:'\"()?!]+ ; token kosong dibuang (sama dengan Statify)",
+ "configs": {
+  "K1": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 3,
+    "only_native": 3
+   },
+   "accuracy": 0.9826658696951583,
+   "kappa": 0.9256816890232787,
+   "macro_f1": 0.9628405883682012,
+   "precision": {
+    "ham": 0.9910096818810512,
+    "spam": 0.9295154185022027
+   },
+   "recall": {
+    "ham": 0.9889579020013802,
+    "spam": 0.9419642857142857
+   },
+   "f1": {
+    "ham": 0.9899827288428324,
+    "spam": 0.9356984478935698
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1433,
+     16
+    ],
+    [
+     13,
+     211
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 6
+  },
+  "K2": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 3,
+    "only_native": 3
+   },
+   "accuracy": 0.9874476987447699,
+   "kappa": 0.9440848475395773,
+   "macro_f1": 0.9720359927250442,
+   "precision": {
+    "ham": 0.9870395634379263,
+    "spam": 0.9903381642512077
+   },
+   "recall": {
+    "ham": 0.9986197377501725,
+    "spam": 0.9151785714285714
+   },
+   "f1": {
+    "ham": 0.9927958833619211,
+    "spam": 0.951276102088167
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1447,
+     2
+    ],
+    [
+     19,
+     205
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 6
+  },
+  "K3": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 3,
+    "only_native": 3
+   },
+   "accuracy": 0.9677226539151226,
+   "kappa": 0.8692215714488377,
+   "macro_f1": 0.9345560281879506,
+   "precision": {
+    "ham": 0.9929328621908127,
+    "spam": 0.8294573643410853
+   },
+   "recall": {
+    "ham": 0.9696342305037957,
+    "spam": 0.9553571428571429
+   },
+   "f1": {
+    "ham": 0.9811452513966481,
+    "spam": 0.8879668049792531
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1405,
+     44
+    ],
+    [
+     10,
+     214
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 6
+  },
+  "K4": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 3,
+    "only_native": 3
+   },
+   "accuracy": 0.9731022115959355,
+   "kappa": 0.8743002068699525,
+   "macro_f1": 0.9370617795252025,
+   "precision": {
+    "ham": 0.9711409395973154,
+    "spam": 0.9890710382513661
+   },
+   "recall": {
+    "ham": 0.9986197377501725,
+    "spam": 0.8080357142857143
+   },
+   "f1": {
+    "ham": 0.9846886696155155,
+    "spam": 0.8894348894348895
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1447,
+     2
+    ],
+    [
+     43,
+     181
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 6
+  },
+  "K1w": {
+   "vocab_size": 7568,
+   "words_to_keep": 0,
+   "accuracy": 0.9844590555887627,
+   "kappa": 0.9309064223447785,
+   "macro_f1": 0.9654461857190066,
+   "precision": {
+    "ham": 0.985665529010239,
+    "spam": 0.9759615384615384
+   },
+   "recall": {
+    "ham": 0.9965493443754313,
+    "spam": 0.90625
+   },
+   "f1": {
+    "ham": 0.9910775566231984,
+    "spam": 0.9398148148148148
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1444,
+     5
+    ],
+    [
+     21,
+     203
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 1
+  },
+  "K3w": {
+   "vocab_size": 7568,
+   "words_to_keep": 0,
+   "accuracy": 0.9808726838015541,
+   "kappa": 0.9175293305728088,
+   "macro_f1": 0.9587646652864044,
+   "precision": {
+    "ham": 0.9889579020013802,
+    "spam": 0.9285714285714286
+   },
+   "recall": {
+    "ham": 0.9889579020013802,
+    "spam": 0.9285714285714286
+   },
+   "f1": {
+    "ham": 0.9889579020013802,
+    "spam": 0.9285714285714286
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1433,
+     16
+    ],
+    [
+     16,
+     208
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 1
+  },
+  "K4w": {
+   "vocab_size": 7568,
+   "words_to_keep": 0,
+   "accuracy": 0.958756724447101,
+   "kappa": 0.795551753635586,
+   "macro_f1": 0.8973430692765539,
+   "precision": {
+    "ham": 0.9545454545454546,
+    "spam": 1.0
+   },
+   "recall": {
+    "ham": 1.0,
+    "spam": 0.6919642857142857
+   },
+   "f1": {
+    "ham": 0.9767441860465116,
+    "spam": 0.8179419525065963
+   },
+   "support": {
+    "ham": 1449,
+    "spam": 224
+   },
+   "confusion_actual_x_pred": [
+    [
+     1449,
+     0
+    ],
+    [
+     69,
+     155
+    ]
+   ],
+   "classes": [
+    "ham",
+    "spam"
+   ],
+   "empty_test_docs": 1
+  }
+ }
+}

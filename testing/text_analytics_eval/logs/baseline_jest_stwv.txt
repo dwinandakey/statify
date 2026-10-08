@@ -1,0 +1,160 @@
+PASS components/Modals/Transform/StringToWordVector/__tests__/columnPrefix.test.ts (9.304 s)
+  validateColumnPrefix
+    √ default VEC_ sah (7 ms)
+    √ sah: tfidf_ (1 ms)
+    √ sah: W. (1 ms)
+    √ sah: @vec
+    √ sah: #v (1 ms)
+    √ sah: $x_1
+    √ sah: A (1 ms)
+    √ tidak sah: ""
+    √ tidak sah: "   " (1 ms)
+    √ tidak sah: "a b" (1 ms)
+    √ tidak sah: " VEC_"
+    √ tidak sah: "1VEC_" (1 ms)
+    √ tidak sah: "_VEC"
+    √ tidak sah: "VEC-" (1 ms)
+    √ tidak sah: "VÉC_"
+    √ terlalu panjang (1 ms)
+  buildColumnData dengan awalan kustom
+    √ default memakai VEC_ (1 ms)
+    √ memakai awalan yang diberikan (1 ms)
+    √ fallback nama memakai awalan
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/buildStwvOutput.test.ts (9.691 s)
+  buildStwvOutput
+    √ countZeroRows menghitung baris nol (6 ms)
+    √ tiga tabel: summary, settings, vocabulary (4 ms)
+    √ processing summary berisi angka yang benar (2 ms)
+    √ tanpa durasi, baris waktu tidak ada (2 ms)
+    √ settings mencerminkan default Weka (2 ms)
+    √ words_to_keep 0 ditampilkan All (1 ms)
+    √ vocabulary: term, kolom, dan jumlah dokumen non-nol (1 ms)
+    √ vocabulary dipotong MAX_VOCABULARY_ROWS dengan catatan (2 ms)
+    √ teks ringkasan dan log menyebut variabel (1 ms)
+    √ output dapat diserialisasi JSON (1 ms)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/describeStwvOutput.test.ts
+  helper penghitung
+    √ countZeroVectorDocuments dan countNonZeroByColumn pada korpus golden (2 ms)
+  describeStwv* — kasus normal (korpus golden 3 dokumen)
+    √ Summary menyebut dokumen, kosakata, kolom, dan prefiks (1 ms)
+    √ Processing Summary: 0 dokumen nol, waktu proses, dan catatan tanpa resep (1 ms)
+    √ Settings default Weka: word counts tanpa IDF dan tanpa normalisasi (1 ms)
+    √ Settings sklearn raw/smooth/l2 dan Weka log1p/standard (1 ms)
+    √ Settings: stopword custom, stemming, n-gram, Words to Keep 0, catatan stemming tanpa lowercase (1 ms)
+    √ Vocabulary: 5 term teratas menurut dokumen non-nol (urutan seri = urutan kosakata)
+    √ Vocabulary: lebih dari 5 term hanya menyebut 5 teratas, dan batas baris ditulis di Note (1 ms)
+    √ panjang tiap interpretasi 60–220 kata dan hanya memakai tag yang diizinkan (7 ms)
+  describeStwv* — dokumen kosong sebagian
+    √ Processing Summary menghitung jumlah dan persen dokumen vektor nol (> ambang → saran) (1 ms)
+    √ tepat 1 dokumen nol memakai bentuk tunggal dan Summary memuat Note
+    √ di bawah ambang tidak memberi saran melonggarkan opsi (1 ms)
+  describeStwv* — data hilang / tidak sah
+    √ tidak membocorkan undefined/NaN/Infinity/[object Object] (kosong) (1 ms)
+    √ tidak membocorkan undefined/NaN/Infinity/[object Object] (tipe salah) (1 ms)
+    √ tidak membocorkan undefined/NaN/Infinity/[object Object] (durasi tak terhingga/negatif) (1 ms)
+    √ tidak membocorkan undefined/NaN/Infinity/[object Object] (baris bukan array) (1 ms)
+    √ tidak membocorkan undefined/NaN/Infinity/[object Object] (setelan tak sah) (1 ms)
+    √ tanpa dokumen dan kosakata: kalimat generik tanpa angka
+    √ durasi tidak sah tidak menulis kalimat waktu (1 ms)
+  describeStwv* — escape HTML
+    √ nama variabel, prefiks, nama kolom, dan term di-escape (1 ms)
+  buildStwvOutput menyertakan interpretasi
+    √ setiap statistic punya description non-kosong berbahasa Inggris (2 ms)
+    √ tabel dan description sejalan (Processing Summary memuat angka yang sama)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/formatStwvError.test.ts
+  formatStwvError (PLAN_V3 E3: kode di akhir dalam kurung)
+    √ kalimat utama dahulu, kode di akhir (1 ms)
+    √ menambahkan titik bila belum ada tanda baca
+    √ membuang awalan kode lama ([KODE] dan KODE:) agar kode tidak di awal (1 ms)
+    √ tidak menggandakan kode yang sudah ada di akhir pesan
+    √ pesan kosong atau kode kosong tetap menghasilkan teks wajar (1 ms)
+    √ kode berisi karakter khusus regex tidak membuat galat (1 ms)
+  pesan galat STWV berbahasa Inggris
+    √ EMPTY_DATA_ERROR dan galat tak dikenal (2 ms)
+    √ validasi awalan kolom (2 ms)
+    √ validasi config (1 ms)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/buildColumnData.test.ts
+  buildColumnData (F01)
+    √ 2 kolom, masing-masing panjang 4 (sejajar baris dataset) (1 ms)
+    √ baris ke-3 = vektor dokumen ke-3 (1 ms)
+    √ nama diberi prefix VEC_ dan nama terpakai diteruskan ke resolver
+    √ resolver gagal → nama fallback VEC_VAR_<indeks> (1 ms)
+  resolveVariable (F20)
+    √ menemukan berdasarkan id dan mengembalikan versi terbaru (columnIndex baru)
+    √ id tidak ditemukan → undefined (1 ms)
+    √ tanpa id: cocokkan nama
+  toRustConfig (perilaku v1 tidak berubah)
+    √ config default → payload default baru (D6: Weka/raw/none/none) (2 ms)
+    √ ngram memakai min/max; custom stopwords di-trim dan dibuang yang kosong
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/normalizeWorkerError.test.ts
+  normalizeWorkerError (F04)
+    √ T3: string JSON {code,message} → objek terisi (1 ms)
+    √ objek {code,message} diteruskan (1 ms)
+    √ objek tanpa message → message fallback tak kosong, code dipertahankan (1 ms)
+    √ Error → WASM_ERROR dengan message Error
+    √ Error dengan properti code string dipertahankan (1 ms)
+    √ string biasa (bukan JSON) menjadi message
+    √ string JSON non-objek diperlakukan sebagai pesan biasa
+    √ undefined / null / string kosong → selalu terisi (1 ms)
+    √ fallbackCode kustom dipakai (mis. onerror worker)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/buildDocuments.test.ts
+  buildDocuments (F01)
+    √ T1: ['a b', null, '', 'b c'] → 4 dokumen, urutan sama, baris tidak dibuang (1 ms)
+    √ undefined menjadi string kosong dan angka diubah ke string
+    √ kolom kosong menghasilkan array kosong (1 ms)
+  areAllDocumentsEmpty
+    √ T2: semua null/kosong/whitespace → true (1 ms)
+    √ minimal satu dokumen berisi → false
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/writeStwvOutput.test.ts
+  writeStwvOutput
+    √ mengisi description setiap statistic dengan interpretasi (bukan judul/kosong) (3 ms)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/config.test.ts
+  STWV_DEFAULT_CONFIG (D6)
+    √ default = Weka / raw / none / none (1 ms)
+    √ opsi lain tetap default lama (1 ms)
+    √ default lolos validasi
+  toRustConfig (kontrak §3.1)
+    √ default menghasilkan nilai enum baru snake_case (1 ms)
+    √ preset sklearn mengirim raw/smooth/l2
+    √ words_to_keep 0 dikirim apa adanya (0 = semua), tidak dipaksa 1000 (1 ms)
+    √ min_term_freq diteruskan
+    √ mode word memaksa n-gram 1..1; mode ngram memakai min/max (1 ms)
+    √ custom stopwords di-trim dan baris kosong dibuang
+  validateStwvConfig
+    √ menolak n-gram min > max
+    √ menolak n-gram 6
+    √ menerima n-gram 1..5
+    √ mode word tidak memvalidasi ukuran n-gram (nilainya tidak dipakai)
+    √ menolak wordsToKeep negatif atau non-bulat; menerima 0 (1 ms)
+    √ menolak minTermFreq 0, negatif, atau non-bulat
+    √ menolak delimiter kosong (1 ms)
+    √ menolak sklearn + doc_length
+    √ menolak Weka + sublinear / smooth / l2, dan TF 'none' sisa v1 (1 ms)
+    √ Weka + log1p/standard/doc_length sah; Custom menerima semua kombinasi
+    √ mengumpulkan beberapa pesan sekaligus (1 ms)
+  applyFormulaStandard
+    √ sklearn → raw/smooth/l2
+    √ weka → raw/none/none (menimpa nilai sebelumnya)
+    √ custom mempertahankan nilai saat ini (1 ms)
+    √ tidak mengubah opsi lain dan tidak memutasi input
+    √ hasil setiap standar selalu lolos validasi (1 ms)
+  getVectorDecimals
+    √ default (raw/none/none) → 0 desimal; binary/none/none → 0 (1 ms)
+    √ IDF aktif, normalisasi aktif, atau TF non-bulat → 4 desimal
+
+Test Suites: 9 passed, 9 total
+Tests:       111 passed, 111 total
+Snapshots:   0 total
+Time:        27.207 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector.
+Test results written to: ..\testing\thesis-eval\logs\baseline_jest_stwv_win.json
+
+=== THESIS-EVAL: exit_code=0 elapsed_s=47.09 started=2026-10-08 00:15:06 +07:00 cmd=npx jest components/Modals/Transform/StringToWordVector --testPathIgnorePatterns=__tests__/thesis --testPathIgnorePatterns=hooks/__tests__/whitebox --coverage --coverageReporters=json-summary --coverageReporters=text "--collectCoverageFrom=components/Modals/Transform/StringToWordVector/**/*.{ts,tsx}" "--collectCoverageFrom=!**/__tests__/**" "--collectCoverageFrom=!**/*.d.ts" "--collectCoverageFrom=!**/wasm-output/**" "--collectCoverageFrom=!**/pkg/**" --json --outputFile=..\testing\thesis-eval\logs\baseline_jest_stwv_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===

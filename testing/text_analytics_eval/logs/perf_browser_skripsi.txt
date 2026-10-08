@@ -1,0 +1,66 @@
+=== run_browser.mjs run_id=browser_skripsi_20261008T095937 device=skripsi (PERANGKAT-SKRIPSI (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11))
+env: AMD Ryzen 5 4600H with Radeon Graphics x12; RAM 15.4 GiB; Windows_NT 10.0.26300; Node v24.13.1
+playwright: playwright @ E:\KULIAH\Skripsi\statify64; server statis: http://127.0.0.1:61617; worker NB: /workers/Classify/NaiveBayes/naive-bayes.worker.js?v=naive-bayes-v3-20261005a; worker AM: /workers/Classify/ApplyModel/apply-model.worker.js?v=apply-model-v3-20261005a
+wasm sha256: stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+peramban: chrome 154.0.8037.98 headless
+keluaran mentah: testing\thesis-eval\perf\raw\browser_skripsi.csv
+halaman: {"userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36","hardwareConcurrency":12,"deviceMemory":16,"longtaskSupported":true,"crossOriginIsolated":false}
+[pilkada_900 | stwv_default] n=900 term=1000 warmup=130 ms  mean=61.9 sd=7.8 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=4s
+[pilkada_900 | stwv_sw_stem] n=900 term=1000 warmup=141 ms  mean=64.3 sd=3.2 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=4s
+[pilkada_900 | nb_holdout70] n=900 term=1000 warmup=140 ms  mean=122.8 sd=12.8 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=4s
+[pilkada_900 | nb_kfold10] n=900 term=1000 warmup=174 ms  mean=208.0 sd=12.9 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.3  (OK)  wall=5s
+[pilkada_900 | am_raw] n=900 term=1000 warmup=121 ms  mean=90.4 sd=10.2 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.1  (OK)  wall=4s
+[sms_5574 | stwv_default] n=5574 term=1000 warmup=528 ms  mean=387.4 sd=42.8 ms  longtask(rata2 jml/maks)=0.6/63 ms  frame_maks=50 ms idle_p95=10.1  (OK)  wall=6s
+[sms_5574 | stwv_sw_stem] n=5574 term=- warmup=85 ms  mean=NaN sd=NaN ms  longtask(rata2 jml/maks)=NaN/0 ms  frame_maks=0 ms idle_p95=10.2  (GALAT: {"code":"WORKER_ERROR","message":"unreachable"})  wall=2s
+[sms_5574 | nb_holdout70] n=5574 term=1000 warmup=227 ms  mean=288.1 sd=40.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=5s
+[sms_5574 | nb_kfold10] n=5574 term=1000 warmup=649 ms  mean=626.4 sd=30.6 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=8s
+[sms_5574 | am_raw] n=5574 term=1000 warmup=169 ms  mean=207.7 sd=56.6 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.3  (OK)  wall=5s
+[smsa_11000 | stwv_default] n=11000 term=1000 warmup=1285 ms  mean=764.6 sd=15.1 ms  longtask(rata2 jml/maks)=1.0/107 ms  frame_maks=100 ms idle_p95=10.3  (OK)  wall=9s
+[smsa_11000 | stwv_sw_stem] n=11000 term=1000 warmup=1285 ms  mean=827.5 sd=16.3 ms  longtask(rata2 jml/maks)=1.0/93 ms  frame_maks=80 ms idle_p95=10.4  (OK)  wall=10s
+[smsa_11000 | nb_holdout70] n=11000 term=1000 warmup=498 ms  mean=552.1 sd=35.5 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=7s
+[smsa_11000 | nb_kfold10] n=11000 term=1000 warmup=1803 ms  mean=1857.9 sd=116.7 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=11 ms idle_p95=10.3  (OK)  wall=15s
+[smsa_11000 | am_raw] n=11000 term=1000 warmup=359 ms  mean=406.9 sd=25.8 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=6s
+[gabungan | stwv_default] n=17974 term=1000 warmup=2772 ms  mean=1240.0 sd=12.4 ms  longtask(rata2 jml/maks)=1.0/209 ms  frame_maks=210 ms idle_p95=10.2  (OK)  wall=14s
+[gabungan | stwv_sw_stem] n=17974 term=- warmup=233 ms  mean=NaN sd=NaN ms  longtask(rata2 jml/maks)=NaN/0 ms  frame_maks=0 ms idle_p95=10.2  (GALAT: {"code":"WORKER_ERROR","message":"unreachable"})  wall=2s
+[gabungan | nb_holdout70] n=17974 term=1000 warmup=948 ms  mean=645.0 sd=4.4 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.4  (OK)  wall=8s
+[gabungan | nb_kfold10] n=17974 term=1000 warmup=2129 ms  mean=2180.5 sd=31.5 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=11 ms idle_p95=10.3  (OK)  wall=17s
+[gabungan | am_raw] n=17974 term=1000 warmup=498 ms  mean=482.9 sd=20.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=10 ms idle_p95=10.2  (OK)  wall=7s
+[besar_ge20000 | stwv_default] n=36305 term=1000 warmup=11879 ms  mean=4120.7 sd=82.2 ms  longtask(rata2 jml/maks)=1.0/472 ms  frame_maks=470 ms idle_p95=10.2  (OK)  wall=39s
+[besar_ge20000 | stwv_sw_stem] n=36305 term=- warmup=3156 ms  mean=NaN sd=NaN ms  longtask(rata2 jml/maks)=NaN/0 ms  frame_maks=0 ms idle_p95=10.1  (GALAT: {"code":"WORKER_ERROR","message":"unreachable"})  wall=5s
+[besar_ge20000 | nb_holdout70] n=36305 term=1000 warmup=9107 ms  mean=9763.0 sd=263.4 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=20 ms idle_p95=10.2  (OK)  wall=62s
+[besar_ge20000 | nb_kfold10] n=36305 term=1000 warmup=25076 ms  mean=27208.6 sd=1882.5 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=20 ms idle_p95=10.2  (OK)  wall=165s
+[besar_ge20000 | am_raw] n=36305 term=1000 warmup=6361 ms  mean=6236.2 sd=275.5 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=20 ms idle_p95=10.2  (OK)  wall=42s
+[sms_5574_ascii | stwv_sw_stem] n=5574 term=1000 warmup=557 ms  mean=397.7 sd=12.7 ms  longtask(rata2 jml/maks)=0.4/57 ms  frame_maks=50 ms idle_p95=10.2  (OK)  wall=7s
+[gabungan_ascii | stwv_sw_stem] n=17974 term=1000 warmup=3049 ms  mean=1323.0 sd=7.6 ms  longtask(rata2 jml/maks)=1.0/202 ms  frame_maks=200 ms idle_p95=10.2  (OK)  wall=14s
+[besar_ge20000_ascii | stwv_sw_stem] GAGAL: page.evaluate: Target page, context or browser has been closed
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browser.newContext: Target page, context or browser has been closed
+Browser logs:
+
+<launching> C:\Program Files\Google\Chrome\Application\chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --disable-dev-shm-usage --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows --user-data-dir=C:\Users\DIJASAN\AppData\Local\Temp\playwright_chromiumdev_profile-jPzwkE --remote-debugging-pipe --no-startup-window
+<launched> pid=11380
+[pid=11380][err] [11380:4620:1008/095941.612:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=11380][err] [11380:4620:1008/095941.612:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=11380][err] [11380:4620:1008/095941.616:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=11380][err] [11380:4620:1008/095941.656:ERROR:google_apis\gcm\engine\mcs_client.cc:702]   Error code: 401  Error message: Authentication Failed: wrong_secret
+[pid=11380][err] [11380:4620:1008/095941.656:ERROR:google_apis\gcm\engine\mcs_client.cc:704] Failed to log in to GCM, resetting connection.
+[pid=11380][err] [11380:26316:1008/095957.897:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 31960: Access is denied. (0x5)
+[pid=11380][err] [11380:24180:1008/100000.002:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 18808: Access is denied. (0x5)
+[pid=11380][err] [11380:26316:1008/100002.107:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 20580: Access is denied. (0x5)
+[pid=11380][err] [11380:24180:1008/100002.193:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 5288: Access is denied. (0x5)
+[pid=11380][err] [11380:26316:1008/100002.277:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 26824: Access is denied. (0x5)
+[pid=11380][err] [11380:24180:1008/100002.361:ERROR:chrome\updater\ipc\update_service_dialer_win.cc:75] Failed to open named pipe server process 19860: Access is denied. (0x5)
+[pid=11380][err] [11380:4620:1008/100010.740:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=11380][err] [11380:4620:1008/100058.709:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=11380][err] [11380:4620:1008/100248.396:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=11380][err] [11380:30852:1008/100348.659:ERROR:chrome\browser\ui\views\user_education\impl\browser_user_education_interface_impl.cc:186] Attempting to show IPH IPH_ExtensionsZeroStatePromo before browser initialization complete; IPH will not be shown.
+[pid=11380][err] [11380:4620:1008/100600.281:ERROR:google_apis\gcm\engine\registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=11380][err] [11380:30852:1008/100633.867:ERROR:chrome\browser\ui\views\user_education\impl\browser_user_education_interface_impl.cc:186] Attempting to show IPH IPH_ExtensionsZeroStatePromo before browser initialization complete; IPH will not be shown.
+[pid=11380] <gracefully close start>
+    at async runCell (E:\KULIAH\Skripsi\statify64\testing\thesis-eval\perf\run_browser.mjs:107:19)
+    at async file:///E:/KULIAH/Skripsi/statify64/testing/thesis-eval/perf/run_browser.mjs:151:68
+
+Node.js v24.13.1
