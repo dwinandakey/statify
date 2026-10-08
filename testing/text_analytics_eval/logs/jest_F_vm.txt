@@ -1,0 +1,220 @@
+===== Jest VM bagian 1 =====
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it01.vector-nb.test.ts (21.443 s)
+  ● Console
+
+    console.log
+      [integration.it01] wasm sha256 stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/thesis/integration.it01.leakage-ui.test.tsx (6.717 s)
+  ● Console
+
+    console.log
+      [integration.it01.ui] kolom STWV=1000; mengandung 'VEC_'=999; terpindah ke Word-Vector Variables=999; W-LEAK tampil=ya
+
+
+    console.log
+      [integration.it01.ui] kolom STWV yang tidak mengandung 'VEC_': ["VEC"]
+
+
+
+Test Suites: 2 passed, 2 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        30.589 s, estimated 43 s
+Ran all test suites matching integration.it01.
+Test results written to: ../../../scratch/jf1.json
+
+===== Jest VM bagian 2 =====
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+  console.log
+    [integration.it03] K1: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+
+  console.log
+    [integration.it03] K1: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+
+  console.log
+    [integration.it03] K2: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 5.000e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 4.154e-2; seri persis 0
+
+
+  console.log
+    [integration.it03] K2: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+
+  console.log
+    [integration.it03] K3: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+
+  console.log
+    [integration.it03] K3: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+
+  console.log
+    [integration.it03] K4: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 1.600e-4; seri persis 0
+
+
+  console.log
+    [integration.it03] K4: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+
+  console.log
+    [integration.it03] K5: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.992e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 3.988e-2; seri persis 0
+
+
+  console.log
+    [integration.it03] K5: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts (20.89 s)
+  K1: NB -> Export Model -> Apply Model pada data latih yang sama
+    ✓ IT-02 K1-a berkas Export Model = JSON.stringify(trained_model, null, 2) dan termuat kembali sama persis (bit-per-bit) (53 ms)
+    ✓ IT-02 K1-b adapter Apply Model menerima model (loadModelFromFile) dan descriptor memuat target, kelas, skema, sumber teks dari model asal (7 ms)
+    ✓ IT-02 K1-c Model Summary di Output Viewer Apply Model sama dengan model asal (sumber, algoritma, skema, target, kelas, variabel teks, likelihood) (2 ms)
+    ✓ IT-02 K1-d RESEP: objek model yang sampai ke wasm Apply Model identik dengan trained_model NB, dan recipe.config = konfigurasi preprocessing yang dikirim NB (14 ms)
+    ✓ IT-02 K1-e sumber Output Viewer: loadModelFromResultStore(statistic "Export Model") menghasilkan descriptor dan model yang sama dengan sumber berkas (11 ms)
+    ✓ IT-03 K1-a kolom hasil tertulis ke dataset: NB_PredictedValue, NB_PredictedProbability, NB_Probability_<kelas>, 630 baris (2 ms)
+    ✓ IT-03 K1-b prediksi == skor acuan presisi penuh; round4(acuan) == kolom NB_Probability_*; selisih <= 5e-5 (batas round4); keputusan kokoh terhadap 1e-9 (343 ms)
+    ✓ IT-03 K1-c metrik evaluasi pada data latih (resubstitusi) di Output Viewer sama dengan perhitungan sendiri dari kolom NB_PredictedValue (2 ms)
+    ✓ IT-03 K1-d parameter yang diterima Apply Model identik dengan trained_model NB (selisih 0 <= 1e-9, bit-per-bit pada K1) (12 ms)
+    ✓ IT-03 K1-e KONTROL NEGATIF: satu log_weight digeser 1e-9 TERDETEKSI oleh pembanding bit (deepBitCompare), sedangkan keluaran Apply Model (round4) tidak berubah -> bukti bahwa kriteria 1e-9 hanya dapat diuji pada parameter (77 ms)
+  K2: NB -> Export Model -> Apply Model pada data latih yang sama
+    ✓ IT-02 K2-a berkas Export Model = JSON.stringify(trained_model, null, 2) dan termuat kembali sama persis (bit-per-bit) (37 ms)
+    ✓ IT-02 K2-b adapter Apply Model menerima model (loadModelFromFile) dan descriptor memuat target, kelas, skema, sumber teks dari model asal (4 ms)
+    ✓ IT-02 K2-c Model Summary di Output Viewer Apply Model sama dengan model asal (sumber, algoritma, skema, target, kelas, variabel teks, likelihood) (1 ms)
+    ✓ IT-02 K2-d RESEP: objek model yang sampai ke wasm Apply Model identik dengan trained_model NB, dan recipe.config = konfigurasi preprocessing yang dikirim NB (35 ms)
+    ✓ IT-02 K2-e sumber Output Viewer: loadModelFromResultStore(statistic "Export Model") menghasilkan descriptor dan model yang sama dengan sumber berkas (24 ms)
+    ✓ IT-03 K2-a kolom hasil tertulis ke dataset: NB_PredictedValue, NB_PredictedProbability, NB_Probability_<kelas>, 630 baris (1 ms)
+    ✓ IT-03 K2-b prediksi == skor acuan presisi penuh; round4(acuan) == kolom NB_Probability_*; selisih <= 5e-5 (batas round4); keputusan kokoh terhadap 1e-9 (95 ms)
+    ✓ IT-03 K2-c metrik evaluasi pada data latih (resubstitusi) di Output Viewer sama dengan perhitungan sendiri dari kolom NB_PredictedValue (1 ms)
+    ✓ IT-03 K2-d parameter yang diterima Apply Model identik dengan trained_model NB (selisih 0 <= 1e-9, bit-per-bit pada K2) (6 ms)
+    ✓ IT-03 K2-e KONTROL NEGATIF: satu log_weight digeser 1e-9 TERDETEKSI oleh pembanding bit (deepBitCompare), sedangkan keluaran Apply Model (round4) tidak berubah -> bukti bahwa kriteria 1e-9 hanya dapat diuji pada parameter (40 ms)
+  K3: NB -> Export Model -> Apply Model pada data latih yang sama
+    ✓ IT-02 K3-a berkas Export Model = JSON.stringify(trained_model, null, 2) dan termuat kembali sama persis (bit-per-bit) (12 ms)
+    ✓ IT-02 K3-b adapter Apply Model menerima model (loadModelFromFile) dan descriptor memuat target, kelas, skema, sumber teks dari model asal (1 ms)
+    ✓ IT-02 K3-c Model Summary di Output Viewer Apply Model sama dengan model asal (sumber, algoritma, skema, target, kelas, variabel teks, likelihood) (1 ms)
+    ✓ IT-02 K3-d RESEP: objek model yang sampai ke wasm Apply Model identik dengan trained_model NB, dan recipe.config = konfigurasi preprocessing yang dikirim NB (10 ms)
+    ✓ IT-02 K3-e sumber Output Viewer: loadModelFromResultStore(statistic "Export Model") menghasilkan descriptor dan model yang sama dengan sumber berkas (11 ms)
+    ✓ IT-03 K3-a kolom hasil tertulis ke dataset: NB_PredictedValue, NB_PredictedProbability, NB_Probability_<kelas>, 630 baris
+    ✓ IT-03 K3-b prediksi == skor acuan presisi penuh; round4(acuan) == kolom NB_Probability_*; selisih <= 5e-5 (batas round4); keputusan kokoh terhadap 1e-9 (85 ms)
+    ✓ IT-03 K3-c metrik evaluasi pada data latih (resubstitusi) di Output Viewer sama dengan perhitungan sendiri dari kolom NB_PredictedValue (1 ms)
+    ✓ IT-03 K3-d parameter yang diterima Apply Model identik dengan trained_model NB (selisih 0 <= 1e-9, bit-per-bit pada K3) (5 ms)
+    ✓ IT-03 K3-e KONTROL NEGATIF: satu log_weight digeser 1e-9 TERDETEKSI oleh pembanding bit (deepBitCompare), sedangkan keluaran Apply Model (round4) tidak berubah -> bukti bahwa kriteria 1e-9 hanya dapat diuji pada parameter (43 ms)
+  K4: NB -> Export Model -> Apply Model pada data latih yang sama
+    ✓ IT-02 K4-a berkas Export Model = JSON.stringify(trained_model, null, 2) dan termuat kembali sama persis (bit-per-bit) (13 ms)
+    ✓ IT-02 K4-b adapter Apply Model menerima model (loadModelFromFile) dan descriptor memuat target, kelas, skema, sumber teks dari model asal (1 ms)
+    ✓ IT-02 K4-c Model Summary di Output Viewer Apply Model sama dengan model asal (sumber, algoritma, skema, target, kelas, variabel teks, likelihood) (1 ms)
+    ✓ IT-02 K4-d RESEP: objek model yang sampai ke wasm Apply Model identik dengan trained_model NB, dan recipe.config = konfigurasi preprocessing yang dikirim NB (8 ms)
+    ✓ IT-02 K4-e sumber Output Viewer: loadModelFromResultStore(statistic "Export Model") menghasilkan descriptor dan model yang sama dengan sumber berkas (11 ms)
+    ✓ IT-03 K4-a kolom hasil tertulis ke dataset: NB_PredictedValue, NB_PredictedProbability, NB_Probability_<kelas>, 630 baris (1 ms)
+    ✓ IT-03 K4-b prediksi == skor acuan presisi penuh; round4(acuan) == kolom NB_Probability_*; selisih <= 5e-5 (batas round4); keputusan kokoh terhadap 1e-9 (76 ms)
+    ✓ IT-03 K4-c metrik evaluasi pada data latih (resubstitusi) di Output Viewer sama dengan perhitungan sendiri dari kolom NB_PredictedValue
+    ✓ IT-03 K4-d parameter yang diterima Apply Model identik dengan trained_model NB (selisih 0 <= 1e-9, bit-per-bit pada K4) (5 ms)
+    ✓ IT-03 K4-e KONTROL NEGATIF: satu log_weight digeser 1e-9 TERDETEKSI oleh pembanding bit (deepBitCompare), sedangkan keluaran Apply Model (round4) tidak berubah -> bukti bahwa kriteria 1e-9 hanya dapat diuji pada parameter (35 ms)
+  K5: NB -> Export Model -> Apply Model pada data latih yang sama
+    ✓ IT-02 K5-a berkas Export Model = JSON.stringify(trained_model, null, 2) dan termuat kembali sama persis (bit-per-bit) (14 ms)
+    ✓ IT-02 K5-b adapter Apply Model menerima model (loadModelFromFile) dan descriptor memuat target, kelas, skema, sumber teks dari model asal (1 ms)
+    ✓ IT-02 K5-c Model Summary di Output Viewer Apply Model sama dengan model asal (sumber, algoritma, skema, target, kelas, variabel teks, likelihood) (1 ms)
+    ✓ IT-02 K5-d RESEP: objek model yang sampai ke wasm Apply Model identik dengan trained_model NB, dan recipe.config = konfigurasi preprocessing yang dikirim NB (12 ms)
+    ✓ IT-02 K5-e sumber Output Viewer: loadModelFromResultStore(statistic "Export Model") menghasilkan descriptor dan model yang sama dengan sumber berkas (8 ms)
+    ✓ IT-03 K5-a kolom hasil tertulis ke dataset: NB_PredictedValue, NB_PredictedProbability, NB_Probability_<kelas>, 630 baris (1 ms)
+    ✓ IT-03 K5-b prediksi == skor acuan presisi penuh; round4(acuan) == kolom NB_Probability_*; selisih <= 5e-5 (batas round4); keputusan kokoh terhadap 1e-9 (64 ms)
+    ✓ IT-03 K5-c metrik evaluasi pada data latih (resubstitusi) di Output Viewer sama dengan perhitungan sendiri dari kolom NB_PredictedValue (1 ms)
+    ✓ IT-03 K5-d parameter yang diterima Apply Model identik dengan trained_model NB (selisih 0 <= 1e-9, bit-per-bit pada K5) (5 ms)
+    ✓ IT-03 K5-e KONTROL NEGATIF: satu log_weight digeser 1e-9 TERDETEKSI oleh pembanding bit (deepBitCompare), sedangkan keluaran Apply Model (round4) tidak berubah -> bukti bahwa kriteria 1e-9 hanya dapat diuji pada parameter (34 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       50 passed, 50 total
+Snapshots:   0 total
+Time:        22.291 s, estimated 25 s
+Ran all test suites matching integration.it02-it03.
+Test results written to: ../../../scratch/jf2.json
+
+===== Jest VM bagian 3 =====
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it05.persistence.test.ts (20.728 s)
+  ● Console
+
+    console.log
+      [integration.it05] round-trip JSON JS: 299884 double diuji, 0 selisih
+
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts
+  ● Console
+
+    console.log
+      [integration.it04] K1: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+
+    console.log
+      [integration.it04] K1: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+
+    console.log
+      [integration.it04] K1: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+
+    console.log
+      [integration.it04] K2: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.979e-5
+
+
+    console.log
+      [integration.it04] K2: Statify akurasi 0.729630 kappa 0.459259 macroF1 0.729537 | scikit-learn akurasi 0.729630 kappa 0.459259 macroF1 0.729537
+
+
+    console.log
+      [integration.it04] K2: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6808510638297872
+
+
+    console.log
+      [integration.it04] K3: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+
+    console.log
+      [integration.it04] K3: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+
+    console.log
+      [integration.it04] K3: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+
+    console.log
+      [integration.it04] K4: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.940e-5
+
+
+    console.log
+      [integration.it04] K4: Statify akurasi 0.766667 kappa 0.533333 macroF1 0.766510 | scikit-learn akurasi 0.766667 kappa 0.533333 macroF1 0.766510
+
+
+    console.log
+      [integration.it04] K4: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+
+    console.log
+      [integration.it04] K5: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.960e-5
+
+
+    console.log
+      [integration.it04] K5: Statify akurasi 0.755556 kappa 0.511111 macroF1 0.755556 | scikit-learn akurasi 0.755556 kappa 0.511111 macroF1 0.755556
+
+
+    console.log
+      [integration.it04] K5: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.723404255319149
+
+
+
+Test Suites: 2 passed, 2 total
+Tests:       33 passed, 33 total
+Snapshots:   0 total
+Time:        26.244 s
+Ran all test suites matching integration.it04|integration.it05.
+Test results written to: ../../../scratch/jf3.json
+

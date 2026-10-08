@@ -1,0 +1,88 @@
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by weka.core.WekaPackageClassLoaderManager (file:/sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of weka.core.WekaPackageClassLoaderManager
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+Caching repository metadata, please wait...
+Refresh in progress. Please wait...
+Unable to download repository zip archve (Server returned HTTP response code: 403 for URL: http://weka.sourceforge.io/packageMetaData/repo.zip) - trying legacy routine...
+java.io.IOException: Server returned HTTP response code: 403 for URL: http://weka.sourceforge.io/packageMetaData/packageList.txt
+	java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2029)
+	java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2024)
+	java.base/java.security.AccessController.doPrivileged(Native Method)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:2023)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1578)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	weka.core.packageManagement.DefaultPackageManager.getRepositoryPackageMetaDataOnlyAsZipLegacy(DefaultPackageManager.java:1090)
+	weka.core.packageManagement.DefaultPackageManager.getRepositoryPackageMetaDataOnlyAsZip(DefaultPackageManager.java:1063)
+	weka.core.WekaPackageManager.refreshCache(WekaPackageManager.java:1870)
+	weka.core.WekaPackageManager.establishCacheIfNeeded(WekaPackageManager.java:1682)
+	weka.core.WekaPackageManager.startupCheck(WekaPackageManager.java:2995)
+	weka.core.WekaPackageManager.main(WekaPackageManager.java:3071)
+
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2029)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2024)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:2023)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1578)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	at weka.core.packageManagement.DefaultPackageManager.getRepositoryPackageMetaDataOnlyAsZipLegacy(DefaultPackageManager.java:1090)
+	at weka.core.packageManagement.DefaultPackageManager.getRepositoryPackageMetaDataOnlyAsZip(DefaultPackageManager.java:1063)
+	at weka.core.WekaPackageManager.refreshCache(WekaPackageManager.java:1870)
+	at weka.core.WekaPackageManager.establishCacheIfNeeded(WekaPackageManager.java:1682)
+	at weka.core.WekaPackageManager.startupCheck(WekaPackageManager.java:2995)
+	at weka.core.WekaPackageManager.main(WekaPackageManager.java:3071)
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: http://weka.sourceforge.io/packageMetaData/packageList.txt
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1973)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:527)
+	at weka.core.packageManagement.DefaultPackageManager.getConnection(DefaultPackageManager.java:883)
+	at weka.core.packageManagement.DefaultPackageManager.getConnection(DefaultPackageManager.java:853)
+	at weka.core.packageManagement.DefaultPackageManager.getRepositoryPackageMetaDataOnlyAsZipLegacy(DefaultPackageManager.java:1087)
+	... 5 more
+[DefaultPackageManager] removing: /sessions/rcw-012fatzmd2ijthuad3dnzb53/wekafiles/repCache
+Local package list is missing, trying a cache refresh to restore...
+java.io.IOException: Server returned HTTP response code: 403 for URL: http://weka.sourceforge.io/packageMetaData/packageList.txt
+	java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2029)
+	java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2024)
+	java.base/java.security.AccessController.doPrivileged(Native Method)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:2023)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1578)
+	java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	weka.core.packageManagement.DefaultPackageManager.getAllPackages(DefaultPackageManager.java:1182)
+	weka.core.WekaPackageManager.listPackages(WekaPackageManager.java:2904)
+	weka.core.WekaPackageManager.main(WekaPackageManager.java:3151)
+
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2029)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection$10.run(HttpURLConnection.java:2024)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getChainedException(HttpURLConnection.java:2023)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1578)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	at weka.core.packageManagement.DefaultPackageManager.getAllPackages(DefaultPackageManager.java:1182)
+	at weka.core.WekaPackageManager.listPackages(WekaPackageManager.java:2904)
+	at weka.core.WekaPackageManager.main(WekaPackageManager.java:3151)
+Caused by: java.io.IOException: Server returned HTTP response code: 403 for URL: http://weka.sourceforge.io/packageMetaData/packageList.txt
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1973)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1562)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:527)
+	at weka.core.packageManagement.DefaultPackageManager.getConnection(DefaultPackageManager.java:883)
+	at weka.core.packageManagement.DefaultPackageManager.getAllPackages(DefaultPackageManager.java:1179)
+	... 2 more

@@ -1,0 +1,166 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it01.vector-nb.test.ts (22.204 s)
+  ● Console
+
+    console.log
+      [integration.it01] wasm sha256 stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it01.vector-nb.test.ts:45:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts
+  ● Console
+
+    console.log
+      [integration.it03] K1: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K1: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K2: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 5.000e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 4.154e-2; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K2: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K3: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K3: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K4: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 1.600e-4; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K4: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K5: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.992e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 3.988e-2; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K5: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it05.persistence.test.ts
+  ● Console
+
+    console.log
+      [integration.it05] round-trip JSON JS: 299884 double diuji, 0 selisih
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it05.persistence.test.ts:132:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts
+  ● Console
+
+    console.log
+      [integration.it04] K1: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K1: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K1: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K2: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.979e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K2: Statify akurasi 0.729630 kappa 0.459259 macroF1 0.729537 | scikit-learn akurasi 0.729630 kappa 0.459259 macroF1 0.729537
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K2: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6808510638297872
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K3: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K3: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K3: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K4: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.940e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K4: Statify akurasi 0.766667 kappa 0.533333 macroF1 0.766510 | scikit-learn akurasi 0.766667 kappa 0.533333 macroF1 0.766510
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K4: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K5: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.960e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K5: Statify akurasi 0.755556 kappa 0.511111 macroF1 0.755556 | scikit-learn akurasi 0.755556 kappa 0.511111 macroF1 0.755556
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K5: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.723404255319149
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts:136:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/blackbox.am.pipeline.test.ts
+  ● Console
+
+    console.log
+      [blackbox.am.pipeline] wasm_bg.wasm sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/blackbox.am.pipeline.test.ts:216:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/blackbox.am.loader.test.ts
+
+Test Suites: 6 passed, 6 total
+Tests:       130 passed, 130 total
+Snapshots:   0 total
+Time:        38.497 s, estimated 71 s
+Ran all test suites matching components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/blackbox.am.loader.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/blackbox.am.pipeline.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it01.vector-nb.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it02-it03.model-roundtrip.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it04.pilkada-train-test.test.ts|components/Modals/Analyze/Classify/apply-model/services/__tests__/thesis/integration.it05.persistence.test.ts.
+Test results written to: ../testing/thesis-eval/logs/jest_final_5_vm.json

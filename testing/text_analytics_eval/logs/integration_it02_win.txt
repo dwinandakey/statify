@@ -1,0 +1,50 @@
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+
+--- K1: Weka default (lowercase, delimiter default, W=1000, TF hitungan, tanpa IDF/normalisasi) + Multinomial, alpha 1
+LULUS  K1 model termuat == model asal NB (bit-per-bit; 6017 angka, 2020 string, 8067 simpul): 0 selisih
+LULUS  K1 Model Summary: model_type = naive_bayes, schema_version = 2.0 (asal 2.0)
+LULUS  K1 Model Summary: trained_at = 2026-10-08T03:30:25.296Z sama dengan model asal
+LULUS  K1 Model Summary: TARGET "Sentiment" sama dengan target NB "Sentiment" (variabel target pada form NB: "Sentiment")
+LULUS  K1 Model Summary: KELAS ["negative","positive"] sama dengan model asal ["negative","positive"]
+LULUS  K1 Model Summary: fitur non-teks = 0 (model hanya-teks), asal 0
+LULUS  K1 Model Summary: Text source = "raw" (asal "raw"), Text likelihood = "multinomial" (asal "multinomial")
+LULUS  K1 Model Summary: Smoothing alpha = 1; Variance floor = 0.000000001; Validation = "Holdout 70% / 30%, seed 42"
+LULUS  K1 RESEP: recipe.config memuat 12 opsi preprocessing yang sama dengan yang dikirim NB: 0 berbeda
+LULUS  K1 RESEP: kosakata 1000 == text.terms 1000, idf 1000, doc_freq 1000, n_docs 630 (= 630 baris latih), recipe_version 1.0
+LULUS  K1 RESEP: variabel teks model "Text Tweet" == variabel teks form NB "Text Tweet"
+LULUS  K1 Apply Model tanpa galat/peringatan: errors="No errors occurred.", warnings=[]
+
+--- K2: K1 + Bernoulli
+LULUS  K2 model termuat == model asal NB (bit-per-bit; 8017 angka, 2020 string, 10069 simpul): 0 selisih
+LULUS  K2 Model Summary: model_type = naive_bayes, schema_version = 2.0 (asal 2.0)
+LULUS  K2 Model Summary: trained_at = 2026-10-08T03:30:25.400Z sama dengan model asal
+LULUS  K2 Model Summary: TARGET "Sentiment" sama dengan target NB "Sentiment" (variabel target pada form NB: "Sentiment")
+LULUS  K2 Model Summary: KELAS ["negative","positive"] sama dengan model asal ["negative","positive"]
+LULUS  K2 Model Summary: fitur non-teks = 0 (model hanya-teks), asal 0
+LULUS  K2 Model Summary: Text source = "raw" (asal "raw"), Text likelihood = "bernoulli" (asal "bernoulli")
+LULUS  K2 Model Summary: Smoothing alpha = 1; Variance floor = 0.000000001; Validation = "Holdout 70% / 30%, seed 42"
+LULUS  K2 RESEP: recipe.config memuat 12 opsi preprocessing yang sama dengan yang dikirim NB: 0 berbeda
+LULUS  K2 RESEP: kosakata 1000 == text.terms 1000, idf 1000, doc_freq 1000, n_docs 630 (= 630 baris latih), recipe_version 1.0
+LULUS  K2 RESEP: variabel teks model "Text Tweet" == variabel teks form NB "Text Tweet"
+LULUS  K2 Apply Model tanpa galat/peringatan: errors="No errors occurred.", warnings=[]
+
+--- K5: Weka: TF log(1+f), IDF ln(N/df), normalisasi panjang dokumen + Multinomial
+LULUS  K5 model termuat == model asal NB (bit-per-bit; 6018 angka, 2020 string, 8067 simpul): 0 selisih
+LULUS  K5 Model Summary: model_type = naive_bayes, schema_version = 2.0 (asal 2.0)
+LULUS  K5 Model Summary: trained_at = 2026-10-08T03:30:25.442Z sama dengan model asal
+LULUS  K5 Model Summary: TARGET "Sentiment" sama dengan target NB "Sentiment" (variabel target pada form NB: "Sentiment")
+LULUS  K5 Model Summary: KELAS ["negative","positive"] sama dengan model asal ["negative","positive"]
+LULUS  K5 Model Summary: fitur non-teks = 0 (model hanya-teks), asal 0
+LULUS  K5 Model Summary: Text source = "raw" (asal "raw"), Text likelihood = "multinomial" (asal "multinomial")
+LULUS  K5 Model Summary: Smoothing alpha = 1; Variance floor = 0.000000001; Validation = "Holdout 70% / 30%, seed 42"
+LULUS  K5 RESEP: recipe.config memuat 12 opsi preprocessing yang sama dengan yang dikirim NB: 0 berbeda
+LULUS  K5 RESEP: kosakata 1000 == text.terms 1000, idf 1000, doc_freq 1000, n_docs 630 (= 630 baris latih), recipe_version 1.0
+LULUS  K5 RESEP: variabel teks model "Text Tweet" == variabel teks form NB "Text Tweet"
+LULUS  K5 Apply Model tanpa galat/peringatan: errors="No errors occurred.", warnings=[]
+
+=== IT-02 (tingkat wasm): 36 lulus, 0 gagal dari 36 pemeriksaan ===
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.53 started=2026-10-08 10:30:25 +07:00 cmd=node testing\text_analytics_eval\integration\it02_export_load.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

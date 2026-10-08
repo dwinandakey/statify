@@ -1,0 +1,39 @@
+=== run_headless.mjs run_id=headless_skripsi_20261008T103117 device=skripsi (PERANGKAT-SKRIPSI (Lenovo IdeaPad Gaming 3 15ARH05, Ryzen 5 4600H, 16 GB, Windows 11))
+env: AMD Ryzen 5 4600H with Radeon Graphics x12; RAM 15.4 GiB; Windows_NT 10.0.26300; Node v24.13.1
+protokol: 1 pemanasan + 5 pengukuran; ms; simpangan baku sampel (n-1)
+keluaran mentah: testing\text_analytics_eval\perf\raw\headless_skripsi.csv
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+[pilkada_900 | stwv_default] n=900 term=1000 warmup=104 ms  mean=45.5 sd=4.0 ms  (OK)  wall=0s
+[pilkada_900 | stwv_sw_stem] n=900 term=1000 warmup=140 ms  mean=63.7 sd=7.0 ms  (OK)  wall=1s
+[pilkada_900 | nb_holdout70] n=900 term=1000 warmup=106 ms  mean=27.8 sd=4.6 ms  (OK)  wall=0s
+[pilkada_900 | nb_kfold10] n=900 term=1000 warmup=173 ms  mean=82.4 sd=4.9 ms  (OK)  wall=1s
+[pilkada_900 | am_raw] n=900 term=1000 warmup=72 ms  mean=20.9 sd=1.8 ms  (OK)  wall=0s
+[sms_5574 | stwv_default] n=5574 term=1000 warmup=444 ms  mean=265.7 sd=6.4 ms  (OK)  wall=2s
+[sms_5574 | stwv_sw_stem] n=5574 term=- warmup=70 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=0s
+[sms_5574 | nb_holdout70] n=5574 term=1000 warmup=236 ms  mean=118.4 sd=3.9 ms  (OK)  wall=1s
+[sms_5574 | nb_kfold10] n=5574 term=1000 warmup=567 ms  mean=418.2 sd=4.0 ms  (OK)  wall=3s
+[sms_5574 | am_raw] n=5574 term=1000 warmup=179 ms  mean=94.6 sd=11.1 ms  (OK)  wall=1s
+[smsa_11000 | stwv_default] n=11000 term=1000 warmup=1443 ms  mean=595.9 sd=17.6 ms  (OK)  wall=5s
+[smsa_11000 | stwv_sw_stem] n=11000 term=1000 warmup=1618 ms  mean=676.8 sd=9.5 ms  (OK)  wall=5s
+[smsa_11000 | nb_holdout70] n=11000 term=1000 warmup=506 ms  mean=325.9 sd=5.1 ms  (OK)  wall=2s
+[smsa_11000 | nb_kfold10] n=11000 term=1000 warmup=1563 ms  mean=1500.1 sd=139.1 ms  (OK)  wall=9s
+[smsa_11000 | am_raw] n=11000 term=1000 warmup=374 ms  mean=221.1 sd=3.4 ms  (OK)  wall=2s
+[gabungan | stwv_default] n=17974 term=1000 warmup=3914 ms  mean=999.1 sd=11.8 ms  (OK)  wall=9s
+[gabungan | stwv_sw_stem] n=17974 term=- warmup=229 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=0s
+[gabungan | nb_holdout70] n=17974 term=1000 warmup=682 ms  mean=484.5 sd=15.8 ms  (OK)  wall=3s
+[gabungan | nb_kfold10] n=17974 term=1000 warmup=2159 ms  mean=2050.5 sd=38.7 ms  (OK)  wall=13s
+[gabungan | am_raw] n=17974 term=1000 warmup=544 ms  mean=322.2 sd=6.1 ms  (OK)  wall=2s
+[besar_ge20000 | stwv_default] n=36305 term=1000 warmup=17461 ms  mean=3288.6 sd=51.0 ms  (OK)  wall=34s
+[besar_ge20000 | stwv_sw_stem] n=36305 term=- warmup=4091 ms  mean=NaN sd=NaN ms  (GALAT: unreachable)  wall=4s
+[besar_ge20000 | nb_holdout70] n=36305 term=1000 warmup=11975 ms  mean=3710.3 sd=245.2 ms  (OK)  wall=31s
+[besar_ge20000 | nb_kfold10] n=36305 term=1000 warmup=27562 ms  mean=17960.9 sd=317.3 ms  (OK)  wall=118s
+[besar_ge20000 | am_raw] n=36305 term=1000 warmup=8056 ms  mean=1661.5 sd=6.5 ms  (OK)  wall=17s
+[sms_5574_ascii | stwv_sw_stem] n=5574 term=1000 warmup=497 ms  mean=303.5 sd=3.6 ms  (OK)  wall=2s
+[gabungan_ascii | stwv_sw_stem] n=17974 term=1000 warmup=3802 ms  mean=1083.2 sd=16.2 ms  (OK)  wall=9s
+[besar_ge20000_ascii | stwv_sw_stem] n=36305 term=1000 warmup=16858 ms  mean=4907.5 sd=69.1 ms  (OK)  wall=42s
+=== selesai ===
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=317.25 started=2026-10-08 10:31:17 +07:00 cmd=node testing\text_analytics_eval\perf\run_headless.mjs --device skripsi --runs 5 cwd=E:\KULIAH\Skripsi\statify64 ===

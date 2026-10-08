@@ -1,0 +1,7 @@
+$ java -Dfile.encoding=UTF-8 -cp /sessions/rcw-012fatzmd2ijthuad3dnzb53/mnt/Weka-3-9-6/weka.jar weka.filters.unsupervised.attribute.StringToWordVector -b -i t.arff -o o.arff -r t.arff -s o2.arff -c last -R first -W 1000 -O -L -C -I -N 1 -M 1   (kata 'a' ada di semua dokumen => idf=ln(4/4)=0; timeout 20 dtk)
+exit code (124 = timeout 20 dtk tercapai): 0
+--- stdout ---
+-rw-r--r-- 1 rcw-012fatzmd2ijthuad3dnzb53 rcw-012fatzmd2ijthuad3dnzb53 514 Oct  7 13:35 o.arff
+-rw-r--r-- 1 rcw-012fatzmd2ijthuad3dnzb53 rcw-012fatzmd2ijthuad3dnzb53 514 Oct  7 13:35 o2.arff
+--- kontrol tanpa -I:
+exit code: 0

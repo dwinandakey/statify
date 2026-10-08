@@ -1,0 +1,7 @@
+vocab_penuh 3101
+ambang_hitungan_WEKA(array[len-W]) 2
+kata_WEKA(>=ambang) 1042
+kata_dengan_hitungan==ambang 441
+kata_Statify(top-W, seri alfabetis) 1000
+kata_WEKA_tidak_di_Statify 42 kata_Statify_tidak_di_WEKA 0
+df==N (idf=0) jumlah kata 0

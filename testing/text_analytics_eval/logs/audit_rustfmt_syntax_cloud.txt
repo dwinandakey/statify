@@ -1,0 +1,10 @@
+AUDIT: rustfmt --edition 2021 --check pada 9 berkas tes Rust thesis_*.rs (2026-10-07T16:12:01Z, rustfmt 1.9.0-stable (2d8144b788 2026-07-07)). HANYA pemeriksaan sintaks (parse); BUKAN kompilasi dan BUKAN eksekusi tes.
+./components/Modals/Analyze/Classify/apply-model/rust/tests/thesis_blackbox_am.rs: tidak ada galat parse
+./components/Modals/Analyze/Classify/apply-model/rust/tests/thesis_compare.rs: tidak ada galat parse
+./components/Modals/Analyze/Classify/naive-bayes/rust/tests/thesis_blackbox_nb.rs: tidak ada galat parse
+./components/Modals/Analyze/Classify/naive-bayes/rust/tests/thesis_partition.rs: tidak ada galat parse
+./public/workers/TextAnalytics/statify-text-core/tests/thesis_blackbox_stwv.rs: tidak ada galat parse
+./public/workers/TextAnalytics/statify-text-core/tests/thesis_formulas.rs: tidak ada galat parse
+./public/workers/TextAnalytics/statify-text-core/tests/thesis_integration.rs: tidak ada galat parse
+./public/workers/TextAnalytics/statify-text-core/tests/thesis_text_pipeline.rs: tidak ada galat parse
+./public/workers/TextAnalytics/statify-text-core/tests/thesis_vocab_limit.rs: tidak ada galat parse

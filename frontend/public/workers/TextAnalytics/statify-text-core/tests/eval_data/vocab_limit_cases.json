@@ -1,0 +1,290 @@
+{
+ "delimiters": "[\\s.,;:'\\\"()?!]+",
+ "cases": [
+  {
+   "name": "seri_tiga_arah_di_batas",
+   "docs": [
+    "c b a",
+    "z z"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "a",
+    "z"
+   ],
+   "note": "z=2 menang; a=b=c=1 seri -> 'a' (alfabetis), bukan urutan kemunculan (c lebih dulu)"
+  },
+  {
+   "name": "seri_semua_keep3",
+   "docs": [
+    "f e d c b a"
+   ],
+   "overrides": {
+    "words_to_keep": 3,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "a",
+    "b",
+    "c"
+   ],
+   "note": "enam term seri count 1 -> tiga pertama alfabetis"
+  },
+  {
+   "name": "seri_bukan_urutan_kemunculan",
+   "docs": [
+    "zeta alpha mu",
+    "beta"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "alpha",
+    "beta"
+   ],
+   "note": "semua count 1; alfabetis alpha < beta < mu < zeta"
+  },
+  {
+   "name": "seri_bytewise_huruf_besar_dulu",
+   "docs": [
+    "Zebra apple Mango"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": false
+   },
+   "expected_vocabulary": [
+    "Mango",
+    "Zebra"
+   ],
+   "note": "byte-wise: 'M'(77) < 'Z'(90) < 'a'(97)"
+  },
+  {
+   "name": "seri_potong_ketat_keep1",
+   "docs": [
+    "a b c d"
+   ],
+   "overrides": {
+    "words_to_keep": 1,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "a"
+   ],
+   "note": "Statify memotong ketat (Weka asli menyimpan semua term seri)"
+  },
+  {
+   "name": "keep_sama_dengan_jumlah_kandidat",
+   "docs": [
+    "Saya suka makan nasi",
+    "Saya tidak suka nasi!",
+    "Makan, makan, makan"
+   ],
+   "overrides": {
+    "words_to_keep": 5,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "makan",
+    "nasi",
+    "saya",
+    "suka",
+    "tidak"
+   ],
+   "note": ""
+  },
+  {
+   "name": "keep_melebihi_jumlah_kandidat",
+   "docs": [
+    "Saya suka makan nasi",
+    "Saya tidak suka nasi!",
+    "Makan, makan, makan"
+   ],
+   "overrides": {
+    "words_to_keep": 6,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "makan",
+    "nasi",
+    "saya",
+    "suka",
+    "tidak"
+   ],
+   "note": ""
+  },
+  {
+   "name": "keep3_pada_D",
+   "docs": [
+    "Saya suka makan nasi",
+    "Saya tidak suka nasi!",
+    "Makan, makan, makan"
+   ],
+   "overrides": {
+    "words_to_keep": 3,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "makan",
+    "nasi",
+    "saya"
+   ],
+   "note": "makan=4; nasi=saya=suka=2 seri -> nasi, saya"
+  },
+  {
+   "name": "keep3_pada_D_sklearn",
+   "docs": [
+    "Saya suka makan nasi",
+    "Saya tidak suka nasi!",
+    "Makan, makan, makan"
+   ],
+   "overrides": {
+    "words_to_keep": 3,
+    "min_term_freq": 1,
+    "lowercase": true,
+    "formula_standard": "sklearn",
+    "tf_method": "raw",
+    "idf_method": "smooth"
+   },
+   "expected_vocabulary": [
+    "makan",
+    "nasi",
+    "saya"
+   ],
+   "note": "sklearn merangking dengan total count seperti Weka"
+  },
+  {
+   "name": "mtf_batas_sama_dipertahankan",
+   "docs": [
+    "x x x y y z"
+   ],
+   "overrides": {
+    "words_to_keep": 1000,
+    "min_term_freq": 2,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "x",
+    "y"
+   ],
+   "note": "count == min_term_freq dipertahankan (>=); z=1 dibuang"
+  },
+  {
+   "name": "mtf3_hanya_x",
+   "docs": [
+    "x x x y y z"
+   ],
+   "overrides": {
+    "words_to_keep": 1000,
+    "min_term_freq": 3,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "x"
+   ],
+   "note": ""
+  },
+  {
+   "name": "mtf_memakai_total_bukan_df",
+   "docs": [
+    "x x x",
+    "y",
+    "y"
+   ],
+   "overrides": {
+    "words_to_keep": 1000,
+    "min_term_freq": 3,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "x"
+   ],
+   "note": "x: total 3, df 1 -> lolos; y: total 2, df 2 -> gugur"
+  },
+  {
+   "name": "mtf_lalu_keep_seri",
+   "docs": [
+    "a a b b c c d"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 2,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "a",
+    "b"
+   ],
+   "note": "d dibuang oleh mtf; a=b=c=2 seri -> a, b"
+  },
+  {
+   "name": "custom_normalized_beda_dari_weka",
+   "docs": [
+    "a",
+    "b b b x x x x x x x"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": true,
+    "formula_standard": "custom",
+    "tf_method": "normalized",
+    "idf_method": "none"
+   },
+   "expected_vocabulary": [
+    "a",
+    "x"
+   ],
+   "note": "skor a=1.0, x=0.7, b=0.3; Weka (total count) memilih b,x"
+  },
+  {
+   "name": "weka_pembanding_custom_normalized",
+   "docs": [
+    "a",
+    "b b b x x x x x x x"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": true
+   },
+   "expected_vocabulary": [
+    "b",
+    "x"
+   ],
+   "note": "total count a=1, b=3, x=7"
+  },
+  {
+   "name": "custom_skor_seri_alfabetis",
+   "docs": [
+    "d c b a"
+   ],
+   "overrides": {
+    "words_to_keep": 2,
+    "min_term_freq": 1,
+    "lowercase": true,
+    "formula_standard": "custom",
+    "tf_method": "binary",
+    "idf_method": "none"
+   },
+   "expected_vocabulary": [
+    "a",
+    "b"
+   ],
+   "note": "semua skor 1.0 -> alfabetis"
+  }
+ ]
+}
