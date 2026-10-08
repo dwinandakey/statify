@@ -389,9 +389,9 @@ Pada seluruh 24 konfigurasi dan tiga dataset, kelas yang diprediksi Statify sama
 | scikit-learn pilkada, SMS Spam, SmSA | DIJALANKAN (cloud) | `logs/accuracy_sklearn_{pilkada,sms_spam,smsa}_cloud.txt` |
 | Perbandingan (`compare_predictions.py`) | DIJALANKAN (VM) | `logs/accuracy_compare_{pilkada,sms_spam,smsa}_vm.txt` |
 | Orkestrator dataset tambahan (`run_dataset_eval.mjs`, tanpa langkah scikit-learn karena VM tidak punya scikit-learn) | DIJALANKAN (VM) | `logs/accuracy_{statify,compare}_{sms_spam,smsa}_vm_orch.txt` |
-| Kesetaraan payload headless dan TypeScript, NB: payload yang dikirim ke worker identik dengan golden headless (`payload_equivalence.nb.test.ts`) | Lulus [VM] (ts-jest) | `logs/jest_D_vm.json` |
-| NB: konfigurasi Text (toRustConfig) memuat daftar stopword Indonesia lengkap dan semua opsi vektorisasi | Lulus [VM] | idem |
-| AM: payload ke worker identik dengan golden headless; kolom prediksi sama dengan prediksi golden (`payload_equivalence.am.test.ts`) | Lulus [VM] | idem |
+| Kesetaraan payload headless dan TypeScript, NB: payload yang dikirim ke worker identik dengan golden headless (`payload_equivalence.nb.test.ts`) | Lulus [Win] (ts-jest) | `logs/jest_D_vm.json` |
+| NB: konfigurasi Text (toRustConfig) memuat daftar stopword Indonesia lengkap dan semua opsi vektorisasi | Lulus [Win] | idem |
+| AM: payload ke worker identik dengan golden headless; kolom prediksi sama dengan prediksi golden (`payload_equivalence.am.test.ts`) | Lulus [Win] | idem |
 | Tes Rust `thesis_compare` (`thesis_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi`) | Lulus [Win] | `logs/rust_thesis_compare.txt` |
 | `run_D.ps1` di Windows (Node 24, Python 3.13) | DIJALANKAN, semua langkah keluar 0 (selftest, Statify, scikit-learn, perbandingan untuk tiga dataset, `thesis_compare`, Jest) | `logs/accuracy_*_win.txt` |
 | Jest konfigurasi produksi di Windows (`payload_equivalence`) | DIJALANKAN, 3 dari 3 lulus | `logs/jest_D_win.json` |

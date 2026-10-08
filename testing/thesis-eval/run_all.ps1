@@ -11,6 +11,8 @@ param(
     [switch]$SkipBaseline, [switch]$SkipTracks, [switch]$SkipE, [switch]$SkipRust,
     [string[]]$Only = @()
 )
+# Dengan `powershell -File`, nilai -Only A,E tiba sebagai SATU string "A,E"; pecah manual agar -Only A,E bekerja.
+$Only = @($Only | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 . (Join-Path $PSScriptRoot 'tools\common.ps1')
 
 $frontend = Join-Path $RepoRoot 'frontend'

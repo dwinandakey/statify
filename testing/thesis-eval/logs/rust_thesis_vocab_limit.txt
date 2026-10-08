@@ -1,5 +1,5 @@
    Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.93s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.05s
      Running tests\thesis_vocab_limit.rs (target\debug\deps\thesis_vocab_limit-c12abb606cc7b319.exe)
 
 running 13 tests
@@ -17,7 +17,7 @@ test words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong ... 
 test words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil ... ok
 test words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
 
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=1.53 started=2026-10-08 00:16:40 +07:00 cmd=cargo test --test thesis_vocab_limit -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===
+=== THESIS-EVAL: exit_code=0 elapsed_s=1.56 started=2026-10-08 09:49:30 +07:00 cmd=cargo test --test thesis_vocab_limit -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

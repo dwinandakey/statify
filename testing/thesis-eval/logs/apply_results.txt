@@ -8,4 +8,4 @@ Hasil Jest: 1322 tes; hasil Rust: 136 tes; target Rust gagal kompilasi: []
   F_integration.md: Lulus=100
 TOTAL penanda: Lulus=589
 
-=== THESIS-EVAL: exit_code=0 elapsed_s=0.23 started=2026-10-08 00:23:35 +07:00 cmd=python -X utf8 testing\thesis-eval\tools\apply_results.py cwd=E:\KULIAH\Skripsi\statify64 ===
+=== THESIS-EVAL: exit_code=0 elapsed_s=0.16 started=2026-10-08 09:46:38 +07:00 cmd=python -X utf8 testing\thesis-eval\tools\apply_results.py cwd=E:\KULIAH\Skripsi\statify64 ===

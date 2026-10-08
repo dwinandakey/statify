@@ -35,111 +35,111 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
-| `model-loader.thesis.test.ts` | konstanta batas = 10 x 1024 x 1024 byte dan pesan pengguna menyebut 10 MB | thesis A(f): batas ukuran berkas 10 MB | Lulus [VM] |
-| `model-loader.thesis.test.ts` | 10 MB + 1 byte ditolak AM_E_FILE_TOO_LARGE (detail = nama berkas) dan isi TIDAK dibaca | thesis A(f): batas ukuran berkas 10 MB | Lulus [VM] |
-| `model-loader.thesis.test.ts` | 10 MB - 1 byte dan tepat 10 MB diterima untuk model valid (isi dibaca) | thesis A(f): batas ukuran berkas 10 MB | Lulus [VM] |
-| `model-loader.thesis.test.ts` | urutan pemeriksaan: ekstensi lebih dulu (.txt besar -> AM_E_PARSE), lalu ukuran, baru isi (besar + rusak -> TOO_LARGE) | thesis A(f): batas ukuran berkas 10 MB | Lulus [VM] |
-| `model-loader.thesis.test.ts` | ekstensi: .JSON diterima; tanpa ekstensi atau .json.txt ditolak AM_E_PARSE | thesis A(f): batas ukuran berkas 10 MB | Lulus [VM] |
-| `model-loader.thesis.test.ts` | berkas kosong -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | hanya spasi -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | kurung buka saja -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | objek terpotong setelah koma -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | array terpotong -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | tanda kutip tunggal -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | literal undefined -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | literal NaN -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | koma di akhir objek -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | teks acak -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model valid yang dipotong separuh -> AM_E_PARSE | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model valid dengan sampah di akhir -> AM_E_PARSE | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | pesan pengguna AM_E_PARSE menyebut JSON dan berakhiran kode | thesis A(f): JSON rusak | Lulus [VM] |
-| `model-loader.thesis.test.ts` | null -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | [] -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | [1,2,3] -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | 42 -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | "teks" -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | true -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | objek kosong -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type angka -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type null -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type "decision_tree" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type "Naive_Bayes" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type "constructor" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type "__proto__" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model_type "toString" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "9.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "1.2" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "3.0" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "0.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version "v1.1" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | schema_version hilang atau bukan string -> galat yang sama (detail kosong atau nilai teks) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | versi yang didukung (1.0, 1.1, 2.0) berhasil; pesan pengguna menyebut ketiganya | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | target.classes = [] -> gagal dengan AM_E_CLASSES_EMPTY | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | kelas kosong dengan prior dan jumlah kasus juga kosong -> tetap gagal (bukan lolos tanpa kelas) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | classes bukan array -> AM_E_FIELD_TYPE (bukan AM_E_CLASSES_EMPTY) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | nb-model-v2_0-vector.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | nb-model-v2_0-raw.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | text.terms bukan array -> AM_E_FIELD_TYPE (detail text.terms) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | model raw dengan recipe.vocabulary kosong -> gagal (kosakata resep tidak sama dengan terms) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [VM] |
-| `model-loader.thesis.test.ts` | ada fixture ekspor nyata untuk diuji | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (4).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5) minstd.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5)17rbVEC.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (6)complement.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `model-loader.thesis.test.ts` | setiap kode galat yang dihasilkan jalur file terdaftar di ALL_APPLY_MODEL_CODES dan punya pesan berakhiran kode | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [VM] |
-| `kfold.thesis.test.ts` | nilai bawaan formulir: 10 fold, tanpa galat | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = -5 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = -1 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 0 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 2 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 3 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 10 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 100 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 1000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 1000000000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 1.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 2.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = 0.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = NaN (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = Infinity (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds = -Infinity (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds bukan number ("5") ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds bukan number ("") ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds bukan number (null) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds bukan number (undefined) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | KFolds bukan number (true) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | pada mode holdout nilai KFolds yang tidak sah diabaikan; sebaliknya TrainingPercentage tidak diperiksa pada kfold | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [VM] |
-| `kfold.thesis.test.ts` | buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust | thesis A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [VM] |
-| `kfold.thesis.test.ts` | nilai KFolds lain juga tidak diubah (2, 10) | thesis A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [VM] |
-| `kfold.thesis.test.ts` | galat Rust "Number of folds must be at least 1 (got 0)." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [VM] |
-| `kfold.thesis.test.ts` | galat Rust "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [VM] |
-| `kfold.thesis.test.ts` | galat Rust "Cannot create cross-validation folds: there are no valid instances after missing-value handling." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [VM] |
-| `kfold.thesis.test.ts` | teks peringatan Rust yang memuat kata fold juga dipetakan ke saran yang sama (pemeta berbasis pencocokan kata) | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [VM] |
-| `formula-output.thesis.test.ts` | Weka: 3 TF x 2 IDF x 2 normalisasi; sklearn: 3 x 3 x 3; custom: semua 5 x 4 x 4 | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [VM] |
-| `formula-output.thesis.test.ts` | untuk ke-80 kombinasi pada grid acuan: sah-Weka/sah-sklearn menurut UI = menurut validator Rust (weka_ok/sklearn_ok) | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [VM] |
-| `formula-output.thesis.test.ts` | rumus yang ditampilkan di tooltip sesuai definisi yang diimplementasikan Rust | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [VM] |
-| `formula-output.thesis.test.ts` | kolom 'Documents (Non-zero)' = document frequency acuan [2, 2, 2, 2, 1] dan tidak ada vektor nol | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `formula-output.thesis.test.ts` | label pengaturan: tiga standar rumus dan opsinya | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `formula-output.thesis.test.ts` | label stopword, stemming, tokenizer, huruf kecil, dan min term frequency | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `formula-output.thesis.test.ts` | kosakata kosong: tabel kosakata tidak dibuat dan kolom pertama-terakhir '-' | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `formula-output.thesis.test.ts` | satu kolom: kalimat tunggal; tepat MAX_VOCABULARY_ROWS istilah tidak memunculkan catatan pemotongan | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `formula-output.thesis.test.ts` | dokumen kosong dihitung sebagai vektor nol dan durasi dibulatkan | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | Indonesia: 758 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | thesis A(c): daftar stopword bawaan | Lulus [VM] |
-| `stopwords.thesis.test.ts` | Inggris: 1298 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | thesis A(c): daftar stopword bawaan | Lulus [VM] |
-| `stopwords.thesis.test.ts` | memuat kata fungsi umum dan (sesuai keputusan pemilik) kata negasi Indonesia | thesis A(c): daftar stopword bawaan | Lulus [VM] |
-| `stopwords.thesis.test.ts` | salinan data tes Rust identik dengan konstanta TypeScript (penjaga sinkronisasi) | thesis A(c): daftar stopword bawaan | Lulus [VM] |
-| `stopwords.thesis.test.ts` | indonesian -> custom_stopwords = JSON array daftar bawaan Indonesia | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | english -> custom_stopwords = JSON array daftar bawaan Inggris | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | none -> custom_stopwords null walau customList terisi | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | custom -> satu kata per baris, di-trim, baris kosong/spasi dibuang, huruf asli dipertahankan | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | custom dengan daftar kosong -> array kosong '[]' (bukan null) | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | keluaran custom_stopwords selalu JSON valid berupa array string (kontrak yang diparse Rust) | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [VM] |
-| `stopwords.thesis.test.ts` | 15 pasangan (min <= max) sah dan diteruskan ke payload sebagai ngram_min/ngram_max | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [VM] |
-| `stopwords.thesis.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [VM] |
-| `stopwords.thesis.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [VM] |
+| `model-loader.thesis.test.ts` | konstanta batas = 10 x 1024 x 1024 byte dan pesan pengguna menyebut 10 MB | thesis A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.thesis.test.ts` | 10 MB + 1 byte ditolak AM_E_FILE_TOO_LARGE (detail = nama berkas) dan isi TIDAK dibaca | thesis A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.thesis.test.ts` | 10 MB - 1 byte dan tepat 10 MB diterima untuk model valid (isi dibaca) | thesis A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.thesis.test.ts` | urutan pemeriksaan: ekstensi lebih dulu (.txt besar -> AM_E_PARSE), lalu ukuran, baru isi (besar + rusak -> TOO_LARGE) | thesis A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.thesis.test.ts` | ekstensi: .JSON diterima; tanpa ekstensi atau .json.txt ditolak AM_E_PARSE | thesis A(f): batas ukuran berkas 10 MB | Lulus [Win] |
+| `model-loader.thesis.test.ts` | berkas kosong -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | hanya spasi -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | kurung buka saja -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | objek terpotong setelah koma -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | array terpotong -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | tanda kutip tunggal -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | literal undefined -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | literal NaN -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | koma di akhir objek -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | teks acak -> AM_E_PARSE dengan detail nama berkas | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model valid yang dipotong separuh -> AM_E_PARSE | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model valid dengan sampah di akhir -> AM_E_PARSE | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | pesan pengguna AM_E_PARSE menyebut JSON dan berakhiran kode | thesis A(f): JSON rusak | Lulus [Win] |
+| `model-loader.thesis.test.ts` | null -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | [] -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | [1,2,3] -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | 42 -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | "teks" -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | true -> AM_E_NOT_OBJECT | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | objek kosong -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type angka -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type null -> AM_E_MODEL_TYPE_MISSING | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type "decision_tree" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type "Naive_Bayes" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type "constructor" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type "__proto__" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model_type "toString" -> AM_E_MODEL_TYPE_UNSUPPORTED (detail = tipe) | thesis A(f): JSON valid tetapi bukan model | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "9.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "1.2" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "3.0" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "0.9" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version "v1.1" -> satu galat AM_E_SCHEMA_VERSION_UNSUPPORTED (validasi berhenti, detail = versi) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | schema_version hilang atau bukan string -> galat yang sama (detail kosong atau nilai teks) | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | versi yang didukung (1.0, 1.1, 2.0) berhasil; pesan pengguna menyebut ketiganya | thesis A(f): schema_version tidak dikenal (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | target.classes = [] -> gagal dengan AM_E_CLASSES_EMPTY | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | kelas kosong dengan prior dan jumlah kasus juga kosong -> tetap gagal (bukan lolos tanpa kelas) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | classes bukan array -> AM_E_FIELD_TYPE (bukan AM_E_CLASSES_EMPTY) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | nb-model-v2_0-vector.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | nb-model-v2_0-raw.json dengan text.terms = [] -> AM_E_NB2_TEXT_SHAPE (detail 'text.terms: empty') | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | text.terms bukan array -> AM_E_FIELD_TYPE (detail text.terms) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | model raw dengan recipe.vocabulary kosong -> gagal (kosakata resep tidak sama dengan terms) | thesis A(f): kelas kosong dan kosakata kosong (lewat loader) | Lulus [Win] |
+| `model-loader.thesis.test.ts` | ada fixture ekspor nyata untuk diuji | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (4).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5) minstd.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5).json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (5)17rbVEC.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | fixture Naive_Bayes_Model_Export (6)complement.json berhasil dimuat lewat loader (ukuran di bawah 10 MB) | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `model-loader.thesis.test.ts` | setiap kode galat yang dihasilkan jalur file terdaftar di ALL_APPLY_MODEL_CODES dan punya pesan berakhiran kode | thesis A(f): fixture ekspor model nyata dan konsistensi kode galat | Lulus [Win] |
+| `kfold.thesis.test.ts` | nilai bawaan formulir: 10 fold, tanpa galat | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = -5 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = -1 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 0 ditolak dengan pesan batas minimum | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 2 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 3 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 10 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 100 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 1000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 1000000000 diterima (tidak ada batas atas di sisi TypeScript; batas atas ditegakkan Rust) | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 1.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 2.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = 0.5 (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = NaN (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = Infinity (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds = -Infinity (bukan bilangan bulat berhingga) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds bukan number ("5") ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds bukan number ("") ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds bukan number (null) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds bukan number (undefined) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | KFolds bukan number (true) ditolak | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | pada mode holdout nilai KFolds yang tidak sah diabaikan; sebaliknya TrainingPercentage tidak diperiksa pada kfold | thesis A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
+| `kfold.thesis.test.ts` | buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust | thesis A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
+| `kfold.thesis.test.ts` | nilai KFolds lain juga tidak diubah (2, 10) | thesis A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
+| `kfold.thesis.test.ts` | galat Rust "Number of folds must be at least 1 (got 0)." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.thesis.test.ts` | galat Rust "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.thesis.test.ts` | galat Rust "Cannot create cross-validation folds: there are no valid instances after missing-value handling." dipetakan ke saran pengaturan cross-validation | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `kfold.thesis.test.ts` | teks peringatan Rust yang memuat kata fold juga dipetakan ke saran yang sama (pemeta berbasis pencocokan kata) | thesis A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
+| `formula-output.thesis.test.ts` | Weka: 3 TF x 2 IDF x 2 normalisasi; sklearn: 3 x 3 x 3; custom: semua 5 x 4 x 4 | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.thesis.test.ts` | untuk ke-80 kombinasi pada grid acuan: sah-Weka/sah-sklearn menurut UI = menurut validator Rust (weka_ok/sklearn_ok) | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.thesis.test.ts` | rumus yang ditampilkan di tooltip sesuai definisi yang diimplementasikan Rust | thesis A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust | Lulus [Win] |
+| `formula-output.thesis.test.ts` | kolom 'Documents (Non-zero)' = document frequency acuan [2, 2, 2, 2, 1] dan tidak ada vektor nol | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.thesis.test.ts` | label pengaturan: tiga standar rumus dan opsinya | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.thesis.test.ts` | label stopword, stemming, tokenizer, huruf kecil, dan min term frequency | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.thesis.test.ts` | kosakata kosong: tabel kosakata tidak dibuat dan kolom pertama-terakhir '-' | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.thesis.test.ts` | satu kolom: kalimat tunggal; tepat MAX_VOCABULARY_ROWS istilah tidak memunculkan catatan pemotongan | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `formula-output.thesis.test.ts` | dokumen kosong dihitung sebagai vektor nol dan durasi dibulatkan | thesis A: buildStwvOutput pada korpus D (acuan df dari reference_values.py) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | Indonesia: 758 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | thesis A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.thesis.test.ts` | Inggris: 1298 entri, string tak kosong, tanpa spasi tepi, huruf kecil, tanpa duplikat | thesis A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.thesis.test.ts` | memuat kata fungsi umum dan (sesuai keputusan pemilik) kata negasi Indonesia | thesis A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.thesis.test.ts` | salinan data tes Rust identik dengan konstanta TypeScript (penjaga sinkronisasi) | thesis A(c): daftar stopword bawaan | Lulus [Win] |
+| `stopwords.thesis.test.ts` | indonesian -> custom_stopwords = JSON array daftar bawaan Indonesia | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | english -> custom_stopwords = JSON array daftar bawaan Inggris | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | none -> custom_stopwords null walau customList terisi | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | custom -> satu kata per baris, di-trim, baris kosong/spasi dibuang, huruf asli dipertahankan | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | custom dengan daftar kosong -> array kosong '[]' (bukan null) | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | keluaran custom_stopwords selalu JSON valid berupa array string (kontrak yang diparse Rust) | thesis A(c): payload stopword ke Rust (toRustConfig) | Lulus [Win] |
+| `stopwords.thesis.test.ts` | 15 pasangan (min <= max) sah dan diteruskan ke payload sebagai ngram_min/ngram_max | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
+| `stopwords.thesis.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
+| `stopwords.thesis.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | thesis A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
 
 ### 3.2 Rust (66 fungsi tes; DIJALANKAN di Windows)
 

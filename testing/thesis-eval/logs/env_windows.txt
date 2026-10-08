@@ -1,4 +1,4 @@
-Waktu pencatatan: 2026-10-08 00:14:05 +07:00
+Waktu pencatatan: 2026-10-08 09:46:09 +07:00
 Komputer: DJ-RAID
 OS: Microsoft Windows 11 Home Single Language 10.0.26300 build 26300 64-bit
 Model: LENOVO 82EY
@@ -16,13 +16,13 @@ cargo-llvm-cov: error: no such command: `llvm-cov` |  | help: view all installed
 cargo-tarpaulin: error: no such command: `tarpaulin` |  | help: view all installed commands with `cargo --list`
 python: Python 3.13.12
 pip: numpy/pandas/scikit-learn/scipy: 2.4.4 3.0.2 1.9.1 1.17.1
-java: 'java' is not recognized as an internal or external command, | operable program or batch file.
+java: java version "25.0.4.1" 2026-08-18 LTS | Java(TM) SE Runtime Environment (build 25.0.4.1+1-LTS-5) | Java HotSpot(TM) 64-Bit Server VM (build 25.0.4.1+1-LTS-5, mixed mode, sharing)
 dot (graphviz): 'dot' is not recognized as an internal or external command, | operable program or batch file.
 git: git version 2.50.1.windows.1
 WEKA: folder ada (C:\Program Files\Weka-3-9-6)
 WEKA version: 3.9.6 |  | -1? -1
 Peramban: C:\Program Files\Google\Chrome\Application\chrome.exe versi 154.0.8037.98
 Peramban: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe versi 154.0.4258.62
-Peramban: C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe versi 154.1.96.61
+Peramban: C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe versi 155.1.97.56
 git branch: thesis-eval
-git commit: dfeeae3068ca8d2a105807736df12d05fc389a41
+git commit: 97a1df38fa6da1d16b2a8040b132fe294532f2dd
