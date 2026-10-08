@@ -763,7 +763,7 @@ export const BinaryLogisticMain = () => {
           .join(" ")}`,
       });
       const analyticId = await addAnalytic(logId, {
-        title: "Multicollinearity Diagnostics (VIF)",
+        title: "Multicollinearity Diagnostics",
       });
 
       const formattedOutput = formatAssumptionTests(payload);
