@@ -1,5 +1,3 @@
-import type React from "react";
-
 export type DiscriminantMainType = {
     GroupingVariable: string | null;
     IndependentVariables: string[] | null;
@@ -8,56 +6,13 @@ export type DiscriminantMainType = {
     SelectionVariable: string | null;
 };
 
-export type DiscriminantDialogProps = {
-    isMainOpen: boolean;
-    setIsMainOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsDefineRangeOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsSetValueOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsStatisticsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsMethodOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsClassifyOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantMainType,
-        value: string | string[] | boolean | null
-    ) => void;
-    data: DiscriminantMainType;
-    globalVariables: string[];
-    onContinue: (mainState: DiscriminantMainType) => void;
-    onReset: () => void;
-    onClose: () => void;
-    isLoading?: boolean;
-    error?: string | null;
-};
-
 export type DiscriminantDefineRangeType = {
     minRange: number | null;
     maxRange: number | null;
 };
 
-export type DiscriminantDefineRangeProps = {
-    isDefineRangeOpen: boolean;
-    setIsDefineRangeOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantDefineRangeType,
-        value: number | null
-    ) => void;
-    data: DiscriminantDefineRangeType;
-};
-
 export type DiscriminantSetValueType = {
     Value: number | null;
-};
-
-export type DiscriminantSetValueProps = {
-    isSetValueOpen: boolean;
-    setIsSetValueOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantSetValueType,
-        value: number | null
-    ) => void;
-    data: DiscriminantSetValueType;
 };
 
 export type DiscriminantStatisticsType = {
@@ -70,16 +25,6 @@ export type DiscriminantStatisticsType = {
     WGCovariance: boolean;
     SGCovariance: boolean;
     TotalCovariance: boolean;
-};
-
-export type DiscriminantStatisticsProps = {
-    isStatisticsOpen: boolean;
-    setIsStatisticsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantStatisticsType,
-        value: boolean
-    ) => void;
-    data: DiscriminantStatisticsType;
 };
 
 export type DiscriminantMethodType = {
@@ -99,16 +44,6 @@ export type DiscriminantMethodType = {
     PRemoval: number | null;
 };
 
-export type DiscriminantMethodProps = {
-    isMethodOpen: boolean;
-    setIsMethodOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantMethodType,
-        value: number | boolean | null
-    ) => void;
-    data: DiscriminantMethodType;
-};
-
 export type DiscriminantClassifyType = {
     AllGroupEqual: boolean;
     GroupSize: boolean;
@@ -125,31 +60,14 @@ export type DiscriminantClassifyType = {
     Replace: boolean;
 };
 
-export type DiscriminantClassifyProps = {
-    isClassifyOpen: boolean;
-    setIsClassifyOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantClassifyType,
-        value: number | boolean | null
-    ) => void;
-    data: DiscriminantClassifyType;
-};
-
 export type DiscriminantSaveType = {
     Predicted: boolean;
     Discriminant: boolean;
     Probabilities: boolean;
+    /** Whether to write the model-information XML file on OK. */
+    ExportXml: boolean;
+    /** Target file name for that export (SPSS asks for a path; a browser can only name the download). */
     XmlFile: string | null;
-};
-
-export type DiscriminantSaveProps = {
-    isSaveOpen: boolean;
-    setIsSaveOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantSaveType,
-        value: boolean | string | null
-    ) => void;
-    data: DiscriminantSaveType;
 };
 
 export type DiscriminantBootstrapType = {
@@ -166,30 +84,10 @@ export type DiscriminantBootstrapType = {
     StrataVariables: string[] | null;
 };
 
-export type DiscriminantBootstrapProps = {
-    isBootstrapOpen: boolean;
-    setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantBootstrapType,
-        value: string[] | string | number | boolean | null
-    ) => void;
-    data: DiscriminantBootstrapType;
-};
-
 export type DiscriminantAssumptionsType = {
     Multicollinearity: boolean;
     MultivariateNormality: boolean;
     UnivariateNormality: boolean;
-};
-
-export type DiscriminantAssumptionsProps = {
-    isAssumptionsOpen: boolean;
-    setIsAssumptionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    updateFormData: (
-        field: keyof DiscriminantAssumptionsType,
-        value: boolean
-    ) => void;
-    data: DiscriminantAssumptionsType;
 };
 
 export type DiscriminantType = {
@@ -202,8 +100,4 @@ export type DiscriminantType = {
     save: DiscriminantSaveType;
     bootstrap: DiscriminantBootstrapType;
     assumptions: DiscriminantAssumptionsType;
-};
-
-export type DiscriminantContainerProps = {
-    onClose: () => void;
 };

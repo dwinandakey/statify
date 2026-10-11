@@ -105,9 +105,10 @@ function buildSystemSettings(settings: any): Table {
 }
 
 function buildPredictorImportance(importance: any): Table {
-  const entries = Array.isArray(importance.entries) && importance.entries.length
-    ? importance.entries
-    : normalizePredictorImportanceEntries(importance.predictors);
+  const entries =
+    Array.isArray(importance.entries) && importance.entries.length
+      ? importance.entries
+      : normalizePredictorImportanceEntries(importance.predictors);
 
   return {
     key: "predictor_importance",
@@ -122,16 +123,29 @@ function buildPredictorImportance(importance: any): Table {
       { header: "Normalized Importance", key: "importance" },
     ],
     rows: entries.map((entry: any, index: number) => ({
-      rowHeader: [String(entry.featureName ?? entry.feature_name ?? entry.name ?? index + 1)],
+      rowHeader: [
+        String(
+          entry.featureName ?? entry.feature_name ?? entry.name ?? index + 1,
+        ),
+      ],
       rank: formatDisplayNumber(entry.rank ?? index + 1),
       predictor: entry.featureName ?? entry.feature_name ?? entry.name ?? "",
       base_error: optionalNumber(entry.baseError ?? entry.base_error),
-      error_without_feature: optionalNumber(entry.errorWithoutFeature ?? entry.error_without_feature),
+      error_without_feature: optionalNumber(
+        entry.errorWithoutFeature ?? entry.error_without_feature,
+      ),
       delta_error: optionalNumber(entry.deltaError ?? entry.delta_error),
       raw_feature_importance: optionalNumber(
-        entry.rawFeatureImportance ?? entry.raw_feature_importance ?? entry.rawImportance ?? entry.raw_importance,
+        entry.rawFeatureImportance ??
+          entry.raw_feature_importance ??
+          entry.rawImportance ??
+          entry.raw_importance,
       ),
-      importance: optionalNumber(entry.normalizedImportance ?? entry.normalized_importance ?? entry.value),
+      importance: optionalNumber(
+        entry.normalizedImportance ??
+          entry.normalized_importance ??
+          entry.value,
+      ),
     })),
     note: `Target: ${importance.target ?? ""}; K = ${importance.k ?? ""}`,
   };
@@ -154,7 +168,9 @@ function buildPredictorSpaceSummary(space: any): Table {
       },
       {
         rowHeader: ["Actual Predictors"],
-        value: formatDisplayNumber(space.actual_predictors ?? space.model_predictors),
+        value: formatDisplayNumber(
+          space.actual_predictors ?? space.model_predictors,
+        ),
       },
       { rowHeader: ["Displayed Space"], value: dimension?.name ?? "" },
       {
@@ -238,7 +254,7 @@ function buildConfusionMatrix(table: any): Table {
 
   return {
     key: "confusion_matrix",
-    title: "Classification Tablee",
+    title: "Classification Table",
     columnHeaders: [
       { header: "Partition", key: "partition" },
       { header: "Observed", key: "observed" },
@@ -264,7 +280,7 @@ function buildErrorSummary(summary: any): Table {
     columnHeaders: [
       { header: "Partition", key: "partition" },
       {
-        header: "Percent of Records in Incorrectly Classified",
+        header: "Percent of Records Incorrectly Classified",
         key: "percent_incorrectly_classified",
       },
     ],
@@ -272,14 +288,14 @@ function buildErrorSummary(summary: any): Table {
       {
         rowHeader: ["Training"],
         partition: "Training",
-        percent_incorrectly_classified: optionalPercent3Decimals(
+        percent_incorrectly_classified: optionalPercent1Decimal(
           summary.training,
         ),
       },
       {
         rowHeader: ["Holdout"],
         partition: "Holdout",
-        percent_incorrectly_classified: optionalPercent3Decimals(
+        percent_incorrectly_classified: optionalPercent1Decimal(
           summary.holdout,
         ),
       },
@@ -287,7 +303,11 @@ function buildErrorSummary(summary: any): Table {
   };
 }
 
-function partitionRows(partitionName: string, partition: any, categories: string[]): Row[] {
+function partitionRows(
+  partitionName: string,
+  partition: any,
+  categories: string[],
+): Row[] {
   const categoryRows: Row[] = categories.map((category, rowIndex) => {
     const row: Row = {
       rowHeader: [partitionName, category],
@@ -309,7 +329,7 @@ function partitionRows(partitionName: string, partition: any, categories: string
 
   const overallPercentRow: Row = {
     rowHeader: [partitionName, "Overall Percent"],
-    percent_correct: "",
+    percent_correct: overallPercentCorrect(partition?.confusion_matrix),
   };
 
   categories.forEach((_, index) => {
@@ -363,8 +383,7 @@ function formatDistance3(value: number) {
   const sign = value < 0 ? -1 : 1;
   const absolute = Math.abs(value);
   const scaledToThousands = Math.floor(absolute * 1000 + Number.EPSILON);
-  const fourthDecimalDigit =
-    Math.floor(absolute * 10000 + Number.EPSILON) % 10;
+  const fourthDecimalDigit = Math.floor(absolute * 10000 + Number.EPSILON) % 10;
   const rounded =
     fourthDecimalDigit >= 5 ? scaledToThousands + 1 : scaledToThousands;
 
@@ -373,16 +392,44 @@ function formatDistance3(value: number) {
 
 function percent(numerator: number, denominator: number) {
   if (denominator <= 0) return "";
-  return `${formatDisplayNumber((numerator / denominator) * 100)}%`;
+  const value = Math.round((numerator / denominator) * 1000) / 10;
+  return `${value.toFixed(1)}%`;
+}
+
+// Persentase klasifikasi benar keseluruhan: jumlah diagonal confusion matrix
+// dibagi seluruh kasus pada partition tersebut.
+function overallPercentCorrect(confusionMatrix: any): string {
+  if (!Array.isArray(confusionMatrix)) return "";
+
+  let correct = 0;
+  let total = 0;
+
+  confusionMatrix.forEach((row: any, rowIndex: number) => {
+    if (!Array.isArray(row)) return;
+    row.forEach((cell: any, columnIndex: number) => {
+      const count = Number(cell ?? 0);
+      if (!Number.isFinite(count)) return;
+      total += count;
+      if (rowIndex === columnIndex) correct += count;
+    });
+  });
+
+  if (total <= 0) return "";
+  return optionalPercent1Decimal((correct / total) * 100);
 }
 
 function optionalNumber(value: any) {
-  if (value === null || value === undefined || !Number.isFinite(Number(value))) return "";
+  if (value === null || value === undefined || !Number.isFinite(Number(value)))
+    return "";
   return formatDisplayNumber(Number(value));
 }
 
 function optionalPercent1Decimal(value: any) {
-  if (value === null || value === undefined || !Number.isFinite(Number(value))) {
+  if (
+    value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+  ) {
     return "";
   }
 
@@ -400,28 +447,25 @@ function optionalPercent1Decimal(value: any) {
   return `${((sign * rounded) / 10).toFixed(1)}%`;
 }
 
-function optionalPercent3Decimals(value: any) {
-  if (value === null || value === undefined || !Number.isFinite(Number(value))) {
-    return "";
-  }
-
-  return `${Number(value).toFixed(3)}%`;
-}
-
 function normalizePredictorImportanceEntries(predictors: any) {
   const rows = Array.isArray(predictors)
     ? predictors.map((entry: any) => ({
         name: entry.name,
         value: entry.value,
       }))
-    : Object.entries(predictors ?? {}).map(([name, value]) => ({ name, value }));
+    : Object.entries(predictors ?? {}).map(([name, value]) => ({
+        name,
+        value,
+      }));
 
   return rows
-    .sort((left: any, right: any) => Number(right.value ?? 0) - Number(left.value ?? 0))
+    .sort(
+      (left: any, right: any) =>
+        Number(right.value ?? 0) - Number(left.value ?? 0),
+    )
     .map((entry: any, index: number) => ({
       ...entry,
       rank: index + 1,
       normalizedImportance: Number(entry.value ?? 0),
     }));
 }
-

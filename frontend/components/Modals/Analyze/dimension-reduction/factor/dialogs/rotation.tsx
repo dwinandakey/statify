@@ -111,7 +111,7 @@ export const FactorRotation = ({
                                             <Label htmlFor="Varimax">Varimax</Label>
                                         </div>
 
-                                        <div className="flex items-center space-x-2">
+                                        {/* <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="Oblimin" id="Oblimin" />
                                             <Label htmlFor="Oblimin">
                                                 Direct Oblimin
@@ -132,7 +132,7 @@ export const FactorRotation = ({
                                                     )
                                                 }
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="flex flex-col gap-2">
@@ -146,13 +146,13 @@ export const FactorRotation = ({
                                             <Label htmlFor="Equimax">Equimax</Label>
                                         </div>
 
-                                  
+{/*                                   
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="Promax" id="Promax" />
                                             <Label htmlFor="Promax">Promax</Label>
-                                        </div>
+                                        </div> */}
 
-                                        <div className="flex items-center space-x-2 pl-6">
+                                        {/* <div className="flex items-center space-x-2 pl-6">
                                             <Label className="w-[80px]">Kappa:</Label>
                                             <Input
                                                 type="number"
@@ -166,7 +166,7 @@ export const FactorRotation = ({
                                                     )
                                                 }
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </RadioGroup>

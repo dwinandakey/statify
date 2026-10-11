@@ -813,7 +813,6 @@ export const createGroupedScatterPlot = (
   );
 
   if (validData.length === 0) {
-    console.error("No valid data available for the grouped scatter plot");
     return null;
   }
 

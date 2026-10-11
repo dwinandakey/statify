@@ -66,7 +66,7 @@ pub fn split_partition_and_cross_validation_by_config(
     let effective_seed = if config.partition.set_seed {
         config.partition.seed
     } else {
-        None
+        config.run.partition_seed
     };
     let mut rng = seeded_mt19937(effective_seed);
 
@@ -458,6 +458,26 @@ pub fn has_valid_partitioning_values(
     true
 }
 
+/// True when the partitioning variable assigns the case to the holdout sample
+/// (value <= 0). Such a case can still be predicted when its target is missing;
+/// it only cannot be scored against an observed value.
+pub fn is_holdout_by_partition_variable(
+    data: &AnalysisData,
+    config: &KnnConfig,
+    raw_case_idx: usize,
+) -> bool {
+    if !config.partition.use_variable {
+        return false;
+    }
+
+    config
+        .partition
+        .partitioning_variable
+        .as_deref()
+        .and_then(|partition_var| numeric_partition_value(raw_case_idx, partition_var, data))
+        .is_some_and(|value| value <= 0.0)
+}
+
 #[cfg(test)]
 fn create_fold_variable_splits(folds: &[usize]) -> Vec<(Vec<usize>, Vec<usize>)> {
     let mut unique_folds = Vec::new();
@@ -787,7 +807,12 @@ mod tests {
                 is_cate_target_var: false,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,
@@ -894,7 +919,12 @@ mod tests {
                 is_cate_target_var: false,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,
@@ -1003,7 +1033,12 @@ mod tests {
                 is_cate_target_var: false,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,
@@ -1102,7 +1137,12 @@ mod tests {
                 is_cate_target_var: false,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,
@@ -1194,7 +1234,12 @@ mod tests {
                 is_cate_target_var: false,
                 random_assign_to_partition: false,
                 random_assign_to_fold: false,
+                predicted_value_name: None,
+                probability_name: None,
+                partition_name: None,
+                fold_name: None,
             },
+            run: Default::default(),
             output: crate::models::config::OutputConfig {
                 case_summary: true,
                 feature_selection_summary: true,

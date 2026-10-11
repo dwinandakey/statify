@@ -77,6 +77,7 @@ export const DiscriminantSaveDefault : DiscriminantSaveType = {
     Predicted: false,
     Discriminant: false,
     Probabilities: false,
+    ExportXml: false,
     XmlFile: null,
 }
 

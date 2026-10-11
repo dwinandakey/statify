@@ -31,6 +31,9 @@ const CompareMeansMenu: FC = () => {
                 <MenubarItem onClick={() => openModal(ModalType.OneWayANOVA)}>
                     One-Way ANOVA...
                 </MenubarItem>
+                <MenubarItem onClick={() => openModal(ModalType.BartlettTest)}>
+                    Bartlett&apos;s Test of Homogeneity...
+                </MenubarItem>
             </MenubarContent>
         </MenubarMenu>
     );

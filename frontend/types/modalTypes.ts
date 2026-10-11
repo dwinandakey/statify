@@ -111,6 +111,7 @@ export enum ModalType {
     IndependentSamplesTTest = "IndependentSamplesTTest",
     PairedSamplesTTest = "PairedSamplesTTest",
     OneWayANOVA = "OneWayANOVA",
+    BartlettTest = "BartlettTest",
 
     // Correlate modals
     Bivariate = "Bivariate",
@@ -130,6 +131,8 @@ export enum ModalType {
     ModalTree = "ModalTree",
     ModalDiscriminant = "ModalDiscriminant",
     ModalNearestNeighbor = "ModalNearestNeighbor",
+    ModalNaiveBayes = "ModalNaiveBayes",
+    ModalApplyModel = "ModalApplyModel",
     ModalROCCurve = "ModalROCCurve",
     ModalROCAnalysis = "ModalROCAnalysis",
 
@@ -313,6 +316,7 @@ export const MODAL_CATEGORIES: Record<ModalType, ModalCategory> = {
     [ModalType.OneSampleTTest]: ModalCategory.Analyze,
     [ModalType.PairedSamplesTTest]: ModalCategory.Analyze,
     [ModalType.OneWayANOVA]: ModalCategory.Analyze,
+    [ModalType.BartlettTest]: ModalCategory.Analyze,
 
     // Correlate modals
     [ModalType.Bivariate]: ModalCategory.Analyze,
@@ -332,6 +336,8 @@ export const MODAL_CATEGORIES: Record<ModalType, ModalCategory> = {
     [ModalType.ModalTree]: ModalCategory.Analyze,
     [ModalType.ModalDiscriminant]: ModalCategory.Analyze,
     [ModalType.ModalNearestNeighbor]: ModalCategory.Analyze,
+    [ModalType.ModalNaiveBayes]: ModalCategory.Analyze,
+    [ModalType.ModalApplyModel]: ModalCategory.Analyze,
     [ModalType.ModalROCCurve]: ModalCategory.Analyze,
     [ModalType.ModalROCAnalysis]: ModalCategory.Analyze,
 
@@ -540,6 +546,10 @@ export function getModalTitle(type: ModalType): string {
             return "Discriminant Analysis";
         case ModalType.ModalNearestNeighbor:
             return "Nearest Neighbor";
+        case ModalType.ModalNaiveBayes:
+            return "Naive Bayes";
+        case ModalType.ModalApplyModel:
+            return "Apply Model";
         case ModalType.ModalROCCurve:
             return "ROC Curve";
         case ModalType.ModalROCAnalysis:

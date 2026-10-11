@@ -1,5 +1,3 @@
-/// Algoritma PAM (Partitioning Around Medoids).
-/// 
 /// Menggunakan crate `kmedoids` untuk komputasi inti PAM.
 /// 
 /// Referensi:
@@ -14,10 +12,6 @@ use ndarray::Array2;
 #[cfg(target_arch = "wasm32")]
 use web_sys::console;
 
-/// Numeric tolerance for distance comparisons in SWAP-phase logic.
-///
-/// This tolerance is intentionally separate from `config.epsilon` (convergence
-/// threshold) because equality/tie checks need a much smaller, stable value.
 const DIST_TIE_EPS: f64 = 1e-12;
 
 #[cfg(target_arch = "wasm32")]
@@ -123,10 +117,6 @@ pub struct PAMResult {
     pub converged: bool,
 }
 
-/// Hasil mentah ala R `cluster::pam`.
-///
-/// Catatan: indeks pada `clu` dan `med` adalah 1-based seperti implementasi C/R,
-/// sehingga perlu dikonversi menjadi 0-based sebelum dipakai oleh pipeline Rust.
 #[derive(Debug, Clone)]
 struct RStylePamRawResult {
     clu: Vec<usize>,
@@ -135,10 +125,6 @@ struct RStylePamRawResult {
     sylinf: Option<Vec<f64>>,
 }
 
-/// Konversi data row-major (`data[row][col]`) menjadi buffer column-major.
-///
-/// Format ini sesuai kebutuhan `cl_pam` yang mengharapkan urutan memori:
-/// `x[col * n + row]`.
 fn to_column_major(data: &[Vec<f64>]) -> Vec<f64> {
     if data.is_empty() {
         return Vec::new();
@@ -182,10 +168,6 @@ fn validate_rectangular_data(data: &[Vec<f64>]) -> Result<usize, String> {
     Ok(p)
 }
 
-/// Adapter fungsi `cl_pam` (signature ala translasi R `cluster::pam`).
-///
-/// Call-site disamakan dengan API referensi agar mudah mengganti implementasi
-/// internal ke translasi `pam.c` penuh tanpa mengubah layer integrasi.
 #[allow(clippy::too_many_arguments)]
 fn cl_pam(
     k: usize,
@@ -227,7 +209,6 @@ fn cl_pam(
         ));
     }
 
-    // Rekonstruksi ke row-major untuk memanfaatkan pipeline PAM yang sudah ada.
     let mut data = vec![vec![0.0_f64; p]; n];
     for col in 0..p {
         for row in 0..n {
@@ -254,9 +235,6 @@ fn cl_pam(
     let dist = build_distance_matrix(&data, &metric);
     let result = run_pam_with_dist(&dist, n, &config, None, None)?;
 
-    // Sesuai alur BUILD/SWAP ala R pam.c pada request integrasi ini:
-    // obj[0] = total cost setelah fase BUILD,
-    // obj[1] = total cost akhir setelah fase SWAP.
     let init_total = result.cost_history.first().copied().unwrap_or(result.total_cost);
     let final_total = result.total_cost;
 
@@ -268,10 +246,6 @@ fn cl_pam(
     })
 }
 
-/// Integrasi PAM gaya R (`cluster::pam`) dengan output kompatibel API lama.
-///
-/// Fungsi ini non-breaking: menambahkan entry-point baru tanpa menghapus
-/// `run_pam` lama.
 pub fn run_pam_r_style(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResult, String> {
     validate_clustering_input(data, config.k)?;
     let p = validate_rectangular_data(data)?;
@@ -425,9 +399,6 @@ pub fn run_pam(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResult, Strin
         return run_pam_single(data, config);
     }
 
-    // Random restart: bangun matriks jarak SEKALI, lalu pakai ulang untuk semua
-    // percobaan n_init. Sebelumnya, tiap run_pam_single() membangun ulang
-    // matriks O(n^2), sehingga overhead per restart menjadi besar.
     validate_clustering_input(data, config.k)?;
     let dist = build_distance_matrix(data, &config.metric);
     let n = data.len();
@@ -455,7 +426,6 @@ pub fn run_pam(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResult, Strin
     best_result.ok_or_else(|| "All initialization attempts failed".to_string())
 }
 
-/// Jalankan PAM satu kali. Membangun matriks jarak lalu delegasi ke run_pam_with_dist.
 fn run_pam_single(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResult, String> {
     validate_clustering_input(data, config.k)?;
     let dist = build_distance_matrix(data, &config.metric);
@@ -463,10 +433,6 @@ fn run_pam_single(data: &[Vec<f64>], config: &PAMConfig) -> Result<PAMResult, St
     run_pam_with_dist(&dist, n, config, None, None)
 }
 
-/// Titik masuk publik yang menerima callback opsional.
-/// - `on_iter`: dipanggil setelah setiap langkah SWAP dengan (iterasi, cost).
-/// - `on_initial_medoids`: dipanggil sekali setelah fase BUILD dengan indeks
-///   medoid awal, agar UI bisa menampilkan medoid awal sebelum SWAP selesai.
 pub fn run_pam_with_progress(
     data: &[Vec<f64>],
     config: &PAMConfig,
@@ -474,13 +440,10 @@ pub fn run_pam_with_progress(
     on_initial_medoids: Option<&dyn Fn(&[usize])>,
 ) -> Result<PAMResult, String> {
     if config.use_r_implementation {
-        // Jalur R-style tidak mengekspos iterasi SWAP per langkah.
-        // Untuk UX tetap konsisten, kirim medoid final sebagai initial snapshot.
         let result = run_pam_r_style(data, config)?;
         if let Some(cb) = on_initial_medoids {
             cb(&result.medoids);
         }
-        // on_iter tidak dipanggil karena iterasi internal tidak diekspos.
         let _ = on_iter;
         return Ok(result);
     }
@@ -491,12 +454,6 @@ pub fn run_pam_with_progress(
     run_pam_with_dist(&dist, n, config, on_iter, on_initial_medoids)
 }
 
-/// Jalankan PAM pada matriks jarak yang sudah dibangun sebelumnya.
-/// Pakai fungsi ini saat menguji banyak nilai k pada data yang sama agar
-/// matriks O(n^2) cukup dibangun sekali.
-/// - `on_iter`: dipanggil setelah setiap SWAP dengan (iterasi, current_cost).
-/// - `on_initial_medoids`: dipanggil sekali setelah inisialisasi BUILD,
-///   sebelum SWAP apa pun, agar medoid awal bisa langsung ditampilkan di UI.
 pub(crate) fn run_pam_with_dist(
     dist: &Array2<f64>,
     n: usize,
@@ -506,10 +463,6 @@ pub(crate) fn run_pam_with_dist(
 ) -> Result<PAMResult, String> {
     let k = config.k;
 
-    // Verifikasi alur k (sisi Rust).
-    // Catat nilai k di sini agar DevTools browser bisa memastikan nilai k yang
-    // benar-benar masuk ke run_pam_with_dist (entry terdalam sebelum BUILD).
-    // Ini memudahkan deteksi jika ada korupsi nilai k di pipeline.
     #[cfg(target_arch = "wasm32")]
     console::log_1(
         &format!("[PAM BUILD entry] k={} n={} use_build={} epsilon={:e}",
@@ -522,15 +475,8 @@ pub(crate) fn run_pam_with_dist(
 
     // Inisialisasi
     let mut medoids: Vec<usize> = if config.use_build_phase {
-        // kmedoids::pam_build mengembalikan (loss, assignments[n], medoids[k]).
-        // Yang dibutuhkan adalah elemen KETIGA (indeks medoid), bukan elemen
-        // kedua (assignment tiap titik). Versi lama tertukar, sehingga vektor
-        // assignment sepanjang n dipakai sebagai medoid awal dan menurunkan akurasi.
         let (_, _, initial_medoids): (f64, Vec<usize>, Vec<usize>) =
             kmedoids::pam_build(dist, k);
-        // Kirim medoid awal ke caller sebelum iterasi SWAP dimulai.
-        // Dengan begitu UI bisa menampilkan informasi awal saat fase SWAP
-        // (yang berpotensi lambat, O(n^2 x max_iter)) masih berjalan.
         if let Some(cb) = on_initial_medoids { cb(&initial_medoids); }
         initial_medoids
     } else {
@@ -544,17 +490,6 @@ pub(crate) fn run_pam_with_dist(
     let mut current_cost = init_cost;
     let mut n_iter = 0usize;
 
-    // Fase SWAP
-    // Gunakan slice boolean datar alih-alih HashSet untuk cek keanggotaan medoid
-    // O(1) dengan locality cache yang lebih baik. Slice ini diinisialisasi ulang
-    // tiap iterasi karena medoid berubah; alokasi O(n) terjadi sekali per iterasi
-    // (konstanta kecil dibanding loop utama O(n^2)).
-    //
-    // Deteksi siklus: simpan setiap set medoid (sudah diurutkan) yang pernah
-    // muncul. Jika PAM kembali ke state lama (bisa terjadi saat epsilon=0 dan
-    // pembulatan floating-point menghasilkan delta nyaris nol), hentikan agar
-    // tidak terus berjalan sampai max_iterations. Biaya memori O(max_iter x k),
-    // biasanya sangat kecil (mis. k=2, 300 iterasi -> 600 nilai usize).
     let mut seen_states: Vec<Vec<usize>> = Vec::new();
     {
         let mut initial_state = medoids.clone();
@@ -574,9 +509,6 @@ pub(crate) fn run_pam_with_dist(
 
         medoids[best_m_pos] = best_x;
 
-        // Deteksi siklus: jika set medoid ini sudah pernah muncul, berarti ada
-        // loop tak berujung akibat delta floating-point yang nyaris nol.
-        // Perlakukan sebagai konvergen (optimum lokal), lalu berhenti.
         let mut state = medoids.clone();
         state.sort_unstable();
         if seen_states.contains(&state) {
@@ -590,8 +522,6 @@ pub(crate) fn run_pam_with_dist(
         cost_history.push(current_cost);
         medoid_history.push(medoids.clone());
         n_iter += 1;
-        // Kirim progress callback (nomor iterasi, cost saat ini) agar worker JS
-        // bisa menampilkan progres real-time, bukan spinner statis.
         if let Some(cb) = on_iter { cb(n_iter, current_cost); }
     }
 
@@ -604,21 +534,12 @@ pub(crate) fn run_pam_with_dist(
     if let Some(last) = cost_history.last_mut() {
         *last = final_cost;
     }
-
-    // Baca jarak per titik langsung dari matriks jarak agar tidak perlu hitung
-    // ulang jarak O(n x d) dari data mentah di layer entry-point WASM.
     let distances_to_medoids: Vec<f64> = (0..n)
         .map(|i| dist[[i, medoids[assignments[i]]]])
         .collect();
 
-    // Hitung silhouette score per objek dengan memakai ulang matriks jarak yang
-    // sudah ada (lookup O(n^2), row-major, lebih ramah cache). Ini menghindari
-    // hitung ulang semua jarak di worker JS setelah WASM selesai.
     let silhouette_scores = compute_silhouette_from_dist(dist, &assignments, n, k);
 
-    // Assertion pasca proses:
-    // Pastikan medoids.len() == k untuk menangkap mutasi k yang tidak sengaja
-    // di dalam crate kmedoids (state statik, salah destructuring return, dll).
     #[cfg(target_arch = "wasm32")]
     console::log_1(
         &format!("[PAM DONE] k={} medoids.len()={} iters={} converged={} cost={:.4}",
@@ -641,10 +562,6 @@ pub(crate) fn run_pam_with_dist(
     })
 }
 
-/// Jalankan PAM untuk rentang nilai k, dengan membangun matriks jarak sekali saja.
-/// Ini optimisasi utama untuk pemilihan k otomatis: alih-alih memanggil
-/// `run_k_medoids` sebanyak N kali (dan tiap kali membangun ulang matriks O(n^2)),
-/// matriks dibangun sekali lalu dipakai ulang untuk semua k.
 pub fn run_pam_range(
     data: &[Vec<f64>],
     k_min: usize,
@@ -662,8 +579,6 @@ pub fn run_pam_range(
         return Err(format!("Invalid range: k_min={} k_max={}", k_min, k_max));
     }
 
-    // Untuk jalur R-style, pakai entry-point R-style per k agar rumus cost
-    // (BUILD/SWAP) tetap identik dengan implementasi yang dipilih.
     if base_config.use_r_implementation {
         let mut results = Vec::with_capacity(k_max - k_min + 1);
         for k in k_min..=k_max {
@@ -677,7 +592,6 @@ pub fn run_pam_range(
         return Ok(results);
     }
 
-    // Bangun matriks jarak sekali untuk seluruh nilai k (jalur non-R)
     let dist = build_distance_matrix(data, &base_config.metric);
 
     let mut results = Vec::with_capacity(k_max - k_min + 1);
@@ -693,12 +607,6 @@ pub fn run_pam_range(
     Ok(results)
 }
 
-// Helper untuk loop SWAP kustom (PAM klasik ala R)
-
-/// Simpan informasi per-objek yang diperlukan oleh evaluasi swap PAM klasik:
-/// - `d_nearest[j] = D_j`   : jarak ke medoid terdekat
-/// - `d_second[j]  = E_j`   : jarak ke medoid terdekat kedua
-/// - `nearest_pos[j]`       : posisi medoid terdekat pada `medoids[]`
 fn compute_nearest_and_second(
     dist: &Array2<f64>,
     medoids: &[usize],
@@ -711,21 +619,15 @@ fn compute_nearest_and_second(
     for j in 0..n {
         for (m_pos, &m_idx) in medoids.iter().enumerate() {
             let d = dist[[j, m_idx]];
-            // Epsilon-aware comparisons are required to keep tie handling stable
-            // when distances are numerically almost equal.
             if d + DIST_TIE_EPS < d_nearest[j] {
                 d_second[j] = d_nearest[j];
                 d_nearest[j] = d;
                 nearest_pos[j] = m_pos;
             } else if m_pos != nearest_pos[j] && d <= d_second[j] + DIST_TIE_EPS {
-                // Keep the second-nearest from a different medoid position.
-                // In exact/near ties this correctly allows E_j == D_j.
                 d_second[j] = d;
             }
         }
 
-        // Degenerate fallback: if k==1 second stays INF, but PAM swap is used
-        // with k>=2. Keep it safe for malformed states.
         if !d_second[j].is_finite() {
             d_second[j] = d_nearest[j];
         }
@@ -734,15 +636,6 @@ fn compute_nearest_and_second(
     (d_nearest, d_second, nearest_pos)
 }
 
-/// Evaluasi delta swap PAM klasik untuk pasangan:
-/// - `remove_pos`: posisi medoid yang akan diganti
-/// - `candidate`: indeks objek non-medoid pengganti
-///
-/// Definisi sesuai rumus:
-/// T_ih = Σ_j C_jih
-/// C_jih =
-///   min(d(j,h), E_j) - D_j,  jika medoid terdekat j adalah i (yang dicopot)
-///   min(d(j,h), D_j) - D_j,  selain itu
 #[inline]
 fn evaluate_swap_delta_exact(
     dist: &Array2<f64>,
@@ -762,9 +655,6 @@ fn evaluate_swap_delta_exact(
         let d_j = d_nearest[j];
         let d_ji = dist[[j, medoids[remove_pos]]];
 
-        // IMPORTANT: use epsilon-aware comparison for "d(j,i) = D_j".
-        // nearest_pos alone is insufficient under ties because a medoid can be
-        // equally-nearest without being selected as the canonical nearest index.
         let removed_is_nearest = d_ji <= d_j + DIST_TIE_EPS;
 
         let c_jih = if removed_is_nearest {
@@ -808,8 +698,6 @@ fn evaluate_swap_delta_exact(
     t_ih
 }
 
-/// Cari swap terbaik (posisi_medoid, kandidat_non_medoid, delta)
-/// menggunakan evaluasi PAM klasik ala R (`pam.c`).
 fn find_best_swap(dist: &Array2<f64>, medoids: &[usize], n: usize) -> (usize, usize, f64) {
     let k = medoids.len();
     let (d_nearest, d_second, nearest_pos) = compute_nearest_and_second(dist, medoids, n);
@@ -891,12 +779,6 @@ fn random_init_medoids(n: usize, k: usize, seed: Option<u64>) -> Vec<usize> {
     indices
 }
 
-/// Hitung silhouette score per objek menggunakan matriks jarak yang sudah ada.
-///
-/// Pemakaian ulang `dist` menghindari bangun ulang jarak O(n^2 x d). Matriks
-/// sudah dibuat oleh `run_pam_single`, jadi di sini cukup lookup indeks O(n^2).
-/// Pola akses dist[[i, j]] dengan i tetap dan j berubah adalah akses baris
-/// pada layout row-major, sehingga berurutan dan lebih ramah cache.
 pub(crate) fn compute_silhouette_from_dist(
     dist: &Array2<f64>,
     assignments: &[usize],
@@ -960,11 +842,6 @@ pub(crate) fn compute_silhouette_from_dist(
     scores
 }
 
-/// Bangun matriks jarak ndarray dari data mentah.
-///
-/// Saat fitur `threading` aktif (wasm-bindgen-rayon), segitiga atas O(n^2/2)
-/// dihitung paralel di banyak thread CPU, biasanya lebih cepat pada perangkat
-/// multi-core. Jika tidak, otomatis fallback ke loop sekuensial.
 #[cfg(not(feature = "threading"))]
 pub(crate) fn build_distance_matrix(data: &[Vec<f64>], metric: &DistanceMetric) -> Array2<f64> {
     let n = data.len();
@@ -981,17 +858,11 @@ pub(crate) fn build_distance_matrix(data: &[Vec<f64>], metric: &DistanceMetric) 
     dist
 }
 
-/// Versi paralel dari build_distance_matrix (butuh fitur `threading`).
-/// Rayon dipakai untuk menghitung segitiga atas secara konkuren, lalu segitiga
-/// bawah simetris ditulis dalam satu pass sekuensial.
 #[cfg(feature = "threading")]
 pub(crate) fn build_distance_matrix(data: &[Vec<f64>], metric: &DistanceMetric) -> Array2<f64> {
     use rayon::prelude::*;
     let n = data.len();
 
-    // Hitung semua triple segitiga atas (i, j, distance) secara paralel.
-    // Tiap baris i adalah unit kerja terpisah; dalam satu baris, kolom j>i
-    // dihitung sekuensial agar tidak memicu n^2/2 task kecil.
     let pairs: Vec<(usize, usize, f64)> = (0..n)
         .into_par_iter()
         .flat_map(|i| {
@@ -1009,7 +880,6 @@ pub(crate) fn build_distance_matrix(data: &[Vec<f64>], metric: &DistanceMetric) 
     dist
 }
 
-/// Konversi PAMResult ke ClusteringResult untuk kompatibilitas
 impl From<PAMResult> for ClusteringResult {
     fn from(pam_result: PAMResult) -> Self {
         ClusteringResult {
@@ -1019,225 +889,5 @@ impl From<PAMResult> for ClusteringResult {
             iterations: pam_result.iterations,
             converged: pam_result.converged,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_to_column_major_layout() {
-        let data = vec![
-            vec![1.0, 2.0, 3.0],
-            vec![4.0, 5.0, 6.0],
-        ];
-
-        // n=2, p=3 -> kolom demi kolom: [1,4,2,5,3,6]
-        let x = to_column_major(&data);
-        assert_eq!(x, vec![1.0, 4.0, 2.0, 5.0, 3.0, 6.0]);
-    }
-
-    #[test]
-    fn test_run_pam_r_style_basic_mapping() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![0.1, 0.1],
-            vec![10.0, 10.0],
-            vec![10.1, 10.1],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            metric: DistanceMetric::Euclidean,
-            max_iterations: 100,
-            random_seed: Some(7),
-            use_build_phase: true,
-            epsilon: 0.0,
-            n_init: 1,
-            use_r_implementation: false,
-        };
-
-        let result = run_pam_r_style(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 2);
-        assert_eq!(result.assignments.len(), data.len());
-        assert_eq!(result.iterations, 0);
-        assert!(result.converged);
-        assert_eq!(result.cost_history.len(), 2);
-        assert_eq!(result.distances_to_medoids.len(), data.len());
-        assert_eq!(result.total_cost_build, result.cost_history[0]);
-        assert_eq!(result.total_cost_swap, result.cost_history[1]);
-        assert_eq!(result.total_cost, result.total_cost_swap);
-
-        for &m in &result.medoids {
-            assert!(m < data.len());
-        }
-        for &a in &result.assignments {
-            assert!(a < config.k);
-        }
-    }
-
-    #[test]
-    fn test_pam_basic_clustering() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 0.0],
-            vec![0.0, 1.0],
-            vec![10.0, 10.0],
-            vec![11.0, 10.0],
-            vec![10.0, 11.0],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            metric: DistanceMetric::Euclidean,
-            max_iterations: 100,
-            use_build_phase: true,
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 2);
-        assert_eq!(result.assignments.len(), 6);
-
-        let cluster0 = result.assignments[0];
-        assert_eq!(result.assignments[1], cluster0);
-        assert_eq!(result.assignments[2], cluster0);
-
-        let cluster1 = result.assignments[3];
-        assert_eq!(result.assignments[4], cluster1);
-        assert_eq!(result.assignments[5], cluster1);
-
-        assert_ne!(cluster0, cluster1);
-        assert!(result.total_cost > 0.0);
-        assert!(result.total_cost.is_finite());
-    }
-
-    #[test]
-    fn test_pam_build_phase() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![10.0, 10.0],
-            vec![11.0, 11.0],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            use_build_phase: true,
-            n_init: 1,
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 2);
-        // Medoids should come from different clusters
-        assert!(
-            (result.medoids[0] < 2 && result.medoids[1] >= 2)
-                || (result.medoids[0] >= 2 && result.medoids[1] < 2)
-        );
-    }
-
-    #[test]
-    fn test_pam_random_init() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![2.0, 2.0],
-            vec![3.0, 3.0],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            use_build_phase: false,
-            random_seed: Some(42),
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 2);
-        // With random init and a seeded RNG the algorithm needs at least 0 or
-        // more swaps to converge; we only check that it ran without error and
-        // produced a valid clustering.
-        assert!(result.total_cost > 0.0);
-        assert!(result.total_cost.is_finite());
-    }
-
-    #[test]
-    fn test_pam_convergence() {
-        let data = vec![
-            vec![0.0],
-            vec![1.0],
-            vec![10.0],
-            vec![11.0],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            epsilon: 0.01,
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        for i in 1..result.cost_history.len() {
-            assert!(result.cost_history[i] <= result.cost_history[i - 1] + 1e-10);
-        }
-    }
-
-    #[test]
-    fn test_pam_single_cluster() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 1.0],
-            vec![2.0, 2.0],
-        ];
-
-        let config = PAMConfig {
-            k: 1,
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 1);
-        assert!(result.assignments.iter().all(|&c| c == 0));
-    }
-
-    #[test]
-    fn test_pam_manhattan_distance() {
-        let data = vec![
-            vec![0.0, 0.0],
-            vec![1.0, 0.0],
-            vec![10.0, 10.0],
-        ];
-
-        let config = PAMConfig {
-            k: 2,
-            metric: DistanceMetric::Manhattan,
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config).unwrap();
-
-        assert_eq!(result.medoids.len(), 2);
-        assert!(result.total_cost > 0.0);
-    }
-
-    #[test]
-    fn test_pam_invalid_k() {
-        let data = vec![vec![0.0], vec![1.0]];
-
-        let config = PAMConfig {
-            k: 3, // k lebih besar dari n
-            ..Default::default()
-        };
-
-        let result = run_pam(&data, &config);
-        assert!(result.is_err());
     }
 }

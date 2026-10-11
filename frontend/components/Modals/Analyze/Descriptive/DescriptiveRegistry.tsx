@@ -24,7 +24,7 @@ function withSuspense(Component: React.ComponentType<BaseModalProps>): React.Com
       <Component {...props} />
     </Suspense>
   );
-  
+
   WrappedComponent.displayName = `withSuspense(${Component.displayName || Component.name || 'Component'})`;
   return WrappedComponent;
 }
@@ -37,7 +37,7 @@ const CrosstabsModal = lazy(() => import('@/components/Modals/Analyze/Descriptiv
 
 /**
  * DESCRIPTIVE_MODAL_COMPONENTS - Registry for descriptive statistics modal components
- * 
+ *
  * Maps each descriptive-related ModalType to its corresponding React component
  */
 export const DESCRIPTIVE_MODAL_COMPONENTS: Record<string, React.ComponentType<BaseModalProps>> = {
@@ -49,24 +49,24 @@ export const DESCRIPTIVE_MODAL_COMPONENTS: Record<string, React.ComponentType<Ba
 
 /**
  * getDescriptiveModalComponent - Get a descriptive modal component by type
- * 
+ *
  * @param type - The type of modal to retrieve
  * @returns The React component for the specified modal type, or null if not found
  */
 export function getDescriptiveModalComponent(type: ModalType): React.ComponentType<BaseModalProps> | null {
   const Component = DESCRIPTIVE_MODAL_COMPONENTS[type];
-  
+
   if (!Component) {
     console.warn(`No descriptive modal component registered for type: ${type}`);
     return null;
   }
-  
+
   return Component;
 }
 
 /**
  * DESCRIPTIVE_MODAL_CONTAINER_PREFERENCES - Container preferences for descriptive modals
- * 
+ *
  * Some modals work better in specific container types based on their complexity
  * and screen space requirements.
  */
@@ -75,4 +75,4 @@ export const DESCRIPTIVE_MODAL_CONTAINER_PREFERENCES: Partial<Record<ModalType, 
   [ModalType.Explore]: "sidebar",
   [ModalType.Frequencies]: "sidebar",
   [ModalType.Crosstabs]: "sidebar",
-}; 
+};

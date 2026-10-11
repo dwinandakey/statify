@@ -8,12 +8,91 @@ use crate::models::{
 use crate::stats::extraction_rules::*;
 
 
+// pub fn extract_factors(
+//     matrix: &DMatrix<f64>,
+//     config: &FactorAnalysisConfig,
+//     var_names: &[String]
+// ) -> Result<ExtractionResult, String> {
+    
+//     let mut result = match config.extraction.method {
+//         ExtractionMethod::PrincipalComponents =>
+//             extract_principal_components(matrix, config, var_names),
+//         ExtractionMethod::UnweightedLeastSquares =>
+//             extract_unweighted_least_squares(matrix, config, var_names),
+//         ExtractionMethod::GeneralizedLeastSquares =>
+//             extract_generalized_least_squares(matrix, config, var_names),
+//         ExtractionMethod::MaximumLikelihood =>
+//             extract_maximum_likelihood(matrix, config, var_names),
+//         ExtractionMethod::PrincipalAxisFactoring =>
+//             extract_principal_axis_factoring(matrix, config, var_names),
+//         ExtractionMethod::AlphaFactoring => extract_alpha_factoring(matrix, config, var_names),
+//         ExtractionMethod::ImageFactoring => extract_image_factoring(matrix, config, var_names),
+//     };
+
+//     if let Ok(ref mut res) = result {
+//         standardize_component_signs(&mut res.loadings); 
+//     }
+
+//     result
+// }
+
+
+
+// HARI INI
 pub fn extract_factors(
     matrix: &DMatrix<f64>,
     config: &FactorAnalysisConfig,
     var_names: &[String]
 ) -> Result<ExtractionResult, String> {
     
+    let n = matrix.nrows();
+    
+    // ================================================================================
+    // 1. SAFETY GATEKEEPER (SOFT FAILURE)
+    // ================================================================================
+    // A. Deteksi nilai komputasi yang rusak (NaN / Infinity) 
+    let is_invalid = matrix.iter().any(|&val| val.is_nan() || val.is_infinite());
+
+    // B. Deteksi masking konstanta dengan noise ekstrem
+    let mut is_zero_variance = false;
+    for i in 0..n {
+        let mut sum_off_diagonal = 0.0;
+        for j in 0..n {
+            if i != j {
+                sum_off_diagonal += matrix[(i, j)].abs();
+            }
+        }
+        
+        if sum_off_diagonal < 1e-12 {
+            is_zero_variance = true;
+            break;
+        }
+    }
+
+    // JIKA MATRIKS RUSAK (VARIANS 0): 
+    // Jangan return Err()! Kembalikan Ok() dengan status FailedExtraction.
+    // Ini akan memicu flag suppress_extraction = true di report.rs
+    if is_invalid || is_zero_variance {
+        return Ok(ExtractionResult {
+            loadings: DMatrix::zeros(n, 0),
+            standardized_loadings: None,
+            standard_deviations: None,
+            eigenvalues: vec![],
+            communalities: vec![],
+            explained_variance: vec![],
+            cumulative_variance: vec![],
+            n_factors: 0,
+            var_names: var_names.to_vec(),
+            has_heywood_case: false,
+            // Paksa diagnostic engine mengenali ini sebagai kegagalan
+            status: ExtractionStatus::FailedExtraction, 
+            extraction_status: ExtractionStatus::FailedExtraction,
+            warning_message: Some("There are fewer than two cases, at least one of the variables has zero variance, there is only one variable in the analysis, or correlation coefficients could not be computed for all pairs of variables. No further statistics will be computed.".to_string()),
+        });
+    }
+    
+
+    // Jika aman, lanjutkan ke proses ekstraksi yang sesungguhnya
     let mut result = match config.extraction.method {
         ExtractionMethod::PrincipalComponents =>
             extract_principal_components(matrix, config, var_names),
@@ -55,6 +134,8 @@ fn build_extraction_result(
 
     let mut result = ExtractionResult {
         loadings,
+        standardized_loadings: None,
+        standard_deviations: None,
         eigenvalues,
         communalities,
         explained_variance,
@@ -174,7 +255,7 @@ pub fn extract_principal_components(
     let has_heywood_case = communalities.iter().any(|&x| x >= 0.999);
     let improper_solution = communalities.iter().any(|&x| x.is_nan());
 
-    Ok(build_extraction_result(
+    let mut result = build_extraction_result(
         loadings,
         eigenvalues, // PCA mem-pass semua eigenvalues untuk scree plot/report
         communalities,
@@ -186,7 +267,22 @@ pub fn extract_principal_components(
         converged,
         false, // singular matrix check bisa ditambahkan di luar jika perlu
         improper_solution,
-    ))
+    );
+
+    let mut standardized_loadings = result.loadings.clone();
+    if config.extraction.covariance {
+        let mut standard_deviations = Vec::with_capacity(n_vars);
+        for i in 0..n_vars {
+            let std_dev = matrix[(i, i)].abs().sqrt().max(1e-12);
+            standard_deviations.push(std_dev);
+            for j in 0..n_factors {
+                standardized_loadings[(i, j)] /= std_dev;
+            }
+        }
+        result.standard_deviations = Some(standard_deviations);
+    }
+    result.standardized_loadings = Some(standardized_loadings);
+    Ok(result)
 }
 
 // --------------------------------------------------------------------------------

@@ -3,13 +3,13 @@ use crate::optimizer::fit_location_only;
 use crate::parallel::fit_non_parallel_location_only;
 use crate::statistics::{
     actual_probabilities, correlation_matrix, covariance_matrix, displayed_log_likelihood,
-    compute_gvif_diagnostics, goodness_of_fit, model_fit_statistics,
+    goodness_of_fit, model_fit_statistics,
     multinomial_log_likelihood_constant,
     parameter_statistics, predicted_categories, predicted_cell_counts, predicted_probabilities,
     excluding_log_likelihood, including_log_likelihood,
 };
 use crate::types::{
-    EncodedPredictorBlock, EstimationOptions, FitResult, GvifOptions, IterationHistoryMeta,
+    EstimationOptions, FitResult, IterationHistoryMeta,
     IterationHistoryOptions, ModelType, PlumError, PlumFitOutput, PlumOutputMetadata,
     PlumOutputOptions, PlumSavedVariableOptions, PlumSpec, PlumWorkerPayload, SavedVariableColumn,
     SavedVariablesResult, Subpopulation,
@@ -54,19 +54,23 @@ pub fn build_plum_output(
         .as_ref()
         .and_then(|opt| opt.parameter_estimates)
         .unwrap_or(default_all);
-    let want_covariance = output_options
+    let want_covariance_table = output_options
+        .as_ref()
+        .and_then(|opt| opt.asymptotic_covariance)
+        .unwrap_or(default_all);
+    let want_correlation = output_options
+        .as_ref()
+        .and_then(|opt| opt.asymptotic_correlation)
+        .unwrap_or(default_all);
+    let want_covariance = want_covariance_table
+        || output_options
         .as_ref()
         .and_then(|opt| opt.asymptotic_correlation)
         .unwrap_or(default_all)
         || want_parameters;
-    let want_correlation = want_covariance;
     let want_parallel = output_options
         .as_ref()
         .and_then(|opt| opt.test_of_parallel_lines)
-        .unwrap_or(false);
-    let want_collinearity = output_options
-        .as_ref()
-        .and_then(|opt| opt.test_of_multicolinearity)
         .unwrap_or(false);
     let iteration_history_every = output_options
         .as_ref()
@@ -280,14 +284,14 @@ pub fn build_plum_output(
     };
     let saved_variables = build_saved_variables(input, spec, &fit_with_cov, &mut warnings);
 
-    let test_of_parallel_lines = if want_parallel && spec.model_type == ModelType::LocationOnly {
+    let test_of_parallel_lines = if want_parallel {
         let options = EstimationOptions::from_payload(Some(&input.estimation_options));
         println!(
             "[ORDINAL][PARALLEL_LINES][PARALLEL_LL] {{\"logLikelihood\":{},\"minus2LogLikelihood\":{}}}",
             fit.log_likelihood,
             fit.minus2_log_likelihood
         );
-        match fit_non_parallel_location_only(data, spec, &options) {
+        match fit_non_parallel_location_only(data, spec, &options, Some(fit)) {
             Ok(mut non_parallel_fit) => {
                 warnings.append(&mut non_parallel_fit.warnings);
                 let mut test = crate::parallel::test_parallel_lines(
@@ -325,27 +329,6 @@ pub fn build_plum_output(
         None
     };
 
-    let collinearity_diagnostics = if want_collinearity {
-        println!("[ORDINAL][MULTICOLLINEARITY][START]");
-        let x = design_matrix_to_dmatrix(&input.location_model.location_design_matrix)?;
-        let blocks = build_encoded_predictor_blocks(input);
-        println!(
-            "[ORDINAL][MULTICOLLINEARITY][PAYLOAD] {{\"rows\":{},\"columns\":{},\"blocks\":{}}}",
-            x.nrows(),
-            x.ncols(),
-            blocks.len()
-        );
-        let diagnostics = compute_gvif_diagnostics(&x, blocks, GvifOptions::default());
-        println!(
-            "[ORDINAL][MULTICOLLINEARITY][RUST_RESULT] {{\"rows\":{},\"warnings\":{}}}",
-            diagnostics.rows.len(),
-            diagnostics.warnings.len()
-        );
-        Some(diagnostics)
-    } else {
-        None
-    };
-
     let metadata = PlumOutputMetadata {
         model_type: input.metadata.model_type.clone(),
         total_rows: input.metadata.total_rows,
@@ -378,103 +361,15 @@ pub fn build_plum_output(
         goodness_of_fit: goodness,
         summary_statistics: summary,
         test_of_parallel_lines,
-        collinearity_diagnostics,
         cell_information,
         predicted_category,
         predicted_probability,
         actual_probability,
         saved_variables,
-        covariance_matrix: covariance.map(|m| matrix_to_vec(&m)),
-        correlation_matrix: correlation.map(|m| matrix_to_vec(&m)),
+        covariance_matrix: if want_covariance_table { covariance.map(|m| matrix_to_vec(&m)) } else { None },
+        correlation_matrix: if want_correlation { correlation.map(|m| matrix_to_vec(&m)) } else { None },
         errors: Vec::new(),
     })
-}
-
-fn design_matrix_to_dmatrix(matrix: &[Vec<f64>]) -> Result<nalgebra::DMatrix<f64>, PlumError> {
-    let rows = matrix.len();
-    let cols = matrix.first().map(|row| row.len()).unwrap_or(0);
-    if rows == 0 || cols == 0 {
-        return Ok(nalgebra::DMatrix::zeros(rows, cols));
-    }
-    let mut values = Vec::with_capacity(rows * cols);
-    for row in matrix {
-        if row.len() != cols {
-            return Err(PlumError::InvalidInput(
-                "Location design matrix row length mismatch.".to_string(),
-            ));
-        }
-        values.extend_from_slice(row);
-    }
-    Ok(nalgebra::DMatrix::from_row_slice(rows, cols, &values))
-}
-
-fn build_encoded_predictor_blocks(input: &PlumWorkerPayload) -> Vec<EncodedPredictorBlock> {
-    let mut blocks = Vec::new();
-    let mut next_column = 0usize;
-    let total_columns = input.location_model.location_term_names.len();
-    let factor_metadata = if input.location_model.factor_level_metadata.is_empty() {
-        &input.factor_level_metadata
-    } else {
-        &input.location_model.factor_level_metadata
-    };
-
-    for predictor in &input.location_model.predictors {
-        match predictor.role.as_str() {
-            "factor" => {
-                let mut indices = factor_metadata
-                    .iter()
-                    .filter(|meta| meta.variable_name == predictor.name)
-                    .filter_map(|meta| meta.active_column_index)
-                    .filter(|idx| *idx < total_columns)
-                    .collect::<Vec<_>>();
-                indices.sort_unstable();
-                indices.dedup();
-
-                if indices.is_empty() {
-                    let level_count = predictor
-                        .levels
-                        .as_ref()
-                        .map(|levels| levels.len().saturating_sub(1))
-                        .unwrap_or(1);
-                    indices = (next_column..(next_column + level_count).min(total_columns))
-                        .collect();
-                }
-
-                if let Some(max_idx) = indices.iter().max() {
-                    next_column = (*max_idx + 1).max(next_column);
-                }
-                blocks.push(EncodedPredictorBlock {
-                    predictor_name: predictor.name.clone(),
-                    predictor_type: "Factor".to_string(),
-                    column_indices: indices,
-                });
-            }
-            "interaction" => {
-                let width = predictor.encoded_column_count.unwrap_or(1).max(1);
-                let end_column = (next_column + width).min(total_columns);
-                if next_column < end_column {
-                    blocks.push(EncodedPredictorBlock {
-                        predictor_name: predictor.name.clone(),
-                        predictor_type: "Interaction".to_string(),
-                        column_indices: (next_column..end_column).collect(),
-                    });
-                    next_column = end_column;
-                }
-            }
-            _ => {
-                if next_column < total_columns {
-                    blocks.push(EncodedPredictorBlock {
-                        predictor_name: predictor.name.clone(),
-                        predictor_type: "Covariate".to_string(),
-                        column_indices: vec![next_column],
-                    });
-                    next_column += 1;
-                }
-            }
-        }
-    }
-
-    blocks
 }
 
 fn intercept_only_spec(spec: &PlumSpec) -> PlumSpec {

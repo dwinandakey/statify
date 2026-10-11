@@ -1,10 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+const PUBLIC_ROOT = path.resolve(__dirname, '../../../../');
+
 // Helper to load worker scripts into the Node test environment.
 const loadScript = (scriptPath) => {
-  const normalized = scriptPath.startsWith('/') ? scriptPath.slice(1) : scriptPath;
-  const absolutePath = path.resolve(__dirname, '../', normalized);
+  const isAbsoluteWorkerPath = scriptPath.startsWith('/');
+  const normalized = isAbsoluteWorkerPath ? scriptPath.slice(1) : scriptPath;
+  const absolutePath = isAbsoluteWorkerPath
+    ? path.resolve(PUBLIC_ROOT, normalized)
+    : path.resolve(__dirname, '../', normalized);
   const scriptContent = fs.readFileSync(absolutePath, 'utf8');
   new Function(scriptContent)();
 };
@@ -46,6 +51,20 @@ const ExamineCalculator = global.self.ExamineCalculator;
 // -------------------------------------------------------------
 
 describe('ExamineCalculator', () => {
+    it.each([
+        { type: 'discrete', values: [999] },
+        { discrete: [999] },
+        { range: { min: 990, max: 1000 } },
+    ])('excludes user-defined missing values from normality: %j', (missing) => {
+        const calculator = new ExamineCalculator({
+            variable: { name: 'score', type: 'NUMERIC', measure: 'scale', missing },
+            data: [1, 2, 3, 4, 999, '', '  ', null, Infinity],
+        });
+        const actual = calculator.getNormalityTests();
+        expect(actual.sampleSize).toBe(4);
+        expect(actual.shapiroWilk.df).toBe(4);
+    });
+
     const variable = { name: 'salary', measure: 'scale' };
     const data = [1, 2, 3, 4, 5];
 
@@ -67,7 +86,7 @@ describe('ExamineCalculator', () => {
         const dataWithOutliers = [1, 2, 3, 4, 5, 100]; // 100 is an outlier
         const calcOutliers = new ExamineCalculator({ variable, data: dataWithOutliers });
         const results = calcOutliers.getStatistics();
-        
+
         // M-estimators should be less affected by the outlier than the mean
         const mean = results.descriptives.Mean;
         expect(results.mEstimators.huber).toBeLessThan(mean);
@@ -81,17 +100,17 @@ describe('ExamineCalculator', () => {
         const constantData = [5, 5, 5, 5, 5];
         const calcConstant = new ExamineCalculator({ variable, data: constantData });
         const resultsConstant = calcConstant.getStatistics();
-        
+
         expect(resultsConstant.mEstimators.huber).toBe(5);
         expect(resultsConstant.mEstimators.hampel).toBe(5);
         expect(resultsConstant.mEstimators.andrews).toBe(5);
         expect(resultsConstant.mEstimators.tukey).toBe(5);
-        
+
         // Test with single value
         const singleData = [42];
         const calcSingle = new ExamineCalculator({ variable, data: singleData });
         const resultsSingle = calcSingle.getStatistics();
-        
+
         expect(resultsSingle.mEstimators.huber).toBe(42);
         expect(resultsSingle.mEstimators.hampel).toBe(42);
         expect(resultsSingle.mEstimators.andrews).toBe(42);
@@ -104,4 +123,34 @@ describe('ExamineCalculator', () => {
         expect(stats.summary.missing).toBe(0);
         expect(stats.summary.total).toBe(5);
     });
+
+  it('should compute tests of normality when requested', () => {
+    const calcWithNormality = new ExamineCalculator({
+      variable,
+      data: [10, 12, 11, 13, 14, 10, 12, 11],
+      options: { showNormalityPlots: true },
+    });
+
+    const stats = calcWithNormality.getStatistics();
+    expect(stats.normalityTests).toBeDefined();
+    expect(stats.normalityTests.kolmogorovSmirnov).toBeDefined();
+    expect(stats.normalityTests.shapiroWilk).toBeDefined();
+    expect(stats.normalityTests.sampleSize).toBe(8);
+    expect(Array.isArray(stats.normalityTests.tests)).toBe(true);
+    expect(stats.normalityTests.tests).toHaveLength(2);
+  });
+
+  it('should compute normality tests for numeric-core variable even when measure is nominal', () => {
+    const nominalNumericVariable = { name: 'score_nominal', measure: 'nominal', type: 'NUMERIC' };
+    const calcNominalMeasure = new ExamineCalculator({
+      variable: nominalNumericVariable,
+      data: [1, 2, 3, 2, 4, 5, 3, 2, 1],
+      options: { showNormalityPlots: true },
+    });
+
+    const stats = calcNominalMeasure.getStatistics();
+    expect(stats.normalityTests).toBeDefined();
+    expect(stats.normalityTests.kolmogorovSmirnov).toBeDefined();
+    expect(stats.normalityTests.shapiroWilk).toBeDefined();
+  });
 });

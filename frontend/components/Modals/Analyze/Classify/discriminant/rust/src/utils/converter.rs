@@ -1,5 +1,7 @@
 use wasm_bindgen::JsValue;
 use serde::Serialize;
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use crate::models::result::{
     DiscriminantResult,
@@ -12,11 +14,10 @@ use crate::models::result::{
     VariableInAnalysis,
     PairwiseComparison,
     HighestGroupStatistics,
-    GroupHistogram,
     ScoreValue,
 };
 
-// Konversi dari String error ke JsValue untuk interaksi WASM
+/// Error message as a JavaScript value, for errors returned across the WASM boundary.
 pub fn string_to_js_error(error: String) -> JsValue {
     JsValue::from_str(&error)
 }
@@ -49,12 +50,37 @@ struct FormatResult {
     casewise_statistics: Option<FormattedCasewiseStatistics>,
     prior_probabilities: Option<FormattedPriorProbabilities>,
     classification_function_coefficients: Option<FormattedClassificationFunctionCoefficients>,
-    discriminant_histograms: Option<FormattedDiscriminantHistograms>,
     scatter_data: Option<FormattedScatterData>,
     bootstrap_results: Option<crate::models::result::BootstrapResults>,
     // Already display-shaped (Vec-based), so passed straight through.
     assumption_results: Option<crate::models::result::AssumptionResults>,
     territorial_map: bool,
+    combined_groups_plot: bool,
+    separate_groups_plot: bool,
+    unstandardized_coefficients: bool,
+    // Vec-based already; rows follow the analysis group order.
+    separate_groups_classification: Option<crate::models::result::SeparateGroupsClassification>,
+}
+
+/// Convert a `"Function k" → scores` map into a Vec ordered Function 1, 2, …
+/// HashMap iteration order is arbitrary, and the formatter lays out the casewise
+/// "Discriminant Scores" columns in Vec order, so the order must be fixed here.
+fn scores_in_function_order(scores: &HashMap<String, Vec<f64>>) -> Vec<ScoreValue> {
+    let mut ordered: Vec<ScoreValue> = scores
+        .iter()
+        .map(|(function, values)| ScoreValue {
+            function: function.clone(),
+            values: values.clone(),
+        })
+        .collect();
+    ordered.sort_by_key(|s| {
+        s.function
+            .rsplit(' ')
+            .next()
+            .and_then(|n| n.parse::<usize>().ok())
+            .unwrap_or(usize::MAX)
+    });
+    ordered
 }
 
 #[derive(Serialize)]
@@ -98,6 +124,105 @@ struct GroupCentroid {
     values: Vec<f64>,
 }
 
+/// Row label SPSS always prints last in the unstandardized coefficients table.
+const CONSTANT_ROW: &str = "(Constant)";
+
+/// Turn an unordered coefficient map into table rows in `order`.
+///
+/// The result structs store these keyed by variable name in a `HashMap`, whose
+/// iteration order is arbitrary and differs between builds of the binary. Every
+/// table below therefore has to impose its own order explicitly, or the rows come
+/// out shuffled relative to SPSS.
+///
+/// Keys missing from `order` are appended afterwards — `(Constant)` last, as SPSS
+/// prints it, and anything else by name so the output stays deterministic.
+fn ordered_function_values(
+    map: &HashMap<String, Vec<f64>>,
+    order: &[String]
+) -> Vec<FunctionValue> {
+    let mut rows: Vec<FunctionValue> = Vec::with_capacity(map.len());
+
+    for name in order {
+        if let Some(values) = map.get(name) {
+            rows.push(FunctionValue { variable: name.clone(), values: values.clone() });
+        }
+    }
+
+    let mut leftover: Vec<&String> = map
+        .keys()
+        .filter(|k| !order.iter().any(|o| o == *k))
+        .collect();
+    leftover.sort_by(|a, b| {
+        let key = |s: &str| (s == CONSTANT_ROW, s.to_string());
+        key(a).cmp(&key(b))
+    });
+    for name in leftover {
+        rows.push(FunctionValue { variable: name.clone(), values: map[name].clone() });
+    }
+
+    rows
+}
+
+/// Index of the function a variable correlates most strongly with, and that
+/// correlation's absolute value. Mirrors the superscript the formatter puts on the
+/// largest absolute correlation in each row of the Structure Matrix.
+fn dominant_function(values: &[f64]) -> (usize, f64) {
+    let mut index = 0;
+    let mut largest = 0.0_f64;
+    for (i, value) in values.iter().enumerate() {
+        if value.abs() > largest {
+            largest = value.abs();
+            index = i;
+        }
+    }
+    (index, largest)
+}
+
+/// Structure Matrix row order: "Variables ordered by absolute size of correlation
+/// within function" — the footnote the table already prints. Variables are grouped
+/// by the function they correlate most strongly with, functions in order, and within
+/// each group sorted by descending absolute correlation.
+fn ordered_structure_rows(
+    map: &HashMap<String, Vec<f64>>,
+    variables: &[String]
+) -> Vec<FunctionValue> {
+    // Seed from the analysis variable order so ties below break deterministically
+    // (`sort_by` is stable).
+    let mut rows = ordered_function_values(map, variables);
+    rows.sort_by(|a, b| {
+        let (fa, va) = dominant_function(&a.values);
+        let (fb, vb) = dominant_function(&b.values);
+        fa.cmp(&fb).then(vb.partial_cmp(&va).unwrap_or(Ordering::Equal))
+    });
+    rows
+}
+
+/// Group centroid rows, by group code ascending — numerically when the codes are
+/// numeric (so 10 sorts after 2), otherwise as text.
+fn ordered_group_centroids(map: &HashMap<String, Vec<f64>>) -> Vec<GroupCentroid> {
+    let mut rows: Vec<GroupCentroid> = map
+        .iter()
+        .map(|(group, values)| GroupCentroid {
+            group: group.clone(),
+            values: values.clone(),
+        })
+        .collect();
+
+    // (is_non_numeric, numeric value, text) — non-numeric codes sort after numeric ones.
+    let key = |g: &str| match g.parse::<f64>() {
+        Ok(n) if n.is_finite() => (0_u8, n, String::new()),
+        _ => (1_u8, 0.0, g.to_string()),
+    };
+    rows.sort_by(|a, b| {
+        let (ka, kb) = (key(&a.group), key(&b.group));
+        ka.0
+            .cmp(&kb.0)
+            .then(ka.1.partial_cmp(&kb.1).unwrap_or(Ordering::Equal))
+            .then(ka.2.cmp(&kb.2))
+    });
+    rows
+}
+
 #[derive(Serialize)]
 struct FormattedStructureMatrix {
     variables: Vec<String>,
@@ -110,6 +235,13 @@ struct FormattedClassificationResults {
     cross_validated_classification: Option<Vec<GroupClassification>>,
     original_percentage: Vec<GroupPercentage>,
     cross_validated_percentage: Option<Vec<GroupPercentage>>,
+    unselected_classification: Option<Vec<GroupClassification>>,
+    unselected_percentage: Option<Vec<GroupPercentage>>,
+    // "Ungrouped cases" rows; counts and percentages are in group order.
+    ungrouped_classification: Option<Vec<i32>>,
+    ungrouped_percentage: Option<Vec<f64>>,
+    unselected_ungrouped_classification: Option<Vec<i32>>,
+    unselected_ungrouped_percentage: Option<Vec<f64>>,
 }
 
 #[derive(Serialize)]
@@ -168,19 +300,24 @@ struct FormattedStepwiseStatistics {
     wilks_lambda: Vec<f64>,
     f_to_enter: Vec<f64>,
     f_to_enter_df1: Vec<i32>,
-    f_to_enter_df2: Vec<i32>,
+    f_to_enter_df2: Vec<f64>,
     significance: Vec<f64>,
     wilks_exact_f: Vec<f64>,
     wilks_exact_df1: Vec<i32>,
-    wilks_exact_df2: Vec<i32>,
+    wilks_exact_df2: Vec<f64>,
     wilks_exact_sig: Vec<f64>,
+    wilks_f_exact: Vec<bool>,
     raos_v: Vec<f64>,
     raos_v_sig: Vec<f64>,
+    raos_v_df: Vec<f64>,
     change_in_v: Vec<f64>,
     change_sig: Vec<f64>,
     variables_in_analysis: Vec<StepVariables>,
     variables_not_in_analysis: Vec<StepVariables>,
     pairwise_comparisons: Vec<GroupPairComparison>,
+    /// Footnotes of the Variables Entered/Removed table, built from the thresholds
+    /// the procedure actually applied.
+    note: crate::models::result::StepwiseNote,
 }
 
 #[derive(Serialize)]
@@ -189,11 +326,12 @@ struct StepVariables {
     variables: Vec<VariableInAnalysis>,
 }
 
+/// One row block of the Pairwise Group Comparisons table: a group at a step and its
+/// F / Sig. against every other group (each comparison names the other group).
 #[derive(Serialize)]
 struct GroupPairComparison {
     step: String,
-    group1: String,
-    group2: String,
+    group: String,
     comparisons: Vec<PairwiseComparison>,
 }
 
@@ -234,7 +372,7 @@ struct GroupCases {
 
 #[derive(Serialize)]
 struct FormattedClassificationFunctionCoefficients {
-    groups: Vec<usize>,
+    groups: Vec<String>,
     variables: Vec<String>,
     coefficients: Vec<GroupCoefficient>,
     constant_terms: Vec<f64>,
@@ -246,80 +384,79 @@ struct GroupCoefficient {
     values: Vec<f64>,
 }
 
-#[derive(Serialize)]
-struct FormattedDiscriminantHistograms {
-    functions: Vec<String>,
-    groups: Vec<String>,
-    histograms: Vec<HistogramEntry>,
-}
-
-#[derive(Serialize)]
-struct HistogramEntry {
-    function: String,
-    group: String,
-    histogram: GroupHistogram,
-}
-
 impl FormatResult {
     fn from_analysis_result(result: &DiscriminantResult) -> Self {
         // Transform GroupStatistics
         let group_statistics = result.group_statistics.as_ref().map(|stats| {
-            // Debug: log raw stats to see if unweighted_n/weighted_n are populated
-            web_sys::console::log_1(&format!("Raw GroupStatistics - groups: {:?}", stats.groups).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - variables: {:?}", stats.variables).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - unweighted_n keys: {:?}", stats.unweighted_n.keys().collect::<Vec<_>>()).into());
-            web_sys::console::log_1(&format!("Raw GroupStatistics - weighted_n keys: {:?}", stats.weighted_n.keys().collect::<Vec<_>>()).into());
+            // Debug-build log of the raw group statistics.
+            crate::debug_log!("Raw GroupStatistics - groups: {:?}", stats.groups);
+            crate::debug_log!("Raw GroupStatistics - variables: {:?}", stats.variables);
+            crate::debug_log!("Raw GroupStatistics - unweighted_n keys: {:?}", stats.unweighted_n.keys().collect::<Vec<_>>());
+            crate::debug_log!("Raw GroupStatistics - weighted_n keys: {:?}", stats.weighted_n.keys().collect::<Vec<_>>());
 
             for var in &stats.variables {
                 if let Some(n_values) = stats.unweighted_n.get(var) {
-                    web_sys::console::log_1(&format!("  {} unweighted_n: {:?}", var, n_values).into());
+                    crate::debug_log!("  {} unweighted_n: {:?}", var, n_values);
                 }
                 if let Some(n_values) = stats.weighted_n.get(var) {
-                    web_sys::console::log_1(&format!("  {} weighted_n: {:?}", var, n_values).into());
+                    crate::debug_log!("  {} weighted_n: {:?}", var, n_values);
                 }
             }
 
-            let means = stats.variables
-                .iter()
-                .map(|var| {
-                    let values = stats.groups
-                        .iter()
-                        .enumerate()
-                        .map(|(j, _group)| {
-                            stats.means.get(var)
-                                .and_then(|v| v.get(j))
-                                .copied()
-                                .unwrap_or(0.0)
-                        })
-                        .collect();
+            // Means and standard deviations exist only with Statistics → Means; without
+            // it both lists stay empty (no zeros), so the formatter leaves the Mean and
+            // Std. Deviation columns out and the table shows only the Valid N counts.
+            let has_means = stats.means.values().any(|values| !values.is_empty());
 
-                    GroupValue {
-                        variable: var.clone(),
-                        values,
-                    }
-                })
-                .collect();
+            let means: Vec<GroupValue> = if has_means {
+                stats.variables
+                    .iter()
+                    .map(|var| {
+                        let values = stats.groups
+                            .iter()
+                            .enumerate()
+                            .map(|(j, _group)| {
+                                stats.means.get(var)
+                                    .and_then(|v| v.get(j))
+                                    .copied()
+                                    .unwrap_or(0.0)
+                            })
+                            .collect();
 
-            let std_deviations = stats.variables
-                .iter()
-                .map(|var| {
-                    let values = stats.groups
-                        .iter()
-                        .enumerate()
-                        .map(|(j, _group)| {
-                            stats.std_deviations.get(var)
-                                .and_then(|v| v.get(j))
-                                .copied()
-                                .unwrap_or(0.0)
-                        })
-                        .collect();
+                        GroupValue {
+                            variable: var.clone(),
+                            values,
+                        }
+                    })
+                    .collect()
+            } else {
+                Vec::new()
+            };
 
-                    GroupValue {
-                        variable: var.clone(),
-                        values,
-                    }
-                })
-                .collect();
+            let std_deviations: Vec<GroupValue> = if has_means {
+                stats.variables
+                    .iter()
+                    .map(|var| {
+                        let values = stats.groups
+                            .iter()
+                            .enumerate()
+                            .map(|(j, _group)| {
+                                stats.std_deviations.get(var)
+                                    .and_then(|v| v.get(j))
+                                    .copied()
+                                    .unwrap_or(0.0)
+                            })
+                            .collect();
+
+                        GroupValue {
+                            variable: var.clone(),
+                            values,
+                        }
+                    })
+                    .collect()
+            } else {
+                Vec::new()
+            };
 
             let unweighted_n = stats.variables
                 .iter()
@@ -373,60 +510,25 @@ impl FormatResult {
             }
         });
 
-        // Transform CanonicalFunctions
+        // Transform CanonicalFunctions.
+        // Both coefficient tables follow the analysis variable order, with
+        // "(Constant)" last in the unstandardized one; centroids follow group code.
         let canonical_functions = result.canonical_functions.as_ref().map(|funcs| {
-            let coefficients = funcs.coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let standardized_coefficients = funcs.standardized_coefficients
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
-            let function_at_centroids = funcs.function_at_centroids
-                .iter()
-                .map(|(group, values)| {
-                    GroupCentroid {
-                        group: group.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedCanonicalFunctions {
-                coefficients,
-                standardized_coefficients,
-                function_at_centroids,
+                coefficients: ordered_function_values(&funcs.coefficients, &funcs.variables),
+                standardized_coefficients: ordered_function_values(
+                    &funcs.standardized_coefficients,
+                    &funcs.variables
+                ),
+                function_at_centroids: ordered_group_centroids(&funcs.function_at_centroids),
             }
         });
 
         // Transform StructureMatrix
         let structure_matrix = result.structure_matrix.as_ref().map(|matrix| {
-            let correlations = matrix.correlations
-                .iter()
-                .map(|(var, values)| {
-                    FunctionValue {
-                        variable: var.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
-
             FormattedStructureMatrix {
                 variables: matrix.variables.clone(),
-                correlations,
+                correlations: ordered_structure_rows(&matrix.correlations, &matrix.variables),
             }
         });
 
@@ -480,11 +582,41 @@ impl FormatResult {
                         .collect()
                 });
 
+            let unselected_classification = results.unselected_classification
+                .as_ref()
+                .map(|unselected| {
+                    unselected
+                        .iter()
+                        .map(|(group, counts)| GroupClassification {
+                            group: group.clone(),
+                            counts: counts.clone(),
+                        })
+                        .collect()
+                });
+
+            let unselected_percentage = results.unselected_percentage
+                .as_ref()
+                .map(|unselected| {
+                    unselected
+                        .iter()
+                        .map(|(group, percentages)| GroupPercentage {
+                            group: group.clone(),
+                            percentages: percentages.clone(),
+                        })
+                        .collect()
+                });
+
             FormattedClassificationResults {
                 original_classification,
                 cross_validated_classification,
                 original_percentage,
                 cross_validated_percentage,
+                unselected_classification,
+                unselected_percentage,
+                ungrouped_classification: results.ungrouped_classification.clone(),
+                ungrouped_percentage: results.ungrouped_percentage.clone(),
+                unselected_ungrouped_classification: results.unselected_ungrouped_classification.clone(),
+                unselected_ungrouped_percentage: results.unselected_ungrouped_percentage.clone(),
             }
         });
 
@@ -616,8 +748,8 @@ impl FormatResult {
                         variables: vars
                             .iter()
                             .map(|v| {
-                                // Convert VariableNotInAnalysis to VariableInAnalysis for simplicity
-                                // This is just a placeholder, you might need actual conversion logic
+                                // Rows of Variables Not in the Analysis share the output shape of
+                                // Variables in the Analysis; their F to Enter fills both F fields.
                                 VariableInAnalysis {
                                     variable: v.variable.clone(),
                                     tolerance: v.tolerance,
@@ -634,22 +766,23 @@ impl FormatResult {
                 })
                 .collect();
 
-            let pairwise_comparisons = stats.pairwise_comparisons
+            // One entry per (step, group), ordered by step then group. Both levels come
+            // from HashMaps with arbitrary iteration order, so sort explicitly.
+            let mut pairwise_comparisons: Vec<GroupPairComparison> = stats.pairwise_comparisons
                 .iter()
                 .flat_map(|(step, group_comps)| {
-                    group_comps
-                        .iter()
-                        .map(|(group1, comps)| {
-                            GroupPairComparison {
-                                step: step.clone(),
-                                group1: group1.clone(),
-                                group2: "".to_string(), // Would need actual group2 info
-                                comparisons: comps.clone(),
-                            }
-                        })
-                        .collect::<Vec<GroupPairComparison>>()
+                    group_comps.iter().map(move |(group, comps)| GroupPairComparison {
+                        step: step.clone(),
+                        group: group.clone(),
+                        comparisons: comps.clone(),
+                    })
                 })
                 .collect();
+            pairwise_comparisons.sort_by(|a, b| {
+                let step_a = a.step.parse::<i32>().unwrap_or(i32::MAX);
+                let step_b = b.step.parse::<i32>().unwrap_or(i32::MAX);
+                step_a.cmp(&step_b).then_with(|| a.group.cmp(&b.group))
+            });
 
             FormattedStepwiseStatistics {
                 method: stats.method.clone(),
@@ -667,27 +800,22 @@ impl FormatResult {
                 wilks_exact_df1: stats.wilks_exact_df1.clone(),
                 wilks_exact_df2: stats.wilks_exact_df2.clone(),
                 wilks_exact_sig: stats.wilks_exact_sig.clone(),
+                wilks_f_exact: stats.wilks_f_exact.clone(),
                 raos_v: stats.raos_v.clone(),
                 raos_v_sig: stats.raos_v_sig.clone(),
+                raos_v_df: stats.raos_v_df.clone(),
                 change_in_v: stats.change_in_v.clone(),
                 change_sig: stats.change_sig.clone(),
                 variables_in_analysis,
                 variables_not_in_analysis,
                 pairwise_comparisons,
+                note: stats.note.clone(),
             }
         });
 
         // Transform CasewiseStatistics
         let casewise_statistics = result.casewise_statistics.as_ref().map(|stats| {
-            let discriminant_scores = stats.discriminant_scores
-                .iter()
-                .map(|(func, values)| {
-                    ScoreValue {
-                        function: func.clone(),
-                        values: values.clone(),
-                    }
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&stats.discriminant_scores);
 
             // Transform cross-validated casewise statistics if present
             let cross_validated = stats.cross_validated.as_ref().map(|cv| {
@@ -756,45 +884,9 @@ impl FormatResult {
                 }
             });
 
-        // Transform DiscriminantHistograms
-        let discriminant_histograms = result.discriminant_histograms.as_ref().map(|hists| {
-            let histograms = hists.functions
-                .iter()
-                .flat_map(|func| {
-                    hists.groups
-                        .iter()
-                        .filter_map(|group| {
-                            // Hanya lanjutkan jika histogram ditemukan untuk func ini
-                            if let Some(histogram) = hists.histograms.get(func) {
-                                Some(HistogramEntry {
-                                    function: func.clone(),
-                                    group: group.clone(),
-                                    histogram: histogram.clone(),
-                                })
-                            } else {
-                                None
-                            }
-                        })
-                        .collect::<Vec<HistogramEntry>>()
-                })
-                .collect();
-
-            FormattedDiscriminantHistograms {
-                functions: hists.functions.clone(),
-                groups: hists.groups.clone(),
-                histograms,
-            }
-        });
-
         // Transform ScatterData
         let scatter_data = result.scatter_data.as_ref().map(|sd| {
-            let discriminant_scores = sd.discriminant_scores
-                .iter()
-                .map(|(func, values)| ScoreValue {
-                    function: func.clone(),
-                    values: values.clone(),
-                })
-                .collect();
+            let discriminant_scores = scores_in_function_order(&sd.discriminant_scores);
             FormattedScatterData {
                 actual_group: sd.actual_group.clone(),
                 discriminant_scores,
@@ -818,11 +910,14 @@ impl FormatResult {
             casewise_statistics,
             prior_probabilities,
             classification_function_coefficients,
-            discriminant_histograms,
             scatter_data,
             bootstrap_results: result.bootstrap_results.clone(),
             assumption_results: result.assumption_results.clone(),
             territorial_map: result.territorial_map,
+            combined_groups_plot: result.combined_groups_plot,
+            separate_groups_plot: result.separate_groups_plot,
+            unstandardized_coefficients: result.unstandardized_coefficients,
+            separate_groups_classification: result.separate_groups_classification.clone(),
         }
     }
 }

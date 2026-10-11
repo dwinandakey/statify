@@ -1,23 +1,11 @@
-/**
- * ElbowChart
- * Dual-axis D3 line chart:
- *   – Left Y-axis  : Total Cost (WCSS)  — solid line
- *   – Right Y-axis : Silhouette Score   — dashed line
- * Optimal K is marked with a vertical annotation.
- * Current K (the chosen k) gets a distinct marker.
- */
-
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import type { ElbowPoint } from "../types/output";
 
 interface ElbowChartProps {
     data: ElbowPoint[];
-    /** The K value that was ultimately chosen for the analysis. */
     currentK?: number;
-    /** Method used to choose optimal k. */
     method?: "silhouette" | "elbow";
-    /** Optional: K optimal from silhouette method (for manual mode display) */
     silhouetteOptimalK?: number;
     width?: number;
     height?: number;
@@ -39,12 +27,10 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        // ── Margins ──────────────────────────────────────────────────────────
         const margin = { top: 36, right: 64, bottom: 92, left: 64 };
         const innerW = width - margin.left - margin.right;
         const innerH = height - margin.top - margin.bottom;
 
-        // ── Resolved CSS tokens ───────────────────────────────────────────────
         const style = getComputedStyle(svgRef.current);
         const tok = (name: string, fallback: string) => {
             const v = style.getPropertyValue(name).trim();
@@ -55,23 +41,19 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         const bgColor     = tok("--background",        "#ffffff");
         const borderColor = tok("--border",            "#e5e7eb");
 
-        // ── Colours ───────────────────────────────────────────────────────────
-        const wcssColor      = "#2563eb";   // blue  — WCSS line
-        const silhColor      = "#16a34a";   // green — Silhouette line
-        const optimalColor   = "#f59e0b";   // amber — optimal-K annotation
-        const currentKColor  = "#8b5cf6";   // violet — chosen-K line
+        const wcssColor      = "#2563eb";  
+        const silhColor      = "#16a34a";   
+        const optimalColor   = "#f59e0b";   
+        const currentKColor  = "#8b5cf6";   
 
-        // ── Find optimal K references ───────────────────────────────────────
         const hasSilhouette  = data.some(d => d.silhouetteScore !== 0);
         const hasWCSS        = data.some(d => d.totalCost !== 0);
 
-        // Best K by silhouette (highest avg silhouette)
         let bestSilhouetteK: number | null = null;
         if (hasSilhouette) {
             const best = data.reduce((a, b) => b.silhouetteScore > a.silhouetteScore ? b : a);
             bestSilhouetteK = best.k;
         }
-        // Elbow by second-derivative of WCSS (greatest "bend")
         let elbowK: number | null = null;
         if (hasWCSS && data.length >= 3) {
             let maxCurv = -Infinity;
@@ -84,7 +66,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             }
         }
 
-        // ── Scales ────────────────────────────────────────────────────────────
         const kValues = data.map(d => d.k);
 
         const xScale = d3.scalePoint<number>()
@@ -105,16 +86,13 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             .range([innerH, 0])
             .nice();
 
-        // ── Root group ────────────────────────────────────────────────────────
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ── Background ───────────────────────────────────────────────────────
         g.append("rect")
             .attr("width", innerW).attr("height", innerH)
             .attr("fill", "transparent");
 
-        // ── Grid ─────────────────────────────────────────────────────────────
         g.append("g")
             .call(d3.axisLeft(yWCSS).ticks(6).tickSize(-innerW).tickFormat(() => ""))
             .call(ax => {
@@ -124,40 +102,38 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                     .attr("stroke-opacity", 0.45);
             });
 
-        const selectedOptimalK =
-            method === "elbow"
+        const selectedOptimalK: number | null =
+            (method === "elbow"
                 ? (elbowK ?? currentK ?? bestSilhouetteK)
-                : (bestSilhouetteK ?? elbowK ?? currentK);
+                : (bestSilhouetteK ?? elbowK ?? currentK)) ?? null;
 
-        // ── Optimal-K vertical band ───────────────────────────────────────────
-        if (selectedOptimalK !== null && selectedOptimalK !== undefined) {
+        if (selectedOptimalK !== null) {
             const ox = xScale(selectedOptimalK);
-            if (ox !== null && ox !== undefined) {
-            g.append("rect")
-                .attr("x", ox - 18).attr("y", 0)
-                .attr("width", 36).attr("height", innerH)
-                .attr("fill", optimalColor)
-                .attr("opacity", 0.08);
-            g.append("line")
-                .attr("x1", ox).attr("x2", ox)
-                .attr("y1", 0).attr("y2", innerH)
-                .attr("stroke", optimalColor)
-                .attr("stroke-width", 1.5)
-                .attr("stroke-dasharray", "5,4");
-            g.append("text")
-                .attr("x", ox).attr("y", -10)
-                .attr("text-anchor", "middle")
-                .attr("font-size", "11")
-                .attr("font-weight", "600")
-                .attr("fill", optimalColor)
-                .text(`★ K optimal (${method}) = ${selectedOptimalK}`);
+            if (ox !== undefined) {
+                g.append("rect")
+                    .attr("x", ox - 18).attr("y", 0)
+                    .attr("width", 36).attr("height", innerH)
+                    .attr("fill", optimalColor)
+                    .attr("opacity", 0.08);
+                g.append("line")
+                    .attr("x1", ox).attr("x2", ox)
+                    .attr("y1", 0).attr("y2", innerH)
+                    .attr("stroke", optimalColor)
+                    .attr("stroke-width", 1.5)
+                    .attr("stroke-dasharray", "5,4");
+                g.append("text")
+                    .attr("x", ox).attr("y", -10)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "11")
+                    .attr("font-weight", "600")
+                    .attr("fill", optimalColor)
+                    .text(`★ K optimal (${method}) = ${selectedOptimalK}`);
             }
         }
 
-        // ── Elbow-K annotation (when different from optimal-K) ───────────────
         if (elbowK !== null && elbowK !== selectedOptimalK && hasWCSS) {
             const ex = xScale(elbowK);
-            if (ex !== null && ex !== undefined) {
+            if (ex !== undefined) {
                 g.append("line")
                     .attr("x1", ex).attr("x2", ex)
                     .attr("y1", 0).attr("y2", innerH)
@@ -168,10 +144,9 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             }
         }
 
-        // ── Current-K vertical line ───────────────────────────────────────────
         if (currentK !== null && currentK !== undefined) {
             const cx2 = xScale(currentK);
-            if (cx2 !== null && cx2 !== undefined) {
+            if (cx2 !== undefined) {
                 g.append("line")
                     .attr("x1", cx2).attr("x2", cx2)
                     .attr("y1", 0).attr("y2", innerH)
@@ -182,14 +157,13 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                     .attr("x", cx2 + 5).attr("y", innerH - 8)
                     .attr("font-size", "10")
                     .attr("fill", currentKColor)
-                    .text(`K terpilih = ${currentK}`);
+                    .text(`Selected K = ${currentK}`);
             }
         }
 
-        // ── Silhouette-Optimal-K annotation (for manual mode) ──────────────────
         if (silhouetteOptimalK !== null && silhouetteOptimalK !== undefined) {
             const sx = xScale(silhouetteOptimalK);
-            if (sx !== null && sx !== undefined && silhouetteOptimalK !== selectedOptimalK) {
+            if (sx !== undefined && silhouetteOptimalK !== selectedOptimalK) {
                 g.append("line")
                     .attr("x1", sx).attr("x2", sx)
                     .attr("y1", 0).attr("y2", innerH)
@@ -207,11 +181,10 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             }
         }
 
-        // ── Tooltip ───────────────────────────────────────────────────────────
-        if (!svgRef.current) return;
-        const parentEl = svgRef.current.parentElement;
-        if (!parentEl) return;
-        const tooltip = d3.select(parentEl)
+        const parent = svgRef.current.parentElement;
+        if (!parent) return;
+
+        const tooltip = d3.select(parent)
             .selectAll<HTMLDivElement, unknown>(".ec-tooltip")
             .data([null])
             .join("div")
@@ -230,25 +203,27 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
             .style("z-index", "50");
 
         const showTooltip = (event: MouseEvent, d: ElbowPoint) => {
-            const [mx, my] = d3.pointer(event, parentEl);
+            const parent = svgRef.current?.parentElement;
+            if (!parent) return;
+            const [mx, my] = d3.pointer(event, parent);
             tooltip
                 .style("opacity", "1")
                 .style("left", `${mx + 14}px`)
                 .style("top", `${my - 10}px`)
                 .html(
-                    `<strong>K = ${d.k}</strong>${d.k === selectedOptimalK ? " ★ Optimal" : ""}${d.k === currentK ? " ● Terpilih" : ""}<br/>${hasWCSS ? `Total Cost: <strong>${d.totalCost.toFixed(2)}</strong><br/>` : ""}${hasSilhouette ? `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong>` : ""}`
+                    `<strong>K = ${d.k}</strong>${d.k === selectedOptimalK ? " ★ Optimal" : ""}${d.k === currentK ? " ● Selected" : ""}<br/>${ 
+                    hasWCSS ? `Total Cost: <strong>${d.totalCost.toFixed(2)}</strong><br/>` : "" 
+                    }${hasSilhouette ? `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong>` : ""}`
                 );
         };
         const hideTooltip = () => tooltip.style("opacity", "0");
 
-        // ── WCSS line + dots ─────────────────────────────────────────────────
         if (hasWCSS) {
             const lineFn = d3.line<ElbowPoint>()
                 .x(d => xScale(d.k) ?? 0)
                 .y(d => yWCSS(d.totalCost))
                 .curve(d3.curveMonotoneX);
 
-            // Area fill under WCSS line
             const areaFn = d3.area<ElbowPoint>()
                 .x(d => xScale(d.k) ?? 0)
                 .y0(innerH)
@@ -284,7 +259,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .on("mouseleave", hideTooltip);
         }
 
-        // ── Silhouette line + dots ────────────────────────────────────────────
         if (hasSilhouette) {
             const silhLine = d3.line<ElbowPoint>()
                 .x(d => xScale(d.k) ?? 0)
@@ -314,7 +288,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .on("mousemove", (e, d) => showTooltip(e as MouseEvent, d))
                 .on("mouseleave", hideTooltip);
 
-            // Score labels above silhouette dots
             g.selectAll(".silh-label")
                 .data(data)
                 .join("text")
@@ -327,8 +300,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .text(d => d.silhouetteScore.toFixed(3));
         }
 
-        // ── Axes ──────────────────────────────────────────────────────────────
-        // X
         g.append("g")
             .attr("transform", `translate(0,${innerH})`)
             .call(d3.axisBottom(xScale).tickFormat(d => `K = ${d}`))
@@ -337,7 +308,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 ax.selectAll("text").attr("font-size", "12").attr("fill", fgColor);
             });
 
-        // Left Y (WCSS)
         if (hasWCSS) {
             g.append("g")
                 .call(d3.axisLeft(yWCSS).ticks(6).tickFormat(d => {
@@ -360,7 +330,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .text("Total Cost (WCSS)");
         }
 
-        // Right Y (Silhouette)
         if (hasSilhouette) {
             g.append("g")
                 .attr("transform", `translate(${innerW},0)`)
@@ -379,26 +348,24 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
                 .text("Silhouette Score");
         }
 
-        // X axis label
         g.append("text")
             .attr("x", innerW / 2).attr("y", innerH + 46)
             .attr("text-anchor", "middle")
             .attr("font-size", "12")
             .attr("fill", mutedColor)
-            .text("Jumlah Klaster (K)");
+            .text("Number of Clusters (K)");
 
-        // ── Legend ────────────────────────────────────────────────────────────
         const legendItems: { color: string; dash?: string; label: string }[] = [];
         if (hasWCSS)      legendItems.push({ color: wcssColor,     label: "Total Cost (WCSS)" });
         if (hasSilhouette) legendItems.push({ color: silhColor,    dash: "7,4", label: "Silhouette Score" });
-        if (selectedOptimalK !== null && selectedOptimalK !== undefined) {
+        if (selectedOptimalK !== null) {
             legendItems.push({
                 color: optimalColor,
                 dash: "5,4",
                 label: `Optimal K = ${selectedOptimalK}`,
             });
         }
-        if (currentK)     legendItems.push({ color: currentKColor, dash: "7,4", label: `K terpilih = ${currentK}` });
+        if (currentK)     legendItems.push({ color: currentKColor, dash: "7,4", label: `Selected K = ${currentK}` });
 
         const legendG = svg.append("g")
             .attr("transform", `translate(${margin.left + 12},${height - 34})`);
@@ -411,7 +378,6 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
         let lx = 0;
         let ly = 0;
         legendItems.forEach(({ color, dash, label }) => {
-            // Measure actual text width so legend wraps cleanly on any viewport/font.
             const probe = legendG.append("text")
                 .attr("font-size", "11")
                 .attr("visibility", "hidden")
@@ -449,7 +415,7 @@ export const ElbowChart: React.FC<ElbowChartProps> = ({
     if (!data || data.length === 0) {
         return (
             <div className="flex items-center justify-center h-40 text-sm text-muted-foreground">
-                Data Elbow tidak tersedia (hanya muncul saat K otomatis digunakan)
+                Elbow data is not available (only shown when automatic K is used)
             </div>
         );
     }

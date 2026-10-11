@@ -5,8 +5,7 @@ import type { DataRow } from "@/types/Data";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { useResultStore } from "@/stores/useResultStore";
 import { jsPDF } from "jspdf";
-// autoTable is not directly used here anymore, but jsPDF instance is extended by it.
-// import { autoTable } from "jspdf-autotable"; 
+import { toast } from "sonner";
 import type { Variable } from "@/types/Variable";
 import type {
     UsePrintLogicProps,
@@ -55,9 +54,9 @@ export const usePrintLogic = ({
             await useVariableStore.getState().loadVariables();
             await useResultStore.getState().loadResults();
 
-            const availableData = useDataStore.getState().data;
-            const availableVariables = useVariableStore.getState().variables;
-            const logs = useResultStore.getState().logs;
+            const availableData = useDataStore.getState().data ?? [];
+            const availableVariables = useVariableStore.getState().variables ?? [];
+            const logs = useResultStore.getState().logs ?? [];
             
             const doc = new jsPDF({ format: paperSize }); 
 
@@ -65,19 +64,19 @@ export const usePrintLogic = ({
 
             // Determine active columns and filtered data once
             const namedVariables = availableVariables.filter(
-                (v: Variable) => String(v.name ?? "").trim() !== ""
+                (v: Variable) => v && String(v.name ?? "").trim() !== ""
             );
             const activeColumns = namedVariables
                 .filter((v: Variable) =>
                     availableData.some((row: DataRow) =>
-                        String(row[v.columnIndex] ?? "").trim() !== ""
+                        row && String(row[v.columnIndex] ?? "").trim() !== ""
                     )
                 )
                 .map((v: Variable) => v.columnIndex)
                 .sort((a: number, b: number) => a - b);
 
             const filteredData = availableData.filter((row: DataRow) =>
-                activeColumns.some((col) =>
+                row && activeColumns.some((col) =>
                     String(row[col] ?? "").trim() !== ""
                 )
             );
@@ -91,17 +90,18 @@ export const usePrintLogic = ({
             }
 
             if (selectedOptions.result) {
-                void addResultsView(doc, currentY, logs, generateAutoTableDataFromString);
+                addResultsView(doc, currentY, logs, generateAutoTableDataFromString);
             }
 
-            // Ensure at least one section was added before saving, or save a blank PDF if that's desired.
-            // For now, it saves even if empty.
             const trimmed = fileName.trim();
-            doc.save(`${trimmed === "" ? "statify_print_output" : trimmed}.pdf`);
-            onClose(); 
+            const outputFileName = `${trimmed === "" ? "statify_print_output" : trimmed}.pdf`;
+
+            doc.save(outputFileName);
+
+            onClose();
         } catch (error) {
             console.error("Error generating PDF:", error);
-            // Optionally, display a user-facing error message here
+            toast.error(`Gagal membuat PDF: ${error instanceof Error ? error.message : String(error)}`);
         } finally {
             setIsGenerating(false);
         }

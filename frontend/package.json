@@ -15,7 +15,8 @@
     "test:bail": "jest --bail",
     "test:descriptive": "node test-descriptive.js",
     "test:descriptive:unit": "jest components/Modals/Analyze/Descriptive/Descriptive/__tests__/ --verbose",
-    "test:descriptive:worker": "jest components/Modals/Analyze/Descriptive/Descriptive/__tests__/DescriptiveWorkerConnection.test.ts components/Modals/Analyze/Descriptive/Descriptive/__tests__/DescriptivesWorkerIntegration.test.ts --verbose"
+    "test:descriptive:worker": "jest components/Modals/Analyze/Descriptive/Descriptive/__tests__/DescriptiveWorkerConnection.test.ts components/Modals/Analyze/Descriptive/Descriptive/__tests__/DescriptivesWorkerIntegration.test.ts --verbose",
+    "build:wasm": "powershell -Command \"cd components/Modals/Analyze/TimeSeries/wasm; wasm-pack build --target web; Copy-Item -Path pkg/timeseries* -Destination ../../../../../public/workers/TimeSeries/ -Force\""
   },
   "dependencies": {
     "@handsontable/react-wrapper": "^15.3.0",
@@ -115,6 +116,7 @@
     "eslint-plugin-jest-dom": "^5.1.0",
     "eslint-plugin-testing-library": "^6.2.1",
     "fake-indexeddb": "^6.0.1",
+    "fast-check": "^4.8.0",
     "jest": "^30.0.2",
     "jest-environment-jsdom": "^30.0.2",
     "postcss": "^8.4.32",

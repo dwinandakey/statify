@@ -1,4 +1,5 @@
 import React from "react";
+import type { Variable } from "@/types/Variable";
 
 export type FactorMainType = {
     TargetVar: string[] | null;
@@ -20,7 +21,7 @@ export type FactorDialogProps = {
         value: unknown
     ) => void;
     data: FactorMainType;
-    globalVariables: string[];
+    globalVariables: Variable[];
     onContinue: (mainState: FactorMainType) => void;
     onReset: () => void;
 };

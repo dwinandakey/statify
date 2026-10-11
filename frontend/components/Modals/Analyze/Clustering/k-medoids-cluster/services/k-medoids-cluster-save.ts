@@ -1,8 +1,3 @@
-/**
- * K-Medoids Clustering - Variable Save Service
- * Creates new variables for cluster membership and distance-to-medoid
- */
-
 import type { Variable } from '@/types/Variable';
 import type { KMedoidsClusterSaveType } from '../types/k-medoids-cluster';
 
@@ -11,9 +6,6 @@ interface SaveVariablesResult {
     variableData: Record<string, number[]>; // Map of variable name -> data array
 }
 
-/**
- * Creates a default variable definition compatible with useVariableStore
- */
 const createClusteringVariable = (
     name: string,
     label: string,
@@ -29,15 +21,6 @@ const createClusteringVariable = (
     role: 'input',
 });
 
-/**
- * Prepares variables to save from K-Medoids clustering results
- * 
- * @param clusterLabels - Array of cluster assignments (0-based indices) per case
- * @param distancesToMedoid - Array of distances to medoid per case (optional)
- * @param saveOptions - User's save configuration
- * @param k - Number of clusters
- * @returns Object containing variable definitions and data arrays
- */
 export const prepareKMedoidsSaveVariables = (
     clusterLabels: number[],
     distancesToMedoid: number[] | undefined,
@@ -76,9 +59,6 @@ export const prepareKMedoidsSaveVariables = (
     };
 };
 
-/**
- * Validates that save data is consistent with current dataset
- */
 export const validateSaveData = (
     variableData: Record<string, number[]>,
     expectedRowCount: number
@@ -110,10 +90,6 @@ export const validateSaveData = (
     return { valid: true };
 };
 
-/**
- * Format save data for direct integration with useDataStore
- * This converts prepared data into cell updates
- */
 export const formatSaveDataForStore = (
     variableData: Record<string, number[]>,
     startColumnIndex: number,

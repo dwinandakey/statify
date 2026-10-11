@@ -3,6 +3,8 @@
 //! This module implements various statistical tests used in discriminant analysis,
 //! including univariate F tests, Wilks' Lambda, and tolerance calculations.
 
+use nalgebra::DMatrix;
+
 use crate::{
     models::{ result::WilksLambdaTest, AnalysisData, DiscriminantConfig },
     stats::core::{ AnalyzedDataset, EPSILON },
@@ -16,10 +18,14 @@ use super::core::{
     get_stepwise_selected_variables,
 };
 
-/// Calculate univariate F test for a variable
+/// Tests of Equality of Group Means for one variable (one-way ANOVA):
 ///
-/// This tests the null hypothesis that the means of a variable are equal
-/// across all groups, using the F-statistic.
+/// SSB = Σₖ nₖ (x̄ₖ − x̄)²,   SSW = Σₖ Σᵢ (xᵢₖ − x̄ₖ)²
+/// F   = [SSB / (g − 1)] / [SSW / (n − g)]
+/// Λ   = SSW / (SSB + SSW)
+///
+/// g and n count only the groups that have cases. F = 0 when SSW = 0 or there are
+/// fewer than two groups; Λ = 1 when SSB + SSW = 0.
 ///
 /// # Parameters
 /// * `variable` - The variable to test
@@ -28,7 +34,7 @@ use super::core::{
 /// # Returns
 /// A tuple of (F value, Wilks' lambda)
 pub fn calculate_univariate_f(variable: &str, dataset: &AnalyzedDataset) -> (f64, f64) {
-    // Extract variable data
+    // x̄, the overall mean
     let overall_mean = *dataset.overall_means.get(variable).unwrap_or(&0.0);
 
     // Calculate between-groups and within-groups sums of squares
@@ -96,119 +102,67 @@ pub fn calculate_univariate_f(variable: &str, dataset: &AnalyzedDataset) -> (f64
 /// Uses raw SSCP matrices: Λ = |W| / |B + W|
 /// where W = Σ(nᵢ-1)Sᵢ (NOT divided by n-k)
 /// This matches SPSS and standard textbook formulas.
-pub fn calculate_overall_wilks_lambda(dataset: &AnalyzedDataset, variables: &[String]) -> f64 {
+///
+/// The ratio is computed on the log scale, ln Λ = ln|W| − ln|T|, with each log
+/// determinant taken from a Cholesky factorization. This avoids overflow of the raw
+/// determinants on large-scale data, and Cholesky fails exactly when a matrix is not
+/// positive definite — that case is returned as an error rather than being replaced
+/// by a plausible-looking value.
+pub fn calculate_overall_wilks_lambda(
+    dataset: &AnalyzedDataset,
+    variables: &[String]
+) -> Result<f64, String> {
     if variables.is_empty() {
-        return 1.0;
+        return Ok(1.0);
     }
 
     // Calculate between-groups and within-groups matrices
     let (between_mat, within_mat) = calculate_between_within_matrices(dataset, variables);
 
-    // IMPORTANT: within_mat is divided by total_df=(n-k) by calculate_between_within_matrices
-    // (which is correct for covariance display purposes).
-    // But Wilks' Lambda requires raw SSCP W: W_raw = W_cov * (n-k).
-    // |W_raw| = |W_cov| * (n-k)^p  where p = number of variables.
-    let total_df = dataset.total_cases - dataset.num_groups;
-    let p = variables.len();
-    let scale_factor = (total_df as f64).powi(p as i32);
+    // within_mat is the pooled covariance W_cov = W_raw / (n-k), as returned by
+    // calculate_between_within_matrices (correct for covariance display).
+    // Wilks' Lambda requires the raw SSCP: W_raw = W_cov * (n-k), T = B + W_raw.
+    let total_df = (dataset.total_cases as f64) - (dataset.num_groups as f64);
+    if total_df <= 0.0 {
+        return Err(
+            format!(
+                "Wilks' lambda is undefined: total cases minus groups is {} (must be positive)",
+                total_df
+            )
+        );
+    }
+    let within_raw = &within_mat * total_df;
+    let total_mat = &between_mat + &within_raw;
 
-    // Wilks' lambda = |W_raw| / |B + W_raw|
-    // where W_raw = within_mat * (n-k)^p
-    let within_det = match within_mat.clone().determinant() {
-        det if det > 0.0 => det * scale_factor,
-        _ => 1.0,
-    };
+    let log_det_within = cholesky_log_determinant(&within_raw).ok_or_else(|| {
+        format!(
+            "Within-groups SSCP matrix is not positive definite for variables [{}]; Wilks' lambda cannot be computed",
+            variables.join(", ")
+        )
+    })?;
+    let log_det_total = cholesky_log_determinant(&total_mat).ok_or_else(|| {
+        format!(
+            "Total SSCP matrix is not positive definite for variables [{}]; Wilks' lambda cannot be computed",
+            variables.join(", ")
+        )
+    })?;
 
-    // For total: |B + W_raw| = |B + W_cov * (n-k)| = |(n-k) * (B/(n-k) + W_cov)|
-    // = (n-k)^p * |B/(n-k) + W_cov|
-    // But simpler: just compute B + W_raw directly
-    let total_mat = &between_mat + &within_mat * (total_df as f64);
-    let total_det = match total_mat.determinant() {
-        det if det > 0.0 => det,
-        _ => 1.0,
-    };
-
-    let lambda = if total_det > 0.0 { within_det / total_det } else { 1.0 };
-
-    lambda
+    Ok((log_det_within - log_det_total).exp())
 }
 
-/// Calculate overall F statistic for a set of variables
-///
-/// This approximates the significance of Wilks' lambda using Rao's F approximation.
-///
-/// F = ((1 - Λ^(1/s)) / Λ^(1/s)) × (df2 / df1)
-///
-/// Where:
-/// - s = sqrt((p²×(g-1)² - 4) / (p² + (g-1)² - 5))
-/// - df1 = p × (g - 1)
-/// - df2 = (n - 1 - (p+g)/2) × s - (p×(g-1) - 2) / 2
-/// - p = number of variables, g = number of groups, n = total cases
-///
-/// This matches SPSS and the standard Rao approximation formula.
-///
-/// # Parameters
-/// * `wilks_lambda` - The Wilks' lambda value
-/// * `num_variables` - Number of variables in the model
-/// * `num_groups` - Number of groups
-/// * `total_cases` - Total number of cases
-///
-/// # Returns
-/// A tuple of (F value, df1, df2)
-pub fn calculate_overall_f_statistic(
-    wilks_lambda: f64,
-    num_variables: usize,
-    num_groups: usize,
-    total_cases: usize
-) -> (f64, i32, i32) {
-    let p = num_variables as f64;
-    let g = num_groups as f64;
-    let n = total_cases as f64;
-
-    // Calculate s for the approximation
-    // s = sqrt((p*(g-1))² - 4) / (p + (g-1) - 2))
-    // i.e. s = sqrt((numerator) / (denominator))
-    let numerator = p.powi(2) * (g - 1.0).powi(2) - 4.0;
-    let denominator = p.powi(2) + (g - 1.0).powi(2) - 5.0;
-    let s = if denominator > EPSILON && numerator > 0.0 {
-        (numerator / denominator).sqrt()
-    } else {
-        1.0
-    };
-
-    // Calculate df1 and df2
-    // df1 = p * (g - 1)
-    // df2 = (n - 1 - (p + g) / 2) * s - (p * (g - 1) - 2) / 2
-    let df1 = (p * (g - 1.0)).round() as i32;
-
-    let w = n - 1.0 - (p + g) / 2.0;
-    let p_k1 = p * (g - 1.0);
-    let df2 = if s > EPSILON {
-        (w * s - (p_k1 - 2.0) / 2.0).round() as i32
-    } else {
-        // fallback when s ≈ 1 (i.e., p*(g-1) = 2)
-        (w * 1.0 - (p_k1 - 2.0) / 2.0).round() as i32
-    };
-
-    // Calculate F statistic using Rao's approximation
-    let f_value = if wilks_lambda > EPSILON && wilks_lambda < 1.0 - EPSILON && df1 > 0 && df2 > 0 {
-        let lambda_power = wilks_lambda.powf(1.0 / s);
-        let numerator = (1.0 - lambda_power) * (df2 as f64);
-        let denominator = lambda_power * (df1 as f64);
-        if denominator > EPSILON {
-            numerator / denominator
-        } else {
-            0.0
-        }
-    } else if wilks_lambda <= EPSILON {
-        // Handle extreme case of perfect discrimination
-        f64::MAX
-    } else {
-        // Handle wilks_lambda close to 1 (no discrimination)
-        0.0
-    };
-
-    (f_value, df1, df2)
+/// ln|A| of a symmetric positive-definite matrix via Cholesky, A = LLᵀ:
+/// ln|A| = 2 · Σ ln(Lᵢᵢ). Returns None when A is not positive definite.
+fn cholesky_log_determinant(matrix: &DMatrix<f64>) -> Option<f64> {
+    let cholesky = matrix.clone().cholesky()?;
+    let l = cholesky.l();
+    Some(
+        2.0 *
+            l
+                .diagonal()
+                .iter()
+                .map(|v| v.ln())
+                .sum::<f64>()
+    )
 }
 
 /// Calculate tolerance for a variable
@@ -217,9 +171,10 @@ pub fn calculate_overall_f_statistic(
 /// explained by the other independent variables in the model. Low tolerance
 /// indicates multicollinearity.
 ///
-/// This implementation uses the **multivariate** approach: regress the target
-/// variable on ALL other variables simultaneously, then compute
-/// tolerance = 1 - R² (where R² is from that multivariate regression).
+/// Computed from the pooled within-groups correlation matrix R of `other_variables`
+/// plus the target: tolerance_i = 1 / (R⁻¹)_ii, which equals 1 - R²_i where R²_i is
+/// the squared multiple correlation of variable i with all the other variables
+/// (pooled within groups). No explicit regression is run.
 ///
 /// This matches SPSS's "Tolerance" column in stepwise output.
 ///
@@ -229,7 +184,7 @@ pub fn calculate_overall_f_statistic(
 /// * `other_variables` - Other variables already in the model
 ///
 /// # Returns
-/// A tuple of (tolerance, minimum tolerance)
+/// A tuple of (tolerance of `variable`, minimum tolerance over every variable in the set)
 pub fn calculate_tolerance(
     variable: &str,
     dataset: &AnalyzedDataset,
@@ -239,16 +194,16 @@ pub fn calculate_tolerance(
         return (1.0, 1.0);
     }
 
-    // 1. Gabungkan semua variabel yang akan dianalisis (prediktor + target)
+    // 1. The variables of the model, then the target.
     let mut all_vars = other_variables.to_vec();
     all_vars.push(variable.to_string());
     let target_idx = all_vars.len() - 1;
 
-    // 2. Dapatkan matriks Pooled Within-Groups Covariance (Gaya SPSS!)
+    // 2. Pooled within-groups covariance matrix.
     let (_, within_cov) = calculate_between_within_matrices(dataset, &all_vars);
     let p = all_vars.len();
 
-    // 3. Ubah Covariance menjadi Matriks Korelasi
+    // 3. Pooled within-groups correlation matrix R, rᵢⱼ = sᵢⱼ / (sᵢ sⱼ).
     let mut within_cor = nalgebra::DMatrix::zeros(p, p);
     for i in 0..p {
         for j in 0..p {
@@ -262,12 +217,12 @@ pub fn calculate_tolerance(
         }
     }
 
-    // Tambahkan regularisasi kecil agar matriks tidak singular saat multikolinearitas tinggi
+    // Small ridge so that R stays invertible under strong multicollinearity.
     for i in 0..p {
         within_cor[(i, i)] += EPSILON;
     }
 
-    // 4. Invers matriks untuk mendapatkan VIF, lalu hitung Tolerance = 1 / VIF
+    // 4. VIFᵢ = (R⁻¹)ᵢᵢ and tolerance = 1 / VIFᵢ.
     match within_cor.try_inverse() {
         Some(inv_cor) => {
             let mut min_tol = 1.0_f64;
@@ -276,27 +231,30 @@ pub fn calculate_tolerance(
             for i in 0..p {
                 let vif = inv_cor[(i, i)];
                 let tol = if vif > 0.0 { 1.0 / vif } else { 0.0 };
-                let clamped_tol = tol.clamp(0.0, 1.0); // Paksa aman di rentang 0 - 1
+                let clamped_tol = tol.clamp(0.0, 1.0); // kept within [0, 1]
 
                 if i == target_idx {
                     target_tol = clamped_tol;
                 }
                 
-                // Min. Tolerance adalah nilai terkecil dari SEMUA variabel di model ini
+                // Minimum tolerance over every variable of the set.
                 if clamped_tol < min_tol {
                     min_tol = clamped_tol;
                 }
             }
             (target_tol, min_tol)
         }
-        None => (0.0, 0.0), // Jika matriks gagal di-invers
+        None => (0.0, 0.0), // R could not be inverted
     }
 }
 
-/// Calculate Wilks' lambda test for discriminant functions
+/// Wilks' Lambda table of the discriminant functions. For the test of functions k
+/// through m (λ = eigenvalues, p = variables in the model, g = groups, n = cases):
 ///
-/// This function tests the significance of discriminant functions by calculating
-/// Wilks' lambda and related chi-square statistics.
+/// Λₖ   = Πᵢ₌ₖᵐ 1 / (1 + λᵢ)
+/// χ²ₖ  = −[n − 1 − (p + g) / 2] · ln Λₖ      (Bartlett's approximation)
+/// dfₖ  = (p − k + 1)(g − k)
+/// Sig. = P(χ²(dfₖ) > χ²ₖ)
 ///
 /// # Parameters
 /// * `data` - The analysis data
@@ -365,8 +323,7 @@ pub fn calculate_wilks_lambda_test(
         wilks_lambda.push(lambda_k);
 
         // Calculate chi-square approximation using Bartlett's formula
-        // χ² = -[n - (p + g + 1)/2] × ln(Λ)
-        // Note: Using (p + g + 1) / 2, not (p + g) / 2
+        // χ² = -[n - 1 - (p + g)/2] × ln(Λ)
         let chi_square_val = -(n - 1.0 - ((p + g) as f64) / 2.0) * lambda_k.ln();
 
         chi_square.push(chi_square_val);

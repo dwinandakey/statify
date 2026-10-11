@@ -1,0 +1,41 @@
+   Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.25s
+     Running tests\eval_blackbox_stwv.rs (target\debug\deps\eval_blackbox_stwv-f2af69d56375ea3e.exe)
+
+running 31 tests
+test bb02_payload_default_dari_aplikasi_diterima_inti_sebagai_weka_raw ... ok
+test bb05_inti_menolak_ngram_min_lebih_besar_dari_max ... ok
+test bb05_inti_menolak_ngram_min_nol ... ok
+test bb06_regex_tidak_valid_menghasilkan_invalid_regex ... ok
+test bb06_regex_sah_dengan_delimiter_kustom_tetap_berjalan ... ok
+test bb08_stemming_porter_running_menjadi_run_dan_parks_menjadi_park ... ok
+test bb02_default_weka_korpus_acuan_menghasilkan_lima_kolom_vec ... ok
+test bb04_ngram_1_2_kosakata_memuat_unigram_dan_bigram ... ok
+test bb09_sklearn_kombinasi_di_luar_standar_ditolak_inti ... ok
+test bb08_stemming_sastrawi_dimakan_menjadi_makan ... ok
+test bb08_stemming_porter_played_menjadi_play ... ok
+test bb08_stemming_sastrawi_memakan_menjadi_makan ... ok
+test bb10_batas_tepat_sepuluh_kandidat_dataset_indonesia ... ok
+test bb04_ngram_2_2_hanya_bigram_tanpa_unigram ... ok
+test bb09_sklearn_standard_cocok_dengan_tfidfvectorizer_pada_korpus_acuan ... ok
+test bb07_stopword_indonesian_membuang_kata_pada_daftar_dari_kosakata ... ok
+test bb07_stopword_custom_menggantikan_daftar_dan_kata_lain_kembali_muncul ... ok
+test bb05_inti_menolak_ngram_max_di_atas_5_dan_menerima_5 ... ok
+test bb06_temuan_c1_01_delimiter_hanya_spasi_jatuh_ke_pola_bawaan_inti ... ok
+test bb10_min_freq_2_tanpa_batas_words_to_keep_menyisakan_16_term ... ok
+test bb09_sklearn_standard_idf_smooth_dan_df_sesuai_rumus ... ok
+test bb11_min_freq_lebih_besar_dari_semua_total_menghasilkan_empty_vocabulary_dan_batasnya_4_masih_lolos ... ok
+test bb12_seluruh_sel_kosong_ditolak_inti_dengan_empty_input ... ok
+test bb12_sel_kosong_menjadi_vektor_nol_dan_jumlah_baris_tetap ... ok
+test bb11_dokumen_hanya_berisi_stopword_indonesian_menghasilkan_empty_vocabulary ... ok
+test bb12_baris_nol_tetap_nol_dan_terbatas_pada_normalisasi_l2_sklearn ... ok
+test bb11_stopword_dan_min_freq_bersama_membuang_semua_kata ... ok
+test bb12_sel_kosong_di_awal_dan_akhir_tetap_sejajar ... ok
+test bb11_semua_kata_stopword_menghasilkan_empty_vocabulary ... ok
+test bb10_words_to_keep_10_min_freq_2_dataset_inggris ... ok
+test bb10_words_to_keep_nol_menyimpan_semua_term ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.71 started=2026-10-08 10:29:06 +07:00 cmd=cargo test --test eval_blackbox_stwv cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

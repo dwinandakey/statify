@@ -1,20 +1,9 @@
-/**
- * Chart Visualisasi K-Medoids
- * Komponen chart komprehensif untuk visualisasi clustering
- * Menggunakan sistem chart yang ada dengan format khusus K-Medoids
- */
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { KMedoidsOutput, IterationHistory } from "../types/output";
 
-/**
- * Format data K-Medoids untuk visualisasi scatter plot
- * Membuat data chart yang kompatibel dengan "Grouped Scatter Plot" GeneralChartContainer
- * Memisahkan titik biasa dan medoid untuk visualisasi yang berbeda
- */
 export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar: string) {
-    // Pisahkan titik biasa dan medoid untuk visualisasi yang berbeda
+    // Separate regular points and medoids for distinct visualization
     const dataPoints = output.assignments
         .filter(obj => !obj.isMedoid)
         .map(obj => {
@@ -30,7 +19,7 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
             };
         });
 
-    // Tambahkan medoid sebagai kategori terpisah
+    // Add medoids as separate category
     const medoids = output.assignments
         .filter(obj => obj.isMedoid)
         .map(obj => {
@@ -72,7 +61,7 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
                     x: xVar,
                     y: yVar
                 },
-                // Styling berbeda untuk klaster dan centroid
+                // Distinct styling for clusters and centroids
                 pointStyles: {
                     "cluster 1": { symbol: "circle", color: "#FF6B6B" },
                     "cluster 2": { symbol: "circle", color: "#4ECDC4" },
@@ -84,10 +73,6 @@ export function formatScatterPlotData(output: KMedoidsOutput, xVar: string, yVar
     };
 }
 
-/**
- * Konversi data sampling CLARA ke format IterationHistory
- * agar dapat digunakan kembali dengan komponen ConvergenceChart yang ada
- */
 export function formatClaraSamplingAsConvergenceData(
     samples: { sampleIndex: number; cost: number; sampleSize?: number; pamIterations?: number }[]
 ): IterationHistory[] {
@@ -102,9 +87,6 @@ export function formatClaraSamplingAsConvergenceData(
     });
 }
 
-/**
- * Format data untuk donut chart (ukuran klaster)
- */
 export function formatDonutChartData(output: KMedoidsOutput) {
     const labels = output.clusterProfiles.map(p => `Cluster ${p.clusterLabel}`);
     const data = output.clusterProfiles.map(p => p.size);
@@ -155,49 +137,7 @@ export function formatDonutChartData(output: KMedoidsOutput) {
 }
 
 /**
- * Format data untuk radar chart (profil klaster)
- */
-export function formatRadarChartData(output: KMedoidsOutput, variables: string[]) {
-    const datasets = output.clusterProfiles.map((profile, idx) => ({
-        label: `Cluster ${profile.clusterLabel}`,
-        data: variables.map(v => {
-            const val = profile.meanAttributes?.[v];
-            return val !== null && isFinite(val) ? val : 0;
-        }),
-        backgroundColor: `hsla(${(idx * 360) / output.clusterProfiles.length}, 70%, 50%, 0.2)`,
-        borderColor: `hsl(${(idx * 360) / output.clusterProfiles.length}, 70%, 50%)`,
-        borderWidth: 2
-    }));
-
-    return {
-        type: "radar",
-        data: {
-            labels: variables,
-            datasets
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: "Cluster Attribute Profiles"
-                },
-                legend: {
-                    display: true,
-                    position: "top" as const
-                }
-            },
-            scales: {
-                r: {
-                    beginAtZero: true
-                }
-            }
-        }
-    };
-}
-
-/**
- * Format data untuk line chart konvergensi
+ * Format data for convergence line chart
  */
 export function formatConvergenceChartData(output: KMedoidsOutput) {
     const iterations = output.iterationHistory.map(h => h.iteration);
@@ -248,18 +188,15 @@ export function formatConvergenceChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Format data untuk bar chart silhouette
- */
 export function formatSilhouetteBarChartData(output: KMedoidsOutput) {
     const labels = output.silhouetteScores.perCluster.map(s => `Cluster ${s.clusterLabel}`);
     const scores = output.silhouetteScores.perCluster.map(s => s.averageScore);
     
     const colors = scores.map(score => {
-        if (score >= 0.7) return "rgba(34, 197, 94, 0.8)"; // hijau
-        if (score >= 0.5) return "rgba(59, 130, 246, 0.8)"; // biru
-        if (score >= 0.3) return "rgba(234, 179, 8, 0.8)"; // kuning
-        return "rgba(239, 68, 68, 0.8)"; // merah
+        if (score >= 0.7) return "rgba(34, 197, 94, 0.8)"; // green
+        if (score >= 0.5) return "rgba(59, 130, 246, 0.8)"; // blue
+        if (score >= 0.3) return "rgba(234, 179, 8, 0.8)"; // yellow
+        return "rgba(239, 68, 68, 0.8)"; // red
     });
 
     return {
@@ -311,9 +248,6 @@ export function formatSilhouetteBarChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Format data untuk elbow chart
- */
 export function formatElbowChartData(output: KMedoidsOutput) {
     if (!output.elbowData) return null;
 
@@ -366,9 +300,6 @@ export function formatElbowChartData(output: KMedoidsOutput) {
     };
 }
 
-/**
- * Komponen pembungkus container chart
- */
 interface ChartCardProps {
     title: string;
     description?: string;
@@ -385,9 +316,9 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, description, chartD
             </CardHeader>
             <CardContent>
                 <div style={{ height: `${height}px` }}>
-                    {/* Chart akan dirender oleh GeneralChartContainer */}
+                    {/* Chart will be rendered by GeneralChartContainer */}
                     <div data-chart-type={chartData.type} data-chart-config={JSON.stringify(chartData)}>
-                        {/* Placeholder untuk rendering chart */}
+                        {/* Placeholder for chart rendering */}
                     </div>
                 </div>
             </CardContent>

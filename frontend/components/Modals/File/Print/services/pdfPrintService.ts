@@ -175,15 +175,15 @@ export function addResultsView(
     doc: jsPDF,
     currentY: number,
     logs: Log[],
-    generateAutoTableDataFromStringFn: typeof generateAutoTableDataFromString // Type remains the same
+    generateAutoTableDataFromStringFn: typeof generateAutoTableDataFromString
 ): number {
     let newY = currentY;
 
-    if (logs.length === 0) {
+    if (!Array.isArray(logs) || logs.length === 0) {
         return newY;
     }
 
-    if (newY > Y_THRESHOLD_GENERAL - 10) { // Slightly less for the main title
+    if (newY > Y_THRESHOLD_GENERAL - 10) {
         doc.addPage();
         newY = PAGE_TOP_MARGIN;
     }
@@ -193,43 +193,47 @@ export function addResultsView(
 
     for (let index = 0; index < logs.length; index++) {
         const log = logs[index];
+        if (!log) continue;
+
         if (index > 0) {
             newY += 3;
             doc.line(PAGE_MARGIN, newY, doc.internal.pageSize.getWidth() - PAGE_MARGIN, newY);
             newY += 7;
         }
 
-        if (newY > Y_THRESHOLD_RESULTS_LOG_ID) { 
-            doc.addPage(); 
-            newY = PAGE_TOP_MARGIN; 
+        if (newY > Y_THRESHOLD_RESULTS_LOG_ID) {
+            doc.addPage();
+            newY = PAGE_TOP_MARGIN;
         }
         doc.setFontSize(LOG_ID_FONT_SIZE);
         doc.setFont(doc.getFont().fontName, 'bold');
-        doc.text(`Analysis Log: ${log.id}`, PAGE_MARGIN, newY);
+        doc.text(`Analysis Log: ${log.id ?? (index + 1)}`, PAGE_MARGIN, newY);
         doc.setFont(doc.getFont().fontName, 'normal');
-        newY += 5; // Specific spacing after log ID
+        newY += 5;
         doc.setFontSize(TEXT_FONT_SIZE);
-        
-        const logTextLines = doc.splitTextToSize(log.log, doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2));
-        if (newY + (logTextLines.length * 3.5) > Y_THRESHOLD_RESULTS_LOG_TEXT) { 
+
+        const logText = String(log.log ?? "");
+        const logTextLines = doc.splitTextToSize(logText, doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2));
+        if (newY + (logTextLines.length * 3.5) > Y_THRESHOLD_RESULTS_LOG_TEXT) {
             doc.addPage();
             newY = PAGE_TOP_MARGIN;
         }
         doc.setFont(doc.getFont().fontName, 'italic');
-        doc.text(log.log, PAGE_MARGIN, newY, { maxWidth: doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2) });
+        doc.text(logText, PAGE_MARGIN, newY, { maxWidth: doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2) });
         doc.setFont(doc.getFont().fontName, 'normal');
         newY += (logTextLines.length * 3.5) + SPACE_AFTER_LOG_TEXT;
 
         if (log.analytics?.length) {
             for (const analytic of log.analytics) {
-                if (newY > Y_THRESHOLD_RESULTS_ANALYTIC_TITLE) { 
-                    doc.addPage(); 
-                    newY = PAGE_TOP_MARGIN; 
+                if (!analytic) continue;
+                if (newY > Y_THRESHOLD_RESULTS_ANALYTIC_TITLE) {
+                    doc.addPage();
+                    newY = PAGE_TOP_MARGIN;
                 }
                 doc.setFontSize(ANALYTIC_TITLE_FONT_SIZE);
                 doc.setFont(doc.getFont().fontName, 'bold');
                 doc.text(
-                    analytic.title,
+                    analytic.title ?? "Analytic",
                     doc.internal.pageSize.getWidth() / 2,
                     newY,
                     { align: "center" }
@@ -239,22 +243,25 @@ export function addResultsView(
 
                 if (analytic.statistics?.length) {
                     for (const stat of analytic.statistics) {
+                        if (!stat?.output_data) continue;
                         const { tables } = generateAutoTableDataFromStringFn(stat.output_data);
+                        if (!Array.isArray(tables)) continue;
 
                         for (const tbl of tables) {
-                            if (newY > Y_THRESHOLD_RESULTS_TABLE_TITLE) { 
-                                doc.addPage(); 
-                                newY = PAGE_TOP_MARGIN; 
+                            if (!tbl) continue;
+                            if (newY > Y_THRESHOLD_RESULTS_TABLE_TITLE) {
+                                doc.addPage();
+                                newY = PAGE_TOP_MARGIN;
                             }
-                            doc.setFontSize(LOG_ID_FONT_SIZE); // Re-using LOG_ID_FONT_SIZE for table titles for consistency
+                            doc.setFontSize(LOG_ID_FONT_SIZE);
                             doc.setFont(doc.getFont().fontName, 'bold');
-                            doc.text(tbl.title, PAGE_MARGIN, newY);
+                            doc.text(tbl.title ?? "", PAGE_MARGIN, newY);
                             doc.setFont(doc.getFont().fontName, 'normal');
-                            newY += 6; // Specific spacing after table title
+                            newY += 6;
 
                             autoTable(doc, {
-                                head: tbl.head as CellDef[][],
-                                body: tbl.body as CellDef[][],
+                                head: (tbl.head ?? []) as CellDef[][],
+                                body: (tbl.body ?? []) as CellDef[][],
                                 startY: newY,
                                 theme: "grid",
                                 styles: { fontSize: TABLE_BODY_FONT_SIZE, cellPadding: 1.5, overflow: 'linebreak' },
@@ -270,9 +277,8 @@ export function addResultsView(
                                 tableWidth: doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2),
                                 didDrawPage: (data: HookData) => { newY = data.cursor?.y ?? PAGE_TOP_MARGIN; }
                             });
-                            newY = ((doc as JsPDFWithAutoTable).lastAutoTable?.finalY ?? newY) + 4; // Small space after table
+                            newY = ((doc as JsPDFWithAutoTable).lastAutoTable?.finalY ?? newY) + 4;
 
-                            // Add statistic description if available, now placed AFTER the table
                             if (stat.description) {
                                 const plainDescription = htmlToPlainText(stat.description);
                                 const descriptionLines = doc.splitTextToSize(plainDescription, doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2));
@@ -283,9 +289,9 @@ export function addResultsView(
                                 const lineHeightFactor = 1.3;
                                 doc.text(descriptionLines, PAGE_MARGIN, newY, { lineHeightFactor, maxWidth: doc.internal.pageSize.getWidth() - (PAGE_MARGIN * 2) });
                                 doc.setFont(doc.getFont().fontName, 'normal');
-                                newY += (descriptionLines.length * TEXT_FONT_SIZE * lineHeightFactor) / 2; // approximate line height
+                                newY += (descriptionLines.length * TEXT_FONT_SIZE * lineHeightFactor) / 2;
                             }
-                            newY += SPACE_AFTER_TABLE; // Final space after the entire statistic block
+                            newY += SPACE_AFTER_TABLE;
                         }
                     }
                 }

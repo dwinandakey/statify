@@ -35,11 +35,8 @@ pub struct DiscriminantResult {
     pub prior_probabilities: Option<PriorProbabilities>,
     #[serde(rename = "classification_function_coefficients")]
     pub classification_function_coefficients: Option<ClassificationFunctionCoefficients>,
-    #[serde(rename = "discriminant_histograms")]
-    pub discriminant_histograms: Option<DiscriminantHistograms>,
-    /// Per-case discriminant scores for scatter plots (combine/sep_grp).
-    /// Populated only when combine || sep_grp and case == false.
-    /// When case == true, casewise_statistics already contains the scores.
+    /// Per-case discriminant scores of every classified case for the Combined-/
+    /// Separate-groups plots. Populated whenever combine || sep_grp.
     #[serde(rename = "scatter_data")]
     pub scatter_data: Option<ScatterData>,
     /// Bootstrap results (bias, std. error, confidence intervals) for the
@@ -56,6 +53,57 @@ pub struct DiscriminantResult {
     /// The map itself is built on the frontend from the group centroids.
     #[serde(rename = "territorial_map")]
     pub territorial_map: bool,
+    /// True when the Combined-Groups plot was requested (Classify → Plots).
+    #[serde(rename = "combined_groups_plot")]
+    pub combined_groups_plot: bool,
+    /// True when the Separate-Groups plots were requested (Classify → Plots).
+    #[serde(rename = "separate_groups_plot")]
+    pub separate_groups_plot: bool,
+    /// True when Statistics → Function Coefficients → Unstandardized was checked.
+    /// The unstandardized coefficients are always computed (scores, centroids, Save
+    /// and the XML export need them); this only decides whether the Canonical
+    /// Discriminant Function Coefficients table is shown, as in SPSS (/STATISTICS=RAW).
+    #[serde(rename = "unstandardized_coefficients")]
+    pub unstandardized_coefficients: bool,
+    /// Classify → Use Covariance Matrix → Separate-groups. Populated only for that
+    /// option; its presence tells the frontend (Save, territorial map) to classify
+    /// with the per-group matrices instead of the pooled one.
+    #[serde(rename = "separate_groups_classification")]
+    pub separate_groups_classification: Option<SeparateGroupsClassification>,
+}
+
+/// Separate-groups classification (SPSS /CLASSIFY=SEPARATE): each group's covariance
+/// matrix of the canonical discriminant functions, which classifies the cases, and
+/// Box's test of those matrices — both of which SPSS displays for this option.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SeparateGroupsClassification {
+    /// Function labels ("1", "2", …) in matrix column order.
+    pub functions: Vec<String>,
+    /// One entry per group, in analysis group order.
+    pub groups: Vec<GroupFunctionCovariance>,
+    /// Log determinants of the group covariance matrices of the functions.
+    #[serde(rename = "log_determinants")]
+    pub log_determinants: LogDeterminants,
+    /// Box's M on those matrices; `None` when it cannot be computed (a warning says why).
+    #[serde(rename = "box_m_test")]
+    pub box_m_test: Option<BoxMTest>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GroupFunctionCovariance {
+    pub group: String,
+    /// Analysis cases in the group (the matrix is estimated from these only).
+    pub n: usize,
+    /// Σⱼ: covariance matrix of the discriminant scores, m × m, one Vec per row.
+    pub covariance: Vec<Vec<f64>>,
+    /// Inverse of Σⱼ* (the functions kept by SPSS's pseudo-inverse rule), padded to
+    /// m × m with zeros for the functions left out.
+    pub inverse: Vec<Vec<f64>>,
+    /// ln|Σⱼ*|.
+    #[serde(rename = "log_determinant")]
+    pub log_determinant: f64,
+    /// Number of functions kept in Σⱼ* — the df of the case's chi-square distance.
+    pub rank: usize,
 }
 
 /// Bundle of all requested assumption checks plus an at-a-glance summary used to
@@ -104,6 +152,8 @@ pub struct MulticollinearityResult {
     pub note: String,
 }
 
+// INACTIVE — result shape of the former full-dataset (pooled) Henze–Zirkler test.
+/*
 /// Henze–Zirkler multivariate normality test computed on the full dataset
 /// (all cases pooled, grouping variable excluded), matching R's `MVN::mvn`.
 /// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
@@ -121,11 +171,36 @@ pub struct HenzeZirklerResult {
     pub violated: bool,
     pub note: String,
 }
+*/
 
-/// Per-variable Anderson–Darling univariate normality test computed on the full
-/// dataset (all cases pooled), matching R's `MVN::mvn` / `nortest::ad.test`.
+/// Henze–Zirkler multivariate normality test run within each group (grouping
+/// variable excluded); every vector has one entry per group, in group order.
+/// The HZ statistic is approximately lognormal under H0; `p_value` is its upper
+/// tail. A group with n ≤ p is not tested (`tested` = false).
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct HenzeZirklerResult {
+    pub groups: Vec<String>,
+    /// Cases used in each group.
+    pub n: Vec<i32>,
+    /// Henze–Zirkler statistic per group (0 when not tested).
+    pub hz: Vec<f64>,
+    #[serde(rename = "p_value")]
+    pub p_value: Vec<f64>,
+    /// Verdict per group: p-value above the normality α (not significant).
+    pub normal: Vec<bool>,
+    /// False when the group could not be tested (too few cases for p predictors).
+    pub tested: Vec<bool>,
+    /// True when any tested group rejects multivariate normality.
+    pub violated: bool,
+    pub note: String,
+}
+
+/// Anderson–Darling univariate normality test per predictor within each group
+/// (`nortest::ad.test` on each group's cases). One entry per tested
+/// group × predictor pair; `groups` and `variables` are parallel.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UnivariateNormalityResult {
+    pub groups: Vec<String>,
     pub variables: Vec<String>,
     /// Anderson–Darling A² statistic per variable.
     pub statistic: Vec<f64>,
@@ -143,12 +218,24 @@ pub struct UnivariateNormalityResult {
 pub struct BootstrapResults {
     #[serde(rename = "num_samples")]
     pub num_samples: i32,
+    /// Resamples that were actually fitted. Lower than `num_samples` when a
+    /// resample lost a group or could not be fitted.
+    #[serde(rename = "valid_samples")]
+    pub valid_samples: i32,
+    /// Fitted resamples whose functions came out in a different order than the
+    /// original solution and were matched back to it.
+    #[serde(rename = "reordered_samples", default)]
+    pub reordered_samples: i32,
     pub level: f64,
     /// "Percentile" or "BCa"
     #[serde(rename = "ci_method")]
     pub ci_method: String,
     /// "Simple" or "Stratified"
     pub sampling: String,
+    /// Variables that define the strata under stratified sampling. Empty when
+    /// the strata are the groups of the grouping variable.
+    #[serde(rename = "strata_variables")]
+    pub strata_variables: Vec<String>,
     pub functions: Vec<String>,
     pub variables: Vec<String>,
     pub standardized: Vec<BootstrapCoefficient>,
@@ -191,6 +278,28 @@ pub struct ProcessingSummary {
     pub both_missing_percent: Option<f64>,
     #[serde(rename = "total_excluded_percent")]
     pub total_excluded_percent: Option<f64>,
+    /// Cases left out by the selection variable (only selected cases enter the
+    /// analysis). Counted before any missing-value category.
+    #[serde(rename = "unselected", default)]
+    pub unselected: Option<usize>,
+    #[serde(rename = "unselected_percent", default)]
+    pub unselected_percent: Option<f64>,
+    /// Classification Processing Summary: cases processed for classification (every
+    /// case; unselected cases are classified too, as the testing part of a split).
+    #[serde(rename = "classification_processed", default)]
+    pub classification_processed: Option<usize>,
+    /// Classification Processing Summary: cases excluded for a missing or out-of-range
+    /// group code. Always 0: such cases are classified as ungrouped cases, as SPSS does.
+    #[serde(rename = "classification_missing_group_codes", default)]
+    pub classification_missing_group_codes: Option<usize>,
+    /// Classification Processing Summary: cases excluded for a missing predictor.
+    /// 0 when "Replace missing values with mean" is on, because those cases are still
+    /// classified with the predictor means substituted.
+    #[serde(rename = "classification_missing_disc_vars")]
+    pub classification_missing_disc_vars: Option<usize>,
+    /// Classification Processing Summary: cases used in the classification output.
+    #[serde(rename = "classification_used_count")]
+    pub classification_used_cases: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -234,6 +343,11 @@ pub struct EigenDescription {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CanonicalFunctions {
+    /// Variables in the model, in analysis order. The coefficient maps below are
+    /// unordered, so this is what fixes the row order of the output tables to match
+    /// SPSS. Defaulted so older serialised results still deserialise.
+    #[serde(default)]
+    pub variables: Vec<String>,
     pub coefficients: HashMap<String, Vec<f64>>,
     #[serde(rename = "standardized_coefficients")]
     pub standardized_coefficients: HashMap<String, Vec<f64>>,
@@ -257,6 +371,25 @@ pub struct ClassificationResults {
     pub original_percentage: HashMap<String, Vec<f64>>,
     #[serde(rename = "cross_validated_percentage")]
     pub cross_validated_percentage: Option<HashMap<String, Vec<f64>>>,
+    /// Cases the selection variable leaves out (the testing part of a split),
+    /// classified with the functions from the selected cases. `None` when no
+    /// selection variable is in use or no unselected case could be classified.
+    #[serde(rename = "unselected_classification", default)]
+    pub unselected_classification: Option<HashMap<String, Vec<i32>>>,
+    #[serde(rename = "unselected_percentage", default)]
+    pub unselected_percentage: Option<HashMap<String, Vec<f64>>>,
+    /// "Ungrouped cases" row of the (selected) Original block: predicted-group counts
+    /// of the cases with a missing or out-of-range group code, in group order. `None`
+    /// when there is no such case.
+    #[serde(rename = "ungrouped_classification", default)]
+    pub ungrouped_classification: Option<Vec<i32>>,
+    #[serde(rename = "ungrouped_percentage", default)]
+    pub ungrouped_percentage: Option<Vec<f64>>,
+    /// The same row of the "Cases Not Selected" block.
+    #[serde(rename = "unselected_ungrouped_classification", default)]
+    pub unselected_ungrouped_classification: Option<Vec<i32>>,
+    #[serde(rename = "unselected_ungrouped_percentage", default)]
+    pub unselected_ungrouped_percentage: Option<Vec<f64>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -270,7 +403,7 @@ pub struct BoxMTest {
     #[serde(rename = "p_value")]
     pub p_value: f64,
     pub note: String,
-    // Debug fields (visible in console.log)
+    // Intermediate values of the computation; not sent to the frontend.
     #[serde(skip_serializing)]
     pub debug_p: usize,
     #[serde(skip_serializing)]
@@ -315,7 +448,7 @@ pub struct LogDeterminants {
     #[serde(rename = "pooled_log_determinant")]
     pub pooled_log_determinant: f64,
     pub note: String,
-    // Debug fields (visible in console.log)
+    // Intermediate values of the computation; not sent to the frontend.
     #[serde(skip_serializing)]
     pub debug_variables: Vec<String>,
 }
@@ -324,7 +457,7 @@ pub struct LogDeterminants {
 pub struct StepwiseStatistics {
     /// Which method was used: "wilks", "unexplained", "mahalanobis", "f_ratio", "raos_v"
     pub method: String,
-    /// Number of groups (k) — used by frontend to compute df = step × (k-1) for Rao's V
+    /// Number of groups (k)
     #[serde(rename = "num_groups")]
     pub num_groups: usize,
     #[serde(rename = "variables_entered")]
@@ -342,25 +475,35 @@ pub struct StepwiseStatistics {
     pub f_to_enter: Vec<f64>,
     #[serde(rename = "f_to_enter_df1")]
     pub f_to_enter_df1: Vec<i32>,
+    /// f64: for the Wilks' Lambda method this is Rao's F df2, fractional when the
+    /// F is approximate.
     #[serde(rename = "f_to_enter_df2")]
-    pub f_to_enter_df2: Vec<i32>,
+    pub f_to_enter_df2: Vec<f64>,
     #[serde(rename = "significance")]
     pub significance: Vec<f64>,
-    /// Model's exact Wilks F (Rao approx) per step — for the Wilks' Lambda summary table
+    /// Model's Wilks F (Rao's F) per step — for the Wilks' Lambda summary table
     #[serde(rename = "wilks_exact_f")]
     pub wilks_exact_f: Vec<f64>,
     #[serde(rename = "wilks_exact_df1")]
     pub wilks_exact_df1: Vec<i32>,
+    /// Rao's F df2, kept fractional (not truncated) when the F is approximate.
     #[serde(rename = "wilks_exact_df2")]
-    pub wilks_exact_df2: Vec<i32>,
+    pub wilks_exact_df2: Vec<f64>,
     #[serde(rename = "wilks_exact_sig")]
     pub wilks_exact_sig: Vec<f64>,
+    /// Whether Rao's F is exact at this step (min(p, g − 1) ≤ 2). When false the
+    /// output heads it "Approximate F", as SPSS does.
+    #[serde(rename = "wilks_f_exact", default)]
+    pub wilks_f_exact: Vec<bool>,
     /// Rao's V cumulative statistic (for Rao's V method)
     #[serde(rename = "raos_v")]
     pub raos_v: Vec<f64>,
     /// Chi-squared approx. significance of cumulative Rao's V (for Rao's V method)
     #[serde(rename = "raos_v_sig")]
     pub raos_v_sig: Vec<f64>,
+    /// df of that chi-square: (variables in the model after the step) × (k − 1)
+    #[serde(rename = "raos_v_df", default)]
+    pub raos_v_df: Vec<f64>,
     /// Change in V (ΔV) between steps (for Rao's V method)
     #[serde(rename = "change_in_v")]
     pub change_in_v: Vec<f64>,
@@ -381,6 +524,8 @@ pub struct StepwiseNote {
     pub max_steps: String,
     pub min_f_to_enter: String,
     pub max_f_to_remove: String,
+    /// "Minimum Rao's V to enter is …" — empty for every method except Rao's V.
+    pub min_v_to_enter: String,
     pub note: String,
 }
 
@@ -424,6 +569,10 @@ pub struct PairwiseComparison {
     pub group_name: String,
     pub f_value: f64,
     pub significance: f64,
+    /// Numerator degrees of freedom of F: p, the number of variables in the model.
+    pub df1: i32,
+    /// Denominator degrees of freedom of F: n − g − p + 1.
+    pub df2: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -508,43 +657,12 @@ pub struct PriorProbabilities {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ClassificationFunctionCoefficients {
-    pub groups: Vec<usize>,
+    /// Group labels (the grouping variable's own codes), one per column.
+    pub groups: Vec<String>,
     pub variables: Vec<String>,
     pub coefficients: HashMap<String, Vec<f64>>,
     #[serde(rename = "constant_terms")]
     pub constant_terms: Vec<f64>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct DiscriminantHistograms {
-    #[serde(rename = "functions")]
-    pub functions: Vec<String>,
-    #[serde(rename = "groups")]
-    pub groups: Vec<String>,
-    #[serde(rename = "histograms")]
-    pub histograms: HashMap<String, GroupHistogram>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GroupHistogram {
-    #[serde(rename = "bin_count")]
-    pub bin_count: i32,
-    #[serde(rename = "bin_width")]
-    pub bin_width: f64,
-    #[serde(rename = "min_value")]
-    pub min_value: f64,
-    #[serde(rename = "max_value")]
-    pub max_value: f64,
-    #[serde(rename = "mean")]
-    pub mean: f64,
-    #[serde(rename = "std_dev")]
-    pub std_dev: f64,
-    #[serde(rename = "sample_size")]
-    pub sample_size: i32,
-    #[serde(rename = "bin_frequencies")]
-    pub bin_frequencies: Vec<i32>,
-    #[serde(rename = "bin_edges")]
-    pub bin_edges: Vec<f64>,
 }
 
 /// Lightweight per-case scores for scatter plot rendering.

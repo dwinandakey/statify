@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import React, { useCallback, useMemo, useEffect } from "react";
 import type { Variable } from "@/types/Variable";
+import type { DataRow } from "@/types/Data";
 import type { TargetListConfig } from '@/components/Common/VariableListManager';
 import VariableListManager from '@/components/Common/VariableListManager';
 import { saveFormData } from "@/hooks/useIndexedDB";
@@ -15,6 +16,7 @@ interface VariablesTabProps {
     setIndependentVariable: React.Dispatch<React.SetStateAction<Variable[]>>;
     setHighlightedVariable: React.Dispatch<React.SetStateAction<{ columnIndex: number, source: string } | null>>;
     containerType?: string;
+    data?: DataRow[];
 }
 
 const VariablesTab: FC<VariablesTabProps> = ({
@@ -26,15 +28,16 @@ const VariablesTab: FC<VariablesTabProps> = ({
     setDependentVariable,
     setIndependentVariable,
     setHighlightedVariable,
-    containerType,
+    containerType: _containerType,
+    data,
 }) => {
     const variableIdKeyToUse: keyof Variable = 'columnIndex';
 
     useEffect(() => {
         if (dependentVariable.length > 0 || independentVariable.length > 0) {
-            saveFormData("ECM", { dependentVariable, independentVariable }, "variables");
+            saveFormData("ECM", { dependentVariable, independentVariable, prevDataRef: data }, "variables");
         }
-    }, [dependentVariable, independentVariable]);
+    }, [dependentVariable, independentVariable, data]);
 
     const filteredAvailableVariables = useMemo(() => {
         return availableVariables.filter((variable) => variable.type === "NUMERIC");
@@ -74,7 +77,7 @@ const VariablesTab: FC<VariablesTabProps> = ({
         }
     }, [setHighlightedVariable]);
 
-    const handleMoveVariable = useCallback((variable: Variable, fromListId: string, toListId: string, targetIndex?: number) => {
+    const handleMoveVariable = useCallback((variable: Variable, fromListId: string, toListId: string, _targetIndex?: number) => {
         // Remove from source
         if (fromListId === 'dependent') {
             setDependentVariable(prev => prev.filter(v => v.columnIndex !== variable.columnIndex));

@@ -37,7 +37,15 @@ jest.mock('sonner', () => ({
 }));
 
 jest.mock('@/services/chart/ChartService', () => ({
-    ChartService: { createChartJSON: jest.fn(() => ({ type: 'line', data: [] })) },
+    ChartService: {
+        createChartJSON: jest.fn((config) => ({
+            chartType: config.chartType,
+            chartData: config.chartData,
+            chartVariables: config.chartVariables,
+            chartMetadata: config.chartMetadata,
+            chartConfig: config.chartConfig,
+        })),
+    },
 }));
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -77,7 +85,7 @@ const runHook = (
     qOrders = [1],
 ) =>
     renderHook(() =>
-        useAnalyzeHook(dep, indep, data, null, pOrder, qOrders, false, false, jest.fn()),
+        useAnalyzeHook(dep, indep, data, null, true, 4, 4, 'aic', pOrder, qOrders, false, false, jest.fn()),
     );
 
 const runAndAnalyze = async (
@@ -126,10 +134,10 @@ const mockARDLResult = {
     },
     cointegration: { isCointegrated: true, statistic: '-3.5', pValue: '0.01' },
     shortRun: {
-        coefficients: ['0.5', '-0.3', '0.2'],
-        stdErrors: ['0.1', '0.05', '0.08'],
-        tStats: ['5.0', '-6.0', '2.5'],
-        pValues: ['0.000', '0.01', '0.015'],
+        coefficients: ['0.5', '-0.3', '0.2', '0.15', '-0.05'],
+        stdErrors: ['0.1', '0.05', '0.08', '0.04', '0.02'],
+        tStats: ['5.0', '-6.0', '2.5', '3.75', '-2.5'],
+        pValues: ['0.000', '0.01', '0.015', '0.001', '0.015'],
         rSquared: '0.75',
         adjRSquared: '0.73',
         fStat: '30.1',
@@ -258,4 +266,130 @@ describe('useAnalyzeHook ARDL – Respons Worker (P6–P8)', () => {
         expect(result.current.errorMsg).toBe('Failed to connect to worker');
         expect(result.current.isCalculating).toBe(false);
     });
+
+    it('TC-ARDL-09: Unrestricted ARDL Model & Automatic Lag Selection payload dikirim dengan benar ke worker', async () => {
+        const result = await runAndAnalyze([yVar], [xVar], makeData(15));
+
+        expect(mockClient.post).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: 'ARDL',
+                payload: expect.objectContaining({
+                    autoSelect: true,
+                    maxP: 4,
+                    maxQ: 4,
+                    selectionCriterion: 'aic',
+                }),
+            }),
+        );
+    });
+
+    it('TC-ARDL-10: Worker mengembalikan unrestrictedModel → Tabel Unrestricted ARDL dimasukkan ke output statistic', async () => {
+        const mockUnrestrictedResult = {
+            ...mockARDLResult,
+            selectedModelName: 'ARDL(1, 1)',
+            evaluatedModelsCount: 20,
+            selectionCriterion: 'AIC',
+            unrestrictedModel: {
+                varNames: ['Y(-1)', 'X1', 'X1(-1)', 'C'],
+                coefficients: ['0.7022', '0.1896', '0.0486', '0.0117'],
+                stdErrors: ['0.0085', '0.0084', '0.0109', '0.0599'],
+                tStats: ['82.6266', '22.6564', '4.4687', '0.1956'],
+                pValues: ['0.0000', '0.0000', '0.0000', '0.8449'],
+                effObs: 1499,
+                diagnostics: {
+                    rSquared: '0.9996',
+                    adjRSquared: '0.9996',
+                    seRegression: '0.4983',
+                    sumSquaredResid: '371.1396',
+                    logLikelihood: '-1080.7050',
+                    fStatistic: '1264478.0000',
+                    probFStatistic: '0.0000',
+                    meanDependentVar: '113.9490',
+                    sdDependentVar: '25.0781',
+                    aic: '1.4472',
+                    bic: '1.4614',
+                    hq: '1.4525',
+                    durbinWatson: '2.0115',
+                },
+            },
+        };
+
+        await runAndAnalyze([yVar], [xVar], makeData(15));
+        await triggerSuccess(mockUnrestrictedResult);
+
+        expect(mockAddStatistic).toHaveBeenCalledWith(
+            1,
+            expect.objectContaining({
+                title: 'ARDL Output',
+                components: 'ArdlAnalysis',
+            }),
+        );
+        const outputPayload = JSON.parse(mockAddStatistic.mock.calls[0][1].output_data);
+        expect(outputPayload.tables.some((t: any) => t.title.includes('Unrestricted ARDL Equation'))).toBe(true);
+    });
+
+    it('TC-ARDL-11: Worker mengembalikan fitted values & correlogram → output_data memuat charts dengan format valid', async () => {
+        const mockResultWithGraphics = {
+            ...mockARDLResult,
+            selectedModelName: 'ARDL(1, 1)',
+            unrestrictedModel: {
+                varNames: ['Y(-1)', 'C'],
+                coefficients: ['0.8', '1.0'],
+                stdErrors: ['0.1', '0.2'],
+                tStats: ['8.0', '5.0'],
+                pValues: ['0.001', '0.001'],
+                effObs: 5,
+                diagnostics: {
+                    rSquared: '0.99',
+                    adjRSquared: '0.98',
+                    seRegression: '0.5',
+                    sumSquaredResid: '1.2',
+                    logLikelihood: '-10.5',
+                    fStatistic: '100.0',
+                    probFStatistic: '0.000',
+                    meanDependentVar: '14.0',
+                    sdDependentVar: '3.0',
+                    aic: '1.4',
+                    bic: '1.5',
+                    hq: '1.45',
+                    durbinWatson: '2.0',
+                },
+                actual: [10, 12, 14, 16, 18],
+                fitted: [9.8, 12.1, 13.9, 16.2, 17.8],
+                residuals: [0.2, -0.1, 0.1, -0.2, 0.2]
+            },
+            correlogram: [
+                { lag: 1, ac: "0.150", pac: "0.150", qStat: "0.12", pValue: "0.72" },
+                { lag: 2, ac: "-0.080", pac: "-0.100", qStat: "0.25", pValue: "0.88" }
+            ]
+        };
+
+        await runAndAnalyze([yVar], [xVar], makeData(15));
+        await triggerSuccess(mockResultWithGraphics);
+
+        const outputPayload = JSON.parse(mockAddStatistic.mock.calls[0][1].output_data);
+        expect(outputPayload.charts).toBeDefined();
+        expect(outputPayload.charts.length).toBe(3); // Actual vs Fitted, Residuals, Correlogram
+        
+        // Actual vs Fitted chart test
+        const actualFitted = outputPayload.charts[0];
+        expect(actualFitted.chartType).toBe("Multiple Line Chart");
+        expect(actualFitted.chartData[0]).toHaveProperty("category");
+        expect(actualFitted.chartData[0]).toHaveProperty("subcategory");
+        expect(actualFitted.chartData[0]).toHaveProperty("value");
+        
+        // Residuals chart test
+        const resChart = outputPayload.charts[1];
+        expect(resChart.chartType).toBe("Line Chart");
+        expect(resChart.chartData[0]).toHaveProperty("category");
+        expect(resChart.chartData[0]).toHaveProperty("value");
+
+        // Correlogram chart test
+        const correloChart = outputPayload.charts[2];
+        expect(correloChart.chartType).toBe("Multiple Line Chart");
+        expect(correloChart.chartData[0]).toHaveProperty("category");
+        expect(correloChart.chartData[0]).toHaveProperty("subcategory");
+        expect(correloChart.chartData[0]).toHaveProperty("value");
+    });
 });
+

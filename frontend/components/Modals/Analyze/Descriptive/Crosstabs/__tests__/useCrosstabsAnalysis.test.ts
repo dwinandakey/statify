@@ -97,7 +97,7 @@ describe('useCrosstabsAnalysis', () => {
     act(() => {
       runPromise = result.current.runAnalysis();
     });
-    
+
     // State during calculation
     expect(result.current.isCalculating).toBe(true);
     expect(mockPostMessage).toHaveBeenCalledTimes(1);
@@ -109,20 +109,20 @@ describe('useCrosstabsAnalysis', () => {
         options: defaultParams.options,
     });
 
-    const mockWorkerResult = { 
-        status: 'success', 
-        results: { 
-            summary: { valid: 2, missing: 0, rowCategories: [], colCategories: [], rowTotals: [], colTotals: [], totalCases: 2 }, 
-            contingencyTable: [] 
-        }, 
-        variableName: 'var1 * var2' 
+    const mockWorkerResult = {
+        status: 'success',
+        results: {
+            summary: { valid: 2, missing: 0, rowCategories: [], colCategories: [], rowTotals: [], colTotals: [], totalCases: 2 },
+            contingencyTable: []
+        },
+        variableName: 'var1 * var2'
     };
 
     await act(async () => {
         workerOnMessage({ data: mockWorkerResult });
         await runPromise; // wait for the full analysis process to complete
     });
-    
+
     expect(mockAddLog).toHaveBeenCalled();
     expect(mockAddAnalytic).toHaveBeenCalled();
     expect(mockAddStatistic).toHaveBeenCalledTimes(2); // Case Processing & Crosstabs table
@@ -130,6 +130,64 @@ describe('useCrosstabsAnalysis', () => {
     expect(mockOnClose).toHaveBeenCalled();
     expect(result.current.isCalculating).toBe(false);
     expect(result.current.error).toBe(null);
+  });
+
+  it('should save Chi-Square Tests output when chi-square statistic is enabled', async () => {
+    const paramsWithChiSquare: CrosstabsAnalysisParams = {
+      ...defaultParams,
+      options: {
+        ...defaultParams.options,
+        statistics: { chiSquare: true },
+      },
+    };
+
+    const { result } = renderHook(() => useCrosstabsAnalysis(paramsWithChiSquare, mockOnClose));
+
+    let runPromise: Promise<void>;
+    act(() => {
+      runPromise = result.current.runAnalysis();
+    });
+
+    const mockWorkerResult = {
+      status: 'success',
+      results: {
+        summary: { valid: 2, missing: 0, rowCategories: ['1', '2'], colCategories: ['A', 'B'], rowTotals: [1, 1], colTotals: [1, 1], totalCases: 2 },
+        contingencyTable: [[1, 0], [0, 1]],
+        chiSquare: {
+          pearson: {
+            value: 2,
+            df: 1,
+            pValue: 0.1573,
+            expectedDiagnostics: {
+              minExpectedCount: 0.5,
+              cellsUnder5: 4,
+              totalCells: 4,
+              percentCellsUnder5: 100,
+            },
+          },
+        },
+      },
+      variableName: 'var1 * var2',
+    };
+
+    await act(async () => {
+      workerOnMessage({ data: mockWorkerResult });
+      await runPromise;
+    });
+
+    expect(mockAddStatistic).toHaveBeenCalledTimes(3); // Case Processing, Crosstabs, Chi-Square Tests
+    expect(mockAddStatistic).toHaveBeenNthCalledWith(
+      3,
+      'analytic-123',
+      expect.objectContaining({
+        components: 'Chi-Square Tests',
+        description: expect.stringContaining('Hipotesis uji kebebasan'),
+      }),
+    );
+    const savedDescription = mockAddStatistic.mock.calls[2][1].description;
+    expect(savedDescription).toContain('<strong>Interpretasi</strong>');
+    expect(savedDescription).toContain('gagal menolak H');
+    expect(savedDescription).not.toContain('Hipotesis uji proporsi');
   });
 
   it('should handle worker error', async () => {
@@ -145,7 +203,7 @@ describe('useCrosstabsAnalysis', () => {
         error: 'Something went wrong',
         variableName: 'var1 * var2'
     };
-    
+
     await act(async () => {
         workerOnMessage({ data: mockWorkerError });
         await runPromise;
@@ -155,19 +213,19 @@ describe('useCrosstabsAnalysis', () => {
     expect(result.current.isCalculating).toBe(false);
     expect(mockTerminate).toHaveBeenCalled();
   });
-  
+
   it('should handle worker instantiation error', async () => {
     const { result } = renderHook(() => useCrosstabsAnalysis(defaultParams, mockOnClose));
 
     act(() => {
       result.current.runAnalysis();
     });
-    
+
     const errorEvent = new ErrorEvent('error', {
       error: new Error('Failed to load script'),
       message: 'Worker script failed to load'
     });
-    
+
     act(() => {
         workerOnError(errorEvent);
     });
@@ -176,4 +234,4 @@ describe('useCrosstabsAnalysis', () => {
     expect(result.current.isCalculating).toBe(false);
     expect(mockTerminate).toHaveBeenCalled();
   });
-}); 
+});

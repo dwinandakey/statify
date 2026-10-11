@@ -56,9 +56,10 @@ export class DiscriminantAnalysis {
      * @param {any} independent_data_defs
      * @param {any} selection_data_defs
      * @param {any} config_data
+     * @param {any} strata_data
      */
-    constructor(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data) {
-        const ret = wasm.discriminantanalysis_new(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data);
+    constructor(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data, strata_data) {
+        const ret = wasm.discriminantanalysis_new(group_data, independent_data, selection_data, group_data_defs, independent_data_defs, selection_data_defs, config_data, strata_data);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }
@@ -242,9 +243,6 @@ function __wbg_get_imports() {
         __wbg_length_9f1775224cf1d815: function(arg0) {
             const ret = arg0.length;
             return ret;
-        },
-        __wbg_log_7e1aa9064a1dbdbd: function(arg0) {
-            console.log(arg0);
         },
         __wbg_msCrypto_bd5a034af96bcba6: function(arg0) {
             const ret = arg0.msCrypto;

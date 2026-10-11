@@ -1,41 +1,17 @@
+import type React from "react";
 import type { Variable } from "@/types/Variable";
 
-/**
- * ========================================
- * K-MEDOIDS CLUSTERING - STATISTICAL ENUMS
- * ========================================
- * Definisi enum untuk parameter clustering yang statistik-aware
- */
-
-/**
- * Metode K-Medoids yang didukung
- * - PAM (Partitioning Around Medoids): Metode klasik, optimal tapi lambat O(n²)
- * - CLARA (Clustering Large Applications): Sampling untuk dataset besar
- * - CLARANS (Clustering Large Applications based on RANdomized Search): Hybrid PAM-CLARA
- */
 export enum KMedoidsMethod {
     PAM = "PAM",
     CLARA = "CLARA",
     CLARANS = "CLARANS",
 }
 
-/**
- * Ukuran jarak (distance measure) untuk menghitung dissimilarity
- * - Euclidean: Jarak geometris standar, sensitif terhadap magnitude
- * - Manhattan: City-block distance, lebih robust terhadap outlier
- */
 export enum DistanceMetric {
     Euclidean = "euclidean",
     Manhattan = "manhattan",
 }
 
-/**
- * Strategi pemilihan medoid awal
- * - Random: Pilih k data points secara acak
- * - KMeansPlusPlus: Strategi smart initialization (adaptasi dari k-means++)
- * - FirstK: Ambil k data pertama (untuk reproducibility testing)
- * - UserDefined: User memilih medoid awal sendiri (advanced)
- */
 export enum InitialMedoidsStrategy {
     Random = "random",
     KMeansPlusPlus = "kmeans++",
@@ -43,79 +19,46 @@ export enum InitialMedoidsStrategy {
     UserDefined = "user_defined",
 }
 
-/**
- * Metrik evaluasi clustering
- * - Silhouette: Range [-1, 1], semakin tinggi semakin baik
- * - DaviesBouldin: Semakin rendah semakin baik
- * - DunnIndex: Semakin tinggi semakin baik
- */
 export enum EvaluationMetric {
     Silhouette = "silhouette",
     DaviesBouldin = "davies_bouldin",
     DunnIndex = "dunn_index",
 }
 
-/**
- * Mode pemilihan jumlah cluster (k)
- * - Manual: user menentukan k secara eksplisit
- * - Automatic: sistem mencari k optimal dalam rentang [kMin, kMax]
- */
 export enum ClusterMode {
     Manual = "manual",
     Automatic = "automatic",
 }
 
-/**
- * Metode pencarian k optimal (hanya relevan jika ClusterMode = Automatic)
- * - Silhouette: pilih k dengan rata-rata Silhouette tertinggi
- * - Elbow: pilih k di titik "siku" kurva total within-cluster distance (SSE/inertia)
- */
 export enum AutoKMethod {
     Silhouette = "silhouette",
     Elbow = "elbow",
 }
 
-/**
- * Metode normalisasi data sebelum clustering
- * - None: tanpa normalisasi
- * - ZScore: standardisasi Z-score
- * - MinMax: skala min-max ke [0, 1]
- */
 export enum NormalizationMethod {
     None = "none",
     ZScore = "zscore",
     MinMax = "minmax",
 }
 
-/**
- * Mode untuk pemakaian seed:
- * - default: gunakan seed default bawaan sistem
- * - random: gunakan RNG acak (seed kosong)
- * - custom: gunakan seed angka dari user
- */
+export enum MissingValueMethod {
+    Listwise = "listwise",
+    Median = "median",
+    Knn = "knn",
+}
+
 export type SeedMode = "default" | "random" | "custom";
 
-/**
- * ========================================
- * MAIN DIALOG - Variable Selection & Basic Config
- * ========================================
- */
 export type KMedoidsClusterMainType = {
     TargetVar: string[] | null;
     CaseTarget: string | null;
     IterateClassify: boolean;
     ClassifyOnly: boolean;
-    /** Mode pemilihan k: Manual (user tentukan) atau Automatic (sistem cari optimal) */
     ClusterMode: ClusterMode;
-    /** k eksplisit — hanya dipakai jika ClusterMode = Manual */
     Cluster: number | null;
-    /** k minimum untuk pencarian otomatis (ClusterMode = Automatic) */
     AutoKMin: number | null;
-    /** k maksimum untuk pencarian otomatis (ClusterMode = Automatic) */
     AutoKMax: number | null;
-    /** Metode pencarian k optimal (ClusterMode = Automatic) */
     AutoKMethod: AutoKMethod;
-    /** Ukuran jarak untuk menghitung dissimilarity - mempengaruhi hasil clustering */
     DistanceMetric: DistanceMetric;
     OpenDataset: boolean;
     ExternalDatafile: boolean;
@@ -134,57 +77,19 @@ export type KMedoidsClusterDialogProps = {
     globalVariables: Variable[];
 };
 
-/**
- * ========================================
- * ITERATE DIALOG - Algorithmic Parameters
- * ========================================
- * Parameter yang mempengaruhi proses iterasi & konvergensi
- */
 export type KMedoidsClusterIterateType = {
-    /** Metode K-Medoids: PAM, CLARA, atau CLARANS */
     Method: KMedoidsMethod;
-
-    /** Strategi pemilihan medoid awal */
     InitialStrategy: InitialMedoidsStrategy;
-
-    /** Maksimum iterasi sebelum stop (default: 300 untuk PAM) */
     MaximumIterations: number | null;
-
-    /** Convergence criterion: stop jika perubahan cost < threshold (default: 0) */
     ConvergenceCriterion: number | null;
-
-    /** Mode pemakaian seed: default, random, atau custom */
     SeedMode: SeedMode;
-
-    /** Random seed untuk reproducibility (null = random) */
     RandomSeed: number | null;
-
-    /** Number of initializations untuk mencari hasil terbaik (default: 10) */
     NumberOfInitializations: number | null;
-
-    /** CLARA only: ukuran sample (default: 40 + 2k) */
     SampleSize: number | null;
-
-    /** CLARA only: jumlah sampling iterations (default: 5) */
     NumSamples: number | null;
-
-    /** CLARANS only: jumlah local minima yang dicari (default: 2) */
     NumLocal: number | null;
-
-    /** CLARANS only: maksimum neighbors yang diperiksa (default: max(250, 1.25% of n*(k-1))) */
     MaxNeighbor: number | null;
-
-    /**
-     * Standardize variables before clustering (setara R pam stand=TRUE).
-     * Setiap variabel ditransformasi ke Z-score: (x - mean) / sd.
-     * Wajib diaktifkan agar skala variabel sebanding.
-     */
     Standardize: boolean;
-
-    /**
-     * Metode normalisasi sebelum clustering.
-     * Default: Z-score (untuk kompatibilitas dengan pam stand=TRUE).
-     */
     NormalizationMethod: NormalizationMethod;
 };
 
@@ -195,37 +100,18 @@ export type KMedoidsClusterIterateProps = {
     ) => void;
     data: KMedoidsClusterIterateType;
     mainData: KMedoidsClusterMainType;
+    validRowCount?: number;
 };
 
-/**
- * ========================================
- * RESULTS DIALOG - Clustering Output
- * ========================================
- * Hasil clustering: medoids, cluster membership, case counts
- */
 export type KMedoidsClusterResultsType = {
-    /** Tampilkan final medoids (setara "Final Cluster Centers" SPSS) */
     ShowFinalMedoids: boolean;
-
-    /** Tampilkan tabel Cluster Medoids pada tab Data Tables */
     ShowClusterMedoids: boolean;
-
-    /** Tampilkan cluster membership untuk setiap case */
     ShowClusterMembership: boolean;
-
-    /** Tampilkan jumlah case per cluster */
     ShowCaseCount: boolean;
-
-    /** Tampilkan iteration history (perubahan medoid per iterasi) */
     ShowIterationHistory: boolean;
-
-    /** Tampilkan total cost / dissimilarity */
     ShowTotalCost: boolean;
-
-    /** Tampilkan output Konvergensi Algoritma (tab convergence + chart + detail iterasi) */
     ShowConvergenceAlgorithm: boolean;
-
-    /** Tampilkan output Histori Sampling (khusus CLARA) */
+    ShowConvergenceChart: boolean;
     ShowSamplingHistory: boolean;
 };
 
@@ -238,30 +124,12 @@ export type KMedoidsClusterResultsProps = {
     iterateData: KMedoidsClusterIterateType;
 };
 
-/**
- * ========================================
- * EVALUATION DIALOG - Cluster Quality Metrics
- * ========================================
- * Metrik evaluasi untuk menilai kualitas clustering
- */
 export type KMedoidsClusterEvaluationType = {
-    /** Silhouette Coefficient (range: -1 to 1, higher is better) */
     ComputeSilhouette: boolean;
-
-    /** Tampilkan silhouette plot per case */
     ShowSilhouettePlot: boolean;
-
-    /** Tampilkan panel silhouette score ringkas per klaster */
-    ShowSilhouetteByCluster: boolean;
-
-    /** Elbow Method — grafik SSE vs k untuk menentukan titik siku optimal */
     ShowElbowPlot: boolean;
-
-    /** Grafik evaluasi k — menampilkan Silhouette dan/atau Elbow dalam satu panel
-     *  hanya relevan jika ClusterMode = Automatic */
     ShowOptimalKChart: boolean;
-
-    /** Tampilkan panel ringkasan kualitas clustering (overall silhouette interpretation) */
+    ShowOptimalKTable: boolean;
     ShowOverallQualityAssessment: boolean;
 };
 
@@ -273,17 +141,8 @@ export type KMedoidsClusterEvaluationProps = {
     data: KMedoidsClusterEvaluationType;
 };
 
-/**
- * ========================================
- * SAVE DIALOG - Variable Output Options
- * ========================================
- * Opsi untuk menyimpan hasil ke dataset sebagai variable baru
- */
 export type KMedoidsClusterSaveType = {
-    /** Simpan cluster membership (variable: CLU_1, CLU_2, ...) */
     ClusterMembership: boolean;
-
-    /** Simpan distance dari medoid cluster (variable: DIS_1, DIS_2, ...) */
     DistanceClusterCenter: boolean;
 };
 
@@ -295,53 +154,27 @@ export type KMedoidsClusterSaveProps = {
     data: KMedoidsClusterSaveType;
 };
 
-/**
- * ========================================
- * OPTIONS DIALOG - Statistical Output Options
- * ========================================
- */
 export type KMedoidsClusterOptionsType = {
-    /** Tampilkan initial medoids sebelum iterasi */
     InitialCluster: boolean;
-
-    /** Tampilkan cluster information per case (optional detail) */
     ClusterInfo: boolean;
-
-    /** Tampilkan panel PCA Projection pada tab visualisasi output */
     ShowPCAProjection: boolean;
-
-    /** Tampilkan panel Cluster Scatter Plot pada tab visualisasi output */
     ShowClusterScatterPlot: boolean;
-
-    /** Tampilkan panel Cluster Size Distribution pada tab visualisasi output */
     ShowClusterSizeDistribution: boolean;
-
-    /** Tampilkan panel Profil Atribut Klaster pada tab visualisasi output */
-    ShowClusterAttributeProfile: boolean;
-
-    /** Tampilkan panel Distance Matrix Between Medoids pada tab visualisasi output */
     ShowDistanceMatrixBetweenMedoids: boolean;
-
-    /** Tampilkan tabel matriks jarak pada tab Data Tables */
     ShowDistanceMatrixTable: boolean;
-
-    /** Missing value handling: exclude listwise */
-    ExcludeListWise: boolean;
-
-    /** Missing value handling: exclude pairwise */
-    ExcludePairWise: boolean;
-
-    /**
-     * Standarisasi Z-score sebelum clustering.
-     * Jika false, data numerik tanpa scaling langsung dipakai untuk PAM.
-     */
+    ShowOptimalKChart?: boolean;
+    ShowConvergenceChart?: boolean;
+    MissingValueMethod: MissingValueMethod;
     Standardize: boolean;
-
-    /**
-     * Metode normalisasi sebelum clustering.
-     * None = tanpa scaling, Z-score = standardisasi, Min-max = [0,1].
-     */
     NormalizationMethod: NormalizationMethod;
+};
+
+export type KMedoidsMissingStats = {
+    rowsWithMissing: number;
+    totalRows: number;
+    missingPercent: string;
+    topVariables: string;
+    remainingVariables: number;
 };
 
 export type KMedoidsClusterOptionsProps = {
@@ -350,13 +183,9 @@ export type KMedoidsClusterOptionsProps = {
         value: string | boolean | null
     ) => void;
     data: KMedoidsClusterOptionsType;
+    missingStats?: KMedoidsMissingStats | null;
 };
 
-/**
- * ========================================
- * COMPLETE FORM STATE
- * ========================================
- */
 export type KMedoidsClusterType = {
     main: KMedoidsClusterMainType;
     iterate: KMedoidsClusterIterateType;

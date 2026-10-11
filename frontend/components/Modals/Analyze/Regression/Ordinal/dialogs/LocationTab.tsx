@@ -121,7 +121,7 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
     return (
         <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1.45fr)] gap-4 py-4">
             <div className="flex min-h-0 flex-col">
-                <label className="mb-2 block text-sm font-semibold">Factors/covariates:</label>
+                <label id="location-x-list" className="mb-2 block text-sm font-semibold">Factors/covariates:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
                     <ScrollArea className="h-full">
                         <div className={scrollableListContentClass}>
@@ -132,8 +132,8 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                                     <div
                                         key={key}
                                         className={`${scrollableItemClass} mb-1 flex cursor-pointer items-center rounded-md border p-1.5 text-sm transition-colors ${isSelected
-                                                ? "border-primary/50 bg-accent text-accent-foreground"
-                                                : "border-transparent hover:bg-accent/50"
+                                            ? "border-primary/50 bg-accent text-accent-foreground"
+                                            : "border-transparent hover:bg-accent/50"
                                             }`}
                                         onClick={(event) => handleVariableClick(event, variable)}
                                     >
@@ -149,6 +149,7 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
 
             <div className="flex items-start pt-7">
                 <Button
+                    id="location-add-button"
                     variant="outline"
                     size="icon"
                     className="h-8 w-8 shrink-0"
@@ -159,7 +160,7 @@ export const LocationTab: React.FC<Props> = ({ factors, covariates, params, onCh
                 </Button>
             </div>
 
-            <div className="flex min-h-0 flex-col">
+            <div id="location-model-list" className="flex min-h-0 flex-col">
                 <label className="mb-2 block text-sm font-semibold">Location model:</label>
                 <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border bg-background">
                     <ScrollArea className="h-full">

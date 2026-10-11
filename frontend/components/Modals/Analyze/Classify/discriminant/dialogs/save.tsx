@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { normalizeXmlFileName } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-xml-export";
 import type { DiscriminantSaveType } from "@/components/Modals/Analyze/Classify/discriminant/types/discriminant";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 
@@ -12,9 +11,30 @@ type Props = {
     data: DiscriminantSaveType;
 };
 
+const SAVE_OPTIONS: Array<{
+    field: keyof DiscriminantSaveType;
+    label: string;
+    hint: string;
+}> = [
+    {
+        field: "Predicted",
+        label: "Predicted Group Membership",
+        hint: "Dis_1 — the group each case is classified into.",
+    },
+    {
+        field: "Discriminant",
+        label: "Discriminant Scores",
+        hint: "Dis1_1, Dis2_1, … — one column per discriminant function.",
+    },
+    {
+        field: "Probabilities",
+        label: "Probabilities of Group Membership",
+        hint: "Dis1_2, Dis2_2, … — one column per group.",
+    },
+];
+
 export const DiscriminantSave = ({ updateFormData, data }: Props) => {
     const saveState = data;
-    const [xmlPreview, setXmlPreview] = useState<string>("");
 
     const handleChanges = (
         field: keyof DiscriminantSaveType,
@@ -23,93 +43,68 @@ export const DiscriminantSave = ({ updateFormData, data }: Props) => {
         updateFormData(field, value === "indeterminate" ? false : value);
     };
 
-    const handleXMLFile = (file: File) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const result = event.target?.result as string;
-            setXmlPreview(result);
-            updateFormData("XmlFile", result);
-        };
-        reader.onerror = () => {
-            console.error("Failed to read file");
-            setXmlPreview("Error loading file content.");
-        };
-        reader.readAsText(file);
-    };
-
     return (
-        <div className="flex flex-col gap-3">
-            <div className="flex items-center space-x-2">
-                <Checkbox
-                    id="Predicted"
-                    checked={saveState.Predicted}
-                    onCheckedChange={(checked) => handleChanges("Predicted", checked)}
-                />
-                <label
-                    htmlFor="Predicted"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Predicted Group Membership
-                </label>
-            </div>
-            <div className="flex items-center space-x-2">
-                <Checkbox
-                    id="Discriminant"
-                    checked={saveState.Discriminant}
-                    onCheckedChange={(checked) => handleChanges("Discriminant", checked)}
-                />
-                <label
-                    htmlFor="Discriminant"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Discriminant Scores
-                </label>
-            </div>
-            <div className="flex items-center space-x-2">
-                <Checkbox
-                    id="Probabilities"
-                    checked={saveState.Probabilities}
-                    onCheckedChange={(checked) => handleChanges("Probabilities", checked)}
-                />
-                <label
-                    htmlFor="Probabilities"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Probabilities of Group Membership
-                </label>
-            </div>
-            <ResizablePanelGroup
-                direction="vertical"
-                className="min-h-[200px] rounded-lg border"
-            >
-                <ResizablePanel defaultSize={40}>
-                    <div className="flex flex-col h-full gap-2 p-2">
-                        <Label className="font-bold">Export Model Information to XML File</Label>
-                        <Input
-                            id="XmlFile"
-                            type="file"
-                            accept=".xml"
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    handleXMLFile(file);
-                                }
-                            }}
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+                {SAVE_OPTIONS.map(({ field, label, hint }) => (
+                    <div key={field} className="flex items-start space-x-2">
+                        <Checkbox
+                            id={field}
+                            checked={Boolean(saveState[field])}
+                            onCheckedChange={(checked) => handleChanges(field, checked)}
+                            className="mt-0.5"
                         />
+                        <div className="flex flex-col gap-0.5">
+                            <label
+                                htmlFor={field}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                {label}
+                            </label>
+                            <span className="text-xs text-muted-foreground">{hint}</span>
+                        </div>
                     </div>
-                </ResizablePanel>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={60}>
-                    <div className="flex flex-col h-full gap-2 p-2">
-                        <Label className="font-bold">Preview</Label>
-                        <Textarea
-                            placeholder="Preview will appear here..."
-                            value={xmlPreview}
-                            readOnly
-                        />
-                    </div>
-                </ResizablePanel>
-            </ResizablePanelGroup>
+                ))}
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+                New variables are appended to the dataset when the analysis runs. Cases left out
+                of the analysis — a grouping value outside the defined range, or a missing
+                predictor — stay blank.
+            </p>
+
+            <div className="flex flex-col gap-3 rounded-lg border p-3">
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="ExportXml"
+                        checked={saveState.ExportXml}
+                        onCheckedChange={(checked) => handleChanges("ExportXml", checked)}
+                    />
+                    <Label htmlFor="ExportXml" className="font-bold">
+                        Export Model Information to XML File
+                    </Label>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="XmlFile" className="text-sm font-normal">
+                        File name
+                    </Label>
+                    <Input
+                        id="XmlFile"
+                        type="text"
+                        placeholder="discriminant_model.xml"
+                        value={saveState.XmlFile ?? ""}
+                        disabled={!saveState.ExportXml}
+                        onChange={(e) => handleChanges("XmlFile", e.target.value)}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                        Saved as{" "}
+                        <code>{normalizeXmlFileName(saveState.XmlFile)}</code> to your downloads
+                        when the analysis finishes. Contains the discriminant functions, group
+                        centroids, priors, and classification coefficients.
+                    </span>
+                </div>
+            </div>
         </div>
     );
 };

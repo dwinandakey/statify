@@ -136,5 +136,6 @@ pub fn calculate_goodness_of_fit(
         deviance,
         deviance_df: df as u32,
         deviance_p_value: deviance_p,
+        subpopulations_count: m as u32,
     }
 }

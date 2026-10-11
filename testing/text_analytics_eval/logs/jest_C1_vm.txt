@@ -1,0 +1,62 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.modal.test.tsx (23.295 s)
+  BB-01 membuka panel String to Word Vector
+    ✓ panel menampilkan tab Variables dan Options (178 ms)
+    ✓ daftar variabel hanya memuat variabel STRING atau bersifat nominal (40 ms)
+    ✓ tab Options memuat bagian Vector Column Name, Stopwords, Stemming, Tokenizer, dan Vectorization Method (219 ms)
+    ✓ tanpa variabel terpilih tombol OK nonaktif; setelah memilih variabel OK aktif (95 ms)
+  BB-03 Vector Column Name tidak sah (awalan kolom)
+    ✓ awalan dimulai angka menampilkan pesan dan menonaktifkan OK (218 ms)
+    ✓ awalan 33 karakter (melewati batas isian) menampilkan pesan panjang maksimum 32 dan OK nonaktif (193 ms)
+    ✓ kolom isian dibatasi maxLength 32 sehingga mengetik 40 karakter hanya menyimpan 32 dan tidak ada galat (887 ms)
+    ✓ temuan C1-02: bila hanya awalan yang tidak sah, kotak galat di bawah memuat judul tanpa rincian (pesan hanya ada di tab Options) (199 ms)
+    ✓ awalan mengandung spasi atau simbol terlarang ditolak, awalan sah mengaktifkan kembali OK (222 ms)
+  BB-06 Delimiters regex tidak valid (galat INVALID_REGEX dari inti)
+    ✓ antarmuka tidak memvalidasi regex di muka; setelah OK galat INVALID_REGEX tampil lengkap dengan kodenya dan modal tetap terbuka (210 ms)
+    ✓ delimiter dikosongkan ditolak di sisi klien dengan pesan dan OK nonaktif (154 ms)
+  BB-11 kosakata kosong (galat EMPTY_VOCABULARY dari inti)
+    ✓ galat EMPTY_VOCABULARY tampil dengan kalimat utama dan kode; tidak ada kolom ditambahkan (241 ms)
+    ✓ galat EMPTY_VOCABULARY akibat Min term frequency memakai kalimat utama yang berbeda (70 ms)
+  BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer)
+    ✓ OK mengirim default Weka ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel (80 ms)
+    ✓ BB-13 Output Viewer menerima Processing Summary, Settings, dan Vocabulary dengan isi yang benar (84 ms)
+    ✓ awalan kolom kustom TKS_ dipakai pada nama kolom dan ringkasan (195 ms)
+  BB-12 sel kosong menjadi vektor nol dan jumlah baris tetap
+    ✓ sel kosong (null) dikirim sebagai string kosong pada indeks yang sama dan semua kolom tetap berisi 5 baris (74 ms)
+    ✓ bila seluruh sel kosong, worker tidak dipanggil dan galat EMPTY_DATA tampil (78 ms)
+  Reset dan Cancel pada panel
+    ✓ Cancel memanggil onClose dan Reset mengembalikan pilihan variabel serta awalan kolom (283 ms)
+
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.options.test.tsx
+  BB-04 n-gram min=1 max=2 (antarmuka ke payload)
+    ✓ memilih N-gram lalu max=2 dan min=1 menghasilkan ngram_min=1, ngram_max=2 tanpa galat (200 ms)
+  BB-05 n-gram tidak sah (antarmuka)
+    ✓ min lebih besar dari max menampilkan pesan dan menonaktifkan OK (210 ms)
+    ✓ max di atas 5 dipotong (clamp) menjadi 5 oleh kolom isian sehingga tidak ada pesan (137 ms)
+    ✓ validateStwvConfig menolak ukuran n-gram 6 (jaring pengaman bila clamp terlewati) (1 ms)
+  BB-07 stopwords Indonesian lalu Custom (antarmuka ke payload)
+    ✓ Indonesian mengirim stopwords_method=indonesian dan seluruh daftar bawaan sebagai JSON (100 ms)
+    ✓ berkas acuan Rust c1_stopwords_indonesian.json identik dengan daftar bawaan aplikasi (16 ms)
+    ✓ Custom dengan daftar yang diketik mengirim array JSON (dipangkas, tanpa baris kosong) (125 ms)
+    ✓ mengetik di kotak teks saat Indonesian terpilih otomatis berpindah ke Custom (118 ms)
+  BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)
+    ✓ Indonesian (Sastrawi) mengirim stemming_method=indonesian (94 ms)
+    ✓ English (Porter) mengirim stemming_method=english dan catatan lowercase tampil (93 ms)
+  BB-09 standar rumus scikit-learn (antarmuka ke payload)
+    ✓ default adalah Weka: Word count, IDF None, Normalization None (58 ms)
+    ✓ memilih scikit-learn otomatis menjadi hitungan (raw), smooth, dan L2 (106 ms)
+    ✓ opsi yang tampil mengikuti standar: sklearn tidak menawarkan log(1+f), Weka tidak menawarkan L2 (106 ms)
+  BB-10 Words to Keep dan Min term frequency (antarmuka ke payload)
+    ✓ Words to Keep=10 dan Min term frequency=2 dikirim sebagai words_to_keep=10, min_term_freq=2 (90 ms)
+    ✓ Min term frequency 0 menampilkan pesan dan menonaktifkan OK (79 ms)
+  Kontrak payload default (dipakai juga oleh tes Rust BB-02)
+    ✓ toRustConfig(default) identik dengan berkas c1_payload_default.json yang dibaca tes Rust (9 ms)
+
+Test Suites: 2 passed, 2 total
+Tests:       35 passed, 35 total
+Snapshots:   0 total
+Time:        28.635 s, estimated 29 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.options.test.tsx|components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.modal.test.tsx.
+Test results written to: ../testing/thesis-eval/logs/jest_C1_vm.json

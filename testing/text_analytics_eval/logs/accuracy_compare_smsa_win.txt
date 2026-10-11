@@ -1,0 +1,45 @@
+### Tabel metrik per konfigurasi dan perangkat — dataset `smsa` (n uji = 500)
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1 | Statify | 0,598000 | 0,350288 | 0,531114 |
+| K1 | scikit-learn | 0,598000 | 0,350288 | 0,531114 |
+| K1 | WEKA | 0,600000 | 0,353504 | 0,533227 |
+| K4 | Statify | 0,624000 | 0,377714 | 0,546609 |
+| K4 | scikit-learn | 0,624000 | 0,377714 | 0,546609 |
+| K1w | Statify | 0,646000 | 0,414140 | 0,565987 |
+| K1w | scikit-learn | 0,646000 | 0,414140 | 0,565987 |
+| K1w | WEKA | 0,646000 | 0,414140 | 0,565987 |
+| K4w | Statify | 0,650000 | 0,405199 | 0,488640 |
+| K4w | scikit-learn | 0,650000 | 0,405199 | 0,488640 |
+
+### Tabel kesamaan (Statify terhadap pembanding)
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/500) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1 | scikit-learn | 500/500 | 4,999e-05 | ≥ 15 (identik)† |
+| K1 | WEKA | 499/500 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K4 | scikit-learn | 500/500 | 5,000e-05 | ≥ 15 (identik)† |
+| K1w | scikit-learn | 500/500 | 4,993e-05 | ≥ 15 (identik)† |
+| K1w | WEKA | 500/500 | tidak dapat dibandingkan (prior kelas Statify = count/N (tanpa Laplace) vs WEKA (n_c+1)/(N+K); hanya setara pada kelas seimbang) | tidak dapat dibandingkan |
+| K4w | scikit-learn | 500/500 | 4,998e-05 | ≥ 15 (identik)† |
+
+† Probabilitas Statify dari Apply Model dibulatkan 4 desimal oleh wasm (round4), sehingga LRE dihitung terhadap round4(c); galat absolut dihitung terhadap c yang tidak dibulatkan (batas teoretis 5,0e-5). Untuk WEKA elemen dengan |c| < 1e-10 tidak diikutkan dalam LRE (WEKA mencetak 16 desimal).
+
+### Matriks konfusi (baris = aktual, kolom = prediksi; urutan kelas: negative, neutral, positive)
+
+| Konfigurasi | Perangkat | Matriks |
+|---|---|---|
+| K1 | Statify | [198, 3, 3] ; [34, 30, 24] ; [109, 28, 71] |
+| K1 | scikit-learn | [198, 3, 3] ; [34, 30, 24] ; [109, 28, 71] |
+| K1 | WEKA | [198, 3, 3] ; [34, 30, 24] ; [108, 28, 72] |
+| K4 | Statify | [183, 1, 20] ; [33, 20, 35] ; [88, 11, 109] |
+| K4 | scikit-learn | [183, 1, 20] ; [33, 20, 35] ; [88, 11, 109] |
+| K1w | Statify | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K1w | scikit-learn | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K1w | WEKA | [197, 1, 6] ; [44, 21, 23] ; [94, 9, 105] |
+| K4w | Statify | [152, 0, 52] ; [28, 2, 58] ; [37, 0, 171] |
+| K4w | scikit-learn | [152, 0, 52] ; [28, 2, 58] ; [37, 0, 171] |
+
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.02 started=2026-10-08 10:30:14 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\compare_predictions.py --dataset smsa cwd=E:\KULIAH\Skripsi\statify64 ===

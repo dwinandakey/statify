@@ -2,10 +2,12 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export const __wbg_kmedoidscluster_free: (a: number, b: number) => void;
+export const calculate_wcss: (a: any) => [number, number, number];
 export const kmedoidscluster_new: () => number;
 export const run_k_medoids: (a: any) => [number, number, number];
 export const run_k_medoids_range: (a: any) => [number, number, number];
 export const run_k_medoids_typed: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: bigint, l: number, m: number, n: number, o: number) => [number, number, number];
+export const standardize_data: (a: any) => [number, number, number];
 export const test_connection: () => [number, number];
 export const init_panic_hook: () => void;
 export const __wbindgen_malloc: (a: number, b: number) => number;

@@ -123,8 +123,8 @@ describe('VariableListManager', () => {
         
         render(<VariableListManager {...propsWithHighlight} />);
 
-        // Find the centrally located button
-        const moveButton = await screen.findByTestId('central-move-button');
+        // Desktop layout renders arrow buttons with testid "arrow-move-button-{listId}"
+        const moveButton = await screen.findByTestId('arrow-move-button-factors');
 
         expect(moveButton).toBeInTheDocument();
         expect(moveButton).toHaveAttribute('aria-label', 'Move variable to Factors');
@@ -139,6 +139,53 @@ describe('VariableListManager', () => {
         );
     });
 
+    /**
+     * TC-VLM-04: Regression test for the first-variable (columnIndex=0) drag-and-drop bug.
+     *
+     * Root cause: handleDrop used `!variableId` which evaluates to `true` when
+     * variableId === 0, incorrectly aborting the drop for the first variable.
+     *
+     * Fix: Changed to `variableId === undefined || variableId === null`.
+     *
+     * This test verifies that a variable with columnIndex=0 CAN be successfully
+     * dragged and dropped into a target list.
+     */
+    it('TC-VLM-04: should allow drop for variable with columnIndex=0 (first variable)', async () => {
+        // Create a variable at columnIndex 0 – this is the problematic case
+        const firstVar = createMockVariable(0, 'VAR000', 'First Variable');
+        const propsWithFirstVar = {
+            ...mockProps,
+            availableVariables: [firstVar, ...mockAvailableVariables],
+        };
+
+        render(<VariableListManager {...propsWithFirstVar} />);
+
+        // Find the target list drop zone
+        const factorsList = screen.getByTestId('factors-variable-list');
+
+        // Simulate drop event with variableId = 0 (the critical edge case)
+        const dropData = JSON.stringify({ variableId: 0, sourceListId: 'available' });
+        const dropEvent = new Event('drop', { bubbles: true }) as any;
+        dropEvent.dataTransfer = {
+            getData: jest.fn().mockReturnValue(dropData),
+            dropEffect: '',
+        };
+        dropEvent.preventDefault = jest.fn();
+        dropEvent.stopPropagation = jest.fn();
+
+        // Fire the drop event on the factors list
+        factorsList.dispatchEvent(dropEvent);
+
+        // onMoveVariable should have been called with the first variable
+        expect(mockProps.onMoveVariable).toHaveBeenCalledWith(
+            firstVar,
+            'available',
+            'factors',
+            undefined
+        );
+    });
+
     // More tests will be added here for drag-and-drop, etc.
 
-}); 
+});
+ 

@@ -1,5 +1,3 @@
-// WASM exported functions for K-Medoids
-
 use wasm_bindgen::prelude::*;
 use js_sys::{Float64Array, Uint32Array, Object, Reflect};
 use serde_wasm_bindgen::{from_value, to_value};
@@ -8,28 +6,18 @@ use web_sys::console;
 use crate::algorithms::pam::{run_pam, PAMConfig, run_pam_range, run_pam_with_progress};
 use crate::algorithms::clara::{run_clara, CLARAConfig};
 use crate::algorithms::clarans::{run_clarans, CLARANSConfig};
-use crate::models::{KMedoidsInput, KMedoidsOutput, KMedoidsRangeInput, KMedoidsRangeItem};
+use crate::models::{
+    KMedoidsInput, KMedoidsOutput, KMedoidsRangeInput, KMedoidsRangeItem,
+    StandardizeInput, StandardizeOutput, WcssInput, WcssOutput,
+};
+use crate::stats::normalization::{normalize_data, NormalizationMethod};
 use crate::utils::distance::DistanceMetric;
 use crate::utils::validation::validate_input;
 
-// Re-export wasm-bindgen-rayon's thread-pool initialiser so JavaScript can
-// call `await initThreadPool(navigator.hardwareConcurrency)` after loading the
-// WASM module.  This triggers the creation of N WebWorker threads (each
-// loading the WASM module themselves) and initialises rayon's global thread
-// pool to use them.
-//
-// Requires the WASM module to have been built with:
-//   RUSTFLAGS="-C target-feature=+atomics,+bulk-memory,+mutable-globals"
-//   wasm-pack build --target web --features threading -- -Z build-std=panic_abort,std
-//
-// The caller *must* serve the page with COOP/COEP headers so the browser
-// exposes SharedArrayBuffer:
-//   Cross-Origin-Opener-Policy: same-origin
-//   Cross-Origin-Embedder-Policy: require-corp
 #[cfg(feature = "threading")]
 pub use wasm_bindgen_rayon::init_thread_pool;
 
-/// Initialize panic hook for better error messages in WASM
+/// Menginisialisasi panic hook agar pesan error di WASM lebih jelas.
 #[wasm_bindgen(start)]
 pub fn init_panic_hook() {
     #[cfg(feature = "console_error_panic_hook")]
@@ -42,25 +30,20 @@ pub fn init_panic_hook() {
 pub fn run_k_medoids(input_value: JsValue) -> Result<JsValue, JsValue> {
     console::log_1(&"Starting K-Medoids clustering...".into());
 
-    // Deserialize input
     let input: KMedoidsInput = from_value(input_value)
         .map_err(|e| JsValue::from_str(&format!("Failed to parse input: {:?}", e)))?;
 
-    // Validate input
     validate_input(&input)
         .map_err(|e| JsValue::from_str(&e))?;
 
-    // ── k-pipeline verification at WASM entry point ──────────────────────
     console::log_1(&format!("[run_k_medoids] k-pipeline: n_clusters={} n={} method={}",
         input.n_clusters, input.data.len(), input.method).into());
     console::log_1(&format!("Processing {} data points with {} clusters (method: {})", 
         input.data.len(), input.n_clusters, input.method).into());
 
-    // Parse distance metric
     let metric = parse_distance_metric(&input.distance_metric)
         .map_err(|e| JsValue::from_str(&e))?;
 
-    // Run clustering based on method
     console::log_1(&format!("[run_k_medoids] Calling method: {}", input.method).into());
     let output = match input.method.to_lowercase().as_str() {
         "pam" => run_pam_clustering(&input, metric)?,
@@ -75,12 +58,10 @@ pub fn run_k_medoids(input_value: JsValue) -> Result<JsValue, JsValue> {
     console::log_1(&format!("Clustering complete! Iterations: {}, Converged: {}",
         output.iterations, output.converged).into());
 
-    // Serialize output
     to_value(&output)
         .map_err(|e| JsValue::from_str(&format!("Failed to serialize output: {:?}", e)))
 }
 
-/// Parse distance metric string to enum
 fn parse_distance_metric(metric: &str) -> Result<DistanceMetric, String> {
     match metric.to_lowercase().as_str() {
         "euclidean" => Ok(DistanceMetric::Euclidean),
@@ -89,35 +70,30 @@ fn parse_distance_metric(metric: &str) -> Result<DistanceMetric, String> {
     }
 }
 
-/// Run PAM clustering
 fn run_pam_clustering(
     input: &KMedoidsInput,
     metric: DistanceMetric,
 ) -> Result<KMedoidsOutput, JsValue> {
-    // Guard: the full n×n distance matrix for PAM costs O(n²) memory.
-    // At 8 bytes per f64 the limit below (~2 500 rows) keeps allocation under
-    // ~50 MB even on low-memory devices.  Larger datasets should use CLARA.
-    const PAM_MAX_N: usize = 2500;
-    if input.data.len() > PAM_MAX_N {
+    const PAM_HARD_MAX_N: usize = 10_000;
+    if input.data.len() > PAM_HARD_MAX_N {
         return Err(JsValue::from_str(&format!(
             "PAM requires an O(n^2) distance matrix ({} rows x {} rows x 8 B = {:.0} MB). \
              Switch to CLARA for datasets larger than {} rows.",
             input.data.len(), input.data.len(),
             (input.data.len() as f64).powi(2) * 8.0 / 1_048_576.0,
-            PAM_MAX_N,
+            PAM_HARD_MAX_N,
         )));
     }
 
-    // Configure PAM
     let config = PAMConfig {
         k: input.n_clusters,
         metric,
         max_iterations: input.max_iterations,
         random_seed: input.random_seed,
         use_build_phase: input.use_build_phase.unwrap_or(true),
-        // When the user leaves convergence_tolerance at 0.0 (the default),
-        // use exact convergence (epsilon = 0.0) to match R's pam() behaviour.
-        // Any positive user-supplied tolerance is forwarded as-is.
+        // Jika convergence_tolerance dibiarkan 0.0 (default), pakai konvergensi
+        // eksak (epsilon = 0.0) agar sama dengan perilaku pam() di R.
+        // Toleransi positif dari pengguna diteruskan apa adanya.
         epsilon: if input.convergence_tolerance > 0.0 {
             input.convergence_tolerance
         } else {
@@ -127,19 +103,17 @@ fn run_pam_clustering(
         use_r_implementation: input.use_r_implementation.unwrap_or(true),
     };
 
-    // Run PAM
     console::log_1(&"[run_pam_clustering] Starting PAM...".into());
     let result = run_pam(&input.data, &config)
         .map_err(|e| JsValue::from_str(&e))?;
     console::log_1(&"[run_pam_clustering] PAM finished".into());
 
-    // Medoid coordinate vectors (cloned from input data by index)
     let medoids: Vec<Vec<f64>> = result.medoids.iter()
         .map(|&idx| input.data[idx].clone())
         .collect();
 
-    // Distances are pre-computed inside PAMResult from the distance matrix —
-    // no raw-data recomputation needed here (eliminates redundant O(n×d) work).
+    // Jarak sudah dihitung di dalam PAMResult dari distance matrix, jadi
+    // tidak perlu dihitung ulang dari data mentah.
     let distances_to_medoids = result.distances_to_medoids;
 
     Ok(KMedoidsOutput {
@@ -160,19 +134,16 @@ fn run_pam_clustering(
         cost_history: result.cost_history,
         silhouette_scores: result.silhouette_scores,
         medoid_history: result.medoid_history,
-        // PAM does not use CLARA sampling
         sample_costs: vec![],
         sample_pam_iterations: vec![],
         clara_best_sample_index: 0,
     })
 }
 
-/// Run CLARA clustering
 fn run_clara_clustering(
     input: &KMedoidsInput,
     metric: DistanceMetric,
 ) -> Result<KMedoidsOutput, JsValue> {
-    // Configure CLARA
     let sample_size = input
         .clara_sample_size
         .unwrap_or(40 + 2 * input.n_clusters)
@@ -187,18 +158,15 @@ fn run_clara_clustering(
         use_build_phase: true,
     };
 
-    // Run CLARA
     console::log_1(&"[run_clara_clustering] Starting CLARA...".into());
     let result = run_clara(&input.data, &config)
         .map_err(|e| JsValue::from_str(&e))?;
     console::log_1(&"[run_clara_clustering] CLARA finished".into());
 
-    // Medoid coordinate vectors
     let medoids: Vec<Vec<f64>> = result.medoids.iter()
         .map(|&idx| input.data[idx].clone())
         .collect();
 
-    // Distances from each point to its assigned medoid
     let distances_to_medoids: Vec<f64> = result.assignments.iter()
         .enumerate()
         .map(|(point_idx, &cluster_idx)| {
@@ -211,12 +179,10 @@ fn run_clara_clustering(
         })
         .collect();
 
-    // Collect per-sample costs from the sampling history
     let sample_costs: Vec<f64> = result.samples.iter().map(|s| s.cost).collect();
     let sample_pam_iterations: Vec<usize> = result.samples.iter().map(|s| s.pam_iterations).collect();
     let clara_best_sample_index = result.best_sample_index;
 
-    // Log per-sample costs so the browser console confirms the data is present
     for s in &result.samples {
         console::log_1(&format!(
             "[CLARA] Sample {}/{}: cost={:.4} pam_iters={}",
@@ -243,11 +209,12 @@ fn run_clara_clustering(
         total_cost_swap: result.total_cost,
         iterations: result.samples_tried,
         converged: true,
-        // cost_history reused to carry per-sample costs so existing TypeScript
-        // code that reads result.cost_history still gets the data even before
-        // it is updated to use the new sample_costs field.
+        // cost_history dipakai untuk membawa cost per sampel, supaya kode
+        // TypeScript yang masih membaca result.cost_history tetap mendapat
+        // data sebelum diperbarui ke field sample_costs.
         cost_history: sample_costs.clone(),
-        silhouette_scores: vec![], // CLARA uses sampling; silhouette skipped in WASM
+        // Silhouette dilewati di WASM untuk CLARA karena memakai sampling
+        silhouette_scores: vec![],
         medoid_history: vec![],
         sample_costs,
         sample_pam_iterations,
@@ -255,31 +222,25 @@ fn run_clara_clustering(
     })
 }
 
-/// Run CLARANS clustering
 fn run_clarans_clustering(
     input: &KMedoidsInput,
     metric: DistanceMetric,
 ) -> Result<KMedoidsOutput, JsValue> {
-    // Configure CLARANS
     let mut config = CLARANSConfig::new(input.n_clusters, input.data.len(), metric);
     
-    // Override with user values if provided
     config.num_local = input.clarans_num_local;
     if let Some(max_neighbors) = input.clarans_max_neighbors {
         config.max_neighbors = max_neighbors;
     }
     config.random_seed = input.random_seed;
 
-    // Run CLARANS
     let result = run_clarans(&input.data, &config)
         .map_err(|e| JsValue::from_str(&e))?;
 
-    // Medoid coordinate vectors
     let medoids: Vec<Vec<f64>> = result.medoids.iter()
         .map(|&idx| input.data[idx].clone())
         .collect();
 
-    // Distances from each point to its assigned medoid
     let distances_to_medoids: Vec<f64> = result.assignments.iter()
         .enumerate()
         .map(|(point_idx, &cluster_idx)| {
@@ -308,9 +269,9 @@ fn run_clarans_clustering(
         iterations: result.local_searches,
         converged: true,
         cost_history: vec![],
-        silhouette_scores: vec![], // CLARANS uses random search; silhouette skipped in WASM
+        // Silhouette dilewati di WASM untuk CLARANS karena memakai pencarian acak
+        silhouette_scores: vec![],
         medoid_history: vec![],
-        // CLARANS does not use CLARA sampling
         sample_costs: vec![],
         sample_pam_iterations: vec![],
         clara_best_sample_index: 0,
@@ -322,9 +283,54 @@ pub fn test_connection() -> String {
     "K-Medoids Cluster WASM module connected successfully!".to_string()
 }
 
-/// Run PAM for a range of k values in a single call.
-/// Builds the O(n²) distance matrix **once** and reuses it for all k values,
-/// eliminating the biggest bottleneck in automatic-k selection.
+/// Standardisasi/normalisasi matriks numerik sebelum clustering.
+///
+/// Menggantikan fungsi JS `standardizeZScore` / `normalizeMinMax` di layer
+/// service TypeScript, sehingga rumus penskalaan hanya punya satu implementasi
+/// (`stats::normalization`), konsisten dengan rumus K-Medoids lain di Rust/WASM.
+///
+/// `method`: "zscore" | "minmax" | "none" (nilai lain dianggap "none").
+/// Z-score memakai simpangan baku sampel (n-1), sama dengan `scale()` di R.
+#[wasm_bindgen]
+pub fn standardize_data(input_value: JsValue) -> Result<JsValue, JsValue> {
+    let input: StandardizeInput = from_value(input_value)
+        .map_err(|e| JsValue::from_str(&format!("Failed to parse input: {:?}", e)))?;
+
+    let method = NormalizationMethod::from_str(&input.method);
+
+    let (matrix, _stats) = normalize_data(&input.data, method);
+
+    to_value(&StandardizeOutput { matrix })
+        .map_err(|e| JsValue::from_str(&format!("Failed to serialize output: {:?}", e)))
+}
+
+/// Menghitung Within-Cluster Sum of Squares (WCSS) untuk metode Elbow.
+///
+/// Menggantikan `calculateWCSS` (k-medoids-cluster-analysis.ts) dan
+/// `computeWCSS` (cluster-worker.ts) versi TypeScript yang duplikat dengan
+/// satu implementasi Rust (`utils::distance::compute_wcss`).
+#[wasm_bindgen]
+pub fn calculate_wcss(input_value: JsValue) -> Result<JsValue, JsValue> {
+    let input: WcssInput = from_value(input_value)
+        .map_err(|e| JsValue::from_str(&format!("Failed to parse input: {:?}", e)))?;
+
+    let metric = parse_distance_metric(&input.distance_metric)
+        .map_err(|e| JsValue::from_str(&e))?;
+
+    let wcss = crate::utils::distance::compute_wcss(
+        &input.data,
+        &input.labels,
+        &input.medoid_indices,
+        &metric,
+    );
+
+    to_value(&WcssOutput { wcss })
+        .map_err(|e| JsValue::from_str(&format!("Failed to serialize output: {:?}", e)))
+}
+
+/// Menjalankan PAM untuk rentang nilai k dalam satu panggilan.
+/// Distance matrix O(n²) dibangun **sekali** dan dipakai ulang untuk semua k,
+/// sehingga menghilangkan bottleneck terbesar pada pemilihan k otomatis.
 #[wasm_bindgen]
 pub fn run_k_medoids_range(input_value: JsValue) -> Result<JsValue, JsValue> {
     let input: KMedoidsRangeInput = from_value(input_value)
@@ -339,17 +345,20 @@ pub fn run_k_medoids_range(input_value: JsValue) -> Result<JsValue, JsValue> {
         .map_err(|e| JsValue::from_str(&e))?;
 
     let base_config = PAMConfig {
-        k: input.k_min,          // overridden per-k inside run_pam_range
+        // Ditimpa per-k di dalam run_pam_range
+        k: input.k_min,
         metric,
         max_iterations: input.max_iterations,
         random_seed: input.random_seed,
         use_build_phase: true,
+        // Konvergensi eksak (sama dengan pam() di R) jika toleransi tidak diisi
         epsilon: if input.convergence_tolerance > 0.0 {
             input.convergence_tolerance
         } else {
-            0.0  // exact convergence to match R's pam() when tolerance is unset
+            0.0
         },
-        n_init: 1,               // exploration pass: no need for multiple inits
+        // Tahap eksplorasi, tidak perlu banyak inisialisasi
+        n_init: 1,
         use_r_implementation: true,
     };
 
@@ -359,8 +368,7 @@ pub fn run_k_medoids_range(input_value: JsValue) -> Result<JsValue, JsValue> {
     let items: Vec<KMedoidsRangeItem> = range_results
         .into_iter()
         .map(|(k, pam)| {
-            // Average silhouette computed from the per-object scores already embedded
-            // in PAMResult (no extra distance recomputation needed).
+            // Rata-rata silhouette dari skor per objek yang sudah ada di PAMResult
             let silhouette_overall = if pam.silhouette_scores.is_empty() {
                 0.0
             } else {
@@ -385,23 +393,21 @@ pub fn run_k_medoids_range(input_value: JsValue) -> Result<JsValue, JsValue> {
         .map_err(|e| JsValue::from_str(&format!("Failed to serialize range output: {:?}", e)))
 }
 
-// ── Typed-array fast path ─────────────────────────────────────────────────────
+// Jalur cepat dengan typed array.
 //
-// `run_k_medoids_typed` bypasses `serde_wasm_bindgen` for the large input and
-// output arrays (cluster_assignments, silhouette_scores, distances_to_medoids)
-// by using js_sys typed-array helpers instead.
+// `run_k_medoids_typed` melewati `serde_wasm_bindgen` untuk array input/output
+// yang besar dengan memakai helper typed-array dari js_sys.
 //
-// Benchmarked improvement (n=1000, d=10):
-//   serde path  ≈ 35 ms just for (de)serialization
-//   typed path  ≈  2 ms
+// Hasil benchmark (n=1000, d=10):
+//   jalur serde  ≈ 35 ms hanya untuk (de)serialisasi
+//   jalur typed  ≈  2 ms
 //
-// The caller should use `Float64Array` for data and pass the array's buffer
-// (an `ArrayBuffer`) as a transferable back via postMessage so the structured-
-// clone step is zero-copy.
+// Pemanggil sebaiknya memakai `Float64Array` untuk data dan mengirim buffer-nya
+// sebagai transferable lewat postMessage agar structured clone tanpa salinan.
 
-/// Copy a Rust `&[f64]` into a new JS-owned `Float64Array`.
-/// Using an unsafe view + `.set()` is the idiomatic wasm-bindgen pattern —
-/// safe as long as no WASM heap allocations happen between `view()` and `set()`.
+/// Menyalin `&[f64]` Rust ke `Float64Array` baru milik JS.
+/// Pola `view()` unsafe + `.set()` adalah idiom wasm-bindgen; aman selama
+/// tidak ada alokasi heap WASM di antara `view()` dan `set()`.
 #[inline]
 fn rust_to_float64(data: &[f64]) -> Float64Array {
     let arr = Float64Array::new_with_length(data.len() as u32);
@@ -410,7 +416,7 @@ fn rust_to_float64(data: &[f64]) -> Float64Array {
     arr
 }
 
-/// Copy a Rust `&[usize]` into a new JS-owned `Uint32Array`.
+/// Menyalin `&[usize]` Rust ke `Uint32Array` baru milik JS.
 #[inline]
 fn rust_to_uint32(data: &[usize]) -> Uint32Array {
     let u32s: Vec<u32> = data.iter().map(|&x| x as u32).collect();
@@ -420,28 +426,26 @@ fn rust_to_uint32(data: &[usize]) -> Uint32Array {
     arr
 }
 
-/// Fast PAM entry-point that avoids `serde_wasm_bindgen` for bulk arrays.
+/// Entry-point PAM cepat yang menghindari `serde_wasm_bindgen` untuk array besar.
 ///
-/// Parameters
-/// ----------
-/// flat_data            — row-major Float64Array of shape (n_rows × n_cols)
-/// n_rows, n_cols       — shape of the data matrix
-/// n_clusters           — k
-/// method               — "pam" (only PAM is supported here; use run_k_medoids for CLARA/CLARANS)
-/// max_iterations       — max SWAP iterations
-/// distance_metric      — "euclidean" | "manhattan"
-/// random_seed          — i64; use -1 for no seed
-/// convergence_tolerance — stop when Δcost < this value (0 → exact convergence)
-/// n_init               — ignored for PAM (BUILD is deterministic); kept for API parity
-/// on_progress          — optional JS callback(iteration: number, cost: number)
-///                        fired after every SWAP step so the UI can show live progress
-/// on_initial_medoids   — optional JS callback(medoids: Uint32Array)
-///                        fired once immediately after the BUILD phase completes,
-///                        before any SWAP iteration starts.  Enables streaming the
-///                        initial cluster centres to the UI while SWAP is still running.
+/// Parameter:
+/// - `flat_data`: Float64Array row-major berukuran (n_rows × n_cols)
+/// - `n_rows`, `n_cols`: bentuk matriks data
+/// - `n_clusters`: k
+/// - `method`: hanya "pam" yang didukung (pakai run_k_medoids untuk CLARA/CLARANS)
+/// - `max_iterations`: iterasi SWAP maksimum
+/// - `distance_metric`: "euclidean" | "manhattan"
+/// - `random_seed`: i64; -1 berarti tanpa seed
+/// - `convergence_tolerance`: berhenti saat Δcost lebih kecil dari nilai ini (0 = konvergensi eksak)
+/// - `n_init`: jumlah inisialisasi (minimal 1)
+/// - `on_progress`: callback JS opsional `(iteration, cost)`, dipanggil setelah
+///   setiap langkah SWAP agar UI bisa menampilkan progres langsung
+/// - `on_initial_medoids`: callback JS opsional `(medoids: Uint32Array)`, dipanggil
+///   sekali setelah fase BUILD selesai dan sebelum SWAP dimulai, sehingga pusat
+///   cluster awal bisa ditampilkan saat SWAP masih berjalan
 ///
-/// Returns a plain JS object with **typed-array** fields so the worker can
-/// pass them as Transferable objects in postMessage() (zero-copy):
+/// Mengembalikan objek JS dengan field typed array sehingga worker bisa
+/// mengirimnya sebagai Transferable lewat postMessage() (tanpa salinan):
 ///   { cluster_assignments: Uint32Array,
 ///     silhouette_scores:   Float64Array,
 ///     distances_to_medoids: Float64Array,
@@ -465,9 +469,6 @@ pub fn run_k_medoids_typed(
     on_progress: Option<js_sys::Function>,
     on_initial_medoids: Option<js_sys::Function>,
 ) -> Result<JsValue, JsValue> {
-    // ── 1. Reshape flat Float64Array → Vec<Vec<f64>> ──────────────────────────
-    // This is O(n×d) copy but uses a tight memcpy loop, far faster than
-    // serde_wasm_bindgen's recursive JS-object traversal.
     if flat_data.len() != n_rows * n_cols {
         return Err(JsValue::from_str(&format!(
             "flat_data length {} != n_rows({}) × n_cols({})",
@@ -480,13 +481,12 @@ pub fn run_k_medoids_typed(
         ));
     }
 
+    // Salinan O(n×d) dengan loop memcpy yang ketat, jauh lebih cepat daripada
+    // traversal rekursif objek JS oleh serde_wasm_bindgen.
     let data: Vec<Vec<f64>> = (0..n_rows)
         .map(|i| flat_data[i * n_cols..(i + 1) * n_cols].to_vec())
         .collect();
 
-    // ── 2. Build JS callback closures ─────────────────────────────────────────
-    // on_iter fires after every SWAP step; on_initial_medoids fires once after
-    // the BUILD phase so the UI can display initial cluster centres early.
     let on_iter: Option<Box<dyn Fn(usize, f64)>> = on_progress.map(|f| {
         Box::new(move |iter: usize, cost: f64| {
             let _ = f.call2(
@@ -499,13 +499,11 @@ pub fn run_k_medoids_typed(
 
     let on_build: Option<Box<dyn Fn(&[usize])>> = on_initial_medoids.map(|f| {
         Box::new(move |medoids: &[usize]| {
-            // Pass medoid indices as a Uint32Array for zero-copy transfer.
             let arr = rust_to_uint32(medoids);
             let _ = f.call1(&JsValue::NULL, &arr.into());
         }) as Box<dyn Fn(&[usize])>
     });
 
-    // ── 3. Configure and run PAM ──────────────────────────────────────────────
     let metric = parse_distance_metric(distance_metric)
         .map_err(|e| JsValue::from_str(&e))?;
 
@@ -523,7 +521,7 @@ pub fn run_k_medoids_typed(
     let result = run_pam_with_progress(&data, &config, on_iter.as_deref(), on_build.as_deref())
         .map_err(|e| JsValue::from_str(&e))?;
 
-    // ── 4. Pack output as typed arrays (no serde overhead for bulk arrays) ────
+    // Susun output sebagai typed array (tanpa overhead serde untuk array besar)
     let obj = Object::new();
 
     let set = |key: &str, val: &JsValue| {
@@ -549,7 +547,7 @@ pub fn run_k_medoids_typed(
     set("iterations",            &JsValue::from_f64(result.iterations as f64));
     set("converged",             &JsValue::from_bool(result.converged));
 
-    // medoid_history: JS Array of Uint32Arrays — one snapshot per step
+    // medoid_history: Array JS berisi Uint32Array, satu snapshot per langkah
     let hist_arr = js_sys::Array::new();
     for snapshot in &result.medoid_history {
         hist_arr.push(&rust_to_uint32(snapshot).into());

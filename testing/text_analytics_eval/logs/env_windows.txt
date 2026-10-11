@@ -1,0 +1,28 @@
+Waktu pencatatan: 2026-10-08 10:27:25 +07:00
+Komputer: DJ-RAID
+OS: Microsoft Windows 11 Home Single Language 10.0.26300 build 26300 64-bit
+Model: LENOVO 82EY
+CPU: AMD Ryzen 5 4600H with Radeon Graphics ; inti=6 ; thread=12
+RAM: 15.4 GB
+Memori: 3200 MHz (ConfiguredClockSpeed=3200)
+Rencana daya aktif: Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)
+node: v24.13.1
+npm: 11.8.0
+npx jest: 30.0.4
+rustc: rustc 1.93.0 (254b59607 2026-01-19)
+cargo: cargo 1.93.0 (083ac5135 2025-12-15)
+wasm-pack: wasm-pack 0.14.0
+cargo-llvm-cov: error: no such command: `llvm-cov` |  | help: view all installed commands with `cargo --list`
+cargo-tarpaulin: error: no such command: `tarpaulin` |  | help: view all installed commands with `cargo --list`
+python: Python 3.13.12
+pip: numpy/pandas/scikit-learn/scipy: 2.4.4 3.0.2 1.9.1 1.17.1
+java: java version "25.0.4.1" 2026-08-18 LTS | Java(TM) SE Runtime Environment (build 25.0.4.1+1-LTS-5) | Java HotSpot(TM) 64-Bit Server VM (build 25.0.4.1+1-LTS-5, mixed mode, sharing)
+dot (graphviz): 'dot' is not recognized as an internal or external command, | operable program or batch file.
+git: git version 2.50.1.windows.1
+WEKA: folder ada (C:\Program Files\Weka-3-9-6)
+WEKA version: 3.9.6 |  | -1? -1
+Peramban: C:\Program Files\Google\Chrome\Application\chrome.exe versi 154.0.8037.98
+Peramban: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe versi 154.0.4258.62
+Peramban: C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe versi 155.1.97.56
+git branch: text-analytics-eval
+git commit: 33b1b7e02cf6f47209020be61fdcd460f6817de1

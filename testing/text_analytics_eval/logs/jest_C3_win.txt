@@ -1,0 +1,138 @@
+  console.log
+    [blackbox.am.pipeline] wasm_bg.wasm sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+      at Object.log (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.pipeline.test.ts:216:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.pipeline.test.ts
+  BB-33 Apply Model dengan Actual target (komputasi WASM nyata)
+    √ BB-33-a biner WASM yang dipakai tercatat (SHA-256 64 heksadesimal) (45 ms)
+    √ BB-33-b payload ke worker memuat slice Actual (Play) dan definisinya; prediktor dikirim sesuai pemetaan (39 ms)
+    √ BB-33-c kolom prediksi tertulis ke dataset: nama, urutan kolom, tipe, dan nilai sama dengan oracle independen (13 ms)
+    √ BB-33-d metrik evaluasi (matriks konfusi, akurasi, presisi/recall/F1, makro/berbobot/mikro, kappa) sama dengan oracle (14 ms)
+    √ BB-33-e model teks Raw + Actual: prediksi dan metrik sama dengan oracle (satu dokumen kosong tidak diskor) (31 ms)
+    √ BB-33-f tanpa Actual target: kolom prediksi tetap ditulis, payload actual kosong, tidak ada tabel metrik/kappa/confusion (15 ms)
+    √ BB-33-g Actual target dipetakan tetapi 'Evaluation metrics' dan 'Confusion matrix' dimatikan di tab Output: tabel metrik tidak dibuat (14 ms)
+  BB-35 Output Viewer setelah prediksi (komputasi WASM nyata)
+    √ BB-35-a statistic yang dipasang: urutan dan kunci komponen unik; log 'Apply Model' / analytic 'Apply Model Result' (18 ms)
+    √ BB-35-b tabel Model Summary: sumber, algoritma, skema, waktu latih, target, kelas, pemetaan fitur, parameter model (3 ms)
+    √ BB-35-c Case Processing Summary: total, diskor, tidak diskor, baris dengan prediktor hilang / kategori asing, dan blok evaluasi (13 ms)
+    √ BB-35-d Prediction Distribution: cacah dan persen per kelas, baris Not scored dan Total (14 ms)
+    √ BB-35-e model teks Raw: Model Summary memuat baris variabel teks, sumber/likelihood teks, dan jumlah dokumen kosong; CPS dan distribusi sesuai oracle (16 ms)
+    √ BB-35-f kotak centang tab Output mengatur tabel yang dipasang; 'Saved Variables' selalu dipasang (30 ms)
+  BB-34 nama kolom bentrok pada jalur penuh (komputasi WASM nyata)
+    √ BB-34-P1 dataset sudah punya NB_PredictedValue dan NB_Probability_Yes: kolom baru bersufiks _1, nama akhir dilaporkan di toast, tabel Saved Variables, dan definisi kolom (6 ms)
+    √ BB-34-P2 variabel yang sudah ada tidak diubah: tidak ada pembaruan sel pada kolom lama (hanya variabel baru ditambahkan) (15 ms)
+
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/eval/blackbox.am.mapping.test.ts
+  BB-31 Auto-map by name (autoMapFeatures)
+    √ BB-31a nama persis: seluruh fitur terpetakan, target aktual otomatis terisi (1 ms)
+    √ BB-31b nama berbeda huruf besar/kecil tetapi unik: terpetakan ke nama variabel dataset
+    √ BB-31c kecocokan persis diutamakan atas varian huruf lain
+    √ BB-31d varian huruf yang ambigu (lebih dari satu kandidat) tidak dipetakan (null)
+    √ BB-31e fitur yang tidak ada di dataset = null; satu variabel tidak dipakai dua fitur (1 ms)
+    √ BB-31f auto-map tidak memeriksa measure; ketidakcocokan baru muncul sebagai AM_E_MAP_ROLE_MISMATCH saat validasi (1 ms)
+    √ BB-31g target aktual: tidak terisi bila measure-nya scale atau namanya sudah dipakai sebagai prediktor (1 ms)
+    √ BB-31h model Raw Text nyata (Pilkada): variabel 'Text Tweet' dan target 'Sentiment' terpetakan (1 ms)
+    √ BB-31i model Word-Vector: kolom VEC_ yang ditemukan terpetakan, sisanya null dan diringkas 'm of V found; V-m treated as 0' (2 ms)
+    √ BB-31j model Word-Vector nyata 17.454 kolom: pemetaan tetap tepat dan cepat (45 ms)
+  BB-32 pemetaan belum lengkap -> validasi gagal (OK nonaktif)
+    √ BB-32a model Raw Text, dataset tanpa variabel 'Teks': AM_E_MAP_RAW_TEXT_UNMAPPED, isValid=false, pesan berkode (1 ms)
+    √ BB-32b memilih variabel teks yang ada membuat form valid kembali
+    √ BB-32c variabel teks dipetakan ke variabel numerik: AM_E_MAP_RAW_TEXT_TYPE (detail = nama variabel teks di model) (1 ms)
+    √ BB-32d model fitur biasa, dataset tanpa 'Temp': AM_E_MAP_UNMAPPED (detail = nama fitur), isValid=false
+    √ BB-32e variabel hasil pemetaan tersimpan sudah tidak ada di dataset: AM_E_MAP_VAR_NOT_FOUND (1 ms)
+    √ BB-32f penyimpangan dari tabel prompt: model Word-Vector yang semua kolomnya tidak ditemukan TIDAK memblokir OK (peringatan + info) (1 ms)
+    √ BB-32g tanpa model dimuat: AM_E_NO_MODEL dan isValid=false
+  BB-34 nama kolom output bentrok (resolveFinalOutputNames)
+    √ BB-34a nama default tanpa bentrok tidak diubah; urutan kolom: predicted, max probability, probabilitas kelas
+    √ BB-34b nama sudah ada di dataset: akhiran _1 dan pasangan (diminta, akhir) dilaporkan
+    √ BB-34c pemeriksaan tidak peka huruf besar/kecil dan akhiran bertambah (_1 sudah ada -> _2) (1 ms)
+    √ BB-34d menjalankan Apply Model kedua kali pada dataset yang sudah berisi hasil pertama: semua kolom bersufiks _1 (1 ms)
+    √ BB-34e awalan (prefix) khusus mengubah semua nama default; bentrok dengan variabel pengguna tetap di-sufiks (9 ms)
+    √ BB-34f nama kelas bukan identifier (spasi) dirapikan oleh fungsi yang sama dan ikut dicatat sebagai disesuaikan (1 ms)
+    √ BB-34g bentrok dengan variabel dataset BUKAN galat validasi (form tetap valid, tombol OK aktif)
+    √ BB-34h peringatan pengguna: teks AM_W_NAME_ADJUSTED tanpa akhiran kode, sesuai konstanta
+  BB-34 nama kustom: bentrok antar-kolom baru adalah GALAT (bukan akhiran otomatis)
+    √ BB-34i dua nama kustom sama (tanpa membedakan huruf) -> AM_E_NAME_DUPLICATE dan OK nonaktif (1 ms)
+    √ BB-34j nama kustom yang sama dengan variabel yang sudah ada di dataset diberi akhiran otomatis (bukan galat) (1 ms)
+    √ BB-34k aturan nama: kosong, tidak valid, > 64 karakter, kata cadangan; pesan lewat formatApplyModelIssueMessage
+
+PASS components/Modals/Analyze/Classify/naive-bayes/dialogs/__tests__/eval/blackbox.nb.persistence.test.tsx
+  BB-36 Persistensi pengaturan menu Naive Bayes
+    √ BB-36-a pembukaan pertama tanpa data tersimpan: seluruh nilai = default (384 ms)
+    √ BB-36-b setelah OK: IndexedDB berisi target, validasi, opsi, output, dan fingerprint dataset (278 ms)
+    √ BB-36-c tutup lalu buka kembali (dataset sama): semua pengaturan terakhir pulih di setiap tab (383 ms)
+    √ BB-36-d menutup dengan Cancel tanpa OK: tidak ada yang tersimpan, pembukaan berikutnya kembali ke default (262 ms)
+    √ BB-36-e dataset berubah sejak penyimpanan: seluruh form direset ke default dan penyimpanan dihapus (302 ms)
+    √ BB-36-f Reset: form kembali ke default dan penyimpanan dihapus sehingga pembukaan berikutnya default (284 ms)
+    √ BB-36-g data tersimpan versi lama (tanpa field v2) dimuat dan digabung dengan default tanpa galat (98 ms)
+    √ BB-36-h OK ditolak (target kosong): tidak ada penyimpanan dan analisis tidak dipanggil (84 ms)
+
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.variables.test.tsx
+  BB-31 tombol Auto-map by name (VariablesTab)
+    √ BB-31-UI-a pemetaan kosong: kedua baris menampilkan galat AM_E_MAP_UNMAPPED; setelah klik Auto-map semua fitur terpetakan dan berstatus valid (184 ms)
+    √ BB-31-UI-b Auto-map menimpa pilihan manual yang salah (Outlook -> Play diganti kembali ke Outlook) (74 ms)
+    √ BB-31-UI-c nama dataset berbeda huruf (outlook, TEMP): tetap terpetakan; nama yang ambigu dibiarkan 'Not mapped' (89 ms)
+    √ BB-31-UI-d fitur numerik yang namanya cocok tetapi measure-nya nominal: terpetakan lalu ditandai AM_E_MAP_ROLE_MISMATCH (86 ms)
+    √ BB-31-UI-e model Word-Vector: Auto-map menampilkan ringkasan '3 of 5 vector columns found; 2 treated as 0.' (81 ms)
+    √ BB-31-UI-f kontainer: memuat model D1 langsung mengisi pemetaan (auto-map saat model dimuat), tanpa klik tombol (271 ms)
+  BB-32 variabel teks model tidak ada di dataset
+    √ BB-32-UI-a VariablesTab: Raw Text Variable 'Not mapped' menampilkan AM_E_MAP_RAW_TEXT_UNMAPPED dengan nama variabel model ('Teks') (22 ms)
+    √ BB-32-UI-b Auto-map tidak menemukan 'Teks' -> galat tetap ada; memilih variabel STRING lain menghilangkannya (235 ms)
+    √ BB-32-UI-c kontainer: model Raw Text dimuat ke dataset tanpa variabel 'Teks' -> tombol OK nonaktif; setelah variabel dipilih -> OK aktif (388 ms)
+    √ BB-32-UI-d kontainer: model fitur biasa (D1) dimuat ke dataset tanpa 'Temp' -> OK nonaktif dan baris Temp berstatus AM_E_MAP_UNMAPPED (235 ms)
+
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.model-tab.test.tsx
+  BB-29 Tab Model: berkas bukan model / terlalu besar
+    √ BB-29-UI-a kontrol file hanya menawarkan .json (accept) dan label radio 'Upload file (.json)' terpilih (50 ms)
+    √ BB-29-UI-b berkas .txt: pesan AM_E_PARSE tampil, model tidak dipakai (tanpa kartu Model Summary) (56 ms)
+    √ BB-29-UI-c berkas > 10 MB: pesan AM_E_FILE_TOO_LARGE, model tidak dipakai (30 ms)
+    √ BB-29-UI-d JSON bukan model: [..] -> AM_E_NOT_OBJECT; objek tanpa model_type -> AM_E_MODEL_TYPE_MISSING; model_type asing -> AM_E_MODEL_TYPE_UNSUPPORTED (dengan nama jenis) (106 ms)
+    √ BB-29-UI-e berkas yang ditolak tidak menggantikan model valid yang sudah dimuat (64 ms)
+    √ BB-29-UI-f kontainer: setelah berkas ditolak, tab Variables/Save/Output tetap nonaktif dan tombol OK nonaktif (171 ms)
+  BB-30 Tab Model: model dari Output Viewer -> Model Summary
+    √ BB-30-UI-a tanpa model di Output Viewer: tampil pesan AM_W_NO_RESULT_STORE_MODELS (tanpa Select) (47 ms)
+    √ BB-30-UI-b memilih model dari daftar menampilkan kartu Model Summary lengkap (algoritma, skema, target, kelas, fitur, sumber) (192 ms)
+    √ BB-30-UI-c kontainer: model dari Output Viewer mengaktifkan tab lain, memetakan variabel otomatis, dan OK aktif (417 ms)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.loader.test.ts
+  BB-29 loader berkas: berkas bukan model
+    √ BB-29a ekstensi bukan .json ditolak AM_E_PARSE sebelum dibaca (2 ms)
+    √ BB-29b ekstensi .JSON huruf besar tetap diterima (pemeriksaan case-insensitive)
+    √ BB-29c isi .json bukan JSON valid -> AM_E_PARSE
+    √ BB-29d JSON valid tetapi bukan objek -> AM_E_NOT_OBJECT (1 ms)
+    √ BB-29e objek tanpa model_type (atau bukan string) -> AM_E_MODEL_TYPE_MISSING (1 ms)
+    √ BB-29f model_type tidak terdaftar -> AM_E_MODEL_TYPE_UNSUPPORTED dengan detail jenis model (2 ms)
+    √ BB-29g naive_bayes dengan schema_version tak dikenal -> AM_E_SCHEMA_VERSION_UNSUPPORTED
+    √ BB-29h naive_bayes tanpa field wajib -> semua AM_E_FIELD_MISSING (target termasuk) (1 ms)
+    √ BB-29i model valid tidak menghasilkan galat; label sumber 'File: <nama>' (1 ms)
+  BB-29 loader berkas: batas ukuran 10 MB
+    √ BB-29j konstanta batas = 10 * 1024 * 1024 byte
+    √ BB-29k ukuran = batas diterima; batas + 1 byte -> AM_E_FILE_TOO_LARGE tanpa membaca isi
+    √ BB-29l berkas non-.json yang juga sangat besar dilaporkan sebagai AM_E_PARSE (ekstensi diperiksa lebih dulu)
+    √ BB-29m teks pesan pengguna sesuai konstanta (kode di akhir kalimat)
+  BB-30 model dari Output Viewer (service)
+    √ BB-30a daftar memuat hanya statistic 'Export Model', terbaru (id terbesar) dulu, label 'log › analytic — trained_at' (1 ms)
+    √ BB-30b result store kosong: loadResults dipanggil tepat sekali, daftar kosong
+    √ BB-30c memuat model objek-JSON: ok, deskriptor (target, kelas, fitur) sesuai model asal, label sumber memuat id (2 ms)
+    √ BB-30d memuat model yang tersimpan sebagai string JSON bersarang (model teks Raw): deskriptor teks terisi (1 ms)
+    √ BB-30e id tidak ada -> AM_E_NO_MODEL; statistic bukan model -> AM_E_NO_MODEL; payload rusak -> AM_E_PARSE (1 ms)
+    √ BB-30f model di result store yang melanggar skema ditolak validasi umum (tidak dipakai) (1 ms)
+
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.save.test.tsx
+  BB-34 SaveTab: nama kolom output bentrok
+    √ BB-34-UI-a tanpa bentrok: nama akhir = nama default, tanpa ikon dan tanpa banner peringatan (29 ms)
+    √ BB-34-UI-b dataset sudah punya NB_PredictedValue: nama akhir NB_PredictedValue_1, ikon peringatan di baris itu, banner AM_W_NAME_ADJUSTED (19 ms)
+    √ BB-34-UI-c bentrok tidak peka huruf besar/kecil dan berlaku untuk kolom probabilitas per kelas (19 ms)
+    √ BB-34-UI-d mengubah Name prefix menghilangkan bentrok: nama akhir berganti dan banner hilang (19 ms)
+    √ BB-34-UI-e nama kustom sama dengan variabel yang ada: diberi akhiran (peringatan), bukan galat (87 ms)
+    √ BB-34-UI-f dua nama kustom kembar antar-kolom hasil: galat AM_E_NAME_DUPLICATE ditampilkan (tidak di-sufiks otomatis) (77 ms)
+
+Test Suites: 7 passed, 7 total
+Tests:       95 passed, 95 total
+Snapshots:   0 total
+Time:        9.845 s
+Ran all test suites matching blackbox.am.|blackbox.nb.persistence.
+Test results written to: ..\testing\text_analytics_eval\logs\jest_C3_win.json
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=14.51 started=2026-10-08 10:29:39 +07:00 cmd=npx jest blackbox.am. blackbox.nb.persistence --runInBand --json --outputFile=..\testing\text_analytics_eval\logs\jest_C3_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===

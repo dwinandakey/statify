@@ -1,0 +1,1428 @@
+/**
+ * ============================================================================
+ * MESIN UJI NORMALITAS
+ * ============================================================================
+ *
+ * Uji normalitas umum dengan bentuk keluaran yang kompatibel dengan SPSS.
+ *
+ * Uji residual regresi berada pada Regression/Assumption Test/normality.js.
+ *
+ * Implementasi ini mengikuti Royston (1995) dengan:
+ * - SPSS-compatible KS p-values (Dallal-Wilkinson + Lilliefors)
+ * - Enhanced numerical stability
+ * - Penanganan kasus tepi secara menyeluruh
+ *
+ * TUJUAN:
+ * Menguji apakah data mengikuti distribusi normal menggunakan dua metode:
+ * 1. Kolmogorov-Smirnov (KS) dengan koreksi Lilliefors
+ * 2. Shapiro-Wilk (SW) dengan aproksimasi Royston
+ *
+ * KONSEP DASAR:
+ * Uji normalitas memeriksa apakah sebaran data sesuai dengan distribusi normal
+ * (kurva lonceng / bell curve). Uji ini penting sebagai prasyarat untuk:
+ * - ANOVA (asumsi normalitas residual)
+ * - T-Test (asumsi normalitas kelompok)
+ * - Regresi Linear (asumsi normalitas residual)
+ * - Bartlett Test (sensitif terhadap non-normalitas)
+ *
+ * HIPOTESIS:
+ * H₀: Data berdistribusi normal
+ * H₁: Data TIDAK berdistribusi normal
+ *
+ * KAPAN DIGUNAKAN:
+ * - Sebelum ANOVA: cek asumsi normalitas per kelompok
+ * - Sebelum Bartlett Test: karena Bartlett sensitif terhadap non-normalitas
+ * - Dalam Regresi: cek normalitas residual
+ * - Explore/Descriptive: sebagai bagian dari "Normality Plots with Tests"
+ *
+ * METODE YANG TERSEDIA:
+ *
+ * 1. KOLMOGOROV-SMIRNOV (KS) dengan Koreksi Lilliefors:
+ *    - Membandingkan CDF empiris data dengan CDF normal teoritis
+ *    - Parameter normal (mean, sd) diestimasi dari data sendiri
+ *    - Koreksi Lilliefors diperlukan karena parameter diestimasi (bukan diketahui)
+ *    - Cocok untuk semua ukuran sampel (n ≥ 3)
+ *
+ *    RUMUS KS:
+ *    a. Urutkan data: x₁ ≤ x₂ ≤ ... ≤ xₙ
+ *    b. Hitung CDF empiris: Fₙ(xᵢ) = i/n
+ *    c. Hitung CDF normal teoritis: F₀(xᵢ) = Φ((xᵢ - x̄) / s)
+ *    d. D⁺ = max|Fₙ(xᵢ) - F₀(xᵢ)|        (deviasi sisi atas)
+ *    e. D⁻ = max|F₀(xᵢ) - Fₙ(xᵢ₋₁)|      (deviasi sisi bawah)
+ *    f. D = max(D⁺, D⁻)                     (statistik uji dua sisi)
+ *
+ * 2. SHAPIRO-WILK (SW):
+ *    - Menghitung korelasi antara data terurut dan quantile normal teoritis
+ *    - Lebih powerful untuk ukuran sampel kecil (n ≤ 50)
+ *    - Batas atas: n ≤ 5000 (mengikuti konvensi SPSS)
+ *    - Menggunakan aproksimasi Royston (1995) untuk p-value
+ *
+ *    RUMUS SW:
+ *    a. Urutkan data: x₁ ≤ x₂ ≤ ... ≤ xₙ
+ *    b. Hitung expected normal order statistics: mᵢ = Φ⁻¹((i - 0.375)/(n + 0.25))
+ *    c. Hitung bobot koefisien aᵢ dari polinomial Royston
+ *    d. W = [Σ aᵢ × x(ᵢ)]² / Σ(xᵢ - x̄)²  (atau ekuivalen: r² antara x dan m)
+ *    e. W mendekati 1 → data normal; W jauh dari 1 → data tidak normal
+ *
+ * INTERPRETASI:
+ * - p-value < 0.05: Tolak H₀ → Data TIDAK normal
+ * - p-value ≥ 0.05: Gagal tolak H₀ → Data dianggap normal
+ *
+ * ASUMSI DAN KETERBATASAN:
+ * - KS: Kurang sensitif di ekor distribusi; cocok untuk n besar
+ * - SW: Lebih powerful untuk n kecil, tapi terbatas sampai n = 5000
+ * - Kedua uji sensitif terhadap ukuran sampel besar (mudah menolak H₀)
+ *
+ * REFERENSI:
+ * 1. Lilliefors, H. W. (1967). "On the Kolmogorov-Smirnov test for normality
+ *    with mean and variance unknown". JASA, 62(318): 399-402.
+ * 2. Shapiro, S. S., & Wilk, M. B. (1965). "An analysis of variance test for
+ *    normality (complete samples)". Biometrika, 52(3/4): 591-611.
+ * 3. Royston, P. (1995). "Remark AS R94: A remark on Algorithm AS 181".
+ *    Applied Statistics, 44(4): 547-551.
+ * 4. Royston, P. (1993). "A toolkit for testing for non-normality in complete
+ *    and censored samples". The Statistician, 42: 37-43.
+ * ============================================================================
+ */
+
+// =============================================================================
+// FUNGSI HELPER STATISTIK DASAR
+// =============================================================================
+
+/**
+ * Membersihkan array data dari nilai yang tidak valid.
+ *
+ * Memfilter NaN, null, undefined, Infinity, -Infinity, dan tipe bukan angka
+ * agar tidak mengganggu perhitungan statistik uji normalitas.
+ * Pola ini konsisten dengan validasi data di Bartlett Test.
+ *
+ * Algoritma:
+ * 1. Iterasi setiap elemen dalam larik masukan
+ * 2. Konversi ke Number dan cek apakah finite
+ * 3. Kumpulkan statistik jumlah nilai invalid per tipe
+ * 4. Log breakdown ke console jika ada nilai yang dibuang
+ *
+ * @param {any[]} values - Array data mentah (bisa berisi campuran tipe)
+ * @returns {number[]} Array hanya berisi angka finite yang valid
+ *
+ * @example
+ * // Filter campuran tipe data
+ * cleanNumericData([5, null, 'a', 7, NaN, 3]);
+ * // => [5, 7, 3]
+ *
+ * @example
+ * // Semua masukan tidak valid → larik kosong
+ * cleanNumericData([NaN, null, undefined, Infinity]);
+ * // => []
+ *
+ * @example
+ * // Masukan bukan larik → larik kosong
+ * cleanNumericData("hello");
+ * // => []
+ */
+function cleanNumericData(values) {
+    if (!Array.isArray(values)) return [];
+    const cleaned = [];
+
+    // Catat jumlah setiap jenis nilai tidak valid
+    let nullCount = 0;
+    let undefinedCount = 0;
+    let nanCount = 0;
+    let infinityCount = 0;
+    let negInfinityCount = 0;
+
+    for (let i = 0; i < values.length; i++) {
+        const v = values[i];
+
+        // Periksa nilai null
+        if (v === null) {
+            nullCount++;
+            continue;
+        }
+
+        // Periksa nilai undefined
+        if (v === undefined) {
+            undefinedCount++;
+            continue;
+        }
+
+        // Konversi menjadi angka dan periksa validitasnya
+        const num = Number(v);
+
+        // Periksa NaN, termasuk string nonnumerik, objek, dan sebagainya
+        if (isNaN(num)) {
+            nanCount++;
+            continue;
+        }
+
+        // Periksa Infinity
+        if (num === Infinity) {
+            infinityCount++;
+            continue;
+        }
+
+        // Periksa -Infinity
+        if (num === -Infinity) {
+            negInfinityCount++;
+            continue;
+        }
+
+        // Masukkan hanya bilangan berhingga yang sudah lolos pemeriksaan.
+        cleaned.push(num);
+    }
+
+    // Catat ringkasan nilai yang dibuang untuk membantu penelusuran data.
+    const totalSkipped = nullCount + undefinedCount + nanCount + infinityCount + negInfinityCount;
+    if (totalSkipped > 0) {
+        const parts = [];
+        if (nanCount > 0) parts.push(`${nanCount} NaN`);
+        if (nullCount > 0) parts.push(`${nullCount} null`);
+        if (undefinedCount > 0) parts.push(`${undefinedCount} undefined`);
+        if (infinityCount > 0) parts.push(`${infinityCount} Infinity`);
+        if (negInfinityCount > 0) parts.push(`${negInfinityCount} -Infinity`);
+
+        const breakdown = parts.join(', ');
+        console.log(`[DEBUG] Normality - cleanNumericData: ${totalSkipped} nilai tidak valid dibuang dari ${values.length} total (${breakdown})`);
+    }
+
+    return cleaned;
+}
+
+/**
+ * Menghitung rata-rata aritmetika (mean).
+ *
+ * Rumus: x̄ = Σxᵢ / n
+ *
+ * Digunakan sebagai langkah awal dalam perhitungan S² (sum of squares)
+ * pada Shapiro-Wilk dan juga untuk standardisasi z-score pada KS test.
+ *
+ * @param {number[]} values - Array berisi nilai-nilai numerik (harus sudah bersih/valid)
+ * @returns {number} Rata-rata aritmetika
+ *
+ * @example
+ * normalityMean([9, 10, 11, 12, 13]);
+ * // => 11
+ *
+ * @example
+ * normalityMean([2, 4, 6]);
+ * // => 4
+ */
+/** Menjumlahkan nilai dengan koreksi Neumaier untuk mengurangi galat floating point. */
+function normalityCompensatedSum(length, valueAt) {
+    let sum = 0;
+    let correction = 0;
+    for (let i = 0; i < length; i++) {
+        const value = valueAt(i);
+        const next = sum + value;
+        correction += Math.abs(sum) >= Math.abs(value)
+            ? (sum - next) + value
+            : (value - next) + sum;
+        sum = next;
+    }
+    return sum + correction;
+}
+
+function normalityMean(values) {
+    return normalityCompensatedSum(values.length, index => values[index]) / values.length;
+}
+
+/**
+ * Menghitung simpangan baku sampel (standard deviation).
+ *
+ * Rumus: s = √[ Σ(xᵢ - x̄)² / (n-1) ]
+ * Menggunakan pembagi (n-1) untuk estimator tidak bias (Bessel's correction).
+ *
+ * Digunakan dalam Kolmogorov-Smirnov test untuk standardisasi z-score:
+ * z = (xᵢ - x̄) / s, sehingga bisa membandingkan dengan Φ(z).
+ *
+ * @param {number[]} values - Array berisi nilai-nilai numerik (harus sudah bersih/valid)
+ * @param {number} [valuesMean] - Mean yang sudah dihitung sebelumnya (opsional, hemat komputasi)
+ * @returns {number} Simpangan baku sampel
+ *
+ * @example
+ * normalityStandardDeviation([9, 10, 11, 12, 13]);
+ * // => 1.5811388300841898 (≈ √2.5)
+ *
+ * @example
+ * // Dengan mean yang sudah dihitung sebelumnya
+ * normalityStandardDeviation([9, 10, 11, 12, 13], 11);
+ * // => 1.5811388300841898
+ */
+function normalityStandardDeviation(values, valuesMean = undefined) {
+    const m = valuesMean !== undefined ? valuesMean : normalityMean(values);
+    const divisor = values.length > 1 ? values.length - 1 : values.length;
+    const sumSqDev = normalityCompensatedSum(values.length, i => {
+        const diff = values[i] - m;
+        return diff * diff;
+    });
+    const variance = sumSqDev / divisor;
+    return Math.sqrt(variance);
+}
+
+/**
+ * Menghitung koefisien korelasi Pearson antara dua array.
+ *
+ * Rumus: r = Σ(xᵢ - x̄)(yᵢ - ȳ) / √[Σ(xᵢ - x̄)² × Σ(yᵢ - ȳ)²]
+ *
+ * Nilai r ∈ [-1, 1]:
+ *   r = +1 → korelasi positif sempurna
+ *   r =  0 → tidak berkorelasi
+ *   r = -1 → korelasi negatif sempurna
+ *
+ * Catatan: Fungsi ini tersedia sebagai utilitas internal tetapi
+ * tidak digunakan langsung dalam rumus W (W menggunakan rumus
+ * (Σaᵢxᵢ)²/S² yang lebih efisien dan numerik stabil).
+ *
+ * @param {number[]} x - Array data pertama
+ * @param {number[]} y - Array data kedua (panjang harus sama dengan x)
+ * @returns {number} Koefisien korelasi Pearson (-1 sampai 1), atau 0 jika salah satu konstan
+ *
+ * @example
+ * normalityPearsonCorrelation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]);
+ * // => 1.0 (korelasi positif sempurna)
+ *
+ * @example
+ * normalityPearsonCorrelation([1, 2, 3], [3, 2, 1]);
+ * // => -1.0 (korelasi negatif sempurna)
+ */
+function normalityPearsonCorrelation(x, y) {
+    const n = x.length;
+    const xm = normalityMean(x);
+    const ym = normalityMean(y);
+
+    const numerator = normalityCompensatedSum(n, i => {
+        const xd = x[i] - xm;
+        const yd = y[i] - ym;
+        return xd * yd;
+    });
+    const xDenom = normalityCompensatedSum(n, i => {
+        const xd = x[i] - xm;
+        return xd * xd;
+    });
+    const yDenom = normalityCompensatedSum(n, i => {
+        const yd = y[i] - ym;
+        return yd * yd;
+    });
+
+    const denom = Math.sqrt(xDenom * yDenom);
+    if (!isFinite(denom) || denom === 0) return 0;
+    return numerator / denom;
+}
+
+/**
+ * Aproksimasi CDF Normal Standar Φ(x).
+ *
+ * Menghitung probabilitas kumulatif P(Z ≤ x) untuk distribusi normal standar.
+ * Menggunakan simetri terhadap peluang ekor atas yang dihitung langsung.
+ *
+ * Digunakan dalam:
+ * - Kolmogorov-Smirnov: menghitung F₀(xᵢ) = Φ((xᵢ - x̄)/s)
+ * - Shapiro-Wilk p-value: mentransformasi z-score ke probabilitas
+ *
+ * @param {number} x - Nilai z-score
+ * @returns {number} Probabilitas kumulatif P(Z ≤ x), nilai dalam [0, 1]
+ *
+ * @example
+ * normalityCDF(0);
+ * // => 0.5 (titik tengah distribusi)
+ *
+ * @example
+ * normalityCDF(1.96);
+ * // => ~0.975 (batas kritis α=5% satu sisi)
+ *
+ * @example
+ * normalityCDF(-1.96);
+ * // => ~0.025
+ *
+ * @see normalitySurvival
+ */
+function normalityCDF(x) {
+    return normalitySurvival(-x);
+}
+
+/**
+ * Peluang ekor atas normal standar P(Z > z).
+ * Untuk z >= 0: P(Z > z) = Q(1/2, z²/2) / 2.
+ * Deret gamma dipakai dekat nol; pecahan berlanjut dipakai di ekor distribusi.
+ * Pola ini sama dengan fungsi gamma di modul kategorik, khusus bentuk 1/2,
+ * sehingga worker normalitas tetap mandiri tanpa impor atau koneksi internet.
+ * Nilai-p kecil dihitung langsung agar tidak hilang karena pengurangan 1 - CDF.
+ * Nilai yang lebih kecil dari jangkauan Number tetap dapat mengalami underflow.
+ */
+function normalitySurvival(z) {
+    if (Number.isNaN(z)) return NaN;
+    const magnitude = Math.abs(z);
+    if (magnitude === 0) return 0.5;
+    if (magnitude > 40) return z > 0 ? 0 : 1;
+
+    const value = magnitude * magnitude / 2;
+    const scale = magnitude * Math.exp(-value) / Math.sqrt(2 * Math.PI);
+    let tail;
+    if (value < 1.5) {
+        let term = 2;
+        let sum = term;
+        for (let iteration = 1; iteration < 1000; iteration++) {
+            term *= value / (iteration + 0.5);
+            sum += term;
+            if (Math.abs(term) <= Math.abs(sum) * Number.EPSILON) break;
+        }
+        tail = (1 - scale * sum) / 2;
+    } else {
+        let offset = value + 0.5;
+        let previous = 1e300;
+        let current = 1 / offset;
+        let fraction = current;
+        for (let iteration = 1; iteration < 1000; iteration++) {
+            const numerator = -iteration * (iteration - 0.5);
+            offset += 2;
+            current = offset + numerator * current;
+            previous = offset + numerator / previous;
+            if (Math.abs(current) < 1e-300) current = 1e-300;
+            if (Math.abs(previous) < 1e-300) previous = 1e-300;
+            current = 1 / current;
+            const delta = current * previous;
+            fraction *= delta;
+            if (Math.abs(delta - 1) <= 2 * Number.EPSILON) break;
+        }
+        tail = scale * fraction / 2;
+    }
+    return z < 0 ? 1 - tail : tail;
+}
+
+/**
+ * Menghitung quantile (inverse CDF) normal standar Φ⁻¹(p) untuk sembarang p ∈ (0, 1).
+ *
+ * Menggunakan aproksimasi rasional Peter J. Acklam pada ekor bawah, bagian
+ * tengah, dan ekor atas distribusi agar koefisien Shapiro-Wilk stabil.
+ *
+ * Digunakan untuk menghitung Expected Normal Order Statistics (mᵢ) pada
+ * uji Shapiro-Wilk via Blom (1958) plotting position:
+ *   mᵢ = Φ⁻¹((i − 0.375) / (n + 0.25))
+ *
+ * @param {number} p - Probabilitas (0 < p < 1)
+ * @returns {number} Nilai z-score yang bersesuaian, atau ±Infinity di batas
+ *
+ * @example
+ * normalityQuantile(0.025);
+ * // => -1.96 (batas bawah CI 95%)
+ *
+ * @example
+ * normalityQuantile(0.975);
+ * // => +1.96 (batas atas CI 95%)
+ *
+ * @example
+ * normalityQuantile(0.5);
+ * // => 0.0 (median distribusi normal)
+ *
+ * @see Blom, G. (1958). Statistical Estimates and Transformed Beta-Variables. Wiley.
+ * @see Peter J. Acklam, An algorithm for computing the inverse normal cumulative distribution function.
+ */
+function normalityQuantile(p) {
+    if (p <= 0) return -Infinity;
+    if (p >= 1) return Infinity;
+
+    const a = [
+        -3.969683028665376e+1, 2.209460984245205e+2,
+        -2.759285104469687e+2, 1.383577518672690e+2,
+        -3.066479806614716e+1, 2.506628277459239,
+    ];
+    const b = [
+        -5.447609879822406e+1, 1.615858368580409e+2,
+        -1.556989798598866e+2, 6.680131188771972e+1,
+        -1.328068155288572e+1,
+    ];
+    const c = [
+        -7.784894002430293e-3, -3.223964580411365e-1,
+        -2.400758277161838, -2.549732539343734,
+        4.374664141464968, 2.938163982698783,
+    ];
+    const d = [
+        7.784695709041462e-3, 3.224671290700398e-1,
+        2.445134137142996, 3.754408661907416,
+    ];
+    const lowerTail = 0.02425;
+
+    if (p < lowerTail) {
+        const q = Math.sqrt(-2 * Math.log(p));
+        return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) /
+            ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+    }
+
+    if (p > 1 - lowerTail) {
+        const q = Math.sqrt(-2 * Math.log(1 - p));
+        return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) /
+            ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+    }
+
+    const q = p - 0.5;
+    const r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q /
+        (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+
+/**
+ * Mengaproksimasi p-value untuk statistik D Kolmogorov-Smirnov dengan Koreksi Lilliefors.
+ *
+ * METODE:
+ *   Menggunakan rumus analitik Dallal & Wilkinson (1986) yang diimplementasikan
+ *   SPSS untuk koreksi Lilliefors. Rumus ini menggantikan distribusi Kolmogorov
+ *   asimtotik (yang hanya valid jika mean & varians diketahui) dengan aproksimasi
+ *   yang tepat ketika parameter diestimasi dari sampel.
+ *
+ * RUMUS (Dallal & Wilkinson, 1986):
+ *   p = exp(−7.01256 × D² × (n + 2.78019)
+ *            + 2.99587 × D × √(n + 2.78019)
+ *            − 0.122119
+ *            + 0.974598 / √n
+ *            + 1.67997 / n)
+ *
+ * BATAS P-VALUE:
+ *   SPSS melaporkan nilai-p maksimum 0,200 untuk Lilliefors karena rumus
+ *   menjadi kurang akurat pada nilai D yang sangat kecil (data sangat normal).
+ *   Jika p > 0.200, nilai dilaporkan sebagai ".200*" (lower bound).
+ *
+ * SAMPEL BESAR (n > 100):
+ *   Dallal & Wilkinson (1986) menyarankan D diganti D × (n/100)^0,49 dan
+ *   n diganti 100 sebelum dimasukkan ke rumus, sama seperti lillie.test di R
+ *   (paket nortest).
+ *
+ * VALIDITAS:
+ *   Rumus berlaku untuk n ≥ 5. Untuk n ≤ 4, nilai-p tidak dihitung (NaN),
+ *   sama seperti lillie.test di R yang menolak sampel kurang dari 5.
+ *
+ * @param {number} d - Statistik D (selisih CDF empiris dan teoritis maksimum, d > 0)
+ * @param {number} n - Ukuran sampel (integer ≥ 1)
+ * @returns {{pValue: number, isLowerBound: boolean}} Objek dengan p-value (0−0.200)
+ *   dan flag isLowerBound yang menandakan apakah p-value dicap di 0.200
+ *
+ * @example
+ * approximateKSPValue(0.15, 30);
+ * // => { pValue: 0.08..., isLowerBound: false }
+ *
+ * @example
+ * // Sangat kecil D → capped di 0.200
+ * approximateKSPValue(0.05, 100);
+ * // => { pValue: 0.200, isLowerBound: true }
+ *
+ * @example
+ * // n sangat kecil → p-value tidak dihitung
+ * approximateKSPValue(0.3, 4);
+ * // => { pValue: NaN, isLowerBound: false }
+ *
+ * @see Dallal, G. E. & Wilkinson, L. (1986). "An analytic approximation to the
+ *   distribution of Lilliefors's test statistic for normality". The American Statistician, 40(4): 294-296.
+ */
+function approximateKSPValue(d, n) {
+    if (n <= 4) {
+        return { pValue: NaN, isLowerBound: false };
+    }
+
+    // Penyesuaian sampel besar dari Dallal & Wilkinson (1986)
+    let dAdj = d;
+    let nAdj = n;
+    if (n > 100) {
+        dAdj = d * Math.pow(n / 100, 0.49);
+        nAdj = 100;
+    }
+
+    let p = Math.exp(
+        -7.01256 * dAdj * dAdj * (nAdj + 2.78019) +
+        2.99587 * dAdj * Math.sqrt(nAdj + 2.78019) -
+        0.122119 +
+        0.974598 / Math.sqrt(nAdj) +
+        1.67997 / nAdj
+    );
+
+    let isLowerBound = false;
+
+    // SPSS membatasi maksimal p-value di 0.200 untuk Lilliefors
+    if (p > 0.200) {
+        p = 0.200;
+        isLowerBound = true;
+    }
+
+    return { pValue: p, isLowerBound };
+}
+
+// =============================================================================
+// UJI KOLMOGOROV-SMIRNOV (KS)
+// =============================================================================
+
+/**
+ * Menghitung Statistik Uji Kolmogorov-Smirnov 1-Sampel (dengan Koreksi Lilliefors).
+ *
+ * Membandingkan distribusi kumulatif empiris (ECDF) data dengan distribusi normal
+ * teoritis. Karena mean dan SD diestimasi dari data sendiri, koreksi Lilliefors
+ * diterapkan pada nilai-p menggunakan rumus Dallal-Wilkinson (1986).
+ *
+ * Algoritma:
+ *   1. Bersihkan data (filter NaN, null, Infinity, dll.)
+ *   2. Urutkan data ascending: x₁ ≤ x₂ ≤ ... ≤ xₙ
+ *   3. Hitung mean (x̄) dan simpangan baku (s)
+ *   4. Untuk setiap xᵢ, hitung D⁺ dan D⁻ (deviasi CDF empiris vs teoritis)
+ *   5. D = max(D⁺, D⁻) sebagai statistik uji dua sisi
+ *   6. P-value via Dallal-Wilkinson (1986), dicap maksimum 0.200
+ *
+ * @param {number[]} values - Array berisi nilai-nilai numerik (bisa mengandung invalid values)
+ * @returns {{statistic: number, df: number, pValue: number, isLowerBound: boolean}|null}
+ *   Objek hasil uji KS, atau null jika data tidak valid (n < 3 atau SD = 0)
+ *
+ * @example
+ * calculateKolmogorovSmirnov([9, 10, 11, 12, 13]);
+ * // => { statistic: 0.136..., df: 5, pValue: 0.200, isLowerBound: true }
+ *
+ * @example
+ * // Data tidak cukup
+ * calculateKolmogorovSmirnov([1, 2]);
+ * // => null
+ *
+ * @example
+ * // Data non-normal (exponential-like)
+ * calculateKolmogorovSmirnov([1, 1, 2, 3, 5, 8, 13, 21, 34, 55]);
+ * // => { statistic: 0.27..., df: 10, pValue: 0.03..., isLowerBound: false }
+ *
+ * @see Lilliefors, H. W. (1967). "On the Kolmogorov-Smirnov test for normality
+ *   with mean and variance unknown". JASA, 62(318): 399-402.
+ */
+function calculateKolmogorovSmirnov(values) {
+    // LANGKAH 1: Validasi dan bersihkan data
+    const cleaned = cleanNumericData(values);
+    const n = cleaned.length;
+    if (n < 3) {
+        console.log('[DEBUG] KS - Data tidak cukup:', n, '(minimal 3)');
+        return null;
+    }
+
+    console.log('[DEBUG] KS - Memulai perhitungan dengan n =', n);
+
+    // LANGKAH 2: Urutkan data dari kecil ke besar
+    const sorted = [...cleaned].sort((a, b) => a - b);
+
+    const m = normalityMean(sorted);
+    const sd = normalityStandardDeviation(sorted, m);
+
+    console.log('[DEBUG] KS - Mean:', m, 'SD:', sd);
+
+    if (!isFinite(sd) || sd === 0) {
+        console.log('[DEBUG] KS - SD tidak valid (0 atau Infinity), uji dibatalkan');
+        return null;
+    }
+
+    // ========================================================================
+    // LANGKAH 4 & 5: Hitung statistik D (dua sisi)
+    // ========================================================================
+    // D+ = max|Fn(xi) - F0(xi)|      -> deviasi sisi atas
+    // D- = max|F0(xi) - Fn(xi-1)|    -> deviasi sisi bawah
+    // D  = max(D+, D-)               -> statistik uji final
+
+    let dPlus = 0;
+    let dMinus = 0;
+
+    for (let i = 0; i < n; i++) {
+        const Fn = (i + 1) / n;           // CDF empiris di titik xi
+        const FnPrev = i / n;             // CDF empiris sebelum xi
+        const zScore = (sorted[i] - m) / sd;
+        const F0 = normalityCDF(zScore);   // CDF normal teoritis
+
+        const dp = Math.abs(Fn - F0);
+        const dm = Math.abs(F0 - FnPrev);
+
+        if (dp > dPlus) dPlus = dp;
+        if (dm > dMinus) dMinus = dm;
+    }
+
+    const D = Math.max(dPlus, dMinus);
+
+    console.log('[DEBUG] KS - D+:', dPlus, 'D-:', dMinus, 'D (final):', D);
+
+    // LANGKAH 6: Hitung p-value (koreksi Lilliefors via Dallal-Wilkinson 1986)
+    const { pValue, isLowerBound } = approximateKSPValue(D, n);
+
+    console.log('[DEBUG] KS - Statistik D:', D, 'df:', n, 'p-value:', pValue, isLowerBound ? '(Lower Bound)' : '');
+
+    return {
+        statistic: D,
+        df: n,
+        pValue: pValue,
+        isLowerBound: isLowerBound
+    };
+}
+
+// =============================================================================
+// UJI SHAPIRO-WILK (SW)
+// =============================================================================
+
+/**
+ * Mengaproksimasi p-value untuk statistik W Shapiro-Wilk.
+ *
+ * W tidak berdistribusi normal, sehingga transformasi logaritmik diperlukan
+ * untuk mengubahnya ke z-score normal standar. Metode berbeda digunakan
+ * berdasarkan ukuran sampel:
+ *
+ * KASUS BERDASARKAN UKURAN SAMPEL:
+ *   n = 3    : Rumus eksak berbasis arcsin (analitik)
+ *              p = (6/π) × [arcsin(√W) - arcsin(√0,75)]
+ *
+ *   4 ≤ n ≤ 11 : Royston (1993) - koefisien polinomial kubik dalam n
+ *              Transform: y₂ = -ln(γ - ln(1-W))
+ *              μ dan σ adalah fungsi kubik dari n
+ *
+ *   n > 11   : Royston (1995) - koefisien polinomial dalam ln(n)
+ *              Transform: y = ln(1-W)
+ *              μ dan σ adalah fungsi polinomial dari ln(n)
+ *
+ * @param {number} W - Statistik W Shapiro-Wilk (0 < W ≤ 1)
+ * @param {number} n - Ukuran sampel (n ≥ 3)
+ * @returns {number} Aproksimasi p-value dalam rentang [0, 1]
+ *
+ * @example
+ * // n=3 menggunakan rumus eksak
+ * shapiroWilkPValue(0.75, 3);
+ * // => ~0.0 (W rendah → strong non-normality)
+ *
+ * @example
+ * // n=30 menggunakan pendekatan sampel besar
+ * shapiroWilkPValue(0.98, 30);
+ * // => ~0.8 (W tinggi → data likely normal)
+ *
+ * @example
+ * // n=10 menggunakan pendekatan sampel kecil
+ * shapiroWilkPValue(0.95, 10);
+ * // => ~0.67 (moderate normality)
+ *
+ * @see Royston, P. (1993). "A toolkit for testing for non-normality in complete
+ *   and censored samples". The Statistician, 42: 37-43.
+ * @see Royston, P. (1995). "Remark AS R94: A remark on Algorithm AS 181".
+ *   Applied Statistics, 44(4): 547-551.
+ */
+function shapiroWilkPValue(W, n) {
+    let mu;
+    let sigma;
+
+    // ========================================================================
+    // Kasus n=3 menggunakan rumus eksak untuk distribusi W.
+    // ========================================================================
+    if (n === 3) {
+        const pValue = (6 / Math.PI) * (
+            Math.asin(Math.sqrt(W)) - Math.asin(Math.sqrt(0.75))
+        );
+        return Math.max(0, Math.min(1, pValue));
+    }
+
+    const y = Math.log(1 - W);
+
+    // ========================================================================
+    //
+    //   approximation in n to obtain μ and σ parameters.
+    //   2. Transform: y₂ = −ln(g − y)
+    //   4. Standardize: z = (y₂ − μ) / σ
+    //   5. p-value = 1 − Φ(z)
+    // ========================================================================
+    if (n <= 11) {
+        // gamma adalah batas transformasi untuk sampel kecil.
+        const gamma = -2.273 + 0.459 * n;
+        if (y >= gamma) {
+            return 1e-99;
+        }
+        const y2 = -Math.log(gamma - y);
+        mu = 0.5440 - 0.39978 * n + 0.025054 * n ** 2 - 0.0006714 * n ** 3;
+        sigma = Math.exp(1.3822 - 0.77857 * n + 0.062767 * n ** 2 - 0.0020322 * n ** 3);
+        const pValue = normalitySurvival((y2 - mu) / sigma);
+        return pValue;
+    }
+
+    // ========================================================================
+    //   AS 181". Applied Statistics, 44(4): 547-551, Table 2.
+    //
+    //   3. Standardize: z = (y − μ) / σ
+    //   4. p-value = 1 − Φ(z)
+    //
+    // ========================================================================
+    const lnN = Math.log(n);
+    mu = -1.5861 - 0.31082 * lnN - 0.083751 * lnN ** 2 + 0.0038915 * lnN ** 3;
+    sigma = Math.exp(-0.4803 - 0.082676 * lnN + 0.0030302 * lnN ** 2);
+    const pValue = normalitySurvival((y - mu) / sigma);
+    return pValue;
+}
+
+/**
+ * Menghitung Statistik Uji Shapiro-Wilk (W).
+ *
+ * Mengukur kemiripan antara data terurut dan distribusi normal teoritis
+ * menggunakan rasio kuadrat bobot linier berbasis koefisien Royston.
+ *
+ * RUMUS UTAMA:
+ *   W = (Σ aᵢ × x(ᵢ))² / S²
+ *   di mana:
+ *   - x(ᵢ)  = data terurut ke-i (ascending)
+ *   - aᵢ    = koefisien bobot Royston (antisimetrik: Σaᵢ = 0)
+ *   - S²    = Σ(xᵢ − x̄)² (total sum of squares)
+ *   - W ∈ (0, 1]: mendekati 1 → normal, mendekati 0 → tidak normal
+ *
+ * ALGORITMA (Royston AS R94):
+ *   1. Bersihkan data dan validasi ukuran sampel (3 ≤ n ≤ 5000)
+ *   2. Urutkan data ascending
+ *   3. Hitung expected normal order stats mᵢ via Blom (1958) plotting position
+ *   4. Hitung koefisien ujung a₁ dan a₂ dengan koreksi polinomial Royston
+ *   5. Hitung faktor normalisasi φ dan koefisien sisanya
+ *   6. Hitung W dari korelasi data terurut dengan koefisien Shapiro-Wilk
+ *   7. Hitung nilai-p dengan pendekatan Royston sesuai ukuran sampel
+ *
+ * NUMERICAL STABILITY:
+ *   - 1-W dihitung sebagai (s-c)(s+c)/s² untuk menjaga presisi saat W mendekati 1
+ *   - Galat floating point sangat kecil ditoleransi; nilai yang benar-benar di luar [0,1] ditolak
+ *   - S² = 0 pada data konstan akan langsung mengembalikan null
+ *   - Penanganan galat mencegah kegagalan worker yang tidak tertangani
+ *
+ * @param {number[]} values - Array berisi nilai-nilai numerik mentah (will be cleaned internally)
+ * @returns {{statistic: number, df: number, pValue: number}|null}
+ *   Objek hasil { statistic: W, df: n, pValue } atau null jika data tidak valid
+ *   (n < 3, n > 5000, semua data identik, atau error tak terduga)
+ *
+ * @example
+ * // Data normal → W mendekati 1, p-value tinggi
+ * calculateShapiroWilk([9, 10, 11, 12, 13]);
+ * // => { statistic: 0.9867..., df: 5, pValue: 0.96... }
+ *
+ * @example
+ * // Data tidak normal → W rendah, p-value rendah
+ * calculateShapiroWilk([1, 1, 1, 10, 100]);
+ * // => { statistic: 0.65..., df: 5, pValue: 0.002... }
+ *
+ * @example
+ * // Data konstan → null (S² = 0)
+ * calculateShapiroWilk([5, 5, 5, 5, 5]);
+ * // => null
+ *
+ * @example
+ * // Data dengan invalid values → dibersihkan dulu
+ * calculateShapiroWilk([1, 2, NaN, 3, null, 4, 5]);
+ * // => { statistic: 0.986..., df: 5, pValue: 0.96... }
+ *
+ * @see Shapiro, S. S. & Wilk, M. B. (1965). "An analysis of variance test for
+ *   normality (complete samples)". Biometrika, 52(3/4): 591-611.
+ * @see Royston, P. (1995). "Remark AS R94: A remark on Algorithm AS 181".
+ *   Applied Statistics, 44(4): 547-551.
+ * @see Blom, G. (1958). Statistical Estimates and Transformed Beta-Variables. Wiley.
+ */
+function calculateShapiroWilk(values) {
+    console.log('[SW] ============================================================');
+    console.log('[SW] Starting Shapiro-Wilk calculation');
+    console.log('[SW] ============================================================');
+
+    try {
+        // LANGKAH 1: Validasi dan bersihkan data
+        const cleaned = cleanNumericData(values);
+        const n = cleaned.length;
+
+        // LANGKAH 1a: Periksa batas ukuran sampel (persyaratan 3.1 dan 3.2)
+        if (n < 3) {
+            console.log(`[SW] Sample size n=${n} is below minimum. Shapiro-Wilk requires at least 3 observations.`);
+            return null;
+        }
+
+        if (n > 5000) {
+            console.log(`[SW] Sample size n=${n} exceeds maximum. Shapiro-Wilk is only valid for n ≤ 5000 (SPSS convention).`);
+            return null;
+        }
+
+        console.log(`[SW] Input: n = ${n} observations`);
+
+    // LANGKAH 2: Urutkan data dari kecil ke besar
+    const x = [...cleaned].sort((a, b) => a - b);
+
+    // ========================================================================
+    // LANGKAH 3: Hitung statistik urutan normal harapan (mᵢ) menggunakan Blom (1958)
+    // ========================================================================
+    //   Beta-Variables". John Wiley & Sons, New York.
+    //
+    // Rumus posisi plot Blom:
+    //   pᵢ = (i − 0.375) / (n + 0.25)
+    //   mᵢ = Φ⁻¹(pᵢ)
+    //
+    // Konstanta 0,375 dan 0,25 memberikan pendekatan tak bias untuk statistik
+    // urutan normal harapan. Rumus yang sama digunakan oleh SPSS dan algoritma
+    // AS R94 Royston untuk menghitung bobot Shapiro-Wilk.
+    const halfLength = Math.floor(n / 2);
+    const m = Array.from(
+        { length: halfLength },
+        (_, i) => normalityQuantile((i + 1 - 0.375) / (n + 0.25)),
+    );
+    const mSumSq = 2 * normalityCompensatedSum(halfLength, i => m[i] * m[i]);
+
+
+    // ========================================================================
+    // LANGKAH 4: Hitung koefisien bobot aᵢ (Royston AS R94)
+    // ========================================================================
+    //   AS 181". Applied Statistics, 44(4): 547-551.
+    //
+    // Koefisien aᵢ bersifat antisimetris: aᵢ = −a_{n+1−i}, sehingga Σaᵢ = 0.
+    // Hanya separuh bagian atas yang dihitung; bagian bawah dicerminkan dengan tanda berlawanan.
+    //
+    //
+    // W selalu berada dalam rentang [0, 1].
+    //
+    //
+    //
+    //      invariant to location shifts. Adding a constant C to all data:
+    //      Σaᵢ(x(ᵢ) + C) = Σaᵢx(ᵢ) + C·Σaᵢ = Σaᵢx(ᵢ) + 0
+    //
+    //
+    //
+    const a = new Array(halfLength).fill(0);
+    const u = 1 / Math.sqrt(n);
+
+
+    if (n === 3) {
+        // ----------------------------------------------------------------
+        // Untuk sampel valid terkecil, bobotnya diketahui secara analitis:
+        //   a₁ = −√(1/2) ≈ −0.7071, a₂ = 0, a₃ = +√(1/2) ≈ +0.7071
+        // ----------------------------------------------------------------
+        a[0] = Math.SQRT1_2;
+    } else {
+        // ----------------------------------------------------------------
+        //   44(4): 547-551, Table 1.
+        //
+        // Koefisien ujung pertama mengikuti AS R94:
+        //   a₁ = poly(c1, u) - m₁ / √Σmᵢ², dengan u = 1/√n.
+        // ----------------------------------------------------------------
+        const c1 = [0, 0.221157, -0.147981, -2.071190, 4.434685, -2.706056];
+        // ----------------------------------------------------------------
+        // Untuk n > 5, koefisien ujung kedua adalah:
+        //   a₂ = poly(c2, u) - m₂ / √Σmᵢ².
+        // ----------------------------------------------------------------
+        const c2 = [0, 0.042981, -0.293762, -1.752461, 5.682633, -3.582633];
+        const polyVal = (coeffs, z) => normalityCompensatedSum(
+            coeffs.length,
+            i => coeffs[i] * z ** i,
+        );
+        const normalizedM = Math.sqrt(mSumSq);
+
+        a[0] = polyVal(c1, u) - m[0] / normalizedM;
+
+        let firstUnadjustedIndex = 1;
+        if (n > 5) {
+            a[1] = -m[1] / normalizedM + polyVal(c2, u);
+            firstUnadjustedIndex = 2;
+        }
+
+        // ----------------------------------------------------------------
+        //
+        // Untuk n minimal 6:
+        //   φ = (Σmᵢ² − 2mₙ² − 2mₙ₋₁²) / (1 − 2aₙ² − 2aₙ₋₁²)
+        // Untuk n = 4 atau 5:
+        //   φ = (Σmᵢ² − 2mₙ²) / (1 − 2aₙ²)
+        //
+        // ----------------------------------------------------------------
+        let phi;
+        if (n > 5) {
+            phi = (mSumSq - 2 * m[0] ** 2 - 2 * m[1] ** 2) /
+                (1 - 2 * a[0] ** 2 - 2 * a[1] ** 2);
+        } else {
+            phi = (mSumSq - 2 * m[0] ** 2) /
+                (1 - 2 * a[0] ** 2);
+        }
+
+
+        if (!(phi > 0)) {
+            throw new Error(`Faktor normalisasi koefisien Shapiro-Wilk tidak valid: ${phi}`);
+        }
+        const coefficientScale = Math.sqrt(phi);
+
+        for (let i = firstUnadjustedIndex; i < halfLength; i++) {
+            a[i] = -m[i] / coefficientScale;
+        }
+    }
+
+    // ========================================================================
+    // LANGKAH 5: Hitung statistik W = (Σ aᵢ xᵢ)² / S²
+    // ========================================================================
+    //   W = (Σ aᵢ × x₍ᵢ₎)² / Σ(xᵢ − x̄)²
+    //
+    // W mengukur korelasi linear antara data terurut x₍ᵢ₎ dan kuantil normal
+    // teoretis yang terkandung dalam koefisien aᵢ.
+    // W mendekati 1 → data konsisten dengan normalitas
+    // W mendekati 0 → penyimpangan kuat dari normalitas
+    //
+    // Catatan: S² merupakan jumlah kuadrat yang belum dinormalisasi (tidak dibagi n−1).
+    // Bentuk pembilang² / S² setara dengan kuadrat Pearson
+    // korelasi Pearson antara x dan a, sehingga secara matematis W ∈ [0, 1].
+
+    const range = x[n - 1] - x[0];
+    if (range === 0) {
+        console.warn('[SW] WARNING: rentang data = 0 (semua data identik), pengujian dibatalkan');
+        return null;
+    }
+
+    const coefficients = Array.from({ length: n }, (_, i) => {
+        const pairedIndex = n - 1 - i;
+        if (i === pairedIndex) return 0;
+        return i < pairedIndex ? -a[i] : a[pairedIndex];
+    });
+    const coefficientMean = normalityMean(coefficients);
+    const scaledMean = normalityCompensatedSum(n, i => x[i] / range) / n;
+    const coefficientSquares = normalityCompensatedSum(n, i => {
+        const difference = coefficients[i] - coefficientMean;
+        return difference * difference;
+    });
+    const dataSquares = normalityCompensatedSum(n, i => {
+        const difference = x[i] / range - scaledMean;
+        return difference * difference;
+    });
+    const crossProducts = normalityCompensatedSum(n, i => (
+        (coefficients[i] - coefficientMean) * (x[i] / range - scaledMean)
+    ));
+    const productOfSquares = coefficientSquares * dataSquares;
+
+    if (!(productOfSquares > 0)) {
+        console.warn('[SW] WARNING: variasi data atau koefisien bernilai nol, pengujian dibatalkan');
+        return null;
+    }
+
+    const correlationScale = Math.sqrt(productOfSquares);
+    let oneMinusW = ((correlationScale - crossProducts) *
+        (correlationScale + crossProducts)) / productOfSquares;
+
+    const floatingPointTolerance = 1e-12;
+    if (oneMinusW < 0 && oneMinusW >= -floatingPointTolerance) oneMinusW = 0;
+    if (oneMinusW > 1 && oneMinusW <= 1 + floatingPointTolerance) oneMinusW = 1;
+    if (oneMinusW < 0 || oneMinusW > 1 || !Number.isFinite(oneMinusW)) {
+        throw new Error(`Statistik Shapiro-Wilk tidak valid: 1-W = ${oneMinusW}`);
+    }
+    const W = 1 - oneMinusW;
+
+
+    // LANGKAH 6: Hitung nilai-p menggunakan pendekatan Royston
+    // Perhitungan nilai-p dibagi menjadi tiga kasus:
+    //   n = 3: rumus eksak (Shapiro & Wilk, 1965)
+    //   4 ≤ n ≤ 11: pendekatan polinomial kubik sampel kecil Royston (1993)
+    //   n > 11: pendekatan polinomial berbasis ln(n) untuk sampel besar Royston (1995)
+
+    const pValue = shapiroWilkPValue(W, n);
+
+        console.log(`[SW] Result: W = ${W}, p-value = ${pValue}`);
+        console.log('[SW] ============================================================');
+
+        return {
+            statistic: W,
+            df: n,
+            pValue: Math.max(Math.min(pValue, 1), 0),
+        };
+    } catch (error) {
+        console.error('[SW] ERROR: Unexpected exception during Shapiro-Wilk calculation');
+        console.error('[SW] Error details:', error.message);
+        console.error('[SW] Stack trace:', error.stack);
+        console.log('[SW] Returning null due to exception');
+        console.log('[SW] ============================================================');
+
+        // Kembalikan null agar program tidak berhenti akibat galat
+        return null;
+    }
+}
+
+// =============================================================================
+// UTILITAS HASIL UJI
+// =============================================================================
+
+/**
+ * Membentuk satu entri hasil uji normalitas yang konsisten.
+ *
+ * Menghasilkan objek terstruktur yang mudah dirender di UI (tabel output).
+ * Field `conclusion` dibuat eksplisit agar formatter bisa langsung memakainya.
+ *
+ * Conclusion values:
+ * - 'reject-normality'       : p < α → Tolak H₀, data TIDAK normal
+ * - 'fail-to-reject-normality': p ≥ α → Gagal tolak H₀, data dianggap normal
+ * - 'not-computed'           : Uji tidak dapat dihitung
+ *
+ * @param {Object} params - Parameter entri
+ * @param {string} params.key - Kunci unik uji ('kolmogorovSmirnov' atau 'shapiroWilk')
+ * @param {string} params.label - Label tampilan ('Kolmogorov-Smirnov' atau 'Shapiro-Wilk')
+ * @param {boolean} params.available - Apakah uji berhasil dihitung
+ * @param {{statistic: number, df: number, pValue: number}|null} params.result - Hasil uji
+ * @param {number} params.alpha - Level signifikansi (default 0.05)
+ * @param {string} [params.unavailableReason] - Alasan jika uji tidak tersedia
+ * @returns {Object} Entri hasil uji yang terstruktur dengan fields:
+ *   key, label, available, statistic, df, pValue, isLowerBound, alpha,
+ *   isSignificant, conclusion, unavailableReason
+ *
+ * @example
+ * createNormalityTestEntry({
+ *   key: 'shapiroWilk',
+ *   label: 'Shapiro-Wilk',
+ *   available: true,
+ *   result: { statistic: 0.98, df: 30, pValue: 0.85 },
+ *   alpha: 0.05,
+ * });
+ * // => { key: 'shapiroWilk', label: 'Shapiro-Wilk', available: true,
+ * //      statistic: 0.98, df: 30, pValue: 0.85, isLowerBound: false,
+ * //      alpha: 0.05, isSignificant: false, conclusion: 'fail-to-reject-normality' }
+ */
+function createNormalityTestEntry({
+    key,
+    label,
+    available,
+    result,
+    alpha,
+    unavailableReason,
+}) {
+    const isValidResult = !!result && Number.isFinite(result.statistic) && Number.isFinite(result.pValue);
+    const isSignificant = isValidResult ? result.pValue < alpha : null;
+
+    return {
+        key,
+        label,
+        available,
+        statistic: isValidResult ? result.statistic : null,
+        df: isValidResult ? result.df : null,
+        pValue: isValidResult ? result.pValue : null,
+        isLowerBound: isValidResult ? (result.isLowerBound || false) : false,
+        alpha,
+        isSignificant,
+        conclusion: isValidResult
+            ? (isSignificant ? 'reject-normality' : 'fail-to-reject-normality')
+            : 'not-computed',
+        unavailableReason: available ? undefined : unavailableReason,
+    };
+}
+
+// =============================================================================
+// RUNNER UTAMA (ORCHESTRATOR)
+// =============================================================================
+
+/**
+ * Runner utama uji normalitas (orchestrator).
+ *
+ * Menjalankan kedua uji normalitas (Kolmogorov-Smirnov dan Shapiro-Wilk) dan
+ * menghasilkan hasil terstruktur yang siap diformat ke tabel UI.
+ * Konsep mirip dengan Bartlett runner di bartlettTestWorker.js.
+ *
+ * Alur Eksekusi:
+ *   1. Validasi input dan ukuran sampel
+ *   2. Jalankan Kolmogorov-Smirnov (selalu, jika n ≥ 3)
+ *   3. Jalankan Shapiro-Wilk (hanya jika n ≤ 5000)
+ *   4. Cetak log terperinci ke konsol dalam format tabel ASCII
+ *   5. Kembalikan hasil terstruktur + backward compatibility keys
+ *
+ * @param {number[]} values - Array data numerik yang akan diuji
+ * @param {Object} [options] - Opsi analisis
+ * @param {number} [options.alpha=0.05] - Level signifikansi (harus dalam (0, 1))
+ * @returns {Object} Hasil lengkap uji normalitas dengan struktur:
+ *   - success {boolean}: Apakah minimal satu uji berhasil
+ *   - sampleSize {number}: Jumlah observasi
+ *   - alpha {number}: Level signifikansi yang digunakan
+ *   - tests {Array}: Array entri hasil per uji (KS dan SW)
+ *   - notes {string[]|undefined}: Catatan/warning jika ada
+ *   - kolmogorovSmirnov {Object|null}: Backward compat - raw KS result
+ *   - shapiroWilk {Object|null}: Backward compat - raw SW result
+ *
+ * @example
+ * // Data normal
+ * const result = runNormalityTests([9, 10, 11, 12, 13, 10, 11, 12, 10, 11]);
+ * console.log(result.success);        // true
+ * console.log(result.tests[1].label); // 'Shapiro-Wilk'
+ * console.log(result.tests[1].conclusion); // 'fail-to-reject-normality'
+ *
+ * @example
+ * // Data terlalu besar untuk SW
+ * const bigData = Array.from({length: 6000}, (_, i) => i);
+ * const result = runNormalityTests(bigData);
+ * console.log(result.tests[1].available); // false
+ * console.log(result.tests[1].unavailableReason);
+ * // 'Shapiro-Wilk hanya dilaporkan untuk ukuran sampel hingga 5000.'
+ *
+ * @example
+ * // Custom alpha
+ * runNormalityTests([1, 2, 3, 4, 5], { alpha: 0.01 });
+ */
+function runNormalityTests(values, options = {}) {
+    const alpha = Number.isFinite(options.alpha) && options.alpha > 0 && options.alpha < 1
+        ? options.alpha
+        : 0.05;
+
+    const sampleSize = Array.isArray(values) ? values.length : 0;
+
+    console.log('[DEBUG] Normality Runner - Memulai uji normalitas, n =', sampleSize, 'alpha =', alpha);
+
+    // Klausa penjaga: jumlah data minimum untuk pengujian normalitas.
+    if (!Array.isArray(values) || sampleSize < 3) {
+        const reason = 'Normality tests require at least 3 valid observations.';
+        console.log('[DEBUG] Normality Runner - Data tidak cukup:', sampleSize);
+        return {
+            success: false,
+            sampleSize,
+            alpha,
+            notes: [reason],
+            tests: [
+                createNormalityTestEntry({
+                    key: 'kolmogorovSmirnov',
+                    label: 'Kolmogorov-Smirnov',
+                    available: false,
+                    result: null,
+                    alpha,
+                    unavailableReason: reason,
+                }),
+                createNormalityTestEntry({
+                    key: 'shapiroWilk',
+                    label: 'Shapiro-Wilk',
+                    available: false,
+                    result: null,
+                    alpha,
+                    unavailableReason: reason,
+                }),
+            ],
+            kolmogorovSmirnov: null,
+            shapiroWilk: null,
+        };
+    }
+
+    const notes = [];
+    const startTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
+    // Jalankan Kolmogorov-Smirnov (hampiran Dallal-Wilkinson hanya berlaku untuk n ≥ 5)
+    const ksSampleSize = cleanNumericData(values).length;
+    const ksAvailable = ksSampleSize >= 5;
+    let ksUnavailableReason;
+    let ks = null;
+
+    if (ksAvailable) {
+        ks = calculateKolmogorovSmirnov(values);
+    } else {
+        ksUnavailableReason = 'Kolmogorov-Smirnov is only reported for sample sizes of at least 5.';
+        notes.push(ksUnavailableReason);
+    }
+
+    // Jalankan Shapiro-Wilk (dibatasi sampai 5000 observasi)
+    let sw = null;
+    let swAvailable = true;
+    let swUnavailableReason;
+
+    if (sampleSize <= 5000) {
+        sw = calculateShapiroWilk(values);
+    } else {
+        swAvailable = false;
+        swUnavailableReason = 'Shapiro-Wilk is only reported for sample sizes up to 5000.';
+        notes.push(swUnavailableReason);
+    }
+
+    const endTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
+    // Susun entri hasil per uji
+    const tests = [
+        createNormalityTestEntry({
+            key: 'kolmogorovSmirnov',
+            label: 'Kolmogorov-Smirnov',
+            available: ksAvailable && !!ks,
+            result: ks,
+            alpha,
+            unavailableReason: ksAvailable
+                ? (ks ? undefined : 'Kolmogorov-Smirnov could not be computed for this data.')
+                : ksUnavailableReason,
+        }),
+        createNormalityTestEntry({
+            key: 'shapiroWilk',
+            label: 'Shapiro-Wilk',
+            available: swAvailable && !!sw,
+            result: sw,
+            alpha,
+            unavailableReason: swAvailable
+                ? (sw ? undefined : 'Shapiro-Wilk could not be computed for this data.')
+                : swUnavailableReason,
+        }),
+    ];
+
+    const hasAnyResult = tests.some((test) => test.available && test.pValue !== null);
+
+    // Cetak log detail ke console (seperti Bartlett printDetailedLog)
+    printNormalityLog(sampleSize, alpha, ks, sw, endTime - startTime);
+
+    return {
+        success: hasAnyResult,
+        sampleSize,
+        alpha,
+        tests,
+        notes: notes.length ? notes : undefined,
+        // Backward compatibility: formatter lama masih membaca dua properti ini.
+        kolmogorovSmirnov: ks,
+        shapiroWilk: sw,
+    };
+}
+
+// =============================================================================
+// LOGGING UTILITIES - Laporan Detail ke Console
+// =============================================================================
+
+/**
+ * Format angka dengan presisi tertentu untuk tampilan log.
+ *
+ * @param {number} num - Angka yang akan diformat
+ * @param {number} [decimals=6] - Jumlah desimal yang diinginkan
+ * @returns {string} Angka yang sudah diformat, atau 'N/A' jika input bukan angka valid
+ *
+ * @example
+ * formatNormalityNumber(0.98654321, 8);
+ * // => '0.98654321'
+ *
+ * @example
+ * formatNormalityNumber(NaN);
+ * // => 'N/A'
+ */
+function formatNormalityNumber(num) {
+    if (typeof num !== 'number' || isNaN(num)) return 'N/A';
+    return String(num);
+}
+
+/**
+ * Cetak laporan terperinci uji normalitas ke konsol dalam format tabel ASCII.
+ *
+ * Mengikuti pola printDetailedLog() pada Bartlett Test Worker.
+ * Mencetak tabel ASCII yang rapi berisi:
+ * - Informasi data (ukuran sampel, alpha, timestamp)
+ * - Hasil Kolmogorov-Smirnov (Statistik D, df, p-value)
+ * - Hasil Shapiro-Wilk (Statistik W, df, p-value)
+ * - Kesimpulan per uji (normal / tidak normal)
+ * - Waktu eksekusi dan rating performa
+ * - Rekomendasi analisis lanjutan
+ *
+ * @param {number} sampleSize - Ukuran sampel (n)
+ * @param {number} alpha - Level signifikansi (α)
+ * @param {{statistic: number, df: number, pValue: number}|null} ksResult - Hasil uji KS
+ * @param {{statistic: number, df: number, pValue: number}|null} swResult - Hasil uji SW
+ * @param {number} executionTime - Waktu eksekusi dalam milidetik
+ *
+ * @example
+ * printNormalityLog(30, 0.05, { statistic: 0.12, df: 30, pValue: 0.200 },
+ *   { statistic: 0.98, df: 30, pValue: 0.85 }, 5.2);
+ * // Prints formatted ASCII table to console
+ */
+function printNormalityLog(sampleSize, alpha, ksResult, swResult, executionTime) {
+    console.log('\n');
+    console.log('================================================================');
+    console.log('       NORMALITY TESTS - DETAILED ANALYSIS LOG');
+    console.log('================================================================');
+    console.log(`  Sample Size (N): ${sampleSize}`);
+    console.log(`  Significance Level (α): ${alpha}`);
+    console.log(`  Timestamp: ${new Date().toISOString()}`);
+    console.log('================================================================');
+
+    // ========== HASIL KOLMOGOROV-SMIRNOV ==========
+    console.log('\n[KOLMOGOROV-SMIRNOV TEST]');
+    if (ksResult) {
+        console.log('  +---------------------------+------------------+');
+        console.log(`  | Statistik D               | ${formatNormalityNumber(ksResult.statistic, 8).padStart(16)} |`);
+        console.log(`  | Degrees of Freedom (df)   | ${String(ksResult.df).padStart(16)} |`);
+        console.log(`  | P-Value (Sig.)            | ${formatNormalityNumber(ksResult.pValue, 8).padStart(16)} |`);
+        console.log('  +---------------------------+------------------+');
+
+        if (ksResult.pValue >= alpha) {
+            console.log(`  Kesimpulan: NORMAL (p = ${formatNormalityNumber(ksResult.pValue, 4)} >= ${alpha})`);
+            console.log('  Interpretasi: Gagal tolak H₀ → Data dianggap berdistribusi normal');
+        } else {
+            console.log(`  Kesimpulan: TIDAK NORMAL (p = ${formatNormalityNumber(ksResult.pValue, 4)} < ${alpha})`);
+            console.log('  Interpretasi: Tolak H₀ → Data TIDAK berdistribusi normal');
+        }
+        console.log('  Catatan: Menggunakan koreksi Lilliefors (parameter diestimasi dari data)');
+    } else {
+        console.log('  Status: TIDAK TERSEDIA');
+        console.log('  Alasan: Data tidak memenuhi syarat (minimal 3 observasi, SD > 0)');
+    }
+
+    // ========== HASIL SHAPIRO-WILK ==========
+    console.log('\n[SHAPIRO-WILK TEST]');
+    if (swResult) {
+        console.log('  +---------------------------+------------------+');
+        console.log(`  | Statistik W               | ${formatNormalityNumber(swResult.statistic, 8).padStart(16)} |`);
+        console.log(`  | Degrees of Freedom (df)   | ${String(swResult.df).padStart(16)} |`);
+        console.log(`  | P-Value (Sig.)            | ${formatNormalityNumber(swResult.pValue, 8).padStart(16)} |`);
+        console.log('  +---------------------------+------------------+');
+
+        if (swResult.pValue >= alpha) {
+            console.log(`  Kesimpulan: NORMAL (p = ${formatNormalityNumber(swResult.pValue, 4)} >= ${alpha})`);
+            console.log('  Interpretasi: Gagal tolak H₀ → Data dianggap berdistribusi normal');
+        } else {
+            console.log(`  Kesimpulan: TIDAK NORMAL (p = ${formatNormalityNumber(swResult.pValue, 4)} < ${alpha})`);
+            console.log('  Interpretasi: Tolak H₀ → Data TIDAK berdistribusi normal');
+        }
+        console.log('  Catatan: Aproksimasi p-value Royston (1993, 1995)');
+    } else {
+        console.log('  Status: TIDAK TERSEDIA');
+        if (sampleSize > 5000) {
+            console.log('  Alasan: Shapiro-Wilk hanya tersedia untuk n ≤ 5000');
+        } else {
+            console.log('  Alasan: Data tidak memenuhi syarat (minimal 3 observasi)');
+        }
+    }
+
+    // ========== WAKTU EKSEKUSI ==========
+    console.log('\n[WAKTU EKSEKUSI]');
+    console.log(`  Total Time: ${formatNormalityNumber(executionTime, 3)} ms`);
+
+    if (executionTime < 10) {
+        console.log('  Performance: EXCELLENT (< 10 ms)');
+    } else if (executionTime < 50) {
+        console.log('  Performance: GOOD (< 50 ms)');
+    } else if (executionTime < 100) {
+        console.log('  Performance: ACCEPTABLE (< 100 ms)');
+    } else {
+        console.log('  Performance: SLOW (>= 100 ms) - Consider data size or system load');
+    }
+
+    // ========== REKOMENDASI ==========
+    console.log('\n[REKOMENDASI]');
+    const ksNormal = ksResult && ksResult.pValue >= alpha;
+    const swNormal = swResult && swResult.pValue >= alpha;
+
+    if (ksNormal && swNormal) {
+        console.log('  ✅ Kedua uji menunjukkan data NORMAL');
+        console.log('  → Asumsi normalitas TERPENUHI, aman melanjutkan ke ANOVA / T-Test / Bartlett');
+    } else if (!ksNormal && !swNormal && ksResult && swResult) {
+        console.log('  ❌ Kedua uji menunjukkan data TIDAK NORMAL');
+        console.log('  → Pertimbangkan: uji non-parametrik, transformasi data, atau Levene Test (pengganti Bartlett)');
+    } else if (ksResult || swResult) {
+        console.log('  ⚠️ Hasil uji tidak konsisten (satu normal, satu tidak)');
+        console.log('  → Periksa ukuran sampel dan distribusi data secara visual (histogram/Q-Q plot)');
+    }
+
+    console.log('\n================================================================');
+    console.log('       END OF NORMALITY TESTS LOG');
+    console.log('================================================================\n');
+}
+
+// =============================================================================
+// EXPOSE FUNGSI KE BERBAGAI ENVIRONMENT
+// =============================================================================
+
+// Sediakan fungsi pada cakupan global worker (lingkungan Web Worker)
+if (typeof self !== 'undefined') {
+    self.calculateKolmogorovSmirnov = calculateKolmogorovSmirnov;
+    self.calculateShapiroWilk = calculateShapiroWilk;
+    self.approximateKSPValue = approximateKSPValue;
+    self.shapiroWilkPValue = shapiroWilkPValue;
+    self.runNormalityTests = runNormalityTests;
+    self.printNormalityLog = printNormalityLog;
+    self.normalityMean = normalityMean;
+}
+
+// Expose ke globalThis untuk environment hybrid/test harness
+if (typeof globalThis !== 'undefined') {
+    globalThis.calculateKolmogorovSmirnov = calculateKolmogorovSmirnov;
+    globalThis.calculateShapiroWilk = calculateShapiroWilk;
+    globalThis.approximateKSPValue = approximateKSPValue;
+    globalThis.shapiroWilkPValue = shapiroWilkPValue;
+    globalThis.runNormalityTests = runNormalityTests;
+    globalThis.printNormalityLog = printNormalityLog;
+    globalThis.normalityMean = normalityMean;
+}
+
+// Expose ke CommonJS untuk unit testing dengan require()
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = {
+        calculateKolmogorovSmirnov,
+        calculateShapiroWilk,
+        approximateKSPValue,
+        shapiroWilkPValue,
+        runNormalityTests,
+        printNormalityLog,
+        normalityMean,
+    };
+}

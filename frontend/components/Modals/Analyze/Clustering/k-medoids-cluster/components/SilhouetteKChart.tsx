@@ -1,22 +1,8 @@
-/**
- * Silhouette Score vs Jumlah Klaster K
- *
- * Line chart that helps select the optimal number of clusters by plotting the
- * average silhouette score for each tested K value.
- *
- * Zones (background bands):
- *   ≥ 0.70  → green   "Sangat Baik"
- *   0.50–0.70 → blue  "Baik"
- *   0.30–0.50 → amber "Cukup"
- *   < 0.30  → red     "Lemah"
- */
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface SilhouetteKPoint {
     k: number;
@@ -25,19 +11,16 @@ export interface SilhouetteKPoint {
 
 export interface SilhouetteKChartProps {
     data: SilhouetteKPoint[];
-    /** K currently used in this analysis run (shown as a dashed vertical line). */
     currentK?: number;
     width?: number;
     height?: number;
 }
 
-// ─── Interpretation zones ─────────────────────────────────────────────────────
-
 const ZONES = [
-    { lo: 0.70, hi: 1.00, color: "#16a34a", label: "Sangat Baik (≥ 0.70)" },
-    { lo: 0.50, hi: 0.70, color: "#2563eb", label: "Baik (0.50 – 0.70)" },
-    { lo: 0.30, hi: 0.50, color: "#d97706", label: "Cukup (0.30 – 0.50)" },
-    { lo: -1.0, hi: 0.30, color: "#dc2626", label: "Lemah (< 0.30)" },
+    { lo: 0.70, hi: 1.00, color: "#16a34a", label: "Very Strong (≥ 0.70)" },
+    { lo: 0.50, hi: 0.70, color: "#2563eb", label: "Strong (0.50 – 0.70)" },
+    { lo: 0.30, hi: 0.50, color: "#d97706", label: "Moderate (0.30 – 0.50)" },
+    { lo: -1.0, hi: 0.30, color: "#dc2626", label: "Weak (< 0.30)" },
 ] as const;
 
 type AxisStyleSelection = d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -49,7 +32,6 @@ function zoneColor(score: number): string {
     return "#dc2626";
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
     data,
@@ -81,14 +63,12 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             sorted[0]
         );
 
-        // ── Layout ────────────────────────────────────────────────────────
         const margin = { top: 52, right: 32, bottom: 58, left: 62 };
         const chartW = svgWidth;
         const chartH = height;
         const innerW = chartW - margin.left - margin.right;
         const innerH = chartH - margin.top - margin.bottom;
 
-        // ── Scales ────────────────────────────────────────────────────────
         const kValues = sorted.map((d) => d.k);
         const allScores = sorted.map((d) => d.silhouetteScore);
         const yMin = Math.min(0, ...allScores) - 0.05;
@@ -106,7 +86,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .nice()
             .range([innerH, 0]);
 
-        // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
         svg.attr("width", chartW)
@@ -118,7 +97,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Clip path
         const clipId = "sil-k-clip";
         svg.append("defs")
             .append("clipPath")
@@ -127,7 +105,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("width", innerW)
             .attr("height", innerH);
 
-        // ── Background quality bands ──────────────────────────────────────
         ZONES.forEach(({ lo, hi, color }) => {
             const y0 = yScale(Math.min(hi, yMax));
             const y1 = yScale(Math.max(lo, yMin));
@@ -141,7 +118,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                 .attr("fill-opacity", 0.06);
         });
 
-        // Zone boundary lines
         [0.3, 0.5, 0.7].forEach((threshold) => {
             if (threshold < yMin || threshold > yMax) return;
             g.append("line")
@@ -163,7 +139,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                 .text(threshold.toFixed(1));
         });
 
-        // ── Grid lines (Y-axis) ───────────────────────────────────────────
         g.append("g")
             .call(
                 d3
@@ -180,7 +155,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                     .attr("stroke-dasharray", "3,3");
             });
 
-        // ── Axes ──────────────────────────────────────────────────────────
         const axisStyle = (sel: AxisStyleSelection) => {
             sel.select(".domain").attr("stroke", "hsl(var(--border))");
             sel.selectAll("text")
@@ -192,7 +166,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             );
         };
 
-        // X axis — integer ticks for K
         g.append("g")
             .attr("transform", `translate(0,${innerH})`)
             .call(
@@ -203,7 +176,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             )
             .call(axisStyle);
 
-        // Y axis
         g.append("g")
             .call(
                 d3
@@ -213,14 +185,13 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             )
             .call(axisStyle);
 
-        // Axis labels
         g.append("text")
             .attr("text-anchor", "middle")
             .attr("x", innerW / 2)
             .attr("y", innerH + 46)
             .attr("font-size", "12px")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Jumlah Klaster (K)");
+            .text("Number of Clusters (K)");
 
         g.append("text")
             .attr("text-anchor", "middle")
@@ -232,7 +203,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("fill", "hsl(var(--foreground))")
             .text("Silhouette Score");
 
-        // ── Current-K reference line ──────────────────────────────────────
         if (currentK !== null && currentK !== undefined) {
             const cx = xScale(currentK);
             if (cx !== undefined) {
@@ -251,11 +221,10 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                     .attr("y", 10)
                     .attr("font-size", "9px")
                     .attr("fill", "hsl(var(--muted-foreground))")
-                    .text(`K aktif = ${currentK}`);
+                    .text(`Current K = ${currentK}`);
             }
         }
 
-        // ── Area fill under line ──────────────────────────────────────────
         const area = d3
             .area<SilhouetteKPoint>()
             .x((d) => xScale(d.k) ?? 0)
@@ -270,7 +239,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("fill", "hsl(var(--primary))")
             .attr("fill-opacity", 0.07);
 
-        // ── Line ──────────────────────────────────────────────────────────
         const line = d3
             .line<SilhouetteKPoint>()
             .x((d) => xScale(d.k) ?? 0)
@@ -287,7 +255,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round");
 
-        // ── Tooltip helpers ───────────────────────────────────────────────
         const tooltipNode = tooltipRef.current;
         const containerNode = containerRef.current;
         if (!tooltipNode || !containerNode) return;
@@ -301,7 +268,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
         };
         const hideTip = () => ttip.style("opacity", "0");
 
-        // ── Data points ───────────────────────────────────────────────────
         g.selectAll("circle.pt")
             .data(sorted)
             .join("circle")
@@ -321,17 +287,17 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
                 d3.select(this).attr("r", 8).attr("stroke-width", 3);
                 const qual =
                     d.silhouetteScore >= 0.7
-                        ? "Sangat Baik"
+                        ? "Very Strong"
                         : d.silhouetteScore >= 0.5
-                        ? "Baik"
+                        ? "Strong"
                         : d.silhouetteScore >= 0.3
-                        ? "Cukup"
-                        : "Lemah";
+                        ? "Moderate"
+                        : "Weak";
                 showTip(
                     event,
                     `<strong>K = ${d.k}</strong><br/>` +
                         `Silhouette: <strong>${d.silhouetteScore.toFixed(4)}</strong><br/>` +
-                        `Kualitas: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>${ 
+                        `Quality: <span style="color:${zoneColor(d.silhouetteScore)}">${qual}</span>${ 
                         d.k === optimalPoint.k
                             ? `<br/><strong style="color:${zoneColor(d.silhouetteScore)}">★ K Optimal</strong>`
                             : ""}`
@@ -370,7 +336,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("pointer-events", "none")
             .text((d) => d.silhouetteScore.toFixed(3));
 
-        // Optimal K annotation
         const ox = xScale(optimalPoint.k) ?? 0;
         const oy = yScale(optimalPoint.silhouetteScore);
         g.append("text")
@@ -382,7 +347,6 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("fill", zoneColor(optimalPoint.silhouetteScore))
             .text(`★ K = ${optimalPoint.k} (Optimal)`);
 
-        // ── Title ─────────────────────────────────────────────────────────
         svg.append("text")
             .attr("x", margin.left + innerW / 2)
             .attr("y", 20)
@@ -390,7 +354,7 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("font-size", "14px")
             .attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Silhouette Score vs Jumlah Klaster K");
+            .text("Silhouette Score vs Number of Clusters K");
 
         svg.append("text")
             .attr("x", margin.left + innerW / 2)
@@ -398,15 +362,15 @@ export const SilhouetteKChart: React.FC<SilhouetteKChartProps> = ({
             .attr("text-anchor", "middle")
             .attr("font-size", "10px")
             .attr("fill", "hsl(var(--muted-foreground))")
-            .text("Nilai silhouette lebih tinggi menunjukkan struktur klaster yang lebih baik");
+            .text("Higher silhouette values indicate a better cluster structure");
     }, [data, currentK, svgWidth, height]);
 
     if (data.length === 0) {
         return (
             <div className="flex items-center justify-center h-[200px] text-sm text-muted-foreground">
-                Data silhouette per K tidak tersedia.
+                Silhouette data per K is not available.
                 <br />
-                Jalankan analisis dengan pemilihan K otomatis untuk melihat grafik ini.
+                Run the analysis with automatic K selection to see this chart.
             </div>
         );
     }

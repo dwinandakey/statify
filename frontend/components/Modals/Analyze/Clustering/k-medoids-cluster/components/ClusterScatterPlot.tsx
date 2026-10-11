@@ -1,27 +1,12 @@
-/**
- * K-Medoids Cluster Scatter Plot
- *
- * Displays all data points colored by cluster label with medoids marked by
- * a star symbol. Works for any number of clusters — colors are generated
- * automatically via an HSL palette.
- *
- * Input shape:
- *   points  – [{ x, y, cluster }]   regular observations
- *   medoids – [{ x, y, cluster }]   one representative per cluster
- */
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-// ─── Public types ────────────────────────────────────────────────────────────
-
 export interface ScatterPoint {
     x: number;
     y: number;
     cluster: number;
-    /** Optional case ID shown in the tooltip */
     label?: string;
 }
 
@@ -42,18 +27,11 @@ export interface ClusterScatterPlotProps {
     height?: number;
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-/** Generate a visually-distinct HSL color for cluster index `idx` out of `total`. */
 function clusterColor(idx: number, total: number): string {
     const hue = (idx * 360) / Math.max(total, 1);
     return `hsl(${hue}, 65%, 50%)`;
 }
 
-/**
- * Build an SVG path string for a star with `n` points, outer radius `R`
- * and inner radius `r`, centred on (0,0).
- */
 function starPath(n = 5, R = 10, r = 4.5): string {
     const step = Math.PI / n;
     const pts: [number, number][] = [];
@@ -66,8 +44,6 @@ function starPath(n = 5, R = 10, r = 4.5): string {
 }
 
 const STAR = starPath(5, 11, 5);
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
     points,
@@ -120,7 +96,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             clusterIds.map((id, i) => [id, clusterColor(i, numClusters)])
         );
 
-        // ── Layout ──────────────────────────────────────────────────────────
         const legendWidth = Math.max(90, numClusters * 5);
         const margin = {
             top: subtitle ? 54 : 38,
@@ -133,7 +108,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
         const innerW = chartW - margin.left - margin.right;
         const innerH = chartH - margin.top - margin.bottom;
 
-        // ── Scales ───────────────────────────────────────────────────────────
         const xMax = d3.max(allX) ?? 0;
         const xMin = d3.min(allX) ?? 0;
         const yMax = d3.max(allY) ?? 0;
@@ -153,20 +127,17 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             .nice()
             .range([innerH, 0]);
 
-        // ── SVG root ─────────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
         svg.attr("width", chartW).attr("height", chartH).attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
-        // Clip path so points don't overflow the plot area
         const clipId = "kmedoids-scatter-clip";
         svg.append("defs").append("clipPath").attr("id", clipId)
             .append("rect").attr("width", innerW).attr("height", innerH);
 
         const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ── Grid ─────────────────────────────────────────────────────────────
         g.append("g")
             .attr("class", "grid-x")
             .attr("transform", `translate(0,${innerH})`)
@@ -194,7 +165,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                     .attr("stroke-dasharray", "3,3");
             });
 
-        // ── Axes ─────────────────────────────────────────────────────────────
         const fmtTick = (v: d3.NumberValue) => {
             const n = +v;
             if (Math.abs(n) >= 1e4) return d3.format(".2e")(n);
@@ -223,7 +193,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 sel.selectAll("line").attr("stroke", "hsl(var(--border))");
             });
 
-        // Axis labels
         g.append("text")
             .attr("text-anchor", "middle")
             .attr("x", innerW / 2)
@@ -239,7 +208,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             .attr("fill", "hsl(var(--foreground))")
             .text(yLabel);
 
-        // ── Data points (clipped) ─────────────────────────────────────────────
         const plotG = g.append("g").attr("clip-path", `url(#${clipId})`);
 
         const tooltipNode = tooltipRef.current;
@@ -267,7 +235,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
 
         const hideTooltip = () => tooltip.style("opacity", "0");
 
-        // Regular points
         plotG
             .selectAll<SVGCircleElement, ScatterPoint>("circle.pt")
             .data(validPoints)
@@ -301,7 +268,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 hideTooltip();
             });
 
-        // Medoid stars (drawn on top)
         plotG
             .selectAll<SVGPathElement, MedoidPoint>("path.medoid")
             .data(validMedoids)
@@ -337,7 +303,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 hideTooltip();
             });
 
-        // ── Legend ────────────────────────────────────────────────────────────
         const lx = chartW - margin.right + 16;
         const legendG = svg.append("g").attr("transform", `translate(${lx},${margin.top + 4})`);
 
@@ -345,9 +310,8 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             .attr("x", 0).attr("y", 0)
             .attr("font-size", "11px").attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Klaster");
+            .text("Cluster");
 
-        // Cluster entries
         clusterIds.forEach((id, i) => {
             const gy = 20 + i * 22;
             const color = colorMap.get(id) ?? "#888";
@@ -365,7 +329,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
                 .text(`Cluster ${id}`);
         });
 
-        // Medoid entry
         const medoidLegendY = 20 + clusterIds.length * 22 + 12;
         legendG.append("line")
             .attr("x1", 0).attr("y1", medoidLegendY - 8)
@@ -386,7 +349,6 @@ export const ClusterScatterPlot: React.FC<ClusterScatterPlotProps> = ({
             .attr("fill", "hsl(var(--foreground))")
             .text("Medoid");
 
-        // ── Title ─────────────────────────────────────────────────────────────
         svg.append("text")
             .attr("x", margin.left + innerW / 2)
             .attr("y", 20)

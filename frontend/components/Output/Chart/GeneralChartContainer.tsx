@@ -780,8 +780,12 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
   };
 
   useEffect(() => {
-    if (parsedData?.charts && Array.isArray(parsedData.charts)) {
-      const nodes = parsedData.charts.map(
+    const rawCharts = parsedData?.charts && Array.isArray(parsedData.charts)
+      ? parsedData.charts
+      : (parsedData && parsedData.chartType ? [parsedData] : []);
+
+    if (rawCharts.length > 0) {
+      const nodes = rawCharts.map(
         (chartData: ChartData, index: number) => {
           const {
             chartType,
@@ -870,7 +874,7 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
               // intact (chartData is the array of value rows).
               const matrixDimensions =
                 (chartConfig as any)?.matrixDimensions ?? [];
-              chartNode = chartUtils.createScatterPlotMatrix(
+              chartNode = chartUtils.createResidualScatterPlotMatrix(
                 chartDataPoints,
                 matrixDimensions,
                 width,
@@ -1186,22 +1190,6 @@ const GeneralChartContainer: React.FC<GeneralChartContainerProps> = ({
                 useAxis,
                 {
                   title: chartMetadata?.title || "Clustered Error Bar Chart",
-                  subtitle: chartMetadata?.subtitle,
-                  titleFontSize: chartMetadata?.titleFontSize || 16,
-                  subtitleFontSize: chartMetadata?.subtitleFontSize || 12,
-                },
-                chartConfig?.axisLabels,
-                chartConfig?.chartColor
-              );
-              break;
-            case "Scatter Plot Matrix":
-              chartNode = chartUtils.createScatterPlotMatrix(
-                chartDataPoints,
-                width,
-                height,
-                useAxis,
-                {
-                  title: chartMetadata?.title || "Scatter Plot Matrix",
                   subtitle: chartMetadata?.subtitle,
                   titleFontSize: chartMetadata?.titleFontSize || 16,
                   subtitleFontSize: chartMetadata?.subtitleFontSize || 12,

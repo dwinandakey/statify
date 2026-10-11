@@ -71,10 +71,18 @@ const HamburgerMenu: React.FC = () => {
   const { handleAction: handleEditAction } = useEditMenuActions();
 
   return (
-    <div className="flex items-center justify-between px-3 py-1.5 border-b border-border bg-background" data-testid="mobile-header">
+    <div
+      className="flex items-center justify-between px-3 py-1.5 border-b border-border bg-background"
+      data-testid="mobile-header"
+    >
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="sm" className="px-1.5 hover:bg-accent" data-testid="hamburger-menu-trigger">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="px-1.5 hover:bg-accent"
+            data-testid="hamburger-menu-trigger"
+          >
             <MenuIcon className="h-5 w-5 text-foreground" />
             <span className="sr-only">Open Menu</span>
           </Button>
@@ -93,9 +101,17 @@ const HamburgerMenu: React.FC = () => {
             </SheetDescription>
           </SheetHeader>
           <div className="py-1 overflow-y-auto">
-            <Accordion type="multiple" className="w-full" data-testid="mobile-menu-accordion">
+            <Accordion
+              type="multiple"
+              className="w-full"
+              data-testid="mobile-menu-accordion"
+            >
               {/* --- File Accordion Item --- */}
-              <AccordionItem value="file" className="border-b border-border" data-testid="mobile-file-menu">
+              <AccordionItem
+                value="file"
+                className="border-b border-border"
+                data-testid="mobile-file-menu"
+              >
                 <AccordionTrigger className="px-4 py-2 text-sm font-medium text-foreground hover:text-foreground hover:bg-accent bg-background">
                   <div className="flex items-center">
                     <FileIcon className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -284,7 +300,11 @@ const HamburgerMenu: React.FC = () => {
                     Sort Variables...
                   </DrawerMenuItem>
                   {/* <DrawerMenuItem onClick={() => openModal(ModalType.Transpose)}>Transpose...</DrawerMenuItem> */}
-                  <DrawerMenuItem onClick={() => openModal(ModalType.Aggregate)}>Aggregate...</DrawerMenuItem>
+                  <DrawerMenuItem
+                    onClick={() => openModal(ModalType.Aggregate)}
+                  >
+                    Aggregate...
+                  </DrawerMenuItem>
                   <DrawerMenuSeparator />
                   {/* <DrawerMenuItem onClick={() => openModal(ModalType.WeightCases)}>Weight Cases...</DrawerMenuItem> */}
                 </AccordionContent>
@@ -373,13 +393,21 @@ const HamburgerMenu: React.FC = () => {
                         Descriptive Statistics
                       </NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-6 pr-0 pb-1 pt-0 bg-accent">
-                        {/* <DrawerMenuItem onClick={() => openModal(ModalType.Frequencies)}>Frequencies...</DrawerMenuItem> */}
                         <DrawerMenuItem
                           onClick={() => openModal(ModalType.Descriptives)}
                         >
                           Descriptives...
                         </DrawerMenuItem>
-                        {/* <DrawerMenuItem onClick={() => openModal(ModalType.Explore)}>Explore...</DrawerMenuItem> */}
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.Explore)}
+                        >
+                          Explore...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.Frequencies)}
+                        >
+                          Frequencies...
+                        </DrawerMenuItem>
                         {/* <DrawerMenuItem onClick={() => openModal(ModalType.Crosstabs)}>Crosstabs...</DrawerMenuItem> */}
                         <DrawerMenuSeparator />
                         {/* Ratio: Opens a modal for ratio statistics */}
@@ -395,11 +423,32 @@ const HamburgerMenu: React.FC = () => {
                         Compare Means
                       </NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        {/* <DrawerMenuItem onClick={() => openModal(ModalType.OneSampleTTest)}>One-Sample T Test...</DrawerMenuItem> */}
-                        {/* <DrawerMenuItem onClick={() => openModal(ModalType.IndependentSamplesTTest)}>Independent-Samples T Test...</DrawerMenuItem> */}
-                        {/* <DrawerMenuItem onClick={() => openModal(ModalType.PairedSamplesTTest)}>Paired-Samples T Test...</DrawerMenuItem> */}
-                        <DrawerMenuItem disabled>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.OneSampleTTest)}
+                        >
+                          One-Sample T Test...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.IndependentSamplesTTest)
+                          }
+                        >
+                          Independent-Samples T Test...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.PairedSamplesTTest)
+                          }
+                        >
+                          Paired-Samples T Test...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.OneWayANOVA)}
+                        >
                           One-Way ANOVA...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem onClick={() => openModal(ModalType.BartlettTest)}>
+                          Bartlett&apos;s Test of Homogeneity...
                         </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>
@@ -408,11 +457,21 @@ const HamburgerMenu: React.FC = () => {
                         General Linear Model
                       </NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem disabled>Univariate...</DrawerMenuItem>
-                        <DrawerMenuItem disabled>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ModalUnivariate)}
+                        >
+                          Univariate...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ModalMultivariate)}
+                        >
                           Multivariate...
                         </DrawerMenuItem>
-                        <DrawerMenuItem disabled>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalRepeatedMeasures)
+                          }
+                        >
                           Repeated Measures...
                         </DrawerMenuItem>
                         <DrawerMenuSeparator />
@@ -424,21 +483,39 @@ const HamburgerMenu: React.FC = () => {
                     <AccordionItem value="classify" className="border-0">
                       <NestedAccordionTrigger>Classify</NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem disabled>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalDiscriminant)
+                          }
+                        >
                           Discriminant...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalNearestNeighbor)
+                          }
+                        >
+                          Nearest Neighbor...
                         </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="clustering" className="border-0">
-                      <NestedAccordionTrigger>Clustering</NestedAccordionTrigger>
+                      <NestedAccordionTrigger>
+                        Clustering
+                      </NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem onClick={() => openModal(ModalType.ModalHierarchicalCluster)}>
-                          Hierarchical Cluster...
-                        </DrawerMenuItem>
-                        <DrawerMenuItem onClick={() => openModal(ModalType.ModalKMeansCluster)}>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalKMeansCluster)
+                          }
+                        >
                           K-Means Cluster...
                         </DrawerMenuItem>
-                        <DrawerMenuItem onClick={() => openModal(ModalType.ModalKMedoidsCluster)}>
+                        <DrawerMenuItem
+                          onClick={() =>
+                            openModal(ModalType.ModalKMedoidsCluster)
+                          }
+                        >
                           K-Medoids Cluster...
                         </DrawerMenuItem>
                       </AccordionContent>
@@ -451,7 +528,11 @@ const HamburgerMenu: React.FC = () => {
                         Dimension Reduction
                       </NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem disabled>Factor...</DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ModalFactor)}
+                        >
+                          Factor...
+                        </DrawerMenuItem>
                         <DrawerMenuItem disabled>
                           Correspondence Analysis...
                         </DrawerMenuItem>
@@ -463,7 +544,11 @@ const HamburgerMenu: React.FC = () => {
                     <AccordionItem value="correlate" className="border-0">
                       <NestedAccordionTrigger>Correlate</NestedAccordionTrigger>
                       <AccordionContent className="flex flex-col space-y-0.5 pl-3 pr-0 pb-1 pt-0 bg-accent">
-                        <DrawerMenuItem disabled>Bivariate...</DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.Bivariate)}
+                        >
+                          Bivariate...
+                        </DrawerMenuItem>
                         <DrawerMenuItem disabled>Partial...</DrawerMenuItem>
                         <DrawerMenuItem disabled>Distances...</DrawerMenuItem>
                         <DrawerMenuItem disabled>
@@ -584,12 +669,46 @@ const HamburgerMenu: React.FC = () => {
                               Legacy Dialogs
                             </NestedAccordionTrigger>
                             <AccordionContent className="flex flex-col space-y-0.5 pl-6 pr-0 pb-1 pt-0 bg-accent">
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.ChiSquare)}>Chi-square...</DrawerMenuItem> */}
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.Runs)}>Runs...</DrawerMenuItem> */}
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.TwoIndependentSamples)}>2 Independent Samples...</DrawerMenuItem> */}
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.KIndependentSamples)}>K Independent Samples...</DrawerMenuItem> */}
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.TwoRelatedSamples)}>2 Related Samples...</DrawerMenuItem> */}
-                              {/* <DrawerMenuItem onClick={() => openModal(ModalType.KRelatedSamples)}>K Related Samples...</DrawerMenuItem> */}
+                              <DrawerMenuItem
+                                onClick={() =>
+                                  openModal(ModalType.ChiSquare)
+                                }
+                              >
+                                Chi-square...
+                              </DrawerMenuItem>
+                              <DrawerMenuItem
+                                onClick={() => openModal(ModalType.Runs)}
+                              >
+                                Runs...
+                              </DrawerMenuItem>
+                              <DrawerMenuItem
+                                onClick={() =>
+                                  openModal(ModalType.TwoIndependentSamples)
+                                }
+                              >
+                                2 Independent Samples...
+                              </DrawerMenuItem>
+                              <DrawerMenuItem
+                                onClick={() =>
+                                  openModal(ModalType.KIndependentSamples)
+                                }
+                              >
+                                K Independent Samples...
+                              </DrawerMenuItem>
+                              <DrawerMenuItem
+                                onClick={() =>
+                                  openModal(ModalType.TwoRelatedSamples)
+                                }
+                              >
+                                2 Related Samples...
+                              </DrawerMenuItem>
+                              <DrawerMenuItem
+                                onClick={() =>
+                                  openModal(ModalType.KRelatedSamples)
+                                }
+                              >
+                                K Related Samples...
+                              </DrawerMenuItem>
                             </AccordionContent>
                           </AccordionItem>
                         </Accordion>
@@ -636,16 +755,19 @@ const HamburgerMenu: React.FC = () => {
                           Error Correction Model
                         </DrawerMenuItem>
                         <DrawerMenuItem
-                          onClick={() => openModal(ModalType.HomoscedasticityTest)}
+                          onClick={() =>
+                            openModal(ModalType.HomoscedasticityTest)
+                          }
                         >
                           Homoscedasticity Test (ARCH-LM)
                         </DrawerMenuItem>
                         <DrawerMenuItem
-                          onClick={() => openModal(ModalType.HeteroskedasticityModels)}
+                          onClick={() =>
+                            openModal(ModalType.HeteroskedasticityModels)
+                          }
                         >
                           Heteroscedasticity Models (ARCH/GARCH)
                         </DrawerMenuItem>
-
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

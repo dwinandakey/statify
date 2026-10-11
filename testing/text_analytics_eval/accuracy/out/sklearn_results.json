@@ -1,0 +1,558 @@
+{
+ "versions": {
+  "python": "3.13.12",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "scikit_learn": "1.9.1",
+  "platform": "Windows-11-10.0.26300-SP0"
+ },
+ "dataset": "pilkada",
+ "train_file": "Claude outputs\\pilkada_train.csv",
+ "test_file": "Claude outputs\\pilkada_test.csv",
+ "n_train": 630,
+ "n_test": 270,
+ "train_class": {
+  "negative": 315,
+  "positive": 315
+ },
+ "test_class": {
+  "negative": 135,
+  "positive": 135
+ },
+ "tokenization": "lowercase (str.lower) + split regex [White_Space.,;:'\"()?!]+ ; token kosong dibuang (sama dengan Statify)",
+ "configs": {
+  "K1": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 19,
+    "only_native": 19
+   },
+   "accuracy": 0.762962962962963,
+   "kappa": 0.5259259259259259,
+   "macro_f1": 0.762962962962963,
+   "precision": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "recall": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "f1": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     103,
+     32
+    ],
+    [
+     32,
+     103
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K2": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 19,
+    "only_native": 19
+   },
+   "accuracy": 0.7296296296296296,
+   "kappa": 0.45925925925925926,
+   "macro_f1": 0.7295368782161235,
+   "precision": {
+    "negative": 0.7384615384615385,
+    "positive": 0.7214285714285714
+   },
+   "recall": {
+    "negative": 0.7111111111111111,
+    "positive": 0.7481481481481481
+   },
+   "f1": {
+    "negative": 0.7245283018867924,
+    "positive": 0.7345454545454545
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     96,
+     39
+    ],
+    [
+     34,
+     101
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K3": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 19,
+    "only_native": 19
+   },
+   "accuracy": 0.762962962962963,
+   "kappa": 0.5259259259259259,
+   "macro_f1": 0.762962962962963,
+   "precision": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "recall": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "f1": {
+    "negative": 0.762962962962963,
+    "positive": 0.762962962962963
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     103,
+     32
+    ],
+    [
+     32,
+     103
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K4": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 19,
+    "only_native": 19
+   },
+   "accuracy": 0.7666666666666667,
+   "kappa": 0.5333333333333333,
+   "macro_f1": 0.7665097253297827,
+   "precision": {
+    "negative": 0.78125,
+    "positive": 0.7535211267605634
+   },
+   "recall": {
+    "negative": 0.7407407407407407,
+    "positive": 0.7925925925925926
+   },
+   "f1": {
+    "negative": 0.7604562737642585,
+    "positive": 0.7725631768953068
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     100,
+     35
+    ],
+    [
+     28,
+     107
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K5": {
+   "vocab_size": 1000,
+   "words_to_keep": 1000,
+   "vocab_vs_native_max_features": {
+    "only_ours": 19,
+    "only_native": 19
+   },
+   "avg_doc_norm": 9.348103734768971,
+   "n_train_zero_norm": 0,
+   "accuracy": 0.7555555555555555,
+   "kappa": 0.5111111111111111,
+   "macro_f1": 0.7555555555555555,
+   "precision": {
+    "negative": 0.7555555555555555,
+    "positive": 0.7555555555555555
+   },
+   "recall": {
+    "negative": 0.7555555555555555,
+    "positive": 0.7555555555555555
+   },
+   "f1": {
+    "negative": 0.7555555555555555,
+    "positive": 0.7555555555555555
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     102,
+     33
+    ],
+    [
+     33,
+     102
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K1w": {
+   "vocab_size": 3101,
+   "words_to_keep": 0,
+   "accuracy": 0.7851851851851852,
+   "kappa": 0.5703703703703704,
+   "macro_f1": 0.7844281702549418,
+   "precision": {
+    "negative": 0.8235294117647058,
+    "positive": 0.7549668874172185
+   },
+   "recall": {
+    "negative": 0.725925925925926,
+    "positive": 0.8444444444444444
+   },
+   "f1": {
+    "negative": 0.7716535433070866,
+    "positive": 0.7972027972027972
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     98,
+     37
+    ],
+    [
+     21,
+     114
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K2w": {
+   "vocab_size": 3101,
+   "words_to_keep": 0,
+   "accuracy": 0.7592592592592593,
+   "kappa": 0.5185185185185186,
+   "macro_f1": 0.7551447506103941,
+   "precision": {
+    "negative": 0.85,
+    "positive": 0.7058823529411765
+   },
+   "recall": {
+    "negative": 0.6296296296296297,
+    "positive": 0.8888888888888888
+   },
+   "f1": {
+    "negative": 0.723404255319149,
+    "positive": 0.7868852459016393
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     85,
+     50
+    ],
+    [
+     15,
+     120
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K3w": {
+   "vocab_size": 3101,
+   "words_to_keep": 0,
+   "accuracy": 0.7851851851851852,
+   "kappa": 0.5703703703703704,
+   "macro_f1": 0.7844281702549418,
+   "precision": {
+    "negative": 0.8235294117647058,
+    "positive": 0.7549668874172185
+   },
+   "recall": {
+    "negative": 0.725925925925926,
+    "positive": 0.8444444444444444
+   },
+   "f1": {
+    "negative": 0.7716535433070866,
+    "positive": 0.7972027972027972
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     98,
+     37
+    ],
+    [
+     21,
+     114
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K4w": {
+   "vocab_size": 3101,
+   "words_to_keep": 0,
+   "accuracy": 0.7666666666666667,
+   "kappa": 0.5333333333333333,
+   "macro_f1": 0.765246553223202,
+   "precision": {
+    "negative": 0.8157894736842105,
+    "positive": 0.7307692307692307
+   },
+   "recall": {
+    "negative": 0.6888888888888889,
+    "positive": 0.8444444444444444
+   },
+   "f1": {
+    "negative": 0.7469879518072289,
+    "positive": 0.7835051546391752
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     93,
+     42
+    ],
+    [
+     21,
+     114
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K5w": {
+   "vocab_size": 3101,
+   "words_to_keep": 0,
+   "avg_doc_norm": 12.38960996990429,
+   "n_train_zero_norm": 0,
+   "accuracy": 0.7407407407407407,
+   "kappa": 0.4814814814814815,
+   "macro_f1": 0.7406126482213439,
+   "precision": {
+    "negative": 0.751937984496124,
+    "positive": 0.7304964539007093
+   },
+   "recall": {
+    "negative": 0.7185185185185186,
+    "positive": 0.762962962962963
+   },
+   "f1": {
+    "negative": 0.7348484848484849,
+    "positive": 0.7463768115942029
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     97,
+     38
+    ],
+    [
+     32,
+     103
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K1m": {
+   "vocab_size": 1042,
+   "words_to_keep": 1042,
+   "vocab_vs_native_max_features": {
+    "only_ours": 0,
+    "only_native": 0
+   },
+   "accuracy": 0.762962962962963,
+   "kappa": 0.5259259259259259,
+   "macro_f1": 0.7628458498023716,
+   "precision": {
+    "negative": 0.7751937984496124,
+    "positive": 0.75177304964539
+   },
+   "recall": {
+    "negative": 0.7407407407407407,
+    "positive": 0.7851851851851852
+   },
+   "f1": {
+    "negative": 0.7575757575757576,
+    "positive": 0.7681159420289855
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     100,
+     35
+    ],
+    [
+     29,
+     106
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K2m": {
+   "vocab_size": 1042,
+   "words_to_keep": 1042,
+   "vocab_vs_native_max_features": {
+    "only_ours": 0,
+    "only_native": 0
+   },
+   "accuracy": 0.7407407407407407,
+   "kappa": 0.4814814814814815,
+   "macro_f1": 0.7405129331649185,
+   "precision": {
+    "negative": 0.7559055118110236,
+    "positive": 0.7272727272727273
+   },
+   "recall": {
+    "negative": 0.7111111111111111,
+    "positive": 0.7703703703703704
+   },
+   "f1": {
+    "negative": 0.732824427480916,
+    "positive": 0.7482014388489209
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     96,
+     39
+    ],
+    [
+     31,
+     104
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  },
+  "K5m": {
+   "vocab_size": 1042,
+   "words_to_keep": 1042,
+   "vocab_vs_native_max_features": {
+    "only_ours": 0,
+    "only_native": 0
+   },
+   "avg_doc_norm": 9.457786687033463,
+   "n_train_zero_norm": 0,
+   "accuracy": 0.7481481481481481,
+   "kappa": 0.49629629629629635,
+   "macro_f1": 0.7481481481481481,
+   "precision": {
+    "negative": 0.7481481481481481,
+    "positive": 0.7481481481481481
+   },
+   "recall": {
+    "negative": 0.7481481481481481,
+    "positive": 0.7481481481481481
+   },
+   "f1": {
+    "negative": 0.7481481481481481,
+    "positive": 0.7481481481481481
+   },
+   "support": {
+    "negative": 135,
+    "positive": 135
+   },
+   "confusion_actual_x_pred": [
+    [
+     101,
+     34
+    ],
+    [
+     34,
+     101
+    ]
+   ],
+   "classes": [
+    "negative",
+    "positive"
+   ],
+   "empty_test_docs": 1
+  }
+ }
+}

@@ -22,7 +22,7 @@ import type {
   AnalysisSection,
   IterationHistoryBlock,
 } from "../types/binary-logistic";
-import { createSection, safeFixed } from "./formatter_utils";
+import { createSection, safeFixed, generateConvergenceNote } from "./formatter_utils";
 
 /**
  * Options for formatting Iteration History tables
@@ -30,20 +30,6 @@ import { createSection, safeFixed } from "./formatter_utils";
 interface IterationHistoryFormatOptions {
   displayAtLastStep?: boolean;
 }
-
-// Helper to generate description for iteration history
-const generateIterationDescription = (
-  block: number,
-  converged: boolean,
-  iterations: number
-): string => {
-  const blockName = block === 0 ? "constant only" : "covariates";
-  if (converged) {
-    return `Estimation terminated at iteration number ${iterations} because parameter estimates changed by less than .001.`;
-  } else {
-    return `Maximum iterations (${iterations}) reached. Model may not have fully converged.`;
-  }
-};
 
 /**
  * Format Iteration History for Block 0 (Constant Only)
@@ -125,11 +111,11 @@ const formatBlock0IterationHistory = (
     return null;
   }
 
-  // Add footnote about initial value
-  const description = generateIterationDescription(
-    0,
-    iterHistory.converged,
-    iterHistory.final_iteration
+  // SPSS lists the convergence status as the final lettered footnote (after
+  // Constant/Initial -2LL), not as a separate interpretive paragraph.
+  const convergenceNote = generateConvergenceNote(
+    iterHistory.final_iteration,
+    iterHistory.converged
   );
 
   return createSection(
@@ -140,10 +126,9 @@ const formatBlock0IterationHistory = (
       rows,
     },
     {
-      description,
       note: hasConstant
-        ? `a. Constant is included in the model.\nb. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}`
-        : `a. Constant is not included in the model.\nb. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}`,
+        ? `a. Constant is included in the model.\nb. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}\nc. ${convergenceNote}`
+        : `a. Constant is not included in the model.\nb. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}\nc. ${convergenceNote}`,
     }
   );
 };
@@ -218,10 +203,9 @@ const formatBlock1EnterIterationHistory = (
     return null;
   }
 
-  const description = generateIterationDescription(
-    1,
-    iterHistory.converged,
-    iterHistory.final_iteration
+  const convergenceNote = generateConvergenceNote(
+    iterHistory.final_iteration,
+    iterHistory.converged
   );
 
   return createSection(
@@ -232,10 +216,9 @@ const formatBlock1EnterIterationHistory = (
       rows,
     },
     {
-      description,
       note: hasConstant
-        ? `a. Method: Enter\nb. Constant is included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}`
-        : `a. Method: Enter\nb. Constant is not included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}`,
+        ? `a. Method: Enter\nb. Constant is included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}\nd. ${convergenceNote}`
+        : `a. Method: Enter\nb. Constant is not included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(iterHistory.initial_neg2ll, 3)}\nd. ${convergenceNote}`,
     }
   );
 };
@@ -358,12 +341,11 @@ const formatBlock1StepwiseIterationHistory = (
     return null;
   }
 
-  // Get final step info for description
+  // Convergence footnote reflects the final step (table combines all steps).
   const lastStep = stepsWithHistory[stepsWithHistory.length - 1];
-  const description = generateIterationDescription(
-    1,
-    lastStep.history.converged,
-    lastStep.history.final_iteration
+  const convergenceNote = generateConvergenceNote(
+    lastStep.history.final_iteration,
+    lastStep.history.converged
   );
 
   return createSection(
@@ -374,10 +356,9 @@ const formatBlock1StepwiseIterationHistory = (
       rows,
     },
     {
-      description,
       note: hasConstant
-        ? `a. Method: ${method}\nb. Constant is included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(stepsWithHistory[0].history.initial_neg2ll, 3)}`
-        : `a. Method: ${method}\nb. Constant is not included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(stepsWithHistory[0].history.initial_neg2ll, 3)}`,
+        ? `a. Method: ${method}\nb. Constant is included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(stepsWithHistory[0].history.initial_neg2ll, 3)}\nd. ${convergenceNote}`
+        : `a. Method: ${method}\nb. Constant is not included in the model.\nc. Initial -2 Log Likelihood: ${safeFixed(stepsWithHistory[0].history.initial_neg2ll, 3)}\nd. ${convergenceNote}`,
     }
   );
 };

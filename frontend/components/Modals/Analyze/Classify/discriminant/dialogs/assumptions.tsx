@@ -58,8 +58,9 @@ export const DiscriminantAssumptions = ({
             <Label className="font-bold">Assumption Tests</Label>
             <p className="text-xs text-muted-foreground">
                 These assumptions should hold for the discriminant analysis to be
-                valid. Run them to check — results appear in the Output Viewer right
-                away, without running the full analysis.
+                valid. They are checked automatically every time you click OK, and
+                their results appear at the top of the output. Use the button below to
+                check them now, without running the full analysis.
             </p>
 
             <Card className="border rounded-md shadow-sm">

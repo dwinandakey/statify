@@ -1,31 +1,39 @@
-// K-Medoids Data Models
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KMedoidsInput {
     pub data: Vec<Vec<f64>>,
     pub n_clusters: usize,
-    pub method: String, // "PAM", "FastPAM", "CLARA", "CLARANS"
+    /// "PAM", "FastPAM", "CLARA", atau "CLARANS"
+    pub method: String,
     pub max_iterations: usize,
-    pub distance_metric: String, // "euclidean", "manhattan"
+    /// "euclidean" atau "manhattan"
+    pub distance_metric: String,
     pub random_seed: Option<u64>,
+    /// Jumlah run dengan seed berbeda; hasil terbaik yang dipakai
     #[serde(default = "default_n_init")]
-    pub n_init: usize, // Number of times to run with different seeds, keep best result
+    pub n_init: usize,
+    /// Berhenti jika perbaikan cost lebih kecil dari nilai ini
     #[serde(default = "default_convergence_tolerance")]
-    pub convergence_tolerance: f64, // Stop if cost improvement < tolerance
+    pub convergence_tolerance: f64,
+    /// PAM: Some(true) = BUILD (deterministik), Some(false) = inisialisasi acak, None = true
     #[serde(default)]
-    pub use_build_phase: Option<bool>, // PAM: Some(true)=BUILD (deterministic), Some(false)=random init, None=true
+    pub use_build_phase: Option<bool>,
+    /// PAM: Some(true) = jalur gaya R, Some(false) = jalur native, None = true
     #[serde(default)]
-    pub use_r_implementation: Option<bool>, // PAM: Some(true)=R-style path, Some(false)=native path, None=true
+    pub use_r_implementation: Option<bool>,
+    /// CLARA: jumlah sub-sampel (default 5)
     #[serde(default = "default_clara_num_samples")]
-    pub clara_num_samples: usize, // CLARA: number of sub-samples (default 5)
+    pub clara_num_samples: usize,
+    /// CLARA: ukuran sampel eksplisit (default 40 + 2*k)
     #[serde(default)]
-    pub clara_sample_size: Option<usize>, // CLARA: explicit sample size (default: 40 + 2*k)
+    pub clara_sample_size: Option<usize>,
+    /// CLARANS: jumlah pencarian lokal (default 2)
     #[serde(default = "default_clarans_num_local")]
-    pub clarans_num_local: usize, // CLARANS: number of local searches (default 2)
+    pub clarans_num_local: usize,
+    /// CLARANS: batas maksimum tetangga yang diperiksa
     #[serde(default)]
-    pub clarans_max_neighbors: Option<usize>, // CLARANS: explicit max neighbors
+    pub clarans_max_neighbors: Option<usize>,
 }
 
 fn default_n_init() -> usize { 10 }
@@ -40,36 +48,35 @@ pub struct KMedoidsOutput {
     pub medoids: Vec<Vec<f64>>,
     pub distances_to_medoids: Vec<f64>,
     pub total_distance: f64,
-    /// Objective value (average distance): total_distance / n.
+    /// Nilai objektif (jarak rata-rata): total_distance / n
     #[serde(default)]
     pub avg_cost: f64,
-    /// Total cost setelah fase BUILD.
+    /// Total cost setelah fase BUILD
     #[serde(default)]
     pub total_cost_build: f64,
-    /// Total cost setelah fase SWAP (final).
+    /// Total cost setelah fase SWAP (final)
     #[serde(default)]
     pub total_cost_swap: f64,
     pub iterations: usize,
     pub converged: bool,
-    /// Cost at each iteration (index 0 = initial cost before any swap)
+    /// Cost tiap iterasi (indeks 0 = cost awal sebelum swap pertama)
     #[serde(default)]
     pub cost_history: Vec<f64>,
-    /// Per-object silhouette scores computed inside WASM from the already-built
-    /// distance matrix.  Populated for PAM runs; empty vec for CLARA/CLARANS.
+    /// Skor silhouette per objek, dihitung di dalam WASM dari distance matrix
+    /// yang sudah ada. Terisi untuk PAM; kosong untuk CLARA/CLARANS.
     #[serde(default)]
     pub silhouette_scores: Vec<f64>,
-    /// Medoid indices at each step: [0] = initial (after BUILD), [i] = after swap i.
-    /// Mirrors cost_history layout so UI can show exact medoids per iteration.
+    /// Medoid di tiap langkah: [0] = awal (setelah BUILD), [i] = setelah swap ke-i.
+    /// Layoutnya sama dengan cost_history.
     #[serde(default)]
     pub medoid_history: Vec<Vec<usize>>,
-    /// Per-sample costs for CLARA (length = num_samples). Empty for PAM/CLARANS.
-    /// Each entry is the total cost on the full dataset for that sample's medoids.
+    /// CLARA: cost per sampel pada seluruh dataset. Kosong untuk PAM/CLARANS.
     #[serde(default)]
     pub sample_costs: Vec<f64>,
-    /// Per-sample PAM iterations for CLARA.
+    /// CLARA: jumlah iterasi PAM per sampel
     #[serde(default)]
     pub sample_pam_iterations: Vec<usize>,
-    /// 1-based index of the best sample (lowest cost) for CLARA. 0 means N/A.
+    /// CLARA: indeks (mulai dari 1) sampel terbaik. 0 berarti tidak berlaku.
     #[serde(default)]
     pub clara_best_sample_index: usize,
 }
@@ -82,7 +89,6 @@ pub struct ClusterStatistics {
     pub silhouette_score: f64,
 }
 
-/// General clustering result structure
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClusteringResult {
     pub cluster_assignments: Vec<usize>,
@@ -92,19 +98,17 @@ pub struct ClusteringResult {
     pub converged: bool,
 }
 
-/// Represents a data point with coordinates
 pub type Point = Vec<f64>;
 
-// ── Range (multi-k) request / response types ─────────────────────────────────
-
-/// Input for running PAM across a range of k values in one WASM call.
-/// The distance matrix is built once internally and reused for all k values.
+/// Input untuk menjalankan PAM pada rentang nilai k dalam satu panggilan WASM.
+/// Distance matrix dibangun sekali dan dipakai ulang untuk semua k.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KMedoidsRangeInput {
     pub data: Vec<Vec<f64>>,
     pub k_min: usize,
     pub k_max: usize,
-    pub method: String,           // used for logging; range always runs PAM internally
+    /// Hanya untuk logging; mode range selalu memakai PAM
+    pub method: String,
     pub max_iterations: usize,
     pub distance_metric: String,
     pub random_seed: Option<u64>,
@@ -112,7 +116,7 @@ pub struct KMedoidsRangeInput {
     pub convergence_tolerance: f64,
 }
 
-/// One result entry returned by `run_k_medoids_range`.
+/// Satu entri hasil dari `run_k_medoids_range`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KMedoidsRangeItem {
     pub k: usize,
@@ -123,7 +127,35 @@ pub struct KMedoidsRangeItem {
     pub converged: bool,
     #[serde(default)]
     pub cost_history: Vec<f64>,
-    /// Average silhouette score computed from the shared distance matrix.
-    /// Pre-computed in WASM so the worker can skip JS silhouette computation.
+    /// Rata-rata silhouette dari distance matrix bersama, dihitung di WASM
+    /// sehingga worker tidak perlu menghitungnya lagi di JS.
     pub silhouette_overall: f64,
+}
+
+/// Input `standardize_data`: matriks numerik dan metode penskalaan.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StandardizeInput {
+    pub data: Vec<Vec<f64>>,
+    /// "zscore" | "minmax" | "none" (nilai lain dianggap "none")
+    pub method: String,
+}
+
+/// Output `standardize_data`: matriks hasil penskalaan dengan bentuk yang sama.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StandardizeOutput {
+    pub matrix: Vec<Vec<f64>>,
+}
+
+/// Input `calculate_wcss` (metode Elbow): hasil clustering beserta datanya.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WcssInput {
+    pub data: Vec<Vec<f64>>,
+    pub labels: Vec<usize>,
+    pub medoid_indices: Vec<usize>,
+    pub distance_metric: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WcssOutput {
+    pub wcss: f64,
 }

@@ -35,7 +35,12 @@ export interface OrdinalOptionsParams {
   confidenceInterval: number;
   delta: number;
   singularityTolerance: number;
-  linkFunction: "Logit" | "Probit" | "Complementary Log-Log" | "Cauchit" | "Negative Log-Log";
+  linkFunction:
+    | "Logit"
+    | "Probit"
+    | "Complementary Log-Log"
+    | "Cauchit"
+    | "Negative Log-Log";
 }
 
 // Interface untuk tab Output (sesuaikan dengan gambar OutputTab.jpeg)
@@ -44,10 +49,10 @@ export interface OrdinalOutputParams {
     goodnessOfFit: boolean;
     summaryStatistics: boolean;
     parameterEstimates: boolean;
+    asymptoticCovariance: boolean;
     asymptoticCorrelation: boolean;
-    cellInformation: boolean;
+    // cellInformation: boolean;
     testOfParallelLines: boolean;
-    test_of_multicolinearity: boolean;
     iterationHistory: boolean;
     iterationHistoryStep: number;
     printIterationHistory: boolean;
@@ -60,7 +65,6 @@ export interface OrdinalOutputParams {
     actualCategoryProbability: boolean;
   };
   printLogLikelihood: "Including" | "Excluding";
-
 }
 
 export interface AnalysisSection {
@@ -131,17 +135,17 @@ export interface PlumOutputOptions {
   pseudoRSquares?: boolean;
   parameterEstimates?: boolean;
   covarianceMatrix?: boolean;
+  asymptoticCovariance?: boolean;
+  asymptoticCorrelation?: boolean;
   residuals?: boolean;
   goodnessOfFit?: boolean;
   summaryStatistics?: boolean;
   testOfParallelLines?: boolean;
-  test_of_multicolinearity?: boolean;
-  multicolinearity?: boolean;
   iterationHistory?: boolean;
   iterationHistoryStep?: number;
   printIterationHistory?: boolean;
   iterationHistoryEvery?: number;
-  cellInformation?: boolean;
+  // cellInformation?: boolean;
   predictedResponseCategory?: boolean;
   estimatedResponseProbabilities?: boolean;
   predictedCategoryProbability?: boolean;

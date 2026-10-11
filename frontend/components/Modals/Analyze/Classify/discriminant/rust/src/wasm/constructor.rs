@@ -31,7 +31,10 @@ impl DiscriminantAnalysis {
         group_data_defs: JsValue,
         independent_data_defs: JsValue,
         selection_data_defs: JsValue,
-        config_data: JsValue
+        config_data: JsValue,
+        // Appended last so an older worker that omits it still constructs
+        // (`undefined` deserialises to `None`).
+        strata_data: JsValue
     ) -> Result<DiscriminantAnalysis, JsValue> {
         // Initialize error collector
         let mut error_collector = ErrorCollector::default();
@@ -103,17 +106,30 @@ impl DiscriminantAnalysis {
             }
         };
 
+        // Bootstrap strata variables are optional; a parse failure must not kill
+        // the whole analysis, it only costs the bootstrap its stratification.
+        let strata_data: Option<Vec<Vec<DataRecord>>> = match
+            serde_wasm_bindgen::from_value(strata_data)
+        {
+            Ok(data) => data,
+            Err(e) => {
+                error_collector.add_error(
+                    "constructor.strata_data",
+                    &format!("Failed to parse strata data: {}", e)
+                );
+                None
+            }
+        };
+
         let config: DiscriminantConfig = match serde_wasm_bindgen::from_value::<DiscriminantConfig>(config_data.clone()) {
             Ok(data) => {
-                // Log received method config for debugging (moved inside Ok branch)
-                web_sys::console::log_1(&format!(
-                    "[DiscriminantAnalysis] Method config received: wilks={}, mahal={}, unex={}, fr={}, raos={}, f_value={}, f_prob={}, f_entry={}, f_removal={}, p_entry={}, p_removal={}",
+                // Debug-build log of the method settings received.
+                crate::debug_log!("[DiscriminantAnalysis] Method config received: wilks={}, mahal={}, unex={}, fr={}, raos={}, f_value={}, f_prob={}, f_entry={}, f_removal={}, p_entry={}, p_removal={}",
                     data.method.wilks, data.method.mahalonobis,
                     data.method.unexplained, data.method.f_ratio, data.method.raos,
                     data.method.f_value, data.method.f_probability,
                     data.method.f_entry, data.method.f_removal,
-                    data.method.p_entry, data.method.p_removal
-                ).into());
+                    data.method.p_entry, data.method.p_removal);
                 data
             }
             Err(e) => {
@@ -152,6 +168,8 @@ impl DiscriminantAnalysis {
             group_data,
             independent_data,
             selection_data,
+            strata_data,
+            row_numbers: None,
             group_data_defs,
             independent_data_defs,
             selection_data_defs,

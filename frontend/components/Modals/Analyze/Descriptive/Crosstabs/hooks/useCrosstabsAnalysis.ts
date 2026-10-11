@@ -3,7 +3,7 @@ import { useVariableStore } from '@/stores/useVariableStore';
 import { useResultStore } from '@/stores/useResultStore';
 import { useAnalysisData } from '@/hooks/useAnalysisData';
 import type { CrosstabsAnalysisParams } from '../types';
-import { formatCaseProcessingSummary, formatCrosstabulationTable } from '../utils/formatters';
+import { formatCaseProcessingSummary, formatCrosstabulationTable, formatChiSquareTestsTable } from '../utils/formatters';
 import type { WorkerClient } from '@/utils/workerClient';
 import { createPooledWorkerClient } from '@/utils/workerClient';
 import type { Variable } from '@/types/Variable';
@@ -42,6 +42,10 @@ const buildCrosstabsLog = (
     lines.push(`  /CELLS=${cellTokens.join(' ')}`);
   }
 
+    if (opts.statistics?.chiSquare) {
+        lines.push('  /STATISTICS=CHISQ');
+    }
+
   // 4) COUNT – penyesuaian bobot non-integer
   const countMapping: Record<NonintegerWeightsType, string> = {
     roundCell: 'ROUND CELL',
@@ -77,7 +81,7 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
 
     // Keep reference to the pooled worker client so we can terminate / reuse
     const workerClientRef = useRef<WorkerClient<any, any> | null>(null);
-    
+
     const { data, weights } = useAnalysisData();
     const { variables } = useVariableStore();
     const { addLog, addAnalytic, addStatistic } = useResultStore();
@@ -88,18 +92,6 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
         if (rowVariables.length === 0 || columnVariables.length === 0) {
             return;
         }
-
-        // === Performance Monitoring: Start ===
-        const startTime = performance.now();
-        const totalVariablePairs = rowVariables.length * columnVariables.length;
-        const caseCount = data?.length || 0;
-        console.log(`[Crosstabs Analysis] Starting analysis:`);
-        console.log(`  - Row variables: ${rowVariables.length}`);
-        console.log(`  - Column variables: ${columnVariables.length}`);
-        console.log(`  - Total variable pairs: ${totalVariablePairs}`);
-        console.log(`  - Cases: ${caseCount}`);
-        console.log(`  - Start time: ${new Date().toISOString()}`);
-        // === Performance Monitoring: End ===
 
         setIsCalculating(true);
         setError(null);
@@ -139,7 +131,7 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
                     };
                     const logMsg = buildCrosstabsLog(rowVar, colVar, options);
                     const logId = await addLog({ log: logMsg });
-                    
+
                     const analyticId = await addAnalytic(logId, {
                         title: "Crosstabs",
                         note: `Crosstabulation for ${rowVar.label || rowVar.name} by ${colVar.label || colVar.name}`
@@ -147,19 +139,20 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
 
                     const caseProcessingSummary = formatCaseProcessingSummary(results, crosstabParams);
                     const crosstabulationTable = formatCrosstabulationTable(results, crosstabParams);
+                    const chiSquareTable = formatChiSquareTestsTable(results, crosstabParams);
 
                     // Pisahkan Case Processing dan Crosstabs menjadi dua statistik terpisah
-                    
+
                     // Statistik 1: Case Processing Summary
                     if (caseProcessingSummary !== null && analyticId) {
                         await addStatistic(analyticId, {
                             title: `Case Processing: ${rowVar.label || rowVar.name} by ${colVar.label || colVar.name}`,
-                            output_data: JSON.stringify({ 
-                                tables: [{ 
-                                    title: caseProcessingSummary.title, 
-                                    columnHeaders: caseProcessingSummary.columnHeaders, 
-                                    rows: caseProcessingSummary.rows 
-                                }] 
+                            output_data: JSON.stringify({
+                                tables: [{
+                                    title: caseProcessingSummary.title,
+                                    columnHeaders: caseProcessingSummary.columnHeaders,
+                                    rows: caseProcessingSummary.rows
+                                }]
                             }),
                             components: "Case Processing",
                             description: "Case processing summary statistics"
@@ -170,15 +163,31 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
                     if (crosstabulationTable !== null && analyticId) {
                         await addStatistic(analyticId, {
                             title: `Crosstabs: ${rowVar.label || rowVar.name} by ${colVar.label || colVar.name}`,
-                            output_data: JSON.stringify({ 
-                                tables: [{ 
-                                    title: crosstabulationTable.title, 
-                                    columnHeaders: crosstabulationTable.columnHeaders, 
-                                    rows: crosstabulationTable.rows 
-                                }] 
+                            output_data: JSON.stringify({
+                                tables: [{
+                                    title: crosstabulationTable.title,
+                                    columnHeaders: crosstabulationTable.columnHeaders,
+                                    rows: crosstabulationTable.rows
+                                }]
                             }),
                             components: "Crosstabs",
                             description: "Crosstabulation results"
+                        });
+                    }
+
+                    if (chiSquareTable !== null && analyticId) {
+                        await addStatistic(analyticId, {
+                            title: `Chi-Square Tests: ${rowVar.label || rowVar.name} by ${colVar.label || colVar.name}`,
+                            output_data: JSON.stringify({
+                                tables: [{
+                                    title: chiSquareTable.title,
+                                    columnHeaders: chiSquareTable.columnHeaders,
+                                    rows: chiSquareTable.rows,
+                                    footer: chiSquareTable.footer,
+                                }]
+                            }),
+                            components: "Chi-Square Tests",
+                            description: chiSquareTable.description?.join('\n') || ''
                         });
                     }
                 } catch (e) {
@@ -187,21 +196,8 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
                     setError((prev) => prev ? `${prev}\nUI Error: ${err}` : `UI Error: ${err}`);
                 }
             }
-            
+
             if (resultCount === totalJobs) {
-                // === Performance Monitoring: End ===
-                const endTime = performance.now();
-                const executionTime = endTime - startTime;
-                console.log(`[Crosstabs Analysis] Analysis completed:`);
-                console.log(`  - Variable pairs processed: ${resultCount}/${totalVariablePairs}`);
-                console.log(`  - Cases analyzed: ${caseCount}`);
-                console.log(`  - Execution time: ${executionTime.toFixed(2)}ms`);
-                console.log(`  - End time: ${new Date().toISOString()}`);
-                if (error) {
-                    console.log(`  - Errors encountered: Yes`);
-                }
-                // === Performance Monitoring: End ===
-                
                 setIsCalculating(false);
                 if (!error) onClose();
                 // Release the worker back to the pool
@@ -242,7 +238,7 @@ export const useCrosstabsAnalysis = (params: CrosstabsAnalysisParams, onClose: (
                 });
                 return rowObject;
             });
-            
+
             workerClient.post({
                 analysisType: 'crosstabs',
                 variable: { row: rowVariable, col: colVariable },

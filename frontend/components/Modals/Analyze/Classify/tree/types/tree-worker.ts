@@ -6,4 +6,4 @@ export type TreeAnalysisType = {
     variables: any[];
 };
 
-export type TreeFinalResultType = {};
+export type TreeFinalResultType = Record<string, unknown>;

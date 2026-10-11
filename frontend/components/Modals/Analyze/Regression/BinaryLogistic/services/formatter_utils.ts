@@ -77,6 +77,15 @@ export const fmtSig = (num: number | undefined | null): string => {
   return num < 0.001 ? "< .001" : num.toFixed(3);
 };
 
+// Format p-value for narrative descriptions as "p (Sig.) ..." so readers can
+// map the prose directly back to the table's "Sig." column - SPSS output
+// tables report "Sig." while conventional write-ups report "p"; this makes
+// the equivalence explicit instead of silently switching notation.
+export const fmtPSig = (num: number | undefined | null): string => {
+  if (num === undefined || num === null || isNaN(num)) return "p (Sig.) = .";
+  return num < 0.001 ? "p (Sig.) < .001" : `p (Sig.) = ${num.toFixed(3)}`;
+};
+
 // Format persentase (1 digit desimal)
 export const fmtPct = (num: number | undefined | null): string => {
   if (num === undefined || num === null || isNaN(num)) return ".";
@@ -101,13 +110,19 @@ export const generateOmnibusDescription = (
   df: number,
   sig: number
 ): string => {
-  const pVal = sig < 0.001 ? "< .001" : `= ${sig.toFixed(3)}`;
-  const significanceText =
-    sig < 0.05 ? "statistically significant" : "not statistically significant";
+  const isSignificant = sig < 0.05;
+  const significanceText = isSignificant
+    ? "statistically significant"
+    : "not statistically significant";
+  // Don't unconditionally claim a better fit - that contradicted a
+  // "not significant" verdict whenever sig >= .05.
+  const fitText = isSignificant
+    ? "The model with the predictor(s) included fits significantly better than the null (intercept-only) model."
+    : "The model with the predictor(s) included does not fit significantly better than the null (intercept-only) model.";
 
-  return `The logistic regression model was ${significanceText}, χ²(${df}) = ${chiSquare.toFixed(
+  return `The omnibus test of model coefficients was ${significanceText}, χ²(${df}) = ${chiSquare.toFixed(
     3
-  )}, p ${pVal}. The model creates a significantly better fit than the null model.`;
+  )}, ${fmtPSig(sig)}. ${fitText}`;
 };
 
 /**
@@ -138,7 +153,6 @@ export const generateClassificationDescription = (
  * Note: P > 0.05 indicates good fit.
  */
 export const generateHosmerDescription = (sig: number): string => {
-  const pVal = sig < 0.001 ? "< .001" : `= ${sig.toFixed(3)}`;
   const fitText =
     sig > 0.05
       ? "indicated a good fit to the data"
@@ -148,7 +162,24 @@ export const generateHosmerDescription = (sig: number): string => {
       ? "meaning the observed and expected probabilities match well."
       : "suggesting significant differences between observed and predicted values.";
 
-  return `The Hosmer and Lemeshow test ${fitText} (p ${pVal}), ${interpretation}`;
+  return `The Hosmer and Lemeshow test ${fitText} (${fmtPSig(sig)}), ${interpretation}`;
+};
+
+/**
+ * Menghasilkan teks footnote SPSS untuk status terminasi estimasi IRLS
+ * (dipakai oleh tabel Model Summary & Iteration History).
+ *
+ * Tidak menyertakan prefix huruf (a./b./dst) - itu ditentukan oleh caller,
+ * karena posisi footnote ini berbeda-beda di tiap tabel.
+ */
+export const generateConvergenceNote = (
+  iterations: number | undefined,
+  converged: boolean | undefined
+): string => {
+  const n = iterations ?? "?";
+  return converged
+    ? `Estimation terminated at iteration number ${n} because parameter estimates changed by less than .001.`
+    : `Estimation terminated at iteration number ${n} because maximum iterations has been reached. Final solution cannot be found.`;
 };
 
 /**

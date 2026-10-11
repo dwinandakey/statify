@@ -41,13 +41,14 @@ export const formatBinaryLogisticResult = (
   const casewiseOutliers = options?.casewiseOutliers ?? 2.0;
 
   // 0. Fitting Warnings (SPSS displays warnings at the very top of output)
-  // Jika ada warning kritis (singular Hessian, separation, dll),
-  // hanya tampilkan tabel Warnings saja — hasil selanjutnya tidak relevan.
+  // Warnings (separation, near-singular Hessian, step-halving, dll) are
+  // shown alongside the full result tables, matching SPSS/R — they don't
+  // replace the output, since even a flagged fit usually still produces a
+  // usable, reportable solution.
   if (hasFittingWarnings(result)) {
     const warningsOutput = formatFittingWarnings(result);
     if (warningsOutput.sections && warningsOutput.sections.length > 0) {
       allSections.push(...warningsOutput.sections);
-      return { sections: allSections };
     }
   }
 

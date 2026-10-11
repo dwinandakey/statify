@@ -1,32 +1,12 @@
-/**
- * K-Medoids PCA Cluster Plot
- *
- * Projects the full multi-dimensional feature matrix to 2D via PCA, then
- * renders a scatter plot where each point is coloured by its cluster label
- * and each medoid is highlighted with a star marker.
- *
- * ── PCA is computed entirely client-side (no external deps) ──────────────
- *   1. Centre the feature matrix by variable means.
- *   2. Build the (d × d) covariance matrix.
- *   3. Find the top 2 eigenvectors via power iteration with deflation.
- *   4. Project all points and medoids into the PC1 / PC2 plane.
- *
- * Public interface mirrors the user-supplied spec:
- *   points  : { features: number[], cluster: number, label?: string }[]
- *   medoids : { features: number[], cluster: number }[]
- */
-
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
 
-// ─── Public types ────────────────────────────────────────────────────────────
 
 export interface PCAPoint {
     features: number[];
     cluster: number;
-    /** Optional human-readable label shown in the tooltip (e.g. "Case 12"). */
     label?: string;
 }
 
@@ -38,35 +18,24 @@ export interface PCAMedoid {
 export interface PCAClusterPlotProps {
     points: PCAPoint[];
     medoids: PCAMedoid[];
-    /** Variable names corresponding to feature indices, used in the tooltip. */
     variableNames?: string[];
     title?: string;
     width?: number;
     height?: number;
 }
 
-// ─── PCA implementation ──────────────────────────────────────────────────────
 
 interface PCAResult {
-    /** One [x, y] pair per input row (same order as input). */
     projected: [number, number][];
-    /** Fraction of total variance captured by PC1. */
     varPC1: number;
-    /** Fraction of total variance captured by PC2. */
     varPC2: number;
 }
 
-/**
- * Pure-TypeScript PCA – finds the top 2 principal components of a numeric
- * matrix using power iteration with deflation.  No external dependencies.
- *
- * @param rows  n × d matrix (each row = one observation).
- */
+
 function computePCA(rows: number[][]): PCAResult {
     const n = rows.length;
     const d = rows[0]?.length ?? 0;
 
-    // ── edge-cases ────────────────────────────────────────────────────────
     if (n < 2 || d === 0) {
         return {
             projected: rows.map(() => [0, 0]),
@@ -85,7 +54,6 @@ function computePCA(rows: number[][]): PCAResult {
         };
     }
 
-    // ── Step 1: centre & scale (standardise, matching R's scale.=TRUE) ────
     const means = Array.from({ length: d }, (_, j) =>
         rows.reduce((s, r) => s + (r[j] ?? 0), 0) / n
     );
@@ -95,7 +63,6 @@ function computePCA(rows: number[][]): PCAResult {
     });
     const C = rows.map(r => r.map((v, j) => ((v ?? 0) - means[j]) / stds[j]));
 
-    // ── Step 2: covariance matrix (d × d) ─────────────────────────────────
     const cov: number[][] = Array.from({ length: d }, () =>
         new Array<number>(d).fill(0)
     );
@@ -107,10 +74,8 @@ function computePCA(rows: number[][]): PCAResult {
         }
     }
 
-    // total variance = trace(cov)
     const totalVar = cov.reduce((s, _, i) => s + cov[i][i], 0);
 
-    // ── Step 3: helpers ───────────────────────────────────────────────────
     const norm2 = (v: number[]) =>
         Math.sqrt(v.reduce((s, x) => s + x * x, 0));
 
@@ -122,10 +87,8 @@ function computePCA(rows: number[][]): PCAResult {
     const matVec = (M: number[][], v: number[]): number[] =>
         M.map(row => row.reduce((s, mij, j) => s + mij * v[j], 0));
 
-    // Deterministic seed (avoids flickering on re-render)
     const seed = (i: number) => Math.sin(i * 127.1 + 311.7) * 43758.5453123;
 
-    /** Power iteration; deflate against already-found eigenvectors. */
     const findEigenvec = (deflateVecs: number[][]): { vec: number[]; eigenval: number } => {
         let v = normalize(Array.from({ length: d }, (_, i) => seed(i)));
 
@@ -148,11 +111,9 @@ function computePCA(rows: number[][]): PCAResult {
         return { vec: v, eigenval };
     };
 
-    // ── Step 4: top 2 principal components ───────────────────────────────
     const { vec: pc1, eigenval: e1 } = findEigenvec([]);
     const { vec: pc2, eigenval: e2 } = findEigenvec([pc1]);
 
-    // ── Step 5: project ───────────────────────────────────────────────────
     const project = (r: number[]): [number, number] => [
         r.reduce((s, v, i) => s + v * pc1[i], 0),
         r.reduce((s, v, i) => s + v * pc2[i], 0),
@@ -167,7 +128,6 @@ function computePCA(rows: number[][]): PCAResult {
     };
 }
 
-// ─── Visual helpers ───────────────────────────────────────────────────────────
 
 const CLUSTER_PALETTE = [
     "#4C9BE8", "#E8784C", "#4CE8A0", "#E84C6A",
@@ -181,7 +141,6 @@ function clusterColor(idx: number, total: number): string {
     return `hsl(${hue}, 65%, 52%)`;
 }
 
-/** SVG path for a 5-point star centred at (0,0). */
 function starPath(R = 11, r = 4.8, n = 5): string {
     const step = Math.PI / n;
     const pts: [number, number][] = [];
@@ -195,7 +154,6 @@ function starPath(R = 11, r = 4.8, n = 5): string {
 
 const STAR_D = starPath();
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
     points,
@@ -210,7 +168,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
     const tooltipRef = useRef<HTMLDivElement>(null);
     const [svgWidth, setSvgWidth] = useState(width);
 
-    // Responsive width via ResizeObserver
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver((entries) => {
@@ -221,7 +178,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         return () => ro.disconnect();
     }, [width]);
 
-    // ── PCA computation (memoised) ────────────────────────────────────────
     const pcaResult = useMemo(() => {
         if (points.length === 0 && medoids.length === 0) return null;
         const allMatrix = [
@@ -238,7 +194,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         return { ptProj, mdProj, varPC1, varPC2 };
     }, [points, medoids]);
 
-    // ── D3 render ──────────────────────────────────────────────────────────
     useEffect(() => {
         if (!svgRef.current || !pcaResult) return;
 
@@ -253,7 +208,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             clusterIds.map((id, i) => [id, clusterColor(i, numClusters)])
         );
 
-        // ── Layout ────────────────────────────────────────────────────────
         const LEGEND_W = 110;
         const margin = { top: 52, right: LEGEND_W + 20, bottom: 56, left: 60 };
         const chartW = svgWidth;
@@ -261,7 +215,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         const innerW = chartW - margin.left - margin.right;
         const innerH = chartH - margin.top - margin.bottom;
 
-        // ── Scales ────────────────────────────────────────────────────────
         const allX = [...ptProj.map(p => p[0]), ...mdProj.map(p => p[0])];
         const allY = [...ptProj.map(p => p[1]), ...mdProj.map(p => p[1])];
         const xMin = d3.min(allX) ?? 0;
@@ -278,10 +231,10 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .domain([yMin - yPad, yMax + yPad])
             .nice().range([innerH, 0]);
 
-        // ── SVG root ──────────────────────────────────────────────────────
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
-        svg.attr("width", chartW).attr("height", chartH)
+        svg.attr("width", chartW)
+            .attr("height", chartH)
             .attr("viewBox", `0 0 ${chartW} ${chartH}`)
             .attr("style", "max-width:100%;height:auto;");
 
@@ -292,7 +245,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // ── Grid ─────────────────────────────────────────────────────────
         const gridStyle = (sel: d3.Selection<SVGGElement, unknown, null, undefined>) => {
             sel.select(".domain").remove();
             sel.selectAll<SVGLineElement, unknown>("line")
@@ -308,7 +260,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .call(d3.axisLeft(yScale).tickSize(-innerW).tickFormat(() => ""))
             .call(gridStyle);
 
-        // ── Axes ─────────────────────────────────────────────────────────
         const fmt = (v: d3.NumberValue) => {
             const n = +v;
             if (Math.abs(n) >= 1e4) return d3.format(".2e")(n);
@@ -330,7 +281,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .call(d3.axisLeft(yScale).ticks(6).tickFormat(fmt as (n: d3.NumberValue) => string))
             .call(axisStyle);
 
-        // Axis labels (PC1 / PC2 with variance explained)
         const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
         g.append("text")
             .attr("text-anchor", "middle")
@@ -343,7 +293,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("font-size", "11px").attr("fill", "hsl(var(--foreground))")
             .text(`PC2 (${pct(varPC2)} variance explained)`);
 
-        // ── Tooltip helpers ────────────────────────────────────────────────
         const tooltipNode = tooltipRef.current;
         const containerNode = containerRef.current;
         if (!tooltipNode || !containerNode) return;
@@ -359,7 +308,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
         };
         const hideTip = () => ttip.style("opacity", "0");
 
-        // ── Data points (clipped) ─────────────────────────────────────────
         const plotG = g.append("g").attr("clip-path", `url(#${clipId})`);
 
         plotG.selectAll<SVGCircleElement, { proj: [number, number]; src: PCAPoint }>("circle.pt")
@@ -393,7 +341,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
                 hideTip();
             });
 
-        // Medoid stars
         plotG.selectAll<SVGPathElement, { proj: [number, number]; src: PCAMedoid }>("path.medoid")
             .data(mdProj.map((proj, i) => ({ proj, src: medoids[i] })))
             .join("path")
@@ -424,7 +371,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
                 hideTip();
             });
 
-        // Medoid cluster labels (small text near the star)
         plotG.selectAll<SVGTextElement, { proj: [number, number]; src: PCAMedoid }>("text.medoid-label")
             .data(mdProj.map((proj, i) => ({ proj, src: medoids[i] })))
             .join("text")
@@ -437,7 +383,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("pointer-events", "none")
             .text(d => `C${d.src.cluster}`);
 
-        // ── Legend ────────────────────────────────────────────────────────
         const lx = chartW - margin.right + 18;
         const lg = svg.append("g").attr("transform", `translate(${lx},${margin.top + 4})`);
 
@@ -445,7 +390,7 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("x", 0).attr("y", 0)
             .attr("font-size", "11px").attr("font-weight", "700")
             .attr("fill", "hsl(var(--foreground))")
-            .text("Klaster");
+            .text("Cluster");
 
         clusterIds.forEach((id, i) => {
             const gy = 20 + i * 22;
@@ -458,7 +403,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
                 .text(`Cluster ${id}`);
         });
 
-        // Medoid legend entry
         const mly = 20 + clusterIds.length * 22 + 14;
         lg.append("line")
             .attr("x1", 0).attr("y1", mly - 10)
@@ -476,7 +420,6 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("font-size", "11px").attr("fill", "hsl(var(--foreground))")
             .text("Medoid");
 
-        // ── Title ─────────────────────────────────────────────────────────
         svg.append("text")
             .attr("x", margin.left + innerW / 2).attr("y", 20)
             .attr("text-anchor", "middle")
@@ -489,22 +432,21 @@ export const PCAClusterPlot: React.FC<PCAClusterPlotProps> = ({
             .attr("text-anchor", "middle")
             .attr("font-size", "10px")
             .attr("fill", "hsl(var(--muted-foreground))")
-            .text(`Dimensi direduksi ke 2D menggunakan PCA · ${points.length} observasi · ${numClusters} klaster`);
+            .text(`Dimensions reduced to 2D using PCA · ${points.length} observations · ${numClusters} clusters`);
 
     }, [pcaResult, points, medoids, variableNames, title, svgWidth, height]);
 
-    // ── Guard: insufficient data ───────────────────────────────────────────
     if (points.length + medoids.length < 2) {
         return (
             <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
-                PCA membutuhkan minimal 2 observasi.
+                PCA requires at least 2 observations.
             </div>
         );
     }
     if ((points[0]?.features.length ?? 0) === 0) {
         return (
             <div className="flex items-center justify-center h-[300px] text-sm text-muted-foreground">
-                Tidak ada data fitur untuk diproyeksikan.
+                No feature data to project.
             </div>
         );
     }

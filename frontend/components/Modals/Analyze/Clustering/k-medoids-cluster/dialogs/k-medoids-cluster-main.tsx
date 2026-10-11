@@ -1,7 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+    TooltipProvider,
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from "@/components/ui/tooltip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,21 +19,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-    TooltipProvider,
-    Tooltip,
-    TooltipTrigger,
-    TooltipContent,
-} from "@/components/ui/tooltip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HelpCircle } from "lucide-react";
-import { KMedoidsClusterDefault } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/constants/k-medoids-cluster-default";
+import { KMedoidsClusterDefault, PAM_HARD_MAX_ROWS, PAM_WARN_ROWS } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/constants/k-medoids-cluster-default";
 import type {
     KMedoidsClusterContainerProps,
     KMedoidsClusterMainType,
     KMedoidsClusterType,
 } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
-import { ClusterMode } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
+import { ClusterMode, KMedoidsMethod, MissingValueMethod } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/types/k-medoids-cluster";
 import { KMedoidsClusterDialog } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/dialog";
 import { KMedoidsClusterIterate } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/iterate";
 import { KMedoidsClusterResults } from "@/components/Modals/Analyze/Clustering/k-medoids-cluster/dialogs/results";
@@ -44,6 +44,8 @@ import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+const TAB_ORDER = ["variables", "iterate", "results", "evaluation", "save", "options"] as const;
+
 export const KMedoidsClusterContainer = ({
     onClose,
 }: KMedoidsClusterContainerProps) => {
@@ -54,13 +56,8 @@ export const KMedoidsClusterContainer = ({
         ...KMedoidsClusterDefault,
     });
     const [activeTab, setActiveTab] = useState("variables");
-    const [pendingMainData, setPendingMainData] = useState<KMedoidsClusterMainType | null>(null);
-    const [missingWarning, setMissingWarning] = useState<{
-        rowsWithMissing: number;
-        totalRows: number;
-        missingPercent: string;
-        topVariables: string;
-    } | null>(null);
+    // Peringatan PAM untuk data besar; null = dialog tertutup.
+    const [pamWarning, setPamWarning] = useState<{ rows: number; isAutomatic: boolean } | null>(null);
 
     const { closeModal } = useModal();
     const router = useRouter();
@@ -70,6 +67,13 @@ export const KMedoidsClusterContainer = ({
             const savedData = await getFormData("KMedoidsCluster");
             if (savedData) {
                 const { id: _id, ...formDataWithoutId } = savedData;
+
+                // Migrasi konfigurasi lama: dua checkbox grafik pindah tab agar satu grup
+                // dengan tabelnya. Nilai lama di section `options` dibawa ke section barunya
+                // supaya preferensi pengguna tidak hilang begitu saja.
+                const legacyConvergenceChart = formDataWithoutId.options?.ShowConvergenceChart;
+                const legacyOptimalKChart = formDataWithoutId.options?.ShowOptimalKChart;
+
                 setFormData({
                     ...KMedoidsClusterDefault,
                     ...formDataWithoutId,
@@ -84,10 +88,18 @@ export const KMedoidsClusterContainer = ({
                     results: {
                         ...KMedoidsClusterDefault.results,
                         ...formDataWithoutId.results,
+                        ShowConvergenceChart:
+                            formDataWithoutId.results?.ShowConvergenceChart ??
+                            legacyConvergenceChart ??
+                            KMedoidsClusterDefault.results.ShowConvergenceChart,
                     },
                     evaluation: {
                         ...KMedoidsClusterDefault.evaluation,
                         ...formDataWithoutId.evaluation,
+                        ShowOptimalKChart:
+                            formDataWithoutId.evaluation?.ShowOptimalKChart ??
+                            legacyOptimalKChart ??
+                            KMedoidsClusterDefault.evaluation.ShowOptimalKChart,
                     },
                     save: {
                         ...KMedoidsClusterDefault.save,
@@ -105,7 +117,7 @@ export const KMedoidsClusterContainer = ({
 
         loadFormData();
 
-        // Panaskan worker/WASM lebih awal agar run pertama tidak menanggung biaya inisialisasi.
+        // Pre-warm worker/WASM so first run does not pay initialization cost.
         void warmupKMedoidsRuntime(true);
     }, []);
 
@@ -124,7 +136,7 @@ export const KMedoidsClusterContainer = ({
     }, []);
 
     const executeKMedoidsCluster = async (mainData: KMedoidsClusterMainType) => {
-        const selectedVarNames = new Set(mainData.TargetVar ?? []);
+        const selectedVarNames = new Set(mainData.TargetVar || []);
         const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
 
         closeModal();
@@ -138,8 +150,8 @@ export const KMedoidsClusterContainer = ({
 
             await saveFormData("KMedoidsCluster", newFormData);
 
-            // Tambahkan pelacakan progres
-            const n_init = newFormData.iterate.NumberOfInitializations ?? 10;
+            // Add progress tracking
+            const n_init = newFormData.iterate.NumberOfInitializations || 10;
             const dataSize = dataVariables.length;
             const progressToast = toast.loading(
                 `Initializing clustering... (${dataSize} cases, ${n_init} runs)`
@@ -151,9 +163,9 @@ export const KMedoidsClusterContainer = ({
                     dataVariables,
                     variables: selectedVariables,
                     allVariables: variables,
-                    useWorker: true, // Coba gunakan web worker (fallback otomatis ke direct jika tidak tersedia)
+                    useWorker: true, // Try to use web worker (auto-fallback to direct if not available)
                     onProgress: (progress) => {
-                        // Perbarui toast dengan progres terkini
+                        // Update toast with progress
                         const statusMsg = progress.stage === "clustering"
                             ? `${progress.message} (running in background)`
                             : progress.message;
@@ -164,8 +176,8 @@ export const KMedoidsClusterContainer = ({
                 toast.dismiss(progressToast);
 
                 if (result.success) {
-                    // Penyimpanan hasil komprehensif berjalan di background.
-                    // Navigasi segera; hasil terbaru akan muncul setelah tersimpan.
+                    // Comprehensive result persistence runs in background.
+                    // Navigate immediately; the latest result will appear once persisted.
                     router.push("/dashboard/result");
                 }
             } catch (error) {
@@ -191,8 +203,15 @@ export const KMedoidsClusterContainer = ({
         });
     };
 
-    const detectMissingWarning = (mainData: KMedoidsClusterMainType) => {
-        const selectedVarNames = new Set(mainData.TargetVar ?? []);
+    /**
+     * Statistik missing value untuk variabel yang sedang dipilih.
+     * Ditampilkan sebagai notice inline di tab Options (tepat di atas grup Missing Values)
+     * supaya angkanya terlihat saat pengguna memilih strategi listwise/pairwise — bukan
+     * sebagai dialog setelah klik OK. Rekap lengkapnya tetap ada di tabel Case Processing
+     * Summary pada output.
+     */
+    const missingStats = useMemo(() => {
+        const selectedVarNames = new Set(formData.main.TargetVar || []);
         const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
 
         if (selectedVariables.length === 0 || dataVariables.length === 0) {
@@ -227,9 +246,11 @@ export const KMedoidsClusterContainer = ({
             return null;
         }
 
-        const topVariables = Object.entries(missingByVariable)
+        const affected = Object.entries(missingByVariable)
             .filter(([, count]) => count > 0)
-            .sort((a, b) => b[1] - a[1])
+            .sort((a, b) => b[1] - a[1]);
+
+        const topVariables = affected
             .slice(0, 5)
             .map(([name, count]) => `${name} (${count})`)
             .join(", ");
@@ -239,14 +260,14 @@ export const KMedoidsClusterContainer = ({
             totalRows: dataVariables.length,
             missingPercent: ((rowsWithMissing / dataVariables.length) * 100).toFixed(1),
             topVariables,
+            remainingVariables: Math.max(0, affected.length - 5),
         };
-    };
+    }, [formData.main.TargetVar, variables, dataVariables]);
 
     const getValidRowCount = (
-    rows: (number | string | null | undefined)[][],
+        rows: any[],
         selectedVariables: typeof variables,
-        useListWise: boolean,
-        usePairWise: boolean
+        missingValueMethod: MissingValueMethod
     ) => {
         if (rows.length === 0 || selectedVariables.length === 0) {
             return 0;
@@ -270,7 +291,7 @@ export const KMedoidsClusterContainer = ({
                 }
             }
 
-            if (useListWise || !usePairWise) {
+            if (missingValueMethod === MissingValueMethod.Listwise) {
                 if (!hasAnyMissing && hasAnyValid) {
                     validCount += 1;
                 }
@@ -282,8 +303,20 @@ export const KMedoidsClusterContainer = ({
         return validCount;
     };
 
-    const handleRunWithMissingCheck = () => {
-        const selectedVarNames = new Set(formData.main.TargetVar ?? []);
+    // Dipakai tab Iterate untuk rekomendasi metode; dihitung ulang hanya saat pilihan variabel,
+    // strategi missing value, atau data berubah.
+    const validRowCount = useMemo(() => {
+        const selectedVarNames = new Set(formData.main.TargetVar || []);
+        const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
+        return getValidRowCount(
+            dataVariables,
+            selectedVariables,
+            formData.options?.MissingValueMethod ?? MissingValueMethod.Listwise
+        );
+    }, [formData.main.TargetVar, formData.options?.MissingValueMethod, variables, dataVariables]);
+
+    const handleRun = () => {
+        const selectedVarNames = new Set(formData.main.TargetVar || []);
         const selectedVariables = variables.filter((v) => selectedVarNames.has(v.name));
 
         if (dataVariables.length === 0) {
@@ -296,13 +329,11 @@ export const KMedoidsClusterContainer = ({
             return;
         }
 
-        const useListWise = formData.options?.ExcludeListWise ?? true;
-        const usePairWise = formData.options?.ExcludePairWise ?? false;
+        const missingValueMethod = formData.options?.MissingValueMethod ?? MissingValueMethod.Listwise;
         const validRows = getValidRowCount(
             dataVariables,
             selectedVariables,
-            useListWise,
-            usePairWise
+            missingValueMethod
         );
 
         if (validRows < 2) {
@@ -312,27 +343,31 @@ export const KMedoidsClusterContainer = ({
             return;
         }
 
-        // Algoritma WASM mengharuskan k < n secara ketat (k == n tidak valid).
-        // Tampilkan pesan error yang ramah sebelum submit agar pengguna dapat memperbaikinya.
-        const isManual = formData.main.ClusterMode === ClusterMode.Manual;
-        if (isManual) {
-            const manualK = formData.main.Cluster ?? 2;
-            if (manualK >= validRows) {
-                toast.error(
-                    `Number of clusters (k=${manualK}) must be less than the number of valid data rows (n=${validRows}). ` +
-                    `Please reduce the number of clusters or add more data.`
-                );
-                return;
-            }
+        // PAM (dan pemilihan k otomatis, yang berakhir dengan PAM pada seluruh data) membutuhkan
+        // matriks jarak n×n. Di atas PAM_WARN_ROWS pengguna diperingatkan tetapi boleh memaksa
+        // lanjut; di atas PAM_HARD_MAX_ROWS ditolak karena alokasi memori hampir pasti gagal.
+        const isAutomatic = formData.main.ClusterMode === ClusterMode.Automatic;
+        const usesFullPam = isAutomatic || String(formData.iterate.Method).toUpperCase() === "PAM";
+        if (usesFullPam && validRows > PAM_HARD_MAX_ROWS) {
+            toast.error(
+                `PAM cannot be used with ${validRows.toLocaleString()} rows (hard limit ${PAM_HARD_MAX_ROWS.toLocaleString()}).`,
+                {
+                    description: isAutomatic
+                        ? "Automatic k selection relies on PAM. Switch to manual cluster mode with the CLARA method, or reduce the data."
+                        : "Select the CLARA method in the Iterate tab, or reduce the data.",
+                    duration: 8000,
+                }
+            );
+            setActiveTab(isAutomatic ? "variables" : "iterate");
+            return;
         }
-
-        const warning = detectMissingWarning(formData.main);
-        if (warning) {
-            setPendingMainData(formData.main);
-            setMissingWarning(warning);
+        if (usesFullPam && validRows > PAM_WARN_ROWS) {
+            setPamWarning({ rows: validRows, isAutomatic });
             return;
         }
 
+        // Tidak ada dialog konfirmasi missing value di sini: dampaknya sudah ditampilkan
+        // sebagai notice inline di tab Options, dan rekapnya masuk ke Case Processing Summary.
         void executeKMedoidsCluster(formData.main);
     };
 
@@ -354,13 +389,32 @@ export const KMedoidsClusterContainer = ({
                     onValueChange={setActiveTab}
                     className="w-full h-full flex flex-col"
                 >
-                    <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
-                        <TabsTrigger value="variables">Variables</TabsTrigger>
-                        <TabsTrigger value="iterate">Iterate</TabsTrigger>
-                        <TabsTrigger value="results">Results</TabsTrigger>
-                        <TabsTrigger value="evaluation">Evaluation</TabsTrigger>
-                        <TabsTrigger value="save">Save</TabsTrigger>
-                        <TabsTrigger value="options">Options</TabsTrigger>
+                    <TabsList
+                        className="grid w-full flex-shrink-0"
+                        style={{
+                            gridTemplateColumns: TAB_ORDER.map((tab) =>
+                                tab === activeTab ? "max-content" : "minmax(0,1fr)"
+                            ).join(" "),
+                        }}
+                    >
+                        <TabsTrigger value="variables" className="min-w-0">
+                            <span className="truncate block w-full">Variables</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="iterate" className="min-w-0">
+                            <span className="truncate block w-full">Iterate</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="results" className="min-w-0">
+                            <span className="truncate block w-full">Results</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="evaluation" className="min-w-0">
+                            <span className="truncate block w-full">Evaluation</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="save" className="min-w-0">
+                            <span className="truncate block w-full">Save</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="options" className="min-w-0">
+                            <span className="truncate block w-full">Options</span>
+                        </TabsTrigger>
                     </TabsList>
 
                     <div className="flex-grow min-h-0 overflow-hidden">
@@ -384,6 +438,7 @@ export const KMedoidsClusterContainer = ({
                             <KMedoidsClusterIterate
                                 data={formData.iterate}
                                 mainData={formData.main}
+                                validRowCount={validRowCount}
                                 updateFormData={(field, value) =>
                                     updateFormData("iterate", field, value)
                                 }
@@ -433,6 +488,7 @@ export const KMedoidsClusterContainer = ({
                         >
                             <KMedoidsClusterOptions
                                 data={formData.options}
+                                missingStats={missingStats}
                                 updateFormData={(field, value) =>
                                     updateFormData("options", field, value)
                                 }
@@ -464,7 +520,7 @@ export const KMedoidsClusterContainer = ({
 
                 <div className="flex items-center space-x-4">
                     <Button
-                        onClick={handleRunWithMissingCheck}
+                        onClick={handleRun}
                         disabled={
                             !formData.main.TargetVar ||
                             formData.main.TargetVar.length === 0 ||
@@ -494,41 +550,52 @@ export const KMedoidsClusterContainer = ({
             </div>
 
             <AlertDialog
-                open={Boolean(missingWarning)}
+                open={pamWarning !== null}
                 onOpenChange={(open) => {
-                    if (!open) {
-                        setMissingWarning(null);
-                        setPendingMainData(null);
-                    }
+                    if (!open) setPamWarning(null);
                 }}
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Warning Missing Value</AlertDialogTitle>
-                        <AlertDialogDescription className="space-y-2">
-                            <span className="block">
-                                Ditemukan missing value pada {missingWarning?.rowsWithMissing ?? 0} dari {missingWarning?.totalRows ?? 0} baris ({missingWarning?.missingPercent ?? "0.0"}%).
-                            </span>
-                            <span className="block mt-2">
-                                Jika dilanjutkan, proses clustering akan menghapus baris yang mengandung missing value.
-                            </span>
-                            {missingWarning?.topVariables ? (
-                                <span className="block mt-2">Variabel terdampak (top 5): {missingWarning.topVariables}</span>
-                            ) : null}
+                        <AlertDialogTitle>PAM may be too heavy for this data</AlertDialogTitle>
+                        <AlertDialogDescription asChild>
+                            <div className="space-y-2">
+                                <p>
+                                    Your data has <strong>{pamWarning?.rows.toLocaleString()}</strong> valid rows.
+                                    PAM builds a full distance matrix of about{" "}
+                                    <strong>
+                                        {pamWarning ? Math.round((pamWarning.rows ** 2 * 8) / 1_048_576) : 0} MB
+                                    </strong>
+                                    , which can be slow and may crash the browser tab on devices with limited memory
+                                    (comfortable up to {PAM_WARN_ROWS.toLocaleString()} rows).
+                                </p>
+                                <p>
+                                    <strong>Recommended:</strong> use CLARA, which clusters samples of the data.
+                                    {pamWarning?.isAutomatic &&
+                                        " Automatic k selection always uses PAM, so CLARA requires manual cluster mode."}
+                                </p>
+                            </div>
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Kembali</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        {pamWarning && !pamWarning.isAutomatic && (
+                            <AlertDialogAction
+                                onClick={() => {
+                                    updateFormData("iterate", "Method", KMedoidsMethod.CLARA);
+                                    setActiveTab("iterate");
+                                }}
+                            >
+                                Switch to CLARA
+                            </AlertDialogAction>
+                        )}
                         <AlertDialogAction
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             onClick={() => {
-                                if (pendingMainData) {
-                                    void executeKMedoidsCluster(pendingMainData);
-                                }
-                                setMissingWarning(null);
-                                setPendingMainData(null);
+                                void executeKMedoidsCluster(formData.main);
                             }}
                         >
-                            Lanjut
+                            Run PAM anyway
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

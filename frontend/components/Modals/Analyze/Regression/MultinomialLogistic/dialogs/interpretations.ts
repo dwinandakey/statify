@@ -46,8 +46,8 @@ export function generateModelFittingDescription(
     }
 
     const pText = pValue < 0.001
-        ? "p < .001"
-        : `p = ${pValue.toFixed(3)}`;
+        ? "p-value (Sig.) < .001"
+        : `p-value (Sig.) = ${pValue.toFixed(3)}`;
 
     if (pValue < 0.05) {
         return `The Final model significantly improves fit over the Intercept-Only baseline model (χ²(${df}) = ${chiSquare.toFixed(2)}, ${pText}), reducing -2 Log Likelihood from ${nullNeg2LL.toFixed(2)} to ${finalNeg2LL.toFixed(2)}. The set of predictors reliably predicts outcome category membership.`;
@@ -108,7 +108,7 @@ export function generateParameterEstimatesDescription(
     const percentSig = calcTotal > 0 ? ((nSignificant / calcTotal) * 100).toFixed(1) : '0.0';
     const refText = refCategoryName ? ` (reference category: '${refCategoryName}')` : '';
 
-    let details = `Logit coefficients for ${nCategories} outcome categories${refText} with ${nPredictors} predictor term${nPredictors !== 1 ? 's' : ''}. Out of ${calcTotal} estimated parameters, ${nSignificant} (${percentSig}%) are statistically significant at p < .05 level.`;
+    let details = `Logit coefficients for ${nCategories} outcome categories${refText} with ${nPredictors} predictor term${nPredictors !== 1 ? 's' : ''}. Out of ${calcTotal} estimated parameters, ${nSignificant} (${percentSig}%) are statistically significant at p-value (Sig.) < .05.`;
 
     if (significantParamNames && significantParamNames.length > 0) {
         details += ` Significant parameters: ${significantParamNames.join(', ')}.`;
@@ -171,12 +171,12 @@ export function generateGoodnessOfFitDescription(
 
     const formatP = (p: number) => (p < 0.001 ? "< .001" : `= ${p.toFixed(3)}`);
 
-    const pearsonFit = pearsonPValue >= 0.05 ? "adequate fit (p ≥ .05)" : `potential lack of fit (p ${formatP(pearsonPValue)})`;
-    const devianceFit = deviancePValue >= 0.05 ? "adequate fit (p ≥ .05)" : `potential lack of fit (p ${formatP(deviancePValue)})`;
+    const pearsonFit = pearsonPValue >= 0.05 ? "adequate fit (p-value (Sig.) ≥ .05)" : `potential lack of fit (p-value (Sig.) ${formatP(pearsonPValue)})`;
+    const devianceFit = deviancePValue >= 0.05 ? "adequate fit (p-value (Sig.) ≥ .05)" : `potential lack of fit (p-value (Sig.) ${formatP(deviancePValue)})`;
 
     const overallFit = (pearsonPValue >= 0.05 && deviancePValue >= 0.05)
-        ? "Non-significant p-values (p ≥ .05) indicate that the model fits the observed data adequately."
-        : "Significant p-values (p < .05) suggest potential discrepancy between observed counts and model predictions.";
+        ? "Non-significant p-value (Sig.) ≥ .05 indicates that the model fits the observed data adequately."
+        : "Significant p-value (Sig.) < .05 suggests potential discrepancy between observed counts and model predictions.";
 
     return `Goodness-of-Fit tests: Pearson χ²(${pearsonDf}) = ${pearsonChiSquare.toFixed(2)} (${pearsonFit}); Deviance χ²(${devianceDf}) = ${deviance.toFixed(2)} (${devianceFit}). ${overallFit}`;
 }
@@ -194,12 +194,12 @@ export function generateLikelihoodRatioDescription(
         ? ((significantCount / variableCount) * 100).toFixed(0)
         : "0";
 
-    const pText = testOverallP < 0.001 ? "p < .001" : `p = ${testOverallP.toFixed(3)}`;
+    const pText = testOverallP < 0.001 ? "p-value (Sig.) < .001" : `p-value (Sig.) = ${testOverallP.toFixed(3)}`;
     const overallInterpret = testOverallP < 0.05
         ? `significant (${pText}), indicating the predictors collectively improve model fit`
         : `not significant (${pText}), indicating predictors do not significantly improve fit over baseline`;
 
-    let text = `Likelihood ratio tests show ${significantCount} of ${variableCount} predictor term${variableCount !== 1 ? 's' : ''} with significant overall main effects (${percentSig}% significant at p < .05). Overall model test is ${overallInterpret}.`;
+    let text = `Likelihood ratio tests show ${significantCount} of ${variableCount} predictor term${variableCount !== 1 ? 's' : ''} with significant overall main effects (${percentSig}% significant at p-value (Sig.) < .05). Overall model test is ${overallInterpret}.`;
 
     if (significantVariableNames && significantVariableNames.length > 0) {
         text += ` Predictors with significant main effects: ${significantVariableNames.join(', ')}.`;

@@ -68,26 +68,29 @@ export function buildCaseProcessingSummary(
     nTotal: number,
     details?: CaseProcessingDetails
 ): CaseProcessingSummary {
-    const safeTotal = Math.max(0, nTotal);
-    const safeValid = Math.max(0, Math.min(nValid, safeTotal));
-    const missingN = safeTotal - safeValid;
-    const initialN = details?.initialN ?? safeTotal;
+    const safeValid = Math.max(0, nValid);
+    const outlierRowsRemoved = Math.max(0, details?.outlierRowsRemoved ?? 0);
+    const missingRowsRemoved = Math.max(
+        0,
+        details?.missingRowsRemoved ?? Math.max(0, nTotal - safeValid)
+    );
+    const initialN = details?.initialN ??
+        Math.max(nTotal, safeValid + missingRowsRemoved + outlierRowsRemoved);
+    const safeTotal = Math.max(0, initialN);
     const preprocessedN = details?.preprocessedN ?? safeValid;
-    const missingRowsRemoved = details?.missingRowsRemoved ?? missingN;
-    const outlierRowsRemoved = details?.outlierRowsRemoved ?? 0;
     const missingByVariable = details?.missingByVariable ?? {};
     const missingEntries = Object.entries(missingByVariable)
         .filter(([, count]) => count > 0)
         .sort((a, b) => b[1] - a[1]);
     const missingVariablesText = missingEntries.length > 0
         ? missingEntries.map(([name, count]) => `${name} (${count})`).join(", ")
-        : "Tidak ada";
+        : "None";
 
     return {
         validN: safeValid,
         validPercent: safeTotal > 0 ? ((safeValid / safeTotal) * 100).toFixed(1) : "0.0",
-        missingN,
-        missingPercent: safeTotal > 0 ? ((missingN / safeTotal) * 100).toFixed(1) : "0.0",
+        missingN: missingRowsRemoved,
+        missingPercent: safeTotal > 0 ? ((missingRowsRemoved / safeTotal) * 100).toFixed(1) : "0.0",
         totalN: safeTotal,
         totalPercent: "100.0",
         initialN,

@@ -1,0 +1,1 @@
+scikit-learn 1.9.1; train_test_split(test_size=0.30, stratify=label, random_state=42); n_all=5574 n_train=3901 n_test=1673

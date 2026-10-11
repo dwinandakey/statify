@@ -21,6 +21,23 @@ export class KMedoidsCluster {
 if (Symbol.dispose) KMedoidsCluster.prototype[Symbol.dispose] = KMedoidsCluster.prototype.free;
 
 /**
+ * Compute Within-Cluster Sum of Squares (WCSS) for the Elbow method.
+ *
+ * Replaces the duplicated `calculateWCSS` (k-medoids-cluster-analysis.ts) and
+ * `computeWCSS` (cluster-worker.ts) TypeScript functions with a single Rust
+ * implementation (`utils::distance::compute_wcss`).
+ * @param {any} input_value
+ * @returns {any}
+ */
+export function calculate_wcss(input_value) {
+    const ret = wasm.calculate_wcss(input_value);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return takeFromExternrefTable0(ret[0]);
+}
+
+/**
  * Initialize panic hook for better error messages in WASM
  */
 export function init_panic_hook() {
@@ -107,6 +124,27 @@ export function run_k_medoids_typed(flat_data, n_rows, n_cols, n_clusters, metho
     const ptr2 = passStringToWasm0(distance_metric, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len2 = WASM_VECTOR_LEN;
     const ret = wasm.run_k_medoids_typed(ptr0, len0, n_rows, n_cols, n_clusters, ptr1, len1, max_iterations, ptr2, len2, random_seed, convergence_tolerance, n_init, isLikeNone(on_progress) ? 0 : addToExternrefTable0(on_progress), isLikeNone(on_initial_medoids) ? 0 : addToExternrefTable0(on_initial_medoids));
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return takeFromExternrefTable0(ret[0]);
+}
+
+/**
+ * Standardize/normalize a numeric matrix before clustering.
+ *
+ * Replaces the equivalent `standardizeZScore` / `normalizeMinMax` JS
+ * functions in the TypeScript service layer so the scaling formula has a
+ * single implementation (`stats::normalization`), consistent with every
+ * other K-Medoids formula living in Rust/WASM.
+ *
+ * `method`: "zscore" | "minmax" | "none" (anything else falls back to "none").
+ * Z-score uses sample standard deviation (n-1), matching R's `scale()`.
+ * @param {any} input_value
+ * @returns {any}
+ */
+export function standardize_data(input_value) {
+    const ret = wasm.standardize_data(input_value);
     if (ret[2]) {
         throw takeFromExternrefTable0(ret[1]);
     }

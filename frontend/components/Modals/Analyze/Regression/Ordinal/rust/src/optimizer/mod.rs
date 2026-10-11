@@ -33,7 +33,6 @@ pub fn fit_location_only(
     let mut history = Vec::new();
     let warnings = Vec::new();
     let mut converged = false;
-    let mut info_matrix: Option<DMatrix<f64>> = None;
     let mut iterations_run = 0;
     let mut last_abs_change_minus2_log_likelihood = None;
     let mut last_max_abs_change_parameters = None;
@@ -55,8 +54,6 @@ pub fn fit_location_only(
             EstimationMethod::FisherScoring => expected_information(&params, data, spec),
             EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
         };
-
-        info_matrix = Some(information.clone());
 
         let delta = solve_linear_system(&information, &grad)
             .ok_or_else(|| PlumError::OptimizationError("Matrix singular".to_string()))?;
@@ -97,6 +94,11 @@ pub fn fit_location_only(
     }
 
     let final_ll = log_likelihood(&params, data, spec);
+    let final_information = match options.method {
+        EstimationMethod::FisherScoring => expected_information(&params, data, spec),
+        EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
+    };
+    let info_matrix = Some(final_information);
 
     if history_options.enabled {
         let final_iteration = iterations_run;
@@ -142,7 +144,6 @@ pub fn fit_general(
     let mut history = Vec::new();
     let warnings = Vec::new();
     let mut converged = false;
-    let mut info_matrix: Option<DMatrix<f64>> = None;
     let mut prev_state: Option<IterationState> = None;
     let mut iterations_run = 0;
     let mut last_abs_change_minus2_log_likelihood = None;
@@ -163,8 +164,6 @@ pub fn fit_general(
             EstimationMethod::FisherScoring => expected_information(&params, data, spec),
             EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
         };
-
-        info_matrix = Some(information.clone());
 
         let delta = solve_linear_system(&information, &grad)
             .ok_or_else(|| PlumError::OptimizationError("Matrix singular".to_string()))?;
@@ -205,6 +204,11 @@ pub fn fit_general(
     }
 
     let final_ll = log_likelihood(&params, data, spec);
+    let final_information = match options.method {
+        EstimationMethod::FisherScoring => expected_information(&params, data, spec),
+        EstimationMethod::NewtonRaphson => -hessian(&params, data, spec),
+    };
+    let info_matrix = Some(final_information);
 
     if history_options.enabled {
         let final_iteration = iterations_run;
@@ -272,15 +276,29 @@ pub fn starting_values_general(location_fit: &FitResult, spec: &PlumSpec) -> Plu
     params
 }
 
-pub fn apply_threshold_monotonicity_adjustment(params: &mut PlumParameters) -> usize {
+pub fn enforce_threshold_monotonicity(theta: &mut [f64]) -> usize {
+    if theta.len() <= 1 {
+        return 0;
+    }
     let mut adjustments = 0;
-    for j in 1..params.theta.len() {
-        if params.theta[j] <= params.theta[j - 1] {
-            params.theta[j] = params.theta[j - 1] + 1e-6;
-            adjustments += 1;
+    let mut changed = true;
+    while changed {
+        changed = false;
+        for j in 0..theta.len() - 1 {
+            if theta[j] > theta[j + 1] {
+                let avg = (theta[j] + theta[j + 1]) / 2.0;
+                theta[j] = avg;
+                theta[j + 1] = avg;
+                adjustments += 1;
+                changed = true;
+            }
         }
     }
     adjustments
+}
+
+pub fn apply_threshold_monotonicity_adjustment(params: &mut PlumParameters) -> usize {
+    enforce_threshold_monotonicity(&mut params.theta)
 }
 
 pub fn step_halving(
