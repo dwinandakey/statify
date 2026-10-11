@@ -1,0 +1,107 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in C:/Data/KULIAH/Skripsi/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+FAIL components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-engine-warnings.test.ts
+  B9: getNaiveBayesEngineWarnings (format get_all_errors Rust)
+    × mengambil setiap pesan bernomor dari ringkasan (8 ms)
+    × 'No errors occurred.', undefined, dan non-string -> daftar kosong (1 ms)
+  B9: analyzeNaiveBayes meneruskan peringatan mesin (BB-37)
+    × (a) respons sukses dengan warning -> catatan tampil dan hasil tetap ditulis (11 ms)
+    × (c) respons normal tanpa warning -> tidak ada catatan, tabel identik dengan respons tanpa field errors (2 ms)
+  B9: galat mesin sampai ke pengguna lewat getUserFriendlyNaiveBayesError (BB-38)
+    √ (b) galat berkode -> pesan berkode dari naive-bayes-error-messages.ts (3 ms)
+    √ galat fold tanpa kode (folds > jumlah kasus) -> pesan pengaturan cross-validation, analisis tidak ditulis (15 ms)
+
+  ● B9: getNaiveBayesEngineWarnings (format get_all_errors Rust) › mengambil setiap pesan bernomor dari ringkasan
+
+    TypeError: (0 , naive_bayes_analysis_1.getNaiveBayesEngineWarnings) is not a function
+
+    [0m [90m 66 |[39m describe([32m"B9: getNaiveBayesEngineWarnings (format get_all_errors Rust)"[39m[33m,[39m () [33m=>[39m {
+     [90m 67 |[39m   it([32m"mengambil setiap pesan bernomor dari ringkasan"[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 68 |[39m     expect(getNaiveBayesEngineWarnings(summaryOf([32m"validation.kfold"[39m[33m,[39m [33mFOLD_WARNING[39m)))[33m.[39mtoEqual([[33mFOLD_WARNING[39m])[33m;[39m
+     [90m    |[39m                                       [31m[1m^[22m[39m
+     [90m 69 |[39m   })[33m;[39m
+     [90m 70 |[39m
+     [90m 71 |[39m   it([32m"'No errors occurred.', undefined, dan non-string -> daftar kosong"[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-engine-warnings.test.ts:68:39)
+
+  ● B9: getNaiveBayesEngineWarnings (format get_all_errors Rust) › 'No errors occurred.', undefined, dan non-string -> daftar kosong
+
+    TypeError: (0 , naive_bayes_analysis_1.getNaiveBayesEngineWarnings) is not a function
+
+    [0m [90m 70 |[39m
+     [90m 71 |[39m   it([32m"'No errors occurred.', undefined, dan non-string -> daftar kosong"[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 72 |[39m     expect(getNaiveBayesEngineWarnings([32m"No errors occurred."[39m))[33m.[39mtoEqual([])[33m;[39m
+     [90m    |[39m                                       [31m[1m^[22m[39m
+     [90m 73 |[39m     expect(getNaiveBayesEngineWarnings(undefined))[33m.[39mtoEqual([])[33m;[39m
+     [90m 74 |[39m     expect(getNaiveBayesEngineWarnings({ errors[33m:[39m [] }))[33m.[39mtoEqual([])[33m;[39m
+     [90m 75 |[39m   })[33m;[39m[0m
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-engine-warnings.test.ts:72:39)
+
+  ● B9: analyzeNaiveBayes meneruskan peringatan mesin (BB-37) › (a) respons sukses dengan warning -> catatan tampil dan hasil tetap ditulis
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: ["Number of folds (6) exceeds the smallest class size (5). Some folds will not contain any instance of that class, so class proportions across folds will not be perfectly balanced. The analysis will still run."]
+    Received: undefined
+
+    [0m [90m 84 |[39m     expect(mockResult)[33m.[39mtoHaveBeenCalledTimes([35m1[39m)[33m;[39m
+     [90m 85 |[39m     expect(lastCall()[33m.[39mrawResult)[33m.[39mtoBe(stub)[33m;[39m
+    [31m[1m>[22m[39m[90m 86 |[39m     expect(lastCall()[33m.[39mengineWarnings)[33m.[39mtoEqual([[33mFOLD_WARNING[39m])[33m;[39m
+     [90m    |[39m                                       [31m[1m^[22m[39m
+     [90m 87 |[39m     expect(noteValues())[33m.[39mtoEqual([[33mFOLD_WARNING[39m])[33m;[39m
+     [90m 88 |[39m     [90m// Tabel lain tetap dibangun.[39m
+     [90m 89 |[39m     [36mconst[39m keys [33m=[39m lastCall()[33m.[39mformattedResult[33m.[39mtables[33m.[39mmap((t) [33m=>[39m t[33m.[39mkey)[33m;[39m[0m
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-engine-warnings.test.ts:86:39)
+
+  ● B9: analyzeNaiveBayes meneruskan peringatan mesin (BB-37) › (c) respons normal tanpa warning -> tidak ada catatan, tabel identik dengan respons tanpa field errors
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: []
+    Received: undefined
+
+    [0m [90m  95 |[39m     [36mawait[39m run()[33m;[39m
+     [90m  96 |[39m     [36mconst[39m withSummary [33m=[39m lastCall()[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m     expect(withSummary[33m.[39mengineWarnings)[33m.[39mtoEqual([])[33m;[39m
+     [90m     |[39m                                        [31m[1m^[22m[39m
+     [90m  98 |[39m     expect(noteValues())[33m.[39mtoEqual([])[33m;[39m
+     [90m  99 |[39m
+     [90m 100 |[39m     workerResponse [33m=[39m { success[33m:[39m [36mtrue[39m[33m,[39m data[33m:[39m stub }[33m;[39m[0m
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-engine-warnings.test.ts:97:40)
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in C:/Data/KULIAH/Skripsi/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+FAIL components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-output-warnings.test.ts
+  B9: resultNaiveBayes dan peringatan mesin
+    √ Case Processing Summary aktif: peringatan cukup di baris Note, catatan analytic kosong (11 ms)
+    × Case Processing Summary mati: peringatan tampil sebagai catatan analytic (4 ms)
+    √ tanpa peringatan: catatan analytic tetap kosong (perilaku lama) (2 ms)
+
+  ● B9: resultNaiveBayes dan peringatan mesin › Case Processing Summary mati: peringatan tampil sebagai catatan analytic
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Number of folds (6) exceeds the smallest class size (5). The analysis will still run."
+    Received: ""
+
+    [0m [90m 43 |[39m
+     [90m 44 |[39m     it([32m"Case Processing Summary mati: peringatan tampil sebagai catatan analytic"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 45 |[39m         expect([36mawait[39m analyticNote([36mfalse[39m[33m,[39m [[33mWARNING[39m]))[33m.[39mtoBe([33mWARNING[39m)[33m;[39m
+     [90m    |[39m                                                      [31m[1m^[22m[39m
+     [90m 46 |[39m     })[33m;[39m
+     [90m 47 |[39m
+     [90m 48 |[39m     it([32m"tanpa peringatan: catatan analytic tetap kosong (perilaku lama)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-output-warnings.test.ts:45:54)
+
+Test Suites: 2 failed, 2 total
+Tests:       5 failed, 4 passed, 9 total
+Snapshots:   0 total
+Time:        4.056 s
+Ran all test suites matching engine-warnings|output-warnings.
