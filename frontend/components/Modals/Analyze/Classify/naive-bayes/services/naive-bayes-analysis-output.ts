@@ -33,12 +33,15 @@ export type NaiveBayesResultPayload = {
   formattedResult: NaiveBayesFormattedResult;
   rawResult: NaiveBayesRawResult;
   configData: NaiveBayesType;
+  /** B9: peringatan non-fatal mesin Rust (sudah menjadi baris Note di Case Processing Summary). */
+  engineWarnings?: string[];
 };
 
 export async function resultNaiveBayes({
   formattedResult,
   rawResult,
   configData,
+  engineWarnings = [],
 }: NaiveBayesResultPayload) {
   const { addLog, addAnalytic, addStatistic } = useResultStore.getState();
 
@@ -49,9 +52,11 @@ export async function resultNaiveBayes({
 
   const logId = await addLog({ log: "Naive Bayes Analysis" });
 
+  // B9: bila Case Processing Summary (tempat baris Note) tidak ditampilkan,
+  // peringatan mesin tetap terlihat lewat catatan analytic.
   const analyticId = await addAnalytic(logId, {
     title: "Naive Bayes Analysis Result",
-    note: "",
+    note: findTable("case_processing_summary") ? "" : engineWarnings.join(" "),
   });
 
   if (configData.output.CaseProcessingSummary) {

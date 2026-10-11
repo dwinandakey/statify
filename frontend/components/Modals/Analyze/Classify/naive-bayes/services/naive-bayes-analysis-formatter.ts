@@ -334,10 +334,13 @@ export function buildTextSummaryRows(
  * v2 (AGENTS_V2 §9): baris Text features memakai `raw.text_features` (N4);
  * bila tidak ada, cadangan `text` (= `trained_model.text`). Baris `Not Scored`
  * tampil bila `raw.not_scored_rows` terisi (hanya model dengan Text).
+ * B9: peringatan non-fatal mesin Rust (`engineWarnings`) ditambahkan sebagai
+ * baris `Note` di akhir, pola yang sama dengan catatan W-LEAK.
  */
 export function buildCaseProcessingSummaryTable(
   raw: NaiveBayesCaseProcessingSummaryRaw,
-  text?: NaiveBayesTrainedTextRaw | null
+  text?: NaiveBayesTrainedTextRaw | null,
+  engineWarnings: string[] = []
 ): Table {
   const textSummary =
     raw.text_features ?? (text ? textSummaryFromTrainedText(text) : null);
@@ -373,6 +376,7 @@ export function buildCaseProcessingSummaryTable(
             },
           ]
         : []),
+      ...engineWarnings.map((warning) => ({ rowHeader: ["Note"], value: warning })),
     ],
   };
 }
@@ -625,7 +629,9 @@ export function transformNaiveBayesResult(
     // true walau tidak ada Text Features, jadi tabel Text hanya dibangun bila
     // Rust benar-benar mengirim `text_feature_table`.
     TextFeatureTable?: boolean;
-  }
+  },
+  // B9: peringatan non-fatal mesin Rust (lihat `getNaiveBayesEngineWarnings`).
+  engineWarnings: string[] = []
 ): ResultJson {
   const tables: Table[] = [];
 
@@ -637,7 +643,11 @@ export function transformNaiveBayesResult(
         ? { ...raw.case_processing_summary, not_scored_rows: raw.not_scored_rows }
         : raw.case_processing_summary;
     tables.push(
-      buildCaseProcessingSummaryTable(summaryRaw, getTrainedText(raw.trained_model))
+      buildCaseProcessingSummaryTable(
+        summaryRaw,
+        getTrainedText(raw.trained_model),
+        engineWarnings
+      )
     );
   }
 
