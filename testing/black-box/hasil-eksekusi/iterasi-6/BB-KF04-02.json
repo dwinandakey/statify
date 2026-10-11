@@ -1,0 +1,66 @@
+{
+ "id": "BB-KF04-02",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate"
+ ],
+ "toasts": [
+  {
+   "label": "Continue tanpa pasangan",
+   "texts": [
+    "Add at least one variable pair.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem.",
+    "Add at least one variable pair.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem."
+   ],
+   "file": "BB-KF04-02-1.png"
+  },
+  {
+   "label": "Continue dengan Variable 1 saja",
+   "texts": [
+    "Some pairs are incomplete. Select Variable 1 and Variable 2 in every row.",
+    "Some pairs are incomplete. Select Variable 1 and Variable 2 in every row."
+   ],
+   "file": "BB-KF04-02-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "terbuka1": true,
+  "terbuka2": true,
+  "kedalaman1DiAvailableSetelahDipakai": 0,
+  "isiPasangan": "Paired Variable(s)\nPair\tVariable 1\tVariable 2\n1\t\nkedalaman1\n\t",
+  "availableSetelahLangkah3": "Available Variables\nlokasi\nukuran1\nkedalaman2\nukuran2\nkd\nuk\nDouble-click to move variables between lists.",
+  "terbuka3": true
+ },
+ "notes": [
+  "BB-KF04-02-1.png: toast: Continue tanpa pasangan",
+  "BB-KF04-02-2.png: toast: Continue dengan Variable 1 saja",
+  "kedalaman1 tidak lagi tersedia di Available Variables setelah dipakai sebagai Variable 1; dicoba drag dari sel Variable 1 ke kolom Variable 2",
+  "BB-KF04-02-3.png: langkah 3: kedalaman1 tidak ada di Available Variables; pasangan tidak terbentuk"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "JyX0CCEXNcyYSCxSLCIPP",
+  "buildIdServed": "JyX0CCEXNcyYSCxSLCIPP",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-26T04:48:25.593Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 13,
+ "finishedAt": "2026-09-26T04:48:38.872Z",
+ "wasmRequested": []
+}

@@ -1,0 +1,11 @@
+module,size,mode,phase,source,invokerType,scripts,script_duration_ms,runs
+repeated-measures,5000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,3679.0,30
+repeated-measures,5000,worker,steady,lainnya: 4583-ded7dd835bf408f0.js,event-listener,1,29.0,1
+repeated-measures,10000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,6872.0,30
+repeated-measures,20000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,18096.0,30
+repeated-measures,20000,main,steady,lainnya: 4583-ded7dd835bf408f0.js,event-listener,1,24.0,1
+repeated-measures,20000,worker,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,7,444.0,7
+repeated-measures,40000,main,startup,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,1,112.0,1
+repeated-measures,40000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,38907.0,30
+repeated-measures,40000,worker,startup,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,1,133.0,1
+repeated-measures,40000,worker,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,3170.0,30

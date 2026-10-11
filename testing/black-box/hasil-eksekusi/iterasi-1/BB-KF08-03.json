@@ -1,0 +1,37 @@
+{
+ "id": "BB-KF08-03",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures"
+ ],
+ "toasts": [
+  {
+   "label": "Define tanpa faktor",
+   "texts": [
+    "Add a within-subjects factor (name and number of levels) before clicking Define.",
+    "Add a within-subjects factor (name and number of levels) before clicking Define."
+   ],
+   "file": "BB-KF08-03-1.png"
+  },
+  {
+   "label": "Define tanpa measure",
+   "texts": [
+    "Add a measure name before clicking Define.",
+    "Add a measure name before clicking Define."
+   ],
+   "file": "BB-KF08-03-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "defineTerbuka1": true,
+  "defineTerbuka2": true
+ },
+ "notes": [
+  "BB-KF08-03-1.png: toast: Define tanpa faktor",
+  "BB-KF08-03-2.png: toast: Define tanpa measure"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 11
+}

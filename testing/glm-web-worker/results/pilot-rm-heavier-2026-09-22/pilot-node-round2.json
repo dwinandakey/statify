@@ -1,0 +1,290 @@
+[
+  {
+    "step": "2a' 1a, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 98,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2a' 1a, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 169,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2a' 1a, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 300,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2a' 1a, levels 8",
+    "L": 8,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 550,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2b' 1a, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 174,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2b' 1a, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 338,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2b' 1a, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 611,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "2b' 1a, levels 10",
+    "L": 10,
+    "M": 1,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 1110,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "3' 1a, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 2000,
+    "medianMs": 311,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "3' 1a, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 5000,
+    "medianMs": 633,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "3' 1a, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 10000,
+    "medianMs": 1179,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  },
+  {
+    "step": "3' 1a, levels 10, 2 measures",
+    "L": 10,
+    "M": 2,
+    "options": {
+      "DescStats": true,
+      "EstEffectSize": true,
+      "ObsPower": true
+    },
+    "emmeans": {},
+    "n": 20000,
+    "medianMs": 2334,
+    "errors": "No errors occurred.",
+    "keys": [
+      "within_subjects_factors",
+      "descriptive_statistics",
+      "multivariate_tests",
+      "mauchly_test",
+      "tests_of_within_subjects_effects",
+      "tests_of_within_subjects_contrasts",
+      "tests_of_between_subjects_effects",
+      "executed_functions"
+    ]
+  }
+]

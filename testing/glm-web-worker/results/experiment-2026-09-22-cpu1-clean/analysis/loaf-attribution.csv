@@ -1,0 +1,16 @@
+module,size,mode,phase,source,invokerType,scripts,script_duration_ms,runs
+multivariate,100,main,startup,react-dom (c7879cf7-fabe25011515220e.js),event-listener,1,191.0,1
+multivariate,100,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,10502.0,30
+multivariate,500,main,startup,react-dom (c7879cf7-fabe25011515220e.js),event-listener,1,250.0,1
+multivariate,500,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,184971.0,30
+multivariate,1000,main,startup,react-dom (c7879cf7-fabe25011515220e.js),event-listener,1,323.0,1
+multivariate,1000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,713408.0,30
+multivariate,2000,main,startup,react-dom (c7879cf7-fabe25011515220e.js),event-listener,1,198.0,1
+multivariate,2000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,2660111.0,30
+repeated-measures,5000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,4063.0,30
+repeated-measures,10000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,29,6635.0,29
+repeated-measures,20000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,13164.0,30
+repeated-measures,40000,main,startup,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,1,68.0,1
+repeated-measures,40000,main,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,26223.0,30
+repeated-measures,40000,worker,startup,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,1,90.0,1
+repeated-measures,40000,worker,steady,"chunk dashboard bersama (registry modal, Handsontable) (9919.04d6baa4c37d6f10.js)",event-listener,30,2974.0,30

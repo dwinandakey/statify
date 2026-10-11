@@ -18,7 +18,10 @@ const customJestConfig = {
     '**/__tests__/**/*.test.tsx',
     '**/test/**/*.test.js',
     '**/test/**/*.test.ts',
-    '**/test/**/*.test.tsx'
+    '**/test/**/*.test.tsx',
+    '**/__test__/**/*.test.js',
+    '**/__test__/**/*.test.ts',
+    '**/__test__/**/*.test.tsx'
   ],
   transform: {
     '^.+\.js$': 'babel-jest',

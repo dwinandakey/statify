@@ -1,0 +1,6 @@
+Jest penuh: 47 suite gagal dari 280; baseline 49
+tes: 6888 lulus, 204 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 2
+  - components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate.test.ts
+  - components/Modals/Analyze/general-linear-model/multivariate/test/multivariate.test.ts

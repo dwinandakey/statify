@@ -1,0 +1,501 @@
+{
+ "id": "BB-KF04-03",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = 8, 3",
+  "profil browser baru (bersih) untuk langkah berikutnya",
+  "impor mv3-geser.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = 0"
+ ],
+ "toasts": [
+  {
+   "label": "OK Paired δ₀ = (8, 3)",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF04-03-2.png"
+  },
+  {
+   "label": "langkah 4: mv3-geser.csv, δ₀ = 0",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF04-03-5.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK Paired δ₀ = (8, 3)",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² (Paired)",
+         "test_name": "Pillai's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.9998",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": "0.0034"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "1",
+         "mean_square": "0.0000",
+         "f_value": "0.0000",
+         "significance": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0667",
+         "df": "1",
+         "mean_square": "0.0667",
+         "f_value": "0.0031",
+         "significance": "0.9567"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "121.5714",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "21.7810",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "305.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  },
+  {
+   "label": "langkah 4: mv3-geser.csv, δ₀ = 0",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² (Paired)",
+         "test_name": "Pillai's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.9998",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": "0.0034"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [0, 0].\na. Design: Intercept\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "1",
+         "mean_square": "0.0000",
+         "f_value": "0.0000",
+         "significance": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0667",
+         "df": "1",
+         "mean_square": "0.0667",
+         "f_value": "0.0031",
+         "significance": "0.9567"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "121.5714",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "21.7810",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "305.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "catatan": "Computed on the difference vector d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic",
+  "nilaiSamaDenganLangkah4": true,
+  "spss": "keluaran SPSS spss/mv3_delta0.sps belum tersedia (testing/fitur-v4/spss-output/ kosong)"
+ },
+ "notes": [
+  "BB-KF04-03-1.png: subdialog Paired, δ₀ = 8, 3",
+  "BB-KF04-03-2.png: toast: OK Paired δ₀ = (8, 3)",
+  "BB-KF04-03-3.png: Hotelling T² (Paired)",
+  "BB-KF04-03-4.png: subdialog Paired, δ₀ = 0 (bawaan)",
+  "BB-KF04-03-5.png: toast: langkah 4: mv3-geser.csv, δ₀ = 0",
+  "BB-KF04-03-6.png: langkah 4: data geser"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "JyX0CCEXNcyYSCxSLCIPP",
+  "buildIdServed": "JyX0CCEXNcyYSCxSLCIPP",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-26T04:48:52.778Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-26T04:49:19.334Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ],
+ "durationS": 27
+}

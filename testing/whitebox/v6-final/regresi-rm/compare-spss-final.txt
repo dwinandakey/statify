@@ -1,0 +1,50 @@
+Statify vs SPSS 27 (presisi penuh; toleransi 0,001)
+
+dataset | tabel | nilai | dibandingkan | selisih maks | > 0,001 | Statify tidak ada
+gambar51 | multivariate | 20 | 20 | 3.85e-4 | 0 | 0
+gambar51 | mauchly | 7 | 7 | 8.88e-15 | 0 | 0
+gambar51 | within_effects | 32 | 32 | 5.82e-11 | 0 | 0
+gambar51 | within_contrasts | 24 | 24 | 4.89e-10 | 0 | 0
+gambar51 | between_effects | 8 | 8 | 2.91e-11 | 0 | 0
+b | descriptives | 48 | 48 | 7.11e-15 | 0 | 0
+b | multivariate | 64 | 64 | 2.95e-4 | 0 | 0
+b | mauchly | 7 | 7 | 5.33e-15 | 0 | 0
+b | within_effects | 76 | 76 | 1.51e-11 | 0 | 0
+b | within_contrasts | 57 | 57 | 1.27e-11 | 0 | 0
+b | between_effects | 19 | 19 | 1.16e-10 | 0 | 0
+a | descriptives | 18 | 18 | 3.55e-15 | 0 | 0
+a | multivariate | 64 | 64 | 4.12e-4 | 0 | 0
+a | mauchly | 14 | 14 | 2.11e-14 | 0 | 0
+a | within_multivariate | 32 | 32 | 4.41e-4 | 0 | 0
+a | within_effects | 88 | 88 | 7.11e-13 | 0 | 0
+a | within_contrasts | 44 | 44 | 2.43e-12 | 0 | 0
+a | between_effects | 22 | 22 | 2.91e-11 | 0 | 0
+c | descriptives | 27 | 27 | 7.11e-15 | 0 | 0
+c | box_m | 5 | 5 | 4.55e-12 | 0 | 0
+c | bartlett | 4 | 4 | 4.97e-14 | 0 | 0
+c | multivariate | 64 | 64 | 4.26e-4 | 0 | 0
+c | mauchly | 7 | 7 | 7.55e-15 | 0 | 0
+c | within_effects | 76 | 76 | 1.17e-11 | 0 | 0
+c | within_contrasts | 38 | 38 | 1.16e-11 | 0 | 0
+c | levene | 48 | 48 | 3.12e-14 | 0 | 0
+c | between_effects | 19 | 19 | 2.91e-11 | 0 | 0
+c | residual_sscp | 27 | 27 | 1.14e-13 | 0 | 0
+c | emmeans | 48 | 48 | 6.39e-14 | 0 | 0
+c | emmeans_pairwise | 40 | 40 | 6.13e-14 | 0 | 0
+d | descriptives | 48 | 48 | 7.11e-15 | 0 | 0
+d | multivariate | 64 | 64 | 2.95e-4 | 0 | 0
+d | mauchly | 7 | 7 | 5.33e-15 | 0 | 0
+d | within_effects | 76 | 76 | 1.51e-11 | 0 | 0
+d | within_contrasts | 57 | 57 | 1.94e-11 | 0 | 0
+d | between_effects | 19 | 19 | 2.91e-11 | 0 | 0
+
+Selisih > 0,001:
+
+Tidak ada nilai Statify:
+
+Desain yang diblokir di Statify:
+  e: 333 nilai SPSS disimpan; Statify: 1. Designs with more than one within-subjects factor are not supported in this version
+
+Tabel (atau bagian tabel) SPSS yang tidak dibuat Statify:
+  c: EM Means metode: Univariate Tests
+  c: EM Means sesi: Multivariate Tests

@@ -1,0 +1,258 @@
+{
+  "base": "http://localhost:3101",
+  "chromium": "143.0.7499.4",
+  "cells": {
+    "multivariate-100": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 100,
+        "logId": 1,
+        "log": "Multivariate Analysis",
+        "titles": [
+          "Between-Subjects Factors",
+          "Multivariate Tests",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 4,
+        "outputBytes": 25188,
+        "errorLines": [
+          "Error df",
+          "error_df",
+          "Error",
+          "error_table",
+          "Errors Logs"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "multivariate-500": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 500,
+        "logId": 1,
+        "log": "Multivariate Analysis",
+        "titles": [
+          "Between-Subjects Factors",
+          "Multivariate Tests",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 4,
+        "outputBytes": 25230,
+        "errorLines": [
+          "Error df",
+          "error_df",
+          "Error",
+          "error_table",
+          "Errors Logs"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "multivariate-1000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 1000,
+        "logId": 1,
+        "log": "Multivariate Analysis",
+        "titles": [
+          "Between-Subjects Factors",
+          "Multivariate Tests",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 4,
+        "outputBytes": 25231,
+        "errorLines": [
+          "Error df",
+          "error_df",
+          "Error",
+          "error_table",
+          "Errors Logs"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "multivariate-2000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 2000,
+        "logId": 1,
+        "log": "Multivariate Analysis",
+        "titles": [
+          "Between-Subjects Factors",
+          "Multivariate Tests",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 4,
+        "outputBytes": 25316,
+        "errorLines": [
+          "Error df",
+          "error_df",
+          "Error",
+          "error_table",
+          "Errors Logs"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "repeated-measures-5000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 5000,
+        "logId": 1,
+        "log": "Repeated Measures Analysis",
+        "titles": [
+          "Within-Subjects Factors",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Multivariate Tests",
+          "Mauchly's Test of Sphericity",
+          "Tests of Within-Subjects Effects",
+          "Tests of Within-Subjects Contrasts",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 17,
+        "outputBytes": 13918,
+        "errorLines": [
+          "Error df",
+          "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+          "Error(time)",
+          "Error",
+          "error_table"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "repeated-measures-10000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 10000,
+        "logId": 1,
+        "log": "Repeated Measures Analysis",
+        "titles": [
+          "Within-Subjects Factors",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Multivariate Tests",
+          "Mauchly's Test of Sphericity",
+          "Tests of Within-Subjects Effects",
+          "Tests of Within-Subjects Contrasts",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 17,
+        "outputBytes": 13932,
+        "errorLines": [
+          "Error df",
+          "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+          "Error(time)",
+          "Error",
+          "error_table"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "repeated-measures-20000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 20000,
+        "logId": 1,
+        "log": "Repeated Measures Analysis",
+        "titles": [
+          "Within-Subjects Factors",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Multivariate Tests",
+          "Mauchly's Test of Sphericity",
+          "Tests of Within-Subjects Effects",
+          "Tests of Within-Subjects Contrasts",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 17,
+        "outputBytes": 13954,
+        "errorLines": [
+          "Error df",
+          "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+          "Error(time)",
+          "Error",
+          "error_table"
+        ],
+        "loggedErrors": []
+      }
+    },
+    "repeated-measures-40000": {
+      "modeActual": "worker",
+      "ok": true,
+      "summary": {
+        "dataRows": 40000,
+        "logId": 1,
+        "log": "Repeated Measures Analysis",
+        "titles": [
+          "Within-Subjects Factors",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Descriptive Statistics",
+          "Multivariate Tests",
+          "Mauchly's Test of Sphericity",
+          "Tests of Within-Subjects Effects",
+          "Tests of Within-Subjects Contrasts",
+          "Tests of Between-Subjects Effects",
+          "Errors Logs"
+        ],
+        "statCount": 17,
+        "outputBytes": 13985,
+        "errorLines": [
+          "Error df",
+          "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+          "Error(time)",
+          "Error",
+          "error_table"
+        ],
+        "loggedErrors": []
+      }
+    }
+  }
+}

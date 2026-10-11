@@ -1,0 +1,59 @@
+{
+ "id": "BB-KF01-01",
+ "steps": [
+  "impor two-way manova.csv"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "tombol": {
+   "Model": "aktif",
+   "Contrasts": "aktif",
+   "Plots": "nonaktif",
+   "Post Hoc": "aktif",
+   "EM Means": "aktif",
+   "Save": "aktif",
+   "Options": "aktif",
+   "Bootstrap": "aktif",
+   "Test Values": "aktif",
+   "Paired": "aktif",
+   "Reset": "aktif",
+   "Cancel": "aktif",
+   "OK": "aktif"
+  },
+  "daftar": [
+   "Available Variables",
+   "Dependent Variables:",
+   "Fixed Factor(s):",
+   "Covariate(s):",
+   "WLS Weight:"
+  ],
+  "catatanPlots": 1
+ },
+ "notes": [
+  "BB-KF01-01-1.png: menu Analyze → General Linear Model",
+  "BB-KF01-01-2.png: dialog Multivariate"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "EXcw4k8lfhzpWjMN3Mjc7",
+  "buildIdServed": "EXcw4k8lfhzpWjMN3Mjc7",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.241dc806.wasm",
+    "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+   }
+  }
+ },
+ "startedAt": "2026-09-30T15:41:29.308Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 3,
+ "finishedAt": "2026-09-30T15:41:32.359Z",
+ "wasmRequested": []
+}

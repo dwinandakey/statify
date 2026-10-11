@@ -1,0 +1,43 @@
+flowchart TD
+    n1{{"1: rows.ok_or_else(..)? (P1)"}}
+    n2["2: return Err(missing)"]
+    n3{{"3: if rows.len() != p (P2)"}}
+    n4{{"4: || any row.len() != p (P3)"}}
+    n5["5: return Err(ukuran)"]
+    n6{{"6: m; if any !finite (P4)"}}
+    n7["7: return Err(angka)"]
+    n8{{"8: if any m_ii <= 0 (P5)"}}
+    n9["9: return Err(diagonal)"]
+    n10{{"10: scale; for i in 0..p (P6)"}}
+    n11{{"11: for j in i+1..p (P7)"}}
+    n12{{"12: if |m_ij - m_ji| > 1e-12 scale (P8)"}}
+    n13["13: return Err(simetris)"]
+    n14{{"14: if cholesky().is_none() (P9)"}}
+    n15["15: return Err(definit positif)"]
+    n16["16: return Ok(m)"]
+    n17["17: keluar"]
+    n1 --> n2
+    n1 --> n3
+    n2 --> n17
+    n3 --> n5
+    n3 --> n4
+    n4 --> n5
+    n4 --> n6
+    n5 --> n17
+    n6 --> n7
+    n6 --> n8
+    n7 --> n17
+    n8 --> n9
+    n8 --> n10
+    n9 --> n17
+    n10 --> n11
+    n10 --> n14
+    n11 --> n12
+    n11 --> n10
+    n12 --> n13
+    n12 --> n11
+    n13 --> n17
+    n14 --> n15
+    n14 --> n16
+    n15 --> n17
+    n16 --> n17

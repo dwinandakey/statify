@@ -1,0 +1,8 @@
+## BB-KF03-04: status selesai; identik dengan iterasi lama
+## BB-KF03-05: status selesai; identik dengan iterasi lama
+## BB-KF03-12: status selesai; identik dengan iterasi lama
+## BB-KF04-03: status selesai; identik dengan iterasi lama
+## BB-KF04-04: status selesai; identik dengan iterasi lama
+## BB-KF03-14: status selesai; identik dengan iterasi lama
+## BB-KF03-15: status selesai; identik dengan iterasi lama
+## BB-KF04-05: status selesai; identik dengan iterasi lama

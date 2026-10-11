@@ -1,0 +1,40 @@
+{
+ "id": "BB-KF01-01",
+ "steps": [
+  "impor two-way manova.csv"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "tombol": {
+   "Model": "aktif",
+   "Contrasts": "aktif",
+   "Plots": "nonaktif",
+   "Post Hoc": "aktif",
+   "EM Means": "aktif",
+   "Save": "aktif",
+   "Options": "aktif",
+   "Bootstrap": "aktif",
+   "Test Values": "aktif",
+   "Paired": "aktif",
+   "Reset": "aktif",
+   "Cancel": "aktif",
+   "OK": "aktif"
+  },
+  "daftar": [
+   "Available Variables",
+   "Dependent Variables:",
+   "Fixed Factor(s):",
+   "Covariate(s):",
+   "WLS Weight:"
+  ],
+  "catatanPlots": 1
+ },
+ "notes": [
+  "BB-KF01-01-1.png: menu Analyze → General Linear Model",
+  "BB-KF01-01-2.png: dialog Multivariate"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 3
+}

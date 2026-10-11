@@ -1,0 +1,2 @@
+c + Residual SSCP: errors: No errors occurred.
+  Bartlett {"likelihood_ratio":0.08681558528608405,"approx_chi_square":40.86859471963443,"df":5,"significance":1.0825442059959298e-7,"description":"Tests the null hypothesis that the residual covariance matrix is proportional to an identity matrix.","design":"Bartlett's Test of Sphericity for Residual Matrix"}

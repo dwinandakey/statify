@@ -1,0 +1,491 @@
+{
+ "id": "BB-KF04-05",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "Paired (kedalaman1, kedalaman2), (ukuran1, ukuran2); δ₀ = 8, 3",
+  "Options: Simultaneous CI dicentang"
+ ],
+ "toasts": [
+  {
+   "label": "OK berpasangan, Σd diketahui",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF04-05-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK berpasangan, Σd diketahui",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Multivariate Tests — Hotelling T² Berpasangan",
+     "tables": [
+      {
+       "title": "Multivariate Tests — Hotelling T² Berpasangan",
+       "columns": [
+        "Effect",
+        "",
+        "T²",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Hotelling T² Berpasangan",
+         "test_name": "Pillai's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.9998",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": "0.0034"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.0002",
+         "f": "0.0016",
+         "hypothesis_df": "2",
+         "error_df": "13",
+         "significance": "0.9984",
+         "t_squared": ""
+        }
+       ],
+       "footnote": "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Chi-Square Test (Known Covariance Matrix)",
+     "tables": [
+      {
+       "title": "Chi-Square Test (Known Covariance Matrix)",
+       "columns": [
+        "Hypothesis",
+        "Chi-Square",
+        "df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "hypothesis": "μd = δ₀",
+         "chi_square": "0.0034",
+         "df": "2",
+         "significance": "0.9983"
+        }
+       ],
+       "footnote": "H₀: μd = δ₀, d = M1 − M2 (d1 = kedalaman1 − kedalaman2, d2 = ukuran1 − ukuran2), δ₀ = [8, 3]. Σd is known (entered in Paired), so χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀) ~ χ²(p) under H₀ (Johnson & Wichern, 6th ed., §4.2, §4.4). p = 2, n = 15. The Hotelling T² test in Multivariate Tests uses the sample covariance matrix instead."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Simultaneous Confidence Intervals",
+     "tables": [
+      {
+       "title": "Simultaneous Confidence Intervals",
+       "columns": [
+        "Dependent Variable",
+        "Mean Difference (d̄)",
+        "Std. Error",
+        "δ₀",
+        "95% Simultaneous T² Interval",
+        "95% Bonferroni Interval"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "estimate": "8.0000",
+         "std_error": "2.8469",
+         "hypothesized": "8",
+         "t2_lower": "-0.1506",
+         "t2_upper": "16.1506",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "0.8555",
+         "bonferroni_upper": "15.1445",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "ukuran1 − ukuran2",
+         "estimate": "3.0667",
+         "std_error": "1.2050",
+         "hypothesized": "3",
+         "t2_lower": "-0.3833",
+         "t2_upper": "6.5166",
+         "t2_contains": "Yes",
+         "bonferroni_lower": "0.0426",
+         "bonferroni_upper": "6.0907",
+         "bonferroni_contains": "Yes"
+        }
+       ],
+       "footnote": "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+     "tables": [
+      {
+       "title": "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+       "columns": [
+        "Dependent Variable",
+        "Mean Difference (d̄)",
+        "Std. Error",
+        "δ₀",
+        "95% Simultaneous χ² Interval",
+        "95% Bonferroni Interval (z)"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "estimate": "8.0000",
+         "std_error": "2.8284",
+         "hypothesized": "8",
+         "chi_square_lower": "1.0767",
+         "chi_square_upper": "14.9233",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "1.6604",
+         "bonferroni_upper": "14.3396",
+         "bonferroni_contains": "Yes"
+        },
+        {
+         "rowHeader": [],
+         "dependent_variable": "ukuran1 − ukuran2",
+         "estimate": "3.0667",
+         "std_error": "1.2111",
+         "hypothesized": "3",
+         "chi_square_lower": "0.1023",
+         "chi_square_upper": "6.0310",
+         "chi_square_contains": "Yes",
+         "bonferroni_lower": "0.3522",
+         "bonferroni_upper": "5.7811",
+         "bonferroni_contains": "Yes"
+        }
+       ],
+       "footnote": "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0000",
+         "df": "0",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "0.0000",
+         "df": "1",
+         "mean_square": "0.0000",
+         "f_value": "0.0000",
+         "significance": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "0.0667",
+         "df": "1",
+         "mean_square": "0.0667",
+         "f_value": "0.0031",
+         "significance": "0.9567"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "121.5714",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "21.7810",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "305.0000",
+         "df": "15",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "kedalaman1 − kedalaman2",
+         "sum_of_squares": "1702.0000",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "ukuran1 − ukuran2",
+         "sum_of_squares": "304.9333",
+         "df": "14",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "kotakAwal": "unchecked",
+  "matriks": {
+   "title": "Σd",
+   "columns": [
+    "d1 = kedalaman1 − kedalaman2",
+    "d2 = ukuran1 − ukuran2"
+   ],
+   "rows": [
+    "d1 = kedalaman1 − kedalaman2",
+    "d2 = ukuran1 − ukuran2"
+   ],
+   "cells": [
+    [
+     {
+      "value": "120",
+      "disabled": false
+     },
+     {
+      "value": "17",
+      "disabled": false
+     }
+    ],
+    [
+     {
+      "value": "17",
+      "disabled": true
+     },
+     {
+      "value": "22",
+      "disabled": false
+     }
+    ]
+   ]
+  },
+  "urutanTabel": [
+   "Multivariate Tests — Hotelling T² Berpasangan",
+   "Chi-Square Test (Known Covariance Matrix)",
+   "Simultaneous Confidence Intervals",
+   "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+   "Tests of Between-Subjects Effects",
+   "Errors Logs"
+  ],
+  "tabelChi": {
+   "kolom": [
+    "Hypothesis",
+    "Chi-Square",
+    "df",
+    "Sig."
+   ],
+   "baris": [
+    {
+     "rowHeader": [],
+     "hypothesis": "μd = δ₀",
+     "chi_square": "0.0034",
+     "df": "2",
+     "significance": "0.9983"
+    }
+   ],
+   "catatan": "H₀: μd = δ₀, d = M1 − M2 (d1 = kedalaman1 − kedalaman2, d2 = ukuran1 − ukuran2), δ₀ = [8, 3]. Σd is known (entered in Paired), so χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀) ~ χ²(p) under H₀ (Johnson & Wichern, 6th ed., §4.2, §4.4). p = 2, n = 15. The Hotelling T² test in Multivariate Tests uses the sample covariance matrix instead."
+  },
+  "tabelCiSigma": {
+   "kolom": [
+    "Dependent Variable",
+    "Mean Difference (d̄)",
+    "Std. Error",
+    "δ₀",
+    "95% Simultaneous χ² Interval",
+    "95% Bonferroni Interval (z)"
+   ],
+   "baris": [
+    {
+     "rowHeader": [],
+     "dependent_variable": "kedalaman1 − kedalaman2",
+     "estimate": "8.0000",
+     "std_error": "2.8284",
+     "hypothesized": "8",
+     "chi_square_lower": "1.0767",
+     "chi_square_upper": "14.9233",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "1.6604",
+     "bonferroni_upper": "14.3396",
+     "bonferroni_contains": "Yes"
+    },
+    {
+     "rowHeader": [],
+     "dependent_variable": "ukuran1 − ukuran2",
+     "estimate": "3.0667",
+     "std_error": "1.2111",
+     "hypothesized": "3",
+     "chi_square_lower": "0.1023",
+     "chi_square_upper": "6.0310",
+     "chi_square_contains": "Yes",
+     "bonferroni_lower": "0.3522",
+     "bonferroni_upper": "5.7811",
+     "bonferroni_contains": "Yes"
+    }
+   ],
+   "catatan": "Σd is known (entered in Paired). χ² intervals: d̄ᵢ ± √χ²(2; α) · √(σd,ᵢᵢ/n), √χ²(2; α) = 2.4477; Bonferroni: d̄ᵢ ± z(α/(2p)) · √(σd,ᵢᵢ/n), z(α/(2p)) = 2.2414. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation of the estimate computed from the known Σ (Johnson & Wichern, 6th ed., §4.2, §4.4)."
+  },
+  "nilaiVsR_K4": {
+   "nilaiDibandingkan": 14,
+   "beda": []
+  },
+  "nilaiSamaR": true
+ },
+ "notes": [
+  "BB-KF04-05-1.png: subdialog Paired: Σd diketahui",
+  "BB-KF04-05-2.png: toast: OK berpasangan, Σd diketahui",
+  "BB-KF04-05-3.png: Chi-Square Test (Known Covariance Matrix)",
+  "BB-KF04-05-4.png: Simultaneous Confidence Intervals (Known Covariance Matrix)",
+  "BB-KF04-05-5.png: Multivariate Tests"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "IdywReo5MTivt50HHa3VO",
+  "buildIdServed": "IdywReo5MTivt50HHa3VO",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T14:21:12.691Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T14:21:26.048Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ],
+ "durationS": 13
+}

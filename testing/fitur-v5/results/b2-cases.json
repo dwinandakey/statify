@@ -1,0 +1,6 @@
+[
+ { "id": "mv6-typeI", "csv": "testing/glm-mv-reference/data/two-way manova tak seimbang.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeI" },
+ { "id": "mv6-typeII", "csv": "testing/glm-mv-reference/data/two-way manova tak seimbang.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeII" },
+ { "id": "mv6-typeIII", "csv": "testing/glm-mv-reference/data/two-way manova tak seimbang.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeIII" },
+ { "id": "mv6-typeIV", "csv": "testing/glm-mv-reference/data/two-way manova tak seimbang.csv", "dep": ["Y1A1", "Y2A1"], "fix": ["faktorA", "faktorB"], "ssType": "typeIV" }
+]

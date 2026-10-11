@@ -1,0 +1,30 @@
+{
+ "id": "BB-KF08-04",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures"
+ ],
+ "toasts": [
+  {
+   "label": "Add faktor kedua",
+   "texts": [
+    "Designs with more than one within-subjects factor are not supported in this version.",
+    "Designs with more than one within-subjects factor are not supported in this version."
+   ],
+   "file": "BB-KF08-04.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "faktorTerdaftar": {
+   "waktu": 1,
+   "kondisi": 0
+  }
+ },
+ "notes": [
+  "BB-KF08-04.png: toast: Add faktor kedua"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7
+}

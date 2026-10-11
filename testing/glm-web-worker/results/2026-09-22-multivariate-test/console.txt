@@ -1,0 +1,86 @@
+┌─────────┬─────────┬──────────────────────────────────────────────┬──────────────────────────┬────────────────────┬───────────────────────┬───────────────────────┬───────┐
+│ (index) │ dataset │ statistic                                    │ matcher                  │ expected           │ actual                │ difference            │ pass  │
+├─────────┼─────────┼──────────────────────────────────────────────┼──────────────────────────┼────────────────────┼───────────────────────┼───────────────────────┼───────┤
+│ 0       │ 'A'     │ 'multivariate_tests'                         │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 1       │ 'A'     │ 'tests_of_between_subjects_effects'          │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 2       │ 'A'     │ 'parameter_estimates'                        │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 3       │ 'A'     │ 'box_test'                                   │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 4       │ 'A'     │ 'box_test.df1'                               │ 'toBe'                   │ 6                  │ 6                     │ 0                     │ true  │
+│ 5       │ 'A'     │ 'box_test.f'                                 │ 'toBeGreaterThanOrEqual' │ 0                  │ 0                     │ 0                     │ true  │
+│ 6       │ 'A'     │ 'between-subjects Y1 × Group'                │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 7       │ 'A'     │ 'between-subjects Y1 × Group .df'            │ 'toBe'                   │ 2                  │ 2                     │ 0                     │ true  │
+│ 8       │ 'A'     │ "Group Pillai's Trace"                       │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 9       │ 'A'     │ "Group Pillai's Trace .value"                │ 'toBeCloseTo(6)'         │ 0                  │ 0.9999020857632955    │ 0.9999020857632955    │ false │
+│ 10      │ 'B'     │ 'multivariate_tests Group*Treatment'         │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 11      │ 'B'     │ 'between-subjects Y3 × Group'                │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 12      │ 'B'     │ 'between-subjects Y3 × Group .df'            │ 'toBe'                   │ 2                  │ 2                     │ 0                     │ true  │
+│ 13      │ 'B'     │ 'box_test.df1'                               │ 'toBe'                   │ 30                 │ 30                    │ 0                     │ true  │
+│ 14      │ 'B'     │ 'box_test.f'                                 │ 'toBeGreaterThanOrEqual' │ 0                  │ 4.693951306795932e-11 │ 4.693951306795932e-11 │ true  │
+│ 15      │ 'B'     │ "Group Pillai's Trace"                       │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 16      │ 'B'     │ "Group Pillai's Trace .f"                    │ 'toBeCloseTo(6)'         │ 0                  │ 17.66327308976982     │ 17.66327308976982     │ false │
+│ 17      │ 'C'     │ 'multivariate_tests Species'                 │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 18      │ 'C'     │ 'between-subjects SepalLength × Species'     │ 'toBeDefined'            │ 'defined'          │ 'defined'             │ ''                    │ true  │
+│ 19      │ 'C'     │ 'between-subjects SepalLength × Species .df' │ 'toBe'                   │ 2                  │ 2                     │ 0                     │ true  │
+│ 20      │ 'C'     │ 'box_test.box_m'                             │ 'toBeCloseTo(6)'         │ 10.393282721313454 │ 10.393282721313454    │ 0                     │ true  │
+│ 21      │ 'C'     │ 'box_test.f'                                 │ 'toBeCloseTo(6)'         │ 1.5497442954550478 │ 1.5484993981127095    │ -0.001244897342338236 │ false │
+│ 22      │ 'C'     │ 'box_test.significance'                      │ 'toBeCloseTo(6)'         │ 0.1975627435596765 │ 0.15801440394882937   │ -0.03954833961084714  │ false │
+└─────────┴─────────┴──────────────────────────────────────────────┴──────────────────────────┴────────────────────┴───────────────────────┴───────────────────────┴───────┘
+engine A Group effect: {"Pillai's Trace":{"value":0.9999020857632955,"f":13.497356574437978,"hypothesis_df":4,"error_df":54,"significance":1.0830951424622981e-7,"partial_eta_squared":0.49995104288164777,"noncent_parameter":53.98942629775191,"observed_power":0.9925911418692616,"is_exact_statistic":false},"Roy's Largest Root":{"value":10212.019410228524,"f":137862.2620380851,"hypothesis_df":2,"error_df":27,"significance":0,"partial_eta_squared":0.9999020857632955,"noncent_parameter":275724.5240761702,"observed_power":0.9999992746383345,"is_exact_statistic":false},"Hotelling's Trace":{"value":10212.019410228524,"f":63825.12131392828,"hypothesis_df":4,"error_df":50,"significance":0,"partial_eta_squared":0.9999020857632955,"noncent_parameter":255300.4852557131,"observed_power":0.9999984332188026,"is_exact_statistic":false},"Wilks' Lambda":{"value":0.00009791423670442474,"f":1300.7732986815574,"hypothesis_df":4,"error_df":52,"significance":0,"partial_eta_squared":0.9901048377120724,"noncent_parameter":5203.09319472623,"observed_power":0.999923122653193,"is_exact_statistic":false}}
+engine B Group Pillai: {"value":0.999903946145387,"f":17.66327308976982,"hypothesis_df":6,"error_df":106,"significance":4.296563105299356e-14,"partial_eta_squared":0.4999519730726935,"noncent_parameter":105.97963853861893,"observed_power":0.9943385351349225,"is_exact_statistic":false}
+engine C box_test: {"box_m":10.393282721313454,"f":1.5484993981127095,"df1":6,"df2":8348.706650615308,"significance":0.15801440394882937,"design":"Box's M Test of Equality of Covariance Matrices","description":"Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups."}
+independent: {
+ "A_groupPillai": {
+  "value": 0.9999020857632956,
+  "f": 13.497356574437978,
+  "df1": 4,
+  "df2": 54,
+  "significance": 1.0830951419784517e-7
+ },
+ "B_groupPillai": {
+  "value": 0.9999999999854481,
+  "f": 17.333333332828865,
+  "df1": 6,
+  "df2": 104,
+  "significance": 8.248957079007803e-14
+ },
+ "B_groupPillai_withoutCovariate": {
+  "value": 0.9999039461459915,
+  "f": 17.663273089791172,
+  "df1": 6,
+  "df2": 106,
+  "significance": 4.2981676580014863e-14
+ },
+ "B_residualSSCP_minEigen_withCovariate": {
+  "eigenvalues": [
+   -1.325422690999898e-17,
+   0.05316861880475429,
+   0.26919501755888037
+  ],
+  "dfe": 53
+ },
+ "B_residualSSCP_minEigen_withoutCovariate": {
+  "eigenvalues": [
+   0.018905061312898153,
+   0.05698624310116813,
+   143.2311086955858
+  ],
+  "dfe": 54
+ },
+ "C_boxM": {
+  "M": 10.393282721313454,
+  "c1": 0.1053388980113118,
+  "c2": 0.01205451568921927,
+  "df1": 6,
+  "oldEngineFormula": {
+   "F": 1.5497442954550478,
+   "df2": 29,
+   "significance": 0.19756274356036932
+  },
+  "box1949": {
+   "case": "c2 > c1^2",
+   "df2": 8348.706650615308,
+   "F": 1.5484993981127095,
+   "significance": 0.15801439104344475
+  }
+ }
+}

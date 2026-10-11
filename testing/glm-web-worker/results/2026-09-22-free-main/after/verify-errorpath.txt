@@ -1,0 +1,42 @@
+multivariate {
+ "firstOkMode": "worker",
+ "badMain": {
+  "threw": true,
+  "name": null,
+  "asString": "Failed to parse configuration: Error: invalid type: unit value, expected struct MultivariateConfig"
+ },
+ "badWorker": {
+  "threw": true,
+  "name": "GlmWorkerTaskError",
+  "asString": "Failed to parse configuration: Error: invalid type: unit value, expected struct MultivariateConfig"
+ },
+ "sameErrorTextAsMain": true,
+ "workerCreations": {
+  "afterFirstOk": 1,
+  "afterBad": 1,
+  "afterRecovery": 2
+ },
+ "recoveredMode": "worker",
+ "recoveredNonEmpty": true
+}
+repeated-measures {
+ "firstOkMode": "worker",
+ "badMain": {
+  "threw": true,
+  "name": null,
+  "asString": "Failed to parse configuration: Error: invalid type: unit value, expected struct RepeatedMeasuresConfig"
+ },
+ "badWorker": {
+  "threw": true,
+  "name": "GlmWorkerTaskError",
+  "asString": "Failed to parse configuration: Error: invalid type: unit value, expected struct RepeatedMeasuresConfig"
+ },
+ "sameErrorTextAsMain": true,
+ "workerCreations": {
+  "afterFirstOk": 1,
+  "afterBad": 1,
+  "afterRecovery": 2
+ },
+ "recoveredMode": "worker",
+ "recoveredNonEmpty": true
+}

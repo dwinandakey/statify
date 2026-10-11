@@ -1,0 +1,522 @@
+$ cargo +nightly llvm-cov --lib --branch --ignore-run-fail --disable-default-ignore-filename-regex --ignore-filename-regex /src/test/|/../test/ --html --output-dir /repo/testing/whitebox/coverage/rust-rm-nightly-branch -- --test-threads=1
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+info: cargo-llvm-cov currently setting cfg(coverage) and cfg(coverage_nightly); you can opt-out it by passing --no-cfg-coverage and --no-cfg-coverage-nightly
+warning: unused import: `crate::stats::summary_processing::*`
+  --> src/stats/core.rs:15:9
+   |
+15 | pub use crate::stats::summary_processing::*;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src/stats/between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::models::config::ContrastMethod`
+ --> src/stats/common.rs:6:5
+  |
+6 | use crate::models::config::ContrastMethod;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `matrix_transpose`
+  --> src/stats/multivariate_tests.rs:21:9
+   |
+21 |         matrix_transpose,
+   |         ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src/stats/residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src/stats/sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `factor_name`
+   --> src/stats/between_subjects_effects.rs:113:10
+    |
+113 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sub_var`
+   --> src/stats/between_subjects_sscp.rs:104:27
+    |
+104 |             for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `sub_var`
+   --> src/stats/between_subjects_sscp.rs:225:31
+    |
+225 |                 for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `sub_var`
+   --> src/stats/between_subjects_sscp.rs:288:35
+    |
+288 |                     for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `i`
+   --> src/stats/between_subjects_sscp.rs:387:10
+    |
+387 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `j`
+   --> src/stats/between_subjects_sscp.rs:389:14
+    |
+389 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+warning: unused variable: `level`
+   --> src/stats/between_subjects_sscp.rs:450:34
+    |
+450 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+
+warning: unused variable: `dep_var_name`
+   --> src/stats/common.rs:519:5
+    |
+519 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+
+warning: unused variable: `factor_name`
+  --> src/stats/descriptive_statistics.rs:22:10
+   |
+22 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `data`
+  --> src/stats/estimable_function.rs:11:5
+   |
+11 |     data: &AnalysisData,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `config`
+   --> src/stats/multivariate_tests.rs:508:5
+    |
+508 |     config: &RepeatedMeasuresConfig,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src/stats/multivariate_tests.rs:568:21
+    |
+568 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: unused variable: `record`
+   --> src/stats/multivariate_tests.rs:637:25
+    |
+637 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src/stats/multivariate_tests.rs:728:21
+    |
+728 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src/stats/multivariate_tests.rs:797:25
+    |
+797 |                     let mut record_idx = 0;
+    |                         ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: unused variable: `record`
+   --> src/stats/multivariate_tests.rs:888:25
+    |
+888 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+warning: value assigned to `record_idx` is never read
+   --> src/stats/multivariate_tests.rs:595:25
+    |
+595 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `record_idx` is never read
+   --> src/stats/multivariate_tests.rs:764:25
+    |
+764 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `record_idx` is never read
+   --> src/stats/multivariate_tests.rs:824:29
+    |
+824 | ...                   record_idx += 1;
+    |                       ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `alpha`
+   --> src/stats/multivariate_tests.rs:961:5
+    |
+961 |     alpha: f64,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_alpha`
+
+warning: unused variable: `det_h`
+   --> src/stats/multivariate_tests.rs:986:9
+    |
+986 |     let det_h = match matrix_determinant(h_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_h`
+
+warning: unused variable: `det_e`
+   --> src/stats/multivariate_tests.rs:991:9
+    |
+991 |     let det_e = match matrix_determinant(e_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_e`
+
+warning: unused variable: `u`
+    --> src/stats/multivariate_tests.rs:1047:13
+     |
+1047 |         let u = ((p as f64) * hypothesis_df - 2.0) / 4.0;
+     |             ^ help: if this is intentional, prefix it with an underscore: `_u`
+
+warning: unused variable: `factor_name`
+  --> src/stats/parameter_estimates.rs:37:10
+   |
+37 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factor_name`
+   --> src/stats/parameter_estimates.rs:230:10
+    |
+230 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factor_name`
+  --> src/stats/parse_factors.rs:31:17
+   |
+31 |             let factor_name = captures.get(1).unwrap().as_str().to_string();
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factors`
+  --> src/stats/residual_sscp_matrix.rs:31:9
+   |
+31 |     let factors = config.main.factors_var.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+
+warning: unused variable: `i`
+  --> src/stats/residual_sscp_matrix.rs:80:10
+   |
+80 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `dependent_vars`
+  --> src/stats/sscp_matrix.rs:25:9
+   |
+25 |     let dependent_vars = config.main.sub_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+
+warning: unused variable: `i`
+  --> src/stats/sscp_matrix.rs:92:10
+   |
+92 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src/stats/sscp_matrix.rs:362:10
+    |
+362 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src/stats/sscp_matrix.rs:419:10
+    |
+419 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: value assigned to `test_entries` is never read
+  --> src/stats/univariate_tests.rs:37:32
+   |
+37 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^ this value is reassigned later and never used
+...
+42 |                 test_entries = entries;
+   |                 ------------ `test_entries` is overwritten here before the previous value is read
+
+warning: unused variable: `total_ss`
+  --> src/stats/univariate_tests.rs:81:9
+   |
+81 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+
+warning: unused variable: `data`
+   --> src/stats/univariate_tests.rs:223:5
+    |
+223 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src/stats/univariate_tests.rs:225:5
+    |
+225 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src/stats/univariate_tests.rs:228:5
+    |
+228 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src/stats/univariate_tests.rs:229:5
+    |
+229 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: unused variable: `data`
+   --> src/stats/univariate_tests.rs:422:5
+    |
+422 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src/stats/univariate_tests.rs:424:5
+    |
+424 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src/stats/univariate_tests.rs:427:5
+    |
+427 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src/stats/univariate_tests.rs:428:5
+    |
+428 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: unused variable: `noncentrality`
+   --> src/stats/within_subjects_effects.rs:327:9
+    |
+327 |     let noncentrality = f * df1;
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_noncentrality`
+
+warning: variable `X` should have a snake case name
+   --> src/stats/between_subjects_effects.rs:192:21
+    |
+192 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: variable `X` should have a snake case name
+   --> src/stats/parameter_estimates.rs:115:21
+    |
+115 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+warning: `wasm` (lib test) generated 51 warnings (run `cargo fix --lib -p wasm --tests` to apply 42 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.09s
+     Running unittests src/lib.rs (/tmp/target-rm-nightly/llvm-cov-target/debug/build/wasm/9b5b38d55507fd99/out/wasm-9b5b38d55507fd99)
+
+running 31 tests
+test test::wb_basis_path::mau_j01_dasar_gambar51 ... ok
+test test::wb_basis_path::mau_j03_tanpa_measure ... ok
+test test::wb_basis_path::mau_j04_satu_level ... ok
+test test::wb_basis_path::mau_j05_tanpa_subjek ... ok
+test test::wb_basis_path::mau_j07_record_kosong ... FAILED
+test test::wb_basis_path::mau_j08_record_terpecah ... ok
+test test::wb_basis_path::mau_j09_nilai_null ... FAILED
+test test::wb_basis_path::mau_j12_satu_subjek ... ok
+test test::wb_basis_path::mau_j18_st_nol ... ok
+test test::wb_basis_path::mau_j19_kontras_singular ... ok
+test test::wb_basis_path::mau_j20_skala_kecil ... FAILED
+test test::wb_basis_path::mau_j21_n_sama_k ... FAILED
+test test::wb_basis_path::mau_j24_dua_measure ... ok
+test test::wb_basis_path::mau_t1_kunci_tidak_ada ... FAILED
+test test::wb_basis_path::pwf_j2_tanpa_definisi ... ok
+test test::wb_basis_path::pwf_j3_grup_kosong ... ok
+test test::wb_basis_path::pwf_j4_nama_tidak_cocok ... ok
+test test::wb_basis_path::pwf_j6_satu_level_bernama ... ok
+test test::wb_basis_path::pwf_j7_level_tanpa_nama ... ok
+test test::wb_basis_path::pwf_j9_tanpa_def_factors ... ok
+test test::wb_basis_path::rm_model_epsilon_invarian_skala_1e_5 ... FAILED
+test test::wb_basis_path::rm_model_hf_n_sama_k ... FAILED
+test test::wb_rm_spss::legacy_mauchly_dataset_a_sesuai_spss ... ok
+test test::wb_rm_spss::legacy_mauchly_gambar51_sesuai_spss ... ok
+test test::wb_rm_spss::legacy_within_effects_dataset_a_koreksi_epsilon_sesuai_spss ... ok
+test test::wb_rm_spss::legacy_within_effects_gambar51_koreksi_epsilon_sesuai_spss ... ok
+test test::wb_rm_spss::legacy_within_effects_observed_power_sesuai_spss ... FAILED
+test test::wb_rm_spss::rm_model_dataset_a_dua_measure_sesuai_spss ... ok
+test test::wb_rm_spss::rm_model_dataset_b_campuran_sesuai_spss ... ok
+test test::wb_rm_spss::rm_model_epsilon_gg_hf_lb_dataset_b ... ok
+test test::wb_rm_spss::rm_model_gambar51_sesuai_spss ... ok
+
+failures:
+
+---- test::wb_basis_path::mau_j07_record_kosong stdout ----
+MAU-J07: 4 nilai acuan dibandingkan, 1 lulus, 3 gagal
+
+thread 'test::wb_basis_path::mau_j07_record_kosong' (7212) panicked at src/test/wb_support.rs:180:9:
+MAU-J07: 3 dari 4 nilai di luar toleransi:
+MAU-J07 w: Statify 0.5773210606138902 vs acuan 0.610163401451419 (selisih 3.284e-2)
+MAU-J07 gg: Statify 0.7308394379608965 vs acuan 0.743040708961689 (selisih 1.220e-2)
+MAU-J07 hf: Statify 0.8719831354769115 vs acuan 0.903909910918092 (selisih 3.193e-2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- test::wb_basis_path::mau_j09_nilai_null stdout ----
+MAU-J09: 4 nilai acuan dibandingkan, 1 lulus, 3 gagal
+
+thread 'test::wb_basis_path::mau_j09_nilai_null' (7214) panicked at src/test/wb_support.rs:180:9:
+MAU-J09: 3 dari 4 nilai di luar toleransi:
+MAU-J09 w: Statify 0.1132353090080198 vs acuan 0.505616673915789 (selisih 3.924e-1)
+MAU-J09 gg: Statify 0.4467814786487625 vs acuan 0.686563855893867 (selisih 2.398e-1)
+MAU-J09 hf: Statify 0.47671561698731574 vs acuan 0.817639408540135 (selisih 3.409e-1)
+
+---- test::wb_basis_path::mau_j20_skala_kecil stdout ----
+MAU-J20: 4 nilai acuan dibandingkan, 2 lulus, 2 gagal
+
+thread 'test::wb_basis_path::mau_j20_skala_kecil' (7218) panicked at src/test/wb_support.rs:180:9:
+MAU-J20: 2 dari 4 nilai di luar toleransi:
+MAU-J20 gg: Statify 1 vs acuan 0.74666374717162 (selisih 2.533e-1)
+MAU-J20 hf: Statify 1 vs acuan 0.895687219051398 (selisih 1.043e-1)
+
+---- test::wb_basis_path::mau_j21_n_sama_k stdout ----
+MAU-J21: 4 nilai acuan dibandingkan, 3 lulus, 1 gagal
+
+thread 'test::wb_basis_path::mau_j21_n_sama_k' (7219) panicked at src/test/wb_support.rs:180:9:
+MAU-J21: 1 dari 4 nilai di luar toleransi:
+MAU-J21 hf: Statify 0.6519967400163001 vs acuan 1 (selisih 3.480e-1)
+
+---- test::wb_basis_path::mau_t1_kunci_tidak_ada stdout ----
+MAU-T1: 4 nilai acuan dibandingkan, 1 lulus, 3 gagal
+
+thread 'test::wb_basis_path::mau_t1_kunci_tidak_ada' (7221) panicked at src/test/wb_support.rs:180:9:
+MAU-T1: 3 dari 4 nilai di luar toleransi:
+MAU-T1 w: Statify 0.2145117511356861 vs acuan 0.610163401451419 (selisih 3.957e-1)
+MAU-T1 gg: Statify 0.5152941643231342 vs acuan 0.743040708961689 (selisih 2.277e-1)
+MAU-T1 hf: Statify 0.5671012654403884 vs acuan 0.903909910918092 (selisih 3.368e-1)
+
+---- test::wb_basis_path::rm_model_epsilon_invarian_skala_1e_5 stdout ----
+RmModel skala 1e-5: 4 nilai acuan dibandingkan, 2 lulus, 2 gagal
+
+thread 'test::wb_basis_path::rm_model_epsilon_invarian_skala_1e_5' (7228) panicked at src/test/wb_support.rs:180:9:
+RmModel skala 1e-5: 2 dari 4 nilai di luar toleransi:
+RmModel skala 1e-5 gg: Statify 1 vs acuan 0.74666374717162 (selisih 2.533e-1)
+RmModel skala 1e-5 hf: Statify 1 vs acuan 0.895687219051398 (selisih 1.043e-1)
+
+---- test::wb_basis_path::rm_model_hf_n_sama_k stdout ----
+RmModel n = k: 4 nilai acuan dibandingkan, 3 lulus, 1 gagal
+
+thread 'test::wb_basis_path::rm_model_hf_n_sama_k' (7229) panicked at src/test/wb_support.rs:180:9:
+RmModel n = k: 1 dari 4 nilai di luar toleransi:
+RmModel n = k hf: Statify 0.6519967400163 vs acuan 1 (selisih 3.480e-1)
+
+---- test::wb_rm_spss::legacy_within_effects_observed_power_sesuai_spss stdout ----
+calculate_tests_within_subjects_effects a (power): 16 nilai acuan dibandingkan, 3 lulus, 13 gagal
+
+thread 'test::wb_rm_spss::legacy_within_effects_observed_power_sesuai_spss' (7234) panicked at src/test/wb_support.rs:180:9:
+calculate_tests_within_subjects_effects a (power): 13 dari 16 nilai di luar toleransi:
+a within cemas waktu Sphericity Assumed Observed Power: Statify 0.13827814458864107 vs acuan 0.9987347147615848 (selisih 8.605e-1)
+a within cemas waktu Greenhouse-Geisser Noncent. Parameter: Statify 31.547277936962747 vs acuan 27.648984702174474 (selisih 3.898e0)
+a within cemas waktu Greenhouse-Geisser Observed Power: Statify 0.11950075197367771 vs acuan 0.9969281031493828 (selisih 8.774e-1)
+a within cemas waktu Huynh-Feldt Noncent. Parameter: Statify 31.547277936962747 vs acuan 31.01322134178041 (selisih 5.341e-1)
+a within cemas waktu Huynh-Feldt Observed Power: Statify 0.1358195899355743 vs acuan 0.9985698471242644 (selisih 8.628e-1)
+a within cemas waktu Lower-bound Noncent. Parameter: Statify 31.547277936962747 vs acuan 15.77363896848136 (selisih 1.577e1)
+a within cemas waktu Lower-bound Observed Power: Statify 0.05045613983124436 vs acuan 0.9596498776873228 (selisih 9.092e-1)
+a within stres waktu Sphericity Assumed Observed Power: Statify 0.23095881790489647 vs acuan 0.9995221544035446 (selisih 7.686e-1)
+a within stres waktu Greenhouse-Geisser Noncent. Parameter: Statify 35.05813953488373 vs acuan 34.97184475840464 (selisih 8.629e-2)
+a within stres waktu Greenhouse-Geisser Observed Power: Statify 0.2304938942131246 vs acuan 0.9995122473391288 (selisih 7.690e-1)
+a within stres waktu Huynh-Feldt Observed Power: Statify 0.23095881790489647 vs acuan 0.9995221544035446 (selisih 7.686e-1)
+a within stres waktu Lower-bound Noncent. Parameter: Statify 35.05813953488373 vs acuan 17.529069767441964 (selisih 1.753e1)
+a within stres waktu Lower-bound Observed Power: Statify 0.10389533946733215 vs acuan 0.9741906286345396 (selisih 8.703e-1)
+
+
+failures:
+    test::wb_basis_path::mau_j07_record_kosong
+    test::wb_basis_path::mau_j09_nilai_null
+    test::wb_basis_path::mau_j20_skala_kecil
+    test::wb_basis_path::mau_j21_n_sama_k
+    test::wb_basis_path::mau_t1_kunci_tidak_ada
+    test::wb_basis_path::rm_model_epsilon_invarian_skala_1e_5
+    test::wb_basis_path::rm_model_hf_n_sama_k
+    test::wb_rm_spss::legacy_within_effects_observed_power_sesuai_spss
+
+test result: FAILED. 23 passed; 8 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.65s
+
+error: test failed, to rerun pass `--lib`
+error: 1 target failed:
+    `--lib`
+warning: process didn't exit successfully: `/usr/local/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/cargo test --no-fail-fast --manifest-path /repo/frontend/components/Modals/Analyze/general-linear-model/repeated-measures/rust/Cargo.toml --target-dir /tmp/target-rm-nightly/llvm-cov-target --lib -- --test-threads=1` (exit status: 101)
+
+    Finished report saved to /repo/testing/whitebox/coverage/rust-rm-nightly-branch/html
+exit code: 0
+
+$ cargo +nightly llvm-cov report --branch --summary-only
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+Filename                              Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+stats/bartlett_test.rs                    169               169     0.00%           4                 4     0.00%         136               136     0.00%           0                 0         -
+stats/between_subjects_effects.rs         220               220     0.00%           9                 9     0.00%         198               198     0.00%           0                 0         -
+stats/between_subjects_sscp.rs            352               352     0.00%           4                 4     0.00%         313               313     0.00%           0                 0         -
+stats/common.rs                           659               659     0.00%          75                75     0.00%         576               576     0.00%           0                 0         -
+stats/descriptive_statistics.rs           111               111     0.00%           5                 5     0.00%         119               119     0.00%           0                 0         -
+stats/emmeans.rs                          117               117     0.00%           5                 5     0.00%         113               113     0.00%           0                 0         -
+stats/estimable_function.rs                49                49     0.00%           2                 2     0.00%          29                29     0.00%           0                 0         -
+stats/glm_tests.rs                        274                17    93.80%          15                 2    86.67%         160                14    91.25%          44                17    61.36%
+stats/mauchly_test.rs                     145                 5    96.55%           8                 2    75.00%         136                 4    97.06%          26                 3    88.46%
+stats/multivariate_tests.rs               862               862     0.00%          27                27     0.00%         755               755     0.00%           0                 0         -
+stats/parameter_estimates.rs              249               249     0.00%          15                15     0.00%         200               200     0.00%           0                 0         -
+stats/parse_factors.rs                     34                 2    94.12%           4                 1    75.00%          36                 1    97.22%           6                 0   100.00%
+stats/posthoc.rs                          118               118     0.00%           3                 3     0.00%         105               105     0.00%           0                 0         -
+stats/residual_sscp_matrix.rs             186               186     0.00%           5                 5     0.00%         163               163     0.00%           0                 0         -
+stats/rm_model.rs                        1567               979    37.52%         192               116    39.58%        1109               652    41.21%          56                23    58.93%
+stats/sscp_matrix.rs                      541               541     0.00%          12                12     0.00%         434               434     0.00%           0                 0         -
+stats/univariate_tests.rs                 361               361     0.00%          10                10     0.00%         376               376     0.00%           0                 0         -
+stats/within_subjects_effects.rs          402               120    70.15%          24                10    58.33%         338                98    71.01%          24                11    54.17%
+utils/converter.rs                         12                12     0.00%           2                 2     0.00%          17                17     0.00%           0                 0         -
+utils/error.rs                             24                24     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+utils/log.rs                               20                20     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+wasm/constructor.rs                        88                88     0.00%           6                 6     0.00%          84                84     0.00%           0                 0         -
+wasm/function.rs                          310               310     0.00%           9                 9     0.00%         283               283     0.00%           0                 0         -
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                    6870              5571    18.91%         444               332    25.23%        5719              4709    17.66%         156                54    65.38%
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+
+    Finished report saved to /repo/testing/whitebox/coverage/rust-rm-nightly-branch/summary.json

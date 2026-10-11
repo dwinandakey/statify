@@ -1,0 +1,5 @@
+﻿2026-09-22T03:22:59.8933463+07:00 started (keep-awake on)
+2026-09-22T03:23:02.0699395+07:00 server up (pid 55324)
+2026-09-22T03:23:02.0884074+07:00 experiment started (pid 46648): node testing/glm-web-worker/experiment/run-experiment.cjs --base=http://localhost:3101 --modules=repeated-measures,multivariate --sizes=100,500,1000,2000 --cpu=1 --runs=31 "--out=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-web-worker\results\experiment-2026-09-22-cpu1"
+2026-09-22T06:28:13.7360987+07:00 experiment exited with code 
+2026-09-22T06:28:15.1796700+07:00 server stopped, keep-awake off

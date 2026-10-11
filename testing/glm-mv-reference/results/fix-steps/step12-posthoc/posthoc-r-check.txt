@@ -1,0 +1,71 @@
+Multiple Comparisons mv4 (treatment, LSD + Bonferroni + Sidak, Scheffe juga dicentang di konfigurasi): Statify (WASM step 12, payload mv4 fixture + dialog Post Hoc) vs R 4.3.2 (rumus SPSS: MSE model, df galat, c = jumlah pasangan).
+Acuan sementara sampai keluaran SPSS mv4_posthoc tersedia. Scheffe tidak menghasilkan baris (tidak dihitung).
+
+--- Statify
+y1 LSD 1-2 | diff 7 SE 1.2909944487358056 Sig 0.0028900201503452294 CI 3.6813931201724213 10.318606879827579
+y1 Bonferroni 1-2 | diff 7 SE 1.2909944487358056 Sig 0.008670060451035688 CI 2.437482699842853 11.562517300157147
+y1 Sidak 1-2 | diff 7 SE 1.2909944487358056 Sig 0.008645027939701344 CI 2.458079903880339 11.54192009611966
+y1 LSD 1-3 | diff 6 SE 1.1547005383792515 Sig 0.0034781651152864246 CI 3.0317477704428235 8.968252229557176
+y1 Bonferroni 1-3 | diff 6 SE 1.1547005383792515 Sig 0.010434495345859274 CI 1.9191604673319231 10.080839532668076
+y1 Sidak 1-3 | diff 6 SE 1.1547005383792515 Sig 0.01039824452571525 CI 1.9375831666816241 10.062416833318377
+y1 LSD 2-3 | diff -1 SE 1.2909944487358056 Sig 0.47359693606806363 CI -4.318606879827579 2.3186068798275787
+y1 Bonferroni 2-3 | diff -1 SE 1.2909944487358056 Sig 1 CI -5.562517300157147 3.562517300157147
+y1 Sidak 2-3 | diff -1 SE 1.2909944487358056 Sig 0.8541336132224993 CI -5.541920096119661 3.541920096119661
+y2 LSD 1-2 | diff 2 SE 1.9999999999999998 Sig 0.3632174676491229 CI -3.1411636712726274 7.141163671272627
+y2 Bonferroni 1-2 | diff 2 SE 1.9999999999999998 Sig 1 CI -5.068221408116742 9.068221408116742
+y2 Sidak 1-2 | diff 2 SE 1.9999999999999998 Sig 0.7417897815264825 CI -5.036312356830494 9.036312356830493
+y2 LSD 1-3 | diff -4 SE 1.7888543819998317 Sig 0.07558681842161241 CI -8.598396580967192 0.5983965809671918
+y2 Bonferroni 1-3 | diff -4 SE 1.7888543819998317 Sig 0.22676045526483724 CI -10.322009419427328 2.322009419427328
+y2 Sidak 1-3 | diff -4 SE 1.7888543819998317 Sig 0.21005220915053935 CI -10.293469096317896 2.2934690963178967
+y2 LSD 2-3 | diff -6 SE 1.9999999999999998 Sig 0.030099247897462655 CI -11.141163671272627 -0.8588363287273726
+y2 Bonferroni 2-3 | diff -6 SE 1.9999999999999998 Sig 0.09029774369238797 CI -13.068221408116742 1.0682214081167416
+y2 Sidak 2-3 | diff -6 SE 1.9999999999999998 Sig 0.08760711837722301 CI -13.036312356830493 1.0363123568304937
+
+--- R
+R y1 LSD 1-2 | diff 7 SE 1.2909944487358 Sig 0.00289002015034523 CI 3.68139312017242 10.3186068798276
+R y1 Bonferroni 1-2 | diff 7 SE 1.2909944487358 Sig 0.00867006045103568 CI 2.43748269984286 11.5625173001571
+R y1 Sidak 1-2 | diff 7 SE 1.2909944487358 Sig 0.00864502793970134 CI 2.45807990388034 11.5419200961197
+R y1 LSD 1-3 | diff 6 SE 1.15470053837925 Sig 0.00347816511528649 CI 3.03174777044283 8.96825222955717
+R y1 Bonferroni 1-3 | diff 6 SE 1.15470053837925 Sig 0.0104344953458595 CI 1.91916046733193 10.0808395326681
+R y1 Sidak 1-3 | diff 6 SE 1.15470053837925 Sig 0.0103982445257156 CI 1.93758316668163 10.0624168333184
+R y1 LSD 2-3 | diff -1 SE 1.2909944487358 Sig 0.473596936068063 CI -4.31860687982758 2.31860687982758
+R y1 Bonferroni 2-3 | diff -1 SE 1.2909944487358 Sig 1 CI -5.56251730015714 3.56251730015714
+R y1 Sidak 2-3 | diff -1 SE 1.2909944487358 Sig 0.854133613222499 CI -5.54192009611966 3.54192009611966
+R y2 LSD 1-2 | diff 2 SE 2 Sig 0.363217467649123 CI -3.14116367127263 7.14116367127263
+R y2 Bonferroni 1-2 | diff 2 SE 2 Sig 1 CI -5.06822140811674 9.06822140811674
+R y2 Sidak 1-2 | diff 2 SE 2 Sig 0.741789781526482 CI -5.0363123568305 9.0363123568305
+R y2 LSD 1-3 | diff -4 SE 1.78885438199983 Sig 0.0755868184216124 CI -8.59839658096719 0.598396580967191
+R y2 Bonferroni 1-3 | diff -4 SE 1.78885438199983 Sig 0.226760455264837 CI -10.3220094194273 2.32200941942733
+R y2 Sidak 1-3 | diff -4 SE 1.78885438199983 Sig 0.210052209150539 CI -10.2934690963179 2.2934690963179
+R y2 LSD 2-3 | diff -6 SE 2 Sig 0.0300992478974626 CI -11.1411636712726 -0.858836328727373
+R y2 Bonferroni 2-3 | diff -6 SE 2 Sig 0.0902977436923877 CI -13.0682214081167 1.06822140811674
+R y2 Sidak 2-3 | diff -6 SE 2 Sig 0.0876071183772228 CI -13.0363123568305 1.0363123568305
+
+--- Jalur tanpa post hoc: keluaran WASM e365897d vs step 12, instance baru per payload (mv1-mv7 fixture, sel eksperimen MV)
+multivariate-1000: byte-identik true
+multivariate-100: byte-identik true
+multivariate-2000: byte-identik true
+multivariate-500: byte-identik true
+multivariate-mv1: byte-identik true
+multivariate-mv2: byte-identik true
+multivariate-mv3: byte-identik true
+multivariate-mv4: byte-identik true
+multivariate-mv5: byte-identik true
+multivariate-mv6: byte-identik true
+multivariate-mv7: byte-identik true
+
+--- R script
+d <- read.csv("testing/glm-mv-reference/data/one-way manova.csv"); d$t <- factor(d$treatment)
+for (y in c("y1", "y2")) {
+  f <- lm(as.formula(paste(y, "~ t")), data = d); mse <- sum(resid(f)^2) / f$df.residual; df <- f$df.residual
+  m <- tapply(d[[y]], d$t, mean); n <- tapply(d[[y]], d$t, length); L <- levels(d$t); c <- choose(length(L), 2)
+  for (i in 1:(length(L)-1)) for (j in (i+1):length(L)) {
+    diff <- m[i] - m[j]; se <- sqrt(mse * (1/n[i] + 1/n[j])); p <- 2 * pt(-abs(diff/se), df)
+    for (meth in c("LSD", "Bonferroni", "Sidak")) {
+      padj <- switch(meth, LSD = p, Bonferroni = min(1, c * p), Sidak = 1 - (1 - p)^c)
+      q <- switch(meth, LSD = 0.025, Bonferroni = 0.05 / (2 * c), Sidak = (1 - 0.95^(1/c)) / 2)
+      tc <- qt(1 - q, df)
+      cat(sprintf("R %s %s %s-%s | diff %.15g SE %.15g Sig %.15g CI %.15g %.15g\n", y, meth, L[i], L[j], diff, se, padj, diff - tc*se, diff + tc*se))
+    }
+  }
+}

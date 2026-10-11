@@ -1,0 +1,79 @@
+{
+  "n": 40000,
+  "L": 10,
+  "M": 1,
+  "K": 3,
+  "options": {
+    "DescStats": true,
+    "EstEffectSize": true,
+    "ObsPower": true
+  },
+  "comparisons": [
+    {
+      "label": "same instance: run 1 vs run 2",
+      "exact": false,
+      "sameAfterSortingArrays": true,
+      "sameAfterSortingArrays12Digits": true,
+      "numericDiffSamePositions": {
+        "abs": 0,
+        "rel": 0,
+        "paths": 0,
+        "where": null
+      },
+      "tablesDiffering": [
+        "descriptive_statistics",
+        "multivariate_tests"
+      ],
+      "tablesWithDifferentValues": [],
+      "valueDiffSamples": {}
+    },
+    {
+      "label": "same instance: run 1 vs run 3",
+      "exact": false,
+      "sameAfterSortingArrays": true,
+      "sameAfterSortingArrays12Digits": true,
+      "numericDiffSamePositions": {
+        "abs": 0,
+        "rel": 0,
+        "paths": 0,
+        "where": null
+      },
+      "tablesDiffering": [
+        "descriptive_statistics",
+        "multivariate_tests"
+      ],
+      "tablesWithDifferentValues": [],
+      "valueDiffSamples": {}
+    },
+    {
+      "label": "fresh instance 1 vs fresh 2",
+      "exact": true,
+      "sameAfterSortingArrays": true,
+      "sameAfterSortingArrays12Digits": true,
+      "numericDiffSamePositions": {
+        "abs": 0,
+        "rel": 0,
+        "paths": 0,
+        "where": null
+      },
+      "tablesDiffering": [],
+      "tablesWithDifferentValues": [],
+      "valueDiffSamples": {}
+    },
+    {
+      "label": "fresh 1 vs same-instance run 1",
+      "exact": true,
+      "sameAfterSortingArrays": true,
+      "sameAfterSortingArrays12Digits": true,
+      "numericDiffSamePositions": {
+        "abs": 0,
+        "rel": 0,
+        "paths": 0,
+        "where": null
+      },
+      "tablesDiffering": [],
+      "tablesWithDifferentValues": [],
+      "valueDiffSamples": {}
+    }
+  ]
+}

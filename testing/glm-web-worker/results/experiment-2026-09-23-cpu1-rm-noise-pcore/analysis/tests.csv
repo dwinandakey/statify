@@ -1,0 +1,5 @@
+module,size,cpu,n_A,n_B,U_B,U_A,p_one_sided,A12_A_vs_B,ties_present,median_B_longest,max_B_longest,median_A_longest,loaf_U_B,loaf_p_one_sided,loaf_A12_A_vs_B,loaf_median_A,loaf_median_B,loaf_max_B
+repeated-measures,5000,1.0,30,30,0.0,900.0,5.980224540471243e-13,1.0,True,0.0,0.0,147.0,0.0,6.04901532833449e-13,1.0,148.45,0.0,0.0
+repeated-measures,10000,1.0,30,30,0.0,900.0,6.029286668129245e-13,1.0,True,0.0,0.0,284.0,0.0,6.058901985029879e-13,1.0,285.1,0.0,0.0
+repeated-measures,20000,1.0,30,30,0.0,900.0,8.560337850647714e-13,1.0,True,0.0,53.0,547.5,0.0,1.181920480555806e-12,1.0,548.2,0.0,53.8
+repeated-measures,40000,1.0,30,30,0.0,900.0,1.4939163059064813e-11,1.0,True,80.0,118.0,987.5,0.0,1.508037659945461e-11,1.0,988.25,80.9,118.9

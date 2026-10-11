@@ -1,0 +1,11 @@
+﻿ID,KF,Hasil Pengujian Iterasi 5,Keterangan Iterasi 5
+BB-KF03-02,KF3,Sesuai,"Baris efek ""jk (Welch-Satterthwaite)""; catatan ""Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices."", diikuti catatan kaki gaya SPSS (R7, R9)."
+BB-KF04-01,KF4,Sesuai,"Tabel ""Multivariate Tests"" dengan baris ""Hotelling T² Berpasangan"" (R9). Nilai tampil = SPSS 20/20."
+BB-KF11-02,KF11,Sesuai,"Tabel ""Multiple Comparisons: treatment (LSD)"", ""(Bonferroni)"", ""(Sidak)"", 6 baris, catatan ""Based on observed means. <metode> adjustment."" (R9). Nilai tampil = SPSS 180/180."
+BB-KF11-03,KF11,Sesuai,"Satu tabel ""Multiple Comparisons: treatment"" dengan kolom Test, 18 baris (R9). Nilai tampil = SPSS 180/180."
+BB-KF14-01,KF14,Sesuai,"Dua grafik Scatter Plot Matrix berjudul ""Residual Plots: y1"" dan ""Residual Plots: y2"" di bawah entri ""Residual Plots"" (R9)."
+BB-KF03-04,KF3,Sesuai,"Subdialog ""Multivariate: Test Values (δ₀)"" dengan H₀ dan 4 isian (R9); catatan H₀ δ₀; nilai sama dengan data geser; Descriptive Statistics data asli."
+BB-KF03-05,KF3,Sesuai,"Baris ""jk (Welch-Satterthwaite)"" identik dengan langkah 6; catatan memuat kalimat Welch baru dan H₀ δ₀ (R9)."
+BB-KF04-03,KF4,Sesuai,"Tabel ""Multivariate Tests"" dengan catatan pasangan dan H₀ δ₀ yang diharapkan (R9); nilai sama dengan langkah 4."
+BB-KF03-14,KF3,Sesuai,"Ringkasan ""δ₀ = [3, 2, 10, 1]; Σ known"" (R9); χ² 1.7971, df 4, Sig. 0.7730; CI = R."
+BB-KF03-15,KF3,Sesuai,"Ringkasan ""δ₀ = [3, 2, 10, 1]; Σ₁ and Σ₂ known"" (R9); χ² 1.6497, df 4, Sig. 0.7998; CI = R."

@@ -1,18 +1,29 @@
 import type { ResultJson, Row, Table } from "@/types/Table";
-import { formatDisplayNumber, formatSig } from "@/hooks/useFormatter";
+import { formatGlmNumber, formatGlmSig as formatSig, formatGlmStat } from "@/hooks/useFormatter";
+import {
+    applyEffectSizePowerColumns,
+    type EffectSizePowerDisplay,
+} from "@/components/Modals/Analyze/general-linear-model/shared/effect-size-columns";
+import { applyRmFootnotes } from "@/components/Modals/Analyze/general-linear-model/shared/spss-footnotes";
 
+/** `effectSizePower`: Options → Estimates of effect size / Observed power;
+ *  the Partial Eta Squared, Noncent. Parameter and Observed Power columns
+ *  appear only for the checked options (as SPSS). Absent: all columns kept. */
 export function transformRepeatedMeasureResult(
     data: any,
-    errors: string[] = []
+    errors: string[] = [],
+    effectSizePower: EffectSizePowerDisplay | null = null
 ): ResultJson {
     const resultJson: ResultJson = { tables: [] };
     if (!data) return resultJson;
 
     formatWithinSubjectsFactors(data, resultJson);
     formatDescriptiveStatistics(data, resultJson);
+    formatHomogeneityTests(data, resultJson);
     formatBartlettTest(data, resultJson);
     formatMultivariateTests(data, resultJson);
     formatMauchlyTest(data, resultJson);
+    formatWithinSubjectsMultivariate(data, resultJson);
     formatTestsWithinSubjectsEffects(data, resultJson);
     formatTestsWithinSubjectsContrasts(data, resultJson);
     formatTestsBetweenSubjectsEffects(data, resultJson);
@@ -23,14 +34,30 @@ export function transformRepeatedMeasureResult(
     formatUnivariateTests(data, resultJson);
     formatPosthocTests(data, resultJson);
     formatEmmeans(data, resultJson);
+    formatEmmeansPairwise(data, resultJson);
     formatErrors(errors, resultJson);
+
+    // SPSS footnotes (v5 A4): Design / exact / upper bound / alpha.
+    applyRmFootnotes(
+        resultJson,
+        data,
+        effectSizePower?.observedPower ?? true,
+        typeof data.multivariate_tests?.alpha === "number" ? data.multivariate_tests.alpha : 0.05
+    );
+    if (effectSizePower) applyEffectSizePowerColumns(resultJson, effectSizePower);
 
     return resultJson;
 }
 
+// v5: 4 decimals as the MV tables (was 3). df cells use dfFmt.
 function fmt3(v: number | null | undefined): string | null {
     if (v === null || v === undefined || isNaN(v as number)) return null;
-    return (v as number).toFixed(3);
+    return formatGlmStat(v as number);
+}
+// df: integers unchanged, fractional df (e.g. Greenhouse-Geisser) 4 decimals.
+function dfFmt(v: number | null | undefined): string | null {
+    if (v === null || v === undefined || isNaN(v as number)) return null;
+    return formatGlmNumber(v as number);
 }
 
 // ── 1. Within-Subjects Factors ───────────────────────────────────────────────
@@ -97,8 +124,8 @@ function formatDescriptiveStatistics(data: any, resultJson: ResultJson) {
                 table.rows.push({
                     rowHeader: [],
                     label: g.factor_value || "",
-                    mean: formatDisplayNumber(g.stats?.mean),
-                    std_dev: formatDisplayNumber(g.stats?.std_deviation),
+                    mean: formatGlmStat(g.stats?.mean),
+                    std_dev: formatGlmStat(g.stats?.std_deviation),
                     n: String(g.stats?.n ?? ""),
                 });
             });
@@ -106,6 +133,69 @@ function formatDescriptiveStatistics(data: any, resultJson: ResultJson) {
             resultJson.tables.push(table);
         }
     );
+}
+
+// ── 3a. Homogeneity tests (Box's M, Levene) ──────────────────────────────────
+function formatHomogeneityTests(data: any, resultJson: ResultJson) {
+    const h = data.homogeneity_tests;
+    if (!h) return;
+    const design = h.design ? `Design: ${h.design}` : "";
+
+    if (h.box_m) {
+        const b = h.box_m;
+        resultJson.tables.push({
+            key: "box_m_test",
+            title: "Box's Test of Equality of Covariance Matrices",
+            columnHeaders: [
+                { header: "", key: "label" },
+                { header: "", key: "value" },
+            ],
+            rows: [
+                { rowHeader: [], label: "Box's M", value: fmt3(b.box_m) },
+                { rowHeader: [], label: "F", value: fmt3(b.f) },
+                { rowHeader: [], label: "df1", value: dfFmt(b.df1) },
+                { rowHeader: [], label: "df2", value: dfFmt(b.df2) },
+                { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
+            ],
+            note: `Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups. ${design}`.trim(),
+            interpretation: "Sig. below the Significance Level in Options indicates that the covariance matrices of the dependent variables differ across the between-subjects groups.",
+        });
+    }
+
+    const levene = h.levene || {};
+    const dvs = Object.keys(levene);
+    if (dvs.length) {
+        const table: Table = {
+            key: "levene_test",
+            title: "Levene's Test of Equality of Error Variances",
+            columnHeaders: [
+                { header: "", key: "dv" },
+                { header: "", key: "based_on" },
+                { header: "Levene Statistic", key: "statistic" },
+                { header: "df1", key: "df1" },
+                { header: "df2", key: "df2" },
+                { header: "Sig.", key: "sig" },
+            ],
+            rows: [],
+            note: `Tests the null hypothesis that the error variance of the dependent variable is equal across groups. ${design}`.trim(),
+            interpretation: "Sig. below the Significance Level in Options indicates that the error variances differ across the between-subjects groups.",
+        };
+        dvs.forEach((dv) => {
+            (levene[dv] || []).forEach((e: any, idx: number) => {
+                const integerDf = Number.isInteger(e.df2);
+                table.rows.push({
+                    rowHeader: [],
+                    dv: idx === 0 ? dv : "",
+                    based_on: e.based_on,
+                    statistic: fmt3(e.statistic),
+                    df1: String(e.df1),
+                    df2: integerDf ? String(e.df2) : dfFmt(e.df2),
+                    sig: formatSig(e.significance),
+                });
+            });
+        });
+        resultJson.tables.push(table);
+    }
 }
 
 // ── 3. Bartlett's Test ────────────────────────────────────────────────────────
@@ -120,8 +210,8 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
             { header: "", key: "value" },
         ],
         rows: [
-            { rowHeader: [], label: "Likelihood Ratio Chi-Square", value: formatDisplayNumber(b.likelihood_ratio) },
-            { rowHeader: [], label: "Approx. Chi-Square", value: formatDisplayNumber(b.approx_chi_square) },
+            { rowHeader: [], label: "Likelihood Ratio", value: formatGlmStat(b.likelihood_ratio) },
+            { rowHeader: [], label: "Approx. Chi-Square", value: formatGlmStat(b.approx_chi_square) },
             { rowHeader: [], label: "df", value: String(b.df) },
             { rowHeader: [], label: "Sig.", value: formatSig(b.significance) },
         ],
@@ -135,7 +225,36 @@ function formatBartlettTest(data: any, resultJson: ResultJson) {
 // ── 4. Multivariate Tests ─────────────────────────────────────────────────────
 function formatMultivariateTests(data: any, resultJson: ResultJson) {
     if (!data.multivariate_tests?.effects) return;
-    const effects = data.multivariate_tests.effects;
+    resultJson.tables.push(
+        multivariateTable(
+            data.multivariate_tests,
+            "multivariate_tests",
+            "Multivariate Tests",
+            "",
+            "Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels."
+        )
+    );
+}
+
+// Tests of Within-Subjects Effects, "Multivariate" part (more than one
+// measure), as SPSS prints it above the univariate tests. The key keeps the
+// tests_within_subjects_effects_ prefix so the output module stores it with
+// the within-subjects effects tables.
+function formatWithinSubjectsMultivariate(data: any, resultJson: ResultJson) {
+    if (!data.within_subjects_multivariate?.effects) return;
+    resultJson.tables.push(
+        multivariateTable(
+            data.within_subjects_multivariate,
+            "tests_within_subjects_effects__multivariate",
+            "Tests of Within-Subjects Effects (Multivariate)",
+            " Tests are based on averaged variables.",
+            "Multivariate tests of the within-subjects effects over all measures, based on the averaged transformed variables."
+        )
+    );
+}
+
+function multivariateTable(tests: any, key: string, title: string, noteSuffix: string, interpretation: string): Table {
+    const effects = tests.effects;
 
     const testOrder = [
         "Pillai's Trace",
@@ -145,8 +264,8 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
     ];
 
     const table: Table = {
-        key: "multivariate_tests",
-        title: "Multivariate Tests",
+        key,
+        title,
         columnHeaders: [
             { header: "", key: "effect" },
             { header: "", key: "test_name" },
@@ -160,11 +279,12 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
             { header: "Observed Power", key: "power" },
         ],
         rows: [],
-        note: data.multivariate_tests.design
-            ? `Design: Intercept; Within Subjects Design: ${data.multivariate_tests.design}`
+        note: tests.design
+            ? (String(tests.design).includes("Within Subjects Design")
+                ? `Design: ${tests.design}`
+                : `Design: Intercept; Within Subjects Design: ${tests.design}`) + noteSuffix
             : undefined,
-        interpretation:
-            "Multivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels.",
+        interpretation,
     };
 
     Object.entries(effects).forEach(([effectName, testMap]: [string, any]) => {
@@ -179,8 +299,8 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
                 test_name: name,
                 value: fmt3(entry.value),
                 f: fmt3(entry.f),
-                hyp_df: fmt3(entry.hypothesis_df),
-                err_df: fmt3(entry.error_df),
+                hyp_df: dfFmt(entry.hypothesis_df),
+                err_df: dfFmt(entry.error_df),
                 sig: formatSig(entry.significance),
                 eta2: fmt3(entry.partial_eta_squared),
                 noncent: fmt3(entry.noncent_parameter),
@@ -189,7 +309,7 @@ function formatMultivariateTests(data: any, resultJson: ResultJson) {
         });
     });
 
-    resultJson.tables.push(table);
+    return table;
 }
 
 // ── 5. Mauchly's Test ─────────────────────────────────────────────────────────
@@ -215,34 +335,21 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
         note:
             "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix." +
             (data.mauchly_test.design
-                ? ` Design: Intercept; Within Subjects Design: ${data.mauchly_test.design}`
+                ? String(data.mauchly_test.design).includes("Within Subjects Design")
+                    ? ` Design: ${data.mauchly_test.design}`
+                    : ` Design: Intercept; Within Subjects Design: ${data.mauchly_test.design}`
                 : ""),
         interpretation:
-            "If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.",
+            "Sig. below the Significance Level in Options indicates that sphericity is violated; use the Greenhouse-Geisser or Huynh-Feldt rows of Tests of Within-Subjects Effects.",
     };
 
-    // Build factor→measure lookup
-    const measuresMap: Record<string, string> = {};
-    if (data.within_subjects_factors?.measures) {
-        Object.entries(data.within_subjects_factors.measures).forEach(
-            ([measureName, factorList]: [string, any]) => {
-                if (Array.isArray(factorList) && factorList.length > 0) {
-                    const factorKeys = Object.keys(factorList[0]?.factor_values || {});
-                    if (factorKeys.length > 0) {
-                        measuresMap[factorKeys[0]] = measureName;
-                    }
-                }
-            }
-        );
-    }
-
-    let firstRow = true;
-    Object.entries(tests).forEach(([factorName, entry]: [string, any]) => {
-        const measureName = measuresMap[factorName] || "";
+    // Keyed by measure (one test per measure); the within-subjects effect
+    // name is in entry.effect.
+    Object.entries(tests).forEach(([measureName, entry]: [string, any]) => {
         table.rows.push({
             rowHeader: [],
-            measure: firstRow ? measureName : "",
-            effect: factorName,
+            measure: measureName,
+            effect: entry.effect ?? "",
             w: fmt3(entry.mauchly_w),
             chi_sq: fmt3(entry.chi_square),
             df: String(entry.df),
@@ -251,7 +358,6 @@ function formatMauchlyTest(data: any, resultJson: ResultJson) {
             hf: fmt3(entry.huynh_feldt_epsilon),
             lb: fmt3(entry.lower_bound_epsilon),
         });
-        firstRow = false;
     });
 
     resultJson.tables.push(table);
@@ -288,7 +394,7 @@ function formatTestsWithinSubjectsEffects(data: any, resultJson: ResultJson) {
             rows: [],
             note: `Measure: ${measureName}`,
             interpretation:
-                "Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.",
+                "Tests the within-subjects effects. When sphericity is violated (Mauchly's test), read the Greenhouse-Geisser or Huynh-Feldt row instead of Sphericity Assumed.",
         };
 
         const sources = result.sources as any[];
@@ -319,7 +425,7 @@ function formatTestsWithinSubjectsEffects(data: any, resultJson: ResultJson) {
                 const isSphericity = assumption === "Sphericity Assumed";
                 const dfVal = isSphericity
                     ? String(Math.round(row.df))
-                    : fmt3(row.df);
+                    : dfFmt(row.df);
 
                 table.rows.push({
                     rowHeader: [],
@@ -367,7 +473,7 @@ function formatTestsWithinSubjectsContrasts(data: any, resultJson: ResultJson) {
             rows: [],
             note: `Measure: ${measureName}`,
             interpretation:
-                "Pairwise contrasts between adjacent levels of the within-subjects factor.",
+                "Tests of the contrasts of the within-subjects factor (Polynomial or Repeated), for each source.",
         };
 
         const effectSources = sources.filter((s) => !s.source.startsWith("Error("));
@@ -375,9 +481,10 @@ function formatTestsWithinSubjectsContrasts(data: any, resultJson: ResultJson) {
 
         effectSources.forEach((s: any, idx: number) => {
             const contrastLabel = Object.values(s.factor_values || {})[0] ?? "";
+            const newSource = idx === 0 || effectSources[idx - 1].source !== s.source;
             table.rows.push({
                 rowHeader: [],
-                source: idx === 0 ? s.source : "",
+                source: newSource ? s.source : "",
                 contrast: String(contrastLabel),
                 ss: fmt3(s.sum_of_squares),
                 df: String(s.df),
@@ -410,11 +517,17 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
     if (!data.tests_of_between_subjects_effects?.effects) return;
     const effects = data.tests_of_between_subjects_effects.effects;
 
+    // Several measures: one table with a Measure column, rows grouped by
+    // source then measure (SPSS layout).
+    const measureNames = Object.keys(effects);
+    const multiMeasure = measureNames.length > 1;
+
     const table: Table = {
         key: "tests_between_subjects_effects",
         title: "Tests of Between-Subjects Effects",
         columnHeaders: [
             { header: "Source", key: "source" },
+            ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
             { header: "Type III Sum of Squares", key: "ss" },
             { header: "df", key: "df" },
             { header: "Mean Square", key: "ms" },
@@ -426,21 +539,28 @@ function formatTestsBetweenSubjectsEffects(data: any, resultJson: ResultJson) {
         ],
         rows: [],
         interpretation:
-            "Tests of between-subjects effects using the average of the repeated measurements as the transform variable.",
+            "Tests of the between-subjects effects on the average of the repeated measurements.",
     };
 
-    const effectOrder = ["Intercept", "Error"];
+    // All sources in result order (Intercept, covariates, factors,
+    // interactions), Error last.
+    const effectOrder = [
+        ...Object.keys(effects[measureNames[0]] || {}).filter((e) => e !== "Error"),
+        "Error",
+    ];
+    table.note = multiMeasure
+        ? "Transformed Variable: Average"
+        : `Measure: ${measureNames[0]}; Transformed Variable: Average`;
 
-    Object.entries(effects).forEach(([measureName, effectMap]: [string, any]) => {
-        table.note = `Measure: ${measureName}; Transformed Variable: Average`;
-
-        effectOrder.forEach((effectName) => {
-            const entry = effectMap[effectName];
+    effectOrder.forEach((effectName) => {
+        measureNames.forEach((measureName, mIdx) => {
+            const entry = effects[measureName]?.[effectName];
             if (!entry) return;
             const isError = effectName === "Error";
             table.rows.push({
                 rowHeader: [],
-                source: effectName,
+                source: mIdx === 0 ? effectName : "",
+                ...(multiMeasure ? { measure: measureName } : {}),
                 ss: fmt3(entry.sum_of_squares),
                 df: String(entry.df),
                 ms: fmt3(entry.mean_square),
@@ -485,7 +605,7 @@ function formatParameterEstimates(data: any, resultJson: ResultJson) {
             ],
             rows: [],
             note: `Dependent Variable: ${dvName}`,
-            interpretation: "OLS parameter estimates for each predictor.",
+            interpretation: "Parameter estimates of the model for each dependent variable.",
         };
 
         (Array.isArray(entryList) ? entryList : []).forEach((e: any, idx: number) => {
@@ -493,12 +613,12 @@ function formatParameterEstimates(data: any, resultJson: ResultJson) {
                 rowHeader: [],
                 dv: idx === 0 ? dvName : "",
                 param: e.parameter,
-                b: formatDisplayNumber(e.b),
-                se: formatDisplayNumber(e.std_error),
-                t: formatDisplayNumber(e.t_value),
+                b: formatGlmStat(e.b),
+                se: formatGlmStat(e.std_error),
+                t: formatGlmStat(e.t_value),
                 sig: formatSig(e.significance),
-                ci_lower: formatDisplayNumber(e.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(e.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(e.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(e.confidence_interval?.upper_bound),
                 eta2: fmt3(e.partial_eta_squared),
                 noncent: fmt3(e.noncent_parameter),
                 power: fmt3(e.observed_power),
@@ -543,27 +663,39 @@ function formatGeneralEstimableFunction(data: any, resultJson: ResultJson) {
 // ── 11. Residual SSCP Matrix ──────────────────────────────────────────────────
 function formatResidualMatrix(data: any, resultJson: ResultJson) {
     if (!data.residual_matrix?.values) return;
-    const vals = data.residual_matrix.values;
-    const rowKeys = Object.keys(vals);
+    const rm = data.residual_matrix;
+    const rowKeys = Object.keys(rm.values);
     if (rowKeys.length === 0) return;
-    const colKeys = Object.keys(vals[rowKeys[0]] || {});
+    const colKeys = Object.keys(rm.values[rowKeys[0]] || {});
+    // Encoded names "p1_(1,nilai)" are shown as the variable name "p1".
+    const display = (k: string) => k.replace(/_\([^()]*\)$/, "");
 
     const table: Table = {
         key: "residual_sscp_matrix",
         title: "Residual SSCP Matrix",
         columnHeaders: [
+            { header: "", key: "part" },
             { header: "", key: "row_label" },
-            ...colKeys.map((k) => ({ header: k, key: k })),
+            ...colKeys.map((k) => ({ header: display(k), key: k })),
         ],
         rows: [],
-        note: data.residual_matrix.description || undefined,
-        interpretation: "The residual sum of squares and cross-products matrix.",
+        note: rm.description || undefined,
+        interpretation: "The residual sum of squares and cross-products matrix, with the residual covariance and correlation matrices.",
     };
 
-    rowKeys.forEach((rk) => {
-        const row: Row = { rowHeader: [], row_label: rk };
-        colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(vals[rk][ck]); });
-        table.rows.push(row);
+    // SSCP, then (from the GLM engine) Covariance and Correlation, as SPSS.
+    const parts: [string, any][] = [
+        ["Sum-of-Squares and Cross-Products", rm.values],
+        ["Covariance", rm.covariance],
+        ["Correlation", rm.correlation],
+    ];
+    parts.forEach(([part, vals]) => {
+        if (!vals) return;
+        rowKeys.forEach((rk, i) => {
+            const row: Row = { rowHeader: [], part: i === 0 ? part : "", row_label: display(rk) };
+            colKeys.forEach((ck) => { row[ck] = formatGlmStat(vals[rk]?.[ck]); });
+            table.rows.push(row);
+        });
     });
 
     resultJson.tables.push(table);
@@ -581,7 +713,7 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
 
         const table: Table = {
             key: `sscp_matrix_${catName}`,
-            title: `SSCP Matrix — ${catName}`,
+            title: `SSCP Matrix: ${catName}`,
             columnHeaders: [
                 { header: "", key: "row_label" },
                 ...colKeys.map((k) => ({ header: k, key: k })),
@@ -592,7 +724,7 @@ function formatSSCPMatrix(data: any, resultJson: ResultJson) {
 
         rowKeys.forEach((rk) => {
             const row: Row = { rowHeader: [], row_label: rk };
-            colKeys.forEach((ck) => { row[ck] = formatDisplayNumber(catData[rk][ck]); });
+            colKeys.forEach((ck) => { row[ck] = formatGlmStat(catData[rk][ck]); });
             table.rows.push(row);
         });
 
@@ -679,11 +811,11 @@ function formatPosthocTests(data: any, resultJson: ResultJson) {
                 factor: t.factor_name,
                 i_level: t.i_level,
                 j_level: t.j_level,
-                mean_diff: formatDisplayNumber(t.mean_difference),
-                se: formatDisplayNumber(t.std_error),
+                mean_diff: formatGlmStat(t.mean_difference),
+                se: formatGlmStat(t.std_error),
                 sig: formatSig(t.significance),
-                ci_lower: formatDisplayNumber(t.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(t.confidence_interval?.upper_bound),
+                ci_lower: formatGlmStat(t.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(t.confidence_interval?.upper_bound),
             });
         });
 
@@ -695,12 +827,18 @@ function formatPosthocTests(data: any, resultJson: ResultJson) {
 function formatEmmeans(data: any, resultJson: ResultJson) {
     if (!data.emmeans) return;
 
-    Object.entries(data.emmeans).forEach(([groupName, meanList]: [string, any]) => {
+    // One table per target ("(OVERALL)", a factor or an interaction), rows per
+    // level (and per measure when there are several), as SPSS EMMEANS TABLES.
+    Object.entries(data.emmeans).forEach(([target, meanList]: [string, any]) => {
+        const list = Array.isArray(meanList) ? meanList : [];
+        const measures = [...new Set(list.map((m: any) => m.dependent_variable))];
+        const multiMeasure = measures.length > 1;
         const table: Table = {
-            key: `emmeans_${groupName}`,
+            key: `emmeans_${target}`,
             title: `Estimated Marginal Means`,
             columnHeaders: [
-                { header: "Factor", key: "factor" },
+                { header: target === "(OVERALL)" ? "" : target, key: "factor" },
+                ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
                 { header: "Mean", key: "mean" },
                 { header: "Std. Error", key: "se" },
                 {
@@ -712,18 +850,70 @@ function formatEmmeans(data: any, resultJson: ResultJson) {
                 },
             ],
             rows: [],
-            note: `Factor: ${groupName}`,
+            note: `${target === "(OVERALL)" ? "Grand Mean" : target}${multiMeasure ? "" : `; Measure: ${measures[0] ?? ""}`}`,
             interpretation: "Estimated marginal means for each level of the specified factor.",
         };
 
-        (Array.isArray(meanList) ? meanList : []).forEach((m: any) => {
+        list.forEach((m: any, idx: number) => {
             table.rows.push({
                 rowHeader: [],
-                factor: m.factor_value,
-                mean: formatDisplayNumber(m.mean),
-                se: formatDisplayNumber(m.std_error),
-                ci_lower: formatDisplayNumber(m.confidence_interval?.lower_bound),
-                ci_upper: formatDisplayNumber(m.confidence_interval?.upper_bound),
+                factor: idx === 0 || list[idx - 1].factor_value !== m.factor_value ? m.factor_value : "",
+                ...(multiMeasure ? { measure: m.dependent_variable } : {}),
+                mean: formatGlmStat(m.mean),
+                se: formatGlmStat(m.std_error),
+                ci_lower: formatGlmStat(m.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(m.confidence_interval?.upper_bound),
+            });
+        });
+
+        resultJson.tables.push(table);
+    });
+}
+
+// ── 15b. EM Means Pairwise Comparisons ───────────────────────────────────────
+function formatEmmeansPairwise(data: any, resultJson: ResultJson) {
+    if (!data.emmeans_pairwise) return;
+
+    Object.entries(data.emmeans_pairwise).forEach(([factor, rows]: [string, any]) => {
+        const list = Array.isArray(rows) ? rows : [];
+        const measures = [...new Set(list.map((r: any) => r.dependent_variable))];
+        const multiMeasure = measures.length > 1;
+        const adjustment = list[0]?.adjustment ?? "";
+        const table: Table = {
+            key: `emmeans_pairwise_${factor}`,
+            title: "Pairwise Comparisons",
+            columnHeaders: [
+                ...(multiMeasure ? [{ header: "Measure", key: "measure" }] : []),
+                { header: `(I) ${factor}`, key: "level_i" },
+                { header: `(J) ${factor}`, key: "level_j" },
+                { header: "Mean Difference (I-J)", key: "diff" },
+                { header: "Std. Error", key: "se" },
+                { header: "Sig.", key: "sig" },
+                {
+                    header: "95% Confidence Interval for Difference",
+                    children: [
+                        { header: "Lower Bound", key: "ci_lower" },
+                        { header: "Upper Bound", key: "ci_upper" },
+                    ],
+                },
+            ],
+            rows: [],
+            note: `Based on estimated marginal means. Adjustment for multiple comparisons: ${adjustment}.${multiMeasure ? "" : ` Measure: ${measures[0] ?? ""}`}`,
+            interpretation: "Pairwise comparisons of the estimated marginal means of the factor.",
+        };
+
+        list.forEach((r: any, idx: number) => {
+            const newGroup = idx === 0 || list[idx - 1].level_i !== r.level_i || list[idx - 1].dependent_variable !== r.dependent_variable;
+            table.rows.push({
+                rowHeader: [],
+                ...(multiMeasure ? { measure: newGroup ? r.dependent_variable : "" } : {}),
+                level_i: newGroup ? r.level_i : "",
+                level_j: r.level_j,
+                diff: formatGlmStat(r.mean_difference),
+                se: formatGlmStat(r.std_error),
+                sig: formatSig(r.significance),
+                ci_lower: formatGlmStat(r.confidence_interval?.lower_bound),
+                ci_upper: formatGlmStat(r.confidence_interval?.upper_bound),
             });
         });
 
@@ -741,7 +931,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             title: "Errors Logs",
             columnHeaders: [{ header: "Message", key: "message" }],
             rows: [{ rowHeader: [], message: "No errors occurred." }],
-            interpretation: "Errors logs from the analysis.",
+            interpretation: "Messages and warnings produced during the analysis.",
         });
         return;
     }
@@ -754,7 +944,7 @@ function formatErrors(errors: string[], resultJson: ResultJson) {
             { header: "Message", key: "message" },
         ],
         rows: [],
-        interpretation: "Errors logs from the analysis.",
+        interpretation: "Messages and warnings produced during the analysis.",
     };
 
     let currentContext = "";

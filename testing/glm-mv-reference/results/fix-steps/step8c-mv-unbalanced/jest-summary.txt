@@ -1,0 +1,4 @@
+Jest penuh: 50 suite gagal dari 276; baseline 49
+gagal di luar baseline: 1
+  + components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts
+baseline yang kini lulus: 0

@@ -1,0 +1,8 @@
+[
+ {"out":"testing/whitebox/ss/14-regresi-build-gabungan.png","title":"Regresi build gabungan ilham (EXcw4k8lfhzpWjMN3Mjc7): regress-final.sh + vs v5 final + vs v6","file":"testing/whitebox/v6-final/regresi-ringkas.txt"},
+ {"out":"testing/whitebox/ss/15-rm-tabel-v6-vs-gabungan.png","title":"Tabel RM lewat UI (36 berkas, --saveTables=1): v6 vs build gabungan","file":"testing/whitebox/v6-final/regresi/rm-tabel/rm-tabel-v6-vs-final.txt"},
+ {"out":"testing/whitebox/ss/16-sleeping-dog-v6-vs-gabungan.png","title":"Sleeping dog: v6 vs build gabungan","file":"testing/whitebox/v6-final/sleeping-dog/v6-vs-final.txt"},
+ {"out":"testing/whitebox/ss/17-black-box-iterasi-7-resmi.png","title":"Black-box iterasi 7 resmi (build gabungan ilham)","file":"testing/whitebox/v6-final/bb-iter7.log"},
+ {"out":"testing/whitebox/ss/18-black-box-iterasi-7-banding.png","title":"Black-box iterasi 7: teks vs pengamatan terbaru ilham, nilai vs uji awal v6","file":"testing/whitebox/v6-final/bb-iter7-banding.txt","grep":"^Black|^skenario|^## "},
+ {"out":"testing/whitebox/ss/19-black-box-iterasi-7-verifikasi-teks.png","title":"Verifikasi perubahan teks (a345ded6/ff9e9a03) dan kutipan Hasil yang Diharapkan","file":"testing/whitebox/v6-final/bb-iter7-verifikasi-teks.txt"}
+]

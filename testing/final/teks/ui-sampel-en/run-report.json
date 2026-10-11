@@ -1,0 +1,148 @@
+{
+  "base": "http://localhost:3101",
+  "mode": "worker",
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-26T04:46:08.871Z",
+  "configs": {
+    "mv3": {
+      "modeActual": "worker",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv3d": {
+      "modeActual": "worker",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv3dci": {
+      "modeActual": "worker",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv3ci": {
+      "modeActual": "worker",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv2d": {
+      "modeActual": "worker",
+      "dataRows": 67,
+      "dialog": {
+        "dep": [
+          "x1 [x1]",
+          "x2 [x2]",
+          "x3 [x3]",
+          "x4 [x4]"
+        ],
+        "fix": [
+          "jk [jk]"
+        ],
+        "variance": "checked"
+      },
+      "titles": [
+        "Between-Subjects Factors",
+        "Descriptive Statistics",
+        "Box's Test of Equality of Covariance Matrices",
+        "Levene's Test of Equality of Error Variances",
+        "Multivariate Tests",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mv1ci": {
+      "modeActual": "worker",
+      "dataRows": 32,
+      "dialog": {
+        "dep": [
+          "mpg [mpg]",
+          "disp [disp]",
+          "hp [hp]",
+          "wt [wt]"
+        ],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Simultaneous Confidence Intervals",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    },
+    "mvK4": {
+      "modeActual": "worker",
+      "dataRows": 15,
+      "dialog": {
+        "dep": [],
+        "fix": [],
+        "variance": null
+      },
+      "titles": [
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Chi-Square Test (Known Covariance Matrix)",
+        "Simultaneous Confidence Intervals",
+        "Simultaneous Confidence Intervals (Known Covariance Matrix)",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "rawCaptured": true
+    }
+  }
+}

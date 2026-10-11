@@ -1,0 +1,55 @@
+{
+ "id": "BB-KF04-02",
+ "steps": [
+  "impor hotelling berpasangan (data asli).csv",
+  "buka Analyze → General Linear Model → Multivariate"
+ ],
+ "toasts": [
+  {
+   "label": "Continue tanpa pasangan",
+   "texts": [
+    "Tambahkan minimal satu pasangan variabel.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem.",
+    "Tambahkan minimal satu pasangan variabel.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling berpasangan (data asli).csv berhasil diimpor ke dalam sistem."
+   ],
+   "file": "BB-KF04-02-1.png"
+  },
+  {
+   "label": "Continue dengan Variable 1 saja",
+   "texts": [
+    "Tambahkan minimal satu pasangan variabel.",
+    "Tambahkan minimal satu pasangan variabel."
+   ],
+   "file": "BB-KF04-02-2.png"
+  },
+  {
+   "label": "Continue dengan variabel sama",
+   "texts": [
+    "Tambahkan minimal satu pasangan variabel.",
+    "Tambahkan minimal satu pasangan variabel."
+   ],
+   "file": "BB-KF04-02-4.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "terbuka1": true,
+  "terbuka2": true,
+  "kedalaman1DiAvailableSetelahDipakai": 0,
+  "isiPasangan": "Paired Variable(s)\nPair\tVariable 1\tVariable 2\n1\t\nkedalaman1\n\t",
+  "terbuka3": true
+ },
+ "notes": [
+  "BB-KF04-02-1.png: toast: Continue tanpa pasangan",
+  "BB-KF04-02-2.png: toast: Continue dengan Variable 1 saja",
+  "kedalaman1 tidak lagi tersedia di Available Variables setelah dipakai sebagai Variable 1; dicoba drag dari sel Variable 1 ke kolom Variable 2",
+  "BB-KF04-02-3.png: pasangan (kedalaman1, kedalaman1)",
+  "BB-KF04-02-4.png: toast: Continue dengan variabel sama"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 14
+}

@@ -1,0 +1,350 @@
+{
+  "base": "http://localhost:3101",
+  "shots": [
+    {
+      "file": "a1-rm-define.png",
+      "label": "RM Define: faktor within perlakuan(4), measure anjing"
+    },
+    {
+      "file": "a2-rm-dialog.png",
+      "label": "RM: y1–y4 di slot perlakuan 1–4"
+    },
+    {
+      "file": "a3-rm-multivariate-tests.png",
+      "label": "RM Multivariate Tests (Hotelling's Trace, F, df, Sig.)"
+    },
+    {
+      "file": "b1-mv-test-values.png",
+      "label": "MV: DV d1, d2, d3; Test Values μ₀ = 0, 0, 0"
+    },
+    {
+      "file": "b2-mv-options.png",
+      "label": "MV Options: Simultaneous CI dicentang, Significance Level 0.05 (95%)"
+    },
+    {
+      "file": "b3-mv-multivariate-tests.png",
+      "label": "MV satu populasi: Multivariate Tests (Hotelling T² vs μ₀ = 0)"
+    },
+    {
+      "file": "b4-mv-ci-simultan.png",
+      "label": "MV satu populasi: CI simultan T² dan Bonferroni 95% untuk d1, d2, d3"
+    }
+  ],
+  "chromium": "143.0.7499.4",
+  "rm": {
+    "tables": [
+      {
+        "title": "Within-Subjects Factors",
+        "note": "Measure: anjing",
+        "columns": [
+          "Measure",
+          "perlakuan",
+          "Dependent Variable"
+        ],
+        "rows": [
+          {
+            "rowHeader": [],
+            "measure": "anjing",
+            "factor_level": "1",
+            "dep_var": "y1_(1,anjing)"
+          },
+          {
+            "rowHeader": [],
+            "measure": "",
+            "factor_level": "2",
+            "dep_var": "y2_(2,anjing)"
+          },
+          {
+            "rowHeader": [],
+            "measure": "",
+            "factor_level": "3",
+            "dep_var": "y3_(3,anjing)"
+          },
+          {
+            "rowHeader": [],
+            "measure": "",
+            "factor_level": "4",
+            "dep_var": "y4_(4,anjing)"
+          }
+        ]
+      },
+      {
+        "title": "Multivariate Tests",
+        "note": "a. Design: Intercept\nWithin Subjects Design: perlakuan\nb. Exact statistic",
+        "columns": [
+          "",
+          "",
+          "Value",
+          "F",
+          "Hypothesis df",
+          "Error df",
+          "Sig."
+        ],
+        "rows": [
+          {
+            "rowHeader": [],
+            "effect": "perlakuan",
+            "test_name": "Pillai's Trace",
+            "value": "0.8657",
+            "f": "34.3752",
+            "hyp_df": "3",
+            "err_df": "16",
+            "sig": "<.001"
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Wilks' Lambda",
+            "value": "0.1343",
+            "f": "34.3752",
+            "hyp_df": "3",
+            "err_df": "16",
+            "sig": "<.001"
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Hotelling's Trace",
+            "value": "6.4454",
+            "f": "34.3752",
+            "hyp_df": "3",
+            "err_df": "16",
+            "sig": "<.001"
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Roy's Largest Root",
+            "value": "6.4454",
+            "f": "34.3752",
+            "hyp_df": "3",
+            "err_df": "16",
+            "sig": "<.001"
+          }
+        ]
+      }
+    ]
+  },
+  "mv": {
+    "tables": [
+      {
+        "title": "Multivariate Tests",
+        "note": "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic",
+        "columns": [
+          "Effect",
+          "",
+          "T²",
+          "Value",
+          "F",
+          "Hypothesis df",
+          "Error df",
+          "Sig."
+        ],
+        "rows": [
+          {
+            "rowHeader": [],
+            "effect": "Hotelling T² (vs μ₀)",
+            "test_name": "Pillai's Trace",
+            "value": "0.8657",
+            "f": "34.3752",
+            "hypothesis_df": "3",
+            "error_df": "16",
+            "significance": "<.001",
+            "t_squared": ""
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Wilks' Lambda",
+            "value": "0.1343",
+            "f": "34.3752",
+            "hypothesis_df": "3",
+            "error_df": "16",
+            "significance": "<.001",
+            "t_squared": ""
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Hotelling's Trace",
+            "value": "6.4454",
+            "f": "34.3752",
+            "hypothesis_df": "3",
+            "error_df": "16",
+            "significance": "<.001",
+            "t_squared": "116.0163"
+          },
+          {
+            "rowHeader": [],
+            "effect": "",
+            "test_name": "Roy's Largest Root",
+            "value": "6.4454",
+            "f": "34.3752",
+            "hypothesis_df": "3",
+            "error_df": "16",
+            "significance": "<.001",
+            "t_squared": ""
+          }
+        ]
+      },
+      {
+        "title": "Simultaneous Confidence Intervals",
+        "note": "Components of μ (Johnson & Wichern, 6th ed., §5.4): x̄ᵢ ± c · √(sᵢᵢ/n), c = √(p(n−1)/(n−p) · F(3, 16; α)) = 3.3062; Bonferroni: t(18; α/(2p)) = 2.6391. n = 19. The intervals hold simultaneously for all 3 components at the 95% confidence level (α = 0.05 from Options → Significance Level).",
+        "columns": [
+          "Dependent Variable",
+          "Mean",
+          "Std. Error",
+          "Test Value (μ₀)",
+          "95% Simultaneous T² Interval",
+          "95% Bonferroni Interval"
+        ],
+        "rows": [
+          {
+            "rowHeader": [],
+            "dependent_variable": "d1",
+            "estimate": "209.3158",
+            "std_error": "22.2808",
+            "hypothesized": "0",
+            "t2_lower": "135.6503",
+            "t2_upper": "282.9813",
+            "t2_contains": "No",
+            "bonferroni_lower": "150.5136",
+            "bonferroni_upper": "268.1180",
+            "bonferroni_contains": "No"
+          },
+          {
+            "rowHeader": [],
+            "dependent_variable": "d2",
+            "estimate": "-60.0526",
+            "std_error": "16.5368",
+            "hypothesized": "0",
+            "t2_lower": "-114.7271",
+            "t2_upper": "-5.3782",
+            "t2_contains": "No",
+            "bonferroni_lower": "-103.6956",
+            "bonferroni_upper": "-16.4097",
+            "bonferroni_contains": "No"
+          },
+          {
+            "rowHeader": [],
+            "dependent_variable": "d3",
+            "estimate": "-12.7895",
+            "std_error": "19.9439",
+            "hypothesized": "0",
+            "t2_lower": "-78.7286",
+            "t2_upper": "53.1496",
+            "t2_contains": "Yes",
+            "bonferroni_lower": "-65.4242",
+            "bonferroni_upper": "39.8453",
+            "bonferroni_contains": "Yes"
+          }
+        ]
+      }
+    ],
+    "raw": {
+      "multivariate_tests": {
+        "effects": {
+          "Intercept": {
+            "Roy's Largest Root": {
+              "value": 6.445351177832649,
+              "f": 34.375206281774126,
+              "hypothesis_df": 3,
+              "error_df": 16,
+              "significance": 3.3177670377693147e-7,
+              "partial_eta_squared": 0.8656880009935137,
+              "noncent_parameter": 103.12561884532238,
+              "observed_power": 0.9999999997501856,
+              "is_exact_statistic": true
+            },
+            "Hotelling's Trace": {
+              "value": 6.4453511778326495,
+              "f": 34.375206281774126,
+              "hypothesis_df": 3,
+              "error_df": 16,
+              "significance": 3.3177670377693147e-7,
+              "partial_eta_squared": 0.8656880009935137,
+              "noncent_parameter": 103.12561884532238,
+              "observed_power": 0.9999999997501856,
+              "is_exact_statistic": true
+            },
+            "Wilks' Lambda": {
+              "value": 0.1343119990064862,
+              "f": 34.375206281774126,
+              "hypothesis_df": 3,
+              "error_df": 16,
+              "significance": 3.3177670377693147e-7,
+              "partial_eta_squared": 0.8656880009935138,
+              "noncent_parameter": 103.12561884532238,
+              "observed_power": 0.9999999997501856,
+              "is_exact_statistic": true
+            },
+            "Pillai's Trace": {
+              "value": 0.8656880009935143,
+              "f": 34.375206281774126,
+              "hypothesis_df": 3,
+              "error_df": 16,
+              "significance": 3.3177670377693147e-7,
+              "partial_eta_squared": 0.8656880009935143,
+              "noncent_parameter": 103.12561884532238,
+              "observed_power": 0.9999999997501856,
+              "is_exact_statistic": true
+            }
+          }
+        },
+        "design": "Type III sum of squares",
+        "alpha": 0.05
+      },
+      "simultaneous_confidence_intervals": {
+        "design": "one_sample",
+        "confidence_level": 0.95,
+        "p": 3,
+        "sample_sizes": [
+          19
+        ],
+        "levels": [],
+        "t2_critical": 3.3062352262665597,
+        "t2_reference": "F",
+        "t2_df": [
+          3,
+          16
+        ],
+        "bonferroni_reference": "t",
+        "intervals": [
+          {
+            "dependent_variable": "d1",
+            "estimate": 209.31578947368422,
+            "std_error": 22.28077773160136,
+            "t2_lower": 135.65029726884825,
+            "t2_upper": 282.9812816785202,
+            "bonferroni_critical": 2.639144819415977,
+            "bonferroni_df": 18,
+            "bonferroni_lower": 150.51359035076962,
+            "bonferroni_upper": 268.1179885965988
+          },
+          {
+            "dependent_variable": "d2",
+            "estimate": -60.05263157894737,
+            "std_error": 16.53676988976977,
+            "t2_lower": -114.72708271716834,
+            "t2_upper": -5.378180440726389,
+            "bonferroni_critical": 2.639144819415977,
+            "bonferroni_df": 18,
+            "bonferroni_lower": -103.69556216340737,
+            "bonferroni_upper": -16.409700994487373
+          },
+          {
+            "dependent_variable": "d3",
+            "estimate": -12.789473684210526,
+            "std_error": 19.94386551353668,
+            "t2_lower": -78.7285843929883,
+            "t2_upper": 53.14963702456725,
+            "bonferroni_critical": 2.639144819415977,
+            "bonferroni_df": 18,
+            "bonferroni_lower": -65.42422303338981,
+            "bonferroni_upper": 39.84527566496876
+          }
+        ]
+      }
+    }
+  }
+}

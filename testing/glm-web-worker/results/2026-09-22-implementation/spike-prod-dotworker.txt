@@ -1,0 +1,47 @@
+[
+  {
+    "variant": "dotworker",
+    "ok": false,
+    "detail": "no reply within 30000 ms"
+  },
+  {
+    "variant": "plain",
+    "ok": true,
+    "detail": {
+      "ok": true,
+      "inWorkerScope": true,
+      "initMs": 51.49000000953674,
+      "totalMs": 91.25,
+      "resultKeys": [
+        "between_subjects_factors",
+        "descriptive_statistics",
+        "levene_test",
+        "tests_of_between_subjects_effects",
+        "parameter_estimates",
+        "general_estimable_function",
+        "contrast_coefficients",
+        "spread_vs_level_plots",
+        "posthoc_tests",
+        "emmeans",
+        "plots",
+        "saved_variables",
+        "executed_functions",
+        "box_test",
+        "bartlett_test",
+        "multivariate_tests",
+        "between_subjects_sscp",
+        "residual_matrix",
+        "sscp_matrix",
+        "univariate_tests",
+        "homogeneous_subsets",
+        "scatter_plot_matrices",
+        "profile_plots",
+        "residual_plots"
+      ],
+      "errorsHead": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+    }
+  }
+]
+---- browser logs ----
+[worker created] http://localhost:3101/_next/static/chunks/2277.bb0550a5e7273dda.js
+[worker created] http://localhost:3101/_next/static/chunks/234.6fa7b1d4fea46f48.js

@@ -1,0 +1,50 @@
+{
+ "id": "BB-KF07-01",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: waktu(4); measure skor"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "tombolDefine": {
+   "Add": 2,
+   "Change": 2,
+   "Remove": 2,
+   "Reset": 1,
+   "Cancel": 1,
+   "Define": 1
+  },
+  "labelDefine": {
+   "factor": 1,
+   "levels": 1,
+   "measure": 1
+  },
+  "tombolUtama": {
+   "Model": "aktif",
+   "Contrasts": "aktif",
+   "Plots": "nonaktif",
+   "Post Hoc": "nonaktif",
+   "EM Means": "aktif",
+   "Save": "aktif",
+   "Options": "aktif",
+   "Back to Define": "aktif",
+   "Reset": "aktif",
+   "Cancel": "aktif",
+   "OK": "aktif"
+  },
+  "daftar": {
+   "within": 1,
+   "between": 1,
+   "cov": 1
+  }
+ },
+ "notes": [
+  "BB-KF07-01-1.png: dialog Define",
+  "BB-KF07-01-2.png: dialog utama Repeated Measures"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 6
+}

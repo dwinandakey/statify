@@ -1,0 +1,66 @@
+{
+  "positiveControl": [
+    {
+      "fn": "instantiateStreaming"
+    },
+    {
+      "fn": "instantiateStreaming"
+    }
+  ],
+  "repeat:main:multivariate": {
+    "exactEqual": false,
+    "sortedKeysEqual": true,
+    "sameMultisetOfNumbers": true,
+    "firstDiffExact": {
+      "index": 2779,
+      "first": "on\":\"§undefined\",\"design\":\"Design: Intercept + Group\",\"test_basis\":\"Based on trimmed mean\"}]}],\"tests_of_between_subjects_effects\":{\"effects\":{\"Y2\":{\"Group\":{\"sum_of_squares\":179.99999999999997,\"df\":2,\"mean_square\":89.99999999999999,\"f_value\":167.8756476683937,\"significance\":5.551115123125783e-16,\"p",
+      "second": "on\":\"§undefined\",\"design\":\"Design: Intercept + Group\",\"test_basis\":\"Based on trimmed mean\"}]}],\"tests_of_between_subjects_effects\":{\"effects\":{\"Y2\":{\"Corrected Model\":{\"sum_of_squares\":179.99999999999997,\"df\":2,\"mean_square\":89.99999999999999,\"f_value\":167.8756476683937,\"significance\":5.551115123125"
+    },
+    "firstDiffSorted": null
+  },
+  "repeat:main:repeated-measures": {
+    "exactEqual": false,
+    "sortedKeysEqual": true,
+    "sameMultisetOfNumbers": true,
+    "firstDiffExact": {
+      "index": 292,
+      "first": ":\"2\"},\"dependent_variable\":\"time_(2,score)\"},{\"factor_values\":{\"time\":\"3\"},\"dependent_variable\":\"time_(3,score)\"}]}},\"descriptive_statistics\":{\"time_(2,score)\":{\"dependent_variable\":\"time_(2,score)\",\"groups\":[{\"factor_name\":\"time\",\"factor_value\":\"2\",\"stats\":{\"mean\":12.171705532673842,\"std_deviation\"",
+      "second": ":\"2\"},\"dependent_variable\":\"time_(2,score)\"},{\"factor_values\":{\"time\":\"3\"},\"dependent_variable\":\"time_(3,score)\"}]}},\"descriptive_statistics\":{\"time_(1,score)\":{\"dependent_variable\":\"time_(1,score)\",\"groups\":[{\"factor_name\":\"time\",\"factor_value\":\"1\",\"stats\":{\"mean\":10.17,\"std_deviation\":0.8221281754"
+    },
+    "firstDiffSorted": null
+  },
+  "repeat:worker:multivariate": {
+    "exactEqual": false,
+    "sortedKeysEqual": true,
+    "sameMultisetOfNumbers": true,
+    "firstDiffExact": {
+      "index": 2779,
+      "first": "on\":\"§undefined\",\"design\":\"Design: Intercept + Group\",\"test_basis\":\"Based on trimmed mean\"}]}],\"tests_of_between_subjects_effects\":{\"effects\":{\"Y2\":{\"Group\":{\"sum_of_squares\":179.99999999999997,\"df\":2,\"mean_square\":89.99999999999999,\"f_value\":167.8756476683937,\"significance\":5.551115123125783e-16,\"p",
+      "second": "on\":\"§undefined\",\"design\":\"Design: Intercept + Group\",\"test_basis\":\"Based on trimmed mean\"}]}],\"tests_of_between_subjects_effects\":{\"effects\":{\"Y2\":{\"Corrected Model\":{\"sum_of_squares\":179.99999999999997,\"df\":2,\"mean_square\":89.99999999999999,\"f_value\":167.8756476683937,\"significance\":5.551115123125"
+    },
+    "firstDiffSorted": null
+  },
+  "repeat:worker:repeated-measures": {
+    "exactEqual": false,
+    "sortedKeysEqual": true,
+    "sameMultisetOfNumbers": true,
+    "firstDiffExact": {
+      "index": 292,
+      "first": ":\"2\"},\"dependent_variable\":\"time_(2,score)\"},{\"factor_values\":{\"time\":\"3\"},\"dependent_variable\":\"time_(3,score)\"}]}},\"descriptive_statistics\":{\"time_(2,score)\":{\"dependent_variable\":\"time_(2,score)\",\"groups\":[{\"factor_name\":\"time\",\"factor_value\":\"2\",\"stats\":{\"mean\":12.171705532673842,\"std_deviation\"",
+      "second": ":\"2\"},\"dependent_variable\":\"time_(2,score)\"},{\"factor_values\":{\"time\":\"3\"},\"dependent_variable\":\"time_(3,score)\"}]}},\"descriptive_statistics\":{\"time_(1,score)\":{\"dependent_variable\":\"time_(1,score)\",\"groups\":[{\"factor_name\":\"time\",\"factor_value\":\"1\",\"stats\":{\"mean\":10.17,\"std_deviation\":0.8221281754"
+    },
+    "firstDiffSorted": null
+  },
+  "timingPerf500": {
+    "main": [
+      3190,
+      6278,
+      6196
+    ],
+    "worker": [
+      6555,
+      6448,
+      6387
+    ]
+  }
+}

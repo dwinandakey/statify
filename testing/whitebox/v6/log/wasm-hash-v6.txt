@@ -1,0 +1,14 @@
+Hash WASM v6 (wasm-pack 0.14.0, rustc 1.95.0 (59807616e 2026-04-14), --target web)
+tanggal: 2026-09-30 19:50:35 +0700
+
+GLM Multivariate
+  v5 (tag skripsi-final-v5, rust/pkg)        : md5 43a77657bcd238bb949797c7dccea200  sha256 2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1  2605336 byte
+  v6 (rust/pkg, tidak dibangun ulang)         : md5 43a77657bcd238bb949797c7dccea200  sha256 2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1  2605336 byte
+  v6 build ulang dari sumber branch v6        : md5 43a77657bcd238bb949797c7dccea200  sha256 2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1  2605336 byte
+  hasil: IDENTIK byte per byte dengan v5
+
+GLM Repeated Measures
+  v5 (tag skripsi-final-v5, rust/pkg)        : md5 f4c34490f7fe4152b5ffb9a8cf9de4f8  sha256 d2d6438b4d8d7cbc65091aad697b03e8d257609b2288eda5d26eabe6471018a9  4806021 byte
+  v6 (build baru, rust/pkg)                  : md5 889473e96259ef9e9f99cd8bba9c1d53  sha256 b8db28200638659468c8176b5f38a069427a89f34496834db80067082f2f8075  4806161 byte
+  hasil: berbeda dari v5 (diharapkan: RmModel::mauchly berubah)
+  glue wasm.js, wasm.d.ts, wasm_bg.wasm.d.ts, package.json: isi identik dengan v5 (git diff --ignore-cr-at-eol kosong)

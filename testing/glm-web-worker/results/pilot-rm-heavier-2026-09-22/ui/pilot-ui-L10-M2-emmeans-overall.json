@@ -1,0 +1,53 @@
+{
+  "env": {
+    "chromium": "143.0.7499.4",
+    "base": "http://localhost:3101",
+    "levels": 10,
+    "measures": 2,
+    "options": "DescStats,EstEffectSize,ObsPower",
+    "emmeans": "overall",
+    "sizes": [
+      200
+    ],
+    "sequence": [
+      "main",
+      "worker"
+    ],
+    "startedAt": "2026-09-22T02:21:30.069Z",
+    "identical": {
+      "200": null
+    }
+  },
+  "results": [
+    {
+      "n": 200,
+      "mode": "main",
+      "error": "page.waitForFunction: Timeout 90000ms exceeded.",
+      "stored": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "loggedErrors": null,
+      "pageErrors": [
+        "RuntimeError: unreachable\n    at wasm.wasm.__rustc[b7974e8690430dd9]::__rust_abort (http://localhost:3101/_next/static/media/wasm_bg.02fad085.wasm:wasm-function[14856]:0x222041)\n    at wasm.wasm.__rustc[b7974e8690430dd9]::__rust_start_panic (http://localhost:3101/_next/static/media/wasm_bg.02fad085."
+      ]
+    },
+    {
+      "n": 200,
+      "mode": "worker",
+      "error": "page.waitForFunction: Timeout 90000ms exceeded.",
+      "stored": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "loggedErrors": null,
+      "pageErrors": [
+        "GlmWorkerTaskError: RuntimeError: unreachable\n    at l.handleResponse (http://localhost:3101/_next/static/chunks/4918.542b0251d67f5967.js:1:2086)\n    at e.onmessage (http://localhost:3101/_next/static/chunks/4918.542b0251d67f5967.js:1:1649)"
+      ]
+    }
+  ]
+}

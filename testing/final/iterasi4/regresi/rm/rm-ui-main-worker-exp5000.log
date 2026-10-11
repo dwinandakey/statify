@@ -1,0 +1,5 @@
+exp5000 main->main tables=16 errors=["time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed","score: t
+exp5000 worker->worker tables=16 errors=["time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed","score: t
+exp5000 main->main tables=16 errors=["time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed","score: t
+exp5000 worker->worker tables=16 errors=["time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed","score: t
+exp5000: all 4 runs byte-identical (main and worker): true

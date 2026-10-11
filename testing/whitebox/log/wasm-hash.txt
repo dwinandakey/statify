@@ -1,0 +1,20 @@
+Verifikasi WASM: build ulang sesudah penambahan test (#[cfg(test)]) vs biner ter-commit di tag skripsi-final-v5
+wasm-pack 0.14.0, rustc 1.95.0, target wasm32-unknown-unknown, --target web
+== multivariate
+committed : 43a77657bcd238bb949797c7dccea200  2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1
+baseline  : 43a77657bcd238bb949797c7dccea200  2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1  (build ulang sumber v5 tanpa perubahan)
+sesudah   : 43a77657bcd238bb949797c7dccea200  2b78977459a99315ac337afe1ca0a4965f5dfbda591ccf708aac8a5e96d9e0d1  (build ulang sesudah penambahan test)
+hasil     : IDENTIK byte-per-byte
+wasm.js: BERBEDA
+wasm.d.ts: BERBEDA
+== repeated-measures
+committed : f4c34490f7fe4152b5ffb9a8cf9de4f8  d2d6438b4d8d7cbc65091aad697b03e8d257609b2288eda5d26eabe6471018a9
+baseline  : f4c34490f7fe4152b5ffb9a8cf9de4f8  d2d6438b4d8d7cbc65091aad697b03e8d257609b2288eda5d26eabe6471018a9  (build ulang sumber v5 tanpa perubahan)
+sesudah   : f4c34490f7fe4152b5ffb9a8cf9de4f8  d2d6438b4d8d7cbc65091aad697b03e8d257609b2288eda5d26eabe6471018a9  (build ulang sesudah penambahan test)
+hasil     : IDENTIK byte-per-byte
+wasm.js: BERBEDA
+wasm.d.ts: BERBEDA
+multivariate/wasm.js: identik setelah normalisasi akhir baris (perbedaan hanya CRLF checkout Windows vs LF keluaran wasm-pack)
+multivariate/wasm.d.ts: identik setelah normalisasi akhir baris (perbedaan hanya CRLF checkout Windows vs LF keluaran wasm-pack)
+repeated-measures/wasm.js: identik setelah normalisasi akhir baris (perbedaan hanya CRLF checkout Windows vs LF keluaran wasm-pack)
+repeated-measures/wasm.d.ts: identik setelah normalisasi akhir baris (perbedaan hanya CRLF checkout Windows vs LF keluaran wasm-pack)

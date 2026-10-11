@@ -1,0 +1,47 @@
+{
+ "id": "BB-KF06-04",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: build [] → kotak Model: [\"Drop variables here.\"] (BB-KF06-04-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.",
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial."
+   ],
+   "file": "BB-KF06-04-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.",
+    "An error occurred during Multivariate analysis. | Error: The custom model has no terms. Add terms in the Model dialog or choose Full Factorial."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-build-terms": [
+   "Drop variables here."
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-04-1.png: dialog Model (build): Drop variables here.",
+  "BB-KF06-04-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72
+}

@@ -1,0 +1,8 @@
+Build sebelum (IdywReo5MTivt50HHa3VO, testing/final/iterasi4/regresi) vs build perapian teks (OrpyJfBOluV37xa0aqmFr, ui-sampel/)
+mv2wd: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mv3d: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mv4ph: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mv5: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mv1ci: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mvK2: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0
+mvK3: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label Welch) 0

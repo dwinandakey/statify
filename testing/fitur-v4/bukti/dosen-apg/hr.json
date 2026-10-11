@@ -1,0 +1,1003 @@
+{
+  "base": "http://localhost:3101",
+  "csv": "WA_Fn-UseC_-HR-Employee-Attrition.csv",
+  "shots": [
+    {
+      "file": "hr-a-options.png",
+      "label": "Options: EstEffectSize tidak dicentang, ObsPower tidak dicentang"
+    },
+    {
+      "file": "hr-a-multivariate-tests.png",
+      "label": "Multivariate Tests (A: tanpa effect size/power)"
+    },
+    {
+      "file": "hr-a-between-subjects.png",
+      "label": "Tests of Between-Subjects Effects (A: tanpa effect size/power)"
+    },
+    {
+      "file": "hr-b-options.png",
+      "label": "Options: EstEffectSize dicentang, ObsPower dicentang"
+    },
+    {
+      "file": "hr-b-multivariate-tests.png",
+      "label": "Multivariate Tests (B: effect size dan power dicentang)"
+    },
+    {
+      "file": "hr-b-between-subjects.png",
+      "label": "Tests of Between-Subjects Effects (B: effect size dan power dicentang)"
+    }
+  ],
+  "runs": {
+    "A: tanpa effect size/power": {
+      "optionsChecked": {
+        "EstEffectSize": false,
+        "ObsPower": false
+      },
+      "optionsSent": {
+        "EstEffectSize": false,
+        "ObsPower": false,
+        "SigLevel": 0.05
+      },
+      "tables": [
+        {
+          "title": "Multivariate Tests",
+          "note": "Type III sum of squares",
+          "columns": [
+            "Effect",
+            "",
+            "Value",
+            "F",
+            "Hypothesis df",
+            "Error df",
+            "Sig.",
+            "Partial Eta Squared",
+            "Noncent. Parameter",
+            "Observed Power"
+          ],
+          "rows": [
+            {
+              "rowHeader": [],
+              "effect": "Intercept",
+              "test_name": "Pillai's Trace",
+              "value": "0.6955",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Wilks' Lambda",
+              "value": "0.3045",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Hotelling's Trace",
+              "value": "2.2844",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Roy's Largest Root",
+              "value": "2.2844",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "Gender",
+              "test_name": "Pillai's Trace",
+              "value": "0.0022",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Wilks' Lambda",
+              "value": "0.9978",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Hotelling's Trace",
+              "value": "0.0023",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Roy's Largest Root",
+              "value": "0.0023",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            }
+          ]
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "note": "a. R Squared = 0.0009 (Adjusted R Squared = 0.0002) — YearsAtCompany\nb. R Squared = 0.0022 (Adjusted R Squared = 0.0015) — TotalWorkingYears\nc. R Squared = 0.001 (Adjusted R Squared = 0.0003) — MonthlyIncome",
+          "columns": [
+            "Source",
+            "Dependent Variable",
+            "Type III Sum of Squares",
+            "df",
+            "Mean Square",
+            "F",
+            "Sig.",
+            "Partial Eta Squared",
+            "Noncent. Parameter",
+            "Observed Power"
+          ],
+          "rows": [
+            {
+              "rowHeader": [],
+              "source": "Corrected Model",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "48.7909",
+              "df": "1",
+              "mean_square": "48.7909",
+              "f_value": "1.3002",
+              "significance": "0.2544",
+              "partial_eta_squared": "0.0009",
+              "noncent_parameter": "1.3002",
+              "observed_power": "0.2069"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "195.4613",
+              "df": "1",
+              "mean_square": "195.4613",
+              "f_value": "3.2335",
+              "significance": "0.0724",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.2335",
+              "observed_power": "0.4354"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "33047389.2029",
+              "df": "1",
+              "mean_square": "33047389.2029",
+              "f_value": "1.4915",
+              "significance": "0.2222",
+              "partial_eta_squared": "0.001",
+              "noncent_parameter": "1.4915",
+              "observed_power": "0.2305"
+            },
+            {
+              "rowHeader": [],
+              "source": "Intercept",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "70047.7025",
+              "df": "1",
+              "mean_square": "70047.7025",
+              "f_value": "1866.6126",
+              "significance": "<.001",
+              "partial_eta_squared": "0.5598",
+              "noncent_parameter": "1866.6126",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "181923.2709",
+              "df": "1",
+              "mean_square": "181923.2709",
+              "f_value": "3009.5503",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6721",
+              "noncent_parameter": "3009.5503",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "60240046031.9457",
+              "df": "1",
+              "mean_square": "60240046031.9457",
+              "f_value": "2718.7272",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6494",
+              "noncent_parameter": "2718.7272",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "Gender",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "48.7909",
+              "df": "1",
+              "mean_square": "48.7909",
+              "f_value": "1.3002",
+              "significance": "0.2544",
+              "partial_eta_squared": "0.0009",
+              "noncent_parameter": "1.3002",
+              "observed_power": "0.2069"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "195.4613",
+              "df": "1",
+              "mean_square": "195.4613",
+              "f_value": "3.2335",
+              "significance": "0.0724",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.2335",
+              "observed_power": "0.4354"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "33047389.2029",
+              "df": "1",
+              "mean_square": "33047389.2029",
+              "f_value": "1.4915",
+              "significance": "0.2222",
+              "partial_eta_squared": "0.001",
+              "noncent_parameter": "1.4915",
+              "observed_power": "0.2305"
+            },
+            {
+              "rowHeader": [],
+              "source": "Error",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "55089.1111",
+              "df": "1468",
+              "mean_square": "37.5266",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "88738.6264",
+              "df": "1468",
+              "mean_square": "60.4487",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "32527127648.8577",
+              "df": "1468",
+              "mean_square": "22157443.9025",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "Total",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "127336",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "275961",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "94723704669",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "Corrected Total",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "55137.902",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "88934.0878",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "32560175038.0606",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            }
+          ]
+        }
+      ],
+      "raw": {
+        "effects": {
+          "Intercept": {
+            "Roy's Largest Root": {
+              "value": 2.284410722153117,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265384,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Hotelling's Trace": {
+              "value": 2.2844107221531362,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265401,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Pillai's Trace": {
+              "value": 0.6955313800265575,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265575,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Wilks' Lambda": {
+              "value": 0.30446861997345576,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265442,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            }
+          },
+          "Gender": {
+            "Pillai's Trace": {
+              "value": 0.0022459930071357646,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.0022459930071357646,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Wilks' Lambda": {
+              "value": 0.9977540069928644,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.0022459930071355716,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Roy's Largest Root": {
+              "value": 0.002251048847091977,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.002245993007122717,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Hotelling's Trace": {
+              "value": 0.002251048847105025,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.002245993007135706,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            }
+          }
+        },
+        "design": "Type III sum of squares",
+        "alpha": 0.05
+      }
+    },
+    "B: effect size dan power dicentang": {
+      "optionsChecked": {
+        "EstEffectSize": true,
+        "ObsPower": true
+      },
+      "optionsSent": {
+        "EstEffectSize": true,
+        "ObsPower": true,
+        "SigLevel": 0.05
+      },
+      "tables": [
+        {
+          "title": "Multivariate Tests",
+          "note": "Type III sum of squares",
+          "columns": [
+            "Effect",
+            "",
+            "Value",
+            "F",
+            "Hypothesis df",
+            "Error df",
+            "Sig.",
+            "Partial Eta Squared",
+            "Noncent. Parameter",
+            "Observed Power"
+          ],
+          "rows": [
+            {
+              "rowHeader": [],
+              "effect": "Intercept",
+              "test_name": "Pillai's Trace",
+              "value": "0.6955",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Wilks' Lambda",
+              "value": "0.3045",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Hotelling's Trace",
+              "value": "2.2844",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Roy's Largest Root",
+              "value": "2.2844",
+              "f": "1116.3154",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6955",
+              "noncent_parameter": "3348.9461",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "effect": "Gender",
+              "test_name": "Pillai's Trace",
+              "value": "0.0022",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Wilks' Lambda",
+              "value": "0.9978",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Hotelling's Trace",
+              "value": "0.0023",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            },
+            {
+              "rowHeader": [],
+              "effect": "",
+              "test_name": "Roy's Largest Root",
+              "value": "0.0023",
+              "f": "1.1",
+              "hypothesis_df": "3",
+              "error_df": "1466",
+              "significance": "0.348",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.3",
+              "observed_power": "0.2991"
+            }
+          ]
+        },
+        {
+          "title": "Tests of Between-Subjects Effects",
+          "note": "a. R Squared = 0.0009 (Adjusted R Squared = 0.0002) — YearsAtCompany\nb. R Squared = 0.0022 (Adjusted R Squared = 0.0015) — TotalWorkingYears\nc. R Squared = 0.001 (Adjusted R Squared = 0.0003) — MonthlyIncome",
+          "columns": [
+            "Source",
+            "Dependent Variable",
+            "Type III Sum of Squares",
+            "df",
+            "Mean Square",
+            "F",
+            "Sig.",
+            "Partial Eta Squared",
+            "Noncent. Parameter",
+            "Observed Power"
+          ],
+          "rows": [
+            {
+              "rowHeader": [],
+              "source": "Corrected Model",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "48.7909",
+              "df": "1",
+              "mean_square": "48.7909",
+              "f_value": "1.3002",
+              "significance": "0.2544",
+              "partial_eta_squared": "0.0009",
+              "noncent_parameter": "1.3002",
+              "observed_power": "0.2069"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "195.4613",
+              "df": "1",
+              "mean_square": "195.4613",
+              "f_value": "3.2335",
+              "significance": "0.0724",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.2335",
+              "observed_power": "0.4354"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "33047389.2029",
+              "df": "1",
+              "mean_square": "33047389.2029",
+              "f_value": "1.4915",
+              "significance": "0.2222",
+              "partial_eta_squared": "0.001",
+              "noncent_parameter": "1.4915",
+              "observed_power": "0.2305"
+            },
+            {
+              "rowHeader": [],
+              "source": "Intercept",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "70047.7025",
+              "df": "1",
+              "mean_square": "70047.7025",
+              "f_value": "1866.6126",
+              "significance": "<.001",
+              "partial_eta_squared": "0.5598",
+              "noncent_parameter": "1866.6126",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "181923.2709",
+              "df": "1",
+              "mean_square": "181923.2709",
+              "f_value": "3009.5503",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6721",
+              "noncent_parameter": "3009.5503",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "60240046031.9457",
+              "df": "1",
+              "mean_square": "60240046031.9457",
+              "f_value": "2718.7272",
+              "significance": "<.001",
+              "partial_eta_squared": "0.6494",
+              "noncent_parameter": "2718.7272",
+              "observed_power": "1"
+            },
+            {
+              "rowHeader": [],
+              "source": "Gender",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "48.7909",
+              "df": "1",
+              "mean_square": "48.7909",
+              "f_value": "1.3002",
+              "significance": "0.2544",
+              "partial_eta_squared": "0.0009",
+              "noncent_parameter": "1.3002",
+              "observed_power": "0.2069"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "195.4613",
+              "df": "1",
+              "mean_square": "195.4613",
+              "f_value": "3.2335",
+              "significance": "0.0724",
+              "partial_eta_squared": "0.0022",
+              "noncent_parameter": "3.2335",
+              "observed_power": "0.4354"
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "33047389.2029",
+              "df": "1",
+              "mean_square": "33047389.2029",
+              "f_value": "1.4915",
+              "significance": "0.2222",
+              "partial_eta_squared": "0.001",
+              "noncent_parameter": "1.4915",
+              "observed_power": "0.2305"
+            },
+            {
+              "rowHeader": [],
+              "source": "Error",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "55089.1111",
+              "df": "1468",
+              "mean_square": "37.5266",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "88738.6264",
+              "df": "1468",
+              "mean_square": "60.4487",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "32527127648.8577",
+              "df": "1468",
+              "mean_square": "22157443.9025",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "Total",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "127336",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "275961",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "94723704669",
+              "df": "1470",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "Corrected Total",
+              "dependent_variable": "YearsAtCompany",
+              "sum_of_squares": "55137.902",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "TotalWorkingYears",
+              "sum_of_squares": "88934.0878",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            },
+            {
+              "rowHeader": [],
+              "source": "",
+              "dependent_variable": "MonthlyIncome",
+              "sum_of_squares": "32560175038.0606",
+              "df": "1469",
+              "mean_square": "",
+              "f_value": "",
+              "significance": "",
+              "partial_eta_squared": "",
+              "noncent_parameter": "",
+              "observed_power": ""
+            }
+          ]
+        }
+      ],
+      "raw": {
+        "effects": {
+          "Intercept": {
+            "Roy's Largest Root": {
+              "value": 2.284410722153117,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265384,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Hotelling's Trace": {
+              "value": 2.2844107221531362,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265401,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Pillai's Trace": {
+              "value": 0.6955313800265575,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265575,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            },
+            "Wilks' Lambda": {
+              "value": 0.30446861997345576,
+              "f": 1116.3153728921566,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0,
+              "partial_eta_squared": 0.6955313800265442,
+              "noncent_parameter": 3348.9461186764697,
+              "observed_power": 1,
+              "is_exact_statistic": true
+            }
+          },
+          "Gender": {
+            "Pillai's Trace": {
+              "value": 0.0022459930071357646,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.0022459930071357646,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Wilks' Lambda": {
+              "value": 0.9977540069928644,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.0022459930071355716,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Roy's Largest Root": {
+              "value": 0.002251048847091977,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.002245993007122717,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            },
+            "Hotelling's Trace": {
+              "value": 0.002251048847105025,
+              "f": 1.1000125366122795,
+              "hypothesis_df": 3,
+              "error_df": 1466,
+              "significance": 0.3479973484716684,
+              "partial_eta_squared": 0.002245993007135706,
+              "noncent_parameter": 3.3000376098368385,
+              "observed_power": 0.2990897312102825,
+              "is_exact_statistic": true
+            }
+          }
+        },
+        "design": "Type III sum of squares",
+        "alpha": 0.05
+      }
+    }
+  },
+  "chromium": "143.0.7499.4"
+}

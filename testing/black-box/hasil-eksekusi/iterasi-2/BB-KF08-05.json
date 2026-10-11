@@ -1,0 +1,30 @@
+{
+ "id": "BB-KF08-05",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: waktu(4); measure skor",
+  "slot within: skor=w1,w2,w3"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan slot ke-4 kosong",
+   "texts": [
+    "Please assign a variable to every within-subjects slot.",
+    "Please assign a variable to every within-subjects slot."
+   ],
+   "file": "BB-KF08-05.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "logBaru": false,
+  "dialogTerbuka": true
+ },
+ "notes": [
+  "BB-KF08-05.png: toast: OK dengan slot ke-4 kosong"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 9
+}

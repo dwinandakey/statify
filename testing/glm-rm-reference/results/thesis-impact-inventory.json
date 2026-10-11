@@ -1,0 +1,2536 @@
+{
+ "old": "8e2ddbd2",
+ "new": "HEAD",
+ "diff": {
+  "models/result.rs": {
+   "struct": {
+    "added": {
+     "BoxMTest": [
+      "box_m",
+      "f",
+      "df1",
+      "df2",
+      "significance"
+     ],
+     "HomogeneityTests": [
+      "box_m",
+      "box_m_note",
+      "levene",
+      "design"
+     ],
+     "LeveneEntry": [
+      "based_on",
+      "statistic",
+      "df1",
+      "df2",
+      "significance"
+     ],
+     "PairwiseComparison": [
+      "dependent_variable",
+      "factor_name",
+      "level_i",
+      "level_j",
+      "mean_difference",
+      "std_error",
+      "significance",
+      "confidence_interval",
+      "adjustment"
+     ]
+    },
+    "removed": [],
+    "changed": {
+     "RepeatedMeasureResult": {
+      "added": [
+       "homogeneity_tests",
+       "within_subjects_multivariate",
+       "emmeans_pairwise"
+      ],
+      "removed": []
+     },
+     "ResidualMatrix": {
+      "added": [
+       "covariance",
+       "correlation"
+      ],
+      "removed": []
+     }
+    }
+   }
+  },
+  "stats/glm_tests.rs": {
+   "file": "added",
+   "items": {
+    "struct": {},
+    "enum": {},
+    "type": [],
+    "fn": [
+     "noncentral_f_cdf",
+     "observed_power",
+     "sphericity_significance",
+     "f_significance",
+     "eigenvalues_e_inv_h",
+     "multivariate_statistics"
+    ],
+    "method": []
+   }
+  },
+  "stats/multivariate_tests.rs": {
+   "fn": {
+    "added": [
+     "doubly_multivariate_tests"
+    ],
+    "removed": []
+   }
+  },
+  "stats/rm_model.rs": {
+   "file": "added",
+   "items": {
+    "struct": {
+     "Term": [
+      "name",
+      "cols",
+      "factors"
+     ],
+     "MeasureData": [
+      "name",
+      "variables",
+      "y"
+     ],
+     "BetweenFactor": [
+      "name",
+      "levels",
+      "labels"
+     ],
+     "RmModel": [
+      "factor",
+      "k",
+      "measures",
+      "factors",
+      "subject_levels",
+      "x",
+      "xtx_inv",
+      "terms",
+      "n",
+      "rank",
+      "excluded",
+      "alpha",
+      "sum_of_squares",
+      "contrast"
+     ]
+    },
+    "enum": {
+     "WithinContrast": [
+      "Polynomial",
+      "Repeated"
+     ],
+     "Component": [
+      "Within",
+      "Between"
+     ]
+    },
+    "type": [
+     "EmmeansOutput"
+    ],
+    "fn": [
+     "number",
+     "level_key",
+     "find_value",
+     "def_index",
+     "between_column",
+     "sort_levels",
+     "value_label",
+     "helmert",
+     "within_contrast_type",
+     "polynomial",
+     "polynomial_label",
+     "median",
+     "trimmed_mean",
+     "stats",
+     "hstack"
+    ],
+    "method": [
+     "RmModel::build",
+     "RmModel::design_note",
+     "RmModel::error_df",
+     "RmModel::coefficients",
+     "RmModel::hypothesis",
+     "RmModel::error",
+     "RmModel::within",
+     "RmModel::average",
+     "RmModel::within_sources",
+     "RmModel::between_sources",
+     "RmModel::multivariate_tests",
+     "RmModel::mauchly",
+     "RmModel::effect_rows",
+     "RmModel::within_effects",
+     "RmModel::within_contrasts",
+     "RmModel::averaged_multivariate",
+     "RmModel::between_effects",
+     "RmModel::univariate_tests",
+     "RmModel::descriptives",
+     "RmModel::effect_codes",
+     "RmModel::marginal_l",
+     "RmModel::estimate",
+     "RmModel::response",
+     "RmModel::parse_target",
+     "RmModel::component_name",
+     "RmModel::component_levels",
+     "RmModel::emmeans",
+     "RmModel::cells",
+     "RmModel::cell_anova",
+     "RmModel::levene",
+     "RmModel::box_m",
+     "RmModel::homogeneity_tests",
+     "RmModel::residual_matrix",
+     "RmModel::bartlett_sphericity"
+    ]
+   }
+  },
+  "utils/collections.rs": {
+   "file": "added",
+   "items": {
+    "struct": {},
+    "enum": {},
+    "type": [
+     "HashMap",
+     "HashSet"
+    ],
+    "fn": [],
+    "method": []
+   }
+  }
+ },
+ "counts": {
+  "old": {
+   "models/config.rs": {
+    "struct": 9,
+    "enum": 5,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/data.rs": {
+    "struct": 4,
+    "enum": 5,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/result.rs": {
+    "struct": 37,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/bartlett_test.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 4,
+    "method": 0
+   },
+   "stats/between_subjects_effects.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/between_subjects_sscp.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/common.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 34,
+    "method": 0
+   },
+   "stats/core.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/descriptive_statistics.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 3,
+    "method": 0
+   },
+   "stats/emmeans.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/estimable_function.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/mauchly_test.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 2,
+    "method": 0
+   },
+   "stats/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/multivariate_tests.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 4,
+    "method": 0
+   },
+   "stats/parameter_estimates.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 7,
+    "method": 0
+   },
+   "stats/parse_factors.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/posthoc.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/profile_plots.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 5,
+    "method": 0
+   },
+   "stats/residual_sscp_matrix.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 4,
+    "method": 0
+   },
+   "stats/sscp_matrix.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 8,
+    "method": 0
+   },
+   "stats/summary_processing.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/univariate_tests.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 5,
+    "method": 0
+   },
+   "stats/within_subjects_effects.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 7,
+    "method": 0
+   },
+   "utils/converter.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 2,
+    "method": 0
+   },
+   "utils/error.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 1,
+    "fn": 0,
+    "method": 4
+   },
+   "utils/log.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 4
+   },
+   "utils/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "wasm/constructor.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 6
+   },
+   "wasm/function.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 6,
+    "method": 0
+   },
+   "wasm/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   }
+  },
+  "new": {
+   "models/config.rs": {
+    "struct": 9,
+    "enum": 5,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/data.rs": {
+    "struct": 4,
+    "enum": 5,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "models/result.rs": {
+    "struct": 41,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/bartlett_test.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 4,
+    "method": 0
+   },
+   "stats/between_subjects_effects.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/between_subjects_sscp.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/common.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 34,
+    "method": 0
+   },
+   "stats/core.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/descriptive_statistics.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 3,
+    "method": 0
+   },
+   "stats/emmeans.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/estimable_function.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/glm_tests.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 6,
+    "method": 0
+   },
+   "stats/mauchly_test.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 2,
+    "method": 0
+   },
+   "stats/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/multivariate_tests.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 5,
+    "method": 0
+   },
+   "stats/parameter_estimates.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 7,
+    "method": 0
+   },
+   "stats/parse_factors.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/posthoc.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 1,
+    "method": 0
+   },
+   "stats/profile_plots.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 5,
+    "method": 0
+   },
+   "stats/residual_sscp_matrix.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 4,
+    "method": 0
+   },
+   "stats/rm_model.rs": {
+    "struct": 4,
+    "enum": 2,
+    "type": 1,
+    "fn": 15,
+    "method": 34
+   },
+   "stats/sscp_matrix.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 8,
+    "method": 0
+   },
+   "stats/summary_processing.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "stats/univariate_tests.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 5,
+    "method": 0
+   },
+   "stats/within_subjects_effects.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 7,
+    "method": 0
+   },
+   "utils/collections.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 2,
+    "fn": 0,
+    "method": 0
+   },
+   "utils/converter.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 2,
+    "method": 0
+   },
+   "utils/error.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 1,
+    "fn": 0,
+    "method": 4
+   },
+   "utils/log.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 4
+   },
+   "utils/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   },
+   "wasm/constructor.rs": {
+    "struct": 1,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 6
+   },
+   "wasm/function.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 6,
+    "method": 0
+   },
+   "wasm/mod.rs": {
+    "struct": 0,
+    "enum": 0,
+    "type": 0,
+    "fn": 0,
+    "method": 0
+   }
+  }
+ },
+ "old_items": {
+  "models/config.rs": {
+   "struct": {
+    "RepeatedMeasuresConfig": [
+     "main",
+     "model",
+     "contrast",
+     "plots",
+     "posthoc",
+     "emmeans",
+     "save",
+     "options"
+    ],
+    "MainConfig": [
+     "sub_var",
+     "factors_var",
+     "covariates"
+    ],
+    "ModelConfig": [
+     "non_cust",
+     "custom",
+     "build_custom_term",
+     "bet_sub_var",
+     "bet_sub_model",
+     "with_sub_var",
+     "with_sub_model",
+     "def_factors",
+     "bet_factors",
+     "cov_model",
+     "build_term_method",
+     "sum_of_square_method",
+     "term_text"
+    ],
+    "ContrastConfig": [
+     "factor_list",
+     "contrast_method",
+     "last",
+     "first"
+    ],
+    "PlotsConfig": [
+     "src_list",
+     "axis_list",
+     "line_list",
+     "plot_list",
+     "fix_factor_vars",
+     "rand_factor_vars",
+     "line_chart_type",
+     "bar_chart_type",
+     "include_error_bars",
+     "confidence_interval",
+     "standard_error",
+     "include_ref_line_for_grand_mean",
+     "y_axis_start_0",
+     "multiplier"
+    ],
+    "PostHocConfig": [
+     "src_list",
+     "fix_factor_vars",
+     "error_ratio",
+     "twosided",
+     "lt_control",
+     "gt_control",
+     "category_method",
+     "waller",
+     "dunnett",
+     "lsd",
+     "bonfe",
+     "sidak",
+     "scheffe",
+     "regwf",
+     "regwq",
+     "snk",
+     "tu",
+     "tub",
+     "dun",
+     "hoc",
+     "gabriel",
+     "tam",
+     "dunt",
+     "games",
+     "dunc"
+    ],
+    "EmmeanConfig": [
+     "src_list",
+     "target_list",
+     "comp_main_effect",
+     "confi_interval_method"
+    ],
+    "SaveConfig": [
+     "res_weighted",
+     "pre_weighted",
+     "std_statistics",
+     "cooks_d",
+     "leverage",
+     "unstandardized_res",
+     "weighted_res",
+     "standardized_res",
+     "studentized_res",
+     "deleted_res",
+     "coeff_stats",
+     "new_dataset",
+     "file_path",
+     "dataset_name",
+     "write_new_dataset"
+    ],
+    "OptionsConfig": [
+     "desc_stats",
+     "homogen_test",
+     "est_effect_size",
+     "spr_vs_level",
+     "obs_power",
+     "res_plot",
+     "param_est",
+     "lack_of_fit",
+     "sscp_mat",
+     "general_fun",
+     "res_sscp_mat",
+     "coefficient_matrix",
+     "transform_mat",
+     "sig_level"
+    ]
+   },
+   "enum": {
+    "BuildTermMethod": [
+     "Interaction",
+     "MainEffects",
+     "All2Way",
+     "All3Way",
+     "All4Way",
+     "All5Way"
+    ],
+    "SumOfSquaresMethod": [
+     "TypeI",
+     "TypeII",
+     "TypeIII",
+     "TypeIV"
+    ],
+    "ContrastMethod": [
+     "None",
+     "Deviation",
+     "Simple",
+     "Difference",
+     "Helmert",
+     "Repeated",
+     "Polynomial"
+    ],
+    "CategoryMethod": [
+     "Last",
+     "First"
+    ],
+    "CIMethod": [
+     "LsdNone",
+     "Bonferroni",
+     "Sidak"
+    ]
+   },
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/data.rs": {
+   "struct": {
+    "DataRecord": [
+     "values"
+    ],
+    "ValueLabel": [
+     "id",
+     "variable_name",
+     "value",
+     "label"
+    ],
+    "VariableDefinition": [
+     "id",
+     "column_index",
+     "name",
+     "width",
+     "decimals",
+     "label",
+     "values",
+     "missing",
+     "columns",
+     "align",
+     "measure",
+     "role"
+    ],
+    "AnalysisData": [
+     "subject_data",
+     "factors_data",
+     "covariate_data",
+     "subject_data_defs",
+     "factors_data_defs",
+     "covariate_data_defs"
+    ]
+   },
+   "enum": {
+    "DataValue": [
+     "Number",
+     "Text",
+     "Boolean",
+     "Null"
+    ],
+    "VariableType": [
+     "Numeric",
+     "Comma",
+     "Dot",
+     "Scientific",
+     "Date",
+     "Adate",
+     "Edate",
+     "Sdate",
+     "Jdate",
+     "Qyr",
+     "Moyr",
+     "Wkyr",
+     "Datetime",
+     "Time",
+     "Dtime",
+     "Wkday",
+     "Month",
+     "Dollar",
+     "Cca",
+     "Ccb",
+     "Ccc",
+     "Ccd",
+     "Cce",
+     "String",
+     "RestrictedNumeric"
+    ],
+    "VariableAlign": [
+     "Right",
+     "Left",
+     "Center"
+    ],
+    "VariableMeasure": [
+     "Scale",
+     "Ordinal",
+     "Nominal",
+     "Unknown"
+    ],
+    "VariableRole": [
+     "Input",
+     "Target",
+     "Both",
+     "None",
+     "Partition",
+     "Split"
+    ]
+   },
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/result.rs": {
+   "struct": {
+    "RepeatedMeasureResult": [
+     "within_subjects_factors",
+     "descriptive_statistics",
+     "bartlett_test",
+     "multivariate_tests",
+     "mauchly_test",
+     "tests_of_within_subjects_effects",
+     "tests_of_within_subjects_contrasts",
+     "tests_of_between_subjects_effects",
+     "parameter_estimates",
+     "general_estimable_function",
+     "within_subjects_sscp",
+     "between_subjects_sscp",
+     "residual_matrix",
+     "sscp_matrix",
+     "univariate_tests",
+     "posthoc_tests",
+     "emmeans",
+     "executed_functions"
+    ],
+    "WithinSubjectsFactors": [
+     "measures"
+    ],
+    "WithinSubjectFactor": [
+     "factor_values",
+     "dependent_variable"
+    ],
+    "DescriptiveStatistics": [
+     "dependent_variable",
+     "groups"
+    ],
+    "StatGroup": [
+     "factor_name",
+     "factor_value",
+     "stats",
+     "subgroups"
+    ],
+    "StatsEntry": [
+     "mean",
+     "std_deviation",
+     "n"
+    ],
+    "BartlettTest": [
+     "likelihood_ratio",
+     "approx_chi_square",
+     "df",
+     "significance",
+     "description",
+     "design"
+    ],
+    "MultivariateTests": [
+     "effects",
+     "design",
+     "alpha"
+    ],
+    "MultivariateTestEntry": [
+     "value",
+     "f",
+     "hypothesis_df",
+     "error_df",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power",
+     "is_exact_statistic"
+    ],
+    "MauchlyTest": [
+     "tests",
+     "design",
+     "note"
+    ],
+    "MauchlyTestEntry": [
+     "effect",
+     "mauchly_w",
+     "chi_square",
+     "df",
+     "significance",
+     "greenhouse_geisser_epsilon",
+     "huynh_feldt_epsilon",
+     "lower_bound_epsilon"
+    ],
+    "TestsWithinSubjectsEffects": [
+     "measures"
+    ],
+    "WithinSubjectsEffectsResult": [
+     "sources"
+    ],
+    "WithinSubjectsEffectSource": [
+     "source",
+     "assumption_type",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "TestsWithinSubjectsContrasts": [
+     "measures"
+    ],
+    "WithinSubjectsContrastsResult": [
+     "sources"
+    ],
+    "WithinSubjectsContrastSource": [
+     "source",
+     "factor_values",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "TestsBetweenSubjectsEffects": [
+     "effects",
+     "r_squared",
+     "adjusted_r_squared"
+    ],
+    "TestEffectEntry": [
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f_value",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "ParameterEstimates": [
+     "estimates"
+    ],
+    "ParameterEstimateEntry": [
+     "parameter",
+     "b",
+     "std_error",
+     "t_value",
+     "significance",
+     "confidence_interval",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "ConfidenceInterval": [
+     "lower_bound",
+     "upper_bound"
+    ],
+    "GeneralEstimableFunction": [
+     "matrix",
+     "design"
+    ],
+    "BetweenSubjectsSSCP": [
+     "matrices",
+     "based_on"
+    ],
+    "BetweenSSCPMatrix": [
+     "values"
+    ],
+    "WithinSubjectsSSCP": [
+     "hypothesis",
+     "error",
+     "based_on"
+    ],
+    "ResidualMatrix": [
+     "matrix_type",
+     "values",
+     "description"
+    ],
+    "SSCPMatrix": [
+     "matrix_type",
+     "categories"
+    ],
+    "UnivariateTests": [
+     "tests",
+     "alpha"
+    ],
+    "UnivariateTestEntry": [
+     "source",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "PostHocTest": [
+     "dependent_variable",
+     "test_type",
+     "factor_name",
+     "i_level",
+     "j_level",
+     "mean_difference",
+     "std_error",
+     "significance",
+     "confidence_interval"
+    ],
+    "EstimatedMarginalMean": [
+     "dependent_variable",
+     "factor_name",
+     "factor_value",
+     "mean",
+     "std_error",
+     "confidence_interval"
+    ],
+    "PlotData": [
+     "title",
+     "x_label",
+     "y_label",
+     "series",
+     "y_axis_starts_at_zero",
+     "includes_reference_line",
+     "reference_line",
+     "dependent_variable",
+     "plot_type",
+     "groups_label",
+     "model",
+     "error_bars",
+     "legend"
+    ],
+    "PlotSeries": [
+     "name",
+     "points",
+     "error_bars",
+     "series_type",
+     "color",
+     "line_style",
+     "marker_style",
+     "is_reference_line"
+    ],
+    "PlotPoint": [
+     "x",
+     "y",
+     "label"
+    ],
+    "LegendItem": [
+     "label",
+     "color",
+     "line_style",
+     "marker_style"
+    ],
+    "SavedVariables": [
+     "variable_values"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/bartlett_test.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_bartlett_test",
+    "calculate_covariance_matrix",
+    "covariance_to_correlation",
+    "calculate_bartlett_test_from_residual"
+   ],
+   "method": []
+  },
+  "stats/between_subjects_effects.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_between_subjects_effects"
+   ],
+   "method": []
+  },
+  "stats/between_subjects_sscp.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_between_subjects_sscp"
+   ],
+   "method": []
+  },
+  "stats/common.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_mean",
+    "calculate_variance",
+    "calculate_std_deviation",
+    "calculate_f_significance",
+    "calculate_t_significance",
+    "calculate_t_critical",
+    "calculate_observed_power",
+    "calculate_observed_power_t",
+    "chi_square_cdf",
+    "f_distribution_cdf",
+    "count_total_cases",
+    "extract_dependent_value",
+    "data_value_to_string",
+    "get_factor_levels",
+    "get_factor_combinations",
+    "generate_combinations",
+    "generate_interaction_terms",
+    "generate_factor_combinations",
+    "parse_interaction_term",
+    "record_matches_interaction",
+    "get_factor_combinations_with_interactions",
+    "get_interaction_level_values",
+    "matches_combination",
+    "get_level_values",
+    "get_level_values_adjusted",
+    "to_dmatrix",
+    "to_dvector",
+    "from_dmatrix",
+    "matrix_multiply",
+    "matrix_inverse",
+    "matrix_determinant",
+    "matrix_transpose",
+    "solve_linear_system",
+    "build_design_matrix_and_response"
+   ],
+   "method": []
+  },
+  "stats/core.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/descriptive_statistics.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_descriptive_statistics",
+    "add_between_subjects_groups",
+    "extract_factor_levels"
+   ],
+   "method": []
+  },
+  "stats/emmeans.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_emmeans"
+   ],
+   "method": []
+  },
+  "stats/estimable_function.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_general_estimable_function"
+   ],
+   "method": []
+  },
+  "stats/mauchly_test.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "build_orthonormal_contrast",
+    "calculate_mauchly_test"
+   ],
+   "method": []
+  },
+  "stats/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/multivariate_tests.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "build_orthonormal_contrast",
+    "calculate_multivariate_tests",
+    "calculate_hypothesis_error_matrices",
+    "calculate_multivariate_test_statistics"
+   ],
+   "method": []
+  },
+  "stats/parameter_estimates.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_parameter_estimates",
+    "calculate_intercept_only_parameters",
+    "calculate_t_test_power",
+    "t_critical_value",
+    "normal_cdf",
+    "normal_quantile",
+    "erf"
+   ],
+   "method": []
+  },
+  "stats/parse_factors.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "parse_within_subject_factors"
+   ],
+   "method": []
+  },
+  "stats/posthoc.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_posthoc_tests"
+   ],
+   "method": []
+  },
+  "stats/profile_plots.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "create_profile_plots",
+    "create_single_profile_plot",
+    "calculate_grand_mean",
+    "get_color_for_index",
+    "get_line_style_for_index"
+   ],
+   "method": []
+  },
+  "stats/residual_sscp_matrix.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_residual_matrix",
+    "calculate_residual_covariance",
+    "calculate_residual_correlation",
+    "calculate_bartlett_sphericity_test"
+   ],
+   "method": []
+  },
+  "stats/sscp_matrix.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_sscp_matrix",
+    "calculate_lack_of_fit_and_pure_error",
+    "calculate_hypothesis_sscp",
+    "build_type_i_reduced_design_matrix",
+    "build_type_ii_reduced_design_matrix",
+    "build_type_iii_reduced_design_matrix",
+    "build_type_iv_reduced_design_matrix",
+    "calculate_error_sscp"
+   ],
+   "method": []
+  },
+  "stats/summary_processing.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/univariate_tests.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_univariate_tests",
+    "calculate_univariate_test_entries",
+    "create_type1_test_entries",
+    "create_type2_test_entries",
+    "create_type3_test_entries"
+   ],
+   "method": []
+  },
+  "stats/within_subjects_effects.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_tests_within_subjects_effects",
+    "calculate_observed_power",
+    "f_critical",
+    "normal_cdf",
+    "normal_quantile",
+    "erf",
+    "calculate_tests_within_subjects_contrasts"
+   ],
+   "method": []
+  },
+  "utils/converter.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "string_to_js_error",
+    "format_result"
+   ],
+   "method": []
+  },
+  "utils/error.rs": {
+   "struct": {
+    "ErrorCollector": [
+     "errors"
+    ]
+   },
+   "enum": {},
+   "type": [
+    "AnalysisResult"
+   ],
+   "fn": [],
+   "method": [
+    "ErrorCollector::add_error",
+    "ErrorCollector::has_errors",
+    "ErrorCollector::get_error_summary",
+    "ErrorCollector::clear"
+   ]
+  },
+  "utils/log.rs": {
+   "struct": {
+    "FunctionLogger": [
+     "executed_functions"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": [
+    "FunctionLogger::add_log",
+    "FunctionLogger::has_logs",
+    "FunctionLogger::get_log_summary",
+    "FunctionLogger::get_executed_functions"
+   ]
+  },
+  "utils/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "wasm/constructor.rs": {
+   "struct": {
+    "RepeatedMeasureAnalysis": [
+     "config",
+     "data",
+     "result",
+     "error_collector"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": [
+    "RepeatedMeasureAnalysis::new",
+    "RepeatedMeasureAnalysis::get_results",
+    "RepeatedMeasureAnalysis::get_formatted_results",
+    "RepeatedMeasureAnalysis::get_executed_functions",
+    "RepeatedMeasureAnalysis::get_all_errors",
+    "RepeatedMeasureAnalysis::clear_errors"
+   ]
+  },
+  "wasm/function.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "run_analysis",
+    "get_results",
+    "get_formatted_results",
+    "get_executed_functions",
+    "get_all_errors",
+    "clear_errors"
+   ],
+   "method": []
+  },
+  "wasm/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  }
+ },
+ "new_items": {
+  "models/config.rs": {
+   "struct": {
+    "RepeatedMeasuresConfig": [
+     "main",
+     "model",
+     "contrast",
+     "plots",
+     "posthoc",
+     "emmeans",
+     "save",
+     "options"
+    ],
+    "MainConfig": [
+     "sub_var",
+     "factors_var",
+     "covariates"
+    ],
+    "ModelConfig": [
+     "non_cust",
+     "custom",
+     "build_custom_term",
+     "bet_sub_var",
+     "bet_sub_model",
+     "with_sub_var",
+     "with_sub_model",
+     "def_factors",
+     "bet_factors",
+     "cov_model",
+     "build_term_method",
+     "sum_of_square_method",
+     "term_text"
+    ],
+    "ContrastConfig": [
+     "factor_list",
+     "contrast_method",
+     "last",
+     "first"
+    ],
+    "PlotsConfig": [
+     "src_list",
+     "axis_list",
+     "line_list",
+     "plot_list",
+     "fix_factor_vars",
+     "rand_factor_vars",
+     "line_chart_type",
+     "bar_chart_type",
+     "include_error_bars",
+     "confidence_interval",
+     "standard_error",
+     "include_ref_line_for_grand_mean",
+     "y_axis_start_0",
+     "multiplier"
+    ],
+    "PostHocConfig": [
+     "src_list",
+     "fix_factor_vars",
+     "error_ratio",
+     "twosided",
+     "lt_control",
+     "gt_control",
+     "category_method",
+     "waller",
+     "dunnett",
+     "lsd",
+     "bonfe",
+     "sidak",
+     "scheffe",
+     "regwf",
+     "regwq",
+     "snk",
+     "tu",
+     "tub",
+     "dun",
+     "hoc",
+     "gabriel",
+     "tam",
+     "dunt",
+     "games",
+     "dunc"
+    ],
+    "EmmeanConfig": [
+     "src_list",
+     "target_list",
+     "comp_main_effect",
+     "confi_interval_method"
+    ],
+    "SaveConfig": [
+     "res_weighted",
+     "pre_weighted",
+     "std_statistics",
+     "cooks_d",
+     "leverage",
+     "unstandardized_res",
+     "weighted_res",
+     "standardized_res",
+     "studentized_res",
+     "deleted_res",
+     "coeff_stats",
+     "new_dataset",
+     "file_path",
+     "dataset_name",
+     "write_new_dataset"
+    ],
+    "OptionsConfig": [
+     "desc_stats",
+     "homogen_test",
+     "est_effect_size",
+     "spr_vs_level",
+     "obs_power",
+     "res_plot",
+     "param_est",
+     "lack_of_fit",
+     "sscp_mat",
+     "general_fun",
+     "res_sscp_mat",
+     "coefficient_matrix",
+     "transform_mat",
+     "sig_level"
+    ]
+   },
+   "enum": {
+    "BuildTermMethod": [
+     "Interaction",
+     "MainEffects",
+     "All2Way",
+     "All3Way",
+     "All4Way",
+     "All5Way"
+    ],
+    "SumOfSquaresMethod": [
+     "TypeI",
+     "TypeII",
+     "TypeIII",
+     "TypeIV"
+    ],
+    "ContrastMethod": [
+     "None",
+     "Deviation",
+     "Simple",
+     "Difference",
+     "Helmert",
+     "Repeated",
+     "Polynomial"
+    ],
+    "CategoryMethod": [
+     "Last",
+     "First"
+    ],
+    "CIMethod": [
+     "LsdNone",
+     "Bonferroni",
+     "Sidak"
+    ]
+   },
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/data.rs": {
+   "struct": {
+    "DataRecord": [
+     "values"
+    ],
+    "ValueLabel": [
+     "id",
+     "variable_name",
+     "value",
+     "label"
+    ],
+    "VariableDefinition": [
+     "id",
+     "column_index",
+     "name",
+     "width",
+     "decimals",
+     "label",
+     "values",
+     "missing",
+     "columns",
+     "align",
+     "measure",
+     "role"
+    ],
+    "AnalysisData": [
+     "subject_data",
+     "factors_data",
+     "covariate_data",
+     "subject_data_defs",
+     "factors_data_defs",
+     "covariate_data_defs"
+    ]
+   },
+   "enum": {
+    "DataValue": [
+     "Number",
+     "Text",
+     "Boolean",
+     "Null"
+    ],
+    "VariableType": [
+     "Numeric",
+     "Comma",
+     "Dot",
+     "Scientific",
+     "Date",
+     "Adate",
+     "Edate",
+     "Sdate",
+     "Jdate",
+     "Qyr",
+     "Moyr",
+     "Wkyr",
+     "Datetime",
+     "Time",
+     "Dtime",
+     "Wkday",
+     "Month",
+     "Dollar",
+     "Cca",
+     "Ccb",
+     "Ccc",
+     "Ccd",
+     "Cce",
+     "String",
+     "RestrictedNumeric"
+    ],
+    "VariableAlign": [
+     "Right",
+     "Left",
+     "Center"
+    ],
+    "VariableMeasure": [
+     "Scale",
+     "Ordinal",
+     "Nominal",
+     "Unknown"
+    ],
+    "VariableRole": [
+     "Input",
+     "Target",
+     "Both",
+     "None",
+     "Partition",
+     "Split"
+    ]
+   },
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "models/result.rs": {
+   "struct": {
+    "RepeatedMeasureResult": [
+     "within_subjects_factors",
+     "descriptive_statistics",
+     "bartlett_test",
+     "homogeneity_tests",
+     "multivariate_tests",
+     "mauchly_test",
+     "tests_of_within_subjects_effects",
+     "within_subjects_multivariate",
+     "tests_of_within_subjects_contrasts",
+     "tests_of_between_subjects_effects",
+     "parameter_estimates",
+     "general_estimable_function",
+     "within_subjects_sscp",
+     "between_subjects_sscp",
+     "residual_matrix",
+     "sscp_matrix",
+     "univariate_tests",
+     "posthoc_tests",
+     "emmeans",
+     "emmeans_pairwise",
+     "executed_functions"
+    ],
+    "WithinSubjectsFactors": [
+     "measures"
+    ],
+    "WithinSubjectFactor": [
+     "factor_values",
+     "dependent_variable"
+    ],
+    "DescriptiveStatistics": [
+     "dependent_variable",
+     "groups"
+    ],
+    "StatGroup": [
+     "factor_name",
+     "factor_value",
+     "stats",
+     "subgroups"
+    ],
+    "StatsEntry": [
+     "mean",
+     "std_deviation",
+     "n"
+    ],
+    "HomogeneityTests": [
+     "box_m",
+     "box_m_note",
+     "levene",
+     "design"
+    ],
+    "BoxMTest": [
+     "box_m",
+     "f",
+     "df1",
+     "df2",
+     "significance"
+    ],
+    "LeveneEntry": [
+     "based_on",
+     "statistic",
+     "df1",
+     "df2",
+     "significance"
+    ],
+    "BartlettTest": [
+     "likelihood_ratio",
+     "approx_chi_square",
+     "df",
+     "significance",
+     "description",
+     "design"
+    ],
+    "MultivariateTests": [
+     "effects",
+     "design",
+     "alpha"
+    ],
+    "MultivariateTestEntry": [
+     "value",
+     "f",
+     "hypothesis_df",
+     "error_df",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power",
+     "is_exact_statistic"
+    ],
+    "MauchlyTest": [
+     "tests",
+     "design",
+     "note"
+    ],
+    "MauchlyTestEntry": [
+     "effect",
+     "mauchly_w",
+     "chi_square",
+     "df",
+     "significance",
+     "greenhouse_geisser_epsilon",
+     "huynh_feldt_epsilon",
+     "lower_bound_epsilon"
+    ],
+    "TestsWithinSubjectsEffects": [
+     "measures"
+    ],
+    "WithinSubjectsEffectsResult": [
+     "sources"
+    ],
+    "WithinSubjectsEffectSource": [
+     "source",
+     "assumption_type",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "TestsWithinSubjectsContrasts": [
+     "measures"
+    ],
+    "WithinSubjectsContrastsResult": [
+     "sources"
+    ],
+    "WithinSubjectsContrastSource": [
+     "source",
+     "factor_values",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "TestsBetweenSubjectsEffects": [
+     "effects",
+     "r_squared",
+     "adjusted_r_squared"
+    ],
+    "TestEffectEntry": [
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f_value",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "ParameterEstimates": [
+     "estimates"
+    ],
+    "ParameterEstimateEntry": [
+     "parameter",
+     "b",
+     "std_error",
+     "t_value",
+     "significance",
+     "confidence_interval",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "ConfidenceInterval": [
+     "lower_bound",
+     "upper_bound"
+    ],
+    "GeneralEstimableFunction": [
+     "matrix",
+     "design"
+    ],
+    "BetweenSubjectsSSCP": [
+     "matrices",
+     "based_on"
+    ],
+    "BetweenSSCPMatrix": [
+     "values"
+    ],
+    "WithinSubjectsSSCP": [
+     "hypothesis",
+     "error",
+     "based_on"
+    ],
+    "ResidualMatrix": [
+     "matrix_type",
+     "values",
+     "description",
+     "covariance",
+     "correlation"
+    ],
+    "SSCPMatrix": [
+     "matrix_type",
+     "categories"
+    ],
+    "UnivariateTests": [
+     "tests",
+     "alpha"
+    ],
+    "UnivariateTestEntry": [
+     "source",
+     "sum_of_squares",
+     "df",
+     "mean_square",
+     "f",
+     "significance",
+     "partial_eta_squared",
+     "noncent_parameter",
+     "observed_power"
+    ],
+    "PostHocTest": [
+     "dependent_variable",
+     "test_type",
+     "factor_name",
+     "i_level",
+     "j_level",
+     "mean_difference",
+     "std_error",
+     "significance",
+     "confidence_interval"
+    ],
+    "PairwiseComparison": [
+     "dependent_variable",
+     "factor_name",
+     "level_i",
+     "level_j",
+     "mean_difference",
+     "std_error",
+     "significance",
+     "confidence_interval",
+     "adjustment"
+    ],
+    "EstimatedMarginalMean": [
+     "dependent_variable",
+     "factor_name",
+     "factor_value",
+     "mean",
+     "std_error",
+     "confidence_interval"
+    ],
+    "PlotData": [
+     "title",
+     "x_label",
+     "y_label",
+     "series",
+     "y_axis_starts_at_zero",
+     "includes_reference_line",
+     "reference_line",
+     "dependent_variable",
+     "plot_type",
+     "groups_label",
+     "model",
+     "error_bars",
+     "legend"
+    ],
+    "PlotSeries": [
+     "name",
+     "points",
+     "error_bars",
+     "series_type",
+     "color",
+     "line_style",
+     "marker_style",
+     "is_reference_line"
+    ],
+    "PlotPoint": [
+     "x",
+     "y",
+     "label"
+    ],
+    "LegendItem": [
+     "label",
+     "color",
+     "line_style",
+     "marker_style"
+    ],
+    "SavedVariables": [
+     "variable_values"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/bartlett_test.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_bartlett_test",
+    "calculate_covariance_matrix",
+    "covariance_to_correlation",
+    "calculate_bartlett_test_from_residual"
+   ],
+   "method": []
+  },
+  "stats/between_subjects_effects.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_between_subjects_effects"
+   ],
+   "method": []
+  },
+  "stats/between_subjects_sscp.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_between_subjects_sscp"
+   ],
+   "method": []
+  },
+  "stats/common.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_mean",
+    "calculate_variance",
+    "calculate_std_deviation",
+    "calculate_f_significance",
+    "calculate_t_significance",
+    "calculate_t_critical",
+    "calculate_observed_power",
+    "calculate_observed_power_t",
+    "chi_square_cdf",
+    "f_distribution_cdf",
+    "count_total_cases",
+    "extract_dependent_value",
+    "data_value_to_string",
+    "get_factor_levels",
+    "get_factor_combinations",
+    "generate_combinations",
+    "generate_interaction_terms",
+    "generate_factor_combinations",
+    "parse_interaction_term",
+    "record_matches_interaction",
+    "get_factor_combinations_with_interactions",
+    "get_interaction_level_values",
+    "matches_combination",
+    "get_level_values",
+    "get_level_values_adjusted",
+    "to_dmatrix",
+    "to_dvector",
+    "from_dmatrix",
+    "matrix_multiply",
+    "matrix_inverse",
+    "matrix_determinant",
+    "matrix_transpose",
+    "solve_linear_system",
+    "build_design_matrix_and_response"
+   ],
+   "method": []
+  },
+  "stats/core.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/descriptive_statistics.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_descriptive_statistics",
+    "add_between_subjects_groups",
+    "extract_factor_levels"
+   ],
+   "method": []
+  },
+  "stats/emmeans.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_emmeans"
+   ],
+   "method": []
+  },
+  "stats/estimable_function.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_general_estimable_function"
+   ],
+   "method": []
+  },
+  "stats/glm_tests.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "noncentral_f_cdf",
+    "observed_power",
+    "sphericity_significance",
+    "f_significance",
+    "eigenvalues_e_inv_h",
+    "multivariate_statistics"
+   ],
+   "method": []
+  },
+  "stats/mauchly_test.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "build_orthonormal_contrast",
+    "calculate_mauchly_test"
+   ],
+   "method": []
+  },
+  "stats/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/multivariate_tests.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "build_orthonormal_contrast",
+    "calculate_multivariate_tests",
+    "doubly_multivariate_tests",
+    "calculate_hypothesis_error_matrices",
+    "calculate_multivariate_test_statistics"
+   ],
+   "method": []
+  },
+  "stats/parameter_estimates.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_parameter_estimates",
+    "calculate_intercept_only_parameters",
+    "calculate_t_test_power",
+    "t_critical_value",
+    "normal_cdf",
+    "normal_quantile",
+    "erf"
+   ],
+   "method": []
+  },
+  "stats/parse_factors.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "parse_within_subject_factors"
+   ],
+   "method": []
+  },
+  "stats/posthoc.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_posthoc_tests"
+   ],
+   "method": []
+  },
+  "stats/profile_plots.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "create_profile_plots",
+    "create_single_profile_plot",
+    "calculate_grand_mean",
+    "get_color_for_index",
+    "get_line_style_for_index"
+   ],
+   "method": []
+  },
+  "stats/residual_sscp_matrix.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_residual_matrix",
+    "calculate_residual_covariance",
+    "calculate_residual_correlation",
+    "calculate_bartlett_sphericity_test"
+   ],
+   "method": []
+  },
+  "stats/rm_model.rs": {
+   "struct": {
+    "Term": [
+     "name",
+     "cols",
+     "factors"
+    ],
+    "MeasureData": [
+     "name",
+     "variables",
+     "y"
+    ],
+    "BetweenFactor": [
+     "name",
+     "levels",
+     "labels"
+    ],
+    "RmModel": [
+     "factor",
+     "k",
+     "measures",
+     "factors",
+     "subject_levels",
+     "x",
+     "xtx_inv",
+     "terms",
+     "n",
+     "rank",
+     "excluded",
+     "alpha",
+     "sum_of_squares",
+     "contrast"
+    ]
+   },
+   "enum": {
+    "WithinContrast": [
+     "Polynomial",
+     "Repeated"
+    ],
+    "Component": [
+     "Within",
+     "Between"
+    ]
+   },
+   "type": [
+    "EmmeansOutput"
+   ],
+   "fn": [
+    "number",
+    "level_key",
+    "find_value",
+    "def_index",
+    "between_column",
+    "sort_levels",
+    "value_label",
+    "helmert",
+    "within_contrast_type",
+    "polynomial",
+    "polynomial_label",
+    "median",
+    "trimmed_mean",
+    "stats",
+    "hstack"
+   ],
+   "method": [
+    "RmModel::build",
+    "RmModel::design_note",
+    "RmModel::error_df",
+    "RmModel::coefficients",
+    "RmModel::hypothesis",
+    "RmModel::error",
+    "RmModel::within",
+    "RmModel::average",
+    "RmModel::within_sources",
+    "RmModel::between_sources",
+    "RmModel::multivariate_tests",
+    "RmModel::mauchly",
+    "RmModel::effect_rows",
+    "RmModel::within_effects",
+    "RmModel::within_contrasts",
+    "RmModel::averaged_multivariate",
+    "RmModel::between_effects",
+    "RmModel::univariate_tests",
+    "RmModel::descriptives",
+    "RmModel::effect_codes",
+    "RmModel::marginal_l",
+    "RmModel::estimate",
+    "RmModel::response",
+    "RmModel::parse_target",
+    "RmModel::component_name",
+    "RmModel::component_levels",
+    "RmModel::emmeans",
+    "RmModel::cells",
+    "RmModel::cell_anova",
+    "RmModel::levene",
+    "RmModel::box_m",
+    "RmModel::homogeneity_tests",
+    "RmModel::residual_matrix",
+    "RmModel::bartlett_sphericity"
+   ]
+  },
+  "stats/sscp_matrix.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_sscp_matrix",
+    "calculate_lack_of_fit_and_pure_error",
+    "calculate_hypothesis_sscp",
+    "build_type_i_reduced_design_matrix",
+    "build_type_ii_reduced_design_matrix",
+    "build_type_iii_reduced_design_matrix",
+    "build_type_iv_reduced_design_matrix",
+    "calculate_error_sscp"
+   ],
+   "method": []
+  },
+  "stats/summary_processing.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "stats/univariate_tests.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_univariate_tests",
+    "calculate_univariate_test_entries",
+    "create_type1_test_entries",
+    "create_type2_test_entries",
+    "create_type3_test_entries"
+   ],
+   "method": []
+  },
+  "stats/within_subjects_effects.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "calculate_tests_within_subjects_effects",
+    "calculate_observed_power",
+    "f_critical",
+    "normal_cdf",
+    "normal_quantile",
+    "erf",
+    "calculate_tests_within_subjects_contrasts"
+   ],
+   "method": []
+  },
+  "utils/collections.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [
+    "HashMap",
+    "HashSet"
+   ],
+   "fn": [],
+   "method": []
+  },
+  "utils/converter.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "string_to_js_error",
+    "format_result"
+   ],
+   "method": []
+  },
+  "utils/error.rs": {
+   "struct": {
+    "ErrorCollector": [
+     "errors"
+    ]
+   },
+   "enum": {},
+   "type": [
+    "AnalysisResult"
+   ],
+   "fn": [],
+   "method": [
+    "ErrorCollector::add_error",
+    "ErrorCollector::has_errors",
+    "ErrorCollector::get_error_summary",
+    "ErrorCollector::clear"
+   ]
+  },
+  "utils/log.rs": {
+   "struct": {
+    "FunctionLogger": [
+     "executed_functions"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": [
+    "FunctionLogger::add_log",
+    "FunctionLogger::has_logs",
+    "FunctionLogger::get_log_summary",
+    "FunctionLogger::get_executed_functions"
+   ]
+  },
+  "utils/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  },
+  "wasm/constructor.rs": {
+   "struct": {
+    "RepeatedMeasureAnalysis": [
+     "config",
+     "data",
+     "result",
+     "error_collector"
+    ]
+   },
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": [
+    "RepeatedMeasureAnalysis::new",
+    "RepeatedMeasureAnalysis::get_results",
+    "RepeatedMeasureAnalysis::get_formatted_results",
+    "RepeatedMeasureAnalysis::get_executed_functions",
+    "RepeatedMeasureAnalysis::get_all_errors",
+    "RepeatedMeasureAnalysis::clear_errors"
+   ]
+  },
+  "wasm/function.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [
+    "run_analysis",
+    "get_results",
+    "get_formatted_results",
+    "get_executed_functions",
+    "get_all_errors",
+    "clear_errors"
+   ],
+   "method": []
+  },
+  "wasm/mod.rs": {
+   "struct": {},
+   "enum": {},
+   "type": [],
+   "fn": [],
+   "method": []
+  }
+ }
+}

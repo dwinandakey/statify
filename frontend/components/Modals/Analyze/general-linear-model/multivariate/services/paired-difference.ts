@@ -36,7 +36,7 @@ function validatePairs(
     pairs.forEach(([v1, v2], idx) => {
         if (!v1 || !v2) {
             throw new Error(
-                `Pair ${idx + 1} is incomplete — both Variable 1 and Variable 2 must be selected.`
+                `Pair ${idx + 1} is incomplete: both Variable 1 and Variable 2 must be selected.`
             );
         }
         if (v1 === v2) {

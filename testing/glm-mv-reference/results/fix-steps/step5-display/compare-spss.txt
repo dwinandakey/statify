@@ -1,0 +1,91 @@
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+1048 nilai SPSS; dibandingkan 964; lulus 936; gagal 28; tanpa padanan 84
+
+config | tabel | nilai | dibandingkan | lulus | gagal | tanpa padanan | selisih maks | di | tampilan UI gagal
+mv1 | Report | 12 | 12 | 12 | 0 | 0 | 2.842170943040401e-14 | disp · Mean | 0
+mv1 | Descriptive Statistics | 12 | 0 | 0 | 0 | 12 | 0 |  | 0
+mv1 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.0004805504253213577 | Intercept / Pillai's Trace · F | 0
+mv1 | Tests of Between-Subjects Effects | 76 | 76 | 76 | 0 | 0 | 1.1641532182693481e-10 | Error / disp - 200 · Type III Sum of Squares | 0
+mv2 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv2 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 3.552713678800501e-15 | x3 / laki-laki · Mean | 0
+mv2 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.546585164964199e-11 |  · df2 | 0
+mv2 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0004116211212021881 | Intercept / Pillai's Trace · F | 0
+mv2 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 9.298117831235686e-14 | x4 / Based on trimmed mean · Sig. | 0
+mv2 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0005000000000006111 | Corrected Model / x4 · Type III Sum of Squares | 0
+mv3 | Descriptive Statistics | 6 | 6 | 6 | 0 | 0 | 1.7763568394002505e-15 | kedalaman1 - kedalaman2 · Mean | 0
+mv3 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.00006003652066155496 | Intercept / Pillai's Trace · F | 0
+mv3 | Tests of Between-Subjects Effects | 38 | 38 | 38 | 0 | 0 | 5.245803791353865e-13 | Intercept / ukuran1 - ukuran2 · Observed Power | 0
+mv4 | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | 0 |  | 0
+mv4 | Descriptive Statistics | 24 | 24 | 24 | 0 | 0 | 8.881784197001252e-16 | y1 / Total · Mean | 0
+mv4 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 9.185896487906575e-11 |  · df2 | 0
+mv4 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.00014043622162240865 | treatment / Wilks' Lambda · F | 0
+mv4 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 5.773159728050814e-15 | y2 / Based on trimmed mean · Levene Statistic | 0
+mv4 | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 0 | 5.323519403077626e-13 | Intercept / y2 · Observed Power | 0
+mv5 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv5 | Descriptive Statistics | 90 | 18 | 18 | 0 | 72 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv5 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.7284841053187847e-12 |  · df2 | 0
+mv5 | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 0.00043671311358539633 | faktorA * faktorB / Roy's Largest Root · F | 0
+mv5 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 2.7200464103316335e-14 | ultimate torque / Based on Median · Sig. | 0
+mv5 | Tests of Between-Subjects Effects | 94 | 94 | 66 | 28 | 0 | 490.2199999999988 | faktorA / ultimate strain · Type III Sum of Squares | 28
+
+GAGAL (|Statify − SPSS| > 0.001):
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Type III Sum of Squares | SPSS 1.2051281250000254 | Statify 0.1012499999999994 (raw) | selisih 1.103878125000026
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Mean Square | SPSS 1.2051281250000254 | Statify 0.1012499999999994 (raw) | selisih 1.103878125000026
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | F | SPSS 5.906857414186716 | Statify 0.49627031415135925 (raw) | selisih 5.4105871000353565
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Sig. | SPSS 0.022927611915115272 | Statify 0.487923706386177 (raw) | selisih 0.4649960944710617
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Partial Eta Squared | SPSS 0.19750846210223075 | Statify 0.020259015261791368 (raw) | selisih 0.1772494468404394
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Noncent. Parameter | SPSS 5.906857414186716 | Statify 0.49627031415135925 (raw) | selisih 5.4105871000353565
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate torque | Observed Power | SPSS 0.6452073210477426 | Statify 0.10387642869923464 (raw) | selisih 0.541330892348508
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Type III Sum of Squares | SPSS 614.2512499999985 | Statify 124.03124999999977 (raw) | selisih 490.2199999999988
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Mean Square | SPSS 614.2512499999985 | Statify 124.03124999999977 (raw) | selisih 490.2199999999988
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | F | SPSS 20.019323999511087 | Statify 4.042355273700071 (raw) | selisih 15.976968725811016
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Sig. | SPSS 0.00015811822785243408 | Statify 0.055737056225637405 (raw) | selisih 0.05557893799778497
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Partial Eta Squared | SPSS 0.45478490309695435 | Statify 0.14415177449417924 (raw) | selisih 0.31063312860277514
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Noncent. Parameter | SPSS 20.019323999511087 | Statify 4.042355273700071 (raw) | selisih 15.976968725811016
+  mv5 | Tests of Between-Subjects Effects | faktorA / ultimate strain | Observed Power | SPSS 0.9900724142103748 | Statify 0.4880534159848188 (raw) | selisih 0.5020189982255561
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Type III Sum of Squares | SPSS 1.6940843750000425 | Statify 0.8107187499999977 (raw) | selisih 0.8833656250000448
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Mean Square | SPSS 0.5646947916666808 | Statify 0.2702395833333326 (raw) | selisih 0.2944552083333482
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | F | SPSS 2.7678149299759194 | Statify 1.3245618065873204 (raw) | selisih 1.443253123388599
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Sig. | SPSS 0.06368013541108551 | Statify 0.2895927807238977 (raw) | selisih 0.2259126453128122
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Partial Eta Squared | SPSS 0.257045180287298 | Statify 0.14205083671080243 (raw) | selisih 0.11499434357649557
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Noncent. Parameter | SPSS 8.303444789927758 | Statify 3.973685419761961 (raw) | selisih 4.329759370165797
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate torque | Observed Power | SPSS 0.5937784725318533 | Statify 0.3071788008671519 (raw) | selisih 0.28659967166470146
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Type III Sum of Squares | SPSS 74.87375000000031 | Statify 89.76499999999999 (raw) | selisih 14.891249999999673
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Mean Square | SPSS 24.957916666666772 | Statify 29.921666666666663 (raw) | selisih 4.963749999999891
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | F | SPSS 0.8134140876437793 | Statify 0.9751897771561266 (raw) | selisih 0.16177568951234733
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Sig. | SPSS 0.4990176020680702 | Statify 0.4207870562194138 (raw) | selisih 0.07823054584865641
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Partial Eta Squared | SPSS 0.09229273463778 | Statify 0.10865394508294449 (raw) | selisih 0.01636121044516449
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Noncent. Parameter | SPSS 2.4402422629313376 | Statify 2.9255693314683797 (raw) | selisih 0.4853270685370421
+  mv5 | Tests of Between-Subjects Effects | faktorB / ultimate strain | Observed Power | SPSS 0.1988872922889069 | Statify 0.23265826710049586 (raw) | selisih 0.03377097481158897
+
+LULUS pada nilai mentah tetapi tampilan UI tidak (|UI − SPSS| > 0.001 atau "<.001" untuk p ≥ .001):
+
+TANPA PADANAN di Statify:
+  mv1 | Descriptive Statistics | mpg - 20 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | disp - 200 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | hp - 150 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | wt - 3 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)

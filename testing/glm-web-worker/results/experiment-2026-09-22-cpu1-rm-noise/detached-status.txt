@@ -1,0 +1,5 @@
+﻿2026-09-22T23:22:51.3597251+07:00 started (keep-awake on)
+2026-09-22T23:22:53.5334240+07:00 server up (pid 33904)
+2026-09-22T23:22:53.5492458+07:00 experiment started (pid 30492): node testing/glm-web-worker/experiment/run-experiment.cjs --base=http://localhost:3101 --modules=repeated-measures --sizes=5000,10000,20000,40000 --cpu=1 --runs=31 "--out=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-web-worker\results\experiment-2026-09-22-cpu1-rm-noise" --clean=true --loaf=true --rm-levels=10 --rm-measures=1 --rm-options=DescStats,EstEffectSize,ObsPower --rm-data=noise --sizes-repeated-measures=5000,10000,20000,40000
+2026-09-23T00:02:16.6410647+07:00 experiment exited with code 
+2026-09-23T00:02:18.0142347+07:00 server stopped, keep-awake off

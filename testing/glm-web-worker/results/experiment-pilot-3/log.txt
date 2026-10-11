@@ -1,0 +1,26 @@
+[2026-09-21T19:55:05.136Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; cells=4, runs/mode=2
+[2026-09-21T19:55:05.192Z] cell repeated-measures-100-cpu1: loading repeated-measures-100.csv
+[2026-09-21T19:55:14.522Z] repeated-measures-100-cpu1 run 1/4 startup main->main status=ok longest=0.0 total=290.1
+[2026-09-21T19:55:17.837Z] repeated-measures-100-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=140.1
+[2026-09-21T19:55:21.254Z] repeated-measures-100-cpu1 run 3/4 steady main->main status=ok longest=0.0 total=134.1
+[2026-09-21T19:55:24.724Z] repeated-measures-100-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=145.1
+[2026-09-21T19:55:24.731Z] cell repeated-measures-100-cpu1 done in 20 s
+[2026-09-21T19:55:24.780Z] cell repeated-measures-2000-cpu1: loading repeated-measures-2000.csv
+[2026-09-21T19:55:34.409Z] repeated-measures-2000-cpu1 run 1/4 startup main->main status=ok longest=0.0 total=378.8
+[2026-09-21T19:55:37.759Z] repeated-measures-2000-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=213.1
+[2026-09-21T19:55:41.155Z] repeated-measures-2000-cpu1 run 3/4 steady main->main status=ok longest=99.0 total=209.3
+[2026-09-21T19:55:44.760Z] repeated-measures-2000-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=242.3
+[2026-09-21T19:55:44.764Z] cell repeated-measures-2000-cpu1 done in 20 s
+[2026-09-21T19:55:44.807Z] cell multivariate-100-cpu1: loading multivariate-100.csv
+[2026-09-21T19:55:53.984Z] multivariate-100-cpu1 run 1/4 startup main->main status=ok longest=186.0 total=476.6
+[2026-09-21T19:55:59.940Z] multivariate-100-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=196.8
+[2026-09-21T19:56:05.993Z] multivariate-100-cpu1 run 3/4 steady main->main status=ok longest=127.0 total=177.5
+[2026-09-21T19:56:12.012Z] multivariate-100-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=197.3
+[2026-09-21T19:56:12.017Z] cell multivariate-100-cpu1 done in 27 s
+[2026-09-21T19:56:12.064Z] cell multivariate-2000-cpu1: loading multivariate-2000.csv
+[2026-09-21T19:56:39.416Z] multivariate-2000-cpu1 run 1/4 startup main->main status=ok longest=216.0 total=18610.0
+[2026-09-21T19:57:07.632Z] multivariate-2000-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=22388.1
+[2026-09-21T19:57:31.802Z] multivariate-2000-cpu1 run 3/4 steady main->main status=ok longest=18219.0 total=18331.4
+[2026-09-21T19:57:56.112Z] multivariate-2000-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=18498.4
+[2026-09-21T19:57:56.116Z] cell multivariate-2000-cpu1 done in 104 s
+[2026-09-21T19:57:56.162Z] finished

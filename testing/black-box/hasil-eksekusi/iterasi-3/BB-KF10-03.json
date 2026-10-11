@@ -1,0 +1,2144 @@
+{
+ "id": "BB-KF10-03",
+ "steps": [
+  "impor rm_c.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: sesi(3); measure nilai",
+  "slot within: nilai=p1,p2,p3",
+  "Between-Subjects Factor(s): metode",
+  "Options: centang DescStats, EstEffectSize, ObsPower; tidak dicentang HomogenTest",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Options: centang HomogenTest"
+ ],
+ "toasts": [],
+ "runs": [
+  {
+   "label": "langkah 3: Homogenity Tests tidak dicentang",
+   "outcome": "log",
+   "toast": [],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "sesi",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "nilai",
+         "factor_level": "1",
+         "dep_var": "p1_(1,nilai)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "p2_(2,nilai)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "p3_(3,nilai)"
+        }
+       ],
+       "footnote": "Measure: nilai"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "59.4000",
+         "std_dev": "4.2216",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "58.2000",
+         "std_dev": "7.1149",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "58.8000",
+         "std_dev": "5.7271",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p1_(1,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "61.7000",
+         "std_dev": "3.5917",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "60.6000",
+         "std_dev": "7.3666",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "61.1500",
+         "std_dev": "5.6687",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p2_(2,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "63.4000",
+         "std_dev": "3.6576",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "64.5000",
+         "std_dev": "9.2286",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "63.9500",
+         "std_dev": "6.8555",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p3_(3,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "sesi",
+         "test_name": "Pillai's Trace",
+         "value": "0.7432",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.2568",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "2.8933",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "2.8933",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "sesi * metode",
+         "test_name": "Pillai's Trace",
+         "value": "0.1223",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.8777",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.1393",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.1393",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        }
+       ],
+       "footnote": "a. Design: Intercept + metode\nWithin Subjects Design: sesi\nb. Exact statistic\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Mauchly's Test of Sphericity",
+     "tables": [
+      {
+       "title": "Mauchly's Test of Sphericity",
+       "columns": [
+        "Measure",
+        "Within Subjects Effect",
+        "Mauchly's W",
+        "Approx. Chi-Square",
+        "df",
+        "Sig.",
+        "Greenhouse-Geisser",
+        "Huynh-Feldt",
+        "Lower-bound"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "nilai",
+         "effect": "sesi",
+         "w": "0.8011",
+         "chi_sq": "3.7703",
+         "df": "2",
+         "sig": "0.1518",
+         "gg": "0.8341",
+         "hf": "0.9602",
+         "lb": "0.5000"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept + metode; Within Subjects Design: sesi"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "sesi",
+         "assumption": "Sphericity Assumed",
+         "ss": "265.9000",
+         "df": "2",
+         "ms": "132.9500",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "30.6939",
+         "power": "0.9986"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "265.9000",
+         "df": "1.6682",
+         "ms": "159.3951",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "25.6015",
+         "power": "0.9956"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "265.9000",
+         "df": "1.9204",
+         "ms": "138.4607",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "29.4723",
+         "power": "0.9982"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "265.9000",
+         "df": "1",
+         "ms": "265.9000",
+         "f": "15.3469",
+         "sig": "0.0010",
+         "eta2": "0.4602",
+         "noncent": "15.3469",
+         "power": "0.9592"
+        },
+        {
+         "rowHeader": [],
+         "source": "sesi * metode",
+         "assumption": "Sphericity Assumed",
+         "ss": "16.9000",
+         "df": "2",
+         "ms": "8.4500",
+         "f": "0.9754",
+         "sig": "0.3868",
+         "eta2": "0.0514",
+         "noncent": "1.9508",
+         "power": "0.2061"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "16.9000",
+         "df": "1.6682",
+         "ms": "10.1308",
+         "f": "0.9754",
+         "sig": "0.3747",
+         "eta2": "0.0514",
+         "noncent": "1.6272",
+         "power": "0.1900"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "16.9000",
+         "df": "1.9204",
+         "ms": "8.8002",
+         "f": "0.9754",
+         "sig": "0.3841",
+         "eta2": "0.0514",
+         "noncent": "1.8732",
+         "power": "0.2023"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "16.9000",
+         "df": "1",
+         "ms": "16.9000",
+         "f": "0.9754",
+         "sig": "0.3364",
+         "eta2": "0.0514",
+         "noncent": "0.9754",
+         "power": "0.1547"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(sesi)",
+         "assumption": "Sphericity Assumed",
+         "ss": "311.8667",
+         "df": "36",
+         "ms": "8.6630",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "311.8667",
+         "df": "30.0273",
+         "ms": "10.3861",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "311.8667",
+         "df": "34.5672",
+         "ms": "9.0220",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "311.8667",
+         "df": "18",
+         "ms": "17.3259",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: nilai.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "sesi",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "sesi",
+         "contrast": "Linear",
+         "ss": "265.2250",
+         "df": "1",
+         "ms": "265.2250",
+         "f": "49.7038",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "0.6750",
+         "df": "1",
+         "ms": "0.6750",
+         "f": "0.0563",
+         "sig": "0.8151"
+        },
+        {
+         "rowHeader": [],
+         "source": "sesi * metode",
+         "contrast": "Linear",
+         "ss": "13.2250",
+         "df": "1",
+         "ms": "13.2250",
+         "f": "2.4784",
+         "sig": "0.1328"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "3.6750",
+         "df": "1",
+         "ms": "3.6750",
+         "f": "0.3065",
+         "sig": "0.5866"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(sesi)",
+         "contrast": "Linear",
+         "ss": "96.0500",
+         "df": "18",
+         "ms": "5.3361",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "215.8167",
+         "df": "18",
+         "ms": "11.9898",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: nilai.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "225461.4000",
+         "df": "1",
+         "ms": "225461.4000",
+         "f": "2260.2227",
+         "sig": "<.001",
+         "eta2": "0.9921",
+         "noncent": "2260.2227",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "2.4000",
+         "df": "1",
+         "ms": "2.4000",
+         "f": "0.0241",
+         "sig": "0.8785",
+         "eta2": "0.0013",
+         "noncent": "0.0241",
+         "power": "0.0525"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "1795.5333",
+         "df": "18",
+         "ms": "99.7519",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: nilai; Transformed Variable: Average.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "7.2000",
+         "df": "1",
+         "ms": "7.2000",
+         "f": "0.2104",
+         "sig": "0.6520",
+         "eta2": "0.0116",
+         "noncent": "0.2104",
+         "power": "0.0719"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "69148.8000",
+         "df": "1",
+         "ms": "69148.8000",
+         "f": "2020.5818",
+         "sig": "<.001",
+         "eta2": "0.9912",
+         "noncent": "2020.5818",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "7.2000",
+         "df": "1",
+         "ms": "7.2000",
+         "f": "0.2104",
+         "sig": "0.6520",
+         "eta2": "0.0116",
+         "noncent": "0.2104",
+         "power": "0.0719"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "616.0000",
+         "df": "18",
+         "ms": "34.2222",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "69772.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "623.2000",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p1_(1,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1801",
+         "sig": "0.6763",
+         "eta2": "0.0099",
+         "noncent": "0.1801",
+         "power": "0.0687"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "74786.4500",
+         "df": "1",
+         "ms": "74786.4500",
+         "f": "2226.8918",
+         "sig": "<.001",
+         "eta2": "0.9920",
+         "noncent": "2226.8918",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1801",
+         "sig": "0.6763",
+         "eta2": "0.0099",
+         "noncent": "0.1801",
+         "power": "0.0687"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "604.5000",
+         "df": "18",
+         "ms": "33.5833",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "75397.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "610.5500",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p2_(2,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1228",
+         "sig": "0.7301",
+         "eta2": "0.0068",
+         "noncent": "0.1228",
+         "power": "0.0627"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "81792.0500",
+         "df": "1",
+         "ms": "81792.0500",
+         "f": "1660.0033",
+         "sig": "<.001",
+         "eta2": "0.9893",
+         "noncent": "1660.0033",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1228",
+         "sig": "0.7301",
+         "eta2": "0.0068",
+         "noncent": "0.1228",
+         "power": "0.0627"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "886.9000",
+         "df": "18",
+         "ms": "49.2722",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "82685.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "892.9500",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p3_(3,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  },
+  {
+   "label": "langkah 4: Homogenity Tests dicentang",
+   "outcome": "log",
+   "toast": [],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "sesi",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "nilai",
+         "factor_level": "1",
+         "dep_var": "p1_(1,nilai)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "p2_(2,nilai)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "p3_(3,nilai)"
+        }
+       ],
+       "footnote": "Measure: nilai"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "59.4000",
+         "std_dev": "4.2216",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "58.2000",
+         "std_dev": "7.1149",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "58.8000",
+         "std_dev": "5.7271",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p1_(1,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "61.7000",
+         "std_dev": "3.5917",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "60.6000",
+         "std_dev": "7.3666",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "61.1500",
+         "std_dev": "5.6687",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p2_(2,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Descriptive Statistics",
+     "tables": [
+      {
+       "title": "Descriptive Statistics",
+       "columns": [
+        "",
+        "Mean",
+        "Std. Deviation",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "1",
+         "mean": "63.4000",
+         "std_dev": "3.6576",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "2",
+         "mean": "64.5000",
+         "std_dev": "9.2286",
+         "n": "10"
+        },
+        {
+         "rowHeader": [],
+         "label": "Total",
+         "mean": "63.9500",
+         "std_dev": "6.8555",
+         "n": "20"
+        }
+       ],
+       "footnote": "Dependent Variable: p3_(3,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Box's Test of Equality of Covariance Matrices",
+     "tables": [
+      {
+       "title": "Box's Test of Equality of Covariance Matrices",
+       "columns": [
+        "",
+        ""
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "label": "Box's M",
+         "value": "13.5347"
+        },
+        {
+         "rowHeader": [],
+         "label": "F",
+         "value": "1.8427"
+        },
+        {
+         "rowHeader": [],
+         "label": "df1",
+         "value": "6"
+        },
+        {
+         "rowHeader": [],
+         "label": "df2",
+         "value": "2347.4717"
+        },
+        {
+         "rowHeader": [],
+         "label": "Sig.",
+         "value": "0.0872"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the observed covariance matrices of the dependent variables are equal across groups. Design: Intercept + metode; Within Subjects Design: sesi"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "sesi",
+         "test_name": "Pillai's Trace",
+         "value": "0.7432",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.2568",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "2.8933",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "2.8933",
+         "f": "24.5934",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "<.001",
+         "eta2": "0.7432",
+         "noncent": "49.1869",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "effect": "sesi * metode",
+         "test_name": "Pillai's Trace",
+         "value": "0.1223",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.8777",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "0.1393",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "0.1393",
+         "f": "1.1844",
+         "hyp_df": "2",
+         "err_df": "17",
+         "sig": "0.3300",
+         "eta2": "0.1223",
+         "noncent": "2.3687",
+         "power": "0.2245"
+        }
+       ],
+       "footnote": "a. Design: Intercept + metode\nWithin Subjects Design: sesi\nb. Exact statistic\nc. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Mauchly's Test of Sphericity",
+     "tables": [
+      {
+       "title": "Mauchly's Test of Sphericity",
+       "columns": [
+        "Measure",
+        "Within Subjects Effect",
+        "Mauchly's W",
+        "Approx. Chi-Square",
+        "df",
+        "Sig.",
+        "Greenhouse-Geisser",
+        "Huynh-Feldt",
+        "Lower-bound"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "nilai",
+         "effect": "sesi",
+         "w": "0.8011",
+         "chi_sq": "3.7703",
+         "df": "2",
+         "sig": "0.1518",
+         "gg": "0.8341",
+         "hf": "0.9602",
+         "lb": "0.5000"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept + metode; Within Subjects Design: sesi"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "sesi",
+         "assumption": "Sphericity Assumed",
+         "ss": "265.9000",
+         "df": "2",
+         "ms": "132.9500",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "30.6939",
+         "power": "0.9986"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "265.9000",
+         "df": "1.6682",
+         "ms": "159.3951",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "25.6015",
+         "power": "0.9956"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "265.9000",
+         "df": "1.9204",
+         "ms": "138.4607",
+         "f": "15.3469",
+         "sig": "<.001",
+         "eta2": "0.4602",
+         "noncent": "29.4723",
+         "power": "0.9982"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "265.9000",
+         "df": "1",
+         "ms": "265.9000",
+         "f": "15.3469",
+         "sig": "0.0010",
+         "eta2": "0.4602",
+         "noncent": "15.3469",
+         "power": "0.9592"
+        },
+        {
+         "rowHeader": [],
+         "source": "sesi * metode",
+         "assumption": "Sphericity Assumed",
+         "ss": "16.9000",
+         "df": "2",
+         "ms": "8.4500",
+         "f": "0.9754",
+         "sig": "0.3868",
+         "eta2": "0.0514",
+         "noncent": "1.9508",
+         "power": "0.2061"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "16.9000",
+         "df": "1.6682",
+         "ms": "10.1308",
+         "f": "0.9754",
+         "sig": "0.3747",
+         "eta2": "0.0514",
+         "noncent": "1.6272",
+         "power": "0.1900"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "16.9000",
+         "df": "1.9204",
+         "ms": "8.8002",
+         "f": "0.9754",
+         "sig": "0.3841",
+         "eta2": "0.0514",
+         "noncent": "1.8732",
+         "power": "0.2023"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "16.9000",
+         "df": "1",
+         "ms": "16.9000",
+         "f": "0.9754",
+         "sig": "0.3364",
+         "eta2": "0.0514",
+         "noncent": "0.9754",
+         "power": "0.1547"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(sesi)",
+         "assumption": "Sphericity Assumed",
+         "ss": "311.8667",
+         "df": "36",
+         "ms": "8.6630",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "311.8667",
+         "df": "30.0273",
+         "ms": "10.3861",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "311.8667",
+         "df": "34.5672",
+         "ms": "9.0220",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "311.8667",
+         "df": "18",
+         "ms": "17.3259",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: nilai.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "sesi",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "sesi",
+         "contrast": "Linear",
+         "ss": "265.2250",
+         "df": "1",
+         "ms": "265.2250",
+         "f": "49.7038",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "0.6750",
+         "df": "1",
+         "ms": "0.6750",
+         "f": "0.0563",
+         "sig": "0.8151"
+        },
+        {
+         "rowHeader": [],
+         "source": "sesi * metode",
+         "contrast": "Linear",
+         "ss": "13.2250",
+         "df": "1",
+         "ms": "13.2250",
+         "f": "2.4784",
+         "sig": "0.1328"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "3.6750",
+         "df": "1",
+         "ms": "3.6750",
+         "f": "0.3065",
+         "sig": "0.5866"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(sesi)",
+         "contrast": "Linear",
+         "ss": "96.0500",
+         "df": "18",
+         "ms": "5.3361",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "215.8167",
+         "df": "18",
+         "ms": "11.9898",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: nilai.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Levene's Test of Equality of Error Variances",
+     "tables": [
+      {
+       "title": "Levene's Test of Equality of Error Variances",
+       "columns": [
+        "",
+        "",
+        "Levene Statistic",
+        "df1",
+        "df2",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "dv": "p1_(1,nilai)",
+         "based_on": "Based on Mean",
+         "statistic": "2.7407",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1151"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median",
+         "statistic": "2.5855",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1252"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median and with adjusted df",
+         "statistic": "2.5855",
+         "df1": "1",
+         "df2": "15.2960",
+         "sig": "0.1283"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on trimmed mean",
+         "statistic": "2.7575",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1141"
+        },
+        {
+         "rowHeader": [],
+         "dv": "p2_(2,nilai)",
+         "based_on": "Based on Mean",
+         "statistic": "2.6498",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1209"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median",
+         "statistic": "2.7056",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1173"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median and with adjusted df",
+         "statistic": "2.7056",
+         "df1": "1",
+         "df2": "12.8126",
+         "sig": "0.1243"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on trimmed mean",
+         "statistic": "2.6231",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.1227"
+        },
+        {
+         "rowHeader": [],
+         "dv": "p3_(3,nilai)",
+         "based_on": "Based on Mean",
+         "statistic": "6.4249",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.0208"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median",
+         "statistic": "6.4696",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.0204"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on Median and with adjusted df",
+         "statistic": "6.4696",
+         "df1": "1",
+         "df2": "12.3515",
+         "sig": "0.0253"
+        },
+        {
+         "rowHeader": [],
+         "dv": "",
+         "based_on": "Based on trimmed mean",
+         "statistic": "6.4214",
+         "df1": "1",
+         "df2": "18",
+         "sig": "0.0208"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error variance of the dependent variable is equal across groups. Design: Intercept + metode; Within Subjects Design: sesi"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "225461.4000",
+         "df": "1",
+         "ms": "225461.4000",
+         "f": "2260.2227",
+         "sig": "<.001",
+         "eta2": "0.9921",
+         "noncent": "2260.2227",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "2.4000",
+         "df": "1",
+         "ms": "2.4000",
+         "f": "0.0241",
+         "sig": "0.8785",
+         "eta2": "0.0013",
+         "noncent": "0.0241",
+         "power": "0.0525"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "1795.5333",
+         "df": "18",
+         "ms": "99.7519",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Measure: nilai; Transformed Variable: Average.\na. Computed using alpha = .05"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "7.2000",
+         "df": "1",
+         "ms": "7.2000",
+         "f": "0.2104",
+         "sig": "0.6520",
+         "eta2": "0.0116",
+         "noncent": "0.2104",
+         "power": "0.0719"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "69148.8000",
+         "df": "1",
+         "ms": "69148.8000",
+         "f": "2020.5818",
+         "sig": "<.001",
+         "eta2": "0.9912",
+         "noncent": "2020.5818",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "7.2000",
+         "df": "1",
+         "ms": "7.2000",
+         "f": "0.2104",
+         "sig": "0.6520",
+         "eta2": "0.0116",
+         "noncent": "0.2104",
+         "power": "0.0719"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "616.0000",
+         "df": "18",
+         "ms": "34.2222",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "69772.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "623.2000",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p1_(1,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1801",
+         "sig": "0.6763",
+         "eta2": "0.0099",
+         "noncent": "0.1801",
+         "power": "0.0687"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "74786.4500",
+         "df": "1",
+         "ms": "74786.4500",
+         "f": "2226.8918",
+         "sig": "<.001",
+         "eta2": "0.9920",
+         "noncent": "2226.8918",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1801",
+         "sig": "0.6763",
+         "eta2": "0.0099",
+         "noncent": "0.1801",
+         "power": "0.0687"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "604.5000",
+         "df": "18",
+         "ms": "33.5833",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "75397.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "610.5500",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p2_(2,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Univariate Tests",
+     "tables": [
+      {
+       "title": "Univariate Tests",
+       "columns": [
+        "Source",
+        "Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig.",
+        "Partial Eta Squared",
+        "Noncent. Parameter",
+        "Observed Power"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1228",
+         "sig": "0.7301",
+         "eta2": "0.0068",
+         "noncent": "0.1228",
+         "power": "0.0627"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "81792.0500",
+         "df": "1",
+         "ms": "81792.0500",
+         "f": "1660.0033",
+         "sig": "<.001",
+         "eta2": "0.9893",
+         "noncent": "1660.0033",
+         "power": "1.0000"
+        },
+        {
+         "rowHeader": [],
+         "source": "metode",
+         "ss": "6.0500",
+         "df": "1",
+         "ms": "6.0500",
+         "f": "0.1228",
+         "sig": "0.7301",
+         "eta2": "0.0068",
+         "noncent": "0.1228",
+         "power": "0.0627"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "886.9000",
+         "df": "18",
+         "ms": "49.2722",
+         "f": null,
+         "sig": null,
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "ss": "82685.0000",
+         "df": "20",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "ss": "892.9500",
+         "df": "19",
+         "ms": null,
+         "f": null,
+         "sig": "",
+         "eta2": null,
+         "noncent": null,
+         "power": null
+        }
+       ],
+       "footnote": "Dependent Variable: p3_(3,nilai)"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "judulLangkah3": [
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy"
+  ],
+  "slotSetelahDefineUlang": "Within-Subjects Variables:\np1_(1,nilai)\np2_(2,nilai)\np3_(3,nilai)",
+  "judulLangkah4": [
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy"
+  ]
+ },
+ "notes": [
+  "BB-KF10-03-1.png: langkah 3: Mauchly",
+  "BB-KF10-03-2.png: langkah 4: Box's M",
+  "BB-KF10-03-3.png: langkah 4: Levene",
+  "BB-KF10-03-4.png: langkah 4: Mauchly"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:34:13.322Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 14,
+ "finishedAt": "2026-09-25T13:34:27.808Z",
+ "wasmRequested": [
+  "wasm_bg.2bc2b212.wasm"
+ ]
+}

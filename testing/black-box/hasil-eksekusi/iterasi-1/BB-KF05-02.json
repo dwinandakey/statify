@@ -1,0 +1,28 @@
+{
+ "id": "BB-KF05-02",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2"
+ ],
+ "toasts": [
+  {
+   "label": "OK tanpa faktor/kovariat",
+   "texts": [
+    "Please select at least one fixed factor or covariate.",
+    "Please select at least one fixed factor or covariate."
+   ],
+   "file": "BB-KF05-02.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF05-02.png: toast: OK tanpa faktor/kovariat"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 9
+}

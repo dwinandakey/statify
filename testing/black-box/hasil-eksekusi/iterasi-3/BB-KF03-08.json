@@ -1,0 +1,60 @@
+{
+ "id": "BB-KF03-08",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [
+  {
+   "label": "OK dengan δ₀ pada faktor 3 level",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.",
+    "An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."
+   ],
+   "file": "BB-KF03-08-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK dengan δ₀ pada faktor 3 level",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.",
+    "An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "pesanSubdialog": "δ₀ hanya berlaku bila Fixed Factor memiliki tepat 2 level (treatment memiliki 3 level).",
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF03-08-1.png: subdialog δ₀ dengan faktor 3 level, isian 1, 1",
+  "BB-KF03-08-2.png: toast: OK dengan δ₀ pada faktor 3 level"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:37:24.855Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:37:36.767Z",
+ "wasmRequested": [],
+ "durationS": 12
+}

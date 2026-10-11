@@ -1,0 +1,26 @@
+[2026-09-21T20:17:19.833Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; cells=4, runs/mode=2
+[2026-09-21T20:17:19.891Z] cell multivariate-500-cpu4: loading multivariate-500.csv
+[2026-09-21T20:18:08.675Z] multivariate-500-cpu4 run 1/4 startup main->main status=ok longest=1349.0 total=30625.9
+[2026-09-21T20:18:21.314Z] multivariate-500-cpu4 run 2/4 startup worker->worker status=ok longest=104.0 total=6527.0
+[2026-09-21T20:18:57.209Z] multivariate-500-cpu4 run 3/4 steady main->main status=ok longest=28829.0 total=29733.0
+[2026-09-21T20:19:10.033Z] multivariate-500-cpu4 run 4/4 steady worker->worker status=ok longest=209.0 total=6887.4
+[2026-09-21T20:19:10.040Z] cell multivariate-500-cpu4 done in 110 s
+[2026-09-21T20:19:10.086Z] cell repeated-measures-500-cpu4: loading repeated-measures-500.csv
+[2026-09-21T20:19:27.799Z] repeated-measures-500-cpu4 run 1/4 startup main->main status=ok longest=59.0 total=1204.0
+[2026-09-21T20:19:33.009Z] repeated-measures-500-cpu4 run 2/4 startup worker->worker status=ok longest=72.0 total=916.2
+[2026-09-21T20:19:38.524Z] repeated-measures-500-cpu4 run 3/4 steady main->main status=ok longest=220.0 total=962.9
+[2026-09-21T20:19:44.524Z] repeated-measures-500-cpu4 run 4/4 steady worker->worker status=ok longest=102.0 total=797.7
+[2026-09-21T20:19:44.527Z] cell repeated-measures-500-cpu4 done in 34 s
+[2026-09-21T20:19:44.576Z] cell multivariate-500-cpu1: loading multivariate-500.csv
+[2026-09-21T20:19:59.609Z] multivariate-500-cpu1 run 1/4 startup main->main status=ok longest=257.0 total=6327.0
+[2026-09-21T20:20:11.323Z] multivariate-500-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=5946.4
+[2026-09-21T20:20:23.003Z] multivariate-500-cpu1 run 3/4 steady main->main status=ok longest=5744.0 total=5881.6
+[2026-09-21T20:20:34.870Z] multivariate-500-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=6030.3
+[2026-09-21T20:20:34.874Z] cell multivariate-500-cpu1 done in 50 s
+[2026-09-21T20:20:34.919Z] cell repeated-measures-500-cpu1: loading repeated-measures-500.csv
+[2026-09-21T20:20:44.192Z] repeated-measures-500-cpu1 run 1/4 startup main->main status=ok longest=0.0 total=279.6
+[2026-09-21T20:20:47.379Z] repeated-measures-500-cpu1 run 2/4 startup worker->worker status=ok longest=0.0 total=163.2
+[2026-09-21T20:20:50.777Z] repeated-measures-500-cpu1 run 3/4 steady main->main status=ok longest=0.0 total=147.9
+[2026-09-21T20:20:54.249Z] repeated-measures-500-cpu1 run 4/4 steady worker->worker status=ok longest=0.0 total=157.7
+[2026-09-21T20:20:54.253Z] cell repeated-measures-500-cpu1 done in 19 s
+[2026-09-21T20:20:54.298Z] finished

@@ -1,0 +1,98 @@
+Uji asap UI (build produksi dari working tree Langkah 1-3, next start -p 3101, Chromium Playwright).
+Skrip: ui-smoke.cjs dan toast-check.cjs di bawah. Setiap toast tampil dua kali karena aplikasi memasang dua <Toaster> (app/layout.tsx dan app/dashboard/layout.tsx); ini bawaan, juga untuk toast lama (toast-check).
+
+--- ui-smoke
+MV Plots disabled: true
+MV Plots note: 1
+MV Post Hoc #Lsd disabled: false
+MV Post Hoc #Bonfe disabled: false
+MV Post Hoc #Sidak disabled: false
+MV Post Hoc #Scheffe disabled: true
+MV Post Hoc #Tu disabled: true
+MV Post Hoc #Games disabled: true
+MV Post Hoc #Dunnett disabled: true
+MV Post Hoc note: 1
+RM Define tanpa faktor -> toast: "Add a within-subjects factor (name and number of levels) before clicking Define. || Add a within-subjects factor (name and number of levels) before clicking Define."
+RM Define tanpa measure -> toast: "Add a measure name before clicking Define. || Add a measure name before clicking Define."
+RM faktor kedua -> toast: "Designs with more than one within-subjects factor are not supported in this version. || Add a measure name before clicking Define. || Designs with more than one within-subjects factor are not supported in this version. || Add a measure name before clicking Define."
+RM Plots disabled: true
+RM Post Hoc disabled: true
+RM Post Hoc note: 1
+RM OK slot kosong -> toast: "Please assign a variable to every within-subjects slot. || Please assign a variable to every within-subjects slot."
+RM Options #SprVsLevel disabled: true
+RM Options #ResPlot disabled: true
+RM Options #LackOfFit disabled: true
+RM Options #HomogenTest disabled: false
+RM Options note: 1
+
+--- toast-check (toast MV lama, tidak diubah)
+toaster: 2 | toast: 2 | teks: ["Please select at least two dependent variables for multivariate analysis.","Please select at least two dependent variables for multivariate analysis."]
+
+--- ui-run mv8 dan mv4ph (dialog Model Build Terms dan Post Hoc lewat UI)
+mv8 worker->worker rows=32 tables=7 errors=[]
+mv4ph worker->worker rows=8 tables=8 errors=[]
+
+--- ui-smoke.cjs
+const path = require("path");
+const REPO = "D:/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64";
+const { chromium } = require(path.join(REPO, "node_modules/@playwright/test"));
+const runner = require(path.join(REPO, "testing/glm-web-worker/experiment/run-experiment.cjs"));
+const toastText = async (page) => { await page.waitForTimeout(700); return (await page.locator("[data-sonner-toast]").allInnerTexts()).map((t) => t.split(String.fromCharCode(10)).join(" ")).join(" || "); };
+(async () => {
+  const b = await chromium.launch(); const out = [];
+  const ctx = await b.newContext({ viewport: { width: 1600, height: 1000 } }); const page = await ctx.newPage();
+  await page.goto("http://localhost:3101/dashboard/data"); await page.locator('[data-testid="main-navbar"]').waitFor();
+  await runner.importCsv(page, path.join(REPO, "testing/glm-rm-reference/data/rm_b.csv"));
+  await runner.clearResults(page);
+  const openGlm = async (item) => { await page.locator('[data-testid="analyze-menu-trigger"]').click(); await page.getByRole("menuitem", { name: "General Linear Model" }).click(); await page.getByRole("menuitem", { name: item, exact: true }).click(); };
+  // MV: Plots disabled, Post Hoc methods
+  await openGlm("Multivariate"); await page.locator("#multivariate-ok-button").waitFor();
+  out.push(["MV Plots disabled", await page.locator("#multivariate-plots-button").isDisabled()]);
+  out.push(["MV Plots note", await page.getByText("Plots are not supported in this version.", { exact: true }).count()]);
+  await page.getByRole("button", { name: "Post Hoc", exact: true }).click();
+  const ph = page.getByRole("dialog").filter({ has: page.getByText("Multivariate: Post Hoc", { exact: true }) }); await ph.waitFor();
+  for (const id of ["Lsd", "Bonfe", "Sidak", "Scheffe", "Tu", "Games", "Dunnett"]) out.push([`MV Post Hoc #${id} disabled`, await ph.locator("#" + id).isDisabled()]);
+  out.push(["MV Post Hoc note", await ph.getByText("Only LSD, Bonferroni, and Sidak are supported in this version.", { exact: true }).count()]);
+  await ph.getByRole("button", { name: "Cancel", exact: true }).click().catch(async () => { await page.keyboard.press("Escape"); });
+  await page.waitForTimeout(300);
+  await page.getByRole("button", { name: "Cancel", exact: true }).first().click().catch(() => {});
+  await page.waitForTimeout(500);
+  // RM: Define without factor / without measure
+  await openGlm("Repeated Measures"); await page.locator("#factorName").waitFor();
+  await page.getByRole("button", { name: "Define", exact: true }).click();
+  out.push(["RM Define tanpa faktor -> toast", await toastText(page)]);
+  await page.locator("#factorName").fill("waktu"); await page.locator("#factorLevels").fill("4");
+  await page.getByRole("button", { name: "Add", exact: true }).nth(0).click();
+  await page.getByRole("button", { name: "Define", exact: true }).click();
+  out.push(["RM Define tanpa measure -> toast", await toastText(page)]);
+  await page.locator("#factorName").fill("kedua"); await page.locator("#factorLevels").fill("2");
+  await page.getByRole("button", { name: "Add", exact: true }).nth(0).click();
+  out.push(["RM faktor kedua -> toast", await toastText(page)]);
+  await page.locator("#measureName").fill("skor"); await page.getByRole("button", { name: "Add", exact: true }).nth(1).click();
+  await page.getByRole("button", { name: "Define", exact: true }).click();
+  await page.getByText("Within-Subjects Variables:", { exact: true }).waitFor();
+  out.push(["RM Plots disabled", await page.locator("#repeated-measures-plots-button").isDisabled()]);
+  out.push(["RM Post Hoc disabled", await page.locator("#repeated-measures-posthoc-button").isDisabled()]);
+  out.push(["RM Post Hoc note", await page.getByText("Post Hoc is not supported in this version. Use EM Means > Compare main effects for pairwise comparisons.", { exact: true }).count()]);
+  await page.getByRole("button", { name: "OK", exact: true }).click();
+  out.push(["RM OK slot kosong -> toast", await toastText(page)]);
+  await page.getByRole("button", { name: "Options", exact: true }).click();
+  const op = page.getByRole("dialog").last(); await page.locator("#LackOfFit").waitFor();
+  for (const id of ["SprVsLevel", "ResPlot", "LackOfFit", "HomogenTest"]) out.push([`RM Options #${id} disabled`, await page.locator("#" + id).isDisabled()]);
+  out.push(["RM Options note", await page.getByText("Spread-vs.-level plots, residual plots, and the lack-of-fit test are not supported in this version.", { exact: true }).count()]);
+  for (const [k, v] of out) console.log(`${k}: ${JSON.stringify(v)}`);
+  await b.close();
+})().catch((e) => { console.error("GAGAL", e.message.split(String.fromCharCode(10))[0]); process.exit(1); });
+
+--- toast-check.cjs
+const path = require("path");
+const REPO = "D:/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64";
+const { chromium } = require(path.join(REPO, "node_modules/@playwright/test"));
+(async () => {
+  const b = await chromium.launch(); const page = await (await b.newContext({ viewport: { width: 1600, height: 1000 } })).newPage();
+  await page.goto("http://localhost:3101/dashboard/data"); await page.locator('[data-testid="main-navbar"]').waitFor();
+  await page.locator('[data-testid="analyze-menu-trigger"]').click(); await page.getByRole("menuitem", { name: "General Linear Model" }).click(); await page.getByRole("menuitem", { name: "Multivariate", exact: true }).click();
+  await page.locator("#multivariate-ok-button").click(); await page.waitForTimeout(700);
+  console.log("toaster:", await page.locator("[data-sonner-toaster]").count(), "| toast:", await page.locator("[data-sonner-toast]").count(), "| teks:", JSON.stringify(await page.locator("[data-sonner-toast]").allInnerTexts()));
+  await b.close();
+})();

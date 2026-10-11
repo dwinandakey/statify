@@ -1,0 +1,477 @@
+$ cargo test --lib wb_v6_epsilon -- --nocapture --test-threads=1   (test v6 terhadap rm_model.rs v5: bukti test gagal sebelum perbaikan)
+tanggal: 2026-09-30 20:23:35 +0700
+   Compiling unicode-ident v1.0.24
+   Compiling autocfg v1.5.0
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling libm v0.2.16
+   Compiling cfg-if v1.0.4
+   Compiling serde_core v1.0.228
+   Compiling wasm-bindgen-shared v0.2.120
+   Compiling rustversion v1.0.22
+   Compiling zerocopy v0.8.48
+   Compiling memchr v2.8.0
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.149
+   Compiling bumpalo v3.20.2
+   Compiling serde v1.0.228
+   Compiling crossbeam-utils v0.8.21
+   Compiling bytemuck v1.25.0
+   Compiling itoa v1.0.18
+   Compiling paste v1.0.15
+   Compiling futures-core v0.3.32
+   Compiling getrandom v0.2.17
+   Compiling safe_arch v0.7.4
+   Compiling rawpointer v0.2.1
+   Compiling slab v0.4.12
+   Compiling once_cell v1.21.4
+   Compiling pin-project-lite v0.2.17
+   Compiling rand_core v0.6.4
+   Compiling futures-task v0.3.32
+   Compiling rayon-core v1.13.0
+   Compiling regex-syntax v0.8.10
+   Compiling either v1.15.0
+   Compiling num-traits v0.2.19
+   Compiling matrixmultiply v0.3.10
+   Compiling wide v0.7.33
+   Compiling futures-util v0.3.32
+   Compiling aho-corasick v1.1.4
+   Compiling typenum v1.20.0
+   Compiling rand_core v0.9.5
+   Compiling hashbrown v0.17.1
+   Compiling equivalent v1.0.2
+   Compiling itertools v0.14.0
+   Compiling rand_mt v5.0.0
+   Compiling regex-automata v0.4.14
+   Compiling wasm-bindgen v0.2.120
+   Compiling crossbeam-epoch v0.9.18
+   Compiling syn v2.0.117
+   Compiling crossbeam-deque v0.8.6
+   Compiling rayon v1.12.0
+   Compiling indexmap v2.14.2
+   Compiling num-complex v0.4.6
+   Compiling num-integer v0.1.46
+   Compiling approx v0.5.1
+   Compiling num-rational v0.4.2
+   Compiling simba v0.9.1
+   Compiling ndarray v0.16.1
+   Compiling regex v1.12.3
+   Compiling wasm-bindgen-macro-support v0.2.120
+   Compiling serde_derive v1.0.228
+   Compiling nalgebra-macros v0.2.2
+   Compiling ppv-lite86 v0.2.21
+   Compiling wasm-bindgen-macro v0.2.120
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.6
+   Compiling rand_distr v0.4.3
+   Compiling nalgebra v0.33.3
+   Compiling js-sys v0.3.97
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling web-sys v0.3.97
+   Compiling statrs v0.18.0
+   Compiling wasm v0.1.0 (D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-v6\frontend\components\Modals\Analyze\general-linear-model\repeated-measures\rust)
+warning: unused import: `crate::stats::summary_processing::*`
+  --> src\stats\core.rs:15:9
+   |
+15 | pub use crate::stats::summary_processing::*;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src\stats\between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::models::config::ContrastMethod`
+ --> src\stats\common.rs:6:5
+  |
+6 | use crate::models::config::ContrastMethod;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `matrix_transpose`
+  --> src\stats\multivariate_tests.rs:21:9
+   |
+21 |         matrix_transpose,
+   |         ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src\stats\residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src\stats\sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `factor_name`
+   --> src\stats\between_subjects_effects.rs:113:10
+    |
+113 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:104:27
+    |
+104 |             for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:225:31
+    |
+225 |                 for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:288:35
+    |
+288 |                     for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+
+warning: unused variable: `i`
+   --> src\stats\between_subjects_sscp.rs:387:10
+    |
+387 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `j`
+   --> src\stats\between_subjects_sscp.rs:389:14
+    |
+389 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+warning: unused variable: `level`
+   --> src\stats\between_subjects_sscp.rs:450:34
+    |
+450 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+
+warning: unused variable: `dep_var_name`
+   --> src\stats\common.rs:519:5
+    |
+519 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+
+warning: unused variable: `factor_name`
+  --> src\stats\descriptive_statistics.rs:22:10
+   |
+22 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `data`
+  --> src\stats\estimable_function.rs:11:5
+   |
+11 |     data: &AnalysisData,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `config`
+   --> src\stats\multivariate_tests.rs:508:5
+    |
+508 |     config: &RepeatedMeasuresConfig,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:568:21
+    |
+568 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:637:25
+    |
+637 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:728:21
+    |
+728 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:797:25
+    |
+797 |                     let mut record_idx = 0;
+    |                         ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:888:25
+    |
+888 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:595:25
+    |
+595 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:764:25
+    |
+764 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:824:29
+    |
+824 | ...                   record_idx += 1;
+    |                       ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `alpha`
+   --> src\stats\multivariate_tests.rs:961:5
+    |
+961 |     alpha: f64,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_alpha`
+
+warning: unused variable: `det_h`
+   --> src\stats\multivariate_tests.rs:986:9
+    |
+986 |     let det_h = match matrix_determinant(h_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_h`
+
+warning: unused variable: `det_e`
+   --> src\stats\multivariate_tests.rs:991:9
+    |
+991 |     let det_e = match matrix_determinant(e_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_e`
+
+warning: unused variable: `u`
+    --> src\stats\multivariate_tests.rs:1047:13
+     |
+1047 |         let u = ((p as f64) * hypothesis_df - 2.0) / 4.0;
+     |             ^ help: if this is intentional, prefix it with an underscore: `_u`
+
+warning: unused variable: `factor_name`
+  --> src\stats\parameter_estimates.rs:37:10
+   |
+37 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factor_name`
+   --> src\stats\parameter_estimates.rs:230:10
+    |
+230 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factor_name`
+  --> src\stats\parse_factors.rs:31:17
+   |
+31 |             let factor_name = captures.get(1).unwrap().as_str().to_string();
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+
+warning: unused variable: `factors`
+  --> src\stats\residual_sscp_matrix.rs:31:9
+   |
+31 |     let factors = config.main.factors_var.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+
+warning: unused variable: `i`
+  --> src\stats\residual_sscp_matrix.rs:80:10
+   |
+80 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `dependent_vars`
+  --> src\stats\sscp_matrix.rs:25:9
+   |
+25 |     let dependent_vars = config.main.sub_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+
+warning: unused variable: `i`
+  --> src\stats\sscp_matrix.rs:92:10
+   |
+92 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:362:10
+    |
+362 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:419:10
+    |
+419 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: value assigned to `test_entries` is never read
+  --> src\stats\univariate_tests.rs:37:32
+   |
+37 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+warning: unused variable: `total_ss`
+  --> src\stats\univariate_tests.rs:81:9
+   |
+81 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:223:5
+    |
+223 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:225:5
+    |
+225 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:228:5
+    |
+228 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:229:5
+    |
+229 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:422:5
+    |
+422 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:424:5
+    |
+424 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:427:5
+    |
+427 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:428:5
+    |
+428 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: unused variable: `noncentrality`
+   --> src\stats\within_subjects_effects.rs:327:9
+    |
+327 |     let noncentrality = f * df1;
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_noncentrality`
+
+warning: variable `X` should have a snake case name
+   --> src\stats\between_subjects_effects.rs:192:21
+    |
+192 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: variable `X` should have a snake case name
+   --> src\stats\parameter_estimates.rs:115:21
+    |
+115 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+warning: `wasm` (lib test) generated 51 warnings (run `cargo fix --lib -p wasm --tests` to apply 42 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 41.11s
+     Running unittests src\lib.rs (C:/Users/ASUS/AppData/Local/Temp/v6-rm-old\debug\deps\wasm-bab94107b756eb66.exe)
+
+running 4 tests
+test test::wb_v6_epsilon::v6_st_nol_epsilon_tetap_1 ... ok
+test test::wb_v6_epsilon::v6_t1_epsilon_sama_pada_skala_1e_5_1_1e5 ... v6 T1 invarian skala: 60 nilai acuan dibandingkan, 51 lulus, 9 gagal
+
+thread 'test::wb_v6_epsilon::v6_t1_epsilon_sama_pada_skala_1e_5_1_1e5' (27736) panicked at src\test\wb_support.rs:180:9:
+v6 T1 invarian skala: 9 dari 60 nilai di luar toleransi:
+gambar51 x 1e-5 "Greenhouse-Geisser": Statify 1 vs acuan 0.7466637471716207 (selisih 2.533e-1)
+gambar51 x 1e-5 "Huynh-Feldt": Statify 1 vs acuan 0.8956872190513986 (selisih 1.043e-1)
+gambar51 x 1e0 GG = x 1e-5: Statify 0.7466637471716202 vs acuan 1 (selisih 2.533e-1)
+gambar51 x 1e0 HF = x 1e-5: Statify 0.895687219051398 vs acuan 1 (selisih 1.043e-1)
+gambar51 x 1e5 GG = x 1e-5: Statify 0.7466637471716202 vs acuan 1 (selisih 2.533e-1)
+gambar51 x 1e5 HF = x 1e-5: Statify 0.895687219051398 vs acuan 1 (selisih 1.043e-1)
+b x 1e-5 "Greenhouse-Geisser": Statify 1 vs acuan 0.8946909662383676 (selisih 1.053e-1)
+b x 1e0 GG = x 1e-5: Statify 0.8946909662383679 vs acuan 1 (selisih 1.053e-1)
+b x 1e5 GG = x 1e-5: Statify 0.8946909662383681 vs acuan 1 (selisih 1.053e-1)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+test test::wb_v6_epsilon::v6_t1_skala_1e_5_sesuai_spss ... v6 T1 skala 1e-5 vs SPSS: 39 nilai acuan dibandingkan, 29 lulus, 10 gagal
+
+thread 'test::wb_v6_epsilon::v6_t1_skala_1e_5_sesuai_spss' (43236) panicked at src\test\wb_support.rs:180:9:
+v6 T1 skala 1e-5 vs SPSS: 10 dari 39 nilai di luar toleransi:
+gambar51 x 1e-5 "mauchly" "perlakuan" null Greenhouse-Geisser: Statify 1 vs acuan 0.74666374717162 (selisih 2.533e-1)
+gambar51 x 1e-5 "mauchly" "perlakuan" null Huynh-Feldt: Statify 1 vs acuan 0.895687219051398 (selisih 1.043e-1)
+gambar51 x 1e-5 "within_effects" "perlakuan" "Greenhouse-Geisser" df: Statify 3 vs acuan 2.23999124151486 (selisih 7.600e-1)
+gambar51 x 1e-5 "within_effects" "perlakuan" "Greenhouse-Geisser" Mean Square: Statify 0.000005606054999999998 vs acuan 0.00000750813873210781 (selisih 1.902e-6)
+gambar51 x 1e-5 "within_effects" "perlakuan" "Huynh-Feldt" df: Statify 3 vs acuan 2.68706165715419 (selisih 3.129e-1)
+gambar51 x 1e-5 "within_effects" "perlakuan" "Huynh-Feldt" Mean Square: Statify 0.000005606054999999998 vs acuan 0.00000625894272102848 (selisih 6.529e-7)
+gambar51 x 1e-5 "within_effects" "Error(perlakuan)" "Greenhouse-Geisser" df: Statify 42 vs acuan 31.359877381208 (selisih 1.064e1)
+gambar51 x 1e-5 "within_effects" "Error(perlakuan)" "Greenhouse-Geisser" Mean Square: Statify 0.00000017598000000000004 vs acuan 0.000000235688421550687 (selisih 5.971e-8)
+gambar51 x 1e-5 "within_effects" "Error(perlakuan)" "Huynh-Feldt" df: Statify 42 vs acuan 37.6188632001587 (selisih 4.381e0)
+gambar51 x 1e-5 "within_effects" "Error(perlakuan)" "Huynh-Feldt" Mean Square: Statify 0.00000017598000000000004 vs acuan 0.000000196474836591256 (selisih 2.049e-8)
+FAILED
+test test::wb_v6_epsilon::v6_t2_n_sama_k_sesuai_spss ... v6 T2 n = k vs SPSS: 39 nilai acuan dibandingkan, 33 lulus, 6 gagal
+
+thread 'test::wb_v6_epsilon::v6_t2_n_sama_k_sesuai_spss' (3040) panicked at src\test\wb_support.rs:180:9:
+v6 T2 n = k vs SPSS: 6 dari 39 nilai di luar toleransi:
+n = k "mauchly" "t" null Huynh-Feldt: Statify 0.6519967400163 vs acuan 1 (selisih 3.480e-1)
+n = k "within_effects" "t" "Huynh-Feldt" df: Statify 1.9559902200489 vs acuan 3 (selisih 1.044e0)
+n = k "within_effects" "t" "Huynh-Feldt" Mean Square: Statify 33.998125 vs acuan 22.1666666666667 (selisih 1.183e1)
+n = k "within_effects" "t" "Huynh-Feldt" Sig.: Statify 0.013133034607159866 vs acuan 0.00320041865623393 (selisih 9.933e-3)
+n = k "within_effects" "Error(t)" "Huynh-Feldt" df: Statify 5.8679706601467005 vs acuan 9 (selisih 3.132e0)
+n = k "within_effects" "Error(t)" "Huynh-Feldt" Mean Square: Statify 3.408333333333333 vs acuan 2.22222222222222 (selisih 1.186e0)
+FAILED
+
+failures:
+
+failures:
+    test::wb_v6_epsilon::v6_t1_epsilon_sama_pada_skala_1e_5_1_1e5
+    test::wb_v6_epsilon::v6_t1_skala_1e_5_sesuai_spss
+    test::wb_v6_epsilon::v6_t2_n_sama_k_sesuai_spss
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 31 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `--lib`
+exit code: 101

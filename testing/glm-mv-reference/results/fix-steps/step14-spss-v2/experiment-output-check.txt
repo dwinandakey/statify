@@ -1,0 +1,28 @@
+Sel eksperimen Web Worker final (MV 100/500/1000/2000, RM 5000-40000 noise): payload dan respons worker ditangkap lewat dialog asli build v2 (kode step 14, BUILD_ID da2MPL8uMDzMEA8FyYFr9) dibanding tangkapan build v1 (release e365897d, testing/release-skripsi-final).
+multivariate-100: payload v1 0edaf7858c94 v2 0edaf7858c94 identik true | respons v1 803ccf97ebae v2 803ccf97ebae identik true
+multivariate-1000: payload v1 d54cf1e699cb v2 d54cf1e699cb identik true | respons v1 b20aeb90f511 v2 b20aeb90f511 identik true
+multivariate-2000: payload v1 d4a9e2f97830 v2 d4a9e2f97830 identik true | respons v1 925dcba3bbe2 v2 925dcba3bbe2 identik true
+multivariate-500: payload v1 3a457a026608 v2 3a457a026608 identik true | respons v1 bb426914f7c8 v2 bb426914f7c8 identik true
+repeated-measures-10000: payload v1 c1dbaa4090d1 v2 c1dbaa4090d1 identik true | respons v1 f193781a3ec5 v2 f193781a3ec5 identik true
+repeated-measures-20000: payload v1 03353c2ab15e v2 03353c2ab15e identik true | respons v1 84d5b7a08c22 v2 84d5b7a08c22 identik true
+repeated-measures-40000: payload v1 01a6cf39ebe0 v2 01a6cf39ebe0 identik true | respons v1 07506f05f9c6 v2 07506f05f9c6 identik true
+repeated-measures-5000: payload v1 24b67d68103c v2 24b67d68103c identik true | respons v1 4d95c252d779 v2 4d95c252d779 identik true
+
+Replay WASM (instance baru per payload), WASM e365897d vs step 14:
+multivariate-100: byte-identik true
+multivariate-1000: byte-identik true
+multivariate-2000: byte-identik true
+multivariate-500: byte-identik true
+multivariate-mv1: byte-identik true
+multivariate-mv2: byte-identik true
+multivariate-mv3: byte-identik true
+multivariate-mv4: byte-identik true
+multivariate-mv5: byte-identik true
+multivariate-mv6: byte-identik true
+multivariate-mv7: byte-identik true
+repeated-measures-10000: byte-identik true
+repeated-measures-20000: byte-identik true
+repeated-measures-40000: byte-identik true
+repeated-measures-5000: byte-identik true
+
+RM di build v2: uji acuan Tests:       1681 passed, 1681 total; main=worker 9 desain byte-identik, hash tabel sama dengan release v1 (rm/).

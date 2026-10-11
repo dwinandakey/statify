@@ -1,0 +1,22 @@
+Validasi prosedur R vs SPSS 27: 240 nilai, lulus 240 (|R - SPSS| <= 0,001), tanpa nilai SPSS 0, selisih maks 4.367e-04
+
+Dataset A, efek Group:
+  Pillai's Trace      value 0.999902085763296  F 13.497356574438  df 4, 54  Sig. 1.0831e-07
+  Wilks' Lambda       value 9.79142367044406e-05  F 1300.77329868145  df 4, 52  Sig. 2.0333e-51
+  Hotelling's Trace   value 10212.0194102269  F 63825.1213139179  df 4, 50  Sig. 5.13718e-92
+  Roy's Largest Root  value 10212.0194102269  F 137862.262038063  df 2, 27  Sig. 7.52348e-55
+  Box's M 2.04636307898909e-12  F 3.04455811947516e-13  df1 6  df2 18168.92308  Sig. 1
+
+Dataset B: rank SSCP galat E = 2 dari 3 (eigen E: 2.69195e-01, 5.31686e-02, 6.53803e-18)
+  car::Anova multivariat: The error SSP matrix is apparently of deficient rank = 2 < 3
+  Y1, Group (univariat Type III): SS 168.356774943366  df 2  F 31139.5938426347  Sig. 4.29965e-82
+  Y2, Group (univariat Type III): SS 316.264705604255  df 2  F 58496.9300023104  Sig. 2.40867e-89
+  Y3, Group (univariat Type III): SS 92.0562576578351  df 2  F 68107.6119473594  Sig. 4.28404e-91
+  Box's M 7.95807864051312e-13  F 2.26809358606649e-14  df1 30  df2 6589.959784  Sig. 1
+
+Dataset C, efek Species:
+  Pillai's Trace      value 0.971522736636843  F 13.6970258682909  df 4, 58  Sig. 6.34427e-08
+  Wilks' Lambda       value 0.0296588604662094  F 67.2925609439625  df 4, 56  Sig. 9.85329e-21
+  Hotelling's Trace   value 32.6768974666073  F 220.569057899599  df 4, 54  Sig. 9.31173e-33
+  Roy's Largest Root  value 32.6756782233962  F 473.797334239245  df 2, 29  Sig. 7.14353e-23
+  Box's M 10.3932827213135  F 1.54849939811271  df1 6  df2 8348.706651  Sig. 0.158014391042943

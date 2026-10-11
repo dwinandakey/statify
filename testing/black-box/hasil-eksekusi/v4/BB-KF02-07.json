@@ -1,0 +1,53 @@
+{
+ "id": "BB-KF02-07",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "Test Values μ₀ = 20, 200, 150, 3",
+  "Options: Simultaneous CI dicentang; Significance Level 0",
+  "Options: Simultaneous CI dicentang; Significance Level 1.5"
+ ],
+ "toasts": [
+  {
+   "label": "Continue dengan Significance Level 0",
+   "texts": [
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling 1 populasi.csv berhasil diimpor ke dalam sistem.",
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling 1 populasi.csv berhasil diimpor ke dalam sistem."
+   ],
+   "file": "BB-KF02-07-1.png"
+  },
+  {
+   "label": "Continue dengan Significance Level 1.5",
+   "texts": [
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals."
+   ],
+   "file": "BB-KF02-07-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "optionsMasihTerbuka_0": true,
+  "optionsMasihTerbuka_1.5": true
+ },
+ "notes": [
+  "BB-KF02-07-1.png: toast: Continue dengan Significance Level 0",
+  "BB-KF02-07-2.png: toast: Continue dengan Significance Level 1.5"
+ ],
+ "env": {
+  "base": "http://localhost:3102",
+  "port": "3102",
+  "buildIdFile": "1IBznO-olYCW5GfFOKskp",
+  "buildIdServed": "1IBznO-olYCW5GfFOKskp"
+ },
+ "startedAt": "2026-09-24T20:07:05.566Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-24T20:07:18.837Z",
+ "durationS": 13
+}

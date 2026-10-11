@@ -1,0 +1,5 @@
+module,size,cpu,runs,pre_checked,pre_all_zero,post_logs_1,post_dom_logs_1
+multivariate,100,1.0,62,62,62,62,41
+multivariate,500,1.0,62,62,62,62,44
+multivariate,1000,1.0,62,62,62,62,52
+multivariate,2000,1.0,62,62,62,62,46

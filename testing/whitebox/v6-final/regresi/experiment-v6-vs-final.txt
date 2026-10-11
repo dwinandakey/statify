@@ -1,0 +1,9 @@
+multivariate-100: payload v6 cd093a5fe8cb final cd093a5fe8cb identik true | respons v6 f4e64953c46d final f4e64953c46d identik true | mode worker
+multivariate-1000: payload v6 819afcf9391f final 819afcf9391f identik true | respons v6 8095aa7124ae final 8095aa7124ae identik true | mode worker
+multivariate-2000: payload v6 53f3001a9717 final 53f3001a9717 identik true | respons v6 9fb16e8f29e4 final 9fb16e8f29e4 identik true | mode worker
+multivariate-500: payload v6 c3bc17f8e0be final c3bc17f8e0be identik true | respons v6 61e1e8e3ef41 final 61e1e8e3ef41 identik true | mode worker
+repeated-measures-10000: payload v6 8c0e18622a69 final 8c0e18622a69 identik true | respons v6 2bf63e86a1db final 2bf63e86a1db identik true | mode worker
+repeated-measures-20000: payload v6 27ff53d876bd final 27ff53d876bd identik true | respons v6 67b52c45dd1c final 67b52c45dd1c identik true | mode worker
+repeated-measures-40000: payload v6 e3ea9db41f75 final e3ea9db41f75 identik true | respons v6 89305fb2fe02 final 89305fb2fe02 identik true | mode worker
+repeated-measures-5000: payload v6 f2d6ec21e658 final f2d6ec21e658 identik true | respons v6 aafe30ecab56 final aafe30ecab56 identik true | mode worker
+sel: 8, tidak identik: 0

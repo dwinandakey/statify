@@ -1,0 +1,24 @@
+mv1: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv1ci: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv1ci10: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv2: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv2ci: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv2d: payload identik true | path berubah 4 (diharapkan 4) | tak terduga 0 | hilang 0
+mv2dci: payload identik true | path berubah 4 (diharapkan 4) | tak terduga 0 | hilang 0
+mv2s: payload identik true | path berubah 4 (diharapkan 4) | tak terduga 0 | hilang 0
+mv2wci: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv2wd: payload identik true | path berubah 4 (diharapkan 4) | tak terduga 0 | hilang 0
+mv2ws: payload identik true | path berubah 4 (diharapkan 4) | tak terduga 0 | hilang 0
+mv3: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv3ci: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv3d: payload identik true | path berubah 1 (diharapkan 1) | tak terduga 0 | hilang 0
+mv3dci: payload identik true | path berubah 1 (diharapkan 1) | tak terduga 0 | hilang 0
+mv3s: payload identik true | path berubah 2 (diharapkan 2) | tak terduga 0 | hilang 0
+mv4: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv4ph: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv5: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv6: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv7: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv8: payload identik true | path berubah 0 (diharapkan 0) | tak terduga 0 | hilang 0
+mv9: payload identik true | path berubah 2 (diharapkan 2) | tak terduga 0 | hilang 0
+konfigurasi: 23, tidak sesuai harapan: 0

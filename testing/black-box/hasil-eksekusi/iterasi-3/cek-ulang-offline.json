@@ -1,0 +1,37 @@
+{
+ "BB-KF02-04 mv1ci": {
+  "tabel": true,
+  "nilaiDibandingkan": 24,
+  "beda": []
+ },
+ "BB-KF02-05 mv1ci10": {
+  "tabel": true,
+  "nilaiDibandingkan": 24,
+  "beda": []
+ },
+ "BB-KF03-10 mv2ci": {
+  "tabel": true,
+  "nilaiDibandingkan": 24,
+  "beda": []
+ },
+ "BB-KF03-11 mv2wci": {
+  "tabel": true,
+  "nilaiDibandingkan": 28,
+  "beda": []
+ },
+ "BB-KF03-12 mv2dci": {
+  "tabel": true,
+  "nilaiDibandingkan": 24,
+  "beda": []
+ },
+ "BB-KF04-04 mv3dci": {
+  "tabel": true,
+  "nilaiDibandingkan": 12,
+  "beda": []
+ },
+ "ringkasanCI": {
+  "nilaiDibandingkan": 136,
+  "beda": 0
+ },
+ "BB-KF02-06 sama dengan BB-KF02-01 iterasi 3": true
+}

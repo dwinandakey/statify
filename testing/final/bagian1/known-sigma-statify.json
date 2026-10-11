@@ -1,0 +1,1258 @@
+[
+ {
+  "id": "K1",
+  "cfg": "mv1",
+  "csv": "hotelling 1 populasi.csv",
+  "design": "one_sample",
+  "sigma": [
+   [
+    36,
+    -630,
+    -320,
+    -5
+   ],
+   [
+    -630,
+    15000,
+    6700,
+    107
+   ],
+   [
+    -320,
+    6700,
+    4700,
+    44
+   ],
+   [
+    -5,
+    107,
+    44,
+    1
+   ]
+  ],
+  "note": "satu populasi, Σ_A",
+  "mu0": [
+   20,
+   200,
+   150,
+   3
+  ],
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "mpg",
+   "disp",
+   "hp",
+   "wt"
+  ],
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 4,
+   "sample_sizes": [
+    32
+   ],
+   "levels": [],
+   "hypothesized": [
+    20,
+    200,
+    150,
+    3
+   ],
+   "chi_square": 11.249432312125961,
+   "df": 4,
+   "significance": 0.023899239766673235,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "mpg",
+     "estimate": 20.090624999999996,
+     "std_error": 1.0606601717798212,
+     "chi_square_lower": 16.823562838611142,
+     "chi_square_upper": 23.35768716138885,
+     "bonferroni_lower": 17.44140828247036,
+     "bonferroni_upper": 22.739841717529632
+    },
+    {
+     "dependent_variable": "disp",
+     "estimate": 230.72187500000004,
+     "std_error": 21.650635094610966,
+     "chi_square_lower": 164.03324788869142,
+     "chi_square_upper": 297.4105021113087,
+     "bonferroni_lower": 176.644965200012,
+     "bonferroni_upper": 284.7987847999881
+    },
+    {
+     "dependent_variable": "hp",
+     "estimate": 146.6875,
+     "std_error": 12.119199643540822,
+     "chi_square_lower": 109.35775043913056,
+     "chi_square_upper": 184.01724956086946,
+     "bonferroni_lower": 116.4173087050143,
+     "bonferroni_upper": 176.9576912949857
+    },
+    {
+     "dependent_variable": "wt",
+     "estimate": 3.2172499999999995,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 2.672739639768524,
+     "chi_square_upper": 3.761760360231475,
+     "bonferroni_lower": 2.7757138804117267,
+     "bonferroni_upper": 3.6587861195882723
+    }
+   ]
+  },
+  "t2_multivariate_tests": 10.785871848116436,
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ },
+ {
+  "id": "K1-a10",
+  "cfg": "mv1ci10",
+  "csv": "hotelling 1 populasi.csv",
+  "design": "one_sample",
+  "sigma": [
+   [
+    36,
+    -630,
+    -320,
+    -5
+   ],
+   [
+    -630,
+    15000,
+    6700,
+    107
+   ],
+   [
+    -320,
+    6700,
+    4700,
+    44
+   ],
+   [
+    -5,
+    107,
+    44,
+    1
+   ]
+  ],
+  "note": "satu populasi, Σ_A, α = 0,10",
+  "mu0": [
+   20,
+   200,
+   150,
+   3
+  ],
+  "alpha": 0.1,
+  "pairs": null,
+  "dep": [
+   "mpg",
+   "disp",
+   "hp",
+   "wt"
+  ],
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 4,
+   "sample_sizes": [
+    32
+   ],
+   "levels": [],
+   "hypothesized": [
+    20,
+    200,
+    150,
+    3
+   ],
+   "chi_square": 11.249432312125961,
+   "df": 4,
+   "significance": 0.023899239766673235,
+   "confidence_level": 0.9,
+   "chi_square_critical": 2.7891648104288955,
+   "z_critical": 2.241402727588145,
+   "intervals": [
+    {
+     "dependent_variable": "mpg",
+     "estimate": 20.090624999999996,
+     "std_error": 1.0606601717798212,
+     "chi_square_lower": 17.13226897304825,
+     "chi_square_upper": 23.04898102695174,
+     "bonferroni_lower": 17.713258397928595,
+     "bonferroni_upper": 22.467991602071397
+    },
+    {
+     "dependent_variable": "disp",
+     "estimate": 230.72187500000004,
+     "std_error": 21.650635094610966,
+     "chi_square_lower": 170.33468547067426,
+     "chi_square_upper": 291.10906452932585,
+     "bonferroni_lower": 182.1940824449234,
+     "bonferroni_upper": 279.24966755507666
+    },
+    {
+     "dependent_variable": "hp",
+     "estimate": 146.6875,
+     "std_error": 12.119199643540822,
+     "chi_square_lower": 112.88505482367353,
+     "chi_square_upper": 180.48994517632647,
+     "bonferroni_lower": 119.52349286278232,
+     "bonferroni_upper": 173.85150713721768
+    },
+    {
+     "dependent_variable": "wt",
+     "estimate": 3.2172499999999995,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 2.7241906621747085,
+     "chi_square_upper": 3.7103093378252905,
+     "bonferroni_lower": 2.821022232988099,
+     "bonferroni_upper": 3.6134777670119
+    }
+   ]
+  },
+  "t2_multivariate_tests": 10.785871848116436,
+  "errors": "Error Summary:\nContext: generate_plots\n  1. No plots generated. Check your configuration.\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\n"
+ },
+ {
+  "id": "K1-S",
+  "cfg": "mv1",
+  "csv": "hotelling 1 populasi.csv",
+  "design": "one_sample",
+  "sigma": [
+   [
+    36.32410282258065,
+    -633.0972076612902,
+    -320.73205645161283,
+    -5.116684677419355
+   ],
+   [
+    -633.0972076612902,
+    15360.799828629031,
+    6721.158669354839,
+    107.68420403225805
+   ],
+   [
+    -320.73205645161283,
+    6721.158669354839,
+    4700.866935483871,
+    44.19266129032259
+   ],
+   [
+    -5.116684677419355,
+    107.68420403225805,
+    44.19266129032259,
+    0.9573789677419356
+   ]
+  ],
+  "note": "sifat: Σ = S → χ² = T²",
+  "mu0": [
+   20,
+   200,
+   150,
+   3
+  ],
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "mpg",
+   "disp",
+   "hp",
+   "wt"
+  ],
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 4,
+   "sample_sizes": [
+    32
+   ],
+   "levels": [],
+   "hypothesized": [
+    20,
+    200,
+    150,
+    3
+   ],
+   "chi_square": 10.78587184811625,
+   "df": 4,
+   "significance": 0.029078904320110642,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "mpg",
+     "estimate": 20.090624999999996,
+     "std_error": 1.0654239593728148,
+     "chi_square_lower": 16.808889345060567,
+     "chi_square_upper": 23.372360654939424,
+     "bonferroni_lower": 17.429509744120473,
+     "bonferroni_upper": 22.75174025587952
+    },
+    {
+     "dependent_variable": "disp",
+     "estimate": 230.72187500000004,
+     "std_error": 21.909472714893372,
+     "chi_square_lower": 163.2359721752557,
+     "chi_square_upper": 298.20777782474437,
+     "bonferroni_lower": 175.99846505885264,
+     "bonferroni_upper": 285.4452849411474
+    },
+    {
+     "dependent_variable": "hp",
+     "estimate": 146.6875,
+     "std_error": 12.120317311600013,
+     "chi_square_lower": 109.35430778037676,
+     "chi_square_upper": 184.02069221962324,
+     "bonferroni_lower": 116.41451709938431,
+     "bonferroni_upper": 176.9604829006157
+    },
+    {
+     "dependent_variable": "wt",
+     "estimate": 3.2172499999999995,
+     "std_error": 0.17296847326011608,
+     "chi_square_lower": 2.6844697852465114,
+     "chi_square_upper": 3.7500302147534876,
+     "bonferroni_lower": 2.785225697440065,
+     "bonferroni_upper": 3.649274302559934
+    }
+   ]
+  },
+  "t2_multivariate_tests": 10.785871848116436,
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ },
+ {
+  "id": "K1-I",
+  "cfg": "mv1",
+  "csv": "hotelling 1 populasi.csv",
+  "design": "one_sample",
+  "sigma": [
+   [
+    1,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    1,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    1
+   ]
+  ],
+  "note": "sifat: Σ = I → χ² = n·Σ(x̄ − μ₀)²",
+  "mu0": [
+   20,
+   200,
+   150,
+   3
+  ],
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "mpg",
+   "disp",
+   "hp",
+   "wt"
+  ],
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 4,
+   "sample_sizes": [
+    32
+   ],
+   "levels": [],
+   "hypothesized": [
+    20,
+    200,
+    150,
+    3
+   ],
+   "chi_square": 30555.573447000075,
+   "df": 4,
+   "significance": 0,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "mpg",
+     "estimate": 20.090624999999996,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 19.546114639768522,
+     "chi_square_upper": 20.63513536023147,
+     "bonferroni_lower": 19.64908888041172,
+     "bonferroni_upper": 20.53216111958827
+    },
+    {
+     "dependent_variable": "disp",
+     "estimate": 230.72187500000004,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 230.17736463976857,
+     "chi_square_upper": 231.2663853602315,
+     "bonferroni_lower": 230.28033888041176,
+     "bonferroni_upper": 231.16341111958832
+    },
+    {
+     "dependent_variable": "hp",
+     "estimate": 146.6875,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 146.14298963976853,
+     "chi_square_upper": 147.23201036023147,
+     "bonferroni_lower": 146.24596388041172,
+     "bonferroni_upper": 147.12903611958828
+    },
+    {
+     "dependent_variable": "wt",
+     "estimate": 3.2172499999999995,
+     "std_error": 0.1767766952966369,
+     "chi_square_lower": 2.672739639768524,
+     "chi_square_upper": 3.761760360231475,
+     "bonferroni_lower": 2.7757138804117267,
+     "bonferroni_upper": 3.6587861195882723
+    }
+   ]
+  },
+  "t2_multivariate_tests": 10.785871848116436,
+  "errors": "Error Summary:\nContext: generate_plots\n  1. No plots generated. Check your configuration.\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\n"
+ },
+ {
+  "id": "K2",
+  "cfg": "mv2",
+  "csv": "hotelling 2 populasi independen.csv",
+  "design": "two_sample_common",
+  "sigma": [
+   [
+    7,
+    6,
+    5,
+    5
+   ],
+   [
+    6,
+    16,
+    8,
+    6
+   ],
+   [
+    5,
+    8,
+    29,
+    14
+   ],
+   [
+    5,
+    6,
+    14,
+    22
+   ]
+  ],
+  "delta0": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "note": "dua populasi, Σ₁ = Σ₂ = Σ_B",
+  "mu0": null,
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "x1",
+   "x2",
+   "x3",
+   "x4"
+  ],
+  "factor": "jk",
+  "statify": {
+   "design": "two_sample_common",
+   "p": 4,
+   "sample_sizes": [
+    32,
+    32
+   ],
+   "factor": "jk",
+   "levels": [
+    "1",
+    "2"
+   ],
+   "hypothesized": [],
+   "chi_square": 104.90439492223592,
+   "df": 4,
+   "significance": 8.876988209161647e-22,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "x1",
+     "estimate": 3.625,
+     "std_error": 0.6614378277661477,
+     "chi_square_lower": 1.58762878846496,
+     "chi_square_upper": 5.66237121153504,
+     "bonferroni_lower": 1.9729231166150363,
+     "bonferroni_upper": 5.2770768833849635
+    },
+    {
+     "dependent_variable": "x2",
+     "estimate": 2,
+     "std_error": 1,
+     "chi_square_lower": -1.0802157451680485,
+     "chi_square_upper": 5.080215745168049,
+     "bonferroni_lower": -0.4977054743972973,
+     "bonferroni_upper": 4.497705474397297
+    },
+    {
+     "dependent_variable": "x3",
+     "estimate": 10.46875,
+     "std_error": 1.346291201783626,
+     "chi_square_lower": 6.321882642684861,
+     "chi_square_upper": 14.615617357315138,
+     "bonferroni_lower": 7.106111095172121,
+     "bonferroni_upper": 13.831388904827879
+    },
+    {
+     "dependent_variable": "x4",
+     "estimate": 0.8125,
+     "std_error": 1.1726039399558574,
+     "chi_square_lower": -2.799373118698121,
+     "chi_square_upper": 4.424373118698121,
+     "bonferroni_lower": -2.116319280127585,
+     "bonferroni_upper": 3.741319280127585
+    }
+   ]
+  },
+  "t2_multivariate_tests": 98.2279094209238,
+  "errors": "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+ },
+ {
+  "id": "K2-d",
+  "cfg": "mv2d",
+  "csv": "hotelling 2 populasi independen.csv",
+  "design": "two_sample_common",
+  "sigma": [
+   [
+    7,
+    6,
+    5,
+    5
+   ],
+   [
+    6,
+    16,
+    8,
+    6
+   ],
+   [
+    5,
+    8,
+    29,
+    14
+   ],
+   [
+    5,
+    6,
+    14,
+    22
+   ]
+  ],
+  "delta0": [
+   3,
+   2,
+   10,
+   1
+  ],
+  "note": "dua populasi, Σ_B, δ₀ = [3, 2, 10, 1]",
+  "mu0": null,
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "x1",
+   "x2",
+   "x3",
+   "x4"
+  ],
+  "factor": "jk",
+  "statify": {
+   "design": "two_sample_common",
+   "p": 4,
+   "sample_sizes": [
+    32,
+    32
+   ],
+   "factor": "jk",
+   "levels": [
+    "1",
+    "2"
+   ],
+   "hypothesized": [],
+   "chi_square": 1.7970650793039726,
+   "df": 4,
+   "significance": 0.7730192718641988,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "x1",
+     "estimate": 0.625,
+     "std_error": 0.6614378277661477,
+     "chi_square_lower": -1.41237121153504,
+     "chi_square_upper": 2.66237121153504,
+     "bonferroni_lower": -1.0270768833849637,
+     "bonferroni_upper": 2.2770768833849635
+    },
+    {
+     "dependent_variable": "x2",
+     "estimate": 0,
+     "std_error": 1,
+     "chi_square_lower": -3.0802157451680485,
+     "chi_square_upper": 3.0802157451680485,
+     "bonferroni_lower": -2.4977054743972973,
+     "bonferroni_upper": 2.4977054743972973
+    },
+    {
+     "dependent_variable": "x3",
+     "estimate": 0.46875,
+     "std_error": 1.346291201783626,
+     "chi_square_lower": -3.6781173573151387,
+     "chi_square_upper": 4.615617357315139,
+     "bonferroni_lower": -2.893888904827879,
+     "bonferroni_upper": 3.831388904827879
+    },
+    {
+     "dependent_variable": "x4",
+     "estimate": -0.1875,
+     "std_error": 1.1726039399558574,
+     "chi_square_lower": -3.799373118698121,
+     "chi_square_upper": 3.424373118698121,
+     "bonferroni_lower": -3.116319280127585,
+     "bonferroni_upper": 2.741319280127585
+    }
+   ]
+  },
+  "t2_multivariate_tests": 1.65113202305661,
+  "errors": "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+ },
+ {
+  "id": "K2-S",
+  "cfg": "mv2",
+  "csv": "hotelling 2 populasi independen.csv",
+  "design": "two_sample_common",
+  "sigma": [
+   [
+    7.164314516129032,
+    6.047379032258064,
+    5.488407258064516,
+    4.700604838709678
+   ],
+   [
+    6.047379032258064,
+    15.894153225806452,
+    8.205141129032258,
+    5.855846774193548
+   ],
+   [
+    5.488407258064516,
+    8.205141129032258,
+    28.731350806451612,
+    13.692540322580644
+   ],
+   [
+    4.700604838709678,
+    5.855846774193548,
+    13.692540322580644,
+    22.320564516129032
+   ]
+  ],
+  "delta0": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "note": "sifat: Σ = S_pooled → χ² = T² dua populasi",
+  "mu0": null,
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "x1",
+   "x2",
+   "x3",
+   "x4"
+  ],
+  "factor": "jk",
+  "statify": {
+   "design": "two_sample_common",
+   "p": 4,
+   "sample_sizes": [
+    32,
+    32
+   ],
+   "factor": "jk",
+   "levels": [
+    "1",
+    "2"
+   ],
+   "hypothesized": [],
+   "chi_square": 98.22790942092374,
+   "df": 4,
+   "significance": 2.344440207368438e-20,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "x1",
+     "estimate": 3.625,
+     "std_error": 0.6691559289568199,
+     "chi_square_lower": 1.5638553716546513,
+     "chi_square_upper": 5.686144628345349,
+     "bonferroni_lower": 1.953645573019142,
+     "bonferroni_upper": 5.296354426980858
+    },
+    {
+     "dependent_variable": "x2",
+     "estimate": 2,
+     "std_error": 0.9966867996581992,
+     "chi_square_lower": -1.0700103733083375,
+     "chi_square_upper": 5.070010373308337,
+     "bonferroni_lower": -0.48943007576580655,
+     "bonferroni_upper": 4.4894300757658065
+    },
+    {
+     "dependent_variable": "x3",
+     "estimate": 10.46875,
+     "std_error": 1.3400408297522974,
+     "chi_square_lower": 6.3411351370289175,
+     "chi_square_upper": 14.596364862971082,
+     "bonferroni_lower": 7.1217226836117895,
+     "bonferroni_upper": 13.81577731638821
+    },
+    {
+     "dependent_variable": "x4",
+     "estimate": 0.8125,
+     "std_error": 1.1811161171781819,
+     "chi_square_lower": -2.8255924610039855,
+     "chi_square_upper": 4.4505924610039855,
+     "bonferroni_lower": -2.1375801917748247,
+     "bonferroni_upper": 3.7625801917748247
+    }
+   ]
+  },
+  "t2_multivariate_tests": 98.2279094209238,
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\n"
+ },
+ {
+  "id": "K3",
+  "cfg": "mv2",
+  "csv": "hotelling 2 populasi independen.csv",
+  "design": "two_sample_separate",
+  "sigma1": [
+   [
+    5,
+    4.5,
+    6.5,
+    5
+   ],
+   [
+    4.5,
+    13,
+    7,
+    6
+   ],
+   [
+    6.5,
+    7,
+    29,
+    14
+   ],
+   [
+    5,
+    6,
+    14,
+    17
+   ]
+  ],
+  "sigma2": [
+   [
+    9,
+    7.5,
+    4.5,
+    4
+   ],
+   [
+    7.5,
+    19,
+    9.5,
+    5.5
+   ],
+   [
+    4.5,
+    9.5,
+    29,
+    13
+   ],
+   [
+    4,
+    5.5,
+    13,
+    28
+   ]
+  ],
+  "delta0": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "note": "dua populasi, Σ₁ dan Σ₂",
+  "sigma": null,
+  "mu0": null,
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "x1",
+   "x2",
+   "x3",
+   "x4"
+  ],
+  "factor": "jk",
+  "statify": {
+   "design": "two_sample_separate",
+   "p": 4,
+   "sample_sizes": [
+    32,
+    32
+   ],
+   "factor": "jk",
+   "levels": [
+    "1",
+    "2"
+   ],
+   "hypothesized": [],
+   "chi_square": 95.94140977248352,
+   "df": 4,
+   "significance": 7.186607564649897e-20,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "x1",
+     "estimate": 3.625,
+     "std_error": 0.6614378277661477,
+     "chi_square_lower": 1.58762878846496,
+     "chi_square_upper": 5.66237121153504,
+     "bonferroni_lower": 1.9729231166150363,
+     "bonferroni_upper": 5.2770768833849635
+    },
+    {
+     "dependent_variable": "x2",
+     "estimate": 2,
+     "std_error": 1,
+     "chi_square_lower": -1.0802157451680485,
+     "chi_square_upper": 5.080215745168049,
+     "bonferroni_lower": -0.4977054743972973,
+     "bonferroni_upper": 4.497705474397297
+    },
+    {
+     "dependent_variable": "x3",
+     "estimate": 10.46875,
+     "std_error": 1.346291201783626,
+     "chi_square_lower": 6.321882642684861,
+     "chi_square_upper": 14.615617357315138,
+     "bonferroni_lower": 7.106111095172121,
+     "bonferroni_upper": 13.831388904827879
+    },
+    {
+     "dependent_variable": "x4",
+     "estimate": 0.8125,
+     "std_error": 1.1858541225631423,
+     "chi_square_lower": -2.8401865397914317,
+     "chi_square_upper": 4.465186539791432,
+     "bonferroni_lower": -2.149414333762564,
+     "bonferroni_upper": 3.774414333762564
+    }
+   ]
+  },
+  "t2_multivariate_tests": 98.2279094209238,
+  "errors": "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+ },
+ {
+  "id": "K3-d",
+  "cfg": "mv2wd",
+  "csv": "hotelling 2 populasi independen.csv",
+  "design": "two_sample_separate",
+  "sigma1": [
+   [
+    5,
+    4.5,
+    6.5,
+    5
+   ],
+   [
+    4.5,
+    13,
+    7,
+    6
+   ],
+   [
+    6.5,
+    7,
+    29,
+    14
+   ],
+   [
+    5,
+    6,
+    14,
+    17
+   ]
+  ],
+  "sigma2": [
+   [
+    9,
+    7.5,
+    4.5,
+    4
+   ],
+   [
+    7.5,
+    19,
+    9.5,
+    5.5
+   ],
+   [
+    4.5,
+    9.5,
+    29,
+    13
+   ],
+   [
+    4,
+    5.5,
+    13,
+    28
+   ]
+  ],
+  "delta0": [
+   3,
+   2,
+   10,
+   1
+  ],
+  "note": "dua populasi, Σ₁ dan Σ₂, δ₀ = [3, 2, 10, 1]",
+  "sigma": null,
+  "mu0": null,
+  "alpha": 0.05,
+  "pairs": null,
+  "dep": [
+   "x1",
+   "x2",
+   "x3",
+   "x4"
+  ],
+  "factor": "jk",
+  "statify": {
+   "design": "two_sample_separate",
+   "p": 4,
+   "sample_sizes": [
+    32,
+    32
+   ],
+   "factor": "jk",
+   "levels": [
+    "1",
+    "2"
+   ],
+   "hypothesized": [],
+   "chi_square": 1.649730519042993,
+   "df": 4,
+   "significance": 0.7998275751460387,
+   "confidence_level": 0.95,
+   "chi_square_critical": 3.0802157451680485,
+   "z_critical": 2.4977054743972973,
+   "intervals": [
+    {
+     "dependent_variable": "x1",
+     "estimate": 0.625,
+     "std_error": 0.6614378277661477,
+     "chi_square_lower": -1.41237121153504,
+     "chi_square_upper": 2.66237121153504,
+     "bonferroni_lower": -1.0270768833849637,
+     "bonferroni_upper": 2.2770768833849635
+    },
+    {
+     "dependent_variable": "x2",
+     "estimate": 0,
+     "std_error": 1,
+     "chi_square_lower": -3.0802157451680485,
+     "chi_square_upper": 3.0802157451680485,
+     "bonferroni_lower": -2.4977054743972973,
+     "bonferroni_upper": 2.4977054743972973
+    },
+    {
+     "dependent_variable": "x3",
+     "estimate": 0.46875,
+     "std_error": 1.346291201783626,
+     "chi_square_lower": -3.6781173573151387,
+     "chi_square_upper": 4.615617357315139,
+     "bonferroni_lower": -2.893888904827879,
+     "bonferroni_upper": 3.831388904827879
+    },
+    {
+     "dependent_variable": "x4",
+     "estimate": -0.1875,
+     "std_error": 1.1858541225631423,
+     "chi_square_lower": -3.8401865397914317,
+     "chi_square_upper": 3.4651865397914317,
+     "bonferroni_lower": -3.149414333762564,
+     "bonferroni_upper": 2.774414333762564
+    }
+   ]
+  },
+  "t2_multivariate_tests": 1.6511320230566098,
+  "errors": "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+ },
+ {
+  "id": "K4",
+  "cfg": "mv3d",
+  "csv": "hotelling berpasangan (data asli).csv",
+  "design": "one_sample",
+  "paired": true,
+  "sigma": [
+   [
+    120,
+    17
+   ],
+   [
+    17,
+    22
+   ]
+  ],
+  "note": "berpasangan, Σd, δ₀ = [8, 3]",
+  "mu0": [
+   8,
+   3
+  ],
+  "alpha": 0.05,
+  "pairs": [
+   [
+    "kedalaman1",
+    "kedalaman2"
+   ],
+   [
+    "ukuran1",
+    "ukuran2"
+   ]
+  ],
+  "dep": null,
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 2,
+   "sample_sizes": [
+    15
+   ],
+   "levels": [],
+   "hypothesized": [
+    8,
+    3
+   ],
+   "chi_square": 0.00340280731603575,
+   "df": 2,
+   "significance": 0.9983000429086716,
+   "confidence_level": 0.95,
+   "chi_square_critical": 2.447746830680816,
+   "z_critical": 2.241402727588145,
+   "intervals": [
+    {
+     "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+     "estimate": 8,
+     "std_error": 2.8284271247461903,
+     "chi_square_lower": 1.0767264695908594,
+     "chi_square_upper": 14.92327353040914,
+     "bonferroni_lower": 1.660355727809594,
+     "bonferroni_upper": 14.339644272190405
+    },
+    {
+     "dependent_variable": "d_ukuran1_minus_ukuran2",
+     "estimate": 3.066666666666667,
+     "std_error": 1.2110601416389966,
+     "chi_square_lower": 0.10229804320595282,
+     "chi_square_upper": 6.031035290127381,
+     "bonferroni_lower": 0.3521931619237346,
+     "bonferroni_upper": 5.781140171409599
+    }
+   ]
+  },
+  "t2_multivariate_tests": 0.0034393104173953003,
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ },
+ {
+  "id": "K4-0",
+  "cfg": "mv3",
+  "csv": "hotelling berpasangan (data asli).csv",
+  "design": "one_sample",
+  "paired": true,
+  "sigma": [
+   [
+    120,
+    17
+   ],
+   [
+    17,
+    22
+   ]
+  ],
+  "note": "berpasangan, Σd, δ₀ = 0",
+  "mu0": [
+   0,
+   0
+  ],
+  "alpha": 0.05,
+  "pairs": [
+   [
+    "kedalaman1",
+    "kedalaman2"
+   ],
+   [
+    "ukuran1",
+    "ukuran2"
+   ]
+  ],
+  "dep": null,
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 2,
+   "sample_sizes": [
+    15
+   ],
+   "levels": [],
+   "hypothesized": [
+    0,
+    0
+   ],
+   "chi_square": 10.861760952786048,
+   "df": 2,
+   "significance": 0.004379238288760341,
+   "confidence_level": 0.95,
+   "chi_square_critical": 2.447746830680816,
+   "z_critical": 2.241402727588145,
+   "intervals": [
+    {
+     "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+     "estimate": 8,
+     "std_error": 2.8284271247461903,
+     "chi_square_lower": 1.0767264695908594,
+     "chi_square_upper": 14.92327353040914,
+     "bonferroni_lower": 1.660355727809594,
+     "bonferroni_upper": 14.339644272190405
+    },
+    {
+     "dependent_variable": "d_ukuran1_minus_ukuran2",
+     "estimate": 3.066666666666667,
+     "std_error": 1.2110601416389966,
+     "chi_square_lower": 0.10229804320595282,
+     "chi_square_upper": 6.031035290127381,
+     "bonferroni_lower": 0.3521931619237346,
+     "bonferroni_upper": 5.781140171409599
+    }
+   ]
+  },
+  "t2_multivariate_tests": 10.818898540198347,
+  "errors": "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\nContext: generate_plots\n  1. No plots generated. Check your configuration.\n"
+ },
+ {
+  "id": "K4-S",
+  "cfg": "mv3d",
+  "csv": "hotelling berpasangan (data asli).csv",
+  "design": "one_sample",
+  "paired": true,
+  "sigma": [
+   [
+    121.57142857142857,
+    17.071428571428573
+   ],
+   [
+    17.071428571428573,
+    21.78095238095238
+   ]
+  ],
+  "note": "sifat: Σd = Sd → χ² = T² berpasangan",
+  "mu0": [
+   8,
+   3
+  ],
+  "alpha": 0.05,
+  "pairs": [
+   [
+    "kedalaman1",
+    "kedalaman2"
+   ],
+   [
+    "ukuran1",
+    "ukuran2"
+   ]
+  ],
+  "dep": null,
+  "factor": null,
+  "statify": {
+   "design": "one_sample",
+   "p": 2,
+   "sample_sizes": [
+    15
+   ],
+   "levels": [],
+   "hypothesized": [
+    8,
+    3
+   ],
+   "chi_square": 0.0034393104173952994,
+   "df": 2,
+   "significance": 0.9982818225511203,
+   "confidence_level": 0.95,
+   "chi_square_critical": 2.447746830680816,
+   "z_critical": 2.241402727588145,
+   "intervals": [
+    {
+     "dependent_variable": "d_kedalaman1_minus_kedalaman2",
+     "estimate": 8,
+     "std_error": 2.8468863526248995,
+     "chi_square_lower": 1.0315429530539335,
+     "chi_square_upper": 14.968457046946067,
+     "bonferroni_lower": 1.6189811640930838,
+     "bonferroni_upper": 14.381018835906916
+    },
+    {
+     "dependent_variable": "d_ukuran1_minus_ukuran2",
+     "estimate": 3.066666666666667,
+     "std_error": 1.2050159717047288,
+     "chi_square_lower": 0.11709264100665306,
+     "chi_square_upper": 6.016240692326681,
+     "bonferroni_lower": 0.3657405809004084,
+     "bonferroni_upper": 5.767592752432925
+    }
+   ]
+  },
+  "t2_multivariate_tests": 0.0034393104173953003,
+  "errors": "Error Summary:\nContext: generate_plots\n  1. No plots generated. Check your configuration.\nContext: calculate_homogeneous_subsets\n  1. No factors defined in the model\n"
+ }
+]

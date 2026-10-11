@@ -1,0 +1,490 @@
+{
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "EXcw4k8lfhzpWjMN3Mjc7",
+  "buildIdServed": "EXcw4k8lfhzpWjMN3Mjc7",
+  "wasm": {
+    "mv": {
+      "file": "wasm_bg.6145c2bf.wasm",
+      "md5": "43a77657bcd238bb949797c7dccea200"
+    },
+    "rm": {
+      "file": "wasm_bg.241dc806.wasm",
+      "md5": "889473e96259ef9e9f99cd8bba9c1d53"
+    }
+  },
+  "chromium": "143.0.7499.4",
+  "playwright": "1.57.0",
+  "startedAt": "2026-09-30T15:59:24.270Z",
+  "scenarios": {
+    "BB-KF01-01": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:41:29.308Z",
+      "finishedAt": "2026-09-30T15:41:32.359Z"
+    },
+    "BB-KF01-02": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T15:41:32.968Z",
+      "finishedAt": "2026-09-30T15:41:53.181Z"
+    },
+    "BB-KF02-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:41:53.902Z",
+      "finishedAt": "2026-09-30T15:42:07.475Z"
+    },
+    "BB-KF02-02": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T15:42:08.168Z",
+      "finishedAt": "2026-09-30T15:42:21.751Z"
+    },
+    "BB-KF02-03": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:42:22.433Z",
+      "finishedAt": "2026-09-30T15:42:31.951Z"
+    },
+    "BB-KF03-01": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T15:42:32.657Z",
+      "finishedAt": "2026-09-30T15:42:52.930Z"
+    },
+    "BB-KF03-02": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:42:53.547Z",
+      "finishedAt": "2026-09-30T15:43:07.084Z"
+    },
+    "BB-KF03-03": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:43:07.799Z",
+      "finishedAt": "2026-09-30T15:43:21.024Z"
+    },
+    "BB-KF04-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:43:21.722Z",
+      "finishedAt": "2026-09-30T15:43:35.113Z"
+    },
+    "BB-KF04-02": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:43:35.860Z",
+      "finishedAt": "2026-09-30T15:43:49.088Z"
+    },
+    "BB-KF05-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:43:49.725Z",
+      "finishedAt": "2026-09-30T15:44:03.132Z"
+    },
+    "BB-KF05-02": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:44:03.756Z",
+      "finishedAt": "2026-09-30T15:44:12.690Z"
+    },
+    "BB-KF06-01": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T15:44:13.424Z",
+      "finishedAt": "2026-09-30T15:44:27.439Z"
+    },
+    "BB-KF06-02": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T15:44:28.076Z",
+      "finishedAt": "2026-09-30T15:44:41.889Z"
+    },
+    "BB-KF06-03": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T15:44:42.507Z",
+      "finishedAt": "2026-09-30T15:45:07.792Z"
+    },
+    "BB-KF06-04": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:45:08.481Z",
+      "finishedAt": "2026-09-30T15:46:20.556Z"
+    },
+    "BB-KF06-05": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:46:21.164Z",
+      "finishedAt": "2026-09-30T15:47:33.735Z"
+    },
+    "BB-KF06-06": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:47:34.426Z",
+      "finishedAt": "2026-09-30T15:48:46.637Z"
+    },
+    "BB-KF06-07": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:48:47.253Z",
+      "finishedAt": "2026-09-30T15:49:59.838Z"
+    },
+    "BB-KF06-08": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:50:00.473Z",
+      "finishedAt": "2026-09-30T15:51:12.726Z"
+    },
+    "BB-KF06-09": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:51:13.350Z",
+      "finishedAt": "2026-09-30T15:52:25.744Z"
+    },
+    "BB-KF10-01": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T15:52:26.420Z",
+      "finishedAt": "2026-09-30T15:52:51.650Z"
+    },
+    "BB-KF10-02": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:52:52.253Z",
+      "finishedAt": "2026-09-30T15:53:05.510Z"
+    },
+    "BB-KF11-01": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:53:06.242Z",
+      "finishedAt": "2026-09-30T15:53:09.901Z"
+    },
+    "BB-KF11-02": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T15:53:10.512Z",
+      "finishedAt": "2026-09-30T15:53:47.652Z"
+    },
+    "BB-KF11-03": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:53:48.272Z",
+      "finishedAt": "2026-09-30T15:54:01.181Z"
+    },
+    "BB-KF13-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:54:01.809Z",
+      "finishedAt": "2026-09-30T15:54:15.381Z"
+    },
+    "BB-KF13-02": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:54:15.983Z",
+      "finishedAt": "2026-09-30T15:54:28.257Z"
+    },
+    "BB-KF13-03": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:54:28.846Z",
+      "finishedAt": "2026-09-30T15:54:42.139Z"
+    },
+    "BB-KF13-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:54:42.764Z",
+      "finishedAt": "2026-09-30T15:55:01.831Z"
+    },
+    "BB-KF14-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:55:02.462Z",
+      "finishedAt": "2026-09-30T15:55:17.594Z"
+    },
+    "BB-KF14-02": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:55:18.296Z",
+      "finishedAt": "2026-09-30T15:55:21.876Z"
+    },
+    "BB-KF07-01": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:55:22.488Z",
+      "finishedAt": "2026-09-30T15:55:28.939Z"
+    },
+    "BB-KF07-02": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T15:55:29.539Z",
+      "finishedAt": "2026-09-30T15:55:42.508Z"
+    },
+    "BB-KF08-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:55:43.206Z",
+      "finishedAt": "2026-09-30T15:55:50.170Z"
+    },
+    "BB-KF08-02": {
+      "status": "selesai",
+      "shots": 8,
+      "startedAt": "2026-09-30T15:55:50.777Z",
+      "finishedAt": "2026-09-30T15:56:29.397Z"
+    },
+    "BB-KF08-03": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:56:30.000Z",
+      "finishedAt": "2026-09-30T15:56:41.277Z"
+    },
+    "BB-KF08-04": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:56:41.971Z",
+      "finishedAt": "2026-09-30T15:56:48.852Z"
+    },
+    "BB-KF08-05": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:56:49.461Z",
+      "finishedAt": "2026-09-30T15:56:58.184Z"
+    },
+    "BB-KF09-01": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T15:56:58.798Z",
+      "finishedAt": "2026-09-30T15:57:08.815Z"
+    },
+    "BB-KF09-02": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:57:09.514Z",
+      "finishedAt": "2026-09-30T15:57:19.784Z"
+    },
+    "BB-KF09-03": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:57:20.392Z",
+      "finishedAt": "2026-09-30T15:57:31.042Z"
+    },
+    "BB-KF10-03": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T15:57:31.632Z",
+      "finishedAt": "2026-09-30T15:57:46.607Z"
+    },
+    "BB-KF11-04": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T15:57:47.305Z",
+      "finishedAt": "2026-09-30T15:57:54.319Z"
+    },
+    "BB-KF11-05": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T15:57:55.035Z",
+      "finishedAt": "2026-09-30T15:58:15.982Z"
+    },
+    "BB-KF12-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T15:58:16.685Z",
+      "finishedAt": "2026-09-30T15:58:26.712Z"
+    },
+    "BB-KF13-05": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:58:27.345Z",
+      "finishedAt": "2026-09-30T15:58:36.930Z"
+    },
+    "BB-KF13-06": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:58:37.620Z",
+      "finishedAt": "2026-09-30T15:58:48.835Z"
+    },
+    "BB-KF13-07": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:58:49.560Z",
+      "finishedAt": "2026-09-30T15:59:15.745Z"
+    },
+    "BB-KF14-03": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T15:59:16.359Z",
+      "finishedAt": "2026-09-30T15:59:23.553Z"
+    },
+    "BB-KF03-04": {
+      "status": "selesai",
+      "shots": 8,
+      "startedAt": "2026-09-30T15:59:24.850Z",
+      "finishedAt": "2026-09-30T15:59:52.814Z"
+    },
+    "BB-KF03-05": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T15:59:53.442Z",
+      "finishedAt": "2026-09-30T16:00:20.527Z"
+    },
+    "BB-KF03-06": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-30T16:00:21.147Z",
+      "finishedAt": "2026-09-30T16:00:29.768Z"
+    },
+    "BB-KF03-07": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T16:00:30.386Z",
+      "finishedAt": "2026-09-30T16:00:56.935Z"
+    },
+    "BB-KF03-08": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:00:57.572Z",
+      "finishedAt": "2026-09-30T16:01:09.462Z"
+    },
+    "BB-KF03-09": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T16:01:10.113Z",
+      "finishedAt": "2026-09-30T16:01:23.344Z"
+    },
+    "BB-KF04-03": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T16:01:23.946Z",
+      "finishedAt": "2026-09-30T16:01:51.285Z"
+    },
+    "BB-KF02-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T16:01:51.908Z",
+      "finishedAt": "2026-09-30T16:02:05.123Z"
+    },
+    "BB-KF02-05": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:02:05.714Z",
+      "finishedAt": "2026-09-30T16:02:19.306Z"
+    },
+    "BB-KF02-06": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:02:19.875Z",
+      "finishedAt": "2026-09-30T16:02:32.835Z"
+    },
+    "BB-KF02-07": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:02:33.418Z",
+      "finishedAt": "2026-09-30T16:02:46.952Z"
+    },
+    "BB-KF03-10": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:02:47.547Z",
+      "finishedAt": "2026-09-30T16:03:00.684Z"
+    },
+    "BB-KF03-11": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:03:01.320Z",
+      "finishedAt": "2026-09-30T16:03:14.782Z"
+    },
+    "BB-KF03-12": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:03:15.514Z",
+      "finishedAt": "2026-09-30T16:03:28.877Z"
+    },
+    "BB-KF04-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T16:03:29.616Z",
+      "finishedAt": "2026-09-30T16:03:42.955Z"
+    },
+    "BB-KF03-13": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:03:43.559Z",
+      "finishedAt": "2026-09-30T16:03:56.755Z"
+    },
+    "BB-KF06-10": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:03:57.444Z",
+      "finishedAt": "2026-09-30T16:04:11.210Z"
+    },
+    "BB-KF02-08": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T16:04:11.824Z",
+      "finishedAt": "2026-09-30T16:04:25.781Z"
+    },
+    "BB-KF02-09": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-30T16:04:26.472Z",
+      "finishedAt": "2026-09-30T16:04:39.669Z"
+    },
+    "BB-KF03-14": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T16:04:40.294Z",
+      "finishedAt": "2026-09-30T16:04:54.399Z"
+    },
+    "BB-KF03-15": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-30T16:04:55.009Z",
+      "finishedAt": "2026-09-30T16:05:08.807Z"
+    },
+    "BB-KF04-05": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-30T16:05:09.457Z",
+      "finishedAt": "2026-09-30T16:05:23.060Z"
+    },
+    "BB-KF02-10": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:05:23.785Z",
+      "finishedAt": "2026-09-30T16:05:28.777Z"
+    },
+    "BB-KF02-11": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T16:05:29.377Z",
+      "finishedAt": "2026-09-30T16:05:34.346Z"
+    },
+    "BB-KF02-12": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T16:05:34.943Z",
+      "finishedAt": "2026-09-30T16:05:40.227Z"
+    },
+    "BB-KF02-13": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-30T16:05:40.850Z",
+      "finishedAt": "2026-09-30T16:05:46.910Z"
+    },
+    "BB-KF03-16": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T16:05:47.505Z",
+      "finishedAt": "2026-09-30T16:05:53.980Z"
+    },
+    "BB-KF04-06": {
+      "status": "selesai",
+      "shots": 1,
+      "startedAt": "2026-09-30T16:05:54.679Z",
+      "finishedAt": "2026-09-30T16:05:59.159Z"
+    }
+  },
+  "finishedAt": "2026-09-30T16:05:59.167Z"
+}

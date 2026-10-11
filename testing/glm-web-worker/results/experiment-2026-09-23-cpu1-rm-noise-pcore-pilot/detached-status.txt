@@ -1,0 +1,6 @@
+﻿2026-09-23T00:04:34.0947570+07:00 processor affinity set to 0xFFF (inherited by server, node and Chromium)
+2026-09-23T00:04:34.2405214+07:00 started (keep-awake on)
+2026-09-23T00:04:36.3761034+07:00 server up (pid 2684)
+2026-09-23T00:04:36.3938151+07:00 experiment started (pid 16116): node testing/glm-web-worker/experiment/run-experiment.cjs --base=http://localhost:3101 --modules=repeated-measures --sizes=5000,10000,20000,40000 --cpu=1 --runs=3 "--out=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-web-worker\results\experiment-2026-09-23-cpu1-rm-noise-pcore-pilot" --clean=true --loaf=true --rm-levels=10 --rm-measures=1 --rm-options=DescStats,EstEffectSize,ObsPower --rm-data=noise --sizes-repeated-measures=5000,10000,20000,40000
+2026-09-23T00:08:53.5623620+07:00 experiment exited with code 
+2026-09-23T00:08:55.2712336+07:00 server stopped, keep-awake off

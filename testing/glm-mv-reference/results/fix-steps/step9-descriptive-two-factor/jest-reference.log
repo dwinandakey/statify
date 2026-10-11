@@ -1,0 +1,1743 @@
+PASS components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts
+  GLM Multivariate vs SPSS 27
+    mv1 · Report
+      √ mpg · Mean (2 ms)
+      √ disp · Mean (1 ms)
+      √ hp · Mean
+      √ wt · Mean
+      √ mpg · Std. Deviation (1 ms)
+      √ disp · Std. Deviation
+      √ hp · Std. Deviation
+      √ wt · Std. Deviation
+      √ mpg · N
+      √ disp · N
+      √ hp · N
+      √ wt · N
+    mv1 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter (1 ms)
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value (2 ms)
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter (1 ms)
+      √ Intercept / Roy's Largest Root · Observed Power
+    mv1 · Tests of Between-Subjects Effects
+      √ Corrected Model / mpg - 20 · Type III Sum of Squares
+      √ Corrected Model / mpg - 20 · df
+      √ Corrected Model / mpg - 20 · Partial Eta Squared
+      √ Corrected Model / mpg - 20 · Noncent. Parameter
+      √ Corrected Model / disp - 200 · Type III Sum of Squares
+      √ Corrected Model / disp - 200 · df
+      √ Corrected Model / disp - 200 · Partial Eta Squared
+      √ Corrected Model / disp - 200 · Noncent. Parameter
+      √ Corrected Model / hp - 150 · Type III Sum of Squares
+      √ Corrected Model / hp - 150 · df
+      √ Corrected Model / hp - 150 · Partial Eta Squared
+      √ Corrected Model / hp - 150 · Noncent. Parameter (1 ms)
+      √ Corrected Model / wt - 3 · Type III Sum of Squares
+      √ Corrected Model / wt - 3 · df
+      √ Corrected Model / wt - 3 · Partial Eta Squared
+      √ Corrected Model / wt - 3 · Noncent. Parameter
+      √ Intercept / mpg - 20 · Type III Sum of Squares
+      √ Intercept / mpg - 20 · df
+      √ Intercept / mpg - 20 · Mean Square
+      √ Intercept / mpg - 20 · F
+      √ Intercept / mpg - 20 · Sig.
+      √ Intercept / mpg - 20 · Partial Eta Squared
+      √ Intercept / mpg - 20 · Noncent. Parameter
+      √ Intercept / mpg - 20 · Observed Power
+      √ Intercept / disp - 200 · Type III Sum of Squares
+      √ Intercept / disp - 200 · df (1 ms)
+      √ Intercept / disp - 200 · Mean Square
+      √ Intercept / disp - 200 · F
+      √ Intercept / disp - 200 · Sig.
+      √ Intercept / disp - 200 · Partial Eta Squared
+      √ Intercept / disp - 200 · Noncent. Parameter
+      √ Intercept / disp - 200 · Observed Power (1 ms)
+      √ Intercept / hp - 150 · Type III Sum of Squares
+      √ Intercept / hp - 150 · df
+      √ Intercept / hp - 150 · Mean Square
+      √ Intercept / hp - 150 · F
+      √ Intercept / hp - 150 · Sig.
+      √ Intercept / hp - 150 · Partial Eta Squared
+      √ Intercept / hp - 150 · Noncent. Parameter
+      √ Intercept / hp - 150 · Observed Power
+      √ Intercept / wt - 3 · Type III Sum of Squares
+      √ Intercept / wt - 3 · df
+      √ Intercept / wt - 3 · Mean Square
+      √ Intercept / wt - 3 · F
+      √ Intercept / wt - 3 · Sig.
+      √ Intercept / wt - 3 · Partial Eta Squared
+      √ Intercept / wt - 3 · Noncent. Parameter
+      √ Intercept / wt - 3 · Observed Power
+      √ Error / mpg - 20 · Type III Sum of Squares
+      √ Error / mpg - 20 · df
+      √ Error / mpg - 20 · Mean Square
+      √ Error / disp - 200 · Type III Sum of Squares
+      √ Error / disp - 200 · df
+      √ Error / disp - 200 · Mean Square
+      √ Error / hp - 150 · Type III Sum of Squares
+      √ Error / hp - 150 · df
+      √ Error / hp - 150 · Mean Square
+      √ Error / wt - 3 · Type III Sum of Squares
+      √ Error / wt - 3 · df
+      √ Error / wt - 3 · Mean Square
+      √ Total / mpg - 20 · Type III Sum of Squares
+      √ Total / mpg - 20 · df
+      √ Total / disp - 200 · Type III Sum of Squares
+      √ Total / disp - 200 · df
+      √ Total / hp - 150 · Type III Sum of Squares
+      √ Total / hp - 150 · df
+      √ Total / wt - 3 · Type III Sum of Squares (1 ms)
+      √ Total / wt - 3 · df
+      √ Corrected Total / mpg - 20 · Type III Sum of Squares
+      √ Corrected Total / mpg - 20 · df
+      √ Corrected Total / disp - 200 · Type III Sum of Squares
+      √ Corrected Total / disp - 200 · df
+      √ Corrected Total / hp - 150 · Type III Sum of Squares
+      √ Corrected Total / hp - 150 · df
+      √ Corrected Total / wt - 3 · Type III Sum of Squares (1 ms)
+      √ Corrected Total / wt - 3 · df
+    mv2 · Between-Subjects Factors
+      √ jk / 1 / laki-laki · N
+      √ jk / 2 / perempuan · N
+    mv2 · Descriptive Statistics
+      √ x1 / laki-laki · Mean
+      √ x1 / laki-laki · Std. Deviation
+      √ x1 / laki-laki · N
+      √ x1 / perempuan · Mean
+      √ x1 / perempuan · Std. Deviation
+      √ x1 / perempuan · N
+      √ x1 / Total · Mean (1 ms)
+      √ x1 / Total · Std. Deviation
+      √ x1 / Total · N (1 ms)
+      √ x2 / laki-laki · Mean
+      √ x2 / laki-laki · Std. Deviation
+      √ x2 / laki-laki · N
+      √ x2 / perempuan · Mean
+      √ x2 / perempuan · Std. Deviation
+      √ x2 / perempuan · N
+      √ x2 / Total · Mean
+      √ x2 / Total · Std. Deviation
+      √ x2 / Total · N
+      √ x3 / laki-laki · Mean
+      √ x3 / laki-laki · Std. Deviation
+      √ x3 / laki-laki · N
+      √ x3 / perempuan · Mean (1 ms)
+      √ x3 / perempuan · Std. Deviation
+      √ x3 / perempuan · N
+      √ x3 / Total · Mean
+      √ x3 / Total · Std. Deviation (1 ms)
+      √ x3 / Total · N
+      √ x4 / laki-laki · Mean
+      √ x4 / laki-laki · Std. Deviation
+      √ x4 / laki-laki · N
+      √ x4 / perempuan · Mean
+      √ x4 / perempuan · Std. Deviation
+      √ x4 / perempuan · N
+      √ x4 / Total · Mean (1 ms)
+      √ x4 / Total · Std. Deviation
+      √ x4 / Total · N
+    mv2 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv2 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value (1 ms)
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value (1 ms)
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter (1 ms)
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter (1 ms)
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df (1 ms)
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ jk / Pillai's Trace · Value
+      √ jk / Pillai's Trace · F (1 ms)
+      √ jk / Pillai's Trace · Hypothesis df
+      √ jk / Pillai's Trace · Error df
+      √ jk / Pillai's Trace · Sig.
+      √ jk / Pillai's Trace · Partial Eta Squared
+      √ jk / Pillai's Trace · Noncent. Parameter
+      √ jk / Pillai's Trace · Observed Power (1 ms)
+      √ jk / Wilks' Lambda · Value
+      √ jk / Wilks' Lambda · F
+      √ jk / Wilks' Lambda · Hypothesis df
+      √ jk / Wilks' Lambda · Error df
+      √ jk / Wilks' Lambda · Sig.
+      √ jk / Wilks' Lambda · Partial Eta Squared
+      √ jk / Wilks' Lambda · Noncent. Parameter
+      √ jk / Wilks' Lambda · Observed Power (1 ms)
+      √ jk / Hotelling's Trace · Value
+      √ jk / Hotelling's Trace · F
+      √ jk / Hotelling's Trace · Hypothesis df
+      √ jk / Hotelling's Trace · Error df
+      √ jk / Hotelling's Trace · Sig.
+      √ jk / Hotelling's Trace · Partial Eta Squared
+      √ jk / Hotelling's Trace · Noncent. Parameter
+      √ jk / Hotelling's Trace · Observed Power (1 ms)
+      √ jk / Roy's Largest Root · Value
+      √ jk / Roy's Largest Root · F
+      √ jk / Roy's Largest Root · Hypothesis df
+      √ jk / Roy's Largest Root · Error df
+      √ jk / Roy's Largest Root · Sig.
+      √ jk / Roy's Largest Root · Partial Eta Squared (1 ms)
+      √ jk / Roy's Largest Root · Noncent. Parameter
+      √ jk / Roy's Largest Root · Observed Power
+    mv2 · Levene's Test of Equality of Error Variances
+      √ x1 / Based on Mean · Levene Statistic
+      √ x1 / Based on Mean · df1
+      √ x1 / Based on Mean · df2
+      √ x1 / Based on Mean · Sig.
+      √ x1 / Based on Median · Levene Statistic (1 ms)
+      √ x1 / Based on Median · df1 (1 ms)
+      √ x1 / Based on Median · df2
+      √ x1 / Based on Median · Sig.
+      √ x1 / Based on Median and with adjusted df · Levene Statistic
+      √ x1 / Based on Median and with adjusted df · df1
+      √ x1 / Based on Median and with adjusted df · df2
+      √ x1 / Based on Median and with adjusted df · Sig.
+      √ x1 / Based on trimmed mean · Levene Statistic
+      √ x1 / Based on trimmed mean · df1 (1 ms)
+      √ x1 / Based on trimmed mean · df2
+      √ x1 / Based on trimmed mean · Sig.
+      √ x2 / Based on Mean · Levene Statistic
+      √ x2 / Based on Mean · df1
+      √ x2 / Based on Mean · df2 (1 ms)
+      √ x2 / Based on Mean · Sig.
+      √ x2 / Based on Median · Levene Statistic
+      √ x2 / Based on Median · df1
+      √ x2 / Based on Median · df2
+      √ x2 / Based on Median · Sig.
+      √ x2 / Based on Median and with adjusted df · Levene Statistic (1 ms)
+      √ x2 / Based on Median and with adjusted df · df1
+      √ x2 / Based on Median and with adjusted df · df2
+      √ x2 / Based on Median and with adjusted df · Sig.
+      √ x2 / Based on trimmed mean · Levene Statistic
+      √ x2 / Based on trimmed mean · df1
+      √ x2 / Based on trimmed mean · df2
+      √ x2 / Based on trimmed mean · Sig. (1 ms)
+      √ x3 / Based on Mean · Levene Statistic
+      √ x3 / Based on Mean · df1
+      √ x3 / Based on Mean · df2
+      √ x3 / Based on Mean · Sig.
+      √ x3 / Based on Median · Levene Statistic
+      √ x3 / Based on Median · df1
+      √ x3 / Based on Median · df2
+      √ x3 / Based on Median · Sig.
+      √ x3 / Based on Median and with adjusted df · Levene Statistic
+      √ x3 / Based on Median and with adjusted df · df1
+      √ x3 / Based on Median and with adjusted df · df2
+      √ x3 / Based on Median and with adjusted df · Sig.
+      √ x3 / Based on trimmed mean · Levene Statistic
+      √ x3 / Based on trimmed mean · df1
+      √ x3 / Based on trimmed mean · df2
+      √ x3 / Based on trimmed mean · Sig.
+      √ x4 / Based on Mean · Levene Statistic (1 ms)
+      √ x4 / Based on Mean · df1
+      √ x4 / Based on Mean · df2
+      √ x4 / Based on Mean · Sig.
+      √ x4 / Based on Median · Levene Statistic
+      √ x4 / Based on Median · df1
+      √ x4 / Based on Median · df2
+      √ x4 / Based on Median · Sig.
+      √ x4 / Based on Median and with adjusted df · Levene Statistic
+      √ x4 / Based on Median and with adjusted df · df1 (1 ms)
+      √ x4 / Based on Median and with adjusted df · df2
+      √ x4 / Based on Median and with adjusted df · Sig.
+      √ x4 / Based on trimmed mean · Levene Statistic
+      √ x4 / Based on trimmed mean · df1
+      √ x4 / Based on trimmed mean · df2
+      √ x4 / Based on trimmed mean · Sig.
+    mv2 · Tests of Between-Subjects Effects
+      √ Corrected Model / x1 · Type III Sum of Squares (1 ms)
+      √ Corrected Model / x1 · df
+      √ Corrected Model / x1 · Mean Square
+      √ Corrected Model / x1 · F
+      √ Corrected Model / x1 · Sig.
+      √ Corrected Model / x1 · Partial Eta Squared
+      √ Corrected Model / x1 · Noncent. Parameter
+      √ Corrected Model / x1 · Observed Power
+      √ Corrected Model / x2 · Type III Sum of Squares
+      √ Corrected Model / x2 · df
+      √ Corrected Model / x2 · Mean Square
+      √ Corrected Model / x2 · F
+      √ Corrected Model / x2 · Sig.
+      √ Corrected Model / x2 · Partial Eta Squared
+      √ Corrected Model / x2 · Noncent. Parameter
+      √ Corrected Model / x2 · Observed Power
+      √ Corrected Model / x3 · Type III Sum of Squares
+      √ Corrected Model / x3 · df
+      √ Corrected Model / x3 · Mean Square
+      √ Corrected Model / x3 · F
+      √ Corrected Model / x3 · Sig.
+      √ Corrected Model / x3 · Partial Eta Squared
+      √ Corrected Model / x3 · Noncent. Parameter
+      √ Corrected Model / x3 · Observed Power
+      √ Corrected Model / x4 · Type III Sum of Squares (1 ms)
+      √ Corrected Model / x4 · df
+      √ Corrected Model / x4 · Mean Square
+      √ Corrected Model / x4 · F
+      √ Corrected Model / x4 · Sig.
+      √ Corrected Model / x4 · Partial Eta Squared
+      √ Corrected Model / x4 · Noncent. Parameter
+      √ Corrected Model / x4 · Observed Power (1 ms)
+      √ Intercept / x1 · Type III Sum of Squares
+      √ Intercept / x1 · df
+      √ Intercept / x1 · Mean Square
+      √ Intercept / x1 · F
+      √ Intercept / x1 · Sig.
+      √ Intercept / x1 · Partial Eta Squared
+      √ Intercept / x1 · Noncent. Parameter
+      √ Intercept / x1 · Observed Power
+      √ Intercept / x2 · Type III Sum of Squares (1 ms)
+      √ Intercept / x2 · df
+      √ Intercept / x2 · Mean Square
+      √ Intercept / x2 · F
+      √ Intercept / x2 · Sig.
+      √ Intercept / x2 · Partial Eta Squared
+      √ Intercept / x2 · Noncent. Parameter
+      √ Intercept / x2 · Observed Power
+      √ Intercept / x3 · Type III Sum of Squares (1 ms)
+      √ Intercept / x3 · df
+      √ Intercept / x3 · Mean Square
+      √ Intercept / x3 · F
+      √ Intercept / x3 · Sig.
+      √ Intercept / x3 · Partial Eta Squared
+      √ Intercept / x3 · Noncent. Parameter
+      √ Intercept / x3 · Observed Power
+      √ Intercept / x4 · Type III Sum of Squares (1 ms)
+      √ Intercept / x4 · df
+      √ Intercept / x4 · Mean Square
+      √ Intercept / x4 · F
+      √ Intercept / x4 · Sig.
+      √ Intercept / x4 · Partial Eta Squared
+      √ Intercept / x4 · Noncent. Parameter
+      √ Intercept / x4 · Observed Power
+      √ jk / x1 · Type III Sum of Squares
+      √ jk / x1 · df
+      √ jk / x1 · Mean Square
+      √ jk / x1 · F
+      √ jk / x1 · Sig.
+      √ jk / x1 · Partial Eta Squared
+      √ jk / x1 · Noncent. Parameter
+      √ jk / x1 · Observed Power
+      √ jk / x2 · Type III Sum of Squares (1 ms)
+      √ jk / x2 · df
+      √ jk / x2 · Mean Square
+      √ jk / x2 · F
+      √ jk / x2 · Sig.
+      √ jk / x2 · Partial Eta Squared
+      √ jk / x2 · Noncent. Parameter
+      √ jk / x2 · Observed Power
+      √ jk / x3 · Type III Sum of Squares
+      √ jk / x3 · df
+      √ jk / x3 · Mean Square
+      √ jk / x3 · F
+      √ jk / x3 · Sig.
+      √ jk / x3 · Partial Eta Squared
+      √ jk / x3 · Noncent. Parameter
+      √ jk / x3 · Observed Power
+      √ jk / x4 · Type III Sum of Squares
+      √ jk / x4 · df
+      √ jk / x4 · Mean Square
+      √ jk / x4 · F
+      √ jk / x4 · Sig.
+      √ jk / x4 · Partial Eta Squared
+      √ jk / x4 · Noncent. Parameter (1 ms)
+      √ jk / x4 · Observed Power
+      √ Error / x1 · Type III Sum of Squares
+      √ Error / x1 · df
+      √ Error / x1 · Mean Square
+      √ Error / x2 · Type III Sum of Squares
+      √ Error / x2 · df
+      √ Error / x2 · Mean Square
+      √ Error / x3 · Type III Sum of Squares
+      √ Error / x3 · df
+      √ Error / x3 · Mean Square
+      √ Error / x4 · Type III Sum of Squares
+      √ Error / x4 · df
+      √ Error / x4 · Mean Square
+      √ Total / x1 · Type III Sum of Squares
+      √ Total / x1 · df
+      √ Total / x2 · Type III Sum of Squares
+      √ Total / x2 · df
+      √ Total / x3 · Type III Sum of Squares (1 ms)
+      √ Total / x3 · df
+      √ Total / x4 · Type III Sum of Squares
+      √ Total / x4 · df
+      √ Corrected Total / x1 · Type III Sum of Squares
+      √ Corrected Total / x1 · df
+      √ Corrected Total / x2 · Type III Sum of Squares
+      √ Corrected Total / x2 · df
+      √ Corrected Total / x3 · Type III Sum of Squares
+      √ Corrected Total / x3 · df
+      √ Corrected Total / x4 · Type III Sum of Squares
+      √ Corrected Total / x4 · df
+    mv3 · Descriptive Statistics
+      √ kedalaman1 - kedalaman2 · Mean
+      √ kedalaman1 - kedalaman2 · Std. Deviation
+      √ kedalaman1 - kedalaman2 · N
+      √ ukuran1 - ukuran2 · Mean
+      √ ukuran1 - ukuran2 · Std. Deviation
+      √ ukuran1 - ukuran2 · N
+    mv3 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df (1 ms)
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+    mv3 · Tests of Between-Subjects Effects
+      √ Corrected Model / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Corrected Model / kedalaman1 - kedalaman2 · df
+      √ Corrected Model / kedalaman1 - kedalaman2 · Partial Eta Squared
+      √ Corrected Model / kedalaman1 - kedalaman2 · Noncent. Parameter
+      √ Corrected Model / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Corrected Model / ukuran1 - ukuran2 · df
+      √ Corrected Model / ukuran1 - ukuran2 · Partial Eta Squared
+      √ Corrected Model / ukuran1 - ukuran2 · Noncent. Parameter
+      √ Intercept / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Intercept / kedalaman1 - kedalaman2 · df
+      √ Intercept / kedalaman1 - kedalaman2 · Mean Square
+      √ Intercept / kedalaman1 - kedalaman2 · F
+      √ Intercept / kedalaman1 - kedalaman2 · Sig.
+      √ Intercept / kedalaman1 - kedalaman2 · Partial Eta Squared
+      √ Intercept / kedalaman1 - kedalaman2 · Noncent. Parameter
+      √ Intercept / kedalaman1 - kedalaman2 · Observed Power
+      √ Intercept / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Intercept / ukuran1 - ukuran2 · df
+      √ Intercept / ukuran1 - ukuran2 · Mean Square
+      √ Intercept / ukuran1 - ukuran2 · F
+      √ Intercept / ukuran1 - ukuran2 · Sig.
+      √ Intercept / ukuran1 - ukuran2 · Partial Eta Squared
+      √ Intercept / ukuran1 - ukuran2 · Noncent. Parameter
+      √ Intercept / ukuran1 - ukuran2 · Observed Power
+      √ Error / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Error / kedalaman1 - kedalaman2 · df
+      √ Error / kedalaman1 - kedalaman2 · Mean Square
+      √ Error / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Error / ukuran1 - ukuran2 · df
+      √ Error / ukuran1 - ukuran2 · Mean Square
+      √ Total / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Total / kedalaman1 - kedalaman2 · df
+      √ Total / ukuran1 - ukuran2 · Type III Sum of Squares (1 ms)
+      √ Total / ukuran1 - ukuran2 · df
+      √ Corrected Total / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Corrected Total / kedalaman1 - kedalaman2 · df
+      √ Corrected Total / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Corrected Total / ukuran1 - ukuran2 · df
+    mv4 · Between-Subjects Factors
+      √ treatment / 1 / treatment 1 · N (1 ms)
+      √ treatment / 2 / treatment 2 · N
+      √ treatment / 3 / treatment 3 · N
+    mv4 · Descriptive Statistics
+      √ y1 / treatment 1 · Mean
+      √ y1 / treatment 1 · Std. Deviation
+      √ y1 / treatment 1 · N
+      √ y1 / treatment 2 · Mean (1 ms)
+      √ y1 / treatment 2 · Std. Deviation
+      √ y1 / treatment 2 · N
+      √ y1 / treatment 3 · Mean
+      √ y1 / treatment 3 · Std. Deviation
+      √ y1 / treatment 3 · N
+      √ y1 / Total · Mean
+      √ y1 / Total · Std. Deviation
+      √ y1 / Total · N (1 ms)
+      √ y2 / treatment 1 · Mean
+      √ y2 / treatment 1 · Std. Deviation
+      √ y2 / treatment 1 · N
+      √ y2 / treatment 2 · Mean
+      √ y2 / treatment 2 · Std. Deviation
+      √ y2 / treatment 2 · N
+      √ y2 / treatment 3 · Mean
+      √ y2 / treatment 3 · Std. Deviation
+      √ y2 / treatment 3 · N
+      √ y2 / Total · Mean
+      √ y2 / Total · Std. Deviation
+      √ y2 / Total · N
+    mv4 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv4 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F (1 ms)
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ treatment / Pillai's Trace · Value
+      √ treatment / Pillai's Trace · F
+      √ treatment / Pillai's Trace · Hypothesis df
+      √ treatment / Pillai's Trace · Error df
+      √ treatment / Pillai's Trace · Sig.
+      √ treatment / Pillai's Trace · Partial Eta Squared
+      √ treatment / Pillai's Trace · Noncent. Parameter (1 ms)
+      √ treatment / Pillai's Trace · Observed Power
+      √ treatment / Wilks' Lambda · Value
+      √ treatment / Wilks' Lambda · F
+      √ treatment / Wilks' Lambda · Hypothesis df
+      √ treatment / Wilks' Lambda · Error df
+      √ treatment / Wilks' Lambda · Sig. (1 ms)
+      √ treatment / Wilks' Lambda · Partial Eta Squared
+      √ treatment / Wilks' Lambda · Noncent. Parameter
+      √ treatment / Wilks' Lambda · Observed Power
+      √ treatment / Hotelling's Trace · Value
+      √ treatment / Hotelling's Trace · F
+      √ treatment / Hotelling's Trace · Hypothesis df
+      √ treatment / Hotelling's Trace · Error df
+      √ treatment / Hotelling's Trace · Sig.
+      √ treatment / Hotelling's Trace · Partial Eta Squared
+      √ treatment / Hotelling's Trace · Noncent. Parameter
+      √ treatment / Hotelling's Trace · Observed Power
+      √ treatment / Roy's Largest Root · Value
+      √ treatment / Roy's Largest Root · F
+      √ treatment / Roy's Largest Root · Hypothesis df
+      √ treatment / Roy's Largest Root · Error df (1 ms)
+      √ treatment / Roy's Largest Root · Sig.
+      √ treatment / Roy's Largest Root · Partial Eta Squared
+      √ treatment / Roy's Largest Root · Noncent. Parameter
+      √ treatment / Roy's Largest Root · Observed Power
+    mv4 · Levene's Test of Equality of Error Variances
+      √ y1 / Based on Mean · Levene Statistic
+      √ y1 / Based on Mean · df1
+      √ y1 / Based on Mean · df2 (1 ms)
+      √ y1 / Based on Mean · Sig.
+      √ y1 / Based on Median · Levene Statistic
+      √ y1 / Based on Median · df1
+      √ y1 / Based on Median · df2
+      √ y1 / Based on Median · Sig.
+      √ y1 / Based on Median and with adjusted df · Levene Statistic
+      √ y1 / Based on Median and with adjusted df · df1
+      √ y1 / Based on Median and with adjusted df · df2
+      √ y1 / Based on Median and with adjusted df · Sig. (1 ms)
+      √ y1 / Based on trimmed mean · Levene Statistic
+      √ y1 / Based on trimmed mean · df1
+      √ y1 / Based on trimmed mean · df2
+      √ y1 / Based on trimmed mean · Sig.
+      √ y2 / Based on Mean · Levene Statistic
+      √ y2 / Based on Mean · df1
+      √ y2 / Based on Mean · df2 (1 ms)
+      √ y2 / Based on Mean · Sig.
+      √ y2 / Based on Median · Levene Statistic
+      √ y2 / Based on Median · df1
+      √ y2 / Based on Median · df2
+      √ y2 / Based on Median · Sig.
+      √ y2 / Based on Median and with adjusted df · Levene Statistic
+      √ y2 / Based on Median and with adjusted df · df1
+      √ y2 / Based on Median and with adjusted df · df2
+      √ y2 / Based on Median and with adjusted df · Sig.
+      √ y2 / Based on trimmed mean · Levene Statistic
+      √ y2 / Based on trimmed mean · df1
+      √ y2 / Based on trimmed mean · df2
+      √ y2 / Based on trimmed mean · Sig. (1 ms)
+    mv4 · Tests of Between-Subjects Effects
+      √ Corrected Model / y1 · Type III Sum of Squares
+      √ Corrected Model / y1 · df
+      √ Corrected Model / y1 · Mean Square
+      √ Corrected Model / y1 · F
+      √ Corrected Model / y1 · Sig.
+      √ Corrected Model / y1 · Partial Eta Squared
+      √ Corrected Model / y1 · Noncent. Parameter
+      √ Corrected Model / y1 · Observed Power (1 ms)
+      √ Corrected Model / y2 · Type III Sum of Squares
+      √ Corrected Model / y2 · df
+      √ Corrected Model / y2 · Mean Square
+      √ Corrected Model / y2 · F
+      √ Corrected Model / y2 · Sig.
+      √ Corrected Model / y2 · Partial Eta Squared
+      √ Corrected Model / y2 · Noncent. Parameter
+      √ Corrected Model / y2 · Observed Power
+      √ Intercept / y1 · Type III Sum of Squares (1 ms)
+      √ Intercept / y1 · df
+      √ Intercept / y1 · Mean Square
+      √ Intercept / y1 · F
+      √ Intercept / y1 · Sig.
+      √ Intercept / y1 · Partial Eta Squared
+      √ Intercept / y1 · Noncent. Parameter
+      √ Intercept / y1 · Observed Power
+      √ Intercept / y2 · Type III Sum of Squares
+      √ Intercept / y2 · df
+      √ Intercept / y2 · Mean Square (1 ms)
+      √ Intercept / y2 · F
+      √ Intercept / y2 · Sig.
+      √ Intercept / y2 · Partial Eta Squared
+      √ Intercept / y2 · Noncent. Parameter (1 ms)
+      √ Intercept / y2 · Observed Power
+      √ treatment / y1 · Type III Sum of Squares
+      √ treatment / y1 · df
+      √ treatment / y1 · Mean Square
+      √ treatment / y1 · F (1 ms)
+      √ treatment / y1 · Sig.
+      √ treatment / y1 · Partial Eta Squared
+      √ treatment / y1 · Noncent. Parameter
+      √ treatment / y1 · Observed Power
+      √ treatment / y2 · Type III Sum of Squares
+      √ treatment / y2 · df
+      √ treatment / y2 · Mean Square
+      √ treatment / y2 · F
+      √ treatment / y2 · Sig.
+      √ treatment / y2 · Partial Eta Squared (1 ms)
+      √ treatment / y2 · Noncent. Parameter
+      √ treatment / y2 · Observed Power
+      √ Error / y1 · Type III Sum of Squares
+      √ Error / y1 · df
+      √ Error / y1 · Mean Square
+      √ Error / y2 · Type III Sum of Squares
+      √ Error / y2 · df
+      √ Error / y2 · Mean Square
+      √ Total / y1 · Type III Sum of Squares
+      √ Total / y1 · df
+      √ Total / y2 · Type III Sum of Squares
+      √ Total / y2 · df
+      √ Corrected Total / y1 · Type III Sum of Squares
+      √ Corrected Total / y1 · df
+      √ Corrected Total / y2 · Type III Sum of Squares
+      √ Corrected Total / y2 · df
+    mv5 · Between-Subjects Factors
+      √ faktorA / 1 / A1 · N
+      √ faktorA / 2 / A2 · N
+      √ faktorB / 1 / B1 · N
+      √ faktorB / 2 / B2 · N (1 ms)
+      √ faktorB / 3 / B3 · N
+      √ faktorB / 4 / B4 · N
+    mv5 · Descriptive Statistics
+      √ ultimate torque / A1 / B1 · Mean
+      √ ultimate torque / A1 / B1 · Std. Deviation
+      √ ultimate torque / A1 / B1 · N
+      √ ultimate torque / A1 / B2 · Mean
+      √ ultimate torque / A1 / B2 · Std. Deviation
+      √ ultimate torque / A1 / B2 · N (1 ms)
+      √ ultimate torque / A1 / B3 · Mean
+      √ ultimate torque / A1 / B3 · Std. Deviation
+      √ ultimate torque / A1 / B3 · N
+      √ ultimate torque / A1 / B4 · Mean
+      √ ultimate torque / A1 / B4 · Std. Deviation
+      √ ultimate torque / A1 / B4 · N
+      √ ultimate torque / A1 / Total · Mean
+      √ ultimate torque / A1 / Total · Std. Deviation
+      √ ultimate torque / A1 / Total · N
+      √ ultimate torque / A2 / B1 · Mean (1 ms)
+      √ ultimate torque / A2 / B1 · Std. Deviation
+      √ ultimate torque / A2 / B1 · N
+      √ ultimate torque / A2 / B2 · Mean
+      √ ultimate torque / A2 / B2 · Std. Deviation
+      √ ultimate torque / A2 / B2 · N
+      √ ultimate torque / A2 / B3 · Mean
+      √ ultimate torque / A2 / B3 · Std. Deviation
+      √ ultimate torque / A2 / B3 · N
+      √ ultimate torque / A2 / B4 · Mean
+      √ ultimate torque / A2 / B4 · Std. Deviation (1 ms)
+      √ ultimate torque / A2 / B4 · N
+      √ ultimate torque / A2 / Total · Mean
+      √ ultimate torque / A2 / Total · Std. Deviation
+      √ ultimate torque / A2 / Total · N
+      √ ultimate torque / Total / B1 · Mean
+      √ ultimate torque / Total / B1 · Std. Deviation
+      √ ultimate torque / Total / B1 · N
+      √ ultimate torque / Total / B2 · Mean
+      √ ultimate torque / Total / B2 · Std. Deviation
+      √ ultimate torque / Total / B2 · N
+      √ ultimate torque / Total / B3 · Mean
+      √ ultimate torque / Total / B3 · Std. Deviation
+      √ ultimate torque / Total / B3 · N
+      √ ultimate torque / Total / B4 · Mean
+      √ ultimate torque / Total / B4 · Std. Deviation
+      √ ultimate torque / Total / B4 · N
+      √ ultimate torque / Total / Total · Mean
+      √ ultimate torque / Total / Total · Std. Deviation
+      √ ultimate torque / Total / Total · N
+      √ ultimate strain / A1 / B1 · Mean
+      √ ultimate strain / A1 / B1 · Std. Deviation (1 ms)
+      √ ultimate strain / A1 / B1 · N
+      √ ultimate strain / A1 / B2 · Mean
+      √ ultimate strain / A1 / B2 · Std. Deviation
+      √ ultimate strain / A1 / B2 · N
+      √ ultimate strain / A1 / B3 · Mean
+      √ ultimate strain / A1 / B3 · Std. Deviation
+      √ ultimate strain / A1 / B3 · N
+      √ ultimate strain / A1 / B4 · Mean
+      √ ultimate strain / A1 / B4 · Std. Deviation
+      √ ultimate strain / A1 / B4 · N
+      √ ultimate strain / A1 / Total · Mean
+      √ ultimate strain / A1 / Total · Std. Deviation
+      √ ultimate strain / A1 / Total · N
+      √ ultimate strain / A2 / B1 · Mean
+      √ ultimate strain / A2 / B1 · Std. Deviation
+      √ ultimate strain / A2 / B1 · N
+      √ ultimate strain / A2 / B2 · Mean
+      √ ultimate strain / A2 / B2 · Std. Deviation
+      √ ultimate strain / A2 / B2 · N
+      √ ultimate strain / A2 / B3 · Mean (1 ms)
+      √ ultimate strain / A2 / B3 · Std. Deviation
+      √ ultimate strain / A2 / B3 · N
+      √ ultimate strain / A2 / B4 · Mean (1 ms)
+      √ ultimate strain / A2 / B4 · Std. Deviation
+      √ ultimate strain / A2 / B4 · N
+      √ ultimate strain / A2 / Total · Mean
+      √ ultimate strain / A2 / Total · Std. Deviation
+      √ ultimate strain / A2 / Total · N
+      √ ultimate strain / Total / B1 · Mean
+      √ ultimate strain / Total / B1 · Std. Deviation
+      √ ultimate strain / Total / B1 · N
+      √ ultimate strain / Total / B2 · Mean (1 ms)
+      √ ultimate strain / Total / B2 · Std. Deviation
+      √ ultimate strain / Total / B2 · N
+      √ ultimate strain / Total / B3 · Mean
+      √ ultimate strain / Total / B3 · Std. Deviation
+      √ ultimate strain / Total / B3 · N
+      √ ultimate strain / Total / B4 · Mean
+      √ ultimate strain / Total / B4 · Std. Deviation
+      √ ultimate strain / Total / B4 · N
+      √ ultimate strain / Total / Total · Mean
+      √ ultimate strain / Total / Total · Std. Deviation
+      √ ultimate strain / Total / Total · N
+    mv5 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv5 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df (1 ms)
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig. (1 ms)
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter (1 ms)
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power (1 ms)
+      √ faktorA / Pillai's Trace · Value
+      √ faktorA / Pillai's Trace · F
+      √ faktorA / Pillai's Trace · Hypothesis df
+      √ faktorA / Pillai's Trace · Error df
+      √ faktorA / Pillai's Trace · Sig.
+      √ faktorA / Pillai's Trace · Partial Eta Squared
+      √ faktorA / Pillai's Trace · Noncent. Parameter
+      √ faktorA / Pillai's Trace · Observed Power (1 ms)
+      √ faktorA / Wilks' Lambda · Value
+      √ faktorA / Wilks' Lambda · F
+      √ faktorA / Wilks' Lambda · Hypothesis df
+      √ faktorA / Wilks' Lambda · Error df
+      √ faktorA / Wilks' Lambda · Sig.
+      √ faktorA / Wilks' Lambda · Partial Eta Squared
+      √ faktorA / Wilks' Lambda · Noncent. Parameter
+      √ faktorA / Wilks' Lambda · Observed Power (1 ms)
+      √ faktorA / Hotelling's Trace · Value
+      √ faktorA / Hotelling's Trace · F
+      √ faktorA / Hotelling's Trace · Hypothesis df
+      √ faktorA / Hotelling's Trace · Error df
+      √ faktorA / Hotelling's Trace · Sig.
+      √ faktorA / Hotelling's Trace · Partial Eta Squared
+      √ faktorA / Hotelling's Trace · Noncent. Parameter
+      √ faktorA / Hotelling's Trace · Observed Power (1 ms)
+      √ faktorA / Roy's Largest Root · Value
+      √ faktorA / Roy's Largest Root · F
+      √ faktorA / Roy's Largest Root · Hypothesis df
+      √ faktorA / Roy's Largest Root · Error df
+      √ faktorA / Roy's Largest Root · Sig.
+      √ faktorA / Roy's Largest Root · Partial Eta Squared
+      √ faktorA / Roy's Largest Root · Noncent. Parameter
+      √ faktorA / Roy's Largest Root · Observed Power
+      √ faktorB / Pillai's Trace · Value
+      √ faktorB / Pillai's Trace · F
+      √ faktorB / Pillai's Trace · Hypothesis df (1 ms)
+      √ faktorB / Pillai's Trace · Error df
+      √ faktorB / Pillai's Trace · Sig.
+      √ faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorB / Pillai's Trace · Noncent. Parameter
+      √ faktorB / Pillai's Trace · Observed Power
+      √ faktorB / Wilks' Lambda · Value
+      √ faktorB / Wilks' Lambda · F
+      √ faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorB / Wilks' Lambda · Error df
+      √ faktorB / Wilks' Lambda · Sig.
+      √ faktorB / Wilks' Lambda · Partial Eta Squared (1 ms)
+      √ faktorB / Wilks' Lambda · Noncent. Parameter
+      √ faktorB / Wilks' Lambda · Observed Power
+      √ faktorB / Hotelling's Trace · Value
+      √ faktorB / Hotelling's Trace · F
+      √ faktorB / Hotelling's Trace · Hypothesis df (1 ms)
+      √ faktorB / Hotelling's Trace · Error df
+      √ faktorB / Hotelling's Trace · Sig.
+      √ faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorB / Hotelling's Trace · Noncent. Parameter
+      √ faktorB / Hotelling's Trace · Observed Power
+      √ faktorB / Roy's Largest Root · Value
+      √ faktorB / Roy's Largest Root · F
+      √ faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorB / Roy's Largest Root · Error df (1 ms)
+      √ faktorB / Roy's Largest Root · Sig.
+      √ faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorB / Roy's Largest Root · Noncent. Parameter
+      √ faktorB / Roy's Largest Root · Observed Power
+      √ faktorA * faktorB / Pillai's Trace · Value
+      √ faktorA * faktorB / Pillai's Trace · F
+      √ faktorA * faktorB / Pillai's Trace · Hypothesis df
+      √ faktorA * faktorB / Pillai's Trace · Error df
+      √ faktorA * faktorB / Pillai's Trace · Sig.
+      √ faktorA * faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Pillai's Trace · Noncent. Parameter (1 ms)
+      √ faktorA * faktorB / Pillai's Trace · Observed Power
+      √ faktorA * faktorB / Wilks' Lambda · Value
+      √ faktorA * faktorB / Wilks' Lambda · F
+      √ faktorA * faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorA * faktorB / Wilks' Lambda · Error df
+      √ faktorA * faktorB / Wilks' Lambda · Sig.
+      √ faktorA * faktorB / Wilks' Lambda · Partial Eta Squared
+      √ faktorA * faktorB / Wilks' Lambda · Noncent. Parameter
+      √ faktorA * faktorB / Wilks' Lambda · Observed Power
+      √ faktorA * faktorB / Hotelling's Trace · Value
+      √ faktorA * faktorB / Hotelling's Trace · F
+      √ faktorA * faktorB / Hotelling's Trace · Hypothesis df
+      √ faktorA * faktorB / Hotelling's Trace · Error df
+      √ faktorA * faktorB / Hotelling's Trace · Sig.
+      √ faktorA * faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Hotelling's Trace · Noncent. Parameter
+      √ faktorA * faktorB / Hotelling's Trace · Observed Power
+      √ faktorA * faktorB / Roy's Largest Root · Value
+      √ faktorA * faktorB / Roy's Largest Root · F
+      √ faktorA * faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorA * faktorB / Roy's Largest Root · Error df
+      √ faktorA * faktorB / Roy's Largest Root · Sig. (1 ms)
+      √ faktorA * faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorA * faktorB / Roy's Largest Root · Noncent. Parameter
+      √ faktorA * faktorB / Roy's Largest Root · Observed Power
+    mv5 · Levene's Test of Equality of Error Variances
+      √ ultimate torque / Based on Mean · Levene Statistic
+      √ ultimate torque / Based on Mean · df1
+      √ ultimate torque / Based on Mean · df2
+      √ ultimate torque / Based on Mean · Sig.
+      √ ultimate torque / Based on Median · Levene Statistic
+      √ ultimate torque / Based on Median · df1
+      √ ultimate torque / Based on Median · df2
+      √ ultimate torque / Based on Median · Sig.
+      √ ultimate torque / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate torque / Based on Median and with adjusted df · df1
+      √ ultimate torque / Based on Median and with adjusted df · df2
+      √ ultimate torque / Based on Median and with adjusted df · Sig.
+      √ ultimate torque / Based on trimmed mean · Levene Statistic
+      √ ultimate torque / Based on trimmed mean · df1
+      √ ultimate torque / Based on trimmed mean · df2
+      √ ultimate torque / Based on trimmed mean · Sig.
+      √ ultimate strain / Based on Mean · Levene Statistic
+      √ ultimate strain / Based on Mean · df1
+      √ ultimate strain / Based on Mean · df2
+      √ ultimate strain / Based on Mean · Sig.
+      √ ultimate strain / Based on Median · Levene Statistic
+      √ ultimate strain / Based on Median · df1
+      √ ultimate strain / Based on Median · df2
+      √ ultimate strain / Based on Median · Sig.
+      √ ultimate strain / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate strain / Based on Median and with adjusted df · df1
+      √ ultimate strain / Based on Median and with adjusted df · df2
+      √ ultimate strain / Based on Median and with adjusted df · Sig.
+      √ ultimate strain / Based on trimmed mean · Levene Statistic
+      √ ultimate strain / Based on trimmed mean · df1
+      √ ultimate strain / Based on trimmed mean · df2
+      √ ultimate strain / Based on trimmed mean · Sig.
+    mv5 · Tests of Between-Subjects Effects
+      √ Corrected Model / ultimate torque · Type III Sum of Squares
+      √ Corrected Model / ultimate torque · df
+      √ Corrected Model / ultimate torque · Mean Square
+      √ Corrected Model / ultimate torque · F
+      √ Corrected Model / ultimate torque · Sig.
+      √ Corrected Model / ultimate torque · Partial Eta Squared
+      √ Corrected Model / ultimate torque · Noncent. Parameter
+      √ Corrected Model / ultimate torque · Observed Power
+      √ Corrected Model / ultimate strain · Type III Sum of Squares
+      √ Corrected Model / ultimate strain · df
+      √ Corrected Model / ultimate strain · Mean Square
+      √ Corrected Model / ultimate strain · F
+      √ Corrected Model / ultimate strain · Sig.
+      √ Corrected Model / ultimate strain · Partial Eta Squared
+      √ Corrected Model / ultimate strain · Noncent. Parameter
+      √ Corrected Model / ultimate strain · Observed Power
+      √ Intercept / ultimate torque · Type III Sum of Squares
+      √ Intercept / ultimate torque · df
+      √ Intercept / ultimate torque · Mean Square
+      √ Intercept / ultimate torque · F (1 ms)
+      √ Intercept / ultimate torque · Sig.
+      √ Intercept / ultimate torque · Partial Eta Squared
+      √ Intercept / ultimate torque · Noncent. Parameter
+      √ Intercept / ultimate torque · Observed Power
+      √ Intercept / ultimate strain · Type III Sum of Squares
+      √ Intercept / ultimate strain · df
+      √ Intercept / ultimate strain · Mean Square
+      √ Intercept / ultimate strain · F
+      √ Intercept / ultimate strain · Sig.
+      √ Intercept / ultimate strain · Partial Eta Squared
+      √ Intercept / ultimate strain · Noncent. Parameter (1 ms)
+      √ Intercept / ultimate strain · Observed Power
+      √ faktorA / ultimate torque · Type III Sum of Squares
+      √ faktorA / ultimate torque · df
+      √ faktorA / ultimate torque · Mean Square
+      √ faktorA / ultimate torque · F
+      √ faktorA / ultimate torque · Sig.
+      √ faktorA / ultimate torque · Partial Eta Squared
+      √ faktorA / ultimate torque · Noncent. Parameter
+      √ faktorA / ultimate torque · Observed Power
+      √ faktorA / ultimate strain · Type III Sum of Squares
+      √ faktorA / ultimate strain · df
+      √ faktorA / ultimate strain · Mean Square
+      √ faktorA / ultimate strain · F
+      √ faktorA / ultimate strain · Sig. (1 ms)
+      √ faktorA / ultimate strain · Partial Eta Squared
+      √ faktorA / ultimate strain · Noncent. Parameter
+      √ faktorA / ultimate strain · Observed Power
+      √ faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorB / ultimate torque · df
+      √ faktorB / ultimate torque · Mean Square
+      √ faktorB / ultimate torque · F
+      √ faktorB / ultimate torque · Sig.
+      √ faktorB / ultimate torque · Partial Eta Squared
+      √ faktorB / ultimate torque · Noncent. Parameter
+      √ faktorB / ultimate torque · Observed Power (1 ms)
+      √ faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorB / ultimate strain · df
+      √ faktorB / ultimate strain · Mean Square
+      √ faktorB / ultimate strain · F
+      √ faktorB / ultimate strain · Sig.
+      √ faktorB / ultimate strain · Partial Eta Squared
+      √ faktorB / ultimate strain · Noncent. Parameter
+      √ faktorB / ultimate strain · Observed Power
+      √ faktorA * faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate torque · df
+      √ faktorA * faktorB / ultimate torque · Mean Square (1 ms)
+      √ faktorA * faktorB / ultimate torque · F
+      √ faktorA * faktorB / ultimate torque · Sig.
+      √ faktorA * faktorB / ultimate torque · Partial Eta Squared
+      √ faktorA * faktorB / ultimate torque · Noncent. Parameter
+      √ faktorA * faktorB / ultimate torque · Observed Power
+      √ faktorA * faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate strain · df
+      √ faktorA * faktorB / ultimate strain · Mean Square
+      √ faktorA * faktorB / ultimate strain · F
+      √ faktorA * faktorB / ultimate strain · Sig. (1 ms)
+      √ faktorA * faktorB / ultimate strain · Partial Eta Squared
+      √ faktorA * faktorB / ultimate strain · Noncent. Parameter
+      √ faktorA * faktorB / ultimate strain · Observed Power
+      √ Error / ultimate torque · Type III Sum of Squares
+      √ Error / ultimate torque · df
+      √ Error / ultimate torque · Mean Square
+      √ Error / ultimate strain · Type III Sum of Squares
+      √ Error / ultimate strain · df
+      √ Error / ultimate strain · Mean Square
+      √ Total / ultimate torque · Type III Sum of Squares
+      √ Total / ultimate torque · df
+      √ Total / ultimate strain · Type III Sum of Squares (1 ms)
+      √ Total / ultimate strain · df
+      √ Corrected Total / ultimate torque · Type III Sum of Squares
+      √ Corrected Total / ultimate torque · df
+      √ Corrected Total / ultimate strain · Type III Sum of Squares
+      √ Corrected Total / ultimate strain · df
+    mv6 · Between-Subjects Factors
+      √ faktorA / 1 / A1 · N
+      √ faktorA / 2 / A2 · N
+      √ faktorB / 1 / B1 · N
+      √ faktorB / 2 / B2 · N
+      √ faktorB / 3 / B3 · N
+      √ faktorB / 4 / B4 · N (1 ms)
+    mv6 · Descriptive Statistics
+      √ ultimate torque / A1 / B1 · Mean
+      √ ultimate torque / A1 / B1 · Std. Deviation
+      √ ultimate torque / A1 / B1 · N
+      √ ultimate torque / A1 / B2 · Mean
+      √ ultimate torque / A1 / B2 · Std. Deviation
+      √ ultimate torque / A1 / B2 · N
+      √ ultimate torque / A1 / B3 · Mean
+      √ ultimate torque / A1 / B3 · Std. Deviation
+      √ ultimate torque / A1 / B3 · N
+      √ ultimate torque / A1 / B4 · Mean
+      √ ultimate torque / A1 / B4 · Std. Deviation
+      √ ultimate torque / A1 / B4 · N
+      √ ultimate torque / A1 / Total · Mean
+      √ ultimate torque / A1 / Total · Std. Deviation
+      √ ultimate torque / A1 / Total · N
+      √ ultimate torque / A2 / B1 · Mean
+      √ ultimate torque / A2 / B1 · Std. Deviation
+      √ ultimate torque / A2 / B1 · N
+      √ ultimate torque / A2 / B2 · Mean
+      √ ultimate torque / A2 / B2 · Std. Deviation
+      √ ultimate torque / A2 / B2 · N
+      √ ultimate torque / A2 / B3 · Mean
+      √ ultimate torque / A2 / B3 · Std. Deviation (1 ms)
+      √ ultimate torque / A2 / B3 · N
+      √ ultimate torque / A2 / B4 · Mean
+      √ ultimate torque / A2 / B4 · Std. Deviation
+      √ ultimate torque / A2 / B4 · N
+      √ ultimate torque / A2 / Total · Mean
+      √ ultimate torque / A2 / Total · Std. Deviation
+      √ ultimate torque / A2 / Total · N
+      √ ultimate torque / Total / B1 · Mean
+      √ ultimate torque / Total / B1 · Std. Deviation
+      √ ultimate torque / Total / B1 · N
+      √ ultimate torque / Total / B2 · Mean
+      √ ultimate torque / Total / B2 · Std. Deviation (1 ms)
+      √ ultimate torque / Total / B2 · N
+      √ ultimate torque / Total / B3 · Mean
+      √ ultimate torque / Total / B3 · Std. Deviation
+      √ ultimate torque / Total / B3 · N
+      √ ultimate torque / Total / B4 · Mean
+      √ ultimate torque / Total / B4 · Std. Deviation
+      √ ultimate torque / Total / B4 · N
+      √ ultimate torque / Total / Total · Mean
+      √ ultimate torque / Total / Total · Std. Deviation
+      √ ultimate torque / Total / Total · N
+      √ ultimate strain / A1 / B1 · Mean
+      √ ultimate strain / A1 / B1 · Std. Deviation
+      √ ultimate strain / A1 / B1 · N
+      √ ultimate strain / A1 / B2 · Mean
+      √ ultimate strain / A1 / B2 · Std. Deviation
+      √ ultimate strain / A1 / B2 · N (1 ms)
+      √ ultimate strain / A1 / B3 · Mean
+      √ ultimate strain / A1 / B3 · Std. Deviation
+      √ ultimate strain / A1 / B3 · N
+      √ ultimate strain / A1 / B4 · Mean
+      √ ultimate strain / A1 / B4 · Std. Deviation
+      √ ultimate strain / A1 / B4 · N
+      √ ultimate strain / A1 / Total · Mean
+      √ ultimate strain / A1 / Total · Std. Deviation
+      √ ultimate strain / A1 / Total · N
+      √ ultimate strain / A2 / B1 · Mean
+      √ ultimate strain / A2 / B1 · Std. Deviation (1 ms)
+      √ ultimate strain / A2 / B1 · N
+      √ ultimate strain / A2 / B2 · Mean
+      √ ultimate strain / A2 / B2 · Std. Deviation
+      √ ultimate strain / A2 / B2 · N
+      √ ultimate strain / A2 / B3 · Mean
+      √ ultimate strain / A2 / B3 · Std. Deviation
+      √ ultimate strain / A2 / B3 · N
+      √ ultimate strain / A2 / B4 · Mean
+      √ ultimate strain / A2 / B4 · Std. Deviation
+      √ ultimate strain / A2 / B4 · N
+      √ ultimate strain / A2 / Total · Mean (1 ms)
+      √ ultimate strain / A2 / Total · Std. Deviation
+      √ ultimate strain / A2 / Total · N
+      √ ultimate strain / Total / B1 · Mean
+      √ ultimate strain / Total / B1 · Std. Deviation
+      √ ultimate strain / Total / B1 · N
+      √ ultimate strain / Total / B2 · Mean
+      √ ultimate strain / Total / B2 · Std. Deviation
+      √ ultimate strain / Total / B2 · N
+      √ ultimate strain / Total / B3 · Mean
+      √ ultimate strain / Total / B3 · Std. Deviation
+      √ ultimate strain / Total / B3 · N
+      √ ultimate strain / Total / B4 · Mean (1 ms)
+      √ ultimate strain / Total / B4 · Std. Deviation
+      √ ultimate strain / Total / B4 · N
+      √ ultimate strain / Total / Total · Mean
+      √ ultimate strain / Total / Total · Std. Deviation
+      √ ultimate strain / Total / Total · N
+    mv6 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv6 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value (1 ms)
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df (1 ms)
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared (1 ms)
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ faktorA / Pillai's Trace · Value
+      √ faktorA / Pillai's Trace · F
+      √ faktorA / Pillai's Trace · Hypothesis df
+      √ faktorA / Pillai's Trace · Error df
+      √ faktorA / Pillai's Trace · Sig.
+      √ faktorA / Pillai's Trace · Partial Eta Squared
+      √ faktorA / Pillai's Trace · Noncent. Parameter
+      √ faktorA / Pillai's Trace · Observed Power
+      √ faktorA / Wilks' Lambda · Value
+      √ faktorA / Wilks' Lambda · F
+      √ faktorA / Wilks' Lambda · Hypothesis df (1 ms)
+      √ faktorA / Wilks' Lambda · Error df
+      √ faktorA / Wilks' Lambda · Sig.
+      √ faktorA / Wilks' Lambda · Partial Eta Squared
+      √ faktorA / Wilks' Lambda · Noncent. Parameter
+      √ faktorA / Wilks' Lambda · Observed Power
+      √ faktorA / Hotelling's Trace · Value
+      √ faktorA / Hotelling's Trace · F
+      √ faktorA / Hotelling's Trace · Hypothesis df
+      √ faktorA / Hotelling's Trace · Error df
+      √ faktorA / Hotelling's Trace · Sig.
+      √ faktorA / Hotelling's Trace · Partial Eta Squared
+      √ faktorA / Hotelling's Trace · Noncent. Parameter
+      √ faktorA / Hotelling's Trace · Observed Power (1 ms)
+      √ faktorA / Roy's Largest Root · Value
+      √ faktorA / Roy's Largest Root · F
+      √ faktorA / Roy's Largest Root · Hypothesis df
+      √ faktorA / Roy's Largest Root · Error df
+      √ faktorA / Roy's Largest Root · Sig.
+      √ faktorA / Roy's Largest Root · Partial Eta Squared
+      √ faktorA / Roy's Largest Root · Noncent. Parameter
+      √ faktorA / Roy's Largest Root · Observed Power
+      √ faktorB / Pillai's Trace · Value
+      √ faktorB / Pillai's Trace · F
+      √ faktorB / Pillai's Trace · Hypothesis df
+      √ faktorB / Pillai's Trace · Error df
+      √ faktorB / Pillai's Trace · Sig.
+      √ faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorB / Pillai's Trace · Noncent. Parameter
+      √ faktorB / Pillai's Trace · Observed Power
+      √ faktorB / Wilks' Lambda · Value
+      √ faktorB / Wilks' Lambda · F (1 ms)
+      √ faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorB / Wilks' Lambda · Error df
+      √ faktorB / Wilks' Lambda · Sig.
+      √ faktorB / Wilks' Lambda · Partial Eta Squared
+      √ faktorB / Wilks' Lambda · Noncent. Parameter
+      √ faktorB / Wilks' Lambda · Observed Power
+      √ faktorB / Hotelling's Trace · Value
+      √ faktorB / Hotelling's Trace · F
+      √ faktorB / Hotelling's Trace · Hypothesis df (1 ms)
+      √ faktorB / Hotelling's Trace · Error df
+      √ faktorB / Hotelling's Trace · Sig.
+      √ faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorB / Hotelling's Trace · Noncent. Parameter
+      √ faktorB / Hotelling's Trace · Observed Power
+      √ faktorB / Roy's Largest Root · Value
+      √ faktorB / Roy's Largest Root · F (1 ms)
+      √ faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorB / Roy's Largest Root · Error df
+      √ faktorB / Roy's Largest Root · Sig.
+      √ faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorB / Roy's Largest Root · Noncent. Parameter
+      √ faktorB / Roy's Largest Root · Observed Power
+      √ faktorA * faktorB / Pillai's Trace · Value
+      √ faktorA * faktorB / Pillai's Trace · F
+      √ faktorA * faktorB / Pillai's Trace · Hypothesis df
+      √ faktorA * faktorB / Pillai's Trace · Error df (1 ms)
+      √ faktorA * faktorB / Pillai's Trace · Sig.
+      √ faktorA * faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Pillai's Trace · Noncent. Parameter
+      √ faktorA * faktorB / Pillai's Trace · Observed Power
+      √ faktorA * faktorB / Wilks' Lambda · Value
+      √ faktorA * faktorB / Wilks' Lambda · F
+      √ faktorA * faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorA * faktorB / Wilks' Lambda · Error df
+      √ faktorA * faktorB / Wilks' Lambda · Sig. (1 ms)
+      √ faktorA * faktorB / Wilks' Lambda · Partial Eta Squared
+      √ faktorA * faktorB / Wilks' Lambda · Noncent. Parameter
+      √ faktorA * faktorB / Wilks' Lambda · Observed Power
+      √ faktorA * faktorB / Hotelling's Trace · Value
+      √ faktorA * faktorB / Hotelling's Trace · F
+      √ faktorA * faktorB / Hotelling's Trace · Hypothesis df
+      √ faktorA * faktorB / Hotelling's Trace · Error df
+      √ faktorA * faktorB / Hotelling's Trace · Sig.
+      √ faktorA * faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Hotelling's Trace · Noncent. Parameter
+      √ faktorA * faktorB / Hotelling's Trace · Observed Power (1 ms)
+      √ faktorA * faktorB / Roy's Largest Root · Value
+      √ faktorA * faktorB / Roy's Largest Root · F
+      √ faktorA * faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorA * faktorB / Roy's Largest Root · Error df
+      √ faktorA * faktorB / Roy's Largest Root · Sig.
+      √ faktorA * faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorA * faktorB / Roy's Largest Root · Noncent. Parameter
+      √ faktorA * faktorB / Roy's Largest Root · Observed Power
+    mv6 · Levene's Test of Equality of Error Variances
+      √ ultimate torque / Based on Mean · Levene Statistic
+      √ ultimate torque / Based on Mean · df1
+      √ ultimate torque / Based on Mean · df2
+      √ ultimate torque / Based on Mean · Sig.
+      √ ultimate torque / Based on Median · Levene Statistic
+      √ ultimate torque / Based on Median · df1
+      √ ultimate torque / Based on Median · df2
+      √ ultimate torque / Based on Median · Sig.
+      √ ultimate torque / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate torque / Based on Median and with adjusted df · df1 (1 ms)
+      √ ultimate torque / Based on Median and with adjusted df · df2
+      √ ultimate torque / Based on Median and with adjusted df · Sig.
+      √ ultimate torque / Based on trimmed mean · Levene Statistic
+      √ ultimate torque / Based on trimmed mean · df1
+      √ ultimate torque / Based on trimmed mean · df2
+      √ ultimate torque / Based on trimmed mean · Sig.
+      √ ultimate strain / Based on Mean · Levene Statistic
+      √ ultimate strain / Based on Mean · df1
+      √ ultimate strain / Based on Mean · df2
+      √ ultimate strain / Based on Mean · Sig.
+      √ ultimate strain / Based on Median · Levene Statistic
+      √ ultimate strain / Based on Median · df1
+      √ ultimate strain / Based on Median · df2
+      √ ultimate strain / Based on Median · Sig.
+      √ ultimate strain / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate strain / Based on Median and with adjusted df · df1
+      √ ultimate strain / Based on Median and with adjusted df · df2 (1 ms)
+      √ ultimate strain / Based on Median and with adjusted df · Sig.
+      √ ultimate strain / Based on trimmed mean · Levene Statistic
+      √ ultimate strain / Based on trimmed mean · df1
+      √ ultimate strain / Based on trimmed mean · df2
+      √ ultimate strain / Based on trimmed mean · Sig.
+    mv6 · Tests of Between-Subjects Effects
+      √ Corrected Model / ultimate torque · Type III Sum of Squares
+      √ Corrected Model / ultimate torque · df
+      √ Corrected Model / ultimate torque · Mean Square (1 ms)
+      √ Corrected Model / ultimate torque · F
+      √ Corrected Model / ultimate torque · Sig.
+      √ Corrected Model / ultimate torque · Partial Eta Squared
+      √ Corrected Model / ultimate torque · Noncent. Parameter
+      √ Corrected Model / ultimate torque · Observed Power
+      √ Corrected Model / ultimate strain · Type III Sum of Squares
+      √ Corrected Model / ultimate strain · df (1 ms)
+      √ Corrected Model / ultimate strain · Mean Square
+      √ Corrected Model / ultimate strain · F
+      √ Corrected Model / ultimate strain · Sig.
+      √ Corrected Model / ultimate strain · Partial Eta Squared
+      √ Corrected Model / ultimate strain · Noncent. Parameter
+      √ Corrected Model / ultimate strain · Observed Power
+      √ Intercept / ultimate torque · Type III Sum of Squares
+      √ Intercept / ultimate torque · df
+      √ Intercept / ultimate torque · Mean Square
+      √ Intercept / ultimate torque · F
+      √ Intercept / ultimate torque · Sig. (1 ms)
+      √ Intercept / ultimate torque · Partial Eta Squared
+      √ Intercept / ultimate torque · Noncent. Parameter
+      √ Intercept / ultimate torque · Observed Power
+      √ Intercept / ultimate strain · Type III Sum of Squares
+      √ Intercept / ultimate strain · df
+      √ Intercept / ultimate strain · Mean Square
+      √ Intercept / ultimate strain · F
+      √ Intercept / ultimate strain · Sig.
+      √ Intercept / ultimate strain · Partial Eta Squared
+      √ Intercept / ultimate strain · Noncent. Parameter
+      √ Intercept / ultimate strain · Observed Power
+      √ faktorA / ultimate torque · Type III Sum of Squares
+      √ faktorA / ultimate torque · df
+      √ faktorA / ultimate torque · Mean Square
+      √ faktorA / ultimate torque · F
+      √ faktorA / ultimate torque · Sig.
+      √ faktorA / ultimate torque · Partial Eta Squared
+      √ faktorA / ultimate torque · Noncent. Parameter
+      √ faktorA / ultimate torque · Observed Power
+      √ faktorA / ultimate strain · Type III Sum of Squares (1 ms)
+      √ faktorA / ultimate strain · df
+      √ faktorA / ultimate strain · Mean Square
+      √ faktorA / ultimate strain · F
+      √ faktorA / ultimate strain · Sig.
+      √ faktorA / ultimate strain · Partial Eta Squared
+      √ faktorA / ultimate strain · Noncent. Parameter
+      √ faktorA / ultimate strain · Observed Power
+      √ faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorB / ultimate torque · df
+      √ faktorB / ultimate torque · Mean Square
+      √ faktorB / ultimate torque · F (1 ms)
+      √ faktorB / ultimate torque · Sig.
+      √ faktorB / ultimate torque · Partial Eta Squared
+      √ faktorB / ultimate torque · Noncent. Parameter
+      √ faktorB / ultimate torque · Observed Power
+      √ faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorB / ultimate strain · df
+      √ faktorB / ultimate strain · Mean Square (1 ms)
+      √ faktorB / ultimate strain · F
+      √ faktorB / ultimate strain · Sig.
+      √ faktorB / ultimate strain · Partial Eta Squared
+      √ faktorB / ultimate strain · Noncent. Parameter
+      √ faktorB / ultimate strain · Observed Power
+      √ faktorA * faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate torque · df
+      √ faktorA * faktorB / ultimate torque · Mean Square
+      √ faktorA * faktorB / ultimate torque · F
+      √ faktorA * faktorB / ultimate torque · Sig.
+      √ faktorA * faktorB / ultimate torque · Partial Eta Squared
+      √ faktorA * faktorB / ultimate torque · Noncent. Parameter (1 ms)
+      √ faktorA * faktorB / ultimate torque · Observed Power
+      √ faktorA * faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate strain · df
+      √ faktorA * faktorB / ultimate strain · Mean Square
+      √ faktorA * faktorB / ultimate strain · F
+      √ faktorA * faktorB / ultimate strain · Sig.
+      √ faktorA * faktorB / ultimate strain · Partial Eta Squared
+      √ faktorA * faktorB / ultimate strain · Noncent. Parameter
+      √ faktorA * faktorB / ultimate strain · Observed Power
+      √ Error / ultimate torque · Type III Sum of Squares
+      √ Error / ultimate torque · df
+      √ Error / ultimate torque · Mean Square
+      √ Error / ultimate strain · Type III Sum of Squares
+      √ Error / ultimate strain · df
+      √ Error / ultimate strain · Mean Square
+      √ Total / ultimate torque · Type III Sum of Squares
+      √ Total / ultimate torque · df
+      √ Total / ultimate strain · Type III Sum of Squares
+      √ Total / ultimate strain · df
+      √ Corrected Total / ultimate torque · Type III Sum of Squares
+      √ Corrected Total / ultimate torque · df
+      √ Corrected Total / ultimate strain · Type III Sum of Squares
+      √ Corrected Total / ultimate strain · df (1 ms)
+    mv7 · Between-Subjects Factors
+      √ jk / 1 / laki-laki · N
+      √ jk / 2 / perempuan · N
+    mv7 · Descriptive Statistics
+      √ x1 / laki-laki · Mean
+      √ x1 / laki-laki · Std. Deviation
+      √ x1 / laki-laki · N
+      √ x1 / perempuan · Mean
+      √ x1 / perempuan · Std. Deviation
+      √ x1 / perempuan · N
+      √ x1 / Total · Mean
+      √ x1 / Total · Std. Deviation
+      √ x1 / Total · N
+      √ x2 / laki-laki · Mean
+      √ x2 / laki-laki · Std. Deviation
+      √ x2 / laki-laki · N
+      √ x2 / perempuan · Mean
+      √ x2 / perempuan · Std. Deviation
+      √ x2 / perempuan · N
+      √ x2 / Total · Mean
+      √ x2 / Total · Std. Deviation (1 ms)
+      √ x2 / Total · N
+      √ x3 / laki-laki · Mean
+      √ x3 / laki-laki · Std. Deviation
+      √ x3 / laki-laki · N
+      √ x3 / perempuan · Mean
+      √ x3 / perempuan · Std. Deviation
+      √ x3 / perempuan · N
+      √ x3 / Total · Mean (1 ms)
+      √ x3 / Total · Std. Deviation
+      √ x3 / Total · N
+      √ x4 / laki-laki · Mean
+      √ x4 / laki-laki · Std. Deviation
+      √ x4 / laki-laki · N
+      √ x4 / perempuan · Mean
+      √ x4 / perempuan · Std. Deviation
+      √ x4 / perempuan · N
+      √ x4 / Total · Mean
+      √ x4 / Total · Std. Deviation
+      √ x4 / Total · N (1 ms)
+    mv7 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv7 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig. (1 ms)
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared (1 ms)
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F (1 ms)
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ jk / Pillai's Trace · Value
+      √ jk / Pillai's Trace · F
+      √ jk / Pillai's Trace · Hypothesis df
+      √ jk / Pillai's Trace · Error df
+      √ jk / Pillai's Trace · Sig. (1 ms)
+      √ jk / Pillai's Trace · Partial Eta Squared
+      √ jk / Pillai's Trace · Noncent. Parameter
+      √ jk / Pillai's Trace · Observed Power
+      √ jk / Wilks' Lambda · Value
+      √ jk / Wilks' Lambda · F
+      √ jk / Wilks' Lambda · Hypothesis df
+      √ jk / Wilks' Lambda · Error df
+      √ jk / Wilks' Lambda · Sig.
+      √ jk / Wilks' Lambda · Partial Eta Squared
+      √ jk / Wilks' Lambda · Noncent. Parameter
+      √ jk / Wilks' Lambda · Observed Power
+      √ jk / Hotelling's Trace · Value
+      √ jk / Hotelling's Trace · F
+      √ jk / Hotelling's Trace · Hypothesis df
+      √ jk / Hotelling's Trace · Error df
+      √ jk / Hotelling's Trace · Sig.
+      √ jk / Hotelling's Trace · Partial Eta Squared
+      √ jk / Hotelling's Trace · Noncent. Parameter
+      √ jk / Hotelling's Trace · Observed Power
+      √ jk / Roy's Largest Root · Value
+      √ jk / Roy's Largest Root · F
+      √ jk / Roy's Largest Root · Hypothesis df (1 ms)
+      √ jk / Roy's Largest Root · Error df
+      √ jk / Roy's Largest Root · Sig.
+      √ jk / Roy's Largest Root · Partial Eta Squared
+      √ jk / Roy's Largest Root · Noncent. Parameter
+      √ jk / Roy's Largest Root · Observed Power
+    mv7 · Levene's Test of Equality of Error Variances
+      √ x1 / Based on Mean · Levene Statistic
+      √ x1 / Based on Mean · df1
+      √ x1 / Based on Mean · df2
+      √ x1 / Based on Mean · Sig. (1 ms)
+      √ x1 / Based on Median · Levene Statistic
+      √ x1 / Based on Median · df1
+      √ x1 / Based on Median · df2
+      √ x1 / Based on Median · Sig.
+      √ x1 / Based on Median and with adjusted df · Levene Statistic
+      √ x1 / Based on Median and with adjusted df · df1
+      √ x1 / Based on Median and with adjusted df · df2
+      √ x1 / Based on Median and with adjusted df · Sig.
+      √ x1 / Based on trimmed mean · Levene Statistic
+      √ x1 / Based on trimmed mean · df1 (1 ms)
+      √ x1 / Based on trimmed mean · df2
+      √ x1 / Based on trimmed mean · Sig.
+      √ x2 / Based on Mean · Levene Statistic
+      √ x2 / Based on Mean · df1
+      √ x2 / Based on Mean · df2 (1 ms)
+      √ x2 / Based on Mean · Sig.
+      √ x2 / Based on Median · Levene Statistic
+      √ x2 / Based on Median · df1
+      √ x2 / Based on Median · df2
+      √ x2 / Based on Median · Sig.
+      √ x2 / Based on Median and with adjusted df · Levene Statistic
+      √ x2 / Based on Median and with adjusted df · df1
+      √ x2 / Based on Median and with adjusted df · df2
+      √ x2 / Based on Median and with adjusted df · Sig. (1 ms)
+      √ x2 / Based on trimmed mean · Levene Statistic
+      √ x2 / Based on trimmed mean · df1
+      √ x2 / Based on trimmed mean · df2
+      √ x2 / Based on trimmed mean · Sig.
+      √ x3 / Based on Mean · Levene Statistic
+      √ x3 / Based on Mean · df1
+      √ x3 / Based on Mean · df2 (1 ms)
+      √ x3 / Based on Mean · Sig.
+      √ x3 / Based on Median · Levene Statistic
+      √ x3 / Based on Median · df1
+      √ x3 / Based on Median · df2
+      √ x3 / Based on Median · Sig.
+      √ x3 / Based on Median and with adjusted df · Levene Statistic
+      √ x3 / Based on Median and with adjusted df · df1
+      √ x3 / Based on Median and with adjusted df · df2
+      √ x3 / Based on Median and with adjusted df · Sig. (1 ms)
+      √ x3 / Based on trimmed mean · Levene Statistic
+      √ x3 / Based on trimmed mean · df1
+      √ x3 / Based on trimmed mean · df2
+      √ x3 / Based on trimmed mean · Sig.
+      √ x4 / Based on Mean · Levene Statistic
+      √ x4 / Based on Mean · df1
+      √ x4 / Based on Mean · df2
+      √ x4 / Based on Mean · Sig.
+      √ x4 / Based on Median · Levene Statistic
+      √ x4 / Based on Median · df1
+      √ x4 / Based on Median · df2 (1 ms)
+      √ x4 / Based on Median · Sig.
+      √ x4 / Based on Median and with adjusted df · Levene Statistic
+      √ x4 / Based on Median and with adjusted df · df1
+      √ x4 / Based on Median and with adjusted df · df2
+      √ x4 / Based on Median and with adjusted df · Sig.
+      √ x4 / Based on trimmed mean · Levene Statistic
+      √ x4 / Based on trimmed mean · df1
+      √ x4 / Based on trimmed mean · df2
+      √ x4 / Based on trimmed mean · Sig. (1 ms)
+    mv7 · Tests of Between-Subjects Effects
+      √ Corrected Model / x1 · Type III Sum of Squares
+      √ Corrected Model / x1 · df
+      √ Corrected Model / x1 · Mean Square
+      √ Corrected Model / x1 · F
+      √ Corrected Model / x1 · Sig.
+      √ Corrected Model / x1 · Partial Eta Squared
+      √ Corrected Model / x1 · Noncent. Parameter
+      √ Corrected Model / x1 · Observed Power
+      √ Corrected Model / x2 · Type III Sum of Squares
+      √ Corrected Model / x2 · df
+      √ Corrected Model / x2 · Mean Square
+      √ Corrected Model / x2 · F
+      √ Corrected Model / x2 · Sig.
+      √ Corrected Model / x2 · Partial Eta Squared
+      √ Corrected Model / x2 · Noncent. Parameter
+      √ Corrected Model / x2 · Observed Power
+      √ Corrected Model / x3 · Type III Sum of Squares
+      √ Corrected Model / x3 · df
+      √ Corrected Model / x3 · Mean Square
+      √ Corrected Model / x3 · F
+      √ Corrected Model / x3 · Sig.
+      √ Corrected Model / x3 · Partial Eta Squared
+      √ Corrected Model / x3 · Noncent. Parameter (1 ms)
+      √ Corrected Model / x3 · Observed Power
+      √ Corrected Model / x4 · Type III Sum of Squares
+      √ Corrected Model / x4 · df
+      √ Corrected Model / x4 · Mean Square
+      √ Corrected Model / x4 · F
+      √ Corrected Model / x4 · Sig.
+      √ Corrected Model / x4 · Partial Eta Squared
+      √ Corrected Model / x4 · Noncent. Parameter
+      √ Corrected Model / x4 · Observed Power
+      √ Intercept / x1 · Type III Sum of Squares
+      √ Intercept / x1 · df
+      √ Intercept / x1 · Mean Square
+      √ Intercept / x1 · F
+      √ Intercept / x1 · Sig.
+      √ Intercept / x1 · Partial Eta Squared
+      √ Intercept / x1 · Noncent. Parameter
+      √ Intercept / x1 · Observed Power
+      √ Intercept / x2 · Type III Sum of Squares
+      √ Intercept / x2 · df
+      √ Intercept / x2 · Mean Square
+      √ Intercept / x2 · F
+      √ Intercept / x2 · Sig. (1 ms)
+      √ Intercept / x2 · Partial Eta Squared
+      √ Intercept / x2 · Noncent. Parameter
+      √ Intercept / x2 · Observed Power
+      √ Intercept / x3 · Type III Sum of Squares
+      √ Intercept / x3 · df
+      √ Intercept / x3 · Mean Square
+      √ Intercept / x3 · F
+      √ Intercept / x3 · Sig.
+      √ Intercept / x3 · Partial Eta Squared
+      √ Intercept / x3 · Noncent. Parameter (1 ms)
+      √ Intercept / x3 · Observed Power
+      √ Intercept / x4 · Type III Sum of Squares
+      √ Intercept / x4 · df
+      √ Intercept / x4 · Mean Square
+      √ Intercept / x4 · F
+      √ Intercept / x4 · Sig.
+      √ Intercept / x4 · Partial Eta Squared
+      √ Intercept / x4 · Noncent. Parameter
+      √ Intercept / x4 · Observed Power (1 ms)
+      √ jk / x1 · Type III Sum of Squares
+      √ jk / x1 · df
+      √ jk / x1 · Mean Square
+      √ jk / x1 · F (1 ms)
+      √ jk / x1 · Sig.
+      √ jk / x1 · Partial Eta Squared
+      √ jk / x1 · Noncent. Parameter
+      √ jk / x1 · Observed Power
+      √ jk / x2 · Type III Sum of Squares
+      √ jk / x2 · df
+      √ jk / x2 · Mean Square
+      √ jk / x2 · F
+      √ jk / x2 · Sig.
+      √ jk / x2 · Partial Eta Squared
+      √ jk / x2 · Noncent. Parameter
+      √ jk / x2 · Observed Power
+      √ jk / x3 · Type III Sum of Squares
+      √ jk / x3 · df
+      √ jk / x3 · Mean Square
+      √ jk / x3 · F
+      √ jk / x3 · Sig.
+      √ jk / x3 · Partial Eta Squared
+      √ jk / x3 · Noncent. Parameter
+      √ jk / x3 · Observed Power
+      √ jk / x4 · Type III Sum of Squares
+      √ jk / x4 · df
+      √ jk / x4 · Mean Square
+      √ jk / x4 · F
+      √ jk / x4 · Sig.
+      √ jk / x4 · Partial Eta Squared
+      √ jk / x4 · Noncent. Parameter
+      √ jk / x4 · Observed Power
+      √ Error / x1 · Type III Sum of Squares
+      √ Error / x1 · df
+      √ Error / x1 · Mean Square (1 ms)
+      √ Error / x2 · Type III Sum of Squares
+      √ Error / x2 · df
+      √ Error / x2 · Mean Square
+      √ Error / x3 · Type III Sum of Squares
+      √ Error / x3 · df
+      √ Error / x3 · Mean Square
+      √ Error / x4 · Type III Sum of Squares
+      √ Error / x4 · df
+      √ Error / x4 · Mean Square
+      √ Total / x1 · Type III Sum of Squares
+      √ Total / x1 · df (1 ms)
+      √ Total / x2 · Type III Sum of Squares
+      √ Total / x2 · df
+      √ Total / x3 · Type III Sum of Squares
+      √ Total / x3 · df
+      √ Total / x4 · Type III Sum of Squares
+      √ Total / x4 · df
+      √ Corrected Total / x1 · Type III Sum of Squares
+      √ Corrected Total / x1 · df
+      √ Corrected Total / x2 · Type III Sum of Squares
+      √ Corrected Total / x2 · df
+      √ Corrected Total / x3 · Type III Sum of Squares (1 ms)
+      √ Corrected Total / x3 · df
+      √ Corrected Total / x4 · Type III Sum of Squares
+      √ Corrected Total / x4 · df
+    SPSS values without a Statify counterpart
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+
+Test Suites: 1 passed, 1 total
+Tests:       12 todo, 1686 passed, 1698 total
+Snapshots:   0 total
+Time:        1.582 s, estimated 2 s
+Ran all test suites matching components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts.

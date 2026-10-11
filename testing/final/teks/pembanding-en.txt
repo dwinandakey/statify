@@ -1,0 +1,8 @@
+Build sebelum (IdywReo5MTivt50HHa3VO, testing/final/iterasi4/regresi) vs build penyeragaman bahasa Inggris (JyX0CCEXNcyYSCxSLCIPP, ui-sampel-en/)
+mv3: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mv3d: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mv3dci: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mv3ci: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mv2d: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mv1ci: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0
+mvK4: payload identik true | respons WASM identik true | tabel dengan isi berbeda (di luar judul, catatan, deskripsi, label efek/CI) 0

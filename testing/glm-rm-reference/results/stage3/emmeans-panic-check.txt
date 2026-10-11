@@ -1,0 +1,10 @@
+L10M2 (OVERALL)                        ok | emmeans ["(OVERALL)"] pairwise [] | Error Summary: Context: calculate_multivariate_tests 1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly depe
+L10M2 (OVERALL) compare bonf           ok | emmeans ["(OVERALL)"] pairwise [] | Error Summary: Context: calculate_multivariate_tests 1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly depe
+L5M1 time (payload)                    ok | emmeans ["time"] pairwise [] | Error Summary: Context: calculate_multivariate_tests 1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly depe
+L5M1 time compare bonf                 ok | emmeans ["time"] pairwise ["time"] | Error Summary: Context: calculate_multivariate_tests 1. time: The error SSCP matrix is singular (the transformed dependent variables are linearly depe
+gambar51 (OVERALL)+perlakuan sidak     ok | emmeans ["(OVERALL)","perlakuan"] pairwise ["perlakuan"] | No errors occurred.
+b kelompok*waktu compare lsd           ok | emmeans ["kelompok","waktu","kelompok * waktu"] pairwise ["kelompok","waktu"] | No errors occurred.
+c unknown target                       ok | emmeans [] pairwise [] | Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test Context: calculate_emmeans 1. EM 
+c empty target list                    ok | emmeans [] pairwise [] | Error Summary: Context: calculate_bartlett_test 1. At least two dependent variables are required for Bartlett's test 
+two within factors (A×B)               ok | emmeans [] pairwise [] | Error Summary: Context: calculate_emmeans 1. Estimated marginal means are not supported for designs with more than one within-subjects factor yet 
+tidak ada panic

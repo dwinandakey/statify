@@ -1,0 +1,505 @@
+{
+  "env": {
+    "chromium": "143.0.7499.4",
+    "base": "http://localhost:3101",
+    "levels": 10,
+    "measures": 1,
+    "options": "DescStats,EstEffectSize,ObsPower",
+    "emmeans": null,
+    "sizes": [
+      40000
+    ],
+    "sequence": [
+      "main",
+      "worker",
+      "main",
+      "worker",
+      "main",
+      "worker"
+    ],
+    "startedAt": "2026-09-22T02:34:10.684Z",
+    "emmeansDialog": {
+      "draggableItems": [
+        "(OVERALL)"
+      ],
+      "compareDisabled": false
+    },
+    "identical": {
+      "40000": false
+    },
+    "identicalValues": {
+      "40000": false
+    },
+    "identicalWithinPairs": {
+      "40000": [
+        true,
+        true,
+        true
+      ]
+    }
+  },
+  "results": [
+    {
+      "n": 40000,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 1422,
+      "clickToEndMs": 1438,
+      "longestLongtaskMs": 66,
+      "longestLoafMs": 1079,
+      "loaf": {
+        "longest_loaf_ms": "1079.3",
+        "loaf_count": 2,
+        "loaf_blocking_ms": "1039.5",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "6637f178d397",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "669df9e0186d",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    },
+    {
+      "n": 40000,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 1230,
+      "clickToEndMs": 1243,
+      "longestLongtaskMs": 93,
+      "longestLoafMs": 94,
+      "loaf": {
+        "longest_loaf_ms": "94.0",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "43.4",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "6637f178d397",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "669df9e0186d",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    },
+    {
+      "n": 40000,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 967,
+      "clickToEndMs": 980,
+      "longestLongtaskMs": 826,
+      "longestLoafMs": 827,
+      "loaf": {
+        "longest_loaf_ms": "827.1",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "776.7",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "4258bb499159",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "5ae1e09e9e6d",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    },
+    {
+      "n": 40000,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 1088,
+      "clickToEndMs": 1103,
+      "longestLongtaskMs": 99,
+      "longestLoafMs": 100,
+      "loaf": {
+        "longest_loaf_ms": "99.7",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "49.1",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "4258bb499159",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "5ae1e09e9e6d",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    },
+    {
+      "n": 40000,
+      "mode": "main",
+      "modeActual": "main",
+      "computeMs": 991,
+      "clickToEndMs": 1004,
+      "longestLongtaskMs": 874,
+      "longestLoafMs": 875,
+      "loaf": {
+        "longest_loaf_ms": "875.1",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "824.5",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "b56e1f3d1ecf",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "ef72aa3aa6ed",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    },
+    {
+      "n": 40000,
+      "mode": "worker",
+      "modeActual": "worker",
+      "computeMs": 1100,
+      "clickToEndMs": 1114,
+      "longestLongtaskMs": 130,
+      "longestLoafMs": 133,
+      "loaf": {
+        "longest_loaf_ms": "132.9",
+        "loaf_count": 1,
+        "loaf_blocking_ms": "80.6",
+        "loaf_glue_scripts": 0,
+        "loaf_service_scripts": 0
+      },
+      "loafSupported": true,
+      "pre": {
+        "logs": 0,
+        "analytics": 0,
+        "statistics": 0,
+        "domLogs": 0
+      },
+      "post": {
+        "logs": 1,
+        "analytics": 18,
+        "statistics": 17,
+        "domLogs": 1
+      },
+      "dataRows": 40000,
+      "tables": [
+        "Within-Subjects Factors",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Descriptive Statistics",
+        "Multivariate Tests",
+        "Mauchly's Test of Sphericity",
+        "Tests of Within-Subjects Effects",
+        "Tests of Within-Subjects Contrasts",
+        "Tests of Between-Subjects Effects",
+        "Errors Logs"
+      ],
+      "loggedErrors": [],
+      "errorLines": [
+        "Error df",
+        "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is pro",
+        "Error(time)",
+        "Error(score)",
+        "Error"
+      ],
+      "hashes": {
+        "Within-Subjects Factors": "fdb70919f841",
+        "Descriptive Statistics": "b56e1f3d1ecf",
+        "Multivariate Tests": "caf13570b2b9",
+        "Mauchly's Test of Sphericity": "dd59d9fbdb10",
+        "Tests of Within-Subjects Effects": "737a1e29ef4a",
+        "Tests of Within-Subjects Contrasts": "1ec504945dd1",
+        "Tests of Between-Subjects Effects": "06e83b63e616",
+        "Errors Logs": "d6245ed4a2cb"
+      },
+      "canonicalHashes": {
+        "Within-Subjects Factors": "4eb150a119b1",
+        "Descriptive Statistics": "ef72aa3aa6ed",
+        "Multivariate Tests": "68f456184068",
+        "Mauchly's Test of Sphericity": "18cf89d2151d",
+        "Tests of Within-Subjects Effects": "21b8cc1d0127",
+        "Tests of Within-Subjects Contrasts": "67946ca17a39",
+        "Tests of Between-Subjects Effects": "64e6b7b39762",
+        "Errors Logs": "f4ea4883a853"
+      }
+    }
+  ]
+}

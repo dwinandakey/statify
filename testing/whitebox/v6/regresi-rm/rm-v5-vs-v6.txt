@@ -1,0 +1,10 @@
+Keluaran WASM RM v5 (D:/claude-tmp-statify/rm-pkg-v5) vs v6 (frontend/components/Modals/Analyze/general-linear-model/repeated-measures/rust/pkg)
+
+gambar51: 222 nilai, IDENTIK
+a: 464 nilai, IDENTIK
+b: 571 nilai, IDENTIK
+c: 735 nilai, IDENTIK
+d: 571 nilai, IDENTIK
+e: 21 nilai, IDENTIK
+
+desain: 6, berbeda: 0

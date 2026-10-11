@@ -1,0 +1,71 @@
+{
+ "id": "BB-KF06-09",
+ "steps": [
+  "impor multivariate-100.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1, Y2",
+  "FixFactor: F1, F2, F3",
+  "Model: custom [\"F1\",\"F2\",\"F3\",\"F1 * F2\"] → kotak Model: [\"F1\",\"F2\",\"F3\",\"F1 * F2\"] (BB-KF06-09-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version."
+   ],
+   "file": "BB-KF06-09-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Only the full factorial model and the main-effects model are supported in this version."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-custom-terms": [
+   "F1",
+   "F2",
+   "F3",
+   "F1 * F2"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-09-1.png: dialog Model (custom): F1; F2; F3; F1 * F2",
+  "BB-KF06-09-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:27:55.972Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72,
+ "finishedAt": "2026-09-25T13:29:07.951Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ]
+}

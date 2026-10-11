@@ -1,0 +1,38 @@
+{
+  "n": 5000,
+  "levels": 10,
+  "measures": 1,
+  "variant": "noise",
+  "errors": "No errors occurred.",
+  "noErrors": true,
+  "tables": [
+    "within_subjects_factors",
+    "descriptive_statistics",
+    "multivariate_tests",
+    "mauchly_test",
+    "tests_of_within_subjects_effects",
+    "tests_of_within_subjects_contrasts",
+    "tests_of_between_subjects_effects"
+  ],
+  "mauchly": {
+    "W": 0.9918338051715312,
+    "chiSquare": 40.96413501403591,
+    "df": 44,
+    "sig": 0.6025003990124089,
+    "gg": 0.998173364441629
+  },
+  "multivariate": [
+    "time"
+  ],
+  "contrasts": [
+    "Linear",
+    "Quadratic",
+    "Cubic",
+    "Order 4",
+    "Order 5",
+    "Order 6",
+    "Order 7",
+    "Order 8",
+    "Order 9"
+  ]
+}

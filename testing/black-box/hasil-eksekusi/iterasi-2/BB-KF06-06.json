@@ -1,0 +1,50 @@
+{
+ "id": "BB-KF06-06",
+ "steps": [
+  "impor hotelling 2 populasi independen.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: x1, x2, x3",
+  "FixFactor: jk",
+  "Covar: x4",
+  "Model: custom [\"jk\",\"x4\",\"jk * x4\"] → kotak Model: [\"jk\",\"x4\",\"jk * x4\"] (BB-KF06-06-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version."
+   ],
+   "file": "BB-KF06-06-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version.",
+    "An error occurred during Multivariate analysis. | Error: Interaction terms with covariates are not supported in this version."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-custom-terms": [
+   "jk",
+   "x4",
+   "jk * x4"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-06-1.png: dialog Model (custom): jk; x4; jk * x4",
+  "BB-KF06-06-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72
+}

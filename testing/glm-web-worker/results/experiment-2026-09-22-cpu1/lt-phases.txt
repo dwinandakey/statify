@@ -1,0 +1,17 @@
+cell                     mode   | early(<=1s after click): n, median/max dur | middle: n, max dur | late(<=3s before end): n, median/max dur
+repeated-measures-100    worker |  50 71/288  |   0 -  |  16 364/615
+repeated-measures-100    main   |  40 80/291  |   0 -  |  12 405/1346
+repeated-measures-500    worker |  46 79/491  |   0 -  |  17 364/840
+repeated-measures-500    main   |  46 81/305  |   0 -  |  17 362/952
+repeated-measures-1000   worker |  48 77/327  |   0 -  |  20 58/688
+repeated-measures-1000   main   |  54 77/296  |   0 -  |  16 353/813
+repeated-measures-2000   worker |  46 73/305  |   0 -  |  23 79/630
+repeated-measures-2000   main   |  45 73/298  |   0 -  |  17 359/1329
+multivariate-100         worker |  65 129/769  |   0 -  |  68 56/193
+multivariate-100         main   |  76 348/760  |   0 -  |  71 58/209
+multivariate-500         worker |  62 147/747  |   1 189  |  82 57/188
+multivariate-500         main   |  59 5745/6151  |   0 -  |  98 57/195
+multivariate-1000        worker |  58 149/774  |   4 195  |  94 66/189
+multivariate-1000        main   |  59 21483/22816  |   0 -  |  91 76/228
+multivariate-2000        worker |  59 149/761  |   3 191  |  97 66/176
+multivariate-2000        main   |  58 83415/89515  |   0 -  |  91 84/275

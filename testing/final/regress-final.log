@@ -1,0 +1,104 @@
+== 0. build
+LIBUcskLZhw3iEIArOeUX
+233726a0a8a20c2630d445119b9c6c1b *wasm_bg.1096746a.wasm
+be41ca5b5ad96571a089a5c52d37530a *wasm_bg.2b6d03d2.wasm
+f4c34490f7fe4152b5ffb9a8cf9de4f8 *wasm_bg.2bc2b212.wasm
+30fd3f3c17dac500267b53f5c0e52b26 *wasm_bg.c0583b08.wasm
+3cd4a4fc283e8cc18c62b4219a32b5c6 *wasm_bg.d6d2fb1b.wasm
+03c58af448a3af2e1845853f795dcd62 *wasm_bg.f735bd9b.wasm
+73038fb34a9a672c66e2d4dd2a015e72cc0f6352
+== 1. UI MV
+worker lama exit 0
+worker Σ exit 0
+main lama exit 0
+main Σ exit 0
+== 2. SPSS + regresi + main/worker
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+2351 nilai SPSS; dibandingkan 2339; lulus 2339; gagal 0; tanpa padanan 12
+main vs worker mv9.json: mode main/worker, 7 tabel, byte-identik true
+HASIL: regresi 0, main=worker true
+mvK1: main = worker true
+mvK1n: main = worker true
+mvK2: main = worker true
+mvK3: main = worker true
+mvK4: main = worker true
+konfigurasi Σ: 5, beda: 0
+== 3. nilai mentah vs v5
+konfigurasi: 23, tidak identik: 0
+mvK1: known_covariance_test = harness K1 (divalidasi R) true
+mvK1n: known_covariance_test = harness K1 (divalidasi R) true
+mvK2: known_covariance_test = harness K2-d (divalidasi R) true
+mvK3: known_covariance_test = harness K3-d (divalidasi R) true
+mvK4: known_covariance_test = harness K4 (divalidasi R) true
+== 4. uji acuan
+values 2339, not_covered 12 -> frontend\components\Modals\Analyze\general-linear-model\multivariate\__test__\fixtures\mv-reference-values.json
+warning: in the working copy of 'frontend/components/Modals/Analyze/general-linear-model/multivariate/__test__/fixtures/mv-reference-values.json', LF will be replaced by CRLF the next time Git touches it
+fixture diff: 0 baris
+Tests:       12 todo, 2339 passed, 2351 total
+Tests:       1681 passed, 1681 total
+== 5. Jest penuh
+Jest penuh: 49 suite gagal dari 279; baseline 49
+tes: 6877 lulus, 210 gagal, 12 todo
+gagal di luar baseline: 0
+baseline yang kini lulus: 0
+== 6. sel eksperimen
+mv exit 0
+rm exit 0
+node:path:479
+      validateString(arg, 'path');
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:479:7)
+    at file:///D:/0.POLTSTAT%20STIS/Tugas%20Kuliah/Skripsi/topik%20baru%20statify/statify64/testing/fitur-v4/harness/exp-compare.mjs:21:81
+    at Array.map (<anonymous>)
+    at file:///D:/0.POLTSTAT%20STIS/Tugas%20Kuliah/Skripsi/topik%20baru%20statify/statify64/testing/fitur-v4/harness/exp-compare.mjs:21:27
+    at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v20.19.0
+node:path:479
+      validateString(arg, 'path');
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:479:7)
+    at file:///D:/0.POLTSTAT%20STIS/Tugas%20Kuliah/Skripsi/topik%20baru%20statify/statify64/testing/fitur-v4/harness/exp-compare.mjs:21:81
+    at Array.map (<anonymous>)
+    at file:///D:/0.POLTSTAT%20STIS/Tugas%20Kuliah/Skripsi/topik%20baru%20statify/statify64/testing/fitur-v4/harness/exp-compare.mjs:21:27
+    at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v20.19.0
+== 7. RM main/worker
+testing/final/harness/regress-final.sh: line 91: $O/rm/rm-ui-main-worker.log: ambiguous redirect
+exit 1
+testing/final/harness/regress-final.sh: line 92: $O/rm/rm-ui-main-worker-exp5000.log: ambiguous redirect
+exit 1
+node:fs:449
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open 'D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\final\bagian3\rm\rm-ui-main-worker.json'
+    at Object.readFileSync (node:fs:449:20)
+    at [eval]:3:153
+    at runScriptInThisContext (node:internal/vm:209:10)
+    at node:internal/process/execution:118:14
+    at [eval]-wrapper:6:24
+    at runScript (node:internal/process/execution:101:62)
+    at evalScript (node:internal/process/execution:133:3)
+    at node:internal/main/eval_string:51:3 {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\final\\bagian3\\rm\\rm-ui-main-worker.json'
+}
+
+Node.js v20.19.0
+== selesai

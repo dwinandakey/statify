@@ -1,0 +1,9 @@
+field                        now                  baseline(pre-fix)    |Δ| base   SPSS 27              |Δ| SPSS   user(3dp) now(3dp)
+mauchly_w                    0.6189363023905575   0.6189363023905579   3.3e-16    0.6189363023905571   4.4e-16    0.619     0.619
+chi_square                   6.103523204614479    6.103523204614472    7.1e-15    6.103523204614488    8.9e-15    6.164     6.104  ≠ nilai pengguna
+df                           5                    5                    0.0e+0     5                    0.0e+0     5         5
+significance                 0.2975045146266828   0.2962756242866822   1.2e-3     0.29750451462668587  3.1e-15    0.298     0.298  (berubah sengaja: koreksi ω₂ seperti SPSS)
+greenhouse_geisser_epsilon   0.7466637471716202   0.7466637471716204   2.2e-16    0.7466637471716207   4.4e-16    0.747     0.747
+huynh_feldt_epsilon          0.895687219051398    0.8956872190513984   3.3e-16    0.8956872190513986   5.6e-16    0.896     0.896
+lower_bound_epsilon          0.3333333333333333   0.3333333333333333   0.0e+0     0.3333333333333333   0.0e+0     0.333     0.333
+regresi Gambar 51: semua nilai sama dengan baseline (presisi penuh; Sig. berubah sengaja) dan dengan SPSS 27 (tol 1e-9)

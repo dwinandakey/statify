@@ -1,0 +1,82 @@
+{
+  "base": "http://localhost:3101",
+  "sequence": [
+    "main",
+    "worker",
+    "main",
+    "worker"
+  ],
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-24T16:29:58.087Z",
+  "designs": {
+    "exp5000": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "de51651f247f"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "de51651f247f"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "de51651f247f"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "de51651f247f"
+        }
+      ]
+    }
+  }
+}

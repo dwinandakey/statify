@@ -1,0 +1,64 @@
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+2351 nilai SPSS; dibandingkan 2339; lulus 2339; gagal 0; tanpa padanan 12
+
+config | tabel | nilai | dibandingkan | lulus | gagal | tanpa padanan | selisih maks | di | tampilan UI gagal
+mv1 | Report | 12 | 12 | 12 | 0 | 0 | 2.842170943040401e-14 | disp · Mean | 0
+mv1 | Descriptive Statistics | 12 | 0 | 0 | 0 | 12 | 0 |  | 0
+mv1 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.0004805504253213577 | Intercept / Pillai's Trace · F | 0
+mv1 | Tests of Between-Subjects Effects | 76 | 76 | 76 | 0 | 0 | 1.6370904631912708e-10 | Intercept / disp - 200 · Type III Sum of Squares | 0
+mv2 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv2 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 3.552713678800501e-15 | x3 / laki-laki · Mean | 0
+mv2 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.546585164964199e-11 |  · df2 | 0
+mv2 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0004116211212021881 | Intercept / Pillai's Trace · F | 0
+mv2 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 1.5651369089653144e-13 | x4 / Based on Median and with adjusted df · Sig. | 0
+mv2 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0005000000000006111 | Corrected Model / x4 · Type III Sum of Squares | 0
+mv3 | Descriptive Statistics | 6 | 6 | 6 | 0 | 0 | 1.7763568394002505e-15 | kedalaman1 - kedalaman2 · Mean | 0
+mv3 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.00006003652066155496 | Intercept / Pillai's Trace · F | 0
+mv3 | Tests of Between-Subjects Effects | 38 | 38 | 38 | 0 | 0 | 5.24691401437849e-13 | Intercept / ukuran1 - ukuran2 · Observed Power | 0
+mv4 | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | 0 |  | 0
+mv4 | Descriptive Statistics | 24 | 24 | 24 | 0 | 0 | 8.881784197001252e-16 | y1 / Total · Mean | 0
+mv4 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 9.185896487906575e-11 |  · df2 | 0
+mv4 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.00014043622162240865 | treatment / Wilks' Lambda · F | 0
+mv4 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 5.773159728050814e-15 | y2 / Based on trimmed mean · Levene Statistic | 0
+mv4 | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 0 | 5.323519403077626e-13 | Intercept / y2 · Observed Power | 0
+mv5 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv5 | Descriptive Statistics | 90 | 90 | 90 | 0 | 0 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv5 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.7284841053187847e-12 |  · df2 | 0
+mv5 | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 0.00043671311358650655 | faktorA * faktorB / Roy's Largest Root · F | 0
+mv5 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 2.731148640577885e-14 | ultimate torque / Based on Median · Sig. | 0
+mv5 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.0004031250000000597 | Corrected Model / ultimate torque · Type III Sum of Squares | 0
+mv6 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv6 | Descriptive Statistics | 90 | 90 | 90 | 0 | 0 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv6 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 3.296918293926865e-12 |  · df2 | 0
+mv6 | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 0.0003143000003982266 | faktorB / Roy's Largest Root · F | 0
+mv6 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 1.9539925233402755e-14 | ultimate torque / Based on trimmed mean · Levene Statistic | 0
+mv6 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.00046153846210472693 | Corrected Model / ultimate strain · Type III Sum of Squares | 0
+mv7 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv7 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 7.105427357601002e-15 | x4 / laki-laki · Mean | 0
+mv7 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 4.3655745685100555e-11 |  · df2 | 0
+mv7 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0002662913221911367 | Intercept / Pillai's Trace · F | 0
+mv7 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 2.9110047705671604e-13 | x3 / Based on Median · Sig. | 0
+mv7 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0004193548388400359 | Corrected Model / x1 · Type III Sum of Squares | 0
+mv8 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv8 | Descriptive Statistics | 90 | 90 | 90 | 0 | 0 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv8 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.7284841053187847e-12 |  · df2 | 0
+mv8 | Multivariate Tests | 96 | 96 | 96 | 0 | 0 | 0.0004084040507628117 | faktorA / Pillai's Trace · F | 0
+mv8 | Levene's Test of Equality of Error Variances | 8 | 8 | 8 | 0 | 0 | 3.9190872769268026e-14 | ultimate torque · Sig. | 0
+mv8 | Tests of Between-Subjects Effects | 78 | 78 | 78 | 0 | 0 | 0.00021250000000083702 | Corrected Model / ultimate torque · Type III Sum of Squares | 0
+mv4ph | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | 0 |  | 0
+mv4ph | Descriptive Statistics | 24 | 24 | 24 | 0 | 0 | 8.881784197001252e-16 | y1 / Total · Mean | 0
+mv4ph | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 9.185896487906575e-11 |  · df2 | 0
+mv4ph | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.00014043622162240865 | treatment / Wilks' Lambda · F | 0
+mv4ph | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 5.773159728050814e-15 | y2 / Based on trimmed mean · Levene Statistic | 0
+mv4ph | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 0 | 5.323519403077626e-13 | Intercept / y2 · Observed Power | 0
+mv4ph | Multiple Comparisons | 180 | 180 | 180 | 0 | 0 | 4.262368236140901e-11 | y2 / LSD / treatment 1 / treatment 2 · Lower Bound | 0
+
+GAGAL (|Statify − SPSS| > 0.001):
+
+LULUS pada nilai mentah tetapi tampilan UI tidak (|UI − SPSS| > 0.001 atau "<.001" untuk p ≥ .001):
+
+TANPA PADANAN di Statify:
+  mv1 | Descriptive Statistics | mpg - 20 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | disp - 200 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | hp - 150 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | wt - 3 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)

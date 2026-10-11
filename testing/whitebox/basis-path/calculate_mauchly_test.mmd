@@ -1,0 +1,109 @@
+flowchart TD
+    n1{{"1: parse_within_subject_factors(..)? (P1)"}}
+    n2["2: return Err"]
+    n3{{"3: for (measure, factors) (P2)"}}
+    n4{{"4: if factors.len() < 2 (P3)"}}
+    n5{{"5: for record_group in subject_data (P4)"}}
+    n6{{"6: for var_name in var_names (P5)"}}
+    n7{{"7: for record in record_group (P6)"}}
+    n8{{"8: if let Some(v) = record.get(var) (P7)"}}
+    n9{{"9: match v: Number (P8)"}}
+    n10["10: push(v); found = true; break"]
+    n11{{"11: if !found (P9)"}}
+    n12["12: push(0.0)"]
+    n13{{"13: if len == n_vars (P10)"}}
+    n14["14: data_matrix.push(row)"]
+    n15{{"15: if n_subjects < 2 (P11)"}}
+    n16{{"16: || n_vars < 2 (P12)"}}
+    n17{{"17: for (i, row) (P13)"}}
+    n18{{"18: for (j, val) in row (P14)"}}
+    n19["19: matrix[i,j] = val"]
+    n20{{"20: for i in 0..n (P15)"}}
+    n21{{"21: for j in 0..k (P16)"}}
+    n22["22: centered[i,j] -= mean[j]"]
+    n23{{"23: cov, S_t, det, trace; if mean_eig < 1e-12 (P17)"}}
+    n24["24: W = 0"]
+    n25["25: W = det / mean_eig^p"]
+    n26{{"26: if W > 0 (P18)"}}
+    n27["27: chi = -(n-1-c) ln W"]
+    n28["28: chi = INF"]
+    n29{{"29: df, Sig.; if sum_sq_eig < 1e-12 (P19)"}}
+    n30["30: GG = 1"]
+    n31["31: GG = (sum l)^2/(p sum l^2)"]
+    n32{{"32: if n <= k (P20)"}}
+    n33["33: HF = min(GG, 1)"]
+    n34{{"34: num, den; if |den| < 1e-12 (P21)"}}
+    n35["35: HF = min(GG, 1)"]
+    n36["36: HF = rumus, [GG, 1]"]
+    n37{{"37: LB; if chi finite (P22)"}}
+    n38["38: chi_square = chi"]
+    n39["39: chi_square = 0"]
+    n40{{"40: tests.insert; if design.is_none() (P23)"}}
+    n41["41: design = Some(..)"]
+    n42["42: return Ok(MauchlyTest)"]
+    n43["43: keluar"]
+    n1 --> n2
+    n1 --> n3
+    n2 --> n43
+    n3 --> n4
+    n3 --> n42
+    n4 --> n3
+    n4 --> n5
+    n5 --> n6
+    n5 --> n15
+    n6 --> n7
+    n6 --> n13
+    n7 --> n8
+    n7 --> n11
+    n8 --> n7
+    n8 --> n9
+    n9 --> n10
+    n9 --> n7
+    n10 --> n11
+    n11 --> n12
+    n11 --> n6
+    n12 --> n6
+    n13 --> n14
+    n13 --> n5
+    n14 --> n5
+    n15 --> n3
+    n15 --> n16
+    n16 --> n3
+    n16 --> n17
+    n17 --> n18
+    n17 --> n20
+    n18 --> n19
+    n18 --> n17
+    n19 --> n18
+    n20 --> n21
+    n20 --> n23
+    n21 --> n22
+    n21 --> n20
+    n22 --> n21
+    n23 --> n24
+    n23 --> n25
+    n24 --> n26
+    n25 --> n26
+    n26 --> n27
+    n26 --> n28
+    n27 --> n29
+    n28 --> n29
+    n29 --> n30
+    n29 --> n31
+    n30 --> n32
+    n31 --> n32
+    n32 --> n33
+    n32 --> n34
+    n33 --> n37
+    n34 --> n35
+    n34 --> n36
+    n35 --> n37
+    n36 --> n37
+    n37 --> n38
+    n37 --> n39
+    n38 --> n40
+    n39 --> n40
+    n40 --> n41
+    n40 --> n3
+    n41 --> n3
+    n42 --> n43

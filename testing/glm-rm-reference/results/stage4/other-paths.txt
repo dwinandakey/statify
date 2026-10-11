@@ -1,0 +1,3 @@
+c + Residual SSCP: errors: No errors occurred.
+  Bartlett {"likelihood_ratio":4.67812546079003e-53,"approx_chi_square":2014.9293247171925,"df":5,"significance":0,"description":"Tests the null hypothesis that the residual covariance matrix is proportional to an identity matrix.","design":"Bartlett's Test of Sphericity for Residual Matrix"} | residual table: true
+gambar51 + Homogeneity: Error Summary: Context: calculate_homogeneity_tests 1. Homogeneity tests (Box's M, Levene) need at least one between-subjects factor 

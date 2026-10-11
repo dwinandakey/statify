@@ -1,0 +1,33 @@
+{
+ "old": "skripsi-final-v5",
+ "new": "WORKTREE",
+ "counts_old": {
+  "pub_fn_total": 81,
+  "pub_fn_common.rs": 36,
+  "struct_result.rs": 42,
+  "struct_total": 60,
+  "enum_total": 11,
+  "pub_method_total": 16
+ },
+ "counts_new": {
+  "pub_fn_total": 81,
+  "pub_fn_common.rs": 36,
+  "struct_result.rs": 45,
+  "struct_total": 63,
+  "enum_total": 11,
+  "pub_method_total": 17
+ },
+ "public_changes": [
+  "models/result.rs: struct KnownCovarianceInput: None  ->  {'vis': 'pub', 'fields': ['pub design: String', 'pub sigma: Option<Vec<Vec<f64>>>', 'pub sigma1: Option<Vec<Vec<f64>>>', 'pub sigma2: Option<Vec<Vec<f64>>>']}",
+  "models/result.rs: struct KnownCovarianceInterval: None  ->  {'vis': 'pub', 'fields': ['pub dependent_variable: String', 'pub estimate: f64', 'pub std_error: f64', 'pub chi_square_lower: f64', 'pub chi_square_upper: f64', 'pub bonferroni_lower: f64', 'pub bonferroni_upper: f64']}",
+  "models/result.rs: struct KnownCovarianceTest: None  ->  {'vis': 'pub', 'fields': ['pub design: String', 'pub p: usize', 'pub sample_sizes: Vec<usize>', 'pub factor: Option<String>', 'pub levels: Vec<String>', 'pub hypothesized: Vec<f64>', 'pub chi_square: f64', 'pub df: f64', 'pub significance: f64', 'pub confidence_level: f64', 'pub chi_square_critical: f64', 'pub z_critical: f64', 'pub intervals: Vec<KnownCovarianceInterval>']}",
+  "wasm/constructor.rs: pub_method added pub fn get_known_covariance_test(&mut self, known: JsValue) -> Result<JsValue, JsValue>"
+ ],
+ "private_added": [
+  "wasm/constructor.rs: sorted_levels",
+  "wasm/constructor.rs: group_mean",
+  "wasm/constructor.rs: known_matrix",
+  "wasm/constructor.rs: calculate_known_covariance_test"
+ ],
+ "private_removed": []
+}

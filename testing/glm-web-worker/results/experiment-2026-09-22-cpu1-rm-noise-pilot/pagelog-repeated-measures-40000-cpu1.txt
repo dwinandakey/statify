@@ -1,0 +1,23 @@
+[warning] The Handsontable instance bound to this component was destroyed and cannot be used properly.
+[warning] [DataTable] Slow update detected: 1069.43ms
+[warning] The Handsontable instance bound to this component was destroyed and cannot be used properly.
+[warning] [DataTable] Slow update detected: 588.40ms
+[warning] [DataTable] Slow update detected: 214.02ms
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] [DataTable] High memory usage: 202.2MB
+[warning] The Handsontable instance bound to this component was destroyed and cannot be used properly.
+[warning] [DataTable] Slow update detected: 580.43ms
+[warning] [DataTable] Slow update detected: 208.21ms
+[warning] Another connection wants to upgrade database 'Statify'. Closing db now to resume the upgrade.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[warning] The Handsontable instance bound to this component was destroyed and cannot be used properly.
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[warning] The resource http://localhost:3101/_next/static/css/ca17f6072347cd1a.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+[warning] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

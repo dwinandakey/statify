@@ -1,0 +1,47 @@
+Observed Power Welch (calculate_welch_two_sample_t2) sebelum dan sesudah step10, data mv2 dengan radio Unequal.
+Cara: payload mv2 dari fixture uji acuan (run UI), main.VarianceMode diganti "Welch" (nilai radio Unequal di dialog.tsx), diputar lewat rust/pkg.
+Sebelum: WASM d654d6e9 (commit 37851d51). Sesudah: WASM 403447c4 (step10).
+
+--- sebelum
+VarianceMode fixture: Pooled | SigLevel: 0.05 | FixFactor: ["jk"] | DepVar: ["x1","x2","x3","x4"]
+design: Type III sum of squares (Welch-Satterthwaite for jk) | alpha: 0.05
+jk | Hotelling's Trace | value 98.22790942092372 | F 23.29263153228373 | df1 4 | df2 55.268023454188445 | Sig 2.6686319820612425e-11 | eta2 0.6276706852139867 | noncent 93.17052612913491 | power 0.9957067968099096
+Intercept | Roy's Largest Root | value 39.117124635856186 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766418 | noncent 2307.910353515515 | power 1
+Intercept | Wilks' Lambda | value 0.024927010823358145 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766419 | noncent 2307.910353515515 | power 1
+Intercept | Pillai's Trace | value 0.9750729891766469 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766469 | noncent 2307.910353515515 | power 1
+Intercept | Hotelling's Trace | value 39.11712463585619 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766418 | noncent 2307.910353515515 | power 1
+errors: "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+
+--- sesudah
+VarianceMode fixture: Pooled | SigLevel: 0.05 | FixFactor: ["jk"] | DepVar: ["x1","x2","x3","x4"]
+design: Type III sum of squares (Welch-Satterthwaite for jk) | alpha: 0.05
+jk | Hotelling's Trace | value 98.22790942092372 | F 23.29263153228373 | df1 4 | df2 55.268023454188445 | Sig 2.6686319820612425e-11 | eta2 0.6276706852139867 | noncent 93.17052612913491 | power 0.9999999999300158
+Intercept | Roy's Largest Root | value 39.117124635856186 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766418 | noncent 2307.910353515515 | power 1
+Intercept | Wilks' Lambda | value 0.024927010823358145 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766419 | noncent 2307.910353515515 | power 1
+Intercept | Pillai's Trace | value 0.9750729891766469 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766469 | noncent 2307.910353515515 | power 1
+Intercept | Hotelling's Trace | value 39.11712463585619 | F 576.9775883788787 | df1 4 | df2 59 | Sig 0 | eta2 0.9750729891766418 | noncent 2307.910353515515 | power 1
+errors: "Error Summary:\nContext: calculate_posthoc_tests\n  1. No post-hoc tests were performed.\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+
+--- R 4.3.2 (df sama dengan Sig.: df1 = 4, df2 = round(55.268) = 55, alpha = 0.05)
+power 1 - pf(qf(0.95, 4, 55), 4, 55, ncp = 4F) = 0.9999999999306284
+Sig 1 - pf(F, 4, 55) = 2.668631982061243e-11
+
+--- skrip
+import fs from "fs";
+const MV = "D:/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/frontend/components/Modals/Analyze/general-linear-model/multivariate";
+const { default: init, MultivariateAnalysis } = await import("file:///" + MV + "/rust/pkg/wasm.js");
+await init({ module_or_path: fs.readFileSync(MV + "/rust/pkg/wasm_bg.wasm") });
+const fx = JSON.parse(fs.readFileSync(MV + "/__test__/fixtures/mv-reference-values.json", "utf8"));
+const p = fx.configs.mv2.payload;
+const cfg = structuredClone(p.config_data);
+console.log("VarianceMode fixture:", cfg.main.VarianceMode, "| SigLevel:", cfg.options.SigLevel, "| FixFactor:", JSON.stringify(cfg.main.FixFactor), "| DepVar:", JSON.stringify(cfg.main.DepVar));
+cfg.main.VarianceMode = "Welch";
+const a = new MultivariateAnalysis(p.dep_data, p.fix_factor_data, p.covar_data, p.wls_data, p.dep_data_defs, p.fix_factor_data_defs, p.covar_data_defs, p.wls_data_defs, cfg);
+const plain = (x) => x instanceof Map ? Object.fromEntries([...x].map(([k, v]) => [k, plain(v)])) : Array.isArray(x) ? x.map(plain) : (x && typeof x === "object") ? Object.fromEntries(Object.entries(x).map(([k, v]) => [k, plain(v)])) : x;
+const r = plain(a.get_results());
+const mt = r.multivariate_tests;
+console.log("design:", mt.design, "| alpha:", mt.alpha);
+for (const [eff, stats] of Object.entries(mt.effects)) for (const [name, e] of Object.entries(stats))
+  console.log(`${eff} | ${name} | value ${e.value} | F ${e.f} | df1 ${e.hypothesis_df} | df2 ${e.error_df} | Sig ${e.significance} | eta2 ${e.partial_eta_squared} | noncent ${e.noncent_parameter} | power ${e.observed_power}`);
+console.log("errors:", JSON.stringify(a.get_all_errors()));
+a.free();

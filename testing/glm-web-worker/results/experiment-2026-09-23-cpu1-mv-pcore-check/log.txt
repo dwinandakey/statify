@@ -1,0 +1,14 @@
+[2026-09-23T15:08:29.297Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; cells=2, runs/mode=2, clean, loaf
+[2026-09-23T15:08:29.355Z] cell multivariate-100-cpu1: loading multivariate-100.csv
+[2026-09-23T15:08:42.946Z] multivariate-100-cpu1 run 1/4 startup main->main status=ok tables=4 errors=0 longest=188.0 total=568.1
+[2026-09-23T15:08:53.594Z] multivariate-100-cpu1 run 2/4 startup worker->worker status=ok tables=4 errors=0 longest=0.0 total=262.2
+[2026-09-23T15:09:14.292Z] multivariate-100-cpu1 run 3/4 steady main->main status=ok tables=4 errors=0 longest=168.0 total=194.2
+[2026-09-23T15:09:30.153Z] multivariate-100-cpu1 run 4/4 steady worker->worker status=ok tables=4 errors=0 longest=0.0 total=195.8
+[2026-09-23T15:09:30.165Z] cell multivariate-100-cpu1 done in 61 s
+[2026-09-23T15:09:30.222Z] cell multivariate-2000-cpu1: loading multivariate-2000.csv
+[2026-09-23T15:09:46.078Z] multivariate-2000-cpu1 run 1/4 startup main->main status=ok tables=4 errors=0 longest=183.0 total=2839.2
+[2026-09-23T15:09:58.984Z] multivariate-2000-cpu1 run 2/4 startup worker->worker status=ok tables=4 errors=0 longest=0.0 total=2544.5
+[2026-09-23T15:10:11.945Z] multivariate-2000-cpu1 run 3/4 steady main->main status=ok tables=4 errors=0 longest=2529.0 total=2574.7
+[2026-09-23T15:10:24.760Z] multivariate-2000-cpu1 run 4/4 steady worker->worker status=ok tables=4 errors=0 longest=0.0 total=2502.2
+[2026-09-23T15:10:24.766Z] cell multivariate-2000-cpu1 done in 55 s
+[2026-09-23T15:10:24.806Z] finished

@@ -1,0 +1,267 @@
+{
+ "id": "BB-KF03-03",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment"
+ ],
+ "toasts": [
+  {
+   "label": "OK Unequal, 3 level",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF03-03-1.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK Unequal, 3 level",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Between-Subjects Factors",
+     "tables": [
+      {
+       "title": "Between-Subjects Factors",
+       "columns": [
+        "",
+        "",
+        "Value Label",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "factor": "treatment",
+         "level": "1",
+         "value_label": "",
+         "n": "3"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "2",
+         "value_label": "",
+         "n": "2"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "3",
+         "value_label": "",
+         "n": "3"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "y1",
+         "sum_of_squares": "78.0000",
+         "df": "2",
+         "mean_square": "39.0000",
+         "f_value": "19.5000",
+         "significance": "0.0044"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "48.0000",
+         "df": "2",
+         "mean_square": "24.0000",
+         "f_value": "5.0000",
+         "significance": "0.0642"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "y1",
+         "sum_of_squares": "103.7143",
+         "df": "1",
+         "mean_square": "103.7143",
+         "f_value": "51.8571",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "168.0000",
+         "df": "1",
+         "mean_square": "168.0000",
+         "f_value": "35.0000",
+         "significance": "0.0020"
+        },
+        {
+         "rowHeader": [],
+         "source": "treatment",
+         "dependent_variable": "y1",
+         "sum_of_squares": "78.0000",
+         "df": "2",
+         "mean_square": "39.0000",
+         "f_value": "19.5000",
+         "significance": "0.0044"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "48.0000",
+         "df": "2",
+         "mean_square": "24.0000",
+         "f_value": "5.0000",
+         "significance": "0.0642"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "y1",
+         "sum_of_squares": "10.0000",
+         "df": "5",
+         "mean_square": "2.0000",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "24.0000",
+         "df": "5",
+         "mean_square": "4.8000",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "y1",
+         "sum_of_squares": "216.0000",
+         "df": "8",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "272.0000",
+         "df": "8",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "y1",
+         "sum_of_squares": "88.0000",
+         "df": "7",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "72.0000",
+         "df": "7",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Context",
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "context": "calculate_multivariate_tests",
+         "message": "VarianceMode = Welch requires the Fixed Factor to have exactly two levels; 'treatment' has 3."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "judulTampil": [
+   "Copy",
+   "Copy",
+   "Copy"
+  ]
+ },
+ "notes": [
+  "BB-KF03-03-1.png: toast: OK Unequal, 3 level",
+  "BB-KF03-03-2.png: Errors Logs"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:19:57.130Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 13,
+ "finishedAt": "2026-09-25T13:20:10.051Z",
+ "wasmRequested": [
+  "wasm_bg.f735bd9b.wasm"
+ ]
+}

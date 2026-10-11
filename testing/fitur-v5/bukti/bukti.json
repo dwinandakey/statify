@@ -1,0 +1,79 @@
+{
+  "base": "http://localhost:3201",
+  "buildId": "KPIl1x_WhkjNTIUnjio8c",
+  "checks": {
+    "a1Toast": [
+      "An error occurred during Multivariate analysis. Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.",
+      "An error occurred during Multivariate analysis. Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."
+    ],
+    "a3Toast_tanpa-opsi": [
+      "Multivariate analysis has been completed successfully.",
+      "Multivariate analysis has been completed successfully."
+    ],
+    "a3a4MT_tanpa-opsi": "Multivariate Tests\nType III sum of squares. a. Design: Intercept + jk b. Exact statistic\nMultivariate Tests\nCopy\nSVG\nMultivariate Tests\nEffect\t\tValue\tF\tHypothesis df\tError df\tSig.\nIntercept\tPillai's Trace\t0.9751\t576.9776\t4\t59\t<.001\n\tWilks' Lambda\t0.0249\t576.9776\t4\t59\t<.001\n\tHotelling's Trace\t39.1171\t576.9776\t4\t59\t<.001\n\tRoy's Largest Root\t39.1171\t576.9776\t4\t59\t<.001\njk\tPillai's Trace\t0.6131\t23.3687\t4\t59\t<.001\n\tWilks' Lambda\t0.3869\t23.3687\t4\t59\t<.001\n\tHotelling's Trace\t1.5843\t23.3687\t4\t59\t<.001\n\tRoy's Largest Root\t1.5843\t23.3687\t4\t59\t<.001\nDescription\nEdit\nTests the joint effect of each predictor on the combined dependent variables using four multivariate statistics (Pillai's Trace, Wilks' Lambda, Hotelling's Trace, Roy's Largest Root). A significant Sig. (< .05) indicates that the effect significantly influences the joint distribution of the dependent variables.",
+    "a3a4BSE_tanpa-opsi": "Tests of Between-Subjects Effects\na. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1 b. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2 c. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3 d. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4\nTests of Between-Subjects Effects\nCopy\nSVG\nTests of Between-Subjects Effects\nSource\tDependent Variable\tType III Sum of Squares\tdf\tMean Square\tF\tSig.\nCorrected Model\tx1\t210.2500\t1\t210.2500\t29.3468\t<.001\n\tx2\t64.0000\t1\t64.0000\t4.0266\t0.0492\n\tx3\t1753.5156\t1\t1753.5156\t61.0314\t<.001\n\tx4\t10.5625\t1\t10.5625\t0.4732\t0.4941\nIntercept\tx1\t12825.5625\t1\t12825.5625\t1790.2009\t<.001\n\tx2\t14220.5625\t1\t14220.5625\t894.7040\t<.001\n\tx3\t30844.1406\t1\t30844.1406\t1073.5360\t<.001\n\tx4\t31951.5625\t1\t31951.5625\t1431.4854\t<.001\njk\tx1\t210.2500\t1\t210.2500\t29.3468\t<.001\n\tx2\t64.0000\t1\t64.0000\t4.0266\t0.0492\n\tx3\t1753.5156\t1\t1753.5156\t61.0314\t<.001\n\tx4\t10.5625\t1\t10.5625\t0.4732\t0.4941\nError\tx1\t444.1875\t62\t7.1643\t\t\n\tx2\t985.4375\t62\t15.8942\t\t\n\tx3\t1781.3438\t62\t28.7314\t\t\n\tx4\t1383.8750\t62\t22.3206\t\t\nTotal\tx1\t13480.0000\t64\t\t\t\n\tx2\t15270.0000\t64\t\t\t\n\tx3\t34379.0000\t64\t\t\t\n\tx4\t33346.0000\t64\t\t\t\nCorrected Total\tx1\t654.4375\t63\t\t\t\n\tx2\t1049.4375\t63\t\t\t\n\tx3\t3534.8594\t63\t\t\t\n\tx4\t1394.4375\t63\t\t\t\nShow Full\nDescription\nEdit\nThis table tests the hypothesis that each effect (e.g., factor or interaction) in the model is null. A significant F-value (Sig. < .05) suggests that the effect significantly contributes to explaining the variance in the dependent variable. The Partial Eta Squared indicates the proportion of variance uniquely explained by that effect.",
+    "a3Toast_dengan-opsi": [
+      "Multivariate analysis has been completed successfully.",
+      "Multivariate analysis has been completed successfully."
+    ],
+    "a3a4MT_dengan-opsi": "Multivariate Tests\nType III sum of squares. a. Design: Intercept + jk b. Exact statistic c. Computed using alpha = .05\nMultivariate Tests\nCopy\nSVG\nMultivariate Tests\nEffect\t\tValue\tF\tHypothesis df\tError df\tSig.\tPartial Eta Squared\tNoncent. Parameter\tObserved Power\nIntercept\tPillai's Trace\t0.9751\t576.9776\t4\t59\t<.001\t0.9751\t2307.9104\t1.0000\n\tWilks' Lambda\t0.0249\t576.9776\t4\t59\t<.001\t0.9751\t2307.9104\t1.0000\n\tHotelling's Trace\t39.1171\t576.9776\t4\t59\t<.001\t0.9751\t2307.9104\t1.0000\n\tRoy's Largest Root\t39.1171\t576.9776\t4\t59\t<.001\t0.9751\t2307.9104\t1.0000\njk\tPillai's Trace\t0.6131\t23.3687\t4\t59\t<.001\t0.6131\t93.4749\t1.0000\n\tWilks' Lambda\t0.3869\t23.3687\t4\t59\t<.001\t0.6131\t93.4749\t1.0000\n\tHotelling's Trace\t1.5843\t23.3687\t4\t59\t<.001\t0.6131\t93.4749\t1.0000\n\tRoy's Largest Root\t1.5843\t23.3687\t4\t59\t<.001\t0.6131\t93.4749\t1.0000\nDescription\nEdit\nTests the joint effect of each predictor on the combined dependent variables using four multivariate statistics (Pillai's Trace, Wilks' Lambda, Hotelling's Trace, Roy's Largest Root). A significant Sig. (< .05) indicates that the effect significantly influences the joint distribution of the dependent variables.",
+    "a3a4BSE_dengan-opsi": "Tests of Between-Subjects Effects\na. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1 b. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2 c. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3 d. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4. e. Computed using alpha = .05\nTests of Between-Subjects Effects\nCopy\nSVG\nTests of Between-Subjects Effects\nSource\tDependent Variable\tType III Sum of Squares\tdf\tMean Square\tF\tSig.\tPartial Eta Squared\tNoncent. Parameter\tObserved Power\nCorrected Model\tx1\t210.2500\t1\t210.2500\t29.3468\t<.001\t0.3213\t29.3468\t0.9996\n\tx2\t64.0000\t1\t64.0000\t4.0266\t0.0492\t0.0610\t4.0266\t0.5062\n\tx3\t1753.5156\t1\t1753.5156\t61.0314\t<.001\t0.4961\t61.0314\t1.0000\n\tx4\t10.5625\t1\t10.5625\t0.4732\t0.4941\t0.0076\t0.4732\t0.1040\nIntercept\tx1\t12825.5625\t1\t12825.5625\t1790.2009\t<.001\t0.9665\t1790.2009\t1.0000\n\tx2\t14220.5625\t1\t14220.5625\t894.7040\t<.001\t0.9352\t894.7040\t1.0000\n\tx3\t30844.1406\t1\t30844.1406\t1073.5360\t<.001\t0.9454\t1073.5360\t1.0000\n\tx4\t31951.5625\t1\t31951.5625\t1431.4854\t<.001\t0.9585\t1431.4854\t1.0000\njk\tx1\t210.2500\t1\t210.2500\t29.3468\t<.001\t0.3213\t29.3468\t0.9996\n\tx2\t64.0000\t1\t64.0000\t4.0266\t0.0492\t0.0610\t4.0266\t0.5062\n\tx3\t1753.5156\t1\t1753.5156\t61.0314\t<.001\t0.4961\t61.0314\t1.0000\n\tx4\t10.5625\t1\t10.5625\t0.4732\t0.4941\t0.0076\t0.4732\t0.1040\nError\tx1\t444.1875\t62\t7.1643\t\t\t\t\t\n\tx2\t985.4375\t62\t15.8942\t\t\t\t\t\n\tx3\t1781.3438\t62\t28.7314\t\t\t\t\t\n\tx4\t1383.8750\t62\t22.3206\t\t\t\t\t\nTotal\tx1\t13480.0000\t64\t\t\t\t\t\t\n\tx2\t15270.0000\t64\t\t\t\t\t\t\n\tx3\t34379.0000\t64\t\t\t\t\t\t\n\tx4\t33346.0000\t64\t\t\t\t\t\t\nCorrected Total\tx1\t654.4375\t63\t\t\t\t\t\t\n\tx2\t1049.4375\t63\t\t\t\t\t\t\n\tx3\t3534.8594\t63\t\t\t\t\t\t\n\tx4\t1394.4375\t63\t\t\t\t\t\t\nShow Full\nDescription\nEdit\nThis table tests the hypothesis that each effect (e.g., factor or interaction) in the model is null. A significant F-value (Sig. < .05) suggests that the effect significantly contributes to explaining the variance in the dependent variable. The Partial Eta Squared indicates the proportion of variance uniquely explained by that effect.",
+    "b3Toast": [
+      "An error occurred during Multivariate analysis. Error: Type IV sums of squares are not available for designs with empty cells (1 of 8 factor-level combinations have no cases). Choose Type III or remove the empty cells.",
+      "An error occurred during Multivariate analysis. Error: Type IV sums of squares are not available for designs with empty cells (1 of 8 factor-level combinations have no cases). Choose Type III or remove the empty cells."
+    ],
+    "b4Options": [
+      [
+        "Type I",
+        ""
+      ],
+      [
+        "Type II",
+        ""
+      ],
+      [
+        "Type III",
+        null
+      ],
+      [
+        "Type IV",
+        ""
+      ]
+    ],
+    "rmMT": "Multivariate Tests\na. Design: Intercept + kelompok Within Subjects Design: waktu b. Exact statistic c. The statistic is an upper bound on F that yields a lower bound on the significance level. d. Computed using alpha = .05\nMultivariate Tests\nCopy\nSVG\nMultivariate Tests\n\t\tValue\tF\tHypothesis df\tError df\tSig.\tPartial Eta Squared\tNoncent. Parameter\tObserved Power\nwaktu\tPillai's Trace\t0.2761\t2.4153\t3\t19\t0.0982\t0.2761\t7.2459\t0.5115\n\tWilks' Lambda\t0.7239\t2.4153\t3\t19\t0.0982\t0.2761\t7.2459\t0.5115\n\tHotelling's Trace\t0.3814\t2.4153\t3\t19\t0.0982\t0.2761\t7.2459\t0.5115\n\tRoy's Largest Root\t0.3814\t2.4153\t3\t19\t0.0982\t0.2761\t7.2459\t0.5115\nwaktu * kelompok\tPillai's Trace\t0.4108\t1.7232\t6\t40\t0.1406\t0.2054\t10.3395\t0.5826\n\tWilks' Lambda\t0.6306\t1.6419\t6\t38\t0.1624\t0.2059\t9.8517\t0.5545\n\tHotelling's Trace\t0.5200\t1.5601\t6\t36\t0.1872\t0.2064\t9.3608\t0.5253\n\tRoy's Largest Root\t0.3040\t2.0268\t3\t20\t0.1425\t0.2331\t6.0803\t0.4418\nDescription\nEdit\nMultivariate tests of within-subjects effects. Wilks' Lambda is commonly reported; a significant result indicates that repeated measures differ across levels."
+  },
+  "shots": [
+    {
+      "file": "a1-toast-delta0-faktor-tiga-level.png",
+      "label": "A1: toast δ₀ faktor 3 level (BB-KF03-08)"
+    },
+    {
+      "file": "a3a4-mv2-multivariate-tests-tanpa-opsi.png",
+      "label": "A3/A4: Multivariate Tests mv2 (tanpa-opsi)"
+    },
+    {
+      "file": "a3a4-mv2-between-tanpa-opsi.png",
+      "label": "A3/A4: Tests of Between-Subjects Effects mv2 (tanpa-opsi)"
+    },
+    {
+      "file": "a3a4-mv2-multivariate-tests-dengan-opsi.png",
+      "label": "A3/A4: Multivariate Tests mv2 (dengan-opsi)"
+    },
+    {
+      "file": "a3a4-mv2-between-dengan-opsi.png",
+      "label": "A3/A4: Tests of Between-Subjects Effects mv2 (dengan-opsi)"
+    },
+    {
+      "file": "b3-type-iv-sel-kosong.png",
+      "label": "B3: Type IV ditolak pada desain dengan sel kosong"
+    },
+    {
+      "file": "b4-rm-model-sum-of-squares.png",
+      "label": "B4: dialog Model RM, hanya Type III aktif"
+    },
+    {
+      "file": "a2a4-rm-b-multivariate-tests.png",
+      "label": "A2/A4 RM: Multivariate Tests rm_b (4 desimal, catatan kaki SPSS)"
+    }
+  ]
+}

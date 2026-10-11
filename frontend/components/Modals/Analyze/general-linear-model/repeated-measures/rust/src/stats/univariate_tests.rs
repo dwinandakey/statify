@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 use crate::models::{
     config::{ RepeatedMeasuresConfig, SumOfSquaresMethod },

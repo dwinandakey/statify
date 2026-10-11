@@ -1,0 +1,69 @@
+{
+ "id": "BB-KF07-01",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: waktu(4); measure skor"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "tombolDefine": {
+   "Add": 2,
+   "Change": 2,
+   "Remove": 2,
+   "Reset": 1,
+   "Cancel": 1,
+   "Define": 1
+  },
+  "labelDefine": {
+   "factor": 1,
+   "levels": 1,
+   "measure": 1
+  },
+  "tombolUtama": {
+   "Model": "aktif",
+   "Contrasts": "aktif",
+   "Plots": "nonaktif",
+   "Post Hoc": "nonaktif",
+   "EM Means": "aktif",
+   "Save": "aktif",
+   "Options": "aktif",
+   "Back to Define": "aktif",
+   "Reset": "aktif",
+   "Cancel": "aktif",
+   "OK": "aktif"
+  },
+  "daftar": {
+   "within": 1,
+   "between": 1,
+   "cov": 1
+  }
+ },
+ "notes": [
+  "BB-KF07-01-1.png: dialog Define",
+  "BB-KF07-01-2.png: dialog utama Repeated Measures"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:32:04.926Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7,
+ "finishedAt": "2026-09-25T13:32:11.447Z",
+ "wasmRequested": []
+}

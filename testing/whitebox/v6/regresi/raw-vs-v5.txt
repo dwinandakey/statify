@@ -1,0 +1,24 @@
+mv1: payload identik true | respons (results) identik true | errors identik true
+mv1ci: payload identik true | respons (results) identik true | errors identik true
+mv1ci10: payload identik true | respons (results) identik true | errors identik true
+mv2: payload identik true | respons (results) identik true | errors identik true
+mv2ci: payload identik true | respons (results) identik true | errors identik true
+mv2d: payload identik true | respons (results) identik false | errors identik true
+mv2dci: payload identik true | respons (results) identik false | errors identik true
+mv2s: payload identik true | respons (results) identik false | errors identik true
+mv2wci: payload identik true | respons (results) identik true | errors identik true
+mv2wd: payload identik true | respons (results) identik false | errors identik true
+mv2ws: payload identik true | respons (results) identik false | errors identik true
+mv3: payload identik true | respons (results) identik true | errors identik true
+mv3ci: payload identik true | respons (results) identik true | errors identik true
+mv3d: payload identik true | respons (results) identik false | errors identik true
+mv3dci: payload identik true | respons (results) identik false | errors identik true
+mv3s: payload identik true | respons (results) identik false | errors identik true
+mv4: payload identik true | respons (results) identik true | errors identik true
+mv4ph: payload identik true | respons (results) identik true | errors identik true
+mv5: payload identik true | respons (results) identik true | errors identik true
+mv6: payload identik true | respons (results) identik true | errors identik true
+mv7: payload identik true | respons (results) identik true | errors identik true
+mv8: payload identik true | respons (results) identik true | errors identik true
+mv9: payload identik true | respons (results) identik false | errors identik true
+konfigurasi: 23, tidak identik: 9

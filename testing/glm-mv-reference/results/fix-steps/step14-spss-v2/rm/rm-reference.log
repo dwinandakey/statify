@@ -1,0 +1,1696 @@
+PASS components/Modals/Analyze/general-linear-model/repeated-measures/__test__/repeated-measures-reference.test.ts
+  Repeated Measures dataset gambar51
+    √ runs without errors (2 ms)
+    √ R car/afex (sementara): between_effects · anjing · Intercept · SS
+    √ R car/afex (sementara): between_effects · anjing · Intercept · df (1 ms)
+    √ R car/afex (sementara): between_effects · anjing · Intercept · error SS
+    √ R car/afex (sementara): between_effects · anjing · Intercept · error df
+    √ R car/afex (sementara): between_effects · anjing · Intercept · F
+    √ R car/afex (sementara): between_effects · anjing · Intercept · Sig.
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · SS
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · df
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · error SS
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · error df (1 ms)
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · F
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · Sig.
+    √ R car/afex (sementara): mauchly · anjing · perlakuan · W (1 ms)
+    √ R car/afex (sementara): mauchly · anjing · perlakuan · Greenhouse-Geisser
+    √ R car/afex (sementara): within_effects · anjing · perlakuan · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Pillai's Trace · Value
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Pillai's Trace · F (1 ms)
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Pillai's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Pillai's Trace · Error df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Pillai's Trace · Sig.
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Wilks' Lambda · Value
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Wilks' Lambda · F
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Wilks' Lambda · Hypothesis df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Wilks' Lambda · Error df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Wilks' Lambda · Sig.
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Hotelling's Trace · Value
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Hotelling's Trace · F
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Hotelling's Trace · Hypothesis df (1 ms)
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Hotelling's Trace · Error df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Hotelling's Trace · Sig.
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Roy's Largest Root · Value
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Roy's Largest Root · F
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Roy's Largest Root · Hypothesis df
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Roy's Largest Root · Error df (1 ms)
+    √ R car/afex (sementara): multivariate · anjing · perlakuan | Roy's Largest Root · Sig.
+    √ SPSS 27: mauchly · anjing · perlakuan · Mauchly's W
+    √ SPSS 27: mauchly · anjing · perlakuan · Approx. Chi-Square
+    √ SPSS 27: mauchly · anjing · perlakuan · df (1 ms)
+    √ SPSS 27: mauchly · anjing · perlakuan · Sig.
+    √ SPSS 27: mauchly · anjing · perlakuan · Greenhouse-Geisser
+    √ SPSS 27: mauchly · anjing · perlakuan · Huynh-Feldt
+    √ SPSS 27: mauchly · anjing · perlakuan · Lower-bound
+    √ SPSS 27: within_effects · anjing · perlakuan · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · anjing · perlakuan · Sphericity Assumed · df (3 ms)
+    √ SPSS 27: within_effects · anjing · perlakuan · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · anjing · perlakuan · Sphericity Assumed · F
+    √ SPSS 27: within_effects · anjing · perlakuan · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · anjing · perlakuan · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · anjing · perlakuan · Greenhouse-Geisser · df (1 ms)
+    √ SPSS 27: within_effects · anjing · perlakuan · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · anjing · perlakuan · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · anjing · perlakuan · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · anjing · perlakuan · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · anjing · perlakuan · Huynh-Feldt · df
+    √ SPSS 27: within_effects · anjing · perlakuan · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · anjing · perlakuan · Huynh-Feldt · F
+    √ SPSS 27: within_effects · anjing · perlakuan · Huynh-Feldt · Sig. (1 ms)
+    √ SPSS 27: within_effects · anjing · perlakuan · Lower-bound · SS
+    √ SPSS 27: within_effects · anjing · perlakuan · Lower-bound · df
+    √ SPSS 27: within_effects · anjing · perlakuan · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · anjing · perlakuan · Lower-bound · F
+    √ SPSS 27: within_effects · anjing · perlakuan · Lower-bound · Sig.
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Sphericity Assumed · df
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Greenhouse-Geisser · SS (1 ms)
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Lower-bound · SS
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Lower-bound · df
+    √ SPSS 27: within_effects · anjing · Error(perlakuan) · Lower-bound · Mean Square (1 ms)
+    √ SPSS 27: between_effects · anjing · Intercept · SS
+    √ SPSS 27: between_effects · anjing · Intercept · df
+    √ SPSS 27: between_effects · anjing · Intercept · Mean Square
+    √ SPSS 27: between_effects · anjing · Intercept · F
+    √ SPSS 27: between_effects · anjing · Intercept · Sig.
+    √ SPSS 27: between_effects · anjing · Error · SS
+    √ SPSS 27: between_effects · anjing · Error · df
+    √ SPSS 27: between_effects · anjing · Error · Mean Square
+    √ SPSS 27: multivariate · perlakuan | Pillai's Trace · Value (1 ms)
+    √ SPSS 27: multivariate · perlakuan | Pillai's Trace · F
+    √ SPSS 27: multivariate · perlakuan | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · perlakuan | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · perlakuan | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · perlakuan | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · perlakuan | Wilks' Lambda · F
+    √ SPSS 27: multivariate · perlakuan | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · perlakuan | Wilks' Lambda · Error df (1 ms)
+    √ SPSS 27: multivariate · perlakuan | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · perlakuan | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · perlakuan | Hotelling's Trace · F
+    √ SPSS 27: multivariate · perlakuan | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · perlakuan | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · perlakuan | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · perlakuan | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · perlakuan | Roy's Largest Root · F
+    √ SPSS 27: multivariate · perlakuan | Roy's Largest Root · Hypothesis df (1 ms)
+    √ SPSS 27: multivariate · perlakuan | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · perlakuan | Roy's Largest Root · Sig.
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Linear · SS
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Linear · df
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Linear · Mean Square
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Linear · F
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Linear · Sig.
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Quadratic · SS (1 ms)
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Quadratic · df
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Quadratic · F
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Cubic · SS
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Cubic · df
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Cubic · Mean Square
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Cubic · F (1 ms)
+    √ SPSS 27: within_contrasts · anjing · perlakuan | Cubic · Sig.
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Linear · SS
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Linear · df
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Linear · Mean Square
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Quadratic · SS
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Quadratic · df
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Cubic · SS
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Cubic · df
+    √ SPSS 27: within_contrasts · anjing · Error(perlakuan) | Cubic · Mean Square
+  Repeated Measures dataset a
+    √ runs without errors
+    √ R car/afex (sementara): between_effects · cemas · Intercept · SS (1 ms)
+    √ R car/afex (sementara): between_effects · cemas · Intercept · df
+    √ R car/afex (sementara): between_effects · cemas · Intercept · error SS
+    √ R car/afex (sementara): between_effects · cemas · Intercept · error df
+    √ R car/afex (sementara): between_effects · cemas · Intercept · F (1 ms)
+    √ R car/afex (sementara): between_effects · cemas · Intercept · Sig.
+    √ R car/afex (sementara): within_effects · cemas · waktu · SS
+    √ R car/afex (sementara): within_effects · cemas · waktu · df
+    √ R car/afex (sementara): within_effects · cemas · waktu · error SS
+    √ R car/afex (sementara): within_effects · cemas · waktu · error df
+    √ R car/afex (sementara): within_effects · cemas · waktu · F
+    √ R car/afex (sementara): within_effects · cemas · waktu · Sig.
+    √ R car/afex (sementara): mauchly · cemas · waktu · W (1 ms)
+    √ R car/afex (sementara): mauchly · cemas · waktu · Greenhouse-Geisser
+    √ R car/afex (sementara): within_effects · cemas · waktu · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): between_effects · stres · Intercept · SS
+    √ R car/afex (sementara): between_effects · stres · Intercept · df
+    √ R car/afex (sementara): between_effects · stres · Intercept · error SS
+    √ R car/afex (sementara): between_effects · stres · Intercept · error df
+    √ R car/afex (sementara): between_effects · stres · Intercept · F
+    √ R car/afex (sementara): between_effects · stres · Intercept · Sig.
+    √ R car/afex (sementara): within_effects · stres · waktu · SS
+    √ R car/afex (sementara): within_effects · stres · waktu · df
+    √ R car/afex (sementara): within_effects · stres · waktu · error SS
+    √ R car/afex (sementara): within_effects · stres · waktu · error df
+    √ R car/afex (sementara): within_effects · stres · waktu · F (1 ms)
+    √ R car/afex (sementara): within_effects · stres · waktu · Sig.
+    √ R car/afex (sementara): mauchly · stres · waktu · W
+    √ R car/afex (sementara): mauchly · stres · waktu · Greenhouse-Geisser
+    √ R car/afex (sementara): within_effects · stres · waktu · Sig. Greenhouse-Geisser
+    √ SPSS 27: mauchly · cemas · waktu · Mauchly's W
+    √ SPSS 27: mauchly · cemas · waktu · Approx. Chi-Square (1 ms)
+    √ SPSS 27: mauchly · cemas · waktu · df
+    √ SPSS 27: mauchly · cemas · waktu · Sig.
+    √ SPSS 27: mauchly · cemas · waktu · Greenhouse-Geisser
+    √ SPSS 27: mauchly · cemas · waktu · Huynh-Feldt
+    √ SPSS 27: mauchly · cemas · waktu · Lower-bound
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · df
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · F (1 ms)
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · cemas · waktu · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · cemas · waktu · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · df
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · F
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · Noncent. Parameter (1 ms)
+    √ SPSS 27: within_effects · cemas · waktu · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · SS
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · df
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · F
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · Sig.
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · cemas · waktu · Lower-bound · Observed Power (1 ms)
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Sphericity Assumed · df
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Huynh-Feldt · Mean Square (1 ms)
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Lower-bound · SS
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Lower-bound · df
+    √ SPSS 27: within_effects · cemas · Error(waktu) · Lower-bound · Mean Square
+    √ SPSS 27: between_effects · cemas · Intercept · SS
+    √ SPSS 27: between_effects · cemas · Intercept · df
+    √ SPSS 27: between_effects · cemas · Intercept · Mean Square
+    √ SPSS 27: between_effects · cemas · Intercept · F
+    √ SPSS 27: between_effects · cemas · Intercept · Sig.
+    √ SPSS 27: between_effects · cemas · Intercept · Partial Eta Squared
+    √ SPSS 27: between_effects · cemas · Intercept · Noncent. Parameter
+    √ SPSS 27: between_effects · cemas · Intercept · Observed Power
+    √ SPSS 27: between_effects · cemas · Error · SS
+    √ SPSS 27: between_effects · cemas · Error · df
+    √ SPSS 27: between_effects · cemas · Error · Mean Square
+    √ SPSS 27: mauchly · stres · waktu · Mauchly's W
+    √ SPSS 27: mauchly · stres · waktu · Approx. Chi-Square
+    √ SPSS 27: mauchly · stres · waktu · df
+    √ SPSS 27: mauchly · stres · waktu · Sig.
+    √ SPSS 27: mauchly · stres · waktu · Greenhouse-Geisser
+    √ SPSS 27: mauchly · stres · waktu · Huynh-Feldt
+    √ SPSS 27: mauchly · stres · waktu · Lower-bound
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · df
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · F
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · Sig. (1 ms)
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · stres · waktu · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · stres · waktu · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · df
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · F
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · stres · waktu · Huynh-Feldt · Observed Power (1 ms)
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · SS
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · df
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · F
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · Sig.
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · stres · waktu · Lower-bound · Observed Power (1 ms)
+    √ SPSS 27: within_effects · stres · Error(waktu) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · stres · Error(waktu) · Sphericity Assumed · df
+    √ SPSS 27: within_effects · stres · Error(waktu) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · stres · Error(waktu) · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · stres · Error(waktu) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · stres · Error(waktu) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · stres · Error(waktu) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · stres · Error(waktu) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · stres · Error(waktu) · Huynh-Feldt · Mean Square (1 ms)
+    √ SPSS 27: within_effects · stres · Error(waktu) · Lower-bound · SS
+    √ SPSS 27: within_effects · stres · Error(waktu) · Lower-bound · df
+    √ SPSS 27: within_effects · stres · Error(waktu) · Lower-bound · Mean Square
+    √ SPSS 27: between_effects · stres · Intercept · SS
+    √ SPSS 27: between_effects · stres · Intercept · df
+    √ SPSS 27: between_effects · stres · Intercept · Mean Square
+    √ SPSS 27: between_effects · stres · Intercept · F
+    √ SPSS 27: between_effects · stres · Intercept · Sig. (1 ms)
+    √ SPSS 27: between_effects · stres · Intercept · Partial Eta Squared
+    √ SPSS 27: between_effects · stres · Intercept · Noncent. Parameter
+    √ SPSS 27: between_effects · stres · Intercept · Observed Power
+    √ SPSS 27: between_effects · stres · Error · SS
+    √ SPSS 27: between_effects · stres · Error · df
+    √ SPSS 27: between_effects · stres · Error · Mean Square
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Value
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · F
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · Intercept | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · F
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Hypothesis df (1 ms)
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · Intercept | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · F
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Error df (1 ms)
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · Intercept | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · F
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Partial Eta Squared (1 ms)
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · Intercept | Roy's Largest Root · Observed Power
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Value
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · F
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · F
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Partial Eta Squared (1 ms)
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · F
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Partial Eta Squared (1 ms)
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · F
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Observed Power
+    √ SPSS 27: descriptives · cemas1 · Mean (1 ms)
+    √ SPSS 27: descriptives · cemas1 · Std. Deviation
+    √ SPSS 27: descriptives · cemas1 · N
+    √ SPSS 27: descriptives · cemas2 · Mean
+    √ SPSS 27: descriptives · cemas2 · Std. Deviation
+    √ SPSS 27: descriptives · cemas2 · N
+    √ SPSS 27: descriptives · cemas3 · Mean
+    √ SPSS 27: descriptives · cemas3 · Std. Deviation (1 ms)
+    √ SPSS 27: descriptives · cemas3 · N
+    √ SPSS 27: descriptives · stres1 · Mean
+    √ SPSS 27: descriptives · stres1 · Std. Deviation
+    √ SPSS 27: descriptives · stres1 · N
+    √ SPSS 27: descriptives · stres2 · Mean
+    √ SPSS 27: descriptives · stres2 · Std. Deviation
+    √ SPSS 27: descriptives · stres2 · N
+    √ SPSS 27: descriptives · stres3 · Mean (1 ms)
+    √ SPSS 27: descriptives · stres3 · Std. Deviation
+    √ SPSS 27: descriptives · stres3 · N
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Value
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · F
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Hypothesis df
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Error df
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Sig.
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: within_multivariate · waktu | Pillai's Trace · Observed Power
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Value
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · F
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Error df
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Sig.
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: within_multivariate · waktu | Wilks' Lambda · Observed Power
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Value
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · F
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Error df
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Sig.
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: within_multivariate · waktu | Hotelling's Trace · Observed Power
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Value
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · F (1 ms)
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Error df
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Sig.
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: within_multivariate · waktu | Roy's Largest Root · Observed Power
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · SS
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · df
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · Mean Square
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · F (1 ms)
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · Sig.
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · Partial Eta Squared
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · cemas · waktu | Linear · Observed Power
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · SS
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · df
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · F
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · cemas · waktu | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · SS
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · df
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · Mean Square
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · F
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · Sig.
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · Partial Eta Squared
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · stres · waktu | Linear · Observed Power (1 ms)
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · SS
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · df
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · F
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · stres · waktu | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Linear · SS
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Linear · df
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Linear · Mean Square (1 ms)
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Quadratic · SS
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Quadratic · df
+    √ SPSS 27: within_contrasts · cemas · Error(waktu) | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Linear · SS
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Linear · df
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Linear · Mean Square
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Quadratic · SS
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Quadratic · df
+    √ SPSS 27: within_contrasts · stres · Error(waktu) | Quadratic · Mean Square (1 ms)
+  Repeated Measures dataset b
+    √ runs without errors
+    √ R car/afex (sementara): between_effects · skor · Intercept · SS
+    √ R car/afex (sementara): between_effects · skor · Intercept · df
+    √ R car/afex (sementara): between_effects · skor · Intercept · error SS
+    √ R car/afex (sementara): between_effects · skor · Intercept · error df
+    √ R car/afex (sementara): between_effects · skor · Intercept · F
+    √ R car/afex (sementara): between_effects · skor · Intercept · Sig.
+    √ R car/afex (sementara): between_effects · skor · kelompok · SS
+    √ R car/afex (sementara): between_effects · skor · kelompok · df
+    √ R car/afex (sementara): between_effects · skor · kelompok · error SS
+    √ R car/afex (sementara): between_effects · skor · kelompok · error df
+    √ R car/afex (sementara): between_effects · skor · kelompok · F (1 ms)
+    √ R car/afex (sementara): between_effects · skor · kelompok · Sig.
+    √ R car/afex (sementara): within_effects · skor · waktu · SS
+    √ R car/afex (sementara): within_effects · skor · waktu · df
+    √ R car/afex (sementara): within_effects · skor · waktu · error SS
+    √ R car/afex (sementara): within_effects · skor · waktu · error df
+    √ R car/afex (sementara): within_effects · skor · waktu · F
+    √ R car/afex (sementara): within_effects · skor · waktu · Sig.
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · SS (1 ms)
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · df
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · error SS
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · error df
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · F
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · Sig.
+    √ R car/afex (sementara): mauchly · skor · waktu · W
+    √ R car/afex (sementara): mauchly · skor · waktu · Greenhouse-Geisser (1 ms)
+    √ R car/afex (sementara): within_effects · skor · waktu · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): mauchly · skor · waktu * kelompok · W
+    √ R car/afex (sementara): mauchly · skor · waktu * kelompok · Greenhouse-Geisser
+    √ R car/afex (sementara): within_effects · skor · waktu * kelompok · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): multivariate · skor · waktu | Pillai's Trace · Value
+    √ R car/afex (sementara): multivariate · skor · waktu | Pillai's Trace · F
+    √ R car/afex (sementara): multivariate · skor · waktu | Pillai's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu | Pillai's Trace · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu | Pillai's Trace · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu | Wilks' Lambda · Value
+    √ R car/afex (sementara): multivariate · skor · waktu | Wilks' Lambda · F
+    √ R car/afex (sementara): multivariate · skor · waktu | Wilks' Lambda · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu | Wilks' Lambda · Error df (1 ms)
+    √ R car/afex (sementara): multivariate · skor · waktu | Wilks' Lambda · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu | Hotelling's Trace · Value
+    √ R car/afex (sementara): multivariate · skor · waktu | Hotelling's Trace · F
+    √ R car/afex (sementara): multivariate · skor · waktu | Hotelling's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu | Hotelling's Trace · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu | Hotelling's Trace · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu | Roy's Largest Root · Value (1 ms)
+    √ R car/afex (sementara): multivariate · skor · waktu | Roy's Largest Root · F
+    √ R car/afex (sementara): multivariate · skor · waktu | Roy's Largest Root · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu | Roy's Largest Root · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu | Roy's Largest Root · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Pillai's Trace · Value
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Pillai's Trace · F
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Pillai's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Pillai's Trace · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Pillai's Trace · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Wilks' Lambda · Value
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Wilks' Lambda · F
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Wilks' Lambda · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Wilks' Lambda · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Wilks' Lambda · Sig. (1 ms)
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Hotelling's Trace · Value
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Hotelling's Trace · F
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Hotelling's Trace · Hypothesis df (1 ms)
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Hotelling's Trace · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Hotelling's Trace · Sig.
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Roy's Largest Root · Value
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Roy's Largest Root · F
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Roy's Largest Root · Hypothesis df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Roy's Largest Root · Error df
+    √ R car/afex (sementara): multivariate · skor · waktu * kelompok | Roy's Largest Root · Sig.
+    √ R car/afex (sementara): univariate · skor|1 · Intercept · SS
+    √ R car/afex (sementara): univariate · skor|1 · Intercept · df
+    √ R car/afex (sementara): univariate · skor|1 · Intercept · F (1 ms)
+    √ R car/afex (sementara): univariate · skor|1 · kelompok · SS
+    √ R car/afex (sementara): univariate · skor|1 · kelompok · df
+    √ R car/afex (sementara): univariate · skor|1 · kelompok · F
+    √ R car/afex (sementara): univariate · skor|1 · Error · SS
+    √ R car/afex (sementara): univariate · skor|1 · Error · df
+    √ R car/afex (sementara): univariate · skor|2 · Intercept · SS
+    √ R car/afex (sementara): univariate · skor|2 · Intercept · df
+    √ R car/afex (sementara): univariate · skor|2 · Intercept · F
+    √ R car/afex (sementara): univariate · skor|2 · kelompok · SS
+    √ R car/afex (sementara): univariate · skor|2 · kelompok · df
+    √ R car/afex (sementara): univariate · skor|2 · kelompok · F
+    √ R car/afex (sementara): univariate · skor|2 · Error · SS (1 ms)
+    √ R car/afex (sementara): univariate · skor|2 · Error · df
+    √ R car/afex (sementara): univariate · skor|3 · Intercept · SS
+    √ R car/afex (sementara): univariate · skor|3 · Intercept · df
+    √ R car/afex (sementara): univariate · skor|3 · Intercept · F
+    √ R car/afex (sementara): univariate · skor|3 · kelompok · SS
+    √ R car/afex (sementara): univariate · skor|3 · kelompok · df (1 ms)
+    √ R car/afex (sementara): univariate · skor|3 · kelompok · F
+    √ R car/afex (sementara): univariate · skor|3 · Error · SS
+    √ R car/afex (sementara): univariate · skor|3 · Error · df
+    √ R car/afex (sementara): univariate · skor|4 · Intercept · SS
+    √ R car/afex (sementara): univariate · skor|4 · Intercept · df
+    √ R car/afex (sementara): univariate · skor|4 · Intercept · F (1 ms)
+    √ R car/afex (sementara): univariate · skor|4 · kelompok · SS
+    √ R car/afex (sementara): univariate · skor|4 · kelompok · df
+    √ R car/afex (sementara): univariate · skor|4 · kelompok · F
+    √ R car/afex (sementara): univariate · skor|4 · Error · SS
+    √ R car/afex (sementara): univariate · skor|4 · Error · df
+    √ SPSS 27: mauchly · skor · waktu · Mauchly's W
+    √ SPSS 27: mauchly · skor · waktu · Approx. Chi-Square (1 ms)
+    √ SPSS 27: mauchly · skor · waktu · df
+    √ SPSS 27: mauchly · skor · waktu · Sig.
+    √ SPSS 27: mauchly · skor · waktu · Greenhouse-Geisser
+    √ SPSS 27: mauchly · skor · waktu · Huynh-Feldt
+    √ SPSS 27: mauchly · skor · waktu · Lower-bound
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · df
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · F
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · F (1 ms)
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · SS
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · df
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · F
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Sig. (1 ms)
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · df (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Observed Power (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Observed Power
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · SS (1 ms)
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · Mean Square
+    √ SPSS 27: between_effects · skor · Intercept · SS
+    √ SPSS 27: between_effects · skor · Intercept · df
+    √ SPSS 27: between_effects · skor · Intercept · Mean Square
+    √ SPSS 27: between_effects · skor · Intercept · F
+    √ SPSS 27: between_effects · skor · Intercept · Sig.
+    √ SPSS 27: between_effects · skor · Intercept · Partial Eta Squared
+    √ SPSS 27: between_effects · skor · Intercept · Noncent. Parameter
+    √ SPSS 27: between_effects · skor · Intercept · Observed Power
+    √ SPSS 27: between_effects · skor · kelompok · SS
+    √ SPSS 27: between_effects · skor · kelompok · df
+    √ SPSS 27: between_effects · skor · kelompok · Mean Square
+    √ SPSS 27: between_effects · skor · kelompok · F
+    √ SPSS 27: between_effects · skor · kelompok · Sig.
+    √ SPSS 27: between_effects · skor · kelompok · Partial Eta Squared
+    √ SPSS 27: between_effects · skor · kelompok · Noncent. Parameter
+    √ SPSS 27: between_effects · skor · kelompok · Observed Power
+    √ SPSS 27: between_effects · skor · Error · SS
+    √ SPSS 27: between_effects · skor · Error · df
+    √ SPSS 27: between_effects · skor · Error · Mean Square (1 ms)
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Value
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · F
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Observed Power (1 ms)
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · F
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · F (1 ms)
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · F
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Error df (1 ms)
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · F
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · F
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Partial Eta Squared (1 ms)
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · F
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · F
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Observed Power (1 ms)
+    √ SPSS 27: descriptives · w1 · 1 · Mean
+    √ SPSS 27: descriptives · w1 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 1 · N
+    √ SPSS 27: descriptives · w1 · 2 · Mean
+    √ SPSS 27: descriptives · w1 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 2 · N
+    √ SPSS 27: descriptives · w1 · 3 · Mean
+    √ SPSS 27: descriptives · w1 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 3 · N
+    √ SPSS 27: descriptives · w1 · Total · Mean
+    √ SPSS 27: descriptives · w1 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w1 · Total · N
+    √ SPSS 27: descriptives · w2 · 1 · Mean
+    √ SPSS 27: descriptives · w2 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w2 · 1 · N
+    √ SPSS 27: descriptives · w2 · 2 · Mean
+    √ SPSS 27: descriptives · w2 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w2 · 2 · N
+    √ SPSS 27: descriptives · w2 · 3 · Mean
+    √ SPSS 27: descriptives · w2 · 3 · Std. Deviation (1 ms)
+    √ SPSS 27: descriptives · w2 · 3 · N
+    √ SPSS 27: descriptives · w2 · Total · Mean
+    √ SPSS 27: descriptives · w2 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w2 · Total · N
+    √ SPSS 27: descriptives · w3 · 1 · Mean
+    √ SPSS 27: descriptives · w3 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 1 · N
+    √ SPSS 27: descriptives · w3 · 2 · Mean
+    √ SPSS 27: descriptives · w3 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 2 · N
+    √ SPSS 27: descriptives · w3 · 3 · Mean
+    √ SPSS 27: descriptives · w3 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 3 · N
+    √ SPSS 27: descriptives · w3 · Total · Mean
+    √ SPSS 27: descriptives · w3 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w3 · Total · N
+    √ SPSS 27: descriptives · w4 · 1 · Mean
+    √ SPSS 27: descriptives · w4 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 1 · N (1 ms)
+    √ SPSS 27: descriptives · w4 · 2 · Mean
+    √ SPSS 27: descriptives · w4 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 2 · N
+    √ SPSS 27: descriptives · w4 · 3 · Mean
+    √ SPSS 27: descriptives · w4 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 3 · N
+    √ SPSS 27: descriptives · w4 · Total · Mean
+    √ SPSS 27: descriptives · w4 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w4 · Total · N
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · df
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · F
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu | Linear · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · df (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · F
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · df
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · F
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu | Cubic · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · F
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · Sig. (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Linear · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · F
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · Mean Square (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · F
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Cubic · Observed Power
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Linear · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Linear · df
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Linear · Mean Square
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Quadratic · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Quadratic · df (1 ms)
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Cubic · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Cubic · df
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Cubic · Mean Square
+  Repeated Measures dataset c
+    √ runs without errors
+    √ R car/afex (sementara): between_effects · nilai · Intercept · SS
+    √ R car/afex (sementara): between_effects · nilai · Intercept · df
+    √ R car/afex (sementara): between_effects · nilai · Intercept · error SS (1 ms)
+    √ R car/afex (sementara): between_effects · nilai · Intercept · error df
+    √ R car/afex (sementara): between_effects · nilai · Intercept · F
+    √ R car/afex (sementara): between_effects · nilai · Intercept · Sig.
+    √ R car/afex (sementara): between_effects · nilai · metode · SS
+    √ R car/afex (sementara): between_effects · nilai · metode · df
+    √ R car/afex (sementara): between_effects · nilai · metode · error SS
+    √ R car/afex (sementara): between_effects · nilai · metode · error df (1 ms)
+    √ R car/afex (sementara): between_effects · nilai · metode · F
+    √ R car/afex (sementara): between_effects · nilai · metode · Sig.
+    √ R car/afex (sementara): within_effects · nilai · sesi · SS
+    √ R car/afex (sementara): within_effects · nilai · sesi · df
+    √ R car/afex (sementara): within_effects · nilai · sesi · error SS
+    √ R car/afex (sementara): within_effects · nilai · sesi · error df
+    √ R car/afex (sementara): within_effects · nilai · sesi · F
+    √ R car/afex (sementara): within_effects · nilai · sesi · Sig.
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · SS
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · df
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · error SS
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · error df
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · F
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · Sig.
+    √ R car/afex (sementara): mauchly · nilai · sesi · W
+    √ R car/afex (sementara): mauchly · nilai · sesi · Greenhouse-Geisser (1 ms)
+    √ R car/afex (sementara): within_effects · nilai · sesi · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): mauchly · nilai · sesi * metode · W
+    √ R car/afex (sementara): mauchly · nilai · sesi * metode · Greenhouse-Geisser
+    √ R car/afex (sementara): within_effects · nilai · sesi * metode · Sig. Greenhouse-Geisser
+    √ R car/afex (sementara): multivariate · nilai · sesi | Pillai's Trace · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi | Pillai's Trace · F
+    √ R car/afex (sementara): multivariate · nilai · sesi | Pillai's Trace · Hypothesis df (1 ms)
+    √ R car/afex (sementara): multivariate · nilai · sesi | Pillai's Trace · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi | Pillai's Trace · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi | Wilks' Lambda · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi | Wilks' Lambda · F
+    √ R car/afex (sementara): multivariate · nilai · sesi | Wilks' Lambda · Hypothesis df (1 ms)
+    √ R car/afex (sementara): multivariate · nilai · sesi | Wilks' Lambda · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi | Wilks' Lambda · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi | Hotelling's Trace · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi | Hotelling's Trace · F
+    √ R car/afex (sementara): multivariate · nilai · sesi | Hotelling's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · nilai · sesi | Hotelling's Trace · Error df (1 ms)
+    √ R car/afex (sementara): multivariate · nilai · sesi | Hotelling's Trace · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi | Roy's Largest Root · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi | Roy's Largest Root · F
+    √ R car/afex (sementara): multivariate · nilai · sesi | Roy's Largest Root · Hypothesis df
+    √ R car/afex (sementara): multivariate · nilai · sesi | Roy's Largest Root · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi | Roy's Largest Root · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Pillai's Trace · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Pillai's Trace · F (1 ms)
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Pillai's Trace · Hypothesis df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Pillai's Trace · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Pillai's Trace · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Wilks' Lambda · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Wilks' Lambda · F
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Wilks' Lambda · Hypothesis df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Wilks' Lambda · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Wilks' Lambda · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Hotelling's Trace · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Hotelling's Trace · F
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Hotelling's Trace · Hypothesis df (1 ms)
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Hotelling's Trace · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Hotelling's Trace · Sig.
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Roy's Largest Root · Value
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Roy's Largest Root · F
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Roy's Largest Root · Hypothesis df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Roy's Largest Root · Error df
+    √ R car/afex (sementara): multivariate · nilai · sesi * metode | Roy's Largest Root · Sig.
+    √ R car/afex (sementara): univariate · nilai|1 · Intercept · SS (1 ms)
+    √ R car/afex (sementara): univariate · nilai|1 · Intercept · df
+    √ R car/afex (sementara): univariate · nilai|1 · Intercept · F
+    √ R car/afex (sementara): univariate · nilai|1 · metode · SS
+    √ R car/afex (sementara): univariate · nilai|1 · metode · df
+    √ R car/afex (sementara): univariate · nilai|1 · metode · F
+    √ R car/afex (sementara): univariate · nilai|1 · Error · SS
+    √ R car/afex (sementara): univariate · nilai|1 · Error · df
+    √ R car/afex (sementara): levene · nilai|1 · Based on Mean · Levene Statistic (1 ms)
+    √ R car/afex (sementara): levene · nilai|1 · Based on Mean · df1
+    √ R car/afex (sementara): levene · nilai|1 · Based on Mean · df2
+    √ R car/afex (sementara): levene · nilai|1 · Based on Mean · Sig.
+    √ R car/afex (sementara): levene · nilai|1 · Based on Median · Levene Statistic
+    √ R car/afex (sementara): levene · nilai|1 · Based on Median · df1
+    √ R car/afex (sementara): levene · nilai|1 · Based on Median · df2
+    √ R car/afex (sementara): levene · nilai|1 · Based on Median · Sig. (1 ms)
+    √ R car/afex (sementara): univariate · nilai|2 · Intercept · SS
+    √ R car/afex (sementara): univariate · nilai|2 · Intercept · df
+    √ R car/afex (sementara): univariate · nilai|2 · Intercept · F
+    √ R car/afex (sementara): univariate · nilai|2 · metode · SS
+    √ R car/afex (sementara): univariate · nilai|2 · metode · df
+    √ R car/afex (sementara): univariate · nilai|2 · metode · F
+    √ R car/afex (sementara): univariate · nilai|2 · Error · SS (1 ms)
+    √ R car/afex (sementara): univariate · nilai|2 · Error · df
+    √ R car/afex (sementara): levene · nilai|2 · Based on Mean · Levene Statistic
+    √ R car/afex (sementara): levene · nilai|2 · Based on Mean · df1
+    √ R car/afex (sementara): levene · nilai|2 · Based on Mean · df2
+    √ R car/afex (sementara): levene · nilai|2 · Based on Mean · Sig.
+    √ R car/afex (sementara): levene · nilai|2 · Based on Median · Levene Statistic
+    √ R car/afex (sementara): levene · nilai|2 · Based on Median · df1
+    √ R car/afex (sementara): levene · nilai|2 · Based on Median · df2 (1 ms)
+    √ R car/afex (sementara): levene · nilai|2 · Based on Median · Sig.
+    √ R car/afex (sementara): univariate · nilai|3 · Intercept · SS
+    √ R car/afex (sementara): univariate · nilai|3 · Intercept · df
+    √ R car/afex (sementara): univariate · nilai|3 · Intercept · F
+    √ R car/afex (sementara): univariate · nilai|3 · metode · SS
+    √ R car/afex (sementara): univariate · nilai|3 · metode · df
+    √ R car/afex (sementara): univariate · nilai|3 · metode · F
+    √ R car/afex (sementara): univariate · nilai|3 · Error · SS (1 ms)
+    √ R car/afex (sementara): univariate · nilai|3 · Error · df
+    √ R car/afex (sementara): levene · nilai|3 · Based on Mean · Levene Statistic
+    √ R car/afex (sementara): levene · nilai|3 · Based on Mean · df1
+    √ R car/afex (sementara): levene · nilai|3 · Based on Mean · df2
+    √ R car/afex (sementara): levene · nilai|3 · Based on Mean · Sig.
+    √ R car/afex (sementara): levene · nilai|3 · Based on Median · Levene Statistic
+    √ R car/afex (sementara): levene · nilai|3 · Based on Median · df1
+    √ R car/afex (sementara): levene · nilai|3 · Based on Median · df2 (1 ms)
+    √ R car/afex (sementara): levene · nilai|3 · Based on Median · Sig.
+    √ R car/afex (sementara): emmeans · nilai · (OVERALL) | (OVERALL) · Mean
+    √ R car/afex (sementara): emmeans · nilai · (OVERALL) | (OVERALL) · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · (OVERALL) | (OVERALL) · Lower Bound (1 ms)
+    √ R car/afex (sementara): emmeans · nilai · (OVERALL) | (OVERALL) · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode | 1 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode | 1 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode | 1 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode | 1 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode | 2 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode | 2 · Std. Error (1 ms)
+    √ R car/afex (sementara): emmeans · nilai · metode | 2 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode | 2 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · sesi | 1 · Mean
+    √ R car/afex (sementara): emmeans · nilai · sesi | 1 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · sesi | 1 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · sesi | 1 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · sesi | 2 · Mean
+    √ R car/afex (sementara): emmeans · nilai · sesi | 2 · Std. Error (1 ms)
+    √ R car/afex (sementara): emmeans · nilai · sesi | 2 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · sesi | 2 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · sesi | 3 · Mean
+    √ R car/afex (sementara): emmeans · nilai · sesi | 3 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · sesi | 3 · Lower Bound (1 ms)
+    √ R car/afex (sementara): emmeans · nilai · sesi | 3 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 1 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 1 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 1 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 1 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 1 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 1 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 1 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 1 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 2 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 2 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 2 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 2 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 2 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 2 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 2 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 2 · Upper Bound (1 ms)
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 3 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 3 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 3 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 1 · 3 · Upper Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 3 · Mean
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 3 · Std. Error
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 3 · Lower Bound
+    √ R car/afex (sementara): emmeans · nilai · metode * sesi | 2 · 3 · Upper Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · metode | 1 - 2 · Mean Difference
+    √ R car/afex (sementara): emmeans_pairwise · nilai · metode | 1 - 2 · Std. Error
+    √ R car/afex (sementara): emmeans_pairwise · nilai · metode | 1 - 2 · Sig.
+    √ R car/afex (sementara): emmeans_pairwise · nilai · metode | 1 - 2 · Lower Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · metode | 1 - 2 · Upper Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 2 · Mean Difference
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 2 · Std. Error
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 2 · Sig.
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 2 · Lower Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 2 · Upper Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 3 · Mean Difference
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 3 · Std. Error
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 3 · Sig.
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 3 · Lower Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 1 - 3 · Upper Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 2 - 3 · Mean Difference (1 ms)
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 2 - 3 · Std. Error
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 2 - 3 · Sig.
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 2 - 3 · Lower Bound
+    √ R car/afex (sementara): emmeans_pairwise · nilai · sesi | 2 - 3 · Upper Bound
+    √ SPSS 27: mauchly · nilai · sesi · Mauchly's W (1 ms)
+    √ SPSS 27: mauchly · nilai · sesi · Approx. Chi-Square
+    √ SPSS 27: mauchly · nilai · sesi · df
+    √ SPSS 27: mauchly · nilai · sesi · Sig.
+    √ SPSS 27: mauchly · nilai · sesi · Greenhouse-Geisser
+    √ SPSS 27: mauchly · nilai · sesi · Huynh-Feldt
+    √ SPSS 27: mauchly · nilai · sesi · Lower-bound
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · df
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · F (1 ms)
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi · Greenhouse-Geisser · Observed Power (1 ms)
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · df
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · F
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · SS
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · df
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · F (1 ms)
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · Sig.
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi · Lower-bound · Observed Power
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · df
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · F
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi * metode · Sphericity Assumed · Observed Power (1 ms)
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi * metode · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · df
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · F (1 ms)
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi * metode · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · SS
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · df
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · F
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · Sig.
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · nilai · sesi * metode · Lower-bound · Observed Power (1 ms)
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Sphericity Assumed · df
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Lower-bound · SS
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Lower-bound · df
+    √ SPSS 27: within_effects · nilai · Error(sesi) · Lower-bound · Mean Square (1 ms)
+    √ SPSS 27: between_effects · nilai · Intercept · SS
+    √ SPSS 27: between_effects · nilai · Intercept · df
+    √ SPSS 27: between_effects · nilai · Intercept · Mean Square
+    √ SPSS 27: between_effects · nilai · Intercept · F
+    √ SPSS 27: between_effects · nilai · Intercept · Sig.
+    √ SPSS 27: between_effects · nilai · Intercept · Partial Eta Squared
+    √ SPSS 27: between_effects · nilai · Intercept · Noncent. Parameter
+    √ SPSS 27: between_effects · nilai · Intercept · Observed Power
+    √ SPSS 27: between_effects · nilai · metode · SS
+    √ SPSS 27: between_effects · nilai · metode · df
+    √ SPSS 27: between_effects · nilai · metode · Mean Square
+    √ SPSS 27: between_effects · nilai · metode · F
+    √ SPSS 27: between_effects · nilai · metode · Sig.
+    √ SPSS 27: between_effects · nilai · metode · Partial Eta Squared
+    √ SPSS 27: between_effects · nilai · metode · Noncent. Parameter
+    √ SPSS 27: between_effects · nilai · metode · Observed Power
+    √ SPSS 27: between_effects · nilai · Error · SS
+    √ SPSS 27: between_effects · nilai · Error · df
+    √ SPSS 27: between_effects · nilai · Error · Mean Square
+    √ SPSS 27: box_m · Box's M · Box's M
+    √ SPSS 27: box_m · Box's M · F
+    √ SPSS 27: box_m · Box's M · df1
+    √ SPSS 27: box_m · Box's M · df2 (1 ms)
+    √ SPSS 27: box_m · Box's M · Sig.
+    √ SPSS 27: levene · nilai|1 · Based on Mean · Levene Statistic
+    √ SPSS 27: levene · nilai|1 · Based on Mean · df1
+    √ SPSS 27: levene · nilai|1 · Based on Mean · df2 (1 ms)
+    √ SPSS 27: levene · nilai|1 · Based on Mean · Sig.
+    √ SPSS 27: levene · nilai|1 · Based on Median · Levene Statistic
+    √ SPSS 27: levene · nilai|1 · Based on Median · df1
+    √ SPSS 27: levene · nilai|1 · Based on Median · df2
+    √ SPSS 27: levene · nilai|1 · Based on Median · Sig.
+    √ SPSS 27: levene · nilai|1 · Based on Median and with adjusted df · Levene Statistic
+    √ SPSS 27: levene · nilai|1 · Based on Median and with adjusted df · df1
+    √ SPSS 27: levene · nilai|1 · Based on Median and with adjusted df · df2 (1 ms)
+    √ SPSS 27: levene · nilai|1 · Based on Median and with adjusted df · Sig.
+    √ SPSS 27: levene · nilai|1 · Based on trimmed mean · Levene Statistic
+    √ SPSS 27: levene · nilai|1 · Based on trimmed mean · df1
+    √ SPSS 27: levene · nilai|1 · Based on trimmed mean · df2
+    √ SPSS 27: levene · nilai|1 · Based on trimmed mean · Sig.
+    √ SPSS 27: levene · nilai|2 · Based on Mean · Levene Statistic
+    √ SPSS 27: levene · nilai|2 · Based on Mean · df1
+    √ SPSS 27: levene · nilai|2 · Based on Mean · df2
+    √ SPSS 27: levene · nilai|2 · Based on Mean · Sig.
+    √ SPSS 27: levene · nilai|2 · Based on Median · Levene Statistic
+    √ SPSS 27: levene · nilai|2 · Based on Median · df1 (1 ms)
+    √ SPSS 27: levene · nilai|2 · Based on Median · df2
+    √ SPSS 27: levene · nilai|2 · Based on Median · Sig.
+    √ SPSS 27: levene · nilai|2 · Based on Median and with adjusted df · Levene Statistic
+    √ SPSS 27: levene · nilai|2 · Based on Median and with adjusted df · df1
+    √ SPSS 27: levene · nilai|2 · Based on Median and with adjusted df · df2
+    √ SPSS 27: levene · nilai|2 · Based on Median and with adjusted df · Sig.
+    √ SPSS 27: levene · nilai|2 · Based on trimmed mean · Levene Statistic
+    √ SPSS 27: levene · nilai|2 · Based on trimmed mean · df1
+    √ SPSS 27: levene · nilai|2 · Based on trimmed mean · df2
+    √ SPSS 27: levene · nilai|2 · Based on trimmed mean · Sig.
+    √ SPSS 27: levene · nilai|3 · Based on Mean · Levene Statistic
+    √ SPSS 27: levene · nilai|3 · Based on Mean · df1 (1 ms)
+    √ SPSS 27: levene · nilai|3 · Based on Mean · df2
+    √ SPSS 27: levene · nilai|3 · Based on Mean · Sig.
+    √ SPSS 27: levene · nilai|3 · Based on Median · Levene Statistic
+    √ SPSS 27: levene · nilai|3 · Based on Median · df1
+    √ SPSS 27: levene · nilai|3 · Based on Median · df2
+    √ SPSS 27: levene · nilai|3 · Based on Median · Sig.
+    √ SPSS 27: levene · nilai|3 · Based on Median and with adjusted df · Levene Statistic
+    √ SPSS 27: levene · nilai|3 · Based on Median and with adjusted df · df1
+    √ SPSS 27: levene · nilai|3 · Based on Median and with adjusted df · df2
+    √ SPSS 27: levene · nilai|3 · Based on Median and with adjusted df · Sig.
+    √ SPSS 27: levene · nilai|3 · Based on trimmed mean · Levene Statistic
+    √ SPSS 27: levene · nilai|3 · Based on trimmed mean · df1 (1 ms)
+    √ SPSS 27: levene · nilai|3 · Based on trimmed mean · df2
+    √ SPSS 27: levene · nilai|3 · Based on trimmed mean · Sig.
+    √ SPSS 27: emmeans · nilai · (OVERALL) | (OVERALL) · Mean
+    √ SPSS 27: emmeans · nilai · (OVERALL) | (OVERALL) · Std. Error
+    √ SPSS 27: emmeans · nilai · (OVERALL) | (OVERALL) · Lower Bound
+    √ SPSS 27: emmeans · nilai · (OVERALL) | (OVERALL) · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode | 1 · Mean
+    √ SPSS 27: emmeans · nilai · metode | 1 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode | 1 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode | 1 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode | 2 · Mean (1 ms)
+    √ SPSS 27: emmeans · nilai · metode | 2 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode | 2 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode | 2 · Upper Bound
+    √ SPSS 27: emmeans · nilai · sesi | 1 · Mean
+    √ SPSS 27: emmeans · nilai · sesi | 1 · Std. Error
+    √ SPSS 27: emmeans · nilai · sesi | 1 · Lower Bound
+    √ SPSS 27: emmeans · nilai · sesi | 1 · Upper Bound
+    √ SPSS 27: emmeans · nilai · sesi | 2 · Mean
+    √ SPSS 27: emmeans · nilai · sesi | 2 · Std. Error
+    √ SPSS 27: emmeans · nilai · sesi | 2 · Lower Bound
+    √ SPSS 27: emmeans · nilai · sesi | 2 · Upper Bound
+    √ SPSS 27: emmeans · nilai · sesi | 3 · Mean (1 ms)
+    √ SPSS 27: emmeans · nilai · sesi | 3 · Std. Error
+    √ SPSS 27: emmeans · nilai · sesi | 3 · Lower Bound
+    √ SPSS 27: emmeans · nilai · sesi | 3 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 1 · Mean
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 1 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 1 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 1 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 2 · Mean
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 2 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 2 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 2 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 3 · Mean (1 ms)
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 3 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 3 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 1 · 3 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 1 · Mean
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 1 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 1 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 1 · Upper Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 2 · Mean
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 2 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 2 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 2 · Upper Bound (1 ms)
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 3 · Mean
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 3 · Std. Error
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 3 · Lower Bound
+    √ SPSS 27: emmeans · nilai · metode * sesi | 2 · 3 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 1 - 2 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 1 - 2 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 1 - 2 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 1 - 2 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 1 - 2 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 2 - 1 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 2 - 1 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 2 - 1 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 2 - 1 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · metode | 2 - 1 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 2 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 2 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 2 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 2 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 2 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 3 · Mean Difference (1 ms)
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 3 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 3 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 3 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 1 - 3 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 1 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 1 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 1 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 1 · Lower Bound (1 ms)
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 1 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 3 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 3 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 3 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 3 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 2 - 3 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 1 · Mean Difference
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 1 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 1 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 1 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 1 · Upper Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 2 · Mean Difference (1 ms)
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 2 · Std. Error
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 2 · Sig.
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 2 · Lower Bound
+    √ SPSS 27: emmeans_pairwise · nilai · sesi | 3 - 2 · Upper Bound
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Value
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · F
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · F
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · F
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · F
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi | Roy's Largest Root · Observed Power
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Value
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · F
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi * metode | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · F
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi * metode | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · F
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi * metode | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · F
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · sesi * metode | Roy's Largest Root · Observed Power
+    √ SPSS 27: descriptives · p1 · 1 · Mean
+    √ SPSS 27: descriptives · p1 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · p1 · 1 · N
+    √ SPSS 27: descriptives · p1 · 2 · Mean
+    √ SPSS 27: descriptives · p1 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · p1 · 2 · N
+    √ SPSS 27: descriptives · p1 · Total · Mean
+    √ SPSS 27: descriptives · p1 · Total · Std. Deviation
+    √ SPSS 27: descriptives · p1 · Total · N
+    √ SPSS 27: descriptives · p2 · 1 · Mean
+    √ SPSS 27: descriptives · p2 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · p2 · 1 · N
+    √ SPSS 27: descriptives · p2 · 2 · Mean
+    √ SPSS 27: descriptives · p2 · 2 · Std. Deviation (1 ms)
+    √ SPSS 27: descriptives · p2 · 2 · N
+    √ SPSS 27: descriptives · p2 · Total · Mean
+    √ SPSS 27: descriptives · p2 · Total · Std. Deviation
+    √ SPSS 27: descriptives · p2 · Total · N
+    √ SPSS 27: descriptives · p3 · 1 · Mean
+    √ SPSS 27: descriptives · p3 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · p3 · 1 · N (1 ms)
+    √ SPSS 27: descriptives · p3 · 2 · Mean
+    √ SPSS 27: descriptives · p3 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · p3 · 2 · N
+    √ SPSS 27: descriptives · p3 · Total · Mean
+    √ SPSS 27: descriptives · p3 · Total · Std. Deviation
+    √ SPSS 27: descriptives · p3 · Total · N
+    √ SPSS 27: bartlett · Bartlett · Likelihood Ratio
+    √ SPSS 27: bartlett · Bartlett · Approx. Chi-Square
+    √ SPSS 27: bartlett · Bartlett · df
+    √ SPSS 27: bartlett · Bartlett · Sig. (1 ms)
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · SS
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · df
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · Mean Square
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · F
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · Sig.
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · Partial Eta Squared
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · nilai · sesi | Linear · Observed Power
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · SS
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · df (1 ms)
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · F
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · nilai · sesi | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · SS
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · df
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · Mean Square
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · F
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · Sig.
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · Noncent. Parameter
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Linear · Observed Power
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · SS
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · df
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · Mean Square
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · F
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · Sig.
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · Partial Eta Squared
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · Noncent. Parameter
+    √ SPSS 27: within_contrasts · nilai · sesi * metode | Quadratic · Observed Power
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Linear · SS
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Linear · df (1 ms)
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Linear · Mean Square
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Quadratic · SS
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Quadratic · df
+    √ SPSS 27: within_contrasts · nilai · Error(sesi) | Quadratic · Mean Square
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p1 | p1 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p1 | p2 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p1 | p3 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p2 | p1 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p2 | p2 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p2 | p3 · value (1 ms)
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p3 | p1 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p3 | p2 · value
+    √ SPSS 27: residual_sscp · Sum-of-Squares and Cross-Products · p3 | p3 · value
+    √ SPSS 27: residual_sscp · Covariance · p1 | p1 · value
+    √ SPSS 27: residual_sscp · Covariance · p1 | p2 · value
+    √ SPSS 27: residual_sscp · Covariance · p1 | p3 · value
+    √ SPSS 27: residual_sscp · Covariance · p2 | p1 · value
+    √ SPSS 27: residual_sscp · Covariance · p2 | p2 · value
+    √ SPSS 27: residual_sscp · Covariance · p2 | p3 · value
+    √ SPSS 27: residual_sscp · Covariance · p3 | p1 · value
+    √ SPSS 27: residual_sscp · Covariance · p3 | p2 · value
+    √ SPSS 27: residual_sscp · Covariance · p3 | p3 · value
+    √ SPSS 27: residual_sscp · Correlation · p1 | p1 · value
+    √ SPSS 27: residual_sscp · Correlation · p1 | p2 · value
+    √ SPSS 27: residual_sscp · Correlation · p1 | p3 · value
+    √ SPSS 27: residual_sscp · Correlation · p2 | p1 · value
+    √ SPSS 27: residual_sscp · Correlation · p2 | p2 · value
+    √ SPSS 27: residual_sscp · Correlation · p2 | p3 · value
+    √ SPSS 27: residual_sscp · Correlation · p3 | p1 · value
+    √ SPSS 27: residual_sscp · Correlation · p3 | p2 · value
+    √ SPSS 27: residual_sscp · Correlation · p3 | p3 · value
+  Repeated Measures dataset d
+    √ runs without errors
+    √ SPSS 27: mauchly · skor · waktu · Mauchly's W
+    √ SPSS 27: mauchly · skor · waktu · Approx. Chi-Square
+    √ SPSS 27: mauchly · skor · waktu · df
+    √ SPSS 27: mauchly · skor · waktu · Sig.
+    √ SPSS 27: mauchly · skor · waktu · Greenhouse-Geisser
+    √ SPSS 27: mauchly · skor · waktu · Huynh-Feldt
+    √ SPSS 27: mauchly · skor · waktu · Lower-bound
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · df (1 ms)
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · F
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · F
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · SS (1 ms)
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · df
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · F
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Sig.
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu · Lower-bound · Observed Power (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Sphericity Assumed · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Mean Square (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Greenhouse-Geisser · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Huynh-Feldt · Observed Power
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · SS
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · df
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Mean Square
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · F
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Sig.
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Partial Eta Squared
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Noncent. Parameter
+    √ SPSS 27: within_effects · skor · waktu * kelompok · Lower-bound · Observed Power
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · df (1 ms)
+    √ SPSS 27: within_effects · skor · Error(waktu) · Sphericity Assumed · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Greenhouse-Geisser · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Huynh-Feldt · Mean Square
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · SS
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · df
+    √ SPSS 27: within_effects · skor · Error(waktu) · Lower-bound · Mean Square (1 ms)
+    √ SPSS 27: between_effects · skor · Intercept · SS
+    √ SPSS 27: between_effects · skor · Intercept · df
+    √ SPSS 27: between_effects · skor · Intercept · Mean Square
+    √ SPSS 27: between_effects · skor · Intercept · F
+    √ SPSS 27: between_effects · skor · Intercept · Sig.
+    √ SPSS 27: between_effects · skor · Intercept · Partial Eta Squared
+    √ SPSS 27: between_effects · skor · Intercept · Noncent. Parameter
+    √ SPSS 27: between_effects · skor · Intercept · Observed Power
+    √ SPSS 27: between_effects · skor · kelompok · SS
+    √ SPSS 27: between_effects · skor · kelompok · df
+    √ SPSS 27: between_effects · skor · kelompok · Mean Square (1 ms)
+    √ SPSS 27: between_effects · skor · kelompok · F
+    √ SPSS 27: between_effects · skor · kelompok · Sig.
+    √ SPSS 27: between_effects · skor · kelompok · Partial Eta Squared
+    √ SPSS 27: between_effects · skor · kelompok · Noncent. Parameter
+    √ SPSS 27: between_effects · skor · kelompok · Observed Power
+    √ SPSS 27: between_effects · skor · Error · SS
+    √ SPSS 27: between_effects · skor · Error · df
+    √ SPSS 27: between_effects · skor · Error · Mean Square
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Value
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · F
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Value
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · F
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · F
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · F
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu | Roy's Largest Root · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · F
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Error df (1 ms)
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Pillai's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Value (1 ms)
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · F
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Wilks' Lambda · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · F
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Hotelling's Trace · Observed Power
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Value
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · F
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Hypothesis df
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Error df
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Sig.
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Partial Eta Squared
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Noncent. Parameter
+    √ SPSS 27: multivariate · waktu * kelompok | Roy's Largest Root · Observed Power (1 ms)
+    √ SPSS 27: descriptives · w1 · 1 · Mean
+    √ SPSS 27: descriptives · w1 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 1 · N
+    √ SPSS 27: descriptives · w1 · 2 · Mean
+    √ SPSS 27: descriptives · w1 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 2 · N
+    √ SPSS 27: descriptives · w1 · 3 · Mean
+    √ SPSS 27: descriptives · w1 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w1 · 3 · N
+    √ SPSS 27: descriptives · w1 · Total · Mean
+    √ SPSS 27: descriptives · w1 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w1 · Total · N (1 ms)
+    √ SPSS 27: descriptives · w2 · 1 · Mean
+    √ SPSS 27: descriptives · w2 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w2 · 1 · N
+    √ SPSS 27: descriptives · w2 · 2 · Mean
+    √ SPSS 27: descriptives · w2 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w2 · 2 · N
+    √ SPSS 27: descriptives · w2 · 3 · Mean
+    √ SPSS 27: descriptives · w2 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w2 · 3 · N
+    √ SPSS 27: descriptives · w2 · Total · Mean
+    √ SPSS 27: descriptives · w2 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w2 · Total · N (1 ms)
+    √ SPSS 27: descriptives · w3 · 1 · Mean
+    √ SPSS 27: descriptives · w3 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 1 · N
+    √ SPSS 27: descriptives · w3 · 2 · Mean
+    √ SPSS 27: descriptives · w3 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 2 · N
+    √ SPSS 27: descriptives · w3 · 3 · Mean
+    √ SPSS 27: descriptives · w3 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w3 · 3 · N
+    √ SPSS 27: descriptives · w3 · Total · Mean
+    √ SPSS 27: descriptives · w3 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w3 · Total · N
+    √ SPSS 27: descriptives · w4 · 1 · Mean
+    √ SPSS 27: descriptives · w4 · 1 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 1 · N
+    √ SPSS 27: descriptives · w4 · 2 · Mean
+    √ SPSS 27: descriptives · w4 · 2 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 2 · N
+    √ SPSS 27: descriptives · w4 · 3 · Mean
+    √ SPSS 27: descriptives · w4 · 3 · Std. Deviation
+    √ SPSS 27: descriptives · w4 · 3 · N
+    √ SPSS 27: descriptives · w4 · Total · Mean (1 ms)
+    √ SPSS 27: descriptives · w4 · Total · Std. Deviation
+    √ SPSS 27: descriptives · w4 · Total · N
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · df
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · F
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · Noncent. Parameter (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu | Level 1 vs. Level 2 · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · df
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · F
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu | Level 2 vs. Level 3 · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · SS
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · df
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · F
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu | Level 3 vs. Level 4 · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · F
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 1 vs. Level 2 · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · F (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · Partial Eta Squared
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 2 vs. Level 3 · Observed Power
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · SS
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · df
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · Mean Square
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · F
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · Sig.
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · Partial Eta Squared (1 ms)
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · Noncent. Parameter
+    √ SPSS 27: within_contrasts · skor · waktu * kelompok | Level 3 vs. Level 4 · Observed Power
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 1 vs. Level 2 · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 1 vs. Level 2 · df
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 1 vs. Level 2 · Mean Square
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 2 vs. Level 3 · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 2 vs. Level 3 · df
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 2 vs. Level 3 · Mean Square
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 3 vs. Level 4 · SS
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 3 vs. Level 4 · df
+    √ SPSS 27: within_contrasts · skor · Error(waktu) | Level 3 vs. Level 4 · Mean Square (1 ms)
+  Tests of Within-Subjects Contrasts: contrast type
+    √ no entry gives Polynomial contrasts (18 ms)
+    √ dialog default gives Polynomial contrasts (17 ms)
+    √ older saved dialog 'None' gives Polynomial contrasts (16 ms)
+    √ Repeated is still selectable (16 ms)
+  Two within-subjects factors (dataset e): blocked
+    √ stops with a readable message and no computed tables (15 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1681 passed, 1681 total
+Snapshots:   0 total
+Time:        1.444 s
+Ran all test suites matching components/Modals/Analyze/general-linear-model/repeated-measures/__test__/repeated-measures-reference.test.ts.
+Test results written to: ..\testing\glm-mv-reference\results\fix-steps\step14-spss-v2\rm\rm-reference.json

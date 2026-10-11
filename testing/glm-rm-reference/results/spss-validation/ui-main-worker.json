@@ -1,0 +1,444 @@
+{
+  "base": "http://localhost:3101",
+  "sequence": [
+    "main",
+    "worker",
+    "main",
+    "worker"
+  ],
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-22T13:37:16.427Z",
+  "designs": {
+    "gambar51": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "7bbeedaed6aa"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "7bbeedaed6aa"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "7bbeedaed6aa"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "7bbeedaed6aa"
+        }
+      ]
+    },
+    "a": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "4a404bf9e035"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "4a404bf9e035"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "4a404bf9e035"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "4a404bf9e035"
+        }
+      ]
+    },
+    "b": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "6f749fc951c4"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "6f749fc951c4"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "6f749fc951c4"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "6f749fc951c4"
+        }
+      ]
+    },
+    "c": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "08ad7c982515"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "08ad7c982515"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "08ad7c982515"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "08ad7c982515"
+        }
+      ]
+    },
+    "cEm": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "da5ceac99bb2"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "da5ceac99bb2"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "da5ceac99bb2"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "da5ceac99bb2"
+        }
+      ]
+    },
+    "cPoly": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "None",
+            "Repeated",
+            "Polynomial"
+          ],
+          "hash": "0db95fa91b69"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "None",
+            "Repeated",
+            "Polynomial"
+          ],
+          "hash": "0db95fa91b69"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "None",
+            "Repeated",
+            "Polynomial"
+          ],
+          "hash": "0db95fa91b69"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "None",
+            "Repeated",
+            "Polynomial"
+          ],
+          "hash": "0db95fa91b69"
+        }
+      ]
+    },
+    "exp5000": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "91fa8f51543f"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "91fa8f51543f"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "91fa8f51543f"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 16,
+          "loggedErrors": [
+            "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed",
+            "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+          ],
+          "hash": "91fa8f51543f"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,626 @@
+[
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Mauchly's W",
+    "value": 0.618936302390555
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Approx. Chi-Square",
+    "value": 6.10352320461453
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "df",
+    "value": 5
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Sig.",
+    "value": 0.297504514626681
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Greenhouse-Geisser",
+    "value": 0.74666374717162
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Huynh-Feldt",
+    "value": 0.895687219051398
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "mauchly",
+    "source": "perlakuan",
+    "correction": null,
+    "field": "Lower-bound",
+    "value": 0.333333333333333
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Sphericity Assumed",
+    "field": "SS",
+    "value": 1.6818165e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Sphericity Assumed",
+    "field": "df",
+    "value": 3
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Sphericity Assumed",
+    "field": "Mean Square",
+    "value": 5.60605499999999e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Sphericity Assumed",
+    "field": "F",
+    "value": 31.8562052505966
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Sphericity Assumed",
+    "field": "Sig.",
+    "value": 6.69424597074551e-11
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Greenhouse-Geisser",
+    "field": "SS",
+    "value": 1.6818165e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Greenhouse-Geisser",
+    "field": "df",
+    "value": 2.23999124151486
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Greenhouse-Geisser",
+    "field": "Mean Square",
+    "value": 7.50813873210781e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Greenhouse-Geisser",
+    "field": "F",
+    "value": 31.8562052505966
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Greenhouse-Geisser",
+    "field": "Sig.",
+    "value": 1.1842515073821e-08
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Huynh-Feldt",
+    "field": "SS",
+    "value": 1.6818165e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Huynh-Feldt",
+    "field": "df",
+    "value": 2.68706165715419
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Huynh-Feldt",
+    "field": "Mean Square",
+    "value": 6.25894272102848e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Huynh-Feldt",
+    "field": "F",
+    "value": 31.8562052505966
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Huynh-Feldt",
+    "field": "Sig.",
+    "value": 5.61983740370747e-10
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Lower-bound",
+    "field": "SS",
+    "value": 1.6818165e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Lower-bound",
+    "field": "df",
+    "value": 1
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Lower-bound",
+    "field": "Mean Square",
+    "value": 1.6818165e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Lower-bound",
+    "field": "F",
+    "value": 31.8562052505966
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "perlakuan",
+    "correction": "Lower-bound",
+    "field": "Sig.",
+    "value": 6.05416056409201e-05
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Sphericity Assumed",
+    "field": "SS",
+    "value": 7.39116e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Sphericity Assumed",
+    "field": "df",
+    "value": 42
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Sphericity Assumed",
+    "field": "Mean Square",
+    "value": 1.7598e-07
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Greenhouse-Geisser",
+    "field": "SS",
+    "value": 7.39116e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Greenhouse-Geisser",
+    "field": "df",
+    "value": 31.359877381208
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Greenhouse-Geisser",
+    "field": "Mean Square",
+    "value": 2.35688421550687e-07
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Huynh-Feldt",
+    "field": "SS",
+    "value": 7.39116e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Huynh-Feldt",
+    "field": "df",
+    "value": 37.6188632001587
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Huynh-Feldt",
+    "field": "Mean Square",
+    "value": 1.96474836591256e-07
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Lower-bound",
+    "field": "SS",
+    "value": 7.39116e-06
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Lower-bound",
+    "field": "df",
+    "value": 14
+  },
+  {
+    "dataset": "gambar51_skala_1e-5",
+    "table": "within_effects",
+    "source": "Error(perlakuan)",
+    "correction": "Lower-bound",
+    "field": "Mean Square",
+    "value": 5.2794e-07
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Mauchly's W",
+    "value": 0.229710937500001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Approx. Chi-Square",
+    "value": 2.53327445404991
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "df",
+    "value": 5
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Sig.",
+    "value": 0.803748683949203
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Greenhouse-Geisser",
+    "value": 0.6519967400163
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Huynh-Feldt",
+    "value": 1
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "mauchly",
+    "source": "t",
+    "correction": null,
+    "field": "Lower-bound",
+    "value": 0.333333333333333
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Sphericity Assumed",
+    "field": "SS",
+    "value": 66.5000000000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Sphericity Assumed",
+    "field": "df",
+    "value": 3
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Sphericity Assumed",
+    "field": "Mean Square",
+    "value": 22.1666666666667
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Sphericity Assumed",
+    "field": "F",
+    "value": 9.97500000000002
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Sphericity Assumed",
+    "field": "Sig.",
+    "value": 0.00320041865623393
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Greenhouse-Geisser",
+    "field": "SS",
+    "value": 66.5000000000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Greenhouse-Geisser",
+    "field": "df",
+    "value": 1.9559902200489
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Greenhouse-Geisser",
+    "field": "Mean Square",
+    "value": 33.9981250000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Greenhouse-Geisser",
+    "field": "F",
+    "value": 9.97500000000002
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Greenhouse-Geisser",
+    "field": "Sig.",
+    "value": 0.0131330346071597
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Huynh-Feldt",
+    "field": "SS",
+    "value": 66.5000000000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Huynh-Feldt",
+    "field": "df",
+    "value": 3
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Huynh-Feldt",
+    "field": "Mean Square",
+    "value": 22.1666666666667
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Huynh-Feldt",
+    "field": "F",
+    "value": 9.97500000000002
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Huynh-Feldt",
+    "field": "Sig.",
+    "value": 0.00320041865623393
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Lower-bound",
+    "field": "SS",
+    "value": 66.5000000000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Lower-bound",
+    "field": "df",
+    "value": 1
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Lower-bound",
+    "field": "Mean Square",
+    "value": 66.5000000000001
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Lower-bound",
+    "field": "F",
+    "value": 9.97500000000002
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "t",
+    "correction": "Lower-bound",
+    "field": "Sig.",
+    "value": 0.0509370060618156
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Sphericity Assumed",
+    "field": "SS",
+    "value": 20
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Sphericity Assumed",
+    "field": "df",
+    "value": 9
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Sphericity Assumed",
+    "field": "Mean Square",
+    "value": 2.22222222222222
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Greenhouse-Geisser",
+    "field": "SS",
+    "value": 20
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Greenhouse-Geisser",
+    "field": "df",
+    "value": 5.8679706601467
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Greenhouse-Geisser",
+    "field": "Mean Square",
+    "value": 3.40833333333333
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Huynh-Feldt",
+    "field": "SS",
+    "value": 20
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Huynh-Feldt",
+    "field": "df",
+    "value": 9
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Huynh-Feldt",
+    "field": "Mean Square",
+    "value": 2.22222222222222
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Lower-bound",
+    "field": "SS",
+    "value": 20
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Lower-bound",
+    "field": "df",
+    "value": 3
+  },
+  {
+    "dataset": "n_sama_k",
+    "table": "within_effects",
+    "source": "Error(t)",
+    "correction": "Lower-bound",
+    "field": "Mean Square",
+    "value": 6.66666666666667
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "startedAt": "2026-09-21T19:55:04.859Z",
+  "os": "Windows_NT 10.0.26200 (win32 x64)",
+  "osVersion": "Windows 11 Home Single Language",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "logicalCores": 20,
+  "totalMemGB": 23.6,
+  "node": "v20.19.0",
+  "playwright": "1.57.0",
+  "chromium": "143.0.7499.4",
+  "next": "15.5.9",
+  "gitHead": "3836f94c56e9447c04455f3d495b524e7facd5fe",
+  "gitDirtyFiles": 18,
+  "codeHashes": {
+    "frontend/components/Modals/Analyze/general-linear-model/shared/glm-execution.ts": "6d419aea076ae31948faca17471a22dc70f27a73",
+    "frontend/components/Modals/Analyze/general-linear-model/multivariate/services/multivariate-analysis.ts": "13a7333bbe49d3f5a26f0ab311d07c3b47b73ed2",
+    "frontend/components/Modals/Analyze/general-linear-model/multivariate/services/multivariate-analysis-worker.ts": "557bccccc2e3a3a5deb175020b30f175a1ef03cd",
+    "frontend/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis.ts": "0eb646abd3d89261fa260fd92196180b1a2b7abc",
+    "frontend/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis-worker.ts": "bdbc0709d3b7a6c6faf7b6107caf61ebda3929d8"
+  },
+  "config": {
+    "BASE": "http://localhost:3101",
+    "MODULES": [
+      "repeated-measures",
+      "multivariate"
+    ],
+    "SIZES": [
+      100,
+      2000
+    ],
+    "CPUS": [
+      1
+    ],
+    "RUNS": 2,
+    "RUN_TIMEOUT_MS": 1800000,
+    "SETTLE_MS": 1000,
+    "HEADLESS": true
+  }
+}

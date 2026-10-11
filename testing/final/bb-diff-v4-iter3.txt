@@ -1,0 +1,440 @@
+## BB-KF02-04: status selesai; 10 perbedaan
+  - checks.barisMpg:
+    lama {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.3969","t2_upper":"23.7844","t2_contains":"Yes","bonferroni_lower":"17.2652","bonferroni_upper":"22.916","bonferroni_contains":"Yes"}
+    baru {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.3969","t2_upper":"23.7844","t2_contains":"Yes","bonferroni_lower":"17.2652","bonferroni_upper":"22.9160","bonferroni_contains":"Yes"}
+  - checks.ciVsR_mv1ci:
+    lama {"baris":4,"nilaiDibandingkan":24,"beda":[]}
+    baru {"baris":4,"nilaiDibandingkan":24,"beda":[{"dv":"mpg","kolom":"bonferroni_upper","tampil":"22.9160","R":"22.916"},{"dv":"wt","kolom":"std_error","tampil":"0.1730","R":"0.173"}]}
+  - checks.nilaiSamaR:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Hotelling T² (vs μ₀)","test_name":"Pillai's Trace","value":"0.2581","f":"2.4355","hypothesis_df":"4","error_df":"28","significance":"0.0706","partial_eta_squared":"0.2581","noncent_parameter":"9.7421","observed_power":"0.6199","t_squared":""}
+    baru {"rowHeader":[],"effect":"Hotelling T² (vs μ₀)","test_name":"Pillai's Trace","value":"0.2581","f":"2.4355","hypothesis_df":"4","error_df":"28","significance":"0.0706","t_squared":""}
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.3969","t2_upper":"23.7844","t2_contains":"Yes","bonferroni_lower":"17.2652","bonferroni_upper":"22.916","bonferroni_contains":"Yes"}
+    baru {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.3969","t2_upper":"23.7844","t2_contains":"Yes","bonferroni_lower":"17.2652","bonferroni_upper":"22.9160","bonferroni_contains":"Yes"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — mpg\nb. R Squared = 0 (Adjusted R Squared = 0) — disp\nc. R Squared = 0 (Adjusted R Squared = 0) — hp\nd. R Squared = 0 (Adjusted R Squared = 0) — wt"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":""}
+## BB-KF02-05: status selesai; 9 perbedaan
+  - checks.ciVsR_mv1ci10:
+    lama {"baris":4,"nilaiDibandingkan":24,"beda":[]}
+    baru {"baris":4,"nilaiDibandingkan":24,"beda":[{"dv":"hp","kolom":"t2_lower","tampil":"109.2260","R":"109.226"},{"dv":"hp","kolom":"t2_upper","tampil":"184.1490","R":"184.149"},{"dv":"wt","kolom":"std_error","tampil":"0.1730","R":"0.173"}]}
+  - checks.nilaiSamaR:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Hotelling T² (vs μ₀)","test_name":"Pillai's Trace","value":"0.2581","f":"2.4355","hypothesis_df":"4","error_df":"28","significance":"0.0706","partial_eta_squared":"0.2581","noncent_parameter":"9.7421","observed_power":"0.7463","t_squared":""}
+    baru {"rowHeader":[],"effect":"Hotelling T² (vs μ₀)","test_name":"Pillai's Trace","value":"0.2581","f":"2.4355","hypothesis_df":"4","error_df":"28","significance":"0.0706","t_squared":""}
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.7976","t2_upper":"23.3836","t2_contains":"Yes","bonferroni_lower":"17.5809","bonferroni_upper":"22.6003","bonferroni_contains":"Yes"}
+    baru {"rowHeader":[],"dependent_variable":"mpg","estimate":"20.0906","std_error":"1.0654","hypothesized":"20","t2_lower":"16.7976","t2_upper":"23.3836","t2_contains":"Yes","bonferroni_lower":"17.5809","bonferroni_upper":"22.6003","bonferroni_contains":"Yes"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — mpg\nb. R Squared = 0 (Adjusted R Squared = 0) — disp\nc. R Squared = 0 (Adjusted R Squared = 0) — hp\nd. R Squared = 0 (Adjusted R Squared = 0) — wt"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":""}
+## BB-KF02-06: status selesai; 5 perbedaan
+  - checks.samaDenganBBKF0201Iterasi2:
+    lama true
+    baru false
+  - checks.catatanSamaDenganBBKF0201Iterasi2:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept\nb. Exact statistic\nc. Computed using alpha = .05"
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — mpg\nb. R Squared = 0 (Adjusted R Squared = 0) — disp\nc. R Squared = 0 (Adjusted R Squared = 0) — hp\nd. R Squared = 0 (Adjusted R Squared = 0) — wt"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — mpg\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — disp\nc. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — hp\nd. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — wt.\ne. Computed using alpha = .05"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"mpg","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0.0000","noncent_parameter":"0.0000","observed_power":""}
+## BB-KF02-07: status selesai; identik dengan iterasi lama
+## BB-KF03-04: status selesai; 17 perbedaan
+  - checks.catatanMT:
+    lama "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+    baru "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Descriptive Statistics" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dv_name":"x1","group_label":"1","mean":"15.9688","std_deviation":"2.2787","n":"32"}
+    baru {"rowHeader":[],"dv_name":"x1","group_label":"1","mean":"15.9688","std_deviation":"2.2787","n":"32"}
+  - run 1 "Levene's Test of Equality of Error Variances" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dv_name":"x1","function":"Based on Mean","levene_statistic":"0.3943","df1":"1","df2":"62","significance":"0.5323"}
+    baru {"rowHeader":[],"dv_name":"x1","function":"Based on Mean","levene_statistic":"0.3943","df1":"1","df2":"62","significance":"0.5323"}
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+    baru "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9708","noncent_parameter":"1963.015","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.25","df":"1","mean_square":"6.25","f_value":"0.8724","significance":"0.3539","partial_eta_squared":"0.0139","noncent_parameter":"0.8724","observed_power":"0.1511"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.2500","df":"1","mean_square":"6.2500","f_value":"0.8724","significance":"0.3539"}
+  - run 2 "Descriptive Statistics" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dv_name":"x1","group_label":"1","mean":"12.9688","std_deviation":"2.2787","n":"32"}
+    baru {"rowHeader":[],"dv_name":"x1","group_label":"1","mean":"12.9688","std_deviation":"2.2787","n":"32"}
+  - run 2 "Levene's Test of Equality of Error Variances" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dv_name":"x1","function":"Based on Mean","levene_statistic":"0.3943","df1":"1","df2":"62","significance":"0.5323"}
+    baru {"rowHeader":[],"dv_name":"x1","function":"Based on Mean","levene_statistic":"0.3943","df1":"1","df2":"62","significance":"0.5323"}
+  - run 2 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 2 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 2 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9708","noncent_parameter":"1963.015","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 2 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+  - run 2 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.25","df":"1","mean_square":"6.25","f_value":"0.8724","significance":"0.3539","partial_eta_squared":"0.0139","noncent_parameter":"0.8724","observed_power":"0.1511"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.2500","df":"1","mean_square":"6.2500","f_value":"0.8724","significance":"0.3539"}
+## BB-KF03-05: status selesai; 14 perbedaan
+  - checks.barisWelch:
+    lama [{"rowHeader":[],"effect":"jk — Welch-Satterthwaite","test_name":"Hotelling's Trace","value":"1.6511","f":"0.3915","hypothesis_df":"4","error_df":"55.268","significance":"0.8138","partial_eta_squared":"0.0276","noncent_parameter":"1.5661","observed_power":"0.1334","t_squared":"1.6511"}]
+    baru [{"rowHeader":[],"effect":"jk — Welch-Satterthwaite","test_name":"Hotelling's Trace","value":"1.6511","f":"0.3915","hypothesis_df":"4","error_df":"55.2680","significance":"0.8138","t_squared":"1.6511"}]
+  - checks.catatanMT:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+    baru "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+    baru "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9708","noncent_parameter":"1963.015","observed_power":"1","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.25","df":"1","mean_square":"6.25","f_value":"0.8724","significance":"0.3539","partial_eta_squared":"0.0139","noncent_parameter":"0.8724","observed_power":"0.1511"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.2500","df":"1","mean_square":"6.2500","f_value":"0.8724","significance":"0.3539"}
+  - run 2 "Multivariate Tests" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 2 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices."
+    baru "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 2 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9708","noncent_parameter":"1963.015","observed_power":"1","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 2 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+  - run 2 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.25","df":"1","mean_square":"6.25","f_value":"0.8724","significance":"0.3539","partial_eta_squared":"0.0139","noncent_parameter":"0.8724","observed_power":"0.1511"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.2500","df":"1","mean_square":"6.2500","f_value":"0.8724","significance":"0.3539"}
+## BB-KF03-06: status selesai; identik dengan iterasi lama
+## BB-KF03-07: status selesai; 13 perbedaan
+  - checks.catatanMT:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9751","noncent_parameter":"2307.9104","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.061 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.25","df":"1","mean_square":"210.25","f_value":"29.3468","significance":"<.001","partial_eta_squared":"0.3213","noncent_parameter":"29.3468","observed_power":"0.9996"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.2500","df":"1","mean_square":"210.2500","f_value":"29.3468","significance":"<.001"}
+  - run 2 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 2 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 2 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9751","noncent_parameter":"2307.9104","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 2 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.061 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+  - run 2 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.25","df":"1","mean_square":"210.25","f_value":"29.3468","significance":"<.001","partial_eta_squared":"0.3213","noncent_parameter":"29.3468","observed_power":"0.9996"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.2500","df":"1","mean_square":"210.2500","f_value":"29.3468","significance":"<.001"}
+## BB-KF03-08: status selesai; 1 perbedaan
+  - toast:
+    lama [["An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.","An error occurred during Multivariate analysis. | Error: Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."]]
+    baru [["An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3.","An error occurred during Multivariate analysis. | Error: Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; 'treatment' has 3."]]
+## BB-KF03-09: status selesai; 7 perbedaan
+  - checks.catatanMT:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9751","noncent_parameter":"2307.9104","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.061 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.25","df":"1","mean_square":"210.25","f_value":"29.3468","significance":"<.001","partial_eta_squared":"0.3213","noncent_parameter":"29.3468","observed_power":"0.9996"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.2500","df":"1","mean_square":"210.2500","f_value":"29.3468","significance":"<.001"}
+## BB-KF03-10: status selesai; 9 perbedaan
+  - checks.ciVsR_mv2ci:
+    lama {"baris":4,"nilaiDibandingkan":24,"beda":[]}
+    baru {"baris":4,"nilaiDibandingkan":24,"beda":[{"dv":"x1","kolom":"estimate","tampil":"3.6250","R":"3.625"},{"dv":"x2","kolom":"estimate","tampil":"2.0000","R":"2"},{"dv":"x3","kolom":"std_error","tampil":"1.3400","R":"1.34"}]}
+  - checks.nilaiSamaR:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9751","noncent_parameter":"2307.9104","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"x1","estimate":"3.625","std_error":"0.6692","hypothesized":"0","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"No","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"No"}
+    baru {"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6692","hypothesized":"0","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"No","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"No"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.061 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.25","df":"1","mean_square":"210.25","f_value":"29.3468","significance":"<.001","partial_eta_squared":"0.3213","noncent_parameter":"29.3468","observed_power":"0.9996"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.2500","df":"1","mean_square":"210.2500","f_value":"29.3468","significance":"<.001"}
+## BB-KF03-11: status selesai; 11 perbedaan
+  - checks.barisDf:
+    lama [["x1","57.6344"],["x2","60.2489"],["x3","61.9997"],["x4","58.235"]]
+    baru [["x1","57.6344"],["x2","60.2489"],["x3","61.9997"],["x4","58.2350"]]
+  - checks.ciVsR_mv2wci:
+    lama {"baris":4,"nilaiDibandingkan":28,"beda":[]}
+    baru {"baris":4,"nilaiDibandingkan":28,"beda":[{"dv":"x1","kolom":"estimate","tampil":"3.6250","R":"3.625"},{"dv":"x2","kolom":"estimate","tampil":"2.0000","R":"2"},{"dv":"x3","kolom":"std_error","tampil":"1.3400","R":"1.34"},{"dv":"x3","kolom":"t2_lower","tampil":"6.0840","R":"6.084"},{"dv":"x4","kolom":"bonferroni_lower","tampil":"-2.2320","R":"-2.232"},{"dv":"x4","kolom":"bonferroni_upper","tampil":…
+  - checks.nilaiSamaR:
+    lama true
+    baru false
+  - checks.errorDfWelch:
+    lama "55.268"
+    baru "55.2680"
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices."
+    baru "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9751","noncent_parameter":"2307.9104","observed_power":"1","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"x1","estimate":"3.625","std_error":"0.6692","hypothesized":"0","t2_lower":"1.4355","t2_upper":"5.8145","t2_contains":"No","bonferroni_df":"57.6344","bonferroni_lower":"1.8996","bonferroni_upper":"5.3504","bonferroni_contains":"No"}
+    baru {"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6692","hypothesized":"0","t2_lower":"1.4355","t2_upper":"5.8145","t2_contains":"No","bonferroni_df":"57.6344","bonferroni_lower":"1.8996","bonferroni_upper":"5.3504","bonferroni_contains":"No"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.061 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.25","df":"1","mean_square":"210.25","f_value":"29.3468","significance":"<.001","partial_eta_squared":"0.3213","noncent_parameter":"29.3468","observed_power":"0.9996"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"210.2500","df":"1","mean_square":"210.2500","f_value":"29.3468","significance":"<.001"}
+## BB-KF03-12: status selesai; 10 perbedaan
+  - checks.baris:
+    lama [{"rowHeader":[],"dependent_variable":"x1","estimate":"3.625","std_error":"0.6692","hypothesized":"3","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"Yes","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"Yes"},{"rowHeader":[],"dependent_variable":"x2","estimate":"2","std_error":"0.9967","hypothesized":"2","t2_lower":"-1.2489","t2_upper":"5.2489","t2_contains":"…
+    baru [{"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6692","hypothesized":"3","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"Yes","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"Yes"},{"rowHeader":[],"dependent_variable":"x2","estimate":"2.0000","std_error":"0.9967","hypothesized":"2","t2_lower":"-1.2489","t2_upper":"5.2489","t2_conta…
+  - checks.ciVsR_mv2ci:
+    lama {"baris":4,"nilaiDibandingkan":24,"beda":[]}
+    baru {"baris":4,"nilaiDibandingkan":24,"beda":[{"dv":"x1","kolom":"estimate","tampil":"3.6250","R":"3.625"},{"dv":"x2","kolom":"estimate","tampil":"2.0000","R":"2"},{"dv":"x3","kolom":"std_error","tampil":"1.3400","R":"1.34"}]}
+  - checks.nilaiSamaR_mv2ci:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis."
+    baru "Type III sum of squares. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","partial_eta_squared":"0.9708","noncent_parameter":"1963.015","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001"}
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"x1","estimate":"3.625","std_error":"0.6692","hypothesized":"3","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"Yes","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"Yes"}
+    baru {"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6692","hypothesized":"3","t2_lower":"1.4437","t2_upper":"5.8063","t2_contains":"Yes","bonferroni_lower":"1.9035","bonferroni_upper":"5.3465","bonferroni_contains":"Yes"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.002) — x1\nb. R Squared = 0 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.002 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.25","df":"1","mean_square":"6.25","f_value":"0.8724","significance":"0.3539","partial_eta_squared":"0.0139","noncent_parameter":"0.8724","observed_power":"0.1511"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"x1","sum_of_squares":"6.2500","df":"1","mean_square":"6.2500","f_value":"0.8724","significance":"0.3539"}
+## BB-KF03-13: status selesai; 5 perbedaan
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + treatment\nb. Exact statistic\nc. The statistic is an upper bound on F that yields a lower bound on the significance level."
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9423","f":"32.679","hypothesis_df":"2","error_df":"4","significance":"0.0033","partial_eta_squared":"0.9423","noncent_parameter":"65.358","observed_power":"0.9964"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9423","f":"32.6790","hypothesis_df":"2","error_df":"4","significance":"0.0033"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"y1","sum_of_squares":"78","df":"2","mean_square":"39","f_value":"19.5","significance":"0.0044","partial_eta_squared":"0.8864","noncent_parameter":"39","observed_power":"0.9808"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"y1","sum_of_squares":"78.0000","df":"2","mean_square":"39.0000","f_value":"19.5000","significance":"0.0044"}
+## BB-KF04-03: status selesai; 13 perbedaan
+  - checks.catatan:
+    lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2)."
+    baru "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" catatan:
+    lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2)."
+    baru "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","partial_eta_squared":"0.0002","noncent_parameter":"0.0032","observed_power":"0.0502","t_squared":""}
+    baru {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","t_squared":""}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — kedalaman1 − kedalaman2\nb. R Squared = 0 (Adjusted R Squared = 0) — ukuran1 − ukuran2"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":""}
+  - run 2 "Multivariate Tests — Hotelling T² Berpasangan" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 2 "Multivariate Tests — Hotelling T² Berpasangan" catatan:
+    lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [0, 0]."
+    baru "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [0, 0].\na. Design: Intercept\nb. Exact statistic"
+  - run 2 "Multivariate Tests — Hotelling T² Berpasangan" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","partial_eta_squared":"0.0002","noncent_parameter":"0.0032","observed_power":"0.0502","t_squared":""}
+    baru {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","t_squared":""}
+  - run 2 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — kedalaman1 − kedalaman2\nb. R Squared = 0 (Adjusted R Squared = 0) — ukuran1 − ukuran2"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+  - run 2 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":""}
+## BB-KF04-04: status selesai; 12 perbedaan
+  - checks.catatan:
+    lama "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.863; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+    baru "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+  - checks.baris:
+    lama [["kedalaman1 − kedalaman2","8","8"],["ukuran1 − ukuran2","3.0667","3"]]
+    baru [["kedalaman1 − kedalaman2","8.0000","8"],["ukuran1 − ukuran2","3.0667","3"]]
+  - checks.ciVsR_mv3dci:
+    lama {"baris":2,"nilaiDibandingkan":12,"beda":[]}
+    baru {"baris":2,"nilaiDibandingkan":12,"beda":[{"dv":"kedalaman1 − kedalaman2","kolom":"estimate","tampil":"8.0000","R":"8"},{"dv":"ukuran1 − ukuran2","kolom":"std_error","tampil":"1.2050","R":"1.205"}]}
+  - checks.nilaiSamaR:
+    lama true
+    baru false
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" kolom:
+    lama ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","T²","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" catatan:
+    lama "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2)."
+    baru "Analisis dilakukan pada vektor selisih d1 = kedalaman1 − kedalaman2; d2 = ukuran1 − ukuran2. δ₀ = [8, 3]. H₀: μd = δ₀ (d = M1 − M2).\na. Design: Intercept\nb. Exact statistic"
+  - run 1 "Multivariate Tests — Hotelling T² Berpasangan" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","partial_eta_squared":"0.0002","noncent_parameter":"0.0032","observed_power":"0.0502","t_squared":""}
+    baru {"rowHeader":[],"effect":"Hotelling T² Berpasangan","test_name":"Pillai's Trace","value":"0.0002","f":"0.0016","hypothesis_df":"2","error_df":"13","significance":"0.9984","t_squared":""}
+  - run 1 "Simultaneous Confidence Intervals" catatan:
+    lama "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.863; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+    baru "Components of μd, d = M1 − M2 (Johnson & Wichern, 6th ed., §6.2): d̄ᵢ ± c · √(s_d,ᵢᵢ/n), c = √(p(n−1)/(n−p) · F(2, 13; α)) = 2.8630; Bonferroni: t(14; α/(2p)) = 2.5096. n = 15. The intervals hold simultaneously for all 2 components at the 95% confidence level (α = 0.05 from Options → Significance Level)."
+  - run 1 "Simultaneous Confidence Intervals" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"dependent_variable":"kedalaman1 − kedalaman2","estimate":"8","std_error":"2.8469","hypothesized":"8","t2_lower":"-0.1506","t2_upper":"16.1506","t2_contains":"Yes","bonferroni_lower":"0.8555","bonferroni_upper":"15.1445","bonferroni_contains":"Yes"}
+    baru {"rowHeader":[],"dependent_variable":"kedalaman1 − kedalaman2","estimate":"8.0000","std_error":"2.8469","hypothesized":"8","t2_lower":"-0.1506","t2_upper":"16.1506","t2_contains":"Yes","bonferroni_lower":"0.8555","bonferroni_upper":"15.1445","bonferroni_contains":"Yes"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0 (Adjusted R Squared = 0) — kedalaman1 − kedalaman2\nb. R Squared = 0 (Adjusted R Squared = 0) — ukuran1 − ukuran2"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0","df":"0","mean_square":"","f_value":"","significance":"","partial_eta_squared":"0","noncent_parameter":"0","observed_power":""}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"kedalaman1 − kedalaman2","sum_of_squares":"0.0000","df":"0","mean_square":"","f_value":"","significance":""}
+## BB-KF06-10: status selesai; 5 perbedaan
+  - run 1 "Multivariate Tests" kolom:
+    lama ["Effect","","Value","F","Hypothesis df","Error df","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Effect","","Value","F","Hypothesis df","Error df","Sig."]
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares"
+    baru "Type III sum of squares.\na. Design: Intercept + faktorA + faktorB + faktorA * faktorB\nb. Exact statistic\nc. The statistic is an upper bound on F that yields a lower bound on the significance level."
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9986","f":"8134.1171","hypothesis_df":"2","error_df":"23","significance":"<.001","partial_eta_squared":"0.9986","noncent_parameter":"16268.2342","observed_power":"1"}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9986","f":"8134.1171","hypothesis_df":"2","error_df":"23","significance":"<.001"}
+  - run 1 "Tests of Between-Subjects Effects" kolom:
+    lama ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig.","Partial Eta Squared","Noncent. Parameter","Observed Power"]
+    baru ["Source","Dependent Variable","Type III Sum of Squares","df","Mean Square","F","Sig."]
+  - run 1 "Tests of Between-Subjects Effects" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"source":"Corrected Model","dependent_variable":"Y1A1","sum_of_squares":"3.0316","df":"7","mean_square":"0.4331","f_value":"2.1227","significance":"0.0801","partial_eta_squared":"0.3824","noncent_parameter":"14.8592","observed_power":"0.678"}
+    baru {"rowHeader":[],"source":"Corrected Model","dependent_variable":"Y1A1","sum_of_squares":"3.0316","df":"7","mean_square":"0.4331","f_value":"2.1227","significance":"0.0801"}

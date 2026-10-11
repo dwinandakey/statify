@@ -1,0 +1,501 @@
+{
+  "base": "http://localhost:3201",
+  "sequence": [
+    "main",
+    "worker",
+    "main",
+    "worker"
+  ],
+  "chromium": "143.0.7499.4",
+  "startedAt": "2026-09-25T04:59:47.352Z",
+  "designs": {
+    "gambar51": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "65d0361fe7c8"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "65d0361fe7c8"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "65d0361fe7c8"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 7,
+          "loggedErrors": [],
+          "hash": "65d0361fe7c8"
+        }
+      ]
+    },
+    "a": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "05a38263ead6"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "05a38263ead6"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "05a38263ead6"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "05a38263ead6"
+        }
+      ]
+    },
+    "b": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "ec548b7db5e3"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "ec548b7db5e3"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "ec548b7db5e3"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "ec548b7db5e3"
+        }
+      ]
+    },
+    "c": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "cad88ef17941"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "cad88ef17941"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "cad88ef17941"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 15,
+          "loggedErrors": [],
+          "hash": "cad88ef17941"
+        }
+      ]
+    },
+    "cEm": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "123c6d3ff9e3"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "123c6d3ff9e3"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "123c6d3ff9e3"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 19,
+          "loggedErrors": [],
+          "hash": "123c6d3ff9e3"
+        }
+      ]
+    },
+    "cPoly": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "0b3140b3685e"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "0b3140b3685e"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "0b3140b3685e"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "0b3140b3685e"
+        }
+      ]
+    },
+    "cRep": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 13,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "678650679852"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 13,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "678650679852"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 13,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "678650679852"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 13,
+          "loggedErrors": [],
+          "contrastOptions": [
+            "Polynomial",
+            "Repeated"
+          ],
+          "hash": "678650679852"
+        }
+      ]
+    },
+    "exp5000n": {
+      "identical": true,
+      "runs": [
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "13d7c56765ec"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "13d7c56765ec"
+        },
+        {
+          "mode": "main",
+          "modeActual": "main",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "13d7c56765ec"
+        },
+        {
+          "mode": "worker",
+          "modeActual": "worker",
+          "pre": {
+            "logs": 0,
+            "analytics": 0,
+            "statistics": 0,
+            "domLogs": 0
+          },
+          "tables": 17,
+          "loggedErrors": [],
+          "hash": "13d7c56765ec"
+        }
+      ]
+    }
+  }
+}

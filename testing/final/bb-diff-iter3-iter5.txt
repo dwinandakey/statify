@@ -1,0 +1,124 @@
+## BB-KF03-02: status selesai; 3 perbedaan
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+    baru "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9751","f":"576.9776","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) — x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) — x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) — x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) — x4"
+    baru "a. R Squared = 0.3213 (Adjusted R Squared = 0.3103) for x1\nb. R Squared = 0.0610 (Adjusted R Squared = 0.0458) for x2\nc. R Squared = 0.4961 (Adjusted R Squared = 0.4879) for x3\nd. R Squared = 0.0076 (Adjusted R Squared = -0.0084) for x4"
+## BB-KF04-01: status selesai; 2 perbedaan
+  - run 1 judul tabel:
+    lama ["Descriptive Statistics","Multivariate Tests — Hotelling T² Berpasangan","Tests of Between-Subjects Effects","Errors Logs"]
+    baru ["Descriptive Statistics","Multivariate Tests","Tests of Between-Subjects Effects","Errors Logs"]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2.\nc. Computed using alpha = .05"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2.\nc. Computed using alpha = .05"
+## BB-KF11-02: status selesai; 6 perbedaan
+  - run 1 judul tabel:
+    lama ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons — treatment (LSD)","Errors Logs"]
+    baru ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons: treatment (LSD)","Errors Logs"]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+    baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+  - run 2 judul tabel:
+    lama ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons — treatment (Bonferroni)","Errors Logs"]
+    baru ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons: treatment (Bonferroni)","Errors Logs"]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+    baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+  - run 3 judul tabel:
+    lama ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons — treatment (Sidak)","Errors Logs"]
+    baru ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons: treatment (Sidak)","Errors Logs"]
+  - run 3 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+    baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+## BB-KF11-03: status selesai; 2 perbedaan
+  - run 1 judul tabel:
+    lama ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons — treatment","Errors Logs"]
+    baru ["Between-Subjects Factors","Multivariate Tests","Tests of Between-Subjects Effects","Multiple Comparisons: treatment","Errors Logs"]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+    baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+## BB-KF14-01: status selesai; 1 perbedaan
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) — y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) — y2"
+    baru "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+## BB-KF03-04: status selesai; 2 perbedaan
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4"
+## BB-KF03-05: status selesai; 8 perbedaan
+  - checks.barisWelch:
+    lama [{"rowHeader":[],"effect":"jk — Welch-Satterthwaite","test_name":"Hotelling's Trace","value":"1.6511","f":"0.3915","hypothesis_df":"4","error_df":"55.2680","significance":"0.8138","t_squared":"1.6511"}]
+    baru [{"rowHeader":[],"effect":"jk (Welch-Satterthwaite)","test_name":"Hotelling's Trace","value":"1.6511","f":"0.3915","hypothesis_df":"4","error_df":"55.2680","significance":"0.8138","t_squared":"1.6511"}]
+  - checks.catatanMT:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+    baru "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+    baru "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices. H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1]. Computed on data in which δ₀ is subtracted from every observation with jk = 1; the jk effect tests this hypothesis.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 1 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+  - run 2 "Multivariate Tests" catatan:
+    lama "Type III sum of squares (Welch-Satterthwaite for jk) — Computed using Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+    baru "Type III sum of squares (Welch-Satterthwaite for jk). The jk effect is computed with the Welch-Satterthwaite approximation for unequal covariance matrices.\na. Design: Intercept + jk\nb. Exact statistic"
+  - run 2 "Multivariate Tests" baris berbeda (contoh baris 1):
+    lama {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+    baru {"rowHeader":[],"effect":"Intercept","test_name":"Pillai's Trace","value":"0.9708","f":"490.7538","hypothesis_df":"4","error_df":"59","significance":"<.001","t_squared":""}
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4"
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4"
+## BB-KF04-03: status selesai; 4 perbedaan
+  - run 1 judul tabel:
+    lama ["Multivariate Tests — Hotelling T² Berpasangan","Tests of Between-Subjects Effects","Errors Logs"]
+    baru ["Multivariate Tests","Tests of Between-Subjects Effects","Errors Logs"]
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+  - run 2 judul tabel:
+    lama ["Multivariate Tests — Hotelling T² Berpasangan","Tests of Between-Subjects Effects","Errors Logs"]
+    baru ["Multivariate Tests","Tests of Between-Subjects Effects","Errors Logs"]
+  - run 2 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) — ukuran1 − ukuran2"
+    baru "a. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for kedalaman1 − kedalaman2\nb. R Squared = 0.0000 (Adjusted R Squared = 0.0000) for ukuran1 − ukuran2"
+## BB-KF03-14: status selesai; 5 perbedaan
+  - checks.ringkasan:
+    lama "δ₀ = [3, 2, 10, 1] · Σ known"
+    baru "δ₀ = [3, 2, 10, 1]; Σ known"
+  - checks.tabelCiSigma:
+    lama {"kolom":["Dependent Variable","Mean Difference (jk = 1 − jk = 2)","Std. Error","δ₀","95% Simultaneous χ² Interval","95% Bonferroni Interval (z)"],"baris":[{"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6614","hypothesized":"3","chi_square_lower":"1.5876","chi_square_upper":"5.6624","chi_square_contains":"Yes","bonferroni_lower":"1.9729","bonferroni_upper":"5.2771","b…
+    baru {"kolom":["Dependent Variable","Mean Difference (jk = 1 − jk = 2)","Std. Error","δ₀","95% Simultaneous χ² Interval","95% Bonferroni Interval (z)"],"baris":[{"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6614","hypothesized":"3","chi_square_lower":"1.5876","chi_square_upper":"5.6624","chi_square_contains":"Yes","bonferroni_lower":"1.9729","bonferroni_upper":"5.2771","b…
+  - run 1 "Simultaneous Confidence Intervals" catatan:
+    lama "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). The intervals are for μ₁ − μ₂…
+    baru "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). The intervals are for μ₁ − μ₂…
+  - run 1 "Simultaneous Confidence Intervals (Known Covariance Matrix)" catatan:
+    lama "Σ₁ = Σ₂ = Σ is known (entered in Test Values (δ₀)). χ² intervals: (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(4; α) · √((1/n₁ + 1/n₂)σᵢᵢ), √χ²(4; α) = 3.0802; Bonferroni: (x̄₁ᵢ − x̄₂ᵢ) ± z(α/(2p)) · √((1/n₁ + 1/n₂)σᵢᵢ), z(α/(2p)) = 2.4977. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the standard deviation…
+    baru "Σ₁ = Σ₂ = Σ is known (entered in Test Values (δ₀)). χ² intervals: (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(4; α) · √((1/n₁ + 1/n₂)σᵢᵢ), √χ²(4; α) = 3.0802; Bonferroni: (x̄₁ᵢ − x̄₂ᵢ) ± z(α/(2p)) · √((1/n₁ + 1/n₂)σᵢᵢ), z(α/(2p)) = 2.4977. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the standard deviation…
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+## BB-KF03-15: status selesai; 5 perbedaan
+  - checks.ringkasan:
+    lama "δ₀ = [3, 2, 10, 1] · Σ₁, Σ₂ known"
+    baru "δ₀ = [3, 2, 10, 1]; Σ₁ and Σ₂ known"
+  - checks.tabelCiSigma:
+    lama {"kolom":["Dependent Variable","Mean Difference (jk = 1 − jk = 2)","Std. Error","δ₀","95% Simultaneous χ² Interval","95% Bonferroni Interval (z)"],"baris":[{"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6614","hypothesized":"3","chi_square_lower":"1.5876","chi_square_upper":"5.6624","chi_square_contains":"Yes","bonferroni_lower":"1.9729","bonferroni_upper":"5.2771","b…
+    baru {"kolom":["Dependent Variable","Mean Difference (jk = 1 − jk = 2)","Std. Error","δ₀","95% Simultaneous χ² Interval","95% Bonferroni Interval (z)"],"baris":[{"rowHeader":[],"dependent_variable":"x1","estimate":"3.6250","std_error":"0.6614","hypothesized":"3","chi_square_lower":"1.5876","chi_square_upper":"5.6624","chi_square_contains":"Yes","bonferroni_lower":"1.9729","bonferroni_upper":"5.2771","b…
+  - run 1 "Simultaneous Confidence Intervals" catatan:
+    lama "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). The intervals are for μ₁ − μ₂…
+    baru "Components of μ(jk = 1) − μ(jk = 2), Σ₁ = Σ₂ (Johnson & Wichern, 6th ed., §6.3): (x̄₁ᵢ − x̄₂ᵢ) ± c · √((1/n₁ + 1/n₂) · s_pooled,ᵢᵢ), c = √((n₁+n₂−2)p/(n₁+n₂−p−1) · F(4, 59; α)) = 3.2597; Bonferroni: t(62; α/(2p)) = 2.5727. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). The intervals are for μ₁ − μ₂…
+  - run 1 "Simultaneous Confidence Intervals (Known Covariance Matrix)" catatan:
+    lama "Σ₁ (jk = 1) and Σ₂ (jk = 2) are known (entered in Test Values (δ₀)). χ² intervals: (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(4; α) · √(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂), √χ²(4; α) = 3.0802; Bonferroni: (x̄₁ᵢ − x̄₂ᵢ) ± z(α/(2p)) · √(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂), z(α/(2p)) = 2.4977. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 from Options → Significance Level). Std. Error is the…
+    baru "Σ₁ (jk = 1) and Σ₂ (jk = 2) are known (entered in Test Values (δ₀)). χ² intervals: (x̄₁ᵢ − x̄₂ᵢ) ± √χ²(4; α) · √(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂), √χ²(4; α) = 3.0802; Bonferroni: (x̄₁ᵢ − x̄₂ᵢ) ± z(α/(2p)) · √(σ₁ᵢᵢ/n₁ + σ₂ᵢᵢ/n₂), z(α/(2p)) = 2.4977. n₁ = 32, n₂ = 32. The intervals hold simultaneously for all 4 components at the 95% confidence level (α = 0.05 the Significance Level in Options). Std. Error is the…
+  - run 1 "Tests of Between-Subjects Effects" catatan:
+    lama "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) — x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) — x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) — x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) — x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."
+    baru "a. R Squared = 0.0139 (Adjusted R Squared = -0.0020) for x1\nb. R Squared = 0.0000 (Adjusted R Squared = -0.0161) for x2\nc. R Squared = 0.0020 (Adjusted R Squared = -0.0141) for x3\nd. R Squared = 0.0004 (Adjusted R Squared = -0.0157) for x4. Computed on data in which δ₀ is subtracted from every observation with jk = 1 (H₀: μ(jk = 1) − μ(jk = 2) = δ₀, δ₀ = [3, 2, 10, 1])."

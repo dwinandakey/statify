@@ -1,0 +1,9 @@
+multivariate-100: payload v5 cd093a5fe8cb final cd093a5fe8cb identik true | respons v5 2afdc8eab043 final f4e64953c46d identik false | mode worker
+multivariate-1000: payload v5 819afcf9391f final 819afcf9391f identik true | respons v5 efeb34722984 final 8095aa7124ae identik false | mode worker
+multivariate-2000: payload v5 53f3001a9717 final 53f3001a9717 identik true | respons v5 9dcdb8c9aebc final 9fb16e8f29e4 identik false | mode worker
+multivariate-500: payload v5 c3bc17f8e0be final c3bc17f8e0be identik true | respons v5 55805744d509 final 61e1e8e3ef41 identik false | mode worker
+repeated-measures-10000: payload v5 8c0e18622a69 final 8c0e18622a69 identik true | respons v5 2bf63e86a1db final 2bf63e86a1db identik true | mode worker
+repeated-measures-20000: payload v5 27ff53d876bd final 27ff53d876bd identik true | respons v5 67b52c45dd1c final 67b52c45dd1c identik true | mode worker
+repeated-measures-40000: payload v5 e3ea9db41f75 final e3ea9db41f75 identik true | respons v5 89305fb2fe02 final 89305fb2fe02 identik true | mode worker
+repeated-measures-5000: payload v5 f2d6ec21e658 final f2d6ec21e658 identik true | respons v5 aafe30ecab56 final aafe30ecab56 identik true | mode worker
+sel: 8, tidak identik: 4

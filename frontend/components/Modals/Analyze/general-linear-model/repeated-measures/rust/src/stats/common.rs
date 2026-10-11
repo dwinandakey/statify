@@ -2,7 +2,7 @@ use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared
 use statrs::function::gamma::gamma;
 use nalgebra::{ DMatrix, DVector };
 
-use std::collections::{ HashMap, HashSet };
+use crate::utils::collections::{ HashMap, HashSet };
 use crate::models::config::ContrastMethod;
 use crate::models::{
     data::{ AnalysisData, DataRecord, DataValue },
@@ -207,6 +207,9 @@ pub fn get_factor_levels(data: &AnalysisData, factor: &str) -> Result<Vec<String
                 // Found our factor, extract levels
                 for records in &data.factors_data[i] {
                     if let Some(value) = records.values.get(factor) {
+                        if matches!(value, DataValue::Null) {
+                            continue;
+                        }
                         let level = data_value_to_string(value);
                         if !level_set.contains(&level) {
                             level_set.insert(level.clone());
@@ -215,6 +218,12 @@ pub fn get_factor_levels(data: &AnalysisData, factor: &str) -> Result<Vec<String
                     }
                 }
 
+                // SPSS order: ascending values (numeric when all levels are numbers).
+                if levels.iter().all(|l| l.parse::<f64>().is_ok()) {
+                    levels.sort_by(|a, b| a.parse::<f64>().unwrap().partial_cmp(&b.parse::<f64>().unwrap()).unwrap());
+                } else {
+                    levels.sort();
+                }
                 return Ok(levels);
             }
         }
@@ -710,130 +719,129 @@ pub fn solve_linear_system(a: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String
     }
 }
 
-/// Helper function to build design matrix and response vector
+/// Design matrix and response of one dependent variable for the
+/// between-subjects model: one row per subject with a numeric value of
+/// `dependent_var` and complete between-subjects variables; columns are the
+/// intercept, the covariates, the effect-coded (deviation, last level = −1)
+/// between-subjects factors and the products of those codes for every
+/// interaction of factors (full factorial).
+///
+/// Between-subjects values are read with the variable-major layout
+/// `factors_data[f][s]` / `covariate_data[c][s]` (see models/data.rs), for the
+/// same subject index s as `subject_data[s]`.
 pub fn build_design_matrix_and_response(
     data: &AnalysisData,
     config: &RepeatedMeasuresConfig,
     dependent_var: &str
 ) -> Result<(Vec<Vec<f64>>, Vec<f64>), String> {
+    let factors: Vec<String> = config.main.factors_var.clone().unwrap_or_default();
+    let covariates: Vec<String> = config.main.covariates.clone().unwrap_or_default();
+
+    let factor_levels: Vec<Vec<String>> = factors
+        .iter()
+        .map(|f| get_factor_levels(data, f))
+        .collect::<Result<_, _>>()?;
+    let factor_index: Vec<usize> = factors
+        .iter()
+        .map(|f| {
+            data.factors_data_defs
+                .iter()
+                .position(|d| d.iter().any(|v| &v.name == f))
+                .ok_or_else(|| format!("Factor '{}' not found in the data", f))
+        })
+        .collect::<Result<_, _>>()?;
+    let covariate_data = data.covariate_data.clone().unwrap_or_default();
+    let covariate_defs = data.covariate_data_defs.clone().unwrap_or_default();
+    let covariate_index: Vec<usize> = covariates
+        .iter()
+        .map(|c| {
+            covariate_defs
+                .iter()
+                .position(|d| d.iter().any(|v| &v.name == c))
+                .ok_or_else(|| format!("Covariate '{}' not found in the data", c))
+        })
+        .collect::<Result<_, _>>()?;
+    let interactions: Vec<Vec<usize>> = generate_interaction_terms(&factors)
+        .iter()
+        .filter_map(|term| {
+            let names = parse_interaction_term(term);
+            if names.len() < 2 {
+                return None;
+            }
+            names.iter().map(|n| factors.iter().position(|f| f == n)).collect::<Option<Vec<usize>>>()
+        })
+        .collect();
+
     let mut x_matrix = Vec::new();
     let mut y_vector = Vec::new();
 
-    // Collect all records
-    for records in &data.subject_data {
-        for record in records {
-            if let Some(y_value) = extract_dependent_value(record, dependent_var) {
-                // Build design matrix row for this record
-                let mut x_row = Vec::new();
+    for (s, records) in data.subject_data.iter().enumerate() {
+        let y_value = match records.iter().find_map(|r| extract_dependent_value(r, dependent_var)) {
+            Some(v) if v.is_finite() => v,
+            _ => continue,
+        };
 
-                // Add factor columns (dummy variables)
-                if let Some(factors) = &config.main.factors_var {
-                    for factor in factors {
-                        if let Ok(levels) = get_factor_levels(data, factor) {
-                            // Create dummy variables based on the factor levels
-                            let factor_value = record.values
-                                .get(factor)
-                                .map(|v| data_value_to_string(v))
-                                .unwrap_or_default();
-
-                            // Use effect coding or dummy coding based on contrast type
-                            match config.contrast.contrast_method {
-                                ContrastMethod::Deviation => {
-                                    // Effect coding
-                                    for level in &levels[0..levels.len() - 1] {
-                                        if &factor_value == level {
-                                            x_row.push(1.0);
-                                        } else if &factor_value == &levels[levels.len() - 1] {
-                                            x_row.push(-1.0);
-                                        } else {
-                                            x_row.push(0.0);
-                                        }
-                                    }
-                                }
-                                _ => {
-                                    // Default to dummy coding (simple contrasts)
-                                    for level in &levels[0..levels.len() - 1] {
-                                        if &factor_value == level {
-                                            x_row.push(1.0);
-                                        } else {
-                                            x_row.push(0.0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        // Effect codes of every factor for this subject (None = missing).
+        let mut codes: Vec<Vec<f64>> = Vec::new();
+        let mut complete = true;
+        for (fi, factor) in factors.iter().enumerate() {
+            let value = data.factors_data
+                .get(factor_index[fi])
+                .and_then(|column| column.get(s))
+                .and_then(|record| record.values.get(factor))
+                .map(data_value_to_string);
+            let levels = &factor_levels[fi];
+            match value.and_then(|v| levels.iter().position(|l| *l == v)) {
+                Some(idx) => {
+                    let last = levels.len() - 1;
+                    codes.push(
+                        (0..last)
+                            .map(|j| if idx == j { 1.0 } else if idx == last { -1.0 } else { 0.0 })
+                            .collect()
+                    );
                 }
-
-                // Add covariate columns
-                if let Some(covariates) = &config.main.covariates {
-                    for covar in covariates {
-                        if let Some(covar_value) = record.values.get(covar) {
-                            match covar_value {
-                                DataValue::Number(num) => x_row.push(*num),
-                                _ => x_row.push(0.0), // Handle non-numeric covariates
-                            }
-                        } else {
-                            x_row.push(0.0); // Missing covariate value
-                        }
-                    }
+                None => {
+                    complete = false;
+                    break;
                 }
-
-                // Add interaction terms
-                if let Some(factors) = &config.main.factors_var {
-                    if factors.len() > 1 {
-                        let interaction_terms = generate_interaction_terms(factors);
-                        for term in &interaction_terms {
-                            let factor_levels = parse_interaction_term(term);
-                            let mut interaction_value = 1.0;
-                            let mut valid = true;
-
-                            for factor in &factor_levels {
-                                if let Some(factor_value) = record.values.get(factor) {
-                                    // For simplicity, we use the product of factor dummy variables
-                                    // This needs to be refined based on the actual coding scheme
-                                    if let Ok(levels) = get_factor_levels(data, factor) {
-                                        let level_value = data_value_to_string(factor_value);
-                                        let level_index = levels
-                                            .iter()
-                                            .position(|l| l == &level_value);
-
-                                        if let Some(idx) = level_index {
-                                            // The interaction term encodes as 1 only if all factors match
-                                            // specific levels, otherwise 0
-                                            if idx != levels.len() - 1 {
-                                                // Not the reference level
-                                                interaction_value *= 1.0;
-                                            } else {
-                                                // Reference level
-                                                valid = false;
-                                                break;
-                                            }
-                                        } else {
-                                            valid = false;
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    valid = false;
-                                    break;
-                                }
-                            }
-
-                            if valid {
-                                x_row.push(interaction_value);
-                            } else {
-                                x_row.push(0.0);
-                            }
-                        }
-                    }
-                }
-
-                // Add this record to the design matrix and response vector
-                x_matrix.push(x_row);
-                y_vector.push(y_value);
             }
         }
+        let mut covariate_values = Vec::new();
+        for (ci, covar) in covariates.iter().enumerate() {
+            match covariate_data
+                .get(covariate_index[ci])
+                .and_then(|column| column.get(s))
+                .and_then(|record| record.values.get(covar))
+            {
+                Some(DataValue::Number(v)) if v.is_finite() => covariate_values.push(*v),
+                _ => {
+                    complete = false;
+                    break;
+                }
+            }
+        }
+        if !complete {
+            continue;
+        }
+
+        let mut x_row = vec![1.0];
+        x_row.extend(covariate_values);
+        for c in &codes {
+            x_row.extend(c.iter().copied());
+        }
+        for term in &interactions {
+            let mut products = vec![1.0];
+            for &fi in term {
+                products = products
+                    .iter()
+                    .flat_map(|p| codes[fi].iter().map(move |c| p * c))
+                    .collect();
+            }
+            x_row.extend(products);
+        }
+
+        x_matrix.push(x_row);
+        y_vector.push(y_value);
     }
 
     Ok((x_matrix, y_vector))

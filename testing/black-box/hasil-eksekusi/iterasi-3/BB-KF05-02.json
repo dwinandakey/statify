@@ -1,0 +1,47 @@
+{
+ "id": "BB-KF05-02",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2"
+ ],
+ "toasts": [
+  {
+   "label": "OK tanpa faktor/kovariat",
+   "texts": [
+    "Please select at least one fixed factor or covariate.",
+    "Please select at least one fixed factor or covariate."
+   ],
+   "file": "BB-KF05-02.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "logBaru": false
+ },
+ "notes": [
+  "BB-KF05-02.png: toast: OK tanpa faktor/kovariat"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:20:51.362Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 9,
+ "finishedAt": "2026-09-25T13:21:00.057Z",
+ "wasmRequested": []
+}

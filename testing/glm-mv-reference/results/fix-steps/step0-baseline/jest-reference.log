@@ -1,0 +1,2184 @@
+jest-haste-map: Haste module naming collision: wasm
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\public\workers\Clustering\K-Medoids\package.json
+    * <rootDir>\public\workers\Classify\Discriminant\pkg\package.json
+
+jest-haste-map: Haste module naming collision: timeseries
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\public\workers\TimeSeries\package.json
+    * <rootDir>\components\Modals\Analyze\TimeSeries\wasm\pkg\package.json
+
+jest-haste-map: Haste module naming collision: statify-logistic
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\public\workers\Regression\Binary\pkg\package.json
+    * <rootDir>\components\Modals\Analyze\Regression\BinaryLogistic\rust\pkg\package.json
+
+jest-haste-map: Haste module naming collision: statify-multinomial
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\public\workers\Regression\Multinomial\pkg\package.json
+    * <rootDir>\components\Modals\Analyze\Regression\MultinomialLogistic\wasm\pkg\package.json
+
+jest-haste-map: Haste module naming collision: statify_ordinal
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>\public\workers\Regression\Ordinal\pkg\package.json
+    * <rootDir>\components\Modals\Analyze\Regression\Ordinal\rust\pkg\package.json
+
+FAIL components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts
+  GLM Multivariate vs SPSS 27
+    mv1 · Report
+      √ mpg · Mean (2 ms)
+      √ disp · Mean
+      √ hp · Mean
+      √ wt · Mean
+      √ mpg · Std. Deviation
+      √ disp · Std. Deviation (1 ms)
+      √ hp · Std. Deviation
+      √ wt · Std. Deviation
+      √ mpg · N
+      √ disp · N (1 ms)
+      √ hp · N
+      √ wt · N
+    mv1 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared (1 ms)
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      × Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value (1 ms)
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared (1 ms)
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      × Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value (1 ms)
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      × Intercept / Hotelling's Trace · Observed Power (1 ms)
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig. (1 ms)
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      × Intercept / Roy's Largest Root · Observed Power
+    mv1 · Tests of Between-Subjects Effects
+      √ Corrected Model / mpg - 20 · Type III Sum of Squares
+      √ Corrected Model / mpg - 20 · df
+      √ Corrected Model / mpg - 20 · Partial Eta Squared (1 ms)
+      √ Corrected Model / mpg - 20 · Noncent. Parameter
+      √ Corrected Model / disp - 200 · Type III Sum of Squares
+      √ Corrected Model / disp - 200 · df
+      √ Corrected Model / disp - 200 · Partial Eta Squared
+      √ Corrected Model / disp - 200 · Noncent. Parameter
+      √ Corrected Model / hp - 150 · Type III Sum of Squares
+      √ Corrected Model / hp - 150 · df
+      √ Corrected Model / hp - 150 · Partial Eta Squared
+      √ Corrected Model / hp - 150 · Noncent. Parameter
+      √ Corrected Model / wt - 3 · Type III Sum of Squares
+      √ Corrected Model / wt - 3 · df
+      √ Corrected Model / wt - 3 · Partial Eta Squared
+      √ Corrected Model / wt - 3 · Noncent. Parameter
+      √ Intercept / mpg - 20 · Type III Sum of Squares
+      √ Intercept / mpg - 20 · df
+      √ Intercept / mpg - 20 · Mean Square
+      √ Intercept / mpg - 20 · F
+      √ Intercept / mpg - 20 · Sig.
+      √ Intercept / mpg - 20 · Partial Eta Squared (1 ms)
+      √ Intercept / mpg - 20 · Noncent. Parameter
+      × Intercept / mpg - 20 · Observed Power
+      √ Intercept / disp - 200 · Type III Sum of Squares
+      √ Intercept / disp - 200 · df
+      √ Intercept / disp - 200 · Mean Square
+      √ Intercept / disp - 200 · F
+      √ Intercept / disp - 200 · Sig.
+      √ Intercept / disp - 200 · Partial Eta Squared
+      √ Intercept / disp - 200 · Noncent. Parameter
+      × Intercept / disp - 200 · Observed Power (1 ms)
+      √ Intercept / hp - 150 · Type III Sum of Squares
+      √ Intercept / hp - 150 · df
+      √ Intercept / hp - 150 · Mean Square
+      √ Intercept / hp - 150 · F
+      √ Intercept / hp - 150 · Sig. (1 ms)
+      √ Intercept / hp - 150 · Partial Eta Squared
+      √ Intercept / hp - 150 · Noncent. Parameter
+      × Intercept / hp - 150 · Observed Power
+      √ Intercept / wt - 3 · Type III Sum of Squares
+      √ Intercept / wt - 3 · df
+      √ Intercept / wt - 3 · Mean Square
+      √ Intercept / wt - 3 · F
+      √ Intercept / wt - 3 · Sig.
+      √ Intercept / wt - 3 · Partial Eta Squared
+      √ Intercept / wt - 3 · Noncent. Parameter
+      × Intercept / wt - 3 · Observed Power
+      √ Error / mpg - 20 · Type III Sum of Squares
+      √ Error / mpg - 20 · df
+      √ Error / mpg - 20 · Mean Square
+      √ Error / disp - 200 · Type III Sum of Squares
+      √ Error / disp - 200 · df
+      √ Error / disp - 200 · Mean Square
+      √ Error / hp - 150 · Type III Sum of Squares
+      √ Error / hp - 150 · df
+      √ Error / hp - 150 · Mean Square
+      √ Error / wt - 3 · Type III Sum of Squares
+      √ Error / wt - 3 · df
+      √ Error / wt - 3 · Mean Square (1 ms)
+      √ Total / mpg - 20 · Type III Sum of Squares
+      √ Total / mpg - 20 · df
+      √ Total / disp - 200 · Type III Sum of Squares
+      √ Total / disp - 200 · df
+      √ Total / hp - 150 · Type III Sum of Squares
+      √ Total / hp - 150 · df
+      √ Total / wt - 3 · Type III Sum of Squares
+      √ Total / wt - 3 · df
+      √ Corrected Total / mpg - 20 · Type III Sum of Squares
+      √ Corrected Total / mpg - 20 · df
+      √ Corrected Total / disp - 200 · Type III Sum of Squares (1 ms)
+      √ Corrected Total / disp - 200 · df
+      √ Corrected Total / hp - 150 · Type III Sum of Squares
+      √ Corrected Total / hp - 150 · df
+      √ Corrected Total / wt - 3 · Type III Sum of Squares
+      √ Corrected Total / wt - 3 · df
+    mv2 · Between-Subjects Factors
+      √ jk / 1 / laki-laki · N
+      √ jk / 2 / perempuan · N (1 ms)
+    mv2 · Descriptive Statistics
+      √ x1 / laki-laki · Mean
+      √ x1 / laki-laki · Std. Deviation
+      √ x1 / laki-laki · N
+      √ x1 / perempuan · Mean
+      √ x1 / perempuan · Std. Deviation
+      √ x1 / perempuan · N (1 ms)
+      √ x1 / Total · Mean
+      √ x1 / Total · Std. Deviation
+      √ x1 / Total · N
+      √ x2 / laki-laki · Mean
+      √ x2 / laki-laki · Std. Deviation
+      √ x2 / laki-laki · N
+      √ x2 / perempuan · Mean
+      √ x2 / perempuan · Std. Deviation
+      √ x2 / perempuan · N (1 ms)
+      √ x2 / Total · Mean
+      √ x2 / Total · Std. Deviation
+      √ x2 / Total · N
+      √ x3 / laki-laki · Mean
+      √ x3 / laki-laki · Std. Deviation
+      √ x3 / laki-laki · N
+      √ x3 / perempuan · Mean
+      √ x3 / perempuan · Std. Deviation
+      √ x3 / perempuan · N (1 ms)
+      √ x3 / Total · Mean
+      √ x3 / Total · Std. Deviation
+      √ x3 / Total · N
+      √ x4 / laki-laki · Mean
+      √ x4 / laki-laki · Std. Deviation
+      √ x4 / laki-laki · N
+      √ x4 / perempuan · Mean (1 ms)
+      √ x4 / perempuan · Std. Deviation
+      √ x4 / perempuan · N
+      √ x4 / Total · Mean
+      √ x4 / Total · Std. Deviation
+      √ x4 / Total · N
+    mv2 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1 (1 ms)
+      √  · df2
+      √  · Sig.
+    mv2 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value (1 ms)
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power (1 ms)
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value (1 ms)
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ jk / Pillai's Trace · Value
+      √ jk / Pillai's Trace · F
+      √ jk / Pillai's Trace · Hypothesis df
+      √ jk / Pillai's Trace · Error df
+      √ jk / Pillai's Trace · Sig.
+      √ jk / Pillai's Trace · Partial Eta Squared
+      √ jk / Pillai's Trace · Noncent. Parameter
+      × jk / Pillai's Trace · Observed Power
+      √ jk / Wilks' Lambda · Value
+      √ jk / Wilks' Lambda · F
+      √ jk / Wilks' Lambda · Hypothesis df
+      √ jk / Wilks' Lambda · Error df
+      √ jk / Wilks' Lambda · Sig.
+      √ jk / Wilks' Lambda · Partial Eta Squared
+      √ jk / Wilks' Lambda · Noncent. Parameter
+      × jk / Wilks' Lambda · Observed Power
+      √ jk / Hotelling's Trace · Value (1 ms)
+      √ jk / Hotelling's Trace · F
+      √ jk / Hotelling's Trace · Hypothesis df
+      √ jk / Hotelling's Trace · Error df
+      √ jk / Hotelling's Trace · Sig.
+      √ jk / Hotelling's Trace · Partial Eta Squared
+      √ jk / Hotelling's Trace · Noncent. Parameter
+      × jk / Hotelling's Trace · Observed Power
+      √ jk / Roy's Largest Root · Value
+      √ jk / Roy's Largest Root · F
+      √ jk / Roy's Largest Root · Hypothesis df
+      √ jk / Roy's Largest Root · Error df
+      √ jk / Roy's Largest Root · Sig.
+      √ jk / Roy's Largest Root · Partial Eta Squared
+      √ jk / Roy's Largest Root · Noncent. Parameter
+      × jk / Roy's Largest Root · Observed Power
+    mv2 · Levene's Test of Equality of Error Variances
+      √ x1 / Based on Mean · Levene Statistic
+      √ x1 / Based on Mean · df1
+      √ x1 / Based on Mean · df2
+      √ x1 / Based on Mean · Sig.
+      √ x1 / Based on Median · Levene Statistic (1 ms)
+      √ x1 / Based on Median · df1
+      √ x1 / Based on Median · df2
+      √ x1 / Based on Median · Sig.
+      √ x1 / Based on Median and with adjusted df · Levene Statistic
+      √ x1 / Based on Median and with adjusted df · df1
+      √ x1 / Based on Median and with adjusted df · df2
+      √ x1 / Based on Median and with adjusted df · Sig.
+      √ x1 / Based on trimmed mean · Levene Statistic
+      √ x1 / Based on trimmed mean · df1 (1 ms)
+      √ x1 / Based on trimmed mean · df2
+      √ x1 / Based on trimmed mean · Sig.
+      √ x2 / Based on Mean · Levene Statistic
+      √ x2 / Based on Mean · df1
+      √ x2 / Based on Mean · df2
+      √ x2 / Based on Mean · Sig.
+      √ x2 / Based on Median · Levene Statistic
+      √ x2 / Based on Median · df1
+      √ x2 / Based on Median · df2
+      √ x2 / Based on Median · Sig.
+      √ x2 / Based on Median and with adjusted df · Levene Statistic
+      √ x2 / Based on Median and with adjusted df · df1
+      √ x2 / Based on Median and with adjusted df · df2
+      √ x2 / Based on Median and with adjusted df · Sig.
+      √ x2 / Based on trimmed mean · Levene Statistic
+      √ x2 / Based on trimmed mean · df1
+      √ x2 / Based on trimmed mean · df2
+      √ x2 / Based on trimmed mean · Sig.
+      √ x3 / Based on Mean · Levene Statistic
+      √ x3 / Based on Mean · df1
+      √ x3 / Based on Mean · df2 (1 ms)
+      √ x3 / Based on Mean · Sig.
+      √ x3 / Based on Median · Levene Statistic
+      √ x3 / Based on Median · df1
+      √ x3 / Based on Median · df2
+      √ x3 / Based on Median · Sig.
+      √ x3 / Based on Median and with adjusted df · Levene Statistic
+      √ x3 / Based on Median and with adjusted df · df1
+      √ x3 / Based on Median and with adjusted df · df2
+      √ x3 / Based on Median and with adjusted df · Sig.
+      √ x3 / Based on trimmed mean · Levene Statistic (1 ms)
+      √ x3 / Based on trimmed mean · df1
+      √ x3 / Based on trimmed mean · df2
+      √ x3 / Based on trimmed mean · Sig.
+      √ x4 / Based on Mean · Levene Statistic
+      √ x4 / Based on Mean · df1
+      √ x4 / Based on Mean · df2
+      √ x4 / Based on Mean · Sig.
+      √ x4 / Based on Median · Levene Statistic
+      √ x4 / Based on Median · df1
+      √ x4 / Based on Median · df2 (1 ms)
+      √ x4 / Based on Median · Sig.
+      √ x4 / Based on Median and with adjusted df · Levene Statistic
+      √ x4 / Based on Median and with adjusted df · df1
+      √ x4 / Based on Median and with adjusted df · df2
+      √ x4 / Based on Median and with adjusted df · Sig.
+      √ x4 / Based on trimmed mean · Levene Statistic
+      √ x4 / Based on trimmed mean · df1
+      √ x4 / Based on trimmed mean · df2
+      √ x4 / Based on trimmed mean · Sig. (1 ms)
+    mv2 · Tests of Between-Subjects Effects
+      √ Corrected Model / x1 · Type III Sum of Squares
+      √ Corrected Model / x1 · df
+      √ Corrected Model / x1 · Mean Square
+      √ Corrected Model / x1 · F
+      √ Corrected Model / x1 · Sig.
+      √ Corrected Model / x1 · Partial Eta Squared
+      √ Corrected Model / x1 · Noncent. Parameter
+      √ Corrected Model / x1 · Observed Power (1 ms)
+      √ Corrected Model / x2 · Type III Sum of Squares
+      √ Corrected Model / x2 · df
+      √ Corrected Model / x2 · Mean Square
+      √ Corrected Model / x2 · F
+      √ Corrected Model / x2 · Sig.
+      √ Corrected Model / x2 · Partial Eta Squared (1 ms)
+      √ Corrected Model / x2 · Noncent. Parameter
+      × Corrected Model / x2 · Observed Power
+      √ Corrected Model / x3 · Type III Sum of Squares
+      √ Corrected Model / x3 · df
+      √ Corrected Model / x3 · Mean Square (1 ms)
+      √ Corrected Model / x3 · F
+      √ Corrected Model / x3 · Sig.
+      √ Corrected Model / x3 · Partial Eta Squared
+      √ Corrected Model / x3 · Noncent. Parameter
+      √ Corrected Model / x3 · Observed Power
+      √ Corrected Model / x4 · Type III Sum of Squares
+      √ Corrected Model / x4 · df (1 ms)
+      √ Corrected Model / x4 · Mean Square
+      √ Corrected Model / x4 · F
+      √ Corrected Model / x4 · Sig.
+      √ Corrected Model / x4 · Partial Eta Squared
+      √ Corrected Model / x4 · Noncent. Parameter
+      × Corrected Model / x4 · Observed Power (1 ms)
+      √ Intercept / x1 · Type III Sum of Squares
+      √ Intercept / x1 · df
+      √ Intercept / x1 · Mean Square
+      √ Intercept / x1 · F
+      √ Intercept / x1 · Sig. (1 ms)
+      √ Intercept / x1 · Partial Eta Squared
+      √ Intercept / x1 · Noncent. Parameter
+      √ Intercept / x1 · Observed Power
+      √ Intercept / x2 · Type III Sum of Squares
+      √ Intercept / x2 · df (1 ms)
+      √ Intercept / x2 · Mean Square
+      √ Intercept / x2 · F
+      √ Intercept / x2 · Sig.
+      √ Intercept / x2 · Partial Eta Squared
+      √ Intercept / x2 · Noncent. Parameter
+      √ Intercept / x2 · Observed Power
+      √ Intercept / x3 · Type III Sum of Squares
+      √ Intercept / x3 · df
+      √ Intercept / x3 · Mean Square
+      √ Intercept / x3 · F
+      √ Intercept / x3 · Sig.
+      √ Intercept / x3 · Partial Eta Squared
+      √ Intercept / x3 · Noncent. Parameter
+      √ Intercept / x3 · Observed Power (1 ms)
+      √ Intercept / x4 · Type III Sum of Squares
+      √ Intercept / x4 · df
+      √ Intercept / x4 · Mean Square
+      √ Intercept / x4 · F
+      √ Intercept / x4 · Sig.
+      √ Intercept / x4 · Partial Eta Squared
+      √ Intercept / x4 · Noncent. Parameter
+      √ Intercept / x4 · Observed Power (1 ms)
+      √ jk / x1 · Type III Sum of Squares
+      √ jk / x1 · df
+      √ jk / x1 · Mean Square
+      √ jk / x1 · F
+      √ jk / x1 · Sig.
+      √ jk / x1 · Partial Eta Squared
+      √ jk / x1 · Noncent. Parameter
+      √ jk / x1 · Observed Power
+      √ jk / x2 · Type III Sum of Squares
+      √ jk / x2 · df (1 ms)
+      √ jk / x2 · Mean Square
+      √ jk / x2 · F
+      √ jk / x2 · Sig.
+      √ jk / x2 · Partial Eta Squared
+      √ jk / x2 · Noncent. Parameter
+      × jk / x2 · Observed Power
+      √ jk / x3 · Type III Sum of Squares
+      √ jk / x3 · df
+      √ jk / x3 · Mean Square
+      √ jk / x3 · F
+      √ jk / x3 · Sig.
+      √ jk / x3 · Partial Eta Squared
+      √ jk / x3 · Noncent. Parameter
+      √ jk / x3 · Observed Power (1 ms)
+      √ jk / x4 · Type III Sum of Squares
+      √ jk / x4 · df
+      √ jk / x4 · Mean Square
+      √ jk / x4 · F
+      √ jk / x4 · Sig.
+      √ jk / x4 · Partial Eta Squared
+      √ jk / x4 · Noncent. Parameter
+      × jk / x4 · Observed Power
+      √ Error / x1 · Type III Sum of Squares
+      √ Error / x1 · df
+      √ Error / x1 · Mean Square
+      √ Error / x2 · Type III Sum of Squares
+      √ Error / x2 · df
+      √ Error / x2 · Mean Square
+      √ Error / x3 · Type III Sum of Squares
+      √ Error / x3 · df
+      √ Error / x3 · Mean Square
+      √ Error / x4 · Type III Sum of Squares
+      √ Error / x4 · df
+      √ Error / x4 · Mean Square
+      √ Total / x1 · Type III Sum of Squares
+      √ Total / x1 · df
+      √ Total / x2 · Type III Sum of Squares
+      √ Total / x2 · df
+      √ Total / x3 · Type III Sum of Squares
+      √ Total / x3 · df
+      √ Total / x4 · Type III Sum of Squares
+      √ Total / x4 · df
+      √ Corrected Total / x1 · Type III Sum of Squares
+      √ Corrected Total / x1 · df (1 ms)
+      √ Corrected Total / x2 · Type III Sum of Squares
+      √ Corrected Total / x2 · df
+      √ Corrected Total / x3 · Type III Sum of Squares
+      √ Corrected Total / x3 · df
+      √ Corrected Total / x4 · Type III Sum of Squares
+      √ Corrected Total / x4 · df
+    mv3 · Descriptive Statistics
+      √ kedalaman1 - kedalaman2 · Mean
+      √ kedalaman1 - kedalaman2 · Std. Deviation
+      √ kedalaman1 - kedalaman2 · N
+      √ ukuran1 - ukuran2 · Mean
+      √ ukuran1 - ukuran2 · Std. Deviation
+      √ ukuran1 - ukuran2 · N
+    mv3 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter (1 ms)
+      × Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared (1 ms)
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      × Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig. (1 ms)
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      × Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value (1 ms)
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      × Intercept / Roy's Largest Root · Observed Power
+    mv3 · Tests of Between-Subjects Effects
+      √ Corrected Model / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Corrected Model / kedalaman1 - kedalaman2 · df
+      √ Corrected Model / kedalaman1 - kedalaman2 · Partial Eta Squared
+      √ Corrected Model / kedalaman1 - kedalaman2 · Noncent. Parameter
+      √ Corrected Model / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Corrected Model / ukuran1 - ukuran2 · df
+      √ Corrected Model / ukuran1 - ukuran2 · Partial Eta Squared
+      √ Corrected Model / ukuran1 - ukuran2 · Noncent. Parameter
+      √ Intercept / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Intercept / kedalaman1 - kedalaman2 · df
+      √ Intercept / kedalaman1 - kedalaman2 · Mean Square
+      √ Intercept / kedalaman1 - kedalaman2 · F
+      √ Intercept / kedalaman1 - kedalaman2 · Sig.
+      √ Intercept / kedalaman1 - kedalaman2 · Partial Eta Squared
+      √ Intercept / kedalaman1 - kedalaman2 · Noncent. Parameter
+      × Intercept / kedalaman1 - kedalaman2 · Observed Power
+      √ Intercept / ukuran1 - ukuran2 · Type III Sum of Squares (1 ms)
+      √ Intercept / ukuran1 - ukuran2 · df
+      √ Intercept / ukuran1 - ukuran2 · Mean Square
+      √ Intercept / ukuran1 - ukuran2 · F
+      √ Intercept / ukuran1 - ukuran2 · Sig.
+      √ Intercept / ukuran1 - ukuran2 · Partial Eta Squared
+      √ Intercept / ukuran1 - ukuran2 · Noncent. Parameter
+      × Intercept / ukuran1 - ukuran2 · Observed Power
+      √ Error / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Error / kedalaman1 - kedalaman2 · df
+      √ Error / kedalaman1 - kedalaman2 · Mean Square
+      √ Error / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Error / ukuran1 - ukuran2 · df
+      √ Error / ukuran1 - ukuran2 · Mean Square
+      √ Total / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Total / kedalaman1 - kedalaman2 · df
+      √ Total / ukuran1 - ukuran2 · Type III Sum of Squares (1 ms)
+      √ Total / ukuran1 - ukuran2 · df
+      √ Corrected Total / kedalaman1 - kedalaman2 · Type III Sum of Squares
+      √ Corrected Total / kedalaman1 - kedalaman2 · df
+      √ Corrected Total / ukuran1 - ukuran2 · Type III Sum of Squares
+      √ Corrected Total / ukuran1 - ukuran2 · df (1 ms)
+    mv4 · Between-Subjects Factors
+      √ treatment / 1 / treatment 1 · N
+      √ treatment / 2 / treatment 2 · N
+      √ treatment / 3 / treatment 3 · N
+    mv4 · Descriptive Statistics
+      √ y1 / treatment 1 · Mean
+      √ y1 / treatment 1 · Std. Deviation
+      √ y1 / treatment 1 · N
+      √ y1 / treatment 2 · Mean
+      √ y1 / treatment 2 · Std. Deviation
+      √ y1 / treatment 2 · N
+      √ y1 / treatment 3 · Mean
+      √ y1 / treatment 3 · Std. Deviation
+      √ y1 / treatment 3 · N
+      √ y1 / Total · Mean
+      √ y1 / Total · Std. Deviation
+      √ y1 / Total · N
+      √ y2 / treatment 1 · Mean
+      √ y2 / treatment 1 · Std. Deviation
+      √ y2 / treatment 1 · N
+      √ y2 / treatment 2 · Mean
+      √ y2 / treatment 2 · Std. Deviation
+      √ y2 / treatment 2 · N
+      √ y2 / treatment 3 · Mean
+      √ y2 / treatment 3 · Std. Deviation
+      √ y2 / treatment 3 · N
+      √ y2 / Total · Mean
+      √ y2 / Total · Std. Deviation
+      √ y2 / Total · N
+    mv4 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      ×  · F
+      √  · df1
+      √  · df2 (1 ms)
+      √  · Sig.
+    mv4 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig.
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter (1 ms)
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power (1 ms)
+      √ treatment / Pillai's Trace · Value
+      √ treatment / Pillai's Trace · F
+      √ treatment / Pillai's Trace · Hypothesis df
+      √ treatment / Pillai's Trace · Error df
+      √ treatment / Pillai's Trace · Sig.
+      √ treatment / Pillai's Trace · Partial Eta Squared
+      √ treatment / Pillai's Trace · Noncent. Parameter
+      × treatment / Pillai's Trace · Observed Power (1 ms)
+      √ treatment / Wilks' Lambda · Value (1 ms)
+      √ treatment / Wilks' Lambda · F
+      √ treatment / Wilks' Lambda · Hypothesis df
+      √ treatment / Wilks' Lambda · Error df
+      √ treatment / Wilks' Lambda · Sig.
+      √ treatment / Wilks' Lambda · Partial Eta Squared
+      √ treatment / Wilks' Lambda · Noncent. Parameter
+      × treatment / Wilks' Lambda · Observed Power
+      √ treatment / Hotelling's Trace · Value
+      √ treatment / Hotelling's Trace · F
+      √ treatment / Hotelling's Trace · Hypothesis df
+      √ treatment / Hotelling's Trace · Error df
+      √ treatment / Hotelling's Trace · Sig.
+      × treatment / Hotelling's Trace · Partial Eta Squared
+      √ treatment / Hotelling's Trace · Noncent. Parameter
+      × treatment / Hotelling's Trace · Observed Power
+      √ treatment / Roy's Largest Root · Value
+      √ treatment / Roy's Largest Root · F
+      √ treatment / Roy's Largest Root · Hypothesis df
+      √ treatment / Roy's Largest Root · Error df
+      √ treatment / Roy's Largest Root · Sig.
+      √ treatment / Roy's Largest Root · Partial Eta Squared
+      √ treatment / Roy's Largest Root · Noncent. Parameter
+      × treatment / Roy's Largest Root · Observed Power
+    mv4 · Levene's Test of Equality of Error Variances
+      √ y1 / Based on Mean · Levene Statistic
+      √ y1 / Based on Mean · df1
+      √ y1 / Based on Mean · df2
+      √ y1 / Based on Mean · Sig.
+      √ y1 / Based on Median · Levene Statistic
+      √ y1 / Based on Median · df1
+      √ y1 / Based on Median · df2 (1 ms)
+      √ y1 / Based on Median · Sig.
+      √ y1 / Based on Median and with adjusted df · Levene Statistic
+      √ y1 / Based on Median and with adjusted df · df1
+      √ y1 / Based on Median and with adjusted df · df2
+      √ y1 / Based on Median and with adjusted df · Sig.
+      √ y1 / Based on trimmed mean · Levene Statistic
+      √ y1 / Based on trimmed mean · df1
+      √ y1 / Based on trimmed mean · df2 (1 ms)
+      √ y1 / Based on trimmed mean · Sig.
+      √ y2 / Based on Mean · Levene Statistic
+      √ y2 / Based on Mean · df1
+      √ y2 / Based on Mean · df2
+      √ y2 / Based on Mean · Sig.
+      √ y2 / Based on Median · Levene Statistic
+      √ y2 / Based on Median · df1
+      √ y2 / Based on Median · df2
+      √ y2 / Based on Median · Sig.
+      √ y2 / Based on Median and with adjusted df · Levene Statistic
+      √ y2 / Based on Median and with adjusted df · df1
+      √ y2 / Based on Median and with adjusted df · df2
+      √ y2 / Based on Median and with adjusted df · Sig.
+      √ y2 / Based on trimmed mean · Levene Statistic
+      √ y2 / Based on trimmed mean · df1
+      √ y2 / Based on trimmed mean · df2
+      √ y2 / Based on trimmed mean · Sig.
+    mv4 · Tests of Between-Subjects Effects
+      √ Corrected Model / y1 · Type III Sum of Squares (1 ms)
+      √ Corrected Model / y1 · df
+      √ Corrected Model / y1 · Mean Square
+      √ Corrected Model / y1 · F
+      √ Corrected Model / y1 · Sig.
+      √ Corrected Model / y1 · Partial Eta Squared
+      √ Corrected Model / y1 · Noncent. Parameter
+      × Corrected Model / y1 · Observed Power
+      √ Corrected Model / y2 · Type III Sum of Squares
+      √ Corrected Model / y2 · df
+      √ Corrected Model / y2 · Mean Square
+      √ Corrected Model / y2 · F
+      √ Corrected Model / y2 · Sig.
+      √ Corrected Model / y2 · Partial Eta Squared
+      √ Corrected Model / y2 · Noncent. Parameter (1 ms)
+      × Corrected Model / y2 · Observed Power
+      √ Intercept / y1 · Type III Sum of Squares
+      √ Intercept / y1 · df
+      √ Intercept / y1 · Mean Square
+      √ Intercept / y1 · F
+      √ Intercept / y1 · Sig.
+      √ Intercept / y1 · Partial Eta Squared
+      √ Intercept / y1 · Noncent. Parameter
+      √ Intercept / y1 · Observed Power (1 ms)
+      √ Intercept / y2 · Type III Sum of Squares
+      √ Intercept / y2 · df
+      √ Intercept / y2 · Mean Square
+      √ Intercept / y2 · F
+      √ Intercept / y2 · Sig.
+      √ Intercept / y2 · Partial Eta Squared
+      √ Intercept / y2 · Noncent. Parameter
+      × Intercept / y2 · Observed Power
+      √ treatment / y1 · Type III Sum of Squares
+      √ treatment / y1 · df
+      √ treatment / y1 · Mean Square
+      √ treatment / y1 · F
+      √ treatment / y1 · Sig.
+      √ treatment / y1 · Partial Eta Squared
+      √ treatment / y1 · Noncent. Parameter
+      × treatment / y1 · Observed Power
+      √ treatment / y2 · Type III Sum of Squares
+      √ treatment / y2 · df
+      √ treatment / y2 · Mean Square (1 ms)
+      √ treatment / y2 · F
+      √ treatment / y2 · Sig.
+      √ treatment / y2 · Partial Eta Squared
+      √ treatment / y2 · Noncent. Parameter
+      × treatment / y2 · Observed Power
+      √ Error / y1 · Type III Sum of Squares
+      √ Error / y1 · df
+      √ Error / y1 · Mean Square (1 ms)
+      √ Error / y2 · Type III Sum of Squares
+      √ Error / y2 · df
+      √ Error / y2 · Mean Square
+      × Total / y1 · Type III Sum of Squares
+      √ Total / y1 · df
+      × Total / y2 · Type III Sum of Squares
+      √ Total / y2 · df
+      √ Corrected Total / y1 · Type III Sum of Squares
+      √ Corrected Total / y1 · df
+      √ Corrected Total / y2 · Type III Sum of Squares
+      √ Corrected Total / y2 · df
+    mv5 · Between-Subjects Factors
+      √ faktorA / 1 / A1 · N
+      √ faktorA / 2 / A2 · N
+      √ faktorB / 1 / B1 · N
+      √ faktorB / 2 / B2 · N
+      √ faktorB / 3 / B3 · N
+      √ faktorB / 4 / B4 · N
+    mv5 · Descriptive Statistics
+      √ ultimate torque / A1 / Total · Mean
+      √ ultimate torque / A1 / Total · Std. Deviation
+      √ ultimate torque / A1 / Total · N
+      √ ultimate torque / A2 / Total · Mean
+      √ ultimate torque / A2 / Total · Std. Deviation
+      √ ultimate torque / A2 / Total · N
+      √ ultimate torque / Total / Total · Mean (1 ms)
+      √ ultimate torque / Total / Total · Std. Deviation
+      √ ultimate torque / Total / Total · N
+      √ ultimate strain / A1 / Total · Mean
+      √ ultimate strain / A1 / Total · Std. Deviation
+      √ ultimate strain / A1 / Total · N
+      √ ultimate strain / A2 / Total · Mean
+      √ ultimate strain / A2 / Total · Std. Deviation
+      √ ultimate strain / A2 / Total · N
+      √ ultimate strain / Total / Total · Mean
+      √ ultimate strain / Total / Total · Std. Deviation
+      √ ultimate strain / Total / Total · N (1 ms)
+    mv5 · Box's Test of Equality of Covariance Matrices
+      √  · Box's M
+      √  · F
+      √  · df1
+      √  · df2
+      √  · Sig.
+    mv5 · Multivariate Tests
+      √ Intercept / Pillai's Trace · Value
+      √ Intercept / Pillai's Trace · F
+      √ Intercept / Pillai's Trace · Hypothesis df
+      √ Intercept / Pillai's Trace · Error df
+      √ Intercept / Pillai's Trace · Sig. (1 ms)
+      √ Intercept / Pillai's Trace · Partial Eta Squared
+      √ Intercept / Pillai's Trace · Noncent. Parameter
+      √ Intercept / Pillai's Trace · Observed Power
+      √ Intercept / Wilks' Lambda · Value
+      √ Intercept / Wilks' Lambda · F
+      √ Intercept / Wilks' Lambda · Hypothesis df
+      √ Intercept / Wilks' Lambda · Error df
+      √ Intercept / Wilks' Lambda · Sig.
+      √ Intercept / Wilks' Lambda · Partial Eta Squared
+      √ Intercept / Wilks' Lambda · Noncent. Parameter
+      √ Intercept / Wilks' Lambda · Observed Power (1 ms)
+      √ Intercept / Hotelling's Trace · Value
+      √ Intercept / Hotelling's Trace · F
+      √ Intercept / Hotelling's Trace · Hypothesis df
+      √ Intercept / Hotelling's Trace · Error df
+      √ Intercept / Hotelling's Trace · Sig.
+      √ Intercept / Hotelling's Trace · Partial Eta Squared
+      √ Intercept / Hotelling's Trace · Noncent. Parameter
+      √ Intercept / Hotelling's Trace · Observed Power
+      √ Intercept / Roy's Largest Root · Value
+      √ Intercept / Roy's Largest Root · F (1 ms)
+      √ Intercept / Roy's Largest Root · Hypothesis df
+      √ Intercept / Roy's Largest Root · Error df
+      √ Intercept / Roy's Largest Root · Sig.
+      √ Intercept / Roy's Largest Root · Partial Eta Squared
+      √ Intercept / Roy's Largest Root · Noncent. Parameter
+      √ Intercept / Roy's Largest Root · Observed Power
+      √ faktorA / Pillai's Trace · Value
+      √ faktorA / Pillai's Trace · F (1 ms)
+      √ faktorA / Pillai's Trace · Hypothesis df
+      √ faktorA / Pillai's Trace · Error df
+      √ faktorA / Pillai's Trace · Sig.
+      √ faktorA / Pillai's Trace · Partial Eta Squared
+      √ faktorA / Pillai's Trace · Noncent. Parameter
+      √ faktorA / Pillai's Trace · Observed Power
+      √ faktorA / Wilks' Lambda · Value
+      √ faktorA / Wilks' Lambda · F (1 ms)
+      √ faktorA / Wilks' Lambda · Hypothesis df
+      √ faktorA / Wilks' Lambda · Error df
+      √ faktorA / Wilks' Lambda · Sig.
+      √ faktorA / Wilks' Lambda · Partial Eta Squared
+      √ faktorA / Wilks' Lambda · Noncent. Parameter
+      √ faktorA / Wilks' Lambda · Observed Power
+      √ faktorA / Hotelling's Trace · Value
+      √ faktorA / Hotelling's Trace · F
+      √ faktorA / Hotelling's Trace · Hypothesis df (1 ms)
+      √ faktorA / Hotelling's Trace · Error df
+      √ faktorA / Hotelling's Trace · Sig.
+      √ faktorA / Hotelling's Trace · Partial Eta Squared
+      √ faktorA / Hotelling's Trace · Noncent. Parameter
+      √ faktorA / Hotelling's Trace · Observed Power
+      √ faktorA / Roy's Largest Root · Value
+      √ faktorA / Roy's Largest Root · F
+      √ faktorA / Roy's Largest Root · Hypothesis df
+      √ faktorA / Roy's Largest Root · Error df
+      √ faktorA / Roy's Largest Root · Sig.
+      √ faktorA / Roy's Largest Root · Partial Eta Squared
+      √ faktorA / Roy's Largest Root · Noncent. Parameter
+      √ faktorA / Roy's Largest Root · Observed Power
+      √ faktorB / Pillai's Trace · Value
+      √ faktorB / Pillai's Trace · F
+      √ faktorB / Pillai's Trace · Hypothesis df
+      √ faktorB / Pillai's Trace · Error df
+      √ faktorB / Pillai's Trace · Sig.
+      √ faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorB / Pillai's Trace · Noncent. Parameter
+      × faktorB / Pillai's Trace · Observed Power (1 ms)
+      √ faktorB / Wilks' Lambda · Value
+      √ faktorB / Wilks' Lambda · F
+      √ faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorB / Wilks' Lambda · Error df
+      √ faktorB / Wilks' Lambda · Sig.
+      √ faktorB / Wilks' Lambda · Partial Eta Squared
+      √ faktorB / Wilks' Lambda · Noncent. Parameter
+      × faktorB / Wilks' Lambda · Observed Power
+      √ faktorB / Hotelling's Trace · Value
+      √ faktorB / Hotelling's Trace · F
+      √ faktorB / Hotelling's Trace · Hypothesis df
+      √ faktorB / Hotelling's Trace · Error df
+      √ faktorB / Hotelling's Trace · Sig.
+      × faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorB / Hotelling's Trace · Noncent. Parameter
+      × faktorB / Hotelling's Trace · Observed Power
+      √ faktorB / Roy's Largest Root · Value
+      √ faktorB / Roy's Largest Root · F
+      √ faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorB / Roy's Largest Root · Error df
+      √ faktorB / Roy's Largest Root · Sig.
+      √ faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorB / Roy's Largest Root · Noncent. Parameter
+      × faktorB / Roy's Largest Root · Observed Power
+      √ faktorA * faktorB / Pillai's Trace · Value
+      √ faktorA * faktorB / Pillai's Trace · F
+      √ faktorA * faktorB / Pillai's Trace · Hypothesis df
+      √ faktorA * faktorB / Pillai's Trace · Error df (1 ms)
+      √ faktorA * faktorB / Pillai's Trace · Sig.
+      √ faktorA * faktorB / Pillai's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Pillai's Trace · Noncent. Parameter
+      × faktorA * faktorB / Pillai's Trace · Observed Power
+      √ faktorA * faktorB / Wilks' Lambda · Value
+      √ faktorA * faktorB / Wilks' Lambda · F (1 ms)
+      √ faktorA * faktorB / Wilks' Lambda · Hypothesis df
+      √ faktorA * faktorB / Wilks' Lambda · Error df
+      √ faktorA * faktorB / Wilks' Lambda · Sig.
+      √ faktorA * faktorB / Wilks' Lambda · Partial Eta Squared
+      √ faktorA * faktorB / Wilks' Lambda · Noncent. Parameter
+      × faktorA * faktorB / Wilks' Lambda · Observed Power
+      √ faktorA * faktorB / Hotelling's Trace · Value
+      √ faktorA * faktorB / Hotelling's Trace · F
+      √ faktorA * faktorB / Hotelling's Trace · Hypothesis df
+      √ faktorA * faktorB / Hotelling's Trace · Error df
+      √ faktorA * faktorB / Hotelling's Trace · Sig.
+      × faktorA * faktorB / Hotelling's Trace · Partial Eta Squared
+      √ faktorA * faktorB / Hotelling's Trace · Noncent. Parameter
+      × faktorA * faktorB / Hotelling's Trace · Observed Power
+      √ faktorA * faktorB / Roy's Largest Root · Value
+      √ faktorA * faktorB / Roy's Largest Root · F
+      √ faktorA * faktorB / Roy's Largest Root · Hypothesis df
+      √ faktorA * faktorB / Roy's Largest Root · Error df
+      √ faktorA * faktorB / Roy's Largest Root · Sig.
+      √ faktorA * faktorB / Roy's Largest Root · Partial Eta Squared
+      √ faktorA * faktorB / Roy's Largest Root · Noncent. Parameter
+      × faktorA * faktorB / Roy's Largest Root · Observed Power
+    mv5 · Levene's Test of Equality of Error Variances
+      √ ultimate torque / Based on Mean · Levene Statistic
+      √ ultimate torque / Based on Mean · df1
+      √ ultimate torque / Based on Mean · df2
+      √ ultimate torque / Based on Mean · Sig.
+      √ ultimate torque / Based on Median · Levene Statistic
+      √ ultimate torque / Based on Median · df1
+      √ ultimate torque / Based on Median · df2
+      √ ultimate torque / Based on Median · Sig. (1 ms)
+      √ ultimate torque / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate torque / Based on Median and with adjusted df · df1
+      √ ultimate torque / Based on Median and with adjusted df · df2
+      √ ultimate torque / Based on Median and with adjusted df · Sig.
+      √ ultimate torque / Based on trimmed mean · Levene Statistic
+      √ ultimate torque / Based on trimmed mean · df1
+      √ ultimate torque / Based on trimmed mean · df2
+      √ ultimate torque / Based on trimmed mean · Sig.
+      √ ultimate strain / Based on Mean · Levene Statistic
+      √ ultimate strain / Based on Mean · df1
+      √ ultimate strain / Based on Mean · df2
+      √ ultimate strain / Based on Mean · Sig.
+      √ ultimate strain / Based on Median · Levene Statistic
+      √ ultimate strain / Based on Median · df1 (1 ms)
+      √ ultimate strain / Based on Median · df2
+      √ ultimate strain / Based on Median · Sig.
+      √ ultimate strain / Based on Median and with adjusted df · Levene Statistic
+      √ ultimate strain / Based on Median and with adjusted df · df1
+      √ ultimate strain / Based on Median and with adjusted df · df2
+      √ ultimate strain / Based on Median and with adjusted df · Sig.
+      √ ultimate strain / Based on trimmed mean · Levene Statistic
+      √ ultimate strain / Based on trimmed mean · df1
+      √ ultimate strain / Based on trimmed mean · df2
+      √ ultimate strain / Based on trimmed mean · Sig.
+    mv5 · Tests of Between-Subjects Effects
+      √ Corrected Model / ultimate torque · Type III Sum of Squares
+      √ Corrected Model / ultimate torque · df
+      √ Corrected Model / ultimate torque · Mean Square
+      √ Corrected Model / ultimate torque · F
+      √ Corrected Model / ultimate torque · Sig.
+      √ Corrected Model / ultimate torque · Partial Eta Squared
+      √ Corrected Model / ultimate torque · Noncent. Parameter
+      × Corrected Model / ultimate torque · Observed Power (1 ms)
+      √ Corrected Model / ultimate strain · Type III Sum of Squares
+      √ Corrected Model / ultimate strain · df
+      √ Corrected Model / ultimate strain · Mean Square
+      √ Corrected Model / ultimate strain · F
+      √ Corrected Model / ultimate strain · Sig.
+      √ Corrected Model / ultimate strain · Partial Eta Squared
+      √ Corrected Model / ultimate strain · Noncent. Parameter (1 ms)
+      × Corrected Model / ultimate strain · Observed Power
+      √ Intercept / ultimate torque · Type III Sum of Squares
+      √ Intercept / ultimate torque · df
+      √ Intercept / ultimate torque · Mean Square
+      √ Intercept / ultimate torque · F
+      √ Intercept / ultimate torque · Sig.
+      √ Intercept / ultimate torque · Partial Eta Squared
+      √ Intercept / ultimate torque · Noncent. Parameter
+      √ Intercept / ultimate torque · Observed Power
+      √ Intercept / ultimate strain · Type III Sum of Squares
+      √ Intercept / ultimate strain · df
+      √ Intercept / ultimate strain · Mean Square
+      √ Intercept / ultimate strain · F
+      √ Intercept / ultimate strain · Sig.
+      √ Intercept / ultimate strain · Partial Eta Squared
+      √ Intercept / ultimate strain · Noncent. Parameter
+      √ Intercept / ultimate strain · Observed Power
+      × faktorA / ultimate torque · Type III Sum of Squares
+      √ faktorA / ultimate torque · df
+      × faktorA / ultimate torque · Mean Square
+      × faktorA / ultimate torque · F
+      × faktorA / ultimate torque · Sig.
+      × faktorA / ultimate torque · Partial Eta Squared (1 ms)
+      × faktorA / ultimate torque · Noncent. Parameter
+      × faktorA / ultimate torque · Observed Power
+      × faktorA / ultimate strain · Type III Sum of Squares
+      √ faktorA / ultimate strain · df
+      × faktorA / ultimate strain · Mean Square
+      × faktorA / ultimate strain · F
+      × faktorA / ultimate strain · Sig.
+      × faktorA / ultimate strain · Partial Eta Squared
+      × faktorA / ultimate strain · Noncent. Parameter (1 ms)
+      × faktorA / ultimate strain · Observed Power
+      × faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorB / ultimate torque · df
+      × faktorB / ultimate torque · Mean Square
+      × faktorB / ultimate torque · F
+      × faktorB / ultimate torque · Sig.
+      × faktorB / ultimate torque · Partial Eta Squared
+      × faktorB / ultimate torque · Noncent. Parameter
+      × faktorB / ultimate torque · Observed Power
+      × faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorB / ultimate strain · df
+      × faktorB / ultimate strain · Mean Square
+      × faktorB / ultimate strain · F
+      × faktorB / ultimate strain · Sig.
+      × faktorB / ultimate strain · Partial Eta Squared
+      × faktorB / ultimate strain · Noncent. Parameter
+      × faktorB / ultimate strain · Observed Power
+      √ faktorA * faktorB / ultimate torque · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate torque · df
+      √ faktorA * faktorB / ultimate torque · Mean Square
+      √ faktorA * faktorB / ultimate torque · F (1 ms)
+      √ faktorA * faktorB / ultimate torque · Sig.
+      √ faktorA * faktorB / ultimate torque · Partial Eta Squared (1 ms)
+      √ faktorA * faktorB / ultimate torque · Noncent. Parameter
+      × faktorA * faktorB / ultimate torque · Observed Power
+      √ faktorA * faktorB / ultimate strain · Type III Sum of Squares
+      √ faktorA * faktorB / ultimate strain · df
+      √ faktorA * faktorB / ultimate strain · Mean Square
+      √ faktorA * faktorB / ultimate strain · F
+      √ faktorA * faktorB / ultimate strain · Sig.
+      √ faktorA * faktorB / ultimate strain · Partial Eta Squared
+      √ faktorA * faktorB / ultimate strain · Noncent. Parameter
+      × faktorA * faktorB / ultimate strain · Observed Power
+      √ Error / ultimate torque · Type III Sum of Squares
+      √ Error / ultimate torque · df (1 ms)
+      √ Error / ultimate torque · Mean Square
+      √ Error / ultimate strain · Type III Sum of Squares
+      √ Error / ultimate strain · df
+      √ Error / ultimate strain · Mean Square
+      √ Total / ultimate torque · Type III Sum of Squares
+      √ Total / ultimate torque · df
+      √ Total / ultimate strain · Type III Sum of Squares
+      √ Total / ultimate strain · df
+      √ Corrected Total / ultimate torque · Type III Sum of Squares (1 ms)
+      √ Corrected Total / ultimate torque · df
+      √ Corrected Total / ultimate strain · Type III Sum of Squares
+      √ Corrected Total / ultimate strain · df
+    SPSS values without a Statify counterpart
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · mpg - 20 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · disp - 200 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · hp - 150 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · Mean: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · Std. Deviation: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv1 · Descriptive Statistics · wt - 3 · N: SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A1 / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / A2 / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate torque / Total / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A1 / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / A2 / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B1 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B1 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B1 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B2 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B2 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B2 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B3 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B3 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B3 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B4 · Mean: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B4 · Std. Deviation: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+      ✎ todo mv5 · Descriptive Statistics · ultimate strain / Total / B4 · N: Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Multivariate Tests › Intercept / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.33908455178755315 > 0.001: Statify 0.9589409971587526, SPSS 0.6198564453711994 (spss: spss-output/mv1_satu_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Multivariate Tests › Intercept / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.33908455178755337 > 0.001: Statify 0.9589409971587526, SPSS 0.6198564453711992 (spss: spss-output/mv1_satu_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Multivariate Tests › Intercept / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.33908455178755315 > 0.001: Statify 0.9589409971587526, SPSS 0.6198564453711994 (spss: spss-output/mv1_satu_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Multivariate Tests › Intercept / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.33908455178755315 > 0.001: Statify 0.9589409971587526, SPSS 0.6198564453711994 (spss: spss-output/mv1_satu_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Tests of Between-Subjects Effects › Intercept / mpg - 20 · Observed Power
+
+    |Statify − SPSS| = 0.047168173142677405 > 0.001: Statify 0.003611069186190252, SPSS 0.05077924232886766 (spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Tests of Between-Subjects Effects › Intercept / disp - 200 · Observed Power
+
+    |Statify − SPSS| = 0.3514905499535007 > 0.001: Statify 0.6258538606808831, SPSS 0.2743633107273824 (spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Tests of Between-Subjects Effects › Intercept / hp - 150 · Observed Power
+
+    |Statify − SPSS| = 0.021421155424090288 > 0.001: Statify 0.03665804293942476, SPSS 0.05807919836351505 (spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv1 · Tests of Between-Subjects Effects › Intercept / wt - 3 · Observed Power
+
+    |Statify − SPSS| = 0.31601607637056917 > 0.001: Statify 0.5456009947875018, SPSS 0.22958491841693263 (spss: spss-output/mv1_satu_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Multivariate Tests › jk / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.004279221459273841 > 0.001: Statify 0.9957207784882235, SPSS 0.9999999999474973 (spss: spss-output/mv2_dua_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Multivariate Tests › jk / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.004279221459273841 > 0.001: Statify 0.9957207784882235, SPSS 0.9999999999474973 (spss: spss-output/mv2_dua_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Multivariate Tests › jk / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.004279221459273841 > 0.001: Statify 0.9957207784882235, SPSS 0.9999999999474973 (spss: spss-output/mv2_dua_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Multivariate Tests › jk / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.004279221459273841 > 0.001: Statify 0.9957207784882235, SPSS 0.9999999999474973 (spss: spss-output/mv2_dua_populasi.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Tests of Between-Subjects Effects › Corrected Model / x2 · Observed Power
+
+    |Statify − SPSS| = 0.3602076993649571 > 0.001: Statify 0.8664552908643685, SPSS 0.5062475914994113 (spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Tests of Between-Subjects Effects › Corrected Model / x4 · Observed Power
+
+    |Statify − SPSS| = 0.10671567509285518 > 0.001: Statify 0.21070028161938104, SPSS 0.10398460652652586 (spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Tests of Between-Subjects Effects › jk / x2 · Observed Power
+
+    |Statify − SPSS| = 0.3602076993649571 > 0.001: Statify 0.8664552908643685, SPSS 0.5062475914994113 (spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv2 · Tests of Between-Subjects Effects › jk / x4 · Observed Power
+
+    |Statify − SPSS| = 0.10671567509285285 > 0.001: Statify 0.21070028161938104, SPSS 0.10398460652652819 (spss: spss-output/mv2_dua_populasi.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Multivariate Tests › Intercept / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.2671188959561004 > 0.001: Statify 0.9800918166868522, SPSS 0.7129729207307518 (spss: spss-output/mv3_berpasangan.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Multivariate Tests › Intercept / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.2671188959561004 > 0.001: Statify 0.9800918166868522, SPSS 0.7129729207307518 (spss: spss-output/mv3_berpasangan.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Multivariate Tests › Intercept / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.2671188959561004 > 0.001: Statify 0.9800918166868522, SPSS 0.7129729207307518 (spss: spss-output/mv3_berpasangan.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Multivariate Tests › Intercept / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.2671188959561004 > 0.001: Statify 0.9800918166868522, SPSS 0.7129729207307518 (spss: spss-output/mv3_berpasangan.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Tests of Between-Subjects Effects › Intercept / kedalaman1 - kedalaman2 · Observed Power
+
+    |Statify − SPSS| = 0.23741051667189994 > 0.001: Statify 0.980712462599887, SPSS 0.743301945927987 (spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv3 · Tests of Between-Subjects Effects › Intercept / ukuran1 - ukuran2 · Observed Power
+
+    |Statify − SPSS| = 0.3024260901528242 > 0.001: Statify 0.9607696051694936, SPSS 0.6583435150166694 (spss: spss-output/mv3_berpasangan.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Box's Test of Equality of Covariance Matrices ›  · F
+
+    |Statify − SPSS| = 0.0010604555240577018 > 0.001: Statify 0.46660043058551076, SPSS 0.46553997506145306 (spss: spss-output/mv4_one_way.xlsx, Box's Test of Equality of Covariance Matrices)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Multivariate Tests › treatment / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.019285143976991437 > 0.001: Statify 0.988078529657477, SPSS 0.9687933856804856 (spss: spss-output/mv4_one_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Multivariate Tests › treatment / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.04565794555790659 > 0.001: Statify 0.9878031817447163, SPSS 0.9421452361868097 (spss: spss-output/mv4_one_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Multivariate Tests › treatment / Hotelling's Trace · Partial Eta Squared
+
+    |Statify − SPSS| = 0.07608843915687757 > 0.001: Statify 0.9086042065009561, SPSS 0.8325157673440785 (spss: spss-output/mv4_one_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Multivariate Tests › treatment / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.13106777119406166 > 0.001: Statify 0.98658810325477, SPSS 0.8555203320607083 (spss: spss-output/mv4_one_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Multivariate Tests › treatment / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.011284191444016156 > 0.001: Statify 0.9950472891169024, SPSS 0.9837630976728863 (spss: spss-output/mv4_one_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › Corrected Model / y1 · Observed Power
+
+    |Statify − SPSS| = 0.019242715709100633 > 0.001: Statify 0.9999999966017322, SPSS 0.9807572808926316 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › Corrected Model / y2 · Observed Power
+
+    |Statify − SPSS| = 0.4601626767204742 > 0.001: Statify 0.9932620530009145, SPSS 0.5330993762804404 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › Intercept / y2 · Observed Power
+
+    |Statify − SPSS| = 0.004133146598143234 > 0.001: Statify 0.9999999748900085, SPSS 0.9958668282918652 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › treatment / y1 · Observed Power
+
+    |Statify − SPSS| = 0.019242715709100633 > 0.001: Statify 0.9999999966017322, SPSS 0.9807572808926316 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › treatment / y2 · Observed Power
+
+    |Statify − SPSS| = 0.4601626767204742 > 0.001: Statify 0.9932620530009145, SPSS 0.5330993762804404 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › Total / y1 · Type III Sum of Squares
+
+    |Statify − SPSS| = 24.28569999999999 > 0.001: Statify 191.7143, SPSS 216 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv4 · Tests of Between-Subjects Effects › Total / y2 · Type III Sum of Squares
+
+    |Statify − SPSS| = 32 > 0.001: Statify 240, SPSS 272 (spss: spss-output/mv4_one_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorB / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.40990082252766 > 0.001: Statify 0.932907993516619, SPSS 0.523007170988959 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorB / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.39541743602790413 > 0.001: Statify 0.9355823657042555, SPSS 0.5401649296763513 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorB / Hotelling's Trace · Partial Eta Squared
+
+    |Statify − SPSS| = 0.12489752420684536 > 0.001: Statify 0.3044689923966171, SPSS 0.17957146818977177 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorB / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.38394886812721307 > 0.001: Statify 0.9376979989627902, SPSS 0.5537491308355771 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorB / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.28494670804363353 > 0.001: Statify 0.9701029913181184, SPSS 0.6851562832744849 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorA * faktorB / Pillai's Trace · Observed Power
+
+    |Statify − SPSS| = 0.3809742810156581 > 0.001: Statify 0.5, SPSS 0.11902571898434189 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorA * faktorB / Wilks' Lambda · Observed Power
+
+    |Statify − SPSS| = 0.3838062765779362 > 0.001: Statify 0.5, SPSS 0.1161937234220638 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorA * faktorB / Hotelling's Trace · Partial Eta Squared
+
+    |Statify − SPSS| = 0.03263953126392536 > 0.001: Statify 0.06764723710542553, SPSS 0.03500770584150017 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorA * faktorB / Hotelling's Trace · Observed Power
+
+    |Statify − SPSS| = 0.38669205898967485 > 0.001: Statify 0.5, SPSS 0.11330794101032515 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Multivariate Tests › faktorA * faktorB / Roy's Largest Root · Observed Power
+
+    |Statify − SPSS| = 0.3597515258119822 > 0.001: Statify 0.5, SPSS 0.14024847418801778 (spss: spss-output/mv5_two_way.xlsx, Multivariate Tests)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › Corrected Model / ultimate torque · Observed Power
+
+    |Statify − SPSS| = 0.32140061452377866 > 0.001: Statify 0.9994065679376286, SPSS 0.67800595341385 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › Corrected Model / ultimate strain · Observed Power
+
+    |Statify − SPSS| = 0.11007737566512665 > 0.001: Statify 0.9999921517346338, SPSS 0.8899147760695072 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Type III Sum of Squares
+
+    |Statify − SPSS| = 1.103878125000026 > 0.001: Statify 0.1012499999999994, SPSS 1.2051281250000254 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Mean Square
+
+    |Statify − SPSS| = 1.103878125000026 > 0.001: Statify 0.1012499999999994, SPSS 1.2051281250000254 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · F
+
+    |Statify − SPSS| = 5.4105871000353565 > 0.001: Statify 0.49627031415135925, SPSS 5.906857414186716 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Sig.
+
+    |Statify − SPSS| = 0.4649960944710617 > 0.001: Statify 0.487923706386177, SPSS 0.022927611915115272 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Partial Eta Squared
+
+    |Statify − SPSS| = 0.1772494468404394 > 0.001: Statify 0.020259015261791368, SPSS 0.19750846210223075 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Noncent. Parameter
+
+    |Statify − SPSS| = 5.4105871000353565 > 0.001: Statify 0.49627031415135925, SPSS 5.906857414186716 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate torque · Observed Power
+
+    |Statify − SPSS| = 0.42546180028513214 > 0.001: Statify 0.21974552076261045, SPSS 0.6452073210477426 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Type III Sum of Squares
+
+    |Statify − SPSS| = 490.2199999999988 > 0.001: Statify 124.03124999999977, SPSS 614.2512499999985 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Mean Square
+
+    |Statify − SPSS| = 490.2199999999988 > 0.001: Statify 124.03124999999977, SPSS 614.2512499999985 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · F
+
+    |Statify − SPSS| = 15.976968725811016 > 0.001: Statify 4.042355273700071, SPSS 20.019323999511087 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Sig.
+
+    |Statify − SPSS| = 0.05557893799778497 > 0.001: Statify 0.055737056225637405, SPSS 0.00015811822785243408 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Partial Eta Squared
+
+    |Statify − SPSS| = 0.31063312860277514 > 0.001: Statify 0.14415177449417924, SPSS 0.45478490309695435 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Noncent. Parameter
+
+    |Statify − SPSS| = 15.976968725811016 > 0.001: Statify 4.042355273700071, SPSS 20.019323999511087 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA / ultimate strain · Observed Power
+
+    |Statify − SPSS| = 0.12257175127555497 > 0.001: Statify 0.8675006629348199, SPSS 0.9900724142103748 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Type III Sum of Squares
+
+    |Statify − SPSS| = 0.8833656250000448 > 0.001: Statify 0.8107187499999977, SPSS 1.6940843750000425 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Mean Square
+
+    |Statify − SPSS| = 0.2944552083333482 > 0.001: Statify 0.2702395833333326, SPSS 0.5646947916666808 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · F
+
+    |Statify − SPSS| = 1.443253123388599 > 0.001: Statify 1.3245618065873204, SPSS 2.7678149299759194 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Sig.
+
+    |Statify − SPSS| = 0.2259126453128122 > 0.001: Statify 0.2895927807238977, SPSS 0.06368013541108551 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Partial Eta Squared
+
+    |Statify − SPSS| = 0.11499434357649557 > 0.001: Statify 0.14205083671080243, SPSS 0.257045180287298 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Noncent. Parameter
+
+    |Statify − SPSS| = 4.329759370165797 > 0.001: Statify 3.973685419761961, SPSS 8.303444789927758 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate torque · Observed Power
+
+    |Statify − SPSS| = 0.2690938328660689 > 0.001: Statify 0.8628723053979223, SPSS 0.5937784725318533 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Type III Sum of Squares
+
+    |Statify − SPSS| = 14.891249999999673 > 0.001: Statify 89.76499999999999, SPSS 74.87375000000031 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Mean Square
+
+    |Statify − SPSS| = 4.963749999999891 > 0.001: Statify 29.921666666666663, SPSS 24.957916666666772 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · F
+
+    |Statify − SPSS| = 0.16177568951234733 > 0.001: Statify 0.9751897771561266, SPSS 0.8134140876437793 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Sig.
+
+    |Statify − SPSS| = 0.07823054584865641 > 0.001: Statify 0.4207870562194138, SPSS 0.4990176020680702 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Partial Eta Squared
+
+    |Statify − SPSS| = 0.01636121044516449 > 0.001: Statify 0.10865394508294449, SPSS 0.09229273463778 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Noncent. Parameter
+
+    |Statify − SPSS| = 0.4853270685370421 > 0.001: Statify 2.9255693314683797, SPSS 2.4402422629313376 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorB / ultimate strain · Observed Power
+
+    |Statify − SPSS| = 0.5695222337908031 > 0.001: Statify 0.76840952607971, SPSS 0.1988872922889069 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA * faktorB / ultimate torque · Observed Power
+
+    |Statify − SPSS| = 0.19231533253863298 > 0.001: Statify 0.2770655449701429, SPSS 0.08475021243150993 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+  ● GLM Multivariate vs SPSS 27 › mv5 · Tests of Between-Subjects Effects › faktorA * faktorB / ultimate strain · Observed Power
+
+    |Statify − SPSS| = 0.3003319896307646 > 0.001: Statify 0.40870184229980955, SPSS 0.10836985266904497 (spss: spss-output/mv5_two_way.xlsx, Tests of Between-Subjects Effects)
+
+    [0m [90m 108 |[39m                 [36mconst[39m diff [33m=[39m [33mMath[39m[33m.[39mabs((statify [36mas[39m number) [33m-[39m e[33m.[39mspss)[33m;[39m
+     [90m 109 |[39m                 [36mif[39m (diff [33m>[39m [33mTOL[39m) {
+    [31m[1m>[22m[39m[90m 110 |[39m                     [36mthrow[39m [36mnew[39m [33mError[39m([32m`|Statify − SPSS| = ${diff} > ${TOL}: Statify ${statify}, SPSS ${e.spss} (${e.source})`[39m)[33m;[39m
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 111 |[39m                 }
+     [90m 112 |[39m             })[33m;[39m
+     [90m 113 |[39m         })[33m;[39m[0m
+
+      at components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts:110:27
+
+Test Suites: 1 failed, 1 total
+Tests:       77 failed, 84 todo, 887 passed, 1048 total
+Snapshots:   0 total
+Time:        1.76 s
+Ran all test suites matching components/Modals/Analyze/general-linear-model/multivariate/__test__/multivariate-reference.test.ts.

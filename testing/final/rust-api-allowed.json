@@ -1,0 +1,11 @@
+[
+ "models/result.rs: struct SimultaneousConfidenceIntervals: None  ->  {'vis': 'pub', 'fields': ['pub design: String', 'pub confidence_level: f64', 'pub p: usize', 'pub sample_sizes: Vec<usize>', 'pub factor: Option<String>', 'pub levels: Vec<String>', 'pub t2_critical: f64', 'pub t2_reference: String', 'pub t2_df: Vec<f64>', 'pub bonferroni_reference: String', 'pub intervals: Vec<SimultaneousInterval>']}",
+ "models/result.rs: struct SimultaneousInterval: None  ->  {'vis': 'pub', 'fields': ['pub dependent_variable: String', 'pub estimate: f64', 'pub std_error: f64', 'pub t2_lower: f64', 'pub t2_upper: f64', 'pub bonferroni_critical: f64', 'pub bonferroni_df: f64', 'pub bonferroni_lower: f64', 'pub bonferroni_upper: f64']}",
+ "stats/common.rs: pub_fn added pub fn calculate_f_significance_df(df1: f64, df2: f64, f_value: f64) -> f64",
+ "stats/common.rs: pub_fn added pub fn calculate_observed_power_df(d1: f64, d2: f64, f_value: f64, alpha: f64) -> f64",
+ "wasm/constructor.rs: pub_method added pub fn get_simultaneous_ci(&mut self) -> Result<JsValue, JsValue>",
+ "models/result.rs: struct KnownCovarianceInput: None  ->  {'vis': 'pub', 'fields': ['pub design: String', 'pub sigma: Option<Vec<Vec<f64>>>', 'pub sigma1: Option<Vec<Vec<f64>>>', 'pub sigma2: Option<Vec<Vec<f64>>>']}",
+ "models/result.rs: struct KnownCovarianceInterval: None  ->  {'vis': 'pub', 'fields': ['pub dependent_variable: String', 'pub estimate: f64', 'pub std_error: f64', 'pub chi_square_lower: f64', 'pub chi_square_upper: f64', 'pub bonferroni_lower: f64', 'pub bonferroni_upper: f64']}",
+ "models/result.rs: struct KnownCovarianceTest: None  ->  {'vis': 'pub', 'fields': ['pub design: String', 'pub p: usize', 'pub sample_sizes: Vec<usize>', 'pub factor: Option<String>', 'pub levels: Vec<String>', 'pub hypothesized: Vec<f64>', 'pub chi_square: f64', 'pub df: f64', 'pub significance: f64', 'pub confidence_level: f64', 'pub chi_square_critical: f64', 'pub z_critical: f64', 'pub intervals: Vec<KnownCovarianceInterval>']}",
+ "wasm/constructor.rs: pub_method added pub fn get_known_covariance_test(&mut self, known: JsValue) -> Result<JsValue, JsValue>"
+]

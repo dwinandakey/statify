@@ -1,0 +1,6 @@
+Verifikasi black-box iterasi 7 (build v6) vs pengamatan v5 final (iterasi 3, ditimpa iterasi 4 untuk 8 skenario)
+Perbandingan per skenario: status, langkah, toast, checks, dan daftar tabel (judul, kolom, baris, catatan kaki) BERURUTAN.
+
+skenario: 78; identik penuh (berurutan): 76; berbeda: 2
+  BB-KF13-04: berbeda pada tabel
+  BB-KF13-07: berbeda pada checks

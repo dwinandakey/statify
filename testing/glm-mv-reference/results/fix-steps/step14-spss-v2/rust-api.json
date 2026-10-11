@@ -1,0 +1,2675 @@
+{
+ "old": "82a63b45",
+ "new": "WORKTREE",
+ "counts_old": {
+  "pub_fn_total": 79,
+  "pub_fn_common.rs": 34,
+  "struct_result.rs": 40,
+  "struct_total": 58,
+  "enum_total": 11,
+  "pub_method_total": 15
+ },
+ "counts_new": {
+  "pub_fn_total": 79,
+  "pub_fn_common.rs": 34,
+  "struct_result.rs": 40,
+  "struct_total": 58,
+  "enum_total": 11,
+  "pub_method_total": 15
+ },
+ "public_changes": [],
+ "private_added": [
+  "stats/between_subjects_effects.rs: effect_ss",
+  "stats/between_subjects_effects.rs: deviation_coded_design",
+  "stats/between_subjects_effects.rs: sse_without_columns",
+  "stats/between_subjects_effects.rs: containing_effect_columns",
+  "stats/box_m_test.rs: f_upper_tail",
+  "stats/common.rs: noncentral_f_cdf",
+  "stats/descriptive_statistics.rs: level_groups",
+  "stats/descriptive_statistics.rs: sort_levels",
+  "stats/levene_test.rs: model_residual_levene",
+  "stats/multivariate_tests.rs: ss_type_label",
+  "stats/multivariate_tests.rs: effect_hypothesis_sscps",
+  "stats/multivariate_tests.rs: residual_sscp",
+  "stats/multivariate_tests.rs: deviation_coded_design",
+  "stats/multivariate_tests.rs: containing_effect_columns",
+  "wasm/constructor.rs: listwise_complete_cases",
+  "wasm/function.rs: normalize_model_spec"
+ ],
+ "private_removed": [],
+ "old_items": {
+  "lib.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/config.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "MultivariateConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub main: MainConfig",
+      "pub model: ModelDetails",
+      "pub contrast: ContrastConfig",
+      "pub plots: PlotsConfig",
+      "pub posthoc: PosthocConfig",
+      "pub emmeans: EmmmeansConfig",
+      "pub save: SaveConfig",
+      "pub options: OptionsConfig",
+      "pub bootstrap: BootstrapConfig"
+     ]
+    },
+    "MainConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub dep_var: Option<Vec<String>>",
+      "pub fix_factor: Option<Vec<String>>",
+      "pub covar: Option<Vec<String>>",
+      "pub wls_weight: Option<String>",
+      "pub test_values: Option<Vec<f64>>",
+      "pub variance_mode: VarianceMode"
+     ]
+    },
+    "ModelDetails": {
+     "vis": "pub",
+     "fields": [
+      "pub non_cust: bool",
+      "pub custom: bool",
+      "pub build_custom_term: bool",
+      "pub factors_var: Option<Vec<String>>",
+      "pub build_term_method: Option<BuildTermMethod>",
+      "pub factors_model: Option<Vec<String>>",
+      "pub terms_var: Option<String>",
+      "pub cov_model: Option<String>",
+      "pub random_model: Option<String>",
+      "pub term_text: Option<String>",
+      "pub sum_of_square_method: SumOfSquaresMethod",
+      "pub intercept: bool"
+     ]
+    },
+    "ContrastConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_list: Option<Vec<String>>",
+      "pub contrast_method: ContrastMethod",
+      "pub last: bool",
+      "pub first: bool"
+     ]
+    },
+    "PlotsConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub axis_list: Option<String>",
+      "pub line_list: Option<String>",
+      "pub plot_list: Option<String>",
+      "pub fix_factor_vars: Option<Vec<String>>",
+      "pub rand_factor_vars: Option<String>",
+      "pub line_chart_type: bool",
+      "pub bar_chart_type: bool",
+      "pub include_error_bars: bool",
+      "pub confidence_interval: bool",
+      "pub standard_error: bool",
+      "pub multiplier: Option<i32>",
+      "pub include_ref_line_for_grand_mean: bool",
+      "pub y_axis_start_0: bool"
+     ]
+    },
+    "PosthocConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub fix_factor_vars: Option<Vec<String>>",
+      "pub lsd: bool",
+      "pub bonfe: bool",
+      "pub sidak: bool",
+      "pub scheffe: bool",
+      "pub regwf: bool",
+      "pub regwq: bool",
+      "pub snk: bool",
+      "pub tu: bool",
+      "pub tub: bool",
+      "pub dun: bool",
+      "pub hoc: bool",
+      "pub gabriel: bool",
+      "pub waller: bool",
+      "pub error_ratio: Option<i32>",
+      "pub dunnett: bool",
+      "pub category_method: Option<CategoryMethod>",
+      "pub twosided: bool",
+      "pub lt_control: bool",
+      "pub gt_control: bool",
+      "pub tam: bool",
+      "pub dunt: bool",
+      "pub games: bool",
+      "pub dunc: bool"
+     ]
+    },
+    "EmmmeansConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub target_list: Option<String>",
+      "pub comp_main_effect: bool",
+      "pub confi_interval_method: Option<CIMethod>"
+     ]
+    },
+    "SaveConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub res_weighted: bool",
+      "pub pre_weighted: bool",
+      "pub std_statistics: bool",
+      "pub cooks_d: bool",
+      "pub leverage: bool",
+      "pub unstandardized_res: bool",
+      "pub weighted_res: bool",
+      "pub standardized_res: bool",
+      "pub studentized_res: bool",
+      "pub deleted_res: bool",
+      "pub coeff_stats: bool",
+      "pub new_dataset: bool",
+      "pub dataset_name: Option<String>",
+      "pub write_new_dataset: bool",
+      "pub file_path: Option<String>"
+     ]
+    },
+    "OptionsConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub desc_stats: bool",
+      "pub est_effect_size: bool",
+      "pub obs_power: bool",
+      "pub param_est: bool",
+      "pub sscp_mat: bool",
+      "pub res_sscp_mat: bool",
+      "pub homogen_test: bool",
+      "pub spr_vs_level: bool",
+      "pub res_plot: bool",
+      "pub lack_of_fit: bool",
+      "pub general_fun: bool",
+      "pub sig_level: Option<f64>",
+      "pub coefficient_matrix: bool",
+      "pub transform_mat: bool"
+     ]
+    },
+    "BootstrapConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub perform_boot_strapping: bool",
+      "pub num_of_samples: Option<i32>",
+      "pub seed: bool",
+      "pub seed_value: Option<i32>",
+      "pub level: Option<f64>",
+      "pub percentile: bool",
+      "pub bca: bool",
+      "pub simple: bool",
+      "pub stratified: bool",
+      "pub variables: Option<Vec<String>>",
+      "pub strata_variables: Option<Vec<String>>"
+     ]
+    }
+   },
+   "enum": {
+    "BuildTermMethod": {
+     "vis": "pub",
+     "variants": [
+      "Interaction",
+      "MainEffects",
+      "All2Way",
+      "All3Way",
+      "All4Way",
+      "All5Way"
+     ]
+    },
+    "SumOfSquaresMethod": {
+     "vis": "pub",
+     "variants": [
+      "TypeI",
+      "TypeII",
+      "TypeIII",
+      "TypeIV"
+     ]
+    },
+    "ContrastMethod": {
+     "vis": "pub",
+     "variants": [
+      "None",
+      "Deviation",
+      "Simple",
+      "Difference",
+      "Helmert",
+      "Repeated",
+      "Polynomial"
+     ]
+    },
+    "CategoryMethod": {
+     "vis": "pub",
+     "variants": [
+      "Last",
+      "First"
+     ]
+    },
+    "CIMethod": {
+     "vis": "pub",
+     "variants": [
+      "LsdNone",
+      "Bonferroni",
+      "Sidak"
+     ]
+    },
+    "VarianceMode": {
+     "vis": "pub",
+     "variants": [
+      "Pooled",
+      "Welch"
+     ]
+    }
+   },
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/data.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "DataRecord": {
+     "vis": "pub",
+     "fields": [
+      "pub values: HashMap<String, DataValue>"
+     ]
+    },
+    "ValueLabel": {
+     "vis": "pub",
+     "fields": [
+      "pub id: Option<i32>",
+      "pub variable_name: String",
+      "pub value: DataValue",
+      "pub label: String"
+     ]
+    },
+    "VariableDefinition": {
+     "vis": "pub",
+     "fields": [
+      "pub id: Option<i32>",
+      "pub column_index: usize",
+      "pub name: String",
+      "pub width: i32",
+      "pub decimals: i32",
+      "pub label: Option<String>",
+      "pub values: Vec<ValueLabel>",
+      "pub missing: Vec<DataValue>",
+      "pub columns: i32",
+      "pub align: VariableAlign",
+      "pub measure: VariableMeasure",
+      "pub role: VariableRole"
+     ]
+    },
+    "AnalysisData": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_data: Vec<Vec<DataRecord>>",
+      "pub fix_factor_data: Vec<Vec<DataRecord>>",
+      "pub covariate_data: Option<Vec<Vec<DataRecord>>>",
+      "pub wls_data: Option<Vec<Vec<DataRecord>>>",
+      "pub dependent_data_defs: Vec<Vec<VariableDefinition>>",
+      "pub fix_factor_data_defs: Vec<Vec<VariableDefinition>>",
+      "pub covariate_data_defs: Option<Vec<Vec<VariableDefinition>>>",
+      "pub wls_data_defs: Option<Vec<Vec<VariableDefinition>>>"
+     ]
+    }
+   },
+   "enum": {
+    "DataValue": {
+     "vis": "pub",
+     "variants": [
+      "Number",
+      "Text",
+      "Boolean",
+      "Null"
+     ]
+    },
+    "VariableType": {
+     "vis": "pub",
+     "variants": [
+      "Numeric",
+      "Comma",
+      "Dot",
+      "Scientific",
+      "Date",
+      "Adate",
+      "Edate",
+      "Sdate",
+      "Jdate",
+      "Qyr",
+      "Moyr",
+      "Wkyr",
+      "Datetime",
+      "Time",
+      "Dtime",
+      "Wkday",
+      "Month",
+      "Dollar",
+      "Cca",
+      "Ccb",
+      "Ccc",
+      "Ccd",
+      "Cce",
+      "String",
+      "RestrictedNumeric"
+     ]
+    },
+    "VariableAlign": {
+     "vis": "pub",
+     "variants": [
+      "Right",
+      "Left",
+      "Center"
+     ]
+    },
+    "VariableMeasure": {
+     "vis": "pub",
+     "variants": [
+      "Scale",
+      "Ordinal",
+      "Nominal",
+      "Unknown"
+     ]
+    },
+    "VariableRole": {
+     "vis": "pub",
+     "variants": [
+      "Input",
+      "Target",
+      "Both",
+      "None",
+      "Partition",
+      "Split"
+     ]
+    }
+   },
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/result.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "MultivariateResult": {
+     "vis": "pub",
+     "fields": [
+      "pub between_subjects_factors: Option<HashMap<String, BetweenSubjectFactors>>",
+      "pub descriptive_statistics: Option<HashMap<String, DescriptiveStatistics>>",
+      "pub levene_test: Option<Vec<LeveneTest>>",
+      "pub tests_of_between_subjects_effects: Option<TestsBetweenSubjectsEffects>",
+      "pub parameter_estimates: Option<ParameterEstimates>",
+      "pub general_estimable_function: Option<GeneralEstimableFunction>",
+      "pub contrast_coefficients: Option<ContrastCoefficients>",
+      "pub spread_vs_level_plots: Option<HashMap<String, SpreadVsLevelPlots>>",
+      "pub posthoc_tests: Option<HashMap<String, Vec<PostHocTest>>>",
+      "pub emmeans: Option<HashMap<String, Vec<EstimatedMarginalMean>>>",
+      "pub plots: Option<HashMap<String, PlotData>>",
+      "pub saved_variables: Option<SavedVariables>",
+      "pub executed_functions: Vec<String>",
+      "pub box_test: Option<BoxTest>",
+      "pub bartlett_test: Option<BartlettTest>",
+      "pub multivariate_tests: Option<MultivariateTests>",
+      "pub between_subjects_sscp: Option<BetweenSubjectsSSCP>",
+      "pub residual_matrix: Option<ResidualMatrix>",
+      "pub sscp_matrix: Option<SSCPMatrix>",
+      "pub univariate_tests: Option<UnivariateTests>",
+      "pub homogeneous_subsets: Option<HashMap<String, HashMap<String, HomogeneousSubsets>>>",
+      "pub scatter_plot_matrices: Option<HashMap<String, ScatterPlotMatrix>>",
+      "pub profile_plots: Option<HashMap<String, PlotData>>",
+      "pub residual_plots: Option<HashMap<String, ResidualPlotData>>"
+     ]
+    },
+    "BetweenSubjectFactors": {
+     "vis": "pub",
+     "fields": [
+      "pub value_counts: HashMap<String, usize>",
+      "pub value_labels: HashMap<String, String>",
+      "pub n: Option<usize>"
+     ]
+    },
+    "DescriptiveStatistics": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub groups: Vec<StatGroup>"
+     ]
+    },
+    "StatGroup": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub stats: StatsEntry",
+      "pub subgroups: Option<Vec<StatGroup>>"
+     ]
+    },
+    "StatsEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub mean: f64",
+      "pub std_deviation: f64",
+      "pub n: usize"
+     ]
+    },
+    "LeveneTest": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub levene: Vec<LeveneResult>"
+     ]
+    },
+    "LeveneResult": {
+     "vis": "pub",
+     "fields": [
+      "pub levene_statistic: f64",
+      "pub df1: usize",
+      "pub df2: f64",
+      "pub significance: f64",
+      "pub function: Option<String>",
+      "pub design: Option<String>",
+      "pub test_basis: Option<String>"
+     ]
+    },
+    "TestsBetweenSubjectsEffects": {
+     "vis": "pub",
+     "fields": [
+      "pub effects: HashMap<String, HashMap<String, TestEffectEntry>>",
+      "pub r_squared: HashMap<String, f64>",
+      "pub adjusted_r_squared: HashMap<String, f64>"
+     ]
+    },
+    "TestEffectEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub sum_of_squares: f64",
+      "pub df: usize",
+      "pub mean_square: f64",
+      "pub f_value: f64",
+      "pub significance: f64",
+      "pub partial_eta_squared: f64",
+      "pub noncent_parameter: f64",
+      "pub observed_power: f64"
+     ]
+    },
+    "ParameterEstimates": {
+     "vis": "pub",
+     "fields": [
+      "pub estimates: HashMap<String, Vec<ParameterEstimateEntry>>"
+     ]
+    },
+    "ParameterEstimateEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub parameter: String",
+      "pub b: f64",
+      "pub std_error: f64",
+      "pub t_value: f64",
+      "pub significance: f64",
+      "pub confidence_interval: ConfidenceInterval",
+      "pub partial_eta_squared: Option<f64>",
+      "pub noncent_parameter: Option<f64>",
+      "pub observed_power: Option<f64>"
+     ]
+    },
+    "ConfidenceInterval": {
+     "vis": "pub",
+     "fields": [
+      "pub lower_bound: f64",
+      "pub upper_bound: f64"
+     ]
+    },
+    "GeneralEstimableFunction": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix: HashMap<String, HashMap<String, i32>>",
+      "pub design: Option<String>"
+     ]
+    },
+    "ContrastCoefficients": {
+     "vis": "pub",
+     "fields": [
+      "pub parameter: Vec<String>",
+      "pub coefficients: Vec<f64>"
+     ]
+    },
+    "SpreadVsLevelPlots": {
+     "vis": "pub",
+     "fields": [
+      "pub points: Vec<SpreadVsLevelPoint>"
+     ]
+    },
+    "SpreadVsLevelPoint": {
+     "vis": "pub",
+     "fields": [
+      "pub level_mean: f64",
+      "pub spread_standard_deviation: f64"
+     ]
+    },
+    "FTest": {
+     "vis": "pub",
+     "fields": [
+      "pub statistic: f64",
+      "pub df1: usize",
+      "pub df2: usize",
+      "pub p_value: f64"
+     ]
+    },
+    "PlotData": {
+     "vis": "pub",
+     "fields": [
+      "pub title: String",
+      "pub x_label: String",
+      "pub y_label: String",
+      "pub series: Vec<PlotSeries>",
+      "pub y_axis_starts_at_zero: bool",
+      "pub includes_reference_line: bool",
+      "pub reference_line: Option<f64>",
+      "pub dependent_variable: Option<String>",
+      "pub plot_type: Option<String>",
+      "pub groups_label: Option<String>",
+      "pub model: Option<String>",
+      "pub error_bars: Option<String>",
+      "pub legend: Option<Vec<LegendItem>>"
+     ]
+    },
+    "PlotSeries": {
+     "vis": "pub",
+     "fields": [
+      "pub name: String",
+      "pub points: Vec<PlotPoint>",
+      "pub error_bars: Option<Vec<ConfidenceInterval>>",
+      "pub series_type: String",
+      "pub color: Option<String>",
+      "pub line_style: Option<String>",
+      "pub marker_style: Option<String>",
+      "pub is_reference_line: Option<bool>"
+     ]
+    },
+    "PlotPoint": {
+     "vis": "pub",
+     "fields": [
+      "pub x: f64",
+      "pub y: f64",
+      "pub label: String"
+     ]
+    },
+    "SavedVariables": {
+     "vis": "pub",
+     "fields": [
+      "pub variable_values: HashMap<String, Vec<f64>>"
+     ]
+    },
+    "LegendItem": {
+     "vis": "pub",
+     "fields": [
+      "pub label: String",
+      "pub color: Option<String>",
+      "pub line_style: Option<String>",
+      "pub marker_style: Option<String>"
+     ]
+    },
+    "ScatterPlotMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub plot_type: String",
+      "pub model: String",
+      "pub matrix_dimensions: Vec<String>"
+     ]
+    },
+    "ResidualPlotData": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub model: String",
+      "pub observed: Vec<f64>",
+      "pub predicted: Vec<f64>",
+      "pub std_residual: Vec<f64>"
+     ]
+    },
+    "BoxTest": {
+     "vis": "pub",
+     "fields": [
+      "pub box_m: f64",
+      "pub f: f64",
+      "pub df1: usize",
+      "pub df2: f64",
+      "pub significance: f64",
+      "pub design: Option<String>",
+      "pub description: Option<String>"
+     ]
+    },
+    "BartlettTest": {
+     "vis": "pub",
+     "fields": [
+      "pub likelihood_ratio: f64",
+      "pub approx_chi_square: f64",
+      "pub df: usize",
+      "pub significance: f64",
+      "pub description: Option<String>",
+      "pub design: Option<String>"
+     ]
+    },
+    "MultivariateTests": {
+     "vis": "pub",
+     "fields": [
+      "pub effects: HashMap<String, HashMap<String, MultivariateTestEntry>>",
+      "pub design: Option<String>",
+      "pub alpha: Option<f64>"
+     ]
+    },
+    "MultivariateTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub value: f64",
+      "pub f: f64",
+      "pub hypothesis_df: f64",
+      "pub error_df: f64",
+      "pub significance: f64",
+      "pub partial_eta_squared: f64",
+      "pub noncent_parameter: f64",
+      "pub observed_power: f64",
+      "pub is_exact_statistic: bool"
+     ]
+    },
+    "BetweenSubjectsSSCP": {
+     "vis": "pub",
+     "fields": [
+      "pub matrices: HashMap<String, BetweenSSCPMatrix>",
+      "pub based_on: Option<String>"
+     ]
+    },
+    "BetweenSSCPMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub values: HashMap<String, HashMap<String, f64>>"
+     ]
+    },
+    "ResidualMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix_type: String",
+      "pub values: HashMap<String, HashMap<String, f64>>",
+      "pub description: Option<String>"
+     ]
+    },
+    "SSCPMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix_type: String",
+      "pub categories: HashMap<String, HashMap<String, HashMap<String, f64>>>"
+     ]
+    },
+    "UnivariateTests": {
+     "vis": "pub",
+     "fields": [
+      "pub tests: HashMap<String, Vec<UnivariateTestEntry>>",
+      "pub alpha: Option<f64>"
+     ]
+    },
+    "UnivariateTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub source: String",
+      "pub sum_of_squares: f64",
+      "pub df: usize",
+      "pub mean_square: Option<f64>",
+      "pub f: Option<f64>",
+      "pub significance: Option<f64>",
+      "pub partial_eta_squared: Option<f64>",
+      "pub noncent_parameter: Option<f64>",
+      "pub observed_power: Option<f64>"
+     ]
+    },
+    "PostHocTest": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub test_type: String",
+      "pub factor_name: String",
+      "pub i_level: String",
+      "pub j_level: String",
+      "pub mean_difference: f64",
+      "pub std_error: f64",
+      "pub significance: f64",
+      "pub confidence_interval: ConfidenceInterval"
+     ]
+    },
+    "EstimatedMarginalMean": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub mean: f64",
+      "pub std_error: f64",
+      "pub confidence_interval: ConfidenceInterval"
+     ]
+    },
+    "HomogeneousSubsets": {
+     "vis": "pub",
+     "fields": [
+      "pub test_name: String",
+      "pub groups: Vec<HomogeneousSubsetGroup>",
+      "pub error_term: String",
+      "pub error_value: f64",
+      "pub uses_harmonic_mean: bool",
+      "pub harmonic_mean_sample_size: Option<f64>",
+      "pub notes: Vec<String>",
+      "pub alpha: f64"
+     ]
+    },
+    "HomogeneousSubsetGroup": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub n: usize",
+      "pub subsets: HashMap<usize, f64>",
+      "pub significance: Option<f64>"
+     ]
+    },
+    "MauchlyTest": {
+     "vis": "pub",
+     "fields": [
+      "pub tests: HashMap<String, MauchlyTestEntry>"
+     ]
+    },
+    "MauchlyTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub effect: String",
+      "pub mauchly_w: f64",
+      "pub chi_square: f64",
+      "pub df: usize",
+      "pub significance: f64",
+      "pub greenhouse_geisser_epsilon: f64",
+      "pub huynh_feldt_epsilon: f64",
+      "pub lower_bound_epsilon: f64"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/bartlett_test.rs": {
+   "pub_fn": {
+    "calculate_bartlett_test": "pub fn calculate_bartlett_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<BartlettTest, String>",
+    "calculate_bartlett_test_from_residual": "pub fn calculate_bartlett_test_from_residual(residual_sscp: &DMatrix<f64>, n: usize, r_x: usize) -> Result<BartlettTest, String>"
+   },
+   "priv_fn": [
+    "calculate_covariance_matrix",
+    "covariance_to_correlation"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/between_subjects_effects.rs": {
+   "pub_fn": {
+    "calculate_tests_between_subjects_effects": "pub fn calculate_tests_between_subjects_effects(data: &AnalysisData, config: &MultivariateConfig) -> Result<TestsBetweenSubjectsEffects, String>",
+    "calculate_type_i_ss": "pub fn calculate_type_i_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, factor_cols: &Vec<usize>, _data: &AnalysisData, _config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_ii_ss": "pub fn calculate_type_ii_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, factor: &str, factor_cols: &Vec<usize>, _data: &AnalysisData, config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_iii_ss": "pub fn calculate_type_iii_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, _effect: &str, effect_cols: &Vec<usize>, _data: &AnalysisData, _config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_iv_ss": "pub fn calculate_type_iv_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, effect: &str, effect_cols: &Vec<usize>, data: &AnalysisData, config: &MultivariateConfig) -> Result<f64, String>",
+    "fit_model_and_get_ss": "pub fn fit_model_and_get_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>) -> Result<f64, String>",
+    "get_factor_columns": "pub fn get_factor_columns(x_matrix: &Vec<Vec<f64>>, factor: &str, data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<usize>, String>",
+    "get_interaction_columns": "pub fn get_interaction_columns(x_matrix: &Vec<Vec<f64>>, interaction_term: &str, data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<usize>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/between_subjects_sscp.rs": {
+   "pub_fn": {
+    "calculate_between_subjects_sscp": "pub fn calculate_between_subjects_sscp(data: &AnalysisData, config: &MultivariateConfig) -> Result<BetweenSubjectsSSCP, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/bootstrap.rs": {
+   "pub_fn": {
+    "perform_bootstrap_analysis": "pub fn perform_bootstrap_analysis(data: &AnalysisData, config: &MultivariateConfig) -> Result<(), String>"
+   },
+   "priv_fn": [
+    "collect_records",
+    "normalize_confidence_level",
+    "build_strata_groups",
+    "data_value_to_key",
+    "sample_simple_indices",
+    "sample_stratified_indices",
+    "sample_mean",
+    "percentile_interval",
+    "bca_interval",
+    "adjusted_bca_probability",
+    "jackknife_acceleration",
+    "quantile"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/box_m_test.rs": {
+   "pub_fn": {
+    "calculate_box_test": "pub fn calculate_box_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<BoxTest, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/common.rs": {
+   "pub_fn": {
+    "calculate_mean": "pub fn calculate_mean(values: &[f64]) -> f64",
+    "calculate_variance": "pub fn calculate_variance(values: &[f64], mean: Option<f64>) -> f64",
+    "calculate_std_deviation": "pub fn calculate_std_deviation(values: &[f64], mean: Option<f64>) -> f64",
+    "calculate_f_significance": "pub fn calculate_f_significance(df1: usize, df2: usize, f_value: f64) -> f64",
+    "calculate_t_significance": "pub fn calculate_t_significance(df: usize, t_value: f64) -> f64",
+    "calculate_t_critical": "pub fn calculate_t_critical(df: usize, alpha: f64) -> f64",
+    "calculate_observed_power": "pub fn calculate_observed_power(df1: usize, df2: usize, f_value: f64, alpha: f64) -> f64",
+    "calculate_observed_power_t": "pub fn calculate_observed_power_t(df: usize, t_value: f64, alpha: f64) -> f64",
+    "chi_square_cdf": "pub fn chi_square_cdf(x: f64, df: f64) -> f64",
+    "f_distribution_cdf": "pub fn f_distribution_cdf(x: f64, df1: f64, df2: f64) -> f64",
+    "count_total_cases": "pub fn count_total_cases(data: &AnalysisData) -> usize",
+    "extract_dependent_value": "pub fn extract_dependent_value(record: &DataRecord, dep_var_name: &str) -> Option<f64>",
+    "merge_records": "pub fn merge_records(data: &AnalysisData) -> Vec<DataRecord>",
+    "data_value_to_string": "pub fn data_value_to_string(value: &DataValue) -> String",
+    "get_factor_levels": "pub fn get_factor_levels(data: &AnalysisData, factor: &str) -> Result<Vec<String>, String>",
+    "get_factor_combinations": "pub fn get_factor_combinations(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<HashMap<String, String>>, String>",
+    "generate_interaction_terms": "pub fn generate_interaction_terms(factors: &[String]) -> Vec<String>",
+    "parse_interaction_term": "pub fn parse_interaction_term(term: &str) -> Vec<String>",
+    "record_matches_interaction": "pub fn record_matches_interaction(record: &DataRecord, combination: &HashMap<String, String>, interaction_term: &str) -> bool",
+    "get_factor_combinations_with_interactions": "pub fn get_factor_combinations_with_interactions(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<HashMap<String, String>>, String>",
+    "get_interaction_level_values": "pub fn get_interaction_level_values(data: &AnalysisData, interaction_term: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "matches_combination": "pub fn matches_combination(record: &DataRecord, combo: &HashMap<String, String>, _data: &AnalysisData, _config: &MultivariateConfig) -> bool",
+    "get_level_values": "pub fn get_level_values(data: &AnalysisData, factor: &str, level: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "get_level_values_adjusted": "pub fn get_level_values_adjusted(values: &[f64], data: &AnalysisData, factor: &str, level: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "to_dmatrix": "pub fn to_dmatrix(matrix: &[Vec<f64>]) -> DMatrix<f64>",
+    "to_dvector": "pub fn to_dvector(vector: &[f64]) -> DVector<f64>",
+    "from_dmatrix": "pub fn from_dmatrix(matrix: &DMatrix<f64>) -> Vec<Vec<f64>>",
+    "matrix_multiply": "pub fn matrix_multiply(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String>",
+    "matrix_inverse": "pub fn matrix_inverse(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String>",
+    "matrix_determinant": "pub fn matrix_determinant(matrix: &[Vec<f64>]) -> Result<f64, String>",
+    "matrix_transpose": "pub fn matrix_transpose(matrix: &[Vec<f64>]) -> Vec<Vec<f64>>",
+    "solve_linear_system": "pub fn solve_linear_system(a: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String>",
+    "build_design_matrix_and_response": "pub fn build_design_matrix_and_response(data: &AnalysisData, config: &MultivariateConfig, dependent_var: &str) -> Result<(Vec<Vec<f64>>, Vec<f64>), String>",
+    "compute_per_group_covariances": "pub fn compute_per_group_covariances(data: &AnalysisData, config: &MultivariateConfig, factors: &[String],) -> Result<Vec<GroupCovariance>, String>"
+   },
+   "priv_fn": [
+    "generate_combinations",
+    "generate_factor_combinations"
+   ],
+   "struct": {
+    "GroupCovariance": {
+     "vis": "pub",
+     "fields": [
+      "pub label: HashMap<String, String>",
+      "pub covariance: DMatrix<f64>",
+      "pub mean: DVector<f64>",
+      "pub n: usize"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/contrast_coefficients.rs": {
+   "pub_fn": {
+    "calculate_contrast_coefficients": "pub fn calculate_contrast_coefficients(data: &AnalysisData, config: &MultivariateConfig) -> Result<ContrastCoefficients, String>"
+   },
+   "priv_fn": [
+    "generate_polynomial_contrast"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/core.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/descriptive_statistics.rs": {
+   "pub_fn": {
+    "calculate_descriptive_statistics": "pub fn calculate_descriptive_statistics(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, DescriptiveStatistics>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/emmeans.rs": {
+   "pub_fn": {
+    "calculate_emmeans": "pub fn calculate_emmeans(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, Vec<EstimatedMarginalMean>>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/estimable_function.rs": {
+   "pub_fn": {
+    "calculate_general_estimable_function": "pub fn calculate_general_estimable_function(data: &AnalysisData, config: &MultivariateConfig) -> Result<GeneralEstimableFunction, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/generate_plots.rs": {
+   "pub_fn": {
+    "generate_plots": "pub fn generate_plots(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, PlotData>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/homogeneous_subsets.rs": {
+   "pub_fn": {
+    "calculate_homogeneous_subsets": "pub fn calculate_homogeneous_subsets(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, HashMap<String, HomogeneousSubsets>>, String>"
+   },
+   "priv_fn": [
+    "calculate_mean_square_error",
+    "calculate_harmonic_mean",
+    "calculate_tukey_hsd_subsets",
+    "calculate_snk_subsets",
+    "calculate_duncan_subsets",
+    "calculate_regwf_subsets",
+    "calculate_regwq_subsets",
+    "calculate_tukey_b_subsets",
+    "calculate_waller_duncan_subsets",
+    "approximate_studentized_range",
+    "f_critical_value",
+    "chi2_critical_value",
+    "calculate_z_critical",
+    "create_homogeneous_subsets",
+    "create_snk_subsets",
+    "calculate_subset_significances"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/levene_test.rs": {
+   "pub_fn": {
+    "calculate_levene_test": "pub fn calculate_levene_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<LeveneTest>, String>"
+   },
+   "priv_fn": [
+    "calculate_median",
+    "calculate_trimmed_mean"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/multivariate_tests.rs": {
+   "pub_fn": {
+    "calculate_multivariate_tests": "pub fn calculate_multivariate_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<MultivariateTests, String>"
+   },
+   "priv_fn": [
+    "calculate_welch_two_sample_t2",
+    "calculate_hypothesis_error_matrices",
+    "eigenvalues_real",
+    "calculate_multivariate_test_statistics",
+    "compute_full_model_residual_sscp"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/parameter_estimates.rs": {
+   "pub_fn": {
+    "calculate_parameter_estimates": "pub fn calculate_parameter_estimates(data: &AnalysisData, config: &MultivariateConfig) -> Result<ParameterEstimates, String>",
+    "generate_parameter_names": "pub fn generate_parameter_names(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<String>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/posthoc.rs": {
+   "pub_fn": {
+    "calculate_posthoc_tests": "pub fn calculate_posthoc_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, Vec<PostHocTest>>, String>"
+   },
+   "priv_fn": [
+    "compute_model_mse"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/residual_plots.rs": {
+   "pub_fn": {
+    "calculate_residual_plots": "pub fn calculate_residual_plots(data: &AnalysisData, config: &MultivariateConfig,) -> Result<HashMap<String, ResidualPlotData>, String>"
+   },
+   "priv_fn": [
+    "build_model_string"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/residual_sscp_matrix.rs": {
+   "pub_fn": {
+    "calculate_residual_matrix": "pub fn calculate_residual_matrix(data: &AnalysisData, config: &MultivariateConfig) -> Result<ResidualMatrix, String>",
+    "calculate_residual_covariance": "pub fn calculate_residual_covariance(residual_sscp: &ResidualMatrix, df: usize) -> Result<ResidualMatrix, String>",
+    "calculate_residual_correlation": "pub fn calculate_residual_correlation(residual_cov: &ResidualMatrix) -> Result<ResidualMatrix, String>",
+    "calculate_bartlett_sphericity_test": "pub fn calculate_bartlett_sphericity_test(residual_cov: &ResidualMatrix, df: usize) -> Result<f64, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/save.rs": {
+   "pub_fn": {
+    "save_variables": "pub fn save_variables(data: &AnalysisData, config: &MultivariateConfig) -> Result<SavedVariables, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/spread_vs_level.rs": {
+   "pub_fn": {
+    "calculate_spread_vs_level_plots": "pub fn calculate_spread_vs_level_plots(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, SpreadVsLevelPlots>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/sscp_matrix.rs": {
+   "pub_fn": {
+    "calculate_sscp_matrix": "pub fn calculate_sscp_matrix(data: &AnalysisData, config: &MultivariateConfig) -> Result<SSCPMatrix, String>",
+    "calculate_hypothesis_sscp": "pub fn calculate_hypothesis_sscp(data: &AnalysisData, config: &MultivariateConfig, effect: &str) -> Result<HashMap<String, HashMap<String, f64>>, String>",
+    "calculate_error_sscp": "pub fn calculate_error_sscp(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, HashMap<String, f64>>, String>"
+   },
+   "priv_fn": [
+    "calculate_lack_of_fit_and_pure_error",
+    "build_type_i_reduced_design_matrix",
+    "build_type_ii_reduced_design_matrix",
+    "build_type_iii_reduced_design_matrix",
+    "build_type_iv_reduced_design_matrix"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/summary_processing.rs": {
+   "pub_fn": {
+    "basic_processing_summary": "pub fn basic_processing_summary(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, BetweenSubjectFactors>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/univariate_tests.rs": {
+   "pub_fn": {
+    "calculate_univariate_tests": "pub fn calculate_univariate_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<UnivariateTests, String>"
+   },
+   "priv_fn": [
+    "calculate_univariate_test_entries",
+    "create_type1_test_entries",
+    "create_type2_test_entries",
+    "create_type3_test_entries"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/example.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/multivariate_validation.rs": {
+   "pub_fn": {},
+   "priv_fn": [
+    "numeric_def",
+    "nominal_def",
+    "build_config",
+    "build_analysis_data",
+    "make_record",
+    "dataset_a",
+    "dataset_b",
+    "dataset_c",
+    "assert_finite",
+    "dataset_a_core_tables_are_computable",
+    "dataset_b_core_tables_are_computable",
+    "dataset_c_core_tables_are_computable",
+    "mtcars_records",
+    "hotelling_t2_one_population_mtcars_matches_apg_modul_3",
+    "hotelling_t2_with_zero_mu0_matches_default_intercept",
+    "hotelling_t2_length_mismatch_returns_error",
+    "multivariate_performance_dataset_b_under_five_seconds",
+    "two_sample_heteroscedastic_dataset",
+    "manual_pooled_t2",
+    "manual_welch_t2",
+    "extract_two_sample_rows",
+    "hotelling_t2_two_sample_pooled_matches_manual",
+    "hotelling_t2_two_sample_welch_matches_manual_krishnamoorthy_yu",
+    "welch_mode_requires_exactly_two_groups_returns_error"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/sample.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "utils/converter.rs": {
+   "pub_fn": {
+    "string_to_js_error": "pub fn string_to_js_error(error: String) -> JsValue",
+    "format_result": "pub fn format_result(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "utils/error.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "ErrorCollector": {
+     "vis": "pub",
+     "fields": [
+      "errors: HashMap<String, Vec<String>>"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "ErrorCollector::add_error": "pub fn add_error(&mut self, context: &str, message: &str)",
+    "ErrorCollector::has_errors": "pub fn has_errors(&self) -> bool",
+    "ErrorCollector::get_error_summary": "pub fn get_error_summary(&self) -> String",
+    "ErrorCollector::clear": "pub fn clear(&mut self)"
+   },
+   "priv_method": []
+  },
+  "utils/log.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "FunctionLogger": {
+     "vis": "pub",
+     "fields": [
+      "executed_functions: Vec<String>"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "FunctionLogger::add_log": "pub fn add_log(&mut self, function_name: &str)",
+    "FunctionLogger::has_logs": "pub fn has_logs(&self) -> bool",
+    "FunctionLogger::get_log_summary": "pub fn get_log_summary(&self) -> String",
+    "FunctionLogger::get_executed_functions": "pub fn get_executed_functions(&self) -> Vec<String>"
+   },
+   "priv_method": []
+  },
+  "utils/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "wasm/constructor.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "MultivariateAnalysis": {
+     "vis": "pub",
+     "fields": [
+      "config: MultivariateConfig",
+      "data: AnalysisData",
+      "result: Option<MultivariateResult>",
+      "error_collector: ErrorCollector",
+      "logger: FunctionLogger"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "MultivariateAnalysis::new": "pub fn new(dep_data: JsValue, fix_factor_data: JsValue, covar_data: JsValue, wls_data: JsValue, dep_data_defs: JsValue, fix_factor_data_defs: JsValue, covar_data_defs: JsValue, wls_data_defs: JsValue, config_data: JsValue) -> Result<MultivariateAnalysis, JsValue>",
+    "MultivariateAnalysis::get_results": "pub fn get_results(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_formatted_results": "pub fn get_formatted_results(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_executed_functions": "pub fn get_executed_functions(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_all_errors": "pub fn get_all_errors(&self) -> JsValue",
+    "MultivariateAnalysis::get_all_log": "pub fn get_all_log(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::clear_errors": "pub fn clear_errors(&mut self) -> JsValue"
+   },
+   "priv_method": []
+  },
+  "wasm/function.rs": {
+   "pub_fn": {
+    "run_analysis": "pub fn run_analysis(data: &AnalysisData, config: &MultivariateConfig, error_collector: &mut ErrorCollector, logger: &mut FunctionLogger) -> Result<Option<MultivariateResult>, JsValue>",
+    "get_results": "pub fn get_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_formatted_results": "pub fn get_formatted_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_executed_functions": "pub fn get_executed_functions(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_all_errors": "pub fn get_all_errors(error_collector: &ErrorCollector) -> JsValue",
+    "get_all_log": "pub fn get_all_log(logger: &FunctionLogger) -> Result<JsValue, JsValue>",
+    "clear_errors": "pub fn clear_errors(error_collector: &mut ErrorCollector) -> JsValue"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "wasm/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  }
+ },
+ "new_items": {
+  "lib.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/config.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "MultivariateConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub main: MainConfig",
+      "pub model: ModelDetails",
+      "pub contrast: ContrastConfig",
+      "pub plots: PlotsConfig",
+      "pub posthoc: PosthocConfig",
+      "pub emmeans: EmmmeansConfig",
+      "pub save: SaveConfig",
+      "pub options: OptionsConfig",
+      "pub bootstrap: BootstrapConfig"
+     ]
+    },
+    "MainConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub dep_var: Option<Vec<String>>",
+      "pub fix_factor: Option<Vec<String>>",
+      "pub covar: Option<Vec<String>>",
+      "pub wls_weight: Option<String>",
+      "pub test_values: Option<Vec<f64>>",
+      "pub variance_mode: VarianceMode"
+     ]
+    },
+    "ModelDetails": {
+     "vis": "pub",
+     "fields": [
+      "pub non_cust: bool",
+      "pub custom: bool",
+      "pub build_custom_term: bool",
+      "pub factors_var: Option<Vec<String>>",
+      "pub build_term_method: Option<BuildTermMethod>",
+      "pub factors_model: Option<Vec<String>>",
+      "pub terms_var: Option<String>",
+      "pub cov_model: Option<String>",
+      "pub random_model: Option<String>",
+      "pub term_text: Option<String>",
+      "pub sum_of_square_method: SumOfSquaresMethod",
+      "pub intercept: bool"
+     ]
+    },
+    "ContrastConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_list: Option<Vec<String>>",
+      "pub contrast_method: ContrastMethod",
+      "pub last: bool",
+      "pub first: bool"
+     ]
+    },
+    "PlotsConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub axis_list: Option<String>",
+      "pub line_list: Option<String>",
+      "pub plot_list: Option<String>",
+      "pub fix_factor_vars: Option<Vec<String>>",
+      "pub rand_factor_vars: Option<String>",
+      "pub line_chart_type: bool",
+      "pub bar_chart_type: bool",
+      "pub include_error_bars: bool",
+      "pub confidence_interval: bool",
+      "pub standard_error: bool",
+      "pub multiplier: Option<i32>",
+      "pub include_ref_line_for_grand_mean: bool",
+      "pub y_axis_start_0: bool"
+     ]
+    },
+    "PosthocConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub fix_factor_vars: Option<Vec<String>>",
+      "pub lsd: bool",
+      "pub bonfe: bool",
+      "pub sidak: bool",
+      "pub scheffe: bool",
+      "pub regwf: bool",
+      "pub regwq: bool",
+      "pub snk: bool",
+      "pub tu: bool",
+      "pub tub: bool",
+      "pub dun: bool",
+      "pub hoc: bool",
+      "pub gabriel: bool",
+      "pub waller: bool",
+      "pub error_ratio: Option<i32>",
+      "pub dunnett: bool",
+      "pub category_method: Option<CategoryMethod>",
+      "pub twosided: bool",
+      "pub lt_control: bool",
+      "pub gt_control: bool",
+      "pub tam: bool",
+      "pub dunt: bool",
+      "pub games: bool",
+      "pub dunc: bool"
+     ]
+    },
+    "EmmmeansConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub src_list: Option<Vec<String>>",
+      "pub target_list: Option<String>",
+      "pub comp_main_effect: bool",
+      "pub confi_interval_method: Option<CIMethod>"
+     ]
+    },
+    "SaveConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub res_weighted: bool",
+      "pub pre_weighted: bool",
+      "pub std_statistics: bool",
+      "pub cooks_d: bool",
+      "pub leverage: bool",
+      "pub unstandardized_res: bool",
+      "pub weighted_res: bool",
+      "pub standardized_res: bool",
+      "pub studentized_res: bool",
+      "pub deleted_res: bool",
+      "pub coeff_stats: bool",
+      "pub new_dataset: bool",
+      "pub dataset_name: Option<String>",
+      "pub write_new_dataset: bool",
+      "pub file_path: Option<String>"
+     ]
+    },
+    "OptionsConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub desc_stats: bool",
+      "pub est_effect_size: bool",
+      "pub obs_power: bool",
+      "pub param_est: bool",
+      "pub sscp_mat: bool",
+      "pub res_sscp_mat: bool",
+      "pub homogen_test: bool",
+      "pub spr_vs_level: bool",
+      "pub res_plot: bool",
+      "pub lack_of_fit: bool",
+      "pub general_fun: bool",
+      "pub sig_level: Option<f64>",
+      "pub coefficient_matrix: bool",
+      "pub transform_mat: bool"
+     ]
+    },
+    "BootstrapConfig": {
+     "vis": "pub",
+     "fields": [
+      "pub perform_boot_strapping: bool",
+      "pub num_of_samples: Option<i32>",
+      "pub seed: bool",
+      "pub seed_value: Option<i32>",
+      "pub level: Option<f64>",
+      "pub percentile: bool",
+      "pub bca: bool",
+      "pub simple: bool",
+      "pub stratified: bool",
+      "pub variables: Option<Vec<String>>",
+      "pub strata_variables: Option<Vec<String>>"
+     ]
+    }
+   },
+   "enum": {
+    "BuildTermMethod": {
+     "vis": "pub",
+     "variants": [
+      "Interaction",
+      "MainEffects",
+      "All2Way",
+      "All3Way",
+      "All4Way",
+      "All5Way"
+     ]
+    },
+    "SumOfSquaresMethod": {
+     "vis": "pub",
+     "variants": [
+      "TypeI",
+      "TypeII",
+      "TypeIII",
+      "TypeIV"
+     ]
+    },
+    "ContrastMethod": {
+     "vis": "pub",
+     "variants": [
+      "None",
+      "Deviation",
+      "Simple",
+      "Difference",
+      "Helmert",
+      "Repeated",
+      "Polynomial"
+     ]
+    },
+    "CategoryMethod": {
+     "vis": "pub",
+     "variants": [
+      "Last",
+      "First"
+     ]
+    },
+    "CIMethod": {
+     "vis": "pub",
+     "variants": [
+      "LsdNone",
+      "Bonferroni",
+      "Sidak"
+     ]
+    },
+    "VarianceMode": {
+     "vis": "pub",
+     "variants": [
+      "Pooled",
+      "Welch"
+     ]
+    }
+   },
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/data.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "DataRecord": {
+     "vis": "pub",
+     "fields": [
+      "pub values: HashMap<String, DataValue>"
+     ]
+    },
+    "ValueLabel": {
+     "vis": "pub",
+     "fields": [
+      "pub id: Option<i32>",
+      "pub variable_name: String",
+      "pub value: DataValue",
+      "pub label: String"
+     ]
+    },
+    "VariableDefinition": {
+     "vis": "pub",
+     "fields": [
+      "pub id: Option<i32>",
+      "pub column_index: usize",
+      "pub name: String",
+      "pub width: i32",
+      "pub decimals: i32",
+      "pub label: Option<String>",
+      "pub values: Vec<ValueLabel>",
+      "pub missing: Vec<DataValue>",
+      "pub columns: i32",
+      "pub align: VariableAlign",
+      "pub measure: VariableMeasure",
+      "pub role: VariableRole"
+     ]
+    },
+    "AnalysisData": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_data: Vec<Vec<DataRecord>>",
+      "pub fix_factor_data: Vec<Vec<DataRecord>>",
+      "pub covariate_data: Option<Vec<Vec<DataRecord>>>",
+      "pub wls_data: Option<Vec<Vec<DataRecord>>>",
+      "pub dependent_data_defs: Vec<Vec<VariableDefinition>>",
+      "pub fix_factor_data_defs: Vec<Vec<VariableDefinition>>",
+      "pub covariate_data_defs: Option<Vec<Vec<VariableDefinition>>>",
+      "pub wls_data_defs: Option<Vec<Vec<VariableDefinition>>>"
+     ]
+    }
+   },
+   "enum": {
+    "DataValue": {
+     "vis": "pub",
+     "variants": [
+      "Number",
+      "Text",
+      "Boolean",
+      "Null"
+     ]
+    },
+    "VariableType": {
+     "vis": "pub",
+     "variants": [
+      "Numeric",
+      "Comma",
+      "Dot",
+      "Scientific",
+      "Date",
+      "Adate",
+      "Edate",
+      "Sdate",
+      "Jdate",
+      "Qyr",
+      "Moyr",
+      "Wkyr",
+      "Datetime",
+      "Time",
+      "Dtime",
+      "Wkday",
+      "Month",
+      "Dollar",
+      "Cca",
+      "Ccb",
+      "Ccc",
+      "Ccd",
+      "Cce",
+      "String",
+      "RestrictedNumeric"
+     ]
+    },
+    "VariableAlign": {
+     "vis": "pub",
+     "variants": [
+      "Right",
+      "Left",
+      "Center"
+     ]
+    },
+    "VariableMeasure": {
+     "vis": "pub",
+     "variants": [
+      "Scale",
+      "Ordinal",
+      "Nominal",
+      "Unknown"
+     ]
+    },
+    "VariableRole": {
+     "vis": "pub",
+     "variants": [
+      "Input",
+      "Target",
+      "Both",
+      "None",
+      "Partition",
+      "Split"
+     ]
+    }
+   },
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "models/result.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "MultivariateResult": {
+     "vis": "pub",
+     "fields": [
+      "pub between_subjects_factors: Option<HashMap<String, BetweenSubjectFactors>>",
+      "pub descriptive_statistics: Option<HashMap<String, DescriptiveStatistics>>",
+      "pub levene_test: Option<Vec<LeveneTest>>",
+      "pub tests_of_between_subjects_effects: Option<TestsBetweenSubjectsEffects>",
+      "pub parameter_estimates: Option<ParameterEstimates>",
+      "pub general_estimable_function: Option<GeneralEstimableFunction>",
+      "pub contrast_coefficients: Option<ContrastCoefficients>",
+      "pub spread_vs_level_plots: Option<HashMap<String, SpreadVsLevelPlots>>",
+      "pub posthoc_tests: Option<HashMap<String, Vec<PostHocTest>>>",
+      "pub emmeans: Option<HashMap<String, Vec<EstimatedMarginalMean>>>",
+      "pub plots: Option<HashMap<String, PlotData>>",
+      "pub saved_variables: Option<SavedVariables>",
+      "pub executed_functions: Vec<String>",
+      "pub box_test: Option<BoxTest>",
+      "pub bartlett_test: Option<BartlettTest>",
+      "pub multivariate_tests: Option<MultivariateTests>",
+      "pub between_subjects_sscp: Option<BetweenSubjectsSSCP>",
+      "pub residual_matrix: Option<ResidualMatrix>",
+      "pub sscp_matrix: Option<SSCPMatrix>",
+      "pub univariate_tests: Option<UnivariateTests>",
+      "pub homogeneous_subsets: Option<HashMap<String, HashMap<String, HomogeneousSubsets>>>",
+      "pub scatter_plot_matrices: Option<HashMap<String, ScatterPlotMatrix>>",
+      "pub profile_plots: Option<HashMap<String, PlotData>>",
+      "pub residual_plots: Option<HashMap<String, ResidualPlotData>>"
+     ]
+    },
+    "BetweenSubjectFactors": {
+     "vis": "pub",
+     "fields": [
+      "pub value_counts: HashMap<String, usize>",
+      "pub value_labels: HashMap<String, String>",
+      "pub n: Option<usize>"
+     ]
+    },
+    "DescriptiveStatistics": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub groups: Vec<StatGroup>"
+     ]
+    },
+    "StatGroup": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub stats: StatsEntry",
+      "pub subgroups: Option<Vec<StatGroup>>"
+     ]
+    },
+    "StatsEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub mean: f64",
+      "pub std_deviation: f64",
+      "pub n: usize"
+     ]
+    },
+    "LeveneTest": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub levene: Vec<LeveneResult>"
+     ]
+    },
+    "LeveneResult": {
+     "vis": "pub",
+     "fields": [
+      "pub levene_statistic: f64",
+      "pub df1: usize",
+      "pub df2: f64",
+      "pub significance: f64",
+      "pub function: Option<String>",
+      "pub design: Option<String>",
+      "pub test_basis: Option<String>"
+     ]
+    },
+    "TestsBetweenSubjectsEffects": {
+     "vis": "pub",
+     "fields": [
+      "pub effects: HashMap<String, HashMap<String, TestEffectEntry>>",
+      "pub r_squared: HashMap<String, f64>",
+      "pub adjusted_r_squared: HashMap<String, f64>"
+     ]
+    },
+    "TestEffectEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub sum_of_squares: f64",
+      "pub df: usize",
+      "pub mean_square: f64",
+      "pub f_value: f64",
+      "pub significance: f64",
+      "pub partial_eta_squared: f64",
+      "pub noncent_parameter: f64",
+      "pub observed_power: f64"
+     ]
+    },
+    "ParameterEstimates": {
+     "vis": "pub",
+     "fields": [
+      "pub estimates: HashMap<String, Vec<ParameterEstimateEntry>>"
+     ]
+    },
+    "ParameterEstimateEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub parameter: String",
+      "pub b: f64",
+      "pub std_error: f64",
+      "pub t_value: f64",
+      "pub significance: f64",
+      "pub confidence_interval: ConfidenceInterval",
+      "pub partial_eta_squared: Option<f64>",
+      "pub noncent_parameter: Option<f64>",
+      "pub observed_power: Option<f64>"
+     ]
+    },
+    "ConfidenceInterval": {
+     "vis": "pub",
+     "fields": [
+      "pub lower_bound: f64",
+      "pub upper_bound: f64"
+     ]
+    },
+    "GeneralEstimableFunction": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix: HashMap<String, HashMap<String, i32>>",
+      "pub design: Option<String>"
+     ]
+    },
+    "ContrastCoefficients": {
+     "vis": "pub",
+     "fields": [
+      "pub parameter: Vec<String>",
+      "pub coefficients: Vec<f64>"
+     ]
+    },
+    "SpreadVsLevelPlots": {
+     "vis": "pub",
+     "fields": [
+      "pub points: Vec<SpreadVsLevelPoint>"
+     ]
+    },
+    "SpreadVsLevelPoint": {
+     "vis": "pub",
+     "fields": [
+      "pub level_mean: f64",
+      "pub spread_standard_deviation: f64"
+     ]
+    },
+    "FTest": {
+     "vis": "pub",
+     "fields": [
+      "pub statistic: f64",
+      "pub df1: usize",
+      "pub df2: usize",
+      "pub p_value: f64"
+     ]
+    },
+    "PlotData": {
+     "vis": "pub",
+     "fields": [
+      "pub title: String",
+      "pub x_label: String",
+      "pub y_label: String",
+      "pub series: Vec<PlotSeries>",
+      "pub y_axis_starts_at_zero: bool",
+      "pub includes_reference_line: bool",
+      "pub reference_line: Option<f64>",
+      "pub dependent_variable: Option<String>",
+      "pub plot_type: Option<String>",
+      "pub groups_label: Option<String>",
+      "pub model: Option<String>",
+      "pub error_bars: Option<String>",
+      "pub legend: Option<Vec<LegendItem>>"
+     ]
+    },
+    "PlotSeries": {
+     "vis": "pub",
+     "fields": [
+      "pub name: String",
+      "pub points: Vec<PlotPoint>",
+      "pub error_bars: Option<Vec<ConfidenceInterval>>",
+      "pub series_type: String",
+      "pub color: Option<String>",
+      "pub line_style: Option<String>",
+      "pub marker_style: Option<String>",
+      "pub is_reference_line: Option<bool>"
+     ]
+    },
+    "PlotPoint": {
+     "vis": "pub",
+     "fields": [
+      "pub x: f64",
+      "pub y: f64",
+      "pub label: String"
+     ]
+    },
+    "SavedVariables": {
+     "vis": "pub",
+     "fields": [
+      "pub variable_values: HashMap<String, Vec<f64>>"
+     ]
+    },
+    "LegendItem": {
+     "vis": "pub",
+     "fields": [
+      "pub label: String",
+      "pub color: Option<String>",
+      "pub line_style: Option<String>",
+      "pub marker_style: Option<String>"
+     ]
+    },
+    "ScatterPlotMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub plot_type: String",
+      "pub model: String",
+      "pub matrix_dimensions: Vec<String>"
+     ]
+    },
+    "ResidualPlotData": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub model: String",
+      "pub observed: Vec<f64>",
+      "pub predicted: Vec<f64>",
+      "pub std_residual: Vec<f64>"
+     ]
+    },
+    "BoxTest": {
+     "vis": "pub",
+     "fields": [
+      "pub box_m: f64",
+      "pub f: f64",
+      "pub df1: usize",
+      "pub df2: f64",
+      "pub significance: f64",
+      "pub design: Option<String>",
+      "pub description: Option<String>"
+     ]
+    },
+    "BartlettTest": {
+     "vis": "pub",
+     "fields": [
+      "pub likelihood_ratio: f64",
+      "pub approx_chi_square: f64",
+      "pub df: usize",
+      "pub significance: f64",
+      "pub description: Option<String>",
+      "pub design: Option<String>"
+     ]
+    },
+    "MultivariateTests": {
+     "vis": "pub",
+     "fields": [
+      "pub effects: HashMap<String, HashMap<String, MultivariateTestEntry>>",
+      "pub design: Option<String>",
+      "pub alpha: Option<f64>"
+     ]
+    },
+    "MultivariateTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub value: f64",
+      "pub f: f64",
+      "pub hypothesis_df: f64",
+      "pub error_df: f64",
+      "pub significance: f64",
+      "pub partial_eta_squared: f64",
+      "pub noncent_parameter: f64",
+      "pub observed_power: f64",
+      "pub is_exact_statistic: bool"
+     ]
+    },
+    "BetweenSubjectsSSCP": {
+     "vis": "pub",
+     "fields": [
+      "pub matrices: HashMap<String, BetweenSSCPMatrix>",
+      "pub based_on: Option<String>"
+     ]
+    },
+    "BetweenSSCPMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub values: HashMap<String, HashMap<String, f64>>"
+     ]
+    },
+    "ResidualMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix_type: String",
+      "pub values: HashMap<String, HashMap<String, f64>>",
+      "pub description: Option<String>"
+     ]
+    },
+    "SSCPMatrix": {
+     "vis": "pub",
+     "fields": [
+      "pub matrix_type: String",
+      "pub categories: HashMap<String, HashMap<String, HashMap<String, f64>>>"
+     ]
+    },
+    "UnivariateTests": {
+     "vis": "pub",
+     "fields": [
+      "pub tests: HashMap<String, Vec<UnivariateTestEntry>>",
+      "pub alpha: Option<f64>"
+     ]
+    },
+    "UnivariateTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub source: String",
+      "pub sum_of_squares: f64",
+      "pub df: usize",
+      "pub mean_square: Option<f64>",
+      "pub f: Option<f64>",
+      "pub significance: Option<f64>",
+      "pub partial_eta_squared: Option<f64>",
+      "pub noncent_parameter: Option<f64>",
+      "pub observed_power: Option<f64>"
+     ]
+    },
+    "PostHocTest": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub test_type: String",
+      "pub factor_name: String",
+      "pub i_level: String",
+      "pub j_level: String",
+      "pub mean_difference: f64",
+      "pub std_error: f64",
+      "pub significance: f64",
+      "pub confidence_interval: ConfidenceInterval"
+     ]
+    },
+    "EstimatedMarginalMean": {
+     "vis": "pub",
+     "fields": [
+      "pub dependent_variable: String",
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub mean: f64",
+      "pub std_error: f64",
+      "pub confidence_interval: ConfidenceInterval"
+     ]
+    },
+    "HomogeneousSubsets": {
+     "vis": "pub",
+     "fields": [
+      "pub test_name: String",
+      "pub groups: Vec<HomogeneousSubsetGroup>",
+      "pub error_term: String",
+      "pub error_value: f64",
+      "pub uses_harmonic_mean: bool",
+      "pub harmonic_mean_sample_size: Option<f64>",
+      "pub notes: Vec<String>",
+      "pub alpha: f64"
+     ]
+    },
+    "HomogeneousSubsetGroup": {
+     "vis": "pub",
+     "fields": [
+      "pub factor_name: String",
+      "pub factor_value: String",
+      "pub n: usize",
+      "pub subsets: HashMap<usize, f64>",
+      "pub significance: Option<f64>"
+     ]
+    },
+    "MauchlyTest": {
+     "vis": "pub",
+     "fields": [
+      "pub tests: HashMap<String, MauchlyTestEntry>"
+     ]
+    },
+    "MauchlyTestEntry": {
+     "vis": "pub",
+     "fields": [
+      "pub effect: String",
+      "pub mauchly_w: f64",
+      "pub chi_square: f64",
+      "pub df: usize",
+      "pub significance: f64",
+      "pub greenhouse_geisser_epsilon: f64",
+      "pub huynh_feldt_epsilon: f64",
+      "pub lower_bound_epsilon: f64"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/bartlett_test.rs": {
+   "pub_fn": {
+    "calculate_bartlett_test": "pub fn calculate_bartlett_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<BartlettTest, String>",
+    "calculate_bartlett_test_from_residual": "pub fn calculate_bartlett_test_from_residual(residual_sscp: &DMatrix<f64>, n: usize, r_x: usize) -> Result<BartlettTest, String>"
+   },
+   "priv_fn": [
+    "calculate_covariance_matrix",
+    "covariance_to_correlation"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/between_subjects_effects.rs": {
+   "pub_fn": {
+    "calculate_tests_between_subjects_effects": "pub fn calculate_tests_between_subjects_effects(data: &AnalysisData, config: &MultivariateConfig) -> Result<TestsBetweenSubjectsEffects, String>",
+    "calculate_type_i_ss": "pub fn calculate_type_i_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, factor_cols: &Vec<usize>, _data: &AnalysisData, _config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_ii_ss": "pub fn calculate_type_ii_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, factor: &str, factor_cols: &Vec<usize>, _data: &AnalysisData, config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_iii_ss": "pub fn calculate_type_iii_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, _effect: &str, effect_cols: &Vec<usize>, _data: &AnalysisData, _config: &MultivariateConfig) -> Result<f64, String>",
+    "calculate_type_iv_ss": "pub fn calculate_type_iv_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>, effect: &str, effect_cols: &Vec<usize>, data: &AnalysisData, config: &MultivariateConfig) -> Result<f64, String>",
+    "fit_model_and_get_ss": "pub fn fit_model_and_get_ss(x_matrix: &Vec<Vec<f64>>, y_vector: &Vec<f64>) -> Result<f64, String>",
+    "get_factor_columns": "pub fn get_factor_columns(x_matrix: &Vec<Vec<f64>>, factor: &str, data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<usize>, String>",
+    "get_interaction_columns": "pub fn get_interaction_columns(x_matrix: &Vec<Vec<f64>>, interaction_term: &str, data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<usize>, String>"
+   },
+   "priv_fn": [
+    "effect_ss",
+    "deviation_coded_design",
+    "sse_without_columns",
+    "containing_effect_columns"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/between_subjects_sscp.rs": {
+   "pub_fn": {
+    "calculate_between_subjects_sscp": "pub fn calculate_between_subjects_sscp(data: &AnalysisData, config: &MultivariateConfig) -> Result<BetweenSubjectsSSCP, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/bootstrap.rs": {
+   "pub_fn": {
+    "perform_bootstrap_analysis": "pub fn perform_bootstrap_analysis(data: &AnalysisData, config: &MultivariateConfig) -> Result<(), String>"
+   },
+   "priv_fn": [
+    "collect_records",
+    "normalize_confidence_level",
+    "build_strata_groups",
+    "data_value_to_key",
+    "sample_simple_indices",
+    "sample_stratified_indices",
+    "sample_mean",
+    "percentile_interval",
+    "bca_interval",
+    "adjusted_bca_probability",
+    "jackknife_acceleration",
+    "quantile"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/box_m_test.rs": {
+   "pub_fn": {
+    "calculate_box_test": "pub fn calculate_box_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<BoxTest, String>"
+   },
+   "priv_fn": [
+    "f_upper_tail"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/common.rs": {
+   "pub_fn": {
+    "calculate_mean": "pub fn calculate_mean(values: &[f64]) -> f64",
+    "calculate_variance": "pub fn calculate_variance(values: &[f64], mean: Option<f64>) -> f64",
+    "calculate_std_deviation": "pub fn calculate_std_deviation(values: &[f64], mean: Option<f64>) -> f64",
+    "calculate_f_significance": "pub fn calculate_f_significance(df1: usize, df2: usize, f_value: f64) -> f64",
+    "calculate_t_significance": "pub fn calculate_t_significance(df: usize, t_value: f64) -> f64",
+    "calculate_t_critical": "pub fn calculate_t_critical(df: usize, alpha: f64) -> f64",
+    "calculate_observed_power": "pub fn calculate_observed_power(df1: usize, df2: usize, f_value: f64, alpha: f64) -> f64",
+    "calculate_observed_power_t": "pub fn calculate_observed_power_t(df: usize, t_value: f64, alpha: f64) -> f64",
+    "chi_square_cdf": "pub fn chi_square_cdf(x: f64, df: f64) -> f64",
+    "f_distribution_cdf": "pub fn f_distribution_cdf(x: f64, df1: f64, df2: f64) -> f64",
+    "count_total_cases": "pub fn count_total_cases(data: &AnalysisData) -> usize",
+    "extract_dependent_value": "pub fn extract_dependent_value(record: &DataRecord, dep_var_name: &str) -> Option<f64>",
+    "merge_records": "pub fn merge_records(data: &AnalysisData) -> Vec<DataRecord>",
+    "data_value_to_string": "pub fn data_value_to_string(value: &DataValue) -> String",
+    "get_factor_levels": "pub fn get_factor_levels(data: &AnalysisData, factor: &str) -> Result<Vec<String>, String>",
+    "get_factor_combinations": "pub fn get_factor_combinations(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<HashMap<String, String>>, String>",
+    "generate_interaction_terms": "pub fn generate_interaction_terms(factors: &[String]) -> Vec<String>",
+    "parse_interaction_term": "pub fn parse_interaction_term(term: &str) -> Vec<String>",
+    "record_matches_interaction": "pub fn record_matches_interaction(record: &DataRecord, combination: &HashMap<String, String>, interaction_term: &str) -> bool",
+    "get_factor_combinations_with_interactions": "pub fn get_factor_combinations_with_interactions(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<HashMap<String, String>>, String>",
+    "get_interaction_level_values": "pub fn get_interaction_level_values(data: &AnalysisData, interaction_term: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "matches_combination": "pub fn matches_combination(record: &DataRecord, combo: &HashMap<String, String>, _data: &AnalysisData, _config: &MultivariateConfig) -> bool",
+    "get_level_values": "pub fn get_level_values(data: &AnalysisData, factor: &str, level: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "get_level_values_adjusted": "pub fn get_level_values_adjusted(values: &[f64], data: &AnalysisData, factor: &str, level: &str, dep_var_name: &str) -> Result<Vec<f64>, String>",
+    "to_dmatrix": "pub fn to_dmatrix(matrix: &[Vec<f64>]) -> DMatrix<f64>",
+    "to_dvector": "pub fn to_dvector(vector: &[f64]) -> DVector<f64>",
+    "from_dmatrix": "pub fn from_dmatrix(matrix: &DMatrix<f64>) -> Vec<Vec<f64>>",
+    "matrix_multiply": "pub fn matrix_multiply(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String>",
+    "matrix_inverse": "pub fn matrix_inverse(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String>",
+    "matrix_determinant": "pub fn matrix_determinant(matrix: &[Vec<f64>]) -> Result<f64, String>",
+    "matrix_transpose": "pub fn matrix_transpose(matrix: &[Vec<f64>]) -> Vec<Vec<f64>>",
+    "solve_linear_system": "pub fn solve_linear_system(a: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String>",
+    "build_design_matrix_and_response": "pub fn build_design_matrix_and_response(data: &AnalysisData, config: &MultivariateConfig, dependent_var: &str) -> Result<(Vec<Vec<f64>>, Vec<f64>), String>",
+    "compute_per_group_covariances": "pub fn compute_per_group_covariances(data: &AnalysisData, config: &MultivariateConfig, factors: &[String],) -> Result<Vec<GroupCovariance>, String>"
+   },
+   "priv_fn": [
+    "noncentral_f_cdf",
+    "generate_combinations",
+    "generate_factor_combinations"
+   ],
+   "struct": {
+    "GroupCovariance": {
+     "vis": "pub",
+     "fields": [
+      "pub label: HashMap<String, String>",
+      "pub covariance: DMatrix<f64>",
+      "pub mean: DVector<f64>",
+      "pub n: usize"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/contrast_coefficients.rs": {
+   "pub_fn": {
+    "calculate_contrast_coefficients": "pub fn calculate_contrast_coefficients(data: &AnalysisData, config: &MultivariateConfig) -> Result<ContrastCoefficients, String>"
+   },
+   "priv_fn": [
+    "generate_polynomial_contrast"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/core.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/descriptive_statistics.rs": {
+   "pub_fn": {
+    "calculate_descriptive_statistics": "pub fn calculate_descriptive_statistics(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, DescriptiveStatistics>, String>"
+   },
+   "priv_fn": [
+    "level_groups",
+    "sort_levels"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/emmeans.rs": {
+   "pub_fn": {
+    "calculate_emmeans": "pub fn calculate_emmeans(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, Vec<EstimatedMarginalMean>>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/estimable_function.rs": {
+   "pub_fn": {
+    "calculate_general_estimable_function": "pub fn calculate_general_estimable_function(data: &AnalysisData, config: &MultivariateConfig) -> Result<GeneralEstimableFunction, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/generate_plots.rs": {
+   "pub_fn": {
+    "generate_plots": "pub fn generate_plots(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, PlotData>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/homogeneous_subsets.rs": {
+   "pub_fn": {
+    "calculate_homogeneous_subsets": "pub fn calculate_homogeneous_subsets(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, HashMap<String, HomogeneousSubsets>>, String>"
+   },
+   "priv_fn": [
+    "calculate_mean_square_error",
+    "calculate_harmonic_mean",
+    "calculate_tukey_hsd_subsets",
+    "calculate_snk_subsets",
+    "calculate_duncan_subsets",
+    "calculate_regwf_subsets",
+    "calculate_regwq_subsets",
+    "calculate_tukey_b_subsets",
+    "calculate_waller_duncan_subsets",
+    "approximate_studentized_range",
+    "f_critical_value",
+    "chi2_critical_value",
+    "calculate_z_critical",
+    "create_homogeneous_subsets",
+    "create_snk_subsets",
+    "calculate_subset_significances"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/levene_test.rs": {
+   "pub_fn": {
+    "calculate_levene_test": "pub fn calculate_levene_test(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<LeveneTest>, String>"
+   },
+   "priv_fn": [
+    "calculate_median",
+    "calculate_trimmed_mean",
+    "model_residual_levene"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/multivariate_tests.rs": {
+   "pub_fn": {
+    "calculate_multivariate_tests": "pub fn calculate_multivariate_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<MultivariateTests, String>"
+   },
+   "priv_fn": [
+    "ss_type_label",
+    "calculate_welch_two_sample_t2",
+    "calculate_hypothesis_error_matrices",
+    "eigenvalues_real",
+    "calculate_multivariate_test_statistics",
+    "compute_full_model_residual_sscp",
+    "effect_hypothesis_sscps",
+    "residual_sscp",
+    "deviation_coded_design",
+    "containing_effect_columns"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/parameter_estimates.rs": {
+   "pub_fn": {
+    "calculate_parameter_estimates": "pub fn calculate_parameter_estimates(data: &AnalysisData, config: &MultivariateConfig) -> Result<ParameterEstimates, String>",
+    "generate_parameter_names": "pub fn generate_parameter_names(data: &AnalysisData, config: &MultivariateConfig) -> Result<Vec<String>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/posthoc.rs": {
+   "pub_fn": {
+    "calculate_posthoc_tests": "pub fn calculate_posthoc_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, Vec<PostHocTest>>, String>"
+   },
+   "priv_fn": [
+    "compute_model_mse"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/residual_plots.rs": {
+   "pub_fn": {
+    "calculate_residual_plots": "pub fn calculate_residual_plots(data: &AnalysisData, config: &MultivariateConfig,) -> Result<HashMap<String, ResidualPlotData>, String>"
+   },
+   "priv_fn": [
+    "build_model_string"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/residual_sscp_matrix.rs": {
+   "pub_fn": {
+    "calculate_residual_matrix": "pub fn calculate_residual_matrix(data: &AnalysisData, config: &MultivariateConfig) -> Result<ResidualMatrix, String>",
+    "calculate_residual_covariance": "pub fn calculate_residual_covariance(residual_sscp: &ResidualMatrix, df: usize) -> Result<ResidualMatrix, String>",
+    "calculate_residual_correlation": "pub fn calculate_residual_correlation(residual_cov: &ResidualMatrix) -> Result<ResidualMatrix, String>",
+    "calculate_bartlett_sphericity_test": "pub fn calculate_bartlett_sphericity_test(residual_cov: &ResidualMatrix, df: usize) -> Result<f64, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/save.rs": {
+   "pub_fn": {
+    "save_variables": "pub fn save_variables(data: &AnalysisData, config: &MultivariateConfig) -> Result<SavedVariables, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/spread_vs_level.rs": {
+   "pub_fn": {
+    "calculate_spread_vs_level_plots": "pub fn calculate_spread_vs_level_plots(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, SpreadVsLevelPlots>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/sscp_matrix.rs": {
+   "pub_fn": {
+    "calculate_sscp_matrix": "pub fn calculate_sscp_matrix(data: &AnalysisData, config: &MultivariateConfig) -> Result<SSCPMatrix, String>",
+    "calculate_hypothesis_sscp": "pub fn calculate_hypothesis_sscp(data: &AnalysisData, config: &MultivariateConfig, effect: &str) -> Result<HashMap<String, HashMap<String, f64>>, String>",
+    "calculate_error_sscp": "pub fn calculate_error_sscp(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, HashMap<String, f64>>, String>"
+   },
+   "priv_fn": [
+    "calculate_lack_of_fit_and_pure_error",
+    "build_type_i_reduced_design_matrix",
+    "build_type_ii_reduced_design_matrix",
+    "build_type_iii_reduced_design_matrix",
+    "build_type_iv_reduced_design_matrix"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/summary_processing.rs": {
+   "pub_fn": {
+    "basic_processing_summary": "pub fn basic_processing_summary(data: &AnalysisData, config: &MultivariateConfig) -> Result<HashMap<String, BetweenSubjectFactors>, String>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "stats/univariate_tests.rs": {
+   "pub_fn": {
+    "calculate_univariate_tests": "pub fn calculate_univariate_tests(data: &AnalysisData, config: &MultivariateConfig) -> Result<UnivariateTests, String>"
+   },
+   "priv_fn": [
+    "calculate_univariate_test_entries",
+    "create_type1_test_entries",
+    "create_type2_test_entries",
+    "create_type3_test_entries"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/example.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/multivariate_validation.rs": {
+   "pub_fn": {},
+   "priv_fn": [
+    "numeric_def",
+    "nominal_def",
+    "build_config",
+    "build_analysis_data",
+    "make_record",
+    "dataset_a",
+    "dataset_b",
+    "dataset_c",
+    "assert_finite",
+    "dataset_a_core_tables_are_computable",
+    "dataset_b_core_tables_are_computable",
+    "dataset_c_core_tables_are_computable",
+    "mtcars_records",
+    "hotelling_t2_one_population_mtcars_matches_apg_modul_3",
+    "hotelling_t2_with_zero_mu0_matches_default_intercept",
+    "hotelling_t2_length_mismatch_returns_error",
+    "multivariate_performance_dataset_b_under_five_seconds",
+    "two_sample_heteroscedastic_dataset",
+    "manual_pooled_t2",
+    "manual_welch_t2",
+    "extract_two_sample_rows",
+    "hotelling_t2_two_sample_pooled_matches_manual",
+    "hotelling_t2_two_sample_welch_matches_manual_krishnamoorthy_yu",
+    "welch_mode_requires_exactly_two_groups_returns_error"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "test/sample.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "utils/converter.rs": {
+   "pub_fn": {
+    "string_to_js_error": "pub fn string_to_js_error(error: String) -> JsValue",
+    "format_result": "pub fn format_result(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>"
+   },
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "utils/error.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "ErrorCollector": {
+     "vis": "pub",
+     "fields": [
+      "errors: HashMap<String, Vec<String>>"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "ErrorCollector::add_error": "pub fn add_error(&mut self, context: &str, message: &str)",
+    "ErrorCollector::has_errors": "pub fn has_errors(&self) -> bool",
+    "ErrorCollector::get_error_summary": "pub fn get_error_summary(&self) -> String",
+    "ErrorCollector::clear": "pub fn clear(&mut self)"
+   },
+   "priv_method": []
+  },
+  "utils/log.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {
+    "FunctionLogger": {
+     "vis": "pub",
+     "fields": [
+      "executed_functions: Vec<String>"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "FunctionLogger::add_log": "pub fn add_log(&mut self, function_name: &str)",
+    "FunctionLogger::has_logs": "pub fn has_logs(&self) -> bool",
+    "FunctionLogger::get_log_summary": "pub fn get_log_summary(&self) -> String",
+    "FunctionLogger::get_executed_functions": "pub fn get_executed_functions(&self) -> Vec<String>"
+   },
+   "priv_method": []
+  },
+  "utils/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "wasm/constructor.rs": {
+   "pub_fn": {},
+   "priv_fn": [
+    "listwise_complete_cases"
+   ],
+   "struct": {
+    "MultivariateAnalysis": {
+     "vis": "pub",
+     "fields": [
+      "config: MultivariateConfig",
+      "data: AnalysisData",
+      "result: Option<MultivariateResult>",
+      "error_collector: ErrorCollector",
+      "logger: FunctionLogger"
+     ]
+    }
+   },
+   "enum": {},
+   "pub_method": {
+    "MultivariateAnalysis::new": "pub fn new(dep_data: JsValue, fix_factor_data: JsValue, covar_data: JsValue, wls_data: JsValue, dep_data_defs: JsValue, fix_factor_data_defs: JsValue, covar_data_defs: JsValue, wls_data_defs: JsValue, config_data: JsValue) -> Result<MultivariateAnalysis, JsValue>",
+    "MultivariateAnalysis::get_results": "pub fn get_results(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_formatted_results": "pub fn get_formatted_results(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_executed_functions": "pub fn get_executed_functions(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::get_all_errors": "pub fn get_all_errors(&self) -> JsValue",
+    "MultivariateAnalysis::get_all_log": "pub fn get_all_log(&self) -> Result<JsValue, JsValue>",
+    "MultivariateAnalysis::clear_errors": "pub fn clear_errors(&mut self) -> JsValue"
+   },
+   "priv_method": []
+  },
+  "wasm/function.rs": {
+   "pub_fn": {
+    "run_analysis": "pub fn run_analysis(data: &AnalysisData, config: &MultivariateConfig, error_collector: &mut ErrorCollector, logger: &mut FunctionLogger) -> Result<Option<MultivariateResult>, JsValue>",
+    "get_results": "pub fn get_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_formatted_results": "pub fn get_formatted_results(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_executed_functions": "pub fn get_executed_functions(result: &Option<MultivariateResult>) -> Result<JsValue, JsValue>",
+    "get_all_errors": "pub fn get_all_errors(error_collector: &ErrorCollector) -> JsValue",
+    "get_all_log": "pub fn get_all_log(logger: &FunctionLogger) -> Result<JsValue, JsValue>",
+    "clear_errors": "pub fn clear_errors(error_collector: &mut ErrorCollector) -> JsValue"
+   },
+   "priv_fn": [
+    "normalize_model_spec"
+   ],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  },
+  "wasm/mod.rs": {
+   "pub_fn": {},
+   "priv_fn": [],
+   "struct": {},
+   "enum": {},
+   "pub_method": {},
+   "priv_method": []
+  }
+ }
+}

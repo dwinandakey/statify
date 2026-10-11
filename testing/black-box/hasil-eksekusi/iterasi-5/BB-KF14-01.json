@@ -1,0 +1,384 @@
+{
+ "id": "BB-KF14-01",
+ "steps": [
+  "impor one-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: y1, y2",
+  "FixFactor: treatment",
+  "Options: centang ResPlot"
+ ],
+ "toasts": [
+  {
+   "label": "OK Residual Plots",
+   "texts": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "file": "BB-KF14-01-1.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK Residual Plots",
+   "toast": [
+    "Multivariate analysis has been completed successfully.",
+    "Multivariate analysis has been completed successfully."
+   ],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Between-Subjects Factors",
+     "tables": [
+      {
+       "title": "Between-Subjects Factors",
+       "columns": [
+        "",
+        "",
+        "Value Label",
+        "N"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "factor": "treatment",
+         "level": "1",
+         "value_label": "",
+         "n": "3"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "2",
+         "value_label": "",
+         "n": "2"
+        },
+        {
+         "rowHeader": [],
+         "factor": "",
+         "level": "3",
+         "value_label": "",
+         "n": "3"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Multivariate Tests",
+     "tables": [
+      {
+       "title": "Multivariate Tests",
+       "columns": [
+        "Effect",
+        "",
+        "Value",
+        "F",
+        "Hypothesis df",
+        "Error df",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "effect": "Intercept",
+         "test_name": "Pillai's Trace",
+         "value": "0.9423",
+         "f": "32.6790",
+         "hypothesis_df": "2",
+         "error_df": "4",
+         "significance": "0.0033"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0577",
+         "f": "32.6790",
+         "hypothesis_df": "2",
+         "error_df": "4",
+         "significance": "0.0033"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "16.3395",
+         "f": "32.6790",
+         "hypothesis_df": "2",
+         "error_df": "4",
+         "significance": "0.0033"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "16.3395",
+         "f": "32.6790",
+         "hypothesis_df": "2",
+         "error_df": "4",
+         "significance": "0.0033"
+        },
+        {
+         "rowHeader": [],
+         "effect": "treatment",
+         "test_name": "Pillai's Trace",
+         "value": "1.5408",
+         "f": "8.3882",
+         "hypothesis_df": "4",
+         "error_df": "10",
+         "significance": "0.0031"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Wilks' Lambda",
+         "value": "0.0385",
+         "f": "8.1989",
+         "hypothesis_df": "4",
+         "error_df": "8",
+         "significance": "0.0062"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Hotelling's Trace",
+         "value": "9.9414",
+         "f": "7.4561",
+         "hypothesis_df": "4",
+         "error_df": "6",
+         "significance": "0.0164"
+        },
+        {
+         "rowHeader": [],
+         "effect": "",
+         "test_name": "Roy's Largest Root",
+         "value": "8.0764",
+         "f": "20.1910",
+         "hypothesis_df": "2",
+         "error_df": "5",
+         "significance": "0.0040"
+        }
+       ],
+       "footnote": "Type III sum of squares.\na. Design: Intercept + treatment\nb. Exact statistic\nc. The statistic is an upper bound on F that yields a lower bound on the significance level."
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Dependent Variable",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Corrected Model",
+         "dependent_variable": "y1",
+         "sum_of_squares": "78.0000",
+         "df": "2",
+         "mean_square": "39.0000",
+         "f_value": "19.5000",
+         "significance": "0.0044"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "48.0000",
+         "df": "2",
+         "mean_square": "24.0000",
+         "f_value": "5.0000",
+         "significance": "0.0642"
+        },
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "dependent_variable": "y1",
+         "sum_of_squares": "103.7143",
+         "df": "1",
+         "mean_square": "103.7143",
+         "f_value": "51.8571",
+         "significance": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "168.0000",
+         "df": "1",
+         "mean_square": "168.0000",
+         "f_value": "35.0000",
+         "significance": "0.0020"
+        },
+        {
+         "rowHeader": [],
+         "source": "treatment",
+         "dependent_variable": "y1",
+         "sum_of_squares": "78.0000",
+         "df": "2",
+         "mean_square": "39.0000",
+         "f_value": "19.5000",
+         "significance": "0.0044"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "48.0000",
+         "df": "2",
+         "mean_square": "24.0000",
+         "f_value": "5.0000",
+         "significance": "0.0642"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "dependent_variable": "y1",
+         "sum_of_squares": "10.0000",
+         "df": "5",
+         "mean_square": "2.0000",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "24.0000",
+         "df": "5",
+         "mean_square": "4.8000",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Total",
+         "dependent_variable": "y1",
+         "sum_of_squares": "216.0000",
+         "df": "8",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "272.0000",
+         "df": "8",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "Corrected Total",
+         "dependent_variable": "y1",
+         "sum_of_squares": "88.0000",
+         "df": "7",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "dependent_variable": "y2",
+         "sum_of_squares": "72.0000",
+         "df": "7",
+         "mean_square": "",
+         "f_value": "",
+         "significance": ""
+        }
+       ],
+       "footnote": "a. R Squared = 0.8864 (Adjusted R Squared = 0.8409) for y1\nb. R Squared = 0.6667 (Adjusted R Squared = 0.5333) for y2"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "y1",
+     "tables": [],
+     "charts": [
+      {
+       "chartType": "Scatter Plot Matrix",
+       "title": "Residual Plots: y1"
+      }
+     ]
+    },
+    {
+     "title": "y2",
+     "tables": [],
+     "charts": [
+      {
+       "chartType": "Scatter Plot Matrix",
+       "title": "Residual Plots: y2"
+      }
+     ]
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "message": "No errors occurred."
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "jumlahGrafik": 2
+ },
+ "notes": [
+  "BB-KF14-01-1.png: toast: OK Residual Plots",
+  "BB-KF14-01-2.png: grafik residual 1",
+  "BB-KF14-01-3.png: grafik residual 2"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "OrpyJfBOluV37xa0aqmFr",
+  "buildIdServed": "OrpyJfBOluV37xa0aqmFr",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.6145c2bf.wasm",
+    "md5": "43a77657bcd238bb949797c7dccea200"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-26T04:07:24.244Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 15,
+ "finishedAt": "2026-09-26T04:07:39.439Z",
+ "wasmRequested": [
+  "wasm_bg.6145c2bf.wasm"
+ ]
+}

@@ -1,0 +1,171 @@
+Statify (UI, worker) vs SPSS 27 — toleransi 0.001
+1698 nilai SPSS; dibandingkan 1542; lulus 1470; gagal 72; tanpa padanan 156
+
+config | tabel | nilai | dibandingkan | lulus | gagal | tanpa padanan | selisih maks | di | tampilan UI gagal
+mv1 | Report | 12 | 12 | 12 | 0 | 0 | 2.842170943040401e-14 | disp · Mean | 0
+mv1 | Descriptive Statistics | 12 | 0 | 0 | 0 | 12 | 0 |  | 0
+mv1 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.0004805504253213577 | Intercept / Pillai's Trace · F | 0
+mv1 | Tests of Between-Subjects Effects | 76 | 76 | 76 | 0 | 0 | 1.6370904631912708e-10 | Intercept / disp - 200 · Type III Sum of Squares | 0
+mv2 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv2 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 3.552713678800501e-15 | x3 / laki-laki · Mean | 0
+mv2 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.546585164964199e-11 |  · df2 | 0
+mv2 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0004116211212021881 | Intercept / Pillai's Trace · F | 0
+mv2 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 9.54236689665322e-14 | x4 / Based on trimmed mean · Sig. | 0
+mv2 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0005000000000006111 | Corrected Model / x4 · Type III Sum of Squares | 0
+mv3 | Descriptive Statistics | 6 | 6 | 6 | 0 | 0 | 1.7763568394002505e-15 | kedalaman1 - kedalaman2 · Mean | 0
+mv3 | Multivariate Tests | 32 | 32 | 32 | 0 | 0 | 0.00006003652066155496 | Intercept / Pillai's Trace · F | 0
+mv3 | Tests of Between-Subjects Effects | 38 | 38 | 38 | 0 | 0 | 5.24691401437849e-13 | Intercept / ukuran1 - ukuran2 · Observed Power | 0
+mv4 | Between-Subjects Factors | 3 | 3 | 3 | 0 | 0 | 0 |  | 0
+mv4 | Descriptive Statistics | 24 | 24 | 24 | 0 | 0 | 8.881784197001252e-16 | y1 / Total · Mean | 0
+mv4 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 9.185896487906575e-11 |  · df2 | 0
+mv4 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.00014043622162240865 | treatment / Wilks' Lambda · F | 0
+mv4 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 5.773159728050814e-15 | y2 / Based on trimmed mean · Levene Statistic | 0
+mv4 | Tests of Between-Subjects Effects | 62 | 62 | 62 | 0 | 0 | 5.323519403077626e-13 | Intercept / y2 · Observed Power | 0
+mv5 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv5 | Descriptive Statistics | 90 | 18 | 18 | 0 | 72 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv5 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 2.7284841053187847e-12 |  · df2 | 0
+mv5 | Multivariate Tests | 128 | 128 | 128 | 0 | 0 | 0.00043671311358539633 | faktorA * faktorB / Roy's Largest Root · F | 0
+mv5 | Levene's Test of Equality of Error Variances | 32 | 32 | 32 | 0 | 0 | 2.7422508708241367e-14 | ultimate torque / Based on Median · Sig. | 0
+mv5 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.0004031250000000597 | Corrected Model / ultimate torque · Type III Sum of Squares | 0
+mv6 | Between-Subjects Factors | 6 | 6 | 6 | 0 | 0 | 0 |  | 0
+mv6 | Descriptive Statistics | 90 | 18 | 18 | 0 | 72 | 2.842170943040401e-14 | ultimate strain / A2 / Total · Mean | 0
+mv6 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 3.296918293926865e-12 |  · df2 | 0
+mv6 | Multivariate Tests | 128 | 128 | 60 | 68 | 0 | 1.1854047416273295 | faktorB / Pillai's Trace · Noncent. Parameter | 68
+mv6 | Levene's Test of Equality of Error Variances | 32 | 32 | 28 | 4 | 0 | 2.4917937573410835 | ultimate strain / Based on Median and with adjusted df · df2 | 4
+mv6 | Tests of Between-Subjects Effects | 94 | 94 | 94 | 0 | 0 | 0.00046153846210472693 | Corrected Model / ultimate strain · Type III Sum of Squares | 0
+mv7 | Between-Subjects Factors | 2 | 2 | 2 | 0 | 0 | 0 |  | 0
+mv7 | Descriptive Statistics | 36 | 36 | 36 | 0 | 0 | 7.105427357601002e-15 | x4 / laki-laki · Mean | 0
+mv7 | Box's Test of Equality of Covariance Matrices | 5 | 5 | 5 | 0 | 0 | 4.3655745685100555e-11 |  · df2 | 0
+mv7 | Multivariate Tests | 64 | 64 | 64 | 0 | 0 | 0.0002662913221911367 | Intercept / Pillai's Trace · F | 0
+mv7 | Levene's Test of Equality of Error Variances | 64 | 64 | 64 | 0 | 0 | 2.9098945475425353e-13 | x3 / Based on Median · Sig. | 0
+mv7 | Tests of Between-Subjects Effects | 124 | 124 | 124 | 0 | 0 | 0.0004193548388400359 | Corrected Model / x1 · Type III Sum of Squares | 0
+
+GAGAL (|Statify − SPSS| > 0.001):
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Value | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Pillai's Trace | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Value | SPSS 0.503678862788946 | Statify 0.5008677535667677 (raw) | selisih 0.0028111092221783096
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Partial Eta Squared | SPSS 0.496321137211054 | Statify 0.4991322464332323 (raw) | selisih 0.0028111092221783096
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Noncent. Parameter | SPSS 16.75166451470373 | Statify 16.94109498752914 (raw) | selisih 0.1894304728254106
+  mv6 | Multivariate Tests | faktorA / Wilks' Lambda | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Value | SPSS 0.98539203027669 | Statify 0.9965349992664201 (raw) | selisih 0.011142968989730107
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Hotelling's Trace | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Value | SPSS 0.98539203027669 | Statify 0.9965349992664201 (raw) | selisih 0.011142968989730107
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | F | SPSS 8.376 (teks) | Statify 8.47054749376457 (raw) | selisih 0.09454749376457094
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Partial Eta Squared | SPSS 0.4963211372110539 | Statify 0.49913224643323234 (raw) | selisih 0.0028111092221784206
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Noncent. Parameter | SPSS 16.751664514703727 | Statify 16.94109498752914 (raw) | selisih 0.18943047282541414
+  mv6 | Multivariate Tests | faktorA / Roy's Largest Root | Observed Power | SPSS 0.9268018585782811 | Statify 0.9295898140577268 (raw) | selisih 0.0027879554794456585
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Value | SPSS 0.2793919208547408 | Statify 0.32679061887299493 (raw) | selisih 0.04739869801825414
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | F | SPSS 0.9742785387600879 | Statify 1.171845995697976 (raw) | selisih 0.19756745693788824
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Sig. | SPSS 0.4565900168509036 | Statify 0.3428586473952353 (raw) | selisih 0.11373136945566831
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Partial Eta Squared | SPSS 0.1396959604273704 | Statify 0.16339530943649747 (raw) | selisih 0.02369934900912707
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Noncent. Parameter | SPSS 5.845671232560528 | Statify 7.031075974187857 (raw) | selisih 1.1854047416273295
+  mv6 | Multivariate Tests | faktorB / Pillai's Trace | Observed Power | SPSS 0.33272943662355614 | Statify 0.3994548191218392 (raw) | selisih 0.06672538249828308
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Value | SPSS 0.7270063026785327 | Statify 0.6889965635750559 (raw) | selisih 0.038009739103476825
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | F | SPSS 0.979 (teks) | Statify 1.1601641263209324 (raw) | selisih 0.18116412632093237
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Sig. | SPSS 0.4542663980303764 | Statify 0.35020716947706587 (raw) | selisih 0.10405922855331051
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Partial Eta Squared | SPSS 0.14735335415042372 | Statify 0.1699418312099712 (raw) | selisih 0.022588477059547474
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Noncent. Parameter | SPSS 5.875838561614739 | Statify 6.960984757925594 (raw) | selisih 1.0851461963108555
+  mv6 | Multivariate Tests | faktorB / Wilks' Lambda | Observed Power | SPSS 0.33135240417578027 | Statify 0.3918887431867345 (raw) | selisih 0.06053633901095423
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Value | SPSS 0.36670311220957424 | Statify 0.428472752382217 (raw) | selisih 0.06176964017264275
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | F | SPSS 0.9778749658921979 | Statify 1.1425940063525786 (raw) | selisih 0.16471904046038066
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Sig. | SPSS 0.45614292701535175 | Statify 0.3608314610941864 (raw) | selisih 0.09531146592116535
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Partial Eta Squared | SPSS 0.1549425909476314 | Statify 0.1764371257457616 (raw) | selisih 0.021494534798130183
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Noncent. Parameter | SPSS 5.867249795353188 | Statify 6.855564038115471 (raw) | selisih 0.9883142427622831
+  mv6 | Multivariate Tests | faktorB / Hotelling's Trace | Observed Power | SPSS 0.3274695993009481 | Statify 0.38205003349948263 (raw) | selisih 0.05458043419853453
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Value | SPSS 0.3408857166667405 | Statify 0.36584088974378837 (raw) | selisih 0.024955173077047865
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | F | SPSS 2.045 (teks) | Statify 2.19504533846273 (raw) | selisih 0.15004533846273027
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Sig. | SPSS 0.14351894171032173 | Statify 0.12387791826227923 (raw) | selisih 0.0196410234480425
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Partial Eta Squared | SPSS 0.25422428804308245 | Statify 0.2678502982967619 (raw) | selisih 0.013626010253679433
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Noncent. Parameter | SPSS 6.135942900001329 | Statify 6.585136015388191 (raw) | selisih 0.449193115386862
+  mv6 | Multivariate Tests | faktorB / Roy's Largest Root | Observed Power | SPSS 0.4370182249539658 | Statify 0.46568126150321076 (raw) | selisih 0.028663036549244958
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Value | SPSS 0.08335194229819627 | Statify 0.10491849399228292 (raw) | selisih 0.021566551694086653
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | F | SPSS 0.2609303527476228 | Statify 0.3321814718565113 (raw) | selisih 0.07125111910888854
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Sig. | SPSS 0.9514320697049196 | Statify 0.9154887134228373 (raw) | selisih 0.03594335628208223
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Partial Eta Squared | SPSS 0.041675971149098136 | Statify 0.05245924699614146 (raw) | selisih 0.010783275847043326
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Noncent. Parameter | SPSS 1.5655821164857366 | Statify 1.993088831139068 (raw) | selisih 0.42750671465333134
+  mv6 | Multivariate Tests | faktorA * faktorB / Pillai's Trace | Observed Power | SPSS 0.10995543434597654 | Statify 0.12908745787425047 (raw) | selisih 0.019132023528273923
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Value | SPSS 0.9182349870191939 | Statify 0.8974398305719669 (raw) | selisih 0.02079515644722707
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | F | SPSS 0.247 (teks) | Statify 0.3150384051921817 (raw) | selisih 0.06803840519218168
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Sig. | SPSS 0.9572348405365915 | Statify 0.9246624488716068 (raw) | selisih 0.03257239166498471
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Partial Eta Squared | SPSS 0.041754213670003204 | Statify 0.05266699066697411 (raw) | selisih 0.010912776996970908
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Noncent. Parameter | SPSS 1.481502225245599 | Statify 1.89023043115309 (raw) | selisih 0.40872820590749104
+  mv6 | Multivariate Tests | faktorA * faktorB / Wilks' Lambda | Observed Power | SPSS 0.10574439805781499 | Statify 0.12361487935404603 (raw) | selisih 0.017870481296231033
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Value | SPSS 0.08731760910536901 | Statify 0.11165299494220263 (raw) | selisih 0.024335385836833617
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | F | SPSS 0.23284695761431734 | Statify 0.29774131984587365 (raw) | selisih 0.06489436223155631
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Sig. | SPSS 0.9626874065543752 | Statify 0.9334393985238757 (raw) | selisih 0.02924800803049954
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Partial Eta Squared | SPSS 0.04183244980278474 | Statify 0.052874688791023944 (raw) | selisih 0.011042238988239202
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Noncent. Parameter | SPSS 1.3970817456859044 | Statify 1.786447919075242 (raw) | selisih 0.38936617338933766
+  mv6 | Multivariate Tests | faktorA * faktorB / Hotelling's Trace | Observed Power | SPSS 0.10158578232045512 | Statify 0.11818967614182163 (raw) | selisih 0.01660389382136651
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Value | SPSS 0.05699493708695552 | Statify 0.07793445904944685 (raw) | selisih 0.020939521962491325
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | F | SPSS 0.342 (teks) | Statify 0.4676067542966811 (raw) | selisih 0.12560675429668106
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Sig. | SPSS 0.7952751868687169 | Statify 0.7085180564477804 (raw) | selisih 0.08675713042093647
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Partial Eta Squared | SPSS 0.05392167463359073 | Statify 0.07229981228930343 (raw) | selisih 0.018378137655712702
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Noncent. Parameter | SPSS 1.0259088675651993 | Statify 1.4028202628900432 (raw) | selisih 0.37691139532484397
+  mv6 | Multivariate Tests | faktorA * faktorB / Roy's Largest Root | Observed Power | SPSS 0.10385425324088116 | Statify 0.12581584988396377 (raw) | selisih 0.021961596643082615
+  mv6 | Levene's Test of Equality of Error Variances | ultimate torque / Based on Median and with adjusted df | df2 | SPSS 11.13685754589761 | Statify 9.147570905714906 (raw) | selisih 1.989286640182705
+  mv6 | Levene's Test of Equality of Error Variances | ultimate torque / Based on Median and with adjusted df | Sig. | SPSS 0.25824518410127006 | Statify 0.27454700348587613 (raw) | selisih 0.016301819384606064
+  mv6 | Levene's Test of Equality of Error Variances | ultimate strain / Based on Median and with adjusted df | df2 | SPSS 10.562583319023206 | Statify 8.070789561682123 (raw) | selisih 2.4917937573410835
+  mv6 | Levene's Test of Equality of Error Variances | ultimate strain / Based on Median and with adjusted df | Sig. | SPSS 0.2956999094312977 | Statify 0.31771943410115977 (raw) | selisih 0.022019524669862067
+
+LULUS pada nilai mentah tetapi tampilan UI tidak (|UI − SPSS| > 0.001 atau "<.001" untuk p ≥ .001):
+
+TANPA PADANAN di Statify:
+  mv1 | Descriptive Statistics | mpg - 20 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | disp - 200 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | hp - 150 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv1 | Descriptive Statistics | wt - 3 :: Mean, Std. Deviation, N — SPSS GLM: statistik selisih x − μ₀; Statify menampilkan variabel asli (dibandingkan lewat tabel Report)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate torque / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv5 | Descriptive Statistics | ultimate strain / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate torque / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A1 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / A2 / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B1 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B2 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B3 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)
+  mv6 | Descriptive Statistics | ultimate strain / Total / B4 :: Mean, Std. Deviation, N — Statify hanya menampilkan level faktor pertama dan Total (tanpa sel A×B dan marginal faktor kedua)

@@ -1,0 +1,536 @@
+{
+ "id": "BB-KF13-06",
+ "steps": [
+  "impor repeated-measures-5000-L10-M1.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "Define: time(10); measure score",
+  "slot within: score=t1,t2,t3,t4,t5,t6,t7,t8,t9,t10"
+ ],
+ "toasts": [],
+ "runs": [
+  {
+   "label": "OK",
+   "outcome": "log",
+   "toast": [],
+   "newLog": true,
+   "output": [
+    {
+     "title": "Within-Subjects Factors",
+     "tables": [
+      {
+       "title": "Within-Subjects Factors",
+       "columns": [
+        "Measure",
+        "time",
+        "Dependent Variable"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "score",
+         "factor_level": "1",
+         "dep_var": "t1_(1,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "2",
+         "dep_var": "t2_(2,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "3",
+         "dep_var": "t3_(3,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "4",
+         "dep_var": "t4_(4,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "5",
+         "dep_var": "t5_(5,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "6",
+         "dep_var": "t6_(6,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "7",
+         "dep_var": "t7_(7,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "8",
+         "dep_var": "t8_(8,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "9",
+         "dep_var": "t9_(9,score)"
+        },
+        {
+         "rowHeader": [],
+         "measure": "",
+         "factor_level": "10",
+         "dep_var": "t10_(10,score)"
+        }
+       ],
+       "footnote": "Measure: score"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Mauchly's Test of Sphericity",
+     "tables": [
+      {
+       "title": "Mauchly's Test of Sphericity",
+       "columns": [
+        "Measure",
+        "Within Subjects Effect",
+        "Mauchly's W",
+        "Approx. Chi-Square",
+        "df",
+        "Sig.",
+        "Greenhouse-Geisser",
+        "Huynh-Feldt",
+        "Lower-bound"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "measure": "score",
+         "effect": "time",
+         "w": "0.0000",
+         "chi_sq": null,
+         "df": "44",
+         "sig": "",
+         "gg": "0.2196",
+         "hf": "0.2197",
+         "lb": "0.1111"
+        }
+       ],
+       "footnote": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix. Design: Intercept; Within Subjects Design: time"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Effects",
+       "columns": [
+        "Source",
+        "",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "time",
+         "assumption": "Sphericity Assumed",
+         "ss": "928111.5178",
+         "df": "9",
+         "ms": "103123.5020",
+         "f": "394538.5031",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "928111.5178",
+         "df": "1.9766",
+         "ms": "469548.6980",
+         "f": "394538.5031",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "928111.5178",
+         "df": "1.9774",
+         "ms": "469364.1499",
+         "f": "394538.5031",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "928111.5178",
+         "df": "1",
+         "ms": "928111.5178",
+         "f": "394538.5031",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(time)",
+         "assumption": "Sphericity Assumed",
+         "ss": "11759.6367",
+         "df": "44991",
+         "ms": "0.2614",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Greenhouse-Geisser",
+         "ss": "11759.6367",
+         "df": "9881.0400",
+         "ms": "1.1901",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Huynh-Feldt",
+         "ss": "11759.6367",
+         "df": "9884.9251",
+         "ms": "1.1897",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "assumption": "Lower-bound",
+         "ss": "11759.6367",
+         "df": "4999",
+         "ms": "2.3524",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: score"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Within-Subjects Contrasts",
+     "tables": [
+      {
+       "title": "Tests of Within-Subjects Contrasts",
+       "columns": [
+        "Source",
+        "time",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "time",
+         "contrast": "Linear",
+         "ss": "928111.5169",
+         "df": "1",
+         "ms": "928111.5169",
+         "f": "13627372.5791",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "4.516E-6",
+         "df": "1",
+         "ms": "4.516E-6",
+         "f": "1.656E-5",
+         "sig": "0.9968"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Cubic",
+         "ss": "0.0007",
+         "df": "1",
+         "ms": "0.0007",
+         "f": "0.0007",
+         "sig": "0.9786"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 4",
+         "ss": "1.224E-5",
+         "df": "1",
+         "ms": "1.224E-5",
+         "f": "1.656E-5",
+         "sig": "0.9968"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 5",
+         "ss": "0.0002",
+         "df": "1",
+         "ms": "0.0002",
+         "f": "0.0007",
+         "sig": "0.9786"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 6",
+         "ss": "6.002E-7",
+         "df": "1",
+         "ms": "6.002E-7",
+         "f": "1.656E-5",
+         "sig": "0.9968"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 7",
+         "ss": "2.219E-6",
+         "df": "1",
+         "ms": "2.219E-6",
+         "f": "0.0007",
+         "sig": "0.9786"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 8",
+         "ss": "2.232E-9",
+         "df": "1",
+         "ms": "2.232E-9",
+         "f": "1.656E-5",
+         "sig": "0.9968"
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 9",
+         "ss": "1.701E-9",
+         "df": "1",
+         "ms": "1.701E-9",
+         "f": "0.0007",
+         "sig": "0.9786"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error(time)",
+         "contrast": "Linear",
+         "ss": "340.4640",
+         "df": "4999",
+         "ms": "0.0681",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Quadratic",
+         "ss": "1363.1191",
+         "df": "4999",
+         "ms": "0.2727",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Cubic",
+         "ss": "5020.1181",
+         "df": "4999",
+         "ms": "1.0042",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 4",
+         "ss": "3695.1702",
+         "df": "4999",
+         "ms": "0.7392",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 5",
+         "ss": "1143.5034",
+         "df": "4999",
+         "ms": "0.2287",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 6",
+         "ss": "181.1482",
+         "df": "4999",
+         "ms": "0.0362",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 7",
+         "ss": "15.4282",
+         "df": "4999",
+         "ms": "0.0031",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 8",
+         "ss": "0.6738",
+         "df": "4999",
+         "ms": "0.0001",
+         "f": null,
+         "sig": null
+        },
+        {
+         "rowHeader": [],
+         "source": "",
+         "contrast": "Order 9",
+         "ss": "0.0118",
+         "df": "4999",
+         "ms": "2.365E-6",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: score"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Tests of Between-Subjects Effects",
+     "tables": [
+      {
+       "title": "Tests of Between-Subjects Effects",
+       "columns": [
+        "Source",
+        "Type III Sum of Squares",
+        "df",
+        "Mean Square",
+        "F",
+        "Sig."
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "source": "Intercept",
+         "ss": "18431989.0577",
+         "df": "1",
+         "ms": "18431989.0577",
+         "f": "881361.2226",
+         "sig": "<.001"
+        },
+        {
+         "rowHeader": [],
+         "source": "Error",
+         "ss": "104544.5510",
+         "df": "4999",
+         "ms": "20.9131",
+         "f": null,
+         "sig": null
+        }
+       ],
+       "footnote": "Measure: score; Transformed Variable: Average"
+      }
+     ],
+     "charts": []
+    },
+    {
+     "title": "Errors Logs",
+     "tables": [
+      {
+       "title": "Errors Logs",
+       "columns": [
+        "Context",
+        "Message"
+       ],
+       "rows": [
+        {
+         "rowHeader": [],
+         "context": "calculate_multivariate_tests",
+         "message": "time: The error SSCP matrix is singular (the transformed dependent variables are linearly dependent), so multivariate statistics cannot be computed"
+        },
+        {
+         "rowHeader": [],
+         "context": "calculate_mauchly_test",
+         "message": "score: the error covariance matrix of the transformed variables is singular, so Mauchly's W = 0 and its chi-square and significance cannot be computed"
+        }
+       ],
+       "footnote": null
+      }
+     ],
+     "charts": []
+    }
+   ]
+  }
+ ],
+ "checks": {
+  "judulTampil": [
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy",
+   "Copy"
+  ]
+ },
+ "notes": [
+  "BB-KF13-06-1.png: Errors Logs",
+  "BB-KF13-06-2.png: Mauchly's Test of Sphericity"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:35:18.041Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 11,
+ "finishedAt": "2026-09-25T13:35:28.804Z",
+ "wasmRequested": [
+  "wasm_bg.2bc2b212.wasm"
+ ]
+}

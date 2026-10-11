@@ -1,0 +1,31 @@
+hash tangkapan v6 = hash regresi v6 (rm-ui-main-worker.json): True
+hash tangkapan v6 = hash regresi v6 (rm-ui-main-worker-exp5000.json): True
+hash tangkapan final = hash regresi final (rm-ui-main-worker.json): True
+hash tangkapan final = hash regresi final (rm-ui-main-worker-exp5000.json): True
+
+berkas tabel dibandingkan: 36
+sel angka: 10780, berbeda: 0; tabel dengan struktur/jumlah berbeda: 0
+judul tabel berubah: []
+
+perubahan teks unik: 7
+  [interpretation]
+    lama: Errors logs from the analysis.
+    baru: Messages and warnings produced during the analysis.
+  [interpretation]
+    lama: If significant (Sig. < .05), sphericity is violated and corrected degrees of freedom should be used.
+    baru: Sig. below the Significance Level in Options indicates that sphericity is violated; use the Greenhouse-Geisser or Huynh-Feldt rows of Tests of Within-Subjects Effects.
+  [interpretation]
+    lama: If significant (Sig. < .05), the covariance matrices of the dependent variables differ across the between-subjects groups.
+    baru: Sig. below the Significance Level in Options indicates that the covariance matrices of the dependent variables differ across the between-subjects groups.
+  [interpretation]
+    lama: If significant (Sig. < .05), the error variances differ across the between-subjects groups.
+    baru: Sig. below the Significance Level in Options indicates that the error variances differ across the between-subjects groups.
+  [interpretation]
+    lama: Pairwise contrasts between adjacent levels of the within-subjects factor.
+    baru: Tests of the contrasts of the within-subjects factor (Polynomial or Repeated), for each source.
+  [interpretation]
+    lama: Tests of between-subjects effects using the average of the repeated measurements as the transform variable.
+    baru: Tests of the between-subjects effects on the average of the repeated measurements.
+  [interpretation]
+    lama: Tests whether repeated measures differ significantly across levels. Use Greenhouse-Geisser or Huynh-Feldt corrected p-values when sphericity is violated.
+    baru: Tests the within-subjects effects. When sphericity is violated (Mauchly's test), read the Greenhouse-Geisser or Huynh-Feldt row instead of Sphericity Assumed.

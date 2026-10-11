@@ -1,0 +1,233 @@
+{
+  "base": "http://localhost:3101",
+  "runs": 10,
+  "startedAt": "2026-09-21T19:14:18.032Z",
+  "scenarios": [
+    {
+      "name": "rm-main",
+      "fn": "runMemoryMain",
+      "args": [
+        "repeated-measures",
+        "large",
+        false
+      ],
+      "rows": [
+        {
+          "run": 1,
+          "ms": 759,
+          "wasmBytes": 19267584,
+          "wasmMB": 18.38,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 2,
+          "ms": 497,
+          "wasmBytes": 19267584,
+          "wasmMB": 18.38,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 3,
+          "ms": 492,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 4,
+          "ms": 484,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 5,
+          "ms": 483,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 6,
+          "ms": 484,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 7,
+          "ms": 478,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 8,
+          "ms": 472,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 9,
+          "ms": 475,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 10,
+          "ms": 491,
+          "wasmBytes": 27328512,
+          "wasmMB": 26.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "mv-main",
+      "fn": "runMemoryMain",
+      "args": [
+        "multivariate",
+        "perf500",
+        false
+      ],
+      "rows": [
+        {
+          "run": 1,
+          "ms": 2942,
+          "wasmBytes": 3997696,
+          "wasmMB": 3.81,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 2,
+          "ms": 2810,
+          "wasmBytes": 5505024,
+          "wasmMB": 5.25,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 3,
+          "ms": 2802,
+          "wasmBytes": 7012352,
+          "wasmMB": 6.69,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 4,
+          "ms": 2810,
+          "wasmBytes": 8585216,
+          "wasmMB": 8.19,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 5,
+          "ms": 2767,
+          "wasmBytes": 10092544,
+          "wasmMB": 9.63,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 6,
+          "ms": 2801,
+          "wasmBytes": 11599872,
+          "wasmMB": 11.06,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 7,
+          "ms": 2760,
+          "wasmBytes": 13172736,
+          "wasmMB": 12.56,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 8,
+          "ms": 2785,
+          "wasmBytes": 14680064,
+          "wasmMB": 14,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 9,
+          "ms": 2786,
+          "wasmBytes": 16187392,
+          "wasmMB": 15.44,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        },
+        {
+          "run": 10,
+          "ms": 2767,
+          "wasmBytes": 16187392,
+          "wasmMB": 15.44,
+          "mode": "main",
+          "ok": null,
+          "instantiations": 1,
+          "gcCalled": false
+        }
+      ],
+      "pageErrors": []
+    }
+  ],
+  "browserVersion": "143.0.7499.4",
+  "finishedAt": "2026-09-21T19:14:52.126Z"
+}

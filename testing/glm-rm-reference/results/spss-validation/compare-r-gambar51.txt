@@ -1,0 +1,4 @@
+Mauchly                    7/7 cocok
+Within-Subjects Effects    44/44 cocok
+Multivariate Tests         32/32 cocok
+Between-Subjects Effects   10/10 cocok

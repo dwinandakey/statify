@@ -34,7 +34,8 @@ export const RepeatedMeasuresModelDefault: RepeatedMeasuresModelType = {
 
 export const RepeatedMeasuresContrastDefault: RepeatedMeasuresContrastType = {
     FactorList: null,
-    ContrastMethod: "none",
+    // Within-subjects contrast as the SPSS default (WSFACTOR … Polynomial).
+    ContrastMethod: "polynomial",
     Last: true,
     First: false,
 };

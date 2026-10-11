@@ -1,0 +1,398 @@
+$ cargo +nightly llvm-cov --lib --branch --ignore-run-fail --disable-default-ignore-filename-regex --ignore-filename-regex /src/test/|/../test/ --html --output-dir /repo/testing/whitebox/coverage/rust-mv-nightly-branch -- --test-threads=1
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+info: cargo-llvm-cov currently setting cfg(coverage) and cfg(coverage_nightly); you can opt-out it by passing --no-cfg-coverage and --no-cfg-coverage-nightly
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src/stats/between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `f32::consts::E`
+ --> src/stats/generate_plots.rs:1:34
+  |
+1 | use std::{ collections::HashMap, f32::consts::E };
+  |                                  ^^^^^^^^^^^^^^
+
+warning: unused import: `StudentsT`
+ --> src/stats/homogeneous_subsets.rs:2:60
+  |
+2 | use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared };
+  |                                                            ^^^^^^^^^
+
+warning: unused imports: `calculate_std_deviation`, `calculate_t_significance`, and `data_value_to_string`
+  --> src/stats/homogeneous_subsets.rs:10:5
+   |
+10 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+...
+14 |     calculate_std_deviation,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+15 |     calculate_t_significance,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `DataValue`
+ --> src/stats/levene_test.rs:6:27
+  |
+6 |     data::{ AnalysisData, DataValue },
+  |                           ^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src/stats/residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src/stats/sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `dep_var`
+   --> src/stats/between_subjects_sscp.rs:109:27
+    |
+109 |             for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `dep_var`
+   --> src/stats/between_subjects_sscp.rs:231:31
+    |
+231 |                 for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `dep_var`
+   --> src/stats/between_subjects_sscp.rs:294:35
+    |
+294 |                     for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `i`
+   --> src/stats/between_subjects_sscp.rs:393:10
+    |
+393 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `j`
+   --> src/stats/between_subjects_sscp.rs:395:14
+    |
+395 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+warning: unused variable: `level`
+   --> src/stats/between_subjects_sscp.rs:456:34
+    |
+456 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+
+warning: unused variable: `dep_var_name`
+   --> src/stats/common.rs:673:5
+    |
+673 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+
+warning: value assigned to `coefficients` is never read
+  --> src/stats/contrast_coefficients.rs:15:28
+   |
+15 |     let mut coefficients = Vec::new();
+   |                            ^^^^^^^^^^ this value is reassigned later and never used
+...
+34 |     coefficients = vec![0.0; parameter.len()];
+   |     ------------ `coefficients` is overwritten here before the previous value is read
+   |
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:361:9
+    |
+361 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:431:9
+    |
+431 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:503:9
+    |
+503 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:580:9
+    |
+580 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:653:9
+    |
+653 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `p`
+   --> src/stats/homogeneous_subsets.rs:692:9
+    |
+692 |     for p in 2..=k {
+    |         ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:724:9
+    |
+724 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unused variable: `k`
+   --> src/stats/homogeneous_subsets.rs:760:9
+    |
+760 |     let k = level_means.len();
+    |         ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `significances`
+   --> src/stats/homogeneous_subsets.rs:795:9
+    |
+795 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+
+warning: unreachable pattern
+   --> src/stats/homogeneous_subsets.rs:864:21
+    |
+853 |                     cdf => {
+    |                     --- matches any value
+...
+864 |                     _ => {
+    |                     ^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable pattern
+   --> src/stats/homogeneous_subsets.rs:921:21
+    |
+910 |                     cdf => {
+    |                     --- matches any value
+...
+921 |                     _ => {
+    |                     ^ no value can reach this
+
+warning: unused variable: `mse`
+    --> src/stats/homogeneous_subsets.rs:1053:5
+     |
+1053 |     mse: f64,
+     |     ^^^ help: if this is intentional, prefix it with an underscore: `_mse`
+
+warning: unused variable: `harmonic_mean`
+    --> src/stats/homogeneous_subsets.rs:1054:5
+     |
+1054 |     harmonic_mean: f64
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_harmonic_mean`
+
+warning: unused variable: `factors`
+  --> src/stats/residual_sscp_matrix.rs:36:9
+   |
+36 |     let factors = config.main.fix_factor.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+
+warning: unused variable: `i`
+  --> src/stats/residual_sscp_matrix.rs:85:10
+   |
+85 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `dependent_vars`
+  --> src/stats/sscp_matrix.rs:30:9
+   |
+30 |     let dependent_vars = config.main.dep_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+
+warning: unused variable: `i`
+  --> src/stats/sscp_matrix.rs:97:10
+   |
+97 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src/stats/sscp_matrix.rs:367:10
+    |
+367 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: unused variable: `i`
+   --> src/stats/sscp_matrix.rs:424:10
+    |
+424 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: value assigned to `test_entries` is never read
+  --> src/stats/univariate_tests.rs:42:32
+   |
+42 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^ this value is reassigned later and never used
+...
+47 |                 test_entries = entries;
+   |                 ------------ `test_entries` is overwritten here before the previous value is read
+
+warning: unused variable: `total_ss`
+  --> src/stats/univariate_tests.rs:86:9
+   |
+86 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+
+warning: unused variable: `data`
+   --> src/stats/univariate_tests.rs:228:5
+    |
+228 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src/stats/univariate_tests.rs:230:5
+    |
+230 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src/stats/univariate_tests.rs:233:5
+    |
+233 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src/stats/univariate_tests.rs:234:5
+    |
+234 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: unused variable: `data`
+   --> src/stats/univariate_tests.rs:469:5
+    |
+469 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+
+warning: unused variable: `dep_var`
+   --> src/stats/univariate_tests.rs:471:5
+    |
+471 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+
+warning: unused variable: `x_matrix`
+   --> src/stats/univariate_tests.rs:474:5
+    |
+474 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+
+warning: unused variable: `y_vector`
+   --> src/stats/univariate_tests.rs:475:5
+    |
+475 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+
+warning: `wasm` (lib test) generated 44 warnings (run `cargo fix --lib -p wasm --tests` to apply 40 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running unittests src/lib.rs (/tmp/target-mv-nightly/llvm-cov-target/debug/build/wasm/7c1943f98860ab01/out/wasm-7c1943f98860ab01)
+
+running 35 tests
+test stats::multivariate_tests::wb_internal::tdf_j1_df_bulat ... ok
+test stats::multivariate_tests::wb_internal::tdf_j2_df_pecahan ... ok
+test test::multivariate_validation::dataset_a_core_tables_are_computable ... ok
+test test::multivariate_validation::dataset_b_core_tables_are_computable ... ok
+test test::multivariate_validation::dataset_c_core_tables_are_computable ... ok
+test test::multivariate_validation::hotelling_t2_length_mismatch_returns_error ... ok
+test test::multivariate_validation::hotelling_t2_one_population_mtcars_matches_apg_modul_3 ... ok
+test test::multivariate_validation::hotelling_t2_two_sample_pooled_matches_manual ... ok
+test test::multivariate_validation::hotelling_t2_two_sample_welch_matches_manual_krishnamoorthy_yu ... ok
+test test::multivariate_validation::hotelling_t2_with_zero_mu0_matches_default_intercept ... ok
+test test::multivariate_validation::multivariate_performance_dataset_b_under_five_seconds ... ok
+test test::multivariate_validation::welch_mode_requires_exactly_two_groups_returns_error ... ok
+test test::wb_multivariate_spss::mv1_satu_populasi_test_values_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv2_dua_populasi_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv4_one_way_empat_statistik_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv5_two_way_faktorial_penuh_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv6_two_way_tak_seimbang_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv9_tiga_dv_empat_level_sesuai_spss ... ok
+test test::wb_multivariate_spss::mv9_wilks_df_pecahan_sesuai_r ... ok
+test test::wb_multivariate_spss::welch_t2_dua_populasi_sesuai_r ... ok
+test wasm::constructor::wb_internal::km_j01_tidak_ada ... ok
+test wasm::constructor::wb_internal::km_j02_jumlah_baris ... ok
+test wasm::constructor::wb_internal::km_j03_panjang_baris ... ok
+test wasm::constructor::wb_internal::km_j04_nan ... ok
+test wasm::constructor::wb_internal::km_j05_diagonal ... ok
+test wasm::constructor::wb_internal::km_j06_p_nol ... ok
+test wasm::constructor::wb_internal::km_j07_p_satu ... ok
+test wasm::constructor::wb_internal::km_j08_tidak_simetris ... ok
+test wasm::constructor::wb_internal::km_j09_tidak_definit_positif ... ok
+test wasm::constructor::wb_internal::km_j10_sigma_a ... ok
+test wasm::constructor::wb_internal::known_sigma_k1_alpha_010_sesuai_r ... ok
+test wasm::constructor::wb_internal::known_sigma_k1_satu_populasi_sesuai_r ... ok
+test wasm::constructor::wb_internal::known_sigma_k2_dua_populasi_sigma_sama_sesuai_r ... ok
+test wasm::constructor::wb_internal::known_sigma_k3_dua_populasi_sigma_berbeda_sesuai_r ... ok
+test wasm::constructor::wb_internal::known_sigma_k4_berpasangan_sesuai_r ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+
+    Finished report saved to /repo/testing/whitebox/coverage/rust-mv-nightly-branch/html
+exit code: 0
+
+$ cargo +nightly llvm-cov report --branch --summary-only
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+Filename                              Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+stats/bartlett_test.rs                    171               171     0.00%           4                 4     0.00%         138               138     0.00%           0                 0         -
+stats/between_subjects_effects.rs         520               131    74.81%          33                11    66.67%         478               108    77.41%          78                38    51.28%
+stats/between_subjects_sscp.rs            357               357     0.00%           4                 4     0.00%         316               316     0.00%           0                 0         -
+stats/bootstrap.rs                        272               272     0.00%          31                31     0.00%         230               230     0.00%           0                 0         -
+stats/box_m_test.rs                       112                 9    91.96%           4                 0   100.00%          86                 8    90.70%          20                10    50.00%
+stats/common.rs                           921               374    59.39%          65                26    60.00%         767               347    54.76%         180                74    58.89%
+stats/contrast_coefficients.rs            128               128     0.00%           3                 3     0.00%          95                95     0.00%           0                 0         -
+stats/descriptive_statistics.rs            85                85     0.00%          14                14     0.00%          94                94     0.00%           0                 0         -
+stats/emmeans.rs                          124               124     0.00%           5                 5     0.00%         116               116     0.00%           0                 0         -
+stats/estimable_function.rs                46                46     0.00%           2                 2     0.00%          25                25     0.00%           0                 0         -
+stats/generate_plots.rs                   243               243     0.00%           7                 7     0.00%         261               261     0.00%           0                 0         -
+stats/homogeneous_subsets.rs              762               762     0.00%          26                26     0.00%         719               719     0.00%           0                 0         -
+stats/levene_test.rs                      327               327     0.00%          19                19     0.00%         267               267     0.00%           0                 0         -
+stats/multivariate_tests.rs               959               196    79.56%          48                17    64.58%         786               149    81.04%         168                70    58.33%
+stats/parameter_estimates.rs              119                12    89.92%           6                 1    83.33%         107                12    88.79%          22                 8    63.64%
+stats/posthoc.rs                          169               169     0.00%           6                 6     0.00%         145               145     0.00%           0                 0         -
+stats/residual_plots.rs                    88                88     0.00%           5                 5     0.00%          94                94     0.00%           0                 0         -
+stats/residual_sscp_matrix.rs             186               186     0.00%           5                 5     0.00%         160               160     0.00%           0                 0         -
+stats/save.rs                             107               107     0.00%           9                 9     0.00%          96                96     0.00%           0                 0         -
+stats/spread_vs_level.rs                   49                49     0.00%           5                 5     0.00%          51                51     0.00%           0                 0         -
+stats/sscp_matrix.rs                      545               545     0.00%          12                12     0.00%         437               437     0.00%           0                 0         -
+stats/summary_processing.rs                36                36     0.00%           4                 4     0.00%          39                39     0.00%           0                 0         -
+stats/univariate_tests.rs                 435               435     0.00%          10                10     0.00%         435               435     0.00%           0                 0         -
+utils/converter.rs                         12                12     0.00%           2                 2     0.00%          17                17     0.00%           0                 0         -
+utils/error.rs                             24                24     0.00%           4                 4     0.00%          21                21     0.00%           0                 0         -
+utils/log.rs                               20                20     0.00%           4                 4     0.00%          18                18     0.00%           0                 0         -
+wasm/constructor.rs                       810               574    29.14%          74                60    18.92%         627               463    26.16%          56                17    69.64%
+wasm/function.rs                          317               317     0.00%          17                17     0.00%         277               277     0.00%           0                 0         -
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                    7944              5799    27.00%         428               313    26.87%        6902              5138    25.56%         524               217    58.59%
+warning: disable-default-ignore-filename-regex has been renamed to --no-default-ignore-filename-regex; old name is still available as an alias, but may removed in future breaking release
+warning: --branch option is unstable
+
+    Finished report saved to /repo/testing/whitebox/coverage/rust-mv-nightly-branch/summary.json

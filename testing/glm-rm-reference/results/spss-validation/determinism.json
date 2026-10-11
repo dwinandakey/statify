@@ -1,0 +1,54 @@
+{
+  "pkg": "rust/pkg",
+  "n": 10,
+  "designs": {
+    "gambar51": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "0c79ca45f3844e75f22c3e26fccdea0b"
+    },
+    "a": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "afef1b44db2826fb113e3aee9588daf3"
+    },
+    "b": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "508a613500a1749e39253369285e0c5c"
+    },
+    "c": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "9a0b092486502efa7626c309a193bcbd"
+    },
+    "L10M1": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "cb72c54e1f05857fbb7d1d39f1e1ac01"
+    },
+    "L10M2": {
+      "sameInstance": true,
+      "freshInstances": true,
+      "sameEqualsFresh": true,
+      "distinctOutputs": 1,
+      "panic": null,
+      "firstHash": "6276894b1086698f183c20a903c71f7e"
+    }
+  }
+}

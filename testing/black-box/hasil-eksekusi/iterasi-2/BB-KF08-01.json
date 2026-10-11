@@ -1,0 +1,26 @@
+{
+ "id": "BB-KF08-01",
+ "steps": [
+  "impor rm_b.csv",
+  "buka Analyze → General Linear Model → Repeated Measures",
+  "slot within: skor=w1,w2,w3,w4"
+ ],
+ "toasts": [],
+ "runs": [],
+ "checks": {
+  "daftarDefine": {
+   "factor": 1,
+   "measure": 1
+  },
+  "slotKosong": "Within-Subjects Variables:\n?_(1,skor)\n?_(2,skor)\n?_(3,skor)\n?_(4,skor)",
+  "slotTerisi": "Within-Subjects Variables:\nw1_(1,skor)\nw2_(2,skor)\nw3_(3,skor)\nw4_(4,skor)"
+ },
+ "notes": [
+  "BB-KF08-01-1.png: Define: waktu(4), skor",
+  "BB-KF08-01-2.png: dialog utama: 4 slot",
+  "BB-KF08-01-3.png: slot terisi w1–w4"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 7
+}

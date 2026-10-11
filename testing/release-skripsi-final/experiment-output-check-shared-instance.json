@@ -1,0 +1,148 @@
+{
+ "rows": [
+  {
+   "cell": "multivariate-100",
+   "modeActual": "worker",
+   "payloadMd5": "0edaf7858c9470e92a458a67ca97cce4",
+   "eksperimen-ab21928c": {
+    "md5": "803ccf97ebae0d73beb897aaa87e4ac3",
+    "bytes": 32316,
+    "wasmMd5": "d654d6e91765f30728e56a466aa71d93"
+   },
+   "release": {
+    "md5": "803ccf97ebae0d73beb897aaa87e4ac3",
+    "bytes": 32316,
+    "wasmMd5": "403447c485cd5e933044e2e6a4860f84"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "803ccf97ebae0d73beb897aaa87e4ac3",
+   "releaseReplayEqualsWorkerResponse": true
+  },
+  {
+   "cell": "multivariate-1000",
+   "modeActual": "worker",
+   "payloadMd5": "d54cf1e699cb7fd94d55b37217b99a63",
+   "eksperimen-ab21928c": {
+    "md5": "d23120f2c2353ce129f80aa3fca62d78",
+    "bytes": 31444,
+    "wasmMd5": "d654d6e91765f30728e56a466aa71d93"
+   },
+   "release": {
+    "md5": "d23120f2c2353ce129f80aa3fca62d78",
+    "bytes": 31444,
+    "wasmMd5": "403447c485cd5e933044e2e6a4860f84"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "b20aeb90f511426c8681c390cb368304",
+   "releaseReplayEqualsWorkerResponse": false
+  },
+  {
+   "cell": "multivariate-2000",
+   "modeActual": "worker",
+   "payloadMd5": "d4a9e2f97830c3571d2765afe5658733",
+   "eksperimen-ab21928c": {
+    "md5": "c16b9947a0c3b77e7f51a53a5c180a31",
+    "bytes": 30931,
+    "wasmMd5": "d654d6e91765f30728e56a466aa71d93"
+   },
+   "release": {
+    "md5": "c16b9947a0c3b77e7f51a53a5c180a31",
+    "bytes": 30931,
+    "wasmMd5": "403447c485cd5e933044e2e6a4860f84"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "925dcba3bbe28c3059a2a22933a8ca3d",
+   "releaseReplayEqualsWorkerResponse": false
+  },
+  {
+   "cell": "multivariate-500",
+   "modeActual": "worker",
+   "payloadMd5": "3a457a026608f65ba59c6f0e1bc462f3",
+   "eksperimen-ab21928c": {
+    "md5": "c66da7eadf42fd199555fad25187dd3f",
+    "bytes": 31895,
+    "wasmMd5": "d654d6e91765f30728e56a466aa71d93"
+   },
+   "release": {
+    "md5": "c66da7eadf42fd199555fad25187dd3f",
+    "bytes": 31895,
+    "wasmMd5": "403447c485cd5e933044e2e6a4860f84"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "bb426914f7c89b25323d3bfe9b37c2a9",
+   "releaseReplayEqualsWorkerResponse": false
+  },
+  {
+   "cell": "repeated-measures-10000",
+   "modeActual": "worker",
+   "payloadMd5": "c1dbaa4090d1100eca3814a47b5d9fe4",
+   "eksperimen-182b6f05": {
+    "md5": "f193781a3ec5db286f2bd7a3afa8fb9d",
+    "bytes": 12095,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "release": {
+    "md5": "f193781a3ec5db286f2bd7a3afa8fb9d",
+    "bytes": 12095,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "f193781a3ec5db286f2bd7a3afa8fb9d",
+   "releaseReplayEqualsWorkerResponse": true
+  },
+  {
+   "cell": "repeated-measures-20000",
+   "modeActual": "worker",
+   "payloadMd5": "03353c2ab15e370f895f81a6f875742a",
+   "eksperimen-182b6f05": {
+    "md5": "84d5b7a08c224cfec849dece577cdd36",
+    "bytes": 12105,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "release": {
+    "md5": "84d5b7a08c224cfec849dece577cdd36",
+    "bytes": 12105,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "84d5b7a08c224cfec849dece577cdd36",
+   "releaseReplayEqualsWorkerResponse": true
+  },
+  {
+   "cell": "repeated-measures-40000",
+   "modeActual": "worker",
+   "payloadMd5": "01a6cf39ebe0073c871ea811ad0da70c",
+   "eksperimen-182b6f05": {
+    "md5": "07506f05f9c6d5024046601692df11f7",
+    "bytes": 12169,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "release": {
+    "md5": "07506f05f9c6d5024046601692df11f7",
+    "bytes": 12169,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "07506f05f9c6d5024046601692df11f7",
+   "releaseReplayEqualsWorkerResponse": true
+  },
+  {
+   "cell": "repeated-measures-5000",
+   "modeActual": "worker",
+   "payloadMd5": "24b67d68103c7fd654ae2b33e4640a81",
+   "eksperimen-182b6f05": {
+    "md5": "4d95c252d7791f7f0c99b03c84a4e7e1",
+    "bytes": 12083,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "release": {
+    "md5": "4d95c252d7791f7f0c99b03c84a4e7e1",
+    "bytes": 12083,
+    "wasmMd5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   },
+   "experimentEqualsRelease": true,
+   "releaseWorkerResponseMd5": "4d95c252d7791f7f0c99b03c84a4e7e1",
+   "releaseReplayEqualsWorkerResponse": true
+  }
+ ]
+}

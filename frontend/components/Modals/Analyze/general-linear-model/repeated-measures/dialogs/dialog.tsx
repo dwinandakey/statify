@@ -9,14 +9,13 @@ import {Label} from "@/components/ui/label";
 import {Badge} from "@/components/ui/badge";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {useModal} from "@/hooks/useModal";
+import { toast } from "sonner";
 
 export const RepeatedMeasuresDialog = ({
     isMainOpen,
     setIsMainOpen,
     setIsModelOpen,
     setIsContrastOpen,
-    setIsPlotsOpen,
-    setIsPostHocOpen,
     setIsEMMeansOpen,
     setIsSaveOpen,
     setIsOptionsOpen,
@@ -179,6 +178,20 @@ export const RepeatedMeasuresDialog = ({
     };
 
     const handleContinue = () => {
+        // Every within-subjects slot ("?_(level,measure)" until filled) needs
+        // a variable before the analysis can run.
+        const slots = mainState.SubVar ?? [];
+        if (slots.length === 0) {
+            toast.error(
+                "No within-subjects variables are defined. Go back to Define and add a within-subjects factor and a measure."
+            );
+            return;
+        }
+        if (slots.some((slot) => slot.includes("?_"))) {
+            toast.error("Please assign a variable to every within-subjects slot.");
+            return;
+        }
+
         Object.entries(mainState).forEach(([key, value]) => {
             updateFormData(key as keyof RepeatedMeasuresMainType, value);
         });
@@ -403,21 +416,32 @@ export const RepeatedMeasuresDialog = ({
                                 Contrasts
                             </Button>
                             <Button
+                                id="repeated-measures-plots-button"
                                 className="w-full"
                                 type="button"
                                 variant="outline"
-                                onClick={openDialog(setIsPlotsOpen)}
+                                disabled
                             >
                                 Plots
                             </Button>
+                            <p className="w-full text-[11px] leading-tight text-muted-foreground">
+                                Plots are not supported in this version.
+                            </p>
+                            {/* Post hoc tests are not computed for Repeated
+                                Measures; pairwise comparisons come from EM
+                                Means > Compare main effects. */}
                             <Button
+                                id="repeated-measures-posthoc-button"
                                 className="w-full"
                                 type="button"
                                 variant="outline"
-                                onClick={openDialog(setIsPostHocOpen)}
+                                disabled
                             >
                                 Post Hoc
                             </Button>
+                            <p className="w-full text-[11px] leading-tight text-muted-foreground">
+                                Post Hoc is not supported in this version. Use EM Means &gt; Compare main effects for pairwise comparisons.
+                            </p>
                             <Button
                                 className="w-full"
                                 type="button"

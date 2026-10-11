@@ -1,0 +1,44 @@
+{
+  "run1": {
+    "withinEffectsIdenticalToWithinOnly": true,
+    "mixedWithinSources": [
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\""
+    ],
+    "mixedMultivariateEffects": [
+      "Intercept",
+      "group"
+    ],
+    "withinOnlyMultivariateEffects": [
+      "time"
+    ],
+    "mixedMultivariateGroup": "{\"Wilks' Lambda\":{\"value\":1,\"f\":null,\"hypothesis_df\":0,\"error_df\":8,\"significance\":0,\"partial_eta_squared\":0,\"noncent_parameter\":0,\"observed_power\":0.5,\"is_exact_statistic\":false},\"Roy's Largest Root\":{\"value\":0,\"f\":null,\"hypothesis_df\":5,\"error_df\":7,\"significance\":0,\"partial_eta_squared\":0,\"noncent_parameter\":0,\"observed_power\":0.5,\"is_exact_statistic\":false},\"Pillai's Trace\":{\"value\":0,\"f\":null"
+  },
+  "run2": {
+    "withinEffectsIdenticalToWithinOnly": true,
+    "mixedWithinSources": [
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"time\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\"",
+      "\"source\":\"Error(time)\""
+    ],
+    "mixedMultivariateEffects": [
+      "group",
+      "Intercept"
+    ],
+    "withinOnlyMultivariateEffects": [
+      "time"
+    ],
+    "mixedMultivariateGroup": "{\"Wilks' Lambda\":{\"value\":1,\"f\":null,\"hypothesis_df\":0,\"error_df\":8,\"significance\":0,\"partial_eta_squared\":0,\"noncent_parameter\":0,\"observed_power\":0.5,\"is_exact_statistic\":false},\"Hotelling's Trace\":{\"value\":0,\"f\":null,\"hypothesis_df\":0,\"error_df\":35,\"significance\":0,\"partial_eta_squared\":0,\"noncent_parameter\":0,\"observed_power\":0.5,\"is_exact_statistic\":false},\"Roy's Largest Root\":{\"value\":0,\"f\":"
+  }
+}

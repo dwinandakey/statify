@@ -86,7 +86,9 @@ export const RepeatedMeasureDefineDialog = ({
 
     // Validation for factor levels
     const isFactorLevelsValid = (levels: number | null): boolean => {
-        if (levels === null) {
+        // Empty or non-numeric input is stored as null (the fields are also
+        // cleared to "" after Add/Change); out-of-range numbers are checked below.
+        if (levels === null || typeof levels !== "number" || Number.isNaN(levels)) {
             toast.error("Number of levels must be a valid number.");
             return false;
         }
@@ -137,10 +139,20 @@ export const RepeatedMeasureDefineDialog = ({
         return true;
     };
 
+    // Designs with more than one within-subjects factor give results that do
+    // not match SPSS (testing/glm-rm-reference, dataset (e)); they are blocked.
+    const MULTI_WITHIN_MESSAGE =
+        "Designs with more than one within-subjects factor are not supported in this version.";
+
     // Handler for adding a factor
     const handleAddFactor = () => {
         const factorName = dialogState.factorName?.trim() || "";
         const factorLevels = dialogState.factorLevels;
+
+        if (dialogState.factors.length >= 1) {
+            toast.error(MULTI_WITHIN_MESSAGE);
+            return;
+        }
 
         // Validate factor name and levels
         if (!isFactorNameValid(factorName)) return;
@@ -325,6 +337,19 @@ export const RepeatedMeasureDefineDialog = ({
 
     // Handler for continuing with the defined data
     const handleContinue = () => {
+        if (dialogState.factors.length > 1) {
+            toast.error(MULTI_WITHIN_MESSAGE);
+            return;
+        }
+        // Both lists are needed to build the within-subjects slots.
+        if (dialogState.factors.length === 0) {
+            toast.error("Add a within-subjects factor (name and number of levels) before clicking Define.");
+            return;
+        }
+        if (dialogState.measures.length === 0) {
+            toast.error("Add a measure name before clicking Define.");
+            return;
+        }
         Object.entries(dialogState).forEach(([key, value]) => {
             updateFormData(key as keyof RepeatedMeasureDefineData, value);
         });
@@ -399,13 +424,18 @@ export const RepeatedMeasureDefineDialog = ({
                                 <Input
                                     id="factorLevels"
                                     className="w-full"
-                                    value={dialogState.factorLevels || ""}
-                                    onChange={(e) =>
+                                    value={dialogState.factorLevels ?? ""}
+                                    onChange={(e) => {
+                                        // A number input yields "" for both an empty
+                                        // field and non-numeric text: store null so the
+                                        // "valid number" message is shown; any number
+                                        // (including 0) is kept for the range check.
+                                        const parsed = parseInt(e.target.value, 10);
                                         handleChange(
                                             "factorLevels",
-                                            parseInt(e.target.value, 10) || ""
-                                        )
-                                    }
+                                            Number.isNaN(parsed) ? null : parsed
+                                        );
+                                    }}
                                     type="number"
                                     min={2}
                                     max={99}

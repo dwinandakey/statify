@@ -1,0 +1,82 @@
+{
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "OrpyJfBOluV37xa0aqmFr",
+  "buildIdServed": "OrpyJfBOluV37xa0aqmFr",
+  "wasm": {
+    "mv": {
+      "file": "wasm_bg.6145c2bf.wasm",
+      "md5": "43a77657bcd238bb949797c7dccea200"
+    },
+    "rm": {
+      "file": "wasm_bg.2bc2b212.wasm",
+      "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+    }
+  },
+  "chromium": "143.0.7499.4",
+  "playwright": "1.57.0",
+  "startedAt": "2026-09-26T04:07:40.162Z",
+  "scenarios": {
+    "BB-KF03-02": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-26T04:06:04.543Z",
+      "finishedAt": "2026-09-26T04:06:18.081Z"
+    },
+    "BB-KF04-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-26T04:06:18.713Z",
+      "finishedAt": "2026-09-26T04:06:32.246Z"
+    },
+    "BB-KF11-02": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-26T04:06:32.864Z",
+      "finishedAt": "2026-09-26T04:07:09.710Z"
+    },
+    "BB-KF11-03": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-26T04:07:10.312Z",
+      "finishedAt": "2026-09-26T04:07:23.617Z"
+    },
+    "BB-KF14-01": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-26T04:07:24.244Z",
+      "finishedAt": "2026-09-26T04:07:39.439Z"
+    },
+    "BB-KF03-04": {
+      "status": "selesai",
+      "shots": 8,
+      "startedAt": "2026-09-26T04:07:40.765Z",
+      "finishedAt": "2026-09-26T04:08:08.613Z"
+    },
+    "BB-KF03-05": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-26T04:08:09.242Z",
+      "finishedAt": "2026-09-26T04:08:36.590Z"
+    },
+    "BB-KF04-03": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-26T04:08:37.207Z",
+      "finishedAt": "2026-09-26T04:09:04.700Z"
+    },
+    "BB-KF03-14": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-26T04:09:05.312Z",
+      "finishedAt": "2026-09-26T04:09:19.222Z"
+    },
+    "BB-KF03-15": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-26T04:09:19.821Z",
+      "finishedAt": "2026-09-26T04:09:33.341Z"
+    }
+  },
+  "finishedAt": "2026-09-26T04:09:33.349Z"
+}

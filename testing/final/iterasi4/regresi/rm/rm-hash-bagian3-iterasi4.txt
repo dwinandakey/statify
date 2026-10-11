@@ -1,0 +1,10 @@
+gambar51: main=worker true | hash bagian3 65d0361fe7c8 iterasi4 65d0361fe7c8 sama true
+a: main=worker true | hash bagian3 33fbd3c750a7 iterasi4 33fbd3c750a7 sama true
+b: main=worker true | hash bagian3 bacba7b1d57c iterasi4 bacba7b1d57c sama true
+c: main=worker true | hash bagian3 e7d5e7d9ba21 iterasi4 e7d5e7d9ba21 sama true
+cEm: main=worker true | hash bagian3 aeacfd765f86 iterasi4 aeacfd765f86 sama true
+cPoly: main=worker true | hash bagian3 a9aa4dc1b949 iterasi4 a9aa4dc1b949 sama true
+cRep: main=worker true | hash bagian3 bc943d2d173f iterasi4 bc943d2d173f sama true
+exp5000n: main=worker true | hash bagian3 d18ef7263b9a iterasi4 d18ef7263b9a sama true
+exp5000: main=worker true | hash bagian3 e0ce09d67d56 iterasi4 e0ce09d67d56 sama true
+desain: 9, beda: 0

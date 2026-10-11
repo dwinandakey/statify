@@ -1,0 +1,80 @@
+mv5 dengan model efek utama (dialog Model: Build Terms, Model = faktorA, faktorB; Type III): Statify (WASM step 11, payload mv5 fixture dengan model diganti) vs R 4.3.2 car::Anova type 3, contr.sum, lm(cbind(Y1A1, Y2A1) ~ A + B).
+Acuan sementara sampai keluaran SPSS mv8 tersedia.
+
+--- Statify
+MV faktorA | Pillai 0.5105496947849133 F 13.560408404050763 df 2,26 | Wilks 0.48945030521508665 | Hotelling 1.0431083387731357 | Roy 1.0431083387731357
+MV Intercept | Pillai 0.9984999795016865 F 8653.548233584446 df 2,26 | Wilks 0.001500020498313578 | Hotelling 665.6575564295728 | Roy 665.6575564295728
+MV faktorB | Pillai 0.3110585238291062 F 1.657562890106139 df 6,54 | Wilks 0.6942565835721446 | Hotelling 0.43273382800465005 | Roy 0.4142527795050185
+BSE Y1A1 Total | SS 1877.4365000000003 df 32 F 0
+BSE Y1A1 Corrected Model | SS 2.899212500000001 df 4 F 3.8914370722777245
+BSE Y1A1 Error | SS 5.028909375000001 df 27 F 0
+BSE Y1A1 Corrected Total | SS 7.928121875000002 df 31 F 0
+BSE Y1A1 faktorA | SS 1.2051281249999972 df 1 F 6.470281516059318
+BSE Y1A1 faktorB | SS 1.6940843749999983 df 3 F 3.0318222576838507
+BSE Y1A1 Intercept | SS 1869.5083781249998 df 1 F 10037.310765691615
+BSE Y2A1 Corrected Model | SS 689.1249999999994 df 4 F 6.05176880406305
+BSE Y2A1 faktorA | SS 614.2512499999998 df 1 F 21.57696529719128
+BSE Y2A1 Error | SS 768.6337499999998 df 27 F 0
+BSE Y2A1 Total | SS 224870.46000000002 df 32 F 0
+BSE Y2A1 faktorB | SS 74.8737500000002 df 3 F 0.8767033063536462
+BSE Y2A1 Intercept | SS 223412.70125 df 1 F 7847.876747215435
+BSE Y2A1 Corrected Total | SS 1457.7587499999993 df 31 F 0
+errors: "Error Summary:\nContext: calculate_homogeneous_subsets\n  1. Failed to calculate homogeneous subsets for any variable-factor combination\n"
+
+--- R
+R MV (Intercept) | Pillai 0.998499979501743 Wilks 0.00150002049831349 Hotelling 665.657556429573 Roy 665.657556429573
+R MV A | Pillai 0.510549694784913 Wilks 0.489450305215087 Hotelling 1.04310833877313 Roy 1.04310833877313
+R MV B | Pillai 0.311058523829107 Wilks 0.694256583572144 Hotelling 0.432733828004651 Roy 0.41425277950502
+R error df 27
+R BSE Y1A1 (Intercept) | SS 1869.508378125 df 1
+R BSE Y1A1 A | SS 1.20512812499999 df 1
+R BSE Y1A1 B | SS 1.69408437500001 df 3
+R BSE Y1A1 Residuals | SS 5.028909375 df 27
+R BSE Y2A1 (Intercept) | SS 223412.70125 df 1
+R BSE Y2A1 A | SS 614.251249999998 df 1
+R BSE Y2A1 B | SS 74.8737499999994 df 3
+R BSE Y2A1 Residuals | SS 768.63375 df 27
+
+--- Varian model
+Build Custom Terms (faktorA, faktorB) = Build Terms: identik
+Build Custom Terms (faktorA, faktorB, faktorA * faktorB) -> faktorial penuh: baris interaksi 3
+Faktor terlewat: ERROR: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing).
+Suku bersarang: ERROR: Nested terms are not supported in this version.
+
+--- R script
+suppressMessages(library(car))
+d <- read.csv("data/two-way manova.csv"); d$A <- factor(d$faktorA); d$B <- factor(d$faktorB)
+options(contrasts = c("contr.sum", "contr.poly"))
+m <- lm(cbind(Y1A1, Y2A1) ~ A + B, data = d)
+st <- function(H, E) { ev <- Re(eigen(solve(E) %*% H)$values); c(sum(ev/(1+ev)), prod(1/(1+ev)), sum(ev), max(ev)) }
+a3 <- Anova(m, type = 3)
+for (t in c("(Intercept)", "A", "B")) { s <- st(a3$SSP[[t]], a3$SSPE); cat(sprintf("R MV %s | Pillai %.15g Wilks %.15g Hotelling %.15g Roy %.15g\n", t, s[1], s[2], s[3], s[4])) }
+cat(sprintf("R error df %d\n", m$df.residual))
+for (y in c("Y1A1", "Y2A1")) { u <- lm(as.formula(paste(y, "~ A + B")), data = d); a <- Anova(u, type = 3); for (t in rownames(a)) cat(sprintf("R BSE %s %s | SS %.15g df %d\n", y, t, a[t, "Sum Sq"], a[t, "Df"])) }
+
+--- Statify script
+import fs from "fs"; import { pathToFileURL } from "url";
+const MV = "D:/0.POLTSTAT STIS/Tugas Kuliah/Skripsi/topik baru statify/statify64/frontend/components/Modals/Analyze/general-linear-model/multivariate";
+const m = await import(pathToFileURL(MV + "/rust/pkg/wasm.js").href); await m.default({ module_or_path: fs.readFileSync(MV + "/rust/pkg/wasm_bg.wasm") });
+const plain = (x) => x instanceof Map ? Object.fromEntries([...x].map(([k, v]) => [k, plain(v)])) : Array.isArray(x) ? x.map(plain) : (x && typeof x === "object") ? Object.fromEntries(Object.entries(x).map(([k, v]) => [k, plain(v)])) : x;
+const fx = JSON.parse(fs.readFileSync(MV + "/__test__/fixtures/mv-reference-values.json", "utf8"));
+const p = fx.configs[process.argv[2] || "mv5"].payload;
+const cfg = structuredClone(p.config_data);
+const variant = process.argv[3] || "build";
+if (variant === "build") Object.assign(cfg.model, { NonCust: false, Custom: true, BuildCustomTerm: false, FactorsModel: ["faktorA", "faktorB"] });
+if (variant === "custom") Object.assign(cfg.model, { NonCust: false, Custom: false, BuildCustomTerm: true, FactorsModel: ["faktorA", "faktorB"] });
+if (variant === "customfull") Object.assign(cfg.model, { NonCust: false, Custom: false, BuildCustomTerm: true, FactorsModel: ["faktorA", "faktorB", "faktorA * faktorB"] });
+if (variant === "missing") Object.assign(cfg.model, { NonCust: false, Custom: true, BuildCustomTerm: false, FactorsModel: ["faktorA"] });
+if (variant === "nested") Object.assign(cfg.model, { NonCust: false, Custom: false, BuildCustomTerm: true, FactorsModel: ["faktorA", "faktorB(faktorA)"] });
+if (process.argv[4]) cfg.model.SumOfSquareMethod = process.argv[4];
+cfg.posthoc = { ...cfg.posthoc, FixFactorVars: ["faktorB"], Bonfe: true };
+let a;
+try { a = new m.MultivariateAnalysis(p.dep_data, p.fix_factor_data, p.covar_data, p.wls_data, p.dep_data_defs, p.fix_factor_data_defs, p.covar_data_defs, p.wls_data_defs, cfg); }
+catch (e) { console.log("ERROR:", String(e)); process.exit(0); }
+const r = plain(a.get_results());
+const mt = r.multivariate_tests.effects;
+for (const [eff, st] of Object.entries(mt)) console.log(`MV ${eff} | Pillai ${st["Pillai's Trace"].value} F ${st["Pillai's Trace"].f} df ${st["Pillai's Trace"].hypothesis_df},${st["Pillai's Trace"].error_df} | Wilks ${st["Wilks' Lambda"].value} | Hotelling ${st["Hotelling's Trace"].value} | Roy ${st["Roy's Largest Root"].value}`);
+const bse = r.tests_of_between_subjects_effects.effects;
+for (const [dv, rows] of Object.entries(bse)) for (const [src, e] of Object.entries(rows)) console.log(`BSE ${dv} ${src} | SS ${e.sum_of_squares} df ${e.df} F ${e.f_value ?? ""}`);
+const ph = r.posthoc_tests; if (ph) for (const [dv, t] of Object.entries(ph)) console.log(`POSTHOC ${dv}: ${t.length} baris, contoh ${JSON.stringify(t[0]).slice(0, 160)}`);
+console.log("errors:", JSON.stringify(a.get_all_errors()));

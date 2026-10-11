@@ -1,0 +1,64 @@
+{
+ "id": "BB-KF02-07",
+ "steps": [
+  "impor hotelling 1 populasi.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: mpg, disp, hp, wt",
+  "Test Values μ₀ = 20, 200, 150, 3",
+  "Options: Simultaneous CI dicentang; Significance Level 0",
+  "Options: Simultaneous CI dicentang; Significance Level 1.5"
+ ],
+ "toasts": [
+  {
+   "label": "Continue dengan Significance Level 0",
+   "texts": [
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling 1 populasi.csv berhasil diimpor ke dalam sistem.",
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Multivariate Analysis settings loaded successfully.",
+    "Import Berhasil: File hotelling 1 populasi.csv berhasil diimpor ke dalam sistem."
+   ],
+   "file": "BB-KF02-07-1.png"
+  },
+  {
+   "label": "Continue dengan Significance Level 1.5",
+   "texts": [
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals.",
+    "Significance Level must be greater than 0 and less than 1 to compute simultaneous confidence intervals."
+   ],
+   "file": "BB-KF02-07-2.png"
+  }
+ ],
+ "runs": [],
+ "checks": {
+  "optionsMasihTerbuka_0": true,
+  "optionsMasihTerbuka_1.5": true
+ },
+ "notes": [
+  "BB-KF02-07-1.png: toast: Continue dengan Significance Level 0",
+  "BB-KF02-07-2.png: toast: Continue dengan Significance Level 1.5"
+ ],
+ "env": {
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "LIBUcskLZhw3iEIArOeUX",
+  "buildIdServed": "LIBUcskLZhw3iEIArOeUX",
+  "wasm": {
+   "mv": {
+    "file": "wasm_bg.f735bd9b.wasm",
+    "md5": "03c58af448a3af2e1845853f795dcd62"
+   },
+   "rm": {
+    "file": "wasm_bg.2bc2b212.wasm",
+    "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+   }
+  }
+ },
+ "startedAt": "2026-09-25T13:38:59.521Z",
+ "status": "selesai",
+ "consoleErrors": [],
+ "finishedAt": "2026-09-25T13:39:13.124Z",
+ "wasmRequested": [],
+ "durationS": 14
+}

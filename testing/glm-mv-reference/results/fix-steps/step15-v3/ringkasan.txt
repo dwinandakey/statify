@@ -1,0 +1,28 @@
+Pemeriksaan regresi skripsi-final-v3 (lima perbaikan frontend hasil iterasi 1 black-box)
+Kode yang diperiksa: commit 37e0e15b (branch ilham). Crate Rust MV dan RM tidak berubah.
+Build produksi: BUILD_ID LHuNzRz16C8sj4tUeFT-j (next build oleh check-step.sh step15-v3).
+
+a. Jest penuh: 49 suite gagal dari 276; baseline 49; gagal di luar baseline 0; baseline yang kini lulus 0.
+   Bukti: jest-summary.txt, jest-failed-suites.txt.
+
+b. Main = worker (UI, build v3):
+   - MV mv1-mv8 dan mv4ph: byte-identik (regress.txt).
+   - RM 9 desain (gambar51, a, b, c, cEm, cPoly, cRep, exp5000n, exp5000), 4 run per desain
+     (main, worker, main, worker): byte-identik; hash tabel sama dengan v2 (rm/rm-hash-v2-v3.txt).
+
+c. Sel eksperimen Web Worker final (MV 100/500/1000/2000, RM 5000-40000 noise) lewat dialog asli
+   build v3: payload dan respons worker identik dengan v1 dan v2 untuk 8/8 sel
+   (experiment-output-check.txt). Hasil result_compare.md §11-§12 tetap berlaku.
+   Konfigurasi MV mv1-mv8 dan mv4ph: payload dan respons worker v3 identik dengan v2 (step14).
+
+d. WASM di build v3 (frontend/.next/static/media): MV wasm_bg.4c7b0023.wasm, RM wasm_bg.2bc2b212.wasm
+   (sama dengan v2). wasm-pack build ulang MV: md5 81ee712d0ebaa6de30071bda98f7212b (sama dengan v2);
+   glue/.d.ts tidak berubah; API publik Rust sama dengan 82a63b45 (api-check.txt).
+
+e. Uji acuan SPSS:
+   - MV: 2339 lulus, 0 gagal, 12 todo dari 2351 (compare-spss.txt, jest-reference.log); regresi 0.
+   - RM: 1681 lulus dari 1681 (rm/rm-reference.log).
+
+Perubahan keluaran yang disengaja: hanya catatan (note) tabel Levene MV, yang kini diakhiri
+"Design: ..." (BB-KF10-02). Baris dan nilai tabel Levene identik dengan v2 untuk mv2, mv4, mv4ph,
+mv5, mv6, mv7, mv8. Tabel lain byte-identik dengan v2.

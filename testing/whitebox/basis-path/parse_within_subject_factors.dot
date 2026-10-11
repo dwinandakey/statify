@@ -1,0 +1,45 @@
+digraph G {
+  graph [rankdir=TB, fontname="Helvetica", labelloc=t, fontsize=16, nodesep=0.35, ranksep=0.35,
+         label="parse_within_subject_factors  (repeated-measures/rust/src/stats/parse_factors.rs:11)\nN = 16, E = 23, V(G) = E - N + 2 = 9 = predikat + 1 = 9"];
+  node [shape=circle, fontname="Helvetica", fontsize=11, width=0.42, fixedsize=true];
+  edge [arrowsize=0.6];
+  n1 [label="1", style=filled, fillcolor="#d9e6f5"];
+  n2 [label="2"];
+  n3 [label="3", style=filled, fillcolor="#d9e6f5"];
+  n4 [label="4", style=filled, fillcolor="#d9e6f5"];
+  n5 [label="5", style=filled, fillcolor="#d9e6f5"];
+  n6 [label="6", style=filled, fillcolor="#d9e6f5"];
+  n7 [label="7"];
+  n8 [label="8", style=filled, fillcolor="#d9e6f5"];
+  n9 [label="9", style=filled, fillcolor="#d9e6f5"];
+  n10 [label="10"];
+  n11 [label="11"];
+  n12 [label="12", style=filled, fillcolor="#d9e6f5"];
+  n13 [label="13"];
+  n14 [label="14"];
+  n15 [label="15"];
+  n16 [label="16", shape=doublecircle, width=0.36];
+  n1 -> n2;
+  n1 -> n3;
+  n2 -> n16;
+  n3 -> n4;
+  n3 -> n15;
+  n4 -> n5;
+  n4 -> n3;
+  n5 -> n6;
+  n5 -> n4;
+  n6 -> n7;
+  n6 -> n12;
+  n7 -> n8;
+  n8 -> n9;
+  n8 -> n14;
+  n9 -> n10;
+  n9 -> n11;
+  n10 -> n8;
+  n11 -> n8;
+  n12 -> n13;
+  n12 -> n14;
+  n13 -> n12;
+  n14 -> n4;
+  n15 -> n16;
+}

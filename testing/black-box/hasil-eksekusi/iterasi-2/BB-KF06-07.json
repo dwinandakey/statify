@@ -1,0 +1,47 @@
+{
+ "id": "BB-KF06-07",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: build [\"faktorA\"] → kotak Model: [\"faktorA\"] (BB-KF06-07-1.png)"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing).",
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing)."
+   ],
+   "file": "BB-KF06-07-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing).",
+    "An error occurred during Multivariate analysis. | Error: The custom model must include every fixed factor and covariate as a main effect ('faktorB' is missing)."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-build-terms": [
+   "faktorA"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-07-1.png: dialog Model (build): faktorA",
+  "BB-KF06-07-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72
+}

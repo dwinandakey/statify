@@ -1,0 +1,5 @@
+[
+ {"out":"testing/whitebox/ss/11-black-box-iterasi-7.png","title":"Black-box iterasi 7: bb-run.cjs + bb-run-v4.cjs --set=all + bb-nilai.mjs (build v6)","file":"testing/whitebox/v6/bb-iter7.log"},
+ {"out":"testing/whitebox/ss/12-black-box-iterasi-7-vs-v5final.png","title":"Black-box iterasi 7 vs pengamatan v5 final (berurutan)","file":"testing/whitebox/v6/bb-iter7-verifikasi.txt"},
+ {"out":"testing/whitebox/ss/13-cargo-test-v6-baru-pada-kode-v5.png","title":"Test baru v6 dijalankan pada rm_model.rs v5 (bukti gagal sebelum perbaikan)","file":"testing/whitebox/v6/log/cargo-test-v6-baru-pada-kode-v5.log","grep":"^[$] |^tanggal|^test |^test result|^exit code|nilai acuan|Statify .* vs"}
+]

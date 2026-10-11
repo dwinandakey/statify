@@ -1,0 +1,49 @@
+{
+ "id": "BB-KF06-05",
+ "steps": [
+  "impor two-way manova.csv",
+  "buka Analyze → General Linear Model → Multivariate",
+  "DV: Y1A1, Y2A1",
+  "FixFactor: faktorA, faktorB",
+  "Model: build [\"faktorA\",\"faktorB\"] → kotak Model: [\"faktorA\",\"faktorB\"] (BB-KF06-05-1.png)",
+  "hapus faktorB dari FixFactor"
+ ],
+ "toasts": [
+  {
+   "label": "OK model kustom",
+   "texts": [
+    "An error occurred during Multivariate analysis. | Error: Model term 'faktorB' is not a selected fixed factor or covariate.",
+    "An error occurred during Multivariate analysis. | Error: Model term 'faktorB' is not a selected fixed factor or covariate."
+   ],
+   "file": "BB-KF06-05-2.png"
+  }
+ ],
+ "runs": [
+  {
+   "label": "OK model kustom",
+   "toast": [
+    "An error occurred during Multivariate analysis. | Error: Model term 'faktorB' is not a selected fixed factor or covariate.",
+    "An error occurred during Multivariate analysis. | Error: Model term 'faktorB' is not a selected fixed factor or covariate."
+   ],
+   "newLog": false,
+   "output": null
+  }
+ ],
+ "checks": {
+  "model-build-terms": [
+   "faktorA",
+   "faktorB"
+  ],
+  "logBaru": false,
+  "logDiHalamanResult": 0,
+  "logSebelum": 0
+ },
+ "notes": [
+  "BB-KF06-05-1.png: dialog Model (build): faktorA; faktorB",
+  "BB-KF06-05-2.png: toast: OK model kustom",
+  "halaman Result: tidak ada log"
+ ],
+ "status": "selesai",
+ "consoleErrors": [],
+ "durationS": 72
+}

@@ -1,0 +1,70 @@
+{
+  "base": "http://localhost:3101",
+  "port": "3101",
+  "buildIdFile": "IdywReo5MTivt50HHa3VO",
+  "buildIdServed": "IdywReo5MTivt50HHa3VO",
+  "wasm": {
+    "mv": {
+      "file": "wasm_bg.6145c2bf.wasm",
+      "md5": "43a77657bcd238bb949797c7dccea200"
+    },
+    "rm": {
+      "file": "wasm_bg.2bc2b212.wasm",
+      "md5": "f4c34490f7fe4152b5ffb9a8cf9de4f8"
+    }
+  },
+  "chromium": "143.0.7499.4",
+  "playwright": "1.57.0",
+  "startedAt": "2026-09-25T14:18:55.742Z",
+  "scenarios": {
+    "BB-KF03-04": {
+      "status": "selesai",
+      "shots": 8,
+      "startedAt": "2026-09-25T14:18:56.350Z",
+      "finishedAt": "2026-09-25T14:19:23.355Z"
+    },
+    "BB-KF03-05": {
+      "status": "selesai",
+      "shots": 4,
+      "startedAt": "2026-09-25T14:19:23.930Z",
+      "finishedAt": "2026-09-25T14:19:50.535Z"
+    },
+    "BB-KF03-12": {
+      "status": "selesai",
+      "shots": 2,
+      "startedAt": "2026-09-25T14:19:51.106Z",
+      "finishedAt": "2026-09-25T14:20:04.157Z"
+    },
+    "BB-KF04-03": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-25T14:20:04.727Z",
+      "finishedAt": "2026-09-25T14:20:30.851Z"
+    },
+    "BB-KF04-04": {
+      "status": "selesai",
+      "shots": 3,
+      "startedAt": "2026-09-25T14:20:31.407Z",
+      "finishedAt": "2026-09-25T14:20:44.401Z"
+    },
+    "BB-KF03-14": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-25T14:20:44.971Z",
+      "finishedAt": "2026-09-25T14:20:58.141Z"
+    },
+    "BB-KF03-15": {
+      "status": "selesai",
+      "shots": 6,
+      "startedAt": "2026-09-25T14:20:58.715Z",
+      "finishedAt": "2026-09-25T14:21:12.123Z"
+    },
+    "BB-KF04-05": {
+      "status": "selesai",
+      "shots": 5,
+      "startedAt": "2026-09-25T14:21:12.691Z",
+      "finishedAt": "2026-09-25T14:21:26.048Z"
+    }
+  },
+  "finishedAt": "2026-09-25T14:21:26.051Z"
+}
