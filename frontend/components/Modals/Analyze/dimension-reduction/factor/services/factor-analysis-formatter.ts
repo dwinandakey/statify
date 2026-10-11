@@ -237,7 +237,13 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
 
     // Deteksi klo backend meminta suppress, berarti ekstraksi gagal/diterminasi
     const suppressExtraction = data.communalities?.suppress_extraction ?? false;
-    const hasSuccessfulExtraction = !suppressExtraction;
+    const hasSuccessfulExtraction = Boolean(
+        analysisStatus?.isConverged &&
+        analysisStatus.extractedFactors > 0 &&
+        !suppressExtraction
+    );
+    const showUnrotatedFactorSolution =
+        configData?.extraction?.Unrotated === true;
     const shouldDisplayScoreMatrices = configData?.scores?.DisplayFactor ?? true;
 
     // 1. Descriptive Statistics
@@ -585,7 +591,10 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
         // 1. Ada data extraction
         // 2. Tidak disuppress oleh backend karena fatal error
         // Catatan: Heywood Case hanya warning, bukan suppress.
-        const showExtractionColumn = hasExtractionData && !suppressExtraction;
+        const showExtractionColumn =
+            showUnrotatedFactorSolution &&
+            hasExtractionData &&
+            !suppressExtraction;
 
         const columnHeaders: any = [{ header: "", key: "var" }];
 
@@ -719,7 +728,8 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
     // ==================================================================================
     if (data.total_variance_explained) {
         try {
-            const renderExtractionDetails = hasSuccessfulExtraction;
+            const renderExtractionDetails =
+                showUnrotatedFactorSolution && hasSuccessfulExtraction;
             // CEK APAKAH ROTASI MENGGUNAKAN METODE OBLIQUE
             const isObliqueRotation = configData?.rotation?.Oblimin === true || configData?.rotation?.Promax === true;
 
@@ -1046,32 +1056,34 @@ function calculateDeterminantFromCorrelationMatrix(correlationData: any): number
             rows: [],
         };
 
-        data.component_matrix.components.forEach((component: any) => {
-            const rowData: any = { rowHeader: [component.variable] };
-            component.values.forEach((value: number | null, index: number) => {
-                if (!hasSuccessfulExtraction || value === null || value === undefined) {
-                    if (showRescaledColumns) {
-                        rowData[`raw_component_${index + 1}`] = "";
-                        rowData[`rescaled_component_${index + 1}`] = "";
-                    } else {
-                        rowData[`component_${index + 1}`] = "";
+        if (showUnrotatedFactorSolution) {
+            data.component_matrix.components.forEach((component: any) => {
+                const rowData: any = { rowHeader: [component.variable] };
+                component.values.forEach((value: number | null, index: number) => {
+                    if (!hasSuccessfulExtraction || value === null || value === undefined) {
+                        if (showRescaledColumns) {
+                            rowData[`raw_component_${index + 1}`] = "";
+                            rowData[`rescaled_component_${index + 1}`] = "";
+                        } else {
+                            rowData[`component_${index + 1}`] = "";
+                        }
+                        return;
                     }
-                    return;
-                }
 
-                if (showRescaledColumns) {
-                    rowData[`raw_component_${index + 1}`] = formatDisplayNumber(value);
-                    const stdDev = covarianceStdDevs.get(component.variable);
-                    rowData[`rescaled_component_${index + 1}`] =
-                        stdDev && stdDev > 0
-                            ? formatDisplayNumber(value / stdDev)
-                            : "";
-                } else {
-                    rowData[`component_${index + 1}`] = formatDisplayNumber(value);
-                }
+                    if (showRescaledColumns) {
+                        rowData[`raw_component_${index + 1}`] = formatDisplayNumber(value);
+                        const stdDev = covarianceStdDevs.get(component.variable);
+                        rowData[`rescaled_component_${index + 1}`] =
+                            stdDev && stdDev > 0
+                                ? formatDisplayNumber(value / stdDev)
+                                : "";
+                    } else {
+                        rowData[`component_${index + 1}`] = formatDisplayNumber(value);
+                    }
+                });
+                table.rows.push(rowData);
             });
-            table.rows.push(rowData);
-        });
+        }
 
         
         // Footer 1: Nama Metode

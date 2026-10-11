@@ -2,7 +2,7 @@ import { transformFactorAnalysisResult } from "../factor-analysis-formatter";
 
 describe("transformFactorAnalysisResult - total variance visibility", () => {
     const baseConfig = {
-        extraction: { Method: "PrincipalComp" },
+        extraction: { Method: "PrincipalComp", Unrotated: true },
         scores: { DisplayFactor: false, SaveVar: false },
     };
 
@@ -60,6 +60,20 @@ describe("transformFactorAnalysisResult - total variance visibility", () => {
         expect(table?.columnHeaders.some((header) => header.header === "Rotation Sums of Squared Loadings")).toBe(true);
         expect(table?.rows[0].extraction_0).toBeDefined();
         expect(table?.rows[0].rotation_0).toBeDefined();
+    });
+
+    it("hides extraction columns when unrotated factor solution is disabled", () => {
+        const result = transformFactorAnalysisResult(makeResult(true), {
+            ...baseConfig,
+            extraction: { Method: "PrincipalComp", Unrotated: false },
+        } as any);
+        const table = result.tables.find((entry) => entry.key === "total_variance_explained");
+
+        expect(table).toBeDefined();
+        expect(table?.columnHeaders.some((header) => header.header === "Extraction Sums of Squared Loadings")).toBe(false);
+        expect(table?.columnHeaders.some((header) => header.header === "Rotation Sums of Squared Loadings")).toBe(false);
+        expect(table?.rows[0].extraction_0).toBeUndefined();
+        expect(table?.rows[0].rotation_0).toBeUndefined();
     });
 
     it("adds the selection filter description to every output table", () => {

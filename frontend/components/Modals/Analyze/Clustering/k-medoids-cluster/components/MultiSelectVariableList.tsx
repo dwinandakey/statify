@@ -54,6 +54,10 @@ interface MultiSelectVariableListProps {
     getVariableIcon?: (variable: Variable) => React.ReactNode;
     getDisplayName?: (variable: Variable) => string;
     availableListHeight?: string;
+    availableTitle?: string;
+    showHelperText?: boolean;
+    forceHorizontal?: boolean;
+    targetListFooters?: Record<string, React.ReactNode>;
 }
 
 const AVAILABLE_LIST_ID = "available";
@@ -71,6 +75,10 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
     getVariableIcon = defaultGetVariableIcon,
     getDisplayName = defaultGetDisplayName,
     availableListHeight = "300px",
+    availableTitle = "Available Variables",
+    showHelperText = true,
+    forceHorizontal = false,
+    targetListFooters,
 }) => {
     const [draggedNames, setDraggedNames] = useState<string[]>([]);
     const [draggedSourceListId, setDraggedSourceListId] = useState<string | null>(null);
@@ -84,13 +92,13 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         () => [
             {
                 id: AVAILABLE_LIST_ID,
-                title: "Available Variables",
+                title: availableTitle,
                 variables: availableVariables,
                 height: availableListHeight,
             } as MultiSelectTargetList,
             ...targetLists,
         ],
-        [availableVariables, targetLists, availableListHeight]
+        [availableVariables, targetLists, availableListHeight, availableTitle]
     );
 
     const getList = useCallback(
@@ -601,7 +609,7 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         </div>
     );
 
-    const useVerticalLayout = isMobile && isPortrait;
+    const useVerticalLayout = !forceHorizontal && isMobile && isPortrait;
 
     if (useVerticalLayout) {
         return (
@@ -615,10 +623,11 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
                     {targetLists.map((list) => (
                         <React.Fragment key={`list-${list.id}`}>
                             {renderList(list, arrowButtons[list.id])}
+                            {targetListFooters?.[list.id]}
                         </React.Fragment>
                     ))}
                 </div>
-                <div className="flex flex-col mt-2 space-y-2">{helperText}</div>
+                {showHelperText && <div className="flex flex-col mt-2 space-y-2">{helperText}</div>}
             </div>
         );
     }
@@ -631,13 +640,14 @@ const MultiSelectVariableList: FC<MultiSelectVariableListProps> = ({
         >
             <div className="w-[45%] flex flex-col" id="available-variables-column">
                 {renderList(availableList)}
-                <div className="flex flex-col mt-2 space-y-2">{helperText}</div>
+                {showHelperText && <div className="flex flex-col mt-2 space-y-2">{helperText}</div>}
             </div>
 
             <div className="w-[45%] flex flex-col space-y-2 relative" id="target-variables-column">
                 {targetLists.map((list) => (
                     <React.Fragment key={`list-${list.id}`}>
                         {renderList(list, arrowButtons[list.id])}
+                        {targetListFooters?.[list.id]}
                     </React.Fragment>
                 ))}
             </div>

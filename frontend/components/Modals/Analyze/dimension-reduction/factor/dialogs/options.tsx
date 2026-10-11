@@ -72,9 +72,9 @@ export const FactorOptions = ({
             <div className="flex-grow overflow-auto px-6 py-4">
                 <ResizablePanelGroup
                     direction="vertical"
-                    className="min-h-[240px] rounded-lg border"
+                    className="min-h-[340px] rounded-lg border"
                 >
-                    <ResizablePanel defaultSize={45}>
+                    <ResizablePanel defaultSize={60} minSize={55}>
                         <div className="flex flex-col gap-2 p-2">
                             <Label className="font-bold">Missing Values</Label>
 
@@ -120,12 +120,15 @@ export const FactorOptions = ({
                                     </div>
                                 </div>
                             </RadioGroup>
+                            <p className="text-sm leading-relaxed text-muted-foreground">
+                                Notes: Pilih metode penanganan missing value sesuai dengan karakteristik data. Untuk panduan pemilihan metode, lihat Help &gt; Factor Analysis.
+                            </p>
                         </div>
                     </ResizablePanel>
 
                     <ResizableHandle />
 
-                    <ResizablePanel defaultSize={55}>
+                    <ResizablePanel defaultSize={40} minSize={35}>
                         <div className="flex flex-col gap-2 p-2">
                             <Label className="font-bold">
                                 Coefficient Display Format
