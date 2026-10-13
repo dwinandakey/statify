@@ -40,9 +40,7 @@ export const formatBlock0 = (
     return label;
   };
 
-  // ======================================================================
   // 1. HELPERS: LABEL DECODING
-  // ======================================================================
   const yMap = modelInfo.y_encoding || {};
   const labelLookup: Record<number, string> = Object.entries(yMap).reduce(
     (acc, [key, val]) => {
@@ -57,13 +55,7 @@ export const formatBlock0 = (
   const label0 = getLabel(0);
   const label1 = getLabel(1);
 
-  // ======================================================================
-  // 2. DATA PREPARATION (Classification Table - USE DATA FROM RUST)
-  // ======================================================================
-  // PERBAIKAN: Gunakan classification table dari steps_detail[0] (Block 0)
-  // yang sudah dihitung dengan benar oleh Rust, bukan menghitung ulang di sini.
-  // Ini penting untuk kasus include_constant = false dimana null model
-  // memprediksi P = 0.5 untuk semua kasus (bukan prediksi mayoritas).
+  // 2. DATA PREPARATION
 
   // Cek apakah include_constant dari model_info
   const includeConstant = modelInfo.include_constant !== false;
@@ -119,9 +111,7 @@ export const formatBlock0 = (
   const b0_overall =
     totalN > 0 ? ((obs0_pred0 + obs1_pred1) / totalN) * 100 : 0;
 
-  // ======================================================================
   // 3. TABLE: CLASSIFICATION TABLE
-  // ======================================================================
   const classificationData = {
     columnHeaders: [
       {
@@ -196,14 +186,8 @@ export const formatBlock0 = (
     )
   );
 
-  // ======================================================================
-  // 4. TABLE: VARIABLES IN EQUATION (Constant Only)
-  // ======================================================================
-  // LOGIKA PRIORITY:
-  // 1. Jika include_constant = false, tidak tampilkan tabel ini.
-  // 2. Cek field khusus `block_0_constant` (Metode Backward pakai ini).
-  // 3. Jika tidak ada, cek `steps_detail[0]` (Metode Enter/Forward pakai ini).
 
+  // 4. TABLE: VARIABLES IN EQUATION (Constant Only)
   if (includeConstant) {
     let constVar = (result as any).block_0_constant;
 
@@ -258,14 +242,7 @@ export const formatBlock0 = (
     }
   }
 
-  // ======================================================================
   // 5. TABLE: VARIABLES NOT IN EQUATION (Score Tests)
-  // ======================================================================
-  // LOGIKA PRIORITY:
-  // 1. Cek field khusus `block_0_variables_not_in` (Backward).
-  // 2. Jika tidak ada, cek `steps_detail[0].variables_not_in_equation` (Enter/Forward).
-  // 3. Fallback ke `variables_not_in_equation` global (root).
-
   let varsNotIn = (result as any).block_0_variables_not_in;
   let remainderTest = null;
 
@@ -281,12 +258,7 @@ export const formatBlock0 = (
     }
   }
 
-  // FIX: Selalu coba ambil remainderTest dari steps_detail[0] (Block 0) terlebih dahulu.
-  // Sebelumnya, jika block_0_variables_not_in ada (kasus stepwise methods),
-  // remainderTest tetap null dan jatuh ke overall_remainder_test yang berisi
-  // data dari FINAL step (bukan Block 0). Ini menyebabkan Overall Statistics
-  // menampilkan df dan chi-square dari step terakhir, bukan dari joint score test
-  // semua variabel kandidat di Block 0.
+
   if (!remainderTest && result.steps_detail && result.steps_detail.length > 0) {
     remainderTest = result.steps_detail[0].remainder_test;
   }
@@ -299,19 +271,11 @@ export const formatBlock0 = (
   // Pastikan array
   const varsNotInArray = varsNotIn ? [...varsNotIn] : [];
 
-  // SPSS omits the joint "Overall Statistics" score test (and swaps the
-  // table footnote) whenever a multi-category predictor (df > 1) is among
-  // the candidates: its omnibus row and its own dummy rows make the joint
-  // information matrix redundant, so SPSS reports it as not computable
-  // rather than showing a number. Exclude any pre-existing "Overall
-  // Statistics" row itself from this check (Backward can already include
-  // one) so it doesn't flag itself via its own df.
   const hasRedundantCategoricalGroup = varsNotInArray.some(
     (v: any) => v.df > 1 && v.label !== "Overall Statistics"
   );
   const canComputeOverall = !hasRedundantCategoricalGroup;
 
-  // --- LOGIKA FIX OVERALL STATISTICS ---
   if (!canComputeOverall) {
     // Backward embeds "Overall Statistics" directly from Rust as a row in
     // variables_not_in_equation - strip it out here so the redundant case

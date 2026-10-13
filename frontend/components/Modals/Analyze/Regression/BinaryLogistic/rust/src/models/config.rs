@@ -129,7 +129,6 @@ pub struct LogisticConfig {
     )]
     pub p_removal: f64,
 
-    // --- BARU: Output Options ---
     #[serde(default, alias = "classificationPlots")]
     pub classification_plots: bool,
 
@@ -159,7 +158,6 @@ pub struct LogisticConfig {
     #[serde(default)]
     pub assumptions: AssumptionConfig,
 
-    // --- BARU: Save Options (Tab Save di UI) ---
     #[serde(default, alias = "savePredictedProbabilities")]
     pub save_predicted_probabilities: bool,
 
@@ -213,7 +211,7 @@ fn default_tol() -> f64 {
 fn default_confidence() -> f64 {
     0.95
 }
-// Helper baru untuk casewise outliers
+// Helper
 fn default_casewise_outliers() -> f64 {
     2.0
 }
@@ -237,7 +235,7 @@ impl Default for LogisticConfig {
             p_entry: 0.05,
             p_removal: 0.10,
 
-            // Default untuk field baru
+            // Default
             classification_plots: false,
             hosmer_lemeshow: false,
             casewise_listing: false,

@@ -1,28 +1,8 @@
 //! Classification Plot Data Generation
-//! 
-//! This module generates data for the Classification Plot visualization,
-//! which shows the distribution of predicted probabilities for each observed group.
-//! 
-//! The Classification Plot is a stacked histogram-like visualization where:
-//! - X-axis: Predicted probability (0 to 1)
-//! - Y-axis: Frequency
-//! - Two groups (typically "F" for FALSE/0 and "T" for TRUE/1) are shown
-//! 
-//! This is the modern equivalent of SPSS's ASCII-art classification plot.
-
 use crate::models::result::{ClassificationPlotData, ClassificationPlotPoint};
 use nalgebra::DVector;
 
 /// Calculate classification plot data from model predictions
-/// 
-/// # Arguments
-/// * `y_vector` - Observed binary outcomes (0 or 1)
-/// * `predictions` - Predicted probabilities from the model
-/// * `cutoff` - Classification cutoff (default 0.5)
-/// * `label_0` - Label for group 0 (e.g., "FALSE", "No", etc.)
-/// * `label_1` - Label for group 1 (e.g., "TRUE", "Yes", etc.)
-/// 
-/// # Returns
 /// ClassificationPlotData containing all data points needed for visualization
 pub fn calculate_classification_plot(
     y_vector: &DVector<f64>,

@@ -38,9 +38,7 @@ export const formatBlock1 = (
   const ciLevel = options?.ciLevel ?? 95;
   const cutoff = options?.cutoff ?? 0.5;
 
-  // ======================================================================
   // 1. HELPERS & SETUP
-  // ======================================================================
   const yMap = modelInfo.y_encoding || {};
   const labelLookup: Record<number, string> = Object.entries(yMap).reduce(
     (acc, [key, val]) => {
@@ -81,9 +79,7 @@ export const formatBlock1 = (
     return label;
   };
 
-  // ======================================================================
   // LOGIKA A: METODE ENTER (Tampilan Standar / Single Step)
-  // ======================================================================
   if (!isStepwise) {
     // 1. Omnibus Tests
     const omni = result.omni_tests;
@@ -143,9 +139,7 @@ export const formatBlock1 = (
 
     // 2. Model Summary
     const summary = result.model_summary;
-    const summaryDesc = generateModelSummaryDescription(
-      summary?.nagelkerke_r_square
-    );
+    const summaryDesc = generateModelSummaryDescription(summary);
 
     const modelSummaryData = {
       columnHeaders: [
@@ -310,9 +304,7 @@ export const formatBlock1 = (
       })
     );
   } else {
-    // ======================================================================
     // LOGIKA B: METODE STEPWISE (Backward / Forward)
-    // ======================================================================
 
     const steps = result.steps_detail || [];
 
@@ -322,10 +314,10 @@ export const formatBlock1 = (
     const isBackward = method.toLowerCase().includes("backward");
     let block1Steps = steps.filter((s) => s.step > 0); // Skip start/step 0 for both Forward and Backward as per request
 
-    // --- BARU: Jika displayAtLastStep, filter sesuai metode ---
+    // --- Jika displayAtLastStep, filter sesuai metode ---
     if (displayAtLastStep && block1Steps.length > 0) {
       if (isBackward) {
-        // Untuk Backward: tampilkan Step 1 dan Step terakhir (SPSS behavior)
+        // Untuk Backward: tampilkan Step 1 dan Step terakhir 
         const firstStep = block1Steps.find((s) => s.step === 1);
         const lastStep = block1Steps[block1Steps.length - 1];
         
@@ -355,7 +347,6 @@ export const formatBlock1 = (
 
     block1Steps.forEach((stepDetail: StepDetail) => {
       // Adjustment: Jika Backward, Step 0 ditampilkan sebagai "Step 0" atau "Step 1" tergantung selera.
-      // Biasanya di SPSS Backward dimulai dari Step 1 (Entered All).
       // Kita pakai step number dari backend Rust.
       const currentStepNum = stepDetail.step;
       const currentStepLabel = `Step ${currentStepNum}`;
@@ -407,7 +398,6 @@ export const formatBlock1 = (
       // 2. Summary Rows
       summaryRows.push({
         rowHeader: [currentStepNum.toString()],
-        // Rust mengirim LL negatif, SPSS menampilkan -2LL (positif)
         ll: safeFixed(Math.abs(-2 * currentLL)),
         cox: safeFixed(stepDetail.summary.cox_snell_r_square),
         nagel: safeFixed(stepDetail.summary.nagelkerke_r_square),
@@ -462,10 +452,6 @@ export const formatBlock1 = (
       // 5. Variables Out Rows
       const varsNotIn = stepDetail.variables_not_in_equation;
       if (varsNotIn && varsNotIn.length > 0) {
-        // SPSS omits the joint "Overall Statistics" score test whenever a
-        // multi-category predictor (df > 1) is still outside the equation
-        // at this step, since its omnibus row and its own dummy rows make
-        // the joint information matrix redundant (same rule as Block 0).
         const stepHasRedundantGroup = varsNotIn.some(
           (v) => v.df > 1 && v.label !== "Overall Statistics"
         );
@@ -551,9 +537,7 @@ export const formatBlock1 = (
 
       if (summaryRows.length > 0) {
         const summary = lastStep?.summary;
-        const sumDesc = summary
-          ? generateModelSummaryDescription(summary.nagelkerke_r_square)
-          : "";
+        const sumDesc = generateModelSummaryDescription(summary);
 
         sections.push(
           createSection(

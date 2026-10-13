@@ -51,9 +51,7 @@ export const formatHosmerLemeshow = (
     method.toLowerCase().includes("forward") ||
     method.toLowerCase().includes("backward");
 
-  // ======================================================================
   // LOGIKA A: METODE ENTER (Single Step)
-  // ======================================================================
   if (!isStepwise) {
     // Ambil Hosmer-Lemeshow dari result utama atau step terakhir
     let hlResult = result.hosmer_lemeshow;
@@ -143,9 +141,7 @@ export const formatHosmerLemeshow = (
     return { sections };
   }
 
-  // ======================================================================
   // LOGIKA B: METODE STEPWISE (Forward/Backward - Multiple Steps)
-  // ======================================================================
 
   // Kumpulkan semua step yang memiliki Hosmer-Lemeshow data
   let stepsWithHL: { step: number; hl: HosmerLemeshowResult }[] = [];
@@ -167,11 +163,9 @@ export const formatHosmerLemeshow = (
     return { sections: [] };
   }
 
-  // ======================================================================
   // FILTER BERDASARKAN displayAtLastStep
   // Forward: hanya step terakhir
   // Backward: step 1 dan step terakhir
-  // ======================================================================
   const isBackward = method.toLowerCase().includes("backward");
 
   if (displayAtLastStep && stepsWithHL.length > 1) {
@@ -191,9 +185,7 @@ export const formatHosmerLemeshow = (
     }
   }
 
-  // ======================================================================
   // TABEL 1: Hosmer and Lemeshow Test Summary (Semua Step)
-  // ======================================================================
 
   // Generate deskripsi berdasarkan step terakhir
   const lastStepHL = stepsWithHL[stepsWithHL.length - 1].hl;
@@ -222,9 +214,7 @@ export const formatHosmerLemeshow = (
     })
   );
 
-  // ======================================================================
   // TABEL 2: Contingency Table (Gabungan Semua Step dalam Satu Tabel)
-  // ======================================================================
 
   // Flatten semua rows dari semua step ke dalam satu array
   const allContingencyRows: any[] = [];

@@ -1,14 +1,5 @@
 /**
- * Format Fitting Warnings for Output Viewer (SPSS-Style Warnings Block)
- *
- * SPSS always displays warnings/notes when the model encounters issues like:
- * - Singular/ill-conditioned Hessian matrix (multicollinearity)
- * - Complete or quasi-complete separation
- * - Step-halving used during estimation
- * - Non-convergence
- *
- * These are displayed as a "Warnings" block in the output viewer, typically
- * appearing at the top of the output (before the main tables).
+ * Format Fitting Warnings for Output Viewer
  */
 
 import type {
@@ -84,8 +75,7 @@ const generateWarningDescription = (fw: FittingWarnings): string => {
 /**
  * Format Fitting Warnings as an AnalysisSection for the output viewer
  *
- * Creates a "Warnings" table similar to SPSS, listing each warning
- * message with a numbered row.
+ * Creates a "Warnings" table
  */
 export const formatFittingWarnings = (
   result: LogisticResult
@@ -145,7 +135,7 @@ export const formatFittingWarnings = (
 
   if (warningMessages.length === 0) return { sections };
 
-  // Build table structure (SPSS-style Warnings table)
+  // Build table structure
   const columnHeaders = [
     { header: "", key: "icon", align: "center" as const },
     { header: "Status", key: "message", align: "left" as const },

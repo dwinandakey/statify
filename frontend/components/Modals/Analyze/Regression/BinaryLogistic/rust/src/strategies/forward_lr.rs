@@ -133,9 +133,6 @@ pub fn run(
         &included_group_indices,
     );
 
-    // --- FIX: Override Block 0 score tests with ANALYTICAL computation ---
-    // Menggunakan calculate_single_score_test() dan calculate_global_score_test_with_constant()
-    // yang sama dengan metode Forward Conditional, agar hasilnya konsisten dengan SPSS.
     {
         let prob_null = if config.include_constant {
             let n_positive = y_vector.iter().filter(|&&y| y > 0.5).count() as f64;
@@ -208,10 +205,6 @@ pub fn run(
 
         let mut best_candidate_group_idx = None;
         let mut best_score_stat = 0.0;
-        // SPSS selects the entry candidate with the SMALLEST significance (p-value),
-        // not the largest score statistic. These coincide when every candidate has the
-        // same df (1), but diverge once a categorical group has df > 1 (its raw chi-square
-        // is not comparable to a df=1 candidate's), so p-value is the correct comparator.
         let mut best_p_val = f64::INFINITY;
 
         // A. FORWARD ENTRY (Score Test - Group-aware)
@@ -428,7 +421,6 @@ pub fn run(
 
             // Hapus variabel terburuk jika memenuhi kriteria removal
             if let Some(loc) = worst_idx_loc {
-                // SPSS assigns each action (entry/removal) its own step number
                 step_count += 1;
 
                 let removed_group_idx = included_group_indices[loc];
@@ -530,7 +522,7 @@ pub fn run(
         sig: 1.0,
     });
 
-    // --- BARU: Hitung Casewise Listing Jika Diminta ---
+    // --- Hitung Casewise Listing Jika Diminta ---
     let casewise_result = if config.casewise_listing && !included_indices.is_empty() {
         let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
         let y_label_0 = "0";
@@ -548,7 +540,7 @@ pub fn run(
         None
     };
 
-    // --- BARU: Hitung Classification Plot Data Jika Diminta ---
+    // --- Hitung Classification Plot Data Jika Diminta ---
     let classification_plot_result = if config.classification_plots && !included_indices.is_empty() {
         let y_label_0 = "FALSE";
         let y_label_1 = "TRUE";
@@ -564,7 +556,7 @@ pub fn run(
         None
     };
 
-    // --- BARU: Calculate Saved Predictions Jika Ada Opsi Save yang Diaktifkan ---
+    // --- Calculate Saved Predictions Jika Ada Opsi Save yang Diaktifkan ---
     let saved_predictions_result = if !included_indices.is_empty() {
         let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
         saved_predictions::calculate_saved_predictions(
@@ -577,10 +569,10 @@ pub fn run(
         None
     };
 
-    // --- BARU: Ambil Correlation of Estimates dari final step ---
+    // --- Ambil Correlation of Estimates dari final step ---
     let corr_estimates_final = final_step.correlation_of_estimates.clone();
 
-    // --- BARU: Generate Step Summary (SPSS Style) ---
+    // --- Generate Step Summary ---
     let step_summary: Vec<StepSummaryRow> = steps_details.iter()
         .filter(|s| s.step > 0) // Skip Step 0 (null model)
         .map(|s| {
@@ -638,17 +630,12 @@ pub fn run(
         assumption_tests: None,
         overall_remainder_test: final_step.remainder_test,
         categorical_codings: codings,
-        // --- MODIFIKASI: AMBIL HL DARI FINAL STEP ---
         hosmer_lemeshow: final_step.hosmer_lemeshow,
         casewise_list: casewise_result,
-        classification_plot_data: classification_plot_result, // BARU: Classification Plot Data
-        // --- BARU: Correlation of Estimates ---
+        classification_plot_data: classification_plot_result,
         correlation_of_estimates: corr_estimates_final,
-        // --- BARU: Step Summary ---
         step_summary: if step_summary.is_empty() { None } else { Some(step_summary) },
-        // --- BARU: Saved Predictions ---
         saved_predictions: saved_predictions_result,
-        // --- BARU: Fitting Warnings dari IRLS ---
         fitting_warnings: {
             let w = &current_model.warnings;
             if w.possible_separation || w.quasi_separation || w.step_halving_used 
@@ -814,9 +801,6 @@ fn calculate_model_if_term_removed(
 
         // 2. Jika subset kosong, berarti kembali ke Null Model
         if subset_indices.is_empty() {
-            // SPSS convention: when include_constant=false and no predictors remain,
-            // the model has ZERO parameters. SPSS reports LL = 0.0 for this degenerate case.
-            // When include_constant=true, the reduced model is the intercept-only (null) model.
             if config.include_constant {
                 reduced_ll = null_log_likelihood;
             } else {
@@ -972,11 +956,9 @@ fn calculate_step_snapshot(
         }
     }
 
-    // --- FIX: GUNAKAN HELPER UNTUK OVERALL STATISTICS ---
     let remainder_test =
         calculate_overall_remainder_stats(full_x, y_vector, included_indices, model, config.include_constant);
 
-    // --- MODIFIKASI: HITUNG HOSMER-LEMESHOW ---
     let hl_result = if config.hosmer_lemeshow && step > 0 {
         match hosmer_lemeshow::calculate(y_vector, &model.predictions, 10) {
             Ok(res) => Some(res),
@@ -986,7 +968,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CORRELATION OF ESTIMATES ---
+    // --- HITUNG CORRELATION OF ESTIMATES ---
     let corr_estimates_result: Option<Vec<CorrelationOfEstimatesRow>> = if config.correlations && step > 0 {
         let mut var_names_for_corr: Vec<String> = Vec::new();
         // Tambahkan Constant hanya jika include_constant = true
@@ -1011,7 +993,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CLASSIFICATION PLOT DATA ---
+    // --- HITUNG CLASSIFICATION PLOT DATA ---
     let classification_plot_result = if config.classification_plots && step > 0 {
         let y_label_0 = "FALSE";
         let y_label_1 = "TRUE";
@@ -1038,13 +1020,9 @@ fn calculate_step_snapshot(
         omni_tests: Some(omni_tests_model),
         step_omni_tests: Some(omni_tests_step),
         model_if_term_removed,
-        // --- MASUKKAN HASIL HOSMER-LEMESHOW ---
         hosmer_lemeshow: hl_result,
-        // --- BARU: CORRELATION OF ESTIMATES ---
         correlation_of_estimates: corr_estimates_result,
-        // --- BARU: ITERATION HISTORY ---
         iteration_history,
-        // --- BARU: CLASSIFICATION PLOT DATA ---
         classification_plot_data: classification_plot_result,
     }
 }

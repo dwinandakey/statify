@@ -1,2 +1,0 @@
-module,size,cpu,run_index,phase,mode_intended,mode_actual,reason
-repeated-measures,10000,1,7,steady,main,,error:Repeated Measures dialog has 5 within slots / 0 group (expected 10 / 0)

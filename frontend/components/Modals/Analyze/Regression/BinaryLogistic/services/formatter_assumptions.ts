@@ -1,17 +1,10 @@
 import type { LogisticResult, AnalysisSection } from "../types/binary-logistic";
 import { createSection, safeFixed, fmtSig, fmtPSig } from "./formatter_utils";
 
-// Single-reference decision threshold for collinearity (see VIF hypothesis
-// note below for the full citation). Kept as one constant so the table
-// title, legend, description and hypothesis note can't drift out of sync.
+// Single-reference decision threshold for collinearity
 const VIF_THRESHOLD = 10;
 
-// Decision rule tested by the VIF/GVIF table, shown once alongside the
-// results. This is a diagnostic decision rule, not an inferential
-// significance test (there is no sampling distribution/p-value for VIF),
-// but it is phrased as H0/H1 to match how collinearity is conventionally
-// reported in the literature and stated per Hair et al. (2010), the most
-// widely used single reference for this cutoff.
+// Decision rule tested by the VIF/GVIF table
 const getVifHypothesisNote = (isGvif: boolean): string => {
   const base =
     "H0: no serious multicollinearity among predictors (Tolerance > 0.10, equivalently VIF < 10).";
@@ -23,11 +16,6 @@ const getVifHypothesisNote = (isGvif: boolean): string => {
 };
 
 // Helper untuk menentukan Concern Level berdasarkan nilai VIF.
-// When the table is on the GVIF^(1/(2*Df)) scale (any term has df > 1),
-// the threshold is sqrt-adjusted (VIF>=10 <=> GVIF^(1/(2*Df)) >= sqrt(10)),
-// the standard adaptation since that value is already a square-root-scaled
-// quantity - comparing it against the raw VIF threshold would understate
-// collinearity for every variable in the table, not just the multi-df ones.
 const getConcernLevel = (vif: number, isGvif?: boolean): string => {
   const threshold = isGvif ? Math.sqrt(VIF_THRESHOLD) : VIF_THRESHOLD;
   return vif >= threshold ? "Problematic" : "Acceptable";
@@ -49,7 +37,6 @@ const generateAssumptionDescription = (vifData: any[]): string => {
 };
 
 // Helper untuk membuat deskripsi dinamis Box-Tidwell
-// References: Box & Tidwell (1962), Fox (1997), Fox & Weisberg (2011)
 const generateBoxTidwellDescription = (boxTidwellData: any[]): string => {
   if (!boxTidwellData || boxTidwellData.length === 0) return "";
 
@@ -103,17 +90,9 @@ export const formatAssumptionTests = (
   if (!assumptions) return { sections };
 
   // --- 1. Variance Inflation Factors (VIF) ---
-  // (No separate raw predictor Correlation Matrix here - redundant with
-  // the Correlation of Estimates table already shown in Block 1, and VIF/
-  // GVIF already covers multicollinearity more directly.)
   if (assumptions.vif && assumptions.vif.length > 0) {
-    // When any predictor has df > 1 (a 3+ category factor), R's car::vif()
-    // switches its WHOLE table to 3 columns - GVIF, Df, GVIF^(1/(2*Df)) -
-    // for every row, single-df terms included, so the scale stays
-    // comparable across the table rather than mixing raw VIF and GVIF
-    // units. Mirrored here, in that column order.
     const isGvif = assumptions.vif.some((row) => row.is_gvif);
-    const adjHeader = "GVIF^(1/2Df)"; // cleaner than R's literal "GVIF^(1/(2*Df))"
+    const adjHeader = "GVIF^(1/2Df)";
 
     const vifColumnHeaders: any[] = [
       { header: "Variable", key: "var" },
@@ -163,10 +142,6 @@ export const formatAssumptionTests = (
     );
 
     // --- 2. Legend VIF ---
-    // Single reference (Hair et al., 2010) instead of the previously
-    // unattributed 4-tier scale, per feedback that mixed conventions across
-    // sources caused inconsistent interpretation. Range is sqrt-adjusted to
-    // match the GVIF^(1/2Df) scale when applicable.
     const fmtRange = (n: number) => safeFixed(isGvif ? Math.sqrt(n) : n, isGvif ? 2 : 0);
     const legendData = {
       columnHeaders: [
@@ -206,7 +181,7 @@ export const formatAssumptionTests = (
     );
   }
 
-  // --- 3. Box-Tidwell Test (R-style output: Fox & Weisberg 2011) ---
+  // --- 3. Box-Tidwell Test ---
   if (assumptions.box_tidwell && assumptions.box_tidwell.length > 0) {
     // Separate tested vs skipped for cleaner output
     const testedRows = assumptions.box_tidwell.filter(
@@ -216,7 +191,7 @@ export const formatAssumptionTests = (
       (row: any) => row.skipped
     );
 
-    // --- Main results table (matches R's car::boxTidwell output) ---
+    // --- Main results table ---
     if (testedRows.length > 0) {
       const btData = {
         columnHeaders: [

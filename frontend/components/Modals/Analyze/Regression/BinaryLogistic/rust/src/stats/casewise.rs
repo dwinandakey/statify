@@ -4,15 +4,6 @@ use crate::stats::irls::FittedModel;
 use nalgebra::{DMatrix, DVector};
 
 /// Calculate casewise diagnostics for binary logistic regression
-/// Similar to SPSS's Casewise Listing of Residuals
-/// 
-/// Returns a vector of CasewiseRow, filtered based on config settings:
-/// - If casewise_type == "outliers": only cases where |SResid| > casewise_outliers
-/// - If casewise_type == "all": all cases
-/// 
-/// SPSS uses the Studentized Residual (SResid) for filtering, not the Standardized
-/// Residual (ZResid). The SPSS SResid is the studentized deviance residual:
-/// d_i / sqrt(1 - h), where d_i is the deviance residual and h is leverage.
 pub fn calculate_casewise_list(
     x_matrix: &DMatrix<f64>,
     y_vector: &DVector<f64>,
@@ -58,20 +49,6 @@ pub fn calculate_casewise_list(
         let leverage = leverages[i];
         
         // 5. Studentized Residual — Studentized Deviance Residual
-        //
-        // Formula: SRE_i = d_i / sqrt(1 - h_i)
-        //
-        // Where:
-        //   d_i = deviance residual (signed)
-        //   h_i = leverage (hat value)
-        //
-        // Dividing the deviance residual by sqrt(1-h) adjusts for leverage,
-        // making residuals comparable across observations.
-        // Verified against IBM SPSS Statistics output.
-        //
-        // References:
-        //   - Pregibon, D. (1981). Logistic Regression Diagnostics.
-        //   - Hosmer, D.W. & Lemeshow, S. (2000). Applied Logistic Regression.
         
         // Compute deviance residual d_i (signed)
         let prob_safe = prob.max(1e-12).min(1.0 - 1e-12);
@@ -109,16 +86,6 @@ pub fn calculate_casewise_list(
         };
         
         // 8. Cook's Distance — Pregibon (1981) ΔX² influence diagnostic
-        //
-        // Formula: D_i = r_std^2 * h / (1 - h)
-        //
-        // Measures approximate change in Pearson chi-squared when case i
-        // is removed. Uses (1-h) to the FIRST power, not (1-h)².
-        // Verified against IBM SPSS Statistics output.
-        //
-        // References:
-        //   - Pregibon, D. (1981). Logistic Regression Diagnostics.
-        //   - Hosmer, D.W. & Lemeshow, S. (2000). Applied Logistic Regression.
         let cooks = if (1.0 - leverage) > 1e-12 {
             (resid_zresid.powi(2) * leverage) / (1.0 - leverage)
         } else {
@@ -126,7 +93,6 @@ pub fn calculate_casewise_list(
         };
         
         // --- Apply Filter ---
-        // SPSS filters by Studentized Residual (SResid), not ZResid
         // "Cases with studentized residuals greater than [threshold] are listed"
         let include_case = show_all || resid_studentized.abs() > outlier_threshold;
         
@@ -172,16 +138,6 @@ pub fn calculate_casewise_list(
 }
 
 /// Calculate leverage (hat) values for each observation using the correct formula
-/// 
-/// The Hat matrix in weighted least squares (which logistic regression uses via IRLS) is:
-/// H = W^{1/2} X (X'WX)^{-1} X' W^{1/2}
-/// 
-/// And the diagonal elements (leverage values) are:
-/// h_ii = w_i * x_i' * (X'WX)^{-1} * x_i
-/// 
-/// where w_i = p_i * (1 - p_i) is the weight for observation i
-/// 
-/// Reference: Hosmer & Lemeshow (2000), Pregibon (1981)
 fn calculate_leverages_correct(
     x_matrix: &DMatrix<f64>,
     predictions: &DVector<f64>,
@@ -197,8 +153,7 @@ fn calculate_leverages_correct(
         })
         .collect();
     
-    // Step 2: Compute leverage for each observation using pre-computed (X'WX)^{-1}
-    // h_ii = w_i * x_i' * (X'WX)^{-1} * x_i
+    // Step 2: Compute leverage for each observation
     let mut leverages = Vec::with_capacity(n);
     
     for i in 0..n {

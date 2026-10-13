@@ -53,14 +53,6 @@ pub fn calculate_score_test(
 }
 
 /// Menghitung Score Test untuk satu variabel kandidat
-/// 
-/// # Arguments
-/// * `x_col` - Kolom variabel kandidat
-/// * `y` - Vector dependen (0/1)
-/// * `null_prob` - Probabilitas null (jika include_constant, ini adalah y_mean; jika tidak, ini adalah 0.5)
-/// * `include_constant` - Apakah model menyertakan constant
-/// 
-/// # Returns
 /// (Score statistic, df, Sig)
 pub fn calculate_single_score_test(
     x_col: &DVector<f64>,
@@ -115,7 +107,6 @@ pub fn calculate_single_score_test(
 }
 
 // Menghitung apakah sekumpulan variabel X secara simultan signifikan dibandingkan Null Model
-// PERBAIKAN: Tambahkan parameter include_constant
 pub fn calculate_global_score_test(
     x: &DMatrix<f64>, // Matrix Covariates (TANPA kolom Intercept)
     y: &DVector<f64>,
@@ -127,14 +118,6 @@ pub fn calculate_global_score_test(
 }
 
 /// Menghitung Global Score Test dengan opsi include_constant
-/// 
-/// # Arguments
-/// * `x` - Matrix Covariates (TANPA kolom Intercept)
-/// * `y` - Vector dependen (0/1)
-/// * `null_prob` - Probabilitas null (y_mean jika include_constant, 0.5 jika tidak)
-/// * `include_constant` - Apakah model menyertakan constant
-/// 
-/// # Returns
 /// (ChiSquare, df, Sig)
 pub fn calculate_global_score_test_with_constant(
     x: &DMatrix<f64>,
@@ -156,7 +139,6 @@ pub fn calculate_global_score_test_with_constant(
 
     let xt_x = x.transpose() * x;
     
-    // PERBEDAAN KUNCI:
     // - Dengan constant: I = w * [X'X - (1/n) * (sum_x * sum_x')]  (centered)
     // - Tanpa constant: I = w * X'X  (uncentered)
     let info_matrix = if include_constant {
@@ -204,15 +186,6 @@ pub fn calculate_global_score_test_with_constant(
 
 /// Menghitung Score Test untuk sekelompok variabel kandidat (multi-df).
 /// Digunakan untuk variabel kategorik dengan lebih dari 2 kategori.
-///
-/// # Arguments
-/// * `residuals` - Residuals dari model saat ini (y - pi)
-/// * `weights` - Weights dari model saat ini (pi * (1 - pi))
-/// * `current_x` - Matriks X model saat ini (termasuk intercept jika ada)
-/// * `candidate_cols` - Matriks kolom kandidat (multiple columns for a group)
-/// * `inv_cov_matrix` - Matriks Kovarians model saat ini
-///
-/// # Returns
 /// (Score statistic, df, P-Value)
 pub fn calculate_group_score_test(
     residuals: &DVector<f64>,
@@ -296,14 +269,6 @@ pub fn calculate_group_score_test(
 
 /// Menghitung Score Test untuk sekelompok variabel di null model (Block 0, analytical).
 /// Digunakan untuk variabel kategorik dengan lebih dari 2 kategori.
-///
-/// # Arguments
-/// * `x_cols` - Matriks kolom variabel (multiple columns for a group)
-/// * `y` - Vector dependen (0/1)
-/// * `null_prob` - Probabilitas null
-/// * `include_constant` - Apakah model menyertakan constant
-///
-/// # Returns
 /// (Score statistic, df, Sig)
 pub fn calculate_single_group_score_test(
     x_cols: &DMatrix<f64>,
