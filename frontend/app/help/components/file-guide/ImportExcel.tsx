@@ -3,76 +3,88 @@ import React from 'react';
 import { HelpGuideTemplate } from '../../ui/HelpGuideTemplate';
 import { HelpCard, HelpAlert, HelpStep } from '../../ui/HelpLayout';
 import { FileSpreadsheet, Upload, Lightbulb, Layers } from 'lucide-react';
+import { useHelpLanguageStore } from '@/stores/useHelpLanguageStore';
 
 export const ImportExcel = () => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
   const sections = [
     {
       id: 'import-steps',
-      title: 'Cara Impor File Excel',
-      description: 'Panduan langkah demi langkah untuk mengimpor data Excel Anda ke Statify',
+      title: isEn ? 'How to Import an Excel File' : 'Cara Impor File Excel',
+      description: isEn ? 'A step-by-step guide to importing your Excel data into Statify' : 'Panduan langkah demi langkah untuk mengimpor data Excel Anda ke Statify',
       icon: Upload,
       content: (
         <div className="space-y-4">
           <HelpStep
             number={1}
-            title="Buka Menu File"
-            description="Klik 'File' di bilah menu atas aplikasi."
+            title={isEn ? "Open the File Menu" : "Buka Menu File"}
+            description={isEn ? "Click 'File' in the app's top menu bar." : "Klik 'File' di bilah menu atas aplikasi."}
           />
           <HelpStep
             number={2}
-            title="Pilih Import Data → Excel"
-            description="Klik File → Import Data → Excel."
+            title={isEn ? "Choose Import Data → Excel" : "Pilih Import Data → Excel"}
+            description={isEn ? "Click File → Import Data → Excel." : "Klik File → Import Data → Excel."}
           />
           <HelpStep
             number={3}
-            title="Pilih File Anda"
-            description="Telusuri komputer Anda dan pilih file Excel (.xlsx atau .xls) yang ingin Anda gunakan."
+            title={isEn ? "Choose Your File" : "Pilih File Anda"}
+            description={isEn
+              ? "Browse your computer and select the Excel file (.xlsx or .xls) you want to use."
+              : "Telusuri komputer Anda dan pilih file Excel (.xlsx atau .xls) yang ingin Anda gunakan."}
           />
           <HelpStep
             number={4}
-            title="Lanjut ke Konfigurasi"
-            description="Klik 'Continue' untuk membuka konfigurasi impor."
+            title={isEn ? "Continue to Configuration" : "Lanjut ke Konfigurasi"}
+            description={isEn ? "Click 'Continue' to open the import configuration." : "Klik 'Continue' untuk membuka konfigurasi impor."}
           />
           <HelpStep
             number={5}
-            title="Pilih Worksheet"
-            description="Pilih worksheet yang akan diimpor."
+            title={isEn ? "Choose the Worksheet" : "Pilih Worksheet"}
+            description={isEn ? "Choose the worksheet to import." : "Pilih worksheet yang akan diimpor."}
           />
           <HelpStep
             number={6}
-            title="Atur Opsi Impor"
-            description="Sesuaikan opsi: First line contains variable names, Read hidden rows/columns, Range, dan perlakuan sel kosong."
+            title={isEn ? "Set the Import Options" : "Atur Opsi Impor"}
+            description={isEn
+              ? "Adjust the options: First line contains variable names, Read hidden rows/columns, Range, and how empty cells are treated."
+              : "Sesuaikan opsi: First line contains variable names, Read hidden rows/columns, Range, dan perlakuan sel kosong."}
           />
           <HelpStep
             number={7}
-            title="Tinjau Data Preview"
-            description="Periksa pratinjau data untuk memastikan pengaturan sudah benar."
+            title={isEn ? "Review the Data Preview" : "Tinjau Data Preview"}
+            description={isEn
+              ? "Check the data preview to make sure the settings are correct."
+              : "Periksa pratinjau data untuk memastikan pengaturan sudah benar."}
           />
           <HelpStep
             number={8}
-            title="Impor"
-            description="Klik tombol 'Import' untuk menyelesaikan proses impor."
+            title={isEn ? "Import" : "Impor"}
+            description={isEn ? "Click the 'Import' button to finish the import." : "Klik tombol 'Import' untuk menyelesaikan proses impor."}
           />
         </div>
       )
     },
     {
       id: 'formats',
-      title: 'Format Yang Didukung',
-      description: 'Jenis file dan fitur yang dapat Anda gunakan',
+      title: isEn ? 'Supported Formats' : 'Format Yang Didukung',
+      description: isEn ? 'The file types and features you can use' : 'Jenis file dan fitur yang dapat Anda gunakan',
       icon: FileSpreadsheet,
       content: (
         <div className="space-y-4">
-          <HelpCard title="Jenis File" icon={FileSpreadsheet} variant="feature">
+          <HelpCard title={isEn ? "File Types" : "Jenis File"} icon={FileSpreadsheet} variant="feature">
             <ul className="text-sm space-y-1 mt-2">
-              <li>• .xlsx (Excel 2007 dan yang lebih baru)</li>
+              <li>• {isEn ? ".xlsx (Excel 2007 and later)" : ".xlsx (Excel 2007 dan yang lebih baru)"}</li>
               <li>• .xls (Excel 97-2003)</li>
             </ul>
           </HelpCard>
-          
-          <HelpCard title="Multiple Worksheet" icon={Layers} variant="feature">
+
+          <HelpCard title={isEn ? "Multiple Worksheets" : "Multiple Worksheet"} icon={Layers} variant="feature">
             <p className="text-sm text-muted-foreground">
-              Statify dapat menangani file Excel dengan beberapa worksheet dan memungkinkan Anda memilih sheet mana yang akan diimpor.
+              {isEn
+                ? "Statify can handle Excel files with multiple worksheets and lets you choose which sheet to import."
+                : "Statify dapat menangani file Excel dengan beberapa worksheet dan memungkinkan Anda memilih sheet mana yang akan diimpor."}
             </p>
           </HelpCard>
         </div>
@@ -80,14 +92,16 @@ export const ImportExcel = () => {
     },
     {
       id: 'features',
-      title: 'Fitur & Informasi',
-      description: 'Informasi penting tentang impor file Excel',
+      title: isEn ? 'Features & Information' : 'Fitur & Informasi',
+      description: isEn ? 'Important information about importing Excel files' : 'Informasi penting tentang impor file Excel',
       icon: Lightbulb,
       content: (
         <div className="space-y-4">
-          <HelpAlert variant="info" title="Tahukah Anda?">
+          <HelpAlert variant="info" title={isEn ? "Did You Know?" : "Tahukah Anda?"}>
             <p className="text-sm mt-2">
-              Statify bekerja sempurna dengan format .xlsx (Excel 2007+) dan .xls (Excel 97-2003).
+              {isEn
+                ? "Statify works perfectly with the .xlsx (Excel 2007+) and .xls (Excel 97-2003) formats."
+                : "Statify bekerja sempurna dengan format .xlsx (Excel 2007+) dan .xls (Excel 97-2003)."}
             </p>
           </HelpAlert>
         </div>
@@ -100,33 +114,39 @@ export const ImportExcel = () => {
   const tips = [
     {
       type: 'tip' as const,
-      title: 'Header Kolom',
-      content: 'Pastikan baris pertama berisi nama variabel yang jelas untuk hasil impor yang optimal dan mudah dipahami.'
+      title: isEn ? 'Column Headers' : 'Header Kolom',
+      content: isEn
+        ? 'Make sure the first row contains clear variable names for an optimal, easy-to-understand import.'
+        : 'Pastikan baris pertama berisi nama variabel yang jelas untuk hasil impor yang optimal dan mudah dipahami.'
     },
     {
       type: 'info' as const,
-      title: 'Pemilihan Worksheet',
-      content: 'Untuk file dengan beberapa worksheet, Anda dapat memilih sheet mana yang akan diimpor ke Statify.'
+      title: isEn ? 'Worksheet Selection' : 'Pemilihan Worksheet',
+      content: isEn
+        ? 'For files with multiple worksheets, you can choose which sheet to import into Statify.'
+        : 'Untuk file dengan beberapa worksheet, Anda dapat memilih sheet mana yang akan diimpor ke Statify.'
     },
     {
       type: 'success' as const,
-      title: 'Format Fleksibel',
-      content: 'Mendukung format .xlsx (Excel 2007+) dan .xls (Excel 97-2003) dengan preservasi metadata yang baik.'
+      title: isEn ? 'Flexible Formats' : 'Format Fleksibel',
+      content: isEn
+        ? 'Supports the .xlsx (Excel 2007+) and .xls (Excel 97-2003) formats with good metadata preservation.'
+        : 'Mendukung format .xlsx (Excel 2007+) dan .xls (Excel 97-2003) dengan preservasi metadata yang baik.'
     }
   ];
 
   const relatedTopics = [
-    { title: 'Impor File CSV', href: '/help/file-guide/import-csv' },
-    { title: 'Impor File SPSS', href: '/help/file-guide/import-sav' },
-    { title: 'Impor dari Clipboard', href: '/help/file-guide/import-clipboard' },
-    { title: 'Ekspor ke Excel', href: '/help/file-guide/export-excel' },
-    { title: 'Panduan Manajemen Data', href: '/help/data-guide' }
+    { title: isEn ? 'Import CSV Files' : 'Impor File CSV', href: '/help/file-guide/import-csv' },
+    { title: isEn ? 'Import SPSS Files' : 'Impor File SPSS', href: '/help/file-guide/import-sav' },
+    { title: isEn ? 'Import from Clipboard' : 'Impor dari Clipboard', href: '/help/file-guide/import-clipboard' },
+    { title: isEn ? 'Export to Excel' : 'Ekspor ke Excel', href: '/help/file-guide/export-excel' },
+    { title: isEn ? 'Data Management Guide' : 'Panduan Manajemen Data', href: '/help/data-guide' }
   ];
 
   return (
     <HelpGuideTemplate
-      title="Impor File Excel"
-      description="Panduan lengkap untuk mengimpor data Excel ke Statify"
+      title={isEn ? "Import Excel Files" : "Impor File Excel"}
+      description={isEn ? "A complete guide to importing Excel data into Statify" : "Panduan lengkap untuk mengimpor data Excel ke Statify"}
       lastUpdated="2024-01-15"
       sections={sections}
       tips={tips}

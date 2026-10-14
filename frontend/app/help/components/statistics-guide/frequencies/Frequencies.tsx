@@ -37,7 +37,9 @@ export const Frequencies: React.FC = () => {
   return (
     <StandardizedGuideLayout
       title="Panduan Analisis Frekuensi"
+      titleEn="Frequencies Analysis Guide"
       description="Pelajari cara membuat dan menginterpretasi tabel frekuensi untuk data Anda"
+      descriptionEn="Learn how to create and interpret frequency tables for your data"
       tabs={tabs}
       defaultTab="overview"
     >

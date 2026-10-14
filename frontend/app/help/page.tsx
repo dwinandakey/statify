@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import {
     GettingStarted,
     FAQ,
-    Feedback,
     HelpContent,
     StatisticsGuide,
     FileGuide,
@@ -13,8 +12,11 @@ import {
 import {
     DataGuide
 } from "@/app/help/components/data-guide";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 export default function HelpPage() {
+    const { language } = useHelpLanguageStore();
+    const isEn = language === 'en';
     const [selected, setSelected] = useState("getting-started");
     const [search, setSearch] = useState("");
     const [activeChild, setActiveChild] = useState<string | null>(null);
@@ -29,35 +31,33 @@ export default function HelpPage() {
     const sectionsData: SectionItem[] = useMemo(() => ([
         {
             key: "getting-started",
-            label: "Getting Started",
+            label: isEn ? "Getting Started" : "Memulai",
             content: <GettingStarted />,
         },
         {
             key: "file-guide",
-            label: "File Management",
+            label: isEn ? "File Management" : "Manajemen File",
             content: <FileGuide section={activeChild ?? undefined} />,
             children: [
-                { key: "import-sav", label: "Import .sav", parentKey: "file-guide", childContent: "import-sav" },
-                { key: "import-csv", label: "Import CSV", parentKey: "file-guide", childContent: "import-csv" },
-                { key: "import-excel", label: "Import Excel", parentKey: "file-guide", childContent: "import-excel" },
-                { key: "import-clipboard", label: "Import from Clipboard", parentKey: "file-guide", childContent: "import-clipboard" },
-                { key: "export-csv", label: "Export CSV", parentKey: "file-guide", childContent: "export-csv" },
-                { key: "export-excel", label: "Export Excel", parentKey: "file-guide", childContent: "export-excel" },
-                { key: "example-data", label: "Example Data", parentKey: "file-guide", childContent: "example-data" },
-                { key: "print", label: "Print", parentKey: "file-guide", childContent: "print" },
+                { key: "import-sav", label: isEn ? "Import .sav" : "Impor .sav", parentKey: "file-guide", childContent: "import-sav" },
+                { key: "import-csv", label: isEn ? "Import CSV" : "Impor CSV", parentKey: "file-guide", childContent: "import-csv" },
+                { key: "import-excel", label: isEn ? "Import Excel" : "Impor Excel", parentKey: "file-guide", childContent: "import-excel" },
+                { key: "import-clipboard", label: isEn ? "Import from Clipboard" : "Impor dari Clipboard", parentKey: "file-guide", childContent: "import-clipboard" },
+                { key: "export-csv", label: isEn ? "Export CSV" : "Ekspor CSV", parentKey: "file-guide", childContent: "export-csv" },
+                { key: "export-excel", label: isEn ? "Export Excel" : "Ekspor Excel", parentKey: "file-guide", childContent: "export-excel" },
+                { key: "example-data", label: isEn ? "Example Data" : "Data Contoh", parentKey: "file-guide", childContent: "example-data" },
+                { key: "print", label: isEn ? "Print" : "Cetak", parentKey: "file-guide", childContent: "print" },
             ],
         },
         {
             key: "data-guide",
-            label: "Data Management",
+            label: isEn ? "Data Management" : "Manajemen Data",
             content: <DataGuide section={activeChild ?? undefined} />,
             children: [
                 { key: "aggregate", label: "Aggregate", parentKey: "data-guide", childContent: "aggregate" },
                 { key: "define-datetime", label: "Define Date and Time", parentKey: "data-guide", childContent: "define-datetime" },
                 { key: "define-var-props", label: "Define Variable Properties", parentKey: "data-guide", childContent: "define-var-props" },
                 { key: "duplicate-cases", label: "Identify Duplicate Cases", parentKey: "data-guide", childContent: "duplicate-cases" },
-                { key: "linear", label: "Linear Regression", parentKey: "statistics-guide", childContent: "linear" },
-                { key: "k-means", label: "K-Means Clustering", parentKey: "statistics-guide", childContent: "k-means" },
                 { key: "restructure", label: "Restructure", parentKey: "data-guide", childContent: "restructure" },
                 { key: "select-cases", label: "Select Cases", parentKey: "data-guide", childContent: "select-cases" },
                 { key: "set-measurement-level", label: "Set Measurement Level", parentKey: "data-guide", childContent: "set-measurement-level" },
@@ -68,7 +68,7 @@ export default function HelpPage() {
         },
         {
             key: "statistics-guide",
-            label: "Statistics Guide",
+            label: isEn ? "Statistics Guide" : "Panduan Statistik",
             content: <StatisticsGuide section={activeChild ?? undefined} />,
             children: [
                 { key: "frequencies", label: "Frequencies", parentKey: "statistics-guide", childContent: "frequencies" },
@@ -107,15 +107,10 @@ export default function HelpPage() {
         },
         {
             key: "faq",
-            label: "FAQs",
+            label: isEn ? "FAQs" : "FAQ",
             content: <FAQ />,
         },
-        {
-            key: "feedback",
-            label: "Send Feedback",
-            content: <Feedback />,
-        },
-    ]), [activeChild]);
+    ]), [activeChild, isEn]);
     // ------------------ END SECTIONS DATA ------------------
 
     // Sync in-page navigation with URL hash: /help#<parentKey>:<childKey?>
@@ -124,7 +119,8 @@ export default function HelpPage() {
         const hash = window.location.hash.replace(/^#/, "");
         if (!hash) return;
         const [parentKey, maybeChild] = hash.split(":");
-        if (!parentKey) return;
+        // ignore unknown sections (e.g. old #feedback links) and keep the current one
+        if (!parentKey || !sectionsData.some(s => s.key === parentKey)) return;
         // set selected only if changed
         setSelected((prev) => (prev !== parentKey ? parentKey : prev));
         // expand the parent

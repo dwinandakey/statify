@@ -23,7 +23,7 @@ export const OverviewTab = () => {
     <FeatureGrid
       features={[
         {
-          title: 'Kapan Digunakan',
+          title: isEn ? 'When to Use It' : 'Kapan Digunakan',
           icon: HelpCircle,
           items: [
             isEn ? 'When you have many correlated variables' : 'Saat Anda memiliki banyak variabel yang saling berkorelasi',
@@ -33,7 +33,7 @@ export const OverviewTab = () => {
           ],
         },
         {
-          title: 'Yang Akan Anda Lihat',
+          title: isEn ? 'What You Will See' : 'Yang Akan Anda Lihat',
           icon: Layers3,
           items: [
             isEn ? 'Data suitability through KMO and Bartlett' : 'Kelayakan data melalui KMO dan Bartlett',

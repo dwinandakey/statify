@@ -30,7 +30,9 @@ export const DescriptiveAnalysis = () => {
   return (
     <StandardizedGuideLayout
       title="Panduan Analisis Deskriptif"
+      titleEn="Descriptive Analysis Guide"
       description="Pelajari cara melakukan analisis statistik deskriptif untuk memahami karakteristik data Anda"
+      descriptionEn="Learn how to run descriptive statistical analysis to understand the characteristics of your data"
       tabs={tabs}
       defaultTab="overview"
     >

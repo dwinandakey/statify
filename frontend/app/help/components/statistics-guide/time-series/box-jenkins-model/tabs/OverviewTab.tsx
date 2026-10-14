@@ -75,7 +75,7 @@ export const OverviewTab = () => {
           },
           {
             title: isEn ? "I (Integrated) — order d" : "I (Integrated) — orde d",
-            formula: "Δᵈ Yt = Yt - Yt-1  (for d=1)",
+            formula: isEn ? "Δᵈ Yt = Yt - Yt-1  (for d=1)" : "Δᵈ Yt = Yt - Yt-1  (untuk d=1)",
             description: isEn
               ? "Number of differencing operations required to make series stationary."
               : "Jumlah operasi differencing untuk membuat data stasioner. d=1 berarti first difference, d=2 second difference.",

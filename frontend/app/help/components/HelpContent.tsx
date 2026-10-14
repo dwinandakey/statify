@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { HelpLayout } from "../ui/HelpLayout";
 import { HelpSidebar } from "./HelpSidebar";
 import { LanguageToggle } from "./LanguageToggle";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 // Recursive type for nested sections
 export type SectionItem = {
@@ -39,13 +40,18 @@ export const HelpContent: React.FC<HelpContentProps> = ({
 	displaySections,
 	expandedKeys,
 }) => {
-
+	const { language } = useHelpLanguageStore();
+	const isEn = language === 'en';
 
 	const renderBreadcrumbs = () => {
 		const selectedSection = sections.find(s => s.key === selectedSectionKey);
 		if (!selectedSection) return null;
 
-		const breadcrumbs = [{ key: "main", label: "Home", href: "/" }, { key: "home", label: "Help Center" }, { key: selectedSection.key, label: selectedSection.label }];
+		const breadcrumbs = [
+			{ key: "main", label: isEn ? "Home" : "Beranda", href: "/" },
+			{ key: "home", label: isEn ? "Help Center" : "Pusat Bantuan" },
+			{ key: selectedSection.key, label: selectedSection.label },
+		];
 		
 		// Add active child if exists
 		if (activeChildKey) {
@@ -99,9 +105,13 @@ export const HelpContent: React.FC<HelpContentProps> = ({
 		if (!selectedSection) return (
 			<div className="text-center py-8">
 				<Book className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-				<h2 className="text-lg font-semibold mb-2">Welcome to the Help Center</h2>
+				<h2 className="text-lg font-semibold mb-2">
+					{isEn ? "Welcome to the Help Center" : "Selamat Datang di Pusat Bantuan"}
+				</h2>
 				<p className="text-muted-foreground max-w-md mx-auto mb-4 text-sm">
-					Please select a topic from the sidebar to get started or use the search to find specific information.
+					{isEn
+						? "Select a topic from the sidebar to get started, or use the search box to filter topics."
+						: "Pilih topik di sidebar untuk memulai, atau gunakan kotak pencarian untuk menyaring topik."}
 				</p>
 				<Button 
 					variant="outline" 
@@ -110,7 +120,7 @@ export const HelpContent: React.FC<HelpContentProps> = ({
 					onClick={() => onSectionSelect("getting-started")}
 				>
 					<BookOpen className="h-3.5 w-3.5 mr-1.5" />
-					Browse Getting Started Guide
+					{isEn ? "Browse Getting Started Guide" : "Buka Panduan Memulai"}
 				</Button>
 			</div>
 		);

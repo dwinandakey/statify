@@ -49,18 +49,21 @@ export const FileGuide: React.FC<FileGuideProps> = ({ section }) => {
     {
       id: 'import',
       label: 'Import Data',
+      labelEn: 'Import Data',
       icon: Upload,
       component: ImportTab
     },
     {
       id: 'export',
       label: 'Export Data',
+      labelEn: 'Export Data',
       icon: Download,
       component: ExportTab
     },
     {
       id: 'data',
       label: 'Kelola Data',
+      labelEn: 'Manage Data',
       icon: Database,
       component: DataTab
     }
@@ -69,7 +72,9 @@ export const FileGuide: React.FC<FileGuideProps> = ({ section }) => {
   return (
     <StandardizedGuideLayout
       title="Panduan Manajemen File"
+      titleEn="File Management Guide"
       description="Pelajari cara mengimpor, mengekspor, dan mengelola data dalam Statify"
+      descriptionEn="Learn how to import, export, and manage data in Statify"
       tabs={tabs}
       defaultTab="import"
     >

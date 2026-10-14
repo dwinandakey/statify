@@ -8,15 +8,15 @@ import { Button } from "@/components/ui/button";
 import { 
   Search, 
   BookOpen, 
-  HelpCircle, 
-  MessageSquare, 
-  ChevronRight, 
+  HelpCircle,
+  ChevronRight,
   Book, 
   Archive, 
   Database,
   ArrowLeft 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 import { type SectionItem } from "./HelpContent";
 
 interface HelpSidebarProps {
@@ -45,8 +45,6 @@ const getSectionIcon = (key: string) => {
       return <Book className="w-4 h-4" />;
     case 'faq':
       return <HelpCircle className="w-4 h-4" />;
-    case 'feedback':
-      return <MessageSquare className="w-4 h-4" />;
     default:
       return <Book className="w-4 h-4" />;
   }
@@ -64,7 +62,10 @@ export const HelpSidebar: React.FC<HelpSidebarProps> = ({
   sidebarOpen,
   setSidebarOpen
 }) => {
-  const renderSidebarItems = (items: SectionItem[], level = 0): React.JSX.Element[] => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
+  const renderSidebarItems =(items: SectionItem[], level = 0): React.JSX.Element[] => {
     return items.map(item => {
       const isSelected = item.key === selectedSectionKey;
   // Consider leaf items (no children) active when either explicitly selected as a child
@@ -110,7 +111,7 @@ export const HelpSidebar: React.FC<HelpSidebarProps> = ({
                           "text-xs mt-0.5",
                           isSelected && !activeChildKey ? "text-primary/70" : "text-muted-foreground"
                         )}>
-                          {item.children.length} topics
+                          {item.children.length} {isEn ? "topics" : "topik"}
                         </p>
                       )}
                     </div>
@@ -159,7 +160,7 @@ export const HelpSidebar: React.FC<HelpSidebarProps> = ({
                   </h4>
                 </div>
                 {searchValue && item.label.toLowerCase().includes(searchValue.toLowerCase()) && (
-                  <Badge variant="outline" className="text-xs h-4 px-1.5 bg-primary/10 text-primary border-primary/20">Match</Badge>
+                  <Badge variant="outline" className="text-xs h-4 px-1.5 bg-primary/10 text-primary border-primary/20">{isEn ? "Match" : "Cocok"}</Badge>
                 )}
               </div>
             </CardContent>
@@ -199,16 +200,18 @@ export const HelpSidebar: React.FC<HelpSidebarProps> = ({
           <div className="mb-4">
             <h1 className="text-lg font-semibold text-foreground mb-1 flex items-center">
               <Book className="w-5 h-5 mr-2" />
-              Help Center
+              {isEn ? "Help Center" : "Pusat Bantuan"}
             </h1>
-            <p className="text-xs text-muted-foreground">Find guides and documentation for Statify.</p>
+            <p className="text-xs text-muted-foreground">
+              {isEn ? "Find guides and documentation for Statify." : "Temukan panduan dan dokumentasi Statify."}
+            </p>
           </div>
           
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search guides..."
+              placeholder={isEn ? "Search guides..." : "Cari panduan..."}
               value={searchValue}
               onChange={onSearchChange}
               className="w-full pl-9 h-8 text-sm bg-background/50 border-border/50 focus:ring-1 ring-primary/30 focus:border-primary/30"
@@ -226,8 +229,8 @@ export const HelpSidebar: React.FC<HelpSidebarProps> = ({
             <Card className="border border-border/50">
               <CardContent className="p-3 text-center">
                 <Search className="w-6 h-6 mx-auto text-muted-foreground mb-2" />
-                <p className="text-xs text-muted-foreground">No results found</p>
-                <p className="text-xs text-muted-foreground/70 mt-0.5">Try different keywords</p>
+                <p className="text-xs text-muted-foreground">{isEn ? "No results found" : "Tidak ada hasil"}</p>
+                <p className="text-xs text-muted-foreground/70 mt-0.5">{isEn ? "Try different keywords" : "Coba kata kunci lain"}</p>
               </CardContent>
             </Card>
           )}

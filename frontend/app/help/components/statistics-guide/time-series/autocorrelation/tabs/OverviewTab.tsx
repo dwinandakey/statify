@@ -82,7 +82,9 @@ export const OverviewTab = () => {
           },
           {
             title: isEn ? "Partial Autocorrelation (PACF)" : "Autokorelasi Parsial (PACF)",
-            formula: "ϕ̂kk = correlation between Yt and Yt-k controlling for Yt-1,...,Yt-k+1",
+            formula: isEn
+              ? "ϕ̂kk = correlation between Yt and Yt-k controlling for Yt-1,...,Yt-k+1"
+              : "ϕ̂kk = korelasi antara Yt dan Yt-k dengan mengendalikan Yt-1,...,Yt-k+1",
             description: isEn
               ? "Measures direct correlation between data and its lag, removing effects of intermediate lags. Useful for AR order identification."
               : "Mengukur korelasi langsung antara data dan lagnya, menghilangkan pengaruh lag perantara. Berguna untuk menentukan orde AR.",
