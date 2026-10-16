@@ -35,3 +35,12 @@ codegen-units = 1
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ["-O3"]
+
+# White-box unit tests live next to the Jest integration tests in ../__tests__/unit.
+[[test]]
+name = "white_box_unit_eigen"
+path = "../__tests__/unit/white_box_unit_eigen.rs"
+
+[[test]]
+name = "white_box_unit_classification"
+path = "../__tests__/unit/white_box_unit_classification.rs"
