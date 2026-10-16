@@ -7,6 +7,7 @@ import { ChartService } from "@/services/chart/ChartService";
 import { useResultStore } from "@/stores/useResultStore";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { getTimeSeriesWorker } from "@/utils/timeseriesWorkerPool";
+import type { TimeSeriesSplitState } from "../../Common/useTimeSeriesSplit";
 
 export const useAnalyzeHook = (
     dependentVariable: Variable[],
@@ -21,7 +22,9 @@ export const useAnalyzeHook = (
     qOrders: number[],
     saveLongRun: boolean,
     saveShortRun: boolean,
-    onClose: () => void
+    splitConfig?: TimeSeriesSplitState,
+    onSaveSplitToDataView?: (totalRows: number, validRowIndices: number[], splitIndex: number, testPredictions?: number[]) => Promise<void>,
+    onClose?: () => void
 ) => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
@@ -106,7 +109,306 @@ export const useAnalyzeHook = (
                     
                     try {
                         const tables = [];
-                        
+                        let charts: any[] = [];
+
+                        if (splitConfig?.splitEnabled) {
+                            toast.success("ARDL split evaluation completed!");
+                            
+                            tables.push({
+                                title: "Time Series Data Split Summary",
+                                columnHeaders: [
+                                    { header: "Partition / Setting", key: "setting" },
+                                    { header: "Details", key: "details" }
+                                ],
+                                rows: [
+                                    {
+                                        setting: "Metode Evaluasi Split",
+                                        details: splitConfig.splitMode === "holdout"
+                                            ? "Mode 1: Holdout Kronologis (Fixed Split / Dynamic Forecast)"
+                                            : `Mode 2: Rolling Window (${splitConfig.rollingType === "expanding" ? "Expanding Window" : "Fixed Window"})`
+                                    },
+                                    {
+                                        setting: "Proporsi Target Training",
+                                        details: `${Math.round(result.trainRatio * 100)}%`
+                                    },
+                                    {
+                                        setting: "Data Training (In-Sample)",
+                                        details: `Observasi 1 .. ${result.trainSize} (${result.trainSize} data)`
+                                    },
+                                    {
+                                        setting: "Data Testing (Out-of-Sample)",
+                                        details: `Observasi ${result.trainSize + 1} .. ${nObs} (${result.testSize} data)`
+                                    },
+                                    {
+                                        setting: "Spesifikasi Lag ARDL",
+                                        details: `ARDL(${result.p}, ${Array.isArray(result.q) ? result.q.join(", ") : result.q})`
+                                    }
+                                ]
+                            });
+
+                            const coefRows = (result.varNames || []).map((vName: string, idx: number) => ({
+                                var: vName,
+                                coef: result.coefficients[idx],
+                                se: result.stdErrors?.[idx] || "-",
+                                tstat: result.tStats?.[idx] || "-",
+                                prob: result.pValues?.[idx] || "-"
+                            }));
+                            tables.push({
+                                title: "ARDL Equation (Estimated on Training Sample)",
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: coefRows
+                            });
+
+                            if (result.metrics) {
+                                tables.push({
+                                    title: "Out-of-Sample Forecast Accuracy Evaluation (Testing Sample)",
+                                    columnHeaders: [
+                                        { header: "Metrik Akurasi", key: "metric" },
+                                        { header: "Nilai", key: "val" },
+                                        { header: "Keterangan", key: "desc" }
+                                    ],
+                                    rows: [
+                                        { metric: "Root Mean Squared Error (RMSE)", val: result.metrics.rmse, desc: "Akar rerata kuadrat selisih ramalan" },
+                                        { metric: "Mean Absolute Error (MAE)", val: result.metrics.mae, desc: "Rerata selisih absolut nilai aktual vs ramalan" },
+                                        { metric: "Mean Absolute Percentage Error (MAPE)", val: result.metrics.mape, desc: "Rata-rata persentase galat peramalan" },
+                                        { metric: "Theil's Inequality Coefficient (U)", val: result.metrics.theilU, desc: "Ukuran performa peramalan relatif (0 = sempurna)" }
+                                    ]
+                                });
+                            }
+
+                            const chartData = [
+                                ...result.trainActual.map((act: number, i: number) => ({
+                                    category: String(i + 1),
+                                    actual: act,
+                                    forecast: i < (result.trainFitted || []).length ? result.trainFitted[i] : null
+                                })),
+                                ...result.testActual.map((act: number, i: number) => ({
+                                    category: String(result.trainSize + i + 1),
+                                    actual: act,
+                                    forecast: result.testYHat[i]
+                                }))
+                            ];
+
+                            charts.push(ChartService.createChartJSON({
+                                chartType: "Line Chart",
+                                chartData,
+                                chartMetadata: {
+                                    title: "ARDL: In-Sample Fit & Out-of-Sample Forecast",
+                                    subtitle: `Split cutoff at observation ${result.trainSize}`
+                                },
+                                chartConfig: {
+                                    axisLabels: { x: "Time Index", y: yVar.name }
+                                },
+                                chartVariables: {
+                                    x: ["category"],
+                                    y: ["actual", "forecast"]
+                                }
+                            }));
+
+                            if (result.diagnostics) {
+                                const d = result.diagnostics;
+                                tables.push({
+                                    title: "ARDL Fit & Diagnostics (Estimated on Training Sample)",
+                                    columnHeaders: [
+                                        { header: "Statistic", key: "col1" },
+                                        { header: "Value", key: "val1" },
+                                        { header: "Statistic", key: "col2" },
+                                        { header: "Value", key: "val2" }
+                                    ],
+                                    rows: [
+                                        { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                        { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                        { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                        { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                        { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                        { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson }
+                                    ],
+                                    footer: `ARDL diagnostics and all model parameters were estimated using training observations 1–${result.trainSize}.`
+                                });
+                            }
+
+                            if (Array.isArray(result.trainResiduals) && result.trainResiduals.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.trainResiduals.map((value: number, index: number) => ({
+                                        category: String(index + 1),
+                                        value
+                                    })),
+                                    chartMetadata: {
+                                        title: "Residuals Plot (ARDL)",
+                                        subtitle: "Training Sample"
+                                    },
+                                    chartConfig: {
+                                        axisLabels: { x: "Time", y: "Residual" }
+                                    }
+                                }));
+                            }
+
+                            if (Array.isArray(result.correlogram) && result.correlogram.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.correlogram.map((row: any) => ({
+                                        category: String(row.lag),
+                                        value: parseFloat(row.ac)
+                                    })),
+                                    chartMetadata: {
+                                        title: "Residual Correlogram Plot (ACF & PACF)",
+                                        subtitle: "Training Sample"
+                                    },
+                                    chartConfig: {
+                                        axisLabels: { x: "Lag", y: "ACF" }
+                                    }
+                                }));
+                            }
+
+                            const unrestricted = result.unrestrictedModel;
+                            if (unrestricted) {
+                                tables.push({
+                                    title: `Unrestricted ARDL Equation (Selected model: ARDL(${result.p}, ${Array.isArray(result.q) ? result.q.join(", ") : result.q}) via AIC)`,
+                                    columnHeaders: [
+                                        { header: "Variable", key: "var" },
+                                        { header: "Coefficient", key: "coef" },
+                                        { header: "Std. Error", key: "se" },
+                                        { header: "t-Statistic", key: "tstat" },
+                                        { header: "Prob.", key: "prob" }
+                                    ],
+                                    rows: (unrestricted.varNames || []).map((varName: string, index: number) => ({
+                                        var: varName,
+                                        coef: unrestricted.coefficients?.[index] ?? "-",
+                                        se: unrestricted.stdErrors?.[index] ?? "-",
+                                        tstat: unrestricted.tStats?.[index] ?? "-",
+                                        prob: unrestricted.pValues?.[index] ?? "-"
+                                    }))
+                                });
+                                if (unrestricted.diagnostics) {
+                                    tables.push({
+                                        title: "Unrestricted ARDL Fit & Diagnostics (Estimated on Training Sample)",
+                                        columnHeaders: [{ header: "Statistic", key: "stat" }, { header: "Value", key: "value" }],
+                                        rows: Object.entries(unrestricted.diagnostics).map(([stat, value]) => ({ stat, value }))
+                                    });
+                                }
+                            }
+                            const longRun = result.longRun;
+                            tables.push({
+                                title: `Long Run Equation: ${yVar.name} ~ C + ${independentVariables.map(v => v.name).join(" + ")} (Estimated on Training Sample)`,
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: (longRun?.coefficients || []).map((coef: any, index: number) => ({
+                                    var: index === 0 ? "C (Intercept)" : independentVariables[index - 1]?.name || `X${index}`,
+                                    coef,
+                                    se: longRun.stdErrors?.[index] ?? "-",
+                                    tstat: longRun.tStats?.[index] ?? "-",
+                                    prob: longRun.pValues?.[index] ?? "-"
+                                }))
+                            });
+                            if (longRun?.diagnostics) {
+                                tables.push({
+                                    title: "Long Run Fit & Diagnostics (Estimated on Training Sample)",
+                                    columnHeaders: [
+                                        { header: "Statistic", key: "col1" },
+                                        { header: "Value", key: "val1" },
+                                        { header: "Statistic", key: "col2" },
+                                        { header: "Value", key: "val2" }
+                                    ],
+                                    rows: [
+                                        { col1: "R-squared", val1: longRun.diagnostics.rSquared, col2: "Mean dependent var", val2: longRun.diagnostics.meanDependentVar },
+                                        { col1: "Adjusted R-squared", val1: longRun.diagnostics.adjRSquared, col2: "S.D. dependent var", val2: longRun.diagnostics.sdDependentVar },
+                                        { col1: "S.E. of regression", val1: longRun.diagnostics.seRegression, col2: "Akaike info criterion", val2: longRun.diagnostics.aic },
+                                        { col1: "Sum squared resid", val1: longRun.diagnostics.sumSquaredResid, col2: "Schwarz criterion", val2: longRun.diagnostics.bic },
+                                        { col1: "Log likelihood", val1: longRun.diagnostics.logLikelihood, col2: "Hannan-Quinn criter.", val2: longRun.diagnostics.hq },
+                                        { col1: "F-statistic", val1: longRun.diagnostics.fStatistic, col2: "Durbin-Watson stat", val2: longRun.diagnostics.durbinWatson }
+                                    ],
+                                    footer: `Long-run equation and diagnostics use training observations 1–${result.trainSize}; testing observations were not used.`
+                                });
+                            }
+                            tables.push({
+                                title: "Cointegration Test (ADF on Residuals)",
+                                columnHeaders: [{ header: "Statistic", key: "stat" }, { header: "Value", key: "value" }],
+                                rows: [
+                                    { stat: "ADF statistic", value: result.cointegration?.statistic ?? "-" },
+                                    { stat: "Prob.", value: result.cointegration?.pValue ?? "-" },
+                                    { stat: "Cointegrated", value: result.cointegration?.isCointegrated ? "Yes" : "No" }
+                                ]
+                            });
+                            const shortRun = result.shortRun;
+                            tables.push({
+                                title: `Short Run ARDL-ECM: D(${yVar.name}) ~ C + ECT(-1) + D(${yVar.name}) lags + D(Xs) lags (Estimated on Training Sample)`,
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: (shortRun?.coefficients || []).map((coef: any, index: number) => ({
+                                    var: index === 0 ? "C" : `Short-run term ${index}`,
+                                    coef,
+                                    se: shortRun.stdErrors?.[index] ?? "-",
+                                    tstat: shortRun.tStats?.[index] ?? "-",
+                                    prob: shortRun.pValues?.[index] ?? "-"
+                                }))
+                            });
+                            if (shortRun?.diagnostics) {
+                                tables.push({
+                                    title: "Short Run ECM Fit & Diagnostics (Estimated on Training Sample)",
+                                    columnHeaders: [{ header: "Statistic", key: "stat" }, { header: "Value", key: "value" }],
+                                    rows: Object.entries(shortRun.diagnostics).map(([stat, value]) => ({ stat, value })),
+                                    footer: `Short-run ARDL-ECM diagnostics use training observations 1–${result.trainSize}; testing observations were not used.`
+                                });
+                            }
+                            tables.push({
+                                title: "Classical Assumptions Tests (Short-Run Residuals)",
+                                columnHeaders: [{ header: "Statistic", key: "stat" }, { header: "Value", key: "value" }],
+                                rows: Object.entries(shortRun?.diagnostics || result.diagnostics || {}).map(([stat, value]) => ({ stat, value }))
+                            });
+                            tables.push({
+                                title: "Correlogram of Residuals (Autocorrelation & Partial Correlation)",
+                                columnHeaders: [{ header: "Lag", key: "lag" }, { header: "AC", key: "ac" }, { header: "PAC", key: "pac" }, { header: "Q-stat", key: "qStat" }, { header: "Prob.", key: "prob" }],
+                                rows: result.correlogram || []
+                            });
+                            tables.push({
+                                title: "Automated Interpretation",
+                                columnHeaders: [{ header: "Interpretation", key: "value" }],
+                                rows: [{ value: result.cointegration?.isCointegrated ? "The ARDL variables are cointegrated and the short-run model includes equilibrium adjustment." : "Cointegration was not established; interpret long-run coefficients with caution." }]
+                            });
+                            tables.push({
+                                title: "Model Interpretation Summary (ARDL)",
+                                columnHeaders: [{ header: "Summary", key: "value" }],
+                                rows: [{ value: "Training-only ARDL estimates, diagnostics, residuals, and correlogram are reported above; testing observations are reserved for out-of-sample forecast evaluation." }]
+                            });
+                            if (onSaveSplitToDataView) {
+                                await onSaveSplitToDataView(data.length, validRowIndices, result.trainSize, result.testYHat);
+                            }
+
+                            const logMsg = `ARDL Split Data Evaluation on ${yVar.name}`;
+                            const logId = await addLog({ log: logMsg });
+                            const analyticId = await addAnalytic(logId, {
+                                title: "ARDL Split Evaluation Results",
+                                note: `p=${result.p}, q=${Array.isArray(result.q) ? result.q.join(",") : result.q} (Train-Test Split)`
+                            });
+
+                            await addStatistic(analyticId, {
+                                title: "ARDL Split Evaluation Output",
+                                output_data: JSON.stringify({ tables, charts }),
+                                components: "ArdlAnalysis",
+                                description: "ARDL Train-Test Split results"
+                            });
+
+                            if (onClose) onClose();
+                            return;
+                        }
+
                         // 0. Unrestricted ARDL Main Model (EViews Baseline Model)
                         if (result.unrestrictedModel) {
                             const u = result.unrestrictedModel;
@@ -383,7 +685,7 @@ export const useAnalyzeHook = (
                             ]
                         });
 
-                        const charts = [];
+                        charts = [];
                         
                         // Actual vs Fitted & Residuals Chart (EViews Graphics)
                         if (result.unrestrictedModel?.fitted && result.unrestrictedModel?.actual) {
@@ -591,7 +893,7 @@ export const useAnalyzeHook = (
                         });
 
                         setTimeout(() => {
-                            onClose();
+                            onClose?.();
                             client.release();
                         }, 1500);
 
@@ -618,20 +920,40 @@ export const useAnalyzeHook = (
                 client.release();
             });
 
-            client.post({
-                type: "ARDL",
-                payload: {
-                    y: yData,
-                    x: xFlat,
-                    n_vars: independentVariables.length,
-                    p: pOrder,
-                    q: qOrdersArray,
-                    autoSelect,
-                    maxP,
-                    maxQ,
-                    selectionCriterion
-                }
-            });
+            if (splitConfig?.splitEnabled) {
+                client.post({
+                    type: "ARDL_SPLIT",
+                    payload: {
+                        y: yData,
+                        x: xFlat,
+                        n_vars: independentVariables.length,
+                        p: pOrder,
+                        q: qOrdersArray,
+                        autoSelect,
+                        maxP,
+                        maxQ,
+                        selectionCriterion,
+                        trainRatio: splitConfig.trainRatio,
+                        splitMode: splitConfig.splitMode,
+                        rollingType: splitConfig.rollingType
+                    }
+                });
+            } else {
+                client.post({
+                    type: "ARDL",
+                    payload: {
+                        y: yData,
+                        x: xFlat,
+                        n_vars: independentVariables.length,
+                        p: pOrder,
+                        q: qOrdersArray,
+                        autoSelect,
+                        maxP,
+                        maxQ,
+                        selectionCriterion
+                    }
+                });
+            }
 
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";

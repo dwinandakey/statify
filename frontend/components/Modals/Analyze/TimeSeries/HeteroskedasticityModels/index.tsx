@@ -1,10 +1,10 @@
-
 "use client";
 
 import type { FC } from "react";
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { useDataStore } from "@/stores/useDataStore";
 import type { Variable } from "@/types/Variable";
@@ -12,12 +12,15 @@ import { useTimeHook } from "@/components/Modals/Analyze/TimeSeries/TimeSeriesTi
 import { useAnalyzeHook } from "@/components/Modals/Analyze/TimeSeries/HeteroskedasticityModels/hooks/analyzeHook";
 import VariablesTab from "@/components/Modals/Analyze/TimeSeries/HeteroskedasticityModels/VariablesTab";
 import TimeTab from "@/components/Modals/Analyze/TimeSeries/TimeSeriesTimeTab";
+import { useTimeSeriesSplit } from "@/components/Modals/Analyze/TimeSeries/Common/useTimeSeriesSplit";
+import { TimeSeriesSplitTab } from "@/components/Modals/Analyze/TimeSeries/Common/TimeSeriesSplitTab";
 import { getFormData, saveFormData, clearFormData } from "@/hooks/useIndexedDB";
 import type { DataRow } from "@/types/Data";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface HeteroskedasticityModelsProps {
     onClose: () => void;
@@ -39,6 +42,13 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
     const [pOrder, setPOrder] = useState<number>(1); // GARCH order / ARCH order for ARCH model
     const [qOrder, setQOrder] = useState<number>(1); // ARCH order for GARCH model
 
+    // Forecast Options State
+    const [includeForecast, setIncludeForecast] = useState<boolean>(false);
+    const [forecastHorizon, setForecastHorizon] = useState<number>(10);
+
+    // Split Data Hook
+    const splitHook = useTimeSeriesSplit(0.8);
+
     const {
         periods,
         selectedPeriod,
@@ -47,6 +57,21 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
         resetTime,
     } = useTimeHook();
 
+    const handleSaveSplitToDataView = async (
+        totalRows: number,
+        validRowIndices: number[],
+        splitIndex: number,
+        testPredictions?: number[]
+    ) => {
+        await splitHook.saveSplitToDataView({
+            totalRows,
+            validRowIndices,
+            splitIndex,
+            testPredictions,
+            modelLabel: modelType
+        });
+    };
+
     const { errorMsg, isCalculating, handleAnalyzes } = useAnalyzeHook(
         selectedVariables,
         data,
@@ -54,9 +79,19 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
         pOrder,
         qOrder,
         modelType,
+        includeForecast,
+        forecastHorizon,
+        {
+            splitEnabled: splitHook.splitEnabled,
+            splitMode: splitHook.splitMode,
+            rollingType: splitHook.rollingType,
+            trainRatio: splitHook.trainRatio,
+            saveSplitVariable: splitHook.saveSplitVariable,
+            savePredictions: splitHook.savePredictions
+        },
+        handleSaveSplitToDataView,
         onClose
     );
-    
 
     useEffect(() => {
         if (errorMsg) {
@@ -68,8 +103,6 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
     useEffect(() => {
         const loadSavedState = async () => {
             try {
-                // Determine form ID based on model type? Or just generic?
-                // Using generic "HeteroModels" for shared state
                 const savedData = await getFormData("HeteroskedasticityModels", "variables");
                 const filteredVariables = variables.filter(v => v.name !== "");
 
@@ -110,7 +143,7 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
 
     const handleOk = () => {
         if (selectedVariables.length === 0) {
-            toast.error("Please select at least one variable");
+            toast.error("Please select a dependent variable");
             return;
         }
         handleAnalyzes();
@@ -120,21 +153,33 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
         const filteredVariables = variables.filter(v => v.name !== "");
         setAvailableVariables(filteredVariables);
         setSelectedVariables([]);
-        resetTime();
         setModelType("GARCH");
         setPOrder(1);
         setQOrder(1);
+        setIncludeForecast(false);
+        setForecastHorizon(10);
+        splitHook.resetSplit();
+        resetTime();
         await clearFormData("HeteroskedasticityModels");
         toast.success("Form reset successfully");
     };
 
+    const totalObs = selectedVariables.length > 0 && selectedVariables[0]
+        ? data.filter(row => {
+            const v = row[selectedVariables[0].columnIndex];
+            return v !== null && v !== undefined && !isNaN(Number(v));
+        }).length
+        : data.length;
+
     return (
         <div className="h-full flex flex-col">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="flex-1 flex flex-col">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="variables">Variables</TabsTrigger>
                     <TabsTrigger value="time">Time</TabsTrigger>
-                    <TabsTrigger value="options">Model</TabsTrigger>
+                    <TabsTrigger value="options">Options</TabsTrigger>
+                    <TabsTrigger value="forecast">Forecast</TabsTrigger>
+                    <TabsTrigger value="split">Split Data</TabsTrigger>
                 </TabsList>
 
                 <div className="flex-1 overflow-auto">
@@ -174,22 +219,22 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
                                     <SelectItem value="ARCH">ARCH (Autoregressive Conditional Heteroscedasticity)</SelectItem>
                                 </SelectContent>
                             </Select>
-                             <p className="text-xs text-muted-foreground">
-                                Select the specific volatility model specification.
+                            <p className="text-xs text-muted-foreground">
+                                Pilih spesifikasi model volatilitas yang akan diestimasi.
                             </p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                             <div className="space-y-2">
+                            <div className="space-y-2">
                                 <Label>ARCH Order (q)</Label>
                                 <Input 
                                     type="number" 
                                     value={qOrder} 
-                                    onChange={(e) => setQOrder(parseInt(e.target.value) || 1)}
+                                    onChange={(e) => setQOrder(Math.max(1, parseInt(e.target.value) || 1))}
                                     min={1} 
                                 />
                                 <p className="text-xs text-muted-foreground">
-                                    Lags of squared residuals.
+                                    Lag kuadrat residual (shock volatilitas).
                                 </p>
                             </div>
                             
@@ -199,24 +244,90 @@ const HeteroskedasticityModels: FC<HeteroskedasticityModelsProps> = ({ onClose, 
                                     <Input 
                                         type="number" 
                                         value={pOrder} 
-                                        onChange={(e) => setPOrder(parseInt(e.target.value) || 1)}
+                                        onChange={(e) => setPOrder(Math.max(1, parseInt(e.target.value) || 1))}
                                         min={1} 
                                     />
                                     <p className="text-xs text-muted-foreground">
-                                        Lags of conditional variance.
+                                        Lag ragam kondisional (persistensi volatilitas).
                                     </p>
                                 </div>
                             )}
                         </div>
 
                         <div className="pt-4 border-t">
-                            <Label className="mb-2 block">Solver Options</Label>
+                            <Label className="mb-2 block">Optimasi Solver</Label>
                             <p className="text-xs text-muted-foreground">
-                                Currently using L-BFGS optimization.
+                                Estimasi menggunakan algoritma optimasi numerik L-BFGS Quasi-Newton.
                             </p>
-                             {/* Future: Add Distribution and Restriction options here */}
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="forecast" className="h-full p-6 space-y-5">
+                        <div className="flex items-start space-x-3 p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+                            <Checkbox
+                                id="include-garch-forecast"
+                                checked={includeForecast}
+                                onCheckedChange={(checked) => setIncludeForecast(!!checked)}
+                                className="mt-1"
+                            />
+                            <div className="space-y-1">
+                                <Label htmlFor="include-garch-forecast" className="text-sm font-semibold cursor-pointer">
+                                    Sertakan Peramalan Multi-Step (Forecasting)
+                                </Label>
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                    Menghitung peramalan nilai mean (ŷ = μ) dan ragam kondisional (σ²_&#123;T+h&#125;) beberapa langkah ke depan beserta 95% Confidence Interval.
+                                </p>
+                            </div>
                         </div>
 
+                        {includeForecast && (
+                            <Card className="animate-in fade-in-50 duration-200">
+                                <CardContent className="pt-5 space-y-4">
+                                    <div className="space-y-2">
+                                        <Label className="text-sm font-semibold">Forecast Horizon (Langkah ke Depan)</Label>
+                                        <div className="flex items-center gap-3">
+                                            <Input
+                                                type="number"
+                                                min={1}
+                                                max={100}
+                                                value={forecastHorizon}
+                                                onChange={(e) => setForecastHorizon(Math.max(1, Math.min(100, parseInt(e.target.value) || 10)))}
+                                                className="w-32"
+                                            />
+                                            <span className="text-xs text-muted-foreground">periode / waktu ke depan (1 s.d. 100)</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-3 bg-muted/40 rounded-md text-xs text-muted-foreground space-y-1 border">
+                                        <p className="font-semibold text-foreground">Catatan Matematis Peramalan:</p>
+                                        <ul className="list-disc list-inside space-y-0.5">
+                                            <li>Prediksi Mean: ŷ = μ (konstanta mean equation).</li>
+                                            <li>Interval Kepercayaan 95%: μ ± 1.96 · σ_&#123;T+h&#125;.</li>
+                                            <li>Prediksi Ragam Multi-Step konvergen ke unconditional variance ω / (1 - α - β) jika model stasioner.</li>
+                                        </ul>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="split" className="h-full">
+                        <TimeSeriesSplitTab
+                            splitEnabled={splitHook.splitEnabled}
+                            setSplitEnabled={splitHook.setSplitEnabled}
+                            splitMode={splitHook.splitMode}
+                            setSplitMode={splitHook.setSplitMode}
+                            rollingType={splitHook.rollingType}
+                            setRollingType={splitHook.setRollingType}
+                            trainRatio={splitHook.trainRatio}
+                            setTrainRatio={splitHook.setTrainRatio}
+                            saveSplitVariable={splitHook.saveSplitVariable}
+                            setSaveSplitVariable={splitHook.setSaveSplitVariable}
+                            savePredictions={splitHook.savePredictions}
+                            setSavePredictions={splitHook.setSavePredictions}
+                            totalObs={totalObs}
+                            modelName={modelType}
+                        />
                     </TabsContent>
                 </div>
             </Tabs>
