@@ -120,3 +120,9 @@ docs/knn-sequence-diagrams/08-penanganan-error-analisis.png
 docs/knn-use-case-diagram/use-case-diagram-knn.png
 scripts/generate-knn-sequence-diagrams.ps1
 scripts/generate-knn-use-case-diagram.ps1
+implementation_plan_garch_forecast_split.md
+4. Dokumentasi/Data Testing/loop_performance_1million.csv
+frontend/components/Modals/Analyze/Classify/nearest-neighbor/__tests__/performance-results-constructor-all-runs.json
+frontend/components/Modals/Analyze/Classify/nearest-neighbor/__tests__/performance-results-constructor-all-runs.json
+testing/eviews/create_eviews_comparison.js
+testing/eviews/statify_eviews_comparison.prg

@@ -62,15 +62,29 @@ const makeData = (n: number): DataRow[] =>
 
 const retVar = createVar('Returns', 0);
 
+const defaultSplitConfig = {
+    splitEnabled: false,
+    splitMode: 'holdout' as const,
+    rollingType: 'expanding' as const,
+    trainRatio: 0.8,
+    saveSplitVariable: false,
+    savePredictions: false,
+};
+
 const runAndAnalyze = async (
     vars: Variable[],
     data: DataRow[],
     pOrder = 1,
     qOrder = 1,
     modelType = 'GARCH',
+    includeForecast = false,
+    forecastHorizon = 10,
+    splitConfig = defaultSplitConfig,
+    onSaveSplit = jest.fn().mockResolvedValue(undefined),
+    onClose = jest.fn()
 ) => {
     const { result } = renderHook(() =>
-        useAnalyzeHook(vars, data, null, pOrder, qOrder, modelType, jest.fn()),
+        useAnalyzeHook(vars, data, null, pOrder, qOrder, modelType, includeForecast, forecastHorizon, splitConfig, onSaveSplit, onClose),
     );
     await act(async () => { await result.current.handleAnalyzes(); });
     return result;
@@ -290,5 +304,149 @@ describe('useAnalyzeHook GARCH/ARCH – Error Worker (P5–P6)', () => {
 
         expect(result.current.errorMsg).toBe('Failed to connect to worker');
         expect(result.current.isCalculating).toBe(false);
+    });
+});
+
+// ─── Jalur Forecasting & Split Data (Masukan 4.1 & 4.2) ────────────────────────
+describe('useAnalyzeHook GARCH/ARCH – Forecasting & Split Data', () => {
+    it('TC-GARCH-07: Forecast Multi-Step → Tabel dan chart peramalan dibuat', async () => {
+        const mockResult = {
+            modelType: 'GARCH',
+            p: 1,
+            q: 1,
+            coefficients: {
+                mu: '0.0500',
+                omega: '0.0100',
+                alpha: ['0.1000'],
+                beta: ['0.8000'],
+            },
+            variance: Array(15).fill(0.05),
+            residuals: Array(15).fill(0.01),
+        };
+
+        await runAndAnalyze([retVar], makeData(15), 1, 1, 'GARCH', true, 5);
+        await triggerSuccess(mockResult);
+
+        expect(mockAddStatistic).toHaveBeenCalled();
+        const payload = JSON.parse(mockAddStatistic.mock.calls[0][1].output_data);
+        const forecastTable = payload.tables.find((t: any) => t.title.includes('Multi-Step Forecast'));
+        expect(forecastTable).toBeDefined();
+        expect(forecastTable.rows.length).toBe(5);
+        expect(forecastTable.rows[0].step).toBe('T + 1');
+    });
+
+    it('TC-GARCH-08: Split Data Mode 1 (Holdout Kronologis) → Kirim payload GARCH_SPLIT', async () => {
+        const splitConfig = {
+            splitEnabled: true,
+            splitMode: 'holdout' as const,
+            rollingType: 'expanding' as const,
+            trainRatio: 0.8,
+            saveSplitVariable: false,
+            savePredictions: false,
+        };
+
+        await runAndAnalyze([retVar], makeData(20), 1, 1, 'GARCH', false, 10, splitConfig);
+
+        expect(mockClient.post).toHaveBeenCalledWith({
+            type: 'GARCH_SPLIT',
+            payload: expect.objectContaining({
+                splitMode: 'holdout',
+                trainRatio: 0.8,
+            }),
+        });
+    });
+
+    it('TC-GARCH-09: Split Data Mode 2 (Rolling Window) → Kirim payload GARCH_SPLIT rolling', async () => {
+        const splitConfig = {
+            splitEnabled: true,
+            splitMode: 'rolling' as const,
+            rollingType: 'fixed' as const,
+            trainRatio: 0.75,
+            saveSplitVariable: true,
+            savePredictions: true,
+        };
+
+        const mockSave = jest.fn().mockResolvedValue(undefined);
+        await runAndAnalyze([retVar], makeData(20), 1, 1, 'GARCH', false, 10, splitConfig, mockSave);
+
+        expect(mockClient.post).toHaveBeenCalledWith({
+            type: 'GARCH_SPLIT',
+            payload: expect.objectContaining({
+                splitMode: 'rolling',
+                rollingType: 'fixed',
+                trainRatio: 0.75,
+            }),
+        });
+    });
+
+    it('TC-GARCH-10: Split Data Sukses → Output memuat tabel partisi dan metrik evaluasi', async () => {
+        const splitConfig = {
+            splitEnabled: true,
+            splitMode: 'holdout' as const,
+            rollingType: 'expanding' as const,
+            trainRatio: 0.8,
+            saveSplitVariable: true,
+            savePredictions: true,
+        };
+
+        const mockSplitResult = {
+            modelType: 'GARCH',
+            splitMode: 'holdout',
+            trainSize: 16,
+            testSize: 4,
+            trainRatio: 0.8,
+            coefficients: {
+                mu: '0.0200',
+                omega: '0.0050',
+                alpha: ['0.1200'],
+                beta: ['0.8200'],
+            },
+            trainVariance: Array(16).fill(0.03),
+            trainResiduals: Array(16).fill(0.01),
+            diagnostics: {
+                rSquared: '0.85',
+                adjRSquared: '0.84',
+                seRegression: '0.012',
+                sumSquaredResid: '0.004',
+                logLikelihood: '620.25',
+                durbinWatson: '1.95',
+                meanDependentVar: '0.015',
+                sdDependentVar: '0.035',
+                aic: '-1234.5',
+                bic: '-1220.0',
+                hq: '-1228.0'
+            },
+            testVarianceForecast: Array(4).fill(0.032),
+            testYHat: Array(4).fill(0.02),
+            metrics: {
+                mse: '0.0004',
+                rmse: '0.0200',
+                mae: '0.0150',
+                mape: '12.5%',
+                theilU: '0.1500',
+            },
+            coverage95: '100.00%',
+        };
+
+        const mockSave = jest.fn().mockResolvedValue(undefined);
+        await runAndAnalyze([retVar], makeData(20), 1, 1, 'GARCH', false, 10, splitConfig, mockSave);
+        await triggerSuccess(mockSplitResult);
+
+        expect(mockAddStatistic).toHaveBeenCalled();
+        const payload = JSON.parse(mockAddStatistic.mock.calls[0][1].output_data);
+
+        // Harus ada tabel Split Summary & Out-of-Sample Evaluation
+        const splitSummary = payload.tables.find((t: any) => t.title.includes('Data Split Summary'));
+        expect(splitSummary).toBeDefined();
+
+        const evalTable = payload.tables.find((t: any) => t.title.includes('Out-of-Sample Forecast Evaluation'));
+        expect(evalTable).toBeDefined();
+
+        // Output estimasi training lama tetap tersedia saat split diaktifkan.
+        expect(payload.tables.find((t: any) => t.title === 'Diagnostics')).toBeDefined();
+        expect(payload.charts).toHaveLength(3);
+
+        // Opsi simpan ke data view dipanggil
+        expect(mockSave).toHaveBeenCalledWith(20, expect.any(Array), 16, mockSplitResult.testYHat);
     });
 });
