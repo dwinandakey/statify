@@ -7,6 +7,7 @@ import { saveDiscriminantResult, saveDiscriminantAssumptions } from "@/component
 import { saveDiscriminantVariables } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-save";
 import { exportDiscriminantModelXml } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-xml-export";
 import { validateDiscriminantInput } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-validation";
+import { markDispatch, markWorkerResponse, startAnalysisRun, type WorkerTiming } from "@/lib/analysisTiming";
 import { toast } from "sonner";
 import { Variable } from "@/types/Variable";
 
@@ -26,7 +27,7 @@ type EngineMessage = {
 
 /** The engine's reply, in the shape discriminant.worker.js posts back. */
 type EngineReply =
-    | { type: "SUCCESS"; payload: { formattedResults: any; log: unknown; errors: unknown } }
+    | { type: "SUCCESS"; payload: { formattedResults: any; log: unknown; errors: unknown }; timing?: WorkerTiming }
     | { type: "ERROR"; error: string };
 
 const WASM_BASE = "/workers/Classify/Discriminant/pkg/";
@@ -73,14 +74,17 @@ function isWorkerDisabled(): boolean {
  * blocks the page until it returns.
  */
 async function runEngineOnMainThread(message: EngineMessage): Promise<EngineReply> {
+    const start = performance.now();
     try {
         const wasm = await import(/* webpackIgnore: true */ `${WASM_BASE}wasm.js`);
         await wasm.default({ module_or_path: `${WASM_BASE}wasm_bg.wasm` });
+        const wasmReady = performance.now();
 
         // Let the browser paint the loading state before the synchronous call
         // takes over the main thread.
         await new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
 
+        const computeStart = performance.now();
         const analysis = new wasm.DiscriminantAnalysis(
             message.group_data,
             message.independent_data,
@@ -94,8 +98,17 @@ async function runEngineOnMainThread(message: EngineMessage): Promise<EngineRepl
         const formattedResults = analysis.get_formatted_results();
         const log = analysis.get_all_log();
         const errors = analysis.get_all_errors();
+        const computeDone = performance.now();
         analysis.free();
-        return { type: "SUCCESS", payload: { formattedResults, log, errors } };
+        return {
+            type: "SUCCESS",
+            payload: { formattedResults, log, errors },
+            timing: {
+                wasmInitMs: wasmReady - start,
+                computeMs: computeDone - computeStart,
+                workerTotalMs: performance.now() - start,
+            },
+        };
     } catch (error) {
         const detail = (error as { message?: string })?.message || String(error);
         return { type: "ERROR", error: detail };
@@ -234,6 +247,16 @@ export const useDiscriminantState = (
                     },
                 };
 
+                // Procedure time (lib/analysisTiming) starts after the settings are
+                // saved, so it holds no IndexedDB work. The run label names the
+                // scenario: method, bootstrap (enter method only) and engine thread.
+                const onMainThread = isWorkerDisabled();
+                const method = mainData.Stepwise ? "Stepwise" : "Enter";
+                const bootstrap = configData.bootstrap?.PerformBootStrapping && !mainData.Stepwise ? "+Bootstrap" : "";
+                const timingCtx = startAnalysisRun(
+                    `Discriminant:${method}${bootstrap}${onMainThread ? ":MainThread" : ""}`
+                );
+
                 const GroupingVariable = mainData.GroupingVariable
                     ? [mainData.GroupingVariable]
                     : [];
@@ -306,7 +329,10 @@ export const useDiscriminantState = (
                             });
                         }
 
-                        await saveDiscriminantResult(formattedResults);
+                        await saveDiscriminantResult(formattedResults, {
+                            ctx: timingCtx,
+                            workerTiming: reply.timing,
+                        });
 
                         // Save-dialog side effects. These run after the output is
                         // stored so a failure here still leaves the user with their
@@ -357,20 +383,25 @@ export const useDiscriminantState = (
                 };
 
                 // Responsiveness test: run on the main thread instead of the worker.
-                if (isWorkerDisabled()) {
+                if (onMainThread) {
                     console.warn(
                         "[Discriminant] Web Worker disabled (localStorage discriminant.noWorker = 1): running on the main thread."
                     );
-                    await handleReply(await runEngineOnMainThread(message));
+                    markDispatch(timingCtx);
+                    const reply = await runEngineOnMainThread(message);
+                    markWorkerResponse(timingCtx);
+                    await handleReply(reply);
                     return;
                 }
 
                 // Create WebWorker and send it the data
                 const worker = new Worker('/workers/Classify/Discriminant/discriminant.worker.js', { type: 'module' });
+                markDispatch(timingCtx);
                 worker.postMessage(message);
 
                 // Handle worker response
                 worker.onmessage = async (e) => {
+                    markWorkerResponse(timingCtx);
                     try {
                         await handleReply(e.data as EngineReply);
                     } finally {
