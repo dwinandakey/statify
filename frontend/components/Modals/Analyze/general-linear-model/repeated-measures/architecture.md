@@ -20,7 +20,7 @@ Analisis General Linear Model (GLM) Repeated Measures (pengukuran berulang): men
 
 ```
 repeated-measures/
-├── constants/          # Konfigurasi default & konstanta UI
+├── constants/          # Konfigurasi default (repeated-measures-default.ts + repeated-measures-define-default.ts)
 ├── dialogs/            # Komponen dialog
 │   ├── dialog.tsx                          # Wrapper dialog utama (shadcn Dialog)
 │   ├── repeated-measures-main.tsx          # Layout sidebar + ResizablePanelGroup
@@ -34,6 +34,9 @@ repeated-measures/
 │   ├── plots.tsx       # Sub-dialog Plots
 │   ├── posthoc.tsx     # Sub-dialog Post Hoc
 │   └── save.tsx        # Sub-dialog Save
+├── hooks/              # Tour onboarding (belum di-wire ke dialog — lihat catatan di bawah)
+│   ├── useTourGuide.ts         # State-machine tur (shared pattern)
+│   └── tourConfig.ts           # repeatedMeasuresDefineTourSteps: TourStep[] (fase Define)
 ├── rust/               # Crate Rust/WASM (engine komputasi)
 │   └── src/
 │       ├── lib.rs              # Entry point #[wasm_bindgen]
@@ -46,8 +49,11 @@ repeated-measures/
 │   ├── repeated-measures-analysis.ts           # Inisialisasi & run WASM
 │   ├── repeated-measures-analysis-formatter.ts # Transform result → tabel HTML
 │   └── repeated-measures-analysis-output.ts    # Render output ke resultStore
-└── types/              # TypeScript type definitions
+├── types/              # repeated-measures.ts, repeated-measure-define.ts, repeated-measures-worker.ts
+└── __test__/           # Integration + performance test (repeated-measures.test.ts, repeated-measures.performance.test.ts)
 ```
+
+> **Test.** `jest.config.js` mencocokkan `**/__test__/**` (di samping `**/test/**` & `**/__tests__/**`), sehingga folder `__test__/` di sini otomatis dijalankan.
 
 ---
 
@@ -227,3 +233,4 @@ Data within-subjects di-average per subjek untuk mendapatkan satu skor per subje
 - **Error collector**: Kegagalan tiap langkah dikumpulkan tanpa menghentikan langkah lain.
 - **Regex factor parsing**: Satu-satunya fitur GLM yang menggunakan crate `regex` untuk memecah nama variabel encoded.
 - **Two-key IndexedDB**: Konfigurasi Define Factor (`"RepeatedMeasuresDefine"`) dan konfigurasi Main Dialog (`"RepeatedMeasures"`) disimpan secara terpisah untuk menjaga state lintas sesi.
+- **Onboarding tour (staged, belum aktif)**: `hooks/useTourGuide.ts` + `hooks/tourConfig.ts` (`repeatedMeasuresDefineTourSteps`) sudah disiapkan mengikuti pola tur bersama (`@/components/Common/TourComponents`, `@/types/tourTypes`), namun **belum di-import/di-render** oleh dialog mana pun — berbeda dengan Multivariate yang tur-nya sudah aktif di `dialog.tsx`. Wiring `TourPopup` + tombol `startTour` (kemungkinan di fase Define) menjadi langkah berikutnya.

@@ -35,6 +35,8 @@ multivariate/
 │   ├── save.tsx                # Sub-dialog Save
 │   └── test-values.tsx         # Sub-dialog Test Values (μ₀ Hotelling T² Satu Populasi)
 ├── hooks/              # Custom React hooks
+│   ├── useTourGuide.ts         # State-machine tur onboarding (langkah, target el, resize)
+│   └── tourConfig.ts           # multivariateTourSteps: TourStep[] untuk dialog utama
 ├── rust/               # Crate Rust/WASM (engine komputasi)
 │   └── src/
 │       ├── lib.rs              # Entry point #[wasm_bindgen]
@@ -49,8 +51,13 @@ multivariate/
 │   ├── multivariate-analysis-output.ts    # Render output ke resultStore
 │   └── paired-difference.ts               # Sintesis kolom d_k = v1_k − v2_k; preview tabel
 ├── types/              # TypeScript type definitions
-└── __test__/           # Integration / snapshot tests
+│   ├── multivariate.ts         # Type konfigurasi & hasil analisis
+│   └── multivariate-worker.ts  # Kontrak payload/result (…AnalysisType, …FinalResultType)
+├── test/               # Unit test JS: contrast-results, paired-difference, smoke, performance
+└── __test__/           # Integration test + fixtures SPSS (fixtures/spss/dataset-a…c)
 ```
+
+> **Dua root test.** `jest.config.js` mencocokkan `**/test/**` dan `**/__test__/**`. File `multivariate.test.ts` & `multivariate.performance.test.ts` identik di kedua folder (mirror); test unit khusus (contrast, paired-difference) hanya di `test/`, sedangkan fixtures SPSS hanya di `__test__/`.
 
 ---
 
@@ -371,6 +378,17 @@ Tombol **Disable Paired Mode** (`onSave(null)`) menghapus konfigurasi paired sep
 
 ---
 
+## Onboarding Tour Guide
+
+Dialog utama menyediakan tur onboarding (tombol help di dialog.tsx → `startTour`) mengikuti pola tur seragam seluruh modul Analyze.
+
+- **Shared component**: `TourPopup` dari `@/components/Common/TourComponents` di-render dalam `<AnimatePresence>` (framer-motion) selama `tourActive`.
+- **Hook lokal**: `useTourGuide(multivariateTourSteps)` (`hooks/useTourGuide.ts`) mengelola `currentStep`, resolusi `currentTargetElement` via `document.getElementById(step.targetId)`, dan re-posisi saat `resize`.
+- **Konfigurasi langkah**: `hooks/tourConfig.ts` mengekspor `multivariateTourSteps: TourStep[]` (`@/types/tourTypes`) — tiap langkah menunjuk `targetId` elemen input (mis. `multivariate-available-variables`, `multivariate-dependent-variables`) dengan posisi & ikon.
+- **Tipe bersama**: `TourStep` dari `types/tourTypes.ts` (level proyek), bukan tipe lokal modul ini.
+
+---
+
 ## Pola Arsitektur Utama
 
 - **WASM class pattern**: Semua state analisis disimpan dalam satu struct `MultivariateAnalysis` yang di-expose ke JS sebagai `#[wasm_bindgen]` class (constructor + method chaining).
@@ -383,3 +401,4 @@ Tombol **Disable Paired Mode** (`onSave(null)`) menghapus konfigurasi paired sep
 - **Branch-and-override pattern**: Cabang khusus (Welch) di akhir `calculate_multivariate_tests` tidak menggantikan dispatcher generik — ia hanya menimpa entry tertentu di `effects` HashMap setelah pipeline normal selesai. Memudahkan reuse machinery existing + isolasi blast radius.
 - **Shared per-group helper**: Logika "kumpulkan rows per kombinasi level → hitung S_i, x̄_i, n_i" dipakai oleh ≥ 2 tempat (Box's M, Welch T²) → diekstrak ke `common.rs` sebagai `compute_per_group_covariances` untuk eliminasi duplikasi.
 - **Zero-Rust extension pattern**: Fitur baru yang secara matematika setara dengan fitur existing dapat diimplementasikan seluruhnya di TS dengan mentransformasi input sebelum melewati WASM boundary — seperti Paired T² yang merouting melalui pipeline Test Values tanpa menambah kode Rust. Biaya: overhead baris invalid (null diff) di data sintetis; manfaat: zero Rust churn.
+- **Shared onboarding-tour pattern**: Tur onboarding memakai komponen bersama (`TourComponents`/`TourPopup`) + `types/tourTypes.ts` level proyek; tiap modul hanya menyediakan `hooks/useTourGuide.ts` + `hooks/tourConfig.ts` lokal. Pola ini konsisten di semua modul Analyze (Descriptive, Regression, CompareMeans, dll.).

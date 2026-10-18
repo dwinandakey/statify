@@ -1,9 +1,7 @@
 use nalgebra::{DMatrix, DVector};
 use std::error::Error;
 
-// ============================================================================
 // CONSTANTS - Threshold dan Parameter untuk Robustness
-// ============================================================================
 
 /// Probability clipping bounds untuk mencegah log(0) atau log(1)
 const PROB_MIN: f64 = 1e-10;
@@ -29,9 +27,7 @@ const LAMBDA_INCREASE_FACTOR: f64 = 10.0;
 /// Condition number threshold untuk ill-conditioned matrix
 const CONDITION_NUMBER_THRESHOLD: f64 = 1e10;
 
-// ============================================================================
 // WARNING FLAGS - Untuk melaporkan masalah ke user
-// ============================================================================
 
 /// Flags untuk warning yang terdeteksi selama fitting
 #[derive(Debug, Clone, Default)]
@@ -83,9 +79,7 @@ pub struct FittedModelWithHistory {
     pub iteration_history: Vec<IterationRecord>,
 }
 
-// ============================================================================
 // HELPER FUNCTIONS - Utility untuk operasi numerik yang aman
-// ============================================================================
 
 /// Sigmoid function dengan clipping untuk stabilitas numerik
 #[inline]
@@ -234,7 +228,6 @@ fn solve_linear_system(
             );
 
             // LAST RESORT: Use pseudo-inverse with heavy regularization
-            // like SPSS, we still produce results even with singular Hessian
             let heavy_reg = hessian + identity.scale(MAX_LAMBDA);
             let svd = heavy_reg.svd(true, true);
             if let Ok(delta) = svd.solve(&gradient, 1e-8) {
@@ -311,9 +304,7 @@ fn step_halving_search(
     (beta_new, ll_new, mu_new)
 }
 
-// ============================================================================
 // MAIN FITTING FUNCTIONS
-// ============================================================================
 
 pub fn fit(
     x: &DMatrix<f64>,
@@ -396,11 +387,6 @@ pub fn fit(
         detect_separation(&beta, &predictions, &mut warnings);
 
         // 9. Cek Konvergensi
-        // Ref: SPSS Algorithm Specification — "Estimation terminated because
-        // parameter estimates changed by less than .001"
-        // Kriteria UTAMA: max|Δβ_actual| < tol (default 0.001)
-        // Menggunakan ACTUAL parameter change (setelah step-halving),
-        // bukan delta (proposed Newton step) — konsisten dengan fit_with_history().
         let param_change = beta.iter()
             .zip(beta_prev.iter())
             .map(|(b_new, b_old)| (b_new - b_old).abs())
@@ -424,10 +410,7 @@ pub fn fit(
         }
     }
 
-    // --- FINAL PASS: Hitung Covariance Matrix ---
-    // PENTING: Untuk final covariance matrix, gunakan PURE Fisher Information Matrix
-    // TANPA ridge regularization. Ridge hanya digunakan selama iterasi untuk stabilitas,
-    // tidak untuk perhitungan final standard errors (sesuai SPSS/SAS convention).
+    // --- Hitung Covariance Matrix ---
     let mut xt_w_final = x.transpose();
     for (col_index, mut col) in xt_w_final.column_iter_mut().enumerate() {
         col *= weights_diag[col_index];
@@ -435,7 +418,7 @@ pub fn fit(
     let hessian_pure = &xt_w_final * x; // Pure Hessian tanpa ridge
     let hessian_regularized = &hessian_pure + identity.scale(current_lambda);
 
-    // Coba inverse pure Hessian terlebih dahulu (SPSS standard)
+    // Coba inverse pure Hessian terlebih dahulu
     // Fallback ke regularized hanya jika pure Hessian singular
     let covariance_matrix = if let Some(inv) = hessian_pure.clone().try_inverse() {
         if inv.iter().any(|x| x.is_nan() || x.is_infinite()) {
@@ -498,9 +481,6 @@ pub fn fit(
     warnings.final_lambda = current_lambda;
 
     // FINAL: Recompute LL from actual final beta for maximum precision.
-    // During IRLS, LL comes from step_halving_search which should already be
-    // consistent, but recomputing eliminates any floating-point drift from
-    // intermediate cached values.
     let final_ll = calculate_log_likelihood_safe(y, &predictions);
 
     Ok(FittedModel {
@@ -517,8 +497,6 @@ pub fn fit(
 }
 
 /// IRLS fitting with iteration history tracking
-/// Returns both the fitted model and a history of each iteration's coefficients and -2LL
-/// This is used for SPSS-style "Iteration History" output
 pub fn fit_with_history(
     x: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -595,9 +573,6 @@ pub fn fit_with_history(
         predictions = mu_new;
 
         // 7. IMMEDIATELY update residuals dan weights agar sinkron dengan beta/predictions baru
-        // FIX: Sebelumnya update ini ada SETELAH convergence check, sehingga saat break
-        // terjadi, residuals/weights masih dari iterasi sebelumnya (stale data).
-        // Ini menyebabkan covariance matrix dan score test menjadi sedikit off.
         residuals = y - &predictions;
         let w_diag_new = predictions.map(|pi| {
             let w = pi * (1.0 - pi);
@@ -608,8 +583,7 @@ pub fn fit_with_history(
         // 8. Hitung -2LL untuk iterasi ini
         let neg2ll_new = -2.0 * ll_new;
 
-        // 9. Catat iteration history TERLEBIH DAHULU (SPSS-style)
-        // SPSS mencatat iterasi TERMASUK iterasi di mana konvergensi terdeteksi
+        // 9. Catat iteration history TERLEBIH DAHULU
         iteration_history.push(IterationRecord {
             iteration: final_iter,
             neg2_log_likelihood: neg2ll_new,
@@ -617,11 +591,6 @@ pub fn fit_with_history(
         });
 
         // 10. Cek Konvergensi SETELAH mencatat iterasi
-        // Ref: SPSS Algorithm Specification — "Estimation terminated because
-        // parameter estimates changed by less than .001"
-        // Kriteria UTAMA: max|Δβ_actual| < tol (default 0.001)
-        // Parameter convergence WAJIB terpenuhi. -2LL change saja TIDAK cukup
-        // karena likelihood surface bisa flat meski parameter belum stabil.
         let param_converged = if iteration_history.len() > 1 {
             let prev_record = &iteration_history[iteration_history.len() - 2];
             
@@ -658,10 +627,7 @@ pub fn fit_with_history(
         }
     }
 
-    // --- FINAL PASS: Hitung Covariance Matrix ---
-    // PENTING: Untuk final covariance matrix, gunakan PURE Fisher Information Matrix
-    // TANPA ridge regularization. Ridge hanya digunakan selama iterasi untuk stabilitas,
-    // tidak untuk perhitungan final standard errors (sesuai SPSS/SAS convention).
+    // --- Hitung Covariance Matrix ---
     let mut xt_w_final = x.transpose();
     for (col_index, mut col) in xt_w_final.column_iter_mut().enumerate() {
         col *= weights_diag[col_index];
@@ -669,7 +635,7 @@ pub fn fit_with_history(
     let hessian_pure = &xt_w_final * x; // Pure Hessian tanpa ridge
     let hessian_regularized = &hessian_pure + identity.scale(current_lambda);
 
-    // Coba inverse pure Hessian terlebih dahulu (SPSS standard)
+    // Coba inverse pure Hessian terlebih dahulu 
     // Fallback ke regularized hanya jika pure Hessian singular
     let covariance_matrix = if let Some(inv) = hessian_pure.clone().try_inverse() {
         if inv.iter().any(|x| x.is_nan() || x.is_infinite()) {
@@ -732,7 +698,6 @@ pub fn fit_with_history(
     warnings.final_lambda = current_lambda;
 
     // Gunakan jumlah iterasi yang benar-benar dicatat (bukan final_iter dari loop)
-    // SPSS melaporkan iterasi terakhir yang tercatat, bukan iterasi ketika konvergensi terdeteksi
     let actual_iterations = if !iteration_history.is_empty() {
         iteration_history.last().unwrap().iteration
     } else {

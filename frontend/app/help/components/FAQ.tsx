@@ -1,97 +1,114 @@
 import React from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpGuideTemplate } from "../ui/HelpGuideTemplate";
-import { HelpCard, HelpAlert, HelpStep } from "../ui/HelpLayout";
-import { Search, FileQuestion, FileCode, BarChart4, Clock, Save, BookOpen, ListOrdered } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
-// Data FAQ khusus Statify
-const faqs = [
-  {
-    question: "Apa itu file .sav?",
-    answer: "File .sav adalah format data yang digunakan oleh SPSS (Statistical Package for the Social Sciences). Statify dapat membaca dan menulis format ini, memungkinkan interoperabilitas yang mulus dengan SPSS."
-  },
-  {
-    question: "Bagaimana cara mengimpor data dari Excel?",
-    answer: "Untuk mengimpor data dari Excel, klik menu 'File' dan pilih 'Impor Excel'. Anda dapat menyesuaikan pengaturan impor seperti sheet mana yang akan dibaca, baris header, dan jenis data variabel."
-  },
-  {
-    question: "Bagaimana cara melakukan analisis deskriptif?",
-    answer: "Untuk melakukan analisis deskriptif, pilih variabel yang ingin Anda analisis dari panel variabel, kemudian klik menu 'Analisis' dan pilih 'Statistik Deskriptif'. Anda dapat memilih statistik mana yang akan ditampilkan seperti mean, median, modus, dan standar deviasi."
-  },
-  {
-    question: "Bisakah Statify membuat grafik?",
-    answer: "Ya, Statify menyertakan berbagai jenis grafik seperti bar chart, histogram, scatter plot, dan box plot. Anda dapat membuat grafik dengan memilih menu 'Grafik' kemudian memilih jenis grafik yang diinginkan."
-  },
-  {
-    question: "Bagaimana cara melakukan uji hipotesis?",
-    answer: "Untuk melakukan uji hipotesis, pilih menu 'Analisis', kemudian pilih jenis uji yang sesuai seperti T-Test, ANOVA, atau Chi-Square. Pilih variabel yang relevan dan sesuaikan parameter uji sesuai kebutuhan."
-  },
-  {
-    question: "Apakah Statify menyimpan data secara otomatis?",
-    answer: "Ya, Statify memiliki fitur autosave yang akan menyimpan pekerjaan Anda secara otomatis jika aplikasi mendeteksi Anda tidak aktif untuk beberapa waktu. Namun, kami tetap merekomendasikan untuk menyimpan pekerjaan Anda secara rutin dengan mengklik 'File' > 'Simpan'."
-  },
-  {
-    question: "Bagaimana cara mengekspor hasil analisis?",
-    answer: "Hasil analisis dapat diekspor dalam format PDF, Excel, atau gambar. Klik kanan pada output analisis dan pilih opsi 'Ekspor', kemudian pilih format yang diinginkan."
-  },
-  {
-    question: "Bagaimana cara menangani data yang hilang dalam analisis?",
-    answer: "Dalam analisis statistik Statify, Anda dapat memilih cara menangani nilai yang hilang untuk setiap jenis analisis. Di kotak dialog analisis, Anda dapat memilih opsi seperti 'Kecualikan kasus berpasangan', 'Kecualikan kasus dalam daftar', atau menggunakan metode estimasi khusus sesuai kebutuhan analisis Anda."
-  }
-];
-
-// Kategori FAQ
-const faqCategories = [
-  {
-    name: "Data & File",
-    icon: <FileCode className="h-5 w-5 mr-2 text-primary/70" />,
-    faqs: [faqs[0], faqs[1], faqs[5], faqs[6]]
-  },
-  {
-    name: "Analisis Statistik",
-    icon: <BarChart4 className="h-5 w-5 mr-2 text-primary/70" />,
-    faqs: [faqs[2], faqs[3], faqs[4], faqs[7]]
-  }
-];
+import { HelpCard, HelpStep } from "../ui/HelpLayout";
+import { FileCode, BarChart4, Clock, Save, BookOpen, ListOrdered } from "lucide-react";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 export const FAQ = () => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
+  // Data FAQ khusus Statify
+  const faqs = [
+    {
+      question: isEn ? "What is a .sav file?" : "Apa itu file .sav?",
+      answer: isEn
+        ? "A .sav file is the data format used by SPSS (Statistical Package for the Social Sciences). Statify can read and write this format, allowing seamless interoperability with SPSS."
+        : "File .sav adalah format data yang digunakan oleh SPSS (Statistical Package for the Social Sciences). Statify dapat membaca dan menulis format ini, memungkinkan interoperabilitas yang mulus dengan SPSS."
+    },
+    {
+      question: isEn ? "How do I import data from Excel?" : "Bagaimana cara mengimpor data dari Excel?",
+      answer: isEn
+        ? "To import data from Excel, click 'File' > 'Import Data' > 'Excel', then choose your file. You can adjust import settings such as the worksheet to read, the cell range, using the first row as variable names, and how empty cells are read."
+        : "Untuk mengimpor data dari Excel, klik menu 'File' > 'Import Data' > 'Excel', lalu pilih file Anda. Anda dapat menyesuaikan pengaturan impor seperti worksheet yang akan dibaca, rentang sel, baris pertama sebagai nama variabel, dan cara membaca sel kosong."
+    },
+    {
+      question: isEn ? "How do I run a descriptive analysis?" : "Bagaimana cara melakukan analisis deskriptif?",
+      answer: isEn
+        ? "To run a descriptive analysis, click 'Analyze' > 'Descriptive Statistics', then choose 'Descriptives' or 'Frequencies'. Select the variables you want to analyze in the dialog, then pick the statistics to display such as the mean, median, and standard deviation. The mode is available in 'Frequencies'."
+        : "Untuk melakukan analisis deskriptif, klik menu 'Analyze' > 'Descriptive Statistics', lalu pilih 'Descriptives' atau 'Frequencies'. Pilih variabel yang ingin Anda analisis pada kotak dialog, kemudian tentukan statistik yang akan ditampilkan seperti mean, median, dan standar deviasi. Modus tersedia di 'Frequencies'."
+    },
+    {
+      question: isEn ? "Can Statify create charts?" : "Bisakah Statify membuat grafik?",
+      answer: isEn
+        ? "Yes, Statify includes many chart types such as bar charts, histograms, scatter plots, and box plots. You can create a chart from 'Graphs' > 'Chart Builder', then choose the chart type you want."
+        : "Ya, Statify menyertakan berbagai jenis grafik seperti bar chart, histogram, scatter plot, dan box plot. Anda dapat membuat grafik dengan memilih menu 'Graphs' > 'Chart Builder', kemudian memilih jenis grafik yang diinginkan."
+    },
+    {
+      question: isEn ? "How do I run a hypothesis test?" : "Bagaimana cara melakukan uji hipotesis?",
+      answer: isEn
+        ? "To run a hypothesis test, open the 'Analyze' menu, then choose the appropriate test, for example T-Test and One-Way ANOVA under 'Compare Means', or Chi-square under 'Nonparametric Tests' > 'Legacy Dialogs'. Select the relevant variables and adjust the test parameters as needed."
+        : "Untuk melakukan uji hipotesis, pilih menu 'Analyze', kemudian pilih jenis uji yang sesuai, misalnya T-Test dan One-Way ANOVA di 'Compare Means', atau Chi-square di 'Nonparametric Tests' > 'Legacy Dialogs'. Pilih variabel yang relevan dan sesuaikan parameter uji sesuai kebutuhan."
+    },
+    {
+      question: isEn ? "Does Statify save data automatically?" : "Apakah Statify menyimpan data secara otomatis?",
+      answer: isEn
+        ? "Yes, Statify has an autosave feature that saves your work automatically when the app detects you have been inactive for a while. Even so, we still recommend saving your work regularly with 'File' > 'Save'."
+        : "Ya, Statify memiliki fitur autosave yang akan menyimpan pekerjaan Anda secara otomatis jika aplikasi mendeteksi Anda tidak aktif untuk beberapa waktu. Namun, kami tetap merekomendasikan untuk menyimpan pekerjaan Anda secara rutin dengan mengklik 'File' > 'Save'."
+    },
+    {
+      question: isEn ? "How do I export analysis results?" : "Bagaimana cara mengekspor hasil analisis?",
+      answer: isEn
+        ? "Analysis results can be exported to PDF from 'File' > 'Print...' by checking the 'Output Viewer (Results)' option. Charts can also be downloaded or copied as PNG or SVG images using the buttons on each chart."
+        : "Hasil analisis dapat diekspor ke PDF melalui menu 'File' > 'Print...' dengan mencentang opsi 'Output Viewer (Results)'. Grafik juga dapat diunduh atau disalin sebagai gambar PNG maupun SVG melalui tombol yang tersedia pada grafik."
+    },
+    {
+      question: isEn ? "How do I handle missing data in an analysis?" : "Bagaimana cara menangani data yang hilang dalam analisis?",
+      answer: isEn
+        ? "In Statify's statistical analyses you can choose how missing values are handled. In the analysis dialog, you can pick options such as 'Exclude cases listwise', 'Exclude cases pairwise', or 'Replace with mean', depending on the type of analysis."
+        : "Dalam analisis statistik Statify, Anda dapat memilih cara menangani nilai yang hilang. Di kotak dialog analisis, Anda dapat memilih opsi seperti 'Exclude cases listwise', 'Exclude cases pairwise', atau 'Replace with mean', tergantung pada jenis analisisnya."
+    }
+  ];
+
+  // Kategori FAQ
+  const faqCategories = [
+    {
+      name: "Data & File",
+      icon: <FileCode className="h-5 w-5 mr-2 text-primary/70" />,
+      faqs: [faqs[0], faqs[1], faqs[5], faqs[6]]
+    },
+    {
+      name: isEn ? "Statistical Analysis" : "Analisis Statistik",
+      icon: <BarChart4 className="h-5 w-5 mr-2 text-primary/70" />,
+      faqs: [faqs[2], faqs[3], faqs[4], faqs[7]]
+    }
+  ];
+
   const sections = [
     {
       id: 'how-to-search',
-      title: 'Cara Mencari Jawaban',
-      description: 'Panduan untuk menemukan informasi yang Anda butuhkan dengan cepat',
+      title: isEn ? 'How to Find Answers' : 'Cara Mencari Jawaban',
+      description: isEn ? 'A guide to quickly finding the information you need' : 'Panduan untuk menemukan informasi yang Anda butuhkan dengan cepat',
       icon: ListOrdered,
       content: (
         <div className="space-y-4">
-          <HelpStep number={1} title="Gunakan Pencarian Cepat">
+          <HelpStep number={1} title={isEn ? "Browse the FAQ Categories" : "Jelajahi Kategori FAQ"}>
             <p className="text-sm">
-              Ketik kata kunci yang terkait dengan pertanyaan Anda di kotak pencarian. 
-              Sistem akan menampilkan hasil yang relevan secara real-time.
-            </p>
-          </HelpStep>
-
-          <HelpStep number={2} title="Jelajahi Kategori FAQ">
-            <p className="text-sm">
-              Telusuri kategori FAQ di bawah ini untuk menemukan jawaban berdasarkan topik:
+              {isEn
+                ? "Browse the FAQ categories below to find answers by topic:"
+                : "Telusuri kategori FAQ di bawah ini untuk menemukan jawaban berdasarkan topik:"}
             </p>
             <ul className="list-disc ml-6 mt-2 text-sm space-y-1">
-              <li><strong>Data & File</strong>: Import, export, dan manajemen file</li>
-              <li><strong>Analisis Statistik</strong>: Prosedur analisis dan interpretasi hasil</li>
+              {isEn ? (
+                <>
+                  <li><strong>Data & File</strong>: Import, export, and file management</li>
+                  <li><strong>Statistical Analysis</strong>: Analysis procedures and interpreting results</li>
+                </>
+              ) : (
+                <>
+                  <li><strong>Data & File</strong>: Import, export, dan manajemen file</li>
+                  <li><strong>Analisis Statistik</strong>: Prosedur analisis dan interpretasi hasil</li>
+                </>
+              )}
             </ul>
           </HelpStep>
 
-          <HelpStep number={3} title="Periksa Panduan Terkait">
+          <HelpStep number={2} title={isEn ? "Check the Related Guides" : "Periksa Panduan Terkait"}>
             <p className="text-sm">
-              Jika tidak menemukan jawaban di FAQ, kunjungi panduan lengkap atau gunakan 
-              fitur pencarian untuk topik yang lebih spesifik.
-            </p>
-          </HelpStep>
-
-          <HelpStep number={4} title="Hubungi Dukungan">
-            <p className="text-sm">
-              Masih butuh bantuan? Gunakan formulir umpan balik untuk menghubungi tim dukungan 
-              atau ajukan pertanyaan baru.
+              {isEn
+                ? "If you can't find the answer in the FAQ, open the complete guides from the sidebar, such as File Management, Data Management, or Statistics Guide."
+                : "Jika tidak menemukan jawaban di FAQ, buka panduan lengkap melalui sidebar, seperti Manajemen File, Manajemen Data, atau Panduan Statistik."}
             </p>
           </HelpStep>
         </div>
@@ -99,38 +116,21 @@ export const FAQ = () => {
     },
     {
       id: 'overview',
-      title: 'Bantuan Cepat',
-      description: 'Informasi penting untuk memulai',
+      title: isEn ? 'Quick Help' : 'Bantuan Cepat',
+      description: isEn ? 'Important information to get started' : 'Informasi penting untuk memulai',
       icon: BookOpen,
       content: (
         <div className="space-y-4">
-          <HelpAlert variant="info" title="Tidak menemukan yang Anda cari?">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-3">
-              <p className="text-sm flex-1">
-                Gunakan fitur pencarian atau hubungi tim dukungan kami untuk bantuan lebih lanjut.
-              </p>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Search className="h-4 w-4 mr-2" />
-                  Cari Bantuan
-                </Button>
-                <Button variant="default" size="sm">
-                  <FileQuestion className="h-4 w-4 mr-2" />
-                  Hubungi Dukungan
-                </Button>
-              </div>
-            </div>
-          </HelpAlert>
-          
-          <HelpCard title="Fitur Autosave" icon={Clock} variant="feature">
+          <HelpCard title={isEn ? "Autosave Feature" : "Fitur Autosave"} icon={Clock} variant="feature">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">
-                Statify secara otomatis menyimpan pekerjaan Anda ketika aplikasi mendeteksi periode tidak aktif. 
-                Ini membantu mencegah kehilangan data jika aplikasi secara tidak sengaja ditutup.
+                {isEn
+                  ? "Statify automatically saves your work when the app detects a period of inactivity. This helps prevent data loss if the app is closed by accident."
+                  : "Statify secara otomatis menyimpan pekerjaan Anda ketika aplikasi mendeteksi periode tidak aktif. Ini membantu mencegah kehilangan data jika aplikasi secara tidak sengaja ditutup."}
               </p>
               <div className="flex items-center gap-2 text-xs font-medium text-primary">
                 <Save className="h-3.5 w-3.5" />
-                <span>Pekerjaan tersimpan otomatis</span>
+                <span>{isEn ? "Work saved automatically" : "Pekerjaan tersimpan otomatis"}</span>
               </div>
             </div>
           </HelpCard>
@@ -140,14 +140,14 @@ export const FAQ = () => {
     {
       id: 'data-file',
       title: 'Data & File',
-      description: 'Pertanyaan yang sering diajukan tentang manajemen data dan file',
+      description: isEn ? 'Frequently asked questions about data and file management' : 'Pertanyaan yang sering diajukan tentang manajemen data dan file',
       icon: FileCode,
       content: (
         <div className="space-y-4">
           <Accordion type="single" collapsible className="w-full">
             {faqCategories[0].faqs.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
+              <AccordionItem
+                key={index}
                 value={`data-file-${index}`}
                 className="border-b border-border/50"
               >
@@ -165,15 +165,15 @@ export const FAQ = () => {
     },
     {
       id: 'statistics',
-      title: 'Analisis Statistik',
-      description: 'Pertanyaan yang sering diajukan tentang analisis statistik',
+      title: isEn ? 'Statistical Analysis' : 'Analisis Statistik',
+      description: isEn ? 'Frequently asked questions about statistical analysis' : 'Pertanyaan yang sering diajukan tentang analisis statistik',
       icon: BarChart4,
       content: (
         <div className="space-y-4">
           <Accordion type="single" collapsible className="w-full">
             {faqCategories[1].faqs.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
+              <AccordionItem
+                key={index}
                 value={`statistics-${index}`}
                 className="border-b border-border/50"
               >
@@ -193,40 +193,35 @@ export const FAQ = () => {
 
   const tips = [
     {
-      type: 'tip' as const,
-      title: 'Pencarian Efektif',
-      content: 'Gunakan kata kunci spesifik seperti "import excel", "t-test", atau "missing values" untuk hasil pencarian yang lebih akurat.'
-    },
-    {
       type: 'info' as const,
-      title: 'Bookmark Halaman Penting',
-      content: 'Simpan halaman bantuan yang sering Anda gunakan sebagai bookmark untuk akses cepat di masa mendatang.'
+      title: isEn ? 'Bookmark Important Pages' : 'Bookmark Halaman Penting',
+      content: isEn
+        ? 'Bookmark the help pages you use most often for quick access in the future.'
+        : 'Simpan halaman bantuan yang sering Anda gunakan sebagai bookmark untuk akses cepat di masa mendatang.'
     },
     {
       type: 'warning' as const,
-      title: 'Versi dan Fitur',
-      content: 'Beberapa fitur mungkin berbeda tergantung versi Statify yang Anda gunakan. Periksa nomor versi di menu About.'
-    },
-    {
-      type: 'tip' as const,
-      title: 'Umpan Balik Berharga',
-      content: 'Bantu kami meningkatkan dokumentasi dengan memberikan umpan balik tentang kejelasan dan kelengkapan jawaban FAQ.'
+      title: isEn ? 'Menus Not Yet Available' : 'Menu yang Belum Tersedia',
+      content: isEn
+        ? 'A menu that appears disabled (cannot be clicked) means the feature is not yet available in Statify.'
+        : 'Menu yang tampil nonaktif (tidak bisa diklik) menandakan fiturnya belum tersedia di Statify.'
     }
   ];
 
   const relatedTopics = [
-    { title: 'Memulai', href: '/help/getting-started' },
-    { title: 'Umpan Balik & Dukungan', href: '/help/feedback' },
-    { title: 'Panduan File', href: '/help/file-guide' },
-    { title: 'Panduan Data', href: '/help/data-guide' },
-    { title: 'Panduan Statistik', href: '/help/statistics-guide' }
+    { title: isEn ? 'Getting Started' : 'Memulai', href: '/help/getting-started' },
+    { title: isEn ? 'File Guide' : 'Panduan File', href: '/help/file-guide' },
+    { title: isEn ? 'Data Guide' : 'Panduan Data', href: '/help/data-guide' },
+    { title: isEn ? 'Statistics Guide' : 'Panduan Statistik', href: '/help/statistics-guide' }
   ];
 
   return (
     <HelpGuideTemplate
-      title="FAQ - Pertanyaan Umum"
-      description="Temukan jawaban cepat untuk pertanyaan yang sering diajukan tentang penggunaan Statify"
-      lastUpdated="2024-01-15"
+      title={isEn ? "FAQ - Frequently Asked Questions" : "FAQ - Pertanyaan Umum"}
+      description={isEn
+        ? "Find quick answers to frequently asked questions about using Statify"
+        : "Temukan jawaban cepat untuk pertanyaan yang sering diajukan tentang penggunaan Statify"}
+      lastUpdated="2026-10-14"
       sections={sections}
       tips={tips}
       relatedTopics={relatedTopics}

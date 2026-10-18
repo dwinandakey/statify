@@ -8,25 +8,6 @@ struct ProbPair {
 }
 
 /// Hosmer-Lemeshow Goodness-of-Fit Test (Ĉ statistic)
-///
-/// Implementation based on Hosmer & Lemeshow (2000) "Applied Logistic Regression",
-/// Chapter 5 — the decile-of-risk grouping approach:
-///
-/// 1. Sort cases by predicted probability π̂ (ascending).
-/// 2. Form g groups of approximately equal size using greedy sequential
-///    grouping.  All cases with identical π̂ are kept together (never split
-///    across groups).
-/// 3. When a large tie block causes a group to grow beyond its target size,
-///    the number of remaining group "slots" is reduced proportionally via
-///        groups_left = g − ⌈(cumulative_cases × g) / N⌉
-///    This prevents the creation of tiny leftover groups.
-/// 4. At each planned boundary, if the boundary falls inside a tie block,
-///    snap to the nearer tie-block edge (extend forward or shrink backward)
-///    whichever yields a group size closer to the target.
-/// 5. Compute the Ĉ statistic:
-///        Ĉ = Σ_{k=1}^{g'} [ (O₁ₖ − E₁ₖ)²/E₁ₖ  +  (O₀ₖ − E₀ₖ)²/E₀ₖ ]
-/// 6. df = g' − 2  (actual number of non-empty groups minus 2).
-/// 7. p-value from χ²(df).
 pub fn calculate(
     y_true: &DVector<f64>,
     y_pred_prob: &DVector<f64>,
@@ -41,9 +22,7 @@ pub fn calculate(
         return Err("Sample size too small for Hosmer-Lemeshow test".to_string());
     }
 
-    // ====================================================================
     // 1. Sort by predicted probability (ascending, stable sort)
-    // ====================================================================
     let mut data: Vec<ProbPair> = (0..n)
         .map(|i| ProbPair {
             y: y_true[i],
@@ -52,24 +31,7 @@ pub fn calculate(
         .collect();
     data.sort_by(|a, b| a.prob.partial_cmp(&b.prob).unwrap());
 
-    // ====================================================================
-    // 2. Greedy sequential grouping — exactly g groups (SPSS-compatible)
-    // ====================================================================
-    //
-    // Key principles (Hosmer & Lemeshow, 2000):
-    //   - Groups are formed sequentially by ranked predicted probability.
-    //   - All cases with identical predicted probabilities must reside in
-    //     the same group (ties are never split across groups).
-    //   - Groups should be approximately equal in size.
-    //   - The result MUST have at most g groups.
-    //
-    // Algorithm:
-    //   - Use a FIXED target size = round(N/g) for every group (NTILE-like).
-    //     This ensures groups 1..g-1 get consistent boundaries regardless
-    //     of how ties shift earlier groups.
-    //   - The loop creates at most g−1 groups.
-    //   - After the loop, all remaining cases form the g-th (final) group,
-    //     absorbing any surplus from tie-induced group size changes.
+    // 2. Greedy sequential grouping — exactly g groups
 
     let g = g_groups;
     let mut group_ranges: Vec<(usize, usize)> = Vec::new(); // (start_incl, end_excl)
@@ -91,13 +53,7 @@ pub fn calculate(
         // Planned end (exclusive)
         let planned_end = (start + target).min(n);
 
-        // ----------------------------------------------------------
         // 2a. Snap to the nearest tie-block boundary
-        // ----------------------------------------------------------
-        // If the planned boundary falls inside a tie block, we must
-        // move it to one of the block's edges.  Choose the edge that
-        // makes the group size closest to the target.
-
         let end;
         if planned_end > start && planned_end < n {
             let boundary_prob = data[planned_end - 1].prob;
@@ -158,9 +114,7 @@ pub fn calculate(
         group_ranges.push((start, n));
     }
 
-    // ====================================================================
     // 3. Compute per-group statistics
-    // ====================================================================
     let mut groups_result: Vec<HosmerLemeshowGroup> = Vec::new();
     let mut chi_square_stat = 0.0;
 
@@ -199,14 +153,9 @@ pub fn calculate(
         });
     }
 
-    // ====================================================================
     // 4. Degrees of freedom and p-value
-    // ====================================================================
     let actual_groups = groups_result.len();
 
-    // SPSS behavior: when actual groups ≤ 2, df = g' - 2 = 0 (or negative),
-    // the test is undefined. SPSS reports chi-square = .000, df = 0, sig = "."
-    // We use NaN for sig so the formatter displays "." (matching SPSS).
     if actual_groups <= 2 {
         return Ok(HosmerLemeshowResult {
             chi_square: 0.0,

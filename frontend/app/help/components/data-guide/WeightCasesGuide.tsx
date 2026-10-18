@@ -2,56 +2,65 @@
 import { HelpGuideTemplate } from '../../ui/HelpGuideTemplate';
 import { HelpCard, HelpAlert, HelpSection } from '../../ui/HelpLayout';
 import { Scale, Settings } from 'lucide-react';
+import { useHelpLanguageStore } from '@/stores/useHelpLanguageStore';
 
 const WeightCasesGuide = () => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
   const sections = [
     {
       id: 'functionality',
-      title: 'Ringkasan Fitur',
-      description: 'Penjelasan fitur pembobotan kasus',
+      title: isEn ? 'Feature Overview' : 'Ringkasan Fitur',
+      description: isEn ? 'An explanation of the case weighting feature' : 'Penjelasan fitur pembobotan kasus',
       icon: Scale,
       content: (
         <div className="space-y-4">
-          <HelpCard title="Pembobotan Berbasis Variabel" variant="feature">
+          <HelpCard title={isEn ? "Variable-Based Weighting" : "Pembobotan Berbasis Variabel"} variant="feature">
             <p className="text-sm">
-              Anda dapat memilih satu variabel numerik dari daftar yang tersedia.
-              Nilai dari variabel ini akan digunakan untuk membobot setiap kasus.
+              {isEn
+                ? "You can choose one numeric variable from the available list. The values of this variable are used to weight each case."
+                : "Anda dapat memilih satu variabel numerik dari daftar yang tersedia. Nilai dari variabel ini akan digunakan untuk membobot setiap kasus."}
             </p>
           </HelpCard>
-          
-          <HelpCard title="Validasi Jenis" variant="feature">
+
+          <HelpCard title={isEn ? "Type Validation" : "Validasi Jenis"} variant="feature">
             <p className="text-sm">
-              Dialog secara otomatis memfilter daftar untuk hanya menampilkan variabel numerik
-              sebagai kandidat yang valid untuk pembobotan.
+              {isEn
+                ? "The dialog automatically filters the list to show only numeric variables as valid weighting candidates."
+                : "Dialog secara otomatis memfilter daftar untuk hanya menampilkan variabel numerik sebagai kandidat yang valid untuk pembobotan."}
             </p>
           </HelpCard>
-          
-          <HelpCard title="Pengecualian Kasus" variant="feature">
+
+          <HelpCard title={isEn ? "Case Exclusion" : "Pengecualian Kasus"} variant="feature">
             <p className="text-sm">
-              Setiap kasus dengan nilai nol, negatif, atau hilang untuk variabel
-              pembobotan yang dipilih akan secara otomatis dikecualikan dari analisis
-              yang menggunakan bobot ini.
+              {isEn
+                ? "Any case with a zero, negative, or missing value for the chosen weight variable is automatically excluded from analyses that use this weight."
+                : "Setiap kasus dengan nilai nol, negatif, atau hilang untuk variabel pembobotan yang dipilih akan secara otomatis dikecualikan dari analisis yang menggunakan bobot ini."}
             </p>
           </HelpCard>
-          
-          <HelpCard title="Pengaturan Global" variant="feature">
+
+          <HelpCard title={isEn ? "Global Setting" : "Pengaturan Global"} variant="feature">
             <p className="text-sm">
-              Konfigurasi pembobotan adalah pengaturan global. Dialog menampilkan
-              variabel pembobotan yang sedang aktif, atau "Jangan membobot kasus"
-              jika tidak ada yang dipilih.
+              {isEn
+                ? "The weighting configuration is a global setting. The dialog shows the currently active weight variable, or \"Do not weight cases\" if none is selected."
+                : "Konfigurasi pembobotan adalah pengaturan global. Dialog menampilkan variabel pembobotan yang sedang aktif, atau \"Jangan membobot kasus\" jika tidak ada yang dipilih."}
             </p>
           </HelpCard>
-          
-          <HelpCard title="Menonaktifkan Pembobotan" variant="feature">
+
+          <HelpCard title={isEn ? "Turning Weighting Off" : "Menonaktifkan Pembobotan"} variant="feature">
             <p className="text-sm">
-              Untuk mematikan pembobotan, cukup hapus variabel dari
-              daftar "Bobot kasus berdasarkan" dan konfirmasi dengan mengklik "OK".
+              {isEn
+                ? "To turn weighting off, simply remove the variable from the \"Weight cases by\" list and confirm by clicking \"OK\"."
+                : "Untuk mematikan pembobotan, cukup hapus variabel dari daftar \"Bobot kasus berdasarkan\" dan konfirmasi dengan mengklik \"OK\"."}
             </p>
           </HelpCard>
-          
-          <HelpAlert variant="info" title="Catatan Penting">
+
+          <HelpAlert variant="info" title={isEn ? "Important Note" : "Catatan Penting"}>
             <p className="text-sm mt-2">
-              Pembobotan kasus mempengaruhi semua analisis statistik yang dilakukan setelah aktivasi.
+              {isEn
+                ? "Case weighting affects all statistical analyses run after it is activated."
+                : "Pembobotan kasus mempengaruhi semua analisis statistik yang dilakukan setelah aktivasi."}
             </p>
           </HelpAlert>
         </div>
@@ -59,52 +68,62 @@ const WeightCasesGuide = () => {
     },
     {
       id: 'workflow',
-      title: 'Alur Kerja',
-      description: 'Penggunaan fitur langkah demi langkah',
+      title: isEn ? 'Workflow' : 'Alur Kerja',
+      description: isEn ? 'Using the feature step by step' : 'Penggunaan fitur langkah demi langkah',
       icon: Settings,
       content: (
         <div className="space-y-4">
-          <HelpSection title="Langkah 1: Inisialisasi">
+          <HelpSection title={isEn ? "Step 1: Initialization" : "Langkah 1: Inisialisasi"}>
             <p className="text-sm">
-              Modal menginisialisasi, mengambil daftar variabel dan status bobot saat ini.
+              {isEn
+                ? "The dialog initializes, fetching the variable list and the current weight status."
+                : "Modal menginisialisasi, mengambil daftar variabel dan status bobot saat ini."}
             </p>
           </HelpSection>
-          
-          <HelpSection title="Langkah 2: Tampilan">
+
+          <HelpSection title={isEn ? "Step 2: Display" : "Langkah 2: Tampilan"}>
             <p className="text-sm">
-              UI merender dialog dengan variabel yang tersedia dan
-              variabel bobot yang dipilih saat ini (jika ada).
+              {isEn
+                ? "The UI renders the dialog with the available variables and the currently selected weight variable (if any)."
+                : "UI merender dialog dengan variabel yang tersedia dan variabel bobot yang dipilih saat ini (jika ada)."}
             </p>
           </HelpSection>
-          
-          <HelpSection title="Langkah 3: Seleksi">
+
+          <HelpSection title={isEn ? "Step 3: Selection" : "Langkah 3: Seleksi"}>
             <p className="text-sm">
-              Anda memindahkan variabel numerik ke dalam daftar target "Bobotkan kasus berdasarkan".
+              {isEn
+                ? "You move a numeric variable into the \"Weight cases by\" target list."
+                : "Anda memindahkan variabel numerik ke dalam daftar target \"Bobotkan kasus berdasarkan\"."}
             </p>
           </HelpSection>
-          
-          <HelpSection title="Langkah 4: Konfirmasi">
+
+          <HelpSection title={isEn ? "Step 4: Confirmation" : "Langkah 4: Konfirmasi"}>
             <p className="text-sm">
-              Anda mengklik "OK". Ini memicu penyimpanan status bobot global.
+              {isEn
+                ? "You click \"OK\". This triggers saving the global weight status."
+                : "Anda mengklik \"OK\". Ini memicu penyimpanan status bobot global."}
             </p>
           </HelpSection>
-          
-          <HelpSection title="Langkah 5: Pembaruan Global">
+
+          <HelpSection title={isEn ? "Step 5: Global Update" : "Langkah 5: Pembaruan Global"}>
             <p className="text-sm">
-              Penyimpanan global diperbarui dengan nama variabel bobot baru
-              (atau string kosong jika tidak ada yang dipilih).
+              {isEn
+                ? "The global store is updated with the new weight variable name (or an empty string if none is selected)."
+                : "Penyimpanan global diperbarui dengan nama variabel bobot baru (atau string kosong jika tidak ada yang dipilih)."}
             </p>
           </HelpSection>
-          
-          <HelpSection title="Langkah 6: Penyelesaian">
+
+          <HelpSection title={isEn ? "Step 6: Completion" : "Langkah 6: Penyelesaian"}>
             <p className="text-sm">
-              Dialog tertutup.
+              {isEn ? "The dialog closes." : "Dialog tertutup."}
             </p>
           </HelpSection>
-          
-          <HelpAlert variant="success" title="Proses Selesai">
+
+          <HelpAlert variant="success" title={isEn ? "Process Complete" : "Proses Selesai"}>
             <p className="text-sm mt-2">
-              Setelah selesai, pembobotan akan aktif untuk semua analisis berikutnya.
+              {isEn
+                ? "Once complete, weighting is active for all subsequent analyses."
+                : "Setelah selesai, pembobotan akan aktif untuk semua analisis berikutnya."}
             </p>
           </HelpAlert>
         </div>
@@ -116,31 +135,39 @@ const WeightCasesGuide = () => {
   const tips = [
     {
       type: 'tip' as const,
-      title: 'Validasi Variabel',
-      content: 'Pastikan variabel pembobot yang dipilih adalah variabel numerik yang valid.'
+      title: isEn ? 'Validate the Variable' : 'Validasi Variabel',
+      content: isEn
+        ? 'Make sure the chosen weight variable is a valid numeric variable.'
+        : 'Pastikan variabel pembobot yang dipilih adalah variabel numerik yang valid.'
     },
     {
       type: 'warning' as const,
-      title: 'Nilai Tidak Valid',
-      content: 'Kasus dengan nilai nol, negatif, atau hilang akan dikecualikan dari analisis.'
+      title: isEn ? 'Invalid Values' : 'Nilai Tidak Valid',
+      content: isEn
+        ? 'Cases with zero, negative, or missing values are excluded from the analysis.'
+        : 'Kasus dengan nilai nol, negatif, atau hilang akan dikecualikan dari analisis.'
     },
     {
       type: 'info' as const,
-      title: 'Pengaturan Global',
-      content: 'Pembobotan adalah pengaturan global yang mempengaruhi semua analisis.'
+      title: isEn ? 'Global Setting' : 'Pengaturan Global',
+      content: isEn
+        ? 'Weighting is a global setting that affects all analyses.'
+        : 'Pembobotan adalah pengaturan global yang mempengaruhi semua analisis.'
     }
   ];
 
   const relatedTopics = [
-    { title: 'Manajemen Data', href: '/help/data-guide' },
-    { title: 'Analisis Statistik', href: '/help/statistics-guide' },
-    { title: 'Jenis Variabel', href: '/help/data-guide/variable-types' }
+    { title: isEn ? 'Data Management' : 'Manajemen Data', href: '/help/data-guide' },
+    { title: isEn ? 'Statistical Analysis' : 'Analisis Statistik', href: '/help/statistics-guide' },
+    { title: isEn ? 'Variable Types' : 'Jenis Variabel', href: '/help/data-guide/variable-types' }
   ];
 
   return (
     <HelpGuideTemplate
-      title="Fitur Pembobotan Kasus"
-      description="Panduan ini menjelaskan fungsionalitas Pembobotan Kasus, yang memungkinkan Anda menerapkan bobot kasus pada dataset berdasarkan nilai dari variabel numerik"
+      title={isEn ? "Weight Cases Feature" : "Fitur Pembobotan Kasus"}
+      description={isEn
+        ? "This guide explains the Weight Cases feature, which lets you apply case weights to a dataset based on the values of a numeric variable"
+        : "Panduan ini menjelaskan fungsionalitas Pembobotan Kasus, yang memungkinkan Anda menerapkan bobot kasus pada dataset berdasarkan nilai dari variabel numerik"}
       lastUpdated="2024-01-15"
       sections={sections}
       tips={tips}

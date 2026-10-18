@@ -111,7 +111,6 @@ const ModalOrdinal = lazy(() =>
 );
 const ModalBinaryLogistic = lazy(() =>
   import("@/components/Modals/Analyze/Regression/BinaryLogistic/dialogs/BinaryLogisticMain").then((mod) => ({
-    // Pastikan Anda meng-export component sebagai 'BinaryLogisticMain' di file aslinya
     default: mod.BinaryLogisticMain as React.ComponentType<BaseModalProps>,
   }))
 );

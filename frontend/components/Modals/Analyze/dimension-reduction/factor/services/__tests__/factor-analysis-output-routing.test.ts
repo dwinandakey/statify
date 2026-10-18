@@ -96,6 +96,7 @@ const baseConfigData = {
     extraction: {
         Method: "MaxLikelihood",
         Scree: false,
+        Unrotated: true,
         Covariance: false,
         Correlation: true,
     },
@@ -163,5 +164,28 @@ describe("resultFactorAnalysis routing", () => {
         expect(addVariableColumns).toHaveBeenCalledTimes(1);
         expect(registerVariableMetadata).toHaveBeenCalledTimes(1);
         expect(saveVariables).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps the component matrix interpretation without rendering its table when disabled", async () => {
+        await resultFactorAnalysis({
+            formattedResult: buildFormattedResult({ isConverged: true, extractedFactors: 2 }),
+            configData: {
+                ...baseConfigData,
+                extraction: {
+                    ...baseConfigData.extraction,
+                    Unrotated: false,
+                },
+            } as any,
+        } as any);
+
+        const componentMatrixStatistic = addStatistic.mock.calls
+            .map(([, payload]) => payload)
+            .find((payload) => payload.title === "Factor Matrixᵃ");
+
+        expect(componentMatrixStatistic).toBeDefined();
+        expect(componentMatrixStatistic.description).toBe("Factor Matrixᵃ description");
+        expect(componentMatrixStatistic.output_data).toBe(
+            JSON.stringify({ text: "" })
+        );
     });
 });

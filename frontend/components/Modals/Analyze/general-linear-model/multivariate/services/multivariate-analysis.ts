@@ -5,14 +5,92 @@ import type {
 import { transformMultivariateResult } from "./multivariate-analysis-formatter";
 import { resultMultivariateAnalysis } from "./multivariate-analysis-output";
 import { buildDifferenceData } from "./paired-difference";
+import {
+    factorLevels,
+    hasNonZeroDelta,
+    normalizeDelta,
+    restoreDescriptiveStatistics,
+    shiftFirstLevel,
+} from "./two-sample-delta";
+import type { MultivariateWorkerPayload } from "./multivariate-analysis-worker";
+import {
+    executeGlmComputation,
+    GlmWorkerClient,
+    markGlmAnalysisEnd,
+    markGlmAnalysisStart,
+} from "@/components/Modals/Analyze/general-linear-model/shared/glm-execution";
 // @ts-ignore
 import init, { MultivariateAnalysis } from "@/components/Modals/Analyze/general-linear-model/multivariate/rust/pkg";
+import { emptyFactorCells, typeIvEmptyCellsMessage } from "./empty-cells";
+import { resolveKnownCovariance } from "./known-sigma";
+
+// Reused across analyses so WASM is initialised once per worker.
+const multivariateWorker = new GlmWorkerClient<MultivariateWorkerPayload, any>(
+    "multivariate",
+    () =>
+        new Worker(new URL("./multivariate-analysis-worker.ts", import.meta.url), {
+            type: "module",
+        })
+);
+
+// Main-thread computation (mode "main" and "main-fallback"). Mirrors the
+// worker: the Rust-side object is released with free() right after the
+// results are read, instead of whenever the JS garbage collector finalises it
+// (without this the WASM heap grew ~1.5 MB per perf500 run).
+async function runMultivariateOnMainThread(payload: MultivariateWorkerPayload) {
+    await init();
+
+    const multivariate = new MultivariateAnalysis(
+        payload.dep_data,
+        payload.fix_factor_data,
+        payload.covar_data,
+        payload.wls_data,
+        payload.dep_data_defs,
+        payload.fix_factor_data_defs,
+        payload.covar_data_defs,
+        payload.wls_data_defs,
+        payload.config_data
+    );
+
+    try {
+        const results = multivariate.get_formatted_results();
+        // Same as the worker: simultaneous CI only when requested.
+        if ((payload.config_data as any)?.options?.SimultaneousCI) {
+            const ci = multivariate.get_simultaneous_ci();
+            if (ci) (results as any).simultaneous_confidence_intervals = ci;
+        }
+        // Same as the worker: chi-square test only with a known Σ.
+        if (payload.known_covariance) {
+            const test = multivariate.get_known_covariance_test(payload.known_covariance);
+            if (test) (results as any).known_covariance_test = test;
+        }
+        const errors = multivariate.get_all_errors();
+        return { results, errors };
+    } finally {
+        multivariate.free();
+    }
+}
+
+/**
+ * Runs the WASM computation in the mode selected by localStorage
+ * "glm-execution-mode" and reports the mode actually used.
+ */
+export function computeMultivariate(payload: MultivariateWorkerPayload) {
+    return executeGlmComputation({
+        module: "multivariate",
+        client: multivariateWorker,
+        payload,
+        runOnMainThread: runMultivariateOnMainThread,
+    });
+}
 
 export async function analyzeMultivariate({
     configData,
     dataVariables,
     variables,
 }: MultivariateAnalysisType) {
+    markGlmAnalysisStart();
+
     // Paired Hotelling T² is implemented entirely in TS by synthesising
     // difference columns (d_k = v1_k − v2_k) and routing them through the
     // existing Test Values pipeline (cabang Intercept dengan μ₀ = δ₀).
@@ -88,11 +166,85 @@ export async function analyzeMultivariate({
         selectedVariables: WlsWeightVariable,
     });
 
+    // Two-population δ₀ (H₀: μ₁ − μ₂ = δ₀): subtract δ₀ from every
+    // observation of the first factor level before the analysis. Only when
+    // δ₀ has a non-zero component, so δ₀ = 0 runs exactly as before.
+    let twoSampleDelta: {
+        factor: string;
+        levels: [string, string];
+        delta0: number[];
+    } | null = null;
+    if (
+        !pairedActive &&
+        FixFactorVariables.length === 1 &&
+        hasNonZeroDelta(configData.main.TwoSampleTestValues)
+    ) {
+        const factor = FixFactorVariables[0];
+        const levels = factorLevels(
+            (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+            factor
+        );
+        if (levels.length !== 2) {
+            throw new Error(
+                `Test Values (δ₀) for two populations require the Fixed Factor to have exactly two levels; '${factor}' has ${levels.length}.`
+            );
+        }
+        const depVars = effectiveConfig.main.DepVar ?? [];
+        const delta0 = normalizeDelta(configData.main.TwoSampleTestValues, depVars.length);
+        slicedDataForDependent = shiftFirstLevel(
+            slicedDataForDependent as Record<string, any>[][],
+            depVars,
+            (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+            factor,
+            levels[0],
+            delta0
+        );
+        twoSampleDelta = { factor, levels: [levels[0], levels[1]], delta0 };
+    }
+
+    // Known Σ (chi-square test): Σd from Paired, Σ from Test Values (one
+    // population) or Test Values (δ₀) (two populations). Sent to Rust only as
+    // the argument of get_known_covariance_test, never in the analysis
+    // config, so a run without it sends the same payload as before.
+    const twoSampleKnown =
+        !pairedActive && FixFactorVariables.length === 1 ? configData.main.TwoSampleKnownSigma ?? null : null;
+    const knownCovariance = resolveKnownCovariance({
+        paired: pairedActive,
+        pairedSigma: pairedMode?.knownSigma ?? null,
+        p: (effectiveConfig.main.DepVar ?? []).length,
+        factors: FixFactorVariables,
+        hasCovariatesOrWls: CovariateVariables.length > 0 || WlsWeightVariable.length > 0,
+        oneSampleSigma: pairedActive ? null : configData.main.KnownSigma ?? null,
+        twoSample: twoSampleKnown,
+        factorLevelCount: twoSampleKnown
+            ? factorLevels(
+                  (slicedDataForFixFactor?.[0] ?? []) as Record<string, any>[],
+                  FixFactorVariables[0]
+              ).length
+            : undefined,
+    });
+
+    // Type IV (v5 B3): Statify computes Type IV as Type III, which equals SPSS
+    // Type IV only without empty cells, so a design with empty cells is
+    // refused (checked here, before the WASM analysis).
+    if (configData.model?.SumOfSquareMethod === "typeIV" && FixFactorVariables.length >= 2) {
+        const depVarsForCells = effectiveConfig.main.DepVar ?? [];
+        const cells = emptyFactorCells(
+            (slicedDataForFixFactor ?? []) as Record<string, unknown>[][],
+            FixFactorVariables,
+            [
+                ...depVarsForCells.map((name: string, k: number) => ({ slice: ((slicedDataForDependent ?? [])[k] ?? []) as Record<string, unknown>[], name })),
+                ...CovariateVariables.map((name: string, k: number) => ({ slice: ((slicedDataForCovariate ?? [])[k] ?? []) as Record<string, unknown>[], name })),
+            ]
+        );
+        if (cells && cells.empty > 0) {
+            throw new Error(typeIvEmptyCellsMessage(cells.empty, cells.total));
+        }
+    }
+
     const varDefsForFixFactor = getVarDefs(variables, FixFactorVariables);
     const varDefsForCovariate = getVarDefs(variables, CovariateVariables);
     const varDefsForWlsWeight = getVarDefs(variables, WlsWeightVariable);
-
-    await init();
 
     // Rust's MainConfig deserializes VarianceMode as a non-optional enum with
     // #[serde(default)] (config.rs:110-111). serde's `default` only fires when
@@ -102,29 +254,44 @@ export async function analyzeMultivariate({
     // exactly one Fixed Factor, so we normalise here before crossing the WASM
     // boundary. PairedMode is also stripped defensively because Rust doesn't
     // know about it.
-    const { PairedMode: _stripPaired, ...mainForRust } = effectiveConfig.main;
+    const {
+        PairedMode: _stripPaired,
+        TwoSampleTestValues: _stripTwoSample,
+        KnownSigma: _stripKnownSigma,
+        TwoSampleKnownSigma: _stripTwoSampleKnownSigma,
+        ...mainForRust
+    } = effectiveConfig.main;
+    // SimultaneousCI is sent only when checked, so a run without it sends
+    // the same payload as before the option existed.
+    const { SimultaneousCI: simultaneousCI, ...optionsWithoutCI } =
+        effectiveConfig.options;
     const configForRust = {
         ...effectiveConfig,
         main: {
             ...mainForRust,
             VarianceMode: mainForRust.VarianceMode ?? "Pooled",
         },
+        options: simultaneousCI
+            ? { ...optionsWithoutCI, SimultaneousCI: true }
+            : optionsWithoutCI,
     };
 
-    const multivariate = new MultivariateAnalysis(
-        slicedDataForDependent,
-        slicedDataForFixFactor,
-        slicedDataForCovariate,
-        slicedDataForWlsWeight,
-        varDefsForDependent,
-        varDefsForFixFactor,
-        varDefsForCovariate,
-        varDefsForWlsWeight,
-        configForRust
-    );
-
-    const results = multivariate.get_formatted_results();
-    const errorsString = multivariate.get_all_errors();
+    const {
+        results,
+        errors: errorsString,
+        mode,
+    } = await computeMultivariate({
+        dep_data: slicedDataForDependent,
+        fix_factor_data: slicedDataForFixFactor,
+        covar_data: slicedDataForCovariate,
+        wls_data: slicedDataForWlsWeight,
+        dep_data_defs: varDefsForDependent,
+        fix_factor_data_defs: varDefsForFixFactor,
+        covar_data_defs: varDefsForCovariate,
+        wls_data_defs: varDefsForWlsWeight,
+        config_data: configForRust,
+        ...(knownCovariance ? { known_covariance: knownCovariance.input } : {}),
+    });
 
     // Determine whether the user actually requested post-hoc tests so we can
     // suppress non-failure warnings when they didn't (Rust always runs
@@ -236,7 +403,21 @@ export async function analyzeMultivariate({
               }
             : null;
 
-    const formattedResults = transformMultivariateResult(results, errors, {
+    // With a two-population δ₀ the analysis ran on shifted data; Descriptive
+    // Statistics are shown for the original data.
+    const resultsForFormat = twoSampleDelta
+        ? {
+              ...results,
+              descriptive_statistics: restoreDescriptiveStatistics(
+                  results?.descriptive_statistics,
+                  effectiveConfig.main.DepVar ?? [],
+                  twoSampleDelta.levels[0],
+                  twoSampleDelta.delta0
+              ),
+          }
+        : results;
+
+    const formattedResults = transformMultivariateResult(resultsForFormat, errors, {
         testValues: effectiveConfig.main.TestValues,
         varianceMode: effectiveConfig.main.VarianceMode,
         factor:
@@ -250,7 +431,18 @@ export async function analyzeMultivariate({
               }
             : null,
         contrastInfo,
+        twoSampleDelta,
+        knownCovariance: knownCovariance
+            ? {
+                  source: knownCovariance.source,
+                  showIntervals: Boolean(configData.options?.SimultaneousCI),
+              }
+            : null,
         sumOfSquareMethod: configData.model?.SumOfSquareMethod ?? null,
+        effectSizePower: {
+            effectSize: Boolean(configData.options?.EstEffectSize),
+            observedPower: Boolean(configData.options?.ObsPower),
+        },
         // Pass the user's DV selection order so per-DV tables (Descriptive
         // Statistics, Parameter Estimates) render in dialog order instead
         // of the non-deterministic Rust HashMap order. In paired mode the
@@ -284,4 +476,6 @@ export async function analyzeMultivariate({
     await resultMultivariateAnalysis({
         formattedResult: formattedResults ?? [],
     });
+
+    markGlmAnalysisEnd("multivariate", mode);
 }

@@ -47,7 +47,9 @@ export const RepeatedMeasuresModel = ({
 
     useEffect(() => {
         if (isModelOpen) {
-            setModelState({ ...data });
+            // Only Type III sums of squares are computed for Repeated Measures
+            // (the RM model always uses Type III): shown selected, others disabled.
+            setModelState({ ...data, SumOfSquareMethod: "typeIII" });
             setAvailableVariables(data.BetSubVar ?? []);
             // Reset build term states
             setCurrentBuildTerm("");
@@ -716,6 +718,7 @@ export const RepeatedMeasuresModel = ({
                                                     <SelectItem
                                                         key={index}
                                                         value={method.value}
+                                                        disabled={method.value !== "typeIII"}
                                                     >
                                                         {method.name}
                                                     </SelectItem>
@@ -725,6 +728,9 @@ export const RepeatedMeasuresModel = ({
                                     </SelectContent>
                                 </Select>
                             </div>
+                            <p className="text-xs text-muted-foreground self-center">
+                                Only Type III sums of squares are supported for Repeated Measures in this version.
+                            </p>
                         </div>
                     </div>
                     <DialogFooter className="sm:justify-start">

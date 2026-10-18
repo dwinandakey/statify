@@ -2,18 +2,6 @@ use crate::models::result::CorrelationOfEstimatesRow;
 use nalgebra::DMatrix;
 
 /// Calculate Correlation Matrix of Parameter Estimates from Covariance Matrix
-/// 
-/// The correlation matrix is derived from the covariance matrix using:
-/// corr(i,j) = cov(i,j) / sqrt(cov(i,i) * cov(j,j))
-/// 
-/// This is similar to SPSS's "Correlations" output option in Binary Logistic Regression.
-/// 
-/// # Arguments
-/// * `covariance_matrix` - The covariance matrix of parameter estimates (from IRLS)
-/// * `variable_names` - Names of variables including "Constant" if applicable
-/// 
-/// # Returns
-/// A vector of CorrelationOfEstimatesRow, each containing variable name and correlation values
 pub fn calculate_correlation_of_estimates(
     covariance_matrix: &DMatrix<f64>,
     variable_names: &[String],

@@ -34,7 +34,6 @@ export const MultivariateDialog = ({
     setIsMainOpen,
     setIsModelOpen,
     setIsContrastOpen,
-    setIsPlotsOpen,
     setIsPostHocOpen,
     setIsEMMeansOpen,
     setIsSaveOpen,
@@ -42,6 +41,7 @@ export const MultivariateDialog = ({
     setIsBootstrapOpen,
     setIsTestValuesOpen,
     setIsPairedOpen,
+    setIsTwoSampleDeltaOpen,
     updateFormData,
     data,
     globalVariables,
@@ -150,12 +150,10 @@ export const MultivariateDialog = ({
             FixFactor: fixFactor.map((v) => v.name),
             Covar: covar.map((v) => v.name),
             WlsWeight: wlsWeight[0]?.name || null,
-            // The Welch radio is only visible with exactly one Fixed Factor.
-            // Reset to default (null → Pooled in Rust) when the user moves
-            // away from that shape, so stale Welch state can't leak into a
-            // multi-factor or no-factor analysis.
-            VarianceMode:
-                fixFactor.length === 1 ? prevState.VarianceMode : null,
+            // VarianceMode is kept here: this effect also runs when the
+            // dialog remounts after a sub-dialog closes, while the lists are
+            // still empty, so a reset here lost the user's choice. It is
+            // reset in handleMoveVariable when the user changes the factors.
         }));
     }, [depVar, fixFactor, covar, wlsWeight]);
 
@@ -225,8 +223,30 @@ export const MultivariateDialog = ({
                     toSetter((prev) => [...prev, variable]);
                 }
             }
+
+            // The Welch radio is only visible with exactly one Fixed Factor.
+            // Reset to default (null → Pooled in Rust) when the user moves
+            // away from that shape, so stale Welch state can't leak into a
+            // multi-factor or no-factor analysis.
+            if (fromListId !== toListId && (fromListId === "FixFactor" || toListId === "FixFactor")) {
+                const nextFactorCount =
+                    fixFactor.length +
+                    (toListId === "FixFactor" ? 1 : 0) -
+                    (fromListId === "FixFactor" ? 1 : 0);
+                if (nextFactorCount !== 1) {
+                    setMainState((prev) => ({ ...prev, VarianceMode: null }));
+                }
+                // δ₀ of the two-population test belongs to the factor it was
+                // entered for: any change of Fixed Factor(s) drops it.
+                // The same holds for the known Σ (Σ₁, Σ₂ are per level).
+                setMainState((prev) =>
+                    prev.TwoSampleTestValues == null && prev.TwoSampleKnownSigma == null
+                        ? prev
+                        : { ...prev, TwoSampleTestValues: null, TwoSampleKnownSigma: null }
+                );
+            }
         },
-        [listStateSetters, targetListsConfig, setAvailableVars]
+        [listStateSetters, targetListsConfig, setAvailableVars, fixFactor.length]
     );
 
     const handleReorderVariable = useCallback(
@@ -359,12 +379,16 @@ export const MultivariateDialog = ({
                                     Contrasts
                                 </Button>
                                 <Button
+                                    id="multivariate-plots-button"
                                     className="w-full"
                                     variant="outline"
-                                    onClick={openDialog(setIsPlotsOpen)}
+                                    disabled
                                 >
                                     Plots
                                 </Button>
+                                <p className="w-full text-[11px] leading-tight text-muted-foreground">
+                                    Plots are not supported in this version.
+                                </p>
                                 <Button
                                     className="w-full"
                                     variant="outline"
@@ -441,13 +465,13 @@ export const MultivariateDialog = ({
                                         className="max-w-sm"
                                     >
                                         <p className="text-xs">
-                                            Pilih <b>Unequal</b>{" "}
-                                            (Welch-Satterthwaite) jika
-                                            asumsi Σ₁ = Σ₂ tidak terpenuhi
-                                            — misal saat Box's M test
-                                            signifikan. Hanya berlaku
-                                            untuk Fixed Factor dengan
-                                            tepat 2 level.
+                                            Choose <b>Unequal</b>{" "}
+                                            (Welch-Satterthwaite) when the
+                                            assumption Σ₁ = Σ₂ does not hold,
+                                            for example when Box's M test is
+                                            significant. Applies only to a
+                                            Fixed Factor with exactly 2
+                                            levels.
                                         </p>
                                     </TooltipContent>
                                 </Tooltip>
@@ -488,6 +512,31 @@ export const MultivariateDialog = ({
                                 </Label>
                             </div>
                         </RadioGroup>
+                        <div className="mt-2 flex items-center justify-between gap-2">
+                            <span
+                                id="two-sample-delta-summary"
+                                className="text-xs text-muted-foreground truncate"
+                            >
+                                {Array.isArray(mainState.TwoSampleTestValues) &&
+                                mainState.TwoSampleTestValues.some((v) => v !== 0)
+                                    ? `δ₀ = [${mainState.TwoSampleTestValues.join(", ")}]`
+                                    : "δ₀ = 0 (H₀: μ₁ = μ₂)"}
+                                {mainState.TwoSampleKnownSigma
+                                    ? mainState.TwoSampleKnownSigma.mode === "separate"
+                                        ? "; Σ₁ and Σ₂ known"
+                                        : "; Σ known"
+                                    : ""}
+                            </span>
+                            <Button
+                                id="two-sample-delta-button"
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={openDialog(setIsTwoSampleDeltaOpen)}
+                            >
+                                Test Values (δ₀)
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>

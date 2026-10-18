@@ -8,33 +8,33 @@ self.onmessage = async (event) => {
   const { action, data, config, dependentId, independentIds, variableDetails } =
     event.data;
 
-  // Logging
-  console.log("Worker: Processing action", action);
-
   const validActions = ["run_binary_logistic", "run_vif", "run_box_tidwell"];
   if (!action || !validActions.includes(action)) return;
 
-  // Timing: a fresh Worker is created per click and terminated right after,
+  // Timing (DINONAKTIFKAN - hanya dipakai saat pengembangan).
+  // Untuk mengaktifkan kembali: uncomment semua blok "Timing" di file ini
+  // beserta instrumentasi analysisTiming di BinaryLogisticMain.tsx.
+  //
+  // A fresh Worker is created per click and terminated right after,
   // so this timeline never holds more than one run - mark names don't need
   // a run id to stay unambiguous. Durations are computed with this worker's
   // own performance.now(); only the resulting numbers (never raw timestamps)
   // are sent back to the main thread, whose timeOrigin differs from ours.
-  const markStart = `worker:${action}:start`;
-  const markInitEnd = `worker:${action}:init-end`;
-  performance.mark(markStart);
+  // const markStart = `worker:${action}:start`;
+  // const markInitEnd = `worker:${action}:init-end`;
+  // performance.mark(markStart);
 
   try {
     await init();
-    performance.mark(markInitEnd);
-    const wasmInitMs = performance.measure(
-      `Worker Wasm Init — ${action}`,
-      markStart,
-      markInitEnd
-    ).duration;
+    // Timing: wasm init
+    // performance.mark(markInitEnd);
+    // const wasmInitMs = performance.measure(
+    //   `Worker Wasm Init — ${action}`,
+    //   markStart,
+    //   markInitEnd
+    // ).duration;
 
-    // =================================================================
     // 1. DATA PREPARATION
-    // =================================================================
 
     let configObj = config;
     if (typeof config === "string") {
@@ -98,9 +98,7 @@ self.onmessage = async (event) => {
       }
     }
 
-    // =================================================================
     // 2. ACTION HANDLING
-    // =================================================================
 
     switch (action) {
       case "run_binary_logistic": {
@@ -111,7 +109,6 @@ self.onmessage = async (event) => {
         const yFlat = new Float64Array(rows);
         for (let i = 0; i < rows; i++) yFlat[i] = yVector[i];
 
-        // --- UPDATE PENTING DI SINI ---
         // Menambahkan parameter opsi tambahan ke rustConfig
         const rustConfig = {
           dependent_index: 0,
@@ -133,7 +130,7 @@ self.onmessage = async (event) => {
           hosmer_lemeshow: configObj.hosmer_lemeshow || false,
           classification_plots: configObj.classification_plots || false,
           casewise_listing: configObj.casewise_listing || false,
-          casewise_type: configObj.casewise_type || "outliers", // BARU: "outliers" atau "all"
+          casewise_type: configObj.casewise_type || "outliers", // "outliers" atau "all"
           casewise_outliers: configObj.casewise_outliers ?? 2.0,
           iteration_history: configObj.iteration_history || false,
           correlations: configObj.correlations || false,
@@ -141,7 +138,7 @@ self.onmessage = async (event) => {
           // Display options
           display_at_last_step: configObj.display_at_last_step || false,
 
-          // --- BARU: Save Options (Tab Save di UI) ---
+          // --- Save Options (Tab Save di UI) ---
           save_predicted_probabilities: configObj.save_predicted_probabilities || false,
           save_predicted_group: configObj.save_predicted_group || false,
           save_residuals_unstandardized: configObj.save_residuals_unstandardized || false,
@@ -156,9 +153,10 @@ self.onmessage = async (event) => {
           assumptions: configObj.assumptions || {},
         };
 
-        const markComputeStart = `worker:${action}:compute-start`;
-        const markComputeEnd = `worker:${action}:compute-end`;
-        performance.mark(markComputeStart);
+        // Timing: compute
+        // const markComputeStart = `worker:${action}:compute-start`;
+        // const markComputeEnd = `worker:${action}:compute-end`;
+        // performance.mark(markComputeStart);
         const resultJson = await calculate_binary_logistic(
           xFlat,
           rows,
@@ -167,12 +165,12 @@ self.onmessage = async (event) => {
           JSON.stringify(rustConfig),
           JSON.stringify(xFeatureNames)
         );
-        performance.mark(markComputeEnd);
-        const computeMs = performance.measure(
-          `Worker Compute — ${action}`,
-          markComputeStart,
-          markComputeEnd
-        ).duration;
+        // performance.mark(markComputeEnd);
+        // const computeMs = performance.measure(
+        //   `Worker Compute — ${action}`,
+        //   markComputeStart,
+        //   markComputeEnd
+        // ).duration;
 
         let result = resultJson;
         if (typeof result === "string") {
@@ -223,7 +221,7 @@ self.onmessage = async (event) => {
           type: "SUCCESS",
           payload: finalResult,
           action,
-          timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
+          // timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
         });
         break;
       }
@@ -248,9 +246,10 @@ self.onmessage = async (event) => {
           feature_names: xFeatureNames,
           categorical_variables: categoricalConfigForRust,
         };
-        const markComputeStart = `worker:${action}:compute-start`;
-        const markComputeEnd = `worker:${action}:compute-end`;
-        performance.mark(markComputeStart);
+        // Timing: compute
+        // const markComputeStart = `worker:${action}:compute-start`;
+        // const markComputeEnd = `worker:${action}:compute-end`;
+        // performance.mark(markComputeStart);
         let vifResult = await calculate_vif(
           xFlat,
           rows,
@@ -258,12 +257,12 @@ self.onmessage = async (event) => {
           yFlat,
           JSON.stringify(vifConfig)
         );
-        performance.mark(markComputeEnd);
-        const computeMs = performance.measure(
-          `Worker Compute — ${action}`,
-          markComputeStart,
-          markComputeEnd
-        ).duration;
+        // performance.mark(markComputeEnd);
+        // const computeMs = performance.measure(
+        //   `Worker Compute — ${action}`,
+        //   markComputeStart,
+        //   markComputeEnd
+        // ).duration;
         if (typeof vifResult === "string") vifResult = JSON.parse(vifResult);
 
         const formattedVif = vifResult.map((item, idx) => ({
@@ -280,7 +279,7 @@ self.onmessage = async (event) => {
           type: "SUCCESS",
           payload: payload,
           action,
-          timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
+          // timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
         });
         break;
       }
@@ -305,9 +304,10 @@ self.onmessage = async (event) => {
           feature_names: xFeatureNames,
           categorical_variables: categoricalConfigForRust,
         };
-        const markComputeStart = `worker:${action}:compute-start`;
-        const markComputeEnd = `worker:${action}:compute-end`;
-        performance.mark(markComputeStart);
+        // Timing: compute
+        // const markComputeStart = `worker:${action}:compute-start`;
+        // const markComputeEnd = `worker:${action}:compute-end`;
+        // performance.mark(markComputeStart);
         let btResult = await calculate_box_tidwell(
           xFlat,
           rows,
@@ -315,18 +315,18 @@ self.onmessage = async (event) => {
           yFlat,
           JSON.stringify(btConfig)
         );
-        performance.mark(markComputeEnd);
-        const computeMs = performance.measure(
-          `Worker Compute — ${action}`,
-          markComputeStart,
-          markComputeEnd
-        ).duration;
+        // performance.mark(markComputeEnd);
+        // const computeMs = performance.measure(
+        //   `Worker Compute — ${action}`,
+        //   markComputeStart,
+        //   markComputeEnd
+        // ).duration;
         if (typeof btResult === "string") btResult = JSON.parse(btResult);
         self.postMessage({
           type: "SUCCESS",
           payload: btResult,
           action,
-          timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
+          // timing: finishWorkerTiming(action, markStart, wasmInitMs, computeMs),
         });
         break;
       }
@@ -341,23 +341,22 @@ self.onmessage = async (event) => {
   }
 };
 
-// =================================================================
 // HELPER FUNCTIONS
-// =================================================================
 
+// Timing (DINONAKTIFKAN - hanya dipakai saat pengembangan).
 // Marks the end of this worker's timeline and bundles the durations it
 // measured on its own performance.now() into plain numbers, safe to send
 // across postMessage to a main thread with a different timeOrigin.
-function finishWorkerTiming(action, markStart, wasmInitMs, computeMs) {
-  const markEnd = `worker:${action}:end`;
-  performance.mark(markEnd);
-  const workerTotalMs = performance.measure(
-    `Worker Total — ${action}`,
-    markStart,
-    markEnd
-  ).duration;
-  return { workerTotalMs, computeMs, wasmInitMs };
-}
+// function finishWorkerTiming(action, markStart, wasmInitMs, computeMs) {
+//   const markEnd = `worker:${action}:end`;
+//   performance.mark(markEnd);
+//   const workerTotalMs = performance.measure(
+//     `Worker Total — ${action}`,
+//     markStart,
+//     markEnd
+//   ).duration;
+//   return { workerTotalMs, computeMs, wasmInitMs };
+// }
 
 function processDependentVariable(rawY) {
   const uniqueVals = [...new Set(rawY)].sort();

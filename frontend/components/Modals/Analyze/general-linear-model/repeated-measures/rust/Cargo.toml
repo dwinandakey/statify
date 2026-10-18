@@ -26,6 +26,7 @@ nalgebra = { version = "0.33.2", features = ["std"] }
 ndarray = "0.16.1"
 statrs = { version = "0.18.0" }
 regex = { version = "1", features = ["std"] }
+indexmap = { version = "2", features = ["serde"] }
 
 [profile.dev]
 opt-level = 0

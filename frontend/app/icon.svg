@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .box { fill: #1643ac; }
+    .label { fill: #f3f4f6; font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; font-weight: 700; }
+    @media (prefers-color-scheme: dark) { .box { fill: #2463eb; } }
+  </style>
+  <rect class="box" width="32" height="32" rx="7"/>
+  <text class="label" x="16" y="20.6" font-size="13" text-anchor="middle" textLength="26" lengthAdjust="spacingAndGlyphs">Stat</text>
+</svg>

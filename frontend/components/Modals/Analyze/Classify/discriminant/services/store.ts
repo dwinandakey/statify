@@ -2,6 +2,12 @@ import { transformDiscriminantResult } from "@/components/Modals/Analyze/Classif
 import { comparisonDecimals } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-number-format";
 import { interpretDiscriminantResult } from "@/components/Modals/Analyze/Classify/discriminant/services/discriminant-interpretation";
 import { useResultStore } from "@/stores/useResultStore";
+import {
+    markProcedureEnd,
+    registerRenderCompletionTarget,
+    type AnalysisRunContext,
+    type WorkerTiming,
+} from "@/lib/analysisTiming";
 import type { Table } from "@/types/Table";
 
 // Output formatted in precision mode (see discriminant-number-format.ts) says so in
@@ -99,9 +105,17 @@ async function renderDiscriminantSection(
     });
 }
 
-export async function saveDiscriminantResult(rawResults: unknown) {
+/** Timing of the run being saved (see lib/analysisTiming). */
+type RunTiming = { ctx: AnalysisRunContext; workerTiming?: WorkerTiming };
+
+export async function saveDiscriminantResult(rawResults: unknown, timing?: RunTiming) {
     const formattedResult = transformDiscriminantResult(rawResults);
     const interpretations = interpretDiscriminantResult(rawResults);
+
+    // Procedure time ends here: the output is fully built, and everything below
+    // is IndexedDB and render work.
+    if (timing) markProcedureEnd(timing.ctx, timing.workerTiming);
+
     const { addLog, addAnalytic, addStatistic } = useResultStore.getState();
 
     const logId = await addLog({ log: "Discriminant Analysis" });
@@ -162,16 +176,36 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         { key: "classification_results", title: "Classification Results", group: GROUP_CLASSIFICATION },
     ];
 
+    const scatterCharts = formattedResult.charts ?? [];
+    const combinedChart = scatterCharts.find(
+        (c: any) => c.chartMetadata?.description === "Combined-Groups Plot"
+    );
+    const separateCharts = scatterCharts.filter(
+        (c: any) => (c.chartMetadata?.description as string)?.startsWith("Separate-Groups Plot:")
+    );
+    const territorialChart = scatterCharts.find(
+        (c: any) => c.chartMetadata?.description === "Territorial Map"
+    );
+    const bootstrapKey = "bootstrap_standardized_coefficients";
+
+    // End-to-end time ends when every statistic added below has been painted, so
+    // the target is registered before the first one is added.
+    if (timing) {
+        const hasTable = (key: string) => formattedResult.tables.some((t: Table) => t.key === key);
+        const expectedCount =
+            sections.filter((s) => hasTable(s.key)).length +
+            (combinedChart ? 1 : 0) +
+            (separateCharts.length > 0 ? 1 : 0) +
+            (territorialChart ? 1 : 0) +
+            (hasTable(bootstrapKey) ? 1 : 0);
+        registerRenderCompletionTarget(timing.ctx, analyticId, expectedCount);
+    }
+
     for (const section of sections) {
         await renderSection(section.key, section.title, section.group);
     }
 
     // ── 7. Discriminant-space plots (visualize the fitted functions) ──
-    const scatterCharts = formattedResult.charts ?? [];
-
-    const combinedChart = scatterCharts.find(
-        (c: any) => c.chartMetadata?.description === "Combined-Groups Plot"
-    );
     // With a single discriminant function the plots are histograms of the
     // Function 1 scores (as in SPSS) instead of scatterplots.
     if (combinedChart) {
@@ -186,9 +220,6 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         });
     }
 
-    const separateCharts = scatterCharts.filter(
-        (c: any) => (c.chartMetadata?.description as string)?.startsWith("Separate-Groups Plot:")
-    );
     if (separateCharts.length > 0) {
         await addStatistic(analyticId, {
             title: "Separate-Groups Plots",
@@ -201,9 +232,6 @@ export async function saveDiscriminantResult(rawResults: unknown) {
         });
     }
 
-    const territorialChart = scatterCharts.find(
-        (c: any) => c.chartMetadata?.description === "Territorial Map"
-    );
     if (territorialChart) {
         await addStatistic(analyticId, {
             title: "Territorial Map",
@@ -217,7 +245,7 @@ export async function saveDiscriminantResult(rawResults: unknown) {
     // ── 8. Bootstrap robustness check (enter-together method only) — rendered
     // last as an optional add-on to the fitted model. ──
     await renderSection(
-        "bootstrap_standardized_coefficients",
+        bootstrapKey,
         "Bootstrap for Standardized Canonical Discriminant Function Coefficients",
         GROUP_BOOTSTRAP,
     );

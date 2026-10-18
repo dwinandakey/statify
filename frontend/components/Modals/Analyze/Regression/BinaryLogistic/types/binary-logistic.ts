@@ -1,8 +1,6 @@
 import type { Variable } from "@/types/Variable";
 
-// =========================================================================
 // 1. CONFIGURATION TYPES (Input dari UI)
-// =========================================================================
 
 export interface BinaryLogisticSaveParams {
   predictedProbabilities: boolean;
@@ -59,7 +57,7 @@ export const DEFAULT_BINARY_LOGISTIC_OPTIONS_PARAMS: BinaryLogisticOptionsParams
     iterationHistory: false,
     ciForExpB: false,
     ciLevel: 95,
-    displayAtEachStep: true, // Default: At each step (same as SPSS)
+    displayAtEachStep: true, 
     probEntry: 0.05,
     probRemoval: 0.1,
     classificationCutoff: 0.5,
@@ -156,7 +154,7 @@ export interface CategoricalVarSetting {
 
 export interface BinaryLogisticCategoricalParams {
   covariates: string[];
-  /** Per-variable contrast/reference settings (SPSS style) */
+  /** Per-variable contrast/reference settings */
   variableSettings: Record<string, CategoricalVarSetting>;
 }
 
@@ -212,9 +210,7 @@ export const DEFAULT_BINARY_LOGISTIC_OPTIONS: BinaryLogisticOptions = {
   assumptionParams: DEFAULT_BINARY_LOGISTIC_ASSUMPTION_PARAMS,
 };
 
-// =========================================================================
 // 2. RESULT TYPES (Output dari Worker/Rust)
-// =========================================================================
 
 // Interface reusable untuk Summary dan Classification Table
 export interface ModelSummary {
@@ -338,7 +334,6 @@ export interface CategoricalCoding {
   categories: FrequencyCount[];
 }
 
-// --- BARU: Hosmer-Lemeshow Types ---
 export interface HosmerLemeshowGroup {
   group: number;
   size: number;
@@ -356,7 +351,7 @@ export interface HosmerLemeshowResult {
   contingency_table: HosmerLemeshowGroup[];
 }
 
-// --- BARU: Iteration History Types (SPSS Style) ---
+// --- Iteration History Types ---
 export interface IterationHistoryRow {
   iteration: number;
   neg2_log_likelihood: number;
@@ -386,27 +381,17 @@ export interface StepDetail {
   omni_tests?: OmniTestsResult;
   step_omni_tests?: OmniTestsResult;
   model_if_term_removed?: ModelIfTermRemovedRow[];
-
-  // --- BARU: Field Hosmer Lemeshow per step ---
   hosmer_lemeshow?: HosmerLemeshowResult;
-
-  // --- BARU: Field Correlation of Estimates per step ---
   correlation_of_estimates?: CorrelationOfEstimatesRow[];
-
-  // --- BARU: Field Iteration History per step ---
   iteration_history?: IterationHistoryBlock;
-
-  // --- BARU: Field Classification Plot Data per step ---
   classification_plot_data?: ClassificationPlotData;
 }
 
-// --- BARU: Correlation of Estimates Types ---
 export interface CorrelationOfEstimatesRow {
   variable: string;    // Nama variabel (termasuk Constant)
   values: number[];    // Nilai korelasi terhadap variabel lain (urut)
 }
 
-// --- BARU: Casewise Listing Types ---
 export interface CasewiseRow {
   case_number: number;          // Nomor kasus (1-indexed)
   selected: string;             // Status seleksi ("S" untuk selected)
@@ -418,7 +403,7 @@ export interface CasewiseRow {
   predicted_probability: number; // Probabilitas P(Y=1)
   resid_zresid: number;         // Residual Standardized (ZResid)
   
-  // Opsional - SPSS menyediakan banyak jenis residual
+  // Opsional
   resid_raw?: number;           // Residual Unstandardized
   resid_logit?: number;         // Residual Logit
   resid_studentized?: number;   // Residual Studentized
@@ -430,7 +415,7 @@ export interface CasewiseRow {
   dfbeta?: number[];            // DfBeta per variable
 }
 
-// --- BARU: Step Summary Types (SPSS Style) ---
+// --- Step Summary Types ---
 export interface StepSummaryRow {
   step: number;
   // Improvement statistics
@@ -447,7 +432,7 @@ export interface StepSummaryRow {
   variable_action: string;  // e.g., "IN: age", "OUT: trestbps"
 }
 
-// --- BARU: Classification Plot Types ---
+// --- Classification Plot Types ---
 export interface ClassificationPlotPoint {
   case_number: number;          // Case number (1-indexed)
   predicted_probability: number; // Predicted probability P(Y=1)
@@ -464,7 +449,7 @@ export interface ClassificationPlotData {
   n_group_1: number;                        // Total cases in group 1
 }
 
-// --- BARU: Saved Predictions Types (untuk Tab Save) ---
+// --- Saved Predictions Types (untuk Tab Save) ---
 export interface SavedPredictionRow {
   case_index: number;                        // Index kasus (0-indexed untuk mapping ke data)
   
@@ -485,7 +470,7 @@ export interface SavedPredictionRow {
   influence_dfbeta?: number[];               // DFB0_1, DFB1_1, ...: DfBeta per variable
 }
 
-// Nama variabel yang akan ditambahkan ke dataset (mengikuti konvensi SPSS)
+// Nama variabel yang akan ditambahkan ke dataset
 export interface SavedVariableNames {
   predicted_probability?: string;            // PRE_1
   predicted_group?: string;                  // PGR_1
@@ -557,38 +542,36 @@ export interface LogisticResult {
   // History ringkas (untuk tabel Step History)
   step_history?: StepHistory[];
 
-  // --- BARU: Detail lengkap setiap langkah (Block 0, Step 1, dst.) ---
+  // --- Detail lengkap setiap langkah (Block 0, Step 1, dst.) ---
   steps_detail?: StepDetail[];
 
   assumption_tests?: AssumptionResult;
 
   categorical_codings?: CategoricalCoding[];
 
-  // --- BARU: Field Hosmer Lemeshow Final Model ---
+  // --- Field Hosmer Lemeshow Final Model ---
   hosmer_lemeshow?: HosmerLemeshowResult;
 
-  // --- BARU: Casewise Listing of Residuals ---
+  // --- Casewise Listing of Residuals ---
   casewise_list?: CasewiseRow[];
 
-  // --- BARU: Classification Plot Data ---
+  // --- Classification Plot Data ---
   classification_plot_data?: ClassificationPlotData;
 
-  // --- BARU: Correlation of Estimates (Final Model) ---
+  // --- Correlation of Estimates (Final Model) ---
   correlation_of_estimates?: CorrelationOfEstimatesRow[];
 
-  // --- BARU: Step Summary (SPSS Style - for stepwise methods) ---
+  // --- Step Summary ---
   step_summary?: StepSummaryRow[];
 
-  // --- BARU: Saved Predictions (Tab Save output) ---
+  // --- Saved Predictions (Tab Save output) ---
   saved_predictions?: SavedPredictions;
 
-  // --- BARU: Fitting Warnings (dari IRLS robust solver) ---
+  // --- Fitting Warnings (dari IRLS robust solver) ---
   fitting_warnings?: FittingWarnings;
 }
 
-// =========================================================================
 // 3. UI OUTPUT TYPE (Format Akhir untuk Ditampilkan)
-// =========================================================================
 
 export interface ColumnHeader {
   header: string;
@@ -604,7 +587,7 @@ export interface TableResultContent {
   style?: "standard" | "compact";
 }
 
-// Ini adalah struktur wrapper baru untuk setiap "Kartu" output
+// struktur wrapper
 export interface AnalysisSection {
   id: string; // ID Unik untuk key React
   title: string; // Judul Card (misal: "Model Summary")

@@ -175,8 +175,9 @@ pub fn calculate_between_subjects_sscp(
         matrices.insert(factor.clone(), BetweenSSCPMatrix { values: factor_sscp });
     }
 
-    // 3. Calculate SSCP matrices for interaction effects
-    if factors.len() > 1 {
+    // 3. Calculate SSCP matrices for interaction effects (none in the
+    // main-effects model)
+    if factors.len() > 1 && config.model.non_cust {
         let interaction_terms = generate_interaction_terms(&factors);
 
         for interaction_term in &interaction_terms {

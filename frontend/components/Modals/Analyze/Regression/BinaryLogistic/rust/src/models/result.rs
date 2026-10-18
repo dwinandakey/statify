@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap; // Tambahan import
 
-// ============================================================================
 // FITTING WARNINGS - Peringatan dari proses IRLS fitting
-// ============================================================================
 
 /// Flags untuk warning yang terdeteksi selama fitting
 /// Digunakan untuk melaporkan masalah potensial ke user
@@ -39,7 +37,7 @@ pub struct FittingWarnings {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VifRow {
     pub variable: String,
-    pub tolerance: f64, // 1 / GVIF
+    pub tolerance: f64, 
     #[serde(default)]
     pub gvif: f64,       // Raw GVIF (== VIF when df == 1)
     pub vif: f64,        // VIF, or GVIF^(1/(2*Df)) when any term has df > 1
@@ -54,8 +52,6 @@ fn default_df() -> usize {
 }
 
 // Struktur untuk satu baris hasil Box-Tidwell
-// Output format mengacu pada R's car::boxTidwell() (Fox & Weisberg, 2011)
-// dan teori asli Box & Tidwell (1962)
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BoxTidwellRow {
     pub variable: String,         // Nama variabel asli
@@ -101,7 +97,7 @@ pub struct AssumptionResult {
     pub box_tidwell: Option<Vec<BoxTidwellRow>>,
 }
 
-// --- BARU: Hosmer-Lemeshow Structures ---
+// --- Hosmer-Lemeshow Structures ---
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct HosmerLemeshowGroup {
     pub group: usize,
@@ -113,7 +109,7 @@ pub struct HosmerLemeshowGroup {
     pub total_observed: usize,
 }
 
-// --- BARU: Classification Plot Data Structures ---
+// --- Classification Plot Data Structures ---
 /// Represents a single data point for the classification plot
 /// Contains the predicted probability and observed group for each case
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -136,7 +132,7 @@ pub struct ClassificationPlotData {
     pub n_group_1: usize,                            // Total cases in group 1
 }
 
-// --- BARU: Casewise Listing Structures ---
+// --- Casewise Listing Structures ---
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CasewiseRow {
     pub case_number: usize,           // Nomor kasus (1-indexed)
@@ -149,7 +145,6 @@ pub struct CasewiseRow {
     pub predicted_probability: f64,   // Probabilitas P(Y=1)
     pub resid_zresid: f64,            // Residual Standardized (ZResid)
     
-    // Opsional - SPSS menyediakan banyak jenis residual
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resid_raw: Option<f64>,       // Residual Unstandardized
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,9 +163,8 @@ pub struct CasewiseRow {
     pub dfbeta: Option<Vec<f64>>,     // DfBeta per variable
 }
 
-// --- BARU: Saved Predictions untuk Tab Save ---
+// --- Saved Predictions untuk Tab Save ---
 /// Struktur untuk menyimpan hasil prediksi per kasus yang akan di-save ke dataset
-/// Ini adalah output dari opsi "Save" di UI SPSS
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SavedPredictionRow {
     pub case_index: usize,            // Index kasus (0-indexed untuk mapping ke data)
@@ -212,7 +206,7 @@ pub struct SavedPredictions {
     pub variable_names: Option<SavedVariableNames>,
 }
 
-/// Nama variabel yang akan ditambahkan ke dataset (mengikuti konvensi SPSS)
+/// Nama variabel yang akan ditambahkan ke dataset 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SavedVariableNames {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -314,25 +308,22 @@ pub struct OmnibusResult {
     pub sig: f64,
 }
 
-// --- BARU: Iteration History Structures (SPSS Style) ---
-/// Represents a single iteration row in SPSS's Iteration History table
-/// Shows the convergence progress of the IRLS algorithm
+// --- Iteration History Structures ---
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct IterationHistoryRow {
-    pub iteration: usize,           // Iteration number (1-indexed like SPSS)
+    pub iteration: usize,           // Iteration number 
     pub neg2_log_likelihood: f64,   // -2 Log Likelihood at this iteration
     pub coefficients: Vec<f64>,     // Coefficient values at this iteration
 }
 
 /// Represents a complete iteration history block for a step
-/// SPSS shows separate blocks for Block 0 (null model) and Block 1 (with covariates)
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct IterationHistoryBlock {
     pub block: usize,               // Block number (0 or 1)
     pub step: usize,                // Step within block (for stepwise methods)
     pub variable_names: Vec<String>, // Names of coefficients (Constant, Var1, etc.)
     pub rows: Vec<IterationHistoryRow>, // Iteration data
-    pub initial_neg2ll: Option<f64>, // Initial -2LL (for sub-step a. in SPSS)
+    pub initial_neg2ll: Option<f64>, // Initial -2LL 
     pub converged: bool,            // Whether convergence was achieved
     pub final_iteration: usize,     // Final iteration count
 }
@@ -348,7 +339,6 @@ pub struct StepHistory {
     pub nagelkerke_r2: f64,
 }
 
-/// Represents a row in the Step Summary table (SPSS style)
 /// Shows improvement statistics, model statistics, correct classification %, and variable action
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StepSummaryRow {
@@ -364,7 +354,7 @@ pub struct StepSummaryRow {
     // Classification
     pub correct_pct: f64,
     // Variable action
-    pub variable_action: String,  // e.g., "IN: age", "OUT: trestbps"
+    pub variable_action: String,  
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -389,19 +379,19 @@ pub struct StepDetail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_omni_tests: Option<OmniTests>,
 
-    // --- BARU: Hosmer Lemeshow per Step ---
+    // --- Hosmer Lemeshow per Step ---
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hosmer_lemeshow: Option<HosmerLemeshowResult>,
 
-    // --- BARU: Correlation of Estimates per Step ---
+    // --- Correlation of Estimates per Step ---
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correlation_of_estimates: Option<Vec<CorrelationOfEstimatesRow>>,
 
-    // --- BARU: Iteration History per Step (SPSS Style) ---
+    // --- Iteration History per Step ---
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iteration_history: Option<IterationHistoryBlock>,
 
-    // --- BARU: Classification Plot Data per Step ---
+    // --- Classification Plot Data per Step ---
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classification_plot_data: Option<ClassificationPlotData>,
 }
@@ -421,7 +411,6 @@ pub struct RemainderTest {
 }
 
 // --- Struktur untuk Output Categorical Variables Codings ---
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FrequencyCount {
     pub category_label: String, // misal: "Male", "Female"
@@ -435,7 +424,7 @@ pub struct CategoricalCoding {
     pub categories: Vec<FrequencyCount>,
 }
 
-// --- Struktur Metadata Model (BARU) ---
+// --- Struktur Metadata Model ---
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ModelInfo {
     pub variables: Vec<String>,
@@ -494,7 +483,7 @@ pub struct LogisticResult {
     #[serde(rename = "steps_detail", skip_serializing_if = "Option::is_none")]
     pub steps_detail: Option<Vec<StepDetail>>,
 
-    // --- Step Summary (SPSS Style - for stepwise methods) ---
+    // --- Step Summary ---
     #[serde(rename = "step_summary", skip_serializing_if = "Option::is_none")]
     pub step_summary: Option<Vec<StepSummaryRow>>,
 
@@ -510,27 +499,27 @@ pub struct LogisticResult {
     )]
     pub categorical_codings: Option<Vec<CategoricalCoding>>,
 
-    // --- BARU: Hosmer Lemeshow Final Model ---
+    // --- Hosmer Lemeshow Final Model ---
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hosmer_lemeshow: Option<HosmerLemeshowResult>,
 
-    // --- BARU: Casewise Listing of Residuals ---
+    // --- Casewise Listing of Residuals ---
     #[serde(rename = "casewise_list", skip_serializing_if = "Option::is_none")]
     pub casewise_list: Option<Vec<CasewiseRow>>,
 
-    // --- BARU: Classification Plot Data ---
+    // --- Classification Plot Data ---
     #[serde(rename = "classification_plot_data", skip_serializing_if = "Option::is_none")]
     pub classification_plot_data: Option<ClassificationPlotData>,
 
-    // --- BARU: Correlation of Estimates (Final Model) ---
+    // --- Correlation of Estimates (Final Model) ---
     #[serde(rename = "correlation_of_estimates", skip_serializing_if = "Option::is_none")]
     pub correlation_of_estimates: Option<Vec<CorrelationOfEstimatesRow>>,
 
-    // --- BARU: Saved Predictions (Tab Save di UI) ---
+    // --- Saved Predictions ---
     #[serde(rename = "saved_predictions", skip_serializing_if = "Option::is_none")]
     pub saved_predictions: Option<SavedPredictions>,
 
-    // --- BARU: Fitting Warnings (dari IRLS robust solver) ---
+    // --- Fitting Warnings ---
     #[serde(rename = "fitting_warnings", skip_serializing_if = "Option::is_none")]
     pub fitting_warnings: Option<FittingWarnings>,
 }

@@ -8,7 +8,20 @@ export type PairedModeType = {
     pairs: [string, string][];
     /** Hypothesised vector of differences (δ₀). null = vektor nol. */
     delta0: number[] | null;
+    /** Known covariance matrix Σd of the differences (Paired → "Population
+     *  covariance matrix (Σ) known"); null/absent = unknown (T² only). */
+    knownSigma?: number[][] | null;
 } | null;
+
+/** Known Σ of the two-population test (Test Values (δ₀) dialog):
+ *  "common" = Σ₁ = Σ₂ = Σ, "separate" = Σ₁ and Σ₂ for the first and second
+ *  factor level in output-table order. */
+export type TwoSampleKnownSigmaType = {
+    mode: "common" | "separate";
+    sigma?: number[][] | null;
+    sigma1?: number[][] | null;
+    sigma2?: number[][] | null;
+};
 
 export type MultivariateMainType = {
     DepVar: string[] | null;
@@ -21,6 +34,20 @@ export type MultivariateMainType = {
      *  service synthesises difference columns d_k = v1_k − v2_k and feeds
      *  them through the existing Test Values pipeline with μ₀ = δ₀. */
     PairedMode: PairedModeType;
+    /** Hypothesised difference δ₀ for the two-population test
+     *  (H₀: μ₁ − μ₂ = δ₀, μ₁ = first level of the single Fixed Factor in
+     *  output-table order). One entry per dependent variable; null = 0.
+     *  Applied in the service by shifting the first level's data; never
+     *  sent to Rust. */
+    TwoSampleTestValues?: number[] | null;
+    /** Known population covariance matrix Σ for the one-population test
+     *  (Test Values → "Population covariance matrix (Σ) known"); null/absent
+     *  = unknown. Sent to Rust only through get_known_covariance_test, never
+     *  in the analysis config. */
+    KnownSigma?: number[][] | null;
+    /** Known Σ (or Σ₁, Σ₂) for the two-population test (Test Values (δ₀)).
+     *  Dropped with δ₀ when the Fixed Factor changes. */
+    TwoSampleKnownSigma?: TwoSampleKnownSigmaType | null;
 };
 
 export type MultivariateDialogProps = {
@@ -36,9 +63,10 @@ export type MultivariateDialogProps = {
     setIsBootstrapOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsTestValuesOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsPairedOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsTwoSampleDeltaOpen: React.Dispatch<React.SetStateAction<boolean>>;
     updateFormData: (
         field: keyof MultivariateMainType,
-        value: string[] | string | number[] | PairedModeType | null
+        value: string[] | string | number[] | number[][] | PairedModeType | TwoSampleKnownSigmaType | null
     ) => void;
     data: MultivariateMainType;
     globalVariables: string[];
@@ -213,6 +241,10 @@ export type MultivariateOptionsType = {
     SigLevel: number | null;
     CoefficientMatrix: boolean;
     TransformMat: boolean;
+    /** Simultaneous confidence intervals (T² and Bonferroni) for the mean
+     *  vector components (one-sample, paired, two-sample). Default off;
+     *  sent to Rust only when checked. */
+    SimultaneousCI?: boolean;
 };
 
 export type MultivariateOptionsProps = {
@@ -255,6 +287,19 @@ export type MultivariateTestValuesProps = {
     depVar: string[];
     testValues: number[] | null;
     onSave: (testValues: number[] | null) => void;
+    knownSigma: number[][] | null;
+    onSaveKnownSigma: (knownSigma: number[][] | null) => void;
+};
+
+export type MultivariateTwoSampleDeltaProps = {
+    isTwoSampleDeltaOpen: boolean;
+    setIsTwoSampleDeltaOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    depVar: string[];
+    factor: string | null;
+    delta0: number[] | null;
+    onSave: (delta0: number[] | null) => void;
+    knownSigma: TwoSampleKnownSigmaType | null;
+    onSaveKnownSigma: (knownSigma: TwoSampleKnownSigmaType | null) => void;
 };
 
 export type MultivariatePairedProps = {

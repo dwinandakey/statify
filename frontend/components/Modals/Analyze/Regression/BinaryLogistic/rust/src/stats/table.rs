@@ -10,18 +10,12 @@ pub fn calculate_classification_table(
     let mut obs_0_pred_1 = 0;
     let mut obs_1_pred_0 = 0;
     let mut obs_1_pred_1 = 0;
-
-    // PERBAIKAN: Tambahkan toleransi kecil untuk menangani floating point precision
-    // Ketika P = 0.5 tepat (misalnya dari model tanpa constant), 
-    // floating point mungkin menyimpannya sebagai 0.4999999... atau 0.5000001...
-    // Toleransi ini memastikan P = 0.5 tepat dianggap >= cutoff
     let epsilon = 1e-10;
 
     for (pred_prob, obs) in predicted_probs.iter().zip(observed_y.iter()) {
         // Gunakan >= dengan toleransi: jika (pred_prob + epsilon) >= cutoff
         let predicted_class = if *pred_prob >= (cutoff - epsilon) { 1.0 } else { 0.0 };
 
-        // PERBAIKAN: Tambahkan 'f64' agar tipe data jelas
         let is_obs_0 = (obs - 0.0f64).abs() < 1e-9;
         let is_obs_1 = (obs - 1.0f64).abs() < 1e-9;
         let is_pred_0 = (predicted_class - 0.0f64).abs() < 1e-9;

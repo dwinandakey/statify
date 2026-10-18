@@ -20,8 +20,13 @@ async function loadWasm() {
 }
 
 self.onmessage = async (event) => {
+    // Timing for lib/analysisTiming: durations are measured on this worker's own
+    // clock and only the numbers are posted back, because the main thread's
+    // performance.now() has a different time origin.
+    const workerStart = performance.now();
     try {
         const wasm = await loadWasm();
+        const wasmReady = performance.now();
 
         const { group_data, independent_data, selection_data, strata_data, group_data_defs, independent_data_defs, selection_data_defs, config_data } = event.data || {};
 
@@ -41,6 +46,7 @@ self.onmessage = async (event) => {
         const formattedResults = discriminant.get_formatted_results();
         const log = discriminant.get_all_log();
         const errors = discriminant.get_all_errors();
+        const computeDone = performance.now();
 
         // Clean up WASM instance
         discriminant.free();
@@ -51,6 +57,11 @@ self.onmessage = async (event) => {
                 formattedResults,
                 log,
                 errors
+            },
+            timing: {
+                wasmInitMs: wasmReady - workerStart,
+                computeMs: computeDone - wasmReady,
+                workerTotalMs: performance.now() - workerStart
             }
         });
     } catch (error) {

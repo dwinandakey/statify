@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import {
     Dialog,
@@ -71,7 +71,7 @@ export const FactorDialog = ({
 }: FactorDialogExtendedProps) => {
     const [activeTab, setActiveTab] = useState<'variables' | 'descriptive' | 'extraction' | 'rotation' | 'scores' | 'options'>('variables');
     const [mainState, setMainState] = useState<FactorMainType>({ ...data });
-    const [availableVariables, setAvailableVariables] = useState<string[]>([]);
+    const [availableVariables, setAvailableVariables] = useState<Variable[]>([]);
 
     // Local states di setiap tab (sinkron sama formData)
     const [descriptivesState, setDescriptivesState] = useState<FactorDescriptivesType>({ ...formData.descriptives });
@@ -113,58 +113,81 @@ export const FactorDialog = ({
             mainState.ValueTarget,
         ].filter(Boolean);
 
-        const updatedVariables = globalVariables
-            .filter((variable) => !usedVariables.includes(variable.name))
-            .map((variable) => variable.name);
-        setAvailableVariables(updatedVariables);
+        const usedNames = new Set(usedVariables);
+        setAvailableVariables(
+            globalVariables.filter((variable) => !usedNames.has(variable.name))
+        );
     }, [mainState, globalVariables]);
 
-    // Handler untuk perubahan main state 
-    const handleDrop = (target: string, variable: string) => {
-        const variableDefinition = globalVariables.find(
-            (item) => item.name === variable
-        );
+    const handleMoveVariables = useCallback(
+        (variables: Variable[], fromListId: string, toListId: string) => {
+            if (variables.length === 0 || fromListId === toListId) return;
 
-        if (target === "TargetVar" && variableDefinition?.type === "STRING") {
-            toast.error("Invalid data type. Factor analysis requires numeric variables.");
-            return;
-        }
-
-        if (target === "ValueTarget") {
-            updateFormData("value", "Selection", null);
-        }
-
-        setMainState((prev) => {
-            const updatedState = { ...prev };
-            if (target === "TargetVar") {
-                updatedState.TargetVar = [
-                    ...(updatedState.TargetVar || []),
-                    variable,
-                ];
-            } else if (target === "ValueTarget") {
-                updatedState.ValueTarget = variable;
+            if (
+                toListId === "TargetVar" &&
+                variables.some((variable) => variable.type === "STRING")
+            ) {
+                toast.error("Invalid data type. Factor analysis requires numeric variables.");
+                return;
             }
-            return updatedState;
-        });
-    };
 
-    const handleRemoveVariable = (target: string, variable?: string) => {
-        if (target === "ValueTarget") {
-            updateFormData("value", "Selection", null);
-        }
+            const accepted = toListId === "ValueTarget" ? variables.slice(0, 1) : variables;
+            const acceptedNames = new Set(accepted.map((variable) => variable.name));
+            const nextTargetVariables = (mainState.TargetVar ?? [])
+                .map((name) => globalVariables.find((variable) => variable.name === name))
+                .filter((variable): variable is Variable => Boolean(variable));
+            const currentValueVariable = mainState.ValueTarget
+                ? globalVariables.find((variable) => variable.name === mainState.ValueTarget)
+                : undefined;
 
-        setMainState((prev) => {
-            const updatedState = { ...prev };
-            if (target === "TargetVar") {
-                updatedState.TargetVar = (updatedState.TargetVar || []).filter(
-                    (item) => item !== variable
-                );
-            } else if (target === "ValueTarget") {
-                updatedState.ValueTarget = "";
+            let nextTarget = nextTargetVariables.filter(
+                (variable) => !acceptedNames.has(variable.name)
+            );
+            let nextValue = currentValueVariable && !acceptedNames.has(currentValueVariable.name)
+                ? [currentValueVariable]
+                : [];
+
+            if (toListId === "TargetVar") {
+                nextTarget = [...nextTarget, ...accepted];
+            } else if (toListId === "ValueTarget") {
+                nextValue = accepted;
             }
-            return updatedState;
-        });
-    };
+
+            const nextTargetNames = nextTarget.map((variable) => variable.name);
+            const nextValueName = nextValue[0]?.name ?? null;
+
+            setMainState((prev) => ({
+                ...prev,
+                TargetVar: nextTargetNames,
+                ValueTarget: nextValueName,
+            }));
+            updateFormData("main", "TargetVar", nextTargetNames);
+            updateFormData("main", "ValueTarget", nextValueName);
+            if (fromListId === "ValueTarget" || toListId === "ValueTarget") {
+                updateFormData("value", "Selection", null);
+            }
+        },
+        [globalVariables, mainState.TargetVar, mainState.ValueTarget, updateFormData]
+    );
+
+    const handleReorderVariable = useCallback(
+        (listId: string, variables: Variable[]) => {
+            if (listId !== "TargetVar") return;
+            const names = variables.map((variable) => variable.name);
+            setMainState((prev) => ({ ...prev, TargetVar: names }));
+            updateFormData("main", "TargetVar", names);
+        },
+        [updateFormData]
+    );
+
+    /* Keep selection-variable changes isolated from the statistical configuration. */
+    const selectionVariable = mainState.ValueTarget
+        ? globalVariables.filter((variable) => variable.name === mainState.ValueTarget)
+        : [];
+
+    const targetVariables = (mainState.TargetVar ?? [])
+        .map((name) => globalVariables.find((variable) => variable.name === name))
+        .filter((variable): variable is Variable => Boolean(variable));
 
     // Handlers untuk setiap tab
     const handleDescriptivesChange = (field: keyof FactorDescriptivesType, value: CheckedState) => {
@@ -264,24 +287,40 @@ export const FactorDialog = ({
                 <Separator />
             </div>
 
-            <div className="flex-grow px-6 overflow-y-auto">
-                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)} className="w-full">
-                    <TabsList className="grid w-full grid-cols-6">
-                        <TabsTrigger id="factor-variables-tab" data-testid="factor-variables-tab" value="variables">Variables</TabsTrigger>
-                        <TabsTrigger id="factor-descriptive-tab" data-testid="factor-descriptive-tab" value="descriptive">Descriptive</TabsTrigger>
-                        <TabsTrigger id="factor-extraction-tab" data-testid="factor-extraction-tab" value="extraction">Extraction</TabsTrigger>
-                        <TabsTrigger id="factor-rotation-tab" data-testid="factor-rotation-tab" value="rotation">Rotation</TabsTrigger>
-                        <TabsTrigger id="factor-scores-tab" data-testid="factor-scores-tab" value="scores">Scores</TabsTrigger>
-                        <TabsTrigger id="factor-options-tab" data-testid="factor-options-tab" value="options">Options</TabsTrigger>
+            <div className="flex-grow min-h-0 px-6 overflow-y-auto">
+                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)} className="w-full h-full flex flex-col">
+                    <TabsList
+                        className="grid w-full flex-shrink-0"
+                        style={{
+                            gridTemplateColumns: [
+                                "variables",
+                                "descriptive",
+                                "extraction",
+                                "rotation",
+                                "scores",
+                                "options",
+                            ].map((tab) =>
+                                tab === activeTab ? "max-content" : "minmax(0, 1fr)"
+                            ).join(" "),
+                        }}
+                    >
+                        <TabsTrigger id="factor-variables-tab" data-testid="factor-variables-tab" value="variables" className="min-w-0"><span className="truncate block w-full">Variables</span></TabsTrigger>
+                        <TabsTrigger id="factor-descriptive-tab" data-testid="factor-descriptive-tab" value="descriptive" className="min-w-0"><span className="truncate block w-full">Descriptive</span></TabsTrigger>
+                        <TabsTrigger id="factor-extraction-tab" data-testid="factor-extraction-tab" value="extraction" className="min-w-0"><span className="truncate block w-full">Extraction</span></TabsTrigger>
+                        <TabsTrigger id="factor-rotation-tab" data-testid="factor-rotation-tab" value="rotation" className="min-w-0"><span className="truncate block w-full">Rotation</span></TabsTrigger>
+                        <TabsTrigger id="factor-scores-tab" data-testid="factor-scores-tab" value="scores" className="min-w-0"><span className="truncate block w-full">Scores</span></TabsTrigger>
+                        <TabsTrigger id="factor-options-tab" data-testid="factor-options-tab" value="options" className="min-w-0"><span className="truncate block w-full">Options</span></TabsTrigger>
                     </TabsList>
 
+                    <div className="flex-grow min-h-0 overflow-hidden">
                     {/* Variables Tab */}
                     <TabsContent value="variables">
                         <VariablesTab
-                            mainState={mainState}
                             availableVariables={availableVariables}
-                            onDrop={handleDrop}
-                            onRemove={handleRemoveVariable}
+                            targetVariables={targetVariables}
+                            selectionVariable={selectionVariable}
+                            onMoveVariables={handleMoveVariables}
+                            onReorderVariable={handleReorderVariable}
                             onOpenValue={() => {
                                 // simppan main state saat ini sebelum buka dialog value 
                                 Object.entries(mainState).forEach(([key, value]) => {
@@ -332,6 +371,7 @@ export const FactorDialog = ({
                             onChange={handleOptionsChange}
                         />
                     </TabsContent>
+                    </div>
                 </Tabs>
             </div>
 

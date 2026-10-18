@@ -32,6 +32,19 @@ import PairedVariablesTab, {
     type PairedHighlightedVariable,
 } from "@/components/Common/PairedVariablesTab";
 import { computeDifferencePreview } from "@/components/Modals/Analyze/general-linear-model/multivariate/services/paired-difference";
+import {
+    parseKnownSigma,
+    resizeSigmaCells,
+    setSigmaCell,
+    sigmaCellsFrom,
+    type SigmaCells,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/services/known-sigma";
+import {
+    KnownSigmaCheckbox,
+    KnownSigmaError,
+    KnownSigmaHint,
+    KnownSigmaMatrix,
+} from "@/components/Modals/Analyze/general-linear-model/multivariate/dialogs/known-sigma-matrix";
 
 const formatPreviewCell = (
     value: number | string | null | undefined
@@ -86,6 +99,10 @@ export const MultivariatePaired = ({
     const [testVariables2, setTestVariables2] = useState<Variable[]>([]);
     const [pairNumbers, setPairNumbers] = useState<number[]>([]);
     const [delta0, setDelta0] = useState<number[]>([]);
+    // Known Σd of the differences (chi-square test); unchecked by default.
+    const [sigmaKnown, setSigmaKnown] = useState<boolean>(false);
+    const [sigmaCells, setSigmaCells] = useState<SigmaCells>([]);
+    const [sigmaError, setSigmaError] = useState<string | null>(null);
     const [highlightedVariable, setHighlightedVariable] =
         useState<PairedHighlightedVariable | null>(null);
     const [highlightedPair, setHighlightedPair] =
@@ -108,6 +125,9 @@ export const MultivariatePaired = ({
         setTestVariables2(v2);
         setPairNumbers(storedPairs.map((_, i) => i + 1));
         setDelta0(resizeDelta0(storedPairs, pairedMode?.delta0 ?? null));
+        setSigmaKnown(Boolean(pairedMode?.knownSigma));
+        setSigmaCells(sigmaCellsFrom(pairedMode?.knownSigma, storedPairs.length));
+        setSigmaError(null);
         setHighlightedVariable(null);
         setHighlightedPair(null);
     }, [isPairedOpen, pairedMode, allSelectableVariables]);
@@ -176,7 +196,7 @@ export const MultivariatePaired = ({
                     counterpart.columnIndex === variable.columnIndex
                 ) {
                     toast.error(
-                        "Pasangan harus berisi dua variabel yang berbeda."
+                        "A pair must contain two different variables."
                     );
                     return;
                 }
@@ -211,7 +231,7 @@ export const MultivariatePaired = ({
                     counterpart.columnIndex === variable.columnIndex
                 ) {
                     toast.error(
-                        "Pasangan harus berisi dua variabel yang berbeda."
+                        "A pair must contain two different variables."
                     );
                     return;
                 }
@@ -300,7 +320,7 @@ export const MultivariatePaired = ({
                 testVariables1[index].columnIndex ===
                     testVariables2[index].columnIndex
             ) {
-                toast.error("Pasangan harus berisi dua variabel yang berbeda.");
+                toast.error("A pair must contain two different variables.");
                 return;
             }
             const temp = testVariables1[index];
@@ -382,6 +402,12 @@ export const MultivariatePaired = ({
         return out;
     }, [testVariables1, testVariables2]);
 
+    // Σd follows the complete pairs (one row and column per difference).
+    useEffect(() => {
+        setSigmaCells((prev) => resizeSigmaCells(prev, completePairs.length));
+    }, [completePairs.length]);
+    const pairLabels = completePairs.map(([v1, v2], idx) => `d${idx + 1} = ${v1} − ${v2}`);
+
     const hasIncompletePair = useMemo(() => {
         const max = Math.max(testVariables1.length, testVariables2.length);
         for (let i = 0; i < max; i++) {
@@ -418,21 +444,35 @@ export const MultivariatePaired = ({
 
     // ── Footer actions ───────────────────────────────────────────────────────
     const handleContinue = () => {
-        if (completePairs.length === 0) {
-            toast.warning("Tambahkan minimal satu pasangan variabel.");
-            return;
-        }
+        // An incomplete row is reported first, so a pair with only
+        // Variable 1 filled asks for Variable 2 instead of "add a pair".
         if (hasIncompletePair) {
             toast.warning(
-                "Terdapat pasangan yang belum lengkap. Isi Variable 1 dan Variable 2 untuk setiap baris."
+                "Some pairs are incomplete. Select Variable 1 and Variable 2 in every row."
             );
             return;
+        }
+        if (completePairs.length === 0) {
+            toast.warning("Add at least one variable pair.");
+            return;
+        }
+        // With Σd known the matrix is validated first; on an error the
+        // dialog stays open and shows the message.
+        let knownSigma: number[][] | null = null;
+        if (sigmaKnown) {
+            const parsed = parseKnownSigma(sigmaCells, completePairs.length, "Known covariance matrix Σd");
+            if (parsed.error !== undefined) {
+                setSigmaError(parsed.error);
+                return;
+            }
+            knownSigma = parsed.matrix;
         }
         const trimmedDelta0 = delta0.slice(0, completePairs.length);
         const allZero = trimmedDelta0.every((v) => v === 0);
         const payload: PairedModeType = {
             pairs: completePairs,
             delta0: allZero ? null : trimmedDelta0,
+            ...(knownSigma ? { knownSigma } : {}),
         };
         onSave(payload);
         setIsPairedOpen(false);
@@ -452,23 +492,23 @@ export const MultivariatePaired = ({
             <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        Paired (Hotelling T²) — Vektor Selisih
+                        Multivariate: Paired
                     </DialogTitle>
                 </DialogHeader>
                 <Separator />
 
                 <div className="flex flex-col gap-4">
                     <p className="text-sm text-muted-foreground">
-                        Pilih pasangan variabel (Measurement 1 vs Measurement 2)
-                        untuk membentuk vektor selisih d = M1 − M2. Sistem akan
-                        menjalankan Hotelling T² Satu Populasi pada vektor d
-                        terhadap δ₀.
+                        Select pairs of variables (Measurement 1 and Measurement
+                        2) to form the difference vector d = M1 − M2. The paired
+                        Hotelling T² test is run as a one-sample test of d against
+                        δ₀.
                     </p>
 
-                    {/* Bagian A — Pemilihan Pasangan Variabel */}
+                    {/* Bagian A: pemilihan pasangan variabel */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            A. Pemilihan Pasangan Variabel
+                            A. Variable Pairs
                         </Label>
                         <PairedVariablesTab
                             availableVariables={availableVariables}
@@ -489,15 +529,15 @@ export const MultivariatePaired = ({
                         />
                     </div>
 
-                    {/* Bagian B — Preview Vektor Selisih */}
+                    {/* Bagian B: preview vektor selisih */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            B. Preview Vektor Selisih (10 baris pertama)
+                            B. Difference Vector Preview (first 10 rows)
                         </Label>
                         {completePairs.length === 0 ? (
                             <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                                Pilih minimal satu pasangan lengkap untuk
-                                menampilkan preview.
+                                Select at least one complete pair to show the
+                                preview.
                             </div>
                         ) : (
                             <ScrollArea className="max-h-[320px] pr-2 border rounded-md">
@@ -523,7 +563,7 @@ export const MultivariatePaired = ({
                                                     }
                                                     className="text-center text-muted-foreground text-sm"
                                                 >
-                                                    Tidak ada data pada dataset.
+                                                    The dataset has no data.
                                                 </TableCell>
                                             </TableRow>
                                         ) : (
@@ -548,19 +588,18 @@ export const MultivariatePaired = ({
                         )}
                     </div>
 
-                    {/* Bagian C — Input δ₀ */}
+                    {/* Bagian C: isian δ₀ */}
                     <div className="rounded-md border p-3 bg-background">
                         <Label className="text-sm font-semibold mb-2 block">
-                            C. Nilai Selisih Hipotesis (δ₀)
+                            C. Hypothesized Difference (δ₀)
                         </Label>
                         <p className="text-xs text-muted-foreground mb-2">
-                            Masukkan nilai selisih hipotesis (δ₀) untuk setiap
-                            pasangan. Biarkan 0 untuk menguji tidak ada
-                            perbedaan.
+                            Enter the hypothesized difference (δ₀) for each
+                            pair. Leave 0 to test for no difference.
                         </p>
                         {completePairs.length === 0 ? (
                             <div className="rounded border border-dashed p-4 text-center text-sm text-muted-foreground">
-                                Tambahkan pasangan lengkap untuk mengatur δ₀.
+                                Add a complete pair to set δ₀.
                             </div>
                         ) : (
                             <ScrollArea className="max-h-[240px] pr-2">
@@ -595,6 +634,39 @@ export const MultivariatePaired = ({
                                     ))}
                                 </div>
                             </ScrollArea>
+                        )}
+                        {completePairs.length > 0 && (
+                            <div className="mt-3 flex flex-col gap-2 rounded-md border p-3">
+                                <KnownSigmaCheckbox
+                                    id="paired-known-sigma-checkbox"
+                                    checked={sigmaKnown}
+                                    onCheckedChange={(checked) => {
+                                        setSigmaKnown(checked);
+                                        setSigmaError(null);
+                                    }}
+                                />
+                                {sigmaKnown && (
+                                    <>
+                                        <p className="text-xs text-muted-foreground">
+                                            The chi-square test χ² = n(d̄ − δ₀)ᵀΣd⁻¹(d̄ − δ₀),
+                                            df = p, is shown next to the paired
+                                            Hotelling T² test.
+                                        </p>
+                                        <KnownSigmaHint />
+                                        <KnownSigmaMatrix
+                                            idPrefix="paired-known-sigma"
+                                            title="Σd"
+                                            names={pairLabels}
+                                            cells={sigmaCells}
+                                            onChange={(i, j, v) => {
+                                                setSigmaCells((prev) => setSigmaCell(prev, i, j, v));
+                                                setSigmaError(null);
+                                            }}
+                                        />
+                                        <KnownSigmaError id="paired-known-sigma-error" message={sigmaError} />
+                                    </>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>

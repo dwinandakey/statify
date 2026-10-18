@@ -175,9 +175,9 @@ pub fn generate_parameter_names(
         }
     }
 
-    // Add interaction terms
+    // Add interaction terms (none in the main-effects model)
     if let Some(factors) = &config.main.fix_factor {
-        if factors.len() > 1 {
+        if factors.len() > 1 && config.model.non_cust {
             let interaction_terms = generate_interaction_terms(factors);
             for term in &interaction_terms {
                 let factors = parse_interaction_term(term);

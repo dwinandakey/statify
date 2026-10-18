@@ -25,7 +25,7 @@ pub struct DesignMatrixResult {
 }
 
 /// Helper: Generate Polynomial Contrasts using Gram-Schmidt Orthogonalization
-/// Ini menghasilkan angka yang sangat presisi dan ortogonal, sesuai standar SPSS.
+/// Ini menghasilkan angka yang sangat presisi dan ortogonal
 fn generate_polynomial_contrasts(n_categories: usize) -> Vec<Vec<f64>> {
     let k = n_categories;
     let n_dummies = k - 1;
@@ -108,7 +108,7 @@ pub fn build(
         };
 
         if let Some(cat_config) = cat_map.get(&col_idx) {
-            // === 1. Identifikasi & Sort ===
+            // 1. Identifikasi & Sort
             let mut frequency_map: BTreeMap<String, usize> = BTreeMap::new();
             for val in col_data.iter() {
                 let key = val.to_string();
@@ -135,7 +135,7 @@ pub fn build(
                 continue;
             }
 
-            // === 2. Setup Parameter ===
+            // 2. Setup Parameter
             let n_dummies = n_categories - 1;
             let mut dummy_columns: Vec<Vec<f64>> = vec![vec![0.0; n_rows]; n_dummies];
             let mut dummy_names: Vec<String> = Vec::new();
@@ -154,7 +154,7 @@ pub fn build(
                 None
             };
 
-            // === 3. GENERATE KODE KONTRAS ===
+            // 3. GENERATE KODE KONTRAS
             for (cat_i, _cat_label) in categories.iter().enumerate() {
                 let mut codes = vec![0.0; n_dummies];
 
@@ -247,7 +247,7 @@ pub fn build(
                         }
                     }
 
-                    // REPEATED: SPSS Matrix Standard
+                    // REPEATED
                     ContrastMethod::Repeated => {
                         let k = n_categories as f64;
                         for j in 0..n_dummies {
@@ -274,30 +274,22 @@ pub fn build(
                 param_codings.insert(cat_i, codes);
             }
 
-            // === 4. Set Nama Kolom Dummy ===
-            // SPSS Convention: Gunakan indeks parameter 1-indexed, bukan nilai kategori.
-            // Contoh: sex dengan 2 kategori (Female, Male) dan reference=Last (Male)
-            // -> 1 dummy column dengan nama sex(1), bukan sex(0) atau sex(Female)
-            // Ini merujuk ke "Parameter coding column (1)" di tabel Categorical Variables Codings
+            // 4. Set Nama Kolom Dummy
             for j in 0..n_dummies {
                 let name = match method {
                     ContrastMethod::Indicator
                     | ContrastMethod::Simple
                     | ContrastMethod::Deviation => {
-                        // SPSS uses 1-indexed parameter column number: (1), (2), etc.
                         // NOT the category value or label
                         format!("{}({})", col_name, j + 1)
                     }
                     ContrastMethod::Difference => {
-                        // SPSS: Difference contrast juga menggunakan indeks 1-indexed
                         format!("{}({})", col_name, j + 1)
                     }
                     ContrastMethod::Helmert => {
-                        // SPSS: Helmert contrast juga menggunakan indeks 1-indexed
                         format!("{}({})", col_name, j + 1)
                     }
                     ContrastMethod::Repeated => {
-                        // SPSS: Repeated contrast juga menggunakan indeks 1-indexed
                         format!("{}({})", col_name, j + 1)
                     }
                     ContrastMethod::Polynomial => {
@@ -309,7 +301,7 @@ pub fn build(
                 dummy_names.push(name);
             }
 
-            // === 5. Isi Matrix ===
+            // 5. Isi Matrix
             for (row_i, &val) in col_data.iter().enumerate() {
                 let key = val.to_string();
                 if let Some(cat_idx) = categories.iter().position(|c| c == &key) {
@@ -323,7 +315,7 @@ pub fn build(
                 }
             }
 
-            // === 6. Finalisasi Output ===
+            // 6. Finalisasi Output
             let group_start_idx = final_columns.len();
             for (d_vec, d_name) in dummy_columns.into_iter().zip(dummy_names.into_iter()) {
                 final_columns.push(DVector::from_vec(d_vec));

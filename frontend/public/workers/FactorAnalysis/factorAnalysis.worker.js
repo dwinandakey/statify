@@ -146,6 +146,9 @@ self.onmessage = async (event) => {
     let factor = null;
 
     try {
+      // This matches the SPSS spss.Submit() scope: the Rust/WASM procedure
+      // and creation of its returned analysis result, excluding transport/UI.
+      const procedureStart = performance.now();
       factor = new FactorAnalysisClass(
         slicedDataForTarget,
         slicedDataForValue,
@@ -154,14 +157,15 @@ self.onmessage = async (event) => {
         configData
       );
 
+      const results = factor.get_formatted_results();
+      const errors = factor.get_all_errors();
+      const procedureExecutionTimeMs = performance.now() - procedureStart;
+
       postMessageSafe("PROGRESS", action, requestId, {
         stage: "formatting",
         message: "Retrieving formatted results...",
         percent: 80,
       });
-
-      const results = factor.get_formatted_results();
-      const errors = factor.get_all_errors();
 
       postMessageSafe("PROGRESS", action, requestId, {
         stage: "done",
@@ -172,6 +176,7 @@ self.onmessage = async (event) => {
       postMessageSafe("SUCCESS", action, requestId, {
         results,
         errors,
+        procedureExecutionTimeMs,
       });
     } finally {
       if (factor && typeof factor.free === "function") {

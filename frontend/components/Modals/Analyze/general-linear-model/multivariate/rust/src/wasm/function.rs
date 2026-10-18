@@ -6,6 +6,7 @@ use crate::models::{
     data::AnalysisData,
     result::MultivariateResult,
 };
+use crate::stats::common::{ generate_interaction_terms, parse_interaction_term };
 use crate::stats::core;
 use crate::utils::log::FunctionLogger;
 use crate::utils::{ converter::{ string_to_js_error, format_result }, error::ErrorCollector };
@@ -16,6 +17,17 @@ pub fn run_analysis(
     error_collector: &mut ErrorCollector,
     logger: &mut FunctionLogger
 ) -> Result<Option<MultivariateResult>, JsValue> {
+    // Model dialog (Build Terms / Build Custom Terms): only the full
+    // factorial and the main-effects model are supported. Done here, not in
+    // the constructor, so the constructor (where the first HashMap, and with
+    // it the hash keys of the run, is created) stays unchanged.
+    let mut model_config = config.clone();
+    if let Err(msg) = normalize_model_spec(&mut model_config) {
+        error_collector.add_error("config.validation.model_terms", &msg);
+        return Err(string_to_js_error(msg));
+    }
+    let config = &model_config;
+
     // Step 1: Basic processing summary (always executed)
     logger.add_log("basic_processing_summary");
     let mut processing_summary = None;
@@ -390,4 +402,87 @@ pub fn get_all_log(logger: &FunctionLogger) -> Result<JsValue, JsValue> {
 pub fn clear_errors(error_collector: &mut ErrorCollector) -> JsValue {
     error_collector.clear();
     JsValue::from_str("Error collector cleared")
+}
+
+/// Reduces the model of the Model dialog to the two supported shapes and
+/// records it in `config.model.non_cust`, which the analysis reads from here
+/// on: `true` = full factorial (every interaction of the fixed factors, the
+/// default), `false` = main effects only (fixed factors and covariates, no
+/// interaction). Build Terms / Build Custom Terms (`FactorsModel`) must name
+/// every fixed factor and covariate as a main effect and either no
+/// interaction or all of them; a model with at most one fixed factor, or with
+/// all interactions, is the full factorial. Other models are rejected.
+fn normalize_model_spec(config: &mut MultivariateConfig) -> Result<(), String> {
+    if config.model.non_cust || !(config.model.custom || config.model.build_custom_term) {
+        return Ok(());
+    }
+    let factors = config.main.fix_factor.clone().unwrap_or_default();
+    let covariates = config.main.covar.clone().unwrap_or_default();
+    let terms: Vec<Vec<String>> = config.model.factors_model
+        .clone()
+        .unwrap_or_default()
+        .iter()
+        .map(|t| t.trim().to_string())
+        .filter(|t| !t.is_empty())
+        .map(|t| {
+            if t.contains('(') || t.contains(')') {
+                return Err("Nested terms are not supported in this version.".to_string());
+            }
+            let mut parts: Vec<String> = parse_interaction_term(&t)
+                .into_iter()
+                .filter(|p| !p.is_empty())
+                .collect();
+            parts.sort();
+            parts.dedup();
+            Ok(parts)
+        })
+        .collect::<Result<_, _>>()?;
+    if terms.is_empty() {
+        return Err("The custom model has no terms. Add terms in the Model dialog or choose Full Factorial.".to_string());
+    }
+
+    let mut interactions: Vec<Vec<String>> = Vec::new();
+    for term in &terms {
+        for name in term {
+            if !factors.contains(name) && !covariates.contains(name) {
+                return Err(format!("Model term '{}' is not a selected fixed factor or covariate.", term.join(" * ")));
+            }
+        }
+        if term.len() > 1 {
+            if term.iter().any(|name| covariates.contains(name)) {
+                return Err("Interaction terms with covariates are not supported in this version.".to_string());
+            }
+            if !interactions.contains(term) {
+                interactions.push(term.clone());
+            }
+        }
+    }
+    for name in factors.iter().chain(covariates.iter()) {
+        if !terms.iter().any(|t| t.len() == 1 && &t[0] == name) {
+            return Err(format!(
+                "The custom model must include every fixed factor and covariate as a main effect ('{}' is missing).",
+                name
+            ));
+        }
+    }
+
+    let all_interactions: Vec<Vec<String>> = generate_interaction_terms(&factors)
+        .iter()
+        .map(|t| {
+            let mut parts = parse_interaction_term(t);
+            parts.sort();
+            parts
+        })
+        .collect();
+    if interactions.is_empty() {
+        // No interaction: main effects only (the full factorial when there
+        // is at most one fixed factor).
+        config.model.non_cust = all_interactions.is_empty();
+        Ok(())
+    } else if all_interactions.iter().all(|t| interactions.contains(t)) {
+        config.model.non_cust = true;
+        Ok(())
+    } else {
+        Err("Only the full factorial model and the main-effects model are supported in this version.".to_string())
+    }
 }

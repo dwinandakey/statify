@@ -96,6 +96,44 @@ export function formatDisplayNumber(
     return num.toFixed(4).replace(/\.?0+$/, "");
 }
 
+// ── GLM Multivariate / Repeated Measures (v5) ─────────────────────────────
+// Fixed decimals per column as SPSS: statistics always with 4 decimals
+// ("1.1" → "1.1000", 1 → "1.0000"); df, counts and coefficients keep integers
+// as they are and show fractional values with 4 decimals. Scientific
+// notation for very small or very large values as formatDisplayNumber. Other
+// modules keep formatDisplayNumber.
+function glmSpecial(num: number | string | undefined | null): string | null | undefined {
+    if (typeof num === "string") return num;
+    if (typeof num === "undefined" || num === null || isNaN(num as number)) return "";
+    if (!isFinite(num as number)) return (num as number) > 0 ? "Infinity" : "-Infinity";
+    if (num !== 0 && (Math.abs(num as number) < 1e-4 || Math.abs(num as number) >= 1e16)) {
+        return (num as number).toExponential(3).toUpperCase();
+    }
+    return undefined;
+}
+
+/** Statistic cells (Value, F, SS, MS, η², λ, power, means, bounds): 4 decimals. */
+export function formatGlmStat(num: number | string | undefined | null): string | null {
+    const special = glmSpecial(num);
+    if (special !== undefined) return special;
+    return (num as number).toFixed(4);
+}
+
+/** df, n, coefficients and entered values: integers unchanged, else 4 decimals. */
+export function formatGlmNumber(num: number | string | undefined | null): string | null {
+    const special = glmSpecial(num);
+    if (special !== undefined) return special;
+    return Number.isInteger(num) ? String(num) : (num as number).toFixed(4);
+}
+
+/** Sig.: "<.001" or 4 decimals (not trimmed). */
+export function formatGlmSig(value: any): string | null {
+    if (typeof value === "string") return value;
+    if (value === null || typeof value === "undefined" || isNaN(value)) return "";
+    if (value < 0.001) return "<.001";
+    return formatGlmStat(value);
+}
+
 // Helper function to ensure columnHeaders are sufficient for all rows
 export function ensureEnoughHeaders(table: Table): Table {
     if (!table.rows || table.rows.length === 0) return table;

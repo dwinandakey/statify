@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { type LucideIcon, Info, AlertTriangle, CheckCircle, XCircle, Lightbulb } from "lucide-react";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 /**
  * Base layout component untuk standardisasi desain help pages
@@ -29,6 +30,9 @@ export const HelpLayout: React.FC<HelpLayoutProps> = ({
   lastUpdated,
   className
 }) => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
   return (
     <div className={cn("space-y-4", className)}>
       {/* Header Section - compact design - only show if title exists */}
@@ -48,7 +52,7 @@ export const HelpLayout: React.FC<HelpLayoutProps> = ({
             
             {lastUpdated && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Terakhir diperbarui:</span>
+                <span>{isEn ? "Last updated:" : "Terakhir diperbarui:"}</span>
                 <time>{lastUpdated}</time>
               </div>
             )}

@@ -113,6 +113,51 @@ export async function resultMultivariateAnalysis({
                 });
             }
 
+            // ── Chi-Square Test (Known Covariance Matrix) ─────────────────
+            const knownChiSquare = findTable("known_covariance_chi_square_test");
+            if (knownChiSquare) {
+                const analyticId = await addAnalytic(logId, {
+                    title: knownChiSquare.title,
+                    note: knownChiSquare.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: knownChiSquare.title,
+                    description: knownChiSquare.interpretation || knownChiSquare.title,
+                    output_data: JSON.stringify({ tables: [knownChiSquare] }),
+                    components: knownChiSquare.title,
+                });
+            }
+
+            // ── Simultaneous Confidence Intervals (Options) ───────────────
+            const simultaneousCI = findTable("simultaneous_confidence_intervals");
+            if (simultaneousCI) {
+                const analyticId = await addAnalytic(logId, {
+                    title: simultaneousCI.title,
+                    note: simultaneousCI.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: simultaneousCI.title,
+                    description: simultaneousCI.interpretation || simultaneousCI.title,
+                    output_data: JSON.stringify({ tables: [simultaneousCI] }),
+                    components: simultaneousCI.title,
+                });
+            }
+
+            // ── Simultaneous CI with a known covariance matrix (Options) ──
+            const knownCI = findTable("known_covariance_confidence_intervals");
+            if (knownCI) {
+                const analyticId = await addAnalytic(logId, {
+                    title: knownCI.title,
+                    note: knownCI.note || "",
+                });
+                await addStatistic(analyticId, {
+                    title: knownCI.title,
+                    description: knownCI.interpretation || knownCI.title,
+                    output_data: JSON.stringify({ tables: [knownCI] }),
+                    components: knownCI.title,
+                });
+            }
+
             // ── Tests of Between-Subjects Effects (combined table) ───────
             const tbsTable = findTable("tests_between_subjects_effects");
             if (tbsTable) {
@@ -262,11 +307,11 @@ export async function resultMultivariateAnalysis({
             );
             if (posthocTables.length > 0) {
                 // Title format from the formatter:
-                //   "Multiple Comparisons — {factor}( ({method}))?"
+                //   "Multiple Comparisons: {factor}( ({method}))?"
                 // The trailing "(method)" is present only when every row in
                 // that factor's table shares the same test_type (the common
                 // case). Use the first table's method as the group label.
-                const titlePattern = /^Multiple Comparisons — (.+?)(?: \((.+?)\))?$/;
+                const titlePattern = /^Multiple Comparisons: (.+?)(?: \((.+?)\))?$/;
                 const firstMatch = posthocTables[0].title.match(titlePattern);
                 const testMethod = firstMatch?.[2] || null;
                 const parentTitle = testMethod
@@ -349,7 +394,7 @@ export async function resultMultivariateAnalysis({
             //
             // Group every per-DV matrix under a single navbar entry so the
             // sidebar reads
-            //   Observed × Predicted × Std. Residual Plots
+            //   Residual Plots
             //     ├ ultimate torque
             //     └ ultimate strain
             // instead of one separate entry per DV.
@@ -357,19 +402,17 @@ export async function resultMultivariateAnalysis({
                 (c: any) =>
                     c?.chartType === "Scatter Plot Matrix" &&
                     typeof c?.chartMetadata?.title === "string" &&
-                    c.chartMetadata.title.startsWith(
-                        "Observed × Predicted × Std. Residual"
-                    )
+                    c.chartMetadata.title.startsWith("Residual Plots: ")
             );
             if (residualCharts.length > 0) {
                 const parentAnalyticId = await addAnalytic(logId, {
-                    title: "Observed × Predicted × Std. Residual Plots",
+                    title: "Residual Plots",
                     note: residualCharts[0]?.chartMetadata?.notes || "",
                 });
 
                 // Title format from the formatter:
-                //   "Observed × Predicted × Std. Residual — {dvLabel}"
-                const titlePattern = /— (.+)$/;
+                //   "Residual Plots: {dvLabel}"
+                const titlePattern = /^Residual Plots: (.+)$/;
                 for (const chart of residualCharts) {
                     const m = (chart.chartMetadata.title as string).match(
                         titlePattern

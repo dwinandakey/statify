@@ -1,6 +1,6 @@
 use nalgebra::{ DMatrix, DVector };
 use statrs::distribution::{ FisherSnedecor, ContinuousCDF };
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 use crate::models::{
     config::RepeatedMeasuresConfig,

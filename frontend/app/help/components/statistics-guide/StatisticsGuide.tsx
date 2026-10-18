@@ -128,24 +128,28 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
     {
       id: 'quick-start',
       label: 'Quick Start',
+      labelEn: 'Quick Start',
       icon: Zap,
       component: QuickStartGuide
     },
     {
       id: 'basic',
       label: 'Panduan Dasar',
+      labelEn: 'Basic Guide',
       icon: BookOpen,
       component: BasicGuideTab
     },
     {
       id: 'advanced',
       label: 'Analisis Lanjutan',
+      labelEn: 'Advanced Analysis',
       icon: TrendingUp,
       component: AdvancedTab
     },
     {
       id: 'tips',
       label: 'Tips & Trik',
+      labelEn: 'Tips & Tricks',
       icon: Target,
       component: TipsTab
     }
@@ -154,7 +158,9 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
   return (
     <StandardizedGuideLayout
       title="Panduan Analisis Statistik"
+      titleEn="Statistical Analysis Guide"
       description="Pelajari berbagai jenis analisis statistik yang tersedia dalam Statify"
+      descriptionEn="Learn about the different types of statistical analysis available in Statify"
       tabs={tabs}
       defaultTab="quick-start"
     />

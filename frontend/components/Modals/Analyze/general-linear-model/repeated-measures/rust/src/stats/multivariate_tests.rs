@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 use nalgebra::{ DMatrix, DVector };
 use statrs::distribution::{ ContinuousCDF, FisherSnedecor };
 
@@ -56,6 +56,12 @@ pub fn calculate_multivariate_tests(
         .factors_var
         .as_ref()
         .map_or(false, |f| !f.is_empty());
+
+    // Several measures: one doubly multivariate test per effect (all measures
+    // jointly), as SPSS does. One measure keeps the path below.
+    if !has_between && within_factors.measures.len() > 1 {
+        return doubly_multivariate_tests(data, config, &within_factors, alpha);
+    }
 
     if !has_between && !within_factors.measures.is_empty() {
         let mut effects: HashMap<String, HashMap<String, MultivariateTestEntry>> =
@@ -382,6 +388,113 @@ pub fn calculate_multivariate_tests(
     }
 
     // Create the final result
+    Ok(MultivariateTests {
+        effects,
+        design: Some(format!("Type {:?} sum of squares", &config.model.sum_of_square_method)),
+        alpha: Some(alpha),
+    })
+}
+
+/// Doubly multivariate tests for a within-subjects-only design with several
+/// measures (SPSS "Multivariate Tests" with Between Subjects: Intercept and
+/// Within Subjects: <factor>):
+///  - Intercept: the per-measure averages T_m = Σ_j y_mj / √k tested jointly;
+///  - within factor: the orthonormal contrasts of every measure (M·(k−1)
+///    transformed variables) tested jointly.
+/// Intercept-only model: H = n·ȳ·ȳᵀ, E = centred cross-products, error df n−1.
+/// Subjects with a missing value on any variable are excluded (listwise).
+fn doubly_multivariate_tests(
+    data: &AnalysisData,
+    config: &RepeatedMeasuresConfig,
+    within_factors: &crate::models::result::WithinSubjectsFactors,
+    alpha: f64
+) -> Result<MultivariateTests, String> {
+    let measures: Vec<(&String, &Vec<crate::models::result::WithinSubjectFactor>)> =
+        within_factors.measures.iter().collect();
+    let k = measures[0].1.len();
+    if k < 2 {
+        return Err("The within-subjects factor needs at least 2 levels".to_string());
+    }
+    if measures.iter().any(|(_, f)| f.len() != k) {
+        return Err("All measures must have the same number of within-subjects levels".to_string());
+    }
+    let ws_factor_name = measures[0].1[0]
+        .factor_values
+        .keys()
+        .next()
+        .cloned()
+        .unwrap_or_else(|| "Factor".to_string());
+
+    // Subject rows: all levels of measure 1, then measure 2, ... (listwise).
+    let var_names: Vec<&String> = measures
+        .iter()
+        .flat_map(|(_, f)| f.iter().map(|w| &w.dependent_variable))
+        .collect();
+    let mut rows: Vec<Vec<f64>> = Vec::new();
+    for record_group in &data.subject_data {
+        let row: Vec<Option<f64>> = var_names
+            .iter()
+            .map(|name| {
+                record_group.iter().find_map(|r| match r.values.get(*name) {
+                    Some(DataValue::Number(v)) if v.is_finite() => Some(*v),
+                    _ => None,
+                })
+            })
+            .collect();
+        if row.iter().all(|v| v.is_some()) {
+            rows.push(row.into_iter().map(|v| v.unwrap()).collect());
+        }
+    }
+    let n = rows.len();
+    let n_measures = measures.len();
+    if n <= n_measures * (k - 1) {
+        return Err(format!(
+            "Not enough complete subjects ({}) for the doubly multivariate test of {} transformed variables",
+            n,
+            n_measures * (k - 1)
+        ));
+    }
+
+    let contrast = build_orthonormal_contrast(k);
+    let root_k = (k as f64).sqrt();
+    let mut z = DMatrix::<f64>::zeros(n, n_measures * (k - 1));
+    let mut t = DMatrix::<f64>::zeros(n, n_measures);
+    for (i, row) in rows.iter().enumerate() {
+        for m in 0..n_measures {
+            let y = DVector::from_row_slice(&row[m * k..(m + 1) * k]);
+            let zc = &contrast * &y;
+            for j in 0..(k - 1) {
+                z[(i, m * (k - 1) + j)] = zc[j];
+            }
+            t[(i, m)] = y.sum() / root_k;
+        }
+    }
+
+    // Intercept-only hypothesis and error SSCP of the columns of x.
+    let intercept_h_e = |x: &DMatrix<f64>| -> (DMatrix<f64>, DMatrix<f64>) {
+        let means = DVector::from_iterator(x.ncols(), (0..x.ncols()).map(|j| x.column(j).mean()));
+        let mut centred = x.clone();
+        for j in 0..x.ncols() {
+            for i in 0..x.nrows() {
+                centred[(i, j)] -= means[j];
+            }
+        }
+        ((n as f64) * &means * means.transpose(), centred.transpose() * &centred)
+    };
+    let (h_between, e_between) = intercept_h_e(&t);
+    let (h_within, e_within) = intercept_h_e(&z);
+    let v = (n - 1) as f64;
+
+    let mut effects: HashMap<String, HashMap<String, MultivariateTestEntry>> = HashMap::new();
+    effects.insert(
+        "Intercept".to_string(),
+        super::glm_tests::multivariate_statistics(&h_between, &e_between, 1.0, v, alpha)?
+    );
+    effects.insert(
+        ws_factor_name,
+        super::glm_tests::multivariate_statistics(&h_within, &e_within, 1.0, v, alpha)?
+    );
+
     Ok(MultivariateTests {
         effects,
         design: Some(format!("Type {:?} sum of squares", &config.model.sum_of_square_method)),

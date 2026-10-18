@@ -1,16 +1,5 @@
 /**
- * Format Step Summary Table (SPSS Style)
- *
- * This table provides a compact summary of all steps in stepwise regression,
- * showing improvement statistics, model statistics, classification percentage,
- * and variable actions.
- *
- * SPSS Step Summary Table Format:
- * Step Summary
- *              Improvement           | Model                 | Correct | Variable
- * Step   Chi-square    df    Sig.   | Chi-square   df  Sig. | Class % |
- * 1      56.144        1     .000   | 56.144       1   .000 | 83.4%   | IN: age
- * 2       9.076        1     .003   | 65.220       2   .000 | 83.8%   | IN: trestbps
+ * Format Step Summary Table
  */
 
 import type { LogisticResult, AnalysisSection, StepSummaryRow } from "../types/binary-logistic";
@@ -65,7 +54,7 @@ export const formatStepSummary = (
   // Generate description
   const description = generateStepSummaryDescription(stepSummary);
 
-  // Build column headers - SPSS style with nested headers
+  // Build column headers
   const columnHeaders = [
     { header: "Step", key: "step" },
     {

@@ -15,9 +15,7 @@ export const formatSummaryTables = (
   const ct = result.classification_table;
   const modelInfo = result.model_info || {};
 
-  // ----------------------------------------------------------------------
   // 1. Hitung Total N dari Classification Table (Included Cases)
-  // ----------------------------------------------------------------------
   const obs0_pred0 = ct.observed_0_predicted_0 || 0;
   const obs0_pred1 = ct.observed_0_predicted_1 || 0;
   const obs1_pred0 = ct.observed_1_predicted_0 || 0;
@@ -27,9 +25,7 @@ export const formatSummaryTables = (
   const count_1 = obs1_pred0 + obs1_pred1;
   const nIncluded = count_0 + count_1;
 
-  // ----------------------------------------------------------------------
   // 2. Data Preparation untuk Case Processing
-  // ----------------------------------------------------------------------
   const nMissing = modelInfo.n_missing || 0;
   const nTotal = nIncluded + nMissing;
 
@@ -39,9 +35,7 @@ export const formatSummaryTables = (
     return fmtPct(val);
   };
 
-  // ----------------------------------------------------------------------
   // 3. Section: Case Processing Summary
-  // ----------------------------------------------------------------------
   const caseProcessingData = {
     columnHeaders: [
       { header: "Unweighted Cases", key: "rh1", colSpan: 2, rowSpan: 2 },
@@ -93,9 +87,7 @@ export const formatSummaryTables = (
     )
   );
 
-  // ----------------------------------------------------------------------
   // 4. Section: Dependent Variable Encoding
-  // ----------------------------------------------------------------------
   const encodingMap = modelInfo.y_encoding || {};
   const encodingRows = Object.entries(encodingMap)
     .map(([originalKey, internalValue]) => {
@@ -154,9 +146,7 @@ export const formatSummaryTables = (
     )
   );
 
-  // ----------------------------------------------------------------------
   // 5. Section: Categorical Variables Codings
-  // ----------------------------------------------------------------------
   if (result.categorical_codings && result.categorical_codings.length > 0) {
     // Cari jumlah kolom parameter coding maksimal (k - 1)
     let maxParamCols = 0;

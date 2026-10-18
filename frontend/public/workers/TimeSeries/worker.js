@@ -223,6 +223,213 @@ self.onmessage = async (e) => {
             return rows;
         };
 
+        const invertMatrix = (M) => {
+            const n_dim = M.length;
+            const A = M.map((row, i) => {
+                const r = [...row];
+                for (let j = 0; j < n_dim; j++) r.push(i === j ? 1 : 0);
+                return r;
+            });
+            for (let i = 0; i < n_dim; i++) {
+                let maxRow = i;
+                for (let k = i + 1; k < n_dim; k++) {
+                    if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k;
+                }
+                if (Math.abs(A[maxRow][i]) < 1e-12) return null;
+                [A[i], A[maxRow]] = [A[maxRow], A[i]];
+                const pivot = A[i][i];
+                for (let j = 0; j < 2 * n_dim; j++) A[i][j] /= pivot;
+                for (let k = 0; k < n_dim; k++) {
+                    if (k !== i) {
+                        const factor = A[k][i];
+                        for (let j = 0; j < 2 * n_dim; j++) A[k][j] -= factor * A[i][j];
+                    }
+                }
+            }
+            return A.map(row => row.slice(n_dim));
+        };
+
+        const computeForecastMetrics = (actual, predicted) => {
+            const n = Math.min(actual.length, predicted.length);
+            if (n === 0) return {
+                mse: "0.0000",
+                rmse: "0.0000",
+                mae: "0.0000",
+                mape: "N/A",
+                theilU: "0.0000"
+            };
+            let sse = 0;
+            let sae = 0;
+            let mapeSum = 0;
+            let validMapeCount = 0;
+            let sumAct2 = 0;
+            let sumPred2 = 0;
+
+            for (let i = 0; i < n; i++) {
+                const act = actual[i];
+                const pred = predicted[i];
+                const err = act - pred;
+                sse += err * err;
+                sae += Math.abs(err);
+                sumAct2 += act * act;
+                sumPred2 += pred * pred;
+                if (Math.abs(act) > 1e-7) {
+                    mapeSum += Math.abs(err / act);
+                    validMapeCount++;
+                }
+            }
+            const mse = sse / n;
+            const rmse = Math.sqrt(mse);
+            const mae = sae / n;
+            const mape = validMapeCount > 0 ? (mapeSum / validMapeCount) * 100 : null;
+            const theilDenom = Math.sqrt(sumAct2 / n) + Math.sqrt(sumPred2 / n);
+            const theilU = theilDenom > 0 ? (rmse / theilDenom) : 0;
+
+            return {
+                mse: fmt(mse),
+                rmse: fmt(rmse),
+                mae: fmt(mae),
+                mape: mape !== null ? fmt(mape) + "%" : "Tidak terdefinisi (y=0)",
+                theilU: fmt(theilU)
+            };
+        };
+
+        const computeGarchForecastHelper = ({
+            modelType,
+            p,
+            q,
+            horizon,
+            mu,
+            omega,
+            alpha = [],
+            beta = [],
+            gamma = [],
+            lastVariance = [],
+            lastResiduals = []
+        }) => {
+            const H = Math.max(1, Math.min(100, horizon || 10));
+            const varianceForecast = [];
+            const volatilityForecast = [];
+            const yHat = [];
+            const lower95 = [];
+            const upper95 = [];
+            const steps = [];
+
+            const pLen = Math.max(1, p || 1);
+            const qLen = Math.max(1, q || 1);
+
+            const histVar = lastVariance.slice(-pLen);
+            while (histVar.length < pLen) {
+                histVar.unshift(histVar[0] || (omega / (1 - (alpha[0] || 0.1) - (beta[0] || 0.8) || 0.1)) || 1.0);
+            }
+
+            const histEps = lastResiduals.slice(-qLen);
+            while (histEps.length < qLen) {
+                histEps.unshift(histEps[0] || 0.0);
+            }
+
+            const varHist = [...histVar];
+            const eps2Hist = histEps.map(e => e * e);
+            const epsRawHist = [...histEps];
+
+            for (let h = 1; h <= H; h++) {
+                let vNext = omega;
+
+                if (modelType === "ARCH") {
+                    for (let i = 0; i < qLen; i++) {
+                        const a = alpha[i] || 0;
+                        const e2 = (h - 1 - i >= 0) ? varianceForecast[h - 1 - i] : eps2Hist[eps2Hist.length - 1 - (i - (h - 1))];
+                        vNext += a * (e2 !== undefined ? e2 : varHist[varHist.length - 1]);
+                    }
+                } else if (modelType === "EGARCH") {
+                    let lnV = omega;
+                    for (let j = 0; j < pLen; j++) {
+                        const b = beta[j] || 0;
+                        const prevV = (h - 1 - j >= 0) ? varianceForecast[h - 1 - j] : varHist[varHist.length - 1 - (j - (h - 1))];
+                        lnV += b * Math.log(Math.max(1e-8, prevV || 1.0));
+                    }
+                    if (h === 1) {
+                        for (let i = 0; i < qLen; i++) {
+                            const a = alpha[i] || 0;
+                            const g = gamma[i] || 0;
+                            const e = epsRawHist[epsRawHist.length - 1 - i] || 0;
+                            const prevSigma = Math.sqrt(varHist[varHist.length - 1 - i] || 1.0);
+                            const z = prevSigma > 0 ? e / prevSigma : 0;
+                            // Statify's EGARCH parameterization is uncentered:
+                            // alpha * |z| + gamma * z (matching the estimator).
+                            lnV += a * Math.abs(z) + g * z;
+                        }
+                    } else {
+                        for (let i = 0; i < qLen; i++) {
+                            // Future standardized shocks are integrated out:
+                            // E|z| = sqrt(2/pi), E[z] = 0.
+                            lnV += (alpha[i] || 0) * Math.sqrt(2 / Math.PI);
+                        }
+                    }
+                    vNext = Math.exp(Math.min(50, Math.max(-50, lnV)));
+                } else if (modelType === "TGARCH") {
+                    for (let i = 0; i < qLen; i++) {
+                        const a = alpha[i] || 0;
+                        const g = gamma[i] || 0;
+                        if (h - 1 - i < 0) {
+                            const lagIdx = i - (h - 1);
+                            const e = epsRawHist[epsRawHist.length - 1 - lagIdx] || 0;
+                            const e2 = eps2Hist[eps2Hist.length - 1 - lagIdx] || 0;
+                            const indicator = e < 0 ? 1 : 0;
+                            vNext += (a + g * indicator) * e2;
+                        } else {
+                            const prevV = varianceForecast[h - 1 - i];
+                            vNext += (a + 0.5 * g) * prevV;
+                        }
+                    }
+                    for (let j = 0; j < pLen; j++) {
+                        const b = beta[j] || 0;
+                        const prevV = (h - 1 - j >= 0) ? varianceForecast[h - 1 - j] : varHist[varHist.length - 1 - (j - (h - 1))];
+                        vNext += b * prevV;
+                    }
+                } else if (modelType === "IGARCH") {
+                    if (h === 1) {
+                        const a = alpha[0] || 0.1;
+                        const b = beta[0] || (1 - a);
+                        const e2 = eps2Hist[eps2Hist.length - 1] || 1.0;
+                        const vLast = varHist[varHist.length - 1] || 1.0;
+                        vNext = omega + a * e2 + b * vLast;
+                    } else {
+                        vNext = varianceForecast[h - 2] + omega;
+                    }
+                } else {
+                    for (let i = 0; i < qLen; i++) {
+                        const a = alpha[i] || 0;
+                        const e2 = (h - 1 - i >= 0) ? varianceForecast[h - 1 - i] : eps2Hist[eps2Hist.length - 1 - (i - (h - 1))];
+                        vNext += a * (e2 !== undefined ? e2 : varHist[varHist.length - 1]);
+                    }
+                    for (let j = 0; j < pLen; j++) {
+                        const b = beta[j] || 0;
+                        const prevV = (h - 1 - j >= 0) ? varianceForecast[h - 1 - j] : varHist[varHist.length - 1 - (j - (h - 1))];
+                        vNext += b * (prevV !== undefined ? prevV : varHist[varHist.length - 1]);
+                    }
+                }
+
+                vNext = Math.max(1e-8, vNext);
+                varianceForecast.push(vNext);
+                const vol = Math.sqrt(vNext);
+                volatilityForecast.push(vol);
+                yHat.push(mu);
+                lower95.push(mu - 1.96 * vol);
+                upper95.push(mu + 1.96 * vol);
+                steps.push(h);
+            }
+
+            return {
+                horizon: H,
+                yHat,
+                varianceForecast,
+                volatilityForecast,
+                lower95,
+                upper95,
+                steps
+            };
+        };
 
         if (type === "GARCH" || type === "ARCH") {
             const { data, p, q } = payload;
@@ -883,6 +1090,491 @@ self.onmessage = async (e) => {
             };
             
             lmResult.free();
+        }
+        else if (type === "GARCH_FORECAST") {
+            const { modelType, p, q, horizon, coefficients, lastVariance, lastResiduals } = payload;
+            const mu = typeof coefficients.mu === 'number' ? coefficients.mu : parseFloat(coefficients.mu) || 0;
+            const omega = typeof coefficients.omega === 'number' ? coefficients.omega : parseFloat(coefficients.omega) || 0.1;
+            const alpha = (coefficients.alpha || []).map(v => typeof v === 'number' ? v : parseFloat(v) || 0);
+            const beta = (coefficients.beta || []).map(v => typeof v === 'number' ? v : parseFloat(v) || 0);
+            const gamma = (coefficients.gamma || []).map(v => typeof v === 'number' ? v : parseFloat(v) || 0);
+
+            const fc = computeGarchForecastHelper({
+                modelType,
+                p,
+                q,
+                horizon,
+                mu,
+                omega,
+                alpha,
+                beta,
+                gamma,
+                lastVariance,
+                lastResiduals
+            });
+
+            result = {
+                modelType,
+                forecast: fc
+            };
+        }
+        else if (type === "GARCH_SPLIT") {
+            const { data, p, q, modelType, trainRatio = 0.8, splitMode = "holdout", rollingType = "expanding" } = payload;
+            const n = data.length;
+            const trainSize = Math.max(10, Math.min(n - 2, Math.floor(n * trainRatio)));
+            const testSize = n - trainSize;
+
+            const trainData = data.slice(0, trainSize);
+            const testData = data.slice(trainSize);
+
+            const effectiveP = modelType === "ARCH" ? 0 : p;
+            const minimumTrainingSize = Math.max(10, effectiveP + q + 3);
+            if (trainSize < minimumTrainingSize) {
+                throw new Error(`Insufficient training observations: at least ${minimumTrainingSize} are required for ${modelType}(${effectiveP},${q})`);
+            }
+            const model = new GARCH(new Float64Array(trainData), effectiveP, q);
+            if (modelType === "EGARCH" && typeof model.estimate_egarch === 'function') {
+                model.estimate_egarch();
+            } else if (modelType === "TGARCH" && typeof model.estimate_tgarch === 'function') {
+                model.estimate_tgarch();
+            } else if (modelType === "IGARCH" && typeof model.estimate_igarch === 'function') {
+                model.estimate_igarch();
+            } else {
+                model.estimate();
+            }
+
+            const mu = model.get_mu();
+            const omega = model.get_omega();
+            const alpha = Array.from(model.get_alpha());
+            const beta = effectiveP > 0 ? Array.from(model.get_beta()) : [];
+            const gamma = (modelType === "EGARCH" || modelType === "TGARCH") ? Array.from(model.get_gamma()) : [];
+
+            const trainVariance = Array.from(model.get_variance());
+            const trainResiduals = Array.from(model.get_residuals());
+            const trainYHat = trainData.map(() => mu);
+            const diagnostics = computeDiagnostics(model, Array.from(model.get_data()), trainResiduals, effectiveP, q, modelType);
+
+            let testVarianceForecast = [];
+            let testVolatilityForecast = [];
+            let testYHat = [];
+            let testLower95 = [];
+            let testUpper95 = [];
+
+            if (splitMode === "holdout") {
+                const fc = computeGarchForecastHelper({
+                    modelType,
+                    p: effectiveP,
+                    q,
+                    horizon: testSize,
+                    mu,
+                    omega,
+                    alpha,
+                    beta,
+                    gamma,
+                    lastVariance: trainVariance,
+                    lastResiduals: trainResiduals
+                });
+                testVarianceForecast = fc.varianceForecast;
+                testVolatilityForecast = fc.volatilityForecast;
+                testYHat = fc.yHat;
+                testLower95 = fc.lower95;
+                testUpper95 = fc.upper95;
+            } else {
+                let currentVarHist = [...trainVariance];
+                let currentResHist = [...trainResiduals];
+                for (let t = 0; t < testSize; t++) {
+                    const fc = computeGarchForecastHelper({
+                        modelType,
+                        p: effectiveP,
+                        q,
+                        horizon: 1,
+                        mu,
+                        omega,
+                        alpha,
+                        beta,
+                        gamma,
+                        lastVariance: currentVarHist,
+                        lastResiduals: currentResHist
+                    });
+                    testVarianceForecast.push(fc.varianceForecast[0]);
+                    testVolatilityForecast.push(fc.volatilityForecast[0]);
+                    testYHat.push(fc.yHat[0]);
+                    testLower95.push(fc.lower95[0]);
+                    testUpper95.push(fc.upper95[0]);
+
+                    const actualY = testData[t];
+                    const resid = actualY - mu;
+                    currentResHist.push(resid);
+                    currentVarHist.push(fc.varianceForecast[0]);
+                    if (rollingType === "fixed" && currentVarHist.length > trainSize) {
+                        currentVarHist.shift();
+                        currentResHist.shift();
+                    }
+                }
+            }
+
+            const metrics = computeForecastMetrics(testData, testYHat);
+
+            let insideCount = 0;
+            for (let i = 0; i < testSize; i++) {
+                if (testData[i] >= testLower95[i] && testData[i] <= testUpper95[i]) {
+                    insideCount++;
+                }
+            }
+            const coverage95 = testSize > 0 ? fmt((insideCount / testSize) * 100) + "%" : "100.00%";
+
+            const testResidualProxy = testData.map(y => Math.pow(y - mu, 2));
+            const varianceMetrics = computeForecastMetrics(testResidualProxy, testVarianceForecast);
+
+            result = {
+                modelType,
+                splitMode,
+                rollingType,
+                forecastMethod: splitMode === "holdout" ? "dynamic" : "static",
+                trainSize,
+                testSize,
+                trainRatio,
+                meanEquation: "y_t = μ + ε_t",
+                fittedMeanEquation: "ŷ_t = μ",
+                forecastMeanEquation: "ŷ_t = μ (parameter fixed from training)",
+                varianceForecastEquation: splitMode === "holdout"
+                    ? "σ²_{T1+h} uses forecast σ² and E[ε²]=σ² for h>1 (dynamic)"
+                    : "σ²_t uses actual ε²_{t-1} and observed σ²_{t-1} (static one-step)",
+                coefficients: {
+                    mu: fmt(mu),
+                    mu_se: fmt(model.get_mu_se()),
+                    mu_z: fmt(model.get_mu_z()),
+                    mu_p: fmt(model.get_mu_p()),
+                    omega: fmt(omega),
+                    omega_se: fmt(model.get_omega_se()),
+                    omega_z: fmt(model.get_omega_z()),
+                    omega_p: fmt(model.get_omega_p()),
+                    alpha: fmtArray(alpha),
+                    alpha_se: fmtArray(Array.from(model.get_alpha_se())),
+                    alpha_z: fmtArray(Array.from(model.get_alpha_z())),
+                    alpha_p: fmtArray(Array.from(model.get_alpha_p())),
+                    beta: effectiveP > 0 ? fmtArray(beta) : undefined,
+                    beta_se: effectiveP > 0 ? fmtArray(Array.from(model.get_beta_se())) : undefined,
+                    beta_z: effectiveP > 0 ? fmtArray(Array.from(model.get_beta_z())) : undefined,
+                    beta_p: effectiveP > 0 ? fmtArray(Array.from(model.get_beta_p())) : undefined,
+                    gamma: (modelType === "EGARCH" || modelType === "TGARCH") ? fmtArray(gamma) : undefined,
+                    gamma_se: (modelType === "EGARCH" || modelType === "TGARCH") ? fmtArray(Array.from(model.get_gamma_se())) : undefined,
+                    gamma_z: (modelType === "EGARCH" || modelType === "TGARCH") ? fmtArray(Array.from(model.get_gamma_z())) : undefined,
+                    gamma_p: (modelType === "EGARCH" || modelType === "TGARCH") ? fmtArray(Array.from(model.get_gamma_p())) : undefined,
+                },
+                diagnostics,
+                trainVariance,
+                trainResiduals,
+                trainYHat,
+                trainData,
+                testActual: testData,
+                testYHat,
+                testVarianceForecast,
+                testVolatilityForecast,
+                testLower95,
+                testUpper95,
+                testResidualProxy,
+                metrics,
+                varianceMetrics,
+                coverage95
+            };
+            model.free();
+        }
+        else if (type === "ARDL_SPLIT") {
+            const { y, x, n_vars, p, q, autoSelect, maxP = 4, maxQ = 4, selectionCriterion = 'aic', trainRatio = 0.8, splitMode = "holdout", rollingType = "expanding" } = payload;
+            const y_arr = Array.from(y);
+            const n_obs = y_arr.length;
+            const trainSize = Math.max(15, Math.min(n_obs - 3, Math.floor(n_obs * trainRatio)));
+            const testSize = n_obs - trainSize;
+
+            const y_train = y_arr.slice(0, trainSize);
+            const y_test = y_arr.slice(trainSize);
+
+            const x_arrays = [];
+            for (let k = 0; k < n_vars; k++) {
+                x_arrays.push(Array.from(x.slice(k * n_obs, (k + 1) * n_obs)));
+            }
+            const x_train = x_arrays.map(arr => arr.slice(0, trainSize));
+
+            const fitARDLOnSample = (sampleY, sampleX, p_val, q_arr) => {
+                const max_q = Math.max(...q_arr);
+                const max_lag = Math.max(p_val, max_q);
+                const eff_n = sampleY.length - max_lag;
+                if (eff_n < 5) return null;
+
+                const varNames = [];
+                for (let i = 1; i <= p_val; i++) varNames.push(`Y(-${i})`);
+                for (let k = 0; k < n_vars; k++) {
+                    for (let j = 0; j <= q_arr[k]; j++) {
+                        varNames.push(`X${n_vars > 1 ? (k + 1) : ""}${j === 0 ? "" : `(-${j})`}`);
+                    }
+                }
+                varNames.push("C");
+                const k_cols = varNames.length;
+                if (eff_n <= k_cols) return null;
+
+                const y_vec = [];
+                const x_mat = [];
+                for (let t = max_lag; t < sampleY.length; t++) {
+                    y_vec.push(sampleY[t]);
+                    const row = [];
+                    for (let i = 1; i <= p_val; i++) row.push(sampleY[t - i]);
+                    for (let k = 0; k < n_vars; k++) {
+                        for (let j = 0; j <= q_arr[k]; j++) row.push(sampleX[k][t - j]);
+                    }
+                    row.push(1.0);
+                    x_mat.push(row);
+                }
+
+                const xtx = Array(k_cols).fill(0).map(() => Array(k_cols).fill(0));
+                const xty = Array(k_cols).fill(0);
+                for (let r = 0; r < eff_n; r++) {
+                    for (let i = 0; i < k_cols; i++) {
+                        xty[i] += x_mat[r][i] * y_vec[r];
+                        for (let j = 0; j < k_cols; j++) xtx[i][j] += x_mat[r][i] * x_mat[r][j];
+                    }
+                }
+                const xtx_inv = invertMatrix(xtx);
+                if (!xtx_inv) return null;
+
+                const coefs = Array(k_cols).fill(0);
+                for (let i = 0; i < k_cols; i++) {
+                    for (let j = 0; j < k_cols; j++) coefs[i] += xtx_inv[i][j] * xty[j];
+                }
+
+                const residuals = [];
+                const fitted = [];
+                let sse = 0;
+                for (let r = 0; r < eff_n; r++) {
+                    let fit = 0;
+                    for (let i = 0; i < k_cols; i++) fit += coefs[i] * x_mat[r][i];
+                    fitted.push(fit);
+                    const res = y_vec[r] - fit;
+                    residuals.push(res);
+                    sse += res * res;
+                }
+
+                const sigma2 = sse / (eff_n - k_cols);
+                const stdErrors = Array(k_cols).fill(0);
+                const tStats = Array(k_cols).fill(0);
+                const pValues = Array(k_cols).fill(0);
+                for (let i = 0; i < k_cols; i++) {
+                    const se = Math.sqrt(Math.max(1e-12, sigma2 * xtx_inv[i][i]));
+                    stdErrors[i] = se;
+                    const t = se > 0 ? coefs[i] / se : 0;
+                    tStats[i] = t;
+                    pValues[i] = 2.0 * (1.0 - normalCDF(Math.abs(t)));
+                }
+
+                return { p: p_val, q: q_arr, varNames, coefs, stdErrors, tStats, pValues, fitted, residuals, eff_n, max_lag };
+            };
+
+            const qArray = Array.isArray(q) ? q : Array(n_vars).fill(typeof q === "number" ? q : 1);
+            const bestModel = fitARDLOnSample(y_train, x_train, p || 1, qArray);
+            if (!bestModel) throw new Error("Gagal mengestimasi ARDL pada data training (sampel terlalu sedikit)");
+
+            const trainXFlat = [];
+            x_train.forEach((values) => trainXFlat.push(...values));
+            const trainModel = new ARDL(
+                new Float64Array(y_train),
+                new Float64Array(trainXFlat),
+                n_vars,
+                bestModel.p,
+                new Uint32Array(bestModel.q)
+            );
+            trainModel.estimate_ardl_ecm();
+            const trainLongRun = {
+                coefficients: fmtArray(Array.from(trainModel.get_lr_coefficients())),
+                stdErrors: fmtArray(Array.from(trainModel.get_lr_std_errors())),
+                tStats: fmtArray(Array.from(trainModel.get_lr_t_statistics())),
+                pValues: fmtArray(Array.from(trainModel.get_lr_p_values())),
+                residuals: Array.from(trainModel.get_lr_residuals()),
+                rSquared: fmt(trainModel.get_lr_r_squared()),
+                adjRSquared: fmt(trainModel.get_lr_adj_r_squared()),
+                fStat: fmt(trainModel.get_lr_f_statistic()),
+                diagnostics: computeRegressionDiagnostics(y_train, Array.from(trainModel.get_lr_residuals()), trainModel.get_lr_coefficients().length)
+            };
+            const trainShortRun = {
+                coefficients: fmtArray(Array.from(trainModel.get_sr_coefficients())),
+                stdErrors: fmtArray(Array.from(trainModel.get_sr_std_errors())),
+                tStats: fmtArray(Array.from(trainModel.get_sr_t_statistics())),
+                pValues: fmtArray(Array.from(trainModel.get_sr_p_values())),
+                residuals: Array.from(trainModel.get_sr_residuals()),
+                rSquared: fmt(trainModel.get_sr_r_squared()),
+                adjRSquared: fmt(trainModel.get_sr_adj_r_squared()),
+                fStat: fmt(trainModel.get_sr_f_statistic()),
+                diagnostics: computeRegressionDiagnostics(y_train.slice(1), Array.from(trainModel.get_sr_residuals()), trainModel.get_sr_coefficients().length)
+            };
+
+            const testYHat = [];
+            const testPredictedBuffer = [...y_train];
+
+            for (let t = trainSize; t < n_obs; t++) {
+                let pred = 0;
+                let idx = 0;
+                for (let i = 1; i <= bestModel.p; i++) {
+                    const yLag = splitMode === "holdout" ? testPredictedBuffer[t - i] : y_arr[t - i];
+                    pred += bestModel.coefs[idx] * (yLag !== undefined ? yLag : y_train[y_train.length - 1]);
+                    idx++;
+                }
+                for (let k = 0; k < n_vars; k++) {
+                    for (let j = 0; j <= bestModel.q[k]; j++) {
+                        const xVal = x_arrays[k][t - j];
+                        pred += bestModel.coefs[idx] * (xVal !== undefined ? xVal : 0);
+                        idx++;
+                    }
+                }
+                pred += bestModel.coefs[idx];
+
+                testYHat.push(pred);
+                testPredictedBuffer.push(pred);
+            }
+
+            const metrics = computeForecastMetrics(y_test, testYHat);
+
+            result = {
+                splitMode,
+                rollingType,
+                trainSize,
+                testSize,
+                trainRatio,
+                p: bestModel.p,
+                q: bestModel.q,
+                varNames: bestModel.varNames,
+                coefficients: fmtArray(bestModel.coefs),
+                stdErrors: fmtArray(bestModel.stdErrors),
+                tStats: fmtArray(bestModel.tStats),
+                pValues: fmtArray(bestModel.pValues),
+                trainActual: y_train,
+                trainFitted: bestModel.fitted,
+                trainResiduals: bestModel.residuals,
+                diagnostics: computeRegressionDiagnostics(
+                    bestModel.fitted,
+                    bestModel.residuals,
+                    bestModel.coefs.length
+                ),
+                correlogram: computeCorrelogram(bestModel.residuals),
+                unrestrictedModel: {
+                    varNames: bestModel.varNames,
+                    coefficients: fmtArray(bestModel.coefs),
+                    stdErrors: fmtArray(bestModel.stdErrors),
+                    tStats: fmtArray(bestModel.tStats),
+                    pValues: fmtArray(bestModel.pValues),
+                    fitted: bestModel.fitted,
+                    residuals: bestModel.residuals,
+                    diagnostics: computeRegressionDiagnostics(bestModel.y || y_train.slice(bestModel.max_lag), bestModel.residuals, bestModel.coefs.length)
+                },
+                longRun: trainLongRun,
+                cointegration: {
+                    statistic: fmt(trainModel.get_adf_statistic()),
+                    pValue: fmt(trainModel.get_adf_p_value()),
+                    isCointegrated: trainModel.get_is_cointegrated()
+                },
+                shortRun: trainShortRun,
+                testActual: y_test,
+                testYHat,
+                metrics
+            };
+            trainModel.free();
+        }
+        else if (type === "ECM_SPLIT") {
+            const { y, x, n_vars, max_lag_adf = 4, max_lag_ecm = 4, trainRatio = 0.8, splitMode = "holdout", rollingType = "expanding" } = payload;
+            const y_arr = Array.from(y);
+            const n_obs = y_arr.length;
+            const trainSize = Math.max(15, Math.min(n_obs - 3, Math.floor(n_obs * trainRatio)));
+            const testSize = n_obs - trainSize;
+
+            const y_train = y_arr.slice(0, trainSize);
+            const y_test = y_arr.slice(trainSize);
+
+            const x_train = [];
+            const x_arrays = [];
+            for (let k = 0; k < n_vars; k++) {
+                const fullX = Array.from(x.slice(k * n_obs, (k + 1) * n_obs));
+                x_arrays.push(fullX);
+                x_train.push(...fullX.slice(0, trainSize));
+            }
+
+            const model = new ECM(new Float64Array(y_train), new Float64Array(x_train), n_vars, max_lag_adf, max_lag_ecm);
+            model.estimate_ecm();
+
+            const lrCoefs = Array.from(model.get_lr_coefficients());
+            const ecmCoefs = Array.from(model.get_ecm_coefficients());
+
+            const testYHat = [];
+            const forecastY = [...y_train];
+            for (let t = trainSize; t < n_obs; t++) {
+                const previousY = splitMode === "holdout" ? forecastY[t - 1] : y_arr[t - 1];
+                let ect = previousY - (lrCoefs[0] || 0);
+                for (let k = 0; k < n_vars; k++) {
+                    ect -= (lrCoefs[k + 1] || 0) * x_arrays[k][t - 1];
+                }
+                let deltaY = ecmCoefs[0] || 0;
+                deltaY += (ecmCoefs[1] || 0) * ect;
+                for (let k = 0; k < n_vars; k++) {
+                    const deltaX = x_arrays[k][t] - x_arrays[k][t - 1];
+                    deltaY += (ecmCoefs[k + 2] || 0) * deltaX;
+                }
+                const forecast = previousY + deltaY;
+                testYHat.push(forecast);
+                forecastY.push(forecast);
+            }
+
+            const metrics = computeForecastMetrics(y_test, testYHat);
+
+            result = {
+                splitMode,
+                rollingType,
+                trainSize,
+                testSize,
+                trainRatio,
+                longRun: {
+                    coefficients: fmtArray(lrCoefs),
+                    stdErrors: fmtArray(Array.from(model.get_lr_std_errors())),
+                    tStats: fmtArray(Array.from(model.get_lr_t_statistics())),
+                    pValues: fmtArray(Array.from(model.get_lr_p_values())),
+                    residuals: Array.from(model.get_lr_residuals()),
+                    rSquared: fmt(model.get_lr_r_squared()),
+                    adjRSquared: fmt(model.get_lr_adj_r_squared()),
+                    fStat: fmt(model.get_lr_f_statistic()),
+                    diagnostics: computeRegressionDiagnostics(
+                        y_train,
+                        Array.from(model.get_lr_residuals()),
+                        lrCoefs.length
+                    )
+                },
+                ecm: {
+                    coefficients: fmtArray(ecmCoefs),
+                    stdErrors: fmtArray(Array.from(model.get_ecm_std_errors())),
+                    tStats: fmtArray(Array.from(model.get_ecm_t_statistics())),
+                    pValues: fmtArray(Array.from(model.get_ecm_p_values())),
+                    residuals: Array.from(model.get_ecm_residuals()),
+                    rSquared: fmt(model.get_ecm_r_squared()),
+                    adjRSquared: fmt(model.get_ecm_adj_r_squared()),
+                    fStat: fmt(model.get_ecm_f_statistic()),
+                    diagnostics: computeRegressionDiagnostics(
+                        y_train,
+                        Array.from(model.get_ecm_residuals()),
+                        ecmCoefs.length
+                    )
+                },
+                cointegration: {
+                    adfStat: fmt(model.get_adf_statistic()),
+                    pValue: fmt(model.get_adf_p_value()),
+                    isCointegrated: model.get_is_cointegrated()
+                },
+                diagnostics: {
+                    jarqueBera: { stat: fmt(model.get_jb_stat()), prob: fmt(model.get_jb_p_value()) },
+                    breuschGodfrey: { stat: fmt(model.get_bg_stat()), prob: fmt(model.get_bg_p_value()) },
+                    breuschPagan: { stat: fmt(model.get_bp_stat()), prob: fmt(model.get_bp_p_value()) }
+                },
+                correlogram: computeCorrelogram(Array.from(model.get_ecm_residuals())),
+                trainActual: y_train,
+                testActual: y_test,
+                testYHat,
+                metrics
+            };
+            model.free();
         }
         
         self.postMessage({ status: "success", result });

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use crate::utils::collections::HashMap;
 
 /// Create profile plots for within-subjects factors
 fn create_profile_plots(

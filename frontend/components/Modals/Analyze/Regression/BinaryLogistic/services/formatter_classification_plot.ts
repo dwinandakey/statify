@@ -1,26 +1,11 @@
 /**
  * Format Classification Plot (Modern Visualization)
- *
- * This module generates data for the Classification Plot visualization,
- * which shows the distribution of predicted probabilities for each observed group.
- *
- * The Classification Plot is a stacked/overlapping histogram-like visualization where:
- * - X-axis: Predicted probability bins (0 to 1)
- * - Y-axis: Frequency
- * - Two groups are shown with different colors
- *
- * This replaces the old SPSS ASCII-art style classification plot with a modern chart.
- * * For stepwise methods (Forward/Backward), classification plots are generated per step.
- * The displayAtLastStep option controls whether to show all steps or only the last step.
  */
 
 import type {
   LogisticResult,
   ClassificationPlotData,
   AnalysisSection} from "../types/binary-logistic";
-import {
-  StepDetail,
-} from "../types/binary-logistic";
 
 /**
  * Options for formatting classification plot
@@ -29,7 +14,7 @@ export interface ClassificationPlotOptions {
   displayAtLastStep?: boolean;
 }
 
-// Number of bins for the histogram (SPSS uses 10 bins by default: 0-0.1, 0.1-0.2, etc.)
+// Number of bins for the histogram
 const NUM_BINS = 10;
 
 /**
@@ -158,9 +143,7 @@ export const formatClassificationPlot = (
     method.toLowerCase().includes("backward");
   const isBackward = method.toLowerCase().includes("backward");
 
-  // ======================================================================
   // CASE 1: Enter Method or result.classification_plot_data exists (single plot)
-  // ======================================================================
   if (!isStepwise && result.classification_plot_data) {
     const { section, chart } = formatSingleClassificationPlot(
       result.classification_plot_data,
@@ -172,9 +155,7 @@ export const formatClassificationPlot = (
     if (chart) allCharts.push(chart);
   }
 
-  // ======================================================================
   // CASE 2: Stepwise Methods - iterate through steps_detail
-  // ======================================================================
   if (isStepwise && result.steps_detail && result.steps_detail.length > 0) {
     // Filter steps that have classification_plot_data
     let stepsWithPlot = result.steps_detail.filter(

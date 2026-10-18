@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
+import { toast } from "sonner";
 import type {
     RepeatedMeasuresContainerProps,
     RepeatedMeasuresMainType,
@@ -42,6 +43,7 @@ import {
     analyzeRepeatedMeasures
 } from "@/components/Modals/Analyze/general-linear-model/repeated-measures/services/repeated-measures-analysis";
 import {clearFormData, getFormData, saveFormData} from "@/hooks/useIndexedDB";
+import { errorMessage } from "@/components/Modals/Analyze/general-linear-model/shared/error-message";
 
 export const RepeatedMeasuresContainer = ({
     onClose,
@@ -123,9 +125,9 @@ export const RepeatedMeasuresContainer = ({
             const newState = { ...prev };
 
             // Within-subjects factors (from Define) drive the Contrast list.
-            // Format follows SPSS: "perlakuan(Repeated)".
+            // Format follows SPSS: "perlakuan(Polynomial)" (SPSS default).
             const defaultContrastMethod =
-                prev.contrast.ContrastMethod ?? "Repeated";
+                prev.contrast.ContrastMethod ?? "Polynomial";
             const contrastMethodLabel =
                 defaultContrastMethod.charAt(0).toUpperCase() +
                 defaultContrastMethod.slice(1);
@@ -133,7 +135,7 @@ export const RepeatedMeasuresContainer = ({
             const existingContrastFactors = prev.contrast.FactorList ?? [];
             const contrastFactorList = factorVars.map((fName) => {
                 const existing = existingContrastFactors.find(
-                    (entry) => entry.split("(")[0] === fName
+                    (entry) => entry.split("(")[0].trim() === fName
                 );
                 return existing ?? `${fName}(${contrastMethodLabel})`;
             });
@@ -166,9 +168,11 @@ export const RepeatedMeasuresContainer = ({
                 BetSubVar: [...factorList, ...covariatesList],
             };
 
+            // EM Means can target the between-subjects factors and, as in
+            // SPSS, the within-subjects factor(s) and their interactions.
             newState.emmeans = {
                 ...prev.emmeans,
-                SrcList: [...factorList],
+                SrcList: [...factorList, ...(factorVars ?? [])],
             };
 
             return newState;
@@ -225,12 +229,35 @@ export const RepeatedMeasuresContainer = ({
         setCombinationVars(nextCombinationVars);
         setFactorVars(nextFactorVars);
 
-        // Reset SubVar to the new placeholder set so the main dialog shows the
-        // correct slots for the user to fill.
-        setFormData((prev) => ({
-            ...prev,
-            main: { ...prev.main, SubVar: nextCombinationVars },
-        }));
+        // Reset SubVar to the new placeholder set only when the definition
+        // (factor names and levels, measure names) actually changed. When
+        // Define is clicked again without changes, the filled slots are kept.
+        const definitionKey = (d: RepeatedMeasureDefineData | undefined) =>
+            JSON.stringify({
+                factors: (d?.factors ?? []).map((f) => [f.name, f.levels]),
+                measures: (d?.measures ?? []).map((m) => m.name),
+            });
+        const definitionUnchanged =
+            definitionKey(defineData.main) === definitionKey(defineState);
+        const slotSuffix = (s: string) => s.match(/_(\(.*\))$/)?.[1] ?? null;
+        setFormData((prev) => {
+            const prevSubVar = prev.main.SubVar ?? [];
+            const slotsAligned =
+                prevSubVar.length === nextCombinationVars.length &&
+                prevSubVar.every(
+                    (s, i) => slotSuffix(s) === slotSuffix(nextCombinationVars[i])
+                );
+            return {
+                ...prev,
+                main: {
+                    ...prev.main,
+                    SubVar:
+                        definitionUnchanged && slotsAligned
+                            ? prevSubVar
+                            : nextCombinationVars,
+                },
+            };
+        });
 
         setIsDefineOpen(false);
         setIsMainOpen(true);
@@ -249,13 +276,32 @@ export const RepeatedMeasuresContainer = ({
         mainData: RepeatedMeasuresMainType
     ) => {
         try {
+            // Derive the between-subjects lists from the main dialog data being
+            // submitted. The effect that syncs them from formData.main runs only
+            // after a re-render, so on the first OK formData.model.BetSubVar was
+            // still empty while FactorsVar was already set (stale BetSubVar).
+            const factorList = mainData.FactorsVar ? [...mainData.FactorsVar] : [];
+            const covariateList = mainData.Covariates ? [...mainData.Covariates] : [];
             const newFormData = {
                 ...formData,
                 main: mainData,
                 model: {
                     ...formData.model,
                     DefFactors: (factorVars ?? []).join(";"),
+                    BetSubVar: [...factorList, ...covariateList],
                 },
+                emmeans: {
+                    ...formData.emmeans,
+                    SrcList: [...factorList, ...(factorVars ?? [])],
+                },
+                ...(mainData.FactorsVar
+                    ? {
+                          plots: { ...formData.plots, SrcList: [...factorList] },
+                          // Post Hoc is disabled for Repeated Measures: no
+                          // factor is sent, so no post hoc test is requested.
+                          posthoc: { ...formData.posthoc, SrcList: [...factorList], FixFactorVars: [] },
+                      }
+                    : {}),
             };
 
             await saveFormData("RepeatedMeasures", newFormData);
@@ -267,6 +313,7 @@ export const RepeatedMeasuresContainer = ({
             });
         } catch (error) {
             console.error(error);
+            toast.error(`An error occurred during Repeated Measures analysis. Error: ${errorMessage(error)}`);
         }
 
         closeModal();
