@@ -23,6 +23,12 @@ import { KMeansClustering } from "./k-means/KMeansClustering";
 import { KMedoidsClustering } from "./k-medoids/KMedoidsClustering";
 import { DiscriminantAnalysis } from "./discriminant";
 import {
+  TextAnalyticsGuide,
+  StringToWordVectorGuide,
+  NaiveBayesGuide,
+  ApplyModelGuide,
+} from "./text-analytics";
+import {
   SumOfSquares,
   EMMeans,
   ParameterEstimates,
@@ -97,6 +103,14 @@ export const StatisticsGuide: React.FC<StatisticsGuideProps> = ({ section }) => 
         return <KMedoidsClustering />;
       case "discriminant":
         return <DiscriminantAnalysis />;
+      case "text-analytics":
+        return <TextAnalyticsGuide />;
+      case "string-to-word-vector":
+        return <StringToWordVectorGuide />;
+      case "naive-bayes":
+        return <NaiveBayesGuide />;
+      case "apply-model":
+        return <ApplyModelGuide />;
       case "univariate":
         return <UnivariateGuide />;
       case "univariate-sum-of-squares":

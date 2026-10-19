@@ -57,8 +57,11 @@ describe("buildStwvOutput", () => {
         expect(valueOf("stwv_processing_summary", "Processing Time (ms)")).toBeUndefined();
     });
 
-    it("settings mencerminkan default Weka", () => {
-        expect(valueOf("stwv_settings", "Formula Standard")).toBe("Weka");
+    it("settings mencerminkan default (tanpa baris Formula Standard)", () => {
+        expect(valueOf("stwv_settings", "Formula Standard")).toBeUndefined();
+        expect(valueOf("stwv_settings", "Term Frequency (TF)")).toBe("Raw count / Raw frequency");
+        expect(valueOf("stwv_settings", "Inverse Document Frequency (IDF)")).toBe("None");
+        expect(valueOf("stwv_settings", "Normalization")).toBe("None");
         expect(valueOf("stwv_settings", "Words to Keep")).toBe(1000);
         expect(valueOf("stwv_settings", "Minimum Term Frequency")).toBe(1);
         expect(valueOf("stwv_settings", "Stopwords")).toBe("None");

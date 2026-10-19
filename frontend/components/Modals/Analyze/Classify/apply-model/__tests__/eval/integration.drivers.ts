@@ -35,19 +35,19 @@ import { resultStore, variableState } from "@/components/Modals/Analyze/Classify
 // Konfigurasi K1..K5 (sama dengan headless/statify_wasm.mjs KONFIGURASI, dibangun di atas STWV_DEFAULT_CONFIG ASLI)
 // ---------------------------------------------------------------------------
 export type KName = "K1" | "K2" | "K3" | "K4" | "K5";
-const cfg = (v: Partial<StwvConfig["vectorization"]> = {}, formulaStandard: StwvConfig["formulaStandard"] = "weka"): StwvConfig => ({
+// Revisi pasca-sidang: tanpa standar rumus; toRustConfig selalu mengirim formula_standard "custom".
+const cfg = (v: Partial<StwvConfig["vectorization"]> = {}): StwvConfig => ({
   ...STWV_DEFAULT_CONFIG,
   stopwords: { ...STWV_DEFAULT_CONFIG.stopwords },
   stemming: { ...STWV_DEFAULT_CONFIG.stemming },
   tokenizer: { ...STWV_DEFAULT_CONFIG.tokenizer },
-  formulaStandard,
   vectorization: { ...STWV_DEFAULT_CONFIG.vectorization, ...v },
 });
 export const KCONFIG: Record<KName, { stwv: StwvConfig; likelihood: "multinomial" | "bernoulli" | "complement" }> = {
   K1: { stwv: cfg(), likelihood: "multinomial" },
   K2: { stwv: cfg(), likelihood: "bernoulli" },
   K3: { stwv: cfg(), likelihood: "complement" },
-  K4: { stwv: cfg({ tfMethod: "raw", idfMethod: "smooth", normalization: "l2" }, "sklearn"), likelihood: "multinomial" },
+  K4: { stwv: cfg({ tfMethod: "raw", idfMethod: "smooth", normalization: "l2" }), likelihood: "multinomial" },
   K5: { stwv: cfg({ tfMethod: "log1p", idfMethod: "standard", normalization: "doc_length" }), likelihood: "multinomial" },
 };
 

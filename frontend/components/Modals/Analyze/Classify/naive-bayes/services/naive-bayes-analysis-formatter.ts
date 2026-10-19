@@ -437,7 +437,8 @@ export function buildAttributeDistributionTable(
       (attribute): attribute is NaiveBayesNumericalAttribute =>
         attribute.role === "numerical" && !!attribute.likelihood_note
     )
-    .map((attribute) => `${attribute.name}: ${attribute.likelihood_note}`);
+    // Catatan dari mesin Rust masih menyebut "(Weka-style)"; nama produk lain tidak ditampilkan.
+    .map((attribute) => `${attribute.name}: ${attribute.likelihood_note?.replace(/\s*\(Weka-style\)/, "")}`);
   const baseNote =
     "Categorical cells show the raw count / smoothed count (percentage) of the class total. Numerical rows show the mean and standard deviation per class.";
 

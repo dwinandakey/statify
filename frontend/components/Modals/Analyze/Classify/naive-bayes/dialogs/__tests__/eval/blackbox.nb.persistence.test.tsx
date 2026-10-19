@@ -290,7 +290,7 @@ describe("BB-36 Persistensi pengaturan menu Naive Bayes", () => {
         openTab(/Options/i);
         expect(byId("smoothing-alpha").value).toBe("2");
         // Field v2 yang tidak ada pada data lama terisi default.
-        expect(screen.getByRole("radio", { name: "Gaussian" })).toBeChecked();
+        expect(screen.getByText("Likelihood: Gaussian")).toBeInTheDocument();
         openTab(/Validation/i);
         expect(screen.getByRole("radio", { name: "Cross-Validation Folds" })).toBeChecked();
         expect(byId("k-folds").value).toBe("7");

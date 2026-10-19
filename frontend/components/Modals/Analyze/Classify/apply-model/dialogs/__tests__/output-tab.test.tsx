@@ -79,11 +79,9 @@ const REQUIRES_ACTUAL_TEXT = "Requires an actual target variable (Variables tab)
 function Harness({
   hasActualTarget,
   initial,
-  showFieldHelp = false,
 }: {
   hasActualTarget: boolean;
   initial?: ApplyModelOutputTabType;
-  showFieldHelp?: boolean;
 }) {
   const [data, setData] = useState<ApplyModelOutputTabType>(
     initial ?? cloneOutputDefault()
@@ -93,7 +91,6 @@ function Harness({
       data={data}
       hasActualTarget={hasActualTarget}
       onChange={setData}
-      showFieldHelp={showFieldHelp}
     />
   );
 }
@@ -174,7 +171,6 @@ describe("OutputTab — perubahan", () => {
         data={cloneOutputDefault()}
         hasActualTarget
         onChange={onChange}
-        showFieldHelp={false}
       />
     );
 
@@ -195,28 +191,12 @@ describe("OutputTab — perubahan", () => {
         data={cloneOutputDefault()}
         hasActualTarget={false}
         onChange={onChange}
-        showFieldHelp={false}
       />
     );
 
     await user.click(screen.getByRole("checkbox", { name: "Evaluation metrics" }));
 
     expect(onChange).not.toHaveBeenCalled();
-  });
-});
-
-describe("OutputTab — teks bantuan", () => {
-  it("showFieldHelp true menampilkan teks bantuan; false menyembunyikannya", () => {
-    const { unmount } = render(<Harness hasActualTarget showFieldHelp={false} />);
-    expect(
-      screen.queryByText(/Shows the algorithm, target, classes/)
-    ).not.toBeInTheDocument();
-    unmount();
-
-    render(<Harness hasActualTarget showFieldHelp />);
-    expect(
-      screen.getByText(/Shows the algorithm, target, classes/)
-    ).toBeInTheDocument();
   });
 });
 

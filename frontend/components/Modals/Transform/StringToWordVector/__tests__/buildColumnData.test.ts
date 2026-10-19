@@ -63,7 +63,7 @@ describe("resolveVariable (F20)", () => {
 });
 
 describe("toRustConfig (perilaku v1 tidak berubah)", () => {
-    it("config default → payload default baru (D6: Weka/raw/none/none)", () => {
+    it("config default → payload default baru (D6: raw/none/none, mode mesin internal weka)", () => {
         const p = toRustConfig(STWV_DEFAULT_CONFIG);
         expect(p).toMatchObject({
             lowercase: true,

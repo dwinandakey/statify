@@ -22,6 +22,7 @@ import CollapsibleNameList from "@/components/Modals/Analyze/Classify/apply-mode
 import { APPLY_MODEL_MESSAGES } from "@/components/Modals/Analyze/Classify/apply-model/constants/apply-model-codes";
 import type { ApplyModelIssue } from "@/components/Modals/Analyze/Classify/apply-model/constants/apply-model-codes";
 import { BUILTIN_MODELS } from "@/components/Modals/Analyze/Classify/apply-model/constants/builtin-models";
+import { APPLY_MODEL_TOUR_IDS } from "@/components/Modals/Analyze/Classify/apply-model/hooks/tourConfig";
 import {
   listResultStoreModels,
   loadBuiltinModel,
@@ -46,21 +47,7 @@ export type ModelTabLoadedHandler = (
 export type ModelTabProps = {
   data: ApplyModelModelTabType;
   onModelLoaded: ModelTabLoadedHandler;
-  showFieldHelp: boolean;
 };
-
-// Teks bantuan (bahasa Inggris, AGENTS.md §6.1) — tampil bila showFieldHelp.
-const MODEL_TAB_HELP = {
-  source:
-    "Choose where the trained model comes from: a JSON file exported from Naive Bayes, a model saved in the Output Viewer, or a model bundled with Statify.",
-  file: "Only .json files up to 10 MB are accepted. A new file replaces the current model only if it is valid.",
-  resultStore:
-    "Lists models exported by earlier Naive Bayes runs that are still in the Output Viewer, newest first.",
-  builtin:
-    "Models shipped with Statify. The catalog is currently empty.",
-  summary:
-    "Review the target, classes and features of the loaded model before mapping variables.",
-} as const;
 
 /** Ganti placeholder `{detail}` pada pesan (AGENTS.md §4.5). */
 function formatIssueMessage(issue: ApplyModelIssue): string {
@@ -70,12 +57,7 @@ function formatIssueMessage(issue: ApplyModelIssue): string {
   );
 }
 
-function HelpText({ show, text }: { show: boolean; text: string }) {
-  if (!show) return null;
-  return <p className="text-xs text-muted-foreground">{text}</p>;
-}
-
-export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) {
+export function ModelTab({ data, onModelLoaded }: ModelTabProps) {
   const [sourceKind, setSourceKind] = useState<ApplyModelSourceKind>(
     data.SourceKind
   );
@@ -180,9 +162,11 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="flex flex-col gap-2">
+      <section
+        id={APPLY_MODEL_TOUR_IDS.sourceSection}
+        className="flex flex-col gap-2"
+      >
         <Label className="font-semibold">Model Source</Label>
-        <HelpText show={showFieldHelp} text={MODEL_TAB_HELP.source} />
         <RadioGroup
           value={sourceKind}
           onValueChange={handleSourceKindChange}
@@ -211,7 +195,10 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
       </section>
 
       {sourceKind === "file" && (
-        <section className="flex flex-col gap-2">
+        <section
+          id={APPLY_MODEL_TOUR_IDS.sourcePicker}
+          className="flex flex-col gap-2"
+        >
           <input
             ref={fileInputRef}
             type="file"
@@ -230,12 +217,14 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
               Choose file
             </Button>
           </div>
-          <HelpText show={showFieldHelp} text={MODEL_TAB_HELP.file} />
         </section>
       )}
 
       {sourceKind === "resultStore" && (
-        <section className="flex flex-col gap-2">
+        <section
+          id={APPLY_MODEL_TOUR_IDS.sourcePicker}
+          className="flex flex-col gap-2"
+        >
           {resultStoreItems === null ? (
             <p className="text-sm text-muted-foreground">Loading models...</p>
           ) : resultStoreItems.length === 0 ? (
@@ -263,12 +252,14 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
               </SelectContent>
             </Select>
           )}
-          <HelpText show={showFieldHelp} text={MODEL_TAB_HELP.resultStore} />
         </section>
       )}
 
       {sourceKind === "builtin" && (
-        <section className="flex flex-col gap-2">
+        <section
+          id={APPLY_MODEL_TOUR_IDS.sourcePicker}
+          className="flex flex-col gap-2"
+        >
           <Select
             value={selectedBuiltinId}
             onValueChange={handleBuiltinSelect}
@@ -290,7 +281,6 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
               {APPLY_MODEL_MESSAGES.AM_W_BUILTIN_EMPTY}
             </p>
           )}
-          <HelpText show={showFieldHelp} text={MODEL_TAB_HELP.builtin} />
         </section>
       )}
 
@@ -314,11 +304,11 @@ export function ModelTab({ data, onModelLoaded, showFieldHelp }: ModelTabProps) 
 
       {descriptor !== null && (
         <section
+          id={APPLY_MODEL_TOUR_IDS.summaryCard}
           data-testid="model-summary-card"
           className="flex flex-col gap-3 rounded-lg border p-4"
         >
           <h3 className="text-sm font-semibold">Model Summary</h3>
-          <HelpText show={showFieldHelp} text={MODEL_TAB_HELP.summary} />
 
           {descriptor.warnings.map((code) => (
             <div

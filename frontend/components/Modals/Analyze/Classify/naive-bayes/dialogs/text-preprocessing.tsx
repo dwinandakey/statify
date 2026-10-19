@@ -24,7 +24,7 @@ export const TextPreprocessingTab = ({ config, setConfig }: TextPreprocessingTab
     const errors = useMemo(() => validateStwvConfig(config), [config]);
 
     return (
-        <div className="flex h-full flex-col gap-2">
+        <div id="naive-bayes-text-preprocessing-content" className="flex h-full flex-col gap-2">
             <p className="text-sm text-muted-foreground">
                 These settings convert the Raw Text Variable into word vectors. With holdout or k-fold
                 validation, the vocabulary is learned from the training data only.

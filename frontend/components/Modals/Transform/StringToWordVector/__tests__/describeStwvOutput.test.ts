@@ -9,7 +9,7 @@ import {
     type StwvDescribeInput,
 } from "../utils/describeStwvOutput";
 import { buildStwvOutput, MAX_VOCABULARY_ROWS } from "../utils/buildStwvOutput";
-import { STWV_DEFAULT_CONFIG, applyFormulaStandard, type StwvConfig } from "../config";
+import { STWV_DEFAULT_CONFIG, type StwvConfig } from "../config";
 import type { VectorizerOutput } from "../types";
 
 // Korpus golden PLAN_FIX §3.6 (Weka raw/none/none): "Saya suka makan nasi", "Saya tidak suka nasi!", "Makan, makan, makan"
@@ -73,9 +73,10 @@ describe("describeStwv* — kasus normal (korpus golden 3 dokumen)", () => {
         expect(html).toContain("<strong>Note.</strong>");
     });
 
-    it("Settings default Weka: word counts tanpa IDF dan tanpa normalisasi", () => {
+    it("Settings default: word counts tanpa IDF dan tanpa normalisasi, tanpa nama standar rumus", () => {
         const html = describeStwvSettings(base());
-        expect(html).toContain("With the Weka standard, cell values are word counts, without IDF weighting and without row normalization.");
+        expect(html).toContain("Cell values are word counts, without IDF weighting and without row normalization.");
+        expect(html).not.toMatch(/weka|scikit|standard,/i);
         expect(html).toContain("no stopwords are removed");
         expect(html).toContain("no stemming is applied");
         expect(html).toContain("at most 1000 words are kept");
@@ -83,9 +84,15 @@ describe("describeStwv* — kasus normal (korpus golden 3 dokumen)", () => {
         expect(html).not.toContain("<strong>Note.</strong>");
     });
 
-    it("Settings sklearn raw/smooth/l2 dan Weka log1p/standard", () => {
-        const sk = describeStwvSettings(base({ config: applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn") }));
-        expect(sk).toContain("scikit-learn standard");
+    it("Settings raw/smooth/l2 dan log1p/standard", () => {
+        const sk = describeStwvSettings(
+            base({ config: { ...STWV_DEFAULT_CONFIG, vectorization: { tfMethod: "raw", idfMethod: "smooth", normalization: "l2" } } })
+        );
+        expect(sk).toContain("ranked by total word count across all documents");
+        const tfidfRanked = describeStwvSettings(
+            base({ config: { ...STWV_DEFAULT_CONFIG, vectorization: { tfMethod: "normalized", idfMethod: "smooth", normalization: "l2" } } })
+        );
+        expect(tfidfRanked).toContain("ranked by the sum of TF × IDF");
         expect(sk).toContain("smoothed IDF = ln((1 + N) / (1 + df)) + 1");
         expect(sk).toContain("unit L2 length");
         const weka: StwvConfig = {

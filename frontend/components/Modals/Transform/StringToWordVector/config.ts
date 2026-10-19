@@ -1,15 +1,17 @@
 import { INDONESIAN_STOPWORDS, ENGLISH_STOPWORDS } from "./constants/stopwords";
 import type { StemmingMethod, StopwordsMethod, TokenizerType, VectorizerConfigPayload } from "./types";
 import {
-    FORMULA_STANDARDS,
+    IDF_OPTIONS,
+    NORM_OPTIONS,
+    TF_OPTIONS,
+    engineFormulaMode,
     isOptionAllowed,
-    type FormulaStandard,
     type IdfMethod,
     type Normalization,
     type TfMethod,
-} from "./constants/formula-standards";
+} from "./constants/vectorization-options";
 
-export type { FormulaStandard, IdfMethod, Normalization, TfMethod };
+export type { IdfMethod, Normalization, TfMethod };
 
 /** State konfigurasi STWV di UI (bentuk bersarang, dipakai OptionsTab). */
 export interface StwvConfig {
@@ -27,8 +29,7 @@ export interface StwvConfig {
         maxSize: number;
     };
     delimiters: string;
-    /** Standar rumus (D5): menentukan opsi TF/IDF/Norm yang sah. */
-    formulaStandard: FormulaStandard;
+    /** TF, IDF, dan normalisasi dipilih bebas (tanpa standar rumus). */
     vectorization: {
         tfMethod: TfMethod;
         idfMethod: IdfMethod;
@@ -43,7 +44,7 @@ export interface StwvConfig {
 /** Payload ke Rust sesuai kontrak PLAN_FIX §3.1 (snake_case, nilai enum baru bukan alias lama). */
 export type StwvRustPayload = VectorizerConfigPayload;
 
-/** Nilai default config (D6): Weka / Word count / IDF None / Norm None. */
+/** Nilai default config (D6): Word count / IDF None / Norm None. */
 export const STWV_DEFAULT_CONFIG: StwvConfig = {
     lowercase: true,
     stopwords: {
@@ -59,7 +60,6 @@ export const STWV_DEFAULT_CONFIG: StwvConfig = {
         maxSize: 2,
     },
     delimiters: "[\\s.,;:'\"()?!]+",
-    formulaStandard: "weka",
     vectorization: {
         tfMethod: "raw",
         idfMethod: "none",
@@ -77,19 +77,6 @@ export function getVectorDecimals(config: StwvConfig): 0 | 4 {
     const { tfMethod, idfMethod, normalization } = config.vectorization;
     const isIntegerTf = tfMethod === "binary" || tfMethod === "raw";
     return isIntegerTf && idfMethod === "none" && normalization === "none" ? 0 : 4;
-}
-
-/**
- * Mengganti standar rumus. Weka/sklearn menerapkan default standar itu;
- * Custom mempertahankan nilai TF/IDF/Norm saat ini.
- */
-export function applyFormulaStandard(config: StwvConfig, standard: FormulaStandard): StwvConfig {
-    const defaults = FORMULA_STANDARDS[standard].defaults;
-    return {
-        ...config,
-        formulaStandard: standard,
-        vectorization: defaults ? { ...defaults } : { ...config.vectorization },
-    };
 }
 
 /**
@@ -121,17 +108,13 @@ export function validateStwvConfig(config: StwvConfig): string[] {
         errors.push("Delimiters cannot be empty.");
     }
 
-    const def = FORMULA_STANDARDS[config.formulaStandard];
     const v = config.vectorization;
     if (
-        !isOptionAllowed(def.tfOptions, v.tfMethod) ||
-        !isOptionAllowed(def.idfOptions, v.idfMethod) ||
-        !isOptionAllowed(def.normOptions, v.normalization)
+        !isOptionAllowed(TF_OPTIONS, v.tfMethod) ||
+        !isOptionAllowed(IDF_OPTIONS, v.idfMethod) ||
+        !isOptionAllowed(NORM_OPTIONS, v.normalization)
     ) {
-        errors.push(
-            `This TF / IDF / Normalization combination is not valid for the ${def.label} standard. ` +
-                "Choose different options or change the formula standard."
-        );
+        errors.push("Choose a valid Term Frequency, Inverse Document Frequency, and Normalization option.");
     }
 
     return errors;
@@ -169,7 +152,8 @@ export function toRustConfig(config: StwvConfig): StwvRustPayload {
         // Mode "word" (bukan n-gram): paksa min = max = 1
         ngram_min: isNgram ? config.tokenizer.minSize : 1,
         ngram_max: isNgram ? config.tokenizer.maxSize : 1,
-        formula_standard: config.formulaStandard,
+        // Field internal mesin, diturunkan dari kombinasi pilihan (tidak dipilih pengguna)
+        formula_standard: engineFormulaMode(config.vectorization),
         tf_method: config.vectorization.tfMethod,
         idf_method: config.vectorization.idfMethod,
         normalization: config.vectorization.normalization,

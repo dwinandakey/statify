@@ -100,12 +100,11 @@ function getLoadedD1(): ModelLoadSuccess {
 const onLoaded = jest.fn();
 
 // Pembungkus berstate yang meniru container: hasil muat disimpan ke `data`.
-function Harness({ showFieldHelp = false }: { showFieldHelp?: boolean }) {
+function Harness() {
   const [data, setData] = useState<ApplyModelModelTabType>(ApplyModelModelDefault);
   return (
     <ModelTab
       data={data}
-      showFieldHelp={showFieldHelp}
       onModelLoaded={(result: ModelLoadSuccess, kind: ApplyModelSourceKind) => {
         onLoaded(result, kind);
         setData({
@@ -276,21 +275,6 @@ describe("ModelTab — sumber bawaan dan Output Viewer", () => {
   });
 });
 
-describe("ModelTab — teks bantuan", () => {
-  it("showFieldHelp true menampilkan teks bantuan; false menyembunyikannya", () => {
-    const { unmount } = render(<Harness showFieldHelp={false} />);
-    expect(
-      screen.queryByText(/Choose where the trained model comes from/)
-    ).not.toBeInTheDocument();
-    unmount();
-
-    render(<Harness showFieldHelp />);
-    expect(
-      screen.getByText(/Choose where the trained model comes from/)
-    ).toBeInTheDocument();
-  });
-});
-
 // ---------------------------------------------------------------------------
 // Container — perilaku Fase 12 (AGENTS.md §6.1)
 // ---------------------------------------------------------------------------
@@ -339,18 +323,16 @@ describe("ApplyModelMain — tab disabled selama belum ada model", () => {
     expect(screen.getByTestId("model-summary-card")).toBeInTheDocument();
   });
 
-  it("tombol Help mengaktifkan teks bantuan di Tab Model", () => {
+  it("tombol Help memulai tur pop-up di Tab Model (tanpa teks bantuan inline)", async () => {
     render(<ApplyModelMain onClose={jest.fn()} />);
-    const help = screen.getByRole("button", { name: "Toggle help" });
-    expect(help).toHaveAttribute("aria-pressed", "false");
     expect(
-      screen.queryByText(/Choose where the trained model comes from/)
+      screen.queryByRole("button", { name: "Toggle help" })
     ).not.toBeInTheDocument();
 
-    fireEvent.click(help);
-    expect(help).toHaveAttribute("aria-pressed", "true");
-    expect(
-      screen.getByText(/Choose where the trained model comes from/)
-    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Start feature tour" }));
+    expect(await screen.findByTestId("tour-popup-container")).toBeInTheDocument();
+    expect(screen.getByTestId("tour-popup-step-counter")).toHaveTextContent(
+      "Step 1 of 3"
+    );
   });
 });

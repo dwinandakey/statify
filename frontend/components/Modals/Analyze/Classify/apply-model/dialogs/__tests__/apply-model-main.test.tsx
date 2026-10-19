@@ -567,26 +567,3 @@ describe("ApplyModelMain — dataset berubah saat panel terbuka", () => {
   });
 });
 
-describe("ApplyModelMain — Help", () => {
-  it("(e) Help memunculkan/menyembunyikan teks bantuan dan memperbarui aria-pressed", async () => {
-    const user = userEvent.setup();
-    render(<ApplyModelMain onClose={jest.fn()} />);
-    const help = screen.getByRole("button", { name: "Toggle help" });
-    expect(help).toHaveAttribute("aria-pressed", "false");
-    expect(
-      screen.queryByText(/Choose where the trained model comes from/)
-    ).not.toBeInTheDocument();
-
-    await user.click(help);
-    expect(help).toHaveAttribute("aria-pressed", "true");
-    expect(
-      screen.getByText(/Choose where the trained model comes from/)
-    ).toBeInTheDocument();
-
-    await user.click(help);
-    expect(help).toHaveAttribute("aria-pressed", "false");
-    expect(
-      screen.queryByText(/Choose where the trained model comes from/)
-    ).not.toBeInTheDocument();
-  });
-});

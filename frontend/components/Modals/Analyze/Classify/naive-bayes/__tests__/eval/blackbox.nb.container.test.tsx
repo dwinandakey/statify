@@ -333,24 +333,22 @@ describe("BB-18 Alpha di luar batas", () => {
 });
 
 // =============================================================================================
-// BB-20 — Gaussian (Weka min. std), sisi UI
+// BB-20 — Likelihood Numeric (revisi pasca-sidang: hanya Gaussian standar), sisi UI
 // =============================================================================================
-describe("BB-20 Gaussian (Weka min. std) - sisi UI", () => {
-    it("BB-20: memilih 'Gaussian (Weka min. std)' dan OK mengirim NumericLikelihood=gaussian_minstd ke analisis", async () => {
+describe("BB-20 Likelihood Numeric Gaussian - sisi UI", () => {
+    it("BB-20: tab Options hanya menampilkan Gaussian (tanpa pilihan min. std) dan OK mengirim NumericLikelihood=gaussian", async () => {
         await renderContainer();
         setTarget("Kelas");
         moveTo("Teks", "excluded");
         openTab(/^Options$/i);
-        expect(screen.getByRole("radio", { name: "Gaussian" })).toHaveAttribute("aria-checked", "true");
-        fireEvent.click(await screen.findByRole("radio", { name: "Gaussian (Weka min. std)" }));
-        expect(screen.getByRole("radio", { name: "Gaussian (Weka min. std)" })).toHaveAttribute("aria-checked", "true");
-
-        // Tabel override memuat variabel numerik efektif.
-        expect(screen.getByLabelText("Likelihood for Umur")).toBeInTheDocument();
+        expect(screen.getByText("Likelihood: Gaussian")).toBeInTheDocument();
+        expect(screen.queryByText(/min\. std/i)).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Likelihood for Umur")).not.toBeInTheDocument();
 
         fireEvent.click(okButton());
         await waitFor(() => expect(mockAnalyze).toHaveBeenCalledTimes(1));
-        expect(lastAnalyzeArgs().configData.options.NumericLikelihood).toBe("gaussian_minstd");
+        expect(lastAnalyzeArgs().configData.options.NumericLikelihood).toBe("gaussian");
+        expect(lastAnalyzeArgs().configData.options.NumericLikelihoodOverrides).toEqual({});
     });
 });
 
