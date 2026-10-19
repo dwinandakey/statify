@@ -1,0 +1,335 @@
+=== java ... weka.filters.unsupervised.attribute.StringToWordVector -h
+
+Help requested.
+
+Filter options:
+
+-C
+	Output word counts rather than boolean word presence.
+
+-R <index1,index2-index4,...>
+	Specify list of string attributes to convert to words (as weka Range).
+	(default: select all string attributes)
+-V
+	Invert matching sense of column indexes.
+-P <attribute name prefix>
+	Specify a prefix for the created attribute names.
+	(default: "")
+-W <number of words to keep>
+	Specify approximate number of word fields to create.
+	Surplus words will be discarded..
+	(default: 1000)
+-prune-rate <rate as a percentage of dataset>
+	Specify the rate (e.g., every 10% of the input dataset) at which to periodically prune the dictionary.
+	-W prunes after creating a full dictionary. You may not have enough memory for this approach.
+	(default: no periodic pruning)
+-T
+	Transform the word frequencies into log(1+fij)
+	where fij is the frequency of word i in jth document(instance).
+
+-I
+	Transform each word frequency into:
+	fij*log(num of Documents/num of documents containing word i)
+	  where fij if frequency of word i in jth document(instance)
+-N
+	Whether to 0=not normalize/1=normalize all data/2=normalize test data only
+	to average length of training documents (default 0=don't normalize).
+-L
+	Convert all tokens to lowercase before adding to the dictionary.
+-stopwords-handler
+	The stopwords handler to use (default Null).
+-stemmer <spec>
+	The stemming algorithm (classname plus parameters) to use.
+-M <int>
+	The minimum term frequency (default = 1).
+-O
+	If this is set, the maximum number of words and the 
+	minimum term frequency is not enforced on a per-class 
+	basis but based on the documents in all the classes 
+	(even if a class attribute is set).
+-tokenizer <spec>
+	The tokenizing algorithm (classname plus parameters) to use.
+	(default: weka.core.tokenizers.WordTokenizer)
+-dictionary <path to save to>
+	The file to save the dictionary to.
+	(default is not to save the dictionary)
+-binary-dict
+	Save the dictionary file as a binary serialized object
+	instead of in plain text form. Use in conjunction with
+	-dictionary
+
+General options:
+
+-h
+	Get help on available options.
+	(use -b -h for help on batch mode.)
+-i <file>
+	The name of the file containing input instances.
+	If not supplied then instances will be read from stdin.
+-o <file>
+	The name of the file output instances will be written to.
+	If not supplied then instances will be written to stdout.
+-c <class index>
+	The number of the attribute to use as the class.
+	"first" and "last" are also valid entries.
+	If not supplied then no class is assigned.
+-decimal <integer>
+	The maximum number of digits to print after the decimal
+	place for numeric values (default: 6)
+
+(exit 0)
+=== java ... weka.classifiers.bayes.NaiveBayesMultinomial -h
+
+Help requested.
+
+General options:
+
+-h or -help
+	Output help information.
+-synopsis or -info
+	Output synopsis for classifier (use in conjunction  with -h)
+-t <name of training file>
+	Sets training file.
+-T <name of test file>
+	Sets test file. If missing, a cross-validation will be performed
+	on the training data.
+-c <class index>
+	Sets index of class attribute (default: last).
+-x <number of folds>
+	Sets number of folds for cross-validation (default: 10).
+-no-cv
+	Do not perform any cross validation.
+-force-batch-training
+	Always train classifier in batch mode, never incrementally.
+-split-percentage <percentage>
+	Sets the percentage for the train/test set split, e.g., 66.
+-preserve-order
+	Preserves the order in the percentage split.
+-s <random number seed>
+	Sets random number seed for cross-validation or percentage split
+	(default: 1).
+-m <name of file with cost matrix>
+	Sets file with cost matrix.
+-continue-iterating
+	Continue training an IterativeClassifier model that has
+	been loaded via -l.
+-clean-up
+	Reduce storage size of an loaded IterativeClassifier
+	after iterating. This effectively 'freezes' the model, and no further
+	iteration is then possible.
+-toggle <comma-separated list of evaluation metric names>
+	Comma separated list of metric names to toggle in the output.
+	All metrics are output by default with the exception of 'Coverage' and 'Region size'.
+	Available metrics:
+	Correct,Incorrect,Kappa,Total cost,Average cost,KB relative,KB information,
+	Correlation,Complexity 0,Complexity scheme,Complexity improvement,
+	MAE,RMSE,RAE,RRSE,Coverage,Region size,TP rate,FP rate,Precision,Recall,
+	F-measure,MCC,ROC area,PRC area
+-l <name of input file>
+	Sets model input file. In case the filename ends with '.xml',
+	a PMML file is loaded or, if that fails, options are loaded
+	from the XML file.
+-d <name of output file>
+	Sets model output file. In case the filename ends with '.xml',
+	only the options are saved to the XML file, not the model.
+-v
+	Outputs no statistics for training data.
+-o
+	Outputs statistics only, not the classifier.
+-output-models-for-training-splits
+	Output models for training splits if cross-validation or percentage-split evaluation is used.
+-do-not-output-per-class-statistics
+	Do not output statistics for each class.
+-k
+	Outputs information-theoretic statistics.
+-classifications "weka.classifiers.evaluation.output.prediction.AbstractOutput + options"
+	Uses the specified class for generating the classification output.
+	E.g.: weka.classifiers.evaluation.output.prediction.PlainText
+-p range
+	Outputs predictions for test instances (or the train instances if
+	no test instances provided and -no-cv is used), along with the 
+	attributes in the specified range (and nothing else). 
+	Use '-p 0' if no attributes are desired.
+	Deprecated: use "-classifications ..." instead.
+-distribution
+	Outputs the distribution instead of only the prediction
+	in conjunction with the '-p' option (only nominal classes).
+	Deprecated: use "-classifications ..." instead.
+-r
+	Only outputs cumulative margin distribution.
+-xml filename | xml-string
+	Retrieves the options from the XML-data instead of the command line.
+-threshold-file <file>
+	The file to save the threshold data to.
+	The format is determined by the extensions, e.g., '.arff' for ARFF 
+	format or '.csv' for CSV.
+-threshold-label <label>
+	The class label to determine the threshold data for
+	(default is the first label)
+-no-predictions
+	Turns off the collection of predictions in order to conserve memory.
+
+Options specific to weka.classifiers.bayes.NaiveBayesMultinomial:
+
+-output-debug-info
+	If set, classifier is run in debug mode and
+	may output additional info to the console
+-do-not-check-capabilities
+	If set, classifier capabilities are not checked before classifier is built
+	(use with caution).
+-num-decimal-places
+	The number of decimal places for the output of numbers in the model (default 2).
+-batch-size
+	The desired batch size for batch prediction  (default 100).
+
+(exit 0)
+=== java ... weka.classifiers.bayes.NaiveBayes -h
+
+Help requested.
+
+General options:
+
+-h or -help
+	Output help information.
+-synopsis or -info
+	Output synopsis for classifier (use in conjunction  with -h)
+-t <name of training file>
+	Sets training file.
+-T <name of test file>
+	Sets test file. If missing, a cross-validation will be performed
+	on the training data.
+-c <class index>
+	Sets index of class attribute (default: last).
+-x <number of folds>
+	Sets number of folds for cross-validation (default: 10).
+-no-cv
+	Do not perform any cross validation.
+-force-batch-training
+	Always train classifier in batch mode, never incrementally.
+-split-percentage <percentage>
+	Sets the percentage for the train/test set split, e.g., 66.
+-preserve-order
+	Preserves the order in the percentage split.
+-s <random number seed>
+	Sets random number seed for cross-validation or percentage split
+	(default: 1).
+-m <name of file with cost matrix>
+	Sets file with cost matrix.
+-continue-iterating
+	Continue training an IterativeClassifier model that has
+	been loaded via -l.
+-clean-up
+	Reduce storage size of an loaded IterativeClassifier
+	after iterating. This effectively 'freezes' the model, and no further
+	iteration is then possible.
+-toggle <comma-separated list of evaluation metric names>
+	Comma separated list of metric names to toggle in the output.
+	All metrics are output by default with the exception of 'Coverage' and 'Region size'.
+	Available metrics:
+	Correct,Incorrect,Kappa,Total cost,Average cost,KB relative,KB information,
+	Correlation,Complexity 0,Complexity scheme,Complexity improvement,
+	MAE,RMSE,RAE,RRSE,Coverage,Region size,TP rate,FP rate,Precision,Recall,
+	F-measure,MCC,ROC area,PRC area
+-l <name of input file>
+	Sets model input file. In case the filename ends with '.xml',
+	a PMML file is loaded or, if that fails, options are loaded
+	from the XML file.
+-d <name of output file>
+	Sets model output file. In case the filename ends with '.xml',
+	only the options are saved to the XML file, not the model.
+-v
+	Outputs no statistics for training data.
+-o
+	Outputs statistics only, not the classifier.
+-output-models-for-training-splits
+	Output models for training splits if cross-validation or percentage-split evaluation is used.
+-do-not-output-per-class-statistics
+	Do not output statistics for each class.
+-k
+	Outputs information-theoretic statistics.
+-classifications "weka.classifiers.evaluation.output.prediction.AbstractOutput + options"
+	Uses the specified class for generating the classification output.
+	E.g.: weka.classifiers.evaluation.output.prediction.PlainText
+-p range
+	Outputs predictions for test instances (or the train instances if
+	no test instances provided and -no-cv is used), along with the 
+	attributes in the specified range (and nothing else). 
+	Use '-p 0' if no attributes are desired.
+	Deprecated: use "-classifications ..." instead.
+-distribution
+	Outputs the distribution instead of only the prediction
+	in conjunction with the '-p' option (only nominal classes).
+	Deprecated: use "-classifications ..." instead.
+-r
+	Only outputs cumulative margin distribution.
+-xml filename | xml-string
+	Retrieves the options from the XML-data instead of the command line.
+-threshold-file <file>
+	The file to save the threshold data to.
+	The format is determined by the extensions, e.g., '.arff' for ARFF 
+	format or '.csv' for CSV.
+-threshold-label <label>
+	The class label to determine the threshold data for
+	(default is the first label)
+-no-predictions
+	Turns off the collection of predictions in order to conserve memory.
+
+Options specific to weka.classifiers.bayes.NaiveBayes:
+
+-K
+	Use kernel density estimator rather than normal
+	distribution for numeric attributes
+-D
+	Use supervised discretization to process numeric attributes
+
+-O
+	Display model in old format (good when there are many classes)
+
+-output-debug-info
+	If set, classifier is run in debug mode and
+	may output additional info to the console
+-do-not-check-capabilities
+	If set, classifier capabilities are not checked before classifier is built
+	(use with caution).
+-num-decimal-places
+	The number of decimal places for the output of numbers in the model (default 2).
+-batch-size
+	The desired batch size for batch prediction  (default 100).
+
+(exit 0)
+=== java ... weka.filters.unsupervised.attribute.NumericToNominal -h
+
+Help requested.
+
+Filter options:
+
+-R <col1,col2-col4,...>
+	Specifies list of columns to discretize. First and last are valid indexes.
+	(default: first-last)
+-V
+	Invert matching sense of column indexes.
+
+General options:
+
+-h
+	Get help on available options.
+	(use -b -h for help on batch mode.)
+-i <file>
+	The name of the file containing input instances.
+	If not supplied then instances will be read from stdin.
+-o <file>
+	The name of the file output instances will be written to.
+	If not supplied then instances will be written to stdout.
+-c <class index>
+	The number of the attribute to use as the class.
+	"first" and "last" are also valid entries.
+	If not supplied then no class is assigned.
+-decimal <integer>
+	The maximum number of digits to print after the decimal
+	place for numeric values (default: 6)
+
+(exit 0)
+=== java ... weka.classifiers.bayes.ComplementNaiveBayes -h
+Error: Could not find or load main class weka.classifiers.bayes.ComplementNaiveBayes
+Caused by: java.lang.ClassNotFoundException: weka.classifiers.bayes.ComplementNaiveBayes
+(exit 1)

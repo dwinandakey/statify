@@ -1,0 +1,42 @@
+# lingkungan eksekusi: Linux VM; weka.jar dari C:\Program Files\Weka-3-9-6
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+openjdk version "11.0.32.1" 2026-08-18
+OpenJDK Runtime Environment (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu)
+OpenJDK 64-Bit Server VM (build 11.0.32.1+1-post-1ubuntu1-22.04-Ubuntu, mixed mode, sharing)
+--- bundled JRE release file:
+IMPLEMENTOR="Azul Systems, Inc."
+IMPLEMENTOR_VERSION="Zulu17.32+13-CA"
+JAVA_VERSION="17.0.2"
+JAVA_VERSION_DATE="2022-01-18"
+--- weka.core.Version
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/local/lib/node_modules_global/lib/node_modules/@anthropic-ai/sandbox-runtime/vendor/java-proxy-agent/srt-proxy-agent.jar
+3.9.6
+
+-1? -1
+ 0? 0
++1? 1
+
+comparing with 5.0.1
+isOlder? true
+equals ? false
+isNewer? false
+
+comparing with 3.9.6
+isOlder? false
+equals ? true
+isNewer? false
+
+comparing with 3.4.0
+isOlder? false
+equals ? false
+isNewer? true
+
+comparing with 3.4
+isOlder? false
+equals ? false
+isNewer? true
+
+comparing with 5
+isOlder? true
+equals ? false
+isNewer? false

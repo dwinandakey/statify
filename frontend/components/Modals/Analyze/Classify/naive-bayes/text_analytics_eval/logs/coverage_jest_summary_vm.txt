@@ -1,0 +1,21 @@
+== stwv: lines 280/545 = 51.37% ; stmts 51.67% ; funcs 72/150 = 48% ; branches 56.7%
+  <70 lines: Transform/StringToWordVector/OptionsTab.tsx                                                     L 0/58 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/StringToWordVectorModal.tsx                                        L 0/37 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/VariablesTab.tsx                                                   L 0/15 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/stringToWord.processor.ts                                          L 0/14 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/hooks/useStringToWordVector.ts                                     L 0/128 0%  F 0% B 0%
+== nb: lines 1146/1317 = 87.01% ; stmts 85.83% ; funcs 248/302 = 82.11% ; branches 79.16%
+  <70 lines: Analyze/Classify/naive-bayes/components/export-model-output.tsx                                 L 0/22 0%  F 0% B 0%
+  <70 lines: Analyze/Classify/naive-bayes/dialogs/validation.tsx                                             L 7/39 17.94%  F 0% B 0%
+== am: lines 1444/1481 = 97.5% ; stmts 96.2% ; funcs 328/338 = 97.04% ; branches 88.8%
+
+== stwv_A: lines 291/545 = 53.39% ; stmts 53.58% ; funcs 73/150 = 48.66% ; branches 63.4%
+  <70 lines: Transform/StringToWordVector/OptionsTab.tsx                                                     L 0/58 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/StringToWordVectorModal.tsx                                        L 0/37 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/VariablesTab.tsx                                                   L 0/15 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/stringToWord.processor.ts                                          L 0/14 0%  F 0% B 0%
+  <70 lines: Transform/StringToWordVector/hooks/useStringToWordVector.ts                                     L 0/128 0%  F 0% B 0%
+== nb_A: lines 1146/1317 = 87.01% ; stmts 85.83% ; funcs 248/302 = 82.11% ; branches 79.16%
+  <70 lines: Analyze/Classify/naive-bayes/components/export-model-output.tsx                                 L 0/22 0%  F 0% B 0%
+  <70 lines: Analyze/Classify/naive-bayes/dialogs/validation.tsx                                             L 7/39 17.94%  F 0% B 0%
+== am_A: lines 1448/1481 = 97.77% ; stmts 96.44% ; funcs 328/338 = 97.04% ; branches 88.95%

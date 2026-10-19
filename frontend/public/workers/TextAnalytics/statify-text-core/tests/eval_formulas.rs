@@ -1,8 +1,8 @@
 //! Tes tesis Track A (a): rumus TF, IDF, dan normalisasi terhadap nilai acuan INDEPENDEN.
 //!
-//! Nilai acuan dihitung oleh `testing/text_analytics_eval/unit/reference_values.py` (Python + numpy, dari
+//! Nilai acuan dihitung oleh `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/unit/reference_values.py` (Python + numpy, dari
 //! DEFINISI rumus pada `vectorizer.rs`/PLAN_FIX.md, bukan dari keluaran Rust) dan disimpan di
-//! `tests/eval_data/formula_grid.json`. Keluaran skrip: `testing/text_analytics_eval/logs/reference_values.txt`.
+//! `tests/eval_data/formula_grid.json`. Keluaran skrip: `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/logs/reference_values.txt`.
 //!
 //! Korpus D (D1, D2, D3) = "Saya suka makan nasi" / "Saya tidak suka nasi!" / "Makan, makan, makan".
 //! Toleransi 1e-6 (nilai acuan JSON berpresisi penuh, jadi pada praktiknya jauh lebih ketat).

@@ -1,0 +1,16 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/whitebox.getNumericInputError.test.ts (16.357 s)
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesV2.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/whitebox.useNaiveBayesValidation.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesTextRules.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/naiveBayesPayload.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/kfold.thesis.test.ts
+
+Test Suites: 6 passed, 6 total
+Tests:       138 passed, 138 total
+Snapshots:   0 total
+Time:        19.587 s
+Ran all test suites matching components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/naiveBayesPayload.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/kfold.thesis.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/whitebox.getNumericInputError.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/thesis/whitebox.useNaiveBayesValidation.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesTextRules.test.ts|components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesV2.test.ts.
+Test results written to: ../testing/thesis-eval/logs/jest_final_8_vm.json

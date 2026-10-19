@@ -1,0 +1,23 @@
+   Compiling statify-text-core v0.1.0 (E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.89s
+     Running tests\eval_vocab_limit.rs (target\debug\deps\eval_vocab_limit-c6e5b72474bee134.exe)
+
+running 13 tests
+test custom_ranking_memakai_skor_bukan_total_count_dan_seri_alfabetis ... ok
+test min_term_freq_batas_inklusif_count_sama_dipertahankan ... ok
+test min_term_freq_dihitung_pada_token_ngram_juga ... ok
+test min_term_freq_lalu_words_to_keep_dengan_seri ... ok
+test min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen ... ok
+test pemangkasan_kosakata_tidak_mengubah_n_dokumen_dan_df_term_yang_tersisa ... ok
+test skenario_acuan_words_to_keep_dan_min_term_freq ... ok
+test words_to_keep_3_pada_korpus_d_memilih_makan_nasi_saya ... ok
+test words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak ... ok
+test words_to_keep_memotong_ketat_walau_banyak_term_seri ... ok
+test words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong ... ok
+test words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil ... ok
+test words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.4 started=2026-10-08 10:28:46 +07:00 cmd=cargo test --test eval_vocab_limit -- --test-threads=1 cwd=E:\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core ===

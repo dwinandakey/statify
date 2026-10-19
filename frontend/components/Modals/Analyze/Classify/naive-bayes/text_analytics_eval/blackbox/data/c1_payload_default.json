@@ -1,0 +1,15 @@
+{
+  "lowercase": true,
+  "stemming_method": "none",
+  "stopwords_method": "none",
+  "custom_stopwords": null,
+  "delimiters": "[\\s.,;:'\"()?!]+",
+  "ngram_min": 1,
+  "ngram_max": 1,
+  "formula_standard": "weka",
+  "tf_method": "raw",
+  "idf_method": "none",
+  "normalization": "none",
+  "words_to_keep": 1000,
+  "min_term_freq": 1
+}

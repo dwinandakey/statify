@@ -1,0 +1,17 @@
+BB-02 acuan independen (Python murni)
+python 3.13.16
+D1 token: ['saya', 'suka', 'makan', 'nasi']
+D2 token: ['saya', 'tidak', 'suka', 'nasi']
+D3 token: ['makan', 'makan', 'makan']
+kosakata (urut alfabetis): ['makan', 'nasi', 'saya', 'suka', 'tidak'] | jumlah = 5
+kolom dataset: ['VEC_makan', 'VEC_nasi', 'VEC_saya', 'VEC_suka', 'VEC_tidak']
+D1: [1, 1, 1, 1, 0]
+D2: [0, 1, 1, 1, 1]
+D3: [3, 0, 0, 0, 0]
+
+Verifikasi silang scikit-learn 1.9.1 CountVectorizer (tokenizer sama):
+kosakata: ['makan', 'nasi', 'saya', 'suka', 'tidak']
+D1: [1, 1, 1, 1, 0]
+D2: [0, 1, 1, 1, 1]
+D3: [3, 0, 0, 0, 0]
+COCOK_PYTHON_SKLEARN = True

@@ -8,7 +8,7 @@
 //!   3. urutan kolom akhir = alfabetis byte-wise.
 //!
 //! Harapan skenario berasal dari `eval_data/vocab_limit_cases.json`, ditulis oleh
-//! `testing/text_analytics_eval/unit/reference_values.py` (implementasi aturan di atas yang independen dari Rust;
+//! `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/unit/reference_values.py` (implementasi aturan di atas yang independen dari Rust;
 //! skrip memastikan harapan tulisan-tangan = hitungan acuan). Log: `logs/reference_values.txt`.
 //!
 //! Sudah tercakup oleh tes lama (tidak diulang): `s3_formulas.rs::words_to_keep_tie_break_alfabetis_weka_dan_sklearn`

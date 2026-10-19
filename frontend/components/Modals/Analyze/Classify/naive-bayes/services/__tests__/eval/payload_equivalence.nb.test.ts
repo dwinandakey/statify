@@ -1,7 +1,7 @@
 /** @jest-environment node */
-// Track D — kesetaraan pembangun payload headless (testing/text_analytics_eval/headless/statify_wasm.mjs) dengan kode TypeScript
+// Track D — kesetaraan pembangun payload headless (frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/headless/statify_wasm.mjs) dengan kode TypeScript
 // aplikasi untuk Naive Bayes (jalur Raw Text). Berkas golden `payload_golden.json` dibuat oleh
-// `node testing/text_analytics_eval/headless/make_payload_golden.mjs` (pustaka headless). Di sini kode TS ASLI
+// `node frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/headless/make_payload_golden.mjs` (pustaka headless). Di sini kode TS ASLI
 // (`analyzeNaiveBayes`, `getSlicedData`, `getVarDefs`, `toRustConfig`, `getEffectivePredictors`) membentuk payload dari
 // masukan yang sama, lalu hasilnya dibandingkan dengan payload golden. Tidak ada komputasi wasm di tes ini.
 import * as fs from "fs";
@@ -25,7 +25,7 @@ jest.mock(
 function findGolden(start: string = __dirname): string | null {
   let dir = start;
   for (let i = 0; i < 16; i += 1) {
-    const p = path.join(dir, "testing", "text_analytics_eval", "headless", "payload_golden.json");
+    const p = path.join(dir, "frontend", "components", "Modals", "Analyze", "Classify", "naive-bayes", "text_analytics_eval", "headless", "payload_golden.json");
     if (fs.existsSync(p)) return p;
     const parent = path.dirname(dir);
     if (parent === dir) break;

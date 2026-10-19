@@ -1,0 +1,41 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.container.test.tsx (22.716 s)
+  BB-14 NB tanpa target
+    ✓ BB-14: tombol OK nonaktif selama target kosong, aktif setelah target diisi (312 ms)
+    ✓ BB-14: klik OK yang nonaktif tidak menjalankan analisis (63 ms)
+    ✓ BB-14 (karakterisasi): teks pesan validasi tidak dirender di layar, hanya OK nonaktif (64 ms)
+  BB-15 Candidate Factors/Covariates
+    ✓ BB-15: mengisi Candidate memindahkan Exclude ke Available; hanya kandidat yang menjadi prediktor (185 ms)
+    ✓ BB-15: aturan tipe: variabel numerik tidak dapat masuk Candidate Factors, nominal tidak dapat masuk Covariates (53 ms)
+  BB-16 Raw Text Variable
+    ✓ BB-16: tab Text Preprocessing nonaktif tanpa Raw Text dan aktif (dapat dibuka) setelah Raw Text diisi (218 ms)
+    ✓ BB-16: mengosongkan Raw Text menonaktifkan kembali tab dan mengembalikan tampilan ke Variables (253 ms)
+  BB-17 Complement dengan prediktor non-teks
+    ✓ BB-17: Complement dipilih saat hanya Text Features, lalu prediktor ditambah -> OK nonaktif dan galat tampil di Options (316 ms)
+  BB-18 Alpha di luar batas
+    ✓ BB-18: Text Alpha 0 dan 1000 menampilkan pesan angka; nilai tidak sah tidak diteruskan ke form (243 ms)
+    ✓ BB-18: Smoothing Alpha 0 dan 1000 menampilkan pesan angka (alpha kategorik) (100 ms)
+  BB-20 Gaussian (Weka min. std) - sisi UI
+    ✓ BB-20: memilih 'Gaussian (Weka min. std)' dan OK mengirim NumericLikelihood=gaussian_minstd ke analisis (209 ms)
+  BB-21 Training Percentage di luar 1-99
+    ✓ BB-21: Training Percentage 0 menahan perpindahan tab dengan toast pesan validasi (97 ms)
+    ✓ BB-21: Training Percentage 100 menahan perpindahan tab dengan toast pesan validasi (106 ms)
+    ✓ BB-21: klik OK dengan Training Percentage 0 menolak menjalankan analisis (OK sendiri tetap aktif) (100 ms)
+    ✓ BB-21: nilai 1 dan 99 (batas sah) diterima dan tab dapat ditinggalkan (113 ms)
+  BB-22 Holdout 70% seed 42 - sisi UI
+    ✓ BB-22: konfigurasi holdout 70 dan seed 42 dikirim identik pada dua kali OK (329 ms)
+  BB-23 10-fold CV - sisi UI
+    ✓ BB-23: memilih Cross-Validation Folds dengan 10 fold mengirim ValidationMethod=kfold dan KFolds=10 (139 ms)
+  BB-27 Peringatan kebocoran Word-Vector - sisi UI
+    ✓ BB-27: peringatan tampil saat Word-Vector Variables terisi, hilang saat dikosongkan (75 ms)
+    ✓ BB-27: jalur Raw Text TIDAK menampilkan peringatan kebocoran (53 ms)
+    ✓ BB-27: jalur Word-Vector memengaruhi sumber teks efektif dan data yang dikirim (kolom vektor di ekor) (116 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        23.658 s
+Ran all test suites matching frontend/components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.container.test.tsx.
+Test results written to: ../testing/thesis-eval/logs/jest_C2_vm_part2.json

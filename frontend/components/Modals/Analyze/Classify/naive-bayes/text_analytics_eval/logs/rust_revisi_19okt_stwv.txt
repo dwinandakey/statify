@@ -1,0 +1,55 @@
+   Compiling unicode-ident v1.0.27
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling wasm-bindgen-shared v0.2.129
+   Compiling rustversion v1.0.23
+   Compiling once_cell v1.21.4
+   Compiling cfg-if v1.0.5
+   Compiling serde_core v1.0.229
+   Compiling bumpalo v3.20.3
+   Compiling fst v0.4.7
+   Compiling serde v1.0.229
+   Compiling version_check v0.9.5
+   Compiling memchr v2.8.3
+   Compiling zerocopy v0.8.63
+   Compiling zmij v1.0.23
+   Compiling ahash v0.8.12
+   Compiling pin-project-lite v0.2.17
+   Compiling futures-task v0.3.34
+   Compiling futures-core v0.3.34
+   Compiling slab v0.4.12
+   Compiling serde_json v1.0.154
+   Compiling regex-syntax v0.8.11
+   Compiling futures-util v0.3.34
+   Compiling allocator-api2 v0.2.21
+   Compiling aho-corasick v1.1.5
+   Compiling itoa v1.0.18
+   Compiling syn v3.0.9
+   Compiling sastrawi-rs v0.5.3
+   Compiling wasm-bindgen v0.2.129
+   Compiling regex-automata v0.4.18
+   Compiling regex v1.13.1
+   Compiling wasm-bindgen-macro-support v0.2.129
+   Compiling serde_derive v1.0.229
+   Compiling hashbrown v0.14.5
+   Compiling rust-stemmers v1.2.0
+   Compiling wasm-bindgen-macro v0.2.129
+   Compiling statify-text-core v0.1.0 (/mnt/c/Data/KULIAH/Skripsi/statify64/frontend/public/workers/TextAnalytics/statify-text-core)
+   Compiling js-sys v0.3.106
+   Compiling console_error_panic_hook v0.1.7
+   Compiling serde-wasm-bindgen v0.4.5
+   Compiling web-sys v0.3.106
+   Compiling statify-string-to-word v0.1.0 (/mnt/c/Data/KULIAH/Skripsi/statify64/frontend/components/Modals/Transform/StringToWordVector/rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 32.26s
+     Running unittests src/lib.rs (/home/dijasan/cargo-target/stwv/debug/deps/statify_string_to_word-8868f88a04041fe8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests statify_string_to_word
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

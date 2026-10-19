@@ -1,6 +1,6 @@
 // Tes evaluasi Track B (white-box, basis path) WB-1: validateColumnPrefix.
 // Satu tes per jalur independen; ID jalur ada pada nama tes. Deterministik (tanpa acak, tanpa jam).
-// Jalur dan simpul: testing/text_analytics_eval/B_whitebox.md, testing/text_analytics_eval/whitebox/WB-1_validateColumnPrefix.dot
+// Jalur dan simpul: frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/B_whitebox.md, frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/whitebox/WB-1_validateColumnPrefix.dot
 import { MAX_COLUMN_PREFIX_LENGTH, validateColumnPrefix } from "@/components/Modals/Transform/StringToWordVector/utils/columnPrefix";
 
 it("WB-1 jalur 1: awalan bawaan yang sah -> null", () => {

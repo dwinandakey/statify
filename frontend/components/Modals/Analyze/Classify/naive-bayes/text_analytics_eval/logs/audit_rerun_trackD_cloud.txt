@@ -1,0 +1,5 @@
+AUDIT: jalan ulang Track D di sandbox cloud ke salinan scratch (bukan perangkat skripsi), dibandingkan byte demi byte (cmp) dengan accuracy/out
+tanggal: 2026-10-07T16:05:00Z  node v22.22.0  python Python 3.13.16  sklearn 1.9.1
+perintah: node accuracy/run_statify.mjs --dataset {pilkada,sms_spam,smsa}; python3 -I accuracy/sk_compare.py --dataset {pilkada,sms_spam,smsa}
+hasil: pred_statify_*.csv pilkada 14/14 identik, sms_spam 7/7 identik, smsa 4/4 identik; stwv_train_statify_*.json pilkada 14/14 identik; pred_sklearn_*.csv pilkada 13/13, sms_spam+smsa 11/11 identik; sklearn_params_*.json 13/13 identik; sklearn_train_matrix_*.json 5/5 identik
+catatan: berkas accuracy/out di salinan cloud ini berasal dari eksekusi VM (Node 22.23.2) untuk Statify; perbandingan ini membuktikan reprodusibilitas lintas mesin (Node 22.22.0 cloud vs 22.23.2 VM) untuk Statify dan determinisme ulang scikit-learn di cloud.

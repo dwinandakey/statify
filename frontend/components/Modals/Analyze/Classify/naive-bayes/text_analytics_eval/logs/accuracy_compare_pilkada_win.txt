@@ -1,0 +1,166 @@
+### Tabel metrik per konfigurasi dan perangkat — dataset `pilkada` (n uji = 270)
+
+| Konfigurasi | Perangkat | Akurasi | Kappa | Macro F1 |
+|---|---|---|---|---|
+| K1 | Statify | 0,762963 | 0,525926 | 0,762963 |
+| K1 | scikit-learn | 0,762963 | 0,525926 | 0,762963 |
+| K1 | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K2 | Statify | 0,729630 | 0,459259 | 0,729537 |
+| K2 | scikit-learn | 0,729630 | 0,459259 | 0,729537 |
+| K2 | WEKA | 0,740741 | 0,481481 | 0,740513 |
+| K3 | Statify | 0,762963 | 0,525926 | 0,762963 |
+| K3 | scikit-learn | 0,762963 | 0,525926 | 0,762963 |
+| K3 | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K4 | Statify | 0,766667 | 0,533333 | 0,766510 |
+| K4 | scikit-learn | 0,766667 | 0,533333 | 0,766510 |
+| K5 | Statify | 0,755556 | 0,511111 | 0,755556 |
+| K5 | scikit-learn | 0,755556 | 0,511111 | 0,755556 |
+| K5 | WEKA | 0,748148 | 0,496296 | 0,748148 |
+| K6 | Statify | 0,722222 | 0,444444 | 0,721577 |
+| K1w | Statify | 0,785185 | 0,570370 | 0,784428 |
+| K1w | scikit-learn | 0,785185 | 0,570370 | 0,784428 |
+| K1w | WEKA | 0,785185 | 0,570370 | 0,784428 |
+| K2w | Statify | 0,759259 | 0,518519 | 0,755145 |
+| K2w | scikit-learn | 0,759259 | 0,518519 | 0,755145 |
+| K3w | Statify | 0,785185 | 0,570370 | 0,784428 |
+| K3w | scikit-learn | 0,785185 | 0,570370 | 0,784428 |
+| K3w | WEKA | 0,785185 | 0,570370 | 0,784428 |
+| K4w | Statify | 0,766667 | 0,533333 | 0,765247 |
+| K4w | scikit-learn | 0,766667 | 0,533333 | 0,765247 |
+| K5w | Statify | 0,740741 | 0,481481 | 0,740613 |
+| K5w | scikit-learn | 0,740741 | 0,481481 | 0,740613 |
+| K5w | WEKA | 0,740741 | 0,481481 | 0,740613 |
+| K1m | Statify | 0,762963 | 0,525926 | 0,762846 |
+| K1m | scikit-learn | 0,762963 | 0,525926 | 0,762846 |
+| K1m | WEKA | 0,762963 | 0,525926 | 0,762846 |
+| K2m | Statify | 0,740741 | 0,481481 | 0,740513 |
+| K2m | scikit-learn | 0,740741 | 0,481481 | 0,740513 |
+| K2m | WEKA | 0,740741 | 0,481481 | 0,740513 |
+| K5m | Statify | 0,748148 | 0,496296 | 0,748148 |
+| K5m | scikit-learn | 0,748148 | 0,496296 | 0,748148 |
+| K5m | WEKA | 0,748148 | 0,496296 | 0,748148 |
+
+### Tabel kesamaan (Statify terhadap pembanding)
+
+| Konfigurasi | Pembanding | Kelas prediksi sama (x/270) | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1 | scikit-learn | 270/270 | 4,996e-05 | ≥ 15 (identik)† |
+| K1 | WEKA | 264/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K2 | scikit-learn | 270/270 | 4,979e-05 | ≥ 15 (identik)† |
+| K2 | WEKA | 267/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K3 | scikit-learn | 270/270 | 4,996e-05 | ≥ 15 (identik)† |
+| K3 | WEKA | 264/270 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4 | scikit-learn | 270/270 | 4,940e-05 | ≥ 15 (identik)† |
+| K5 | scikit-learn | 270/270 | 4,960e-05 | ≥ 15 (identik)† |
+| K5 | WEKA | 264/270 | tidak dapat dibandingkan (kosakata berbeda: Statify memotong tepat W=1000, WEKA menyimpan semua kata seri di batas (>1000 kata); lihat varian w) | tidak dapat dibandingkan |
+| K1w | scikit-learn | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K1w | WEKA | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K2w | scikit-learn | 270/270 | 4,963e-05 | ≥ 15 (identik)† |
+| K3w | scikit-learn | 270/270 | 4,990e-05 | ≥ 15 (identik)† |
+| K3w | WEKA | 270/270 | tidak dapat dibandingkan (ComplementNaiveBayes WEKA mengeluarkan distribusi 0/1 (bukan softmax skor), tidak setara dengan posterior Statify) | tidak dapat dibandingkan |
+| K4w | scikit-learn | 270/270 | 4,979e-05 | ≥ 15 (identik)† |
+| K5w | scikit-learn | 270/270 | 4,998e-05 | ≥ 15 (identik)† |
+| K5w | WEKA | 270/270 | 4,999e-05 | ≥ 15 (identik)† |
+| K1m | scikit-learn | 270/270 | 4,962e-05 | ≥ 15 (identik)† |
+| K1m | WEKA | 270/270 | 4,962e-05 | ≥ 15 (identik)† |
+| K2m | scikit-learn | 270/270 | 4,983e-05 | ≥ 15 (identik)† |
+| K2m | WEKA | 270/270 | 4,983e-05 | ≥ 15 (identik)† |
+| K5m | scikit-learn | 270/270 | 4,989e-05 | ≥ 15 (identik)† |
+| K5m | WEKA | 270/270 | 4,989e-05 | ≥ 15 (identik)† |
+
+Tambahan (tanpa Statify): scikit-learn terhadap WEKA pada resolusi penuh
+
+| Konfigurasi | Pembanding | Kelas prediksi sama | Galat absolut maksimum probabilitas | LRE minimum |
+|---|---|---|---|---|
+| K1w | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 1,354e-14 | 8,98 |
+| K5w | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 3,031e-07 | 5,50 |
+| K1m | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 1,310e-14 | 9,79 |
+| K5m | scikit-learn vs WEKA (resolusi penuh) | 270/270 | 3,860e-07 | 5,28 |
+
+† Probabilitas Statify dari Apply Model dibulatkan 4 desimal oleh wasm (round4), sehingga LRE dihitung terhadap round4(c); galat absolut dihitung terhadap c yang tidak dibulatkan (batas teoretis 5,0e-5). Untuk WEKA elemen dengan |c| < 1e-10 tidak diikutkan dalam LRE (WEKA mencetak 16 desimal).
+
+### Tingkat parameter model (resolusi penuh): model ekspor Statify (wasm NB) vs `feature_log_prob_` scikit-learn
+
+| Konfigurasi | Kosakata identik | Jumlah kata | Besaran | Elemen | Galat absolut maksimum | LRE minimum |
+|---|---|---|---|---|---|---|
+| K1 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,66 |
+| K1 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,21 |
+| K2 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K3 | ya | 1000 | log-likelihood (log_weights) | 2000 | 0 | ≥ 15 (identik) |
+| K3 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K4 | ya | 1000 | log-likelihood (log_weights) | 2000 | 8,882e-16 | 15,75 |
+| K4 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5 | ya | 1000 | log-likelihood (log_weights) | 2000 | 2,665e-15 | 15,33 |
+| K5 | ya | 1000 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K1w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
+| K1w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2w | ya | 3101 | log-likelihood (log_weights) | 6202 | 8,882e-16 | 15,21 |
+| K2w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K3w | ya | 3101 | log-likelihood (log_weights) | 6202 | 8,882e-16 | 15,83 |
+| K3w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K4w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,54 |
+| K4w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5w | ya | 3101 | log-likelihood (log_weights) | 6202 | 1,776e-15 | 15,48 |
+| K5w | ya | 3101 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K1m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,66 |
+| K1m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K2m | ya | 1042 | log-likelihood (log_weights) | 2084 | 8,882e-16 | 15,21 |
+| K2m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+| K5m | ya | 1042 | log-likelihood (log_weights) | 2084 | 1,776e-15 | 15,52 |
+| K5m | ya | 1042 | prior kelas | 2 | 5,551e-17 | 15,95 |
+
+### Tingkat vektor (resolusi penuh): matriks latih STWV (wasm) vs scikit-learn/numpy
+
+| Konfigurasi | Kosakata identik | Elemen tak-nol bersama | Posisi tak-nol berbeda | Galat absolut maksimum | LRE minimum |
+|---|---|---|---|---|---|
+| K4 | ya | 6644 | 0 | 1,110e-16 | 15,43 |
+| K5 | ya | 6644 | 0 | 5,329e-15 | 14,96 |
+| K4w | ya | 8783 | 0 | 1,110e-16 | 15,53 |
+| K5w | ya | 8783 | 0 | 5,329e-15 | 14,99 |
+| K5m | ya | 6724 | 0 | 7,105e-15 | 14,96 |
+
+### Matriks konfusi (baris = aktual, kolom = prediksi; urutan kelas: negative, positive)
+
+| Konfigurasi | Perangkat | Matriks |
+|---|---|---|
+| K1 | Statify | [103, 32] ; [32, 103] |
+| K1 | scikit-learn | [103, 32] ; [32, 103] |
+| K1 | WEKA | [100, 35] ; [29, 106] |
+| K2 | Statify | [96, 39] ; [34, 101] |
+| K2 | scikit-learn | [96, 39] ; [34, 101] |
+| K2 | WEKA | [96, 39] ; [31, 104] |
+| K3 | Statify | [103, 32] ; [32, 103] |
+| K3 | scikit-learn | [103, 32] ; [32, 103] |
+| K3 | WEKA | [100, 35] ; [29, 106] |
+| K4 | Statify | [100, 35] ; [28, 107] |
+| K4 | scikit-learn | [100, 35] ; [28, 107] |
+| K5 | Statify | [102, 33] ; [33, 102] |
+| K5 | scikit-learn | [102, 33] ; [33, 102] |
+| K5 | WEKA | [101, 34] ; [34, 101] |
+| K6 | Statify | [91, 44] ; [31, 104] |
+| K1w | Statify | [98, 37] ; [21, 114] |
+| K1w | scikit-learn | [98, 37] ; [21, 114] |
+| K1w | WEKA | [98, 37] ; [21, 114] |
+| K2w | Statify | [85, 50] ; [15, 120] |
+| K2w | scikit-learn | [85, 50] ; [15, 120] |
+| K3w | Statify | [98, 37] ; [21, 114] |
+| K3w | scikit-learn | [98, 37] ; [21, 114] |
+| K3w | WEKA | [98, 37] ; [21, 114] |
+| K4w | Statify | [93, 42] ; [21, 114] |
+| K4w | scikit-learn | [93, 42] ; [21, 114] |
+| K5w | Statify | [97, 38] ; [32, 103] |
+| K5w | scikit-learn | [97, 38] ; [32, 103] |
+| K5w | WEKA | [97, 38] ; [32, 103] |
+| K1m | Statify | [100, 35] ; [29, 106] |
+| K1m | scikit-learn | [100, 35] ; [29, 106] |
+| K1m | WEKA | [100, 35] ; [29, 106] |
+| K2m | Statify | [96, 39] ; [31, 104] |
+| K2m | scikit-learn | [96, 39] ; [31, 104] |
+| K2m | WEKA | [96, 39] ; [31, 104] |
+| K5m | Statify | [101, 34] ; [34, 101] |
+| K5m | scikit-learn | [101, 34] ; [34, 101] |
+| K5m | WEKA | [101, 34] ; [34, 101] |
+
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.88 started=2026-10-08 10:29:59 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\compare_predictions.py --dataset pilkada cwd=E:\KULIAH\Skripsi\statify64 ===
