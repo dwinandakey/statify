@@ -8,14 +8,35 @@
 // Fase 17 — OK menjalankan pipeline penuh lewat `applyModel`
 // (services/apply-model-analysis.ts: worker -> Output Viewer -> kolom
 // dataset); galat toast lewat `getUserFriendlyApplyModelError` (§6.6).
+// Revisi pasca-sidang (disetujui pemilik): tombol Help kiri bawah tidak lagi
+// men-toggle teks bantuan inline (`helperMode`), melainkan memulai tur pop-up
+// dwibahasa per tab & kolom (pola Ordinal Regression; hooks/tourConfig.ts).
 
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CircleHelp } from "lucide-react";
+import { HelpCircle } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ActiveElementHighlight, TourPopup } from "@/components/Common/TourComponents";
+import {
+    useTourGuide,
+    type TabControlProps,
+    type TourStep,
+} from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
+import {
+    APPLY_MODEL_TOUR_IDS,
+    buildApplyModelTourSteps,
+} from "@/components/Modals/Analyze/Classify/apply-model/hooks/tourConfig";
 import { useModal } from "@/hooks/useModal";
 import { clearFormData, getFormData, saveFormData } from "@/hooks/useIndexedDB";
 import { useDataStore } from "@/stores/useDataStore";
@@ -198,7 +219,7 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
         cloneApplyModelDefault
     );
     const [activeTab, setActiveTab] = useState("model");
-    const [helperMode, setHelperMode] = useState(false);
+    const helpLanguage = useHelpLanguageStore((s) => s.language);
     // Dinaikkan saat Reset / pemulihan dari IndexedDB agar state internal
     // Tab Model (radio sumber, pilihan Select) ikut tersinkron (pola KNN).
     const [resetKey, setResetKey] = useState(0);
@@ -296,6 +317,56 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
 
     const { validation } = useApplyModelValidation(formData, variables);
 
+    // Tur bantuan: langkah dibangun dari state saat ini. Tanpa model hanya
+    // langkah Tab Model (tab lain disabled & belum dirender).
+    const liveTourSteps = useMemo(
+        () =>
+            buildApplyModelTourSteps({
+                language: helpLanguage,
+                hasModel: descriptor !== null && adapter !== null,
+                textSource: descriptor?.text?.source ?? null,
+            }),
+        [helpLanguage, descriptor, adapter]
+    );
+    // Selama tur berjalan, daftar langkah dibekukan (snapshot saat tombol Help
+    // ditekan) agar indeks langkah tidak keluar batas bila model berganti.
+    const [frozenTourSteps, setFrozenTourSteps] = useState<
+        TourStep[] | null
+    >(null);
+
+    const tabControl = useMemo<TabControlProps>(
+        () => ({
+            setActiveTab: (tab: string) => setActiveTab(tab),
+            currentActiveTab: activeTab,
+        }),
+        [activeTab]
+    );
+
+    const {
+        tourActive,
+        currentStep,
+        tourSteps: activeTourSteps,
+        currentTargetElement,
+        startTour,
+        nextStep,
+        prevStep,
+        endTour,
+    } = useTourGuide(frozenTourSteps ?? liveTourSteps, "sidebar", tabControl);
+
+    // Gulirkan panel ke kolom yang sedang dijelaskan agar terlihat bersama pop-up-nya.
+    useEffect(() => {
+        currentTargetElement?.scrollIntoView?.({ block: "nearest" });
+    }, [currentTargetElement]);
+
+    useEffect(() => {
+        if (!tourActive) setFrozenTourSteps(null);
+    }, [tourActive]);
+
+    const handleStartTour = useCallback(() => {
+        setFrozenTourSteps(liveTourSteps);
+        startTour();
+    }, [liveTourSteps, startTour]);
+
     const handleVariablesChange = useCallback(
         (next: ApplyModelVariablesTabType) => {
             setFormData((prev) => ({ ...prev, variables: next }));
@@ -365,6 +436,8 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
     }, [closeModal, onClose, formData, variables]);
 
     const handleReset = useCallback(async () => {
+        // Model dibuang → langkah tur menyusut; hentikan tur yang berjalan.
+        endTour();
         setFormData(cloneApplyModelDefault());
         setActiveTab("model");
         setResetKey((value) => value + 1);
@@ -374,10 +447,27 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
             // Gagal menghapus data tersimpan: state form tetap sudah direset.
         }
         toast.success("Apply Model settings have been reset.");
-    }, []);
+    }, [endTour]);
 
     return (
         <div className="flex flex-col h-full">
+            <AnimatePresence>
+                {tourActive &&
+                    activeTourSteps.length > 0 &&
+                    currentStep < activeTourSteps.length && (
+                        <TourPopup
+                            step={activeTourSteps[currentStep]}
+                            currentStep={currentStep}
+                            totalSteps={activeTourSteps.length}
+                            onNext={nextStep}
+                            onPrev={prevStep}
+                            onClose={endTour}
+                            targetElement={currentTargetElement}
+                        />
+                    )}
+            </AnimatePresence>
+            <ActiveElementHighlight active={tourActive} />
+
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
                 <h2 className="text-sm font-semibold">Apply Model</h2>
@@ -391,14 +481,31 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
                     className="w-full"
                 >
                     <TabsList className="grid w-full grid-cols-4">
-                        <TabsTrigger value="model">Model</TabsTrigger>
-                        <TabsTrigger value="variables" disabled={!hasModel}>
+                        <TabsTrigger
+                            value="model"
+                            id={APPLY_MODEL_TOUR_IDS.modelTab}
+                        >
+                            Model
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="variables"
+                            id={APPLY_MODEL_TOUR_IDS.variablesTab}
+                            disabled={!hasModel}
+                        >
                             Variables
                         </TabsTrigger>
-                        <TabsTrigger value="save" disabled={!hasModel}>
+                        <TabsTrigger
+                            value="save"
+                            id={APPLY_MODEL_TOUR_IDS.saveTab}
+                            disabled={!hasModel}
+                        >
                             Save
                         </TabsTrigger>
-                        <TabsTrigger value="output" disabled={!hasModel}>
+                        <TabsTrigger
+                            value="output"
+                            id={APPLY_MODEL_TOUR_IDS.outputTab}
+                            disabled={!hasModel}
+                        >
                             Output
                         </TabsTrigger>
                     </TabsList>
@@ -408,7 +515,6 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
                             key={`model-${resetKey}`}
                             data={formData.model}
                             onModelLoaded={handleModelLoaded}
-                            showFieldHelp={helperMode}
                         />
                     </TabsContent>
 
@@ -419,7 +525,6 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
                                 descriptor={descriptor}
                                 variables={variables}
                                 onChange={handleVariablesChange}
-                                showFieldHelp={helperMode}
                             />
                         )}
                     </TabsContent>
@@ -432,7 +537,6 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
                                 adapter={adapter}
                                 existingVariables={variables}
                                 onChange={handleSaveChange}
-                                showFieldHelp={helperMode}
                             />
                         )}
                     </TabsContent>
@@ -442,7 +546,6 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
                             data={formData.output}
                             hasActualTarget={formData.variables.ActualTargetVar !== null}
                             onChange={handleOutputChange}
-                            showFieldHelp={helperMode}
                         />
                     </TabsContent>
                 </Tabs>
@@ -450,16 +553,26 @@ const ApplyModelMain: React.FC<BaseModalProps> = ({ onClose }) => {
 
             {/* Footer */}
             <div className="flex items-center justify-between gap-2 px-4 py-3 border-t">
-                <Button
-                    type="button"
-                    variant="ghost"
-                    aria-pressed={helperMode}
-                    aria-label="Toggle help"
-                    onClick={() => setHelperMode((value) => !value)}
-                    className={helperMode ? "bg-accent" : undefined}
-                >
-                    <CircleHelp className="h-4 w-4" />
-                </Button>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                type="button"
+                                data-testid="apply-model-help-button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={handleStartTour}
+                                aria-label="Start feature tour"
+                                className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                            >
+                                <HelpCircle className="h-4 w-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            <p className="text-xs">Start feature tour</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
                 <div className="flex items-center gap-2">
                     <Button disabled={!validation.isValid} onClick={handleOK}>
                         OK

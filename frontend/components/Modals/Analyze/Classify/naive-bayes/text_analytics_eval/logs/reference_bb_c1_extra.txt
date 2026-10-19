@@ -1,0 +1,88 @@
+python 3.13.16 | numpy 2.5.3 | scikit-learn 1.9.1
+
+==============================================================================
+BB-04  n-gram min=1 max=2 pada korpus D (Weka raw/none/none)
+==============================================================================
+jumlah term: 12
+kosakata: ['makan', 'makan makan', 'makan nasi', 'nasi', 'saya', 'saya suka', 'saya tidak', 'suka', 'suka makan', 'suka nasi', 'tidak', 'tidak suka']
+unigram: ['makan', 'nasi', 'saya', 'suka', 'tidak']
+bigram : ['makan makan', 'makan nasi', 'saya suka', 'saya tidak', 'suka makan', 'suka nasi', 'tidak suka']
+D1: [1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0]
+D2: [0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1]
+D3: [3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+==============================================================================
+BB-07  stopword pada korpus D
+==============================================================================
+ukuran daftar Indonesian = 758 | 'saya' di daftar: True | 'tidak' di daftar: True
+[Indonesian] kosakata: ['makan', 'nasi', 'suka']
+  D1: [1, 1, 1]
+  D2: [0, 1, 1]
+  D3: [3, 0, 0]
+[Custom {suka}] kosakata: ['makan', 'nasi', 'saya', 'tidak']
+  D1: [1, 1, 1, 0]
+  D2: [0, 1, 1, 1]
+  D3: [3, 0, 0, 0]
+
+==============================================================================
+BB-09  scikit-learn standard (raw / smooth / L2) pada korpus D
+==============================================================================
+kosakata: ['makan', 'nasi', 'saya', 'suka', 'tidak']
+idf_ (sklearn): ['1.2876820724517808', '1.2876820724517808', '1.2876820724517808', '1.2876820724517808', '1.6931471805599454']
+D1: ['0.5', '0.5', '0.5', '0.5', '0.0']
+D2: ['0.0', '0.45985352875883484', '0.45985352875883484', '0.45985352875883484', '0.604652128305311']
+D3: ['1.0', '0.0', '0.0', '0.0', '0.0']
+df: [2, 2, 2, 2, 1] | idf manual: [1.287682072452, 1.287682072452, 1.287682072452, 1.287682072452, 1.69314718056]
+selisih maks manual vs sklearn: 1.1102230246251565e-16
+norma L2 tiap baris (sklearn): [1.0, 1.0, 1.0]
+
+==============================================================================
+BB-10  Words to Keep=10, Min term frequency=2 pada dataset_inggris_testing (10 baris)
+==============================================================================
+jumlah term unik (semua): 41
+kandidat total>=2: 16
+urutan peringkat (hitungan turun, tie alfabetis): [('beautiful', 5), ('the', 4), ('games', 3), ('is', 3), ('running', 3), ('to', 3), ('a', 2), ('are', 2), ('be', 2), ('chess', 2), ('game', 2), ('of', 2), ('park', 2), ('played', 2), ('playing', 2), ('she', 2)]
+kosakata akhir (alfabetis, <= 10): ['a', 'are', 'be', 'beautiful', 'chess', 'games', 'is', 'running', 'the', 'to'] | jumlah = 10
+baris 1: [0, 0, 0, 1, 0, 0, 0, 1, 1, 1]
+baris 2: [0, 1, 0, 1, 0, 0, 0, 0, 1, 0]
+baris 3: [0, 0, 0, 0, 0, 0, 0, 1, 1, 0]
+baris 4: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+baris 5: [1, 0, 0, 0, 1, 0, 1, 0, 0, 0]
+baris 6: [0, 0, 0, 0, 0, 3, 0, 0, 0, 0]
+baris 7: [0, 0, 2, 0, 0, 0, 1, 0, 1, 2]
+baris 8: [0, 0, 0, 3, 0, 0, 0, 0, 0, 0]
+baris 9: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+baris 10: [1, 0, 0, 0, 1, 0, 1, 0, 0, 0]
+total frekuensi tiap term: [2, 2, 2, 5, 2, 3, 3, 3, 4, 3]
+baris nol: []
+
+==============================================================================
+BB-10b batas: dataset_indonesia_testing (tepat 10 kandidat)
+==============================================================================
+jumlah term unik (semua): 34
+kandidat total>=2: 10
+urutan peringkat (hitungan turun, tie alfabetis): [('berlari', 4), ('kucing', 4), ('nasi', 4), ('goreng', 3), ('dan', 2), ('dimakan', 2), ('itu', 2), ('makan', 2), ('saya', 2), ('tikus', 2)]
+kosakata akhir (alfabetis, <= 10): ['berlari', 'dan', 'dimakan', 'goreng', 'itu', 'kucing', 'makan', 'nasi', 'saya', 'tikus'] | jumlah = 10
+baris 1: [0, 0, 0, 1, 1, 0, 0, 1, 1, 0]
+baris 2: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+baris 3: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0]
+baris 4: [0, 0, 0, 0, 1, 1, 0, 0, 0, 1]
+baris 5: [0, 0, 0, 1, 0, 0, 1, 1, 0, 0]
+baris 6: [0, 1, 0, 0, 0, 1, 0, 0, 0, 1]
+baris 7: [3, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+baris 8: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+baris 9: [0, 0, 0, 0, 0, 0, 1, 1, 0, 0]
+baris 10: [1, 0, 1, 1, 0, 1, 0, 1, 0, 0]
+total frekuensi tiap term: [4, 2, 2, 3, 2, 4, 2, 4, 2, 2]
+baris nol: [8]
+
+==============================================================================
+BB-12  sel kosong pada korpus D (disisipkan '' dan '   ')
+==============================================================================
+kosakata: ['makan', 'nasi', 'saya', 'suka', 'tidak']
+baris 1: [1, 1, 1, 1, 0]
+baris 2: [0, 0, 0, 0, 0]
+baris 3: [0, 1, 1, 1, 1]
+baris 4: [0, 0, 0, 0, 0]
+baris 5: [3, 0, 0, 0, 0]
+jumlah baris: 5 | baris nol: [2, 4]

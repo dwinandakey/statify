@@ -22,7 +22,7 @@ import { validateColumnPrefix, DEFAULT_COLUMN_PREFIX } from "../../utils/columnP
 import { INDONESIAN_STOPWORDS } from "../../constants/stopwords";
 
 const REPO_ROOT = path.resolve(__dirname, "../../../../../../../");
-const DATA_DIR = path.join(REPO_ROOT, "testing", "text_analytics_eval", "blackbox", "data");
+const DATA_DIR = path.join(REPO_ROOT, "frontend", "components", "Modals", "Analyze", "Classify", "naive-bayes", "text_analytics_eval", "blackbox", "data");
 
 /** Keadaan terakhir pembungkus (dibaca tes setelah interaksi). */
 const latest: { config: StwvConfig; prefix: string } = { config: STWV_DEFAULT_CONFIG, prefix: DEFAULT_COLUMN_PREFIX };
@@ -182,20 +182,22 @@ describe("BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)", () => {
     });
 });
 
-describe("BB-09 standar rumus scikit-learn (antarmuka ke payload)", () => {
-    it("default adalah Weka: Word count, IDF None, Normalization None", () => {
+describe("BB-09 TF, IDF, dan normalisasi dipilih bebas (antarmuka ke payload)", () => {
+    it("default: Word count, IDF None, Normalization None; pilihan Formula standard tidak ada", () => {
         const { container } = render(<Harness />);
-        expect(isChecked(byId(container, "std-weka"))).toBe(true);
         expect(isChecked(byId(container, "tf-raw"))).toBe(true);
         expect(isChecked(byId(container, "idf-none"))).toBe(true);
         expect(isChecked(byId(container, "norm-none"))).toBe(true);
+        expect(container.querySelector("[id^='std-']")).toBeNull();
+        expect(screen.queryByText(/formula standard/i)).toBeNull();
+        expect(container.textContent).not.toMatch(/weka|scikit/i);
     });
 
-    it("memilih scikit-learn otomatis menjadi hitungan (raw), smooth, dan L2", async () => {
+    it("memilih raw, smooth, dan L2 dikirim apa adanya (mode mesin internal sklearn)", async () => {
         const { container } = render(<Harness />);
-        await userEvent.click(byId(container, "std-sklearn"));
+        await userEvent.click(byId(container, "idf-smooth"));
+        await userEvent.click(byId(container, "norm-l2"));
 
-        expect(isChecked(byId(container, "std-sklearn"))).toBe(true);
         expect(isChecked(byId(container, "tf-raw"))).toBe(true);
         expect(isChecked(byId(container, "idf-smooth"))).toBe(true);
         expect(isChecked(byId(container, "norm-l2"))).toBe(true);
@@ -209,14 +211,17 @@ describe("BB-09 standar rumus scikit-learn (antarmuka ke payload)", () => {
         expect(okButton()).toBeEnabled();
     });
 
-    it("opsi yang tampil mengikuti standar: sklearn tidak menawarkan log(1+f), Weka tidak menawarkan L2", async () => {
+    it("semua opsi TF (5), IDF (4), dan normalisasi (4) selalu tampil", () => {
         const { container } = render(<Harness />);
-        expect(container.querySelector("#tf-log1p")).not.toBeNull(); // Weka
-        expect(container.querySelector("#norm-l2")).toBeNull();
-        await userEvent.click(byId(container, "std-sklearn"));
-        expect(container.querySelector("#tf-log1p")).toBeNull();
-        expect(container.querySelector("#tf-sublinear")).not.toBeNull();
-        expect(container.querySelector("#norm-l2")).not.toBeNull();
+        for (const id of ["tf-binary", "tf-raw", "tf-log1p", "tf-sublinear", "tf-normalized"]) {
+            expect(container.querySelector(`#${id}`)).not.toBeNull();
+        }
+        for (const id of ["idf-none", "idf-standard", "idf-smooth", "idf-plus1"]) {
+            expect(container.querySelector(`#${id}`)).not.toBeNull();
+        }
+        for (const id of ["norm-none", "norm-l2", "norm-l1", "norm-doc_length"]) {
+            expect(container.querySelector(`#${id}`)).not.toBeNull();
+        }
     });
 });
 

@@ -358,6 +358,11 @@ const HamburgerMenu: React.FC = () => {
                   >
                     Rank Case...
                   </DrawerMenuItem>
+                  <DrawerMenuItem
+                    onClick={() => openModal(ModalType.StringToWordVector)}
+                  >
+                    String to Word Vector...
+                  </DrawerMenuItem>
                   <DrawerMenuSeparator />
                   <DrawerMenuItem disabled>
                     Date and Time Wizard...
@@ -496,6 +501,16 @@ const HamburgerMenu: React.FC = () => {
                           }
                         >
                           Nearest Neighbor...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ModalNaiveBayes)}
+                        >
+                          Naive Bayes...
+                        </DrawerMenuItem>
+                        <DrawerMenuItem
+                          onClick={() => openModal(ModalType.ModalApplyModel)}
+                        >
+                          Apply Model...
                         </DrawerMenuItem>
                       </AccordionContent>
                     </AccordionItem>

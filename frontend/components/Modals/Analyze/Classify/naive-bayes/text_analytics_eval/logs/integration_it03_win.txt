@@ -1,0 +1,76 @@
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+IT-03: data latih 630 baris (E:\KULIAH\Skripsi\statify64\Claude outputs\pilkada_train.csv)
+
+--- K1: Weka default (lowercase, delimiter default, W=1000, TF hitungan, tanpa IDF/normalisasi) + Multinomial, alpha 1
+LULUS  K1 (c) model Export Model == trained_model wasm (bit-per-bit, 6017 angka)  :: selisih maksimum = 0
+LULUS  K1 kosakata STWV(train) == model.text.terms == model.text.recipe.vocabulary (1000 term)
+LULUS  K1 urutan kelas Apply Model == model.target.classes  :: ["negative","positive"]
+LULUS  K1 (a) kelas prediksi Apply Model == acuan presisi penuh: 630/630 baris diskor (tidak diskor 0)
+LULUS  K1 (b1) round4(acuan) == keluaran Apply Model: 1260/1260 probabilitas; selisih maksimum 0
+LULUS  K1 (b2) max_probability == round4(maks acuan): selisih maksimum 0
+LULUS  K1 (b3) |acuan presisi penuh - keluaran| <= 5e-5 (batas pembulatan): maksimum 4.994e-5
+INFO  K1 kriteria asli 1e-9 pada probabilitas keluaran Apply Model: selisih maksimum 4.994e-5 -> TIDAK terpenuhi secara langsung (akibat round4, bukan rumus)
+LULUS  K1 (d) selisih skor-log terkecil (di luar seri persis) = 7.241e-3 >> 1e-9; seri persis: 0 baris  :: galat <= 1e-9 tidak dapat membalik kelas pada baris tak-seri
+INFO  K1 resubstitusi: akurasi 0.907937, kappa 0.815873, macro-F1 0.907933; evaluated_rows(AM)=630
+LULUS  K1 evaluated_rows Apply Model == 630
+
+--- K2: K1 + Bernoulli
+LULUS  K2 (c) model Export Model == trained_model wasm (bit-per-bit, 8017 angka)  :: selisih maksimum = 0
+LULUS  K2 kosakata STWV(train) == model.text.terms == model.text.recipe.vocabulary (1000 term)
+LULUS  K2 urutan kelas Apply Model == model.target.classes  :: ["negative","positive"]
+LULUS  K2 (a) kelas prediksi Apply Model == acuan presisi penuh: 630/630 baris diskor (tidak diskor 0)
+LULUS  K2 (b1) round4(acuan) == keluaran Apply Model: 1260/1260 probabilitas; selisih maksimum 0
+LULUS  K2 (b2) max_probability == round4(maks acuan): selisih maksimum 0
+LULUS  K2 (b3) |acuan presisi penuh - keluaran| <= 5e-5 (batas pembulatan): maksimum 5.000e-5
+INFO  K2 kriteria asli 1e-9 pada probabilitas keluaran Apply Model: selisih maksimum 5.000e-5 -> TIDAK terpenuhi secara langsung (akibat round4, bukan rumus)
+LULUS  K2 (d) selisih skor-log terkecil (di luar seri persis) = 4.154e-2 >> 1e-9; seri persis: 0 baris  :: galat <= 1e-9 tidak dapat membalik kelas pada baris tak-seri
+INFO  K2 resubstitusi: akurasi 0.904762, kappa 0.809524, macro-F1 0.904738; evaluated_rows(AM)=630
+LULUS  K2 evaluated_rows Apply Model == 630
+
+--- K3: K1 + Complement
+LULUS  K3 (c) model Export Model == trained_model wasm (bit-per-bit, 6017 angka)  :: selisih maksimum = 0
+LULUS  K3 kosakata STWV(train) == model.text.terms == model.text.recipe.vocabulary (1000 term)
+LULUS  K3 urutan kelas Apply Model == model.target.classes  :: ["negative","positive"]
+LULUS  K3 (a) kelas prediksi Apply Model == acuan presisi penuh: 630/630 baris diskor (tidak diskor 0)
+LULUS  K3 (b1) round4(acuan) == keluaran Apply Model: 1260/1260 probabilitas; selisih maksimum 0
+LULUS  K3 (b2) max_probability == round4(maks acuan): selisih maksimum 0
+LULUS  K3 (b3) |acuan presisi penuh - keluaran| <= 5e-5 (batas pembulatan): maksimum 4.994e-5
+INFO  K3 kriteria asli 1e-9 pada probabilitas keluaran Apply Model: selisih maksimum 4.994e-5 -> TIDAK terpenuhi secara langsung (akibat round4, bukan rumus)
+LULUS  K3 (d) selisih skor-log terkecil (di luar seri persis) = 7.241e-3 >> 1e-9; seri persis: 0 baris  :: galat <= 1e-9 tidak dapat membalik kelas pada baris tak-seri
+INFO  K3 resubstitusi: akurasi 0.907937, kappa 0.815873, macro-F1 0.907933; evaluated_rows(AM)=630
+LULUS  K3 evaluated_rows Apply Model == 630
+
+--- K4: scikit-learn standar (hitungan, IDF smooth, L2) + Multinomial
+LULUS  K4 (c) model Export Model == trained_model wasm (bit-per-bit, 6017 angka)  :: selisih maksimum = 0
+LULUS  K4 kosakata STWV(train) == model.text.terms == model.text.recipe.vocabulary (1000 term)
+LULUS  K4 urutan kelas Apply Model == model.target.classes  :: ["negative","positive"]
+LULUS  K4 (a) kelas prediksi Apply Model == acuan presisi penuh: 630/630 baris diskor (tidak diskor 0)
+LULUS  K4 (b1) round4(acuan) == keluaran Apply Model: 1260/1260 probabilitas; selisih maksimum 0
+LULUS  K4 (b2) max_probability == round4(maks acuan): selisih maksimum 0
+LULUS  K4 (b3) |acuan presisi penuh - keluaran| <= 5e-5 (batas pembulatan): maksimum 4.994e-5
+INFO  K4 kriteria asli 1e-9 pada probabilitas keluaran Apply Model: selisih maksimum 4.994e-5 -> TIDAK terpenuhi secara langsung (akibat round4, bukan rumus)
+LULUS  K4 (d) selisih skor-log terkecil (di luar seri persis) = 1.600e-4 >> 1e-9; seri persis: 0 baris  :: galat <= 1e-9 tidak dapat membalik kelas pada baris tak-seri
+INFO  K4 resubstitusi: akurasi 0.915873, kappa 0.831746, macro-F1 0.915873; evaluated_rows(AM)=630
+LULUS  K4 evaluated_rows Apply Model == 630
+
+--- K5: Weka: TF log(1+f), IDF ln(N/df), normalisasi panjang dokumen + Multinomial
+LULUS  K5 (c) model Export Model == trained_model wasm (bit-per-bit, 6018 angka)  :: selisih maksimum = 0
+LULUS  K5 kosakata STWV(train) == model.text.terms == model.text.recipe.vocabulary (1000 term)
+LULUS  K5 urutan kelas Apply Model == model.target.classes  :: ["negative","positive"]
+LULUS  K5 (a) kelas prediksi Apply Model == acuan presisi penuh: 630/630 baris diskor (tidak diskor 0)
+LULUS  K5 (b1) round4(acuan) == keluaran Apply Model: 1260/1260 probabilitas; selisih maksimum 0
+LULUS  K5 (b2) max_probability == round4(maks acuan): selisih maksimum 0
+LULUS  K5 (b3) |acuan presisi penuh - keluaran| <= 5e-5 (batas pembulatan): maksimum 4.992e-5
+INFO  K5 kriteria asli 1e-9 pada probabilitas keluaran Apply Model: selisih maksimum 4.992e-5 -> TIDAK terpenuhi secara langsung (akibat round4, bukan rumus)
+LULUS  K5 (d) selisih skor-log terkecil (di luar seri persis) = 3.988e-2 >> 1e-9; seri persis: 0 baris  :: galat <= 1e-9 tidak dapat membalik kelas pada baris tak-seri
+INFO  K5 resubstitusi: akurasi 0.949206, kappa 0.898413, macro-F1 0.949206; evaluated_rows(AM)=630
+LULUS  K5 evaluated_rows Apply Model == 630
+
+RINGKASAN_IT03 [{"k":"K1","N":630,"scored":630,"samePred":630,"sameR4":1260,"nProb":1260,"maxAbsRaw":0.00004993934523762986,"maxAbsR4":0,"minGap":0.0072407118732940035,"exactTies":0,"params":6017,"acc":0.9079365079365079},{"k":"K2","N":630,"scored":630,"samePred":630,"sameR4":1260,"nProb":1260,"maxAbsRaw":0.00004999504869807048,"maxAbsR4":0,"minGap":0.04153962998744021,"exactTies":0,"params":8017,"acc":0.9047619047619048},{"k":"K3","N":630,"scored":630,"samePred":630,"sameR4":1260,"nProb":1260,"maxAbsRaw":0.0000499393452376419,"maxAbsR4":0,"minGap":0.0072407118732940035,"exactTies":0,"params":6017,"acc":0.9079365079365079},{"k":"K4","N":630,"scored":630,"samePred":630,"sameR4":1260,"nProb":1260,"maxAbsRaw":0.000049942444463602076,"maxAbsR4":0,"minGap":0.00016004807977409996,"exactTies":0,"params":6017,"acc":0.9158730158730158},{"k":"K5","N":630,"scored":630,"samePred":630,"sameR4":1260,"nProb":1260,"maxAbsRaw":0.00004992107229271382,"maxAbsR4":0,"minGap":0.039875749238035496,"exactTies":0,"params":6018,"acc":0.9492063492063492}]
+
+=== IT-03: 45 lulus, 0 gagal dari 45 pemeriksaan ===
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.78 started=2026-10-08 10:30:25 +07:00 cmd=node testing\text_analytics_eval\integration\it03_same_data.mjs cwd=E:\KULIAH\Skripsi\statify64 ===

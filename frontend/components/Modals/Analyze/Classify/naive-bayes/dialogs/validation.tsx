@@ -78,7 +78,7 @@ export const ValidationTab = ({ data, updateFormData }: ValidationTabProps) => {
     return (
         <div className="flex flex-col gap-4">
             {/* Method Selection */}
-            <section className="rounded-lg border p-4">
+            <section id="naive-bayes-validation-method" className="rounded-lg border p-4">
                 <Label className="mb-3 block font-semibold">Validation Method</Label>
                 <RadioGroup
                     value={validationState.ValidationMethod}
@@ -97,7 +97,7 @@ export const ValidationTab = ({ data, updateFormData }: ValidationTabProps) => {
             </section>
 
             {/* Holdout Settings */}
-            <section className={`rounded-lg border p-4 ${!isHoldout ? "opacity-50" : ""}`}>
+            <section id="naive-bayes-validation-holdout" className={`rounded-lg border p-4 ${!isHoldout ? "opacity-50" : ""}`}>
                 <Label className="mb-3 block font-semibold">Holdout Settings</Label>
                 <div className="flex items-center gap-2">
                     <Label htmlFor="training-percent" className="w-[140px]">
@@ -139,7 +139,7 @@ export const ValidationTab = ({ data, updateFormData }: ValidationTabProps) => {
             </section>
 
             {/* K-Fold Settings */}
-            <section className={`rounded-lg border p-4 ${!isKFold ? "opacity-50" : ""}`}>
+            <section id="naive-bayes-validation-kfold" className={`rounded-lg border p-4 ${!isKFold ? "opacity-50" : ""}`}>
                 <Label className="mb-3 block font-semibold">Cross-Validation Settings</Label>
                 <div className="flex items-center gap-2">
                     <Label htmlFor="k-folds" className="w-[140px]">
@@ -159,7 +159,7 @@ export const ValidationTab = ({ data, updateFormData }: ValidationTabProps) => {
             </section>
 
             {/* Random Seed */}
-            <section className="rounded-lg border p-4">
+            <section id="naive-bayes-validation-seed" className="rounded-lg border p-4">
                 <div className="flex items-center space-x-2">
                     <Checkbox
                         id="use-seed"

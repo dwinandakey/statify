@@ -2,7 +2,7 @@
 // buildStwvOutput yang belum tersentuh tes lama (cakupan terukur: buildStwvOutput.ts cabang 54,5%).
 //
 // Sudah tercakup oleh __tests__/buildStwvOutput.test.ts (tidak diulang): tiga tabel, angka processing summary,
-// baris waktu opsional, settings default Weka, words_to_keep 0 = "All", tabel kosakata dengan jumlah dokumen
+// baris waktu opsional, settings default, words_to_keep 0 = "All", tabel kosakata dengan jumlah dokumen
 // non-nol (2 kata), pemotongan MAX_VOCABULARY_ROWS (+5) dengan catatan, teks ringkasan dan log, serialisasi JSON.
 
 import * as fs from "fs";
@@ -11,9 +11,11 @@ import * as path from "path";
 import { buildStwvOutput, MAX_VOCABULARY_ROWS } from "@/components/Modals/Transform/StringToWordVector/utils/buildStwvOutput";
 import { STWV_DEFAULT_CONFIG, type StwvConfig } from "@/components/Modals/Transform/StringToWordVector/config";
 import {
-    FORMULA_STANDARDS,
+    IDF_OPTIONS,
+    NORM_OPTIONS,
+    TF_OPTIONS,
     isOptionAllowed,
-} from "@/components/Modals/Transform/StringToWordVector/constants/formula-standards";
+} from "@/components/Modals/Transform/StringToWordVector/constants/vectorization-options";
 import type { VectorizerOutput } from "@/components/Modals/Transform/StringToWordVector/types";
 
 const GRID = JSON.parse(
@@ -31,55 +33,38 @@ const GRID = JSON.parse(
 
 const clone = (c: StwvConfig): StwvConfig => JSON.parse(JSON.stringify(c));
 
-describe("eval A: opsi rumus UI sama dengan tabel kombinasi sah validator Rust", () => {
-    it("Weka: 3 TF x 2 IDF x 2 normalisasi; sklearn: 3 x 3 x 3; custom: semua 5 x 4 x 4", () => {
-        expect(FORMULA_STANDARDS.weka.tfOptions.map((o) => o.value)).toEqual(["binary", "raw", "log1p"]);
-        expect(FORMULA_STANDARDS.weka.idfOptions.map((o) => o.value)).toEqual(["none", "standard"]);
-        expect(FORMULA_STANDARDS.weka.normOptions.map((o) => o.value)).toEqual(["none", "doc_length"]);
-        expect(FORMULA_STANDARDS.sklearn.tfOptions.map((o) => o.value)).toEqual(["binary", "raw", "sublinear"]);
-        expect(FORMULA_STANDARDS.sklearn.idfOptions.map((o) => o.value)).toEqual(["none", "smooth", "plus1"]);
-        expect(FORMULA_STANDARDS.sklearn.normOptions.map((o) => o.value)).toEqual(["none", "l2", "l1"]);
-        expect(FORMULA_STANDARDS.custom.tfOptions).toHaveLength(5);
-        expect(FORMULA_STANDARDS.custom.idfOptions).toHaveLength(4);
-        expect(FORMULA_STANDARDS.custom.normOptions).toHaveLength(4);
+describe("eval A: opsi rumus UI mencakup semua kombinasi yang diterima mesin Rust (mode custom)", () => {
+    it("TF 5 x IDF 4 x normalisasi 4, dipilih bebas", () => {
+        expect(TF_OPTIONS.map((o) => o.value)).toEqual(["binary", "raw", "log1p", "sublinear", "normalized"]);
+        expect(IDF_OPTIONS.map((o) => o.value)).toEqual(["none", "standard", "smooth", "plus1"]);
+        expect(NORM_OPTIONS.map((o) => o.value)).toEqual(["none", "l2", "l1", "doc_length"]);
     });
 
-    it("untuk ke-80 kombinasi pada grid acuan: sah-Weka/sah-sklearn menurut UI = menurut validator Rust (weka_ok/sklearn_ok)", () => {
+    it("ke-80 kombinasi pada grid acuan Rust semuanya tersedia di UI", () => {
         expect(GRID.entries).toHaveLength(80);
         for (const e of GRID.entries) {
-            const wekaUi =
-                isOptionAllowed(FORMULA_STANDARDS.weka.tfOptions, e.tf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.weka.idfOptions, e.idf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.weka.normOptions, e.norm as never);
-            const sklearnUi =
-                isOptionAllowed(FORMULA_STANDARDS.sklearn.tfOptions, e.tf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.sklearn.idfOptions, e.idf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.sklearn.normOptions, e.norm as never);
-            const customUi =
-                isOptionAllowed(FORMULA_STANDARDS.custom.tfOptions, e.tf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.custom.idfOptions, e.idf as never) &&
-                isOptionAllowed(FORMULA_STANDARDS.custom.normOptions, e.norm as never);
-            expect({ kombinasi: `${e.tf}/${e.idf}/${e.norm}`, weka: wekaUi }).toEqual({
-                kombinasi: `${e.tf}/${e.idf}/${e.norm}`,
-                weka: e.weka_ok,
-            });
-            expect({ kombinasi: `${e.tf}/${e.idf}/${e.norm}`, sklearn: sklearnUi }).toEqual({
-                kombinasi: `${e.tf}/${e.idf}/${e.norm}`,
-                sklearn: e.sklearn_ok,
-            });
-            expect(customUi).toBe(true);
+            const ui =
+                isOptionAllowed(TF_OPTIONS, e.tf as never) &&
+                isOptionAllowed(IDF_OPTIONS, e.idf as never) &&
+                isOptionAllowed(NORM_OPTIONS, e.norm as never);
+            expect({ kombinasi: `${e.tf}/${e.idf}/${e.norm}`, ui }).toEqual({ kombinasi: `${e.tf}/${e.idf}/${e.norm}`, ui: true });
+        }
+    });
+
+    it("label opsi tidak menyebut nama aplikasi lain", () => {
+        for (const o of [...TF_OPTIONS, ...IDF_OPTIONS, ...NORM_OPTIONS]) {
+            expect(o.label).not.toMatch(/weka|scikit|sklearn/i);
         }
     });
 
     it("rumus yang ditampilkan di tooltip sesuai definisi yang diimplementasikan Rust", () => {
-        const custom = FORMULA_STANDARDS.custom;
         const f = (opts: readonly { value: string; formula: string }[], v: string) => opts.find((o) => o.value === v)?.formula;
-        expect(f(custom.tfOptions, "log1p")).toBe("ln(1 + f)");
-        expect(f(custom.tfOptions, "sublinear")).toBe("1 + ln(f) if f > 0, else 0");
-        expect(f(custom.tfOptions, "normalized")).toBe("f / (number of tokens in document)");
-        expect(f(custom.idfOptions, "standard")).toBe("ln(N / df)");
-        expect(f(custom.idfOptions, "smooth")).toBe("ln((1 + N) / (1 + df)) + 1");
-        expect(f(custom.idfOptions, "plus1")).toBe("ln(N / df) + 1");
+        expect(f(TF_OPTIONS, "log1p")).toBe("ln(1 + f)");
+        expect(f(TF_OPTIONS, "sublinear")).toBe("1 + ln(f) if f > 0, else 0");
+        expect(f(TF_OPTIONS, "normalized")).toBe("f / (number of tokens in document)");
+        expect(f(IDF_OPTIONS, "standard")).toBe("ln(N / df)");
+        expect(f(IDF_OPTIONS, "smooth")).toBe("ln((1 + N) / (1 + df)) + 1");
+        expect(f(IDF_OPTIONS, "plus1")).toBe("ln(N / df) + 1");
     });
 });
 
@@ -114,23 +99,21 @@ describe("eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.
     const settingValue = (out: ReturnType<typeof build>, label: string) =>
         out.tables.find((t) => t.key === "stwv_settings")!.rows.find((r) => r.rowHeader[0] === label)?.value;
 
-    it("label pengaturan: tiga standar rumus dan opsinya", () => {
-        const sk = clone(STWV_DEFAULT_CONFIG);
-        sk.formulaStandard = "sklearn";
-        sk.vectorization = { tfMethod: "sublinear", idfMethod: "plus1", normalization: "l1" };
-        const out = build({ config: sk });
-        expect(settingValue(out, "Formula Standard")).toBe("scikit-learn");
-        expect(settingValue(out, "Term Frequency (TF)")).toBe("Sublinear 1 + ln(f)");
-        expect(settingValue(out, "Inverse Document Frequency (IDF)")).toBe("ln(N/df) + 1");
-        expect(settingValue(out, "Normalization")).toBe("L1");
+    it("label pengaturan: nama opsi TF / IDF / normalisasi tanpa baris standar rumus", () => {
+        const a = clone(STWV_DEFAULT_CONFIG);
+        a.vectorization = { tfMethod: "sublinear", idfMethod: "plus1", normalization: "l1" };
+        const out = build({ config: a });
+        expect(settingValue(out, "Formula Standard")).toBeUndefined();
+        expect(settingValue(out, "Term Frequency (TF)")).toBe("Sublinear");
+        expect(settingValue(out, "Inverse Document Frequency (IDF)")).toBe("IDF + 1");
+        expect(settingValue(out, "Normalization")).toBe("L1 / Manhattan");
 
-        const cu = clone(STWV_DEFAULT_CONFIG);
-        cu.formulaStandard = "custom";
-        cu.vectorization = { tfMethod: "normalized", idfMethod: "smooth", normalization: "doc_length" };
-        const out2 = build({ config: cu });
-        expect(settingValue(out2, "Formula Standard")).toBe("Custom");
-        expect(settingValue(out2, "Term Frequency (TF)")).toBe("Normalized  —  f / tokens");
-        expect(settingValue(out2, "Normalization")).toBe("Normalize document length (Weka)");
+        const b = clone(STWV_DEFAULT_CONFIG);
+        b.vectorization = { tfMethod: "normalized", idfMethod: "smooth", normalization: "doc_length" };
+        const out2 = build({ config: b });
+        expect(settingValue(out2, "Term Frequency (TF)")).toBe("Relative frequency / Length-normalized");
+        expect(settingValue(out2, "Inverse Document Frequency (IDF)")).toBe("Smooth IDF");
+        expect(settingValue(out2, "Normalization")).toBe("Document length / Average-length");
     });
 
     it("label stopword, stemming, tokenizer, huruf kecil, dan min term frequency", () => {

@@ -104,7 +104,6 @@ function Harness() {
   return (
     <ModelTab
       data={data}
-      showFieldHelp={false}
       onModelLoaded={(result: ModelLoadSuccess, kind: ApplyModelSourceKind) => {
         onLoaded(result, kind);
         setData({

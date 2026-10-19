@@ -94,7 +94,6 @@ function Harness({
         spy?.(next);
         setData(next);
       }}
-      showFieldHelp={false}
     />
   );
 }

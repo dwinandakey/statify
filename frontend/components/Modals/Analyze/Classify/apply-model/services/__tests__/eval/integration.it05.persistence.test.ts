@@ -4,7 +4,7 @@
 // Tes ini mensimulasikan "sesi baru" DALAM SATU proses Jest: cache wasm dibuang (resetWasm) sehingga Apply Model
 // berjalan pada instance wasm baru dengan memori baru, store dikosongkan, dan model dibaca dari berkas di disk lewat
 // loadModelFromFile ASLI. Pembuktian dengan DUA PROSES Node terpisah (fase 1: latih+ekspor; fase 2: muat+terap) ada di
-// testing/text_analytics_eval/integration/it05_persist.mjs (log integration_it05_*.txt).
+// frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/integration/it05_persist.mjs (log integration_it05_*.txt).
 //
 // Peran float_roundtrip dan batasannya (dijelaskan di F_integration.md):
 //  - Jalur browser: model berpindah sebagai OBJEK JavaScript (serde_wasm_bindgen) dan sebagai TEKS JSON hanya di sisi

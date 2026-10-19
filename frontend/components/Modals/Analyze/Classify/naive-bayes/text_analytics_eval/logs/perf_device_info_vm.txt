@@ -1,0 +1,9 @@
+CPU(s):                                  2
+Model name:                              AMD Ryzen 5 4600H with Radeon Graphics
+Thread(s) per core:                      2
+Hypervisor vendor:                       Microsoft
+               total        used        free      shared  buff/cache   available
+Mem:            3915         278        3055           0         581        3419
+Linux claude 6.8.0-138-generic #138~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Aug  7 13:43:15 UTC  x86_64 x86_64 x86_64 GNU/Linux
+v22.23.2
+Python 3.10.12

@@ -1,6 +1,5 @@
 import {
     STWV_DEFAULT_CONFIG,
-    applyFormulaStandard,
     getVectorDecimals,
     toRustConfig,
     validateStwvConfig,
@@ -12,8 +11,8 @@ import {
 const withOverrides = (patch: Partial<StwvConfig>): StwvConfig => ({ ...STWV_DEFAULT_CONFIG, ...patch });
 
 describe("STWV_DEFAULT_CONFIG (D6)", () => {
-    it("default = Weka / raw / none / none", () => {
-        expect(STWV_DEFAULT_CONFIG.formulaStandard).toBe("weka");
+    it("default = raw / none / none, tanpa pilihan standar rumus", () => {
+        expect(STWV_DEFAULT_CONFIG).not.toHaveProperty("formulaStandard");
         expect(STWV_DEFAULT_CONFIG.vectorization).toEqual({
             tfMethod: "raw",
             idfMethod: "none",
@@ -55,14 +54,18 @@ describe("toRustConfig (kontrak §3.1)", () => {
         });
     });
 
-    it("preset sklearn mengirim raw/smooth/l2", () => {
-        const p = toRustConfig(applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn"));
-        expect([p.formula_standard, p.tf_method, p.idf_method, p.normalization]).toEqual([
-            "sklearn",
-            "raw",
-            "smooth",
-            "l2",
-        ]);
+    it("mode mesin internal diturunkan dari kombinasi pilihan (bukan dipilih pengguna)", () => {
+        const mode = (tfMethod: TfMethod, idfMethod: StwvConfig["vectorization"]["idfMethod"], normalization: StwvConfig["vectorization"]["normalization"]) =>
+            toRustConfig(withOverrides({ vectorization: { tfMethod, idfMethod, normalization } })).formula_standard;
+        expect(mode("raw", "none", "none")).toBe("weka");
+        expect(mode("log1p", "standard", "doc_length")).toBe("weka");
+        expect(mode("raw", "smooth", "l2")).toBe("sklearn");
+        expect(mode("sublinear", "plus1", "l1")).toBe("sklearn");
+        expect(mode("normalized", "none", "none")).toBe("custom");
+        expect(mode("raw", "standard", "l2")).toBe("custom");
+        expect(mode("log1p", "smooth", "doc_length")).toBe("custom");
+        const p = toRustConfig(withOverrides({ vectorization: { tfMethod: "raw", idfMethod: "smooth", normalization: "l2" } }));
+        expect([p.tf_method, p.idf_method, p.normalization]).toEqual(["raw", "smooth", "l2"]);
     });
 
     it("words_to_keep 0 dikirim apa adanya (0 = semua), tidak dipaksa 1000", () => {
@@ -124,71 +127,28 @@ describe("validateStwvConfig", () => {
         expect(validateStwvConfig(withOverrides({ delimiters: "" }))).toHaveLength(1);
     });
 
-    it("menolak sklearn + doc_length", () => {
-        const cfg = applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn");
-        const bad: StwvConfig = { ...cfg, vectorization: { ...cfg.vectorization, normalization: "doc_length" } };
-        expect(validateStwvConfig(bad)).toHaveLength(1);
+    it("semua 5 × 4 × 4 kombinasi TF / IDF / normalisasi sah", () => {
+        const tfs: TfMethod[] = ["binary", "raw", "log1p", "sublinear", "normalized"];
+        const idfs: StwvConfig["vectorization"]["idfMethod"][] = ["none", "standard", "smooth", "plus1"];
+        const norms: StwvConfig["vectorization"]["normalization"][] = ["none", "l2", "l1", "doc_length"];
+        for (const tfMethod of tfs)
+            for (const idfMethod of idfs)
+                for (const normalization of norms)
+                    expect(validateStwvConfig(withOverrides({ vectorization: { tfMethod, idfMethod, normalization } }))).toEqual([]);
     });
 
-    it("menolak Weka + sublinear / smooth / l2, dan TF 'none' sisa v1", () => {
+    it("menolak TF 'none' sisa v1 dan nilai yang tidak dikenal", () => {
         const v = STWV_DEFAULT_CONFIG.vectorization;
-        expect(validateStwvConfig(withOverrides({ vectorization: { ...v, tfMethod: "sublinear" } }))).toHaveLength(1);
-        expect(validateStwvConfig(withOverrides({ vectorization: { ...v, idfMethod: "smooth" } }))).toHaveLength(1);
-        expect(validateStwvConfig(withOverrides({ vectorization: { ...v, normalization: "l2" } }))).toHaveLength(1);
         expect(validateStwvConfig(withOverrides({ vectorization: { ...v, tfMethod: "none" as unknown as TfMethod } }))).toHaveLength(1);
-    });
-
-    it("Weka + log1p/standard/doc_length sah; Custom menerima semua kombinasi", () => {
-        const weka = withOverrides({
-            vectorization: { tfMethod: "log1p", idfMethod: "standard", normalization: "doc_length" },
-        });
-        expect(validateStwvConfig(weka)).toEqual([]);
-        const custom = withOverrides({
-            formulaStandard: "custom",
-            vectorization: { tfMethod: "normalized", idfMethod: "plus1", normalization: "l1" },
-        });
-        expect(validateStwvConfig(custom)).toEqual([]);
+        expect(
+            validateStwvConfig(
+                withOverrides({ vectorization: { ...v, idfMethod: "idf" as unknown as StwvConfig["vectorization"]["idfMethod"] } })
+            )
+        ).toHaveLength(1);
     });
 
     it("mengumpulkan beberapa pesan sekaligus", () => {
         expect(validateStwvConfig(withOverrides({ wordsToKeep: -1, minTermFreq: 0 }))).toHaveLength(2);
-    });
-});
-
-describe("applyFormulaStandard", () => {
-    it("sklearn → raw/smooth/l2", () => {
-        const cfg = applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn");
-        expect(cfg.formulaStandard).toBe("sklearn");
-        expect(cfg.vectorization).toEqual({ tfMethod: "raw", idfMethod: "smooth", normalization: "l2" });
-    });
-
-    it("weka → raw/none/none (menimpa nilai sebelumnya)", () => {
-        const sk = applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn");
-        const cfg = applyFormulaStandard(sk, "weka");
-        expect(cfg.formulaStandard).toBe("weka");
-        expect(cfg.vectorization).toEqual({ tfMethod: "raw", idfMethod: "none", normalization: "none" });
-    });
-
-    it("custom mempertahankan nilai saat ini", () => {
-        const sk = applyFormulaStandard(STWV_DEFAULT_CONFIG, "sklearn");
-        const cfg = applyFormulaStandard(sk, "custom");
-        expect(cfg.formulaStandard).toBe("custom");
-        expect(cfg.vectorization).toEqual(sk.vectorization);
-    });
-
-    it("tidak mengubah opsi lain dan tidak memutasi input", () => {
-        const base = withOverrides({ wordsToKeep: 50, minTermFreq: 2 });
-        const snapshot = JSON.stringify(base);
-        const cfg = applyFormulaStandard(base, "sklearn");
-        expect(cfg.wordsToKeep).toBe(50);
-        expect(cfg.minTermFreq).toBe(2);
-        expect(JSON.stringify(base)).toBe(snapshot);
-    });
-
-    it("hasil setiap standar selalu lolos validasi", () => {
-        for (const std of ["weka", "sklearn", "custom"] as const) {
-            expect(validateStwvConfig(applyFormulaStandard(STWV_DEFAULT_CONFIG, std))).toEqual([]);
-        }
     });
 });
 

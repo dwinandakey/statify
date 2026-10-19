@@ -396,7 +396,7 @@ describe("BB-11 kosakata kosong (galat EMPTY_VOCABULARY dari inti)", () => {
 });
 
 describe("BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer)", () => {
-    it("OK mengirim default Weka ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel", async () => {
+    it("OK mengirim konfigurasi default ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel", async () => {
         renderModal();
         await pickVariable("Teks Ulasan");
         await userEvent.click(okButton());
@@ -476,8 +476,8 @@ describe("BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer
 
         const settings = tableOf("Settings");
         const st = (label: string) => settings.rows.find((r) => (r.rowHeader as string[])[0] === label)?.value;
-        expect(st("Formula Standard")).toBe("Weka");
-        expect(st("Term Frequency (TF)")).toBe("Word count");
+        expect(st("Formula Standard")).toBeUndefined();
+        expect(st("Term Frequency (TF)")).toBe("Raw count / Raw frequency");
         expect(st("Inverse Document Frequency (IDF)")).toBe("None");
         expect(st("Normalization")).toBe("None");
         expect(st("Convert to Lowercase")).toBe("Yes");

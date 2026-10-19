@@ -1,4 +1,6 @@
 import React from "react";
+import "katex/dist/katex.min.css";
+import { InlineMath } from "react-katex";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -7,12 +9,14 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { INDONESIAN_STOPWORDS, ENGLISH_STOPWORDS } from "./constants/stopwords";
 import {
-  FORMULA_STANDARDS,
-  FORMULA_STANDARD_ORDER,
-  isFormulaStandard,
+  IDF_OPTIONS,
+  NORM_OPTIONS,
+  TF_OPTIONS,
+  ranksByWordCount,
   type FormulaOption,
-} from "./constants/formula-standards";
-import { applyFormulaStandard, type StwvConfig } from "./config";
+} from "./constants/vectorization-options";
+import type { StwvConfig } from "./config";
+import { STWV_TOUR_IDS } from "./hooks/tourConfig";
 import type { StemmingMethod, StopwordsMethod, TokenizerType } from "./types";
 
 /**
@@ -68,8 +72,6 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
   setColumnPrefix,
   columnPrefixError = null,
 }) => {
-  const standard = FORMULA_STANDARDS[config.formulaStandard];
-
   const renderOptions = <T extends string>(
     idPrefix: string,
     options: readonly FormulaOption<T>[],
@@ -85,10 +87,16 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
       className="grid grid-cols-2 gap-2 pt-1"
     >
       {options.map((opt) => (
-        <div key={opt.value} className="flex items-center space-x-2" title={opt.formula}>
-          <RadioGroupItem value={opt.value} id={`${idPrefix}-${opt.value}`} />
-          <Label htmlFor={`${idPrefix}-${opt.value}`} className="font-normal cursor-pointer text-sm">
+        <div key={opt.value} className="flex items-start space-x-2" title={opt.formula}>
+          <RadioGroupItem value={opt.value} id={`${idPrefix}-${opt.value}`} className="mt-0.5" />
+          <Label htmlFor={`${idPrefix}-${opt.value}`} className="font-normal cursor-pointer text-sm leading-tight">
             {opt.label}
+            {/* Rumus ditulis kecil di bawah nama dengan notasi matematika (opsi "None" tidak perlu rumus) */}
+            {opt.value !== "none" && (
+              <span className="block text-[11px] text-muted-foreground mt-1" data-testid={`${idPrefix}-${opt.value}-formula`}>
+                <InlineMath math={opt.latex} />
+              </span>
+            )}
           </Label>
         </div>
       ))}
@@ -102,7 +110,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
 
           {/* Vector Column Name */}
           {columnPrefix !== undefined && setColumnPrefix && (
-            <div className="space-y-3">
+            <div className="space-y-3" id={STWV_TOUR_IDS.columnPrefix}>
               <h3 className="text-sm font-semibold">Vector Column Name</h3>
               <Input
                 id="stwv-column-prefix"
@@ -124,7 +132,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
           )}
 
           {/* Text Preprocessing */}
-          <div className="space-y-3">
+          <div className="space-y-3" id={STWV_TOUR_IDS.lowercase}>
             <h3 className="text-sm font-semibold">Text Preprocessing</h3>
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -141,7 +149,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
           </div>
 
           {/* Stopwords Removal */}
-          <div className="space-y-3">
+          <div className="space-y-3" id={STWV_TOUR_IDS.stopwords}>
             <h3 className="text-sm font-semibold">Stopwords Removal</h3>
             <RadioGroup
               value={config.stopwords.method}
@@ -200,7 +208,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
           </div>
 
           {/* Stemming */}
-          <div className="space-y-3">
+          <div className="space-y-3" id={STWV_TOUR_IDS.stemming}>
             <h3 className="text-sm font-semibold">Stemming</h3>
             <RadioGroup
               value={config.stemming.method}
@@ -232,7 +240,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
 
           {/* Tokenizer & Delimiters */}
           <div className="space-y-4">
-            <div className="space-y-3">
+            <div className="space-y-3" id={STWV_TOUR_IDS.tokenizer}>
               <h3 className="text-sm font-semibold">Tokenizer</h3>
               <RadioGroup
                 value={config.tokenizer.type}
@@ -283,7 +291,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
               </RadioGroup>
             </div>
 
-            <div className="space-y-2 max-w-xs pt-1">
+            <div className="space-y-2 max-w-xs pt-1" id={STWV_TOUR_IDS.delimiters}>
               <Label htmlFor="delimiters" className="text-sm font-semibold">Delimiters</Label>
               <Input
                 id="delimiters"
@@ -301,58 +309,34 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
           <div className="space-y-4">
             <h3 className="text-sm font-semibold">Vectorization Method</h3>
 
-            {/* Formula standard (preset) */}
-            <div className="space-y-2">
-              <Label className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Formula standard</Label>
-              <RadioGroup
-                value={config.formulaStandard}
-                onValueChange={(val) => {
-                  if (isFormulaStandard(val)) {
-                    setConfig((prev) => applyFormulaStandard(prev, val));
-                  }
-                }}
-                className="flex flex-row space-x-6 pt-1"
-              >
-                {FORMULA_STANDARD_ORDER.map((id) => (
-                  <div key={id} className="flex items-center space-x-2" title={FORMULA_STANDARDS[id].description}>
-                    <RadioGroupItem value={id} id={`std-${id}`} />
-                    <Label htmlFor={`std-${id}`} className="font-normal cursor-pointer text-sm">
-                      {FORMULA_STANDARDS[id].label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              <p className="text-[10px] text-muted-foreground">{standard.description}</p>
-            </div>
-
             {/* Term Frequency (TF) */}
-            <div className="space-y-2">
+            <div className="space-y-2" id={STWV_TOUR_IDS.tf}>
               <Label className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Term Frequency (TF)</Label>
               {renderOptions(
                 "tf",
-                standard.tfOptions,
+                TF_OPTIONS,
                 (tfMethod) => setConfig((prev) => ({ ...prev, vectorization: { ...prev.vectorization, tfMethod } })),
                 config.vectorization.tfMethod,
               )}
             </div>
 
             {/* Inverse Document Frequency (IDF) */}
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-2" id={STWV_TOUR_IDS.idf}>
               <Label className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Inverse Document Frequency (IDF)</Label>
               {renderOptions(
                 "idf",
-                standard.idfOptions,
+                IDF_OPTIONS,
                 (idfMethod) => setConfig((prev) => ({ ...prev, vectorization: { ...prev.vectorization, idfMethod } })),
                 config.vectorization.idfMethod,
               )}
             </div>
 
             {/* Normalization */}
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-2" id={STWV_TOUR_IDS.normalization}>
               <Label className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Normalization</Label>
               {renderOptions(
                 "norm",
-                standard.normOptions,
+                NORM_OPTIONS,
                 (normalization) => setConfig((prev) => ({ ...prev, vectorization: { ...prev.vectorization, normalization } })),
                 config.vectorization.normalization,
               )}
@@ -360,7 +344,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
           </div>
 
           {/* Words to Keep */}
-          <div className="space-y-2 max-w-xs pt-1">
+          <div className="space-y-2 max-w-xs pt-1" id={STWV_TOUR_IDS.wordsToKeep}>
             <Label htmlFor="words-to-keep" className="text-sm font-semibold">Words to Keep</Label>
             <Input
               id="words-to-keep"
@@ -376,14 +360,14 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
             />
             <p className="text-[10px] text-muted-foreground mt-1">
               0 = keep all words.{" "}
-              {config.formulaStandard === "custom"
-                ? "Words are ranked by the sum of TF × IDF."
-                : "Words are ranked by total word count across all documents."}
+              {ranksByWordCount(config.vectorization)
+                ? "Words are ranked by total word count across all documents."
+                : "Words are ranked by the sum of TF × IDF."}
             </p>
           </div>
 
           {/* Min term frequency */}
-          <div className="space-y-2 max-w-xs pt-1">
+          <div className="space-y-2 max-w-xs pt-1" id={STWV_TOUR_IDS.minTermFreq}>
             <Label htmlFor="min-term-freq" className="text-sm font-semibold">Min term frequency</Label>
             <Input
               id="min-term-freq"

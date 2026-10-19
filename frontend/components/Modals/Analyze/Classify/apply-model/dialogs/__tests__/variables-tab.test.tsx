@@ -85,12 +85,10 @@ function Harness({
   descriptor,
   variables,
   initial,
-  showFieldHelp = false,
 }: {
   descriptor: ModelDescriptor;
   variables: Variable[];
   initial?: ApplyModelVariablesTabType;
-  showFieldHelp?: boolean;
 }) {
   const [data, setData] = useState<ApplyModelVariablesTabType>(
     initial ?? autoMapFeatures(descriptor, variables)
@@ -101,7 +99,6 @@ function Harness({
       descriptor={descriptor}
       variables={variables}
       onChange={setData}
-      showFieldHelp={showFieldHelp}
     />
   );
 }
@@ -303,33 +300,6 @@ describe("VariablesTab — actual target", () => {
     expect(screen.getByTestId("actual-target-errors")).toHaveTextContent(
       APPLY_MODEL_MESSAGES.AM_E_ACTUAL_IS_PREDICTOR.replace("{detail}", "Outlook")
     );
-  });
-});
-
-describe("VariablesTab — teks bantuan", () => {
-  it("showFieldHelp true menampilkan teks bantuan; false menyembunyikannya", () => {
-    const { unmount } = render(
-      <Harness
-        descriptor={getD1Descriptor()}
-        variables={makeD3Variables()}
-        showFieldHelp={false}
-      />
-    );
-    expect(
-      screen.queryByText(/Every model feature must be mapped/)
-    ).not.toBeInTheDocument();
-    unmount();
-
-    render(
-      <Harness
-        descriptor={getD1Descriptor()}
-        variables={makeD3Variables()}
-        showFieldHelp
-      />
-    );
-    expect(
-      screen.getByText(/Every model feature must be mapped/)
-    ).toBeInTheDocument();
   });
 });
 

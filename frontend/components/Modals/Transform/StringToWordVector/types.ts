@@ -13,9 +13,9 @@ export type StemmingMethod = "none" | "indonesian" | "english";
 /** Jenis tokenizer di UI. */
 export type TokenizerType = "word" | "ngram";
 
-// Tipe rumus didefinisikan di constants/formula-standards.ts (satu sumber kebenaran, PLAN_FIX §3.1).
-import type { FormulaStandard, IdfMethod, Normalization, TfMethod } from "./constants/formula-standards";
-export type { FormulaStandard, IdfMethod, Normalization, TfMethod };
+// Tipe rumus didefinisikan di constants/vectorization-options.ts (satu sumber kebenaran).
+import type { EngineFormulaMode, IdfMethod, Normalization, TfMethod } from "./constants/vectorization-options";
+export type { IdfMethod, Normalization, TfMethod };
 
 /** Payload yang dikirim ke Rust — harus cocok dengan struct config di sisi Rust. */
 export interface VectorizerConfigPayload {
@@ -28,7 +28,8 @@ export interface VectorizerConfigPayload {
     delimiters: string;
     ngram_min: number;
     ngram_max: number;
-    formula_standard: FormulaStandard;
+    /** Internal, diturunkan dari TF/IDF/normalisasi oleh toRustConfig. */
+    formula_standard: EngineFormulaMode;
     tf_method: TfMethod;
     idf_method: IdfMethod;
     normalization: Normalization;
@@ -48,7 +49,7 @@ export interface VectorizerOutput {
         method: string;
         /** Diisi Rust setelah S3 (belum ada pada build WASM lama). */
         empty_documents?: number;
-        formula_standard?: FormulaStandard;
+        formula_standard?: string;
     };
 }
 

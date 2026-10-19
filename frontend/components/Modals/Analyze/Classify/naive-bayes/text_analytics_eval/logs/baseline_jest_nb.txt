@@ -1,0 +1,339 @@
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/variables-tab.test.tsx
+  filterVariablesByText
+    √ case-insensitive, mencocokkan nama atau label, awalan VEC_ ikut (5 ms)
+  DatasetVariableList lewat VariablesTab: filter + Select All (filtered)
+    √ filter VEC_ + Select All menyorot HANYA variabel yang cocok (172 ms)
+    √ mengubah filter membuang sorotan pada variabel yang tersembunyi (69 ms)
+    √ Shift-range bekerja pada daftar yang terfilter (19 ms)
+    √ Ctrl-klik menambah/mengurangi sorotan satu per satu (25 ms)
+    √ drag item yang tersorot membawa SELURUH sorotan; item lain hanya dirinya (27 ms)
+  VariablesTab: pemindahan multi-variabel & slot Text Features
+    √ Select All (filtered) lalu tombol panah memindahkan semuanya ke Word-Vector Variables (23 ms)
+    √ memasukkan ke Raw Text mengosongkan Word-Vector (dan sebaliknya) (33 ms)
+    √ aturan tipe: STRING tidak bisa ke Word-Vector, NUMERIC tidak bisa ke Raw Text (13 ms)
+    √ sorotan campuran: hanya variabel yang lolos aturan yang dipindah ke slot (15 ms)
+    √ tombol panah kembali memindahkan item zona ke Available (18 ms)
+    √ drop muatan multi-variabel ke zona memindahkan semuanya; urut ulang dalam zona (18 ms)
+    √ muatan drop tidak sah diabaikan tanpa galat (7 ms)
+    √ perilaku v1: double-click pertama mengisi Target, berikutnya ke Excluded (mode exclude) (26 ms)
+    √ perilaku v1: pindah ke Candidates mengosongkan Excluded (mode saling eksklusif) (29 ms)
+  moveVariables (fungsi murni)
+    √ variabel tidak pernah berada di dua tempat (1 ms)
+    √ memindahkan target yang sudah ada ke Excluded mencabutnya dari Target (13 ms)
+    √ zona maxItems=1 memakai variabel lolos pertama dan melepas isi lama (1 ms)
+    √ mengembalikan null bila tidak ada variabel yang lolos aturan (1 ms)
+    √ TextSource dijaga konsisten dengan isi slot
+    √ readZoneLists: Raw Text menang atas Word-Vector pada state tidak konsisten
+    √ isAllowedInZone: Target nominal/ordinal, Raw STRING, Word-Vector NUMERIC (1 ms)
+    √ reorderWithin menyisipkan pada indeks daftar asli
+  VariablesTab: peringatan non-blokir (AGENTS_V2 §3.4)
+    √ W-LEAK muncul bila Word-Vector Variables terisi (12 ms)
+    √ W-VEC muncul bila >= 20 kolom numerik tampak seperti vektor kata (8 ms)
+    √ W-VEC tidak muncul pada 19 kolom (9 ms)
+    √ W-STR muncul untuk kolom STRING yang tampak seperti teks bebas/ID (9 ms)
+    √ peringatan tidak memblokir interaksi (tombol panah tetap bekerja) (14 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/text-feature-table-output.test.tsx
+  escapeCsvField
+    √ teks biasa tidak diubah (1 ms)
+    √ koma, kutip, dan baris baru dibungkus kutip; kutip digandakan (1 ms)
+  buildTextFeatureCsv / TSV
+    √ header dan urutan kolom terkunci; escape koma/kutip benar (1 ms)
+    √ berkas CSV diawali BOM UTF-8 (EF BB BF) dan mempertahankan karakter non-ASCII (1 ms)
+    √ TSV: pemisah tab, tab/baris baru di dalam teks diganti spasi
+    √ tabel kosong: hanya header (1 ms)
+  utf8ByteLength
+    √ menghitung byte UTF-8 (1/2/3/4 byte)
+  TextFeatureTableOutput
+    √ menampilkan tabel Top-k per kelas (Rank, Term, Score, Log weight, Count) (29 ms)
+    √ data tidak valid: pesan galat, tidak crash (2 ms)
+    √ Download CSV: nama default + isi ber-BOM dari tabel lengkap (35 ms)
+    √ Copy (TSV): menyalin TSV lengkap dan toast sukses bila <= 5 MB (13 ms)
+    √ Copy (TSV) > 5 MB: toast saran Download CSV dan TIDAK menyalin (256 ms)
+    √ kegagalan clipboard: toast galat (87 ms)
+    √ tombol nonaktif bila tabel lengkap kosong (10 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-interpretation.test.ts
+  escapeHtml
+    √ meng-escape & < > " (1 ms)
+  describeCohensKappa
+    √ kappa -0.1 -> poor (Landis & Koch) (3 ms)
+    √ kappa 0 -> slight (Landis & Koch) (3 ms)
+    √ kappa 0.2 -> slight (Landis & Koch) (2 ms)
+    √ kappa 0.21 -> fair (Landis & Koch) (2 ms)
+    √ kappa 0.4 -> fair (Landis & Koch) (2 ms)
+    √ kappa 0.41 -> moderate (Landis & Koch) (2 ms)
+    √ kappa 0.6 -> moderate (Landis & Koch) (2 ms)
+    √ kappa 0.61 -> substantial (Landis & Koch) (1 ms)
+    √ kappa 0.8 -> substantial (Landis & Koch) (2 ms)
+    √ kappa 0.81 -> almost perfect (Landis & Koch) (2 ms)
+    √ kappa 1 -> almost perfect (Landis & Koch) (3 ms)
+    √ menyebut nilai 3 desimal dan panjang 60-220 kata (1 ms)
+    √ nilai null: kalimat generik tanpa angka (1 ms)
+    √ nilai undefined: kalimat generik tanpa angka (2 ms)
+    √ nilai NaN: kalimat generik tanpa angka (1 ms)
+    √ nilai Infinity: kalimat generik tanpa angka (9 ms)
+  describeConfusionMatrix
+    √ data stub 3 kelas: diagonal 43 dari 45 dan salah klasifikasi terbanyak (2 ms)
+    √ tanpa kesalahan: tertulis tidak ada baris salah klasifikasi (1 ms)
+    √ data hilang/NaN tidak bocor ke HTML (1 ms)
+    √ nama kelas '<b>' di-escape (1 ms)
+  describeEvaluationMetrics
+    √ 2 kelas: accuracy vs NIR, F1, recall terendah (2 ms)
+    √ accuracy <= NIR + 0.01: belum lebih baik dari menebak kelas mayoritas (1 ms)
+    √ batas tepat NIR + 0.01 masih dianggap belum lebih baik
+    √ kelas tidak seimbang (rasio < 0.5): catatan macro F1/recall (2 ms)
+    √ tanpa confusion matrix: tidak ada kalimat NIR, tetap valid (1 ms)
+    √ data hilang/NaN: tidak ada undefined/NaN di HTML (1 ms)
+    √ nama kelas '<b>' di-escape pada recall terendah dan NIR (1 ms)
+    √ data stub: kelas recall terendah adalah versicolor (1 ms)
+  describeCaseProcessingSummary
+    √ data stub: valid vs total, target, atribut, skenario (2 ms)
+    √ fitur teks vector: leakage dari getLeakageNote, tanpa menyalin teks (2 ms)
+    √ complement tanpa prior: catatan kanonik NO_PRIOR (1 ms)
+    √ tanpa data: kalimat generik, tidak ada NaN/undefined (2 ms)
+    √ nama target dan atribut di-escape (1 ms)
+  describeAttributeDistribution
+    √ atribut numerik dengan beda mean terbesar dan kategori dengan rasio terbesar (2 ms)
+    √ min-std: catatan tampil hanya bila ada atribut gaussian_minstd (1 ms)
+    √ data stub dan data kosong/rusak tetap bersih (2 ms)
+    √ nama atribut dan kelas '<b>' di-escape (1 ms)
+  describeTextFeatureTable
+    √ 3 term teratas per kelas, likelihood, alpha, catatan top-k (2 ms)
+    √ term ber-HTML di-escape
+    √ source vector: catatan LEAKAGE lewat getLeakageNote (1 ms)
+    √ data kosong/rusak tetap bersih (2 ms)
+  describeExportModel
+    √ model stub: schema, target, jumlah kelas, peringatan data sensitif, cara pakai (2 ms)
+    √ tanpa model: tetap non-kosong dan bersih (2 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/export-model-action.test.tsx
+  ExportModelAction
+    √ renders with the default export file name pre-filled (9 ms)
+    √ calls onExport with the default file name and the trained model when clicked (12 ms)
+    √ calls onExport with a user-edited file name (10 ms)
+    √ falls back to the default file name when the input is cleared/blank (6 ms)
+    √ disables the export button when there is no trained model yet (4 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesValidation.test.ts
+  getEffectivePredictors
+    √ mode exclude: predictor efektif = semua eligible dikurangi target & excluded (1 ms)
+    √ mode candidates: predictor efektif = gabungan CandidateFactors + CandidateCovariates
+    √ mode exclude kosong tanpa exclude apapun -> semua eligible selain target (1 ms)
+    √ Temuan 2 (Fase 18): SpecificationMode adalah SATU-SATUNYA sumber kebenaran mode, bukan isi array -- heuristik lama keliru menganggap CandidateFactors terisi berarti mode candidates aktif
+    √ fallback: SpecificationMode belum ada di data lama (kompatibilitas mundur) -> diperlakukan sebagai mode exclude
+  useNaiveBayesValidation
+    √ form kosong (default) -> isValid=false dengan pesan target & predictor (3 ms)
+    √ target terisi tapi predictor efektif kosong -> isValid=false (1 ms)
+    √ target + predictor terisi tapi alpha = 0 -> validateNumericInputs mengembalikan pesan alpha (2 ms)
+    √ semua valid -> validation.isValid=true dan validateNumericInputs()=null (1 ms)
+  getNumericInputError
+    √ menolak Smoothing Alpha = 0 (1 ms)
+    √ menolak Smoothing Alpha > 999
+    √ menerima Smoothing Alpha desimal (1 ms)
+    √ menolak persentase training di luar 1-99 pada mode holdout
+    √ menolak jumlah fold < 1 pada mode kfold
+    √ menolak seed di luar rentang 0-4294967295
+    √ menerima seed null (Set Seed tidak dicentang)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/options.test.tsx (6.54 s)
+  OptionsTab
+    √ renders with default value 1 (127 ms)
+    √ calls updateFormData when valid value is entered (39 ms)
+    √ shows error for value 0 (36 ms)
+    √ shows error for negative value (29 ms)
+    √ shows error for value > 999 (28 ms)
+    √ accepts decimal values (26 ms)
+    √ syncs local state when data prop changes (35 ms)
+  OptionsTab v2
+    √ Complement disabled (dengan penjelasan) saat ada predictor Numeric/Categorical (81 ms)
+    √ Complement enabled bila model hanya berisi Text Features (26 ms)
+    √ pilihan tersimpan complement + predictor lain menampilkan galat (21 ms)
+    √ blok Text nonaktif tanpa Text Features (26 ms)
+    √ TextAlpha tidak sah tidak diteruskan, nilai sah diteruskan (27 ms)
+    √ radio Numeric memilih Gaussian (Weka min. std) (25 ms)
+    √ override per variabel: set lalu kembali ke Group default menghapus kunci (31 ms)
+    √ kotak filter tabel override hanya muncul bila variabel Numeric > 50 (145 ms)
+    √ pruneNumericOverrides membuang variabel yang tidak lagi Numeric (1 ms)
+  OutputTab v2
+    √ Text Feature Table dan Top-k nonaktif tanpa Text Features (17 ms)
+    √ Top-k hanya meneruskan bilangan bulat 1-1000 (25 ms)
+    √ mencentang Text Feature Table memanggil updateFormData (15 ms)
+  TextPreprocessingTab
+    √ memakai OptionsTab STWV tanpa bagian Vector Column Name dan tanpa galat pada default (59 ms)
+    √ menampilkan galat validateStwvConfig (47 ms)
+  helper container v2
+    √ getEffectiveNumericPredictors: exclude memakai measure scale; candidates memakai CandidateCovariates (1 ms)
+    √ getNaiveBayesSelectedVariables: raw TIDAK ikut slice, vector ikut di ekor (1 ms)
+    √ buildRawTextValues membaca sel asli (tanpa parseFloat)
+    √ getTabLeaveError hanya menahan galat milik tab itu (1 ms)
+  NaiveBayesContainer v2
+    √ tab Text Preprocessing disabled tanpa Raw Text dan aktif setelah Raw Text terisi (76 ms)
+    √ "3 kucing lucu" tetap utuh sampai payload (rawTextValues dari useDataStore.data) (748 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/raw-text-payload.test.ts
+  Raw Text dari tab Variables sampai payload
+    √ "3 kucing lucu" tetap utuh sampai payload (rawTextValues dari data store) (2 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/naiveBayesPayload.test.ts
+  buildNaiveBayesTextPayload
+    √ none: tanpa Text Features (1 ms)
+    √ raw: sejajar baris target; kosong/null -> null; angka di-String-kan
+    √ raw: panjang values = jumlah baris target (diisi null bila teks lebih pendek) (1 ms)
+    √ raw: teks berawalan angka tetap utuh (tanpa parseFloat)
+    √ raw: teks spasi saja (spasi/tab/newline) -> null; teks bermakna tidak di-trim
+    √ N5-6: '   ' dan '\t\n' -> null; '  halo  ' dan '3 kucing lucu' tetap utuh (1 ms)
+    √ N5-4: TextSource tersimpan basi -> payload memakai nilai efektif dari slot
+    √ raw: slice getSlicedData diabaikan; tanpa rawTextValues melempar galat (15 ms)
+    √ vector: values[row][i] sejajar columns; non-numerik/NaN -> null
+  buildNaiveBayesWorkerConfig
+    √ tanpa teks: Text = null dan field `text` UI tidak ikut terkirim (1 ms)
+    √ raw: Text = toRustConfig(formData.text) (1 ms)
+    √ vector: Text = null (konfigurasi preprocessing tidak dipakai)
+    √ TextSource basi diganti nilai efektif dari isi slot (1 ms)
+    √ TextTopK tidak sah diganti default 100; yang sah dipertahankan
+  getUserFriendlyNaiveBayesError (kode §11)
+    √ NB_E_TEXT_NEGATIVE: satu kolom memuat nama kolom dan jumlah (1 ms)
+    √ NB_E_TEXT_NEGATIVE: beberapa kolom -> nama pertama + jumlah (1 ms)
+    √ NB_E_TEXT_NEGATIVE: pesan tanpa nama kolom tidak crash (pesan umum)
+    √ NB_E_TEXT_NEGATIVE: tanpa jumlah tetap memuat nama kolom (1 ms)
+    √ nomor fold dikenali dari "NB_E_TEXT_EMPTY_VOCAB_FOLD: fold 3 kosong"
+    √ nomor fold dikenali dari "NB_E_TEXT_EMPTY_VOCAB_FOLD: fold ke-3 kosong" (1 ms)
+    √ nomor fold dikenali dari "NB_E_TEXT_EMPTY_VOCAB_FOLD: Fold #3 kosong"
+    √ nomor fold dikenali dari "NB_E_TEXT_EMPTY_VOCAB_FOLD: fold ke 12 kosong"
+    √ NB_E_TEXT_RAW_MISSING: galat builder dipetakan ke pesan ramah
+    √ NB_E_TEXT_EMPTY_VOCAB_FOLD tanpa nomor fold tidak crash (1 ms)
+    √ NB_E_TEXT_EMPTY_VOCAB_FOLD menyebut nomor fold; NB_E_TEXT_EMPTY_VOCAB untuk model final
+    √ NB_E_COMPLEMENT_MIXED (1 ms)
+    √ NB_E_TEXT_CONFIG meneruskan pesan asli CORE (1 ms)
+    √ pesan v1 tidak berubah
+  splitNaiveBayesDataVariables
+    √ urutan [target, ...predictor, ...text vector] (2 ms)
+    √ tanpa target: predictor mulai dari indeks 0, rowCount 0 (1 ms)
+    √ tanpa predictor: target lalu text vector (1 ms)
+    √ raw: kolom Text tidak dibaca dari ekor dataVariables (1 ms)
+    √ dataVariables bukan array -> semua kosong, tidak crash
+
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesV2.test.ts
+  getEffectivePredictors v2 (Text Features)
+    √ exclude: Raw Text Variable keluar dari predictor, STRING lain TETAP ikut (1 ms)
+    √ exclude: Word-Vector Variables keluar dari predictor, STRING biasa tetap ikut (1 ms)
+    √ exclude: target, ExcludedVar, Raw Text, Vector, dan unknown sekaligus keluar
+    √ candidates: tetap gabungan CandidateFactors + CandidateCovariates (v1) (1 ms)
+    √ data lama tanpa field Text (undefined) -> perilaku v1
+  getEffectiveTextSource & getTextColumnNames
+    √ diturunkan dari isi slot, bukan dari TextSource tersimpan (1 ms)
+  useNaiveBayesValidation v2
+    √ OK aktif bila target terisi dan HANYA Text Features terisi (predictor lain dikeluarkan) (3 ms)
+    √ N5-8: target kosong (mode exclude) tanpa Text Features -> pesan target DAN predictor (1 ms)
+    √ N5-8: target kosong tetapi Text Features terisi -> hanya pesan target (2 ms)
+    √ N5-8: target kosong pada mode candidates tidak memunculkan pesan predictor bila kandidat terisi (1 ms)
+    √ tanpa predictor dan tanpa Text Features -> tetap tidak valid (12 ms)
+    √ Complement + predictor Numeric/Categorical efektif -> error yang memblokir OK (1 ms)
+    √ Complement + hanya Text Features -> valid (2 ms)
+    √ Complement tersimpan tetapi Text Features kosong -> tidak memblokir (1 ms)
+    √ jalur Raw Text memvalidasi StwvConfig (n-gram min > max -> tidak valid) (2 ms)
+    √ jalur vector tidak memvalidasi StwvConfig (1 ms)
+  getNumericInputError v2 (TextAlpha & TextTopK)
+    √ default dengan Text Features -> null
+    √ TextAlpha 0 / > 999 / NaN ditolak (1 ms)
+    √ TextTopK harus bilangan bulat 1-1000 (saat tabel dicentang)
+    √ TextAlpha/TextTopK tidak divalidasi bila tidak ada Text Features (field tersembunyi) (1 ms)
+    √ SmoothingAlpha v1 tetap divalidasi
+  mergeWithDefaults
+    √ data lama (tanpa field v2 dan tanpa text) digabung dengan default v2 (1 ms)
+    √ null/undefined -> default penuh (1 ms)
+    √ merge dalam pada text (STWV) dan tidak berbagi referensi dengan default (1 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesTextRules.test.ts
+  detectVectorLikeColumns (W-VEC)
+    √ 20 kolom sparse -> peringatan dengan jumlah kolom (3 ms)
+    √ 19 kolom sparse -> tidak ada peringatan (1 ms)
+    √ kolom dengan nilai negatif atau tidak sparse tidak dihitung (1 ms)
+    √ tepat 50% nol bukan 'lebih dari 50%' -> tidak dihitung (1 ms)
+    √ hanya variabel scale (Numeric); nominal diabaikan; missing tidak dihitung
+    √ sampel dibatasi 1.000 baris pertama (6 ms)
+  detectFreeTextStrings (W-STR)
+    √ nilai unik 50% -> peringatan dengan nama kolom
+    √ nilai unik di bawah 50% -> tidak ada peringatan (1 ms)
+    √ nilai kosong tidak dihitung; variabel non-STRING diabaikan
+    √ sampel dibatasi 5.000 baris (7 ms)
+  getLeakageNote (W-LEAK)
+    √ hanya untuk sumber vector
+
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-text-feature-formatter.test.ts
+  Case Processing Summary: baris Text (AGENTS_V2 §9)
+    √ tanpa blok text: tabel v1 TIDAK berubah (6 baris) (2 ms)
+    √ raw: Raw text '{var}' ({V} terms), likelihood, alpha; tanpa catatan W-LEAK (1 ms)
+    √ vector: Word vectors: {n} columns + catatan W-LEAK (1 ms)
+  buildTextFeatureTable
+    √ baris per kelas berurutan dengan Rank mulai 1 dan angka golden §6.7 (1 ms)
+    √ tidak membawa data `full` ke dalam tabel
+    √ k lebih kecil dari panjang `top` memotong baris (1 ms)
+    √ kelas tanpa entri tidak menimbulkan galat
+  transformNaiveBayesResult
+    √ v1: hasil stub identik dengan empat kelompok tabel v1 (regresi nol) (1 ms)
+    √ v1 + flag TextFeatureTable=true tanpa text_feature_table: tabel Text diabaikan (1 ms)
+    √ dengan text_feature_table + flag true: tabel Text ditambahkan di akhir (1 ms)
+    √ flag TextFeatureTable=false atau tidak diberikan: tabel Text tidak dibangun
+    √ baris Text pada Case Processing Summary diambil dari trained_model.text (1 ms)
+  Case Processing Summary: case_processing_summary.text_features (N4)
+    √ text_features menjadi sumber utama (mengalahkan trained_model.text)
+    √ Complement tanpa prior: catatan class_prior_note tampil, tanpa tabel prior (1 ms)
+    √ cadangan trained_model.text untuk Complement juga memberi catatan tanpa prior
+    √ uses_class_prior=true: class_prior_note diabaikan
+    √ vector: catatan leakage ditampilkan memakai teks kanonik (bukan string Rust)
+    √ not_scored_rows: baris tampil (termasuk 0); tanpa nilai tidak ada baris (v1)
+    √ transform: not_scored_rows level atas dipakai bila summary belum membawanya
+  Attribute Distribution Table: keterangan likelihood Numeric (N4)
+    √ tanpa likelihood_note: note identik v1 (1 ms)
+    √ atribut gaussian_minstd menambah keterangan pada note
+  getTrainedText (union export 1.x | 2.0)
+    √ 1.x tanpa blok text, 2.0 text=null, 2.0 dengan text, model kosong (1 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-error-messages.test.ts
+  getUserFriendlyNaiveBayesError: NB_E_TEXT_NEGATIVE, format lama (Indonesia)
+    √ (a) satu kolom bermasalah: nama kolom + kalimat inti, kode di akhir (1 ms)
+    √ (b) beberapa kolom bermasalah: nama kolom pertama + sisa kolom (1 ms)
+    √ nama kolom dengan spasi dan angka dipertahankan; string (bukan Error) juga didukung (1 ms)
+    √ tidak tertangkap kata 'fold'/'predictor' pada nama kolom
+  getUserFriendlyNaiveBayesError: NB_E_TEXT_NEGATIVE, format baru (Inggris)
+    √ (a) satu kolom bermasalah: nama kolom + kalimat inti, kode di akhir
+    √ (b) beberapa kolom bermasalah: nama kolom pertama + sisa kolom
+    √ nama kolom dengan spasi dan angka dipertahankan; string (bukan Error) juga didukung
+    √ tidak tertangkap kata 'fold'/'predictor' pada nama kolom (1 ms)
+  getUserFriendlyNaiveBayesError: NB_E_TEXT_NEGATIVE, format tak dikenal
+    √ (c) fallback pesan umum, tidak melempar galat (1 ms)
+  getUserFriendlyNaiveBayesError: kode NB_E_* lain (pola E3, kode di akhir)
+    √ NB_E_TEXT_SHAPE memakai pesan ramah baru (1 ms)
+    √ NB_E_TEXT_EMPTY_VOCAB_FOLD: nomor fold dari format lama dan baru
+    √ NB_E_TEXT_EMPTY_VOCAB_FOLD: varian holdout format baru
+    √ NB_E_TEXT_EMPTY_VOCAB: format baru (1 ms)
+    √ NB_E_COMPLEMENT_MIXED: jumlah predictor dari format baru bersifat opsional
+    √ NB_E_TEXT_CONFIG: kode CORE dipindah ke akhir kalimat (1 ms)
+    √ NB_E_TEXT_RAW_MISSING
+  getUserFriendlyNaiveBayesError: pesan v1 (English)
+    √ no target (1 ms)
+    √ no predictors
+    √ no valid cases
+    √ fold count too large
+    √ wasm failed to load
+    √ something else (1 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-output.test.ts
+  resultNaiveBayes: Text Feature Table
+    √ Text Features terisi + flag + data: statistic 'Text Feature Table' sebelum Export Model (5 ms)
+    √ opsi tersimpan true tetapi tidak ada Text Features: statistic Text diabaikan (1 ms)
+    √ Text Features terisi tetapi Rust tidak mengirim tabel: diabaikan (1 ms)
+    √ flag dimatikan: diabaikan (1 ms)
+    √ v1: statistic yang dipasang sama seperti sebelum v2 (1 ms)
+    √ setiap statistic punya description HTML berbahasa Inggris (interpretasi otomatis) (3 ms)
+
+Test Suites: 13 passed, 13 total
+Tests:       253 passed, 253 total
+Snapshots:   0 total
+Time:        11.011 s
+Ran all test suites matching components/Modals/Analyze/Classify/naive-bayes.
+Test results written to: ..\testing\text_analytics_eval\logs\baseline_jest_nb_win.json
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=15.73 started=2026-10-08 10:28:01 +07:00 cmd=npx jest components/Modals/Analyze/Classify/naive-bayes --testPathIgnorePatterns=__tests__/eval --testPathIgnorePatterns=hooks/__tests__/whitebox --coverage --coverageReporters=json-summary --coverageReporters=text "--collectCoverageFrom=components/Modals/Analyze/Classify/naive-bayes/**/*.{ts,tsx}" "--collectCoverageFrom=!**/__tests__/**" "--collectCoverageFrom=!**/*.d.ts" "--collectCoverageFrom=!**/wasm-output/**" "--collectCoverageFrom=!**/pkg/**" --json --outputFile=..\testing\text_analytics_eval\logs\baseline_jest_nb_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===

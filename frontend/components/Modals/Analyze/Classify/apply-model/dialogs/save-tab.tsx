@@ -24,6 +24,7 @@ import {
   validateNamePrefix,
 } from "@/components/Modals/Analyze/Classify/apply-model/hooks/useApplyModelSaveRules";
 import type { OutputColumnSpec } from "@/components/Modals/Analyze/Classify/apply-model/hooks/useApplyModelSaveRules";
+import { APPLY_MODEL_TOUR_IDS } from "@/components/Modals/Analyze/Classify/apply-model/hooks/tourConfig";
 import type { ApplyModelSaveTabType } from "@/components/Modals/Analyze/Classify/apply-model/types/apply-model";
 import type { Variable } from "@/types/Variable";
 
@@ -33,20 +34,7 @@ export type SaveTabProps = {
   adapter: Pick<ClassifierModelAdapter, "defaultOutputPrefix">;
   existingVariables: Variable[];
   onChange: (next: ApplyModelSaveTabType) => void;
-  showFieldHelp: boolean;
 };
-
-// Teks bantuan (bahasa Inggris, AGENTS.md §6.1) — tampil bila showFieldHelp.
-const SAVE_TAB_HELP = {
-  columns:
-    "Choose which columns are added to the active dataset. The predicted value column is always saved.",
-  prefix:
-    "Text placed before each default column name. Leave empty to use the algorithm default.",
-  customNames:
-    "Edit the name of every column to be saved. Empty names are not replaced by defaults.",
-  table:
-    "Final name is what the column will be called in the dataset. It is adjusted automatically when the name is invalid or already used.",
-} as const;
 
 const PREDICTED_VALUE_LABEL = "Predicted value";
 const MAX_PROBABILITY_LABEL = "Predicted probability (predicted class)";
@@ -58,11 +46,6 @@ function formatIssueMessage(issue: ApplyModelIssue): string {
     /\{detail\}/g,
     issue.detail ?? ""
   );
-}
-
-function HelpText({ show, text }: { show: boolean; text: string }) {
-  if (!show) return null;
-  return <p className="text-xs text-muted-foreground">{text}</p>;
 }
 
 /** Nama kolom untuk tampilan tabel, diturunkan dari `spec.key`. */
@@ -78,7 +61,6 @@ export function SaveTab({
   adapter,
   existingVariables,
   onChange,
-  showFieldHelp,
 }: SaveTabProps) {
   const specs = useMemo(
     () => getOutputColumnSpecs(descriptor, data, adapter),
@@ -152,13 +134,18 @@ export function SaveTab({
     <div className="flex flex-col gap-4">
       <section className="flex flex-col gap-2">
         <Label className="font-semibold">Columns to save</Label>
-        <HelpText show={showFieldHelp} text={SAVE_TAB_HELP.columns} />
 
-        <div className="flex items-center gap-2">
+        <div
+          id={APPLY_MODEL_TOUR_IDS.savePredictedRow}
+          className="flex items-center gap-2"
+        >
           <Checkbox id="save-predicted-value" checked disabled />
           <Label htmlFor="save-predicted-value">{PREDICTED_VALUE_LABEL}</Label>
         </div>
-        <div className="flex items-center gap-2">
+        <div
+          id={APPLY_MODEL_TOUR_IDS.saveMaxProbabilityRow}
+          className="flex items-center gap-2"
+        >
           <Checkbox
             id="save-max-probability"
             checked={data.SaveMaxProbability}
@@ -168,7 +155,10 @@ export function SaveTab({
           />
           <Label htmlFor="save-max-probability">{MAX_PROBABILITY_LABEL}</Label>
         </div>
-        <div className="flex items-center gap-2">
+        <div
+          id={APPLY_MODEL_TOUR_IDS.saveClassProbabilitiesRow}
+          className="flex items-center gap-2"
+        >
           <Checkbox
             id="save-class-probabilities"
             checked={data.SaveClassProbabilities}
@@ -182,7 +172,10 @@ export function SaveTab({
         </div>
       </section>
 
-      <section className="flex flex-col gap-2">
+      <section
+        id={APPLY_MODEL_TOUR_IDS.savePrefixSection}
+        className="flex flex-col gap-2"
+      >
         <Label htmlFor="save-name-prefix" className="font-semibold">
           Name prefix
         </Label>
@@ -193,11 +186,13 @@ export function SaveTab({
           aria-invalid={prefixInvalid}
           onChange={(event) => handlePrefixChange(event.target.value)}
         />
-        <HelpText show={showFieldHelp} text={SAVE_TAB_HELP.prefix} />
       </section>
 
       <section className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
+        <div
+          id={APPLY_MODEL_TOUR_IDS.saveCustomNamesRow}
+          className="flex items-center gap-2"
+        >
           <Checkbox
             id="save-use-custom-names"
             checked={data.UseCustomNames}
@@ -207,9 +202,12 @@ export function SaveTab({
           />
           <Label htmlFor="save-use-custom-names">Use custom names</Label>
         </div>
-        <HelpText show={showFieldHelp} text={SAVE_TAB_HELP.customNames} />
 
-        <table className="w-full text-sm" data-testid="save-names-table">
+        <table
+          id={APPLY_MODEL_TOUR_IDS.saveNamesTable}
+          className="w-full text-sm"
+          data-testid="save-names-table"
+        >
           <thead>
             <tr className="border-b text-left text-muted-foreground">
               <th className="py-1 pr-2 font-normal">Column</th>
@@ -267,7 +265,6 @@ export function SaveTab({
             })}
           </tbody>
         </table>
-        <HelpText show={showFieldHelp} text={SAVE_TAB_HELP.table} />
 
         {resolved.adjusted.length > 0 && (
           <div

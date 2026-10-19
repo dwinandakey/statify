@@ -1,10 +1,10 @@
 //! Evaluasi skripsi — Track D (OPSIONAL): probabilitas posterior Apply Model pada PRESISI PENUH dari SUMBER Rust,
-//! sekaligus pemeriksaan bahwa biner wasm yang dipakai skrip Node (`testing/text_analytics_eval/headless`) tidak basi
+//! sekaligus pemeriksaan bahwa biner wasm yang dipakai skrip Node (`frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/headless`) tidak basi
 //! terhadap sumber.
 //!
 //! Cara kerja (tidak menulis ulang rumus; hanya memanggil fungsi produksi):
-//!   1. Membaca model hasil Export Model dari wasm Naive Bayes: `testing/text_analytics_eval/accuracy/out/model_statify_<K>.json`
-//!      (dibuat oleh `node testing/text_analytics_eval/accuracy/run_statify.mjs`).
+//!   1. Membaca model hasil Export Model dari wasm Naive Bayes: `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/out/model_statify_<K>.json`
+//!      (dibuat oleh `node frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/run_statify.mjs`).
 //!   2. Membaca `Claude outputs/pilkada_test.csv` (kolom `Id`, `Sentiment`, `Text Tweet`).
 //!   3. `build_scorer(model)` -> `TextModel::prepare(payload raw)` -> `score_row_with_text` -> `normalize_log_scores`
 //!      (log-sum-exp) -> `argmax_with_tie_break`: jalur yang sama dengan `run_apply_model_with_text`, tetapi probabilitas
@@ -94,7 +94,7 @@ fn column(header: &[String], name: &str) -> usize {
 #[test]
 fn eval_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi() {
     let root = repo_root();
-    let out_dir = root.join("testing").join("text_analytics_eval").join("accuracy").join("out");
+    let out_dir = root.join("frontend").join("components").join("Modals").join("Analyze").join("Classify").join("naive-bayes").join("text_analytics_eval").join("accuracy").join("out");
     let test_csv = root.join("Claude outputs").join("pilkada_test.csv");
     let rows = parse_csv(&fs::read_to_string(&test_csv).expect("pilkada_test.csv tidak terbaca"));
     let header = rows[0].clone();

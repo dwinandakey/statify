@@ -17,7 +17,9 @@ serde_json = { version = "1.0", features = ["float_roundtrip"] }
 rust-stemmers = "1.2.0"
 
 # Stemming bahasa Indonesia (Nazief-Adriani via Sastrawi)
-sastrawi-rs = "0.5.1"
+# Dikunci persis 0.5.3 untuk STWV, Naive Bayes, dan Apply Model (Cargo.lock tidak ikut git);
+# versi 0.5.1 panik pada token yang karakter keduanya multibita.
+sastrawi-rs = "=0.5.3"
 
 # HashSet & HashMap efisien untuk stopwords filter
 hashbrown = "0.14"

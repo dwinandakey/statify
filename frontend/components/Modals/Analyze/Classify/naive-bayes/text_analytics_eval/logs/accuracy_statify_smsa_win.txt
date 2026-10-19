@@ -1,0 +1,17 @@
+=== run_statify.mjs  dataset=smsa  configs=K1,K4,K1w,K4w  2026-10-08T03:30:08.109Z
+[statify_wasm] node=v24.13.1 win32/x64 (Windows_NT 10.0.26300) repo=E:\KULIAH\Skripsi\statify64
+[statify_wasm] stwv sha256=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 bytes=1464043 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
+[statify_wasm] nb   sha256=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 bytes=1843034 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
+[statify_wasm] am   sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc bytes=1627140 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
+train=11000 baris (smsa_train.csv)  test=500 baris (smsa_test.csv)  header=["Id","Label","Text"]
+K1: acc=0.598000 (299/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=551 apply_ms=65 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\smsa\pred_statify_K1.csv
+K4: acc=0.624000 (312/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=354 apply_ms=17 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\smsa\pred_statify_K4.csv
+K1w: acc=0.646000 (323/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=489 apply_ms=81 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\smsa\pred_statify_K1w.csv
+K4w: acc=0.650000 (325/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=444 apply_ms=75 NBerrors="No errors occurred." AMerrors="No errors occurred." -> testing\text_analytics_eval\accuracy\out\smsa\pred_statify_K4w.csv
+=== ringkasan ===
+K1	acc=0.598000	299/500	notScored=0	vocab=1000
+K4	acc=0.624000	312/500	notScored=0	vocab=1000
+K1w	acc=0.646000	323/500	notScored=0	vocab=17898
+K4w	acc=0.650000	325/500	notScored=0	vocab=17898
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.37 started=2026-10-08 10:30:08 +07:00 cmd=node testing\text_analytics_eval\accuracy\run_statify.mjs --dataset smsa cwd=E:\KULIAH\Skripsi\statify64 ===

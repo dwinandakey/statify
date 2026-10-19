@@ -1,5 +1,5 @@
 import type { StwvConfig } from "../config";
-import { FORMULA_STANDARDS } from "../constants/formula-standards";
+import { ranksByWordCount } from "../constants/vectorization-options";
 
 /**
  * Interpretasi otomatis (HTML, bahasa Inggris) untuk setiap item Output Viewer STWV.
@@ -244,7 +244,6 @@ export function describeStwvProcessingSummary(input: StwvDescribeInput): string 
 /** Tabel Settings. */
 export function describeStwvSettings(input: StwvDescribeInput): string {
     const { config } = input;
-    const standard = FORMULA_STANDARDS[config.formulaStandard];
     const v = config.vectorization;
 
     const what = "Lists the preprocessing and weighting options that were used to build the word vectors.";
@@ -253,10 +252,9 @@ export function describeStwvSettings(input: StwvDescribeInput): string {
         "and normalization rescales each document vector.";
 
     const weights =
-        `With the ${standard.label} standard, cell values are ${TF_PHRASE[v.tfMethod]}, ` +
+        `Cell values are ${TF_PHRASE[v.tfMethod]}, ` +
         `${IDF_PHRASE[v.idfMethod]} and ${NORM_PHRASE[v.normalization]}.`;
-    const ranking =
-        config.formulaStandard === "custom" ? "the sum of TF × IDF" : "total word count across all documents";
+    const ranking = ranksByWordCount(v) ? "total word count across all documents" : "the sum of TF × IDF";
     const wordsToKeep = toCount(config.wordsToKeep);
     const keep =
         wordsToKeep === null

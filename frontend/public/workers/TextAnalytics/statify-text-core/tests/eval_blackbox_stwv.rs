@@ -8,8 +8,8 @@
 //! `blackbox.stwv.options.test.tsx` -> "Kontrak payload default").
 //!
 //! Nilai acuan dihitung SECARA INDEPENDEN di Python (tanpa kode Statify):
-//!   testing/text_analytics_eval/blackbox/reference_bb02.py          -> logs/reference_bb02.txt
-//!   testing/text_analytics_eval/blackbox/c1_reference_extra.py      -> logs/reference_bb_c1_extra.txt
+//!   frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/blackbox/reference_bb02.py          -> logs/reference_bb02.txt
+//!   frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/blackbox/c1_reference_extra.py      -> logs/reference_bb_c1_extra.txt
 //! Angka di bawah disalin dari kedua log tersebut. Kolom/baris acuan BB-09 berasal dari
 //! scikit-learn 1.9.1 TfidfVectorizer (smooth_idf=True, norm="l2").
 //!
@@ -22,12 +22,12 @@ use statify_text_core::{
 
 /// Payload default yang dikirim antarmuka (sama dengan keluaran `toRustConfig(STWV_DEFAULT_CONFIG)`).
 const DEFAULT_PAYLOAD: &str =
-    include_str!("../../../../../../testing/text_analytics_eval/blackbox/data/c1_payload_default.json");
+    include_str!("../../../../../components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/blackbox/data/c1_payload_default.json");
 
 /// Daftar stopword Indonesian bawaan aplikasi (JSON array; identik dengan `INDONESIAN_STOPWORDS`,
 /// disamakan oleh tes Jest "berkas acuan Rust c1_stopwords_indonesian.json identik ...").
 const STOPWORDS_ID_JSON: &str =
-    include_str!("../../../../../../testing/text_analytics_eval/blackbox/data/c1_stopwords_indonesian.json");
+    include_str!("../../../../../components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/blackbox/data/c1_stopwords_indonesian.json");
 
 const TOL: f64 = 1e-9;
 

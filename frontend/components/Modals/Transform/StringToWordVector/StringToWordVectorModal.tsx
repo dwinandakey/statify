@@ -8,7 +8,14 @@ import { VariablesTab } from "./VariablesTab";
 import { OptionsTab } from "./OptionsTab";
 import { toast } from "sonner";
 import { validateStwvConfig } from "./config";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, HelpCircle } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
+import { STWV_TOUR_IDS, getStwvTourSteps } from "./hooks/tourConfig";
 import { validateColumnPrefix } from "./utils/columnPrefix";
 import { formatStwvError } from "./utils/formatStwvError";
 
@@ -17,7 +24,7 @@ import { formatStwvError } from "./utils/formatStwvError";
  * Berisi tabulasi dan logic, namun TIDAK membungkus dirinya sendiri dengan `Dialog`.
  * Ini agar Sidebar bisa merendernya dengan lebar penuh dengan rapi!.
  */
-const StringToWordVectorContent: React.FC<BaseModalProps> = ({ onClose }) => {
+const StringToWordVectorContent: React.FC<BaseModalProps> = ({ onClose, containerType }) => {
     const {
         availableVariables,
         selectedVariable,
@@ -36,6 +43,24 @@ const StringToWordVectorContent: React.FC<BaseModalProps> = ({ onClose }) => {
     } = useStringToWordVector();
 
     const [activeTab, setActiveTab] = React.useState("variables");
+
+    // Tur bantuan interaktif (pola Ordinal Regression); bahasa mengikuti halaman Help
+    const helpLanguage = useHelpLanguageStore((state) => state.language);
+    const baseTourSteps = React.useMemo(() => getStwvTourSteps(helpLanguage), [helpLanguage]);
+    const tabControl = React.useMemo(
+        (): TabControlProps => ({
+            setActiveTab: (tab: string) => setActiveTab(tab),
+            currentActiveTab: activeTab,
+        }),
+        [activeTab]
+    );
+    const { tourActive, currentStep, tourSteps, currentTargetElement, startTour, nextStep, prevStep, endTour } =
+        useTourGuide(baseTourSteps, containerType === "sidebar" ? "sidebar" : "dialog", tabControl);
+
+  // Gulirkan panel ke kolom yang sedang dijelaskan agar terlihat bersama pop-up-nya.
+  React.useEffect(() => {
+    currentTargetElement?.scrollIntoView?.({ block: "nearest" });
+  }, [currentTargetElement]);
 
     // Validasi opsi: tombol Run dinonaktifkan dan pesan ditampilkan bila ada yang tidak sah
     const validationErrors = React.useMemo(() => validateStwvConfig(config), [config]);
@@ -63,11 +88,26 @@ const StringToWordVectorContent: React.FC<BaseModalProps> = ({ onClose }) => {
 
     return (
         <div className="flex flex-col h-full bg-background">
+            <AnimatePresence>
+                {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
+                    <TourPopup
+                        step={tourSteps[currentStep]}
+                        currentStep={currentStep}
+                        totalSteps={tourSteps.length}
+                        onNext={nextStep}
+                        onPrev={prevStep}
+                        onClose={endTour}
+                        targetElement={currentTargetElement}
+                    />
+                )}
+            </AnimatePresence>
+            <ActiveElementHighlight active={tourActive} />
+
             <div className="flex-grow px-6 py-3 overflow-y-auto min-h-0">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
                     <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
-                        <TabsTrigger value="variables">Variables</TabsTrigger>
-                        <TabsTrigger value="options">Options</TabsTrigger>
+                        <TabsTrigger value="variables" id={STWV_TOUR_IDS.variablesTab}>Variables</TabsTrigger>
+                        <TabsTrigger value="options" id={STWV_TOUR_IDS.optionsTab}>Options</TabsTrigger>
                     </TabsList>
 
                     <div className="flex-grow min-h-0 overflow-hidden">
@@ -125,19 +165,42 @@ const StringToWordVectorContent: React.FC<BaseModalProps> = ({ onClose }) => {
             </div>
 
             {/* Footer Form Action Buttons */}
-            <div className="px-6 py-3 border-t border-border flex items-center justify-end bg-secondary flex-shrink-0 space-x-4">
-                <Button onClick={handleOk} disabled={isLoading || !selectedVariable || hasValidationErrors}>
-                    {isLoading ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Processing...
-                        </>
-                    ) : (
-                        "OK"
-                    )}
-                </Button>
-                <Button variant="outline" onClick={handleReset} disabled={isLoading}>Reset</Button>
-                <Button variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
+            <div className="px-6 py-3 border-t border-border flex items-center justify-between bg-secondary flex-shrink-0">
+                <div className="flex items-center text-muted-foreground">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    data-testid="stwv-help-button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={startTour}
+                                    aria-label="Start feature tour"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                                >
+                                    <HelpCircle className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                <p className="text-xs">Start feature tour</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <div className="flex items-center space-x-4">
+                    <Button onClick={handleOk} disabled={isLoading || !selectedVariable || hasValidationErrors}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Processing...
+                            </>
+                        ) : (
+                            "OK"
+                        )}
+                    </Button>
+                    <Button variant="outline" onClick={handleReset} disabled={isLoading}>Reset</Button>
+                    <Button variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
+                </div>
             </div>
         </div>
     );

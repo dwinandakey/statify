@@ -2,7 +2,7 @@
 // pada payload ke Rust.
 //
 // Tes Rust `statify-text-core/tests/eval_text_pipeline.rs` memakai SALINAN daftar ini
-// (`tests/eval_data/stopwords_{id,en}.json`, dibuat oleh testing/text_analytics_eval/unit/reference_values.py).
+// (`tests/eval_data/stopwords_{id,en}.json`, dibuat oleh frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/unit/reference_values.py).
 // Tes di sini menjaga agar salinan itu tetap identik dengan konstanta TypeScript yang sungguh dikirim aplikasi.
 //
 // Sudah tercakup oleh __tests__/config.test.ts (tidak diulang): default config, preset sklearn, words_to_keep 0,

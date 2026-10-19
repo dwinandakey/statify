@@ -1,0 +1,12 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.output.test.tsx (17.088 s)
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.validation.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       43 passed, 43 total
+Snapshots:   0 total
+Time:        18.296 s
+Ran all test suites matching frontend/components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.validation.test.ts|frontend/components/Modals/Analyze/Classify/naive-bayes/__tests__/thesis/blackbox.nb.output.test.tsx.
+Error: ENOENT: no such file or directory, open '/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/testing/thesis-eval/logs/jest_C2_vm_part1.json'

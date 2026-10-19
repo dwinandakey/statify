@@ -148,6 +148,23 @@ export function buildNaiveBayesTextPayload(
   return { source: "vector", columns: names, values };
 }
 
+/**
+ * Mengambil peringatan non-fatal dari `errors` yang dikirim worker bersama
+ * `success: true` (= string `get_all_errors()` Rust, `utils/error.rs`):
+ * `"No errors occurred."` atau `"Error Summary:\nContext: ...\n  1. pesan\n"`.
+ * Pada run sukses, isi pengumpul galat Rust hanya peringatan (galat fatal
+ * membuat `get_formatted_results()` gagal), mis. fold > kelas terkecil.
+ */
+export function getNaiveBayesEngineWarnings(errors: unknown): string[] {
+  if (typeof errors !== "string") return [];
+  const warnings: string[] = [];
+  for (const line of errors.split(/\r?\n/)) {
+    const match = /^\s+\d+\.\s+(.+)$/.exec(line);
+    if (match) warnings.push(match[1].trim());
+  }
+  return warnings;
+}
+
 /** Hasil pemisahan `dataVariables` (lihat `splitNaiveBayesDataVariables`). */
 export type NaiveBayesSplitData = {
   targetNames: string[];
@@ -255,6 +272,7 @@ export async function analyzeNaiveBayes({
   const predictorsDefs = getVarDefs(variables, predictorNames);
 
   const worker = new Worker(NAIVE_BAYES_WORKER_URL, { type: "module" });
+  let engineWarnings: string[] = [];
 
   const rawResult = await new Promise<NaiveBayesRawResult>((resolve, reject) => {
     worker.postMessage({
@@ -274,6 +292,8 @@ export async function analyzeNaiveBayes({
           reject(new Error(e.data.error ?? "Naive Bayes worker failed."));
           return;
         }
+        // B9: peringatan non-fatal Rust ikut ditampilkan di output (baris Note).
+        engineWarnings = getNaiveBayesEngineWarnings(e.data.errors);
         resolve(e.data.data as NaiveBayesRawResult);
       } catch (error) {
         reject(error instanceof Error ? error : new Error(String(error)));
@@ -288,12 +308,17 @@ export async function analyzeNaiveBayes({
     };
   });
 
-  const formattedResult = transformNaiveBayesResult(rawResult, configData.output);
+  const formattedResult = transformNaiveBayesResult(
+    rawResult,
+    configData.output,
+    engineWarnings,
+  );
 
   await resultNaiveBayes({
     formattedResult,
     rawResult,
     configData,
+    engineWarnings,
   });
 
   return rawResult;

@@ -78,7 +78,7 @@ function modelTabData(model: Record<string, unknown>): ApplyModelModelTabType {
 
 describe("ModelTab v2 — info Text", () => {
   it("model raw: baris ringkasan Text dari adapter + variabel teks model; tanpa tabel fitur", () => {
-    render(<ModelTab data={modelTabData(nbModelRaw)} onModelLoaded={jest.fn()} showFieldHelp={false} />);
+    render(<ModelTab data={modelTabData(nbModelRaw)} onModelLoaded={jest.fn()} />);
 
     const card = screen.getByTestId("model-summary-card");
     expect(within(card).getByText("Text source")).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe("ModelTab v2 — info Text", () => {
 
   it("model vector: jumlah kolom vektor + daftar kolom yang dapat dibuka", async () => {
     const user = userEvent.setup();
-    render(<ModelTab data={modelTabData(nbModelVector)} onModelLoaded={jest.fn()} showFieldHelp={false} />);
+    render(<ModelTab data={modelTabData(nbModelVector)} onModelLoaded={jest.fn()} />);
 
     expect(screen.getByTestId("model-text-info")).toHaveTextContent("Word-vector columns: 5");
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
@@ -109,7 +109,7 @@ describe("ModelTab v2 — info Text", () => {
   });
 
   it("model v1: tidak ada info Text dan tabel fitur tetap tampil", () => {
-    render(<ModelTab data={modelTabData(nbModelV11)} onModelLoaded={jest.fn()} showFieldHelp={false} />);
+    render(<ModelTab data={modelTabData(nbModelV11)} onModelLoaded={jest.fn()} />);
 
     expect(screen.queryByTestId("model-text-info")).not.toBeInTheDocument();
     expect(screen.queryByTestId("model-no-features")).not.toBeInTheDocument();

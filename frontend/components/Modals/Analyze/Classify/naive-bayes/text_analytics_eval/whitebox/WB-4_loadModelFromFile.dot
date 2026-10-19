@@ -1,0 +1,38 @@
+digraph G {
+  rankdir=TB; nodesep=0.35; ranksep=0.38;
+  node [fontname="Helvetica", fontsize=10, margin="0.08,0.04"];
+  edge [fontname="Helvetica", fontsize=9];
+  labelloc=t; label="WB-4 loadModelFromFile (+ finalizeLoad)"; fontsize=12; fontname="Helvetica-Bold";
+  "S" [label="Mulai", shape=ellipse,style=filled,fillcolor="#d9ead3"];
+  "q1" [label="1: bukan .json?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "r1" [label="2: return fail(AM_E_PARSE)", shape=box,style=filled,fillcolor="#f4cccc"];
+  "q2" [label="3: size > 10 MB?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "r2" [label="4: return fail(AM_E_FILE_TOO_LARGE)", shape=box,style=filled,fillcolor="#f4cccc"];
+  "s0" [label="5: let raw (masuk try)", shape=box];
+  "q3" [label="6: file.text() melempar?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "q4" [label="7: JSON.parse melempar?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "r3" [label="8: catch: return fail(AM_E_PARSE)", shape=box,style=filled,fillcolor="#f4cccc"];
+  "s1" [label="9: finalizeLoad: validateAnyModel(raw)", shape=box];
+  "q5" [label="10: !validation.ok?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "r4" [label="11: return {ok:false, errors}", shape=box,style=filled,fillcolor="#f4cccc"];
+  "r5" [label="12: return {ok:true, model, ...}", shape=box,style=filled,fillcolor="#cfe2f3"];
+  "X" [label="Selesai", shape=ellipse,style=filled,fillcolor="#d9ead3"];
+  "S" -> "q1";
+  "q1" -> "r1" [label="T"];
+  "q1" -> "q2" [label="F"];
+  "q2" -> "r2" [label="T"];
+  "q2" -> "s0" [label="F"];
+  "s0" -> "q3";
+  "q3" -> "r3" [label="T"];
+  "q3" -> "q4" [label="F"];
+  "q4" -> "r3" [label="T"];
+  "q4" -> "s1" [label="F"];
+  "s1" -> "q5";
+  "q5" -> "r4" [label="T"];
+  "q5" -> "r5" [label="F"];
+  "r1" -> "X";
+  "r2" -> "X";
+  "r3" -> "X";
+  "r4" -> "X";
+  "r5" -> "X";
+}

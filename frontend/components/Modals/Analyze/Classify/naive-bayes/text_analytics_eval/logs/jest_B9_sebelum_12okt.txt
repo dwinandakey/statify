@@ -1,0 +1,238 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in C:/Data/KULIAH/Skripsi/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.pipeline.test.ts
+  ● Console
+
+    console.log
+      [blackbox.am.pipeline] wasm_bg.wasm sha256=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.pipeline.test.ts:216:13)
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in C:/Data/KULIAH/Skripsi/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/apply-model-main.test.tsx (5.332 s)
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.container.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/save-tab.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/variables-tab.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.variables.test.tsx
+PASS components/Modals/Analyze/Classify/naive-bayes/dialogs/__tests__/eval/blackbox.nb.persistence.test.tsx
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/options.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/output-tab.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/variables-tab-v2.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.model-tab.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/model-tab.test.tsx
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/variables-tab.test.tsx
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.output.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/eval/blackbox.am.mapping.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/text-feature-table-output.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/eval/blackbox.am.save.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/dialogs/__tests__/model-tab-v2.test.tsx
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-interpretation.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-analysis-v2.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/naiveBayesPayload.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/adapters/__tests__/naive-bayes-adapter.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/payload_equivalence.am.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/model-loader.eval.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/adapters/__tests__/naive-bayes-adapter-v2.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-analysis.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/useApplyModelMappingRulesV2.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/model-loader.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-interpretation.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-output.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/blackbox.am.loader.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/export-model-action.test.tsx
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/useApplyModelMappingRules.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.validation.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/whitebox.useNaiveBayesValidation.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesV2.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-save-variables.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/useApplyModelSaveRules.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/eval/whitebox.useNaiveBayesValidation.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-text-feature-formatter.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesTextRules.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/adapters/__tests__/registry.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-error-messages.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/useNaiveBayesValidation.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/useApplyModelValidation.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/constants/__tests__/apply-model-default.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/eval/kfold.eval.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-error-messages.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/raw-text-payload.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/constants/__tests__/apply-model-codes.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/naive-bayes-analysis-output.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-formatter.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/services/__tests__/eval/payload_equivalence.nb.test.ts
+PASS components/Modals/Analyze/Classify/naive-bayes/hooks/__tests__/eval/whitebox.getNumericInputError.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/apply-model-formatter-v2.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/whitebox.loadModelFromFile.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/hooks/__tests__/useApplyModelOutputRules.test.ts
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it05.persistence.test.ts
+  ● Console
+
+    console.log
+      [integration.it05] round-trip JSON JS: 299884 double diuji, 0 selisih
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it05.persistence.test.ts:132:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts
+  ● Console
+
+    console.log
+      [integration.it03] K1: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K1: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K2: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 5.000e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 4.154e-2; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K2: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K3: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 7.241e-3; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K3: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K4: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.994e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 1.600e-4; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K4: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+    console.log
+      [integration.it03] K5: kelas sama 630/630; round4(acuan)==kolom 1260/1260 (selisih maks 0); |acuan-kolom| maks 4.992e-5; kriteria 1e-9 langsung: tidak terpenuhi (round4); selisih skor-log terkecil 3.988e-2; seri persis 0
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:195:13)
+
+    console.log
+      [integration.it03] K5: kontrol negatif (geser 1e-9 pada satu log_weight): deepBitCompare melaporkan 1 selisih; sel keluaran AM yang berubah = 0/2520
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it02-it03.model-roundtrip.test.ts:240:13)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/components/__tests__/eval/integration.it01.leakage-ui.test.tsx
+  ● Console
+
+    console.log
+      [integration.it01.ui] kolom STWV=1000; mengandung 'VEC_'=999; terpindah ke Word-Vector Variables=999; W-LEAK tampil=ya
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/components/__tests__/eval/integration.it01.leakage-ui.test.tsx:99:13)
+
+    console.log
+      [integration.it01.ui] kolom STWV yang tidak mengandung 'VEC_': ["VEC"]
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/naive-bayes/components/__tests__/eval/integration.it01.leakage-ui.test.tsx:105:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts
+  ● Console
+
+    console.log
+      [integration.it04] K1: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K1: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K1: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K2: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.979e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K2: Statify akurasi 0.729630 kappa 0.459259 macroF1 0.729537 | scikit-learn akurasi 0.729630 kappa 0.459259 macroF1 0.729537
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K2: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6808510638297872
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K3: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.996e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K3: Statify akurasi 0.762963 kappa 0.525926 macroF1 0.762963 | scikit-learn akurasi 0.762963 kappa 0.525926 macroF1 0.762963
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K3: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K4: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.940e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K4: Statify akurasi 0.766667 kappa 0.533333 macroF1 0.766510 | scikit-learn akurasi 0.766667 kappa 0.533333 macroF1 0.766510
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K4: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.6968085106382979
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:136:13)
+
+    console.log
+      [integration.it04] K5: kelas sama dg scikit-learn 270/270; galat absolut maksimum probabilitas 4.960e-5
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:104:13)
+
+    console.log
+      [integration.it04] K5: Statify akurasi 0.755556 kappa 0.511111 macroF1 0.755556 | scikit-learn akurasi 0.755556 kappa 0.511111 macroF1 0.755556
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:116:13)
+
+    console.log
+      [integration.it04] K5: akurasi holdout NB (validasi 70/30 di dalam 630 baris latih) = 0.723404255319149
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it04.pilkada-train-test.test.ts:136:13)
+
+PASS components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it01.vector-nb.test.ts (5.005 s)
+  ● Console
+
+    console.log
+      [integration.it01] wasm sha256 stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+
+      at Object.<anonymous> (components/Modals/Analyze/Classify/apply-model/services/__tests__/eval/integration.it01.vector-nb.test.ts:45:13)
+
+
+Test Suites: 63 passed, 63 total
+Tests:       1147 passed, 1147 total
+Snapshots:   0 total
+Time:        33.337 s
+Ran all test suites matching components/Modals/Analyze/Classify/naive-bayes|components/Modals/Analyze/Classify/apply-model.
+Test results written to: ..\testing\text_analytics_eval\logs\jest_B9_sebelum_12okt.json

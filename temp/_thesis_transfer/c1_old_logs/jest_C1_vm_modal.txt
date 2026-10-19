@@ -1,0 +1,36 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.modal.test.tsx (25.299 s)
+  BB-01 membuka panel String to Word Vector
+    ✓ panel menampilkan tab Variables dan Options (181 ms)
+    ✓ daftar variabel hanya memuat variabel STRING atau bersifat nominal (44 ms)
+    ✓ tab Options memuat bagian Vector Column Name, Stopwords, Stemming, Tokenizer, dan Vectorization Method (229 ms)
+    ✓ tanpa variabel terpilih tombol OK nonaktif; setelah memilih variabel OK aktif (115 ms)
+  BB-03 Vector Column Name tidak sah (awalan kolom)
+    ✓ awalan dimulai angka menampilkan pesan dan menonaktifkan OK (229 ms)
+    ✓ awalan 33 karakter (melewati batas isian) menampilkan pesan panjang maksimum 32 dan OK nonaktif (189 ms)
+    ✓ kolom isian dibatasi maxLength 32 sehingga mengetik 40 karakter hanya menyimpan 32 dan tidak ada galat (860 ms)
+    ✓ awalan mengandung spasi atau simbol terlarang ditolak, awalan sah mengaktifkan kembali OK (202 ms)
+  BB-06 Delimiters regex tidak valid (galat INVALID_REGEX dari inti)
+    ✓ antarmuka tidak memvalidasi regex di muka; setelah OK galat INVALID_REGEX tampil lengkap dengan kodenya dan modal tetap terbuka (226 ms)
+    ✓ delimiter dikosongkan ditolak di sisi klien dengan pesan dan OK nonaktif (152 ms)
+  BB-11 kosakata kosong (galat EMPTY_VOCABULARY dari inti)
+    ✓ galat EMPTY_VOCABULARY tampil dengan kalimat utama dan kode; tidak ada kolom ditambahkan (262 ms)
+    ✓ galat EMPTY_VOCABULARY akibat Min term frequency memakai kalimat utama yang berbeda (78 ms)
+  BB-02 dan BB-13 alur OK pada korpus acuan (antarmuka dan Output Viewer)
+    ✓ OK mengirim default Weka ke worker, menambahkan lima kolom VEC_ ke dataset, lalu menutup panel (86 ms)
+    ✓ BB-13 Output Viewer menerima Processing Summary, Settings, dan Vocabulary dengan isi yang benar (80 ms)
+    ✓ awalan kolom kustom TKS_ dipakai pada nama kolom dan ringkasan (217 ms)
+  BB-12 sel kosong menjadi vektor nol dan jumlah baris tetap
+    ✓ sel kosong (null) dikirim sebagai string kosong pada indeks yang sama dan semua kolom tetap berisi 5 baris (78 ms)
+    ✓ bila seluruh sel kosong, worker tidak dipanggil dan galat EMPTY_DATA tampil (75 ms)
+  Reset dan Cancel pada panel
+    ✓ Cancel memanggil onClose dan Reset mengembalikan pilihan variabel serta awalan kolom (295 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       18 passed, 18 total
+Snapshots:   0 total
+Time:        26.13 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.modal.test.tsx.
+Test results written to: ../testing/thesis-eval/logs/jest_C1_vm_modal.json

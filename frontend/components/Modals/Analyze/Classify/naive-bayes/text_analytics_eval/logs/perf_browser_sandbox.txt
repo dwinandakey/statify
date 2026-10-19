@@ -1,0 +1,41 @@
+=== run_browser.mjs run_id=browser_sandbox_20261007T222738 device=sandbox (SANDBOX-CLOUD (UJI ASAP, BUKAN PERANGKAT SKRIPSI))
+env: Intel(R) Xeon(R) Processor @ 2.10GHz x2; RAM 7.8 GiB; Linux 6.18.44-fc-v77; Node v22.22.0
+playwright: playwright @ /home/claude/statify64; server statis: http://127.0.0.1:35167; worker NB: /workers/Classify/NaiveBayes/naive-bayes.worker.js?v=naive-bayes-v3-20261005a; worker AM: /workers/Classify/ApplyModel/apply-model.worker.js?v=apply-model-v3-20261005a
+wasm sha256: stwv=94ef9c8b5693fb779112724225b297e2392a47ca0376ef1239d02332d7146669 nb=163a5b8f482ae84503cb81943dd958033be900dfbef05f8c242977e1615a1fd8 am=036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc
+peramban: Chromium bawaan Playwright 141.0.7390.37 headless
+keluaran mentah: testing/thesis-eval/perf/raw/browser_sandbox.csv
+halaman: {"userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36","hardwareConcurrency":2,"deviceMemory":8,"longtaskSupported":true,"crossOriginIsolated":false}
+[pilkada_900 | stwv_default] n=900 term=1000 warmup=176 ms  mean=60.6 sd=4.8 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=4s
+[pilkada_900 | stwv_sw_stem] n=900 term=1000 warmup=182 ms  mean=67.1 sd=7.3 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=4s
+[pilkada_900 | nb_holdout70] n=900 term=1000 warmup=255 ms  mean=213.7 sd=40.9 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=5s
+[pilkada_900 | nb_kfold10] n=900 term=1000 warmup=322 ms  mean=322.0 sd=15.2 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=5s
+[pilkada_900 | am_raw] n=900 term=1000 warmup=118 ms  mean=121.3 sd=16.9 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=4s
+[sms_5574 | stwv_default] n=5574 term=1000 warmup=529 ms  mean=351.0 sd=15.6 ms  longtask(rata2 jml/maks)=1.0/110 ms  frame_maks=100 ms idle_p95=16.7  (OK)  wall=6s
+[sms_5574 | stwv_sw_stem] n=5574 term=- warmup=132 ms  mean=NaN sd=NaN ms  longtask(rata2 jml/maks)=NaN/0 ms  frame_maks=0 ms idle_p95=16.8  (GALAT: {"code":"WORKER_ERROR","message":"unreachable"})  wall=2s
+[sms_5574 | nb_holdout70] n=5574 term=1000 warmup=345 ms  mean=373.1 sd=38.8 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=6s
+[sms_5574 | nb_kfold10] n=5574 term=1000 warmup=1008 ms  mean=800.2 sd=38.7 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.8  (OK)  wall=9s
+[sms_5574 | am_raw] n=5574 term=1000 warmup=288 ms  mean=281.7 sd=24.5 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=5s
+[smsa_11000 | stwv_default] n=11000 term=1000 warmup=1207 ms  mean=741.1 sd=34.6 ms  longtask(rata2 jml/maks)=1.0/197 ms  frame_maks=183 ms idle_p95=16.8  (OK)  wall=9s
+[smsa_11000 | stwv_sw_stem] n=11000 term=1000 warmup=1299 ms  mean=808.3 sd=18.7 ms  longtask(rata2 jml/maks)=1.0/193 ms  frame_maks=167 ms idle_p95=16.7  (OK)  wall=10s
+[smsa_11000 | nb_holdout70] n=11000 term=1000 warmup=665 ms  mean=626.9 sd=21.3 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=7s
+[smsa_11000 | nb_kfold10] n=11000 term=1000 warmup=1770 ms  mean=1796.0 sd=32.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.8  (OK)  wall=14s
+[smsa_11000 | am_raw] n=11000 term=1000 warmup=505 ms  mean=501.6 sd=50.7 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=7s
+[gabungan | stwv_default] n=17974 term=1000 warmup=1725 ms  mean=1205.3 sd=34.2 ms  longtask(rata2 jml/maks)=1.0/285 ms  frame_maks=267 ms idle_p95=16.7  (OK)  wall=13s
+[gabungan | stwv_sw_stem] n=17974 term=- warmup=288 ms  mean=NaN sd=NaN ms  longtask(rata2 jml/maks)=NaN/0 ms  frame_maks=0 ms idle_p95=16.7  (GALAT: {"code":"WORKER_ERROR","message":"unreachable"})  wall=2s
+[gabungan | nb_holdout70] n=17974 term=1000 warmup=868 ms  mean=830.1 sd=51.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=9s
+[gabungan | nb_kfold10] n=17974 term=1000 warmup=2557 ms  mean=2567.1 sd=35.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=19s
+[gabungan | am_raw] n=17974 term=1000 warmup=837 ms  mean=714.6 sd=54.6 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=8s
+[besar_ge20000 | stwv_default] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | stwv_sw_stem] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | nb_holdout70] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | nb_kfold10] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[besar_ge20000 | am_raw] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[sms_5574_ascii | stwv_sw_stem] n=5574 term=1000 warmup=575 ms  mean=388.0 sd=14.4 ms  longtask(rata2 jml/maks)=0.8/96 ms  frame_maks=83 ms idle_p95=16.8  (OK)  wall=7s
+[gabungan_ascii | stwv_sw_stem] n=17974 term=1000 warmup=1900 ms  mean=1418.3 sd=106.7 ms  longtask(rata2 jml/maks)=1.0/301 ms  frame_maks=283 ms idle_p95=16.7  (OK)  wall=14s
+[besar_ge20000_ascii | stwv_sw_stem] NOT RUN: payload/dataset tidak ada (lihat perf/data/PREPARE_STATUS.json)
+[pilkada_900__overhead40doc | stwv_default] n=40 term=393 warmup=65 ms  mean=3.1 sd=1.0 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.8  (OK)  wall=4s
+[pilkada_900__overhead40doc | stwv_sw_stem] n=40 term=287 warmup=80 ms  mean=6.3 sd=4.1 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.8  (OK)  wall=4s
+[pilkada_900__overhead40doc | nb_holdout70] n=40 term=393 warmup=106 ms  mean=98.3 sd=10.2 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=4s
+[pilkada_900__overhead40doc | nb_kfold10] n=40 term=393 warmup=146 ms  mean=139.2 sd=22.9 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.7  (OK)  wall=4s
+[pilkada_900__overhead40doc | am_raw] n=40 term=1000 warmup=95 ms  mean=75.5 sd=4.7 ms  longtask(rata2 jml/maks)=0.0/0 ms  frame_maks=17 ms idle_p95=16.8  (OK)  wall=4s
+=== selesai ===

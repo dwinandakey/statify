@@ -1,0 +1,34 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/tsconfig.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.options.test.tsx (32.086 s)
+  BB-04 n-gram min=1 max=2 (antarmuka ke payload)
+    ✓ memilih N-gram lalu max=2 dan min=1 menghasilkan ngram_min=1, ngram_max=2 tanpa galat (328 ms)
+  BB-05 n-gram tidak sah (antarmuka)
+    ✓ min lebih besar dari max menampilkan pesan dan menonaktifkan OK (194 ms)
+    ✓ max di atas 5 dipotong (clamp) menjadi 5 oleh kolom isian sehingga tidak ada pesan (148 ms)
+    ✓ validateStwvConfig menolak ukuran n-gram 6 (jaring pengaman bila clamp terlewati) (1 ms)
+  BB-07 stopwords Indonesian lalu Custom (antarmuka ke payload)
+    ✓ Indonesian mengirim stopwords_method=indonesian dan seluruh daftar bawaan sebagai JSON (145 ms)
+    ✓ berkas acuan Rust c1_stopwords_indonesian.json identik dengan daftar bawaan aplikasi (32 ms)
+    ✓ Custom dengan daftar yang diketik mengirim array JSON (dipangkas, tanpa baris kosong) (145 ms)
+    ✓ mengetik di kotak teks saat Indonesian terpilih otomatis berpindah ke Custom (124 ms)
+  BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)
+    ✓ Indonesian (Sastrawi) mengirim stemming_method=indonesian (106 ms)
+    ✓ English (Porter) mengirim stemming_method=english dan catatan lowercase tampil (120 ms)
+  BB-09 standar rumus scikit-learn (antarmuka ke payload)
+    ✓ default adalah Weka: Word count, IDF None, Normalization None (85 ms)
+    ✓ memilih scikit-learn otomatis menjadi hitungan (raw), smooth, dan L2 (149 ms)
+    ✓ opsi yang tampil mengikuti standar: sklearn tidak menawarkan log(1+f), Weka tidak menawarkan L2 (121 ms)
+  BB-10 Words to Keep dan Min term frequency (antarmuka ke payload)
+    ✓ Words to Keep=10 dan Min term frequency=2 dikirim sebagai words_to_keep=10, min_term_freq=2 (104 ms)
+    ✓ Min term frequency 0 menampilkan pesan dan menonaktifkan OK (93 ms)
+  Kontrak payload default (dipakai juga oleh tes Rust BB-02)
+    ✓ toRustConfig(default) identik dengan berkas c1_payload_default.json yang dibaca tes Rust (21 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        32.803 s
+Ran all test suites matching components/Modals/Transform/StringToWordVector/__tests__/thesis/blackbox.stwv.options.test.tsx.
+Error: ENOENT: no such file or directory, open '/sessions/rcw-01yfzondmq7agkdbs9gcrefe/mnt/statify64/frontend/testing/thesis-eval/logs/jest_C1_vm.json'

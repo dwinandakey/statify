@@ -1,0 +1,276 @@
+@relation pilkada_test
+
+@attribute text string
+@attribute sentiment {negative,positive}
+
+@data
+'#agussilvy bicara apa kasihan yaa...lap itu air matanya wkwkwkwk',negative
+'Maaf ya pendukung #AgusSilvy..hayo dukung #AniesSandi diputaran 2 @ronavioleta @NetizenTofa',negative
+'Trima Kasih atas KeIstiqomahan Relawan #AHY @AgusYudhoyono lah yg tlh mengantarkan #AniesSandiDKI1 #JakartaGubernurBaru dg cukup signifikan',negative
+'aku juga kemarin #AHY 19april2017 suaraku utk paslon 3 #DKI',negative
+'Karna yang belebihan itu tidak baik ya bah #AHY',negative
+'Double LOL. @aniesbaswedan nuduh @AgusYudhoyono miskin ide sekarang dia copy #AHY. @SBYudhoyono http://m.republika.co.id',negative
+'Kemana nih Antasari. .. #ahy kalah di #pilgubdki2017 melempem dia... bener-bener akting yang https://www.instagram.com/p/BRXaBMtBUeb/',negative
+'Kini ketika #AHY berada di luar arena tabir kegelapan & tiada harapan kembali menyergap rakyat. Kemana lagi rakyat mencari ketulusan?',negative
+'Antasari Diancam Harry Tanoe https://youtu.be/9KbbpAjibTc  #Antasari #ahok #Sby #AHY #berita #MetroTV #Indonesia #JumatBerkah #KimJongNam',negative
+'JOKE terbaik selama pilkada serentak 2017 #bravo @masril_pku @Chilli_Pari #AHY.',negative
+'Hellloooo.... Suara rakyat.. Ngerti suara rakyat? Bukan suaranya #AHY or dek @AgusYudhoyono.. Ngopi dulu gih.. #PenikmatKopi',negative
+'Agus tersingkir Ahok & Anies rebutan suara AHY untuk kepentingan kelompok   lewat @YouTube #ahok #anies #ahy #pilgub',negative
+'blunder itu ya dulu hina2 #AHY tapi sekarang butuh 17% suara dan harus ngemis minta sama orang yang dulu di hina2. JLEB!',negative
+'Masih mau mencaci maki #AHY dan Pepo Memo nya?! Kalian hrs mengemis minta suara 17% kpd orang2 yang selama ini kalian hina!!!!!!',negative
+'Golput lebih tinggi daripada pemilih #AHY ya nampaknya. #pilkadadki2017',negative
+'Kalau merhatiin relawan #AHY saat ini minta rehat itu karena ada hal yang ganjal mungkin harus ada Islah dengan relawan #AniesSandi dulu.',negative
+'Jangan tanya aku. aku sekeluarga pemilih #AHY. Kalau program DP 0% nyata. aku sekeluarga milih #3. https://twitter.com/totonih/status/',negative
+'#AHY-Sylvi Anies-Sandiaga Basuki-Djarot Debat Pilkada DKI 2017 Jangan Jual Mimpi Demi Jadi Gubernur...',negative
+'ahhhh bukannya karena bang aji ada disitu yang bikin kalah #AHY?',negative
+'pantas saja #AHY hancur',negative
+'Tim yang tidak pernah tidur #ahy',negative
+'Coba beretika bila ingin dukungan dari konstituen setia #AHY. Jangan menipu dengan membuat meme dan berita palsu. Rachland Nashidik',negative
+'amieeennnnn dan tidak lupa dengan janji2 manis saat kampanye..#AHY Sang Mayor Sejati',negative
+'Ketika AHY kalah & berpidato semua timnya terdiam menangis lalu setelah itu mereka melepaskan diri dari pilkada DKI. @panca66 @bambangelf',negative
+'Ternyata segelintir pendukung AHY merasa ditikung di saat terakhir karena adanya tweet dari akun resmi parpol pendukung Anies-Sandi #Pilkada',negative
+'Gagal di Pilkada DKI Jakarta AHY Diisukan Maju ke Pilgub Jatim https://goo.gl/fb/ECcmdW  #headlines #politikbirokrasi #pilkadadki',negative
+'AHOK melejit... Anies menanjak... AHY mengapung... #PilkadaDKI',negative
+'Kasihan AHY kalah walaupun sudah umroh dibantu doa 7 juta umat.Ternyata Allah itu netral tidak berpolitik #PilkadaDKI',negative
+'Selamat datang AHY sebagai rakyat biasa setelah mundur dari TNI dan kalah di Pilkada DKI #pilkadaDKI #pilkadarasapilpres',negative
+'heeebohhhh....Agus Sylvi kalah di TPS 6 tmpat @AgusYudhoyono menggunakan hak pilihnya... #PilkadaDKI #QuickCount #ahy\t',negative
+'Yang pilih #AHY semoga tidak  ikut demokrat yaa kalau benar mau dukung Ahok.',negative
+'Mesin robot #AHY-Sylvi lupa dimatiin jadi masih masuk trending topik',negative
+'Maksud hati caper dari ahy/silvy eh malah kena protes dari mereka <FACE WITH STUCK-OUT TOUNGES> <Rolling on the Floor Laughing> <Rolling on the Floor Laughing>',negative
+'AHY bisa kok menang pilgub DKI bisa.... Asal ngumpulin dulu 7 bola dragon ball <Rolling on the Floor Laughing> <Rolling on the Floor Laughing> #QuickCount #PilkadaDKI',negative
+'#AHY Anies Hilang Ya di debat @KompasTV #ahokdjarotdirosi <Grimacing Face> <Grimacing Face> @Takviri @WahhabiCC @embah72 @gerilyapolitik @cagubnyinyir @kangdede78',negative
+'Kirim ke aku saja Kaosnya... #AHY sejati <Smiling Face With Smiling Eyes> <Smiling Face With Smiling Eyes> <Smiling Face With Smiling Eyes>',negative
+'#AHYhumorlagu Kisah Sedih AHY di Balik Lagu Jatuh Bangun  <Frowning Face> <Frowning Face>',negative
+'Pendukung #AHY sulit melupakan bully2 seperti ini <Thumbs Down>',negative
+'Versi #3 video #AHYANGaruk2Kepala terlihat bingung bicara banjir kota apung  <Face With Stuck-Out Tongue & Closed Eyes>  di atas permukaan tanah dan air bikin bengong <Smiling Face With Open Mouth & Closed Eyes>',negative
+'Deklarasi ini sepihak. Tanpa konsultasi dan persetujuan AHY.',negative
+'Sekarang tinggal tunggu sikap #AHY terhadap manuver agus   <Clapping Hands>  <Face With Cold Sweat> <Face With Cold Sweat>',negative
+'Tersingkir dari kancah pilkada DKI rupanya ada cara lain untuk mengangkat seseorang #AHY Mendunia',positive
+'Menurut AHY Pilkada DKI memberi hikmah pelajaran ujian dan tantangan yang dapat ia ambil. Semua itu dapat mematangkan karakternya#AIMAN',positive
+'kalau dilihat upaya Demokrat mengenalkan AHY cukup berhasil di Pilkada Jakarta dan sekarang AHY sudah mulai blusukan ke seluruh Indonesia',positive
+'@AHY prinsip kepemimpinan memenangkan sebuah Pilkada belajar terus dan sangat dinamis. @hildathawilla @Panti_silaban',positive
+'Menyeberangi Selat Malaka. Aiman KompasTV yang mendapat kesempatan pertama mewawancarai AHY usai Pilkada DKI @Rosianna766Hi',positive
+'Pilkada DKI berdoa AHY menang. Mudah-mudahan Anies Sandi yang menang.',positive
+'Sebentar lagi kita lupakan kegilaan pilkada DKI. Mari berlari bersama AHY. Kita mulai dari Kepri 23 April',positive
+'semoga Anies menang pilkada dan AHY jadi presiden Indonesia 2019 Aamiin YRA klop dah!@AgusYudhoyono',positive
+'Maju terus AHY-Silvy dan Anies-Sandi BerSATU bersama menangkan pilkada DKI #pilihpemimpinmuslim #Debat2PilkadaDKI',positive
+'Terimakasih AHY-SILVY tanpa kalian jakarta tidak akan mempunyai gubernur baru',positive
+'saya lebih ke #AgusSilvy',positive
+'Cakeeepppp....#bersatunya pendukung #AniesSandi dan #agussilvy',positive
+'Sinyal Positif Agus-Sylvi Merapat ke Anies-Sandi #PilkadaDKIJakarta #agussilvy https://www.harianbernas.com/berita-32894-Sinyal-Positif',positive
+'Mengakui kekalahan apapun itu tujuannya tapi great applause lah. Patut ditiru untuk demokrasi yang positif #AgusSilvy',positive
+'Salut! @AgusYudhoyono & Mpok Silvy dengan mengakui kemenangan Paslon lain. #agussilvy #Salam2Jari #KitaNKRI #TetapSemangat #PilkadaDKI',positive
+'baru quick countTtp kalau hasil kpud benar sampai 2putaran SIAP RAPAT KAN BARISAN SEMUA! SATU KOMANDO! #aniessandi #agussilvy',positive
+'Apapun hasilnya kau tetap kebanggaan kami #AgusSilvy',positive
+'Ada apa dengan #AHY knp disetiap acara nya massa membludak?Krn rakyat melihat harapan utk AHY memimpin negara ini dimasa yg dtg. #AHYforAll',positive
+'Kekalahan adalah sukses yg tertunda bukan untuk disesali tapi dijadikan pengalaman tuk lebih baik lagi di masa depan #AHY',positive
+'Demokrat dengan cinta untuk NKRI #AHY dan #Demokrat berbakti.',positive
+'#AHY#TheNextLeader#AHY#AdalahKita',positive
+'Datang tampak muka pulang tampak punggung. Terima kasih Kepri #DemokratKelilingNusantara #AHY',positive
+'#Setia HinggAHY akhir #Harapan #MasaDepanBangsa @PDemokrat @SBYudhoyono @hincapandjaitan @ranabaja @hariswijaya1975 @Edhie_Baskoro',positive
+'Mas Agus kasih kuliah umum nih #AHY',positive
+'Kuliah umum mahasiswa perspektif untuk masa depan #AHY (at UMRAH DOMPAK) â€',positive
+'Suara pemilih #AHY pada putaran ke 1 terlihat memilih paslon no 3 pada puataran ke dua kali ini. Selamat Jakarta punya gubernur baru.',positive
+'AHY Bergaya Sporty  ke TPS #AHY #TPS #PilkadaDKI #lampost',positive
+'Bagaimana pun suara Pendukung #AHY akan menentukan kemenangan salah satu Paslon.',positive
+'Bismillah semoga esok Hari Jakarta memiliki pemimpin yang sesuai tuntunan AlQuran diridhai Alloh swt',positive
+'bu Sylvi adalah contoh keberanian betawi utk dalam bersikap ngga ngambang atau banci. Contoh perempuan betawi tulen !',positive
+'saya putaran pertama dukung ibu dan mas agus yah lebih baik kalah dengan terhormat daripada menang karena curang',positive
+'Begitu tulus begitu menyenangkan... Insyaallah ada jalan bu @sylviana_murni',positive
+'Postingan 28 Januari 2017 meneduhkan. Tetep #AHY',positive
+'Salam Wallahulmuwafiq IlaAqwamithoriq @sandiuno mencerminkan beliau NU sejak itu saya jatuh hati meski waktu itu saya #AHY @AgusYudhoyono',positive
+'Saya selalu suka dengan orang yang berjiwa besar #AHY',positive
+'Prananda Sebut #AHY Demokrat Sejati Saya Kagum dan Salut  https://goo.gl/fb/8fH7wi  #nasional',positive
+'Bangga melihat pernyataan #AHY ini. Ksatria.',positive
+'#AHY dukung #HariSantriNasional',positive
+'Dengan kecerdasan nasionalisme dan jiwa pancasilais yang dimiliki #AHY bisa dikatakan memiliki Jiwa Santri walaupun belum pernah mondok',positive
+'[HEBOH] Pentolan band Coldplay asal Inggris Chris Martin memberikan dukungan pada pasangan Agus-Sylvi #AHY di Pilkada Jakarta 2017.',positive
+'12. #AHY dan SBY di puji dan dibela tanpa mereka merasa malu dan merasa bersalah demi mengharapkan dukungan politik dan massa demokrat!',positive
+'AHY Mundur Selangkah Untuk Melompat Tinggi   https://goo.gl/2LMaBG  #News #AHY',positive
+'Membaca Strategi Politik SBY dalam Pencalonan Agus Yudhoyono #AHY',positive
+'Kalau saja #AhokMenang dalam #PilkadaDKI2017 maka jelas warga DKI cukup cerdas tak mudah diprovokasi isue SARA tapi kok..#GombalinAhok',negative
+'Langsung deh cuitan curang lah black campaign lah nongol.. Katanya legowo itu demokrasi bukan namanya hahaa #pilkadadki2017',negative
+'Jangan harap Jakarta bebas korupsi kalau suaramu saja masih bisa dibeli #muslimvotemuslim #OTTSembakoAhok #pilihanmumasadepanmu #pilkadadki2',negative
+'Syukur lembar C6 sudah di tangan. Tidak sabar mau colok matanya Ahok. #PilkadaDKI2017',negative
+'Penista Agama #ahok',negative
+'Tidak rumit membedakan antara yang hitam dan putih dalam #PilkadaDKI2017 Sangat jelas siapa yang paling doyan gaduh',negative
+'Kalau Ahok lawannya Djarot aku mungkin pilih Djarot karena memang Ahok perlu belajar lebih baik mengenai humas dan diplomasi #PilkadaDKI201',negative
+'Jangan biarkan ini terjadi!! #Gue2 #BaDjaUntukJakarta #pilkadadki2017',negative
+'Dilarang Pilih Cagub Nonmuslim? Habib: Pilih Djarot! #PilkadaDKI2017',negative
+'Pak Djarot menangis @addiems pimpin #NyanyianUntukAhok. Ada apa ya? Cek http://goo.gl/7iUqa0  #AhokDjarot #BalaiKota #VisuallyYours',negative
+'Kami sangat rasa kehilangan bapak ahok #ahok #ahokdjarot #teman #temanahokfair #temanahok https://www.instagram.com/p/BT8dsSfhP3L/',negative
+'Ohh jadi mereka itu tertib karena #AhokDjarot ya terus ada gub baru mereka tidak tertib lagi',negative
+'Kafirrrrrr dan menista ya??!#SaveAhok #RIPJUSTICEINDONESIA #Ahok #AhokDjarot â€ iqra iqra iqra !!! http://www.nu.or.id',negative
+'Lihat raut wajah bpk Djarot bikin miris. Sabar & kuatkan @AhokDjarot @basuki_btp #IndonesiaBerkabung #AhokDjarot',negative
+'habiburokhman sindir #Ahok via #puisi #Sembako http://obsessionnews.com #AniesSandiGubernurKita #AhokDjarot #Anieshttps://twitter.com',negative
+'Buahahahhaha!! Emang siapa yang merayakan? Bisa gak pendukungmu merayakan tanpa di bayar? #AhokDicintaiRakyat #AhokDjarot #Ahok @detikcom',negative
+'Bawa #Ganja #Polisi Ciduk #Penyanyi Pro #Ahok http://obsessionnews.com #AhokDjarot #iwak #anies #AniesSandi #PilkadaDKI #pilkadajakarta\t',negative
+'Yah namanya juga manusia suka khilaf. Yang paling disayang A...yang diajak buat komitment B paling ujung-ujungnya nyesel. #AhokDjarot',negative
+'Makin stress! Dipikiran @fadlizon cuma duit itung : 4000 bunga x Rp 200.000 udah berapa dananya?? Tapi cinta ke #AhokDjarot melebihi materi',negative
+'saya sarankan @fadlizon di DPR bikin PANSUS KARANGAN BUNGA atau undang LSM untuk bentuk TIM PENCARI FAKTA KARANGAN BUNGA dari pada jadi gila',negative
+'#karanganbunga #karanganbungaahok #ahokdjarot Karangan Bunga yang Sindir Ahok - Djarot Dirusak http://dlvr.it/P0pJTx',negative
+'seBentar lagi pada komen apa nih Mas ? Settingan ? Pencitraan ? Apa disuruh Ahok lagi ? Hahaha #AhokDjarot',negative
+'Kita gembira atas bunga2 buat #AhokDjarot kaga juga bahas2 soal A&S tapi kenapa yang benci tetep fokus sama #Badja yaaa? Perhatian kalian',negative
+'Para pendukung yang menang pada stres ni ya melihat Kembang ke AhokDjarot Hati Rakyat tidak bisa dibohongi MENANGLAH KARENA MENANG.',negative
+'Yang dilantik Oktober nanti bisa kayak gini gak #AhokDjarot #AhokMandiKembang',negative
+'Banyak yang mulai SAKIT JIWA karena warga lebih cinta #AhokDjarot. #karanganbungaahok #GombalinAhok Kamis  #LawanSekulerRadikal',negative
+'Menit ke 1:51 sedih banget huhuhu... IBU itu sama bapaknya nangis #AhokDjarot #savejakarta',negative
+'Haha.. Kayaknya sebentar lagi ada banyak bunga tandingan nih #AhokDjarot',negative
+'Karangan bunga yang dikarang-karang untuk #AhokDjarot sungguh kegilaan pasca kegilaan tuntutan JPU kasus #AhokPenistaAgama',negative
+'Untuk pembenci pak basuki >Benci boleh goblok jangan< #AhokDjarot #badja',negative
+'Ancam Polisikan Sutradara Video Rasis Kampanye Ahok-Djarot Minta Bayaran Sesuai Kontrak https://goo.gl/lwg3Ai  #News #AhokDjarot',negative
+'Di penutup Paslon mengucapkan permintaan maaf. #AhokDjarot Melakukannya dengan baik. #AniesSandi kok minta maafnya gitu..?',negative
+'Lholho ini kenapa pendukung ahok DP 0% teruntuk kaum dhuafa situ kan uangnya sudah banyak. <Bomb>  #DP0% #AhokKeok #PilkadaDKI #pilkadadki201',negative
+'dulu #Jakarta tidak pernah terpecah belah tapi sejak ada orang asing #jakarta terpecah <Broken Heart>  #AkuCoblosAniesSandi #pilkadadki2017 #PilkadaDK',negative
+'Tidak akan diberi petunjuk orang-orang zalim. Tetap HARAM pemimpin kafir.  <Fire> <Fire> #PilkadaDKI #pilkadadki2017 #IslamRahmatanLilAlamin',negative
+'Jangan sampai allah mengAzab kalian wahai orang2 muslim yang memilih pemimpin kafir <High Voltage> <High Voltage> #pilkadadki2017 #PilkadaDKI',negative
+'Bukan untuk memenangkan Anies-Sandi tetapi untuk mengalahkan Ahok-Djarot. Tarik kesimpulannya sendiri yep',negative
+'Sembako Murah Ala Timses Ahok-Djarot Langgar UU Pemilu http://m.viva.co.id  Suap suara model begini menghina kecerdasan warga..',negative
+'Dulu mereka bilang #AHY cagub #FPI sekarang #Anies cagub #FPI. Intinya #Ahoker buta peta politik <Zipper-Mouth Face>',negative
+'KAFIR Tetap HARAM pemimpin kafir. #PilkadaDKI #pilkadadki2017 #IslamRahmatanLilAlamin  <Fire> <Fire>  <Fire> <Fire>',negative
+'#Djarot Beberkan Kronologi Pengusiran Dirinya Setelah Sholat Jumat http://bit.ly/2pgp5M1  #AhokDjarot #PilkadaDki2017',negative
+'Kuota @aagym lagi habis makanya tidak mengikuti berita @Warta_MUI @mata #indonesia #pilkadaDKI #AniesSandi #voteahok #ahokdjarot',negative
+'#AhokDjarot anti korup..kinerja kerja nyata.. Kebersihan Tata ruang kota.. Jakarta..makin baik?  <Weary Face>  <Weary Face>',negative
+'mendadak santun & toleran gini <Zipper-Mouth Face> <Zipper-Mouth Face> <Zipper-Mouth Face> ....bukan gara deket tgl 19 April kan ? <FACE WITH TEARS OF JOY> <FACE WITH TEARS OF JOY> <FACE WITH TEARS OF JOY> #indonesia @Metro_TV #voteahok #ahokdjarot #ahok',negative
+'SAAT ALIEN MENYERANG INDONESIA http://www.triandry.com #pertempuranakhirjawarajkt #deklarasippp #rompiskasmaran #ahokdjarot #aniessandi',negative
+'#AhokDjarot mencari orang pintar buanyak di Jakarta. Mencari orang yang jujur anti korupsi suka bekerja keras...itu yang sulit.',negative
+'Kampanyenya ngomong program ini program itu jadi mentri aja dipecat <FACE WITH TEARS OF JOY> mending liat yang udah ada hasil kerja ada deh #AhokDjarot',negative
+'pantes banyak polling dihapus kalau yang menang polling #AhokDjarot pasti DIBESAR2KAN ditayangkan 25x dalam sehari dimetrotivi <FACE WITH TEARS OF JOY> <FACE WITH TEARS OF JOY> <FACE WITH TEARS OF JOY>',negative
+'PDI-P perkuat kemenangan Ahok-Djarot #pilkadaDKI2017.',positive
+'Inilah pemenang #PilkadaDKI2017 yang sesungguhnya. Mereka harus mengalah agar Jakarta tidak pecah oleh politik sara yang brutal dari pihak',positive
+'Dalam hitungan saya pemenang sesungguhnya dalam #PilkadaDKI2017 adalah #AhokDjarot tapi mereka harus mengalah untuk kepentingan nasional.',positive
+'Selamat istirahat pak @basuki_btp Setelah ronde panjang melawan penjahat Anda telah menang #pilkadajakarta #pilkadadki2017 #BasukiDjarot',positive
+'Tidak apa-apa Ahok kalah supaya sedikit aman. Coba Ahok menang calo akhirat pada ribet teriak-teriak di monas. #PilkadaDKI #pilkadadki2017',positive
+'Untuk bpk@basuki_btp terima kasih untuk perjuanganmu selama 5 tahun terakhir. Kami akan terus mendukungmu terbang lebih tinggi lagi.#pilkada',positive
+'@ahok @djarot saya mendukungmu di pilkada ini dengan sepenuh hati. Semoga menang menang merdeka',positive
+'Meski Saya warga Sultra tetapi Saya dukung Ahok Djarot Untuk Gub.DKI Jakarta #pilkadadki2017 #pilkadajakarta #ahokmenang #ahok',positive
+'Apa yang dicari.? Pilih gubernur yang bisa mimpin jakarta. Bukan yang hanya omong kosong #BesokGuaAhok #pilkadadki2017 #PastikanBesokDua',positive
+'satu orang pemimpin yang tahu bagaimana cara memimpin adalah lebih baik dari pada seribu orang yang belajar kepemimpinan #pilkadadki2017',positive
+'#PilkadaDKI2017 KH Said Aqil Sebut #Ahok-Djarot Sejalan dengan NU',positive
+'Kita Butuh Pemimpin BERMUTU Bukan Sebatas penjaja KARTU di #pilkadadki2017 Nanti Semoga @AhokDjarot Sukses dan menang',positive
+'Iwan Fals saja pilih Ahok Djarot..tahu kan konsistennya Iwan Fals melawan korupsi ? #pilkadadki2017 @Takviri',positive
+'#1000Lilin #rizieqpulang #LilinUntukAhok #ahok #AhokDjarot andai saja ini bisa di contoh untuk seluruh indonesia',positive
+'Bener banget! Cuma yang nonton concert Coldplay aja yang ngerti #AhokDjarot',positive
+'Pelajaran Kesabaran dari The Invisible Djarot http://kom.ps/AFwLJ5  #AhokSelaluDihati #badja #AhokDjarot #AhokMartir',positive
+'#freeahok #saveahok #ahokfornobel2017 #ahokdjarot #ahoklovers #ahokbtp #ahok https://www.instagram.com/p/BUBE8R_BJnj/',positive
+'Ternyata mencari pemimpin yang dicintai itu tidak gampang.MSP. #AhokDjarot #AhokForNobel #silake5',positive
+'1000 Lilin untuk pak Ahok #saveahok #ahokers #ahokdjarothttps://www.instagram.com/p/BT6m67jFgW4IhB_AXM414EpDGHX3BA4-_8lc5w0/ â€¦',positive
+'Sejuta Lilin demi Keadilan #AhokDjarot #lawinforcement #justice #JakartauntukSemua #IndonesiaRaya https://www.instagram.com/p/BT6ioErhYdo/',positive
+'SALAM SUJUD DAN HORMAT SAYA PADA PAK DJAROT KHABARNYA PENANGGUHAN TAHANAN AHOK DI SETUJUIN DAN MALAM INI PAK AHOK PULANG',positive
+'Dukungan Doa dan Pemasangan Lilin untuk AHOK dari MANADO untuk Indonesia. #SaveAhok #AhokDjarot #AhokPresidenRIke8',positive
+'Tuhan selalu bersama pak @basuki_btp dan keluarga.kami selalu bersama pak ahok #freeahok #Ahok #keadilan #AhokDjarot',positive
+'Tetap semangat pak Djarot Air matamu akan selalu terkenang Air mata yang menandakan kecintaanmu untuk Indonesia #Djarot #ahok #ahokDjarot',positive
+'Paduan suara warga di balai kota #ahokdjarot',positive
+'DEMAM Karangan Bunga Dukung Ahok-Djarot Menjalar hingga Siantar',positive
+'Tidak ada pemimpin di Indonesia Sebaik jujur tegas dan kerja nyata Ahok Djarod is the Best #AhokDjarot',positive
+'Integrasi rusun pasar dan bioskop rakyat semasa #AhokDjarot yang ditunggu kelanjutannya dibawah gubernur baru',positive
+'#AhokDjarot selalu dihati #BuniYani masuk bui #Anies pecatan menteri bloon',positive
+'Pemenang sejati adalah pemenang hati Rakyat. Udah kalah masih bisa datangkan rejeki buat tukang bungaPak #AhokDjarot #AhokDicintaiRakyat',positive
+'Perlu IDE GILA #REDKARPET #LONGREDCARPET #LONGREDCARPETAhokDjarot #AhokDjarot',positive
+'Tuhan sayang Jakarta & AhokDjarot karena AhokDjarot kalah saja mereka masih marah AhokDjarot menang apa yg terjadi di Jakarta terima kasih.',positive
+'#GombalinAhok kamu luar biasa pak begitu jahat ninggalin aku yg terlanjur sayang padamu #AhokDjarot',positive
+'Karangan bunga dan antrian foto bersama.... Il phenomenon baru kayaknya untuk seorg figur di indonesia #AhokDjarot',positive
+'KARANGAN BUNGA ucapan TERIMAKASIH masyarakat ke Pak @basuki_btp & Pak @AhokDjarot sampai Monas #karanganbungaahok #telkomsel #AhokDjarot',positive
+'#ahok #djarot tetap di hatiku #pilkadadki',positive
+'#duajari #ahokdjarot #badja #salamduajari #duajari #kode #code #gangster #farmer #foodhero https://www.instagram.com/p/BS1x10_Bovd/',positive
+'Sudahlah bikin pusing. Lagian @basuki_btp Sudah jawab dengan baik. tinggal semua tenangkonsentrasiberdoaselalu bahagia Untuk menang',positive
+'Betul tidak pak jokowi ? <Trophy> <Trophy> Oke lah ya pak basukibtp Dukung 100 % . . #pilkadadki #pilkadadki2017',positive
+'Peach #pilkadadki #pilkada #pilkadadki2017 #pilkada2017 #ahok #ahokdjarot #ahokers  https://www.instagram.com/p/BTDYVuNAw',positive
+'Kekalahan Basuki Tjahaja Purnama-Djarot Saiful Hidayat di Pilkada DKI Jakarta tidak mempengaruhi elektabilitas PDI <Victory Hand>',positive
+'saya percaya kondisi cuaca beberapa hari sebelum pilkada dki ikut serta memberikan kontribusi positif ke ahok-djarot. Aku 2!! <Victory Hand> <Victory Hand>',positive
+'Kalah karena jujur lebih baik daripada menang karena curang <Heavy Check Mark> <Heavy Check Mark>. Initerjadi di pilkada DKi.Makanya masih iri tidak terima sama Ahok',positive
+'Banyak pemimpin agama yang baik. Tapi pelayan warga yang JUJUR BERSIH dan KERJA NYATA cuma <Victory Hand> <Victory Hand> @AhokDjarot #DebatPilkadaDKI',positive
+'#Jelas membawa manfaat untuk umat. Komitmen #AhokDjarot <Victory Hand> <Victory Hand> untuk Umat Islam - https://kask.us/ioQK2  #ForumKaskus via #KASKUS',positive
+'Baju Seragam buat nyoblos sudah siap nih teman-teman... #pilkadadki #ahokdjarot… https://www.instagram.com/p/BS3xZkflwVZ/',positive
+'#gue2 #kami2 #ahokdjarot #tetapahokdjarot #suarakankebenaran #weedbegoodtogether #katakitaig https://www.instagram.com/p/BS3mqF8lxNP/',positive
+'Ahok-Djarot  <Victory Hand> <Victory Hand>  Meroket. #ahok #djarot #ahokdjarot #pilkada #election #pilkadadki2017 #gubernur… https://www.instagram.com/p/BS3diVJBTna/',positive
+'INI! #Ahok #AhokDjarot',positive
+'Walaupun banyak cobaan yang menimpa pak ahok mundur 1 langkah maju 1000 langkah untuk menjadikan jakarta lebih maju lagi <Trophy> #ahokdjarot',positive
+'Siaran langsung pak Ahok  <grining face with smile eye>  #ahok #ahokdjarot https://www.instagram.com/p/BS3YHWsgAk7/',positive
+'Ahok di Net Ahok di ini talkshow #AhokDjarot #JakartaPunyaSemua #temenahok #ahokdjarotmenang #JakartaKece',positive
+'Lebih baik jadi dosen yang dibanggakan dari pada berharap jadi Gubernur dengan cara yang membohongi rakyat dan diri sendiri. #pilkadadki2017',negative
+'Daftar rumah baru di jakarta yang DP nya 0-Rp Kalau gak terealisasi kau tanggung janji kau di akhirat nanti #pilkadaDKI2017 #pathdaily',negative
+'Harus menerima hasil ini dengan lapang dada. #PilkadaDKI2017',negative
+'Kalo gitu aku mau tagih program DP 0% dari Anies-Sandi #PilkadaDKI #pilkadadki2017',negative
+'Sabtu kerja&ngobrol tentang #pilkadaDKIternyata ketua RW di komplek rumah teman saya super maksa warga pilih Anies demi janji 3 Milyar',negative
+'Mungkin maksud Anies prostitusi dan perjudian di Kalijodo harus tertata rapih -> http://megapolitan.kompas.com/read/2017/04/15/19414861/ani',negative
+'Pak @aniesbaswedan sekarang kan lagi masa tenang kok team sukses bapak masih kerja ya? Bagi2 bunga segala lagi #pilkadadki2017',negative
+'Jika nanti punya pemimpin yang ingkar jangan heran karena pada tuhan pun manusia itu seringkali ingkar!! #pilkadadki2017',negative
+'program asal ngomong begini jadinya pemotongan warga #pilkadadki2017 #pilkadadkijakarta2017 #asalngomomg',negative
+'Waaaah ternyata dia sudah sadar kalo selama ini salah pilih #BasukiDjarot @ahok_btp @AhokDjarot #pilkadadkijakarta2017 #PILKADADKI2017',negative
+'Belajar mulai dari yang sederhana: Kursi dipakai untuk duduk. Tapi sejak kapan meja jadi tempat duduk? Pantas aja jadi Mendikbud dipecat!',negative
+'Didiklah orang muda dengan akhlak dan integritas. Bukan ambisi kotor dan fitnah. Jangan omong doang. #pilkadadki2017',negative
+'cara kampanye #Anies membuat Menteri agama mengeluarkan peraturan larangan kampanye di rumah ibadah. sdh jelas #AniesSandi menang karna SARA',negative
+'Perayaan kemenangan #AniesSandi tidak pakai papan kembang tapi pakai kambiang â€ merasa bersyukur di Abunawas... http://fb.me/89nIV8t2r',negative
+'Anies-Sandi Dinilai Loyo sehingga Berpotensi Dikangkangi Ormas Garis Keras http://bit.ly/2p3jbgb  #AniesSandi',negative
+'Kalo cari suami tuh cari aja team keamanan #aniessandi.. Kotak aja djagain apalagi kamu',negative
+'Dua Program Ahok yang akan Dibatalkan Anies Anies-Sandi Ahok Djarot #GubernurJakarta #AniesSandi #Ahok',negative
+'walupun bukan orangJakarta saya juga tidak pernah menyesal dan rugi dukung #AniesSandi Ayo kapan lagi bagi2 uang&sembako non pilkada??pret',negative
+'Program Anies-Sandi Dianggap Menyulitkan https://goo.gl/2ADg8E  #AniesSandi #KelapaGading',negative
+'Pendukung #AniesSandi Tim #ASBAK Siap Melakukan SEGALANYA.. MENEBAR FITNAH sana sini Demi kemenangan Anies..',negative
+'Mungkin situs http://fitnahlagi.com  masih perlu dipertahankan selama #AniesSandi belum dilantik. Untuk counter hoax. Cc: @JktMajuBersama',negative
+'Sudah Curang Kalah itulah kekalahan yang sangat menyakitkan Tidak bermartabat dan memalukan #politiksembako #pilkadajakarta #AniesSandi',negative
+'DP 0 persen ternyata beda dengan DP 0 rupiah #AniesSandi #QEREN. lha bukannya sama2 0 ?lha 0 persen dari 350jt kan 0 rupiah ?atau beda ?',negative
+'Mendapat surga itu tidak semudah tinggal nyoblos #AniesSandi #justsaying',negative
+'Prabowo: Terima Kasih Habib Rizieq https://kumparan.com #PilkadaDKI #AniesSandi #TerimaKasihUlama #TerimaKasihHabib #AllahuAkbar',negative
+'#AniesSandi berpihak atau tidak adil atau tidak bisa dilihat kok nanti dari titik2 Iklan di DKI. Di dominasi media @Hary_Tanoe atau tidak!',negative
+'Ente Kafirun nantangin laskar #AniesSandi ??! Kite cari ente !! #JakartaBersyariah https://twitter.com',negative
+'BIADAB !!! Kelakuan Kelompok Pendukung #AniesSandi Melebihi PENJAJAH & Terbukti Melampaui Kemampuan IBLIS #GueCintaNKRI #MasjidUntukSemua',negative
+'kasian.. masjid dijadikan alat tempat balas dendam.. takbir dilontarkan untuk memuaskan kebencian.. benar2 PARAH pendukung #AniesSandi',negative
+'Akun @CangHaris akun provokator & bukan bagian dari timses #AniesSandi. Timeline @CangHaris lebih mencirikan akun Ahokers. Waspadalah!',negative
+'Jangan jiplak Program #OKEOCE hasil bikinan pendukung penista agama',negative
+'Munafik katanya tidak boleh jualan agama tapi paling frontal bawa agama sabar min @Gerindra yang penting #OkeOce',negative
+'Jadi kalo kalah pasti badja berbuat curang? Picik <Grimacing Face>  Prabowo Sebut Anies-Sandi Akan Menang Pilkada DKI jika Tidak Dicurangi',negative
+'Kenapa waktu kampanye Sandi malah ke Cianjur? Anies minta dukungan Aher? Hhmm.. Jabar siap2 dilanda Anies-Sandi 2018 <Zipper-Mouth Face> Siap2 kalah Pilkada',negative
+'Pilkada kok panitianya banyak pakai kaos salam bersama. Mereka panitia apa tim pemenangan Anies-Sandi? Sudah main licik aja masih kalah',negative
+'anies sandi menang pilkada dki #terimakasihFPI',negative
+'Dan nginulpun terdiam <Face Without Mouth> . #dacademy4 Salam #OkeOce #CoblosPecinya',negative
+'Hati2 terprovokasi ya teman. Ini bukan wajah islam ini wajah politik. <Disappointed Face>',negative
+'orang kaya mah bebas tajir melintir. Alhamdullilah. #OkeOce',negative
+'#RIP Logika dan nalar @ices_ardhono #salambersama #okeoce #tetapahok #gue2 #dpNol',negative
+'#debatfinalpilkadadki Hhahahaa.. #OkeOce atau OKE-NGOCEH??? @aniesbaswedan',negative
+'Apalagi ada yang mau berpihak sama ormas abal abal #fitsahats #firzahots #okeoce #salambersama #tetapahok #kampanyeahokjahat',negative
+'#debatfinalpilkadadki ada oke oce. Ada oke mart. Lama2 ada oke jek hahaha ogah kerja ogah capek #okeoce',negative
+'Adekku baru saja mengatakan arti #OKEOCE katanya Ogah KErja Ogah CapE <Smiling Face With Open Mouth & Closed Eyes> <Smiling Face With Open Mouth & Closed Eyes>',negative
+'Jawaban kok #OkeOce saja',negative
+'Apapun pertanyaannya jawabannya pasti #okeoce #DebatPilkadaDKI',negative
+'#PilkadaDKI2017 KPU: Anies-Sandi unggul di seluruh Jakarta',positive
+'Alhamdulillah #PilkadaDKI2017 keren mancarli: aman lancar terkendali Tks Jakarta sdh berikan hal menarik. Selamat u Gub-Wagub terpilih.',positive
+'Saatnya menerima gubernur baru. Terima kasih kepada gubernur lama. Sudahi perselisihan mari bersatu untuk maju. #pilkadadki2017',positive
+'HEY......yang menang jangan sombong yang kalah jangan marah!!! #pilkadadki2017',positive
+'#PilkadaDKI2017 semoga #AniesGubernurBaru buktikan bahwa jakarta memiliki pesta demokrasi terbaik di Indonesia !!',positive
+'Kalau tidak mau di DUA kan jadilah orang keTIGA #pilkadadki2017 @ Cikini Menteng https://www.instagram.com/p/BTDS6RyjNqJ/',positive
+'Ornamen Betawi Hiasi TPS 28 Tempat Anies Nyoblos. https://goo.gl/FVZA0B  #pilkadadki2017 #tps28 @aniesbaswedan',positive
+'Anies-Sandi Bakal Upayakan Hal Ini untuk Buruh di Jakarta #AniesSandi #Buruh #Jakarta http://bit.ly/2oXCggA',positive
+'Seneng lihat expresinya #gubernurbarudkijakarta #milad19pks #aniessandi #salambersama https://www.instagram.com/p/BTgLmrBjg68/',positive
+'Anies Larang Warga DKI Buka Medsos Atas Nama Rekonsiliasi #Anies #AniesBaswedan #AniesSandi #Medsos http://www.berita168.com/ via @berita168',positive
+'Janji Kampanye Anies Yakin APBD DKI Cukup #JanjiKampanye #AniesSandi https://www.harianbernas.com',positive
+'Keren ada karangan bunga TANDINGAN ajakan untuk dukung #AniesSandi lucu juga ya..',positive
+'Anies - Sandi: Pastikan Akan Menutup Hotel Alexis dan Malioboro http://monystars.com/hotel-alexis/  #aniessandi #sandiagauno #aniesbaswedan',positive
+'Pasangan #AniesSandi merupakan pasangan yang ideal untuk #MerajutJakartakembali dari dinamika yang terjadi diIbu Kota Jakarta. #ILC',positive
+'Kok masih dibahas? Ini sudah di-counter di situs anti HOAX tim #AniesSandi',positive
+'@JktMajuBersama Sambil nunggu hasil resmi KPU. Yuk kawal #AniesSandi & rangkul smua... http://fb.me/W7EoLl8p',positive
+'Silaturahmi bersama teman-teman media yang selama ini mengikuti kegiatan kampanye kami. Terima kasih semuanya! Salam bersama! #AniesSandi',positive
+'Kemenangan #AniesSandi di #PilkadaDKI putaran ke 2 bukan kemenangan sekelompok orangtetapi kemenangan seluruh warga DKI rakyat Indonesia.',positive
+'Anies: Komitmen Kita adalah Kota Jakarta Paling Bhineka di Indonesia. #GubernurBaru #AniesSandi Anies-Sandi... http://fb.me/7F3Lncd4W',positive
+'Kemenangan sesungguhnya KEADILAN HUKUM dan KEADILAN SOSIAL yang Timpang dirasakan Rakyat. #AniesSandi #AniesSandiDKI1',positive
+'Mari lebih bekerja keras supaya dapat mengemban amanah. #AniesSandi #AmanatNasional #PilkadaDKI2017',positive
+'Waaah... #PKSLampung #aniessandi',positive
+'Saran untuk #AniesSandi agar Reklamasi dpt dibatalkan agar dibicarakan dengan Pemerintah Pusat @KSPgoid @kemaritiman @kkpgoid @KejaksaanRI',positive
+'Jeda Iklan Sandiaga Turun dari Panggung Debat lalu Peluk Erat Nelayan : Bang @sandiuno #OkeOce #salambersama',positive
+'Sandiaga Uno: Gaji Lima Tahun Saya untuk Kaum Dhuafa http://bit.ly/2pwgHV8',positive
+'Bismillah semoga tahun ini ada gubernur baruu... #AniesJawaraJakarta #GubernurkuAniesBaswedan #OkeOce #TolakReklamasi',positive
+'Menang Pilkada DKI Prabowo: Anies-Sandi Harus Kerja Keras',positive
+'Inilah Hasil Rekapituasi Manual Pilkada DKI Anies-Sandi Tetap Menang http://fb.me/5WQ3cfXh0',positive
+'... #AniesSandy  <OK HAND>  untuk Jakarta yang lebih baik ...',positive
+'... Hahaha ... Adjrot Adjrot .... Ada ada aja ... Kehabisan akal ya untuk mengalahkan #AniesSandy kandidat favoritku <lovered>  <lovered>  ...',positive
+'... Anies memang luar biasa  <OK HAND> ... Gubernur rakyat bukan Gubernur pengembang ... #AniesSandy',positive
+'#garudaindonesia #indonesia #motivator #motivatorindonesia #pembicara #trainer #pelatih #coach #kata2bijak #wisdom #ahokdjarot #aniessandy',positive
+'Hallo Bang @aniesbaswedan Wah Asyik juga ya habis manggung di DA  <THUMBS UP> <THUMBS UP> @IndosiarID #OkeOce #Telu',positive
+'#okeoce #3  <OK HAND>   <OK HAND>   <OK HAND> https://www.instagram.com/p/BS3wZR3BSRI/',positive
+'sedang nongkrong tiba2 didatangi timses paslon 3 #OkeOce  <OK HAND>',positive
+'Pak Anies jadi pempmpinnya maju terus Pak ke jalan yang di Ridhoi Allah  <THUMBS UP> <THUMBS UP> @DAcademyID @IndosiarID #OkeOce #3 #AniesSandi',positive
+'3 YA 3 JANGAN LUPA YAAA #OkeOce <OK HAND> <OK HAND> <OK HAND>  #AniesSandi',positive
+'#jakartakece #DebatFinalPilkadaJKT #OkeOce #3ya3 #JumatBarokah',positive
+'Ingat pilih no.3 di tanggal 19 April nanti ya kakak! <OK HAND> #okeoce . #PilihAniesSandi #AniesSandi… https://www.instagram.com/p/BS1-_Sqh9Yf/',positive
+'#PesanBijak #OkeOce #GubernurGu3 ...',positive

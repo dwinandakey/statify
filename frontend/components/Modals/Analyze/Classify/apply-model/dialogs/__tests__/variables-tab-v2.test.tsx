@@ -68,7 +68,6 @@ function Harness({
         onChangeSpy?.(next);
         setData(next);
       }}
-      showFieldHelp={false}
     />
   );
 }

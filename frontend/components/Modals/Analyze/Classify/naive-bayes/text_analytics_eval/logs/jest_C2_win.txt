@@ -1,0 +1,99 @@
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.container.test.tsx
+  BB-14 NB tanpa target
+    √ BB-14: tombol OK nonaktif selama target kosong, aktif setelah target diisi (252 ms)
+    √ BB-14: klik OK yang nonaktif tidak menjalankan analisis (64 ms)
+    √ BB-14 (karakterisasi): teks pesan validasi tidak dirender di layar, hanya OK nonaktif (53 ms)
+  BB-15 Candidate Factors/Covariates
+    √ BB-15: mengisi Candidate memindahkan Exclude ke Available; hanya kandidat yang menjadi prediktor (162 ms)
+    √ BB-15: aturan tipe: variabel numerik tidak dapat masuk Candidate Factors, nominal tidak dapat masuk Covariates (47 ms)
+  BB-16 Raw Text Variable
+    √ BB-16: tab Text Preprocessing nonaktif tanpa Raw Text dan aktif (dapat dibuka) setelah Raw Text diisi (170 ms)
+    √ BB-16: mengosongkan Raw Text menonaktifkan kembali tab dan mengembalikan tampilan ke Variables (183 ms)
+  BB-17 Complement dengan prediktor non-teks
+    √ BB-17: Complement dipilih saat hanya Text Features, lalu prediktor ditambah -> OK nonaktif dan galat tampil di Options (280 ms)
+  BB-18 Alpha di luar batas
+    √ BB-18: Text Alpha 0 dan 1000 menampilkan pesan angka; nilai tidak sah tidak diteruskan ke form (235 ms)
+    √ BB-18: Smoothing Alpha 0 dan 1000 menampilkan pesan angka (alpha kategorik) (92 ms)
+  BB-20 Gaussian (Weka min. std) - sisi UI
+    √ BB-20: memilih 'Gaussian (Weka min. std)' dan OK mengirim NumericLikelihood=gaussian_minstd ke analisis (218 ms)
+  BB-21 Training Percentage di luar 1-99
+    √ BB-21: Training Percentage 0 menahan perpindahan tab dengan toast pesan validasi (87 ms)
+    √ BB-21: Training Percentage 100 menahan perpindahan tab dengan toast pesan validasi (84 ms)
+    √ BB-21: klik OK dengan Training Percentage 0 menolak menjalankan analisis (OK sendiri tetap aktif) (113 ms)
+    √ BB-21: nilai 1 dan 99 (batas sah) diterima dan tab dapat ditinggalkan (115 ms)
+  BB-22 Holdout 70% seed 42 - sisi UI
+    √ BB-22: konfigurasi holdout 70 dan seed 42 dikirim identik pada dua kali OK (283 ms)
+  BB-23 10-fold CV - sisi UI
+    √ BB-23: memilih Cross-Validation Folds dengan 10 fold mengirim ValidationMethod=kfold dan KFolds=10 (178 ms)
+  BB-27 Peringatan kebocoran Word-Vector - sisi UI
+    √ BB-27: peringatan tampil saat Word-Vector Variables terisi, hilang saat dikosongkan (73 ms)
+    √ BB-27: jalur Raw Text TIDAK menampilkan peringatan kebocoran (35 ms)
+    √ BB-27: jalur Word-Vector memengaruhi sumber teks efektif dan data yang dikirim (kolom vektor di ekor) (139 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.output.test.tsx
+  BB-25 Output setelah pelatihan
+    √ BB-25: statistic yang dipasang: Case Processing Summary, Attribute Distribution, Model Evaluation Metrics, Cohen's Kappa, Confusion Matrix, Export Model (urutan) (5 ms)
+    √ BB-25: Case Processing Summary memuat total/valid/dibuang, target, atribut, skenario validasi (2 ms)
+    √ BB-25: Model Evaluation Metrics memuat per kelas, macro/weighted/micro, overall accuracy; Kappa satu angka (1 ms)
+    √ BB-25: Confusion Matrix: baris=actual, kolom=predicted, baris/kolom Total, grand total, persentase (2 ms)
+    √ BB-25: tabel yang tidak dicentang tidak dipasang (1 ms)
+    √ BB-25: statistic 'Export Model' selalu dipasang bila model berhasil dilatih (tidak tergantung centang Output) (1 ms)
+  BB-20 Attribute Distribution Table untuk Gaussian min-std (sisi TS)
+    √ BB-20: atribut numerik dengan likelihood_note menambah keterangan pada tabel (2 ms)
+    √ BB-20: tanpa likelihood_note (Gaussian biasa) catatan dasar tidak berubah
+  BB-26 Download CSV dan Copy Text Feature Table
+    √ BB-26: Download CSV mengunduh 'Naive_Bayes_Text_Features.csv' (BOM UTF-8, CRLF, kolom terkunci) (272 ms)
+    √ BB-26: Copy (TSV) menulis tabel lengkap bertab ke clipboard dan menampilkan toast sukses (27 ms)
+    √ BB-26: tabel tampil per kelas (peringkat, term, score) di komponen (7 ms)
+    √ BB-26: gagal menyalin -> toast galat yang mengarahkan ke Download CSV (87 ms)
+  BB-27 Peringatan kebocoran pada keluaran
+    √ BB-27: Case Processing Summary jalur vector memuat baris Note kebocoran; jalur raw tidak (2 ms)
+  BB-28 Export Model (sisi TS)
+    √ BB-28: unduhan 'Naive_Bayes_Model_Export.json' berisi model schema 2.0 jalur Raw Text lengkap dengan resep (10 ms)
+    √ BB-28: nama berkas dapat diubah; '.json' ditambahkan bila belum ada (11 ms)
+    √ BB-28: jalur Word-Vector tetap schema 2.0 tetapi TANPA resep (recipe null/tidak ada) (7 ms)
+    √ BB-28: model rusak/kosong -> tombol Export Model nonaktif; data bukan JSON -> pesan galat (6 ms)
+
+PASS components/Modals/Analyze/Classify/naive-bayes/__tests__/eval/blackbox.nb.validation.test.ts
+  BB-14 NB tanpa target (lapisan hook validasi)
+    √ BB-14: tanpa target, isValid=false dengan pesan 'Select a target variable.' (4 ms)
+    √ BB-14: target terisi + Text Features (tanpa prediktor lain) -> valid; target terisi tanpa apa pun di mode candidates -> pesan prediktor (3 ms)
+  BB-17 Complement + prediktor numerik/kategorik
+    √ BB-17: hook memblokir OK dengan pesan Complement (tanpa kode di UI) (1 ms)
+    √ BB-17: Complement dengan Text Features saja -> valid; Multinomial/Bernoulli dengan prediktor lain -> valid (4 ms)
+    √ BB-17: galat Rust NB_E_COMPLEMENT_MIXED dipetakan ke pesan ramah dengan kode di akhir (1 ms)
+  BB-18 Alpha di luar batas (getNumericInputError)
+    √ BB-18: Text smoothing alpha 0, negatif, > 999, NaN (1 ms)
+    √ BB-18: batas sah Text alpha (0.01 dan 999) diterima (1 ms)
+    √ BB-18: Text alpha tidak divalidasi bila tidak ada Text Features (kolom tersembunyi) (1 ms)
+    √ BB-18: Smoothing Alpha (kategorik) 0, > 999, NaN
+  BB-19 NB_E_TEXT_NEGATIVE (pemetaan pesan Rust di sisi TS)
+    √ BB-19: satu kolom negatif -> pesan menyebut nama kolom dan kode
+    √ BB-19: beberapa kolom negatif -> nama kolom pertama dan jumlah kolom lain
+    √ BB-19: UI tidak memblokir kolom negatif sebelum analisis (hook validasi tetap valid) (2 ms)
+  BB-21 Training Percentage (getNumericInputError)
+    √ BB-21: Training Percentage 0 ditolak
+    √ BB-21: Training Percentage 100 ditolak
+    √ BB-21: Training Percentage -5 ditolak (1 ms)
+    √ BB-21: Training Percentage 70.5 ditolak
+    √ BB-21: Training Percentage 150 ditolak
+    √ BB-21: Training Percentage 1 diterima
+    √ BB-21: Training Percentage 70 diterima (1 ms)
+    √ BB-21: Training Percentage 99 diterima
+    √ BB-21: pada metode k-fold, Training Percentage tidak divalidasi
+  BB-22 Seed (validasi)
+    √ BB-22: seed 42 sah; tanpa seed (null) sah (1 ms)
+    √ BB-22: seed di luar 0..4294967295 atau pecahan ditolak
+  BB-24 Fold melebihi anggota kelas terkecil (sisi TS)
+    √ BB-24: TS hanya memeriksa fold >= 1 dan bilangan bulat; batas terhadap ukuran data diserahkan ke Rust (1 ms)
+    √ BB-24: galat Rust 'fold melebihi jumlah instance' (run ber-Text, ringkasan konstruktor) -> pesan ramah tanpa kode NB_E_
+    √ BB-24 (temuan): run TANPA fitur Text yang gagal karena fold hanya sampai sebagai 'No analysis results available' -> pesan generik (1 ms)
+
+Test Suites: 3 passed, 3 total
+Tests:       63 passed, 63 total
+Snapshots:   0 total
+Time:        6.058 s
+Ran all test suites matching eval/blackbox.nb.container|eval/blackbox.nb.validation|eval/blackbox.nb.output.
+Test results written to: ..\testing\text_analytics_eval\logs\jest_C2_win.json
+
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=10.73 started=2026-10-08 10:29:25 +07:00 cmd=npx jest eval/blackbox.nb.container eval/blackbox.nb.validation eval/blackbox.nb.output --runInBand --json --outputFile=..\testing\text_analytics_eval\logs\jest_C2_win.json cwd=E:\KULIAH\Skripsi\statify64\frontend ===

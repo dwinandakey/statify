@@ -116,12 +116,10 @@ function Harness({
   descriptor = getD1Descriptor(),
   existingVariables = [],
   initial,
-  showFieldHelp = false,
 }: {
   descriptor?: ModelDescriptor;
   existingVariables?: Variable[];
   initial?: ApplyModelSaveTabType;
-  showFieldHelp?: boolean;
 }) {
   const [data, setData] = useState<ApplyModelSaveTabType>(
     initial ?? cloneSaveDefault()
@@ -133,7 +131,6 @@ function Harness({
       adapter={naiveBayesModelAdapter}
       existingVariables={existingVariables}
       onChange={setData}
-      showFieldHelp={showFieldHelp}
     />
   );
 }
@@ -369,21 +366,6 @@ describe("SaveTab — Final name & AM_W_NAME_ADJUSTED", () => {
     );
     expect(screen.getByTestId("name-adjusted-class:Rain Day")).toBeInTheDocument();
     expect(screen.queryByTestId("name-adjusted-class:Sunny")).not.toBeInTheDocument();
-  });
-});
-
-describe("SaveTab — teks bantuan", () => {
-  it("showFieldHelp true menampilkan teks bantuan; false menyembunyikannya", () => {
-    const { unmount } = render(<Harness showFieldHelp={false} />);
-    expect(
-      screen.queryByText(/Choose which columns are added/)
-    ).not.toBeInTheDocument();
-    unmount();
-
-    render(<Harness showFieldHelp />);
-    expect(
-      screen.getByText(/Choose which columns are added/)
-    ).toBeInTheDocument();
   });
 });
 
