@@ -18,7 +18,7 @@ Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di brow
 | 4 | Time series | _(diisi)_ | _(diisi)_ |
 | 5 | Regresi logistik biner | Dwinanda Muhammad Keyzha (222212576) | [Regresi Logistik Biner](#regresi-logistik-biner) |
 | 6 | Regresi logistik ordinal | _(diisi)_ | _(diisi)_ |
-| 7 | Regresi logistik multinomial | _(diisi)_ | _(diisi)_ |
+| 7 | Regresi logistik multinomial | _Willy Sumbayak (222212916)_ | _Regresi Logistik Multinomial_ |
 | 8 | Analisis diskriminan | _(diisi)_ | _(diisi)_ |
 | 9 | Nearest neighbor | _(diisi)_ | _(diisi)_ |
 | 10 | K-medoids | _(diisi)_ | _(diisi)_ |
