@@ -18,7 +18,7 @@ Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di brow
 | 4 | Time series | _(diisi)_ | _(diisi)_ |
 | 5 | Regresi logistik biner | Dwinanda Muhammad Keyzha (222212576) | [Regresi Logistik Biner](#regresi-logistik-biner) |
 | 6 | Regresi logistik ordinal | _(diisi)_ | _(diisi)_ |
-| 7 | Regresi logistik multinomial | _Willy Sumbayak (222212916)_ | _Regresi Logistik Multinomial_ |
+| 7 | Regresi logistik multinomial | Willy Sumbayak (222212916) | [Regresi Logistik Multinomial](#regresi-logistik-multinomial) |
 | 8 | Analisis diskriminan | _(diisi)_ | _(diisi)_ |
 | 9 | Nearest neighbor | _(diisi)_ | _(diisi)_ |
 | 10 | K-medoids | _(diisi)_ | _(diisi)_ |
@@ -188,3 +188,126 @@ Worker hanya membaca salinan ini, jadi bila langkah penyalinan terlewat, tampila
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan di dalam aplikasi: halaman **Help**, bagian Binary Logistic Regression.
 - Dokumentasi rumus: _(tautan menyusul)_
+
+---
+
+## Regresi Logistik Multinomial
+
+**Nama**             : Willy Sumbayak  
+**NIM**              : 222212916  
+**Judul Skripsi**    : PENGEMBANGAN MODUL REGRESI LOGISTIK MULTINOMIAL PADA APLIKASI STATIFY  
+**Dosen Pembimbing** : Dr. Achmad Syahrul Choir, S.S.T., M.Si.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan analisis regresi logistik untuk variabel dependen nominal dengan lebih dari dua kategori (model *baseline-category logit*). Parameter diestimasi dengan metode *maximum likelihood* melalui Newton-Raphson dengan *step-halving*. Perhitungan berjalan dengan Rust/WebAssembly di browser, jadi data tidak dikirim ke server. Format keluaran mengikuti prosedur NOMREG pada SPSS.
+
+### Cara mengakses
+
+Menu **Analyze > Regression > Multinomial Logistic...** membuka dialog dengan lima tab:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Memilih variabel dependen, faktor (*fixed*), dan kovariat |
+| Statistics | Memilih statistik dan tabel yang ditampilkan |
+| Criteria | Mengatur kriteria iterasi dan konvergensi |
+| Options | Mengatur kategori referensi, skala dispersi, opsi stepwise, dan hierarki |
+| Save | Menyimpan hasil per kasus ke dataset |
+
+### Fitur
+
+- **Kategori referensi**: kategori pertama, terakhir, atau kustom.
+- **Criteria**: iterasi maksimum, konvergensi parameter, konvergensi log-likelihood, kriteria singularitas, dan delta untuk sel kosong.
+- **Options**: skala dispersi (None, User defined, Pearson, Deviance), probabilitas dan uji entry/removal (Likelihood ratio atau Score), serta aturan hierarki.
+- **Statistics**: Pseudo R-square, Step summary, Model fitting information, Information criteria, Cell probabilities, Classification table, Goodness-of-fit, Monotonicity measures, Estimates, Likelihood ratio tests, Asymptotic correlations, dan Asymptotic covariances.
+- **Save**: estimated response probabilities, predicted category, predicted category probability, dan probabilitas kategori aktual.
+
+### Keluaran
+
+Tabel mengikuti format SPSS:
+
+- Case Processing Summary.
+- Model Fitting Information (-2 Log likelihood, Chi-square, AIC, BIC).
+- Goodness-of-Fit (Pearson dan Deviance).
+- Pseudo R-Square (Cox & Snell, Nagelkerke, McFadden).
+- Likelihood Ratio Tests per efek.
+- Parameter Estimates (B, Std. Error, Wald, df, Sig., Exp(B), dan selang kepercayaan) untuk setiap kategori non-referensi.
+- Classification Table, Observed and Predicted Frequencies (cell probabilities), serta matriks korelasi dan kovarians asimtotik.
+
+Setiap tabel disertai interpretasi singkat (`dialogs/interpretations.ts`).
+
+### Alur kerja
+
+```
+dialogs/MultinomialLogisticMain.tsx       Mengumpulkan variabel dan opsi
+        |
+public/workers/Regression/multinomialLogistic.worker.js
+        |                                 Menyiapkan data lalu memanggil WASM
+wasm/ (crate statify-multinomial)         Design matrix, Newton-Raphson, log-likelihood,
+        |                                 Wald, LR test, goodness-of-fit, klasifikasi
+dialogs/interpretations.ts                Interpretasi tabel
+        |
+IndexedDB -> halaman Result               Log, analytic, dan statistic disimpan lalu ditampilkan
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/Regression/MultinomialLogistic/`
+
+```
+MultinomialLogistic/
+├── ALGORITMA_DAN_RUMUS.md            # Dokumentasi algoritma dan rumus
+├── diagrams/                         # Diagram alur modul
+├── dialogs/
+│   ├── MultinomialLogisticMain.tsx   # Dialog utama, orkestrasi worker, simpan hasil
+│   ├── VariablesTab.tsx
+│   ├── StatisticsTab.tsx
+│   ├── CriteriaTab.tsx
+│   ├── OptionsTab.tsx
+│   ├── SaveTab.tsx
+│   └── interpretations.ts            # Teks interpretasi hasil
+├── hooks/
+│   └── tourConfig.ts                 # Konfigurasi tur fitur
+└── wasm/                             # Crate Rust -> WebAssembly
+    ├── multinomialLogistic.worker.ts
+    └── src/
+        ├── lib.rs                    # Fungsi yang diekspor ke JavaScript
+        ├── models/                   # config.rs, result.rs
+        └── stats/                    # core, estimation, newton_raphson, probabilities,
+                                      # log_likelihood, likelihood_ratio, goodness_of_fit,
+                                      # classification, cell_probabilities, format_results
+```
+
+File pendukung di luar folder modul:
+
+| File | Fungsi |
+|---|---|
+| `frontend/public/workers/Regression/multinomialLogistic.worker.js` | Web Worker yang menyiapkan data dan memanggil WASM |
+| `frontend/public/workers/Regression/Multinomial/pkg/` | Paket WASM hasil build yang dibaca worker |
+| `frontend/components/Modals/ModalRegistry.tsx` | Mendaftarkan dialog ke sistem modal |
+| `frontend/app/help/components/statistics-guide/multinomial-logistic/` | Panduan penggunaan di halaman Help |
+
+### Build ulang WASM
+
+Lakukan hanya bila kode Rust berubah.
+
+```bash
+cd frontend/components/Modals/Analyze/Regression/MultinomialLogistic/wasm
+cargo test                       # unit test
+wasm-pack build --target web     # menulis ke wasm/pkg
+```
+
+Setelah itu salin berkas `statify_multinomial*` dan `package.json` dari `wasm/pkg` ke `frontend/public/workers/Regression/Multinomial/pkg/`. Worker hanya membaca salinan ini.
+
+### Pengujian
+
+- **Unit test Rust** (`cargo test` di folder `wasm/`).
+- **Perbandingan dengan SPSS**: estimasi parameter, uji model, dan goodness-of-fit dibandingkan dengan keluaran SPSS NOMREG.
+
+### Dokumentasi
+
+- Dokumentasi algoritma dan rumus: [ALGORITMA_DAN_RUMUS.md](frontend/components/Modals/Analyze/Regression/MultinomialLogistic/ALGORITMA_DAN_RUMUS.md).
+- Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
+- Panduan di dalam aplikasi: halaman **Help**, bagian Multinomial Logistic Regression.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
