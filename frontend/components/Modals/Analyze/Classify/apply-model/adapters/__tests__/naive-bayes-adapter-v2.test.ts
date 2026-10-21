@@ -96,7 +96,7 @@ describe("naiveBayesModelAdapter — schema 2.0", () => {
     expect(labels).toEqual([
       "Smoothing alpha",
       "Variance floor",
-      "Training validation",
+      "Validation (training)",
       "Text source",
       "Text likelihood",
       "Text terms",

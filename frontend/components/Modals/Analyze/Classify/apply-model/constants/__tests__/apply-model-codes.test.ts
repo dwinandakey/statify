@@ -32,10 +32,10 @@ describe("Apply Model — kode & pesan (AGENTS.md §4.5)", () => {
     );
   });
 
-  it("jumlah kode: 50 error (43 v1 + 7 v2) dan 9 warning (8 v1 + 1 v2)", () => {
+  it("jumlah kode: 51 error (43 v1 + 7 v2 + AM_E_SERIALIZE) dan 9 warning (8 v1 + 1 v2)", () => {
     const errors = ALL_APPLY_MODEL_CODES.filter((c) => c.startsWith("AM_E_"));
     const warnings = ALL_APPLY_MODEL_CODES.filter((c) => c.startsWith("AM_W_"));
-    expect(errors).toHaveLength(50);
+    expect(errors).toHaveLength(51);
     expect(warnings).toHaveLength(9);
   });
 

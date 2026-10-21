@@ -16,7 +16,7 @@ Halaman sumber: https://archive.ics.uci.edu/dataset/228/sms+spam+collection  (do
 ## Asal berkas mentah dan status verifikasi
 
 - Sandbox penulisan tidak dapat mengunduh (HTTP 403 pada `archive.ics.uci.edu` dan `raw.githubusercontent.com`). Berkas mentah di atas
-  BUKAN diunduh oleh skrip ini, melainkan disalin dari `testing/thesis-eval/weka/data/` (diunduh pengguna dan dicatat oleh agen WEKA di
+  BUKAN diunduh oleh skrip ini, melainkan disalin dari `text_analytics_eval/weka/data/` (dahulu `testing/thesis-eval/weka/data/`; diunduh pengguna dan dicatat oleh agen WEKA di
   `weka/00_ENV_dan_pemetaan_opsi.md` bagian 6.1). sha256 ketiga berkas sama dengan yang dicatat agen WEKA.
 - `download_datasets.py --download` hanya mencatat hasil unduhan yang sebenarnya; URL pada tabel BELUM diverifikasi dari sandbox.
 - Lisensi pada tabel adalah yang tertera pada halaman sumber menurut pengetahuan penulis skrip dan BELUM diverifikasi ulang di sini.

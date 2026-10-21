@@ -6,14 +6,14 @@ Dokumen ini dibangkitkan oleh `frontend/components/Modals/Analyze/Classify/naive
 
 | Hal | Hasil |
 |---|---|
-| Tes Jest Track A (4 berkas) | **106 kasus per 21 Okt 2026 (105 pada 8 Okt; +1 tes rumus di `formula-output.eval.test.ts`), semua lulus, 0 gagal** (Windows dengan konfigurasi Jest produksi, `logs/jest_A_win.json`; VM Linux sebagai pembanding, `logs/jest_A_vm.json`) |
-| Tes Rust Track A (4 target) | **60 fungsi tes; 60 lulus, 0 gagal di Windows** per 21 Okt 2026 (`cargo test --test eval_formulas` 15, `eval_vocab_limit` 9, `eval_text_pipeline` 20, `eval_partition` 16; rustc 1.99.1, `logs/rust_pembersihan_21okt_{core,nb}.txt`). Run 8 Okt (rustc 1.93.0, `logs/rust_eval_*.txt`): 66 fungsi, 66 lulus; 6 tes duplikat (`eval_vocab_limit` 4, `eval_partition` 2) dihapus 21 Okt 2026 (`LAPORAN_PEMBERSIHAN_TES_21Okt.md`). Tes ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
+| Tes Jest Track A (4 berkas) | **107 kasus per 22 Okt 2026 (105 pada 8 Okt; +1 tes rumus di `formula-output.eval.test.ts`, +1 tes penolakan fold 1 di `kfold.eval.test.ts`), semua lulus, 0 gagal** (Windows dengan konfigurasi Jest produksi, `logs/jest_A_win.json`; VM Linux sebagai pembanding, `logs/jest_A_vm.json`) |
+| Tes Rust Track A (4 target) | **59 fungsi tes; 59 lulus, 0 gagal di Windows** per 22 Okt 2026 (`cargo test --test eval_formulas` 15, `eval_vocab_limit` 9, `eval_text_pipeline` 20, `eval_partition` 15; rustc 1.99.1, `logs/rust_eval_*.txt`, `logs/rust_final_win_{core,nb}.txt`; `eval_partition` 16 → 15 karena tes karakterisasi `k1_*` menjadi tes penolakan setelah fold minimal 2). Run 8 Okt (rustc 1.93.0, `logs/rust_eval_*.txt`): 66 fungsi, 66 lulus; 6 tes duplikat (`eval_vocab_limit` 4, `eval_partition` 2) dihapus 21 Okt 2026 (`LAPORAN_PEMBERSIHAN_TES_21Okt.md`). Tes ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
 | Nilai acuan independen | `unit/reference_values.py` (Python + numpy, 80 kombinasi TF x IDF x normalisasi, 16 skenario Words to Keep/Min term frequency, 5 skenario stopword, 18 skenario n-gram); log `logs/reference_values.txt`. Kombinasi sah-sklearn (27) dibandingkan langsung dengan scikit-learn: selisih maksimum 0. Nilai golden lama PLAN_FIX 3.6 cocok. |
 | Cakupan Jest | Diukur di VM per menu, sebelum dan sesudah Track A (bagian 4). STWV 51,37% menjadi 53,39%; Naive Bayes 87,01% (tidak berubah); Apply Model 97,50% menjadi 97,77% (cakupan baris). |
 | Cakupan Rust | **Tidak terukur**, lihat `run_A.ps1` (`cargo llvm-cov` bila terpasang). Hanya ada estimasi statis celah (bagian 4.2), bukan cakupan terukur. |
 | Temuan | `BUGS_A.md`: A-1 `KFolds = 1` diterima dan menghasilkan evaluasi tanpa data latih (sisi TS dan sisi Rust terverifikasi dengan tes yang dijalankan di Windows); tiga catatan informasional (A-2 sampai A-4). |
 
-Catatan lingkungan: Jest dijalankan dengan `jest.eval.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), dan hasilnya 105 dari 105 lulus (`logs/jest_A_win.json`). Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
+Catatan lingkungan: Jest dijalankan dengan `jest.eval.config.js` (ts-jest, `isolatedModules`, diagnostik TypeScript dimatikan) melalui `tools/run_jest_linux.sh` di VM Linux; `run_A.ps1` menjalankan ulang empat berkas yang sama dengan konfigurasi produksi repo di Windows (`logs/jest_A_win.json`), dan hasilnya 107 dari 107 lulus per 22 Okt 2026 (`logs/jest_A_win.json`). Seed acak 42 dan toleransi 1e-6 dipakai di semua tes numerik.
 
 ## 2. Cakupan tugas dan berkas yang dibuat
 
@@ -31,7 +31,7 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 
 ## 3. Tes yang ditambahkan
 
-### 3.1 Jest (105 kasus pada 8 Okt; 106 sejak 21 Okt 2026 dengan satu tes rumus baru di `formula-output.eval.test.ts`; DIJALANKAN di Windows dan di VM)
+### 3.1 Jest (105 kasus pada 8 Okt; 107 per 22 Okt 2026 dengan satu tes rumus baru di `formula-output.eval.test.ts` dan satu tes penolakan fold 1 di `kfold.eval.test.ts`; DIJALANKAN di Windows dan di VM)
 
 | Berkas | Nama tes | Perilaku yang diuji | Status |
 |---|---|---|---|
@@ -114,7 +114,7 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 | `kfold.eval.test.ts` | pada mode holdout nilai KFolds yang tidak sah diabaikan; sebaliknya TrainingPercentage tidak diperiksa pada kfold | eval A(e): batas jumlah fold pada getNumericInputError | Lulus [Win] |
 | `kfold.eval.test.ts` | buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust | eval A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
 | `kfold.eval.test.ts` | nilai KFolds lain juga tidak diubah (2, 10) | eval A(e): KFolds = 1 diteruskan apa adanya ke worker | Lulus [Win] |
-| `kfold.eval.test.ts` | galat Rust "Number of folds must be at least 2 (got 0)." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | BELUM DIJALANKAN |
+| `kfold.eval.test.ts` | galat Rust "Number of folds must be at least 2 (got 1)." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
 | `kfold.eval.test.ts` | galat Rust "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
 | `kfold.eval.test.ts` | galat Rust "Cannot create cross-validation folds: there are no valid instances after missing-value handling." dipetakan ke saran pengaturan cross-validation | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
 | `kfold.eval.test.ts` | teks peringatan Rust yang memuat kata fold juga dipetakan ke saran yang sama (pemeta berbasis pencocokan kata) | eval A(e): pemetaan pesan galat Rust terkait jumlah fold | Lulus [Win] |
@@ -141,7 +141,7 @@ Tes TypeScript lain di luar butir a sampai f (butir 3 tugas) dimasukkan ke dalam
 | `stopwords.eval.test.ts` | pasangan min > max, nol, enam, dan non-bulat ditolak dengan pesan n-gram | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
 | `stopwords.eval.test.ts` | mode word selalu mengirim 1..1 walau minSize/maxSize bernilai lain | eval A(c): rentang n-gram 1-5 pada konfigurasi | Lulus [Win] |
 
-### 3.2 Rust (66 fungsi tes saat run 8 Okt, 60 tersisa sejak 21 Okt 2026; DIJALANKAN di Windows)
+### 3.2 Rust (66 fungsi tes saat run 8 Okt, 59 per 22 Okt 2026; DIJALANKAN di Windows)
 
 Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya terjadi di Windows (`run_A.ps1`, rustc 1.93.0) dan seluruhnya lulus tanpa perubahan berkas. Sebelum itu hanya dilakukan: `rustfmt --check` (hanya parse sintaks, tanpa galat pada semua berkas `eval_*.rs`; `logs/audit_rustfmt_syntax_cloud.txt`; ini BUKAN kompilasi), pembacaan ulang setiap berkas baris demi baris terhadap signature sumber (nama impor, tipe argumen, nama field `VectorizerOutput`, `TextVectorizerModel`, `HoldoutSplit`, `StratifiedKFold`, `PredictionScores`, `EvaluationMetrics`), dan penyalinan pola `cfg`/`run` dari `s3_formulas.rs` yang sudah terbukti kompil. Kekhawatiran kesalahan kompilasi tidak terbukti pada kompilasi Windows.
 
@@ -208,16 +208,15 @@ Seluruh tes Rust di bawah ditulis tanpa dapat dikompilasi; kompilasi pertamanya 
 | `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_ukuran_total_fold_berselisih_paling_banyak_jumlah_kelas` | kfold ukuran total fold berselisih paling banyak jumlah kelas | Lulus [Win] |
 | `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_karakterisasi_ukuran_fold_tidak_seimbang_pada_tiga_kelas_sama_besar` | kfold karakterisasi ukuran fold tidak seimbang pada tiga kelas sama besar | Lulus [Win] |
 | `eval_partition.rs` (naive-bayes (crate wasm)) | `kfold_k_sama_dengan_jumlah_instance_menghasilkan_fold_kosong_dan_peringatan` | kfold k sama dengan jumlah instance menghasilkan fold kosong dan peringatan | Lulus [Win] |
-| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_lolos_validate_fold_count_tanpa_peringatan` | k1 lolos validate fold count tanpa peringatan | Lulus [Win] |
-| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_menghasilkan_satu_fold_berisi_semua_indeks` | k1 menghasilkan satu fold berisi semua indeks | Lulus [Win] |
-| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data` | k1 fold latih kosong dan fold uji adalah seluruh data | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_ditolak_validate_fold_count` | k1 ditolak validate fold count | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_ditolak_stratified_k_fold` | k1 ditolak stratified k fold | Lulus [Win] |
 | `eval_partition.rs` (naive-bayes (crate wasm)) | `k2_sebagai_pembanding_fold_latih_tidak_kosong` | k2 sebagai pembanding fold latih tidak kosong | Lulus [Win] |
-| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama` | k1 evaluasi end to end tanpa panic tanpa nan tetapi semua prediksi kelas alfabetis pertama | Lulus [Win] |
+| `eval_partition.rs` (naive-bayes (crate wasm)) | `k1_ditolak_dan_alasannya_fold_tunggal_melatih_pada_nol_baris` | k1 ditolak dan alasannya fold tunggal melatih pada nol baris | Lulus [Win] |
 
 Pernyataan harapan yang tidak berasal dari nilai acuan Python independen (jujur dicatat):
 - Stemmer Indonesia (Sastrawi): hanya `memakan` menjadi `makan` dan `makan` menjadi `makan` yang diperiksa persis (pasangan pertama dulu juga diuji tes lama `characterization.rs::stemming_indonesia_memakan_menjadi_makan`, yang dihapus 21 Okt 2026 sebagai duplikat; kini hanya diuji di `eval_text_pipeline.rs`). Untuk kata lain hanya properti (tidak kosong, tidak lebih panjang, huruf kecil, deterministik) dan bahwa `dimakan`, `berlari`, `membanggakan` berubah.
 - Stemmer Inggris (Porter2/Snowball): sembilan pasangan klasik (`running`, `cats`, `dogs`, `jumped`, `caresses`, `ponies`, `ties`, `cries`, `caress`) berasal dari dokumentasi algoritma Snowball English langkah 1a/1b, bukan dari eksekusi di sesi ini. Bila `cargo test` menunjukkan keluaran lain, periksa dulu versi crate `rust-stemmers` sebelum menyimpulkan ada bug.
-- Tes `k1_*` pada `eval_partition.rs` menegaskan PERILAKU SAAT INI kode sumber (bukan perilaku yang seharusnya; lihat `BUGS_A.md` A-1): data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0. Perilaku ini dikunci sebagai tes karakterisasi dan sudah dieksekusi: `cargo test` di Windows lulus (`logs/rust_eval_partition.txt`; status per tes ada pada kolom Status di bagian Rust). Percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log tersimpan dan tidak dihitung.
+- Tes `k1_*` pada `eval_partition.rs` dulu (8 dan 21 Okt 2026) adalah tes karakterisasi yang mengunci perilaku lama `KFolds = 1` diterima (`BUGS_A.md` A-1). Setelah perbaikan fold minimal 2 (22 Okt 2026) tes itu menjadi tes penolakan: `k1_ditolak_validate_fold_count` (k = 1 dan k = 0 ditolak dengan pesan "Number of folds must be at least 2 (got 1)."/"(got 0)"; k = 2 sah), `k1_ditolak_stratified_k_fold` (`stratified_k_fold` mengembalikan galat untuk k = 1), dan `k1_ditolak_dan_alasannya_fold_tunggal_melatih_pada_nol_baris` (k = 1 ditolak; fold tunggal yang dibentuk manual menunjukkan alasannya: data latih kosong, semua prediksi jatuh ke kelas alfabetis pertama, akurasi 3/9, kappa 0). Tes ini sudah dieksekusi: `cargo test` di Windows lulus (`logs/rust_eval_partition.txt`; status per tes ada pada kolom Status di bagian Rust). Percobaan `rustc` di sandbox yang pernah dicatat penulis tidak punya skrip/log tersimpan dan tidak dihitung.
 - Ukuran fold [9, 6, 6, 6, 6] dan [2, 2, 2, 0, 0, 0] pada `eval_partition.rs` diturunkan dari algoritma round-robin di kode dan dikunci oleh tes Rust yang dieksekusi di Windows (`logs/rust_eval_partition.txt`, lulus). Tiga tes tambahan mengunci keluaran awal MT19937 seed 42 (sama dengan `numpy.random.RandomState(42)`) dan indeks eksak partisi holdout/k-fold seed 42 terhadap replika Python independen.
 
 ## 4. Celah cakupan
@@ -299,16 +298,16 @@ Angka Jest Track A berasal dari Windows dengan konfigurasi Jest produksi (`logs/
 | Rust statify-text-core (tes lama) [Win] | `statify-text-core/tests/{characterization,nb_text,s2_pipeline,s3_formulas,s4_fit_transform}.rs` (`logs/unit_core.txt`) | 91 | 91 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust statify-text-core (Track A) | `tests/eval_{formulas,vocab_limit,text_pipeline}.rs` (run 8 Okt; sejak 21 Okt 2026 tinggal 44 karena `eval_vocab_limit` 13 menjadi 9) | 48 | 48 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust naive-bayes (tes lama inline) [Win] | `naive-bayes/rust/src/**` blok `#[cfg(test)]` (`logs/unit_nb.txt`) | 203 | 203 | 0 | tidak terukur, lihat `run_A.ps1` |
-| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/eval_partition.rs` (run 8 Okt; sejak 21 Okt 2026 tinggal 16) | 18 | 18 | 0 | tidak terukur, lihat `run_A.ps1` |
+| Rust naive-bayes (Track A) | `naive-bayes/rust/tests/eval_partition.rs` (run 8 Okt; per 22 Okt 2026 tinggal 15) | 18 | 18 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust apply-model (tes lama) [Win] | `apply-model/rust/src/**` blok `#[cfg(test)]` (117) + `rust/tests/text_scoring.rs` (39) (`logs/unit_am.txt`) | 156 | 156 | 0 | tidak terukur, lihat `run_A.ps1` |
 | Rust wrapper STWV | `StringToWordVector/rust` | 0 | tidak ada tes | tidak ada tes | tidak terukur |
 
-Catatan baseline: kolom Jest "sebelum" memuat hanya tes lama tiap menu pada konfigurasi tesis (tes evaluasi track lain dikecualikan). Berkas `logs/jest_A_vm_part1.json` dan `logs/jest_A_vm_part2.json` adalah salinan identik `jest_A_vm.json` (berkas pecahan lama tidak dapat dihapus dari sandbox karena penghapusan tidak diizinkan); jangan dijumlahkan. Angka Rust pada tabel adalah baseline 7–8 Okt. Rerun 21 Okt 2026 (Windows, rustc 1.99.1, Jest 30.0.4, setelah tes duplikat dibuang; `LAPORAN_PEMBERSIHAN_TES_21Okt.md`): Rust 565 lulus (inti 155 = 78 lama + 77 evaluasi, Naive Bayes 243 = 203 + 40, Apply Model 167 = 154 + 13); Jest 1.243 lulus dalam 79 suite (STWV 167, Naive Bayes 385, Apply Model 691); cakupan baris Jest dengan semua tes STWV 72,45%, Naive Bayes 94,75%, Apply Model 97,80% (memuat paket evaluasi, jadi tidak setara dengan angka pada tabel).
+Catatan baseline: kolom Jest "sebelum" memuat hanya tes lama tiap menu pada konfigurasi tesis (tes evaluasi track lain dikecualikan). Berkas `logs/jest_A_vm_part1.json` dan `logs/jest_A_vm_part2.json` adalah salinan identik `jest_A_vm.json` (berkas pecahan lama tidak dapat dihapus dari sandbox karena penghapusan tidak diizinkan); jangan dijumlahkan. Angka Rust pada tabel adalah baseline 7–8 Okt. Keadaan terkini, uji ulang 22 Okt 2026 (Windows, rustc/cargo 1.99.1, Node 24.20.0, Jest 30.0.5; `LAPORAN_UJI_ULANG_22Okt.md`; tes duplikat sudah dibuang 21 Okt 2026): Rust 564 lulus (inti 155 = 78 lama + 77 evaluasi, Naive Bayes 242 = 203 + 39, Apply Model 167 = 154 + 13); Jest 1.250 lulus dalam 80 suite (STWV 171, Naive Bayes 388, Apply Model 691); cakupan baris Jest dengan semua tes STWV 72,18%, Naive Bayes 94,43%, Apply Model 97,80% (memuat paket evaluasi, jadi tidak setara dengan angka pada tabel).
 
 ## 7. Temuan
 
 Rincian, lokasi file:baris, langkah reproduksi, dampak, usulan, dan label keyakinan ada di `BUGS_A.md`. Ringkas:
-- **A-1 (sedang):** `KFolds = 1` diterima di TS (`useNaiveBayesValidation.ts:255`) dan Rust (`partition.rs:179`); satu fold berarti data latih kosong dan hasil evaluasi tidak bermakna tanpa peringatan. Usulan: batas minimum 2 di kedua lapisan. TS terverifikasi dengan tes yang dijalankan (Windows); Rust terverifikasi dengan `cargo test` di Windows (`logs/rust_eval_partition.txt`).
+- **A-1 (sedang):** `KFolds = 1` diterima di TS (`useNaiveBayesValidation.ts:255`) dan Rust (`partition.rs:179`); satu fold berarti data latih kosong dan hasil evaluasi tidak bermakna tanpa peringatan. Usulan: batas minimum 2 di kedua lapisan. TS terverifikasi dengan tes yang dijalankan (Windows); Rust terverifikasi dengan `cargo test` di Windows (`logs/rust_eval_partition.txt`). **Status 22 Okt 2026: DIPERBAIKI** (fold minimal 2 di `hooks/useNaiveBayesValidation.ts` dan `rust/src/stats/partition.rs`; lihat `BUGS_A.md` A-1).
 - **A-2 (informasi):** ukuran total fold k-fold tidak seimbang ([9, 6, 6, 6, 6] untuk 3 kelas x 11 pada k = 5, pembanding scikit-learn [7, 7, 7, 6, 6]); syarat selisih per kelas <= 1 tetap terpenuhi.
 - **A-3 (informasi):** k lebih besar dari kelas terbesar menghasilkan fold uji kosong; peringatan tetap muncul.
 - **A-4 (informasi):** asersi tautologi pada tes lama `s3_formulas.rs:277`. Blok asersi itu dibuang 21 Okt 2026 (tesnya tetap).

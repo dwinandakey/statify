@@ -1,5 +1,7 @@
 # ENV — Lingkungan pengujian
 
+> Catatan status (22 Okt 2026): versi di dokumen ini adalah lingkungan awal (7–8 Okt 2026) dan dipertahankan sebagai baseline yang dirujuk `REPORT.md`. Versi final (rustc/cargo 1.99.1, wasm-pack 0.15.0, Node 24.20.0, Jest 30.0.5, Chrome 155.0.8059.85) ada di `LAPORAN_UJI_ULANG_22Okt.md`.
+
 Semua versi di bawah berasal dari perintah/berkas yang benar-benar dibaca; sumbernya ditulis di kolom "Sumber". Yang tidak dapat diverifikasi ditulis apa adanya. Paket evaluasi dijalankan di **tiga lingkungan berbeda**; setiap angka di laporan menyebut lingkungannya.
 
 ## 1. Perangkat uji skripsi (Windows) — lingkungan acuan untuk hasil buku

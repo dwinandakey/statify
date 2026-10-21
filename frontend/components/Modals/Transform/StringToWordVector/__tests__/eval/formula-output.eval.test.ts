@@ -126,7 +126,7 @@ describe("eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.
         const out = build({ config: c });
         expect(settingValue(out, "Convert to Lowercase")).toBe("No");
         expect(settingValue(out, "Stopwords")).toBe("Custom (2 words)");
-        expect(settingValue(out, "Stemming")).toBe("Indonesian");
+        expect(settingValue(out, "Stemming")).toBe("Indonesian (Sastrawi)");
         expect(settingValue(out, "Tokenizer")).toBe("N-gram (min 2, max 4)");
         expect(settingValue(out, "Minimum Term Frequency")).toBe(3);
 
@@ -134,7 +134,7 @@ describe("eval A: buildStwvOutput pada korpus D (acuan df dari reference_values.
         c.stemming = { method: "english" };
         const satu = build({ config: c });
         expect(settingValue(satu, "Stopwords")).toBe("Custom (1 word)");
-        expect(settingValue(satu, "Stemming")).toBe("English");
+        expect(settingValue(satu, "Stemming")).toBe("English (Snowball/Porter2)");
 
         c.stopwords = { method: "indonesian", customList: "" };
         expect(settingValue(build({ config: c }), "Stopwords")).toBe("Indonesian");

@@ -16,7 +16,7 @@ export type ApplyModelErrorCode =
   | "AM_E_MAP_RAW_TEXT_UNMAPPED" | "AM_E_MAP_RAW_TEXT_TYPE" | "AM_E_TEXT_NEGATIVE"
   | "AM_E_ACTUAL_NOT_FOUND" | "AM_E_ACTUAL_MEASURE" | "AM_E_ACTUAL_IS_PREDICTOR"
   | "AM_E_NAME_EMPTY" | "AM_E_NAME_INVALID" | "AM_E_NAME_TOO_LONG" | "AM_E_NAME_RESERVED" | "AM_E_NAME_DUPLICATE"
-  | "AM_E_NO_MODEL" | "AM_E_NO_ROWS" | "AM_E_PAYLOAD" | "AM_E_WORKER";
+  | "AM_E_NO_MODEL" | "AM_E_NO_ROWS" | "AM_E_PAYLOAD" | "AM_E_WORKER" | "AM_E_SERIALIZE";
 
 export type ApplyModelWarningCode =
   | "AM_W_LEGACY_SCHEMA" | "AM_W_UNSEEN_SKIPPED_LEGACY" | "AM_W_UNSEEN_CATEGORY"
@@ -51,7 +51,7 @@ export const ALL_APPLY_MODEL_CODES: ReadonlyArray<
   "AM_E_MAP_RAW_TEXT_UNMAPPED", "AM_E_MAP_RAW_TEXT_TYPE", "AM_E_TEXT_NEGATIVE",
   "AM_E_ACTUAL_NOT_FOUND", "AM_E_ACTUAL_MEASURE", "AM_E_ACTUAL_IS_PREDICTOR",
   "AM_E_NAME_EMPTY", "AM_E_NAME_INVALID", "AM_E_NAME_TOO_LONG", "AM_E_NAME_RESERVED", "AM_E_NAME_DUPLICATE",
-  "AM_E_NO_MODEL", "AM_E_NO_ROWS", "AM_E_PAYLOAD", "AM_E_WORKER",
+  "AM_E_NO_MODEL", "AM_E_NO_ROWS", "AM_E_PAYLOAD", "AM_E_WORKER", "AM_E_SERIALIZE",
   "AM_W_LEGACY_SCHEMA", "AM_W_UNSEEN_SKIPPED_LEGACY", "AM_W_UNSEEN_CATEGORY",
   "AM_W_ROWS_NOT_SCORED", "AM_W_ACTUAL_UNKNOWN_CLASS", "AM_W_NAME_ADJUSTED",
   "AM_W_NO_RESULT_STORE_MODELS", "AM_W_BUILTIN_EMPTY", "AM_W_TEXT_ALL_ZERO_FILLED",
@@ -130,6 +130,7 @@ export const APPLY_MODEL_MESSAGES: Record<
   AM_E_NO_ROWS: withCode("AM_E_NO_ROWS", "The active dataset has no data rows for the mapped variables."),
   AM_E_PAYLOAD: withCode("AM_E_PAYLOAD", "The data sent to the analysis engine does not match the model."),
   AM_E_WORKER: withCode("AM_E_WORKER", "The analysis engine failed to run. Reload the page and try again."),
+  AM_E_SERIALIZE: withCode("AM_E_SERIALIZE", "The analysis result could not be returned from the analysis engine. Reload the page and try again."),
 
   // --- Warning ---
   AM_W_LEGACY_SCHEMA: "This model uses the old format (1.0). Unknown categories are skipped during prediction. Export the model again from the Naive Bayes menu for consistent results.",

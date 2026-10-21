@@ -62,9 +62,9 @@ function describeStopwords(config: StwvConfig): string {
 function describeStemming(config: StwvConfig): string {
     switch (config.stemming.method) {
         case "indonesian":
-            return "Indonesian";
+            return "Indonesian (Sastrawi)";
         case "english":
-            return "English";
+            return "English (Snowball/Porter2)";
         default:
             return "None";
     }

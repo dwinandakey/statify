@@ -778,7 +778,7 @@ function buildDescriptor(raw: NaiveBayesExportedModel): ModelDescriptor {
     { label: "Smoothing alpha", value: String(raw.smoothing_alpha) },
     { label: "Variance floor", value: String(raw.variance_floor) },
     {
-      label: "Training validation",
+      label: "Validation (training)",
       value: formatTrainingValidation(raw.validation_config),
     },
   ];

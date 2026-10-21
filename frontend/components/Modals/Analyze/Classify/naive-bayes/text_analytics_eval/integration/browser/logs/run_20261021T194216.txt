@@ -1,0 +1,145 @@
+# Statify real-browser integration tests IT-01..IT-05 (Playwright + Google Chrome)
+date=2026-10-21T19:42:16.558Z
+chrome=chromium channel=chrome version=155.0.8059.85
+app_url=http://localhost:3000 (npm run dev, Next.js dev server)
+mode=headless; os=Windows_NT 10.0.26300 x64; AMD Ryzen 5 4600H with Radeon Graphics x12; node=v24.20.0; playwright=@playwright/test 1.57.0
+config=K1 (STWV/NB Text Preprocessing defaults: lowercase, word tokenizer, raw count TF, IDF none, normalization none, Words to Keep 1000, min TF 1; Multinomial, text alpha 1; holdout 70/30 seed 42)
+spec=frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/integration/browser/it_browser.spec.ts
+
+IT-01: PASS (13/13 checks)
+IT-02: PASS (9/9 checks)
+IT-03: PASS (10/10 checks)
+IT-04: PASS (10/10 checks)
+IT-05: PASS (6/6 checks)
+page-load incidents (data grid not rendered, page reloaded): IT-02: data grid appeared only after reload #1; IT-05: data grid appeared only after reload #2
+
+## Checks
+PASS  IT-01  STWV Options = K1 defaults (prefix VEC_)  :: {"lowercase":true,"stopNone":true,"stemNone":true,"tokWord":true,"delimiters":"[\\s.,;:'\"()?!]+","tfRaw":true,"idfNone":true,"normNone":true,"wordsToKeep":"1000","minTf":"1","prefix":"VEC_"}
+PASS  IT-01  STWV adds 1000 vector columns (toast)  :: 1000 vector columns were added to the dataset.
+PASS  IT-01  NB filter "VEC_" lists 999 of the 1000 STWV columns (known F-01: column "VEC" from token "&")  :: 999 shown, 0 selected
+PASS  IT-01  Leakage warning (W-LEAK) shown under Text Features after moving VEC_ columns  :: Column 'Text Tweet' looks like free text or an ID. Exclude it or move it to Text Features. The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slight
+PASS  IT-01  Word-Vector Variables zone holds all 1000 vector columns (999 filtered + VEC)  :: zone items=1000
+PASS  IT-01  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1
+PASS  IT-01  Case Processing Summary "Text features" = "Word vectors: 1000 columns"  :: Word vectors: 1000 columns
+PASS  IT-01  Case Processing Summary "Note" row = leakage note  :: The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slightly optimistic.
+PASS  IT-01  NB holdout accuracy (Word-Vector) = 0.670 (headless log: 0.6702127659574468)  :: 0.67
+PASS  IT-01  Exported model: text.source="vector", term count = 1000 = number of VEC_ columns used  :: source=vector, terms=1000, columns=1000, log_weights={"negative":1000,"positive":1000}, recipe=absent
+PASS  IT-01  Model text.columns/terms == the 1000 columns placed in Word-Vector Variables (same names)  :: zone=1000, model columns=1000, unique=1000
+PASS  IT-01  Number of model terms == headless STWV vocabulary size (K1)  :: 1000 vs 1000
+PASS  IT-01  scenario ran to completion (no UI error)  :: 25.8 s
+PASS  IT-02  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1
+PASS  IT-02  NB Text Preprocessing = K1 (lowercase, no stopwords/stemming, word tokenizer, raw count, no IDF, no norm, W=1000, minTF 1)  :: {"lowercase":true,"stopNone":true,"stemNone":true,"tokWord":true,"delimiters":"[\\s.,;:'\"()?!]+","tfRaw":true,"idfNone":true,"normNone":true,"wordsToKeep":"1000","minTf":"1"}
+PASS  IT-02  NB raw-text holdout accuracy = 0.697 (headless log: 0.6968085106382979)  :: 0.697
+PASS  IT-02  Downloaded file = JSON.stringify(model, null, 2) (stable round-trip)  :: 137288 B
+PASS  IT-02  Browser-exported model == headless wasm K1 model (bit-for-bit, ignoring trained_at)  :: 6017 numbers compared, diffs=0
+PASS  IT-02  Model Summary card (Upload file) matches the trained model (target, classes, text source, terms, alpha, validation, trained_at)  :: all 12 fields match
+PASS  IT-02  Model Summary text info: "Raw text variable: Text Tweet"  :: Text features Raw text variable: Text Tweet
+PASS  IT-02  Model Summary via "From Output Viewer" == via uploaded file (all fields except Source)  :: Source="Output Viewer: Naive Bayes Analysis › Naive Bayes Analysis Result (#6)"
+PASS  IT-02  scenario ran to completion (no UI error)  :: 73.6 s
+PASS  IT-03  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+PASS  IT-03  Case Processing: Total Rows = Scored = Evaluated = 630  :: 630/630/630
+PASS  IT-03  Resubstitution metrics shown = accuracy 0.908, kappa 0.816 (headless 0.907937 / 0.815873)  :: acc=0.908, kappa=0.816, macroF1=0.908
+PASS  IT-03  Dataset has NB_PredictedValue, NB_PredictedProbability, NB_Probability_negative, NB_Probability_positive  :: ["NB_PredictedValue","NB_PredictedProbability","NB_Probability_negative","NB_Probability_positive"]
+PASS  IT-03  Exported rows = 630 in original Id order  :: rows=630
+PASS  IT-03  NB_ columns filled on 630/630 rows  :: 630/630
+PASS  IT-03  Predicted class == NB model prediction (full-precision reference) on 630/630 rows  :: 630/630
+PASS  IT-03  max |reference probability - Apply Model probability| <= 5e-5 (round4)  :: max=4.994e-5; round4(ref)==output on 1260/1260
+PASS  IT-03  Recomputed resubstitution accuracy/kappa = 0.907937/0.815873 (headless)  :: acc=0.907937, kappa=0.815873
+PASS  IT-03  scenario ran to completion (no UI error)  :: 11.8 s
+PASS  IT-04  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+PASS  IT-04  Case Processing: Total Rows = Scored = Evaluated = 270  :: 270/270/270
+PASS  IT-04  Output Viewer metrics (3 dp) = scikit-learn K1 (acc 0.763, kappa 0.526, macro-F1 0.763)  :: acc=0.763, kappa=0.526, macroF1=0.763
+PASS  IT-04  NB_ columns filled on 270/270 rows  :: rows=270, filled=270
+PASS  IT-04  Row order (Id) == scikit-learn prediction file
+PASS  IT-04  Predicted class == scikit-learn K1 on 270/270 rows  :: 270/270
+PASS  IT-04  max |probability - scikit-learn| <= 5e-5 (round4)  :: max=4.996e-5
+PASS  IT-04  Metrics from exported predictions == scikit-learn K1 (|diff| < 1e-9)  :: acc 0.762963 vs 0.762963, kappa 0.525926 vs 0.525926, macroF1 0.762963 vs 0.762963; cm=[[103,32],[32,103]] vs [[103,32],[32,103]]
+PASS  IT-04  Class + both probabilities identical to headless Track D file pred_statify_K1.csv  :: 270/270 rows identical
+PASS  IT-04  scenario ran to completion (no UI error)  :: 23.0 s
+PASS  IT-05  New session has no trained model in the Output Viewer (no Model Summary from viewer)
+PASS  IT-05  Model Summary after reload == IT-02 Model Summary  :: identical
+PASS  IT-05  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+PASS  IT-05  Output Viewer metrics identical to IT-04  :: {"totalRows":"270","scored":"270","evaluated":"270","accuracy":"0.763","kappa":"0.526","macroF1":"0.763"}
+PASS  IT-05  NB_ columns (class + 3 probabilities) identical to IT-04 on 270/270 rows  :: 270/270 identical
+PASS  IT-05  scenario ran to completion (no UI error)  :: 135.4 s
+
+## Full log
+[2026-10-21T19:37:46.004Z] Chrome: chromium channel=chrome version=155.0.8059.85; app URL: http://localhost:3000; headless; OS: Windows_NT 10.0.26300 x64; AMD Ryzen 5 4600H with Radeon Graphics x12; Node v24.20.0
+[2026-10-21T19:37:46.341Z] ===== IT-01 start
+[2026-10-21T19:37:49.543Z] IT-01 /dashboard/data ready (data grid rendered) after 3.2 s, attempt 1
+[2026-10-21T19:37:54.857Z] imported pilkada_train.csv
+[2026-10-21T19:37:56.626Z] PASS  IT-01  STWV Options = K1 defaults (prefix VEC_)  :: {"lowercase":true,"stopNone":true,"stemNone":true,"tokWord":true,"delimiters":"[\\s.,;:'\"()?!]+","tfRaw":true,"idfNone":true,"normNone":true,"wordsToKeep":"1000","minTf":"1","prefix":"VEC_"}
+[2026-10-21T19:38:04.548Z] PASS  IT-01  STWV adds 1000 vector columns (toast)  :: 1000 vector columns were added to the dataset.
+[2026-10-21T19:38:06.056Z] PASS  IT-01  NB filter "VEC_" lists 999 of the 1000 STWV columns (known F-01: column "VEC" from token "&")  :: 999 shown, 0 selected
+[2026-10-21T19:38:06.350Z] PASS  IT-01  Leakage warning (W-LEAK) shown under Text Features after moving VEC_ columns  :: Column 'Text Tweet' looks like free text or an ID. Exclude it or move it to Text Features. The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slight
+[2026-10-21T19:38:06.777Z] PASS  IT-01  Word-Vector Variables zone holds all 1000 vector columns (999 filtered + VEC)  :: zone items=1000
+[2026-10-21T19:38:07.746Z] PASS  IT-01  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1
+[2026-10-21T19:38:11.451Z] PASS  IT-01  Case Processing Summary "Text features" = "Word vectors: 1000 columns"  :: Word vectors: 1000 columns
+[2026-10-21T19:38:11.495Z] PASS  IT-01  Case Processing Summary "Note" row = leakage note  :: The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slightly optimistic.
+[2026-10-21T19:38:11.531Z] PASS  IT-01  NB holdout accuracy (Word-Vector) = 0.670 (headless log: 0.6702127659574468)  :: 0.67
+[2026-10-21T19:38:12.035Z] model exported via Output Viewer "Export Model" -> C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\IT01_wordvector_model.json (120457 B)
+[2026-10-21T19:38:12.037Z] PASS  IT-01  Exported model: text.source="vector", term count = 1000 = number of VEC_ columns used  :: source=vector, terms=1000, columns=1000, log_weights={"negative":1000,"positive":1000}, recipe=absent
+[2026-10-21T19:38:12.037Z] PASS  IT-01  Model text.columns/terms == the 1000 columns placed in Word-Vector Variables (same names)  :: zone=1000, model columns=1000, unique=1000
+[2026-10-21T19:38:12.154Z] PASS  IT-01  Number of model terms == headless STWV vocabulary size (K1)  :: 1000 vs 1000
+[2026-10-21T19:38:12.154Z] PASS  IT-01  scenario ran to completion (no UI error)  :: 25.8 s
+[2026-10-21T19:38:12.403Z] ===== IT-02 start
+[2026-10-21T19:39:01.133Z] LOAD-ISSUE IT-02 attempt 1: no data grid 45 s after load (menus inert); console: (no errors/warnings)
+[2026-10-21T19:39:06.308Z] IT-02 /dashboard/data ready (data grid rendered) after 5.1 s, attempt 2
+[2026-10-21T19:39:13.118Z] imported pilkada_train.csv
+[2026-10-21T19:39:15.643Z] PASS  IT-02  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1
+[2026-10-21T19:39:16.059Z] PASS  IT-02  NB Text Preprocessing = K1 (lowercase, no stopwords/stemming, word tokenizer, raw count, no IDF, no norm, W=1000, minTF 1)  :: {"lowercase":true,"stopNone":true,"stemNone":true,"tokWord":true,"delimiters":"[\\s.,;:'\"()?!]+","tfRaw":true,"idfNone":true,"normNone":true,"wordsToKeep":"1000","minTf":"1"}
+[2026-10-21T19:39:21.896Z] NB (raw text) Output Viewer: Text features="Raw text: 'Text Tweet' (1000 terms)", holdout Overall Accuracy=0.697
+[2026-10-21T19:39:21.896Z] PASS  IT-02  NB raw-text holdout accuracy = 0.697 (headless log: 0.6968085106382979)  :: 0.697
+[2026-10-21T19:39:22.113Z] model exported via Output Viewer "Export Model" -> C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\F_K1.json (137288 B)
+[2026-10-21T19:39:22.195Z] PASS  IT-02  Downloaded file = JSON.stringify(model, null, 2) (stable round-trip)  :: 137288 B
+[2026-10-21T19:39:22.321Z] PASS  IT-02  Browser-exported model == headless wasm K1 model (bit-for-bit, ignoring trained_at)  :: 6017 numbers compared, diffs=0
+[2026-10-21T19:39:24.875Z] Model Summary (file): {"Source":"File: F_K1.json","Algorithm":"Naive Bayes","Schema version":"2.0","Trained at":"2026-10-21T19:39:19.472Z","Target":"Sentiment","Classes":"negative, positive","Smoothing alpha":"1","Variance floor":"1e-9","Training validation":"Holdout 70% / 30%, seed 42","Text source":"Raw text: 'Text Tweet'","Text likelihood":"Multinomial","Text terms":"1000","Text alpha":"1","__textInfo":"Text features Raw text variable: Text Tweet"}
+[2026-10-21T19:39:24.875Z] PASS  IT-02  Model Summary card (Upload file) matches the trained model (target, classes, text source, terms, alpha, validation, trained_at)  :: all 12 fields match
+[2026-10-21T19:39:24.875Z] PASS  IT-02  Model Summary text info: "Raw text variable: Text Tweet"  :: Text features Raw text variable: Text Tweet
+[2026-10-21T19:39:25.506Z] Output Viewer model options: ["Naive Bayes Analysis › Naive Bayes Analysis Result — 2026-10-21T19:39:19.472Z"]
+[2026-10-21T19:39:25.854Z] Model Summary (Output Viewer): {"Source":"Output Viewer: Naive Bayes Analysis › Naive Bayes Analysis Result (#6)","Algorithm":"Naive Bayes","Schema version":"2.0","Trained at":"2026-10-21T19:39:19.472Z","Target":"Sentiment","Classes":"negative, positive","Smoothing alpha":"1","Variance floor":"1e-9","Training validation":"Holdout 70% / 30%, seed 42","Text source":"Raw text: 'Text Tweet'","Text likelihood":"Multinomial","Text terms":"1000","Text alpha":"1","__textInfo":"Text features Raw text variable: Text Tweet"}
+[2026-10-21T19:39:25.854Z] PASS  IT-02  Model Summary via "From Output Viewer" == via uploaded file (all fields except Source)  :: Source="Output Viewer: Naive Bayes Analysis › Naive Bayes Analysis Result (#6)"
+[2026-10-21T19:39:26.037Z] PASS  IT-02  scenario ran to completion (no UI error)  :: 73.6 s
+[2026-10-21T19:39:26.037Z] ===== IT-03 start
+[2026-10-21T19:39:26.647Z] PASS  IT-03  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+[2026-10-21T19:39:30.139Z] Apply Model Output Viewer (train): {"totalRows":"630","scored":"630","evaluated":"630","accuracy":"0.908","kappa":"0.816","macroF1":"0.908"}
+[2026-10-21T19:39:30.139Z] PASS  IT-03  Case Processing: Total Rows = Scored = Evaluated = 630  :: 630/630/630
+[2026-10-21T19:39:30.139Z] PASS  IT-03  Resubstitution metrics shown = accuracy 0.908, kappa 0.816 (headless 0.907937 / 0.815873)  :: acc=0.908, kappa=0.816, macroF1=0.908
+[2026-10-21T19:39:37.725Z] dataset exported via File > Export > CSV Data -> C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\IT03_train_with_NB.csv (109900 B)
+[2026-10-21T19:39:37.733Z] PASS  IT-03  Dataset has NB_PredictedValue, NB_PredictedProbability, NB_Probability_negative, NB_Probability_positive  :: ["NB_PredictedValue","NB_PredictedProbability","NB_Probability_negative","NB_Probability_positive"]
+[2026-10-21T19:39:37.741Z] PASS  IT-03  Exported rows = 630 in original Id order  :: rows=630
+[2026-10-21T19:39:37.793Z] PASS  IT-03  NB_ columns filled on 630/630 rows  :: 630/630
+[2026-10-21T19:39:37.794Z] PASS  IT-03  Predicted class == NB model prediction (full-precision reference) on 630/630 rows  :: 630/630
+[2026-10-21T19:39:37.794Z] PASS  IT-03  max |reference probability - Apply Model probability| <= 5e-5 (round4)  :: max=4.994e-5; round4(ref)==output on 1260/1260
+[2026-10-21T19:39:37.795Z] IT-03 metrics recomputed from exported CSV: acc=0.9079365079365079, kappa=0.8158730158730159, macroF1=0.9079327964846151
+[2026-10-21T19:39:37.795Z] PASS  IT-03  Recomputed resubstitution accuracy/kappa = 0.907937/0.815873 (headless)  :: acc=0.907937, kappa=0.815873
+[2026-10-21T19:39:37.795Z] PASS  IT-03  scenario ran to completion (no UI error)  :: 11.8 s
+[2026-10-21T19:39:37.795Z] ===== IT-04 start
+[2026-10-21T19:39:47.923Z] imported pilkada_test.csv
+[2026-10-21T19:39:49.836Z] PASS  IT-04  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+[2026-10-21T19:39:55.490Z] Apply Model Output Viewer (test): {"totalRows":"270","scored":"270","evaluated":"270","accuracy":"0.763","kappa":"0.526","macroF1":"0.763"}
+[2026-10-21T19:39:55.572Z] PASS  IT-04  Case Processing: Total Rows = Scored = Evaluated = 270  :: 270/270/270
+[2026-10-21T19:39:55.572Z] PASS  IT-04  Output Viewer metrics (3 dp) = scikit-learn K1 (acc 0.763, kappa 0.526, macro-F1 0.763)  :: acc=0.763, kappa=0.526, macroF1=0.763
+[2026-10-21T19:40:00.758Z] dataset exported via File > Export > CSV Data -> C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\IT04_test_with_NB.csv (47120 B)
+[2026-10-21T19:40:00.760Z] PASS  IT-04  NB_ columns filled on 270/270 rows  :: rows=270, filled=270
+[2026-10-21T19:40:00.765Z] PASS  IT-04  Row order (Id) == scikit-learn prediction file
+[2026-10-21T19:40:00.765Z] PASS  IT-04  Predicted class == scikit-learn K1 on 270/270 rows  :: 270/270
+[2026-10-21T19:40:00.765Z] PASS  IT-04  max |probability - scikit-learn| <= 5e-5 (round4)  :: max=4.996e-5
+[2026-10-21T19:40:00.765Z] PASS  IT-04  Metrics from exported predictions == scikit-learn K1 (|diff| < 1e-9)  :: acc 0.762963 vs 0.762963, kappa 0.525926 vs 0.525926, macroF1 0.762963 vs 0.762963; cm=[[103,32],[32,103]] vs [[103,32],[32,103]]
+[2026-10-21T19:40:00.767Z] PASS  IT-04  Class + both probabilities identical to headless Track D file pred_statify_K1.csv  :: 270/270 rows identical
+[2026-10-21T19:40:00.767Z] PASS  IT-04  scenario ran to completion (no UI error)  :: 23.0 s
+[2026-10-21T19:40:00.992Z] ===== IT-05 start
+[2026-10-21T19:40:01.755Z] IT-05: new Chrome process (version 155.0.8059.85), fresh context (empty IndexedDB); only carrier = C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\F_K1.json
+[2026-10-21T19:40:55.430Z] LOAD-ISSUE IT-05 attempt 1: no data grid 45 s after load (menus inert); console: (no errors/warnings)
+[2026-10-21T19:41:52.325Z] LOAD-ISSUE IT-05 attempt 2: no data grid 45 s after load (menus inert); console: (no errors/warnings)
+[2026-10-21T19:41:57.534Z] IT-05 /dashboard/data ready (data grid rendered) after 5.1 s, attempt 3
+[2026-10-21T19:42:04.654Z] imported pilkada_test.csv
+[2026-10-21T19:42:06.723Z] IT-05 "From Output Viewer" in new session: Model Source Upload file (.json) From Output Viewer Statify built-in model Loading models... OK Reset Cancel
+[2026-10-21T19:42:06.723Z] PASS  IT-05  New session has no trained model in the Output Viewer (no Model Summary from viewer)
+[2026-10-21T19:42:07.056Z] PASS  IT-05  Model Summary after reload == IT-02 Model Summary  :: identical
+[2026-10-21T19:42:07.160Z] PASS  IT-05  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw="Text Tweet", actual="Sentiment"
+[2026-10-21T19:42:13.014Z] PASS  IT-05  Output Viewer metrics identical to IT-04  :: {"totalRows":"270","scored":"270","evaluated":"270","accuracy":"0.763","kappa":"0.526","macroF1":"0.763"}
+[2026-10-21T19:42:15.965Z] dataset exported via File > Export > CSV Data -> C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\browser\downloads\IT05_test_new_session.csv (47120 B)
+[2026-10-21T19:42:15.982Z] PASS  IT-05  NB_ columns (class + 3 probabilities) identical to IT-04 on 270/270 rows  :: 270/270 identical
+[2026-10-21T19:42:15.983Z] IT-05 first 5 rows (Id, pred, P(positive)): 2:negative:0.0589 5:negative:0.4568 9:positive:0.9889 14:negative:0.2105 15:negative:0.1987
+[2026-10-21T19:42:16.432Z] PASS  IT-05  scenario ran to completion (no UI error)  :: 135.4 s

@@ -25,7 +25,7 @@ Dokumen ini adalah hasil Track C3 untuk skenario BB-29 s.d. BB-36 pada modul Tex
 
 ## Catatan penyesuaian (tabel prompt terhadap kode sumber)
 
-1. **Bahasa pesan.** Seluruh pesan antarmuka Apply Model berbahasa Inggris dan berakhiran kode dalam tanda kurung, mis. `... (AM_E_MAP_UNMAPPED)` (aturan E3 pada `PLAN_V3_UI_EN`). Pesan dikutip persis dari `constants/apply-model-codes.ts`; tes memakai konstanta yang sama sehingga perubahan teks akan tertangkap.
+1. **Bahasa pesan.** Seluruh pesan antarmuka Apply Model berbahasa Inggris dan berakhiran kode dalam tanda kurung, mis. `... (AM_E_MAP_UNMAPPED)` (aturan E3 pada `naive-bayes/docs/PLAN_V3_UI_EN.md`). Pesan dikutip persis dari `constants/apply-model-codes.ts`; tes memakai konstanta yang sama sehingga perubahan teks akan tertangkap.
 2. **BB-29 (bukan model).** Tidak ada kode khusus untuk "bukan berkas JSON". Ekstensi selain `.json` dan isi yang bukan JSON sama-sama memberi `AM_E_PARSE` ("The model content could not be read as valid JSON."), sehingga untuk berkas `.txt` pesan itu kurang tepat sasaran (BUGS_C3.md, C3-02). Batas ukuran tepat 10 × 1024 × 1024 byte (10 MiB), sedangkan pesan menyebut "10 MB" (C3-03). Ekstensi diperiksa sebelum ukuran.
 3. **BB-30 (Output Viewer).** Pesan "belum ada model" adalah peringatan (`AM_W_NO_RESULT_STORE_MODELS`) tanpa akhiran kode, bukan galat `AM_E_`. Hanya statistic "Export Model" dari Naive Bayes yang masuk daftar.
 4. **BB-31 (Auto-map).** Pemetaan otomatis tidak memeriksa measure; ketidakcocokan measure baru terlihat setelah validasi (`AM_E_MAP_ROLE_MISMATCH`). Pemetaan juga dijalankan otomatis ketika model dimuat, jadi tombol "Auto-map by name" berguna terutama untuk menimpa pilihan manual atau setelah dataset berubah.

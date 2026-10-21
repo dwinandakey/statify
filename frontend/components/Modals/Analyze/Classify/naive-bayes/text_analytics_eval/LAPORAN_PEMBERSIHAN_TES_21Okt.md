@@ -1,5 +1,7 @@
 # Laporan pembersihan tes Text Analytics (21 Oktober 2026)
 
+> Dokumen historis (21 Okt 2026). Angka dan versi di sini sudah digantikan oleh laporan final `LAPORAN_UJI_ULANG_22Okt.md` (Rust 564 = 155/242/167; Jest 1.250 dalam 80 suite; rustc 1.99.1, Node 24.20.0, Jest 30.0.5).
+
 Lingkungan: Windows 11 (perangkat skripsi), cargo/rustc 1.99.1, Jest 30.0.4, Node 22.23.2. Log: `logs/rust_pembersihan_21okt_*.txt`, `logs/jest_pembersihan_21okt_*_win.json`, `logs/coverage_pembersihan_21okt_*_win.json`, `logs/versi_pembersihan_21okt.txt`.
 
 ## 1. Asal angka 19 Oktober (586 Rust, 1.345 Jest)

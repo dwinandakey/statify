@@ -31,7 +31,7 @@ Angka performa berasal dari run terakhir setelah perbaikan long task STWV (run `
 
 Sumber buku: `C:\Data\KULIAH\Skripsi\REVISI SIDANG\audit_v19\buku_v19_teks.md`
 Sumber baru: `...\naive-bayes\text_analytics_eval\logs\*` (dibuat 22 Okt 2026 pukul 00.09–00.39), `perf\tables_generated.md`, `accuracy\out\*`. Pembanding lama untuk performa diambil dari versi HEAD git `logs/perf_browser_skripsi.txt` (run 8 Okt 2026 dengan Chrome 154), yang cocok persis dengan Tabel 44 di buku.
-Lingkungan baru: Windows 11 Pro 10.0.26300, Node v24.20.0, rustc/cargo 1.99.1, wasm-pack 0.15.0, Jest 30.0.4, Python 3.13.15 (numpy 2.5.4, scipy 1.18.1, pandas 3.0.6, scikit-learn 1.9.1), Chrome 155.0.8059.85 headless, WEKA 3.9.6.
+Lingkungan baru: Windows 11 Pro 10.0.26300, Node v24.20.0, rustc/cargo 1.99.1, wasm-pack 0.15.0, Jest 30.0.5 (`jest --version` mencetak 30.0.4 karena bug upstream), Python 3.13.15 (numpy 2.5.4, scipy 1.18.1, pandas 3.0.6, scikit-learn 1.9.1), Chrome 155.0.8059.85 headless, WEKA 3.9.6.
 
 Perbedaan ditandai **tebal**.
 
@@ -180,13 +180,13 @@ Tidak ada log baru yang memuat ulang seluruh baris Tabel 40; nilai TF-IDF dari `
 
 | Dataset / Konfigurasi | Buku: kelas sama / akurasi Statify=sklearn / WEKA (2414–2419) | Baru | Status |
 |---|---|---|---|
-| SMS Spam K1 | 1.673/1.673 / 0,982666 / 0,983264 | 1673/1673 / 0,982666 / 0,983264 | sama |
-| SMS Spam K2 | 1.673/1.673 / 0,987448 / 0,988643 | 1673/1673 / 0,987448 / 0,988643 | sama |
-| SMS Spam K3 | 1.673/1.673 / 0,967723 / 0,967723 | 1673/1673 / 0,967723 / 0,967723 | sama |
-| SMS Spam K4 | 1.673/1.673 / 0,973102 / — | 1673/1673 / 0,973102 / — | sama |
+| SMS Spam K1 | 1.673/1.673 / 0,982666 / 0,983264 | 1.673/1.673 / 0,982666 / 0,983264 | sama |
+| SMS Spam K2 | 1.673/1.673 / 0,987448 / 0,988643 | 1.673/1.673 / 0,987448 / 0,988643 | sama |
+| SMS Spam K3 | 1.673/1.673 / 0,967723 / 0,967723 | 1.673/1.673 / 0,967723 / 0,967723 | sama |
+| SMS Spam K4 | 1.673/1.673 / 0,973102 / — | 1.673/1.673 / 0,973102 / — | sama |
 | SmSA K1 | 500/500 / 0,598000 / 0,600000 | 500/500 / 0,598000 / 0,600000 | sama |
 | SmSA K4 | 500/500 / 0,624000 / — | 500/500 / 0,624000 / — | sama |
-| Varian vocab penuh vs WEKA (2425) | 1.673/1.673 dan 500/500 | K1w SMS 1673/1673, K1w SmSA 500/500 | sama |
+| Varian vocab penuh vs WEKA (2425) | 1.673/1.673 dan 500/500 | K1w SMS 1.673/1.673, K1w SmSA 500/500 | sama |
 | Total (2425) | 24 konfigurasi, 17.221/17.221 | 13×270 + 7×1.673 + 4×500 = 17.221, seluruhnya sama | sama |
 
 ## Tabel 44 Execution time (jalur peramban, Chrome headless) — DIPERBARUI: run bersih setelah perubahan kode STWV
@@ -288,7 +288,7 @@ Bagian buku yang perlu diubah:
 | Seluruh unit, white-box, black-box berhasil | 153 | semua lulus, 0 gagal | sama |
 | Prediksi Pilkada sama dengan scikit-learn | 153, 2603 | 270/270 K1–K5 | sama |
 | < 2,5 detik hingga 17.974 dok | 153, 2603 | maks 1.900,2 ms (run terbaru 01.24) | sama |
-| 565 test case Rust, 1.243 Jest | 2603 | **564 Rust, 1.246 Jest** (penjumlahan baseline + eval) | **beda** |
+| 565 test case Rust, 1.243 Jest | 2603 | **564 Rust, 1.250 Jest (80 suite)** | **beda** |
 | 54 path white-box lulus | 2603 | 54/54 | sama |
 | Sama dengan WEKA pada K1, K2, K5 setelah vocab disamakan | 2603 | 270/270 | sama |
 | 56 skenario black-box berhasil | 2603 | semua tes otomatis lulus; teks harapan BB-07/27/32/36/40 perlu disesuaikan | sama (jumlah), teks beda |

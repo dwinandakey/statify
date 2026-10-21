@@ -109,7 +109,7 @@ describe("naiveBayesModelAdapter.validate — model valid", () => {
       summaryRows: [
         { label: "Smoothing alpha", value: "1" },
         { label: "Variance floor", value: "1e-9" },
-        { label: "Training validation", value: "Holdout 70% / 30%, seed 42" },
+        { label: "Validation (training)", value: "Holdout 70% / 30%, seed 42" },
       ],
       warnings: [],
     });
@@ -133,7 +133,7 @@ describe("naiveBayesModelAdapter.validate — model valid", () => {
     ]);
   });
 
-  it("Training validation untuk k-fold tanpa seed → '10-fold, no seed'", () => {
+  it("Validation (training) untuk k-fold tanpa seed → '10-fold, no seed'", () => {
     const { model } = modelV11();
     model.validation_config = {
       method: "kfold",
@@ -145,7 +145,7 @@ describe("naiveBayesModelAdapter.validate — model valid", () => {
     const result = validate(model);
     expectOk(result);
     expect(result.descriptor.summaryRows[2]).toEqual({
-      label: "Training validation",
+      label: "Validation (training)",
       value: "10-fold, no seed",
     });
   });

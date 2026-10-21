@@ -1,0 +1,373 @@
+{
+  "config": {
+    "configFile": "C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\playwright.config.ts",
+    "rootDir": "C:/Data/KULIAH/Skripsi/statify64/frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/integration/browser",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\logs\\playwright_report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Data/KULIAH/Skripsi/statify64/frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/integration/browser/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Data/KULIAH/Skripsi/statify64/frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/integration/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.spec\\.ts$/"
+        ],
+        "timeout": 1800000
+      }
+    ],
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.57.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "it_browser.spec.ts",
+      "file": "it_browser.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "IT-01..IT-05 through the real Statify UI (Chrome)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 1800000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 328038,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[2026-10-21T19:59:11.735Z] Chrome: chromium channel=chrome version=155.0.8059.85; app URL: http://localhost:3000; headless; OS: Windows_NT 10.0.26300 x64; AMD Ryzen 5 4600H with Radeon Graphics x12; Node v24.20.0\n"
+                    },
+                    {
+                      "text": "[2026-10-21T19:59:12.785Z] ===== IT-01 start\n"
+                    },
+                    {
+                      "text": "[2026-10-21T19:59:46.775Z] IT-01 /dashboard/data ready (data grid rendered) after 34.0 s, attempt 1\n"
+                    },
+                    {
+                      "text": "[2026-10-21T19:59:52.458Z] imported pilkada_train.csv\n"
+                    },
+                    {
+                      "text": "[2026-10-21T19:59:54.891Z] PASS  IT-01  STWV Options = K1 defaults (prefix VEC_)  :: {\"lowercase\":true,\"stopNone\":true,\"stemNone\":true,\"tokWord\":true,\"delimiters\":\"[\\\\s.,;:'\\\"()?!]+\",\"tfRaw\":true,\"idfNone\":true,\"normNone\":true,\"wordsToKeep\":\"1000\",\"minTf\":\"1\",\"prefix\":\"VEC_\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:05.008Z] PASS  IT-01  STWV adds 1000 vector columns (toast)  :: 1000 vector columns were added to the dataset.\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:13.566Z] PASS  IT-01  NB filter \"VEC_\" lists 999 of the 1000 STWV columns (known F-01: column \"VEC\" from token \"&\")  :: 999 shown, 0 selected\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:14.024Z] PASS  IT-01  Leakage warning (W-LEAK) shown under Text Features after moving VEC_ columns  :: Column 'Text Tweet' looks like free text or an ID. Exclude it or move it to Text Features. The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slight\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:14.476Z] PASS  IT-01  Word-Vector Variables zone holds all 1000 vector columns (999 filtered + VEC)  :: zone items=1000\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:15.684Z] PASS  IT-01  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.287Z] PASS  IT-01  Case Processing Summary \"Text features\" = \"Word vectors: 1000 columns\"  :: Word vectors: 1000 columns\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.324Z] PASS  IT-01  Case Processing Summary \"Note\" row = leakage note  :: The vocabulary and IDF of these vector columns were computed outside Naive Bayes on all rows, so evaluation results may be slightly optimistic.\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.362Z] PASS  IT-01  NB holdout accuracy (Word-Vector) = 0.670 (headless log: 0.6702127659574468)  :: 0.67\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.959Z] model exported via Output Viewer \"Export Model\" -> C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\IT01_wordvector_model.json (120457 B)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.961Z] PASS  IT-01  Exported model: text.source=\"vector\", term count = 1000 = number of VEC_ columns used  :: source=vector, terms=1000, columns=1000, log_weights={\"negative\":1000,\"positive\":1000}, recipe=absent\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:21.962Z] PASS  IT-01  Model text.columns/terms == the 1000 columns placed in Word-Vector Variables (same names)  :: zone=1000, model columns=1000, unique=1000\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:22.117Z] PASS  IT-01  Number of model terms == headless STWV vocabulary size (K1)  :: 1000 vs 1000\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:22.118Z] PASS  IT-01  scenario ran to completion (no UI error)  :: 69.3 s\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:22.525Z] ===== IT-02 start\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:28.231Z] IT-02 /dashboard/data ready (data grid rendered) after 5.7 s, attempt 1\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:34.347Z] imported pilkada_train.csv\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:37.340Z] PASS  IT-02  NB Options: text likelihood Multinomial, Text Alpha 1 (K1)  :: multinomial=true, alpha=1\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:37.722Z] PASS  IT-02  NB Text Preprocessing = K1 (lowercase, no stopwords/stemming, word tokenizer, raw count, no IDF, no norm, W=1000, minTF 1)  :: {\"lowercase\":true,\"stopNone\":true,\"stemNone\":true,\"tokWord\":true,\"delimiters\":\"[\\\\s.,;:'\\\"()?!]+\",\"tfRaw\":true,\"idfNone\":true,\"normNone\":true,\"wordsToKeep\":\"1000\",\"minTf\":\"1\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:48.629Z] NB (raw text) Output Viewer: Text features=\"Raw text: 'Text Tweet' (1000 terms)\", holdout Overall Accuracy=0.697\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:48.629Z] PASS  IT-02  NB raw-text holdout accuracy = 0.697 (headless log: 0.6968085106382979)  :: 0.697\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:48.913Z] model exported via Output Viewer \"Export Model\" -> C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\F_K1.json (137288 B)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:49.013Z] PASS  IT-02  Downloaded file = JSON.stringify(model, null, 2) (stable round-trip)  :: 137288 B\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:49.190Z] PASS  IT-02  Browser-exported model == headless wasm K1 model (bit-for-bit, ignoring trained_at)  :: 6017 numbers compared, diffs=0\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:51.909Z] Model Summary (file): {\"Source\":\"File: F_K1.json\",\"Algorithm\":\"Naive Bayes\",\"Schema version\":\"2.0\",\"Trained at\":\"2026-10-21T20:00:41.256Z\",\"Target\":\"Sentiment\",\"Classes\":\"negative, positive\",\"Smoothing alpha\":\"1\",\"Variance floor\":\"1e-9\",\"Validation (training)\":\"Holdout 70% / 30%, seed 42\",\"Text source\":\"Raw text: 'Text Tweet'\",\"Text likelihood\":\"Multinomial\",\"Text terms\":\"1000\",\"Text alpha\":\"1\",\"__textInfo\":\"Text features Raw text variable: Text Tweet\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:51.909Z] PASS  IT-02  Model Summary card (Upload file) matches the trained model (target, classes, text source, terms, alpha, validation, trained_at)  :: all 12 fields match\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:51.909Z] PASS  IT-02  Model Summary text info: \"Raw text variable: Text Tweet\"  :: Text features Raw text variable: Text Tweet\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.271Z] Output Viewer model options: [\"Naive Bayes Analysis › Naive Bayes Analysis Result — 2026-10-21T20:00:41.256Z\"]\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.630Z] Model Summary (Output Viewer): {\"Source\":\"Output Viewer: Naive Bayes Analysis › Naive Bayes Analysis Result (#6)\",\"Algorithm\":\"Naive Bayes\",\"Schema version\":\"2.0\",\"Trained at\":\"2026-10-21T20:00:41.256Z\",\"Target\":\"Sentiment\",\"Classes\":\"negative, positive\",\"Smoothing alpha\":\"1\",\"Variance floor\":\"1e-9\",\"Validation (training)\":\"Holdout 70% / 30%, seed 42\",\"Text source\":\"Raw text: 'Text Tweet'\",\"Text likelihood\":\"Multinomial\",\"Text terms\":\"1000\",\"Text alpha\":\"1\",\"__textInfo\":\"Text features Raw text variable: Text Tweet\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.630Z] PASS  IT-02  Model Summary via \"From Output Viewer\" == via uploaded file (all fields except Source)  :: Source=\"Output Viewer: Naive Bayes Analysis › Naive Bayes Analysis Result (#6)\"\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.838Z] PASS  IT-02  scenario ran to completion (no UI error)  :: 30.3 s\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.838Z] ===== IT-03 start\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:52.981Z] PASS  IT-03  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw=\"Text Tweet\", actual=\"Sentiment\"\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:54.865Z] Apply Model Output Viewer (train): {\"totalRows\":\"630\",\"scored\":\"630\",\"evaluated\":\"630\",\"accuracy\":\"0.908\",\"kappa\":\"0.816\",\"macroF1\":\"0.908\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:54.865Z] PASS  IT-03  Case Processing: Total Rows = Scored = Evaluated = 630  :: 630/630/630\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:00:54.865Z] PASS  IT-03  Resubstitution metrics shown = accuracy 0.908, kappa 0.816 (headless 0.907937 / 0.815873)  :: acc=0.908, kappa=0.816, macroF1=0.908\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.328Z] dataset exported via File > Export > CSV Data -> C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\IT03_train_with_NB.csv (109900 B)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.338Z] PASS  IT-03  Dataset has NB_PredictedValue, NB_PredictedProbability, NB_Probability_negative, NB_Probability_positive  :: [\"NB_PredictedValue\",\"NB_PredictedProbability\",\"NB_Probability_negative\",\"NB_Probability_positive\"]\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.348Z] PASS  IT-03  Exported rows = 630 in original Id order  :: rows=630\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.408Z] PASS  IT-03  NB_ columns filled on 630/630 rows  :: 630/630\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.408Z] PASS  IT-03  Predicted class == NB model prediction (full-precision reference) on 630/630 rows  :: 630/630\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.408Z] PASS  IT-03  max |reference probability - Apply Model probability| <= 5e-5 (round4)  :: max=4.994e-5; round4(ref)==output on 1260/1260\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.410Z] IT-03 metrics recomputed from exported CSV: acc=0.9079365079365079, kappa=0.8158730158730159, macroF1=0.9079327964846151\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.410Z] PASS  IT-03  Recomputed resubstitution accuracy/kappa = 0.907937/0.815873 (headless)  :: acc=0.907937, kappa=0.815873\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.411Z] PASS  IT-03  scenario ran to completion (no UI error)  :: 10.6 s\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:03.411Z] ===== IT-04 start\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:20.508Z] imported pilkada_test.csv\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:22.346Z] PASS  IT-04  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw=\"Text Tweet\", actual=\"Sentiment\"\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:28.993Z] Apply Model Output Viewer (test): {\"totalRows\":\"270\",\"scored\":\"270\",\"evaluated\":\"270\",\"accuracy\":\"0.763\",\"kappa\":\"0.526\",\"macroF1\":\"0.763\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:29.108Z] PASS  IT-04  Case Processing: Total Rows = Scored = Evaluated = 270  :: 270/270/270\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:29.108Z] PASS  IT-04  Output Viewer metrics (3 dp) = scikit-learn K1 (acc 0.763, kappa 0.526, macro-F1 0.763)  :: acc=0.763, kappa=0.526, macroF1=0.763\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.605Z] dataset exported via File > Export > CSV Data -> C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\IT04_test_with_NB.csv (47120 B)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.609Z] PASS  IT-04  NB_ columns filled on 270/270 rows  :: rows=270, filled=270\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.615Z] PASS  IT-04  Row order (Id) == scikit-learn prediction file\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.616Z] PASS  IT-04  Predicted class == scikit-learn K1 on 270/270 rows  :: 270/270\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.617Z] PASS  IT-04  max |probability - scikit-learn| <= 5e-5 (round4)  :: max=4.996e-5\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.617Z] PASS  IT-04  Metrics from exported predictions == scikit-learn K1 (|diff| < 1e-9)  :: acc 0.762963 vs 0.762963, kappa 0.525926 vs 0.525926, macroF1 0.762963 vs 0.762963; cm=[[103,32],[32,103]] vs [[103,32],[32,103]]\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.621Z] PASS  IT-04  Class + both probabilities identical to headless Track D file pred_statify_K1.csv  :: 270/270 rows identical\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:34.621Z] PASS  IT-04  scenario ran to completion (no UI error)  :: 31.2 s\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:35.152Z] ===== IT-05 start\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:01:36.190Z] IT-05: new Chrome process (version 155.0.8059.85), fresh context (empty IndexedDB); only carrier = C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\F_K1.json\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:02:25.699Z] LOAD-ISSUE IT-05 attempt 1: no data grid 45 s after load (menus inert); console: (no errors/warnings)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:03:14.992Z] LOAD-ISSUE IT-05 attempt 2: no data grid 45 s after load (menus inert); console: (no errors/warnings)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:07.594Z] LOAD-ISSUE IT-05 attempt 3: no data grid 45 s after load (menus inert); console: (no errors/warnings)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:19.128Z] IT-05 /dashboard/data ready (data grid rendered) after 11.5 s, attempt 4\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:25.201Z] imported pilkada_test.csv\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:27.217Z] IT-05 \"From Output Viewer\" in new session: Model Source Upload file (.json) From Output Viewer Statify built-in model No Naive Bayes models are saved in the Output Viewer yet. OK Reset Cancel\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:27.218Z] PASS  IT-05  New session has no trained model in the Output Viewer (no Model Summary from viewer)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:27.537Z] PASS  IT-05  Model Summary after reload == IT-02 Model Summary  :: identical\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:27.630Z] PASS  IT-05  Apply Model Variables: Raw text = Text Tweet, Actual target = Sentiment (auto-map)  :: raw=\"Text Tweet\", actual=\"Sentiment\"\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:35.368Z] PASS  IT-05  Output Viewer metrics identical to IT-04  :: {\"totalRows\":\"270\",\"scored\":\"270\",\"evaluated\":\"270\",\"accuracy\":\"0.763\",\"kappa\":\"0.526\",\"macroF1\":\"0.763\"}\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:38.667Z] dataset exported via File > Export > CSV Data -> C:\\Data\\KULIAH\\Skripsi\\statify64\\frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\integration\\browser\\downloads\\IT05_test_new_session.csv (47120 B)\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:38.749Z] PASS  IT-05  NB_ columns (class + 3 probabilities) identical to IT-04 on 270/270 rows  :: 270/270 identical\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:38.750Z] IT-05 first 5 rows (Id, pred, P(positive)): 2:negative:0.0589 5:negative:0.4568 9:positive:0.9889 14:negative:0.2105 15:negative:0.1987\n"
+                    },
+                    {
+                      "text": "[2026-10-21T20:04:39.681Z] PASS  IT-05  scenario ran to completion (no UI error)  :: 184.5 s\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "IT-01",
+                      "duration": 69330
+                    },
+                    {
+                      "title": "IT-02",
+                      "duration": 30312
+                    },
+                    {
+                      "title": "IT-03",
+                      "duration": 10571
+                    },
+                    {
+                      "title": "IT-04",
+                      "duration": 31209
+                    },
+                    {
+                      "title": "IT-05",
+                      "duration": 184527
+                    }
+                  ],
+                  "startTime": "2026-10-21T19:59:09.893Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9f71df697ef0892e761a-d39bd39de4e0f019fd3b",
+          "file": "it_browser.spec.ts",
+          "line": 362,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-21T19:59:08.298Z",
+    "duration": 332175.258,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

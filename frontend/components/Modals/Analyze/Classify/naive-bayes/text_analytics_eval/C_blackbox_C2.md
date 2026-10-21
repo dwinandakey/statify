@@ -12,8 +12,8 @@ Setiap skenario diuji pada tiga lapis, dan lapis yang dipakai dicatat pada kolom
 
 | Lapis | Status | Keterangan |
 |---|---|---|
-| Jest (3 berkas, 63 tes) | **Dijalankan: 63 lulus, 0 gagal** di Windows dengan konfigurasi produksi (`next/jest`, `--runInBand`) | Log: `logs/jest_C2_win.json` dan `logs/jest_C2_win.txt`. Hasil yang sama di VM Linux (ts-jest): `logs/jest_C2_vm.json`. |
-| Rust (`eval_blackbox_nb`, 24 tes) | **Dijalankan: 24 lulus, 0 gagal** di Windows (`cargo test --test eval_blackbox_nb`, rustc 1.93.0) | Log: `logs/rust_eval_blackbox_nb.txt`. Berkas ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
+| Jest (3 berkas, 64 tes per 22 Okt 2026; 63 sebelum BB-18 dipecah) | **Dijalankan: 64 lulus, 0 gagal** di Windows dengan konfigurasi produksi (`next/jest`, `--runInBand`) | Log: `logs/jest_C2_win.json` dan `logs/jest_C2_win.txt`. Hasil yang sama di VM Linux (ts-jest): `logs/jest_C2_vm.json`. |
+| Rust (`eval_blackbox_nb`, 24 tes) | **Dijalankan: 24 lulus, 0 gagal** di Windows (`cargo test --test eval_blackbox_nb`, rustc 1.93.0); uji ulang 22 Okt 2026 (rustc 1.99.1): 24 lulus, 0 gagal (`LAPORAN_UJI_ULANG_22Okt.md`) | Log: `logs/rust_eval_blackbox_nb.txt`. Berkas ditulis tanpa kompiler dan dikompilasi pertama kali di Windows tanpa perubahan. |
 | Manual (15 skenario) | **MANUAL — belum dijalankan** | Menunggu Yedija; lihat `C_manual_checklist_C2.md`. |
 
 Sel "Status" di tabel berisi penanda `⟦jest:…⟧` dan `⟦rust:…⟧`; `tools/apply_results.py` menggantinya dengan `Lulus`, `Gagal`, atau `BELUM DIJALANKAN` dari log. Hasil Windows diutamakan atas hasil VM.

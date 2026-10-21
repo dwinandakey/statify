@@ -5,7 +5,7 @@
 
 **Baseline.** `cargo test` untuk empat crate (inti, NB, AM, STWV) dan `npx jest` untuk tiga menu dengan `--testPathIgnorePatterns=__tests__/eval` serta pengecualian dua berkas whitebox lama (`hooks/__tests__/whitebox`, dihapus 21 Okt 2026), sehingga yang dihitung hanyalah tes yang sudah ada. Cakupan baris Jest diukur dengan `--collectCoverageFrom` terbatas pada folder tiga menu. Angka diekstrak dari log oleh `tools/build_baseline.py`, bukan diketik.
 
-**Track A (unit).** Empat berkas Jest (`model-loader`, `kfold`, `stopwords`, `formula-output`; 105 tes pada 8 Okt, 106 sejak 21 Okt 2026) dan empat berkas Rust (`eval_formulas` 15, `eval_vocab_limit` 9, `eval_text_pipeline` 20, `eval_partition` 16; sebelum 21 Okt 2026 masing-masing 13 dan 18). Nilai harapan dihitung mandiri (tangan atau replika Python independen), termasuk keluaran awal MT19937 seed 42 yang sama dengan `numpy.random.RandomState(42)`, dan indeks partisi holdout/k-fold seed 42. Estimasi statis celah cakupan Rust ada di `unit/static_gap_rust.py` (bukan pengukuran).
+**Track A (unit).** Empat berkas Jest (`model-loader`, `kfold`, `stopwords`, `formula-output`; 105 tes pada 8 Okt, 107 per 22 Okt 2026) dan empat berkas Rust (`eval_formulas` 15, `eval_vocab_limit` 9, `eval_text_pipeline` 20, `eval_partition` 15; sebelum 21 Okt 2026 masing-masing 13 dan 18, `eval_partition` 16 pada 21 Okt sebelum fold minimal 2). Nilai harapan dihitung mandiri (tangan atau replika Python independen), termasuk keluaran awal MT19937 seed 42 yang sama dengan `numpy.random.RandomState(42)`, dan indeks partisi holdout/k-fold seed 42. Estimasi statis celah cakupan Rust ada di `unit/static_gap_rust.py` (bukan pengukuran).
 
 **Track B (white-box basis path).** Untuk WB-1 `validateColumnPrefix`, WB-2 `getNumericInputError`, WB-3 blok `useMemo` validasi pada `useNaiveBayesValidation`, WB-4 `loadModelFromFile` (dengan `finalizeLoad` diperluas): graf alir ditulis tangan dari kode sumber, kondisi majemuk (`||`, `&&`, `??`) dipecah menjadi simpul predikat per operan; V(G) = E − N + 2 dan P + 1 dihitung dan dicocokkan oleh skrip (`tools/wb_core.py`, `wb_graphs.py`, `wb_synth.py`), jalur independen dipilih dan **rank matriks vektor-sisi** diperiksa; satu tes Jest per jalur (nama tes memuat ID jalur). Flow graph dibangkitkan dengan Graphviz. Jalur infeasible ditandai eksplisit.
 
@@ -75,8 +75,7 @@ Semua jalur relatif terhadap `frontend/components/Modals/Analyze/Classify/naive-
 | `ENV.md` | Lingkungan dan penyimpangan (Lampiran C) |
 | `01_baseline.md`, `A_unit.md`, `B_whitebox.md`, `C_blackbox.md`, `D_accuracy.md`, `E_performance.md`, `F_integration.md` | Dokumen per track; D, E, F disalin sebagian di Lampiran D–F |
 | `C_manual_checklist.md`, `F_manual_checklist.md` | Daftar periksa manual (belum dijalankan) |
-| `AUDIT_DOCS.md` | Audit konsistensi dokumen |
-| `PROMPT_Evaluasi_Modul_Text_Analytics.md` | Spesifikasi asli (sengaja tidak diubah; masih memakai nama lama `thesis-eval`) |
+| `LAPORAN_UJI_ULANG_22Okt.md` | Laporan final uji ulang 22 Oktober 2026; menggantikan angka di dokumen lain bila berbeda |
 | `logs/` | Log mentah. Nama berakhiran `_win` atau berkas `rust_*.txt`, `baseline_*`, `integration_*_win.txt` adalah Windows; `_vm` adalah VM |
 | `perf/raw/*.csv` | Pengukuran waktu mentah per run (Track E) |
 | `accuracy/out/`, `weka/out/` | Prediksi dan model per konfigurasi (Track D) |

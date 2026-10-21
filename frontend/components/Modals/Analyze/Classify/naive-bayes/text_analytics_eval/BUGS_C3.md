@@ -7,6 +7,7 @@ Tidak ada tes evaluasi Track C3 yang gagal (95 dari 95 lulus di Windows, `logs/j
 - Reproduksi: ubah beberapa pengaturan (mis. Smoothing Alpha 0,5), klik Cancel, buka menu lagi: pengaturan kembali ke nilai sebelumnya atau default. Tes: `BB-36-d` (`blackbox.nb.persistence.test.tsx`).
 - Dampak: pengguna yang membaca dokumentasi mengira perubahan yang dibatalkan tetap tersimpan; skenario BB-36 pada prompt ("tutup dan buka kembali menu NB, pengaturan terakhir pulih") hanya benar bila penutupan dilakukan lewat OK.
 - Usulan: ubah kalimat dokumentasi menjadi "disimpan saat OK ditekan", atau, bila perilaku otomatis memang diinginkan, simpan juga saat Cancel/penutupan.
+- Status (22 Okt 2026): `naive-bayes/DOKUMENTASI.md` sudah dihapus (riwayat di git); kalimat "disimpan otomatis" tidak lagi ada di dokumen aktif (`naive-bayes/README.md`). Perilaku kode tetap: penyimpanan IndexedDB hanya di `handleOK`.
 
 ## C3-02 (rendah): berkas non-.json dilaporkan sebagai "isi bukan JSON yang sah"
 - Lokasi: `frontend/components/Modals/Analyze/Classify/apply-model/services/model-loader.ts`, baris 166–167 (`if (!file.name.toLowerCase().endsWith(".json")) return fail("AM_E_PARSE", file.name)`); pesan di `constants/apply-model-codes.ts`, baris 71.

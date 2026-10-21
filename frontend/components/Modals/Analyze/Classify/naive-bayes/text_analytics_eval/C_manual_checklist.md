@@ -241,7 +241,7 @@ Lakukan sesudah M-02 (korpus D, opsi bawaan, awalan `VEC_`). Buka Output Viewer 
 
 ## Daftar periksa manual — Menu Naive Bayes (BB-14 s.d. BB-28), Track C2
 
-Dokumen ini dijalankan oleh Yedija di aplikasi Statify yang sedang berjalan (`npm run dev` pada `E:\KULIAH\Skripsi\statify64\frontend`). Kolom **Tangkapan layar** dan **Hasil (Lulus/Gagal)** sengaja dikosongkan; isi setelah menjalankan langkah. Semua skenario pada dokumen ini berstatus **MANUAL — belum dijalankan** sampai kolom Hasil diisi.
+Dokumen ini dijalankan oleh Yedija di aplikasi Statify yang sedang berjalan (`npm run dev` pada `C:\Data\KULIAH\Skripsi\statify64\frontend`). Kolom **Tangkapan layar** dan **Hasil (Lulus/Gagal)** sengaja dikosongkan; isi setelah menjalankan langkah. Semua skenario pada dokumen ini berstatus **MANUAL — belum dijalankan** sampai kolom Hasil diisi.
 
 Tes otomatis untuk skenario yang sama (Jest dan Rust) dijelaskan pada `C_blackbox_C2.md`. Daftar ini menguji hal yang tidak dapat dipastikan otomatis: tampilan nyata di peramban, unduhan berkas, clipboard, dan alur pengguna dari awal.
 
