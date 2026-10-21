@@ -4,7 +4,7 @@ Cakupan terukur Rust: tidak terukur di sesi ini, lihat run_A.ps1 (cargo llvm-cov
 ==============================================================================================================
 Crate core  (frontend\public\workers\TextAnalytics\statify-text-core)
   pub fn terdeteksi: 34; dapat dihitung (bukan wasm_bindgen, bukan nama umum): 27; wasm_bindgen: 0
-  TIDAK dirujuk tes SEBELUM Track A: 12   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 10
+  TIDAK dirujuk tes SEBELUM Track A: 13   |   SETELAH Track A (termasuk 4 berkas evaluasi Track A): 10
   Daftar celah yang masih tersisa (estimasi statis):
     - src\config.rs                                 pub fn v1_label
     - src\config.rs                                 pub fn v1_label
@@ -18,6 +18,7 @@ Crate core  (frontend\public\workers\TextAnalytics\statify-text-core)
     - src\vectorizer.rs                             pub fn vectorize
   Celah yang ditutup tes tesis Track A (kini dirujuk):
     + src\stemmer.rs                                pub fn stem_batch
+    + src\stemmer.rs                                pub fn stem
     + src\stopwords.rs                              pub fn build_set
   Berkas yang tidak satu pun pub fn-nya dirujuk tes (estimasi): src\config.rs, src\error.rs, src\tokenizer.rs, src\validator.rs
 ==============================================================================================================
@@ -76,9 +77,9 @@ Crate stwv-wrapper  (frontend\components\Modals\Transform\StringToWordVector\rus
 ==============================================================================================================
 RINGKASAN (estimasi statis)
 crate           pub fn  dihitung  wasm  celah sebelum  celah sesudah
-core                34        27     0             12             10
+core                34        27     0             13             10
 naive-bayes         86        83     1             13             13
 apply-model         45        42     1             16             16
 stwv-wrapper         2         0     2              0              0
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.26 started=2026-10-08 10:28:41 +07:00 cmd=python -X utf8 testing\text_analytics_eval\unit\static_gap_rust.py cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.44 started=2026-10-22 00.12.34 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\unit\static_gap_rust.py cwd=C:\Data\KULIAH\Skripsi\statify64 ===

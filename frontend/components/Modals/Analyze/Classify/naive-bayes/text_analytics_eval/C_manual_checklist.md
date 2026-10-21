@@ -146,7 +146,7 @@ Dua bagian terpisah, masing-masing dengan dataset segar. Karena pembatasan metod
 | A4. Di Data Editor lihat kolom `VEC_makan`. | — | Bernilai ≥ 1 pada baris 1 ("memakan"), baris 5 ("MAKAN"), baris 9 ("makan"). Baris 3 dan 10 ("Dimakan", "dimakan") diharapkan 1 juga; catat nilai sebenarnya. | | | |
 | A5. Catat term lain pada Vocabulary (mis. hasil untuk "makanan", "berlari", "mengejar", "peliharaan"). | — | Tidak ada nilai pasti; salin hasilnya ke Catatan sebagai observasi. | | | |
 | B1. Impor ulang; ganti dataset ke `dataset_inggris_testing.csv`; pilih `teks_en`. | — | 10 baris. | | | |
-| B2. Options → Stemming: **English (Porter)**; **OK**. | — | Kolom bertambah. | | | |
+| B2. Options → Stemming: **English (Snowball/Porter2)**; **OK**. | — | Kolom bertambah. | | | |
 | B3. Vocabulary: cari "running", "parks", "played". | — | "running", "parks", dan "played" **tidak ada**; "run", "park", dan "play" **ada**; "ran" tetap "ran". | | | |
 | B4. Periksa nilai kolom `VEC_run`, `VEC_park`, `VEC_play`. | — | `VEC_run` = 1 pada baris 1, 3, 9. `VEC_park` = 1 pada baris 1, 2, 8. `VEC_play` = 1 pada baris 5, 3 pada baris 6, 1 pada baris 10. Catat bila berbeda. | | | |
 | B5. Baca catatan di bawah opsi Stemming. | — | Teks kecil: "Stemming always converts tokens to lowercase, so the Lowercase option has no effect while stemming is on." | | | |
@@ -400,7 +400,7 @@ Catatan kode: tidak ada kode `NB_E_*` untuk fold (C2-01). Hasil yang diharapkan 
 | 1 | DS-2 (kelas A = 3 baris, B = 2 baris). Target = `kelas`. Tab Validation: Cross-Validation Folds, Number of Folds `3` (lebih besar dari kelas terkecil = 2, tetapi tidak melebihi 5 baris). Klik OK. | Analisis tetap berjalan dan selesai. Peringatan fold tidak tampil di antarmuka (catat apakah ada). | | | |
 | 2 | Ulangi dengan Number of Folds `6` (lebih besar dari 5 baris). Klik OK. | Analisis gagal. Toast galat generik: `The Naive Bayes analysis could not be completed. Check the selected variables and settings, then try again.` (pesan khusus fold tidak sampai ke pengguna pada run tanpa Text). Tidak ada kode `NB_E_`. | | | |
 | 3 | DS-1, konfigurasi teks, Cross-Validation Folds, Number of Folds `700` (melebihi 630 baris), Seed `42`. Klik OK. | Analisis gagal dengan toast `Check the cross-validation settings. The number of folds must not exceed the number of cases or the size of the smallest class.` (run ber-Text membawa pesan fold). Tanpa kode `NB_E_`. | | | |
-| 4 | Number of Folds `0`, lalu pindah tab atau klik OK. | Toast `The number of folds must be at least 1.` | | | |
+| 4 | Number of Folds `0`, lalu pindah tab atau klik OK. | Toast `The number of folds must be at least 2.` | | | |
 
 ### BB-25 — Output setelah pelatihan (F28)
 

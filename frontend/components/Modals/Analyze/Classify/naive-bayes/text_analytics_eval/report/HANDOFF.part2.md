@@ -21,8 +21,8 @@ Catatan tata letak. Tabel BB (8 kolom) lebar; pecah per menu (BB-01..13, BB-14..
 
 ### 5.1 Boleh ditulis tegas (didukung bukti [Win])
 
-1. Seluruh tes lama (Rust 450, Jest 830) lulus sebelum paket evaluasi, sehingga evaluasi dimulai dari baseline hijau. Pustaka STWV Rust tidak memiliki tes sendiri.
-2. 453 tes Jest dan 136 fungsi tes Rust baru lulus; jumlah per track seperti pada Bagian 3.
+1. Seluruh tes lama (baseline 7–8 Okt: Rust 450, Jest 830) lulus sebelum paket evaluasi, sehingga evaluasi dimulai dari baseline hijau. Setelah tes duplikat dibuang 21 Okt 2026 tes lama tinggal Rust 435 dan Jest 789, semuanya lulus. Pustaka STWV Rust tidak memiliki tes sendiri.
+2. 453 tes Jest dan 136 fungsi tes Rust baru lulus (8 Okt); per 21 Okt 2026 menjadi 454 tes Jest dan 130 fungsi tes Rust, semuanya lulus; jumlah per track seperti pada Bagian 3.
 3. Kompleksitas siklomatik keempat fungsi white-box: 7, 29, 13, 6, diverifikasi dengan skrip (jumlah sisi, simpul, predikat, dan rank matriks jalur). 54 dari 55 jalur struktural layak dan semuanya lulus; satu jalur WB-3 tidak layak karena `TargetVar` tidak berubah antara dua pemeriksaan.
 4. Kelas prediksi Statify sama dengan scikit-learn 1.9.1 pada 17.221 dari 17.221 prediksi (24 konfigurasi; pilkada, SMS Spam, SmSA); akurasi, Kappa, dan Macro F1 identik sampai 6 desimal; parameter model cocok sampai galat absolut maksimum 2,665e-15 (Windows; 1,776e-15 di VM).
 5. Selisih probabilitas keluaran Apply Model terhadap scikit-learn paling besar sekitar 5,0e-5 dan seluruhnya dijelaskan oleh pembulatan 4 desimal (`round4`) pada wasm Apply Model, bukan oleh galat rumus.

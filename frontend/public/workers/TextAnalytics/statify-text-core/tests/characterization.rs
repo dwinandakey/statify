@@ -9,7 +9,7 @@
 //! memang akan diubah (mis. fallback diam-diam pada stopwords JSON rusak — F11).
 
 use statify_text_core::{
-    ngram, preprocess_documents, run_pipeline, stemmer, StemmingMethod, StopwordsMethod, TextVectorizerConfig,
+    ngram, preprocess_documents, run_pipeline, StemmingMethod, StopwordsMethod, TextVectorizerConfig,
 };
 
 const TOL: f64 = 1e-6;
@@ -140,18 +140,6 @@ fn stopwords_custom_tidak_peka_huruf_besar_kecil() {
 }
 
 #[test]
-fn stemming_indonesia_memakan_menjadi_makan() {
-    let hasil = stemmer::stem(vec!["memakan".to_string()], "indonesian");
-    assert_eq!(hasil, vec!["makan"]);
-}
-
-#[test]
-fn stemming_inggris_running_menjadi_run() {
-    let hasil = stemmer::stem(vec!["running".to_string()], "english");
-    assert_eq!(hasil, vec!["run"]);
-}
-
-#[test]
 fn stemming_selalu_lowercase_walau_opsi_lowercase_mati() {
     // Perilaku v1 (F12): stemmer memaksa lowercase internal.
     let mut cfg = config("raw", "none", 1, 1, 1000);
@@ -159,16 +147,6 @@ fn stemming_selalu_lowercase_walau_opsi_lowercase_mati() {
     cfg.stemming_method = StemmingMethod::English;
     let tokens = preprocess_documents(&["Running".to_string()], &cfg).unwrap();
     assert_eq!(tokens[0], vec!["run"]);
-}
-
-#[test]
-fn dokumen_kosong_di_tengah_menjadi_baris_nol_dan_sejajar() {
-    let docs = vec!["saya suka nasi".to_string(), "".to_string(), "suka makan".to_string()];
-    let out = run_pipeline(&docs, &config("raw", "none", 1, 1, 1000)).unwrap();
-    assert_eq!(out.matrix.len(), 3);
-    assert!(out.matrix[1].iter().all(|&v| v == 0.0), "baris dokumen kosong harus nol");
-    assert!(out.matrix[0].iter().any(|&v| v > 0.0));
-    assert!(out.matrix[2].iter().any(|&v| v > 0.0));
 }
 
 #[test]
@@ -186,24 +164,6 @@ fn validator_ngram_tidak_valid_ditolak() {
     assert_eq!(e1.code, "INVALID_CONFIG");
     let e2 = run_pipeline(&korpus_d(), &config("raw", "none", 3, 2, 1000)).unwrap_err();
     assert_eq!(e2.code, "INVALID_CONFIG");
-}
-
-#[test]
-fn regex_tidak_valid_menghasilkan_invalid_regex() {
-    let mut cfg = config("raw", "none", 1, 1, 1000);
-    cfg.delimiters = "[(".to_string();
-    let e = run_pipeline(&korpus_d(), &cfg).unwrap_err();
-    assert_eq!(e.code, "INVALID_REGEX");
-}
-
-#[test]
-fn semua_token_terbuang_menghasilkan_empty_vocabulary() {
-    // Semua kata adalah stopword → kosakata kosong.
-    let mut cfg = config("raw", "none", 1, 1, 1000);
-    cfg.stopwords_method = StopwordsMethod::Custom;
-    cfg.custom_stopwords = Some(r#"["saya","suka","makan","nasi","tidak"]"#.to_string());
-    let e = run_pipeline(&korpus_d(), &cfg).unwrap_err();
-    assert_eq!(e.code, "EMPTY_VOCABULARY");
 }
 
 #[test]

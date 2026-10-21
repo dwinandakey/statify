@@ -1,5 +1,47 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.17s
-     Running unittests src\lib.rs (target\debug\deps\statify_string_to_word-9d63fe7a4ea999d5.exe)
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling wasm-bindgen-shared v0.2.129
+   Compiling rustversion v1.0.23
+   Compiling once_cell v1.21.4
+   Compiling cfg-if v1.0.5
+   Compiling serde_core v1.0.229
+   Compiling bumpalo v3.20.3
+   Compiling fst v0.4.7
+   Compiling serde v1.0.229
+   Compiling version_check v0.9.5
+   Compiling zerocopy v0.8.63
+   Compiling memchr v2.8.3
+   Compiling slab v0.4.12
+   Compiling zmij v1.0.23
+   Compiling ahash v0.8.12
+   Compiling futures-task v0.3.34
+   Compiling futures-core v0.3.34
+   Compiling pin-project-lite v0.2.17
+   Compiling aho-corasick v1.1.5
+   Compiling regex-syntax v0.8.11
+   Compiling futures-util v0.3.34
+   Compiling serde_json v1.0.154
+   Compiling allocator-api2 v0.2.21
+   Compiling itoa v1.0.18
+   Compiling wasm-bindgen v0.2.129
+   Compiling syn v3.0.9
+   Compiling sastrawi-rs v0.5.3
+   Compiling regex-automata v0.4.18
+   Compiling wasm-bindgen-macro-support v0.2.129
+   Compiling regex v1.13.1
+   Compiling hashbrown v0.14.5
+   Compiling serde_derive v1.0.229
+   Compiling wasm-bindgen-macro v0.2.129
+   Compiling rust-stemmers v1.2.0
+   Compiling statify-text-core v0.1.0 (C:\Data\KULIAH\Skripsi\statify64\frontend\public\workers\TextAnalytics\statify-text-core)
+   Compiling js-sys v0.3.106
+   Compiling console_error_panic_hook v0.1.7
+   Compiling serde-wasm-bindgen v0.4.5
+   Compiling web-sys v0.3.106
+   Compiling statify-string-to-word v0.1.0 (C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Transform\StringToWordVector\rust)
+    Finished `test` profile [unoptimized] target(s) in 39.39s
+     Running unittests src\lib.rs (target\debug\deps\statify_string_to_word-82caa1595c20595c.exe)
 
 running 0 tests
 
@@ -12,4 +54,4 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=3.65 started=2026-10-08 10:27:43 +07:00 cmd=cargo test cwd=E:\KULIAH\Skripsi\statify64\frontend\components\Modals\Transform\StringToWordVector\rust ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=40.56 started=2026-10-22 00.11.02 +07:00 cmd=cargo test cwd=C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Transform\StringToWordVector\rust ===

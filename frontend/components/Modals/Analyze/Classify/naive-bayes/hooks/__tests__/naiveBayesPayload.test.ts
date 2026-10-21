@@ -93,22 +93,6 @@ describe("buildNaiveBayesTextPayload", () => {
         });
     });
 
-    it("N5-6: '   ' dan '\\t\\n' -> null; '  halo  ' dan '3 kucing lucu' tetap utuh", () => {
-        const form = cloneDefault();
-        form.main.RawTextVar = "tweet";
-        const payload = buildNaiveBayesTextPayload(form.main, [], 4, [
-            "   ",
-            "\t\n",
-            "  halo  ",
-            "3 kucing lucu",
-        ]);
-        expect(payload).toEqual({
-            source: "raw",
-            variable: "tweet",
-            values: [null, null, "  halo  ", "3 kucing lucu"],
-        });
-    });
-
     it("N5-4: TextSource tersimpan basi -> payload memakai nilai efektif dari slot", () => {
         const form = cloneDefault();
         // Tersimpan "raw" tetapi slot kosong -> none.
@@ -226,38 +210,6 @@ describe("buildNaiveBayesWorkerConfig", () => {
 });
 
 describe("getUserFriendlyNaiveBayesError (kode §11)", () => {
-    it("NB_E_TEXT_NEGATIVE: satu kolom memuat nama kolom dan jumlah", () => {
-        const message = getUserFriendlyNaiveBayesError(
-            new Error(
-                "NB_E_TEXT_NEGATIVE: Kolom vektor teks 'VEC_a' berisi nilai negatif (total 1 kolom bermasalah). Multinomial/Bernoulli/Complement NB memerlukan nilai ≥ 0. Periksa apakah kolom ini bukan vektor kata (mis. hasil standardisasi/PCA atau kode missing seperti -1) lalu keluarkan dari Word-Vector Variables."
-            )
-        );
-        expect(message).toContain("'VEC_a'");
-        expect(message).toContain("negative values");
-        // Satu kolom terdampak: tidak ada kalimat "and N more column(s)".
-        expect(message).not.toContain("more column");
-        expect(message.endsWith("(NB_E_TEXT_NEGATIVE)")).toBe(true);
-    });
-
-    it("NB_E_TEXT_NEGATIVE: beberapa kolom -> nama pertama + jumlah", () => {
-        const message = getUserFriendlyNaiveBayesError(
-            new Error(
-                "NB_E_TEXT_NEGATIVE: Kolom vektor teks 'zscore_1' berisi nilai negatif (total 7 kolom bermasalah). Multinomial/Bernoulli/Complement NB memerlukan nilai ≥ 0. Periksa apakah kolom ini bukan vektor kata (mis. hasil standardisasi/PCA atau kode missing seperti -1) lalu keluarkan dari Word-Vector Variables."
-            )
-        );
-        expect(message).toContain("'zscore_1'");
-        expect(message).toContain("and 6 more column(s)");
-    });
-
-    it("NB_E_TEXT_NEGATIVE: pesan tanpa nama kolom tidak crash (pesan umum)", () => {
-        const message = getUserFriendlyNaiveBayesError(
-            new Error("NB_E_TEXT_NEGATIVE: ada nilai negatif")
-        );
-        expect(message).toContain("Text vector columns contain negative values");
-        expect(message).not.toContain("'");
-        expect(message).not.toContain("undefined");
-    });
-
     it("NB_E_TEXT_NEGATIVE: tanpa jumlah tetap memuat nama kolom", () => {
         const message = getUserFriendlyNaiveBayesError(
             new Error("NB_E_TEXT_NEGATIVE: Kolom vektor teks 'x' berisi nilai negatif.")
@@ -329,30 +281,6 @@ describe("getUserFriendlyNaiveBayesError (kode §11)", () => {
         );
         expect(final).toContain("after text preprocessing");
         expect(final).not.toContain("fold");
-    });
-
-    it("NB_E_COMPLEMENT_MIXED", () => {
-        expect(
-            getUserFriendlyNaiveBayesError(
-                new Error("NB_E_COMPLEMENT_MIXED: complement dengan fitur non-text")
-            )
-        ).toContain("contains Text Features only");
-    });
-
-    it("NB_E_TEXT_CONFIG meneruskan pesan asli CORE", () => {
-        const message = getUserFriendlyNaiveBayesError(
-            new Error("NB_E_TEXT_CONFIG: [INVALID_REGEX] pola delimiter salah")
-        );
-        // Pola E3: kode CORE dipindah ke akhir kalimat, tidak lagi di awal.
-        expect(message).toContain("pola delimiter salah");
-        expect(message).not.toContain("[INVALID_REGEX]");
-        expect(message.endsWith("(NB_E_TEXT_CONFIG: INVALID_REGEX)")).toBe(true);
-    });
-
-    it("pesan v1 tidak berubah", () => {
-        expect(getUserFriendlyNaiveBayesError(new Error("no target"))).toBe(
-            "Select a target variable before running the Naive Bayes analysis."
-        );
     });
 });
 

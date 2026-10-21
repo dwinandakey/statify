@@ -19,8 +19,8 @@
 // dieksekusi", tanpa angka pasti — diputuskan EKSPLISIT di sini, bukan
 // ditebak diam-diam, sesuai instruksi tugas Fase 11):
 //
-//   - `folds < 1`                              -> BLOKIR KERAS (Err).
-//     Tidak ada k-fold yang valid dengan jumlah fold nol/negatif.
+//   - `folds < 2`                              -> BLOKIR KERAS (Err).
+//     Tidak ada k-fold yang valid dengan jumlah fold < 2 (k = 1 membuat data latih kosong).
 //   - `folds > n_instance` (jumlah instance valid setelah preprocessing)
 //                                               -> BLOKIR KERAS (Err).
 //     Ini kasus "jelas tidak mungkin dieksekusi" yang disebut AGENTS.md:
@@ -176,9 +176,9 @@ pub fn validate_fold_count(
     n_instance: usize,
     smallest_class_size: usize,
 ) -> Result<Option<String>, String> {
-    if folds < 1 {
+    if folds < 2 {
         return Err(format!(
-            "Number of folds must be at least 1 (got {}).",
+            "Number of folds must be at least 2 (got {}).",
             folds
         ));
     }
@@ -377,7 +377,13 @@ mod tests {
     // ---------------- validate_fold_count (keputusan Fase 11) ----------------
 
     #[test]
-    fn folds_less_than_one_is_hard_blocked() {
+    fn folds_less_than_two_is_hard_blocked() {
+        let result_one = validate_fold_count(1, 100, 20);
+        assert_eq!(
+            result_one,
+            Err("Number of folds must be at least 2 (got 1).".to_string())
+        );
+
         let result = validate_fold_count(0, 100, 20);
         assert!(result.is_err());
 

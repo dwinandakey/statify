@@ -1,15 +1,15 @@
 // Tes tesis Track A (e), sisi TypeScript: validasi angka KFolds pada Naive Bayes.
 //
-// Temuan yang dikarakterisasi: getNumericInputError menerima KFolds = 1 (batas bawah hanya "< 1"), padahal
-// 1-fold cross-validation menghasilkan data latih KOSONG (lihat naive-bayes/rust/tests/eval_partition.rs dan
-// frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/BUGS_A.md). Tes di sini mencatat PERILAKU SAAT INI (karakterisasi), bukan perilaku ideal:
-// bila batas minimum diperbaiki menjadi 2, ekspektasi KFolds = 1 di bawah harus diubah secara sengaja.
+// Temuan BUGS_A.md A-1 (SUDAH DIPERBAIKI 22 Okt 2026): getNumericInputError dulu menerima KFolds = 1 (batas bawah
+// hanya "< 1"), padahal 1-fold cross-validation menghasilkan data latih KOSONG (lihat
+// naive-bayes/rust/tests/eval_partition.rs dan text_analytics_eval/BUGS_A.md). Batas minimum kini 2 di UI dan di Rust;
+// tes di sini menegaskan bahwa KFolds = 1 DITOLAK.
 //
-// Sudah tercakup (tidak diulang): whitebox.getNumericInputError.test.ts (Jalur 20-23 dan "Catatan temuan: KFolds = 1
-// masih diterima") dan useNaiveBayesValidation.test.ts ("menolak jumlah fold < 1 pada mode kfold").
+// Sudah tercakup (tidak diulang): whitebox.getNumericInputError.test.ts (Jalur 20-22 dan 28) dan
+// useNaiveBayesValidation.test.ts (penolakan jumlah fold tidak sah pada mode kfold).
 // Yang ditambahkan: tabel batas lengkap (-1..1000000000, non-bilangan-bulat, NaN, Infinity, non-number), KFolds diabaikan
-// pada mode holdout, penerusan KFolds = 1 ke konfigurasi worker tanpa penjaga tambahan, dan pemetaan pesan galat Rust
-// terkait fold ke pesan pengguna.
+// pada mode holdout, penerusan KFolds apa adanya ke konfigurasi worker (penjaga ada di getNumericInputError dan Rust),
+// dan pemetaan pesan galat Rust terkait fold ke pesan pengguna.
 
 import { getNumericInputError } from "@/components/Modals/Analyze/Classify/naive-bayes/hooks/useNaiveBayesValidation";
 import { buildNaiveBayesWorkerConfig } from "@/components/Modals/Analyze/Classify/naive-bayes/services/naive-bayes-analysis";
@@ -28,7 +28,7 @@ jest.mock(
 );
 
 const base = (): NaiveBayesType => JSON.parse(JSON.stringify(NaiveBayesDefault));
-const PESAN_MINIMUM = "The number of folds must be at least 1.";
+const PESAN_MINIMUM = "The number of folds must be at least 2.";
 
 const kfold = (folds: unknown): NaiveBayesType => {
     const f = base();
@@ -43,12 +43,13 @@ describe("eval A(e): batas jumlah fold pada getNumericInputError", () => {
         expect(getNumericInputError(kfold(10))).toBeNull();
     });
 
-    it.each([[-5], [-1], [0]])("KFolds = %p ditolak dengan pesan batas minimum", (nilai) => {
+    it.each([[-5], [-1], [0], [1]])("KFolds = %p ditolak dengan pesan batas minimum", (nilai) => {
         expect(getNumericInputError(kfold(nilai))).toBe(PESAN_MINIMUM);
     });
 
-    it("KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak)", () => {
-        expect(getNumericInputError(kfold(1))).toBeNull();
+    it("PERBAIKAN TEMUAN A-1: KFolds = 1 DITOLAK (minimum 2); KFolds = 2 adalah batas bawah yang sah", () => {
+        expect(getNumericInputError(kfold(1))).toBe(PESAN_MINIMUM);
+        expect(getNumericInputError(kfold(2))).toBeNull();
     });
 
     it.each([[2], [3], [10], [100], [1000], [1_000_000_000]])(
@@ -81,8 +82,8 @@ describe("eval A(e): batas jumlah fold pada getNumericInputError", () => {
     });
 });
 
-describe("eval A(e): KFolds = 1 diteruskan apa adanya ke worker", () => {
-    it("buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust", () => {
+describe("eval A(e): KFolds diteruskan apa adanya ke worker (penjaga di getNumericInputError dan Rust)", () => {
+    it("buildNaiveBayesWorkerConfig tidak menambah penjaga: ValidationMethod kfold dan KFolds 1 sampai ke Rust (yang menolaknya)", () => {
         const form = kfold(1);
         const config = buildNaiveBayesWorkerConfig(form);
         expect(config.validation.ValidationMethod).toBe("kfold");
@@ -102,7 +103,7 @@ describe("eval A(e): pemetaan pesan galat Rust terkait jumlah fold", () => {
 
     // Teks sama dengan format! di naive-bayes/rust/src/stats/partition.rs (validate_fold_count).
     it.each([
-        ["Number of folds must be at least 1 (got 0)."],
+        ["Number of folds must be at least 2 (got 1)."],
         [
             "Number of folds (15) cannot be greater than the number of valid instances (10). Choose a smaller number of folds.",
         ],

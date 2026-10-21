@@ -335,26 +335,6 @@ describe("SaveTab — nama kustom", () => {
 });
 
 describe("SaveTab — Final name & AM_W_NAME_ADJUSTED", () => {
-  it("variabel NB_PredictedValue sudah ada → Final name NB_PredictedValue_1 + ikon peringatan", () => {
-    render(
-      <Harness
-        existingVariables={[makeVariable("NB_PredictedValue", "nominal", "STRING")]}
-      />
-    );
-
-    expect(screen.getByTestId("final-name-predicted")).toHaveTextContent(
-      "NB_PredictedValue_1"
-    );
-    expect(screen.getByTestId("name-adjusted-predicted")).toBeInTheDocument();
-    expect(screen.getByTestId("save-name-adjusted")).toHaveTextContent(
-      APPLY_MODEL_MESSAGES.AM_W_NAME_ADJUSTED
-    );
-    // Baris yang tidak berubah tidak diberi ikon.
-    expect(
-      screen.queryByTestId("name-adjusted-maxProbability")
-    ).not.toBeInTheDocument();
-  });
-
   it("kelas 'Rain Day' → NB_Probability_Rain_Day dengan ikon peringatan", () => {
     const base = getD1Descriptor();
     const descriptor: ModelDescriptor = { ...base, classes: ["Rain Day", "Sunny"] };

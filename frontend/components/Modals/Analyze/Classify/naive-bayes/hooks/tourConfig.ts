@@ -270,9 +270,9 @@ const VALIDATION_STEPS: StepDef[] = [
         titleId: "Cross-Validation Folds",
         titleEn: "Cross-Validation Folds",
         contentId:
-            "Number of Folds bawaan 10 (minimal 1). Fold dibentuk secara stratified dan metrik dihitung dari gabungan prediksi semua fold. Jumlah fold tidak boleh melebihi jumlah kasus; bila melebihi ukuran kelas terkecil, analisis tetap berjalan dengan peringatan.",
+            "Number of Folds bawaan 10 (minimal 2). Fold dibentuk secara stratified dan metrik dihitung dari gabungan prediksi semua fold. Jumlah fold tidak boleh melebihi jumlah kasus; bila melebihi ukuran kelas terkecil, analisis tetap berjalan dengan peringatan.",
         contentEn:
-            "Number of Folds defaults to 10 (minimum 1). Folds are stratified and metrics are computed from the pooled predictions of all folds. The number of folds must not exceed the number of cases; if it exceeds the smallest class size, the analysis still runs with a warning.",
+            "Number of Folds defaults to 10 (minimum 2). Folds are stratified and metrics are computed from the pooled predictions of all folds. The number of folds must not exceed the number of cases; if it exceeds the smallest class size, the analysis still runs with a warning.",
         position: "top",
     },
     {

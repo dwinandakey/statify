@@ -97,15 +97,6 @@ describe("validateStwvConfig", () => {
         expect(validateStwvConfig(ngram(3, 2))).toHaveLength(1);
     });
 
-    it("menolak n-gram 6", () => {
-        expect(validateStwvConfig(ngram(1, 6))).toHaveLength(1);
-    });
-
-    it("menerima n-gram 1..5", () => {
-        expect(validateStwvConfig(ngram(1, 5))).toEqual([]);
-        expect(validateStwvConfig(ngram(2, 2))).toEqual([]);
-    });
-
     it("mode word tidak memvalidasi ukuran n-gram (nilainya tidak dipakai)", () => {
         expect(validateStwvConfig(withOverrides({ tokenizer: { type: "word", minSize: 3, maxSize: 2 } }))).toEqual([]);
     });

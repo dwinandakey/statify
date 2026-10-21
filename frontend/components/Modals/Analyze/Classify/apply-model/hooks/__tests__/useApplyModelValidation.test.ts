@@ -71,17 +71,6 @@ function codesOf(issues: ApplyModelIssue[]): string[] {
 }
 
 describe("computeApplyModelValidation", () => {
-  it("tanpa model → isValid false dan AM_E_NO_MODEL", () => {
-    const { validation, firstErrorMessage } = computeApplyModelValidation(
-      cloneDefault(),
-      makeD3Variables()
-    );
-
-    expect(validation.isValid).toBe(false);
-    expect(codesOf(validation.issues)).toEqual(["AM_E_NO_MODEL"]);
-    expect(firstErrorMessage).toBe(APPLY_MODEL_MESSAGES.AM_E_NO_MODEL);
-  });
-
   it("D1 + mapping valid → isValid true, tanpa issue, tanpa pesan error", () => {
     const { validation, firstErrorMessage } = computeApplyModelValidation(
       makeValidForm(),

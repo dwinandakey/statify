@@ -72,7 +72,7 @@ Semua 7 jalur layak. Jalur 3 dan 4 sama-sama berakhir di simpul 5 tetapi berbeda
 | 6 | S-1-3-4-6-8-9-X | prefix = "1VEC_" (diawali angka) | "Vector column name must start with a letter, @, # or $." | ⟦jest:whitebox.validateColumnPrefix.test.ts::WB-1 jalur 6: diawali angka -> pesan galat⟧ |
 | 7 | S-1-3-4-6-8-10-11-X | prefix = "VEC-" (memuat tanda hubung) | "Vector column name can only contain letters, digits, periods, underscores, @, # and $." | ⟦jest:whitebox.validateColumnPrefix.test.ts::WB-1 jalur 7: memuat tanda hubung -> pesan galat⟧ |
 
-Hubungan dengan tes lama: `StringToWordVector/__tests__/columnPrefix.test.ts` menguji perilaku (nilai sah, tidak sah, batas 32) memakai `it.each`, tanpa pemetaan ke jalur; tes evaluasi ini mandiri dan memetakan satu tes ke satu jalur.
+Hubungan dengan tes lama: `StringToWordVector/__tests__/columnPrefix.test.ts` menguji perilaku (nilai sah, tidak sah, batas 32) memakai `it.each`, tanpa pemetaan ke jalur (lima baris nilai tidak sah dihapus dari berkas itu pada 21 Okt 2026 sebagai duplikat; kini hanya diuji di WB-1); tes evaluasi ini mandiri dan memetakan satu tes ke satu jalur.
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 7 dari 7 tes jalur lulus.
 
@@ -123,8 +123,8 @@ Keputusan pemecahan: setiap `||` pada guard `typeof ... || !Number.isFinite(...)
 | 32 | `const folds = validation.KFolds` (pernyataan, baris 254) |
 | 33 | `typeof folds !== "number"  (operan 1 \|\|)` (predikat, baris 255) |
 | 34 | `!Number.isInteger(folds)  (operan 2 \|\|)` (predikat, baris 255) |
-| 35 | `folds < 1  (operan 3 \|\|)` (predikat, baris 255) |
-| 36 | `return "The number of folds must be at least 1."` (return, baris 256) |
+| 35 | `folds < 2  (operan 3 \|\|)` (predikat, baris 255) |
+| 36 | `return "The number of folds must be at least 2."` (return, baris 256) |
 | 37 | `validation.RandomSeed !== null` (predikat, baris 263) |
 | 38 | `typeof validation.RandomSeed !== "number"  (operan 1 \|\|)` (predikat, baris 265) |
 | 39 | `!Number.isInteger(validation.RandomSeed)  (operan 2 \|\|)` (predikat, baris 266) |
@@ -179,9 +179,9 @@ Jalur dasar (1) adalah nilai bawaan formulir. Jalur 2–29 dibangun dengan memba
 | 17 | S-1-2-3-5-7-9-24-25-26-27-28-29-30-X | TrainingPercentage = 100 | "Training percentage must be a whole number between 1 and 99." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 17: TrainingPercentage = 100⟧ |
 | 18 | S-1-2-3-5-7-9-10-11-13-15-17-24-25-26-30-X | RawTextVar = "Text Tweet" (fitur teks aktif); TextFeatureTable = false; TrainingPercentage = "70" (string) | "Training percentage must be a whole number between 1 and 99." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 18: RawTextVar = "Text Tweet" (fitur teks aktif); TextFeatureTable = false; TrainingPercentage = "70" (string)⟧ |
 | 19 | S-1-2-3-5-7-9-10-11-13-15-17-18-19-20-21-22-24-25-26-30-X | RawTextVar = "Text Tweet" (fitur teks aktif); TrainingPercentage = "70" (string) | "Training percentage must be a whole number between 1 and 99." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 19: RawTextVar = "Text Tweet" (fitur teks aktif); TrainingPercentage = "70" (string)⟧ |
-| 20 | S-1-2-3-5-7-9-24-31-32-33-36-X | ValidationMethod = "kfold"; KFolds = "10" (string) | "The number of folds must be at least 1." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 20: ValidationMethod = "kfold"; KFolds = "10" (string)⟧ |
-| 21 | S-1-2-3-5-7-9-24-31-32-33-34-36-X | ValidationMethod = "kfold"; KFolds = 2.5 | "The number of folds must be at least 1." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 21: ValidationMethod = "kfold"; KFolds = 2.5⟧ |
-| 22 | S-1-2-3-5-7-9-24-31-32-33-34-35-36-X | ValidationMethod = "kfold"; KFolds = 0 | "The number of folds must be at least 1." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 22: ValidationMethod = "kfold"; KFolds = 0⟧ |
+| 20 | S-1-2-3-5-7-9-24-31-32-33-36-X | ValidationMethod = "kfold"; KFolds = "10" (string) | "The number of folds must be at least 2." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 20: ValidationMethod = "kfold"; KFolds = "10" (string)⟧ |
+| 21 | S-1-2-3-5-7-9-24-31-32-33-34-36-X | ValidationMethod = "kfold"; KFolds = 2.5 | "The number of folds must be at least 2." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 21: ValidationMethod = "kfold"; KFolds = 2.5⟧ |
+| 22 | S-1-2-3-5-7-9-24-31-32-33-34-35-36-X | ValidationMethod = "kfold"; KFolds = 1 | "The number of folds must be at least 2." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 22: ValidationMethod = "kfold"; KFolds = 1⟧ |
 | 23 | S-1-2-3-5-7-9-24-25-26-27-28-29-31-37-38-42-X | RandomSeed = "42" (string) | "The seed must be a whole number between 0 and 4294967295." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 23: RandomSeed = "42" (string)⟧ |
 | 24 | S-1-2-3-5-7-9-24-25-26-27-28-29-31-37-38-39-42-X | RandomSeed = 4.2 | "The seed must be a whole number between 0 and 4294967295." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 24: RandomSeed = 4.2⟧ |
 | 25 | S-1-2-3-5-7-9-24-25-26-27-28-29-31-37-38-39-40-42-X | RandomSeed = -1 | "The seed must be a whole number between 0 and 4294967295." | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 25: RandomSeed = -1⟧ |
@@ -190,7 +190,7 @@ Jalur dasar (1) adalah nilai bawaan formulir. Jalur 2–29 dibangun dengan memba
 | 28 | S-1-2-3-5-7-9-24-31-32-33-34-35-37-43-X | ValidationMethod = "kfold" | null | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 28: ValidationMethod = "kfold"⟧ |
 | 29 | S-1-2-3-5-7-9-24-25-26-27-28-29-31-37-38-39-40-41-43-X | RandomSeed = 42 | null | ⟦jest:whitebox.getNumericInputError.test.ts::WB-2 jalur 29: RandomSeed = 42⟧ |
 
-Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts` (28 jalur bernomor + 1 catatan temuan `KFolds = 1`) memuat masukan serupa untuk jalur galat; perbedaan yang dapat diverifikasi dari berkasnya: tidak ada jalur dengan `ValidationMethod` di luar union (jalur 27 di sini), dan jalur galat Training Percentage setelah blok Text Features dilewati dengan dua cara berbeda (jalur 18 dan 19 di sini) tidak ada di tes lama.
+Hubungan dengan tes lama (berkas lama ini dihapus 21 Okt 2026; jalurnya kini hanya diuji di WB-2): `naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts` (28 jalur bernomor + 1 catatan temuan `KFolds = 1`) memuat masukan serupa untuk jalur galat; perbedaan yang dapat diverifikasi dari berkasnya: tidak ada jalur dengan `ValidationMethod` di luar union (jalur 27 di sini), dan jalur galat Training Percentage setelah blok Text Features dilewati dengan dua cara berbeda (jalur 18 dan 19 di sini) tidak ada di tes lama.
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 29 dari 29 tes jalur lulus.
 
@@ -271,7 +271,7 @@ Jalur dasar (1): target terisi, ada predictor, tanpa fitur teks. Jalur 2–12 di
 | 11 | S-1-2-3-4-5-6-7-9-10-12-13-14-15-16-20-23-X | TargetVar kosong (null), SpecificationMode tidak ada (undefined), ada prediktor efektif (Pasangan Calon), tanpa fitur teks | isValid = false; errors = ["Select a target variable."; "Select at least one predictor variable (using Variables to Exclude or Candidate Factors / Covariates) or add Text Features."] | ⟦jest:whitebox.useNaiveBayesValidation.test.ts::WB-3 jalur 11: TargetVar kosong (null), SpecificationMode tidak ada (undefined), ada prediktor efektif (Pasangan Calon), tanpa fitur teks⟧ |
 | 12 | S-1-2-3-4-5-6-8-9-10-12-13-14-15-16-20-23-X | TargetVar kosong (null), SpecificationMode = exclude (bawaan), ada prediktor efektif (Pasangan Calon), tanpa fitur teks | isValid = false; errors = ["Select a target variable."; "Select at least one predictor variable (using Variables to Exclude or Candidate Factors / Covariates) or add Text Features."] | ⟦jest:whitebox.useNaiveBayesValidation.test.ts::WB-3 jalur 12: TargetVar kosong (null), SpecificationMode = exclude (bawaan), ada prediktor efektif (Pasangan Calon), tanpa fitur teks⟧ |
 
-Hubungan dengan tes lama: `naive-bayes/hooks/__tests__/whitebox.useNaiveBayesValidation.test.ts` memuat 10 jalur (WB-3 lama) tanpa pemecahan `??` dan `&&` per operan; tes evaluasi ini memakai pemecahan yang lebih halus (V(G) = 13) dan membuktikan bahwa 12 jalur layak.
+Hubungan dengan tes lama (berkas lama ini dihapus 21 Okt 2026; jalurnya kini hanya diuji di WB-3): `naive-bayes/hooks/__tests__/whitebox.useNaiveBayesValidation.test.ts` memuat 10 jalur (WB-3 lama) tanpa pemecahan `??` dan `&&` per operan; tes evaluasi ini memakai pemecahan yang lebih halus (V(G) = 13) dan membuktikan bahwa 12 jalur layak.
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 12 dari 12 tes jalur lulus.
 
@@ -335,7 +335,7 @@ Semua 6 jalur layak. Jalur 5 memakai `"[]"` (JSON sah tetapi bukan objek): `vali
 | 5 | S-1-3-5-6-7-8-X | isi file "{bad" (JSON.parse melempar SyntaxError) | ok = false; errors = [{code: "AM_E_PARSE", severity: "error", detail: "bad.json"}] | ⟦jest:whitebox.loadModelFromFile.test.ts::WB-4 jalur 5: isi file "{bad" (JSON.parse melempar SyntaxError)⟧ |
 | 6 | S-1-3-5-6-7-9-10-11-X | isi file "[]" (JSON sah, bukan objek; validateAnyModel gagal) | ok = false; errors = [{code: "AM_E_NOT_OBJECT", severity: "error"}] (tanpa detail) | ⟦jest:whitebox.loadModelFromFile.test.ts::WB-4 jalur 6: isi file "[]" (JSON sah, bukan objek; validateAnyModel gagal)⟧ |
 
-Hubungan dengan tes lama: `apply-model/services/__tests__/model-loader.test.ts` memuat kasus fungsional (D1/D2, ekstensi, ukuran, parse, tipe model, dsb.) dan memberi pola mock `File`; tes evaluasi ini mengulang pola itu tetapi per jalur basis set.
+Hubungan dengan tes lama: `apply-model/services/__tests__/model-loader.test.ts` memuat kasus fungsional (D1/D2, dsb.) dan memberi pola mock `File` (kasus ekstensi, ukuran, parse, dan tipe model dihapus dari berkas itu pada 21 Okt 2026 sebagai duplikat; kini hanya diuji di WB-4, BB-29, dan `model-loader.eval.test.ts`); tes evaluasi ini mengulang pola itu tetapi per jalur basis set.
 
 Hasil eksekusi di Windows (`logs/jest_B_win.json`, konfigurasi Jest produksi, perangkat uji skripsi): 6 dari 6 tes jalur lulus.
 
@@ -353,7 +353,7 @@ Catatan rekap: "Jalur independen" adalah jumlah jalur layak yang dites (sama den
 
 ## Hubungan dengan tes whitebox lama
 
-Tes lama milik pengguna tidak diubah dan tidak disalin: `naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts` (WB-2 lama, 28 jalur), `whitebox.useNaiveBayesValidation.test.ts` (WB-3 lama, 10 jalur), `StringToWordVector/__tests__/columnPrefix.test.ts` (WB-1, uji perilaku). Hasil jalannya ada di `logs/whitebox_nb.txt` dan `logs/whitebox_stwv.txt`. Perbedaan analisis: tes baru ini (i) memecah kondisi majemuk per operan secara konsisten, (ii) memverifikasi V(G) dengan skrip dan rank, (iii) menandai jalur infeasible secara eksplisit, dan (iv) menambahkan WB-4 yang belum ada di tes lama. Berkas baru berada di folder `__tests__/eval/` dan nama tesnya memuat ID jalur (mis. `WB-2 jalur 14: ...`).
+Tes lama milik pengguna tidak diubah dan tidak disalin selama evaluasi: `naive-bayes/hooks/__tests__/whitebox.getNumericInputError.test.ts` (WB-2 lama, 28 jalur), `whitebox.useNaiveBayesValidation.test.ts` (WB-3 lama, 10 jalur), `StringToWordVector/__tests__/columnPrefix.test.ts` (WB-1, uji perilaku). Pada 21 Okt 2026 kedua berkas whitebox lama Naive Bayes dihapus dan lima baris `it.each` nilai tidak sah di `columnPrefix.test.ts` dibuang sebagai duplikat; buku mengikuti analisis `eval/` (WB-1 7 jalur, WB-2 29 jalur, WB-3 V(G) = 13 dengan 12 jalur layak, WB-4 6 jalur). Hasil jalannya ada di `logs/whitebox_nb.txt` dan `logs/whitebox_stwv.txt`. Perbedaan analisis: tes baru ini (i) memecah kondisi majemuk per operan secara konsisten, (ii) memverifikasi V(G) dengan skrip dan rank, (iii) menandai jalur infeasible secara eksplisit, dan (iv) menambahkan WB-4 yang belum ada di tes lama. Berkas baru berada di folder `__tests__/eval/` dan nama tesnya memuat ID jalur (mis. `WB-2 jalur 14: ...`).
 
 ## Temuan
 

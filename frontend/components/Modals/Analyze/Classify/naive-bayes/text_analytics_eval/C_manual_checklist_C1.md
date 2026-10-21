@@ -139,7 +139,7 @@ Dua bagian terpisah, masing-masing dengan dataset segar. Karena pembatasan metod
 | A4. Di Data Editor lihat kolom `VEC_makan`. | — | Bernilai ≥ 1 pada baris 1 ("memakan"), baris 5 ("MAKAN"), baris 9 ("makan"). Baris 3 dan 10 ("Dimakan", "dimakan") diharapkan 1 juga; catat nilai sebenarnya. | | | |
 | A5. Catat term lain pada Vocabulary (mis. hasil untuk "makanan", "berlari", "mengejar", "peliharaan"). | — | Tidak ada nilai pasti; salin hasilnya ke Catatan sebagai observasi. | | | |
 | B1. Impor ulang; ganti dataset ke `dataset_inggris_testing.csv`; pilih `teks_en`. | — | 10 baris. | | | |
-| B2. Options → Stemming: **English (Porter)**; **OK**. | — | Kolom bertambah. | | | |
+| B2. Options → Stemming: **English (Snowball/Porter2)**; **OK**. | — | Kolom bertambah. | | | |
 | B3. Vocabulary: cari "running", "parks", "played". | — | "running", "parks", dan "played" **tidak ada**; "run", "park", dan "play" **ada**; "ran" tetap "ran". | | | |
 | B4. Periksa nilai kolom `VEC_run`, `VEC_park`, `VEC_play`. | — | `VEC_run` = 1 pada baris 1, 3, 9. `VEC_park` = 1 pada baris 1, 2, 8. `VEC_play` = 1 pada baris 5, 3 pada baris 6, 1 pada baris 10. Catat bila berbeda. | | | |
 | B5. Baca catatan di bawah opsi Stemming. | — | Teks kecil: "Stemming always converts tokens to lowercase, so the Lowercase option has no effect while stemming is on." | | | |

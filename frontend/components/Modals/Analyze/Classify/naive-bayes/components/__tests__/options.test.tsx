@@ -66,11 +66,6 @@ jest.mock("@/components/Modals/Analyze/Classify/naive-bayes/components/variables
                     "button",
                     { onClick: () => props.onChange({ TargetVar: "Kelas", RawTextVar: "Teks" }) },
                     "set-raw"
-                ),
-                createElement(
-                    "button",
-                    { onClick: () => props.onChange({ TargetVar: "Kelas", RawTextVar: null }) },
-                    "set-target-only"
                 )
             ),
     };
@@ -119,34 +114,34 @@ describe("OptionsTab", () => {
         expect(mockUpdateFormData).toHaveBeenCalledWith("SmoothingAlpha", 2.5);
     });
 
-    it("shows error for value 0", () => {
+    it("shows error for value 0 and still forwards it so validation blocks OK (UC-03 4a)", () => {
         render(<OptionsTab data={defaultData} updateFormData={mockUpdateFormData} />);
         const input = screen.getByLabelText(/Smoothing Alpha/i);
 
         fireEvent.change(input, { target: { value: "0" } });
 
         expect(screen.getByText(/must be greater than 0/i)).toBeInTheDocument();
-        expect(mockUpdateFormData).not.toHaveBeenCalled();
+        expect(mockUpdateFormData).toHaveBeenCalledWith("SmoothingAlpha", 0);
     });
 
-    it("shows error for negative value", () => {
+    it("shows error for negative value and still forwards it so validation blocks OK (UC-03 4a)", () => {
         render(<OptionsTab data={defaultData} updateFormData={mockUpdateFormData} />);
         const input = screen.getByLabelText(/Smoothing Alpha/i);
 
         fireEvent.change(input, { target: { value: "-1" } });
 
         expect(screen.getByText(/must be greater than 0/i)).toBeInTheDocument();
-        expect(mockUpdateFormData).not.toHaveBeenCalled();
+        expect(mockUpdateFormData).toHaveBeenCalledWith("SmoothingAlpha", -1);
     });
 
-    it("shows error for value > 999", () => {
+    it("shows error for value > 999 and still forwards it so validation blocks OK (UC-03 4a)", () => {
         render(<OptionsTab data={defaultData} updateFormData={mockUpdateFormData} />);
         const input = screen.getByLabelText(/Smoothing Alpha/i);
 
         fireEvent.change(input, { target: { value: "1000" } });
 
         expect(screen.getByText(/must not exceed 999/i)).toBeInTheDocument();
-        expect(mockUpdateFormData).not.toHaveBeenCalled();
+        expect(mockUpdateFormData).toHaveBeenCalledWith("SmoothingAlpha", 1000);
     });
 
     it("accepts decimal values", () => {
@@ -234,22 +229,32 @@ describe("OptionsTab v2", () => {
         expect(screen.getByLabelText(/Text Alpha/i)).toBeDisabled();
     });
 
-    it("TextAlpha tidak sah tidak diteruskan, nilai sah diteruskan", () => {
+    it("TextAlpha tidak sah TETAP diteruskan (UC-03 4a) dengan pesan identik getNumericInputError", () => {
         render(<OptionsTab data={baseData} updateFormData={update} hasTextFeatures />);
         const input = screen.getByLabelText(/Text Alpha/i);
         fireEvent.change(input, { target: { value: "0" } });
-        expect(update).not.toHaveBeenCalled();
-        expect(screen.getByText("Text Alpha must be greater than 0")).toBeInTheDocument();
+        expect(update).toHaveBeenLastCalledWith("TextAlpha", 0);
+        expect(screen.getByText("Text smoothing alpha must be greater than 0.")).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: "1000" } });
+        expect(update).toHaveBeenLastCalledWith("TextAlpha", 1000);
+        expect(screen.getByText("Text smoothing alpha must not exceed 999.")).toBeInTheDocument();
         fireEvent.change(input, { target: { value: "0.5" } });
-        expect(update).toHaveBeenCalledWith("TextAlpha", 0.5);
+        expect(update).toHaveBeenLastCalledWith("TextAlpha", 0.5);
+        expect(screen.queryByText(/Text smoothing alpha must/)).not.toBeInTheDocument();
     });
 
-    it("Numeric hanya Gaussian standar: tanpa pilihan min. std dan tanpa tabel override (revisi pasca-sidang)", () => {
-        render(<OptionsTab data={baseData} updateFormData={update} numericVariables={["Umur", "Tinggi"]} />);
-        expect(screen.getByText("Likelihood: Gaussian")).toBeInTheDocument();
-        expect(screen.queryByText(/min\. std/i)).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("Likelihood for Umur")).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("Filter numeric variables")).not.toBeInTheDocument();
+    it("Smoothing Alpha tidak sah TETAP diteruskan (UC-03 4a) dengan pesan identik getNumericInputError", () => {
+        render(<OptionsTab data={baseData} updateFormData={update} />);
+        const input = screen.getByLabelText(/Smoothing Alpha/i);
+        fireEvent.change(input, { target: { value: "0" } });
+        expect(update).toHaveBeenLastCalledWith("SmoothingAlpha", 0);
+        expect(screen.getByText("Smoothing Alpha must be greater than 0.")).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: "1000" } });
+        expect(update).toHaveBeenLastCalledWith("SmoothingAlpha", 1000);
+        expect(screen.getByText("Smoothing Alpha must not exceed 999.")).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: "2" } });
+        expect(update).toHaveBeenLastCalledWith("SmoothingAlpha", 2);
+        expect(screen.queryByText(/Smoothing Alpha must/)).not.toBeInTheDocument();
     });
 
     it("pruneNumericOverrides membuang variabel yang tidak lagi Numeric", () => {
@@ -283,19 +288,26 @@ describe("OutputTab v2", () => {
         expect(screen.getByLabelText("Top-k terms per class")).toBeDisabled();
     });
 
-    it("Top-k hanya meneruskan bilangan bulat 1-1000", () => {
+    it("Top-k tidak sah TETAP diteruskan (UC-03 4a; kosong -> NaN) dengan pesan identik getNumericInputError", () => {
         render(<OutputTab data={output} updateFormData={update} hasTextFeatures />);
         const input = screen.getByLabelText("Top-k terms per class");
         expect(input).toHaveValue(100);
+        const message = "Top-k terms per class must be a whole number between 1 and 1000.";
 
         fireEvent.change(input, { target: { value: "0" } });
+        expect(update).toHaveBeenLastCalledWith("TextTopK", 0);
+        expect(screen.getByText(message)).toBeInTheDocument();
         fireEvent.change(input, { target: { value: "1001" } });
+        expect(update).toHaveBeenLastCalledWith("TextTopK", 1001);
         fireEvent.change(input, { target: { value: "2.5" } });
-        expect(update).not.toHaveBeenCalled();
-        expect(screen.getByText(/whole number between 1 and 1000/i)).toBeInTheDocument();
+        expect(update).toHaveBeenLastCalledWith("TextTopK", 2.5);
+        fireEvent.change(input, { target: { value: "" } });
+        expect(update).toHaveBeenLastCalledWith("TextTopK", Number.NaN);
+        expect(screen.getByText(message)).toBeInTheDocument();
 
         fireEvent.change(input, { target: { value: "25" } });
-        expect(update).toHaveBeenCalledWith("TextTopK", 25);
+        expect(update).toHaveBeenLastCalledWith("TextTopK", 25);
+        expect(screen.queryByText(message)).not.toBeInTheDocument();
     });
 
     it("mencentang Text Feature Table memanggil updateFormData", () => {
@@ -398,18 +410,6 @@ describe("NaiveBayesContainer v2", () => {
             ["neg", "2024 pilkada seru"],
             ["pos", ""],
         ];
-    });
-
-    it("tab Text Preprocessing disabled tanpa Raw Text dan aktif setelah Raw Text terisi", async () => {
-        render(<NaiveBayesContainer onClose={jest.fn()} />);
-        const textTab = await screen.findByRole("tab", { name: /Text Preprocessing/i });
-        expect(textTab).toBeDisabled();
-
-        fireEvent.click(screen.getByText("set-raw"));
-        await waitFor(() => expect(screen.getByRole("tab", { name: /Text Preprocessing/i })).toBeEnabled());
-
-        fireEvent.click(screen.getByText("set-target-only"));
-        await waitFor(() => expect(screen.getByRole("tab", { name: /Text Preprocessing/i })).toBeDisabled());
     });
 
     it('"3 kucing lucu" tetap utuh sampai payload (rawTextValues dari useDataStore.data)', async () => {

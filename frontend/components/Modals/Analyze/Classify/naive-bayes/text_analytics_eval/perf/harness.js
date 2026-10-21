@@ -66,6 +66,17 @@ async function idleBaseline(ms = 1200) {
   return r.frame_p95_ms;
 }
 
+/** Salinan utils/packedMatrix.ts unpackMatrix (anggaran 20 ms per potongan, jeda setTimeout 0). */
+async function unpackMatrix({ rows, cols, data }) {
+  const matrix = new Array(rows);
+  let sliceStart = performance.now();
+  for (let i = 0; i < rows; i++) {
+    matrix[i] = Array.from(data.subarray(i * cols, (i + 1) * cols));
+    if (performance.now() - sliceStart > 20) { await new Promise((r) => setTimeout(r, 0)); sliceStart = performance.now(); }
+  }
+  return matrix;
+}
+
 function waitWorker(worker, kind, timeoutMs) {
   return new Promise((resolve) => {
     let done = false;
@@ -75,7 +86,11 @@ function waitWorker(worker, kind, timeoutMs) {
       const t1 = performance.now();           // stempel waktu pertama di handler (deserialisasi hasil sudah selesai)
       const m = e.data;
       if (kind === "stwv") {
-        if (m.status === "success") finish({ t1, status: "OK", terms: m.payload?.vocabulary?.length ?? "" });
+        // Sama dengan hooks/useStringToWordVector.ts: matriks Float64Array disusun ulang menjadi number[][] secara
+        // bertahap (utils/packedMatrix.ts unpackMatrix); t1 diambil setelah penyusunan selesai.
+        if (m.status === "success" && m.payload?.packedMatrix) {
+          unpackMatrix(m.payload.packedMatrix).then(() => finish({ t1: performance.now(), status: "OK", terms: m.payload.vocabulary?.length ?? "" }));
+        } else if (m.status === "success") finish({ t1, status: "OK", terms: m.payload?.vocabulary?.length ?? "" });
         else finish({ t1, status: "GALAT", err: JSON.stringify(m.payload).slice(0, 300) });
       } else if (kind === "nb") {
         if (m.success && m.data?.trained_model) finish({ t1, status: "OK", terms: m.data.trained_model.text?.terms?.length ?? "" });

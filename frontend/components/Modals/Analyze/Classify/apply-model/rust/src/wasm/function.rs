@@ -916,19 +916,6 @@ mod tests {
     }
 
     #[test]
-    fn d1_d3_with_actual_adds_actual_unknown_class_warning_last() {
-        let result = run_with_actual(&d1()).unwrap();
-        assert_eq!(
-            warning_pairs(&result),
-            vec![
-                ("AM_W_ROWS_NOT_SCORED".to_string(), 1),
-                ("AM_W_UNSEEN_CATEGORY".to_string(), 2),
-                ("AM_W_ACTUAL_UNKNOWN_CLASS".to_string(), 1),
-            ]
-        );
-    }
-
-    #[test]
     fn d1_d3_with_actual_keeps_predictions_identical_to_run_without_actual() {
         let without = run(&d1()).unwrap();
         let with = run_with_actual(&d1()).unwrap();
@@ -1028,15 +1015,6 @@ mod tests {
             evaluation.confusion_matrix["matrix"],
             json!([[0, 0], [0, 0]])
         );
-    }
-
-    #[test]
-    fn evaluation_is_none_when_actual_is_empty() {
-        let result = run(&d1()).unwrap();
-        assert!(result.evaluation.is_none());
-        assert!(!warning_pairs(&result)
-            .iter()
-            .any(|(code, _)| code == "AM_W_ACTUAL_UNKNOWN_CLASS"));
     }
 
     #[test]

@@ -10,7 +10,7 @@ Semua versi di bawah berasal dari perintah/berkas yang benar-benar dibaca; sumbe
 | CPU | AMD Ryzen 5 4600H, 6 inti / 12 thread | diberikan pengguna; model CPU juga terlihat dari VM (§3) |
 | RAM | 16 GB DDR4 3200 MHz | diberikan pengguna (belum diverifikasi sesi ini) |
 | OS | Windows 11 Home 64-bit | diberikan pengguna |
-| rustc / cargo | rustc 1.93.0 (254b59607 2026-01-19), host `x86_64-pc-windows-msvc`, toolchain `stable-x86_64-pc-windows-msvc` | berkas `target/.rustc_info.json` hasil build Windows di repo |
+| rustc / cargo | rustc 1.93.0 (254b59607 2026-01-19), host `x86_64-pc-windows-msvc`, toolchain `stable-x86_64-pc-windows-msvc`; rerun pembersihan tes 21 Okt 2026 memakai cargo/rustc 1.99.1 (`logs/versi_pembersihan_21okt.txt`) | berkas `target/.rustc_info.json` hasil build Windows di repo |
 | WEKA | 3.9.6, `C:\Program Files\Weka-3-9-6\` (JRE bawaan Zulu 17.0.2) | `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/weka/00_ENV_dan_pemetaan_opsi.md` (dibaca dari berkas `release` JRE) |
 | Peramban terpasang | Chrome 154.0.8037.98 (dipakai Track E), Edge 154.0.4258.62, Brave 155.1.97.56 | `logs/env_windows.txt` (dicatat `run_all.ps1`, 8 Oktober 2026 10:27 WIB) |
 | Node.js / npm / Jest (npx) | v24.13.1 / 11.8.0 / 30.0.4 | `logs/env_windows.txt` |

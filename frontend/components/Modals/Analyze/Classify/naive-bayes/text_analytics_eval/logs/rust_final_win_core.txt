@@ -1,0 +1,228 @@
+    Finished `test` profile [unoptimized] target(s) in 0.42s
+     Running unittests src\lib.rs (target\debug\deps\statify_text_core-2e84a4a6f9fa5125.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\characterization.rs (target\debug\deps\characterization-92bc6cbda20b4ddc.exe)
+
+running 10 tests
+test validator_array_kosong_dan_semua_kosong_ditolak ... ok
+test validator_ngram_tidak_valid_ditolak ... ok
+test stemming_selalu_lowercase_walau_opsi_lowercase_mati ... ok
+test stopwords_custom_tidak_peka_huruf_besar_kecil ... ok
+test raw_none_menghasilkan_raw_count ... ok
+test golden_lama_log_smooth_none_pada_korpus_d ... ok
+test words_to_keep_2_pada_korpus_d_cara_lama ... ok
+test stats_v1_dipertahankan ... ok
+test ngram_unigram_vs_bigram ... ok
+test kontrak_json_lama_diparse_dan_error_diserialisasi ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\eval_blackbox_stwv.rs (target\debug\deps\eval_blackbox_stwv-cae8ad274c17e369.exe)
+
+running 31 tests
+test bb02_payload_default_dari_aplikasi_diterima_inti_sebagai_weka_raw ... ok
+test bb05_inti_menolak_ngram_min_lebih_besar_dari_max ... ok
+test bb05_inti_menolak_ngram_min_nol ... ok
+test bb06_regex_tidak_valid_menghasilkan_invalid_regex ... ok
+test bb06_regex_sah_dengan_delimiter_kustom_tetap_berjalan ... ok
+test bb09_sklearn_kombinasi_di_luar_standar_ditolak_inti ... ok
+test bb04_ngram_2_2_hanya_bigram_tanpa_unigram ... ok
+test bb04_ngram_1_2_kosakata_memuat_unigram_dan_bigram ... ok
+test bb08_stemming_porter_played_menjadi_play ... ok
+test bb05_inti_menolak_ngram_max_di_atas_5_dan_menerima_5 ... ok
+test bb02_default_weka_korpus_acuan_menghasilkan_lima_kolom_vec ... ok
+test bb08_stemming_sastrawi_dimakan_menjadi_makan ... ok
+test bb09_sklearn_standard_cocok_dengan_tfidfvectorizer_pada_korpus_acuan ... ok
+test bb06_temuan_c1_01_delimiter_hanya_spasi_jatuh_ke_pola_bawaan_inti ... ok
+test bb09_sklearn_standard_idf_smooth_dan_df_sesuai_rumus ... ok
+test bb08_stemming_porter_running_menjadi_run_dan_parks_menjadi_park ... ok
+test bb08_stemming_sastrawi_memakan_menjadi_makan ... ok
+test bb07_stopword_indonesian_membuang_kata_pada_daftar_dari_kosakata ... ok
+test bb10_batas_tepat_sepuluh_kandidat_dataset_indonesia ... ok
+test bb10_min_freq_2_tanpa_batas_words_to_keep_menyisakan_16_term ... ok
+test bb10_words_to_keep_10_min_freq_2_dataset_inggris ... ok
+test bb10_words_to_keep_nol_menyimpan_semua_term ... ok
+test bb12_seluruh_sel_kosong_ditolak_inti_dengan_empty_input ... ok
+test bb07_stopword_custom_menggantikan_daftar_dan_kata_lain_kembali_muncul ... ok
+test bb11_semua_kata_stopword_menghasilkan_empty_vocabulary ... ok
+test bb11_stopword_dan_min_freq_bersama_membuang_semua_kata ... ok
+test bb12_sel_kosong_menjadi_vektor_nol_dan_jumlah_baris_tetap ... ok
+test bb12_baris_nol_tetap_nol_dan_terbatas_pada_normalisasi_l2_sklearn ... ok
+test bb12_sel_kosong_di_awal_dan_akhir_tetap_sejajar ... ok
+test bb11_min_freq_lebih_besar_dari_semua_total_menghasilkan_empty_vocabulary_dan_batasnya_4_masih_lolos ... ok
+test bb11_dokumen_hanya_berisi_stopword_indonesian_menghasilkan_empty_vocabulary ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\eval_formulas.rs (target\debug\deps\eval_formulas-b9187a52930dd60f.exe)
+
+running 15 tests
+test tf_normalized_memakai_total_token_termasuk_ngram_sebelum_pemangkasan ... ok
+test tf_binary_pada_korpus_d ... ok
+test normalisasi_l2_nilai_acuan_dan_norma_satu ... ok
+test normalisasi_doc_length_semua_baris_bernorma_rata_rata ... ok
+test tf_log1p_pada_korpus_d ... ok
+test idf_smooth_pada_korpus_d ... ok
+test idf_standard_pada_korpus_d ... ok
+test idf_plus1_pada_korpus_d ... ok
+test normalisasi_l1_nilai_acuan_dan_jumlah_satu ... ok
+test tf_sublinear_pada_korpus_d ... ok
+test tf_raw_pada_korpus_d ... ok
+test tf_normalized_pada_korpus_d ... ok
+test grid_preset_weka_hanya_kombinasi_sah_dan_hasil_sama ... ok
+test grid_preset_sklearn_hanya_kombinasi_sah_dan_hasil_sama ... ok
+test grid_80_kombinasi_pada_standar_custom ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests\eval_integration.rs (target\debug\deps\eval_integration-02c12c9425997b86.exe)
+
+running 2 tests
+test model_k1_k5_json_rapi_dimuat_ulang_transform_identik ... ok
+test f64_acak_json_roundtrip_bit_identik ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.73s
+
+     Running tests\eval_text_pipeline.rs (target\debug\deps\eval_text_pipeline-352a241b8739ac38.exe)
+
+running 20 tests
+test ngram_di_luar_rentang_1_sampai_5_ditolak_invalid_config ... ok
+test ngram_generate_semua_rentang_1_sampai_5_sesuai_acuan_python ... ok
+test stemmer_indonesia_pasangan_yang_terbukti_di_tes_lama ... ok
+test stemmer_memaksa_lowercase_dan_metode_lain_mengembalikan_token_apa_adanya ... ok
+test stemmer_indonesia_sifat_umum_pada_kata_berimbuhan ... ok
+test stemmer_inggris_contoh_porter2_klasik ... ok
+test stemmer_inggris_melalui_pipeline_dan_batch_sejajar ... ok
+test daftar_stopword_bawaan_dimuat_utuh_oleh_build_set ... ok
+test ngram_dibentuk_setelah_stopword_dan_stemming_dan_tidak_melintasi_kata_terbuang ... ok
+test stopword_disaring_sebelum_stemming ... ok
+test ngram_hanya_bigram_tanpa_unigram_dan_token_kurang_dari_minimum_menghasilkan_kosong ... ok
+test stopword_metode_none_mengabaikan_daftar_yang_dikirim ... ok
+test stopword_indonesia_membuang_kata_negasi_tidak ... ok
+test stopword_kustom_dinormalkan_lowercase_unik_dan_terurut_pada_resep ... ok
+test stopword_inggris_tidak_peka_huruf_besar_kecil_walau_lowercase_mati ... ok
+test stopword_tanpa_daftar_atau_daftar_kosong_tidak_menyaring_apa_pun ... ok
+test stopword_json_bukan_array_string_ditolak_invalid_stopwords ... ok
+test ngram_jumlah_term_sama_dengan_rumus_untuk_tujuh_kata_berbeda ... ok
+test stopword_bawaan_indonesia_dan_inggris_sesuai_acuan_python ... ok
+test ngram_melalui_pipeline_penuh_semua_rentang_sah ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\eval_vocab_limit.rs (target\debug\deps\eval_vocab_limit-20ee951ac6750ce0.exe)
+
+running 9 tests
+test pemangkasan_kosakata_tidak_mengubah_n_dokumen_dan_df_term_yang_tersisa ... ok
+test min_term_freq_dihitung_pada_token_ngram_juga ... ok
+test min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen ... ok
+test words_to_keep_seri_tiga_arah_di_batas_dipilih_alfabetis_bukan_urutan_kemunculan ... ok
+test words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong ... ok
+test words_to_keep_memotong_ketat_walau_banyak_term_seri ... ok
+test min_term_freq_batas_inklusif_count_sama_dipertahankan ... ok
+test skenario_acuan_words_to_keep_dan_min_term_freq ... ok
+test words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests\nb_text.rs (target\debug\deps\nb_text-d17a68ebebaa1226.exe)
+
+running 13 tests
+test golden_bernoulli ... ok
+test bernoulli_menghitung_term_absen_untuk_seluruh_kosakata ... ok
+test top_k_membatasi_jumlah_dan_k_nol ... ok
+test golden_complement_tanpa_prior ... ok
+test label_di_luar_rentang_diabaikan_tanpa_panic ... ok
+test nilai_pecahan_tf_idf_diperbolehkan ... ok
+test score_rows_mengabaikan_indeks_di_luar_kosakata_dan_nilai_non_finite ... ok
+test top_k_multinomial_urut_dan_tiebreak_alfabetis ... ok
+test top_k_satu_kelas_memakai_log_weight_langsung ... ok
+test golden_multinomial ... ok
+test kelas_tanpa_dokumen_tidak_menghasilkan_nan ... ok
+test top_k_tiebreak_memakai_nama_term_bukan_indeks ... ok
+test jalur_raw_end_to_end_cocok_dengan_golden ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\s2_pipeline.rs (target\debug\deps\s2_pipeline-a249164e049f1c24.exe)
+
+running 16 tests
+test field_baru_punya_default_dan_json_v1_tetap_diterima ... ok
+test alias_nilai_lama_diterima ... ok
+test field_wajib_hilang_menghasilkan_invalid_config ... ok
+test nilai_enum_tidak_dikenal_menghasilkan_invalid_config ... ok
+test nilai_enum_baru_diterima ... ok
+test text_error_diserialisasi_sebagai_objek_code_message ... ok
+test pipeline_stopwords_dan_stemming_inggris ... ok
+test stopwords_tanpa_daftar_lanjut_tanpa_filter ... ok
+test stopwords_metode_bawaan_dengan_daftar_dari_frontend_memfilter ... ok
+test dokumen_kosong_dan_whitespace_di_tengah_menjadi_baris_nol ... ok
+test stopwords_json_rusak_diabaikan_bila_metode_none ... ok
+test pipeline_dipakai_ulang_hasilnya_konsisten_dan_sejajar ... ok
+test t6_stopwords_json_rusak_menghasilkan_invalid_stopwords ... ok
+test validasi_rentang_config ... ok
+test tf_log1p_dan_idf_plus1_dihitung_sesuai_rumus ... ok
+test alias_lama_menghasilkan_angka_v1_yang_sama ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\s3_formulas.rs (target\debug\deps\s3_formulas-f7e24739bf0d2cc3.exe)
+
+running 17 tests
+test kombinasi_tidak_sah_menghasilkan_invalid_config ... ok
+test dokumen_dengan_norma_nol_tidak_menghasilkan_nan_pada_doc_length ... ok
+test golden_weka_log1p_standard_none ... ok
+test normalisasi_l2_menghasilkan_norma_satu ... ok
+test golden_sklearn_raw_plus1_l2 ... ok
+test min_term_freq_2_membuang_tidak ... ok
+test golden_weka_raw_standard_doc_length ... ok
+test min_term_freq_diterapkan_sebelum_words_to_keep ... ok
+test custom_menerima_semua_kombinasi_termasuk_normalized ... ok
+test dokumen_yang_tokennya_terpangkas_dihitung_sebagai_kosong ... ok
+test words_to_keep_1_weka_adalah_makan_dengan_count_4 ... ok
+test stats_format_baru ... ok
+test words_to_keep_0_menyimpan_semua_kata ... ok
+test words_to_keep_custom_idf_standar_membuang_kata_yang_ada_di_semua_dokumen ... ok
+test words_to_keep_tie_break_alfabetis_weka_dan_sklearn ... ok
+test dokumen_kosong_tetap_baris_nol_tanpa_nan_pada_l1_l2_doc_length ... ok
+test df_satu_pass_sama_dengan_hitungan_naif ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\s4_fit_transform.rs (target\debug\deps\s4_fit_transform-ecaee19733e6e9ee.exe)
+
+running 22 tests
+test csr_invarian_dan_to_dense_raw_count ... ok
+test csr_json_roundtrip ... ok
+test isi_model_pada_korpus_d ... ok
+test csr_indeks_kolom_urut_menaik_per_baris ... ok
+test fit_menerapkan_validasi_yang_sama_dengan_run_pipeline ... ok
+test dokumen_kosong_dan_oov_di_tengah_tetap_sejajar_dan_tanpa_nan ... ok
+test idf_none_menyimpan_satu_dan_idf_plus1_sesuai_golden ... ok
+test model_json_memuat_kunci_sesuai_kontrak ... ok
+test doc_length_tanpa_avg_doc_norm_pada_model_menghasilkan_invalid_data ... ok
+test doc_length_memakai_avg_doc_norm_tersimpan_bukan_dari_data_transform ... ok
+test resolved_stopwords_lowercase_unik_dan_urut_alfabetis ... ok
+test to_dense_tidak_panic_pada_csr_rusak ... ok
+test keluaran_run_pipeline_sama_dengan_to_dense_fit_transform ... ok
+test t14_dokumen_seluruhnya_oov_menjadi_baris_nol_tanpa_error ... ok
+test ngram_pada_resep_dipakai_saat_transform ... ok
+test transform_dokumen_semua_kosong_diperbolehkan_menjadi_baris_nol ... ok
+test transform_menolak_array_kosong_dan_model_tidak_valid ... ok
+test transform_memakai_resolved_stopwords_dari_model_bukan_config ... ok
+test t13_kosakata_tetap_oov_diabaikan_idf_memakai_n_latih ... ok
+test transform_fit_sama_dengan_fit_transform_untuk_konfigurasi_lain ... ok
+test transform_fit_sama_dengan_fit_transform_untuk_semua_golden ... ok
+test model_json_roundtrip_menghasilkan_transform_identik ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests statify_text_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

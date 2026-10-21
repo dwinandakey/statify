@@ -11,14 +11,10 @@ describe("validateColumnPrefix", () => {
         expect(validateColumnPrefix(p)).toBeNull();
     });
 
+    // "", " VEC_", "a b", "1VEC_", "VEC-" diuji (dengan pesan persis) di eval/whitebox.validateColumnPrefix.test.ts.
     it.each([
-        ["", "kosong"],
         ["   ", "kosong"],
-        ["a b", "spasi"],
-        [" VEC_", "spasi"],
-        ["1VEC_", "diawali"],
         ["_VEC", "diawali"],
-        ["VEC-", "hanya boleh"],
         ["VÉC_", "hanya boleh"],
     ])("tidak sah: %j", (p) => {
         expect(validateColumnPrefix(p)).not.toBeNull();

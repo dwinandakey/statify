@@ -1,11 +1,11 @@
-Hasil Jest: 1322 tes; hasil Rust: 136 tes; target Rust gagal kompilasi: []
-  A_unit.md: Lulus=171
+Hasil Jest: 1386 tes; hasil Rust: 577 tes; target Rust gagal kompilasi: []
+  A_unit.md: BELUM DIJALANKAN=1, Lulus=164
   B_whitebox.md: Lulus=54
   C_blackbox_C1.md: Lulus=66
   C_blackbox_C2.md: Lulus=87
   C_blackbox_C3.md: Lulus=107
   D_accuracy.md: Lulus=4
   F_integration.md: Lulus=100
-TOTAL penanda: Lulus=589
+TOTAL penanda: BELUM DIJALANKAN=1, Lulus=582
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.29 started=2026-10-08 10:45:55 +07:00 cmd=python -X utf8 testing\text_analytics_eval\tools\apply_results.py cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.25 started=2026-10-22 01.33.39 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\tools\apply_results.py cwd=C:\Data\KULIAH\Skripsi\statify64 ===

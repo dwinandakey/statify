@@ -159,7 +159,7 @@ Catatan kode: tidak ada kode `NB_E_*` untuk fold (C2-01). Hasil yang diharapkan 
 | 1 | DS-2 (kelas A = 3 baris, B = 2 baris). Target = `kelas`. Tab Validation: Cross-Validation Folds, Number of Folds `3` (lebih besar dari kelas terkecil = 2, tetapi tidak melebihi 5 baris). Klik OK. | Analisis tetap berjalan dan selesai. Peringatan fold tidak tampil di antarmuka (catat apakah ada). | | | |
 | 2 | Ulangi dengan Number of Folds `6` (lebih besar dari 5 baris). Klik OK. | Analisis gagal. Toast galat generik: `The Naive Bayes analysis could not be completed. Check the selected variables and settings, then try again.` (pesan khusus fold tidak sampai ke pengguna pada run tanpa Text). Tidak ada kode `NB_E_`. | | | |
 | 3 | DS-1, konfigurasi teks, Cross-Validation Folds, Number of Folds `700` (melebihi 630 baris), Seed `42`. Klik OK. | Analisis gagal dengan toast `Check the cross-validation settings. The number of folds must not exceed the number of cases or the size of the smallest class.` (run ber-Text membawa pesan fold). Tanpa kode `NB_E_`. | | | |
-| 4 | Number of Folds `0`, lalu pindah tab atau klik OK. | Toast `The number of folds must be at least 1.` | | | |
+| 4 | Number of Folds `0`, lalu pindah tab atau klik OK. | Toast `The number of folds must be at least 2.` | | | |
 
 ## BB-25 — Output setelah pelatihan (F28)
 

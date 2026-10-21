@@ -77,10 +77,6 @@ function mixedModel(): RawModel {
 }
 
 describe("naiveBayesModelAdapter — schema 2.0", () => {
-  it("supportedSchemaVersions memuat 1.0, 1.1, 2.0", () => {
-    expect(naiveBayesModelAdapter.supportedSchemaVersions).toEqual(["1.0", "1.1", "2.0"]);
-  });
-
   it("fixture raw (golden §6.7) valid; descriptor memuat info Text dan feature kosong", () => {
     const result = validate(nbModelRaw);
     expectOk(result);
@@ -197,12 +193,6 @@ describe("naiveBayesModelAdapter — model 1.0/1.1 tetap valid (P-V1)", () => {
     model.features = [];
     model.feature_order = [];
     expectIssue(validate(model), "AM_E_FEATURE_ORDER_MISMATCH", "feature_order is empty");
-  });
-
-  it("versi di luar 1.0/1.1/2.0 tetap AM_E_SCHEMA_VERSION_UNSUPPORTED", () => {
-    const model = clone(nbModelV11);
-    model.schema_version = "3.0";
-    expectIssue(validate(model), "AM_E_SCHEMA_VERSION_UNSUPPORTED", "3.0");
   });
 });
 

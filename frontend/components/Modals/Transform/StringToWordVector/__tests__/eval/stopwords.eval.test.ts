@@ -7,7 +7,7 @@
 //
 // Sudah tercakup oleh __tests__/config.test.ts (tidak diulang): default config, preset sklearn, words_to_keep 0,
 // min_term_freq, "mode word memaksa n-gram 1..1; mode ngram memakai min/max", "custom stopwords di-trim dan baris kosong
-// dibuang", validasi n-gram min > max dan ukuran 6, serta n-gram 1..5 diterima (satu contoh).
+// dibuang", dan validasi n-gram min > max. Ukuran 6 dengan pesan persis ada di blackbox.stwv.options.test.tsx (BB-05).
 
 import * as fs from "fs";
 import * as path from "path";

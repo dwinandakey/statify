@@ -57,33 +57,39 @@ const viewerOutputOptions: Array<{
     },
 ];
 
+/** Teks input Top-k -> angka; kosong menjadi NaN (bukan 0) supaya tetap tidak sah. */
+export function parseTopK(raw: string): number {
+    return raw.trim() === "" ? Number.NaN : Number(raw);
+}
+
+/** Pesan galat Top-k; teksnya IDENTIK dengan cabang Top-k di `getNumericInputError`. */
+export function getTopKError(k: number): string | null {
+    if (!Number.isInteger(k) || k < TEXT_TOP_K_MIN || k > TEXT_TOP_K_MAX) {
+        return `Top-k terms per class must be a whole number between ${TEXT_TOP_K_MIN} and ${TEXT_TOP_K_MAX}.`;
+    }
+    return null;
+}
+
 export const OutputTab = ({ data, updateFormData, hasTextFeatures = false }: OutputTabProps) => {
     const handleChange = (field: keyof NaiveBayesOutputType, checked: CheckedState) => {
         updateFormData(field, normalizeOutputCheckboxValue(checked));
     };
 
-    // Input Top-k disimpan sebagai teks lokal agar pengguna bisa mengetik sementara nilai tak sah;
-    // hanya nilai bilangan bulat 1-1000 yang diteruskan ke form (nilai lain menampilkan galat).
+    // Input Top-k disimpan sebagai teks lokal agar pengguna bisa mengetik sementara nilai tak sah.
+    // UC-03 alur alternatif 4a: nilai TIDAK SAH tetap diteruskan ke form (kosong -> NaN) sehingga
+    // getNumericInputError memblokir OK/pindah tab dengan pesan yang sama dan analisis tidak dijalankan.
     const [topKText, setTopKText] = React.useState(String(data.TextTopK ?? ""));
     React.useEffect(() => {
-        setTopKText(String(data.TextTopK ?? ""));
+        // Jangan menimpa teks yang sedang diketik bila nilainya sudah sama (mis. "" <-> NaN).
+        setTopKText((prev) => (Object.is(parseTopK(prev), data.TextTopK) ? prev : String(data.TextTopK ?? "")));
     }, [data.TextTopK]);
 
-    const topKError = React.useMemo(() => {
-        const n = Number(topKText);
-        if (topKText.trim() === "" || !Number.isInteger(n) || n < TEXT_TOP_K_MIN || n > TEXT_TOP_K_MAX) {
-            return `Top-k must be a whole number between ${TEXT_TOP_K_MIN} and ${TEXT_TOP_K_MAX}.`;
-        }
-        return null;
-    }, [topKText]);
+    const topKError = React.useMemo(() => getTopKError(parseTopK(topKText)), [topKText]);
 
     const handleTopKChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const raw = e.target.value;
         setTopKText(raw);
-        const n = Number(raw);
-        if (raw.trim() !== "" && Number.isInteger(n) && n >= TEXT_TOP_K_MIN && n <= TEXT_TOP_K_MAX) {
-            updateFormData("TextTopK", n);
-        }
+        updateFormData("TextTopK", parseTopK(raw));
     };
 
     const textTableEnabled = hasTextFeatures;

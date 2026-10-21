@@ -249,11 +249,11 @@ export function getNumericInputError(formData: NaiveBayesType): string | null {
         }
     }
 
-    // Cross-Validation Folds — AGENTS.md §4.2: default 10, minimum 1.
+    // Cross-Validation Folds — AGENTS.md §4.2: default 10, minimum 2.
     if (validation.ValidationMethod === "kfold") {
         const folds = validation.KFolds;
-        if (typeof folds !== "number" || !Number.isInteger(folds) || folds < 1) {
-            return "The number of folds must be at least 1.";
+        if (typeof folds !== "number" || !Number.isInteger(folds) || folds < 2) {
+            return "The number of folds must be at least 2.";
         }
     }
 

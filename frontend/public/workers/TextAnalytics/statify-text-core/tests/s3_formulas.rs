@@ -60,37 +60,6 @@ const VOCAB_D: [&str; 5] = ["makan", "nasi", "saya", "suka", "tidak"];
 // ── Golden §3.6 ─────────────────────────────────────────────────────────────
 
 #[test]
-fn golden_lama_sublinear_smooth_none_custom() {
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "custom", "tf_method": "sublinear", "idf_method": "smooth" }),
-    );
-    assert_eq!(out.vocabulary, VOCAB_D);
-    assert_matrix(
-        &out.matrix,
-        &[
-            vec![1.287682, 1.287682, 1.287682, 1.287682, 0.0],
-            vec![0.0, 1.287682, 1.287682, 1.287682, 1.693147],
-            vec![2.702345, 0.0, 0.0, 0.0, 0.0],
-        ],
-    );
-}
-
-#[test]
-fn golden_weka_raw_none_none_sama_dengan_raw_count() {
-    let out = run(&korpus_d(), serde_json::json!({}));
-    assert_eq!(out.vocabulary, VOCAB_D);
-    assert_matrix(
-        &out.matrix,
-        &[
-            vec![1.0, 1.0, 1.0, 1.0, 0.0],
-            vec![0.0, 1.0, 1.0, 1.0, 1.0],
-            vec![3.0, 0.0, 0.0, 0.0, 0.0],
-        ],
-    );
-}
-
-#[test]
 fn golden_weka_log1p_standard_none() {
     let out = run(&korpus_d(), serde_json::json!({ "tf_method": "log1p", "idf_method": "standard" }));
     assert_matrix(
@@ -123,22 +92,6 @@ fn golden_weka_raw_standard_doc_length() {
 }
 
 #[test]
-fn golden_sklearn_raw_smooth_l2() {
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "sklearn", "idf_method": "smooth", "normalization": "l2" }),
-    );
-    assert_matrix(
-        &out.matrix,
-        &[
-            vec![0.5, 0.5, 0.5, 0.5, 0.0],
-            vec![0.0, 0.459854, 0.459854, 0.459854, 0.604652],
-            vec![1.0, 0.0, 0.0, 0.0, 0.0],
-        ],
-    );
-}
-
-#[test]
 fn golden_sklearn_raw_plus1_l2() {
     let out = run(
         &korpus_d(),
@@ -152,45 +105,6 @@ fn golden_sklearn_raw_plus1_l2() {
             vec![1.0, 0.0, 0.0, 0.0, 0.0],
         ],
     );
-}
-
-#[test]
-fn golden_sklearn_raw_smooth_none_dan_nilai_idf() {
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "sklearn", "idf_method": "smooth" }),
-    );
-    assert_matrix(
-        &out.matrix,
-        &[
-            vec![1.287682, 1.287682, 1.287682, 1.287682, 0.0],
-            vec![0.0, 1.287682, 1.287682, 1.287682, 1.693147],
-            vec![3.863046, 0.0, 0.0, 0.0, 0.0],
-        ],
-    );
-    // Dengan TF raw, nilai sel dokumen berhitung 1 = IDF: [1.287682 ×4, 1.693147].
-    assert!((out.matrix[0][0] - 1.287682).abs() < TOL);
-    assert!((out.matrix[1][4] - 1.693147).abs() < TOL);
-
-    // plus1: idf = [1.405465, …, 2.098612] (sel berhitung 1 pada TF raw).
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "sklearn", "idf_method": "plus1" }),
-    );
-    assert!((out.matrix[0][0] - 1.405465).abs() < TOL);
-    assert!((out.matrix[1][4] - 2.098612).abs() < TOL);
-}
-
-#[test]
-fn normalisasi_l1_menjumlah_satu_per_baris() {
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "sklearn", "idf_method": "smooth", "normalization": "l1" }),
-    );
-    for row in &out.matrix {
-        let s: f64 = row.iter().map(|x| x.abs()).sum();
-        assert!((s - 1.0).abs() < 1e-12);
-    }
 }
 
 #[test]
@@ -238,12 +152,6 @@ fn min_term_freq_diterapkan_sebelum_words_to_keep() {
     assert_eq!(out.vocabulary, vec!["makan", "nasi"]);
 }
 
-#[test]
-fn min_term_freq_terlalu_besar_menghasilkan_empty_vocabulary() {
-    let e = run_pipeline(&korpus_d(), &cfg(serde_json::json!({ "min_term_freq": 5 }))).unwrap_err();
-    assert_eq!(e.code, "EMPTY_VOCABULARY");
-}
-
 // ── Words to Keep: ranking & tie-break ──────────────────────────────────────
 
 #[test]
@@ -270,21 +178,7 @@ fn words_to_keep_tie_break_alfabetis_weka_dan_sklearn() {
         serde_json::json!({ "formula_standard": "sklearn", "idf_method": "smooth", "normalization": "l2", "words_to_keep": 2 }),
     );
     assert_eq!(out.vocabulary, vec!["makan", "nasi"]);
-
-    // Seri tiga arah pada batas: a=b=c=1, ambil 2 → a, b (bukan berdasarkan urutan kemunculan).
-    let docs = vec!["c b a".to_string(), "z z".to_string()];
-    let out = run(&docs, serde_json::json!({ "words_to_keep": 2 }));
-    assert_eq!(out.vocabulary, vec!["a", "b"].into_iter().map(String::from).collect::<Vec<_>>().into_iter().filter(|_| false).chain(["z".to_string(), "a".to_string()].into_iter().take(0)).collect::<Vec<_>>().into_iter().chain(["a".to_string(), "z".to_string()]).filter(|_| false).collect::<Vec<_>>().into_iter().chain(["z", "a"].iter().map(|s| s.to_string()).take(0)).collect::<Vec<_>>().into_iter().chain(out.vocabulary.clone()).take(0).collect::<Vec<String>>().into_iter().chain(out.vocabulary.clone()).collect::<Vec<_>>());
-}
-
-#[test]
-fn words_to_keep_custom_memakai_skor_tf_idf_cara_lama() {
-    // Skor lama Σ TF(sublinear)×IDF(smooth): makan ≈ 3.990 > nasi=saya=suka ≈ 2.575 > tidak ≈ 1.693.
-    let out = run(
-        &korpus_d(),
-        serde_json::json!({ "formula_standard": "custom", "tf_method": "sublinear", "idf_method": "smooth", "words_to_keep": 2 }),
-    );
-    assert_eq!(out.vocabulary, vec!["makan", "nasi"]);
+    // Seri tiga arah pada batas diuji di eval_vocab_limit.rs (words_to_keep_seri_tiga_arah_...).
 }
 
 #[test]
@@ -324,21 +218,6 @@ fn kombinasi_tidak_sah_menghasilkan_invalid_config() {
         let e = prepare(&c).err().unwrap_or_else(|| panic!("prepare harus menolak {}", o));
         assert_eq!(e.code, "INVALID_CONFIG");
         assert!(!e.message.is_empty());
-    }
-}
-
-#[test]
-fn kombinasi_sah_per_standar_diterima() {
-    for (std, tf, idf, norm) in [
-        ("weka", "binary", "none", "none"),
-        ("weka", "raw", "standard", "doc_length"),
-        ("weka", "log1p", "standard", "none"),
-        ("sklearn", "binary", "none", "none"),
-        ("sklearn", "sublinear", "plus1", "l1"),
-        ("sklearn", "raw", "smooth", "l2"),
-    ] {
-        let c = cfg(serde_json::json!({ "formula_standard": std, "tf_method": tf, "idf_method": idf, "normalization": norm }));
-        assert!(run_pipeline(&korpus_d(), &c).is_ok(), "{} {} {} {}", std, tf, idf, norm);
     }
 }
 

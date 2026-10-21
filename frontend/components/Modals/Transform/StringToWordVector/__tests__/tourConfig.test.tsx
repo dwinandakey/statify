@@ -4,7 +4,7 @@
 // helpers/loadStwvHook karena `import.meta.url`).
 
 import React from "react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { Variable } from "@/types/Variable";
 import StringToWordVectorModal from "../StringToWordVectorModal";
@@ -132,8 +132,20 @@ describe("STWV dialog tour", () => {
         const firstOptions = steps.findIndex((s) => s.requiredTab === "options");
         const target = firstOptions + 1;
         for (let i = 0; i < target; i++) {
-            await userEvent.click(screen.getByTestId("tour-popup-next-button"));
-            // Tunggu popup berpindah ke langkah berikutnya sebelum klik lagi
+            // Klik Next hanya setelah langkah ke-i selesai dirender (judul, target, dan tab aktif);
+            // perpindahan tab memicu render ulang tertunda sehingga klik yang terlalu cepat bisa hilang.
+            await waitFor(
+                () => {
+                    expect(screen.getByTestId("tour-popup-title")).toHaveTextContent(steps[i].title);
+                    expect(document.getElementById(steps[i].targetId)).not.toBeNull();
+                    expect(screen.getByRole("tab", { selected: true })).toHaveAttribute(
+                        "id",
+                        `stwv-${steps[i].requiredTab}-tab-trigger`
+                    );
+                },
+                { timeout: 5000 }
+            );
+            fireEvent.click(screen.getByTestId("tour-popup-next-button"));
             await waitFor(
                 () => expect(screen.getByTestId("tour-popup-step-counter")).toHaveTextContent(`Step ${i + 2} of`),
                 { timeout: 5000 }

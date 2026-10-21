@@ -4,11 +4,12 @@
 // pemeriksaan loader dan kode galat AM_E_* yang sebenarnya dihasilkan (diverifikasi terhadap
 // constants/apply-model-codes.ts dan services/model-loader.ts).
 //
-// Sudah tercakup oleh services/__tests__/model-loader.test.ts (tidak diulang di sini):
-//  - "ukuran 11 MB -> AM_E_FILE_TOO_LARGE", "ukuran tepat 10 MB masih diterima (batas inklusif)",
-//  - 'isi "{bad" -> AM_E_PARSE', "file .txt -> AM_E_PARSE", "file.text() gagal dibaca -> AM_E_PARSE",
-//  - "JSON valid tetapi bukan objek -> AM_E_NOT_OBJECT" (satu contoh), model_type "decision_tree",
-//  - D1 (1.1) dan D2 (1.0) berhasil dimuat.
+// Sudah tercakup di tempat lain (tidak diulang di sini):
+//  - eval/whitebox.loadModelFromFile.test.ts (WB-4 jalur 1-6): model valid, ".txt -> AM_E_PARSE",
+//    "ukuran batas + 1 -> AM_E_FILE_TOO_LARGE", "file.text() gagal -> AM_E_PARSE", 'isi "{bad" -> AM_E_PARSE',
+//    '"[]" -> AM_E_NOT_OBJECT'.
+//  - eval/blackbox.am.loader.test.ts (BB-29b/k): ".JSON diterima", "tepat 10 MB diterima".
+//  - services/__tests__/model-loader.test.ts: D1 (1.1) dan D2 (1.0) berhasil dimuat.
 // Dan oleh adapters/__tests__/naive-bayes-adapter*.test.ts: validasi schema_version/classes/terms pada level adapter.
 // Yang ditambahkan di sini: batas 10 MB + 1 byte tanpa membaca isi, urutan pemeriksaan (ekstensi -> ukuran -> parse),
 // variasi JSON rusak (kosong, terpotong), seluruh nilai JSON non-objek, schema tidak dikenal LEWAT loader, kelas kosong

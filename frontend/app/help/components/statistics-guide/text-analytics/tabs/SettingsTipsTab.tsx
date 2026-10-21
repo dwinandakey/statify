@@ -54,8 +54,8 @@ export const SettingsTipsTab = () => {
           </TipRow>
           <TipRow name="Stemming">
             {isEn
-              ? "Indonesian (Sastrawi) removes Indonesian affixes (for example makanan → makan); English (Porter) removes English suffixes (for example running → run). Use the stemmer that matches the language. Stemming merges word variants, which helps small datasets, but it can also merge words with different meanings; compare with None if in doubt. Stemming makes processing slower on large datasets."
-              : "Indonesian (Sastrawi) membuang imbuhan bahasa Indonesia (misalnya makanan → makan); English (Porter) membuang akhiran bahasa Inggris (misalnya running → run). Gunakan stemmer yang sesuai bahasa teks. Stemming menggabungkan variasi kata sehingga membantu dataset kecil, tetapi dapat juga menggabungkan kata yang maknanya berbeda; bandingkan dengan None bila ragu. Stemming membuat proses lebih lambat pada dataset besar."}
+              ? "Indonesian (Sastrawi) removes Indonesian affixes (for example makanan → makan); English (Snowball/Porter2) removes English suffixes (for example running → run). Use the stemmer that matches the language. Stemming merges word variants, which helps small datasets, but it can also merge words with different meanings; compare with None if in doubt. Stemming makes processing slower on large datasets."
+              : "Indonesian (Sastrawi) membuang imbuhan bahasa Indonesia (misalnya makanan → makan); English (Snowball/Porter2) membuang akhiran bahasa Inggris (misalnya running → run). Gunakan stemmer yang sesuai bahasa teks. Stemming menggabungkan variasi kata sehingga membantu dataset kecil, tetapi dapat juga menggabungkan kata yang maknanya berbeda; bandingkan dengan None bila ragu. Stemming membuat proses lebih lambat pada dataset besar."}
           </TipRow>
         </div>
       </HelpCard>

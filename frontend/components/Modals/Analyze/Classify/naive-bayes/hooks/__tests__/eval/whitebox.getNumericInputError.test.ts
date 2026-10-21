@@ -137,21 +137,21 @@ it("WB-2 jalur 20: ValidationMethod = \"kfold\"; KFolds = \"10\" (string)", () =
     const f = base();
     f.validation.ValidationMethod = "kfold";
     f.validation.KFolds = "10" as unknown as number;
-    expect(getNumericInputError(f)).toBe("The number of folds must be at least 1.");
+    expect(getNumericInputError(f)).toBe("The number of folds must be at least 2.");
 });
 
 it("WB-2 jalur 21: ValidationMethod = \"kfold\"; KFolds = 2.5", () => {
     const f = base();
     f.validation.ValidationMethod = "kfold";
     f.validation.KFolds = 2.5;
-    expect(getNumericInputError(f)).toBe("The number of folds must be at least 1.");
+    expect(getNumericInputError(f)).toBe("The number of folds must be at least 2.");
 });
 
-it("WB-2 jalur 22: ValidationMethod = \"kfold\"; KFolds = 0", () => {
+it("WB-2 jalur 22: ValidationMethod = \"kfold\"; KFolds = 1", () => {
     const f = base();
     f.validation.ValidationMethod = "kfold";
-    f.validation.KFolds = 0;
-    expect(getNumericInputError(f)).toBe("The number of folds must be at least 1.");
+    f.validation.KFolds = 1;
+    expect(getNumericInputError(f)).toBe("The number of folds must be at least 2.");
 });
 
 it("WB-2 jalur 23: RandomSeed = \"42\" (string)", () => {

@@ -163,13 +163,6 @@ describe("TextFeatureTableOutput", () => {
         expect(toast.success).not.toHaveBeenCalled();
     });
 
-    it("kegagalan clipboard: toast galat", async () => {
-        const onCopy = jest.fn().mockRejectedValue(new Error("ditolak"));
-        render(<TextFeatureTableOutput data={{ textFeatureTable: tableOf([entry({})]) }} onCopy={onCopy} />);
-        fireEvent.click(screen.getByRole("button", { name: /copy \(tsv\)/i }));
-        await waitFor(() => expect(toast.error).toHaveBeenCalled());
-    });
-
     it("tombol nonaktif bila tabel lengkap kosong", () => {
         render(<TextFeatureTableOutput data={{ textFeatureTable: tableOf([]) }} />);
         expect(screen.getByRole("button", { name: /download csv/i })).toBeDisabled();

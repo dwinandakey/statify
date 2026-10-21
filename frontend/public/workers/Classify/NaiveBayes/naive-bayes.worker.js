@@ -20,10 +20,10 @@
 // sebagai penanda "kode sekarang mengharapkan wasm asli", TAPI file
 // `pkg/*` di folder ini MASIH ISI DUMMY Fase 8 sampai pemilik produk
 // menjalankan build dan menyalin ulang `pkg/*` secara manual).
-import init, { NaiveBayesAnalysis } from "/workers/Classify/NaiveBayes/pkg/wasm.js?v=naive-bayes-v3-20261005a";
+import init, { NaiveBayesAnalysis } from "/workers/Classify/NaiveBayes/pkg/wasm.js?v=naive-bayes-v3-20261022a";
 
 const WASM_URL =
-  "/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm?v=naive-bayes-v3-20261005a";
+  "/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm?v=naive-bayes-v3-20261022a";
 
 self.onmessage = async (e) => {
   // v2: `text` (payload Text, AGENTS_V2 §5.1) bersifat opsional; `undefined` = payload v1 tanpa Text.

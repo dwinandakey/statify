@@ -98,8 +98,8 @@ def build_wb2():
     g.node("sf", "stmt", "folds = KFolds", 'const folds = validation.KFolds', 254)
     pred("f1", "typeof folds != number?", 'typeof folds !== "number"  (operan 1 ||)', 255)
     pred("f2", "!isInteger(folds)?", '!Number.isInteger(folds)  (operan 2 ||)', 255)
-    pred("f3", "folds < 1?", 'folds < 1  (operan 3 ||)', 255)
-    g.node("rf", "ret", "return 'folds'", 'return "The number of folds must be at least 1."', 256, msg="The number of folds must be at least 1.")
+    pred("f3", "folds < 2?", 'folds < 2  (operan 3 ||)', 255)
+    g.node("rf", "ret", "return 'folds'", 'return "The number of folds must be at least 2."', 256, msg="The number of folds must be at least 2.")
     # Seed
     pred("s0", "RandomSeed != null?", 'validation.RandomSeed !== null', 263)
     pred("s1", "typeof seed != number?", 'typeof validation.RandomSeed !== "number"  (operan 1 ||)', 265)

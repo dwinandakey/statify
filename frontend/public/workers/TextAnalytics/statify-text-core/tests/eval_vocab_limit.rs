@@ -13,10 +13,8 @@
 //!
 //! Sudah tercakup oleh tes lama (tidak diulang): `s3_formulas.rs::words_to_keep_tie_break_alfabetis_weka_dan_sklearn`
 //! (korpus D keep=2), `words_to_keep_1_weka_adalah_makan_dengan_count_4`, `words_to_keep_0_menyimpan_semua_kata`,
-//! `min_term_freq_2_membuang_tidak`, `min_term_freq_diterapkan_sebelum_words_to_keep`,
-//! `min_term_freq_terlalu_besar_menghasilkan_empty_vocabulary`. Catatan: pernyataan seri-tiga-arah pada tes lama
-//! `words_to_keep_tie_break_alfabetis_weka_dan_sklearn` berbentuk tautologi (membandingkan `out.vocabulary`
-//! dengan dirinya sendiri), sehingga kasus itu dijaga ulang secara nyata di berkas ini.
+//! `min_term_freq_2_membuang_tidak`, `min_term_freq_diterapkan_sebelum_words_to_keep`; min_term_freq terlalu besar
+//! dicakup `eval_blackbox_stwv.rs` (BB-11). Kasus seri tiga arah dijaga di berkas ini.
 
 use statify_text_core::{fit, run_pipeline, TextVectorizerConfig, VectorizerOutput};
 
@@ -123,16 +121,6 @@ fn words_to_keep_memotong_ketat_walau_banyak_term_seri() {
 }
 
 #[test]
-fn words_to_keep_seri_diurutkan_bytewise_huruf_besar_sebelum_huruf_kecil() {
-    // lowercase = false: "Mango" (M=77) < "Zebra" (Z=90) < "apple" (a=97). Keep 2 -> Mango, Zebra.
-    let out = run(
-        &docs(&["Zebra apple Mango"]),
-        serde_json::json!({ "words_to_keep": 2, "lowercase": false }),
-    );
-    assert_eq!(out.vocabulary, vec!["Mango", "Zebra"]);
-}
-
-#[test]
 fn words_to_keep_hasil_stabil_pada_pengulangan_walau_urutan_hashmap_acak() {
     // HashMap memakai RandomState berbeda tiap instance: bila tie-break bergantung pada urutan iterasi,
     // hasil akan berubah antar pemanggilan. Seluruh pemanggilan harus identik.
@@ -153,44 +141,7 @@ fn words_to_keep_sama_dengan_atau_melebihi_jumlah_kandidat_tidak_memotong() {
     }
 }
 
-#[test]
-fn words_to_keep_3_pada_korpus_d_memilih_makan_nasi_saya() {
-    // makan=4 teratas; nasi=saya=suka=2 seri -> nasi, saya (suka tersingkir alfabetis).
-    for o in [
-        serde_json::json!({ "words_to_keep": 3 }),
-        serde_json::json!({ "formula_standard": "sklearn", "idf_method": "smooth", "words_to_keep": 3 }),
-    ] {
-        let out = run(&korpus_d(), o);
-        assert_eq!(out.vocabulary, vec!["makan", "nasi", "saya"]);
-    }
-}
-
 // ── Words to Keep pada preset Custom (skor TF x IDF) ────────────────────────
-
-#[test]
-fn custom_ranking_memakai_skor_bukan_total_count_dan_seri_alfabetis() {
-    // a muncul 1x di dokumen pendek (TF normalized 1.0); x muncul 7x di dokumen 10 token (0.7); b 3x (0.3).
-    // Custom (sum TF): a=1.0 > x=0.7 > b=0.3 -> keep 2 = a, x. Weka (total count): x=7, b=3 -> b, x.
-    let d = docs(&["a", "b b b x x x x x x x"]);
-    let custom = run(
-        &d,
-        serde_json::json!({
-            "formula_standard": "custom", "tf_method": "normalized", "idf_method": "none", "words_to_keep": 2
-        }),
-    );
-    assert_eq!(custom.vocabulary, vec!["a", "x"]);
-    let weka = run(&d, serde_json::json!({ "words_to_keep": 2 }));
-    assert_eq!(weka.vocabulary, vec!["b", "x"]);
-
-    // Semua skor sama (TF binary, IDF none) -> seri -> alfabetis.
-    let seri = run(
-        &docs(&["d c b a"]),
-        serde_json::json!({
-            "formula_standard": "custom", "tf_method": "binary", "idf_method": "none", "words_to_keep": 2
-        }),
-    );
-    assert_eq!(seri.vocabulary, vec!["a", "b"]);
-}
 
 // ── Min term frequency ──────────────────────────────────────────────────────
 
@@ -213,14 +164,6 @@ fn min_term_freq_menghitung_total_kemunculan_bukan_jumlah_dokumen() {
     let out = run(&d, serde_json::json!({ "min_term_freq": 3 }));
     assert_eq!(out.vocabulary, vec!["x"]);
     assert_eq!(out.stats.empty_documents, 2, "dokumen yang kehilangan semua term menjadi baris nol");
-}
-
-#[test]
-fn min_term_freq_lalu_words_to_keep_dengan_seri() {
-    // d=1 gugur (mtf=2); a=b=c=2 seri; keep 2 -> a, b.
-    let d = docs(&["a a b b c c d"]);
-    let out = run(&d, serde_json::json!({ "min_term_freq": 2, "words_to_keep": 2 }));
-    assert_eq!(out.vocabulary, vec!["a", "b"]);
 }
 
 #[test]

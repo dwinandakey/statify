@@ -292,10 +292,16 @@ describe("BB-17 Complement dengan prediktor non-teks", () => {
 });
 
 // =============================================================================================
-// BB-18 — Text alpha 0 atau > maksimum
+// BB-18 — Text alpha 0 atau > maksimum (UC-03 alur alternatif 4a: pesan tampil, analisis tidak dijalankan)
 // =============================================================================================
 describe("BB-18 Alpha di luar batas", () => {
-    it("BB-18: Text Alpha 0 dan 1000 menampilkan pesan angka; nilai tidak sah tidak diteruskan ke form", async () => {
+    const TEXT_ALPHA_LOW = "Text smoothing alpha must be greater than 0.";
+    const TEXT_ALPHA_HIGH = "Text smoothing alpha must not exceed 999.";
+    const ALPHA_LOW = "Smoothing Alpha must be greater than 0.";
+    const ALPHA_HIGH = "Smoothing Alpha must not exceed 999.";
+    const TOAST_ID = expect.objectContaining({ id: "naive-bayes-validation-error" });
+
+    it("BB-18: Text Alpha 0 dan 1000 menampilkan pesan; OK menolak menjalankan analisis; nilai sah memulihkan", async () => {
         await renderContainer();
         setTarget("Kelas");
         moveTo("Teks", "rawText");
@@ -303,32 +309,82 @@ describe("BB-18 Alpha di luar batas", () => {
         const input = await screen.findByLabelText(/Text Alpha/i);
 
         fireEvent.change(input, { target: { value: "0" } });
-        expect(screen.getByText("Text Alpha must be greater than 0")).toBeInTheDocument();
+        expect(screen.getByText(TEXT_ALPHA_LOW)).toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenCalledWith(TEXT_ALPHA_LOW, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
 
         fireEvent.change(input, { target: { value: "1000" } });
-        expect(screen.getByText("Text Alpha must not exceed 999")).toBeInTheDocument();
-        expect(screen.queryByText("Text Alpha must be greater than 0")).not.toBeInTheDocument();
+        expect(screen.getByText(TEXT_ALPHA_HIGH)).toBeInTheDocument();
+        expect(screen.queryByText(TEXT_ALPHA_LOW)).not.toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenLastCalledWith(TEXT_ALPHA_HIGH, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
 
-        // Batas atas yang sah (999) tidak menampilkan pesan.
-        fireEvent.change(input, { target: { value: "999" } });
-        expect(screen.queryByText(/Text Alpha must/)).not.toBeInTheDocument();
-
-        // Nilai tidak sah terakhir tidak pernah masuk ke form: setelah pindah tab nilai kembali ke nilai sah terakhir.
-        fireEvent.change(input, { target: { value: "0" } });
+        // Nilai tidak sah juga menahan perpindahan tab (nilai tetap tersimpan di form, tidak dibuang diam-diam).
         openTab(/Validation/i);
-        await screen.findByLabelText(/Training Percentage/i);
-        openTab(/^Options$/i);
-        expect(await screen.findByLabelText(/Text Alpha/i)).toHaveValue(999);
+        expect(screen.getByRole("tab", { name: /^Options$/i })).toHaveAttribute("data-state", "active");
+        expect(screen.getByLabelText(/Text Alpha/i)).toHaveValue(1000);
+
+        // Batas atas yang sah (999) menghapus pesan dan OK menjalankan analisis dengan nilai itu.
+        fireEvent.change(input, { target: { value: "999" } });
+        expect(screen.queryByText(/Text smoothing alpha must/)).not.toBeInTheDocument();
+        fireEvent.click(okButton());
+        await waitFor(() => expect(mockAnalyze).toHaveBeenCalledTimes(1));
+        expect(lastAnalyzeArgs().configData.options.TextAlpha).toBe(999);
     });
 
-    it("BB-18: Smoothing Alpha 0 dan 1000 menampilkan pesan angka (alpha kategorik)", async () => {
+    it("BB-18: Smoothing Alpha 0 dan 1000 menampilkan pesan; OK menolak menjalankan analisis; nilai sah memulihkan", async () => {
         await renderContainer();
+        setTarget("Kelas");
+        moveTo("Teks", "excluded");
         openTab(/^Options$/i);
         const input = await screen.findByLabelText(/Smoothing Alpha/i);
+
         fireEvent.change(input, { target: { value: "0" } });
-        expect(screen.getByText("Smoothing Alpha must be greater than 0")).toBeInTheDocument();
+        expect(screen.getByText(ALPHA_LOW)).toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenCalledWith(ALPHA_LOW, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
+
         fireEvent.change(input, { target: { value: "1000" } });
-        expect(screen.getByText("Smoothing Alpha must not exceed 999")).toBeInTheDocument();
+        expect(screen.getByText(ALPHA_HIGH)).toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenLastCalledWith(ALPHA_HIGH, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
+
+        fireEvent.change(input, { target: { value: "0.5" } });
+        expect(screen.queryByText(/Smoothing Alpha must/)).not.toBeInTheDocument();
+        fireEvent.click(okButton());
+        await waitFor(() => expect(mockAnalyze).toHaveBeenCalledTimes(1));
+        expect(lastAnalyzeArgs().configData.options.SmoothingAlpha).toBe(0.5);
+    });
+
+    it("BB-18: Top-k 0 / kosong menampilkan pesan; OK menolak menjalankan analisis; nilai sah memulihkan", async () => {
+        const TOP_K = "Top-k terms per class must be a whole number between 1 and 1000.";
+        await renderContainer();
+        setTarget("Kelas");
+        moveTo("Teks", "rawText");
+        openTab(/^Output$/i);
+        const input = await screen.findByLabelText("Top-k terms per class");
+
+        fireEvent.change(input, { target: { value: "0" } });
+        expect(screen.getByText(TOP_K)).toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenCalledWith(TOP_K, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
+
+        fireEvent.change(input, { target: { value: "" } });
+        expect(screen.getByText(TOP_K)).toBeInTheDocument();
+        fireEvent.click(okButton());
+        expect(toast.error).toHaveBeenLastCalledWith(TOP_K, TOAST_ID);
+        expect(mockAnalyze).not.toHaveBeenCalled();
+
+        fireEvent.change(input, { target: { value: "25" } });
+        expect(screen.queryByText(TOP_K)).not.toBeInTheDocument();
+        fireEvent.click(okButton());
+        await waitFor(() => expect(mockAnalyze).toHaveBeenCalledTimes(1));
+        expect(lastAnalyzeArgs().configData.output.TextTopK).toBe(25);
     });
 });
 

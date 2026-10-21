@@ -79,7 +79,7 @@ MUT2 = {
     ("h4", "T"): ("TP", "TrainingPercentage = 100", "f.validation.TrainingPercentage = 100;"),
     ("f1", "T"): ("KF", 'KFolds = "10" (string)', 'f.validation.KFolds = "10" as unknown as number;'),
     ("f2", "T"): ("KF", "KFolds = 2.5", "f.validation.KFolds = 2.5;"),
-    ("f3", "T"): ("KF", "KFolds = 0", "f.validation.KFolds = 0;"),
+    ("f3", "T"): ("KF", "KFolds = 1", "f.validation.KFolds = 1;"),
     ("s0", "T"): ("SEED", "RandomSeed = 42", "f.validation.RandomSeed = 42;"),
     ("s1", "T"): ("SEED", 'RandomSeed = "42" (string)', 'f.validation.RandomSeed = "42" as unknown as number;'),
     ("s2", "T"): ("SEED", "RandomSeed = 4.2", "f.validation.RandomSeed = 4.2;"),

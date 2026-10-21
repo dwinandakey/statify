@@ -163,4 +163,4 @@ Tambahan (tanpa Statify): scikit-learn terhadap WEKA pada resolusi penuh
 | K5m | WEKA | [101, 34] ; [34, 101] |
 
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.88 started=2026-10-08 10:29:59 +07:00 cmd=python -X utf8 testing\text_analytics_eval\accuracy\compare_predictions.py --dataset pilkada cwd=E:\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1.56 started=2026-10-22 00.14.12 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\compare_predictions.py --dataset pilkada cwd=C:\Data\KULIAH\Skripsi\statify64 ===

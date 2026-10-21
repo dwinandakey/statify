@@ -39,11 +39,13 @@ Tingkat mengikuti catatan masing-masing temuan (sedang/tinggi = memengaruhi hasi
 
 ## BUGS_A - pengamatan Track A (pengujian unit tambahan)
 
-Seluruh 105 tes Jest Track A lulus di Windows (`logs/jest_A_win.json`) dan di VM (`logs/jest_A_vm.json`). Seluruh 66 fungsi tes Rust Track A dikompilasi dan lulus pada `cargo test` di Windows (`logs/rust_eval_formulas.txt` 15, `rust_eval_vocab_limit.txt` 13, `rust_eval_text_pipeline.txt` 20, `rust_eval_partition.txt` 18; 8 Oktober 2026). Percobaan `rustc` awal pada harness sandbox tidak punya log yang dapat ditelusuri dan tidak dihitung sebagai hasil; yang dipakai hanya log Windows.
+Seluruh 105 tes Jest Track A lulus di Windows (`logs/jest_A_win.json`) dan di VM (`logs/jest_A_vm.json`); sejak 21 Okt 2026 Track A berisi 106 tes (satu tes rumus baru di `formula-output.eval.test.ts`), semuanya lulus. Seluruh 66 fungsi tes Rust Track A dikompilasi dan lulus pada `cargo test` di Windows (`logs/rust_eval_formulas.txt` 15, `rust_eval_vocab_limit.txt` 13, `rust_eval_text_pipeline.txt` 20, `rust_eval_partition.txt` 18; 8 Oktober 2026). Pada 21 Oktober 2026 enam tes duplikat dihapus (`eval_vocab_limit` 13 menjadi 9, `eval_partition` 18 menjadi 16); 60 fungsi yang tersisa lulus pada rerun Windows (rustc 1.99.1, `logs/rust_pembersihan_21okt_{core,nb}.txt`). Percobaan `rustc` awal pada harness sandbox tidak punya log yang dapat ditelusuri dan tidak dihitung sebagai hasil; yang dipakai hanya log Windows.
 
 Skala keyakinan yang dipakai: **terverifikasi dengan tes yang dijalankan** (Jest dan `cargo test` di Windows), **analisis kode** (dibaca baris demi baris, tidak ada tes yang mengeksekusinya), **dugaan** (inferensi tanpa pembuktian).
 
 ### A-1 (sedang): `KFolds = 1` lolos validasi dan menghasilkan evaluasi tanpa data latih
+
+**Status 22 Okt 2026: DIPERBAIKI** (disetujui pemilik). Minimum fold kini 2 di UI (`getNumericInputError`, baris 255: `folds < 2`, pesan "The number of folds must be at least 2.") dan di Rust (`validate_fold_count`, baris 179: `folds < 2`, pesan "Number of folds must be at least 2 (got {})."). Tes `k1_*` di `rust/tests/eval_partition.rs` dan `hooks/__tests__/eval/kfold.eval.test.ts` kini menegaskan penolakan. Uraian di bawah dipertahankan sebagai catatan temuan awal.
 
 Ringkas: formulir Naive Bayes dan engine Rust sama-sama menerima jumlah fold 1. Satu fold berarti seluruh data menjadi data uji dan data latih kosong, sehingga metrik "cross-validation" yang dilaporkan tidak bermakna dan tidak disertai galat atau peringatan.
 
@@ -61,7 +63,7 @@ Ringkas: formulir Naive Bayes dan engine Rust sama-sama menerima jumlah fold 1. 
 #### Langkah reproduksi
 1. Antarmuka: buka Naive Bayes, pilih Validation = K-Fold, isi Number of folds = 1, jalankan analisis pada dataset kelas biner mana pun. Tidak ada pesan galat; hasil muncul.
 2. Sisi TS (tanpa antarmuka): `getNumericInputError` dengan `ValidationMethod = "kfold"`, `KFolds = 1` mengembalikan `null`. Tes: `kfold.eval.test.ts` > "eval A(e): batas jumlah fold pada getNumericInputError KARAKTERISASI TEMUAN: KFolds = 1 DITERIMA (hanya nilai < 1 yang ditolak)". DIJALANKAN dan lulus.
-3. Sisi Rust: `cargo test --test eval_partition` di `.../naive-bayes/rust` (`k1_lolos_validate_fold_count_tanpa_peringatan`, `k1_menghasilkan_satu_fold_berisi_semua_indeks`, `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data`, `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama`). Dijalankan di Windows dan lulus (`logs/rust_eval_partition.txt`, 18 dari 18); ekspektasinya dinyatakan sebagai "PERILAKU SAAT INI" (bukan perilaku yang seharusnya) di komentar tes, sehingga lulusnya tes membuktikan bahwa perilaku itu benar-benar terjadi.
+3. Sisi Rust: `cargo test --test eval_partition` di `.../naive-bayes/rust` (`k1_lolos_validate_fold_count_tanpa_peringatan`, `k1_menghasilkan_satu_fold_berisi_semua_indeks`, `k1_fold_latih_kosong_dan_fold_uji_adalah_seluruh_data`, `k1_evaluasi_end_to_end_tanpa_panic_tanpa_nan_tetapi_semua_prediksi_kelas_alfabetis_pertama`). Dijalankan di Windows dan lulus (`logs/rust_eval_partition.txt`, 18 dari 18 pada 8 Okt; 16 dari 16 setelah dua tes duplikat dihapus 21 Okt 2026, `logs/rust_pembersihan_21okt_nb.txt`); ekspektasinya dinyatakan sebagai "PERILAKU SAAT INI" (bukan perilaku yang seharusnya) di komentar tes, sehingga lulusnya tes membuktikan bahwa perilaku itu benar-benar terjadi.
 
 #### Dampak
 - Data latih tiap evaluasi k = 1 kosong. Terverifikasi oleh tes Rust yang dijalankan (jalur numerik/kategorik): semua kelas mendapat prior 0, skor sama, argmax memakai `score > best` pada kelas terurut alfabetis sehingga SEMUA prediksi jatuh ke kelas alfabetis pertama. Akurasi yang dilaporkan sama dengan proporsi kelas itu (mis. 3/9 pada fixture tes) dan Kappa 0, tanpa galat. Pengguna bisa menyalin angka itu sebagai hasil validasi silang.
@@ -73,12 +75,12 @@ Ringkas: formulir Naive Bayes dan engine Rust sama-sama menerima jumlah fold 1. 
 Batas minimum 2 di kedua lapisan, dengan pesan diperbarui:
 - TS: `useNaiveBayesValidation.ts:255` ubah `folds < 1` menjadi `folds < 2`; pesan menjadi "The number of folds must be at least 2.".
 - Rust: `partition.rs:179` ubah `folds < 1` menjadi `folds < 2`; pesan menjadi "Number of folds must be at least 2 (got {}).".
-- Sesuaikan tes yang mengkarakterisasi perilaku lama: `kfold.eval.test.ts` (KFolds = 1 menjadi ditolak), `eval_partition.rs` (k1_* menjadi `Err`), tes lama `folds_less_than_one_is_hard_blocked`, `whitebox.getNumericInputError`, `useNaiveBayesValidation.test.ts`, dan teks AGENTS.md 4.2.
+- Sesuaikan tes yang mengkarakterisasi perilaku lama: `kfold.eval.test.ts` (KFolds = 1 menjadi ditolak), `eval_partition.rs` (k1_* menjadi `Err`), tes lama `folds_less_than_one_is_hard_blocked`, `eval/whitebox.getNumericInputError.test.ts` (WB-2), dan teks AGENTS.md 4.2.
 - Tidak mengubah kode produksi dalam paket ini (aturan Track A).
 
 #### Keyakinan
 - Sisi TS (k = 1 diterima): **terverifikasi dengan tes yang dijalankan**.
-- Sisi Rust (partisi satu fold dengan latih kosong, prediksi seragam, akurasi 3/9, kappa 0 pada fixture 9 baris): **terverifikasi dengan tes yang dijalankan** (`cargo test --test eval_partition` di Windows, 18 dari 18 lulus). Jalur teks mentah (`NB_E_TEXT_EMPTY_VOCAB_FOLD`) tetap **analisis kode**: `fit_split` memanggil `fit_transform` dengan daftar dokumen kosong, galat `EMPTY_INPUT` pemeta `map_core_error` menjadi kode itu (tidak dieksekusi).
+- Sisi Rust (partisi satu fold dengan latih kosong, prediksi seragam, akurasi 3/9, kappa 0 pada fixture 9 baris): **terverifikasi dengan tes yang dijalankan** (`cargo test --test eval_partition` di Windows, 18 dari 18 lulus pada 8 Okt; 16 dari 16 pada rerun 21 Okt 2026). Jalur teks mentah (`NB_E_TEXT_EMPTY_VOCAB_FOLD`) tetap **analisis kode**: `fit_split` memanggil `fit_transform` dengan daftar dokumen kosong, galat `EMPTY_INPUT` pemeta `map_core_error` menjadi kode itu (tidak dieksekusi).
 
 ### A-2 (informasi): ukuran fold total tidak seimbang pada k-fold bertingkat
 
@@ -98,7 +100,7 @@ Batas minimum 2 di kedua lapisan, dengan pesan diperbarui:
 
 - Lokasi: `frontend/public/workers/TextAnalytics/statify-text-core/tests/s3_formulas.rs:277`, tes `words_to_keep_tie_break_alfabetis_weka_dan_sklearn`.
 - Pengamatan: argumen kedua `assert_eq!` dirangkai dari rantai iterator yang berakhir dengan `.chain(out.vocabulary.clone())` setelah beberapa `take(0)`/`filter(|_| false)`, sehingga ekspektasi selalu sama dengan `out.vocabulary`. Asersi seri tiga arah itu selalu benar dan tidak menguji apa pun.
-- Penanganan: tidak diubah (tes lama). Skenario yang sama diuji sungguhan di `eval_vocab_limit.rs` (`tie_tiga_arah...`), dengan nilai acuan dari `unit/reference_values.py`.
+- Penanganan: tidak diubah selama evaluasi (tes lama); blok asersi tautologi itu dibuang pada pembersihan 21 Okt 2026, tesnya tetap (`LAPORAN_PEMBERSIHAN_TES_21Okt.md`). Skenario yang sama diuji sungguhan di `eval_vocab_limit.rs` (`tie_tiga_arah...`), dengan nilai acuan dari `unit/reference_values.py`.
 - Keyakinan: analisis kode (bacaan sintaks), tidak memerlukan eksekusi.
 
 
@@ -115,8 +117,9 @@ Tidak ada tes evaluasi Track B yang gagal (54 dari 54 lulus di VM, `logs/jest_B_
 - Usulan: tambahkan cabang `else` yang mengembalikan pesan galat, atau normalisasi `ValidationMethod` di `mergeWithDefaults`.
 
 ### B-2 (informasi): `KFolds = 1` diterima
+- Status 22 Okt 2026: DIPERBAIKI (lihat BUGS_A.md A-1). Predikat simpul 35 WB-2 kini `folds < 2`; struktur graf (N, E, V(G), jalur) tidak berubah, masukan jalur 22 menjadi `KFolds = 1` dan pesan simpul 36 menjadi "The number of folds must be at least 2.".
 - Lokasi: baris 253–258 yang sama. Sesuai AGENTS.md §4.2 (minimum 1), sehingga bukan penyimpangan dari spesifikasi.
-- Catatan: k-fold dengan satu fold secara metodologis degenerate (tidak ada data uji). Tes lama (`whitebox.getNumericInputError.test.ts`, "Catatan temuan") sudah mencatatnya; di sini hanya dirujuk. Batas atas fold terhadap ukuran data memang sengaja diserahkan ke engine Rust (komentar baris 181–184).
+- Catatan: k-fold dengan satu fold secara metodologis degenerate (tidak ada data uji). Tes lama `hooks/__tests__/whitebox.getNumericInputError.test.ts` ("Catatan temuan") dulu sudah mencatatnya; berkas itu dihapus 21 Okt 2026 dan kasusnya kini hanya diuji di WB-2 (`hooks/__tests__/eval/whitebox.getNumericInputError.test.ts`). Batas atas fold terhadap ukuran data memang sengaja diserahkan ke engine Rust (komentar baris 181–184).
 
 
 <!-- sumber: BUGS_C1.md -->

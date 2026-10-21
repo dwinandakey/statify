@@ -161,7 +161,7 @@ describe("BB-07 stopwords Indonesian lalu Custom (antarmuka ke payload)", () => 
     });
 });
 
-describe("BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)", () => {
+describe("BB-08 stemming Sastrawi dan Snowball/Porter2 (antarmuka ke payload)", () => {
     it("Indonesian (Sastrawi) mengirim stemming_method=indonesian", async () => {
         const { container } = render(<Harness />);
         expect(toRustConfig(latest.config).stemming_method).toBe("none");
@@ -170,7 +170,7 @@ describe("BB-08 stemming Sastrawi dan Porter (antarmuka ke payload)", () => {
         expect(isChecked(byId(container, "stem-id"))).toBe(true);
     });
 
-    it("English (Porter) mengirim stemming_method=english dan catatan lowercase tampil", async () => {
+    it("English (Snowball/Porter2) mengirim stemming_method=english dan catatan lowercase tampil", async () => {
         const { container } = render(<Harness />);
         await userEvent.click(byId(container, "stem-en"));
         expect(toRustConfig(latest.config).stemming_method).toBe("english");

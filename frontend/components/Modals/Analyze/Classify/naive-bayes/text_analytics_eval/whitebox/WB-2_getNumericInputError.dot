@@ -38,7 +38,7 @@ digraph G {
   "sf" [label="32: folds = KFolds", shape=box];
   "f1" [label="33: typeof folds != number?", shape=diamond,style=filled,fillcolor="#fff2cc"];
   "f2" [label="34: !isInteger(folds)?", shape=diamond,style=filled,fillcolor="#fff2cc"];
-  "f3" [label="35: folds < 1?", shape=diamond,style=filled,fillcolor="#fff2cc"];
+  "f3" [label="35: folds < 2?", shape=diamond,style=filled,fillcolor="#fff2cc"];
   "rf" [label="36: return 'folds'", shape=box,style=filled,fillcolor="#f4cccc"];
   "s0" [label="37: RandomSeed != null?", shape=diamond,style=filled,fillcolor="#fff2cc"];
   "s1" [label="38: typeof seed != number?", shape=diamond,style=filled,fillcolor="#fff2cc"];

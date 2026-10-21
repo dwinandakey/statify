@@ -17,7 +17,13 @@ self.onmessage = async (event) => {
   try {
     await initWasm();
     const result = process_text_data(data, config);
-    self.postMessage({ status: "success", payload: result });
+    // Sama dengan stringToWord.processor.ts: matriks dikirim sebagai Float64Array row-major yang di-transfer
+    // (utils/packedMatrix.ts packMatrix), bukan number[][].
+    const { matrix, ...rest } = result;
+    const rows = matrix.length, cols = result.vocabulary.length;
+    const buf = new Float64Array(rows * cols);
+    for (let i = 0; i < rows; i++) { const row = matrix[i], base = i * cols; for (let j = 0; j < cols; j++) buf[base + j] = row[j] ?? 0; }
+    self.postMessage({ status: "success", payload: { ...rest, packedMatrix: { rows, cols, data: buf } } }, [buf.buffer]);
   } catch (error) {
     self.postMessage({ status: "error", payload: { code: "WORKER_ERROR", message: String(error && error.message ? error.message : error) } });
   }

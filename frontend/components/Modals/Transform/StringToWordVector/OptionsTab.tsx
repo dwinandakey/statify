@@ -229,7 +229,7 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="english" id="stem-en" />
-                <Label htmlFor="stem-en" className="font-normal cursor-pointer">English (Porter)</Label>
+                <Label htmlFor="stem-en" className="font-normal cursor-pointer">English (Snowball/Porter2)</Label>
               </div>
             </RadioGroup>
             {/* F12: stemmer selalu lowercase */}

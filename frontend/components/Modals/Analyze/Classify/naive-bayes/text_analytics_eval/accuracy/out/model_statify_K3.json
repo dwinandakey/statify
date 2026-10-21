@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "model_type": "naive_bayes",
-  "trained_at": "2026-10-08T03:29:54.844Z",
+  "trained_at": "2026-10-21T17:13:59.338Z",
   "target": {
     "name": "Sentiment",
     "classes": [
@@ -22,8 +22,8 @@
   "variance_floor": 1e-9,
   "feature_order": [],
   "label_mapping": {
-    "positive": 1,
-    "negative": 0
+    "negative": 0,
+    "positive": 1
   },
   "validation_config": {
     "method": "holdout",

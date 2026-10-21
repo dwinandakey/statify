@@ -51,7 +51,7 @@ import type { Variable } from "@/types/Variable";
  * file ini soal `pkg/` yang masih perlu diisi ulang manual oleh pemilik
  * produk).
  */
-const NAIVE_BAYES_WASM_VERSION = "naive-bayes-v3-20261005a";
+const NAIVE_BAYES_WASM_VERSION = "naive-bayes-v3-20261022a";
 const NAIVE_BAYES_WORKER_URL = `/workers/Classify/NaiveBayes/naive-bayes.worker.js?v=${NAIVE_BAYES_WASM_VERSION}`;
 
 // Batas Top-k (AGENTS_V2 §3.7) dan default-nya; dipakai untuk mengamankan

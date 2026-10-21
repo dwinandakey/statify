@@ -30,8 +30,8 @@ export const ValidationTab = () => {
             title="Cross-Validation Folds"
             description={
               isEn
-                ? "Enter the Number of Folds (default 10, at least 1). The valid rows are split into stratified folds; each fold is predicted once by a model trained on the other folds, and the metrics are computed from the pooled predictions of all folds. The number of folds must not exceed the number of valid cases. If it exceeds the size of the smallest class, the analysis still runs but shows a warning because that class cannot appear in every fold."
-                : "Isi Number of Folds (bawaan 10, minimal 1). Baris valid dibagi menjadi fold yang stratified; setiap fold diprediksi sekali oleh model yang dilatih pada fold lainnya, dan metrik dihitung dari gabungan prediksi semua fold. Jumlah fold tidak boleh melebihi jumlah kasus valid. Bila melebihi ukuran kelas terkecil, analisis tetap berjalan tetapi menampilkan peringatan karena kelas tersebut tidak dapat hadir di setiap fold."
+                ? "Enter the Number of Folds (default 10, at least 2). The valid rows are split into stratified folds; each fold is predicted once by a model trained on the other folds, and the metrics are computed from the pooled predictions of all folds. The number of folds must not exceed the number of valid cases. If it exceeds the size of the smallest class, the analysis still runs but shows a warning because that class cannot appear in every fold."
+                : "Isi Number of Folds (bawaan 10, minimal 2). Baris valid dibagi menjadi fold yang stratified; setiap fold diprediksi sekali oleh model yang dilatih pada fold lainnya, dan metrik dihitung dari gabungan prediksi semua fold. Jumlah fold tidak boleh melebihi jumlah kasus valid. Bila melebihi ukuran kelas terkecil, analisis tetap berjalan tetapi menampilkan peringatan karena kelas tersebut tidak dapat hadir di setiap fold."
             }
           />
           <HelpStep

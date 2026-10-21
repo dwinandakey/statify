@@ -737,7 +737,7 @@ fn bb24_fold_melebihi_jumlah_instance_ditolak_tanpa_kode_nb_e() {
         message
     );
     let zero = validate_fold_count(0, 15, 3).expect_err("0 fold harus ditolak");
-    assert!(zero.contains("Number of folds must be at least 1"), "{}", zero);
+    assert!(zero.contains("Number of folds must be at least 2"), "{}", zero);
 
     let (data, _labels) = mixed_data(&[("A", 15), ("B", 15)], 0);
     let summary = run_err(

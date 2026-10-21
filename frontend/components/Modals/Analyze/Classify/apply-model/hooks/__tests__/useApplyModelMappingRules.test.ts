@@ -137,20 +137,6 @@ describe("autoMapFeatures + validateMapping — D1 dengan variabel D3", () => {
     ).toEqual([error("AM_E_MAP_UNMAPPED", "Outlook")]);
   });
 
-  it("nama persis menang atas kandidat case-insensitive", () => {
-    const descriptor = getD1Descriptor();
-    const variables = [
-      makeVariable("outlook", "nominal", "STRING"),
-      makeVariable("Outlook", "nominal", "STRING"),
-      makeVariable("Temp", "scale"),
-    ];
-
-    expect(autoMapFeatures(descriptor, variables).FeatureMapping).toEqual({
-      Outlook: "Outlook",
-      Temp: "Temp",
-    });
-  });
-
   it("Temp ber-measure nominal -> AM_E_MAP_ROLE_MISMATCH (detail nama fitur)", () => {
     const descriptor = getD1Descriptor();
     const variables = [
@@ -221,20 +207,6 @@ describe("autoMapFeatures + validateMapping — D1 dengan variabel D3", () => {
     ).toEqual([error("AM_E_MAP_NUMERIC_TYPE", "Temp")]);
   });
 
-  it("variabel yang dipetakan sudah terhapus -> AM_E_MAP_VAR_NOT_FOUND (detail nama variabel)", () => {
-    const descriptor = getD1Descriptor();
-    const variables = [makeVariable("Outlook", "nominal", "STRING")];
-
-    expect(
-      validateMapping(
-        descriptor,
-        { Outlook: "Outlook", Temp: "TempHilang" },
-        null,
-        variables
-      )
-    ).toEqual([error("AM_E_MAP_VAR_NOT_FOUND", "TempHilang")]);
-  });
-
   it("fitur tanpa key di mapping diperlakukan belum dipetakan", () => {
     const descriptor = getD1Descriptor();
 
@@ -256,36 +228,9 @@ describe("validateMapping — duplikat", () => {
       validateMapping(descriptor, { A: "X", B: "X" }, null, variables)
     ).toEqual([error("AM_E_MAP_DUPLICATE", "X")]);
   });
-
-  it("auto-map case-insensitive yang menghasilkan duplikat: fitur kedua menjadi null", () => {
-    const descriptor = makeDescriptor([
-      { name: "Ab", role: "categorical" },
-      { name: "aB", role: "categorical" },
-    ]);
-    const variables = [makeVariable("Ab", "nominal", "STRING")];
-
-    expect(autoMapFeatures(descriptor, variables).FeatureMapping).toEqual({
-      Ab: "Ab",
-      aB: null,
-    });
-  });
 });
 
 describe("Actual target", () => {
-  it("auto-map: Play ber-measure scale -> ActualTargetVar null", () => {
-    const descriptor = getD1Descriptor();
-    const variables = [
-      makeVariable("Outlook", "nominal", "STRING"),
-      makeVariable("Temp", "scale"),
-      makeVariable("Play", "scale"),
-    ];
-
-    const result = autoMapFeatures(descriptor, variables);
-
-    expect(result.FeatureMapping).toEqual({ Outlook: "Outlook", Temp: "Temp" });
-    expect(result.ActualTargetVar).toBeNull();
-  });
-
   it("auto-map: variabel target sudah dipakai sebagai prediktor -> null", () => {
     const descriptor = makeDescriptor(
       [

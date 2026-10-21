@@ -33,7 +33,7 @@ import type { Variable } from "@/types/Variable";
  * `public/workers/Classify/ApplyModel/apply-model.worker.js` dan di-bump
  * setiap `pkg/` disalin ulang. Format: `apply-model-YYYYMMDD<huruf>`.
  */
-export const APPLY_MODEL_WASM_VERSION = "apply-model-v3-20261005a";
+export const APPLY_MODEL_WASM_VERSION = "apply-model-v3-20261022a";
 export const APPLY_MODEL_WORKER_URL = `/workers/Classify/ApplyModel/apply-model.worker.js?v=${APPLY_MODEL_WASM_VERSION}`;
 
 export type ApplyModelRunSummary = {

@@ -1,35 +1,35 @@
-Dicatat: 2026-10-08 10:30:49 +07:00
-Komputer: DJ-RAID
+Dicatat: 2026-10-22 01.18.58 +07:00
+Komputer: DESKTOP-P4GNG1E
 Model: LENOVO 82EY
 RAM fisik (GiB): 15.37
 CPU: AMD Ryzen 5 4600H with Radeon Graphics | inti=6 | thread=12 | clock maks (MHz)=3000 | clock saat ini (MHz)=3000
 Modul RAM: 8 GiB | kecepatan (MT/s)=3200 | konfigurasi (MT/s)=3200
 Modul RAM: 8 GiB | kecepatan (MT/s)=3200 | konfigurasi (MT/s)=3200
-OS: Microsoft Windows 11 Home Single Language 10.0.26300 build 26300 64-bit
-GPU: NVIDIA GeForce GTX 1650 Ti | driver 32.0.15.9186
-GPU: AMD Radeon(TM) Graphics | driver 31.0.21923.11000
-Baterai: status=2 (2 = tersambung ke daya AC), muatan (%)=54
-Paket daya aktif: Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)
-PowerShell: 5.1.26100.9444
-node: v24.13.1
-npm: 11.8.0
-python: Python 3.13.12
-Peramban terpasang: C:\Program Files\Google\Chrome\Application\chrome.exe versi 154.0.8037.98
-Peramban terpasang: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe versi 154.0.4258.62
+OS: Microsoft Windows 11 Pro 10.0.26300 build 26300 64-bit
+GPU: NVIDIA GeForce GTX 1650 Ti | driver 32.0.16.1742
+GPU: AMD Radeon(TM) Graphics | driver 31.0.21925.1001
+Baterai: status=2 (2 = tersambung ke daya AC), muatan (%)=59
+Paket daya aktif: Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Seimbang)
+PowerShell: 5.1.26100.9711
+node: v24.20.0
+npm: 11.19.0
+python: Python 3.13.15
+Peramban terpasang: C:\Program Files\Google\Chrome\Application\chrome.exe versi 155.0.8059.85
+Peramban terpasang: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe versi 155.0.4283.62
 
 --- systeminfo ---
 
-Host Name:                     DJ-RAID
-OS Name:                       Microsoft Windows 11 Home Single Language
+Host Name:                     DESKTOP-P4GNG1E
+OS Name:                       Microsoft Windows 11 Pro
 OS Version:                    10.0.26300 N/A Build 26300
 OS Manufacturer:               Microsoft Corporation
 OS Configuration:              Standalone Workstation
 OS Build Type:                 Multiprocessor Free
-Registered Owner:              DIJASAN
+Registered Owner:              Dijasan
 Registered Organization:       N/A
-Product ID:                    00327-36352-86331-AAOEM
-Original Install Date:         22/09/2025, 07:49:34
-System Boot Time:              08/10/2026, 08:44:38
+Product ID:                    00330-80000-00000-AA702
+Original Install Date:         11/10/2026, 05.12.36
+System Boot Time:              14/10/2026, 22.26.06
 System Manufacturer:           LENOVO
 System Model:                  82EY
 System Type:                   x64-based PC
@@ -38,43 +38,47 @@ Processor(s):                  1 Processor(s) Installed.
 BIOS Version:                  LENOVO FCCN21WW, 20/09/2023
 Windows Directory:             C:\WINDOWS
 System Directory:              C:\WINDOWS\system32
-Boot Device:                   \Device\HarddiskVolume6
-System Locale:                 3809
+Boot Device:                   \Device\HarddiskVolume4
+System Locale:                 en-us;English (United States)
 Input Locale:                  en-us;English (United States)
 Time Zone:                     (UTC+07:00) Bangkok, Hanoi, Jakarta
 Total Physical Memory:         15.741 MB
-Available Physical Memory:     2.015 MB
-Virtual Memory: Max Size:      35.618 MB
-Virtual Memory: Available:     2.244 MB
-Virtual Memory: In Use:        33.374 MB
+Available Physical Memory:     6.913 MB
+Virtual Memory: Max Size:      44.413 MB
+Virtual Memory: Available:     23.259 MB
+Virtual Memory: In Use:        21.154 MB
 Page File Location(s):         C:\pagefile.sys
 Domain:                        WORKGROUP
-Logon Server:                  \\DJ-RAID
-Hotfix(s):                     5 Hotfix(s) Installed.
-                               [01]: KB5126052
-                               [02]: KB5054156
-                               [03]: KB5121794
-                               [04]: KB5129195
-                               [05]: KB5124007
+Logon Server:                  \\DESKTOP-P4GNG1E
+Hotfix(s):                     6 Hotfix(s) Installed.
+                               [01]: KB5127694
+                               [02]: KB5121794
+                               [03]: KB5127648
+                               [04]: KB5124007
+                               [05]: KB5124009
+                               [06]: KB5127647
 Network Card(s):               4 NIC(s) Installed.
-                               [01]: Realtek 8822CE Wireless LAN 802.11ac PCI-E NIC
+                               [01]: Bluetooth Device (Personal Area Network)
+                                     Connection Name: Bluetooth Network Connection
+                                     Status:          Media disconnected
+                               [02]: Realtek PCIe GbE Family Controller
+                                     Connection Name: Ethernet
+                                     Status:          Media disconnected
+                               [03]: Realtek 8822CE Wireless LAN 802.11ac PCI-E NIC
                                      Connection Name: Wi-Fi
                                      DHCP Enabled:    Yes
                                      DHCP Server:     192.168.1.1
                                      IP address(es)
                                      [01]: 192.168.1.3
-                               [02]: Bluetooth Device (Personal Area Network)
-                                     Connection Name: Bluetooth Network Connection
-                                     Status:          Media disconnected
-                               [03]: Realtek PCIe GbE Family Controller
-                                     Connection Name: Ethernet
-                                     Status:          Media disconnected
+                                     [02]: fe80::ce83:a377:a32f:46bd
+                                     [03]: 2001:448a:2034:177e:3822:f03e:cb2b:6e34
+                                     [04]: 2001:448a:2034:177e:ab57:44ab:9f:78a6
                                [04]: Wintun Userspace Tunnel
                                      Connection Name: Tailscale
                                      DHCP Enabled:    No
                                      IP address(es)
                                      [01]: 169.254.83.107
-                                     [02]: fe80::38c8:742f:6df3:b28
+                                     [02]: fe80::30f2:b5b9:fba4:80c7
 Virtualization-based security: Status: Running
                                Required Security Properties:
                                      Base Virtualization Support
@@ -89,6 +93,6 @@ Virtualization-based security: Status: Running
                                Services Running:
                                      Hypervisor enforced Code Integrity
                                App Control for Business policy: Enforced
-                               App Control for Business user mode policy: Off
+                               App Control for Business user mode policy: Enforced
                                Security Features Enabled:
 Hyper-V Requirements:          A hypervisor has been detected. Features required for Hyper-V will not be displayed.

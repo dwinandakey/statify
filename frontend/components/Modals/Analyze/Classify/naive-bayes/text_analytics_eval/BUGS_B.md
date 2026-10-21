@@ -9,5 +9,6 @@ Tidak ada tes evaluasi Track B yang gagal (54 dari 54 lulus di VM, `logs/jest_B_
 - Usulan: tambahkan cabang `else` yang mengembalikan pesan galat, atau normalisasi `ValidationMethod` di `mergeWithDefaults`.
 
 ## B-2 (informasi): `KFolds = 1` diterima
+- Status 22 Okt 2026: DIPERBAIKI (lihat BUGS_A.md A-1). Predikat simpul 35 WB-2 kini `folds < 2`; struktur graf (N, E, V(G), jalur) tidak berubah, masukan jalur 22 menjadi `KFolds = 1` dan pesan simpul 36 menjadi "The number of folds must be at least 2.".
 - Lokasi: baris 253–258 yang sama. Sesuai AGENTS.md §4.2 (minimum 1), sehingga bukan penyimpangan dari spesifikasi.
-- Catatan: k-fold dengan satu fold secara metodologis degenerate (tidak ada data uji). Tes lama (`whitebox.getNumericInputError.test.ts`, "Catatan temuan") sudah mencatatnya; di sini hanya dirujuk. Batas atas fold terhadap ukuran data memang sengaja diserahkan ke engine Rust (komentar baris 181–184).
+- Catatan: k-fold dengan satu fold secara metodologis degenerate (tidak ada data uji). Tes lama `hooks/__tests__/whitebox.getNumericInputError.test.ts` ("Catatan temuan") dulu sudah mencatatnya; berkas itu dihapus 21 Okt 2026 dan kasusnya kini hanya diuji di WB-2 (`hooks/__tests__/eval/whitebox.getNumericInputError.test.ts`). Batas atas fold terhadap ukuran data memang sengaja diserahkan ke engine Rust (komentar baris 181–184).

@@ -2,6 +2,7 @@
 
 Lingkup: 01_baseline, ENV, A_unit, B_whitebox, C_blackbox_C1/C2/C3, C_manual_checklist_C*, D_accuracy, E_performance, F_integration, F_manual_checklist, BUGS_A..F.
 Aturan: `AGENT_COMMON.md` dan `PROMPT_Evaluasi_Modul_Text_Analytics.md`. Kode produksi dan tes tidak diubah; tidak ada git; tidak ada berkas dihapus.
+Catatan 21 Okt 2026: dokumen ini potret audit sebelum run Windows 8 Okt; angka Rust di bawah (136 penanda, Rust Track A 66, `eval_partition` 18) sudah tidak berlaku. Sesudah pembersihan tes duplikat: 130 fungsi eval Rust (Track A 60, `eval_partition` 16, `eval_vocab_limit` 9), semua lulus di Windows; lihat `LAPORAN_PEMBERSIHAN_TES_21Okt.md`.
 Hasil `python3 frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/tools/apply_results.py --check` (hanya `--check`), setelah semua perbaikan: Jest 453 tes dikenali, Rust 0 tes (belum pernah dikompilasi), total penanda BELUM DIJALANKAN = 136 (semua Rust), Lulus = 453 (semua Jest, [VM]). Tidak ada penanda rusak (`⟦` tanpa `⟧`) dan tidak ada nama berkas/tes Jest yang hilang dari log. Ke-136 penanda Rust cocok dengan nama `fn` di sumber.
 
 ## Temuan dan tindakan
@@ -32,4 +33,4 @@ Hasil `python3 frontend/components/Modals/Analyze/Classify/naive-bayes/text_anal
 3. Seluruh tes Rust Track A/B/C/D/F (136 penanda) BELUM DIJALANKAN; tidak boleh ditulis "lulus" sampai `cargo test` di Windows menghasilkan `logs/rust_*.txt`.
 4. `templates/` kosong. Template dibuat saat apply pertama; bila `templates/<nama>.md` sudah ada nanti, dokumen aktif harus diregenerasi/disamakan agar tidak menimpa perbaikan ini.
 5. Hasil Windows (versi rustc, node_modules, git HEAD) dan log WEKA Windows tidak dapat diperiksa dari cloud.
-6. Selama audit ada penyuntingan paralel oleh pihak lain (`AGENT_COMMON.md`, `BUGS_A.md`, `BUGS_C2.md`, `eval_partition.rs`; jumlah tes 15 menjadi 18, Rust Track A = 66). Perbaikan dilakukan dengan penggantian terarah; periksa ulang dengan `--check` setelah penggabungan.
+6. Selama audit ada penyuntingan paralel oleh pihak lain (`AGENT_COMMON.md`, `BUGS_A.md`, `BUGS_C2.md`, `eval_partition.rs`; jumlah tes 15 menjadi 18, Rust Track A = 66; per 21 Okt 2026 menjadi 16 dan 60 setelah tes duplikat dihapus). Perbaikan dilakukan dengan penggantian terarah; periksa ulang dengan `--check` setelah penggabungan.

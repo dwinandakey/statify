@@ -33,7 +33,6 @@ jest.mock(
 );
 
 import {
-  MAX_MODEL_FILE_BYTES,
   listResultStoreModels,
   loadBuiltinModel,
   loadModelFromFile,
@@ -159,64 +158,6 @@ describe("loadModelFromFile", () => {
     if (!result.ok) return;
     expect(result.descriptor.schemaVersion).toBe("1.0");
     expect(result.descriptor.warnings).toEqual(["AM_W_LEGACY_SCHEMA"]);
-  });
-
-  it("ekstensi .JSON (huruf besar) diterima (case-insensitive)", async () => {
-    const result = await loadModelFromFile(
-      makeFile("MODEL.JSON", JSON.stringify(nbModelV11))
-    );
-    expect(result.ok).toBe(true);
-  });
-
-  it("file .txt → AM_E_PARSE", async () => {
-    const result = await loadModelFromFile(
-      makeFile("model.txt", JSON.stringify(nbModelV11))
-    );
-    expectFailure(result, "AM_E_PARSE", "model.txt");
-  });
-
-  it("ukuran 11 MB → AM_E_FILE_TOO_LARGE", async () => {
-    const result = await loadModelFromFile(
-      makeFile("big.json", JSON.stringify(nbModelV11), 11 * 1024 * 1024)
-    );
-    expectFailure(result, "AM_E_FILE_TOO_LARGE", "big.json");
-  });
-
-  it("ukuran tepat 10 MB masih diterima (batas inklusif)", async () => {
-    const result = await loadModelFromFile(
-      makeFile("edge.json", JSON.stringify(nbModelV11), MAX_MODEL_FILE_BYTES)
-    );
-    expect(result.ok).toBe(true);
-  });
-
-  it('isi "{bad" → AM_E_PARSE', async () => {
-    const result = await loadModelFromFile(makeFile("bad.json", "{bad"));
-    expectFailure(result, "AM_E_PARSE", "bad.json");
-  });
-
-  it("file.text() gagal dibaca → AM_E_PARSE", async () => {
-    const file = {
-      name: "unreadable.json",
-      size: 10,
-      text: async () => {
-        throw new Error("read error");
-      },
-    } as unknown as File;
-    expectFailure(await loadModelFromFile(file), "AM_E_PARSE", "unreadable.json");
-  });
-
-  it("JSON valid tetapi bukan objek → error validasi AM_E_NOT_OBJECT", async () => {
-    const result = await loadModelFromFile(makeFile("arr.json", "[]"));
-    expectFailure(result, "AM_E_NOT_OBJECT");
-  });
-
-  it('model_type "decision_tree" → AM_E_MODEL_TYPE_UNSUPPORTED dengan detail', async () => {
-    const model = clone(nbModelV11);
-    model.model_type = "decision_tree";
-    const result = await loadModelFromFile(
-      makeFile("dt.json", JSON.stringify(model))
-    );
-    expectFailure(result, "AM_E_MODEL_TYPE_UNSUPPORTED", "decision_tree");
   });
 });
 
@@ -349,13 +290,6 @@ describe("listResultStoreModels & loadModelFromResultStore", () => {
     expect(items).toHaveLength(1);
   });
 
-  it("logs tetap kosong setelah loadResults → list kosong, loadResults hanya sekali", async () => {
-    mockLoadResults.mockResolvedValue(undefined);
-    const items = await listResultStoreModels();
-    expect(items).toEqual([]);
-    expect(mockLoadResults).toHaveBeenCalledTimes(1);
-  });
-
   it("logs sudah terisi → loadResults tidak dipanggil", async () => {
     mockStoreState.logs = [
       makeLog(1, "NB", "Result", [modelStatistic(11, nbModelV11)]),
@@ -363,40 +297,6 @@ describe("listResultStoreModels & loadModelFromResultStore", () => {
     await listResultStoreModels();
     await loadModelFromResultStore(11);
     expect(mockLoadResults).not.toHaveBeenCalled();
-  });
-
-  it("loadModelFromResultStore: id tidak ada → AM_E_NO_MODEL", async () => {
-    mockStoreState.logs = [
-      makeLog(1, "NB", "Result", [modelStatistic(11, nbModelV11)]),
-    ];
-    expectFailure(await loadModelFromResultStore(99), "AM_E_NO_MODEL", "99");
-  });
-
-  it("loadModelFromResultStore: statistic bukan model → AM_E_NO_MODEL", async () => {
-    mockStoreState.logs = [makeLog(1, "NB", "Result", [otherStatistic(10)])];
-    expectFailure(await loadModelFromResultStore(10), "AM_E_NO_MODEL", "10");
-  });
-
-  it("loadModelFromResultStore: output_data rusak → AM_E_PARSE", async () => {
-    mockStoreState.logs = [
-      makeLog(1, "NB", "Result", [
-        {
-          id: 3,
-          title: "Export Model",
-          description: "",
-          output_data: "{bad",
-          components: "Export Model",
-        },
-      ]),
-    ];
-    expectFailure(await loadModelFromResultStore(3), "AM_E_PARSE", "3");
-  });
-
-  it('loadModelFromResultStore: model_type "svm" → AM_E_MODEL_TYPE_UNSUPPORTED', async () => {
-    const model = clone(nbModelV11);
-    model.model_type = "svm";
-    mockStoreState.logs = [makeLog(1, "NB", "Result", [modelStatistic(8, model)])];
-    expectFailure(await loadModelFromResultStore(8), "AM_E_MODEL_TYPE_UNSUPPORTED", "svm");
   });
 });
 

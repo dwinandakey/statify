@@ -13,7 +13,7 @@
 //
 // Versi cache (`?v=...`) WAJIB di-bump setiap kali `pkg/` diganti (lihat
 // `apply-model-analysis.ts`, konstanta `APPLY_MODEL_WASM_VERSION`).
-const APPLY_MODEL_WASM_VERSION = "apply-model-v3-20261005a";
+const APPLY_MODEL_WASM_VERSION = "apply-model-v3-20261022a";
 
 let wasmModulePromise = null;
 

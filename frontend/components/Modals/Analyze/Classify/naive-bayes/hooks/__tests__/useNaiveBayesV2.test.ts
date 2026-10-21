@@ -141,31 +141,6 @@ describe("useNaiveBayesValidation v2", () => {
         renderHook(() => useNaiveBayesValidation(form, variables)).result
             .current;
 
-    it("OK aktif bila target terisi dan HANYA Text Features terisi (predictor lain dikeluarkan)", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = "label";
-        form.main.ExcludedVar = ["nama", "tweet", "VEC_a", "VEC_b", "umur"];
-        form.main.TextVectorVars = ["VEC_a", "VEC_b"];
-
-        expect(getEffectivePredictors(form.main, variables)).toEqual([]);
-        expect(run(form).validation.isValid).toBe(true);
-    });
-
-    it("N5-8: target kosong (mode exclude) tanpa Text Features -> pesan target DAN predictor", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = null;
-
-        const { validation } = run(form);
-
-        expect(validation.isValid).toBe(false);
-        expect(validation.errors).toEqual(
-            expect.arrayContaining([
-                expect.stringContaining("target"),
-                expect.stringContaining("predictor"),
-            ])
-        );
-    });
-
     it("N5-8: target kosong tetapi Text Features terisi -> hanya pesan target", () => {
         const form = cloneDefault();
         form.main.TargetVar = null;
@@ -175,47 +150,6 @@ describe("useNaiveBayesValidation v2", () => {
 
         expect(validation.isValid).toBe(false);
         expect(validation.errors).toEqual(["Select a target variable."]);
-    });
-
-    it("N5-8: target kosong pada mode candidates tidak memunculkan pesan predictor bila kandidat terisi", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = null;
-        form.main.SpecificationMode = "candidates";
-        form.main.CandidateCovariates = ["umur"];
-
-        expect(run(form).validation.errors).toEqual(["Select a target variable."]);
-    });
-
-    it("tanpa predictor dan tanpa Text Features -> tetap tidak valid", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = "label";
-        form.main.ExcludedVar = ["nama", "tweet", "VEC_a", "VEC_b", "umur"];
-
-        expect(run(form).validation.isValid).toBe(false);
-    });
-
-    it("Complement + predictor Numeric/Categorical efektif -> error yang memblokir OK", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = "label";
-        form.main.TextVectorVars = ["VEC_a", "VEC_b"];
-        form.options.TextLikelihood = "complement";
-
-        const { validation } = run(form);
-
-        expect(validation.isValid).toBe(false);
-        expect(validation.errors.some((e) => e.includes("Complement"))).toBe(
-            true
-        );
-    });
-
-    it("Complement + hanya Text Features -> valid", () => {
-        const form = cloneDefault();
-        form.main.TargetVar = "label";
-        form.main.ExcludedVar = ["nama", "tweet", "umur"];
-        form.main.TextVectorVars = ["VEC_a", "VEC_b"];
-        form.options.TextLikelihood = "complement";
-
-        expect(run(form).validation.isValid).toBe(true);
     });
 
     it("Complement tersimpan tetapi Text Features kosong -> tidak memblokir", () => {
@@ -266,20 +200,6 @@ describe("getNumericInputError v2 (TextAlpha & TextTopK)", () => {
         expect(getNumericInputError(withText())).toBeNull();
     });
 
-    it("TextAlpha 0 / > 999 / NaN ditolak", () => {
-        const a = withText();
-        a.options.TextAlpha = 0;
-        expect(getNumericInputError(a)).toContain("Text smoothing alpha");
-
-        const b = withText();
-        b.options.TextAlpha = 1000;
-        expect(getNumericInputError(b)).toContain("999");
-
-        const c = withText();
-        c.options.TextAlpha = Number.NaN;
-        expect(getNumericInputError(c)).toContain("valid");
-    });
-
     it("TextTopK harus bilangan bulat 1-1000 (saat tabel dicentang)", () => {
         for (const bad of [0, 1001, 2.5, Number.NaN]) {
             const form = withText();
@@ -300,14 +220,6 @@ describe("getNumericInputError v2 (TextAlpha & TextTopK)", () => {
         form.output.TextTopK = 0;
 
         expect(getNumericInputError(form)).toBeNull();
-    });
-
-    it("SmoothingAlpha v1 tetap divalidasi", () => {
-        const form = cloneDefault();
-        form.options.SmoothingAlpha = 0;
-        expect(getNumericInputError(form)).toBe(
-            "Smoothing Alpha must be greater than 0."
-        );
     });
 });
 

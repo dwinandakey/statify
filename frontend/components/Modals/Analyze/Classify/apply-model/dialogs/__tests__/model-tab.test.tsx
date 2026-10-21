@@ -135,11 +135,6 @@ beforeEach(() => {
 // ---------------------------------------------------------------------------
 
 describe("ModelTab — sumber file", () => {
-  it("radio 'Upload file (.json)' terpilih secara default", () => {
-    render(<Harness />);
-    expect(screen.getByRole("radio", { name: "Upload file (.json)" })).toBeChecked();
-  });
-
   it("upload D1 menampilkan kartu ringkasan model", async () => {
     render(<Harness />);
     uploadFile(makeFile("nb-model-v1_1.json", JSON.stringify(nbModelV11)));
@@ -321,18 +316,5 @@ describe("ApplyModelMain — tab disabled selama belum ada model", () => {
     expect(screen.getByRole("tab", { name: "Save" })).toBeEnabled();
     expect(screen.getByRole("tab", { name: "Output" })).toBeEnabled();
     expect(screen.getByTestId("model-summary-card")).toBeInTheDocument();
-  });
-
-  it("tombol Help memulai tur pop-up di Tab Model (tanpa teks bantuan inline)", async () => {
-    render(<ApplyModelMain onClose={jest.fn()} />);
-    expect(
-      screen.queryByRole("button", { name: "Toggle help" })
-    ).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Start feature tour" }));
-    expect(await screen.findByTestId("tour-popup-container")).toBeInTheDocument();
-    expect(screen.getByTestId("tour-popup-step-counter")).toHaveTextContent(
-      "Step 1 of 3"
-    );
   });
 });

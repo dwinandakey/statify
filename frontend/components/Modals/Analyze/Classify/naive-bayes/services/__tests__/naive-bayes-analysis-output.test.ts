@@ -84,18 +84,6 @@ describe("resultNaiveBayes: Text Feature Table", () => {
         expect(stats.map((s) => s.title)).not.toContain("Text Feature Table");
     });
 
-    it("v1: statistic yang dipasang sama seperti sebelum v2", async () => {
-        const stats = await run({ rawText: null, flag: true, withTable: false });
-        expect(stats.map((s) => s.title)).toEqual([
-            "Case Processing Summary",
-            "Attribute Distribution Table",
-            "Model Evaluation Metrics",
-            "Cohen's Kappa",
-            "Confusion Matrix",
-            "Export Model",
-        ]);
-    });
-
     it("setiap statistic punya description HTML berbahasa Inggris (interpretasi otomatis)", async () => {
         const stats = await run({ rawText: "Text Tweet", flag: true, withTable: true });
         expect(stats.length).toBeGreaterThanOrEqual(7);

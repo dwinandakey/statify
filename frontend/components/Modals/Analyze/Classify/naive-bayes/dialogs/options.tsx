@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -72,6 +72,25 @@ export function pruneNumericOverrides(
     return next;
 }
 
+/**
+ * Pesan galat field Smoothing Alpha / Text Alpha. Teksnya IDENTIK dengan cabang yang sama di
+ * `getNumericInputError` (hooks/useNaiveBayesValidation.ts) supaya pesan di bawah field dan pesan
+ * yang menahan OK selalu sama.
+ */
+export function getSmoothingAlphaError(value: number | undefined): string | null {
+    if (typeof value !== "number" || !Number.isFinite(value)) return "Enter a valid number for Smoothing Alpha.";
+    if (value <= 0) return "Smoothing Alpha must be greater than 0.";
+    if (value > 999) return "Smoothing Alpha must not exceed 999.";
+    return null;
+}
+
+export function getTextAlphaError(value: number | undefined): string | null {
+    if (typeof value !== "number" || !Number.isFinite(value)) return "Enter a valid number for Text smoothing alpha.";
+    if (value <= 0) return "Text smoothing alpha must be greater than 0.";
+    if (value > 999) return "Text smoothing alpha must not exceed 999.";
+    return null;
+}
+
 export const OptionsTab = ({
     data,
     updateFormData,
@@ -80,56 +99,36 @@ export const OptionsTab = ({
     hasOtherPredictors = false,
 }: OptionsTabProps) => {
     const [optionsState, setOptionsState] = useState<NaiveBayesOptionsType>({ ...data });
-    const [error, setError] = useState<string | null>(null);
-    const [textAlphaError, setTextAlphaError] = useState<string | null>(null);
 
     useEffect(() => {
         setOptionsState({ ...data });
     }, [data]);
 
-    const validateAlpha = useCallback((value: number): string | null => {
-        if (value <= 0) return "Smoothing Alpha must be greater than 0";
-        if (value > 999) return "Smoothing Alpha must not exceed 999";
-        return null;
-    }, []);
-
-    const validateTextAlpha = useCallback((value: number): string | null => {
-        if (!Number.isFinite(value) || value <= 0) return "Text Alpha must be greater than 0";
-        if (value > 999) return "Text Alpha must not exceed 999";
-        return null;
-    }, []);
+    // UC-03 alur alternatif 4a: nilai TIDAK SAH tetap diteruskan ke form (tidak lagi dibuang diam-diam
+    // sambil mempertahankan nilai lama), sehingga getNumericInputError memblokir OK/pindah tab dengan pesan
+    // yang SAMA persis dengan pesan galat di bawah field ini, dan analisis tidak dijalankan.
+    const error = useMemo(() => getSmoothingAlphaError(optionsState.SmoothingAlpha), [optionsState.SmoothingAlpha]);
+    const textAlphaError = useMemo(
+        () => (hasTextFeatures ? getTextAlphaError(optionsState.TextAlpha) : null),
+        [hasTextFeatures, optionsState.TextAlpha]
+    );
 
     const handleAlphaChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            const rawValue = e.target.value;
-            const numValue = Number(rawValue);
-
+            const numValue = Number(e.target.value);
             setOptionsState((prev) => ({ ...prev, SmoothingAlpha: numValue }));
-
-            const validationError = validateAlpha(numValue);
-            setError(validationError);
-
-            if (!validationError) {
-                updateFormData("SmoothingAlpha", numValue);
-            }
+            updateFormData("SmoothingAlpha", numValue);
         },
-        [updateFormData, validateAlpha]
+        [updateFormData]
     );
 
     const handleTextAlphaChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const numValue = Number(e.target.value);
-
             setOptionsState((prev) => ({ ...prev, TextAlpha: numValue }));
-
-            const validationError = validateTextAlpha(numValue);
-            setTextAlphaError(validationError);
-
-            if (!validationError) {
-                updateFormData("TextAlpha", numValue);
-            }
+            updateFormData("TextAlpha", numValue);
         },
-        [updateFormData, validateTextAlpha]
+        [updateFormData]
     );
 
     const textLikelihood = optionsState.TextLikelihood ?? "multinomial";

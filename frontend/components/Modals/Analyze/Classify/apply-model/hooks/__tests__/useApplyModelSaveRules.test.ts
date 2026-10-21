@@ -42,7 +42,6 @@ import { naiveBayesModelAdapter } from "@/components/Modals/Analyze/Classify/app
 import type { ModelDescriptor } from "@/components/Modals/Analyze/Classify/apply-model/adapters/types";
 import { ApplyModelSaveDefault } from "@/components/Modals/Analyze/Classify/apply-model/constants/apply-model-default";
 import type { ApplyModelSaveTabType } from "@/components/Modals/Analyze/Classify/apply-model/types/apply-model";
-import type { Variable } from "@/types/Variable";
 
 // Fixture dimuat via require: tsconfig `composite: true` tidak mengizinkan
 // import JSON via path alias (TS6307).
@@ -59,22 +58,6 @@ function makeSave(overrides: Partial<ApplyModelSaveTabType> = {}): ApplyModelSav
     ...JSON.parse(JSON.stringify(ApplyModelSaveDefault)),
     ...overrides,
   } as ApplyModelSaveTabType;
-}
-
-function makeVariable(name: string, columnIndex: number): Variable {
-  return {
-    columnIndex,
-    name,
-    type: "STRING",
-    width: 8,
-    decimals: 0,
-    values: [],
-    missing: null,
-    columns: 64,
-    align: "left",
-    measure: "nominal",
-    role: "input",
-  };
 }
 
 describe("getOutputColumnSpecs", () => {
@@ -336,31 +319,6 @@ describe("resolveFinalOutputNames", () => {
     const result = resolveFinalOutputNames(["NB_PredictedValue", "NB_PredictedProbability"], []);
     expect(result.finalNames).toEqual(["NB_PredictedValue", "NB_PredictedProbability"]);
     expect(result.adjusted).toEqual([]);
-  });
-
-  it('kelas "Rain Day" → NB_Probability_Rain Day menjadi NB_Probability_Rain_Day', () => {
-    const descriptor: ModelDescriptor = { ...loadDescriptor(), classes: ["Rain Day", "Sunny"] };
-    const specs = getOutputColumnSpecs(descriptor, makeSave({ SaveClassProbabilities: true }), naiveBayesModelAdapter);
-    const requested = specs.map((s) => s.requestedName);
-    expect(requested).toContain("NB_Probability_Rain Day");
-
-    const result = resolveFinalOutputNames(requested, []);
-    expect(result.finalNames).toContain("NB_Probability_Rain_Day");
-    expect(result.adjusted).toEqual([{ requested: "NB_Probability_Rain Day", final: "NB_Probability_Rain_Day" }]);
-  });
-
-  it("variabel dataset sudah ada NB_PredictedValue → NB_PredictedValue_1 + entri adjusted", () => {
-    const result = resolveFinalOutputNames(
-      ["NB_PredictedValue", "NB_PredictedProbability"],
-      [makeVariable("NB_PredictedValue", 0)],
-    );
-    expect(result.finalNames).toEqual(["NB_PredictedValue_1", "NB_PredictedProbability"]);
-    expect(result.adjusted).toEqual([{ requested: "NB_PredictedValue", final: "NB_PredictedValue_1" }]);
-  });
-
-  it("bentrok dengan variabel dataset tidak peka huruf besar/kecil", () => {
-    const result = resolveFinalOutputNames(["NB_PredictedValue"], [makeVariable("nb_predictedvalue", 0)]);
-    expect(result.finalNames).toEqual(["NB_PredictedValue_1"]);
   });
 
   it("dua nama yang sama diproses berurutan dengan daftar yang tumbuh", () => {

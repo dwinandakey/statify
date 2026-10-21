@@ -139,7 +139,7 @@ function stemmingPhrase(config: StwvConfig): string {
         case "indonesian":
             return "Indonesian stemming (Sastrawi) is applied";
         case "english":
-            return "English stemming (Porter) is applied";
+            return "English stemming (Snowball/Porter2) is applied";
         default:
             return "no stemming is applied";
     }

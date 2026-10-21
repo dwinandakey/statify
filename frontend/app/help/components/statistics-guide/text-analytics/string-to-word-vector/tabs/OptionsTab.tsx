@@ -78,8 +78,8 @@ export const OptionsTab = () => {
             title="Stemming"
             description={
               isEn
-                ? "Reduces each word to its root so that word variations count as one term. None (default), Indonesian (Sastrawi), or English (Porter). Stemming always converts words to lowercase, so the Lowercase option has no effect while stemming is on."
-                : "Mengubah setiap kata ke bentuk dasarnya sehingga variasi kata dihitung sebagai satu term. None (default), Indonesian (Sastrawi), atau English (Porter). Stemming selalu mengubah kata menjadi huruf kecil, sehingga opsi Lowercase tidak berpengaruh saat stemming aktif."
+                ? "Reduces each word to its root so that word variations count as one term. None (default), Indonesian (Sastrawi), or English (Snowball/Porter2). Stemming always converts words to lowercase, so the Lowercase option has no effect while stemming is on."
+                : "Mengubah setiap kata ke bentuk dasarnya sehingga variasi kata dihitung sebagai satu term. None (default), Indonesian (Sastrawi), atau English (Snowball/Porter2). Stemming selalu mengubah kata menjadi huruf kecil, sehingga opsi Lowercase tidak berpengaruh saat stemming aktif."
             }
           />
           <HelpStep

@@ -229,12 +229,14 @@ describe("BB-22 Seed (validasi)", () => {
 
 // =============================================================================================
 describe("BB-24 Fold melebihi anggota kelas terkecil (sisi TS)", () => {
-    it("BB-24: TS hanya memeriksa fold >= 1 dan bilangan bulat; batas terhadap ukuran data diserahkan ke Rust", () => {
+    it("BB-24: TS hanya memeriksa fold >= 2 dan bilangan bulat; batas terhadap ukuran data diserahkan ke Rust", () => {
         const kfold = (folds: number) =>
             form({ validation: { ValidationMethod: "kfold", TrainingPercentage: 70, KFolds: folds } });
-        expect(getNumericInputError(kfold(0))).toBe("The number of folds must be at least 1.");
-        expect(getNumericInputError(kfold(-3))).toBe("The number of folds must be at least 1.");
-        expect(getNumericInputError(kfold(2.5))).toBe("The number of folds must be at least 1.");
+        expect(getNumericInputError(kfold(1))).toBe("The number of folds must be at least 2.");
+        expect(getNumericInputError(kfold(0))).toBe("The number of folds must be at least 2.");
+        expect(getNumericInputError(kfold(-3))).toBe("The number of folds must be at least 2.");
+        expect(getNumericInputError(kfold(2.5))).toBe("The number of folds must be at least 2.");
+        expect(getNumericInputError(kfold(2))).toBeNull();
         // Tidak ada batas atas di TS: 1000 fold lolos validasi UI (ditolak oleh Rust bila > jumlah baris valid).
         expect(getNumericInputError(kfold(1000))).toBeNull();
         expect(getNumericInputError(kfold(10))).toBeNull();

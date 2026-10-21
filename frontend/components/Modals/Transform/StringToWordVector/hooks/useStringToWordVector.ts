@@ -8,6 +8,7 @@ import type { AppError, VectorizerOutput } from "../types";
 import { buildDocuments, areAllDocumentsEmpty, EMPTY_DATA_ERROR } from "../utils/buildDocuments";
 import { buildColumnData } from "../utils/buildColumnData";
 import { normalizeWorkerError } from "../utils/normalizeWorkerError";
+import { unpackMatrix, type PackedMatrix } from "../utils/packedMatrix";
 import { resolveVariable } from "../utils/resolveVariable";
 import { DEFAULT_COLUMN_PREFIX, validateColumnPrefix } from "../utils/columnPrefix";
 import { buildStwvOutput } from "../utils/buildStwvOutput";
@@ -90,7 +91,17 @@ export const useStringToWordVector = () => {
             worker.onmessage = (event: MessageEvent) => {
                 const { status, payload } = event.data;
                 if (status === "success") {
-                    resolve(payload as VectorizerOutput);
+                    // Worker mengirim matriks sebagai Float64Array (packedMatrix); susun ulang
+                    // secara bertahap agar main thread tidak terkunci. Bentuk lama (matrix) tetap diterima.
+                    const { packedMatrix, ...rest } = payload as Omit<VectorizerOutput, "matrix"> & {
+                        matrix?: number[][];
+                        packedMatrix?: PackedMatrix;
+                    };
+                    if (packedMatrix) {
+                        unpackMatrix(packedMatrix).then((matrix) => resolve({ ...rest, matrix }), reject);
+                    } else {
+                        resolve(payload as VectorizerOutput);
+                    }
                 } else {
                     // F04: payload bisa string JSON / objek / Error — selalu dinormalkan
                     reject(normalizeWorkerError(payload));

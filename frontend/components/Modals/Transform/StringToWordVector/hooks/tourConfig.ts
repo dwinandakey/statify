@@ -145,8 +145,8 @@ const STEP_DEFS: StepDef[] = [
         defaultPosition: "bottom",
         text: {
             title: "Stemming",
-            id: "Mengubah kata ke bentuk dasarnya agar variasi kata dihitung sebagai satu kata (mis. \"makanan\" menjadi \"makan\"). None (default), Indonesian (Sastrawi), atau English (Porter). Dilakukan setelah stopwords dibuang dan selalu menghasilkan huruf kecil.",
-            en: "Reduces words to their root form so word variations count as one word (e.g. \"running\" becomes \"run\"). None (default), Indonesian (Sastrawi), or English (Porter). Applied after stopword removal and always produces lowercase words.",
+            id: "Mengubah kata ke bentuk dasarnya agar variasi kata dihitung sebagai satu kata (mis. \"makanan\" menjadi \"makan\"). None (default), Indonesian (Sastrawi), atau English (Snowball/Porter2). Dilakukan setelah stopwords dibuang dan selalu menghasilkan huruf kecil.",
+            en: "Reduces words to their root form so word variations count as one word (e.g. \"running\" becomes \"run\"). None (default), Indonesian (Sastrawi), or English (Snowball/Porter2). Applied after stopword removal and always produces lowercase words.",
         },
     },
     {
