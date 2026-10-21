@@ -2002,7 +2002,7 @@ Ketiga wasm di atas sama persis (sha256) pada sandbox cloud dan VM. Seluruh `pre
 #### 3. Metode
 
 ##### 3.1 Data
-- **Pilkada**: `Claude outputs/pilkada_train.csv` (630 baris; negative 315, positive 315) dan `pilkada_test.csv` (270 baris; 135 per kelas). Kolom teks `Text Tweet`, kelas `Sentiment`; `Id` dan `Pasangan Calon` dikeluarkan dari prediktor. Berkas data tidak diubah dan tidak ada pembagian baru.
+- **Pilkada**: `accuracy/datasets/pilkada_train.csv` (630 baris; negative 315, positive 315) dan `pilkada_test.csv` (270 baris; 135 per kelas). Kolom teks `Text Tweet`, kelas `Sentiment`; `Id` dan `Pasangan Calon` dikeluarkan dari prediktor. Berkas data tidak diubah dan tidak ada pembagian baru.
 - **SMS Spam (UCI id 228)**: 5.574 pesan (ham 4.827, spam 747); pembagian berstrata 70/30, seed 42 (`train_test_split(test_size=0.30, stratify=label, random_state=42)` pada daftar indeks): 3.901 latih, 1.673 uji. CSV identik dengan yang dipakai agen WEKA.
 - **SmSA (IndoNLU)**: pembagian resmi, 11.000 latih dan 500 uji (negative 204, neutral 88, positive 208); data validasi tidak dipakai.
 - Asal berkas, sha256, dan lisensi: `accuracy/datasets/MANIFEST.md`. URL unduhan dan lisensi **belum diverifikasi dari sandbox** (jaringan keluar diblokir); berkas mentah diunduh pengguna.
@@ -2423,7 +2423,7 @@ Semua berkas CSV seragam (`Id,Label,Text`) dibangun oleh `perf/prepare_datasets.
 
 | ID | Dokumen | Sumber |
 |---|---|---|
-| `pilkada_900` | 900 | `Claude outputs/pilkada_train.csv` (630) + `pilkada_test.csv` (270), digabung agar 900 dokumen diproses sekaligus (kolom `Pasangan Calon` tidak dipakai; di aplikasi dikeluarkan lewat mode Exclude) |
+| `pilkada_900` | 900 | `accuracy/datasets/pilkada_train.csv` (630) + `pilkada_test.csv` (270), digabung agar 900 dokumen diproses sekaligus (kolom `Pasangan Calon` tidak dipakai; di aplikasi dikeluarkan lewat mode Exclude) |
 | `sms_5574` | 5.574 | `accuracy/datasets/sms_spam_all.csv` (UCI SMS Spam Collection) |
 | `smsa_11000` | 11.000 | `accuracy/datasets/smsa_train.csv` (IndoNLU SmSA, berkas latih) |
 | `gabungan` | 17.974 | Pilkada 900 + SMS 5.574 + SmSA latih+uji 11.500. Label campuran, hanya untuk beban waktu. **Bukan** dataset >= 20.000 (kurang 2.026). Dilaporkan sebagai baris tambahan berlabel jelas. |
@@ -2575,7 +2575,7 @@ Dokumen ini melaporkan Track F evaluasi modul Text Analytics Statify: apakah kel
 | wasm Apply Model (`public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm`) | sha256 `036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc`, 1.627.140 B | idem |
 | Mesin | VM Linux di perangkat (kernel 6.8.0-138), Node v22.23.2 (sandbox cloud: Node 22.22). Bukan Windows 11 laptop skripsi; waktu eksekusi sandbox tidak dilaporkan sebagai hasil perangkat itu. | log |
 | Jest | `tools/run_jest_linux.sh` (config `jest.eval.config.js`, ts-jest, `@jest-environment node` untuk tes service dan jsdom untuk tes antarmuka) | `logs/jest_F_vm.txt` |
-| Data | `Claude outputs/pilkada_train.csv` (630 baris) dan `pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`; kelas negative dan positive | log |
+| Data | `accuracy/datasets/pilkada_train.csv` (630 baris) dan `pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`; kelas negative dan positive | log |
 | Konfigurasi | K1 sampai K5 seperti Track D (`headless/statify_wasm.mjs`, dibangun di atas `STWV_DEFAULT_CONFIG`); seed 42; alpha 1 | `integration/it_util.mjs`, `integration.drivers.ts` |
 
 Berkas wasm yang dipakai adalah yang ada di repositori (tidak dibangun ulang oleh Track F).

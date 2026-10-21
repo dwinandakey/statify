@@ -8,8 +8,8 @@
   "platform": "Windows-11-10.0.26300-SP0"
  },
  "dataset": "pilkada",
- "train_file": "Claude outputs\\pilkada_train.csv",
- "test_file": "Claude outputs\\pilkada_test.csv",
+ "train_file": "frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\accuracy\\datasets\\pilkada_train.csv",
+ "test_file": "frontend\\components\\Modals\\Analyze\\Classify\\naive-bayes\\text_analytics_eval\\accuracy\\datasets\\pilkada_test.csv",
  "n_train": 630,
  "n_test": 270,
  "train_class": {

@@ -5,7 +5,7 @@
 //! Cara kerja (tidak menulis ulang rumus; hanya memanggil fungsi produksi):
 //!   1. Membaca model hasil Export Model dari wasm Naive Bayes: `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/out/model_statify_<K>.json`
 //!      (dibuat oleh `node frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/run_statify.mjs`).
-//!   2. Membaca `Claude outputs/pilkada_test.csv` (kolom `Id`, `Sentiment`, `Text Tweet`).
+//!   2. Membaca `text_analytics_eval/accuracy/datasets/pilkada_test.csv` (kolom `Id`, `Sentiment`, `Text Tweet`).
 //!   3. `build_scorer(model)` -> `TextModel::prepare(payload raw)` -> `score_row_with_text` -> `normalize_log_scores`
 //!      (log-sum-exp) -> `argmax_with_tie_break`: jalur yang sama dengan `run_apply_model_with_text`, tetapi probabilitas
 //!      TIDAK dibulatkan `round4`.
@@ -95,7 +95,7 @@ fn column(header: &[String], name: &str) -> usize {
 fn eval_compare_pilkada_probabilitas_presisi_penuh_dan_wasm_tidak_basi() {
     let root = repo_root();
     let out_dir = root.join("frontend").join("components").join("Modals").join("Analyze").join("Classify").join("naive-bayes").join("text_analytics_eval").join("accuracy").join("out");
-    let test_csv = root.join("Claude outputs").join("pilkada_test.csv");
+    let test_csv = out_dir.parent().expect("folder accuracy").join("datasets").join("pilkada_test.csv");
     let rows = parse_csv(&fs::read_to_string(&test_csv).expect("pilkada_test.csv tidak terbaca"));
     let header = rows[0].clone();
     let data = &rows[1..];

@@ -6,4 +6,4 @@ K1w: acc=0.646000 kappa=0.414140 macroF1=0.565987 vocab=17898  empty_test_docs=0
 K4w: acc=0.650000 kappa=0.405199 macroF1=0.488640 vocab=17898  empty_test_docs=0
 tulis: C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\sklearn_results.json
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=5.47 started=2026-10-22 00.14.25 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset smsa --no-params cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=4 started=2026-10-22 01.44.09 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset smsa --no-params cwd=C:\Data\KULIAH\Skripsi\statify64 ===

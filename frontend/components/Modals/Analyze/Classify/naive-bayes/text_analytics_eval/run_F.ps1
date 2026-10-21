@@ -12,7 +12,7 @@
 #   3. Opsional: cargo test --test eval_integration (statify-text-core) -> logs\rust_eval_integration.txt
 # Prasyarat: node (v18+), dependensi frontend terpasang (npm ci di folder frontend), wasm sudah dibangun di repo
 #            (public\workers\TextAnalytics\{StringToWordVector,NaiveBayes,ApplyModel}\...\pkg), dataset
-#            "Claude outputs\pilkada_{train,test}.csv".
+#            "accuracy\datasets\pilkada_{train,test}.csv".
 # Pemakaian (dari folder repo):  powershell -ExecutionPolicy Bypass -File frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\run_F.ps1
 # Parameter: -SkipJest, -SkipRust
 param([switch]$SkipJest, [switch]$SkipRust)

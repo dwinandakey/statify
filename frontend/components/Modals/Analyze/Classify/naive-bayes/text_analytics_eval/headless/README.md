@@ -76,7 +76,7 @@ Contoh:
 ```js
 import { logWasmInfo, readCsv, runTrainApply, KONFIGURASI } from "./statify_wasm.mjs";
 logWasmInfo();
-const train = readCsv("Claude outputs/pilkada_train.csv"), test = readCsv("Claude outputs/pilkada_test.csv");
+const train = readCsv("accuracy/datasets/pilkada_train.csv"), test = readCsv("accuracy/datasets/pilkada_test.csv");
 const r = await runTrainApply({ train, test, textCol: "Text Tweet", labelCol: "Sentiment",
                                 excluded: ["Id", "Pasangan Calon"], kconfig: KONFIGURASI.K1 });
 console.log(r.predicted.slice(0, 5), r.classProb[0].slice(0, 5), r.timings);

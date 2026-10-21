@@ -11,7 +11,7 @@ Tes otomatis untuk skenario yang sama (Jest dan Rust) dijelaskan pada `C_blackbo
 
 | Kode | Berkas | Isi | Tipe pengukuran yang harus tampil di Variable View |
 |---|---|---|---|
-| DS-1 | `Claude outputs\pilkada_train.csv` (630 baris; 315 `negative`, 315 `positive`) | `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet` | `Id` = Scale; `Sentiment` = Nominal; `Pasangan Calon` = Nominal; `Text Tweet` = Nominal (tipe String) |
+| DS-1 | `accuracy\datasets\pilkada_train.csv` (630 baris; 315 `negative`, 315 `positive`) | `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet` | `Id` = Scale; `Sentiment` = Nominal; `Pasangan Calon` = Nominal; `Text Tweet` = Nominal (tipe String) |
 | DS-2 | `dataset_untuk_text\uji_a2.csv` (5 baris: `x` = 1,1,1,3,5; `kelas` = A,A,A,B,B) | `x`, `kelas` | `x` = Scale (Numeric); `kelas` = Nominal |
 
 3. Ubah pengukuran di Variable View bila impor menebak lain. Bila tipe/ukuran tidak bisa diubah sesuai tabel, hentikan dan catat.

@@ -10,7 +10,7 @@ Bahasa dokumen: Indonesia baku-akademik. Kolom tabel HARUS persis seperti di pro
 4. Pengguna (Yedija) menjalankan Rust, Jest standar (config produksi, Windows), Playwright, dan WEKA sendiri di Windows lewat skrip PowerShell yang Anda siapkan. Hasil dari perangkat itulah yang akan masuk buku. Sandbox cloud/VM BUKAN perangkat uji skripsi (Lenovo IdeaPad Gaming 3, Ryzen 5 4600H, Windows 11): jangan klaim waktu eksekusi dari sandbox sebagai hasil perangkat itu.
 
 ## Dua lokasi kerja
-- **Cloud (penulisan)**: `/home/claude/statify64` adalah salinan kerja repo (tanpa node_modules/target). Tulis & edit berkas di sini dengan Write/Edit, path relatif repo SAMA dengan repo asli. Dataset: `/home/claude/statify64/Claude outputs/pilkada_{train,test}.csv` dan `dataset_untuk_text/`.
+- **Cloud (penulisan)**: `/home/claude/statify64` adalah salinan kerja repo (tanpa node_modules/target). Tulis & edit berkas di sini dengan Write/Edit, path relatif repo SAMA dengan repo asli. Dataset: `/home/claude/statify64/frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/datasets/pilkada_{train,test}.csv` dan `dataset_untuk_text/`.
 - **Perangkat (eksekusi Jest & tujuan akhir)**: repo asli di `E:\KULIAH\Skripsi\statify64`, di VM lokal `$HOME/mnt/statify64`.
 
 ### Mengirim berkas cloud -> perangkat (3 langkah)

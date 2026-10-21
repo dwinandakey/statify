@@ -1,6 +1,6 @@
-"""sk_compare.py — pembanding scikit-learn untuk Track D (akurasi numerik Statify vs scikit-learn vs WEKA).
+"""sk_compare.py — pembanding scikit-learn untuk akurasi Naive Bayes teks Statify (dibandingkan juga dengan WEKA).
 
-Pengganti `Claude outputs/sk_compare.py`. Perbedaan penting dari skrip lama:
+Prinsip:
   * TIDAK membuat split baru dan TIDAK menulis ulang berkas data. Membaca berkas latih/uji yang sudah ada.
   * Kosakata, df/IDF, dan rata-rata norma HANYA dihitung dari data latih (`fit` pada latih, `transform` pada uji).
     Tidak ada statistik dari data uji yang dipakai (pemeriksaan kebocoran: lihat fungsi `assert_no_leak`).
@@ -22,7 +22,7 @@ Tokenisasi: SENGAJA disamakan dengan Statify supaya selisih angka mencerminkan i
   Varian "w" (K1w, K2w, K3w, K4w, K5w): kosakata = seluruh kata (tanpa pemangkasan) => tidak ada aturan seri,
   dan tidak ada kode seleksi kosakata kustom.
 
-K5 (TF log(1+f) x ln(N/df), normalisasi panjang dokumen Weka) tidak ada padanannya di scikit-learn; fitur dihitung
+K5 (TF log(1+f) x ln(N/df), normalisasi panjang dokumen WEKA) tidak ada padanannya di scikit-learn; fitur dihitung
   dengan numpy (independen dari Rust) lalu MultinomialNB scikit-learn dipakai sebagai pengklasifikasi.
 K6 (stopword + Sastrawi) tidak dibandingkan ke scikit-learn (tidak ada Sastrawi).
 
@@ -51,8 +51,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", "..", "..", "..", "..", ".."))
 
 DATASETS = {
-    "pilkada": dict(train=os.path.join(REPO, "Claude outputs", "pilkada_train.csv"),
-                    test=os.path.join(REPO, "Claude outputs", "pilkada_test.csv"),
+    "pilkada": dict(train=os.path.join(HERE, "datasets", "pilkada_train.csv"),
+                    test=os.path.join(HERE, "datasets", "pilkada_test.csv"),
                     id="Id", text="Text Tweet", label="Sentiment", out=os.path.join(HERE, "out"),
                     default_configs="K1,K2,K3,K4,K5,K1w,K2w,K3w,K4w,K5w,K1m,K2m,K5m"),
     "sms_spam": dict(train=os.path.join(HERE, "datasets", "sms_spam_train.csv"),
@@ -112,7 +112,7 @@ def sparse_rows(X):
 
 
 def weka_features(Ctr, Cte, kind):
-    """K5: TF log(1+f), IDF ln(N/df) dari latih, normalisasi panjang dokumen Weka (numpy murni). Latih & uji."""
+    """K5: TF log(1+f), IDF ln(N/df) dari latih, normalisasi panjang dokumen WEKA (numpy murni). Latih & uji."""
     n = Ctr.shape[0]
     df = (Ctr > 0).sum(axis=0)
     idf = np.log(n / np.maximum(df, 1))

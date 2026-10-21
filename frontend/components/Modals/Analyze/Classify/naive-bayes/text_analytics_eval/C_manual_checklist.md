@@ -214,7 +214,7 @@ Lakukan sesudah M-02 (korpus D, opsi bawaan, awalan `VEC_`). Buka Output Viewer 
 | 4. Buka tabel **Settings**. | — | Formula Standard Weka; Term Frequency Word count; Inverse Document Frequency None; Normalization None; Convert to Lowercase Yes; Stopwords None; Stemming None; Tokenizer "Word (unigram)"; Delimiters (Regex) `[\s.,;:'"()?!]+`; Words to Keep 1000; Minimum Term Frequency 1. | | | |
 | 5. Buka tabel **Vocabulary**. | — | Kolom No, Term, Dataset Column, Documents (Non-zero). Lima baris: makan / VEC_makan / 2; nasi / VEC_nasi / 2; saya / VEC_saya / 2; suka / VEC_suka / 2; tidak / VEC_tidak / 1. | | | |
 | 6. Baca interpretasi di bawah tiap tabel. | — | Setiap item memiliki paragraf "What this shows.", "How to read it.", "Key findings." berbahasa Inggris dan tanpa tag HTML mentah yang tampak. | | | |
-| 7. (Opsional) Ulangi dengan dataset besar (mis. `Claude outputs/pilkada_train.csv`, kolom teks) untuk melihat pembatasan tabel Vocabulary. | — | Tabel Vocabulary memuat paling banyak 200 baris dengan catatan "Showing the first 200 of N terms (alphabetical, same order as the dataset columns)."; semua N kolom tetap ada di Data Editor. | | | |
+| 7. (Opsional) Ulangi dengan dataset besar (mis. `accuracy/datasets/pilkada_train.csv`, kolom teks) untuk melihat pembatasan tabel Vocabulary. | — | Tabel Vocabulary memuat paling banyak 200 baris dengan catatan "Showing the first 200 of N terms (alphabetical, same order as the dataset columns)."; semua N kolom tetap ada di Data Editor. | | | |
 
 ---
 
@@ -252,7 +252,7 @@ Tes otomatis untuk skenario yang sama (Jest dan Rust) dijelaskan pada `C_blackbo
 
 | Kode | Berkas | Isi | Tipe pengukuran yang harus tampil di Variable View |
 |---|---|---|---|
-| DS-1 | `Claude outputs\pilkada_train.csv` (630 baris; 315 `negative`, 315 `positive`) | `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet` | `Id` = Scale; `Sentiment` = Nominal; `Pasangan Calon` = Nominal; `Text Tweet` = Nominal (tipe String) |
+| DS-1 | `accuracy\datasets\pilkada_train.csv` (630 baris; 315 `negative`, 315 `positive`) | `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet` | `Id` = Scale; `Sentiment` = Nominal; `Pasangan Calon` = Nominal; `Text Tweet` = Nominal (tipe String) |
 | DS-2 | `dataset_untuk_text\uji_a2.csv` (5 baris: `x` = 1,1,1,3,5; `kelas` = A,A,A,B,B) | `x`, `kelas` | `x` = Scale (Numeric); `kelas` = Nominal |
 
 3. Ubah pengukuran di Variable View bila impor menebak lain. Bila tipe/ukuran tidak bisa diubah sesuai tabel, hentikan dan catat.

@@ -207,7 +207,7 @@ Lakukan sesudah M-02 (korpus D, opsi bawaan, awalan `VEC_`). Buka Output Viewer 
 | 4. Buka tabel **Settings**. | — | Formula Standard Weka; Term Frequency Word count; Inverse Document Frequency None; Normalization None; Convert to Lowercase Yes; Stopwords None; Stemming None; Tokenizer "Word (unigram)"; Delimiters (Regex) `[\s.,;:'"()?!]+`; Words to Keep 1000; Minimum Term Frequency 1. | | | |
 | 5. Buka tabel **Vocabulary**. | — | Kolom No, Term, Dataset Column, Documents (Non-zero). Lima baris: makan / VEC_makan / 2; nasi / VEC_nasi / 2; saya / VEC_saya / 2; suka / VEC_suka / 2; tidak / VEC_tidak / 1. | | | |
 | 6. Baca interpretasi di bawah tiap tabel. | — | Setiap item memiliki paragraf "What this shows.", "How to read it.", "Key findings." berbahasa Inggris dan tanpa tag HTML mentah yang tampak. | | | |
-| 7. (Opsional) Ulangi dengan dataset besar (mis. `Claude outputs/pilkada_train.csv`, kolom teks) untuk melihat pembatasan tabel Vocabulary. | — | Tabel Vocabulary memuat paling banyak 200 baris dengan catatan "Showing the first 200 of N terms (alphabetical, same order as the dataset columns)."; semua N kolom tetap ada di Data Editor. | | | |
+| 7. (Opsional) Ulangi dengan dataset besar (mis. `accuracy/datasets/pilkada_train.csv`, kolom teks) untuk melihat pembatasan tabel Vocabulary. | — | Tabel Vocabulary memuat paling banyak 200 baris dengan catatan "Showing the first 200 of N terms (alphabetical, same order as the dataset columns)."; semua N kolom tetap ada di Data Editor. | | | |
 
 ---
 

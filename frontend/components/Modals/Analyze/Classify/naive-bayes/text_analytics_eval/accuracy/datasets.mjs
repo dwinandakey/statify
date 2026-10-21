@@ -7,8 +7,8 @@ const ACC = path.join(repoRoot, "frontend", "components", "Modals", "Analyze", "
 export const DATASETS = {
   // Berkas ASLI yang dipakai skripsi (tidak diubah, tidak ada split baru).
   pilkada: {
-    train: path.join(repoRoot, "Claude outputs", "pilkada_train.csv"),
-    test: path.join(repoRoot, "Claude outputs", "pilkada_test.csv"),
+    train: path.join(ACC, "datasets", "pilkada_train.csv"),
+    test: path.join(ACC, "datasets", "pilkada_test.csv"),
     idCol: "Id", textCol: "Text Tweet", labelCol: "Sentiment", excluded: ["Id", "Pasangan Calon"],
     outDir: path.join(ACC, "out"),
   },

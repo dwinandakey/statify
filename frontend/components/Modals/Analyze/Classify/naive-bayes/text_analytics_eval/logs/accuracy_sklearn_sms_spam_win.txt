@@ -9,4 +9,4 @@ K3w: acc=0.980873 kappa=0.917529 macroF1=0.958765 vocab=7568  empty_test_docs=1
 K4w: acc=0.958757 kappa=0.795552 macroF1=0.897343 vocab=7568  empty_test_docs=1
 tulis: C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\sms_spam\sklearn_results.json
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=4.61 started=2026-10-22 00.14.15 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset sms_spam --no-params cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=3.43 started=2026-10-22 01.44.02 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset sms_spam --no-params cwd=C:\Data\KULIAH\Skripsi\statify64 ===

@@ -21,7 +21,7 @@ Dokumen ini melaporkan Track F evaluasi modul Text Analytics Statify: apakah kel
 | wasm Apply Model (`public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm`) | sha256 `036c9fd9dbd9f14baf84dcb031c1fe5e452f3b990511a39cfb5c66ab6592e3fc`, 1.627.140 B | idem |
 | Mesin | VM Linux di perangkat (kernel 6.8.0-138), Node v22.23.2 (sandbox cloud: Node 22.22). Bukan Windows 11 laptop skripsi; waktu eksekusi sandbox tidak dilaporkan sebagai hasil perangkat itu. | log |
 | Jest | `tools/run_jest_linux.sh` (config `jest.eval.config.js`, ts-jest, `@jest-environment node` untuk tes service dan jsdom untuk tes antarmuka) | `logs/jest_F_vm.txt` |
-| Data | `Claude outputs/pilkada_train.csv` (630 baris) dan `pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`; kelas negative dan positive | log |
+| Data | `accuracy/datasets/pilkada_train.csv` (630 baris) dan `pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`; kelas negative dan positive | log |
 | Konfigurasi | K1 sampai K5 seperti Track D (`headless/statify_wasm.mjs`, dibangun di atas `STWV_DEFAULT_CONFIG`); seed 42; alpha 1 | `integration/it_util.mjs`, `integration.drivers.ts` |
 
 Berkas wasm yang dipakai adalah yang ada di repositori (tidak dibangun ulang oleh Track F).

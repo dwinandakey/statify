@@ -15,4 +15,4 @@ K2m: acc=0.740741 kappa=0.481481 macroF1=0.740513 vocab=1042 {'only_ours': 0, 'o
 K5m: acc=0.748148 kappa=0.496296 macroF1=0.748148 vocab=1042 {'only_ours': 0, 'only_native': 0} empty_test_docs=1
 tulis: C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\sklearn_results.json
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=10.79 started=2026-10-22 00.14.01 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset pilkada cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=3.5 started=2026-10-22 01.43.56 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\sk_compare.py --dataset pilkada cwd=C:\Data\KULIAH\Skripsi\statify64 ===

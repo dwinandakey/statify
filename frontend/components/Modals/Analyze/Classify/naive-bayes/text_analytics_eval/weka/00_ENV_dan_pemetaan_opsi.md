@@ -187,7 +187,7 @@ Dibuat oleh `make_arff.py` (dapat dijalankan ulang; idempoten) dengan Python (ta
 Pembagian data **tidak diulang**: memakai `data/pilkada_train.csv` (630 baris) dan `data/pilkada_test.csv` (270 baris) apa adanya.
 
 > Catatan sumber: berkas CSV ini tidak ada di `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/weka/data/` saat tugas dimulai. Saya menyalinnya (`cp -n`, tanpa menimpa) dari
-> `Claude outputs/pilkada_train.csv` dan `Claude outputs/pilkada_test.csv` di repo (hasil `sk_compare.py`: stratified 70/30, seed 42). Berkas aslinya tidak diubah.
+> `accuracy/datasets/pilkada_train.csv` dan `accuracy/datasets/pilkada_test.csv` di repo (hasil `sk_compare.py`: stratified 70/30, seed 42). Berkas aslinya tidak diubah.
 
 Header ARFF (identik di latih dan uji, diverifikasi):
 

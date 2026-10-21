@@ -1,17 +1,17 @@
-=== run_statify.mjs  dataset=smsa  configs=K1,K4,K1w,K4w  2026-10-21T17:14:22.991Z
+=== run_statify.mjs  dataset=smsa  configs=K1,K4,K1w,K4w  2026-10-21T18:44:07.262Z
 [statify_wasm] node=v24.20.0 win32/x64 (Windows_NT 10.0.26300) repo=C:\Data\KULIAH\Skripsi\statify64
 [statify_wasm] stwv sha256=5c202402bb74660ac7fe848c4d639340c64b786407543c360528be1efc90b29e bytes=1449467 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
 [statify_wasm] nb   sha256=79ed2e20bf4c87b82e60721083adde044f77cfe17bc3f584940c89a25d0b5bee bytes=1805743 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
 [statify_wasm] am   sha256=9298d33493b550f623e3cf4ccf07c01e6ff7dbd8f775b7c60897d3fbfcd03e97 bytes=1589155 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
 train=11000 baris (smsa_train.csv)  test=500 baris (smsa_test.csv)  header=["Id","Label","Text"]
-K1: acc=0.598000 (299/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=640 apply_ms=78 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K1.csv
-K4: acc=0.624000 (312/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=492 apply_ms=24 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K4.csv
-K1w: acc=0.646000 (323/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=531 apply_ms=86 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K1w.csv
-K4w: acc=0.650000 (325/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=492 apply_ms=83 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K4w.csv
+K1: acc=0.598000 (299/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=540 apply_ms=61 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K1.csv
+K4: acc=0.624000 (312/500) notScored=0 vocab=1000 likelihood=multinomial train_ms=430 apply_ms=20 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K4.csv
+K1w: acc=0.646000 (323/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=494 apply_ms=81 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K1w.csv
+K4w: acc=0.650000 (325/500) notScored=0 vocab=17898 likelihood=multinomial train_ms=451 apply_ms=93 NBerrors="No errors occurred." AMerrors="No errors occurred." -> frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\out\smsa\pred_statify_K4w.csv
 === ringkasan ===
 K1	acc=0.598000	299/500	notScored=0	vocab=1000
 K4	acc=0.624000	312/500	notScored=0	vocab=1000
 K1w	acc=0.646000	323/500	notScored=0	vocab=17898
 K4w	acc=0.650000	325/500	notScored=0	vocab=17898
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.8 started=2026-10-22 00.14.22 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\run_statify.mjs --dataset smsa cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.48 started=2026-10-22 01.44.07 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\run_statify.mjs --dataset smsa cwd=C:\Data\KULIAH\Skripsi\statify64 ===

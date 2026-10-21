@@ -11,7 +11,7 @@
 # hilang menjadi GAGAL (bukan lulus diam-diam).
 $dataCandidates = @(
     $env:TA_EVAL_DATA_DIR,
-    (Join-Path $RepoRoot 'Claude outputs'),
+    (Join-Path $PSScriptRoot 'accuracy\datasets'),
     (Join-Path $RepoRoot 'dataset_untuk_text'),
     'E:\KULIAH\Skripsi\SIDANG'
 ) | Where-Object { $_ -and (Test-Path -LiteralPath (Join-Path $_ 'pilkada_train.csv')) }

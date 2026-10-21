@@ -12,7 +12,7 @@
 //! ```
 //!
 //! Data: dataset buatan kecil (dibangun di dalam berkas ini) dan, untuk tes berakhiran `_pilkada`,
-//! `pilkada_train.csv`. Lokasi dicari berurutan: `TA_EVAL_DATA_DIR`, `<repo>/Claude outputs/`,
+//! `pilkada_train.csv`. Lokasi dicari berurutan: `TA_EVAL_DATA_DIR`, `naive-bayes/text_analytics_eval/accuracy/datasets/`,
 //! `<repo>/dataset_untuk_text/`, `E:\KULIAH\Skripsi\SIDANG\`. Bila tidak ditemukan, tes itu
 //! mencetak `TA_EVAL_SKIP` dan dilewati; bila variabel lingkungan `TA_EVAL_REQUIRE_DATA` di-set
 //! (skrip `run_C2.ps1` melakukannya) berkas yang hilang membuat tes GAGAL (bukan lulus diam-diam).
@@ -1044,7 +1044,7 @@ fn find_pilkada_train() -> Option<PathBuf> {
     }
     // naive-bayes/rust -> naive-bayes -> Classify -> Analyze -> Modals -> components -> frontend -> repo
     let manifest = Path::new(env!("CARGO_MANIFEST_DIR"));
-    candidates.push(manifest.join("../../../../../../../Claude outputs/pilkada_train.csv"));
+    candidates.push(manifest.join("../text_analytics_eval/accuracy/datasets/pilkada_train.csv"));
     candidates.push(manifest.join("../../../../../../../dataset_untuk_text/pilkada_train.csv"));
     candidates.push(PathBuf::from("E:\\KULIAH\\Skripsi\\SIDANG\\pilkada_train.csv"));
     candidates.into_iter().find(|path| path.is_file())

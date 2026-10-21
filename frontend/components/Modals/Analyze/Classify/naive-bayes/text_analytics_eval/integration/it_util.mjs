@@ -19,8 +19,8 @@ export { repoRoot, readCsv, toCsv, makeVariables, naiveBayesDefault, buildNaiveB
 export const EVAL_DIR = path.join(repoRoot, "frontend", "components", "Modals", "Analyze", "Classify", "naive-bayes", "text_analytics_eval");
 export const OUT_DIR = path.join(EVAL_DIR, "integration", "out");
 export const PIL = {
-  train: path.join(repoRoot, "Claude outputs", "pilkada_train.csv"),
-  test: path.join(repoRoot, "Claude outputs", "pilkada_test.csv"),
+  train: path.join(EVAL_DIR, "accuracy", "datasets", "pilkada_train.csv"),
+  test: path.join(EVAL_DIR, "accuracy", "datasets", "pilkada_test.csv"),
   idCol: "Id", textCol: "Text Tweet", labelCol: "Sentiment", excluded: ["Id", "Pasangan Calon"],
 };
 

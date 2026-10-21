@@ -40,3 +40,15 @@ Halaman sumber: https://archive.ics.uci.edu/dataset/228/sms+spam+collection  (do
 - SMS Spam: split stratified 70/30 seed 42 (`train_test_split(test_size=0.30, stratify=label, random_state=42)` pada daftar indeks), urutan asli dipertahankan; Id = nomor baris asli (1-based).
 - SmSA: pembagian resmi train -> test; validasi (1.260) tidak dipakai. Id = nomor baris berkas.
 - Kolom CSV: `Id,Label,Text` (UTF-8, kutip RFC 4180).
+
+## Data utama dan data beban performa (disimpan di repo)
+
+Agar seluruh pengujian dapat diulang dari clone repo tanpa berkas di luar repo, data berikut disimpan di folder ini.
+
+| Berkas | Isi | Baris data | Bytes | sha256 |
+|---|---|---|---|---|
+| `pilkada_train.csv` | Data latih tweet Pilkada DKI 2017 (kolom `Id,Sentiment,Pasangan Calon,Text Tweet`), berkas asli skripsi tanpa perubahan | 630 | 85939 | b017b039aba9dfc65f75b84ef337d7495bd6dbac5656697cfd336013f6193478 |
+| `pilkada_test.csv` | Data uji tweet Pilkada DKI 2017, kolom sama | 270 | 36491 | eb3304febeb5aef9c5fe54d5cf8877693775005c56ba3787e33f404a4bbe0df9 |
+| `newsgroups20.csv` | 20 Newsgroups dari `sklearn.datasets.fetch_20newsgroups(subset='all', remove=('headers','footers','quotes'))`, spasi dirapikan, dokumen kosong dibuang (kolom `Id,Label,Text`). Hanya dipakai `perf/prepare_datasets.mjs` untuk set beban ≥ 20.000 dokumen. | 18331 | 21613410 | 9f60508f298cedba1bdee7e5ab0e17c50d093c429561faa88311503f68ef6208 |
+
+Pemakai: tes Rust `eval_compare.rs` dan `eval_blackbox_nb.rs`, tes Jest integrasi Apply Model, `accuracy/run_statify.mjs` dan `datasets.mjs`, `accuracy/sk_compare.py`, `integration/it_util.mjs`, `perf/prepare_datasets.mjs`, `run_C2.ps1`.

@@ -37,7 +37,7 @@ Disusun 12-10-2026 (malam sebelum sidang 13-10-2026, 13.30 WIB). Lingkup: hanya 
 
 ### Penyesuaian lingkungan (bukan perubahan kode)
 
-1. **Dataset tes integrasi.** Lima suite integrasi (IT-01..IT-05) membaca `statify64/Claude outputs/pilkada_{train,test}.csv`, yang belum ada di laptop baru (`ENOENT`). Kedua berkas disalin dari `SIDANG\` (folder SIDANG hanya dibaca) dan folder itu dikecualikan lewat `.git/info/exclude` (lokal, tidak ter-commit).
+1. **Dataset tes integrasi.** Lima suite integrasi (IT-01..IT-05) membaca `statify64/frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/accuracy/datasets/pilkada_{train,test}.csv`, yang belum ada di laptop baru (`ENOENT`). Kedua berkas disalin dari `SIDANG\` (folder SIDANG hanya dibaca) dan folder itu dikecualikan lewat `.git/info/exclude` (lokal, tidak ter-commit).
 2. **Cache Jest.** `jest.eval.config.js` memakai `cacheDirectory: process.env.JEST_CACHE_DIR`; tanpa variabel ini Jest 30 gagal dengan `TypeError [ERR_INVALID_ARG_TYPE] ... Received undefined`. Saat menjalankan Jest, set `JEST_CACHE_DIR` ke folder sementara (lihat perintah di bawah).
 3. **Identitas git** belum diatur di laptop baru. Commit dibuat dengan `git -c user.name="Dija" -c user.email=...` (identitas yang sama dengan riwayat repo) tanpa mengubah konfigurasi global.
 4. `.claude/launch.json` (konfigurasi pratinjau lokal) dibuat dan dikecualikan lewat `.git/info/exclude`.

@@ -1,7 +1,7 @@
 // prepare_datasets.mjs — Track E: membangun CSV dataset seragam (Id,Label,Text) untuk uji waktu eksekusi di perf/data/.
 //
 // Sumber (semuanya berkas NYATA yang sudah ada; tidak ada dokumen yang digandakan):
-//   pilkada_900   = "Claude outputs/pilkada_train.csv" (630) + "pilkada_test.csv" (270); kolom Sentiment -> Label,
+//   pilkada_900   = accuracy/datasets/pilkada_train.csv (630) + pilkada_test.csv (270); kolom Sentiment -> Label,
 //                   "Text Tweet" -> Text; kolom "Pasangan Calon" tidak dipakai (di aplikasi dikeluarkan lewat mode Exclude,
 //                   sehingga hasil setara).
 //   sms_5574      = accuracy/datasets/sms_spam_all.csv
@@ -40,8 +40,8 @@ function writeDs(id, rows, note) {
 const need = (p) => { if (!fs.existsSync(p)) throw new Error(`berkas sumber tidak ada: ${p}`); return p; };
 
 // --- Pilkada
-const pTrain = readCsv(need(path.join(repoRoot, "Claude outputs", "pilkada_train.csv")));
-const pTest = readCsv(need(path.join(repoRoot, "Claude outputs", "pilkada_test.csv")));
+const pTrain = readCsv(need(path.join(ACC, "pilkada_train.csv")));
+const pTest = readCsv(need(path.join(ACC, "pilkada_test.csv")));
 const pk = (d) => { const l = d.header.indexOf("Sentiment"), t = d.header.indexOf("Text Tweet"); return d.rows.map((r) => [r[l], r[t]]); };
 const pilkada = [...pk(pTrain), ...pk(pTest)];
 writeDs("pilkada_900", pilkada, `train ${pTrain.rows.length} + test ${pTest.rows.length}`);
@@ -75,9 +75,17 @@ console.log(`SmSA gabungan: ${smsaAll.length} (${smsaNote})`);
 const gab = [...pilkada, ...smsRows, ...smsaAll];
 writeDs("gabungan", gab, `pilkada ${pilkada.length} + sms ${smsRows.length} + smsa ${smsaAll.length} (${smsaNote}). Label campuran; hanya untuk beban waktu, bukan akurasi.`);
 
-// --- 20 Newsgroups (opsional)
+// --- 20 Newsgroups (opsional): pakai salinan di accuracy/datasets/newsgroups20.csv bila ada (hasil unduhan yang sama,
+//     disimpan di repo agar pengukuran dapat diulang tanpa jaringan); bila tidak ada, unduh lewat scikit-learn.
 let ng = null;
-if (try20ng) {
+const ngLocal = path.join(ACC, "newsgroups20.csv");
+if (fs.existsSync(ngLocal)) {
+  const d = readCsv(ngLocal);
+  const l = d.header.indexOf("Label"), t = d.header.indexOf("Text");
+  ng = d.rows.map((r) => [r[l], r[t]]);
+  console.log(`20 Newsgroups: ${ng.length} dokumen dari ${path.relative(repoRoot, ngLocal)}`);
+}
+if (!ng && try20ng) {
   const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "statify20ng_")), "ng.csv");
   const code = [
     "import csv,re,sys",

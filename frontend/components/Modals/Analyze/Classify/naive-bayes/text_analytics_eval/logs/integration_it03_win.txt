@@ -2,7 +2,7 @@
 [statify_wasm] stwv sha256=5c202402bb74660ac7fe848c4d639340c64b786407543c360528be1efc90b29e bytes=1449467 file=frontend/components/Modals/Transform/StringToWordVector/wasm-output/statify_string_to_word_bg.wasm
 [statify_wasm] nb   sha256=79ed2e20bf4c87b82e60721083adde044f77cfe17bc3f584940c89a25d0b5bee bytes=1805743 file=frontend/public/workers/Classify/NaiveBayes/pkg/wasm_bg.wasm
 [statify_wasm] am   sha256=9298d33493b550f623e3cf4ccf07c01e6ff7dbd8f775b7c60897d3fbfcd03e97 bytes=1589155 file=frontend/public/workers/Classify/ApplyModel/pkg/wasm_bg.wasm
-IT-03: data latih 630 baris (C:\Data\KULIAH\Skripsi\statify64\Claude outputs\pilkada_train.csv)
+IT-03: data latih 630 baris (C:\Data\KULIAH\Skripsi\statify64\frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\accuracy\datasets\pilkada_train.csv)
 
 --- K1: Weka default (lowercase, delimiter default, W=1000, TF hitungan, tanpa IDF/normalisasi) + Multinomial, alpha 1
 LULUS  K1 (c) model Export Model == trained_model wasm (bit-per-bit, 6017 angka)  :: selisih maksimum = 0
@@ -73,4 +73,4 @@ RINGKASAN_IT03 [{"k":"K1","N":630,"scored":630,"samePred":630,"sameR4":1260,"nPr
 
 === IT-03: 45 lulus, 0 gagal dari 45 pemeriksaan ===
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.33 started=2026-10-22 00.15.06 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\it03_same_data.mjs cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.88 started=2026-10-22 01.44.25 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\it03_same_data.mjs cwd=C:\Data\KULIAH\Skripsi\statify64 ===

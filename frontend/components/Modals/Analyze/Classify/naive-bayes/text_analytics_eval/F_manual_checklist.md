@@ -7,7 +7,7 @@ Semua status di sini adalah **MANUAL, belum dijalankan** sampai Anda mengisinya.
 ## 0. Persiapan
 
 1. Terminal di folder `frontend`: `npm run dev`; buka `http://localhost:3000` di Chrome (jendela biasa, IndexedDB aktif).
-2. Data: `Claude outputs\pilkada_train.csv` (630 baris) dan `Claude outputs\pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`. Impor lewat File → Import Data → CSV Data. Setiap kali berganti dataset, impor dataset baru (menggantikan yang lama) dan periksa Variable View: `Sentiment`, `Pasangan Calon`, `Text Tweet` bertipe String; `Id` sesuai hasil impor.
+2. Data: `accuracy\datasets\pilkada_train.csv` (630 baris) dan `accuracy\datasets\pilkada_test.csv` (270 baris); kolom `Id`, `Sentiment`, `Pasangan Calon`, `Text Tweet`. Impor lewat File → Import Data → CSV Data. Setiap kali berganti dataset, impor dataset baru (menggantikan yang lama) dan periksa Variable View: `Sentiment`, `Pasangan Calon`, `Text Tweet` bertipe String; `Id` sesuai hasil impor.
 3. Pengaturan Naive Bayes untuk jalur teks mentah (K1, bawaan): Target `Sentiment`; `Id`, `Pasangan Calon` dipindah ke Variables to Exclude; `Text Tweet` ke Raw Text Variable; tab Options: likelihood Multinomial, alpha 1; tab Validation: Use random seed dicentang, seed 42. Tab Text Preprocessing tetap bawaan (Words to Keep 1.000).
 4. Nilai acuan K1 dari log VM: IT-04 akurasi 0,762963, Kappa 0,525926, Macro F1 0,762963 (`logs/integration_it04_vm.txt`); resubstitusi pada pilkada_train akurasi 0,907937, Kappa 0,815873 (`logs/integration_it03_vm.txt`).
 

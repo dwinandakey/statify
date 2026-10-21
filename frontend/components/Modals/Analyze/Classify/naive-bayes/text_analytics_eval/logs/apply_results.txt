@@ -8,4 +8,4 @@ Hasil Jest: 1386 tes; hasil Rust: 577 tes; target Rust gagal kompilasi: []
   F_integration.md: Lulus=100
 TOTAL penanda: BELUM DIJALANKAN=1, Lulus=582
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.25 started=2026-10-22 01.33.39 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\tools\apply_results.py cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=0.34 started=2026-10-22 01.44.49 +07:00 cmd=python -X utf8 frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\tools\apply_results.py cwd=C:\Data\KULIAH\Skripsi\statify64 ===

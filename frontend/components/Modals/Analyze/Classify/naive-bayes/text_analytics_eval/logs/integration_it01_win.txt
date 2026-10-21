@@ -40,4 +40,4 @@ RINGKASAN_IT01 [{"W":1000,"nVec":1000,"notPrefixed":1,"viaFilter":999,"terms":10
 
 === IT-01 (tingkat wasm): 24 lulus, 0 gagal dari 24 pemeriksaan ===
 
-=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=2.73 started=2026-10-22 00.15.01 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\it01_stwv_to_nb.mjs cwd=C:\Data\KULIAH\Skripsi\statify64 ===
+=== TEXT_ANALYTICS_EVAL: exit_code=0 elapsed_s=1 started=2026-10-22 01.44.23 +07:00 cmd=node frontend\components\Modals\Analyze\Classify\naive-bayes\text_analytics_eval\integration\it01_stwv_to_nb.mjs cwd=C:\Data\KULIAH\Skripsi\statify64 ===
