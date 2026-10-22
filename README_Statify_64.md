@@ -14,7 +14,7 @@ Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di brow
 |---|---|---|---|
 | 1 | Uji statistik parametrik dan nonparametrik lanjutan | _(diisi)_ | _(diisi)_ |
 | 2 | Analisis faktor | _(diisi)_ | _(diisi)_ |
-| 3 | GLM multivariate dan repeated measures | _(diisi)_ | _(diisi)_ |
+| 3 | GLM multivariate dan repeated measures | Muhammad Ilham Cahyanto (222212756) | [GLM Multivariate dan Repeated Measures](#glm-multivariate-dan-repeated-measures) |
 | 4 | Time series | _(diisi)_ | _(diisi)_ |
 | 5 | Regresi logistik biner | Dwinanda Muhammad Keyzha (222212576) | [Regresi Logistik Biner](#regresi-logistik-biner) |
 | 6 | Regresi logistik ordinal | _(diisi)_ | _(diisi)_ |
@@ -309,5 +309,252 @@ Setelah itu salin berkas `statify_multinomial*` dan `package.json` dari `wasm/pk
 - Dokumentasi algoritma dan rumus: [ALGORITMA_DAN_RUMUS.md](frontend/components/Modals/Analyze/Regression/MultinomialLogistic/ALGORITMA_DAN_RUMUS.md).
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan di dalam aplikasi: halaman **Help**, bagian Multinomial Logistic Regression.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## GLM Multivariate dan Repeated Measures
+
+**Nama**             : Muhammad Ilham Cahyanto  
+**NIM**              : 222212756  
+**Judul Skripsi**    : PENGEMBANGAN MODUL PEMODELAN LINIER PEUBAH GANDA DAN PENGUKURAN BERULANG PADA APLIKASI STATIFY  
+**Dosen Pembimbing** : Firdaus, M.B.A.  
+
+### Deskripsi singkat
+
+Modul ini menambahkan dua prosedur General Linear Model (GLM) ke Statify:
+
+- **GLM Multivariate** menganalisis lebih dari satu variabel dependen sekaligus. Prosedur ini mencakup MANOVA satu dan dua arah, MANCOVA, uji vektor rata-rata satu populasi, dua populasi, dan berpasangan (Hotelling's T²), serta uji khi-kuadrat bila matriks kovarians populasi Σ diketahui.
+- **GLM Repeated Measures** menganalisis data yang diukur berulang pada subjek yang sama. Prosedur ini mencakup desain within-subjects, desain campuran (within dan between), desain dengan kovariat, dan desain *doubly multivariate* (lebih dari satu measure), lengkap dengan uji sferisitas Mauchly dan koreksi epsilon.
+
+Kedua prosedur dihitung dengan Rust/WebAssembly di dalam Web Worker, jadi data tidak dikirim ke server dan tampilan tidak membeku saat perhitungan berjalan. Keluaran mengikuti prosedur GLM pada SPSS dan sudah divalidasi terhadap keluaran IBM SPSS Statistics 27 dengan toleransi 0,001.
+
+### Cara mengakses
+
+**GLM Multivariate**: menu **Analyze > General Linear Model > Multivariate...** membuka dialog dengan panel variabel dan tombol subdialog:
+
+| Bagian | Fungsi |
+|---|---|
+| Variabel | Memilih Dependent Variables, Fixed Factor(s), Covariate(s), dan WLS Weight |
+| Model | Full factorial atau model kustom, jenis Sum of Squares (Type I–IV), intercept |
+| Contrasts | Kontras per faktor: Deviation, Simple, Difference, Helmert, Repeated, Polynomial |
+| Post Hoc | Perbandingan berganda LSD, Bonferroni, dan Sidak |
+| EM Means | Estimated marginal means dan perbandingan efek utama (LSD, Bonferroni, Sidak) |
+| Save | Nilai prediksi, residual, leverage, dan statistik koefisien |
+| Options | Statistik yang ditampilkan, uji homogenitas, selang kepercayaan simultan, taraf signifikansi |
+| Bootstrap | Selang kepercayaan bootstrap (percentile dan BCa), sampling sederhana atau berstrata |
+| Test Values | Nilai uji μ₀ untuk uji vektor rata-rata satu populasi |
+| Paired | Pasangan variabel untuk Hotelling's T² berpasangan, dengan nilai uji δ₀ |
+| Covariance Matrices | Muncul bila ada satu faktor dengan dua level. Pilihan Equal (Σ gabungan) atau Unequal (Welch-Satterthwaite), serta Test Values (δ₀) untuk uji dua populasi |
+
+Subdialog Test Values, Test Values (δ₀), dan Paired juga menyediakan isian matriks kovarians Σ yang diketahui.
+
+**GLM Repeated Measures**: menu **Analyze > General Linear Model > Repeated Measures...** memakai alur dua tahap:
+
+1. **Define**: menentukan nama faktor within-subjects, jumlah levelnya, dan nama measure.
+2. **Dialog utama**: memetakan variabel dataset ke setiap sel (level × measure), lalu memilih Between-Subjects Factor(s) dan Covariate(s). Tombol **Back to Define** kembali ke tahap pertama.
+
+| Bagian | Fungsi |
+|---|---|
+| Model | Full factorial atau model kustom untuk efek within dan between, dengan Sum of Squares Type III |
+| Contrasts | Kontras faktor within-subjects: Polynomial (bawaan, sama dengan SPSS) atau Repeated |
+| EM Means | Estimated marginal means dan perbandingan berpasangan (LSD, Bonferroni, Sidak) |
+| Save | Nilai prediksi, residual, leverage, dan statistik koefisien |
+| Options | Statistik yang ditampilkan, uji homogenitas, taraf signifikansi |
+
+Plots (kedua prosedur) dan Post Hoc (Repeated Measures) belum didukung di versi ini, dan tombolnya dinonaktifkan. Untuk perbandingan berpasangan pada Repeated Measures, gunakan EM Means > Compare main effects.
+
+### Fitur
+
+**GLM Multivariate**
+
+- **Desain**: MANOVA satu dan dua arah, MANCOVA, model kustom (misalnya model efek utama tanpa interaksi), dan analisis berbobot (WLS). Sum of Squares Type I sampai IV, termasuk penanganan sel kosong pada Type IV.
+- **Uji vektor rata-rata (Hotelling's T²)**:
+  - satu populasi, dengan nilai uji μ₀;
+  - dua populasi, dengan nilai uji δ₀ dan pilihan matriks kovarians sama (Σ gabungan) atau tidak sama (Welch-Satterthwaite, df pecahan);
+  - berpasangan, dengan nilai uji δ₀. Kolom selisih d = v₁ − v₂ dibentuk otomatis.
+- **Σ diketahui**: uji khi-kuadrat untuk satu populasi, dua populasi, dan berpasangan. Matriks yang dimasukkan diperiksa (diagonal positif dan definit positif) sebelum analisis dijalankan.
+- **Selang kepercayaan simultan**: T² dan Bonferroni; untuk kasus Unequal memakai Krishnamoorthy–Yu dan Welch t.
+- **Uji multivariat**: Pillai's Trace, Wilks' Lambda, Hotelling's Trace, dan Roy's Largest Root, beserta partial eta squared, noncentrality, dan observed power.
+- **Analisis lanjutan**: kontras, post hoc, EM means, dan bootstrap.
+
+**GLM Repeated Measures**
+
+- **Desain**: within-subjects murni, campuran within × between, dengan kovariat, dan *doubly multivariate*.
+- **Sferisitas**: uji Mauchly beserta epsilon Greenhouse-Geisser, Huynh-Feldt, dan Lower-bound. Epsilon mengoreksi df pada Tests of Within-Subjects Effects.
+- **Uji multivariat** untuk efek within-subjects (Pillai, Wilks, Hotelling, Roy).
+- **Kontras within-subjects** Polynomial dan Repeated, serta EM means dengan perbandingan berpasangan.
+
+**Keduanya**
+
+- Statistik deskriptif, uji homogenitas (Box's M, Levene, Bartlett's test of sphericity), estimasi parameter, matriks SSCP, *general estimable function*, ukuran efek, dan observed power.
+- Penyimpanan nilai prediksi, residual, dan leverage ke dataset.
+- Tur fitur interaktif di dalam dialog.
+- Pesan galat yang jelas bila data atau pengaturan tidak memenuhi syarat analisis.
+
+### Keluaran
+
+Tabel dan catatan kaki mengikuti format SPSS.
+
+**GLM Multivariate**
+
+- Between-Subjects Factors dan Descriptive Statistics.
+- Box's Test of Equality of Covariance Matrices, Bartlett's Test of Sphericity, dan Levene's Test of Equality of Error Variances.
+- **Multivariate Tests**, ditambah Chi-Square Test (Known Covariance Matrix) bila Σ diketahui.
+- Simultaneous Confidence Intervals (T² dan Bonferroni, atau versi Σ diketahui).
+- Tests of Between-Subjects Effects dan Parameter Estimates.
+- Between-Subjects SSCP Matrix, Residual SSCP Matrix, dan General Estimable Function.
+- Contrast Results (K Matrix) beserta uji multivariat dan univariatnya, Estimated Marginal Means, dan Multiple Comparisons.
+
+**GLM Repeated Measures**
+
+- Within-Subjects Factors dan Descriptive Statistics.
+- Box's M, Levene, dan Bartlett.
+- Multivariate Tests untuk efek within-subjects.
+- **Mauchly's Test of Sphericity** (W, Approx. Chi-Square, df, Sig., dan tiga epsilon).
+- **Tests of Within-Subjects Effects** dengan empat baris per efek (Sphericity Assumed, Greenhouse-Geisser, Huynh-Feldt, Lower-bound).
+- Tests of Within-Subjects Contrasts dan Tests of Between-Subjects Effects.
+- Parameter Estimates, matriks SSCP, Estimated Marginal Means, Pairwise Comparisons, dan Univariate Tests.
+
+### Alur kerja
+
+```
+dialogs/*-main.tsx                        Mengumpulkan variabel dan opsi, disimpan di IndexedDB
+        |
+services/*-analysis.ts                    Memotong data, membuang kasus tidak lengkap, menyusun payload
+        |                                 (RM: memetakan variabel ke sel level x measure; MV: kolom
+        |                                 selisih untuk Paired, validasi matriks Sigma)
+services/*-analysis-worker.ts             Web Worker yang memuat WASM dari rust/pkg
+        |
+rust/ (crate wasm per modul)              Design matrix, Sum of Squares Type I-IV, uji multivariat,
+        |                                 Mauchly dan epsilon (RM), Hotelling T2 dan Sigma diketahui (MV)
+services/*-analysis-formatter.ts          Menyusun tabel gaya SPSS beserta catatan kaki
+        |
+IndexedDB -> halaman Result               Log, analytic, dan statistic disimpan lalu ditampilkan
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/general-linear-model/`
+
+```
+general-linear-model/
+├── multivariate/
+│   ├── README.md, architecture.md, development-step.md   # Dokumentasi teknis modul
+│   ├── constants/                    # Nilai bawaan dialog dan daftar metode
+│   ├── dialogs/
+│   │   ├── multivariate-main.tsx     # Container: orkestrasi worker dan simpan hasil
+│   │   ├── dialog.tsx                # Dialog utama dan panel Covariance Matrices
+│   │   ├── model.tsx, contrast.tsx, posthoc.tsx, emmeans.tsx,
+│   │   │   save.tsx, options.tsx, bootstrap.tsx, plots.tsx
+│   │   ├── test-values.tsx           # Nilai uji mu0 (satu populasi)
+│   │   ├── two-sample-delta.tsx      # Nilai uji delta0 (dua populasi)
+│   │   ├── paired.tsx                # Hotelling's T2 berpasangan
+│   │   └── known-sigma-matrix.tsx    # Isian matriks Sigma diketahui
+│   ├── hooks/                        # tourConfig.ts, useTourGuide.ts
+│   ├── services/
+│   │   ├── multivariate-analysis.ts            # Menyiapkan payload dan menjalankan worker
+│   │   ├── multivariate-analysis-worker.ts     # Web Worker
+│   │   ├── multivariate-analysis-formatter.ts  # Tabel gaya SPSS
+│   │   ├── multivariate-analysis-output.ts     # Menyimpan hasil ke halaman Result
+│   │   ├── paired-difference.ts      # Kolom selisih untuk uji berpasangan
+│   │   ├── two-sample-delta.ts       # Uji dua populasi dengan delta0
+│   │   ├── known-sigma.ts            # Validasi dan uji khi-kuadrat Sigma diketahui
+│   │   └── empty-cells.ts            # Penanganan sel kosong
+│   ├── types/
+│   ├── test/, __test__/              # Jest (unit, acuan SPSS, performa)
+│   └── rust/                         # Crate Rust -> WebAssembly
+│       ├── pkg/                      # Hasil build yang dimuat worker
+│       └── src/
+│           ├── lib.rs
+│           ├── models/               # config, data, result
+│           ├── stats/                # core, multivariate_tests, between_subjects_effects,
+│           │                         # box_m_test, levene_test, bartlett_test, sscp_matrix,
+│           │                         # parameter_estimates, emmeans, posthoc, bootstrap, ...
+│           ├── wasm/                 # constructor.rs, function.rs (API ke JavaScript)
+│           ├── utils/
+│           └── test/                 # Validasi Rust terhadap nilai SPSS
+├── repeated-measures/
+│   ├── README.md, architecture.md, development-step.md
+│   ├── constants/
+│   ├── dialogs/
+│   │   ├── define/                   # Tahap Define: faktor within, level, measure
+│   │   ├── repeated-measures-main.tsx
+│   │   ├── dialog.tsx                # Dialog utama dan pemetaan sel level x measure
+│   │   └── model.tsx, contrast.tsx, emmeans.tsx, save.tsx, options.tsx,
+│   │       posthoc.tsx, plots.tsx
+│   ├── hooks/
+│   ├── services/                     # analysis, worker, formatter, output
+│   ├── types/
+│   ├── __test__/                     # Jest (struktur keluaran, acuan SPSS, performa)
+│   └── rust/
+│       ├── pkg/
+│       └── src/
+│           ├── stats/                # rm_model, mauchly_test, within_subjects_effects,
+│           │                         # multivariate_tests, parse_factors, glm_tests,
+│           │                         # between_subjects_effects, emmeans, ...
+│           ├── wasm/, models/, utils/
+│           └── test/
+└── shared/                           # Dipakai MV dan RM: eksekusi GLM, kolom effect size,
+                                      # catatan kaki SPSS, pesan galat
+```
+
+File pendukung di luar folder modul:
+
+| File | Fungsi |
+|---|---|
+| `frontend/components/Modals/Analyze/general-linear-model/GeneralLinearModelRegistry.tsx` | Mendaftarkan dialog Multivariate dan Repeated Measures ke sistem modal |
+| `frontend/components/Modals/Analyze/general-linear-model/general-linear-model-menu.tsx` | Entri menu Analyze > General Linear Model |
+| `frontend/app/help/components/statistics-guide/multivariate/` | Panduan penggunaan GLM Multivariate di halaman Help |
+| `frontend/app/help/components/statistics-guide/repeated-measures/` | Panduan penggunaan GLM Repeated Measures di halaman Help |
+
+### Build ulang WASM
+
+Lakukan hanya bila kode Rust berubah. Build final skripsi memakai rustc 1.95.0 dan wasm-pack 0.14.0.
+
+```bash
+cd frontend/components/Modals/Analyze/general-linear-model/multivariate/rust
+cargo test --lib                 # unit test dan validasi
+wasm-pack build --target web     # menulis ke rust/pkg
+
+cd ../../repeated-measures/rust
+cargo test --lib
+wasm-pack build --target web
+```
+
+Berbeda dengan modul yang memakai `public/workers/`, worker GLM di-bundle oleh Next.js dan memuat WASM langsung dari `rust/pkg`. Karena itu, hasil build tidak perlu disalin ke folder lain. Commit berkas di `rust/pkg/` (`wasm_bg.wasm`, `wasm.js`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, `package.json`) beserta `Cargo.lock` kedua crate.
+
+### Pengujian
+
+- **Unit test Rust** (`cargo test --lib` di folder `rust/` masing-masing), termasuk validasi terhadap nilai SPSS dan pengujian jalur dasar (*basis path*).
+- **Jest** dari folder `frontend/`. Jalankan secara serial karena setiap suite memuat WASM:
+
+  ```bash
+  npx jest --runInBand general-linear-model/multivariate general-linear-model/repeated-measures general-linear-model/shared
+  ```
+
+  Suite `repeated-measures-reference.test.ts` membaca dataset dari `testing/glm-rm-reference/data/`. Data ini tersedia di branch `ilham`, tetapi sudah dihapus dari `main`. Di `main`, ambil dulu datanya dari commit build final, lalu jalankan Jest. Hasilnya 14 suite lulus, dengan 4.080 test lulus dan 12 test berstatus *todo*:
+
+  ```bash
+  git restore --source=3552b5dc -- testing/glm-rm-reference/data
+  ```
+
+- **Validasi numerik terhadap SPSS 27**, dengan toleransi |Statify − SPSS| ≤ 0,001:
+  - **Multivariate**: 9 konfigurasi. Konfigurasinya adalah satu populasi, dua populasi, berpasangan, MANOVA satu arah beserta post hoc, MANOVA dua arah dengan dan tanpa interaksi, data tak seimbang, dan data dengan nilai hilang. Sebanyak 2.339 nilai yang punya padanan di Statify semuanya lulus.
+  - **Repeated Measures**: 4 dataset (within-only dua measure, dua desain campuran, dan dataset Gambar 51). Sebanyak 1.047 nilai cocok.
+- **Black-box**: 78 skenario pada build final, semuanya sesuai.
+- **White-box**: *basis path testing* dan *code coverage* pada inti Rust dan services TypeScript, dengan nilai harapan dari SPSS 27 atau R 4.3.2.
+
+Data, sintaks SPSS, keluaran SPSS, harness, dan laporan pengujian tersimpan di folder `testing/` pada commit build final [`3552b5dc`](https://git.stis.ac.id/222212887/statify64/-/tree/3552b5dc5a02743ff9466a32454cc9dc546b1335/testing). Folder ini sudah tidak ada di `main`. Isinya antara lain:
+
+- `glm-mv-reference/` dan `glm-rm-reference/`: validasi terhadap SPSS;
+- `black-box/`: skenario dan hasil eksekusi;
+- `whitebox/`: laporan white-box v6.
+
+### Dokumentasi
+
+- Dokumentasi teknis (arsitektur, alur data, algoritma): [multivariate/architecture.md](frontend/components/Modals/Analyze/general-linear-model/multivariate/architecture.md) dan [repeated-measures/architecture.md](frontend/components/Modals/Analyze/general-linear-model/repeated-measures/architecture.md), serta README di masing-masing folder modul.
+- Panduan di dalam aplikasi: halaman **Help**, bagian GLM Multivariate dan GLM Repeated Measures (dwibahasa Indonesia/Inggris).
+- Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan penggunaan modul: _(tautan menyusul)_
 
