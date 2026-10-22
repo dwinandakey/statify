@@ -29,6 +29,7 @@ const Explore = () => {
     {
       id: 'plots',
       label: 'Grafik',
+      labelEn: 'Plots',
       icon: BarChart3,
       component: PlotsTab
     }
@@ -37,7 +38,9 @@ const Explore = () => {
   return (
     <StandardizedGuideLayout
       title="Panduan Eksplorasi Data"
+      titleEn="Explore Data Guide"
       description="Analisis statistik komprehensif dengan metode robust dan deteksi outlier"
+      descriptionEn="Comprehensive statistical analysis with robust methods and outlier detection"
       tabs={tabs}
       defaultTab="overview"
     >

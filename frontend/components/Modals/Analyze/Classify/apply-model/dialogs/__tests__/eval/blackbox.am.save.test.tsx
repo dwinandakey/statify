@@ -66,7 +66,6 @@ function Harness({
       adapter={naiveBayesModelAdapter}
       existingVariables={existing}
       onChange={setData}
-      showFieldHelp={false}
     />
   );
 }

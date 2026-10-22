@@ -582,6 +582,8 @@ Mengikuti pola `NB/dialogs/naive-bayes-main.tsx` dengan perbedaan yang disebut e
 - Tab `variables`, `save`, `output` **disabled** selama `formData.model.ModelJson === null`.
 - Saat `helperMode` true, tiap kontrol menampilkan teks bantuan singkat (`<p className="text-xs text-muted-foreground">`) di bawahnya. Teks bantuan didefinisikan sebagai konstanta di file tab masing-masing (bahasa Inggris).
 
+*(Revisi pasca-sidang, disetujui pemilik — menggantikan toggle `helperMode` di atas: tombol Help kiri bawah (`HelpCircle`, `aria-label="Start feature tour"`, Tooltip) memulai tur pop-up `useTourGuide(..., "sidebar")` + `TourPopup` (pola Ordinal Regression). Langkah dwibahasa (`useHelpLanguageStore`) dibangun oleh `AM/hooks/tourConfig.ts` dari state saat ini: tanpa model hanya langkah Tab Model; dengan model seluruh tab, langkah fitur teks hanya bila model punya fitur Text. Prop `showFieldHelp` dan teks bantuan inline dihapus; isinya dipindah ke tur. UI tidak boleh menyebut produk lain.)*
+
 **Perilaku tombol:**
 
 | Tombol | Perilaku |

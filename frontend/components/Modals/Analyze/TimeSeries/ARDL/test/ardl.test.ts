@@ -77,6 +77,15 @@ const makeDataNullX = (): DataRow[] => [
 const yVar  = createVar('Y', 0);
 const xVar  = createVar('X1', 1);
 
+const defaultSplitConfig = {
+    splitEnabled: false,
+    splitMode: 'holdout' as const,
+    rollingType: 'expanding' as const,
+    trainRatio: 0.8,
+    saveSplitVariable: false,
+    savePredictions: false,
+};
+
 const runHook = (
     dep: Variable[],
     indep: Variable[],
@@ -85,7 +94,7 @@ const runHook = (
     qOrders = [1],
 ) =>
     renderHook(() =>
-        useAnalyzeHook(dep, indep, data, null, true, 4, 4, 'aic', pOrder, qOrders, false, false, jest.fn()),
+        useAnalyzeHook(dep, indep, data, null, true, 4, 4, 'aic', pOrder, qOrders, false, false, defaultSplitConfig, undefined, jest.fn()),
     );
 
 const runAndAnalyze = async (

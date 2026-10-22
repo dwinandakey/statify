@@ -57,12 +57,12 @@ export const FeaturesSection = () => {
         {name: 'Descriptive', description: 'Frequencies, descriptives, explore and crosstabs'},
         {name: 'Compare Means', description: 'T-tests and one-way ANOVA'},
         {name: 'General Linear Model', description: 'Univariate, multivariate and repeated measures'},
-        {name: 'Classify', description: 'Cluster analysis, discriminant and factor analysis'},
+        {name: 'Classify', description: 'Cluster analysis, discriminant, nearest neighbor and naive Bayes'},
         {name: 'Dimension Reduction', description: 'Principal component analysis and factor analysis'},
-        {name: 'Correlate', description: 'Bivariate, partial and distances'},
-        {name: 'Regression', description: 'Linear, logistic, and curve estimation'},
-        {name: 'Nonparametric Tests', description: 'Chi-square, binomial, and K-related samples'},
-        {name: 'Time Series', description: 'ARIMA models and forecasting'}
+        {name: 'Correlate', description: 'Bivariate (Pearson, Kendall, Spearman) and partial correlation'},
+        {name: 'Regression', description: 'Linear, logistic, ordinal and curve estimation'},
+        {name: 'Nonparametric Tests', description: 'Chi-square, runs, independent and related samples tests'},
+        {name: 'Time Series', description: 'ARIMA, ARDL, ECM, ARCH/GARCH models and forecasting'}
     ];
 
     const container = {

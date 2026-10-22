@@ -9,7 +9,7 @@
 // Sisanya nyata: getSlicedData/getVarDefs, pembentukan nama kolom, formatter tabel, penulisan Output Viewer
 // (mock store, penulisan dicatat), penulisan kolom ke dataset (mock addVariables, argumen dicatat).
 //
-// Nilai harapan dihitung INDEPENDEN dengan Python murni (testing/text_analytics_eval/tools/c3_am_oracle.py), bukan
+// Nilai harapan dihitung INDEPENDEN dengan Python murni (frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/tools/c3_am_oracle.py), bukan
 // disalin dari keluaran Rust. Bila biner WASM tidak ada di salinan repo, seluruh berkas ini dilewati.
 
 import type { Variable } from "@/types/Variable";

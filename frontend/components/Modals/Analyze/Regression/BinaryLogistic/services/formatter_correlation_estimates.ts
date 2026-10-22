@@ -6,23 +6,7 @@ import type {
 import { createSection, safeFixed } from "./formatter_utils";
 
 /**
- * Format Correlation Matrix of Estimates (SPSS Style)
- *
- * This table shows the correlations between the parameter estimates.
- * It appears in Block 1 after Variables in the Equation when the
- * "Correlations of estimates" option is selected.
- *
- * For stepwise methods, all steps are combined into ONE table with
- * Step column as row header (SPSS format).
- *
- * Example SPSS output:
- * Correlation Matrix
- *                 Constant    age     trestbps
- * Step 1  Constant   1.000   -.990
- *         age        -.990   1.000
- * Step 2  Constant   1.000   -.636    -.661
- *         age        -.636   1.000    -.149
- *         trestbps   -.661   -.149    1.000
+ * Format Correlation Matrix of Estimates
  */
 
 /**
@@ -66,7 +50,7 @@ const generateCorrDescription = (
 };
 
 /**
- * Format Correlation of Estimates (SPSS Style)
+ * Format Correlation of Estimates
  * - For Enter method: Single table without step column
  * - For Stepwise methods: Combined table with all steps (Step as row header)
  */
@@ -104,7 +88,7 @@ export const formatCorrelationOfEstimates = (
       sections.push(singleTableSection);
     }
   } else {
-    // For stepwise methods, build SPSS-style combined table
+    // For stepwise methods
     const combinedSection = buildStepwiseCombinedCorrelationTable(result, displayAtLastStep);
     if (combinedSection) {
       sections.push(combinedSection);
@@ -177,7 +161,7 @@ const buildEnterCorrelationTable = (
 };
 
 /**
- * Build SPSS-style combined correlation table for stepwise methods
+ * Build combined correlation table for stepwise methods
  * All steps in one table with Step as row header
  */
 const buildStepwiseCombinedCorrelationTable = (
@@ -208,11 +192,9 @@ const buildStepwiseCombinedCorrelationTable = (
     return null;
   }
 
-  // ======================================================================
   // FILTER BERDASARKAN displayAtLastStep
   // Forward: hanya step terakhir
   // Backward: step 1 dan step terakhir
-  // ======================================================================
   if (displayAtLastStep && stepsWithCorr.length > 1) {
     const firstStep = stepsWithCorr[0];
     const lastStep = stepsWithCorr[stepsWithCorr.length - 1];

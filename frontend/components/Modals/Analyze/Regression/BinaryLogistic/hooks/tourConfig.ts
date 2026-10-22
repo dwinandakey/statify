@@ -22,7 +22,7 @@ export type TourStep = BaseTourStep & {
 };
 
 export const baseTourSteps: TourStep[] = [
-  // ---------------- VARIABLES TAB ----------------
+  // VARIABLES TAB
   {
     title: 'Variables Tab',
     content: 'Start here: select your dependent variable, covariates, and regression method. This defines what goes into the model.',
@@ -74,7 +74,7 @@ export const baseTourSteps: TourStep[] = [
     forceChangeTab: true,
   },
 
-  // ---------------- CATEGORICAL TAB ----------------
+  // CATEGORICAL TAB
   {
     title: 'Categorical Tab',
     content: 'Tell the model which covariates are categorical (nominal/ordinal) and how they should be coded.',
@@ -116,7 +116,7 @@ export const baseTourSteps: TourStep[] = [
     forceChangeTab: true,
   },
 
-  // ---------------- SAVE TAB ----------------
+  // SAVE TAB
   {
     title: 'Save Tab',
     content: 'Choose which model results should be written back into your dataset as new variables.',
@@ -158,7 +158,7 @@ export const baseTourSteps: TourStep[] = [
     forceChangeTab: true,
   },
 
-  // ---------------- OPTIONS TAB ----------------
+  // OPTIONS TAB
   {
     title: 'Options Tab',
     content: 'Fine-tune the statistics, plots, and convergence settings used when the model runs.',
@@ -230,7 +230,7 @@ export const baseTourSteps: TourStep[] = [
     forceChangeTab: true,
   },
 
-  // ---------------- ASSUMPTION TAB ----------------
+  // ASSUMPTION TAB
   {
     title: 'Assumption Tab',
     content: 'Check the statistical assumptions behind binary logistic regression before trusting the results.',

@@ -8,7 +8,6 @@ use crate::stats::irls::{fit, fit_with_history, FittedModel, FittingWarnings, It
 use crate::stats::score_test::{calculate_score_test, calculate_group_score_test};
 use crate::stats::design_matrix::VariableGroup;
 use crate::stats::wald::calculate_joint_wald_test;
-// --- TAMBAHAN IMPORT ---
 use crate::stats::hosmer_lemeshow;
 use crate::stats::casewise;
 use crate::stats::correlation_of_estimates;
@@ -37,7 +36,7 @@ pub fn run(
     // Derive included column indices from groups
     let mut included_indices: Vec<usize> = Vec::new();
     let mut steps_history: Vec<StepHistory> = Vec::new();
-    // Vektor baru untuk menyimpan snapshot lengkap
+    // Vektor untuk menyimpan snapshot lengkap
     let mut steps_details: Vec<StepDetail> = Vec::new();
 
     // --- STEP 0: NULL MODEL ---
@@ -129,13 +128,13 @@ pub fn run(
         prev_n_vars,
         feature_names,
         config, // Pass config
-        block_0_iter_history, // BARU: Iteration history
+        block_0_iter_history,
         variable_groups,
         &included_group_indices,
     );
     steps_details.push(step0_detail);
 
-    // Ambil data Block 0 Constant dari snapshot yang baru dibuat
+    // Ambil data Block 0 Constant
     let block_0_row = if config.include_constant && !steps_details[0].variables_in_equation.is_empty() {
         steps_details[0].variables_in_equation[0].clone()
     } else {
@@ -165,10 +164,6 @@ pub fn run(
         let mut best_candidate_group_idx: Option<usize> = None;
         let mut best_score_stat = 0.0;
         let mut _best_score_df = 1_i32;
-        // SPSS selects the VARIABLE GROUP with the SMALLEST significance (p-value)
-        // among those meeting the p_entry threshold, not the largest raw score statistic.
-        // For categorical vars (joint, multi-df score test), the chi-square is not
-        // comparable across groups with different df, so comparing p-values is required.
         let mut best_p_val = f64::INFINITY;
 
         // ---------------------------------------------------------
@@ -326,10 +321,8 @@ pub fn run(
             }
         }
 
-        // ---------------------------------------------------------
         // B. BACKWARD REMOVAL: Wald Test (Group-aware)
         // For categorical groups: use joint Wald test (multi-df)
-        // ---------------------------------------------------------
         if !included_group_indices.is_empty() {
             let mut worst_group_loc: Option<usize> = None;
             let mut max_p_val = -1.0;
@@ -367,7 +360,6 @@ pub fn run(
 
             // Eksekusi Penghapusan
             if let Some(loc) = worst_group_loc {
-                // SPSS assigns each action (entry/removal) its own step number
                 step_count += 1;
 
                 let removed_group_idx = included_group_indices[loc];
@@ -497,7 +489,7 @@ pub fn run(
         1.0
     };
 
-    // --- BARU: Hitung Casewise Listing Jika Diminta ---
+    // --- Hitung Casewise Listing Jika Diminta ---
     let casewise_result = if config.casewise_listing && !included_indices.is_empty() {
         let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
         let y_label_0 = "0";
@@ -515,10 +507,10 @@ pub fn run(
         None
     };
 
-    // --- BARU: Ambil Correlation of Estimates dari final step ---
+    // --- Ambil Correlation of Estimates dari final step ---
     let corr_estimates_final = final_step.correlation_of_estimates.clone();
 
-    // --- BARU: Generate Step Summary (SPSS Style) ---
+    // --- Generate Step Summary ---
     let step_summary: Vec<StepSummaryRow> = steps_details.iter()
         .filter(|s| s.step > 0) // Skip Step 0 (null model)
         .map(|s| {
@@ -569,7 +561,6 @@ pub fn run(
         assumption_tests: None,
         overall_remainder_test: final_step.remainder_test,
         categorical_codings: codings,
-        // --- MODIFIKASI: AMBIL HL DARI FINAL STEP ---
         hosmer_lemeshow: final_step.hosmer_lemeshow,
         casewise_list: casewise_result,
         classification_plot_data: if config.classification_plots && !included_indices.is_empty() {
@@ -583,11 +574,8 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Correlation of Estimates ---
         correlation_of_estimates: corr_estimates_final,
-        // --- BARU: Step Summary ---
         step_summary: if step_summary.is_empty() { None } else { Some(step_summary) },
-        // --- BARU: Saved Predictions ---
         saved_predictions: if !included_indices.is_empty() {
             let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
             saved_predictions::calculate_saved_predictions(
@@ -599,7 +587,6 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Fitting Warnings dari IRLS ---
         fitting_warnings: {
             let w = &current_model.warnings;
             if w.possible_separation || w.quasi_separation || w.step_halving_used 
@@ -965,7 +952,7 @@ fn calculate_step_snapshot(
     let remainder_test =
         calculate_overall_remainder_stats(full_x, y_vector, included_indices, model, config.include_constant);
 
-    // --- MODIFIKASI: HITUNG HOSMER-LEMESHOW ---
+    // --- HITUNG HOSMER-LEMESHOW ---
     let hl_result = if config.hosmer_lemeshow && step > 0 {
         match hosmer_lemeshow::calculate(y_vector, &model.predictions, 10) {
             Ok(res) => Some(res),
@@ -975,7 +962,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CORRELATION OF ESTIMATES ---
+    // --- HITUNG CORRELATION OF ESTIMATES ---
     let corr_estimates_result: Option<Vec<CorrelationOfEstimatesRow>> = if config.correlations && step > 0 {
         // Build variable names (Constant + included vars)
         let mut var_names_for_corr: Vec<String> = Vec::new();
@@ -999,7 +986,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CLASSIFICATION PLOT DATA ---
+    // --- HITUNG CLASSIFICATION PLOT DATA ---
     let classification_plot_result = if config.classification_plots && step > 0 {
         let y_label_0 = "FALSE";
         let y_label_1 = "TRUE";
@@ -1026,13 +1013,9 @@ fn calculate_step_snapshot(
         omni_tests: Some(omni_tests_model),     
         step_omni_tests: Some(omni_tests_step),
         model_if_term_removed: None,
-        // --- MASUKKAN HOSMER LEMESHOW ---
         hosmer_lemeshow: hl_result,
-        // --- BARU: CORRELATION OF ESTIMATES ---
         correlation_of_estimates: corr_estimates_result,
-        // --- BARU: ITERATION HISTORY ---
         iteration_history,
-        // --- BARU: CLASSIFICATION PLOT DATA ---
         classification_plot_data: classification_plot_result,
     }
 }

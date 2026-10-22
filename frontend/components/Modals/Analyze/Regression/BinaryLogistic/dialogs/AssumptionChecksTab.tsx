@@ -53,7 +53,6 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
 
       setVifSuccess(true);
     } catch (error: any) {
-      console.error("VIF Check Error:", error);
       setVifError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setIsTestingVIF(false);
@@ -78,7 +77,6 @@ export const AssumptionChecksTab: React.FC<AssumptionChecksTabProps> = ({
 
       setBtSuccess(true);
     } catch (error: any) {
-      console.error("Box-Tidwell Error:", error);
       setBtError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setIsTestingBT(false);

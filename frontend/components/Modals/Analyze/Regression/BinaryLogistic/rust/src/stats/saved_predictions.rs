@@ -1,67 +1,4 @@
 //! Saved Predictions Calculator for Binary Logistic Regression
-//!
-//! This module calculates predictions and diagnostics that can be saved
-//! to the dataset, similar to SPSS's "Save" functionality.
-//!
-//! ## Variables that can be saved:
-//!
-//! ### Predicted Values
-//! - **Probabilities (PRE_1)**: P(Y=1|X) - Predicted probability of success
-//! - **Group membership (PGR_1)**: Predicted group (0 or 1) based on cutoff
-//!
-//! ### Residuals
-//! Following SPSS conventions and standard logistic regression theory:
-//!
-//! 1. **Unstandardized Residual (RES_1)**
-//!    - Formula: `r_i = Y_i - P_i`
-//!    - Range: [-1, 1]
-//!    - Simply the difference between observed and predicted probability
-//!
-//! 2. **Logit Residual (LRE_1)**
-//!    - Formula: `r_logit = (Y - P) / (P * (1-P))`
-//!    - Approximates the residual on the logit scale
-//!    - Useful for checking linearity assumptions
-//!
-//! 3. **Standardized (Pearson) Residual (ZRE_1)**
-//!    - Formula: `r_pearson = (Y - P) / sqrt(P * (1-P))`
-//!    - Follows approximately N(0,1) for well-fitting models
-//!    - Values > |2| often indicate outliers
-//!
-//! 4. **Deviance Residual (DEV_1)**
-//!    - Formula: `d_i = sign(Y-P) * sqrt(2 * |contribution to deviance|)`
-//!    - For Y=1: `d_i = sign(Y-P) * sqrt(-2 * ln(P))`
-//!    - For Y=0: `d_i = sign(Y-P) * sqrt(-2 * ln(1-P))`
-//!    - Sum of squares equals the deviance statistic
-//!
-//! 5. **Studentized Residual (SRE_1)** — Studentized Deviance Residual
-//!    - Formula: `SRE_i = d_i / sqrt(1 - h_i)`
-//!      - `d_i` = deviance residual (signed)
-//!      - `h_i` = leverage (hat value)
-//!    - Dividing the deviance residual by sqrt(1-h) adjusts for leverage,
-//!      approximating the change in model deviance if case i is deleted
-//!    - Matches IBM SPSS Statistics output exactly
-//!    - Reference: Pregibon (1981), Hosmer & Lemeshow (2000)
-//!
-//! ### Influence Statistics
-//! 
-//! 6. **Cook's Distance (COO_1)**
-//!    - Formula: `D_i = (r_std^2 * h_i) / (1 - h_i)`
-//!    - Where r_std = standardized Pearson residual, h = leverage
-//!    - This is Pregibon's (1981) ΔX² statistic: the approximate change
-//!      in Pearson chi-squared when observation i is deleted
-//!    - Note: uses `(1-h)` NOT `(1-h)²` — verified against IBM SPSS output
-//!    - Reference: Pregibon (1981), Hosmer & Lemeshow (2000)
-//!
-//! 7. **Leverage (LEV_1)**
-//!    - Formula: `h_i = w_i * x_i' * (X'WX)^{-1} * x_i`
-//!    - Diagonal of hat matrix, measures remoteness in X-space
-//!    - w_i = p_i * (1 - p_i)
-//!
-//! 8. **DfBeta (DFB0_1, DFB1_1, ...)**
-//!    - Formula: `DFBETA_j = [Cov(β) * x_i * r_i] / (1 - h_i)`
-//!    - Change in coefficient j if case i is deleted
-//!    - Uses one-step Newton approximation (Pregibon, 1981)
-//!    - NOTE: Does NOT multiply by w_i since Cov(β) already incorporates weights
 
 use crate::models::config::LogisticConfig;
 use crate::models::result::{SavedPredictionRow, SavedPredictions, SavedVariableNames};
@@ -69,15 +6,6 @@ use crate::stats::irls::FittedModel;
 use nalgebra::{DMatrix, DVector};
 
 /// Calculate saved predictions based on config options
-/// 
-/// # Arguments
-/// * `x_matrix` - Design matrix (with constant if include_constant is true)
-/// * `y_vector` - Observed outcomes (0 or 1)
-/// * `model` - Fitted logistic regression model
-/// * `config` - Configuration specifying which values to save
-/// 
-/// # Returns
-/// SavedPredictions containing all requested prediction values
 pub fn calculate_saved_predictions(
     x_matrix: &DMatrix<f64>,
     y_vector: &DVector<f64>,
@@ -210,23 +138,6 @@ pub fn calculate_saved_predictions(
             }
 
             // Studentized Residual — Studentized Deviance Residual
-            //
-            // Formula: SRE_i = d_i / sqrt(1 - h_i)
-            //
-            // Where:
-            //   d_i = deviance residual (already signed)
-            //   h_i = leverage (hat value)
-            //
-            // This adjusts the deviance residual for leverage, making residuals
-            // comparable across observations with different leverage levels.
-            // d_i² / (1-h_i) approximates the change in model deviance when
-            // case i is deleted.
-            //
-            // Verified against IBM SPSS Statistics output.
-            //
-            // References:
-            //   - Pregibon, D. (1981). Logistic Regression Diagnostics.
-            //   - Hosmer, D.W. & Lemeshow, S. (2000). Applied Logistic Regression.
             if config.save_residuals_studentized {
                 // Compute signed deviance residual d_i
                 let dev_resid = if raw_resid >= 0.0 {
@@ -243,25 +154,6 @@ pub fn calculate_saved_predictions(
             }
 
             // Cook's Distance for Logistic Regression
-            //
-            // Pregibon (1981) ΔX² influence diagnostic.
-            //
-            // Formula: D_i = r_std^2 * h_i / (1 - h_i)
-            //
-            // Where:
-            //   r_std = standardized Pearson residual = (Y-P)/sqrt(P(1-P))
-            //   h_i = leverage (hat value)
-            //
-            // This measures the approximate change in the Pearson chi-squared
-            // statistic when observation i is removed. It uses (1-h) to the
-            // FIRST power (not squared), unlike classic Cook's D from linear
-            // regression which uses (1-h)².
-            //
-            // Verified against IBM SPSS Statistics output.
-            //
-            // References:
-            //   - Pregibon, D. (1981). Logistic Regression Diagnostics.
-            //   - Hosmer, D.W. & Lemeshow, S. (2000). Applied Logistic Regression.
             if config.save_influence_cooks {
                 let one_minus_h = 1.0 - h_i;
                 let cooks = if one_minus_h > 1e-12 {
@@ -303,10 +195,6 @@ pub fn calculate_saved_predictions(
 }
 
 /// Calculate leverage (diagonal of hat matrix) for logistic regression
-/// h_i = w_i * x_i' * (X'WX)^{-1} * x_i
-///
-/// Uses the pre-computed (X'WX)^{-1} from the IRLS fitting (model.covariance_matrix)
-/// to ensure numerical consistency with the model's standard errors.
 fn calculate_leverage(
     x_matrix: &DMatrix<f64>,
     predictions: &DVector<f64>,
@@ -334,23 +222,6 @@ fn calculate_leverage(
 }
 
 /// Calculate DfBeta for a single case
-/// 
-/// DfBeta measures the change in each regression coefficient when observation i is deleted.
-/// Uses the one-step Newton approximation (Pregibon, 1981).
-/// 
-/// **Formula (SPSS-compatible)**:
-/// 
-/// DFBETA_j = [Cov(β) * x_i * r_i] / (1 - h_i)
-/// 
-/// Where:
-/// - Cov(β) = (X'WX)^{-1} = covariance_matrix (already computed during IRLS)
-/// - x_i = predictor vector for observation i  
-/// - r_i = y_i - p_i = raw residual (NOT weighted)
-/// - h_i = leverage (hat value) for observation i
-/// 
-/// Reference: 
-/// - Pregibon, D. (1981). Logistic Regression Diagnostics. The Annals of Statistics.
-/// - SPSS Regression Algorithms documentation
 fn calculate_dfbeta_for_case(
     x_matrix: &DMatrix<f64>,
     case_idx: usize,
@@ -387,7 +258,7 @@ fn calculate_dfbeta_for_case(
     dfbeta
 }
 
-/// Generate variable names following SPSS conventions
+/// Generate variable names
 fn generate_variable_names(config: &LogisticConfig, n_params: usize) -> SavedVariableNames {
     SavedVariableNames {
         predicted_probability: if config.save_predicted_probabilities {
@@ -739,9 +610,7 @@ mod tests {
         assert_eq!(names.resid_studentized, Some("SRE_1".to_string()));
     }
 
-    // =========================================================================
     // INFLUENCE STATISTICS TESTS
-    // =========================================================================
 
     #[test]
     fn test_influence_leverage() {

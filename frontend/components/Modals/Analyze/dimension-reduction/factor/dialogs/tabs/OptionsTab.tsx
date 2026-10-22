@@ -72,9 +72,9 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
         <div className="py-4">
             <ResizablePanelGroup
                 direction="vertical"
-                className="min-h-[260px] rounded-lg border"
+                className="min-h-[340px] rounded-lg border"
             >
-                <ResizablePanel defaultSize={45}>
+                <ResizablePanel defaultSize={60} minSize={55}>
                     <div className="flex flex-col gap-2 p-3">
                         <Label className="font-bold">Missing Values</Label>
 
@@ -99,12 +99,15 @@ export const OptionsTab: React.FC<OptionsTabProps> = ({
                                 </div>
                             </div>
                         </RadioGroup>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                            Notes: Choose a method to handle missing values based on the characteristics of your data. For guidance on choosing a method, check Help &gt; Factor Analysis.
+                        </p>
                     </div>
                 </ResizablePanel>
 
                 <ResizableHandle />
 
-                <ResizablePanel defaultSize={55}>
+                <ResizablePanel defaultSize={40} minSize={35}>
                     <div className="flex flex-col gap-2 p-3">
                         <Label className="font-bold">Coefficient Display Format</Label>
 

@@ -92,7 +92,7 @@ export const OutputTab = ({ data, updateFormData, hasTextFeatures = false }: Out
         <div className="flex flex-col h-full min-h-0 w-full overflow-hidden">
             <div className="flex-1 min-h-0 w-full overflow-y-auto">
                 <div className="flex flex-col items-start gap-2 p-4 w-full">
-                    <div className="w-full max-w-xl rounded-lg border md:min-w-[200px]">
+                    <div id="naive-bayes-output-viewer" className="w-full max-w-xl rounded-lg border md:min-w-[200px]">
                         <section className="flex flex-col gap-3 p-4">
                             <Label className="font-bold">Viewer Output</Label>
                             {viewerOutputOptions.map(({ field, label, description }) => (
@@ -117,7 +117,7 @@ export const OutputTab = ({ data, updateFormData, hasTextFeatures = false }: Out
                     </div>
 
                     {/* v2 (AGENTS_V2 §3.7): Text Feature Table + Top-k */}
-                    <div className="w-full max-w-xl rounded-lg border md:min-w-[200px]">
+                    <div id="naive-bayes-output-text" className="w-full max-w-xl rounded-lg border md:min-w-[200px]">
                         <section className="flex flex-col gap-3 p-4">
                             <Label className="font-bold">Text Features</Label>
                             <div className="flex flex-col gap-1">

@@ -30,9 +30,7 @@ pub fn run(
 
     let mut steps_details: Vec<StepDetail> = Vec::new();
 
-    // ==========================================
     // BLOCK 0: NULL MODEL - STEP 0
-    // ==========================================
 
     // 1. Hitung Log Likelihood Analitik untuk Baseline Zero (P=0.5)
     //    Digunakan saat include_constant = false.
@@ -66,7 +64,6 @@ pub fn run(
     } else {
         // --- Kasus 2: Tidak Ada Konstanta ---
         // Null Model adalah model "Empty" dimana probabilitas setiap case = 0.5
-        // Ini adalah standar SPSS untuk "Regression through the origin" (Null model has no terms).
         let predictions = DVector::from_element(n_samples, 0.5);
         let residuals = y_vector - &predictions;
         let weights = DVector::from_element(n_samples, 0.25);
@@ -91,7 +88,6 @@ pub fn run(
         crate::utils::probability::z_score_from_confidence(config.confidence_level);
 
     // --- 1. Constant Statistics (Null Model) ---
-    // SPSS menggunakan formula ANALITIK untuk Wald statistic di Block 0
     // Ini memberikan hasil yang lebih presisi daripada menggunakan covariance matrix dari IRLS
     let block_0_constant = if config.include_constant {
         // Hitung proporsi kasus positif
@@ -105,7 +101,7 @@ pub fn run(
         // Beta0 (Constant) = ln(p / (1-p)) = logit(p)
         let beta_0 = (p_safe / (1.0 - p_safe)).ln();
         
-        // SPSS Formula untuk Variance dari Constant di Null Model:
+        // Variance dari Constant di Null Model:
         // Var(β₀) = 1 / (n × p × (1-p))
         // Ini adalah inverse dari Fisher Information untuk intercept-only model
         let variance_beta0 = 1.0 / (n_total * p_safe * (1.0 - p_safe));
@@ -278,9 +274,7 @@ pub fn run(
         classification_plot_data: None,
     });
 
-    // ==========================================
     // BLOCK 1: FULL MODEL (Enter Method) - STEP 1
-    // ==========================================
     let mut x_full = x_raw.clone();
     if config.include_constant {
         x_full = x_full.insert_column(0, 1.0);

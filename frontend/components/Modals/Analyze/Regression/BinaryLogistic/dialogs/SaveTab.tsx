@@ -18,10 +18,6 @@ const SaveCheckboxRow: React.FC<SaveCheckboxRowProps> = ({
   checked,
   onCheckedChange,
 }) => {
-  // Clicking the checkbox or the label already toggles it on their own
-  // (native label->input forwarding + Radix's own click handling).
-  // Only handle clicks that land on the row's empty space so we don't
-  // double-fire onCheckedChange for a single click.
   const handleRowClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
     if (target.closest('[role="checkbox"], label')) return;

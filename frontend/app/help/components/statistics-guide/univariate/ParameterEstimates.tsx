@@ -8,12 +8,21 @@ import {
     TrendingUp,
     Layers,
 } from "lucide-react";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 export const ParameterEstimates: React.FC = () => {
+    const { language } = useHelpLanguageStore();
+    const isEn = language === "en";
+    const where = isEn ? "Where:" : "Di mana:";
+
     return (
         <HelpContentWrapper
             title="GLM Univariate: Parameter Estimates"
-            description="Complete explanation of parameter estimation in GLM Univariate analysis."
+            description={
+                isEn
+                    ? "Complete explanation of parameter estimation in GLM Univariate analysis."
+                    : "Penjelasan lengkap estimasi parameter dalam analisis GLM Univariate."
+            }
         >
             <Alert className="mb-6 bg-blue-50 border-blue-100 text-blue-800">
                 <div className="flex">
@@ -23,9 +32,9 @@ export const ParameterEstimates: React.FC = () => {
                             Parameter Estimates
                         </AlertTitle>
                         <AlertDescription className="text-blue-700">
-                            Parameter estimates provide coefficients for each
-                            predictor in the model, showing the relationship
-                            between predictors and the dependent variable.
+                            {isEn
+                                ? "Parameter estimates provide coefficients for each predictor in the model, showing the relationship between predictors and the dependent variable."
+                                : "Parameter estimates memberikan koefisien untuk setiap prediktor dalam model, yang menunjukkan hubungan antara prediktor dan variabel dependen."}
                         </AlertDescription>
                     </div>
                 </div>
@@ -34,72 +43,106 @@ export const ParameterEstimates: React.FC = () => {
             <div className="prose max-w-none">
                 <h2 className="flex items-center gap-2">
                     <Calculator className="h-6 w-6" />
-                    Basic Concepts of Parameter Estimates
+                    {isEn ? "Basic Concepts of Parameter Estimates" : "Konsep Dasar Parameter Estimates"}
                 </h2>
 
                 <p>
-                    Parameter estimates are coefficients obtained from the GLM
-                    model that show:
+                    {isEn
+                        ? "Parameter estimates are coefficients obtained from the GLM model that show:"
+                        : "Parameter estimates adalah koefisien yang diperoleh dari model GLM yang menunjukkan:"}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
                     <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                         <h4 className="font-bold text-green-800 mb-2">
-                            Parameter Components
+                            {isEn ? "Parameter Components" : "Komponen Parameter"}
                         </h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                            <li>Intercept (β₀)</li>
-                            <li>Factor coefficients (αᵢ, βⱼ)</li>
-                            <li>Covariate coefficients (γ)</li>
-                            <li>Interaction coefficients (αβᵢⱼ)</li>
+                            {isEn ? (
+                                <>
+                                    <li>Intercept (β₀)</li>
+                                    <li>Factor coefficients (αᵢ, βⱼ)</li>
+                                    <li>Covariate coefficients (γ)</li>
+                                    <li>Interaction coefficients (αβᵢⱼ)</li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>Intercept (β₀)</li>
+                                    <li>Koefisien faktor (αᵢ, βⱼ)</li>
+                                    <li>Koefisien kovariat (γ)</li>
+                                    <li>Koefisien interaksi (αβᵢⱼ)</li>
+                                </>
+                            )}
                         </ul>
                     </div>
 
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                         <h4 className="font-bold text-blue-800 mb-2">
-                            Interpretation
+                            {isEn ? "Interpretation" : "Interpretasi"}
                         </h4>
                         <ul className="text-sm text-blue-700 space-y-1">
-                            <li>Magnitude of predictor effect</li>
-                            <li>Direction of relationship</li>
-                            <li>Statistical significance</li>
-                            <li>Standard error</li>
+                            {isEn ? (
+                                <>
+                                    <li>Magnitude of predictor effect</li>
+                                    <li>Direction of relationship</li>
+                                    <li>Statistical significance</li>
+                                    <li>Standard error</li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>Besarnya efek prediktor</li>
+                                    <li>Arah hubungan</li>
+                                    <li>Signifikansi statistik</li>
+                                    <li>Standard error</li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
 
                 <h2 className="flex items-center gap-2 mt-8">
                     <BarChart3 className="h-6 w-6" />
-                    Mathematical Model
+                    {isEn ? "Mathematical Model" : "Model Matematis"}
                 </h2>
 
-                <h3>General GLM Model</h3>
+                <h3>{isEn ? "General GLM Model" : "Model GLM Umum"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>Y = Xβ + ε</strong>
                     </div>
-                    <p className="mt-2 text-sm text-gray-600">Where:</p>
+                    <p className="mt-2 text-sm text-gray-600">{where}</p>
                     <ul className="text-sm text-gray-600 mt-1">
-                        <li>Y = dependent variable vector (n × 1)</li>
-                        <li>X = design matrix (n × p)</li>
-                        <li>β = parameter vector (p × 1)</li>
-                        <li>ε = error vector (n × 1)</li>
+                        {isEn ? (
+                            <>
+                                <li>Y = dependent variable vector (n × 1)</li>
+                                <li>X = design matrix (n × p)</li>
+                                <li>β = parameter vector (p × 1)</li>
+                                <li>ε = error vector (n × 1)</li>
+                            </>
+                        ) : (
+                            <>
+                                <li>Y = vektor variabel dependen (n × 1)</li>
+                                <li>X = matriks desain (n × p)</li>
+                                <li>β = vektor parameter (p × 1)</li>
+                                <li>ε = vektor error (n × 1)</li>
+                            </>
+                        )}
                     </ul>
                 </div>
 
-                <h3>Parameter Estimation with OLS</h3>
+                <h3>{isEn ? "Parameter Estimation with OLS" : "Estimasi Parameter dengan OLS"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>β̂ = (X'X)⁻¹X'y</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Least squares estimator for parameter β
+                        {isEn ? "Least squares estimator for parameter β" : "Estimator least squares untuk parameter β"}
                     </p>
                 </div>
 
                 <h2 className="flex items-center gap-2 mt-8">
                     <TrendingUp className="h-6 w-6" />
-                    Parameter Components
+                    {isEn ? "Parameter Components" : "Komponen Parameter"}
                 </h2>
 
                 <h3>Intercept (β₀)</h3>
@@ -108,55 +151,56 @@ export const ParameterEstimates: React.FC = () => {
                         <strong>β₀ = ȳ - Σβᵢx̄ᵢ</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Predicted value of Y when all predictors = 0
+                        {isEn ? "Predicted value of Y when all predictors = 0" : "Nilai prediksi Y ketika semua prediktor = 0"}
                     </p>
                 </div>
 
-                <h3>Factor Coefficients (αᵢ, βⱼ)</h3>
+                <h3>{isEn ? "Factor Coefficients (αᵢ, βⱼ)" : "Koefisien Faktor (αᵢ, βⱼ)"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>αᵢ = μᵢ - μ</strong>
                     </div>
-                    <p className="mt-2 text-sm text-gray-600">Where:</p>
+                    <p className="mt-2 text-sm text-gray-600">{where}</p>
                     <ul className="text-sm text-gray-600 mt-1">
-                        <li>μᵢ = mean for level i</li>
-                        <li>μ = overall mean</li>
+                        <li>μᵢ = {isEn ? "mean for level i" : "rata-rata untuk level i"}</li>
+                        <li>μ = {isEn ? "overall mean" : "rata-rata keseluruhan"}</li>
                     </ul>
                 </div>
 
-                <h3>Covariate Coefficients (γ)</h3>
+                <h3>{isEn ? "Covariate Coefficients (γ)" : "Koefisien Kovariat (γ)"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>γ = Cov(Y,X) / Var(X)</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Change in Y per unit change in X
+                        {isEn ? "Change in Y per unit change in X" : "Perubahan Y untuk setiap perubahan satu unit X"}
                     </p>
                 </div>
 
-                <h3>Interaction Coefficients (αβᵢⱼ)</h3>
+                <h3>{isEn ? "Interaction Coefficients (αβᵢⱼ)" : "Koefisien Interaksi (αβᵢⱼ)"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>(αβ)ᵢⱼ = μᵢⱼ - μᵢ. - μ.ⱼ + μ..</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Interaction effect between factor A level i and factor B
-                        level j
+                        {isEn
+                            ? "Interaction effect between factor A level i and factor B level j"
+                            : "Efek interaksi antara faktor A level i dan faktor B level j"}
                     </p>
                 </div>
 
                 <h2 className="flex items-center gap-2 mt-8">
                     <Layers className="h-6 w-6" />
-                    Standard Errors and Inference
+                    {isEn ? "Standard Errors and Inference" : "Standard Error dan Inferensi"}
                 </h2>
 
-                <h3>Covariance Matrix</h3>
+                <h3>{isEn ? "Covariance Matrix" : "Matriks Kovarians"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>Var(β̂) = σ²(X'X)⁻¹</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Where σ² = MSE (Mean Square Error)
+                        {isEn ? "Where σ² = MSE (Mean Square Error)" : "Di mana σ² = MSE (Mean Square Error)"}
                     </p>
                 </div>
 
@@ -166,17 +210,19 @@ export const ParameterEstimates: React.FC = () => {
                         <strong>SE(β̂ᵢ) = √[MSE × Cᵢᵢ]</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Where Cᵢᵢ is the i-th diagonal element of (X'X)⁻¹
+                        {isEn
+                            ? "Where Cᵢᵢ is the i-th diagonal element of (X'X)⁻¹"
+                            : "Di mana Cᵢᵢ adalah elemen diagonal ke-i dari (X'X)⁻¹"}
                     </p>
                 </div>
 
-                <h3>t-Statistic</h3>
+                <h3>{isEn ? "t-Statistic" : "Statistik t"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <div className="text-center text-lg font-mono">
                         <strong>t = β̂ᵢ / SE(β̂ᵢ)</strong>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                        Follows t-distribution with df = n-p-1
+                        {isEn ? "Follows t-distribution with df = n-p-1" : "Mengikuti distribusi t dengan df = n-p-1"}
                     </p>
                 </div>
 
@@ -187,71 +233,101 @@ export const ParameterEstimates: React.FC = () => {
                     </div>
                 </div>
 
-                <h2 className="mt-8">Parameter Interpretation</h2>
+                <h2 className="mt-8">{isEn ? "Parameter Interpretation" : "Interpretasi Parameter"}</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
                     <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                         <h4 className="font-bold text-yellow-800 mb-2">
-                            Positive Coefficient
+                            {isEn ? "Positive Coefficient" : "Koefisien Positif"}
                         </h4>
                         <ul className="text-sm text-yellow-700 space-y-1">
-                            <li>Increase in predictor → increase in Y</li>
-                            <li>Positive effect on dependent variable</li>
-                            <li>Same direction relationship</li>
+                            {isEn ? (
+                                <>
+                                    <li>Increase in predictor → increase in Y</li>
+                                    <li>Positive effect on dependent variable</li>
+                                    <li>Same direction relationship</li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>Kenaikan prediktor → kenaikan Y</li>
+                                    <li>Efek positif terhadap variabel dependen</li>
+                                    <li>Hubungan searah</li>
+                                </>
+                            )}
                         </ul>
                     </div>
 
                     <div className="bg-red-50 p-4 rounded-lg border border-red-200">
                         <h4 className="font-bold text-red-800 mb-2">
-                            Negative Coefficient
+                            {isEn ? "Negative Coefficient" : "Koefisien Negatif"}
                         </h4>
                         <ul className="text-sm text-red-700 space-y-1">
-                            <li>Increase in predictor → decrease in Y</li>
-                            <li>Negative effect on dependent variable</li>
-                            <li>Opposite direction relationship</li>
+                            {isEn ? (
+                                <>
+                                    <li>Increase in predictor → decrease in Y</li>
+                                    <li>Negative effect on dependent variable</li>
+                                    <li>Opposite direction relationship</li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>Kenaikan prediktor → penurunan Y</li>
+                                    <li>Efek negatif terhadap variabel dependen</li>
+                                    <li>Hubungan berlawanan arah</li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
 
-                <h3>Factor Coefficient Interpretation</h3>
+                <h3>{isEn ? "Factor Coefficient Interpretation" : "Interpretasi Koefisien Faktor"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <p className="text-sm text-gray-600">
-                        For factor with k levels:
+                        {isEn ? "For factor with k levels:" : "Untuk faktor dengan k level:"}
                     </p>
                     <ul className="text-sm text-gray-600 mt-1">
-                        <li>Level 1: baseline (no coefficient)</li>
-                        <li>
-                            Level i: coefficient αᵢ shows difference from
-                            baseline
-                        </li>
-                        <li>Interpretation: Y for level i = baseline + αᵢ</li>
+                        {isEn ? (
+                            <>
+                                <li>Level 1: baseline (no coefficient)</li>
+                                <li>Level i: coefficient αᵢ shows difference from baseline</li>
+                                <li>Interpretation: Y for level i = baseline + αᵢ</li>
+                            </>
+                        ) : (
+                            <>
+                                <li>Level 1: baseline (tanpa koefisien)</li>
+                                <li>Level i: koefisien αᵢ menunjukkan selisih dari baseline</li>
+                                <li>Interpretasi: Y untuk level i = baseline + αᵢ</li>
+                            </>
+                        )}
                     </ul>
                 </div>
 
-                <h3>Covariate Coefficient Interpretation</h3>
+                <h3>{isEn ? "Covariate Coefficient Interpretation" : "Interpretasi Koefisien Kovariat"}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <p className="text-sm text-gray-600">
-                        For continuous covariate:
+                        {isEn ? "For continuous covariate:" : "Untuk kovariat kontinu:"}
                     </p>
                     <ul className="text-sm text-gray-600 mt-1">
-                        <li>
-                            Coefficient γ shows change in Y per unit change in X
-                        </li>
-                        <li>
-                            Interpretation: 1 unit increase in X → γ unit
-                            increase in Y
-                        </li>
-                        <li>
-                            Controls for effects of other variables in model
-                        </li>
+                        {isEn ? (
+                            <>
+                                <li>Coefficient γ shows change in Y per unit change in X</li>
+                                <li>Interpretation: 1 unit increase in X → γ unit increase in Y</li>
+                                <li>Controls for effects of other variables in model</li>
+                            </>
+                        ) : (
+                            <>
+                                <li>Koefisien γ menunjukkan perubahan Y untuk setiap perubahan satu unit X</li>
+                                <li>Interpretasi: kenaikan 1 unit X → kenaikan γ unit Y</li>
+                                <li>Mengendalikan efek variabel lain dalam model</li>
+                            </>
+                        )}
                     </ul>
                 </div>
 
-                <h2 className="mt-8">Parameter Estimates Output</h2>
+                <h2 className="mt-8">{isEn ? "Parameter Estimates Output" : "Output Parameter Estimates"}</h2>
 
                 <div className="bg-gray-50 p-4 rounded-lg my-4">
                     <h4 className="font-bold mb-2">
-                        Parameter Estimates Table:
+                        {isEn ? "Parameter Estimates Table:" : "Tabel Parameter Estimates:"}
                     </h4>
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">

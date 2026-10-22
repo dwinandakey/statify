@@ -33,9 +33,7 @@ pub fn run(
     let chi_dist_1df = ChiSquared::new(1.0).unwrap();
     let z_score = crate::utils::probability::z_score_from_confidence(config.confidence_level);
 
-    // ========================================================================
     // BLOCK 0: NULL MODEL
-    // ========================================================================
     let sum_y: f64 = y_vector.sum();
     let n_1 = sum_y;
     let n_0 = n_samples as f64 - n_1;
@@ -157,9 +155,7 @@ pub fn run(
         }
     };
 
-    // ========================================================================
     // BLOCK 0: STEP 0 (NULL MODEL) - untuk Iteration History
-    // ========================================================================
     let null_model_for_step0: FittedModel;
     let block_0_iter_history: Option<IterationHistoryBlock>;
 
@@ -192,9 +188,7 @@ pub fn run(
         block_0_iter_history = None;
     }
 
-    // ========================================================================
     // BLOCK 1: BACKWARD WALD (START WITH FULL MODEL)
-    // ========================================================================
 
     // --- STEP 1 (Start): FULL MODEL ---
     let mut included_indices: Vec<usize> = (0..n_total_vars).collect();
@@ -375,7 +369,6 @@ pub fn run(
         sig: omni_sig,
     };
 
-    // --- BARU: Hitung Casewise Listing Jika Diminta ---
     let casewise_result = if config.casewise_listing && !included_indices.is_empty() {
         let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
         let y_label_0 = "0";
@@ -393,10 +386,8 @@ pub fn run(
         None
     };
 
-    // --- BARU: Ambil Correlation of Estimates dari final step ---
     let corr_estimates_final = final_step.correlation_of_estimates.clone();
 
-    // --- BARU: Generate Step Summary (SPSS Style) ---
     let step_summary: Vec<StepSummaryRow> = steps_details.iter()
         .filter(|s| s.step > 0) // Skip Step 0 untuk backward juga (full model awal)
         .map(|s| {
@@ -444,7 +435,6 @@ pub fn run(
         assumption_tests: None,
         overall_remainder_test: final_step.remainder_test,
         categorical_codings: codings,
-        // --- MODIFIKASI: Ambil Hosmer Lemeshow dari Step Terakhir ---
         hosmer_lemeshow: final_step.hosmer_lemeshow,
         casewise_list: casewise_result,
         classification_plot_data: if config.classification_plots && !included_indices.is_empty() {
@@ -458,11 +448,8 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Correlation of Estimates ---
         correlation_of_estimates: corr_estimates_final,
-        // --- BARU: Step Summary ---
         step_summary: if step_summary.is_empty() { None } else { Some(step_summary) },
-        // --- BARU: Saved Predictions ---
         saved_predictions: if !included_indices.is_empty() {
             let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
             saved_predictions::calculate_saved_predictions(
@@ -474,7 +461,6 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Fitting Warnings dari IRLS ---
         fitting_warnings: {
             let w = &current_model.warnings;
             if w.possible_separation || w.quasi_separation || w.step_halving_used 
@@ -639,7 +625,7 @@ fn calculate_step_snapshot(
     let remainder_test =
         calculate_overall_remainder_stats(full_x, y_vector, included_indices, model, config.include_constant);
 
-    // --- MODIFIKASI: HITUNG HOSMER-LEMESHOW ---
+    // HITUNG HOSMER-LEMESHOW ---
     let hl_result = if config.hosmer_lemeshow && step > 0 {
         match hosmer_lemeshow::calculate(y_vector, &model.predictions, 10) {
             Ok(res) => Some(res),
@@ -649,7 +635,6 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CORRELATION OF ESTIMATES ---
     let corr_estimates_result: Option<Vec<CorrelationOfEstimatesRow>> = if config.correlations && step > 0 {
         let mut var_names_for_corr: Vec<String> = Vec::new();
         if config.include_constant {
@@ -672,7 +657,6 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CLASSIFICATION PLOT DATA ---
     let classification_plot_result = if config.classification_plots && step > 0 {
         let y_label_0 = "FALSE";
         let y_label_1 = "TRUE";
@@ -699,13 +683,9 @@ fn calculate_step_snapshot(
         remainder_test,
         omni_tests: Some(omni_tests_model),
         step_omni_tests: Some(omni_tests_step),
-        // --- MASUKKAN HASIL HOSMER-LEMESHOW ---
         hosmer_lemeshow: hl_result,
-        // --- BARU: CORRELATION OF ESTIMATES ---
         correlation_of_estimates: corr_estimates_result,
-        // --- BARU: ITERATION HISTORY ---
         iteration_history,
-        // --- BARU: CLASSIFICATION PLOT DATA ---
         classification_plot_data: classification_plot_result,
     }
 }

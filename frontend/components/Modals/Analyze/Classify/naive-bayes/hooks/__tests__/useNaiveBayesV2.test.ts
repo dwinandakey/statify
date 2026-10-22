@@ -374,9 +374,9 @@ describe("mergeWithDefaults", () => {
             type: "ngram",
         });
         expect(merged.text.stopwords).toEqual(STWV_DEFAULT_CONFIG.stopwords);
-        expect(merged.options.NumericLikelihoodOverrides).toEqual({
-            umur: "gaussian_minstd",
-        });
+        // Revisi pasca-sidang: pilihan min. std dihapus; isian lama kembali ke Gaussian standar.
+        expect(merged.options.NumericLikelihoodOverrides).toEqual({});
+        expect(merged.options.NumericLikelihood).toBe("gaussian");
 
         // Mutasi hasil tidak boleh mengubah konstanta default.
         merged.text.tokenizer.minSize = 99;

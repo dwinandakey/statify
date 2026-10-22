@@ -8,7 +8,6 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -40,15 +39,17 @@ import { formatAssumptionTests } from "../services/formatter_assumptions";
 // Syntax Generator
 import { generateLogisticRegressionSyntax } from "../services/syntaxGenerator";
 
-// Timing instrumentation
-import {
-  startAnalysisRun,
-  markDispatch,
-  markWorkerResponse,
-  markProcedureEnd,
-  registerRenderCompletionTarget,
-  type AnalysisRunContext,
-} from "@/lib/analysisTiming";
+// Timing instrumentation (DINONAKTIFKAN - hanya dipakai saat pengembangan).
+// Untuk mengaktifkan kembali: uncomment import ini dan semua blok "Timing"
+// di file ini serta di binaryLogistic.worker.js.
+// import {
+//   startAnalysisRun,
+//   markDispatch,
+//   markWorkerResponse,
+//   markProcedureEnd,
+//   registerRenderCompletionTarget,
+//   type AnalysisRunContext,
+// } from "@/lib/analysisTiming";
 
 // Types
 import type { Variable } from "@/types/Variable";
@@ -122,15 +123,6 @@ export const BinaryLogisticMain = () => {
     DEFAULT_BINARY_LOGISTIC_OPTIONS
   );
 
-  const variableDetails = useMemo(() => {
-    return variablesFromStore.reduce((acc, v) => {
-      if (v.id !== undefined) {
-        acc[v.id] = v;
-      }
-      return acc;
-    }, {} as Record<number, Variable>);
-  }, [variablesFromStore]);
-
   // Sub-Dialog Params State
   const [catParams, setCatParams] = useState<BinaryLogisticCategoricalParams>(
     DEFAULT_BINARY_LOGISTIC_CATEGORICAL_PARAMS
@@ -193,7 +185,6 @@ export const BinaryLogisticMain = () => {
     }
   };
 
-  // --- MODIFIKASI: Auto-detect Nominal/Ordinal variables ---
   const handleMoveToCovariates = () => {
     if (highlightedVariable) {
       // 1. Tambahkan ke daftar Covariates
@@ -313,8 +304,8 @@ export const BinaryLogisticMain = () => {
   // --- WORKER HELPER ---
   const runWorkerAction = (
     action: string,
-    extraConfig = {},
-    timingCtx?: AnalysisRunContext
+    extraConfig = {}
+    // Timing: timingCtx?: AnalysisRunContext
   ) => {
     return new Promise((resolve, reject) => {
       // Validasi minimal untuk semua action
@@ -340,13 +331,14 @@ export const BinaryLogisticMain = () => {
       );
 
       worker.onmessage = (event) => {
-        const { type, payload, timing } = event.data;
+        const { type, payload } = event.data; // Timing: + timing
         worker.terminate();
         if (type === "SUCCESS") {
-          if (timingCtx) {
-            markWorkerResponse(timingCtx);
-            timingCtx.workerTiming = timing;
-          }
+          // Timing:
+          // if (timingCtx) {
+          //   markWorkerResponse(timingCtx);
+          //   timingCtx.workerTiming = timing;
+          // }
           resolve(payload);
         } else reject(new Error(payload || "Worker error"));
       };
@@ -356,10 +348,6 @@ export const BinaryLogisticMain = () => {
         reject(error);
       };
 
-      // Refresh variables from store: IDs may have shifted since `options` was
-      // set (e.g. after a prior run saved predictions/residuals to the dataset).
-      // Without this, stale IDs miss `variableDetails` entirely and every row
-      // gets filtered out as "missing", see findActualVariable() above.
       const currentVariables = useVariableStore.getState().variables;
 
       const actualDependent = options.dependent
@@ -417,11 +405,10 @@ export const BinaryLogisticMain = () => {
         independent_indices: indepIndices,
         rows: data.length,
         cols: currentVariables.length,
-        // ... (config lain tidak relevan untuk VIF/BT raw calc, tapi dikirim saja)
         ...extraConfig,
       };
 
-      if (timingCtx) markDispatch(timingCtx);
+      // Timing: if (timingCtx) markDispatch(timingCtx);
 
       worker.postMessage({
         action,
@@ -455,7 +442,6 @@ export const BinaryLogisticMain = () => {
     yEncoding?: Record<string, number>
   ) => {
     if (!savedPredictions?.rows?.length) {
-      console.log("[Main] No saved predictions to process");
       return;
     }
 
@@ -533,9 +519,6 @@ export const BinaryLogisticMain = () => {
       variablesToAdd.push(newVariable);
 
       // Prepare cell updates for this variable
-      // NOTE: rowIndex is the position among ANALYZED cases (post listwise
-      // deletion), not the dataset row. row.case_index is the original
-      // dataset row the worker remapped it to - use that as the target.
       values.forEach((value, rowIndex) => {
         if (value !== undefined && !isNaN(value)) {
           allCellUpdates.push({
@@ -606,8 +589,7 @@ export const BinaryLogisticMain = () => {
     const queueDfBetaVariables = (): void => {
       if (!variableNames?.influence_dfbeta?.length) return;
 
-      // DfBeta names from Rust look like "DFB0_1", "DFB1_1".
-      // We extract the base name ("DFB0", "DFB1") and find the next available suffix.
+      // DfBeta names
       let dfbetaSuffix = 1;
       while (true) {
         const anyExists = variableNames.influence_dfbeta.some((rustName) => {
@@ -620,7 +602,7 @@ export const BinaryLogisticMain = () => {
 
       for (let i = 0; i < variableNames.influence_dfbeta.length; i++) {
         const rustName = variableNames.influence_dfbeta[i];
-        const baseName = rustName.split('_')[0]; // "DFB0" or "DFB1", etc.
+        const baseName = rustName.split('_')[0]; 
         const varName = `${baseName}_${dfbetaSuffix}`;
         
         const isConstant = baseName === "DFB0";
@@ -715,27 +697,16 @@ export const BinaryLogisticMain = () => {
 
     // --- Execute batch addition ---
     if (variablesToAdd.length > 0) {
-      console.log(`[Main] Adding ${variablesToAdd.length} saved prediction variables...`);
-      try {
-        // Step 1: Add variables WITHOUT updates (empty columns)
-        // This avoids index conflicts during splice operations
-        await addVariables(variablesToAdd, []);
+      // Step 1: Add variables WITHOUT updates (empty columns)
+      // This avoids index conflicts during splice operations
+      await addVariables(variablesToAdd, []);
 
-        // Step 2: After variables are added, apply cell updates separately
-        // The column indices should now be valid in the new structure
-        if (allCellUpdates.length > 0) {
-          console.log(`[Main] Applying ${allCellUpdates.length} cell updates...`);
-          await useDataStore.getState().updateCells(allCellUpdates);
-          await useDataStore.getState().saveData();
-        }
-
-        console.log("[Main] Saved predictions added to dataset successfully");
-      } catch (error) {
-        console.error("[Main] Error adding saved predictions:", error);
-        throw error;
+      // Step 2: After variables are added, apply cell updates separately
+      // The column indices should now be valid in the new structure
+      if (allCellUpdates.length > 0) {
+        await useDataStore.getState().updateCells(allCellUpdates);
+        await useDataStore.getState().saveData();
       }
-    } else {
-      console.log("[Main] No saved predictions to add");
     }
   };
 
@@ -748,13 +719,11 @@ export const BinaryLogisticMain = () => {
         throw new Error("VIF requires at least two independent variables.");
       }
 
-      const timingCtx = startAnalysisRun("BinaryLogistic:VIF");
+      // Timing: const timingCtx = startAnalysisRun("BinaryLogistic:VIF");
 
-      const payload: any = await runWorkerAction("run_vif", {}, timingCtx);
+      const payload: any = await runWorkerAction("run_vif", {} /* , timingCtx */);
 
-      console.log("VIF Payload form Worker:", payload); // Debugging
-
-      markProcedureEnd(timingCtx, timingCtx.workerTiming);
+      // Timing: markProcedureEnd(timingCtx, timingCtx.workerTiming);
 
       // Save log & analytic container
       const logId = await addLog({
@@ -768,11 +737,12 @@ export const BinaryLogisticMain = () => {
 
       const formattedOutput = formatAssumptionTests(payload);
 
-      registerRenderCompletionTarget(
-        timingCtx,
-        analyticId,
-        formattedOutput.sections?.length ?? 0
-      );
+      // Timing:
+      // registerRenderCompletionTarget(
+      //   timingCtx,
+      //   analyticId,
+      //   formattedOutput.sections?.length ?? 0
+      // );
 
       // Save sections using loop
       if (formattedOutput.sections && formattedOutput.sections.length > 0) {
@@ -788,8 +758,6 @@ export const BinaryLogisticMain = () => {
             components: "Assumption Tests",
           });
         }
-      } else {
-        console.warn("Formatter returned no sections for VIF", formattedOutput);
       }
     } catch (err: any) {
       console.error(err);
@@ -802,11 +770,11 @@ export const BinaryLogisticMain = () => {
       if (!options.dependent)
         throw new Error("Dependent variable is required.");
 
-      const timingCtx = startAnalysisRun("BinaryLogistic:BoxTidwell");
+      // Timing: const timingCtx = startAnalysisRun("BinaryLogistic:BoxTidwell");
 
-      const payload: any = await runWorkerAction("run_box_tidwell", {}, timingCtx);
+      const payload: any = await runWorkerAction("run_box_tidwell", {} /* , timingCtx */);
 
-      markProcedureEnd(timingCtx, timingCtx.workerTiming);
+      // Timing: markProcedureEnd(timingCtx, timingCtx.workerTiming);
 
       // Save log & analytic container
       const logId = await addLog({
@@ -827,11 +795,12 @@ export const BinaryLogisticMain = () => {
 
       const formattedOutput = formatAssumptionTests(mockResult);
 
-      registerRenderCompletionTarget(
-        timingCtx,
-        analyticId,
-        formattedOutput.sections?.length ?? 0
-      );
+      // Timing:
+      // registerRenderCompletionTarget(
+      //   timingCtx,
+      //   analyticId,
+      //   formattedOutput.sections?.length ?? 0
+      // );
 
       for (const section of formattedOutput.sections) {
         const tableDataWithTitle = {
@@ -872,7 +841,7 @@ export const BinaryLogisticMain = () => {
       return;
     }
 
-    const timingCtx = startAnalysisRun(`BinaryLogistic:${options.method}`);
+    // Timing: const timingCtx = startAnalysisRun(`BinaryLogistic:${options.method}`);
 
     setIsLoading(true);
 
@@ -886,14 +855,11 @@ export const BinaryLogisticMain = () => {
       );
 
       worker.onmessage = async (event) => {
-        const { type, payload, timing } = event.data;
-        console.log(`[Main] Worker Message: ${type}`, payload);
+        const { type, payload } = event.data; // Timing: + timing
 
         if (type === "SUCCESS") {
-          markWorkerResponse(timingCtx);
+          // Timing: markWorkerResponse(timingCtx);
           try {
-            console.log("[Main] Starting Formatting Process...");
-
             const allIndependentVars = [
               ...options.covariates,
               ...options.factors,
@@ -913,15 +879,6 @@ export const BinaryLogisticMain = () => {
               }
             );
 
-            console.log("[Main] Formatting Complete:", formattedResult);
-
-            if (
-              !formattedResult.sections ||
-              formattedResult.sections.length === 0
-            ) {
-              console.warn("[Main] Warning: Formatter returned 0 sections!");
-            }
-
             // B. Simpan Log dengan syntax lengkap SPSS-like
             const syntaxLog = generateLogisticRegressionSyntax({
               dependent: options.dependent!,
@@ -933,9 +890,9 @@ export const BinaryLogisticMain = () => {
               optionParams: optParams,
             });
 
-            // Procedure time ends here: result data is fully built, nothing
-            // below this point is IndexedDB or render work.
-            markProcedureEnd(timingCtx, timing);
+            // Timing: procedure time ends here: result data is fully built,
+            // nothing below this point is IndexedDB or render work.
+            // markProcedureEnd(timingCtx, timing);
 
             const logId = await addLog({
               log: syntaxLog,
@@ -947,13 +904,12 @@ export const BinaryLogisticMain = () => {
               note: `Method: ${options.method}`,
             });
 
-            registerRenderCompletionTarget(
-              timingCtx,
-              analyticId,
-              formattedResult.sections?.length ?? 0
-            );
-
-            console.log(`[Main] Saving to DB (AnalyticID: ${analyticId})...`);
+            // Timing:
+            // registerRenderCompletionTarget(
+            //   timingCtx,
+            //   analyticId,
+            //   formattedResult.sections?.length ?? 0
+            // );
 
             // D. Simpan Output per Section
             if (
@@ -961,11 +917,7 @@ export const BinaryLogisticMain = () => {
               Array.isArray(formattedResult.sections)
             ) {
               for (const section of formattedResult.sections) {
-                console.log(`[Main] Saving Section: ${section.title}`);
-
-                // -----------------------------------------------------------
                 // LOGIC CUSTOM COMPONENTS (HEADER GROUPING)
-                // -----------------------------------------------------------
                 let componentCategory = "Tables";
                 const cleanTitle = section.title
                   .replace(/<[^>]*>?/gm, " ")
@@ -995,9 +947,7 @@ export const BinaryLogisticMain = () => {
                   componentCategory = cleanTitle;
                 }
 
-                // -----------------------------------------------------------
                 // DATA PREPARATION FOR RENDERER
-                // -----------------------------------------------------------
                 let payloadForRenderer: any;
 
                 // Handle chart sections differently
@@ -1020,9 +970,7 @@ export const BinaryLogisticMain = () => {
                   };
                 }
 
-                // -----------------------------------------------------------
                 // SIMPAN KE DATABASE
-                // -----------------------------------------------------------
                 await addStatistic(analyticId, {
                   title: section.title,
                   description: section.description || "",
@@ -1034,13 +982,11 @@ export const BinaryLogisticMain = () => {
 
             // E. Simpan Saved Predictions ke Dataset (jika ada)
             if (payload.saved_predictions) {
-              console.log("[Main] Processing Saved Predictions...");
               // Pass y_encoding from model_info to convert 0/1 back to original labels
               const yEncoding = payload.model_info?.y_encoding;
               await savePredictionsToDataset(payload.saved_predictions, yEncoding);
             }
 
-            console.log("[Main] All Saved. Closing Modal.");
             setIsLoading(false);
             worker.terminate();
             closeModal("BINARY_LOGISTIC");
@@ -1051,7 +997,7 @@ export const BinaryLogisticMain = () => {
             worker.terminate();
           }
         } else if (type === "ERROR") {
-          console.error("[Main] Worker reported ERROR:", payload);
+          // Stack trace sudah di-log oleh worker (binaryLogistic.worker.js)
           toast.error(
             typeof payload === "string"
               ? payload
@@ -1093,17 +1039,7 @@ export const BinaryLogisticMain = () => {
         ...actualFactors.map(f => currentVariables.findIndex(v => v.id === f.id)),
       ].filter((idx) => idx !== -1);
 
-      // Debug logging
-      console.log("[Main] Variables in store:", currentVariables.length);
-      console.log("[Main] Dependent variable:", options.dependent?.name, "oldID:", options.dependent?.id, "newID:", actualDependent?.id);
-      console.log("[Main] Dependent index found:", depIndex);
-      console.log("[Main] Actual covariates:", actualCovariates.map(c => ({ name: c.name, id: c.id })));
-      console.log("[Main] Independent indices:", indepIndices);
-
       if (!actualDependent || depIndex === -1) {
-        const storeIds = currentVariables.map(v => v.id);
-        console.error("[Main] Variable IDs in store:", storeIds);
-        console.error("[Main] Looking for dependent ID:", options.dependent?.id);
         throw new Error(
           `Dependent variable "${options.dependent?.name}" was not found in the dataset. ` +
           `Please reselect it from the available list.`
@@ -1135,7 +1071,6 @@ export const BinaryLogisticMain = () => {
         "Backward: LR": "BackwardLR",
       };
 
-      // --- PERUBAHAN: Mapping Konfigurasi Kategorik (Per-Variable) ---
       // Mengubah state UI (catParams) menjadi format config untuk Rust
       // Setiap variabel memiliki contrast & reference sendiri (SPSS style)
       const categoricalConfig = actualCovariates
@@ -1160,7 +1095,6 @@ export const BinaryLogisticMain = () => {
           });
         }
       });
-      // ------------------------------------------------
 
       const analysisConfig = {
         dependent_index: depIndex,
@@ -1182,15 +1116,14 @@ export const BinaryLogisticMain = () => {
         classification_plots: optParams.classificationPlots,
         hosmer_lemeshow: optParams.hosmerLemeshow,
         casewise_listing: optParams.casewiseListing,
-        casewise_type: optParams.casewiseType, // BARU: "outliers" atau "all"
+        casewise_type: optParams.casewiseType, // "outliers" atau "all"
         casewise_outliers: optParams.casewiseOutliers,
         iteration_history: optParams.iterationHistory,
         correlations: optParams.correlations,
 
-        // Display option - BARU: untuk menentukan at each step vs at last step
+        // Display option: untuk menentukan at each step vs at last step
         display_at_last_step: !optParams.displayAtEachStep,
 
-        // --- BARU: Save Options (Tab Save di UI) ---
         save_predicted_probabilities: saveParams.predictedProbabilities,
         save_predicted_group: saveParams.predictedGroup,
         save_residuals_unstandardized: saveParams.residualsUnstandardized,
@@ -1214,9 +1147,7 @@ export const BinaryLogisticMain = () => {
         },
       };
 
-      console.log("Config Cleaned for Rust:", JSON.stringify(analysisConfig));
-
-      markDispatch(timingCtx);
+      // Timing: markDispatch(timingCtx);
 
       // Use ACTUAL IDs from currentVariables (not the potentially stale IDs from options)
       worker.postMessage({

@@ -1,18 +1,11 @@
-import type { AnalysisSection, TableResultContent } from "../types/binary-logistic";
+import type {
+  AnalysisSection,
+  ModelSummary,
+  TableResultContent,
+} from "../types/binary-logistic";
 
 /**
  * Helper untuk menggabungkan note dan description
- * Note (technical/methodological info) menjadi bagian awal
- * Description (interpretasi) menjadi bagian akhir
- * 
- * Format output (HTML untuk TiptapEditor):
- * "a. [Note line 1]<br>
- *  b. [Note line 2]<br><br>
- *  [Description/Interpretation]"
- * 
- * Notes:
- * - Setiap poin (a., b., c., dll) dipisahkan dengan <br>
- * - Ada double <br> antara note dan interpretasi
  */
 const mergeNoteAndDescription = (
   note?: string,
@@ -77,10 +70,7 @@ export const fmtSig = (num: number | undefined | null): string => {
   return num < 0.001 ? "< .001" : num.toFixed(3);
 };
 
-// Format p-value for narrative descriptions as "p (Sig.) ..." so readers can
-// map the prose directly back to the table's "Sig." column - SPSS output
-// tables report "Sig." while conventional write-ups report "p"; this makes
-// the equivalence explicit instead of silently switching notation.
+// Format p-value for narrative descriptions as "p (Sig.)
 export const fmtPSig = (num: number | undefined | null): string => {
   if (num === undefined || num === null || isNaN(num)) return "p (Sig.) = .";
   return num < 0.001 ? "p (Sig.) < .001" : `p (Sig.) = ${num.toFixed(3)}`;
@@ -98,9 +88,7 @@ export const fmtInt = (num: number | undefined | null): string => {
   return num.toString();
 };
 
-// ============================================================================
-// DESCRIPTION GENERATORS (SPSS Style - English)
-// ============================================================================
+// DESCRIPTION GENERATORS
 
 /**
  * Menghasilkan deskripsi untuk Omnibus Tests of Model Coefficients.
@@ -126,14 +114,31 @@ export const generateOmnibusDescription = (
 };
 
 /**
- * Menghasilkan deskripsi untuk Model Summary (Nagelkerke R Square).
+ * Menghasilkan deskripsi untuk Model Summary (-2 Log likelihood, Cox & Snell,
+ * Nagelkerke).
  */
 export const generateModelSummaryDescription = (
-  nagelkerke: number | undefined
+  summary: ModelSummary | undefined
 ): string => {
-  if (nagelkerke === undefined) return "";
-  const pct = (nagelkerke * 100).toFixed(1);
-  return `The model explained ${pct}% (Nagelkerke R Square) of the variance in the dependent variable.`;
+  if (!summary) return "";
+  const { log_likelihood, cox_snell_r_square, nagelkerke_r_square } = summary;
+  if (
+    !Number.isFinite(log_likelihood) ||
+    !Number.isFinite(cox_snell_r_square) ||
+    !Number.isFinite(nagelkerke_r_square)
+  ) {
+    return "";
+  }
+
+  const neg2ll = safeFixed(-2 * log_likelihood);
+  const lowPct = (Math.min(cox_snell_r_square, nagelkerke_r_square) * 100).toFixed(1);
+  const highPct = (Math.max(cox_snell_r_square, nagelkerke_r_square) * 100).toFixed(1);
+
+  return `The model has a -2 Log likelihood of ${neg2ll}. Pseudo R² (Cox & Snell = ${safeFixed(
+    cox_snell_r_square
+  )}, Nagelkerke = ${safeFixed(
+    nagelkerke_r_square
+  )}) suggests the predictors account for approximately ${lowPct}%–${highPct}% of the variation in the dependent variable; these are approximations, not exact variance explained.`;
 };
 
 /**
@@ -166,7 +171,7 @@ export const generateHosmerDescription = (sig: number): string => {
 };
 
 /**
- * Menghasilkan teks footnote SPSS untuk status terminasi estimasi IRLS
+ * Menghasilkan teks footnote untuk status terminasi estimasi IRLS
  * (dipakai oleh tabel Model Summary & Iteration History).
  *
  * Tidak menyertakan prefix huruf (a./b./dst) - itu ditentukan oleh caller,

@@ -14,6 +14,8 @@ import { useAnalyzeHook } from "@/components/Modals/Analyze/TimeSeries/ARDL/hook
 import VariablesTab from "@/components/Modals/Analyze/TimeSeries/ARDL/VariablesTab";
 import TimeTab from "@/components/Modals/Analyze/TimeSeries/TimeSeriesTimeTab";
 import OptionTab from "@/components/Modals/Analyze/TimeSeries/ARDL/OptionTab";
+import { useTimeSeriesSplit } from "@/components/Modals/Analyze/TimeSeries/Common/useTimeSeriesSplit";
+import { TimeSeriesSplitTab } from "@/components/Modals/Analyze/TimeSeries/Common/TimeSeriesSplitTab";
 import { getFormData, clearFormData } from "@/hooks/useIndexedDB";
 import type { DataRow } from "@/types/Data";
 import { toast } from "sonner";
@@ -59,6 +61,23 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
         resetOptions,
     } = useOptionHook();
 
+    const splitHook = useTimeSeriesSplit(0.8);
+
+    const handleSaveSplitToDataView = async (
+        totalRows: number,
+        validRowIndices: number[],
+        splitIndex: number,
+        testPredictions?: number[]
+    ) => {
+        await splitHook.saveSplitToDataView({
+            totalRows,
+            validRowIndices,
+            splitIndex,
+            testPredictions,
+            modelLabel: "ARDL"
+        });
+    };
+
     const { errorMsg: analysisError, isCalculating, handleAnalyzes } = useAnalyzeHook(
         dependentVariable,
         independentVariables,
@@ -72,6 +91,15 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
         qOrders,
         saveLongRun,
         saveShortRun,
+        {
+            splitEnabled: splitHook.splitEnabled,
+            splitMode: splitHook.splitMode,
+            rollingType: splitHook.rollingType,
+            trainRatio: splitHook.trainRatio,
+            saveSplitVariable: splitHook.saveSplitVariable,
+            savePredictions: splitHook.savePredictions
+        },
+        handleSaveSplitToDataView,
         onClose
     );
     
@@ -142,17 +170,30 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
         setIndependentVariables([]);
         resetTime();
         resetOptions();
+        splitHook.resetSplit();
         await clearFormData("ARDL");
         toast.success("Form reset successfully");
     };
 
+    const totalObs = dependentVariable.length > 0 && independentVariables.length > 0
+        ? data.filter(row => {
+            const yVal = row[dependentVariable[0].columnIndex];
+            if (yVal === null || yVal === undefined || isNaN(Number(yVal))) return false;
+            return independentVariables.every(iv => {
+                const xVal = row[iv.columnIndex];
+                return xVal !== null && xVal !== undefined && !isNaN(Number(xVal));
+            });
+        }).length
+        : data.length;
+
     return (
         <div className="h-full flex flex-col">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="flex-1 flex flex-col">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="variables">Variables</TabsTrigger>
                     <TabsTrigger value="time">Time</TabsTrigger>
                     <TabsTrigger value="options">Options</TabsTrigger>
+                    <TabsTrigger value="split">Split Data</TabsTrigger>
                     <TabsTrigger value="save">Save</TabsTrigger>
                 </TabsList>
 
@@ -195,6 +236,25 @@ const ARDL: FC<ARDLProps> = ({ onClose, containerType }) => {
                             independentVariables={independentVariables}
                             handlePOrder={handlePOrder}
                             handleQOrders={handleQOrders}
+                        />
+                    </TabsContent>
+
+                    <TabsContent value="split" className="h-full">
+                        <TimeSeriesSplitTab
+                            splitEnabled={splitHook.splitEnabled}
+                            setSplitEnabled={splitHook.setSplitEnabled}
+                            splitMode={splitHook.splitMode}
+                            setSplitMode={splitHook.setSplitMode}
+                            rollingType={splitHook.rollingType}
+                            setRollingType={splitHook.setRollingType}
+                            trainRatio={splitHook.trainRatio}
+                            setTrainRatio={splitHook.setTrainRatio}
+                            saveSplitVariable={splitHook.saveSplitVariable}
+                            setSaveSplitVariable={splitHook.setSaveSplitVariable}
+                            savePredictions={splitHook.savePredictions}
+                            setSavePredictions={splitHook.setSavePredictions}
+                            totalObs={totalObs}
+                            modelName="ARDL"
                         />
                     </TabsContent>
 

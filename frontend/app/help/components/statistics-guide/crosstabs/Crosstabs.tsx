@@ -23,6 +23,7 @@ export const Crosstabs: React.FC = () => {
     {
       id: 'cells',
       label: 'Sel',
+      labelEn: 'Cells',
       icon: Table,
       component: CellsTab
     },
@@ -37,7 +38,9 @@ export const Crosstabs: React.FC = () => {
   return (
     <StandardizedGuideLayout
       title="Panduan Analisis Crosstabs"
+      titleEn="Crosstabs Analysis Guide"
       description="Pelajari cara menganalisis hubungan antara variabel kategorikal menggunakan tabulasi silang"
+      descriptionEn="Learn how to analyze relationships between categorical variables using cross tabulation"
       tabs={tabs}
       defaultTab="overview"
     >

@@ -1,6 +1,6 @@
 import type { Table } from "@/types/Table";
 import type { StwvConfig } from "../config";
-import { FORMULA_STANDARDS, type FormulaOption } from "../constants/formula-standards";
+import { IDF_OPTIONS, NORM_OPTIONS, TF_OPTIONS, type FormulaOption } from "../constants/vectorization-options";
 import type { VectorizerOutput } from "../types";
 import {
     describeStwvProcessingSummary,
@@ -38,8 +38,10 @@ export interface StwvOutput {
     tables: Table[];
 }
 
+/** Nama opsi tanpa rumus di belakang tanda "—" (mis. "Word count  —  f" → "Word count"). */
 function optionLabel<T extends string>(options: readonly FormulaOption<T>[], value: T): string {
-    return options.find((o) => o.value === value)?.label ?? value;
+    const label = options.find((o) => o.value === value)?.label;
+    return label ? label.split("—")[0].trim() : value;
 }
 
 function describeStopwords(config: StwvConfig): string {
@@ -96,7 +98,6 @@ export function buildStwvOutput(input: StwvOutputInput): StwvOutput {
     const vocabSize = result.vocabulary.length;
     const first = columnNames[0];
     const last = columnNames[columnNames.length - 1];
-    const std = FORMULA_STANDARDS[config.formulaStandard];
 
     const summaryRows: Table["rows"] = [
         { rowHeader: ["Source Variable"], value: variableName },
@@ -133,10 +134,9 @@ export function buildStwvOutput(input: StwvOutputInput): StwvOutput {
             { header: "Value", key: "value" },
         ],
         rows: [
-            { rowHeader: ["Formula Standard"], value: std.label },
-            { rowHeader: ["Term Frequency (TF)"], value: optionLabel(std.tfOptions, config.vectorization.tfMethod) },
-            { rowHeader: ["Inverse Document Frequency (IDF)"], value: optionLabel(std.idfOptions, config.vectorization.idfMethod) },
-            { rowHeader: ["Normalization"], value: optionLabel(std.normOptions, config.vectorization.normalization) },
+            { rowHeader: ["Term Frequency (TF)"], value: optionLabel(TF_OPTIONS, config.vectorization.tfMethod) },
+            { rowHeader: ["Inverse Document Frequency (IDF)"], value: optionLabel(IDF_OPTIONS, config.vectorization.idfMethod) },
+            { rowHeader: ["Normalization"], value: optionLabel(NORM_OPTIONS, config.vectorization.normalization) },
             { rowHeader: ["Convert to Lowercase"], value: config.lowercase ? "Yes" : "No" },
             { rowHeader: ["Stopwords"], value: describeStopwords(config) },
             { rowHeader: ["Stemming"], value: describeStemming(config) },

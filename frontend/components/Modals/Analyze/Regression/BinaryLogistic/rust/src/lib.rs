@@ -12,9 +12,7 @@ fn api_error(msg: &str) -> JsValue {
     JsValue::from_str(msg)
 }
 
-// ========================================================================
 // 1. BINARY LOGISTIC REGRESSION (MAIN)
-// ========================================================================
 #[wasm_bindgen]
 pub fn calculate_binary_logistic(
     data_x: &[f64],
@@ -61,7 +59,7 @@ pub fn calculate_binary_logistic(
     let x_matrix_raw = DMatrix::from_row_slice(rows, cols, data_x);
     let y_vector = DVector::from_column_slice(data_y);
 
-    // --- BARU: Panggil Design Matrix Builder ---
+    // --- Panggil Design Matrix Builder ---
     // Ini akan menangani dummy encoding untuk variabel kategorik
     let design_result = stats::design_matrix::build(&x_matrix_raw, &feature_names, &config)
         .map_err(|e| api_error(&format!("Design Matrix Error: {}", e)))?;
@@ -137,20 +135,11 @@ pub fn calculate_binary_logistic(
     Ok(JsValue::from_str(&json_output))
 }
 
-// ========================================================================
 // 2. MULTICOLLINEARITY (VIF)
-// ========================================================================
 #[derive(serde::Deserialize)]
 struct VifConfig {
     #[serde(default)]
     feature_names: Vec<String>,
-    // Same categorical config the main regression uses (column_index/
-    // method/reference). Needed so VIF is computed on the ACTUAL
-    // dummy-coded model matrix instead of raw ordinal category codes -
-    // otherwise a nominal variable with 3+ categories gets treated as one
-    // continuous column, which is not a meaningful VIF/GVIF input and
-    // won't match R's car::vif() (which uses Fox & Monette's Generalized
-    // VIF for multi-df terms).
     #[serde(default, alias = "categoricalVariables")]
     categorical_variables: Vec<models::config::CategoricalVarConfig>,
 }
@@ -204,21 +193,11 @@ pub fn calculate_vif(
     }
 }
 
-// ========================================================================
 // 3. LINEARITY (BOX-TIDWELL)
-// ========================================================================
 #[derive(serde::Deserialize)]
 struct BoxTidwellConfig {
     #[serde(default)]
     feature_names: Vec<String>,
-    // Same categorical config the main regression uses. Needed for two
-    // reasons: (1) to know which ORIGINAL variables are categorical (skip
-    // them as ln(X) candidates - a unique-value count alone can't tell a
-    // 5+ category nominal from a genuine continuous variable), and (2) so
-    // categorical variables used as CONTROLS in the augmented regression
-    // (R's `other.x`) are properly dummy-coded rather than fed in as raw
-    // ordinal integers, which would distort the fit for every variable in
-    // the model, not just the categorical ones.
     #[serde(default, alias = "categoricalVariables")]
     categorical_variables: Vec<models::config::CategoricalVarConfig>,
 }

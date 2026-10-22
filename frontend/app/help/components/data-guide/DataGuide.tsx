@@ -59,24 +59,28 @@ const DataGuide: React.FC<DataGuideProps> = ({ section }) => {
     {
       id: 'quick-start',
       label: 'Panduan Cepat',
+      labelEn: 'Quick Start',
       icon: BarChart3,
       component: QuickStartGuide
     },
     {
       id: 'data-management',
       label: 'Kelola Data',
+      labelEn: 'Manage Data',
       icon: Database,
       component: DataManagementTab
     },
     {
       id: 'data-transformation',
       label: 'Transformasi Data',
+      labelEn: 'Data Transformation',
       icon: Settings,
       component: DataTransformationTab
     },
     {
       id: 'data-quality',
       label: 'Kualitas Data',
+      labelEn: 'Data Quality',
       icon: Filter,
       component: DataQualityTab
     }
@@ -85,7 +89,9 @@ const DataGuide: React.FC<DataGuideProps> = ({ section }) => {
   return (
     <StandardizedGuideLayout
       title="Panduan Manajemen Data"
+      titleEn="Data Management Guide"
       description="Pelajari cara mengelola, mentransformasi, dan memastikan kualitas data Anda di Statify"
+      descriptionEn="Learn how to manage, transform, and ensure the quality of your data in Statify"
       tabs={tabs}
       defaultTab="quick-start"
     />

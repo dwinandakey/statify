@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
-import { CircleHelp } from "lucide-react";
+import { HelpCircle } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -33,6 +34,14 @@ import { analyzeNaiveBayes } from "@/components/Modals/Analyze/Classify/naive-ba
 import { getUserFriendlyNaiveBayesError } from "@/components/Modals/Analyze/Classify/naive-bayes/services/naive-bayes-error-messages";
 import type { Variable } from "@/types/Variable";
 import { toast } from "sonner";
+import type { TabControlProps } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { useTourGuide } from "@/components/Modals/Analyze/Descriptive/Descriptive/hooks/useTourGuide";
+import { TourPopup, ActiveElementHighlight } from "@/components/Common/TourComponents";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
+import {
+    getNaiveBayesTourSteps,
+    NAIVE_BAYES_TOUR_IDS,
+} from "@/components/Modals/Analyze/Classify/naive-bayes/hooks/tourConfig";
 
 const NAIVE_BAYES_VALIDATION_ERROR_TOAST_ID = "naive-bayes-validation-error";
 const NAIVE_BAYES_SETTINGS_LOAD_ERROR_TOAST_ID = "naive-bayes-settings-load-error";
@@ -342,6 +351,29 @@ const NaiveBayesContainer = ({ onClose }: NaiveBayesContainerProps) => {
         if (activeTab === "text" && !hasRawText) setActiveTab("variables");
     }, [activeTab, hasRawText]);
 
+    // Tur bantuan interaktif (pola Ordinal Regression). Tur memindah tab LANGSUNG
+    // (tanpa validasi tab-leave `handleTabChange`) agar setiap langkah dapat
+    // ditampilkan; langkah Text Preprocessing hanya ada bila Raw Text terisi.
+    const helpLanguage = useHelpLanguageStore((s) => s.language);
+    const tourStepsConfig = useMemo(
+        () => getNaiveBayesTourSteps(helpLanguage, { hasRawText }),
+        [helpLanguage, hasRawText]
+    );
+    const tabControl = useMemo<TabControlProps>(
+        () => ({
+            setActiveTab: (tab: string) => setActiveTab(tab),
+            currentActiveTab: activeTab,
+        }),
+        [activeTab]
+    );
+    const { tourActive, currentStep, tourSteps, currentTargetElement, startTour, nextStep, prevStep, endTour } =
+        useTourGuide(tourStepsConfig, "sidebar", tabControl);
+
+    // Gulirkan panel ke kolom yang sedang dijelaskan agar terlihat bersama pop-up-nya.
+    useEffect(() => {
+        currentTargetElement?.scrollIntoView?.({ block: "nearest" });
+    }, [currentTargetElement]);
+
     const handleTabChange = useCallback(
         (next: string) => {
             if (next === activeTab) return;
@@ -469,24 +501,41 @@ const NaiveBayesContainer = ({ onClose }: NaiveBayesContainerProps) => {
 
     return (
         <div className="flex h-full flex-col">
+            <AnimatePresence>
+                {tourActive && tourSteps.length > 0 && currentStep < tourSteps.length && (
+                    <TourPopup
+                        step={tourSteps[currentStep]}
+                        currentStep={currentStep}
+                        totalSteps={tourSteps.length}
+                        onNext={nextStep}
+                        onPrev={prevStep}
+                        onClose={endTour}
+                        targetElement={currentTargetElement}
+                    />
+                )}
+            </AnimatePresence>
+            <ActiveElementHighlight active={tourActive} />
+
             <div className="flex items-center justify-between border-b px-4 py-3">
                 <h2 className="text-lg font-semibold">Naive Bayes</h2>
-                <Button variant="ghost" size="icon" onClick={() => { closeModal(); onClose(); }}>
-                    <CircleHelp className="h-5 w-5" />
-                </Button>
             </div>
 
             <Tabs value={activeTab} onValueChange={handleTabChange} className="flex flex-1 flex-col overflow-hidden">
                 <div className="border-b px-4">
                     <TabsList className="w-full justify-start">
-                        <TabsTrigger value="variables" className="min-w-0">
+                        <TabsTrigger value="variables" id={NAIVE_BAYES_TOUR_IDS.variablesTab} className="min-w-0">
                             <span className="truncate block w-full">Variables</span>
                         </TabsTrigger>
                         <TooltipProvider delayDuration={100}>
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span className="min-w-0" tabIndex={hasRawText ? -1 : 0}>
-                                        <TabsTrigger value="text" className="min-w-0" disabled={!hasRawText}>
+                                        <TabsTrigger
+                                            value="text"
+                                            id={NAIVE_BAYES_TOUR_IDS.textTab}
+                                            className="min-w-0"
+                                            disabled={!hasRawText}
+                                        >
                                             <span className="truncate block w-full">Text Preprocessing</span>
                                         </TabsTrigger>
                                     </span>
@@ -498,13 +547,13 @@ const NaiveBayesContainer = ({ onClose }: NaiveBayesContainerProps) => {
                                 )}
                             </Tooltip>
                         </TooltipProvider>
-                        <TabsTrigger value="options" className="min-w-0">
+                        <TabsTrigger value="options" id={NAIVE_BAYES_TOUR_IDS.optionsTab} className="min-w-0">
                             <span className="truncate block w-full">Options</span>
                         </TabsTrigger>
-                        <TabsTrigger value="validation" className="min-w-0">
+                        <TabsTrigger value="validation" id={NAIVE_BAYES_TOUR_IDS.validationTab} className="min-w-0">
                             <span className="truncate block w-full">Validation</span>
                         </TabsTrigger>
-                        <TabsTrigger value="output" className="min-w-0">
+                        <TabsTrigger value="output" id={NAIVE_BAYES_TOUR_IDS.outputTab} className="min-w-0">
                             <span className="truncate block w-full">Output</span>
                         </TabsTrigger>
                     </TabsList>
@@ -515,26 +564,50 @@ const NaiveBayesContainer = ({ onClose }: NaiveBayesContainerProps) => {
                 </div>
             </Tabs>
 
-            <div className="flex items-center justify-end gap-2 border-t px-4 py-3">
-                <Button
-                    variant="default"
-                    disabled={!validation.isValid}
-                    onClick={handleOK}
-                >
-                    OK
-                </Button>
-                <Button variant="outline" onClick={handleReset}>
-                    Reset
-                </Button>
-                <Button
-                    variant="outline"
-                    onClick={() => {
-                        closeModal();
-                        onClose();
-                    }}
-                >
-                    Cancel
-                </Button>
+            <div className="flex items-center justify-between gap-2 border-t px-4 py-3">
+                <div className="flex items-center text-muted-foreground">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    data-testid="naive-bayes-help-button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={startTour}
+                                    aria-label="Start feature tour"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                                >
+                                    <HelpCircle className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                <p className="text-xs">Start feature tour</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Button
+                        id={NAIVE_BAYES_TOUR_IDS.okButton}
+                        variant="default"
+                        disabled={!validation.isValid}
+                        onClick={handleOK}
+                    >
+                        OK
+                    </Button>
+                    <Button variant="outline" onClick={handleReset}>
+                        Reset
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            closeModal();
+                            onClose();
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                </div>
             </div>
         </div>
     );

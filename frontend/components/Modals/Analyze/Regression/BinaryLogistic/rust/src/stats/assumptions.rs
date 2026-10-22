@@ -54,10 +54,6 @@ fn cov_to_cor(v: &DMatrix<f64>) -> DMatrix<f64> {
     })
 }
 
-// ----------------------------------------------------------------------------
-// R-faithful logistic fit (stats::glm.fit) - the source of vcov(model)
-// ----------------------------------------------------------------------------
-
 /// `.Machine$double.eps`; R's `binomial()` clamps `linkinv()`/`mu.eta()` with it.
 const R_DBL_EPSILON: f64 = f64::EPSILON;
 
@@ -96,22 +92,6 @@ fn r_binomial_deviance(y: &DVector<f64>, mu: &DVector<f64>) -> f64 {
 /// Reproduces `stats::glm.fit()` for `binomial(link = "logit")` under R's
 /// default `glm.control()` (epsilon = 1e-8, maxit = 25) and returns
 /// `vcov(model)` exactly as R reports it - the matrix `car::vif()` reads.
-///
-/// That matrix is NOT the information matrix at the final coefficients.
-/// glm.fit stops as soon as |dev - devold| / (|dev| + 0.1) < epsilon and keeps
-/// the QR / working weights of the iteration that *produced* the returned
-/// coefficients, i.e. weights evaluated one Fisher-scoring step earlier. So
-/// `vcov(model)` = (X'WX)^-1 with a slightly stale W, and R's GVIF differs from
-/// the fully converged value in the 4th-5th significant digit (on the
-/// HR-Attrition data R stops after 5 iterations: Age 1.7366 in R vs 1.7365
-/// converged, which prints as 1.737 vs 1.736). Iterating to full convergence
-/// is the more exact number but is not what R prints, so mirror R step for
-/// step: same `mustart`, same weighted least squares via Householder QR
-/// (`Cdqrls`), same deviance stopping rule.
-///
-/// Returns `Err` wherever R itself would leave the well-behaved path
-/// (aliased column, step-halving, non-convergence); the caller then falls
-/// back to the fully converged `fit_logit_augmented`.
 fn glm_fit_vcov_like_r(x_design: &DMatrix<f64>, y: &DVector<f64>) -> Result<DMatrix<f64>, String> {
     const EPSILON: f64 = 1e-8; // glm.control(epsilon)
     const MAX_ITER: usize = 25; // glm.control(maxit)
@@ -196,15 +176,7 @@ fn glm_fit_vcov_like_r(x_design: &DMatrix<f64>, y: &DVector<f64>) -> Result<DMat
 
 /// Build the weighted correlation matrix R's `car::vif()` actually uses for
 /// a fitted GLM: `cov2cor(vcov(model)[-intercept, -intercept])`, where
-/// `vcov(model) = (X'WX)^-1` and W = diag(p̂ᵢ(1-p̂ᵢ)) comes from THIS
-/// logistic fit (Fox & Monette 1992's Generalized VIF, generalized to GLMs
-/// via the model's own Fisher information - not the plain correlation of
-/// X, which is only equivalent to this for an OLS/lm fit where W = I).
-///
-/// `vcov(model)` is taken from `glm_fit_vcov_like_r` so the numbers agree with
-/// R at printed precision (see its docs for why that differs from the fully
-/// converged information matrix in the 3rd decimal). If that emulation cannot
-/// be used, the fully converged `fit_logit_augmented` is used instead.
+/// `vcov(model) = (X'WX)^-1` and W = diag(p̂ᵢ(1-p̂ᵢ))
 fn weighted_correlation_from_fit(
     x: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -227,10 +199,6 @@ fn weighted_correlation_from_fit(
     Ok(cov_to_cor(&v))
 }
 
-// ----------------------------------------------------------------------------
-// Exact linear dependencies (aliased columns)
-// ----------------------------------------------------------------------------
-
 /// Relative size below which a design column counts as an exact linear
 /// combination of the columns before it: R's `lm.fit`/`glm.fit` default
 /// (`tol = 1e-11` in `Cdqrls`), the rule that turns a coefficient into `NA`.
@@ -250,12 +218,7 @@ struct AliasScan {
     involved: Vec<bool>,
 }
 
-/// Finds the exact linear dependencies among the columns of `x` and the
-/// (implicit) intercept, using the same rule as R: walk the columns in order
-/// and drop each one that adds nothing to those before it (`|R_jj| <= 1e-11 *
-/// ||x_j||` in the Householder QR). A column that never varies is therefore
-/// aliased with the intercept, and of two identical columns the later one is
-/// dropped.
+/// Finds the exact linear dependencies among the columns of `x` and the (implicit) intercept
 fn find_aliased_columns(x: &DMatrix<f64>) -> AliasScan {
     let (n, p) = x.shape();
     let mut scan = AliasScan {
@@ -307,9 +270,7 @@ fn find_aliased_columns(x: &DMatrix<f64>) -> AliasScan {
     scan
 }
 
-/// Row for a term whose (G)VIF is infinite or cannot be computed. `999.9` is
-/// the established "no finite value" marker the output formatter already
-/// shows as problematic.
+/// Row for a term whose (G)VIF is infinite or cannot be computed
 fn perfect_collinearity_row(name: &str, df: usize, is_gvif: bool) -> VifRow {
     VifRow {
         variable: name.to_string(),
@@ -326,32 +287,7 @@ fn principal_minor(r: &DMatrix<f64>, idx: &[usize]) -> f64 {
     DMatrix::from_fn(idx.len(), idx.len(), |a, b| r[(idx[a], idx[b])]).determinant()
 }
 
-/// Given a (possibly weighted) correlation matrix `r` of the regressor
-/// columns, compute the Fox & Monette (1992) determinant-ratio Generalized
-/// VIF for each term:
-///
-///   GVIF_j = det(R_jj) * det(R_(-j),(-j)) / det(R)
-///
-/// `variable_groups` maps each term to the column indices it occupies in `r`
-/// - a single column for numeric/binary predictors, or (k-1) dummy columns
-/// for a k-category categorical predictor. For a single-column term this
-/// reduces exactly to ordinary VIF = 1/(1-R_j^2). Columns of `r` that belong
-/// to no listed term still count as the "other" regressors.
-///
-/// When `has_multi_df` is set (some term of the model has df > 1),
-/// `GVIF^(1/(2*Df))` is reported for EVERY term (continuous ones included) so
-/// the values stay comparable - matches `car::vif()`'s own convention of
-/// switching the whole table's scale rather than mixing raw VIF and GVIF units.
-///
-/// There is deliberately NO "det(R) is tiny, so call everything singular"
-/// cut-off. det(R) of the coefficient correlation matrix can fall far below
-/// 1e-12 for a perfectly computable model - a few strongly collinear terms
-/// are enough (HR-Attrition with the nested Department/JobRole factors:
-/// det = 9e-18 yet cond(R) = 4e7, and car::vif() simply divides). Only a
-/// determinant that is not positive and finite (numerically singular), or a
-/// per-term value that round-off pushed clearly below its theoretical minimum
-/// of 1, falls back to the 999.9 marker - for that term, or for all of them
-/// when the matrix itself is unusable.
+///   GVIF_j
 fn gvif_rows(
     r: &DMatrix<f64>,
     variable_groups: &[(String, Vec<usize>)],
@@ -402,34 +338,8 @@ fn gvif_rows(
         .collect()
 }
 
-/// Menghitung (Generalized) Variance Inflation Factor untuk model regresi
+/// (Generalized) Variance Inflation Factor untuk model regresi
 /// logistik yang sesungguhnya di-fit (bukan aproksimasi linear/unweighted).
-///
-/// This now genuinely matches R's `car::vif()` applied to the actual fitted
-/// `glm(family=binomial)` object: the correlation matrix is derived from
-/// `vcov(model) = (X'WX)^-1`, W = diag(p̂ᵢ(1-p̂ᵢ)) from THIS logistic fit -
-/// not from the plain correlation of X (that older approach is only
-/// equivalent to `car::vif()` for an `lm`, where W = I; for a `glm` the two
-/// diverge because W varies per observation).
-///
-/// `x` must be the FULLY EXPANDED design matrix (categorical predictors
-/// already dummy-coded), matching the main regression. `variable_groups`
-/// maps each ORIGINAL variable to its column indices in `x`, same grouping
-/// used to build the regression's design matrix.
-///
-/// If the weighted fit fails to converge (e.g. near-perfect separation),
-/// falls back to the plain correlation-of-X approximation rather than
-/// failing the whole request - collinearity among predictors is still a
-/// meaningful (if less precise) diagnostic even when the logistic fit
-/// itself is unstable.
-///
-/// Exact linear dependencies (a column that is a combination of the others
-/// or of the intercept) are handled the way R's glm handles them: the
-/// redundant column gets no coefficient and is left out of the fit. R's
-/// `car::vif()` then refuses to run at all; Statify instead reports every
-/// term involved in the dependency as problematic (tolerance 0, 999.9) and
-/// still computes all the other terms on the remaining model, so one
-/// duplicated column does not blank out the whole table.
 pub fn calculate_vif(
     x: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -486,62 +396,6 @@ pub fn calculate_vif(
 }
 
 /// Box-Tidwell Test for Linearity of the Logit
-///
-/// Implementation based on:
-/// - Box, G. E. P. & Tidwell, P. W. (1962). Transformation of the independent
-///   variables. Technometrics, 4, 531–550.
-/// - Fox, J. (1997). Applied Regression, Linear Models, and Related Methods. Sage.
-/// - Fox, J. & Weisberg, S. (2011). An R Companion to Applied Regression (2nd ed.). Sage.
-///
-/// The test checks whether the relationship between each continuous predictor X
-/// and the logit of Y is linear. Under H₀ the power transformation parameter
-/// λ = 1 (i.e., no transformation needed). The procedure:
-///
-/// 1. For each eligible continuous predictor Xⱼ compute the "constructed variable"
-///    Xⱼ·ln(Xⱼ) at λ=1.
-/// 2. Fit the augmented logistic model simultaneously containing ALL original
-///    covariates plus ALL constructed variables (R-style simultaneous approach).
-/// 3. For each constructed variable γ̂ⱼ (coefficient of Xⱼ·ln(Xⱼ)), compute the
-///    score test of H₀: λ=1 from THIS λ=1 fit:
-///    - Score z = γ̂ⱼ / SE(γ̂ⱼ)
-///    - p-value = 2·Φ(−|z|)   (two-tailed)
-/// 4. If the score test is significant (p < α) → the linearity-in-the-logit
-///    assumption is violated for Xⱼ and a power/log transformation (or
-///    treating Xⱼ as categorical) should be considered.
-///
-/// Only the λ=1 score test is reported (Score Statistic, df, Sig.) - not a
-/// separately-refined MLE of λ. That iterative estimate is only weakly
-/// identified whenever the score test itself is non-significant (the data
-/// can't distinguish λ=1 from nearby values), and is numerically unstable
-/// near degenerate λ (X^λ → constant as λ→0), so it was dropped rather than
-/// shown alongside a test that already answers the "linear or not" question.
-///
-/// **Simultaneous vs per-variable:**
-/// R's `car::boxTidwell()` adds ALL constructed variables at once so that the
-/// covariance matrix accounts for inter-correlations between constructed
-/// variables. This implementation follows the same approach. If the simultaneous
-/// model is numerically unstable, it falls back to per-variable testing.
-///
-/// `x` must be the FULLY EXPANDED design matrix (categorical predictors
-/// already dummy-coded, matching the main regression) - not raw ordinal
-/// codes. If a categorical control variable is left as raw integers, it
-/// biases the joint fit for every variable in the model, not just itself.
-/// `variable_groups` maps each ORIGINAL variable to (name, its column
-/// indices in `x`, whether it's categorical) - the same grouping used to
-/// build the regression's design matrix.
-///
-/// **Eligibility rules:**
-/// - Groups flagged `is_categorical` (from the Variable/Categorical tab -
-///   the SAME source used to dummy-code them for the main regression):
-///   SKIP as an ln(X) candidate. Authoritative - checked before any
-///   heuristic, since a unique-value count cannot reliably distinguish a
-///   5+ category nominal variable from a genuine continuous one. Their
-///   dummy columns still participate in the fit as control variables.
-/// - Binary / dichotomous variables (≤ 2 unique values): SKIP
-/// - Variables with very few unique values (≤ 4) NOT already flagged above:
-///   SKIP (likely an unflagged ordinal/discrete variable)
-/// - Constant variables: SKIP
-/// - Variables with values ≤ 0: a uniform shift X' = X − min(X) + 1 is applied
 pub fn calculate_box_tidwell(
     x: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -553,9 +407,7 @@ pub fn calculate_box_tidwell(
         return Err("Dimensi X dan Y tidak sesuai.".to_string());
     }
 
-    // ================================================================
     // PHASE 1: Classify each variable as eligible or skipped
-    // ================================================================
     struct EligibleVar {
         col_idx: usize,
         name: String,
@@ -571,11 +423,6 @@ pub fn calculate_box_tidwell(
 
     for (name, col_indices, is_categorical) in variable_groups {
         // --- Explicitly categorical (from Variable/Categorical tab) ---
-        // Authoritative: skip regardless of unique-value count, since a
-        // 5+ category nominal variable would otherwise slip past the
-        // "<=4 unique values" heuristic below and get tested as if it
-        // were a genuine continuous predictor. Its dummy columns are
-        // still part of `x` and participate in the fit as controls.
         if *is_categorical {
             let idx = skipped_results.len();
             skipped_results.push(make_skipped_row(
@@ -689,13 +536,7 @@ pub fn calculate_box_tidwell(
         return Ok(reassemble_results(&order, &skipped_results, &[]));
     }
 
-    // ================================================================
     // PHASE 2: Build augmented design matrix (SIMULTANEOUS approach)
-    //
-    //   [Intercept, X₁, X₂, ..., Xₖ, X_{e1}·ln(X_{e1}), ..., X_{em}·ln(X_{em})]
-    //
-    // where e1..em are the eligible variable indices.
-    // ================================================================
     let n_eligible = eligible_vars.len();
     let total_cols = 1 + cols + n_eligible;
 
@@ -721,9 +562,7 @@ pub fn calculate_box_tidwell(
         }
     }
 
-    // ================================================================
     // PHASE 3: Fit the augmented logistic model via IRLS
-    // ================================================================
     match fit_logit_augmented(&x_design, y) {
         Ok(fit_result) => {
             let mut eligible_results = Vec::with_capacity(n_eligible);
@@ -824,10 +663,7 @@ pub fn calculate_box_tidwell(
         }
     }
 }
-
-// ============================================================================
 // HELPER: Pearson correlation between two vectors
-// ============================================================================
 #[allow(dead_code)]
 fn pearson_correlation(a: &[f64], b: &[f64]) -> f64 {
     let n = a.len() as f64;
@@ -852,9 +688,7 @@ fn pearson_correlation(a: &[f64], b: &[f64]) -> f64 {
     if denom < 1e-15 { 0.0 } else { cov / denom }
 }
 
-// ============================================================================
 // HELPER: Create a skipped BoxTidwellRow
-// ============================================================================
 fn make_skipped_row(name: &str, reason: &str, note: &str) -> BoxTidwellRow {
     BoxTidwellRow {
         variable: name.to_string(),
@@ -873,9 +707,7 @@ fn make_skipped_row(name: &str, reason: &str, note: &str) -> BoxTidwellRow {
     }
 }
 
-// ============================================================================
 // HELPER: Reassemble results in original variable order
-// ============================================================================
 fn reassemble_results(
     order: &[Result<usize, usize>],
     skipped: &[BoxTidwellRow],
@@ -890,9 +722,7 @@ fn reassemble_results(
         .collect()
 }
 
-// ============================================================================
 // Fit result structures
-// ============================================================================
 struct AugmentedFitResult {
     beta: DVector<f64>,
     se: DVector<f64>,
@@ -905,9 +735,7 @@ struct PerVariableFitResult {
     se_gamma: f64,
 }
 
-// ============================================================================
 // SIMULTANEOUS AUGMENTED MODEL FIT via IRLS
-// ============================================================================
 fn fit_logit_augmented(
     x_design: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -980,9 +808,7 @@ fn fit_logit_augmented(
     Err("Augmented model did not converge".into())
 }
 
-// ============================================================================
 // PER-VARIABLE FALLBACK FIT
-// ============================================================================
 fn fit_per_variable(
     x: &DMatrix<f64>,
     y: &DVector<f64>,
@@ -1018,9 +844,7 @@ fn fit_per_variable(
     })
 }
 
-// ============================================================================
 // Standard Normal CDF (Abramowitz & Stegun approximation)
-// ============================================================================
 fn standard_normal_cdf(x: f64) -> f64 {
     if x < -8.0 { return 0.0; }
     if x > 8.0 { return 1.0; }
@@ -1222,8 +1046,7 @@ mod vif_tests {
         }
     }
 
-    // ---- deterministic synthetic data (no rand dependency) -------------------
-
+    // deterministic synthetic data (no rand dependency)
     fn lcg_stream(seed: u64) -> impl FnMut() -> f64 {
         let mut state = seed;
         move || {

@@ -98,6 +98,8 @@ export async function resultFactorAnalysis({
              * */
             const extractionMethod = configData.extraction.Method;
             const showScreePlot = configData.extraction.Scree === true;
+            const showUnrotatedFactorSolution =
+                configData.extraction.Unrotated === true;
 
             const logMessage = generateFactorAnalysisLog(configData);
             const logId = await addLog({ log: logMessage });
@@ -277,7 +279,9 @@ export async function resultFactorAnalysis({
                 await addStatistic(analyticId, {
                     title: tableTitle,
                     description: getTableDescription("component_matrix", tableTitle),
-                    output_data: componentMatrix,
+                    output_data: showUnrotatedFactorSolution
+                        ? componentMatrix
+                        : JSON.stringify({ text: "" }),
                     components: tableTitle,
                 });
             }

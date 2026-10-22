@@ -104,7 +104,10 @@ export function mergeWithDefaults(
         main: { ...NaiveBayesDefault.main, ...(s.main ?? {}) },
         options: {
             ...options,
-            NumericLikelihoodOverrides: { ...(options.NumericLikelihoodOverrides ?? {}) },
+            // Revisi pasca-sidang: pilihan Gaussian (min. std) dihapus dari UI; isian lama
+            // yang tersimpan dikembalikan ke Gaussian standar.
+            NumericLikelihood: "gaussian",
+            NumericLikelihoodOverrides: {},
         },
         validation: { ...NaiveBayesDefault.validation, ...(s.validation ?? {}) },
         output: { ...NaiveBayesDefault.output, ...(s.output ?? {}) },

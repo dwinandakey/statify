@@ -244,43 +244,12 @@ describe("OptionsTab v2", () => {
         expect(update).toHaveBeenCalledWith("TextAlpha", 0.5);
     });
 
-    it("radio Numeric memilih Gaussian (Weka min. std)", () => {
-        render(<OptionsTab data={baseData} updateFormData={update} />);
-        fireEvent.click(screen.getByRole("radio", { name: "Gaussian (Weka min. std)" }));
-        expect(update).toHaveBeenCalledWith("NumericLikelihood", "gaussian_minstd");
-    });
-
-    it("override per variabel: set lalu kembali ke Group default menghapus kunci", () => {
-        const { rerender } = render(
-            <OptionsTab data={baseData} updateFormData={update} numericVariables={["Umur", "Tinggi"]} />
-        );
-        fireEvent.change(screen.getByLabelText("Likelihood for Umur"), { target: { value: "gaussian_minstd" } });
-        expect(update).toHaveBeenLastCalledWith("NumericLikelihoodOverrides", { Umur: "gaussian_minstd" });
-
-        rerender(
-            <OptionsTab
-                data={{ ...baseData, NumericLikelihoodOverrides: { Umur: "gaussian_minstd", Tinggi: "gaussian" } }}
-                updateFormData={update}
-                numericVariables={["Umur", "Tinggi"]}
-            />
-        );
-        fireEvent.change(screen.getByLabelText("Likelihood for Umur"), { target: { value: "default" } });
-        expect(update).toHaveBeenLastCalledWith("NumericLikelihoodOverrides", { Tinggi: "gaussian" });
-    });
-
-    it("kotak filter tabel override hanya muncul bila variabel Numeric > 50", () => {
-        const fifty = Array.from({ length: 50 }, (_, i) => `V${i}`);
-        const { rerender } = render(
-            <OptionsTab data={baseData} updateFormData={update} numericVariables={fifty} />
-        );
+    it("Numeric hanya Gaussian standar: tanpa pilihan min. std dan tanpa tabel override (revisi pasca-sidang)", () => {
+        render(<OptionsTab data={baseData} updateFormData={update} numericVariables={["Umur", "Tinggi"]} />);
+        expect(screen.getByText("Likelihood: Gaussian")).toBeInTheDocument();
+        expect(screen.queryByText(/min\. std/i)).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Likelihood for Umur")).not.toBeInTheDocument();
         expect(screen.queryByLabelText("Filter numeric variables")).not.toBeInTheDocument();
-
-        const many = [...fifty, "Umur"];
-        rerender(<OptionsTab data={baseData} updateFormData={update} numericVariables={many} />);
-        const filter = screen.getByLabelText("Filter numeric variables");
-        fireEvent.change(filter, { target: { value: "umur" } });
-        expect(screen.getByLabelText("Likelihood for Umur")).toBeInTheDocument();
-        expect(screen.queryByLabelText("Likelihood for V1")).not.toBeInTheDocument();
     });
 
     it("pruneNumericOverrides membuang variabel yang tidak lagi Numeric", () => {

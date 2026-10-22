@@ -2,7 +2,7 @@
 //! Porter/Snowball (Inggris), serta n-gram 1-5.
 //!
 //! Sumber harapan:
-//!   - `eval_data/pipeline_cases.json`  : keluaran `testing/text_analytics_eval/unit/reference_values.py` (penyaringan
+//!   - `eval_data/pipeline_cases.json`  : keluaran `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/unit/reference_values.py` (penyaringan
 //!     stopword dan pembangkitan n-gram dihitung ulang di Python, independen dari Rust);
 //!   - `eval_data/stopwords_id.json` / `stopwords_en.json` : salinan `INDONESIAN_STOPWORDS` /
 //!     `ENGLISH_STOPWORDS` dari `StringToWordVector/constants/stopwords.ts`. Daftar inilah yang dikirim UI ke

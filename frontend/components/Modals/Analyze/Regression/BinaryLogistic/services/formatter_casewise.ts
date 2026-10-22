@@ -6,19 +6,7 @@ import type {
 import { createSection, safeFixed } from "./formatter_utils";
 
 /**
- * Format Casewise Listing of Residuals (SPSS Style)
- * 
- * Generates a table showing individual case diagnostics including:
- * - Case Number
- * - Selected Status
- * - Observed (with ** for misclassified)
- * - Predicted Probability
- * - Predicted Group
- * - Temporary Variables: Resid, ZResid, SResid
- * 
- * SPSS Note:
- * - a: S = Selected, U = Unselected cases, and ** = Misclassified cases.
- * - b: Cases with studentized residuals greater than [threshold] are listed.
+ * Format Casewise Listing of Residuals
  */
 export const formatCasewiseListing = (
   result: LogisticResult,
@@ -113,7 +101,7 @@ export const formatCasewiseListing = (
     description = parts.join(" ");
   }
 
-  // Build column headers - SPSS style with nested headers
+  // Build column header
   const columnHeaders = [
     { header: "Case", key: "case_number" },
     { header: "Selected Status", key: "selected", align: "center" as const },
@@ -143,7 +131,6 @@ export const formatCasewiseListing = (
     sresid: row.resid_studentized !== undefined ? safeFixed(row.resid_studentized, 3) : "-",
   }));
 
-  // SPSS-style footnotes
   const footnotes = [
     "a. S = Selected, U = Unselected cases, and ** = Misclassified cases.",
     `b. Cases with studentized residuals greater than ${safeFixed(outlierThreshold, 3)} are listed.`

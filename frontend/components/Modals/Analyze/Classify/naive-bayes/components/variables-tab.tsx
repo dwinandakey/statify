@@ -460,6 +460,7 @@ export const VariablesTab = ({ allVariables, formData, onChange }: VariablesTabP
         return (
             <div
                 key={zoneId}
+                id={`naive-bayes-zone-${zoneId}`}
                 className="mb-2 flex flex-col"
                 data-testid={`nb-zone-${zoneId}`}
             >
@@ -551,7 +552,7 @@ export const VariablesTab = ({ allVariables, formData, onChange }: VariablesTabP
 
     return (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2" data-testid="nb-variables-tab">
-            <div className="h-[460px] min-h-0 rounded-md border">
+            <div id="naive-bayes-available-variables" className="h-[460px] min-h-0 rounded-md border">
                 <DatasetVariableList
                     variables={availableVars}
                     highlightedVariables={highlightedAvailable}
@@ -564,13 +565,15 @@ export const VariablesTab = ({ allVariables, formData, onChange }: VariablesTabP
             <div className="flex flex-col">
                 {ZONE_ORDER_V1.map(renderZone)}
 
-                <div className="mb-1 mt-1 border-t pt-2 text-sm font-semibold" data-testid="nb-text-features-heading">
-                    Text Features
+                <div id="naive-bayes-text-features" className="flex flex-col">
+                    <div className="mb-1 mt-1 border-t pt-2 text-sm font-semibold" data-testid="nb-text-features-heading">
+                        Text Features
+                    </div>
+                    <p className="mb-2 px-1 text-xs text-muted-foreground">
+                        Raw Text Variable and Word-Vector Variables are mutually exclusive.
+                    </p>
+                    {ZONE_ORDER_TEXT.map(renderZone)}
                 </div>
-                <p className="mb-2 px-1 text-xs text-muted-foreground">
-                    Raw Text Variable and Word-Vector Variables are mutually exclusive.
-                </p>
-                {ZONE_ORDER_TEXT.map(renderZone)}
 
                 {warnings.length > 0 && (
                     <div

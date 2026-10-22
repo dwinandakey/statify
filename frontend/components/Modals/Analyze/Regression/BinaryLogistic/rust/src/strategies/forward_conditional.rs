@@ -125,16 +125,6 @@ pub fn run(
         variable_groups, &included_group_indices,
     );
 
-    // --- FIX: Override Block 0 score tests with ANALYTICAL computation ---
-    // Menggunakan calculate_single_score_test() dan calculate_global_score_test_with_constant()
-    // yang sama dengan metode Enter, agar hasilnya konsisten dengan SPSS.
-    //
-    // KUNCI: Menggunakan prob_null ANALITIK (n1/N) bukan dari IRLS predictions.
-    // Untuk global score test, formula mengasumsikan U_0 = sum(y_i - p) = 0 (score
-    // intercept di MLE = 0). Ini hanya tepat jika p = n1/N PERSIS.
-    // Jika p dari IRLS sedikit berbeda (akibat convergence tolerance 0.001),
-    // maka U_0 ≠ 0 dan error-nya teramplifikasi melalui matrix inversion di joint test.
-    // Ref: Hosmer & Lemeshow (2000), Section 2.4 — Score test evaluated at MLE under H0.
     {
         let prob_null = if config.include_constant {
             let n_positive = y_vector.iter().filter(|&&y| y > 0.5).count() as f64;
@@ -210,10 +200,6 @@ pub fn run(
         let mut best_candidate_group_idx: Option<usize> = None;
         let mut best_score_stat = 0.0;
         let mut _best_score_df = 1_i32;
-        // SPSS selects the entry candidate with the SMALLEST significance (p-value),
-        // not the largest raw score statistic — comparing chi-square values directly
-        // is invalid once candidates have different df (e.g. a categorical group vs.
-        // a continuous variable), since a df>1 stat needs a larger value for the same p.
         let mut best_p_val = f64::INFINITY;
 
         // A. FORWARD ENTRY (Score Test - Group-aware)
@@ -455,7 +441,7 @@ pub fn run(
         sig: 1.0,
     });
 
-    // --- BARU: Hitung Casewise Listing Jika Diminta ---
+    // --- Hitung Casewise Listing Jika Diminta ---
     let casewise_result = if config.casewise_listing && !included_indices.is_empty() {
         let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
         let y_label_0 = "0";
@@ -473,10 +459,10 @@ pub fn run(
         None
     };
 
-    // --- BARU: Ambil Correlation of Estimates dari final step ---
+    // --- Ambil Correlation of Estimates dari final step ---
     let corr_estimates_final = final_step.correlation_of_estimates.clone();
 
-    // --- BARU: Generate Step Summary (SPSS Style) ---
+    // --- Generate Step Summary ---
     let step_summary: Vec<StepSummaryRow> = steps_details.iter()
         .filter(|s| s.step > 0) // Skip Step 0 (null model)
         .map(|s| {
@@ -534,7 +520,7 @@ pub fn run(
         assumption_tests: None,
         overall_remainder_test: final_step.remainder_test,
         categorical_codings: codings,
-        // --- MODIFIKASI: AMBIL HL DARI FINAL STEP ---
+        // --- AMBIL HL DARI FINAL STEP ---
         hosmer_lemeshow: final_step.hosmer_lemeshow,
         casewise_list: casewise_result,
         classification_plot_data: if config.classification_plots && !included_indices.is_empty() {
@@ -548,11 +534,11 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Correlation of Estimates ---
+        // --- Correlation of Estimates ---
         correlation_of_estimates: corr_estimates_final,
-        // --- BARU: Step Summary ---
+        // --- Step Summary ---
         step_summary: if step_summary.is_empty() { None } else { Some(step_summary) },
-        // --- BARU: Saved Predictions ---
+        // --- Saved Predictions ---
         saved_predictions: if !included_indices.is_empty() {
             let final_x = build_design_matrix(x_matrix, &included_indices, n_samples, config.include_constant);
             saved_predictions::calculate_saved_predictions(
@@ -564,7 +550,7 @@ pub fn run(
         } else {
             None
         },
-        // --- BARU: Fitting Warnings dari IRLS ---
+        // --- Fitting Warnings dari IRLS ---
         fitting_warnings: {
             let w = &current_model.warnings;
             if w.possible_separation || w.quasi_separation || w.step_halving_used 
@@ -642,7 +628,7 @@ fn calculate_overall_remainder_stats(
     let x_in = build_design_matrix(full_x, included_indices, full_x.nrows(), include_constant);
 
     // 4. Hitung Score Vector: U = X_out^T * (y - p)
-    // PERBAIKAN: Hitung manual raw residuals (y - p)
+    // Hitung manual raw residuals (y - p)
     let raw_residuals = y_vector - &model.predictions;
     let u = x_out.transpose() * &raw_residuals;
 
@@ -695,9 +681,6 @@ fn calculate_overall_remainder_stats(
 }
 
 // --- HELPER UNTUK MODEL IF TERM REMOVED (Conditional Parameter Estimates - Group-aware) ---
-// SPSS "Conditional" method: adjusts remaining betas using covariance matrix
-// when setting β_j = 0. Footnote: "Based on conditional parameter estimates"
-// Groups categorical dummy variables together (e.g., ChestPain with df=3)
 fn calculate_model_if_term_removed(
     model: &FittedModel,
     x_matrix: &DMatrix<f64>,
@@ -850,7 +833,7 @@ fn calculate_step_snapshot(
         sig: sig_model,
     };
 
-    // SPSS convention: positive when variable entered, negative when removed
+    // positive when variable entered, negative when removed
     let chi_sq_step = 2.0 * (model.final_log_likelihood - prev_ll);
     let df_step = (included_indices.len() as i32 - prev_n_vars as i32).abs();
     let sig_step = if df_step > 0 && chi_sq_step.abs() > 1e-9 {
@@ -947,7 +930,7 @@ fn calculate_step_snapshot(
     let remainder_test =
         calculate_overall_remainder_stats(full_x, y_vector, included_indices, model, config.include_constant);
 
-    // --- MODIFIKASI: HITUNG HOSMER-LEMESHOW ---
+    // --- HITUNG HOSMER-LEMESHOW ---
     let hl_result = if config.hosmer_lemeshow && step > 0 {
         match hosmer_lemeshow::calculate(y_vector, &model.predictions, 10) {
             Ok(res) => Some(res),
@@ -957,7 +940,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CORRELATION OF ESTIMATES ---
+    // --- HITUNG CORRELATION OF ESTIMATES ---
     let corr_estimates_result: Option<Vec<CorrelationOfEstimatesRow>> = if config.correlations && step > 0 {
         let mut var_names_for_corr: Vec<String> = Vec::new();
         if config.include_constant {
@@ -980,7 +963,7 @@ fn calculate_step_snapshot(
         None
     };
 
-    // --- BARU: HITUNG CLASSIFICATION PLOT DATA ---
+    // --- HITUNG CLASSIFICATION PLOT DATA ---
     let classification_plot_result = if config.classification_plots && step > 0 {
         let y_label_0 = "FALSE";
         let y_label_1 = "TRUE";
@@ -1007,13 +990,9 @@ fn calculate_step_snapshot(
         omni_tests: Some(omni_tests_model),
         step_omni_tests: Some(omni_tests_step),
         model_if_term_removed,
-        // --- MASUKKAN HASIL HOSMER-LEMESHOW ---
         hosmer_lemeshow: hl_result,
-        // --- BARU: CORRELATION OF ESTIMATES ---
         correlation_of_estimates: corr_estimates_result,
-        // --- BARU: ITERATION HISTORY ---
         iteration_history,
-        // --- BARU: CLASSIFICATION PLOT DATA ---
         classification_plot_data: classification_plot_result,
     }
 }

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, Ruler, Shapes, BarChartHorizontal } from "lucide-react";
 import type { Variable } from "@/types/Variable";
+import { STWV_TOUR_IDS } from "./hooks/tourConfig";
 
 interface VariablesTabProps {
   availableVariables: Variable[];
@@ -41,7 +42,7 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
     <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 gap-6 py-4 flex-grow min-h-0">
         {/* KOLOM KIRI: Available Variables */}
-        <div className="col-span-1 flex flex-col h-full min-h-0">
+        <div className="col-span-1 flex flex-col h-full min-h-0" id={STWV_TOUR_IDS.availableList}>
           <label className="font-semibold block mb-2 text-sm">Variables:</label>
           <div className="border border-border rounded-md flex-1 bg-background overflow-hidden">
             <ScrollArea className="h-full p-2 pr-3">
@@ -81,12 +82,13 @@ export const VariablesTab: React.FC<VariablesTabProps> = ({
               variant="outline"
               size="icon"
               className="mt-6 shrink-0 h-8 w-8"
+              id={STWV_TOUR_IDS.moveButton}
               onClick={onMoveToTarget}
               disabled={!highlightedVariable || !!selectedVariable}
             >
               <ChevronRight size={16} />
             </Button>
-            <div className="flex-1">
+            <div className="flex-1" id={STWV_TOUR_IDS.targetVariable}>
               <label className="font-semibold block mb-2 text-sm">
                 Target Variable:
               </label>

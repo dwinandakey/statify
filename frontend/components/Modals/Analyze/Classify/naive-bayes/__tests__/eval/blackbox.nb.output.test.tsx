@@ -190,7 +190,9 @@ describe("BB-20 Attribute Distribution Table untuk Gaussian min-std (sisi TS)", 
         const stats = await runResult(raw as NaiveBayesRawResult);
         const table = (JSON.parse(stats[1].output_data) as TableJson).tables[0];
         expect(table.note).toContain("Numerical likelihood:");
-        expect(table.note).toContain("minimum standard deviation floor (Weka-style)");
+        // Catatan mesin Rust masih memuat "(Weka-style)"; formatter membuang nama produk lain itu.
+        expect(table.note).toContain("minimum standard deviation floor; minimum variance = 0.111");
+        expect(table.note).not.toMatch(/weka/i);
         // Baris Mean/Std. Dev. tetap ada untuk atribut numerik.
         const labels = table.rows.map((r) => (r.rowHeader as string[]).join("|"));
         expect(labels.some((l) => l.endsWith("|Mean"))).toBe(true);

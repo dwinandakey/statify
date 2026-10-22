@@ -13,6 +13,8 @@ type PendingWorkerRequest = {
     resolve: (payload: any) => void;
     reject: (error: Error) => void;
     timeoutId: ReturnType<typeof setTimeout>;
+    measureRoundTrip: boolean;
+    roundTripStart?: number;
 };
 
 let factorWorker: Worker | null = null;
@@ -125,6 +127,14 @@ function handleWorkerMessage(event: MessageEvent) {
     if (!pendingRequest) return;
 
     if (type === "SUCCESS") {
+        if (
+            pendingRequest.measureRoundTrip &&
+            pendingRequest.roundTripStart !== undefined
+        ) {
+            console.info(
+                `Statify - Worker Round-Trip Time: ${(performance.now() - pendingRequest.roundTripStart).toFixed(4)} ms`
+            );
+        }
         pendingRequest.resolve(payload);
         return;
     }
@@ -169,7 +179,8 @@ function getOrCreateWorker(): Worker {
 function runWorkerAction(
     action: FactorWorkerAction,
     payload: Record<string, unknown> = {},
-    timeoutMs = 120000
+    timeoutMs = 120000,
+    measureRoundTrip = false
 ): Promise<any> {
     return new Promise((resolve, reject) => {
         const worker = getOrCreateWorker();
@@ -181,14 +192,19 @@ function runWorkerAction(
             terminateFactorWorker();
         }, timeoutMs);
 
-        pendingRequests.set(requestId, {
+        const pendingRequest: PendingWorkerRequest = {
             action,
             resolve,
             reject,
             timeoutId,
-        });
+            measureRoundTrip,
+        };
+        pendingRequests.set(requestId, pendingRequest);
 
         try {
+            if (measureRoundTrip) {
+                pendingRequest.roundTripStart = performance.now();
+            }
             worker.postMessage({
                 action,
                 requestId,
@@ -284,7 +300,34 @@ export async function analyzeFactor({
         // Tetap lanjutkan eksekusi. Action run_factor_analysis akan mencoba init ulang di worker.
     }
 
-    const { results } = await runWorkerAction(
+    console.info("Statify - Benchmark Configuration", {
+        variables: targetVariables,
+        missingValues: configData.options.ExcludeListWise
+            ? "LISTWISE"
+            : configData.options.ExcludePairWise
+                ? "PAIRWISE"
+                : configData.options.ReplaceMean
+                    ? "MEANSUB"
+                    : "CONFIGURED",
+        extractionMethod: configData.extraction.Method,
+        correlationMatrix: configData.extraction.Correlation,
+        covarianceMatrix: configData.extraction.Covariance,
+        eigenvalueCriterion: configData.extraction.Eigen
+            ? configData.extraction.EigenVal
+            : null,
+        extractionMaxIterations: configData.extraction.MaxIter,
+        rotation: configData.rotation.None
+            ? "NOROTATE"
+            : configData.rotation.Varimax
+                ? "VARIMAX"
+                : configData.rotation.Oblimin
+                    ? "OBLIMIN"
+                    : configData.rotation.Promax
+                        ? "PROMAX"
+                        : "CONFIGURED",
+    });
+
+    const { results, procedureExecutionTimeMs } = await runWorkerAction(
         "run_factor_analysis",
         {
             slicedDataForTarget,
@@ -293,7 +336,11 @@ export async function analyzeFactor({
             varDefsForValue,
             configData,
         },
-        180000
+        180000,
+        true
+    );
+    console.info(
+        `Statify - Factor Analysis Procedure Time: ${Number(procedureExecutionTimeMs).toFixed(4)} ms`
     );
 
     // Teruskan configData ke formatter agar bisa mengakses extraction.Method
@@ -306,4 +353,5 @@ export async function analyzeFactor({
         formattedResult: formattedResults ?? [],
         configData,
     });
+
 }

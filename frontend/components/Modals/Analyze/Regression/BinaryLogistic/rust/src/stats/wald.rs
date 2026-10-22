@@ -2,24 +2,6 @@ use nalgebra::{DMatrix, DVector};
 use statrs::distribution::{ChiSquared, ContinuousCDF};
 
 /// Menghitung Joint Wald Test untuk sekelompok variabel (multi-df).
-///
-/// SPSS menggunakan joint Wald test untuk variabel kategorik yang memiliki
-/// lebih dari 2 kategori. Misalnya, ChestPain dengan 4 kategori menghasilkan
-/// 3 dummy variables → joint Wald test dengan df=3.
-///
-/// Formula:
-///   W = β_G' × Cov_GG^(-1) × β_G ~ χ²(|G|)
-///
-/// di mana:
-///   β_G = subvektor beta untuk grup
-///   Cov_GG = submatriks kovarians untuk grup
-///
-/// # Arguments
-/// * `beta` - Vektor koefisien penuh dari model
-/// * `covariance_matrix` - Matriks kovarians penuh dari model
-/// * `beta_indices` - Indeks beta yang termasuk dalam grup ini
-///
-/// # Returns
 /// (wald_statistic, df, p_value)
 pub fn calculate_joint_wald_test(
     beta: &DVector<f64>,

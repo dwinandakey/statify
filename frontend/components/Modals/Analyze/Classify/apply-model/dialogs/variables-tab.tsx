@@ -28,6 +28,7 @@ import {
   validateMapping,
 } from "@/components/Modals/Analyze/Classify/apply-model/hooks/useApplyModelMappingRules";
 import CollapsibleNameList from "@/components/Modals/Analyze/Classify/apply-model/dialogs/collapsible-name-list";
+import { APPLY_MODEL_TOUR_IDS } from "@/components/Modals/Analyze/Classify/apply-model/hooks/tourConfig";
 import type { ApplyModelVariablesTabType } from "@/components/Modals/Analyze/Classify/apply-model/types/apply-model";
 import type { Variable } from "@/types/Variable";
 
@@ -36,22 +37,7 @@ export type VariablesTabProps = {
   descriptor: ModelDescriptor;
   variables: Variable[];
   onChange: (next: ApplyModelVariablesTabType) => void;
-  showFieldHelp: boolean;
 };
-
-// Teks bantuan (bahasa Inggris, AGENTS.md §6.1) — tampil bila showFieldHelp.
-const VARIABLES_TAB_HELP = {
-  mapping:
-    "Every model feature must be mapped to one dataset variable. Categorical features accept nominal or ordinal variables; numerical features accept scale variables.",
-  autoMap:
-    "Matches features to dataset variables by name (exact first, then case-insensitive if unique). This overwrites your manual choices.",
-  actual:
-    "Optional. Choose the variable holding the true class to add evaluation metrics and a confusion matrix to the output.",
-  rawText:
-    "This model was trained on raw text. Choose the string variable that holds the text to classify; it is preprocessed with the text preprocessing settings stored in the model.",
-  vector:
-    "This model was trained on word-vector columns. Columns are matched to dataset variables by name; columns that are not found are treated as 0.",
-} as const;
 
 // Radix Select tidak menerima value string kosong, jadi pilihan "kosong"
 // memakai sentinel ini.
@@ -86,11 +72,6 @@ function formatIssueMessage(issue: ApplyModelIssue): string {
   );
 }
 
-function HelpText({ show, text }: { show: boolean; text: string }) {
-  if (!show) return null;
-  return <p className="text-xs text-muted-foreground">{text}</p>;
-}
-
 /** Nama opsi dropdown: kandidat sesuai aturan, ditambah pilihan saat ini
  * (agar nilai yang salah tetap tampil dan statusnya menjelaskan kesalahannya). */
 function withCurrent(names: string[], current: string | null): string[] {
@@ -105,7 +86,6 @@ export function VariablesTab({
   descriptor,
   variables,
   onChange,
-  showFieldHelp,
 }: VariablesTabProps) {
   const text = descriptor.text;
   const textMapping = useMemo(
@@ -216,10 +196,14 @@ export function VariablesTab({
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="flex flex-col gap-2">
+      <section
+        id={APPLY_MODEL_TOUR_IDS.mappingSection}
+        className="flex flex-col gap-2"
+      >
         <div className="flex items-center justify-between">
           <Label className="font-semibold">Variable Mapping</Label>
           <Button
+            id={APPLY_MODEL_TOUR_IDS.autoMapButton}
             type="button"
             variant="outline"
             size="sm"
@@ -228,8 +212,6 @@ export function VariablesTab({
             Auto-map by name
           </Button>
         </div>
-        <HelpText show={showFieldHelp} text={VARIABLES_TAB_HELP.mapping} />
-        <HelpText show={showFieldHelp} text={VARIABLES_TAB_HELP.autoMap} />
 
         {descriptor.features.length === 0 ? (
           <p
@@ -342,6 +324,7 @@ export function VariablesTab({
 
       {text?.source === "raw" && (
         <section
+          id={APPLY_MODEL_TOUR_IDS.textSection}
           data-testid="raw-text-section"
           className="flex flex-col gap-2"
         >
@@ -369,7 +352,6 @@ export function VariablesTab({
               ))}
             </SelectContent>
           </Select>
-          <HelpText show={showFieldHelp} text={VARIABLES_TAB_HELP.rawText} />
           {rawTextIssues.length > 0 && (
             <div
               data-testid="raw-text-errors"
@@ -391,6 +373,7 @@ export function VariablesTab({
 
       {text?.source === "vector" && (
         <section
+          id={APPLY_MODEL_TOUR_IDS.textSection}
           data-testid="vector-text-section"
           className="flex flex-col gap-2"
         >
@@ -402,7 +385,6 @@ export function VariablesTab({
             <Info className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             <span>{formatVectorMappingSummary(vectorSummary)}</span>
           </p>
-          <HelpText show={showFieldHelp} text={VARIABLES_TAB_HELP.vector} />
           {zeroFilledInfo !== undefined && (
             <CollapsibleNameList
               label="Show columns treated as 0"
@@ -443,7 +425,10 @@ export function VariablesTab({
         </section>
       )}
 
-      <section className="flex flex-col gap-2">
+      <section
+        id={APPLY_MODEL_TOUR_IDS.actualTargetSection}
+        className="flex flex-col gap-2"
+      >
         <Label className="font-semibold">Actual target (optional)</Label>
         <Select
           value={data.ActualTargetVar ?? NONE_VALUE}
@@ -464,7 +449,6 @@ export function VariablesTab({
         <p className="text-xs text-muted-foreground">
           Evaluation is shown only when this is set.
         </p>
-        <HelpText show={showFieldHelp} text={VARIABLES_TAB_HELP.actual} />
         {actualIssues.length > 0 && (
           <div
             data-testid="actual-target-errors"

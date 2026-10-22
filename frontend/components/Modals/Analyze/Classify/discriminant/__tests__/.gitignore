@@ -1,0 +1,3 @@
+# Local-only artifacts of the white-box tests; the test code itself is tracked.
+log-eksekusi-*.txt
+archive-*/

@@ -1,3 +1,0 @@
-Jest penuh: 49 suite gagal dari 278; baseline 49
-gagal di luar baseline: 0
-baseline yang kini lulus: 0

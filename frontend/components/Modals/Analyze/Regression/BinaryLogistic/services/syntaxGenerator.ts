@@ -1,17 +1,5 @@
 /**
- * SPSS-Like Syntax Generator for Binary Logistic Regression
- *
- * This module generates a complete SPSS-compatible syntax log that includes
- * all options selected by the user, matching the format:
- *
- * LOGISTIC REGRESSION VARIABLES fbs
- *   /METHOD=ENTER age sex trestbps chol thalch oldpeak
- *   /CONTRAST (sex)=Indicator
- *   /SAVE=PRED COOK RESID
- *   /CLASSPLOT
- *   /CASEWISE OUTLIER(2)
- *   /PRINT=GOODFIT CORR ITER(1) SUMMARY CI(95)
- *   /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+ * Syntax Generator for Binary Logistic Regression
  */
 
 import type {
@@ -33,7 +21,7 @@ interface SyntaxGeneratorOptions {
 }
 
 /**
- * Generate complete SPSS-like syntax for Binary Logistic Regression
+ * Generate complete syntax for Binary Logistic Regression
  *
  * @param options - All configuration options from the UI
  * @returns Complete syntax string matching SPSS format
@@ -127,11 +115,6 @@ const mapMethodToSpssFormat = (method: BinaryLogisticOptions["method"]): string 
 
 /**
  * Generate /CONTRAST statements for categorical variables
- *
- * Format: /CONTRAST (varname)=Indicator(1)
- * where 1 = First reference, omit = Last reference
- * 
- * Now supports per-variable contrast & reference settings (SPSS style).
  */
 const generateContrastStatements = (
   catParams: BinaryLogisticCategoricalParams,
@@ -179,20 +162,6 @@ const generateContrastStatements = (
 
 /**
  * Generate /SAVE statement based on selected options
- *
- * Format: /SAVE=PRED COOK RESID LEVER DFBETA SRESID ZRESID DEV LRESID
- *
- * SPSS Save Options:
- * - PRED = Predicted probabilities
- * - PGROUP = Predicted group membership
- * - COOK = Cook's distance
- * - LEVER = Leverage values
- * - RESID = Unstandardized residuals
- * - ZRESID = Standardized (Pearson) residuals
- * - SRESID = Studentized residuals
- * - DEV = Deviance residuals
- * - LRESID = Logit residuals
- * - DFBETA = DfBeta values
  */
 const generateSaveStatement = (
   saveParams: BinaryLogisticSaveParams
@@ -224,15 +193,6 @@ const generateSaveStatement = (
 
 /**
  * Generate /PRINT statement based on selected options
- *
- * Format: /PRINT=GOODFIT CORR ITER(1) SUMMARY CI(95)
- *
- * SPSS Print Options:
- * - GOODFIT = Hosmer-Lemeshow goodness-of-fit test
- * - CORR = Correlation matrix of parameter estimates
- * - ITER(n) = Iteration history every n iterations
- * - SUMMARY = Model summary (classification table at each step)
- * - CI(level) = Confidence interval for odds ratios
  */
 const generatePrintStatement = (
   optParams: BinaryLogisticOptionsParams
@@ -273,10 +233,6 @@ const generatePrintStatement = (
 
 /**
  * Generate /CRITERIA statement
- *
- * Format: /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5)
- *
- * This always appears as it contains essential analysis criteria
  */
 const generateCriteriaStatement = (
   optParams: BinaryLogisticOptionsParams

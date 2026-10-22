@@ -1,20 +1,5 @@
 /**
- * Format Iteration History Tables (SPSS Style)
- *
- * This module generates iteration history tables showing the convergence
- * progress of the IRLS algorithm at each step.
- *
- * SPSS displays iteration history in the following format:
- * - Block 0: Initial Model (Constant only)
- * - Block 1: With covariates (may have multiple steps for stepwise methods)
- *
- * Each table shows:
- * - Iteration number
- * - -2 Log Likelihood
- * - Coefficients for each variable in the model
- *
- * For stepwise methods, all steps within Block 1 are combined into ONE table
- * with Step column as row header (SPSS format).
+ * Format Iteration History Tables
  */
 
 import type {
@@ -33,18 +18,6 @@ interface IterationHistoryFormatOptions {
 
 /**
  * Format Iteration History for Block 0 (Constant Only)
- * 
- * SPSS Format:
- * | Iteration       | -2 Log likelihood | Coefficients |
- * |                 |                   | Constant     |
- * | Step 0 | 1      | 832.343           | -1.343       |
- * |        | 2      | 821.549           | -1.604       |
- * 
- * rowHeader is used for the "Step X" and iteration number columns.
- * Step X spans all iterations within that step using rowSpan.
- * 
- * NOTE: SPSS starts iteration numbering from 1, not 0.
- * We filter out iteration 0 (initial state) and renumber.
  */
 const formatBlock0IterationHistory = (
   iterHistory: IterationHistoryBlock
@@ -80,7 +53,7 @@ const formatBlock0IterationHistory = (
     });
   }
 
-  // Filter out iteration 0 (initial state) - SPSS shows iterations starting from 1
+  // Filter out iteration 0 (initial state)
   // Also handles case where iteration already starts from 1
   const filteredRows = iterHistory.rows.filter((row) => row.iteration >= 1);
   
@@ -91,7 +64,7 @@ const formatBlock0IterationHistory = (
   // Format: rowHeader: ["Step 0", "1"], ["Step 0", "2"], dst.
   // DataTableRenderer akan otomatis merge "Step 0" dengan rowSpan
   const rows = rowsToUse.map((row, idx) => {
-    // Use 1-based iteration number for display (SPSS style)
+    // Use 1-based iteration number for display
     const iterNum = row.iteration >= 1 ? row.iteration : idx + 1;
     
     const rowData: Record<string, any> = {
@@ -111,8 +84,6 @@ const formatBlock0IterationHistory = (
     return null;
   }
 
-  // SPSS lists the convergence status as the final lettered footnote (after
-  // Constant/Initial -2LL), not as a separate interpretive paragraph.
   const convergenceNote = generateConvergenceNote(
     iterHistory.final_iteration,
     iterHistory.converged
@@ -135,14 +106,6 @@ const formatBlock0IterationHistory = (
 
 /**
  * Format Iteration History for Block 1 - Enter Method (Single Step)
- * 
- * SPSS Format:
- * | Iteration       | -2 Log likelihood | Coefficients                              |
- * |                 |                   | Constant | age | sex(1) | trestbps | ... |
- * | Step 1 | 1      | 782.296           | -4.667   | .037| -.263  | .007     | ... |
- * |        | 2      | 750.887           | -7.481   | .065| -.497  | .013     | ... |
- * 
- * NOTE: SPSS starts iteration numbering from 1, not 0.
  */
 const formatBlock1EnterIterationHistory = (
   iterHistory: IterationHistoryBlock,
@@ -177,7 +140,7 @@ const formatBlock1EnterIterationHistory = (
     });
   }
 
-  // Filter out iteration 0 (initial state) - SPSS shows iterations starting from 1
+  // Filter out iteration 0 (initial state)
   const filteredRows = iterHistory.rows.filter((row) => row.iteration >= 1);
   const rowsToUse = filteredRows.length > 0 ? filteredRows : iterHistory.rows;
 
@@ -251,11 +214,9 @@ const formatBlock1StepwiseIterationHistory = (
     return null;
   }
 
-  // ======================================================================
   // FILTER BERDASARKAN displayAtLastStep
   // Forward: hanya step terakhir
   // Backward: step 1 dan step terakhir
-  // ======================================================================
   const isBackward = method.toLowerCase().includes("backward");
 
   if (displayAtLastStep && stepsWithHistory.length > 1) {
@@ -311,7 +272,7 @@ const formatBlock1StepwiseIterationHistory = (
   stepsWithHistory.forEach(({ step, history }) => {
     const stepVarNames = history.variable_names || [];
 
-    // Filter out iteration 0 (initial state) - SPSS shows iterations starting from 1
+    // Filter out iteration 0 (initial state)
     const filteredRows = history.rows.filter((row) => row.iteration >= 1);
     const rowsToUse = filteredRows.length > 0 ? filteredRows : history.rows;
 
@@ -385,9 +346,7 @@ export const formatIterationHistory = (
     method.toLowerCase().includes("forward") ||
     method.toLowerCase().includes("backward");
 
-  // ======================================================================
   // BLOCK 0: Beginning Block (Null Model)
-  // ======================================================================
   const step0 = stepsDetail.find((s) => s.step === 0);
   if (step0?.iteration_history) {
     const block0Section = formatBlock0IterationHistory(step0.iteration_history);
@@ -396,9 +355,7 @@ export const formatIterationHistory = (
     }
   }
 
-  // ======================================================================
   // BLOCK 1: With Covariates
-  // ======================================================================
   if (!isStepwise) {
     // Enter method - single step
     const step1 = stepsDetail.find((s) => s.step === 1);

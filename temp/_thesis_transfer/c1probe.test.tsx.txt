@@ -1,0 +1,18 @@
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import StringToWordVectorModal from "../../StringToWordVectorModal";
+
+jest.mock("@/stores/useVariableStore", () => ({ useVariableStore: Object.assign(() => [], { getState: () => ({ variables: [] }) }), processVariableName: () => ({}) }));
+jest.mock("@/stores/useDataStore", () => ({ useDataStore: Object.assign(() => undefined, { getState: () => ({}) }) }));
+jest.mock("@/stores/useResultStore", () => ({ useResultStore: { getState: () => ({}) } }));
+jest.mock("sonner", () => ({ toast: {} }));
+jest.mock("../../hooks/useStringToWordVector", () => {
+    const m = require("./helpers/loadStwvHook").loadStwvHook();
+    console.log("EXPORTS", Object.keys(m));
+    return m;
+});
+
+it("probe", () => {
+    render(<StringToWordVectorModal onClose={() => undefined} containerType="sidebar" />);
+    expect(screen.getByRole("tab", { name: "Options" })).toBeInTheDocument();
+});

@@ -2,7 +2,7 @@
 //
 // Temuan yang dikarakterisasi: getNumericInputError menerima KFolds = 1 (batas bawah hanya "< 1"), padahal
 // 1-fold cross-validation menghasilkan data latih KOSONG (lihat naive-bayes/rust/tests/eval_partition.rs dan
-// testing/text_analytics_eval/BUGS_A.md). Tes di sini mencatat PERILAKU SAAT INI (karakterisasi), bukan perilaku ideal:
+// frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/BUGS_A.md). Tes di sini mencatat PERILAKU SAAT INI (karakterisasi), bukan perilaku ideal:
 // bila batas minimum diperbaiki menjadi 2, ekspektasi KFolds = 1 di bawah harus diubah secara sengaja.
 //
 // Sudah tercakup (tidak diulang): whitebox.getNumericInputError.test.ts (Jalur 20-23 dan "Catatan temuan: KFolds = 1

@@ -1,7 +1,7 @@
 /** @jest-environment node */
 // Track D — kesetaraan pembangun payload headless dengan kode TypeScript Apply Model (`applyModel`), jalur Raw Text.
 // Kode TS ASLI (`applyModel`, getSlicedData, getVarDefs, readRawTextValues) membentuk payload dari masukan golden
-// (`testing/text_analytics_eval/headless/payload_golden.json`, dibuat pustaka headless); payload yang ditangkap di Worker
+// (`frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/headless/payload_golden.json`, dibuat pustaka headless); payload yang ditangkap di Worker
 // dibandingkan dengan golden, dan prediksi dari wasm AM yang dijalankan lewat jalur TS dibandingkan dengan prediksi
 // golden (dari pustaka headless). Pola mock sama dengan blackbox.am.pipeline.test.ts.
 import * as fs from "fs";
@@ -43,7 +43,7 @@ import {
 function findGolden(start: string = __dirname): string | null {
   let dir = start;
   for (let i = 0; i < 16; i += 1) {
-    const p = path.join(dir, "testing", "text_analytics_eval", "headless", "payload_golden.json");
+    const p = path.join(dir, "frontend", "components", "Modals", "Analyze", "Classify", "naive-bayes", "text_analytics_eval", "headless", "payload_golden.json");
     if (fs.existsSync(p)) return p;
     const parent = path.dirname(dir);
     if (parent === dir) break;

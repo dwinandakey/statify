@@ -32,7 +32,7 @@ export const repoRootDir = (): string => path.dirname(findFrontendRoot());
 export const PILKADA = {
   train: () => path.join(repoRootDir(), "Claude outputs", "pilkada_train.csv"),
   test: () => path.join(repoRootDir(), "Claude outputs", "pilkada_test.csv"),
-  accuracyOut: () => path.join(repoRootDir(), "testing", "text_analytics_eval", "accuracy", "out"),
+  accuracyOut: () => path.join(repoRootDir(), "frontend", "components", "Modals", "Analyze", "Classify", "naive-bayes", "text_analytics_eval", "accuracy", "out"),
   textCol: "Text Tweet",
   labelCol: "Sentiment",
   idCol: "Id",

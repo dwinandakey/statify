@@ -7,6 +7,7 @@ import { ChartService } from "@/services/chart/ChartService";
 import { useResultStore } from "@/stores/useResultStore";
 import { useVariableStore } from "@/stores/useVariableStore";
 import { getTimeSeriesWorker } from "@/utils/timeseriesWorkerPool";
+import type { TimeSeriesSplitState } from "../../Common/useTimeSeriesSplit";
 
 export const useAnalyzeHook = (
     dependentVariable: Variable[],
@@ -16,7 +17,9 @@ export const useAnalyzeHook = (
     maxLagADF: number,
     saveLongRun: boolean,
     saveShortRun: boolean,
-    onClose: () => void
+    splitConfig?: TimeSeriesSplitState,
+    onSaveSplitToDataView?: (totalRows: number, validRowIndices: number[], splitIndex: number, testPredictions?: number[]) => Promise<void>,
+    onClose?: () => void
 ) => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
@@ -76,15 +79,30 @@ export const useAnalyzeHook = (
 
             const client = getTimeSeriesWorker();
 
-            client.post({
-                type: "ECM",
-                payload: {
-                    y: yData,
-                    x: xData,
-                    n_vars: n_vars,
-                    max_lag_adf: maxLagADF,
-                }
-            });
+            if (splitConfig?.splitEnabled) {
+                client.post({
+                    type: "ECM_SPLIT",
+                    payload: {
+                        y: yData,
+                        x: xData,
+                        n_vars: n_vars,
+                        max_lag_adf: maxLagADF,
+                        trainRatio: splitConfig.trainRatio,
+                        splitMode: splitConfig.splitMode,
+                        rollingType: splitConfig.rollingType
+                    }
+                });
+            } else {
+                client.post({
+                    type: "ECM",
+                    payload: {
+                        y: yData,
+                        x: xData,
+                        n_vars: n_vars,
+                        max_lag_adf: maxLagADF,
+                    }
+                });
+            }
 
             client.onMessage(async (e) => {
                 const { status, result, error } = e.data;
@@ -93,12 +111,331 @@ export const useAnalyzeHook = (
                     console.timeEnd("Statify ECM Execution Time");
                     console.log("ECM Results:", result);
                     
-                    const isCointegrated = result.cointegration.isCointegrated;
-                    toast.success("ECM estimation completed!");
-                    
                     try {
                         const tables = [];
-                        
+                        let charts: any[] = [];
+
+                        if (splitConfig?.splitEnabled) {
+                            toast.success("ECM split evaluation completed!");
+
+                            tables.push({
+                                title: "Time Series Data Split Summary",
+                                columnHeaders: [
+                                    { header: "Partition / Setting", key: "setting" },
+                                    { header: "Details", key: "details" }
+                                ],
+                                rows: [
+                                    {
+                                        setting: "Metode Evaluasi Split",
+                                        details: splitConfig.splitMode === "holdout"
+                                            ? "Mode 1: Holdout Kronologis (Fixed Split / Dynamic Forecast)"
+                                            : `Mode 2: Rolling Window (${splitConfig.rollingType === "expanding" ? "Expanding Window" : "Fixed Window"})`
+                                    },
+                                    {
+                                        setting: "Proporsi Target Training",
+                                        details: `${Math.round(result.trainRatio * 100)}%`
+                                    },
+                                    {
+                                        setting: "Data Training (In-Sample)",
+                                        details: `Observasi 1 .. ${result.trainSize} (${result.trainSize} data)`
+                                    },
+                                    {
+                                        setting: "Data Testing (Out-of-Sample)",
+                                        details: `Observasi ${result.trainSize + 1} .. ${yData.length} (${result.testSize} data)`
+                                    },
+                                    {
+                                        setting: "Kointegrasi (ADF on Residuals)",
+                                        details: result.cointegration.isCointegrated ? "Terkointegrasi (Hubungan Jangka Panjang Valid)" : "Tidak Terkointegrasi"
+                                    }
+                                ]
+                            });
+
+                            // Long Run Coefficients Table
+                            const longRunRows = [];
+                            longRunRows.push({
+                                var: "C (Intercept)",
+                                coef: result.longRun.coefficients[0],
+                                se: result.longRun.stdErrors[0],
+                                tstat: result.longRun.tStats[0],
+                                prob: result.longRun.pValues[0]
+                            });
+                            for (let i = 0; i < independentVariable.length; i++) {
+                                longRunRows.push({
+                                    var: independentVariable[i].name,
+                                    coef: result.longRun.coefficients[i + 1],
+                                    se: result.longRun.stdErrors[i + 1],
+                                    tstat: result.longRun.tStats[i + 1],
+                                    prob: result.longRun.pValues[i + 1]
+                                });
+                            }
+                            tables.push({
+                                title: "Long-Run Cointegration Equation (Estimated on Training Sample)",
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: longRunRows,
+                                footer: `R-squared: ${result.longRun.rSquared ?? ''}`
+                            });
+
+                            // Out-of-Sample Forecast Evaluation
+                            if (result.metrics) {
+                                tables.push({
+                                    title: "Out-of-Sample Forecast Accuracy Evaluation (Testing Sample)",
+                                    columnHeaders: [
+                                        { header: "Metrik Akurasi", key: "metric" },
+                                        { header: "Nilai Prediksi Level (ŷ)", key: "val" },
+                                        { header: "Keterangan", key: "desc" }
+                                    ],
+                                    rows: [
+                                        { metric: "Root Mean Squared Error (RMSE)", val: result.metrics.rmse, desc: "Akar rerata kuadrat selisih ramalan" },
+                                        { metric: "Mean Absolute Error (MAE)", val: result.metrics.mae, desc: "Rerata selisih absolut nilai aktual vs ramalan" },
+                                        { metric: "Mean Absolute Percentage Error (MAPE)", val: result.metrics.mape, desc: "Rata-rata persentase galat peramalan" },
+                                        { metric: "Theil's Inequality Coefficient (U)", val: result.metrics.theilU, desc: "Ukuran performa peramalan relatif (0 = sempurna)" }
+                                    ]
+                                });
+                            }
+
+                            // Chart: Actual vs Forecast
+                            const chartData = [
+                                ...result.trainActual.map((act: number, i: number) => ({
+                                    category: String(i + 1),
+                                    actual: act,
+                                    forecast: null
+                                })),
+                                ...result.testActual.map((act: number, i: number) => ({
+                                    category: String(result.trainSize + i + 1),
+                                    actual: act,
+                                    forecast: result.testYHat[i]
+                                }))
+                            ];
+
+                            charts.push(ChartService.createChartJSON({
+                                chartType: "Line Chart",
+                                chartData,
+                                chartMetadata: {
+                                    title: "ECM: In-Sample Level & Out-of-Sample Forecast",
+                                    subtitle: `Split cutoff at observation ${result.trainSize}`
+                                },
+                                chartConfig: {
+                                    axisLabels: { x: "Time Index", y: yVar.name }
+                                },
+                                chartVariables: {
+                                    x: ["category"],
+                                    y: ["actual", "forecast"]
+                                }
+                            }));
+
+                            if (result.longRun?.diagnostics) {
+                                const d = result.longRun.diagnostics;
+                                tables.push({
+                                    title: "Long Run Fit & Diagnostics (Estimated on Training Sample)",
+                                    columnHeaders: [
+                                        { header: "Statistic", key: "col1" },
+                                        { header: "Value", key: "val1" },
+                                        { header: "Statistic", key: "col2" },
+                                        { header: "Value", key: "val2" }
+                                    ],
+                                    rows: [
+                                        { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                        { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                        { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                        { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                        { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                        { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson }
+                                    ],
+                                    footer: `All long-run and short-run parameters were estimated using training observations 1–${result.trainSize}.`
+                                });
+                            }
+
+                            if (result.ecm?.diagnostics) {
+                                const d = result.ecm.diagnostics;
+                                tables.push({
+                                    title: "Short Run ECM Fit & Diagnostics (Estimated on Training Sample)",
+                                    columnHeaders: [
+                                        { header: "Statistic", key: "col1" },
+                                        { header: "Value", key: "val1" },
+                                        { header: "Statistic", key: "col2" },
+                                        { header: "Value", key: "val2" }
+                                    ],
+                                    rows: [
+                                        { col1: "R-squared", val1: d.rSquared, col2: "Mean dependent var", val2: d.meanDependentVar },
+                                        { col1: "Adjusted R-squared", val1: d.adjRSquared, col2: "S.D. dependent var", val2: d.sdDependentVar },
+                                        { col1: "S.E. of regression", val1: d.seRegression, col2: "Akaike info criterion", val2: d.aic },
+                                        { col1: "Sum squared resid", val1: d.sumSquaredResid, col2: "Schwarz criterion", val2: d.bic },
+                                        { col1: "Log likelihood", val1: d.logLikelihood, col2: "Hannan-Quinn criter.", val2: d.hq },
+                                        { col1: "F-statistic", val1: d.fStatistic, col2: "Durbin-Watson stat", val2: d.durbinWatson }
+                                    ],
+                                    footer: `Short-run ECM estimated using the training sample (observations 1–${result.trainSize}); testing observations were not used for estimation or diagnostics.`
+                                });
+                            }
+
+                            const ecmResiduals = result.ecm?.residuals || [];
+                            if (ecmResiduals.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: ecmResiduals.map((value: number, index: number) => ({
+                                        category: String(index + 1),
+                                        value
+                                    })),
+                                    chartMetadata: {
+                                        title: "ECM Residuals",
+                                        subtitle: "Short-Run Training Sample"
+                                    },
+                                    chartConfig: {
+                                        axisLabels: { x: "Time", y: "Residual" }
+                                    }
+                                }));
+                            }
+
+                            if (Array.isArray(result.correlogram) && result.correlogram.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.correlogram.map((row: any) => ({
+                                        category: String(row.lag),
+                                        value: parseFloat(row.ac)
+                                    })),
+                                    chartMetadata: {
+                                        title: "ECM Residual Correlogram Plot (ACF & PACF)",
+                                        subtitle: "Autocorrelation by Lag"
+                                    },
+                                    chartConfig: {
+                                        axisLabels: { x: "Lag", y: "ACF" }
+                                    }
+                                }));
+                            }
+
+                            const longRunValues = result.longRun?.coefficients || [];
+                            tables.push({
+                                title: `Long Run Regression: ${yVar.name} ~ C + ${independentVariable.map(v => v.name).join(" + ")}`,
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: longRunValues.map((coef: any, index: number) => ({
+                                    var: index === 0 ? "C (Intercept)" : independentVariable[index - 1]?.name || `X${index}`,
+                                    coef,
+                                    se: result.longRun?.stdErrors?.[index] ?? "-",
+                                    tstat: result.longRun?.tStats?.[index] ?? "-",
+                                    prob: result.longRun?.pValues?.[index] ?? "-"
+                                }))
+                            });
+                            tables.push({
+                                title: "Cointegration Test (ADF on Residuals)",
+                                columnHeaders: [{ header: "Statistic", key: "stat" }, { header: "Value", key: "value" }],
+                                rows: [
+                                    { stat: "ADF statistic", value: result.cointegration?.adfStat ?? result.cointegration?.statistic ?? "-" },
+                                    { stat: "Prob.", value: result.cointegration?.pValue ?? "-" },
+                                    { stat: "Cointegrated", value: result.cointegration?.isCointegrated ? "Yes" : "No" }
+                                ]
+                            });
+                            const ecmValues = result.ecm?.coefficients || [];
+                            tables.push({
+                                title: `Short Run (ECM): D(${yVar.name}) ~ C + ECT(-1) + ${independentVariable.map(v => "D(" + v.name + ")").join(" + ")}`,
+                                columnHeaders: [
+                                    { header: "Variable", key: "var" },
+                                    { header: "Coefficient", key: "coef" },
+                                    { header: "Std. Error", key: "se" },
+                                    { header: "t-Statistic", key: "tstat" },
+                                    { header: "Prob.", key: "prob" }
+                                ],
+                                rows: ecmValues.map((coef: any, index: number) => ({
+                                    var: index === 0 ? "C" : index === 1 ? "ECT(-1)" : `D(${independentVariable[index - 2]?.name || "X"})`,
+                                    coef,
+                                    se: result.ecm?.stdErrors?.[index] ?? "-",
+                                    tstat: result.ecm?.tStats?.[index] ?? "-",
+                                    prob: result.ecm?.pValues?.[index] ?? "-"
+                                }))
+                            });
+                            tables.push({
+                                title: "Classical Assumptions (Residual Diagnostics)",
+                                columnHeaders: [{ header: "Test", key: "test" }, { header: "Statistic", key: "stat" }, { header: "Prob.", key: "prob" }],
+                                rows: [
+                                    { test: "Jarque-Bera", stat: result.diagnostics?.jarqueBera?.stat ?? "-", prob: result.diagnostics?.jarqueBera?.prob ?? "-" },
+                                    { test: "Breusch-Godfrey", stat: result.diagnostics?.breuschGodfrey?.stat ?? "-", prob: result.diagnostics?.breuschGodfrey?.prob ?? "-" },
+                                    { test: "Breusch-Pagan", stat: result.diagnostics?.breuschPagan?.stat ?? "-", prob: result.diagnostics?.breuschPagan?.prob ?? "-" }
+                                ]
+                            });
+                            tables.push({
+                                title: "Correlogram of ECM Residuals (ACF & PACF)",
+                                columnHeaders: [{ header: "Lag", key: "lag" }, { header: "AC", key: "ac" }, { header: "PAC", key: "pac" }, { header: "Q-stat", key: "qStat" }, { header: "Prob.", key: "prob" }],
+                                rows: result.correlogram || []
+                            });
+                            tables.push({
+                                title: "Model Interpretation",
+                                columnHeaders: [{ header: "Interpretation", key: "value" }],
+                                rows: [{ value: result.cointegration?.isCointegrated ? "The variables are cointegrated; the ECM describes short-run adjustment toward long-run equilibrium." : "Cointegration was not established; interpret the ECM long-run relation with caution." }]
+                            });
+                            if (result.longRun?.residuals?.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.longRun.residuals.map((value: number, index: number) => ({
+                                        category: String(index + 1),
+                                        value
+                                    })),
+                                    chartMetadata: { title: "Equilibrium Error (Residuals)", subtitle: "Long Run Training Sample" },
+                                    chartConfig: { axisLabels: { x: "Time", y: "Residual" } }
+                                }));
+                            }
+                            if (result.ecm?.residuals?.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.ecm.residuals.map((value: number, index: number) => ({
+                                        category: String(index + 1),
+                                        value
+                                    })),
+                                    chartMetadata: { title: "ECM Residuals", subtitle: "Short Run Training Sample" },
+                                    chartConfig: { axisLabels: { x: "Time", y: "Residual" } }
+                                }));
+                            }
+                            if (result.correlogram?.length > 0) {
+                                charts.push(ChartService.createChartJSON({
+                                    chartType: "Line Chart",
+                                    chartData: result.correlogram.flatMap((row: any) => [
+                                        { category: `${row.lag} ACF`, value: row.ac },
+                                        { category: `${row.lag} PACF`, value: row.pac }
+                                    ]),
+                                    chartMetadata: { title: "ECM Residual Correlogram Plot (ACF & PACF)", subtitle: "Training Sample" },
+                                    chartConfig: { axisLabels: { x: "Lag", y: "Correlation" } }
+                                }));
+                            }
+                            tables.push({
+                                title: "Model Interpretation Summary (ECM)",
+                                columnHeaders: [{ header: "Summary", key: "value" }],
+                                rows: [{ value: "Training-only ECM estimates, diagnostics, residuals, and correlogram are reported above; testing observations are reserved for out-of-sample forecast evaluation." }]
+                            });
+
+                            if (onSaveSplitToDataView) {
+                                await onSaveSplitToDataView(data.length, validRowIndices, result.trainSize, result.testYHat);
+                            }
+
+                            const logMsg = `ECM Split Data Evaluation on ${yVar.name}`;
+                            const logId = await addLog({ log: logMsg });
+                            const analyticId = await addAnalytic(logId, {
+                                title: "ECM Split Evaluation Results",
+                                note: `Train-Test Split (${Math.round(result.trainRatio * 100)}%)`
+                            });
+
+                            await addStatistic(analyticId, {
+                                title: "ECM Split Evaluation Output",
+                                output_data: JSON.stringify({ tables, charts }),
+                                components: "EcmAnalysis",
+                                description: "ECM Train-Test Split results"
+                            });
+
+                            if (onClose) onClose();
+                            return;
+                        }
+
+                        const isCointegrated = result.cointegration.isCointegrated;
+                        toast.success("ECM estimation completed!");
+
                         // 1. Long Run Table
                         const longRunRows = [];
                         longRunRows.push({
@@ -306,7 +643,7 @@ export const useAnalyzeHook = (
                             ]
                         });
 
-                        const charts = [];
+                        charts = [];
 
                         if (result.longRun?.residuals?.length > 0) {
                             const resData = result.longRun.residuals.map((val: number, i: number) => ({
@@ -467,7 +804,7 @@ export const useAnalyzeHook = (
                         });
                         
                         setTimeout(() => {
-                            onClose();
+                            onClose?.();
                             client.release();
                         }, 1500);
 

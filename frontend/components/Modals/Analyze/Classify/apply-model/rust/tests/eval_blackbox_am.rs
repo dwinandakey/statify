@@ -3,7 +3,7 @@
 //! Prediction Distribution) pada tingkat Rust (`run_apply_model` / `run_apply_model_with_text`).
 //!
 //! Angka acuan BUKAN disalin dari keluaran Rust: semuanya dihitung ulang secara independen oleh
-//! `testing/text_analytics_eval/tools/c3_am_oracle.py` (Python murni) dan dicantumkan sebagai literal di sini.
+//! `frontend/components/Modals/Analyze/Classify/naive-bayes/text_analytics_eval/tools/c3_am_oracle.py` (Python murni) dan dicantumkan sebagai literal di sini.
 //! Selain itu, skor log kasus D1 juga dihitung ulang di dalam tes ini memakai rumus Naive Bayes
 //! (prior, kategorikal, Gaussian) tanpa memanggil kode produksi.
 //!

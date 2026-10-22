@@ -11,6 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { type LucideIcon, BookOpen, Settings, HelpCircle } from "lucide-react";
+import { useHelpLanguageStore } from "@/stores/useHelpLanguageStore";
 
 /**
  * Template standar untuk semua guide pages
@@ -68,6 +69,9 @@ export const HelpGuideTemplate: React.FC<HelpGuideTemplateProps> = ({
   tips,
   troubleshooting
 }) => {
+  const { language } = useHelpLanguageStore();
+  const isEn = language === 'en';
+
   return (
     <HelpLayout
       title={title}
@@ -79,18 +83,18 @@ export const HelpGuideTemplate: React.FC<HelpGuideTemplateProps> = ({
 
       {/* Overview Section */}
       {overview && (
-        <HelpSection title="Gambaran Umum" icon={BookOpen}>
+        <HelpSection title={isEn ? "Overview" : "Gambaran Umum"} icon={BookOpen}>
           {overview}
         </HelpSection>
       )}
 
       {/* Prerequisites */}
       {prerequisites && prerequisites.length > 0 && (
-        <HelpSection title="Prasyarat" icon={Settings}>
+        <HelpSection title={isEn ? "Prerequisites" : "Prasyarat"} icon={Settings}>
           <HelpCard>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground mb-3">
-                Sebelum memulai, pastikan Anda telah:
+                {isEn ? "Before you begin, make sure you have:" : "Sebelum memulai, pastikan Anda telah:"}
               </p>
               <ul className="space-y-1">
                 {prerequisites.map((item, index) => (
@@ -144,7 +148,7 @@ export const HelpGuideTemplate: React.FC<HelpGuideTemplateProps> = ({
                     {step.code && (
                       <HelpCodeBlock
                         language={step.codeLanguage || "javascript"}
-                        title={`Code Example ${index + 1}`}
+                        title={isEn ? `Code Example ${index + 1}` : `Contoh Kode ${index + 1}`}
                       >
                         {step.code}
                       </HelpCodeBlock>
@@ -159,7 +163,7 @@ export const HelpGuideTemplate: React.FC<HelpGuideTemplateProps> = ({
 
       {/* Troubleshooting */}
       {troubleshooting && troubleshooting.length > 0 && (
-        <HelpSection title="Pemecahan Masalah" icon={HelpCircle}>
+        <HelpSection title={isEn ? "Troubleshooting" : "Pemecahan Masalah"} icon={HelpCircle}>
           <div className="space-y-4">
             {troubleshooting.map((item, index) => (
               <HelpCard key={index} title={item.problem} variant="step">
