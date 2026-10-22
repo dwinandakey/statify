@@ -1,4 +1,0 @@
-﻿label,order,n,software,start,end,seconds,result
-validasi-kode,1,10000,spss,2026-10-16T12:53:41.5260071+07:00,2026-10-16T12:54:13.5114496+07:00,32,mv1:0 mv2:0 rm:0
-validasi-kode,2,10000,statify-e2e,2026-10-16T12:54:43.5183334+07:00,2026-10-16T12:57:12.3511630+07:00,148.8,exit:0
-validasi-kode,phase2,10000,statify-compute,2026-10-16T12:58:59.1374127+07:00,2026-10-16T12:59:39.6410268+07:00,40.5,exit:0

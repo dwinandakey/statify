@@ -1,7 +1,0 @@
-measure,cell,distinct_result_hashes,distinct_sorted_key_hashes,hashes
-statify_e2e,mv1-n100000,3,,845c613fae74 9ac309fbdfb9 e5995caac6ea
-statify_e2e,mv2-n100000,3,,984463f7cb8e 99f9104c92c1 d326119b5e85
-statify_e2e,rm-n100000,1,,38abb48c0e59
-statify_compute,mv1-n100000,3,,845c613fae74 9ac309fbdfb9 e5995caac6ea
-statify_compute,mv2-n100000,3,,984463f7cb8e 99f9104c92c1 d326119b5e85
-statify_compute,rm-n100000,1,,38abb48c0e59

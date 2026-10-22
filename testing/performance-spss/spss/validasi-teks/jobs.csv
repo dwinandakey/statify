@@ -1,3 +1,0 @@
-﻿mv1-n10000,2026-10-16T12:49:37.8255781+07:00,2026-10-16T12:49:48.6332800+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
-mv2-n10000,2026-10-16T12:49:48.6468715+07:00,2026-10-16T12:49:59.2960979+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF
-rm-n10000,2026-10-16T12:49:59.2960979+07:00,2026-10-16T12:50:09.9295629+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF

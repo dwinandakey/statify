@@ -1,4 +1,0 @@
-proc,n,median_prep_ms,median_serialize_ms,median_worker_ms,median_post_ms,median_e2e_ms,share_worker_pct,share_post_pct
-mv1,10000,8.4,4.0,1662.2,48.6,1711.1,97.1,2.8
-mv2,10000,5.9,5.8,3463.2,51.9,3521.1,98.4,1.5
-rm,10000,6.6,3.2,408.5,112.2,542.2,75.3,20.7

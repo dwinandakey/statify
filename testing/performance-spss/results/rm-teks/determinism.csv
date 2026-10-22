@@ -1,9 +1,0 @@
-measure,cell,distinct_result_hashes,distinct_sorted_key_hashes,hashes
-statify_e2e,rm-n100,1,1,5a0ffa8f8cd5
-statify_e2e,rm-n1000,1,1,8f913f4b1b17
-statify_e2e,rm-n10000,1,1,ed6f70d5325b
-statify_e2e,rm-n50000,1,1,dbcc015dcc40
-statify_compute,rm-n100,1,1,5a0ffa8f8cd5
-statify_compute,rm-n1000,1,1,8f913f4b1b17
-statify_compute,rm-n10000,1,1,ed6f70d5325b
-statify_compute,rm-n50000,1,1,dbcc015dcc40

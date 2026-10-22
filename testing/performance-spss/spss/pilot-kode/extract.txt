@@ -1,9 +1,0 @@
-﻿mv1-n100000  run  1 rows=100000 elapsed=  1260.0 ms (00:00:01.26) cpu=  1230.0 ms
-mv1-n100000  run  2 rows=100000 elapsed=  1210.0 ms (00:00:01.21) cpu=  1200.0 ms
-mv1-n100000  run  3 rows=100000 elapsed=  1230.0 ms (00:00:01.23) cpu=  1200.0 ms
-mv2-n100000  run  1 rows=100000 elapsed=  2060.0 ms (00:00:02.06) cpu=  2080.0 ms
-mv2-n100000  run  2 rows=100000 elapsed=  2050.0 ms (00:00:02.05) cpu=  2060.0 ms
-mv2-n100000  run  3 rows=100000 elapsed=  2080.0 ms (00:00:02.08) cpu=  1980.0 ms
-rm-n100000   run  1 rows=100000 elapsed=  1180.0 ms (00:00:01.18) cpu=  1170.0 ms
-rm-n100000   run  2 rows=100000 elapsed=  1240.0 ms (00:00:01.24) cpu=  1230.0 ms
-rm-n100000   run  3 rows=100000 elapsed=  1250.0 ms (00:00:01.25) cpu=  1230.0 ms
