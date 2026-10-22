@@ -1,0 +1,41 @@
+[2026-10-16T07:37:26.635Z] start: chromium 143.0.7499.4; procs=mv1,mv2,rm sizes=100000 runs=11
+[2026-10-16T07:37:26.943Z] cell mv1-n100000: payload loaded (7.6 MB)
+[2026-10-16T07:37:46.539Z] mv1-n100000 run 1/11 warmup status=ok in-worker=17355.19 post=53.55 roundtrip=17416.54
+[2026-10-16T07:38:02.188Z] mv1-n100000 run 2/11 measured status=ok in-worker=14579.53 post=51.88 roundtrip=14631.78
+[2026-10-16T07:38:17.746Z] mv1-n100000 run 3/11 measured status=ok in-worker=14495.52 post=52.00 roundtrip=14548.23
+[2026-10-16T07:38:33.394Z] mv1-n100000 run 4/11 measured status=ok in-worker=14578.56 post=52.69 roundtrip=14631.63
+[2026-10-16T07:38:49.077Z] mv1-n100000 run 5/11 measured status=ok in-worker=14611.09 post=51.87 roundtrip=14663.34
+[2026-10-16T07:39:04.664Z] mv1-n100000 run 6/11 measured status=ok in-worker=14519.10 post=53.13 roundtrip=14572.59
+[2026-10-16T07:39:20.282Z] mv1-n100000 run 7/11 measured status=ok in-worker=14546.01 post=52.21 roundtrip=14598.90
+[2026-10-16T07:39:35.931Z] mv1-n100000 run 8/11 measured status=ok in-worker=14593.51 post=52.43 roundtrip=14646.33
+[2026-10-16T07:39:51.497Z] mv1-n100000 run 9/11 measured status=ok in-worker=14491.00 post=53.12 roundtrip=14544.48
+[2026-10-16T07:40:07.244Z] mv1-n100000 run 10/11 measured status=ok in-worker=14685.99 post=52.33 roundtrip=14738.70
+[2026-10-16T07:40:22.808Z] mv1-n100000 run 11/11 measured status=ok in-worker=14495.70 post=51.17 roundtrip=14547.17
+[2026-10-16T07:40:23.283Z] cell mv1-n100000 done in 177 s
+[2026-10-16T07:40:23.604Z] cell mv2-n100000: payload loaded (8.4 MB)
+[2026-10-16T07:41:02.728Z] mv2-n100000 run 1/11 warmup status=ok in-worker=36902.98 post=63.40 roundtrip=36973.51
+[2026-10-16T07:41:37.025Z] mv2-n100000 run 2/11 measured status=ok in-worker=33231.33 post=58.84 roundtrip=33290.52
+[2026-10-16T07:42:11.522Z] mv2-n100000 run 3/11 measured status=ok in-worker=33415.84 post=61.87 roundtrip=33478.63
+[2026-10-16T07:42:45.647Z] mv2-n100000 run 4/11 measured status=ok in-worker=33055.68 post=61.77 roundtrip=33117.97
+[2026-10-16T07:43:19.893Z] mv2-n100000 run 5/11 measured status=ok in-worker=33161.98 post=60.72 roundtrip=33223.09
+[2026-10-16T07:43:54.082Z] mv2-n100000 run 6/11 measured status=ok in-worker=33116.36 post=60.76 roundtrip=33178.00
+[2026-10-16T07:44:28.478Z] mv2-n100000 run 7/11 measured status=ok in-worker=33323.96 post=59.96 roundtrip=33384.34
+[2026-10-16T07:45:02.832Z] mv2-n100000 run 8/11 measured status=ok in-worker=33274.21 post=58.36 roundtrip=33333.48
+[2026-10-16T07:45:37.351Z] mv2-n100000 run 9/11 measured status=ok in-worker=33445.39 post=58.96 roundtrip=33504.74
+[2026-10-16T07:46:11.630Z] mv2-n100000 run 10/11 measured status=ok in-worker=33212.92 post=58.59 roundtrip=33272.30
+[2026-10-16T07:46:45.915Z] mv2-n100000 run 11/11 measured status=ok in-worker=33208.87 post=61.21 roundtrip=33270.49
+[2026-10-16T07:46:46.397Z] cell mv2-n100000 done in 383 s
+[2026-10-16T07:46:46.750Z] cell rm-n100000: payload loaded (11.6 MB)
+[2026-10-16T07:46:51.794Z] rm-n100000 run 1/11 warmup status=ok in-worker=2946.63 post=35.79 roundtrip=2989.71
+[2026-10-16T07:46:55.379Z] rm-n100000 run 2/11 measured status=ok in-worker=2529.98 post=34.27 roundtrip=2564.62
+[2026-10-16T07:46:58.857Z] rm-n100000 run 3/11 measured status=ok in-worker=2426.58 post=34.54 roundtrip=2461.45
+[2026-10-16T07:47:02.292Z] rm-n100000 run 4/11 measured status=ok in-worker=2382.16 post=43.38 roundtrip=2425.90
+[2026-10-16T07:47:05.782Z] rm-n100000 run 5/11 measured status=ok in-worker=2438.14 post=35.06 roundtrip=2473.54
+[2026-10-16T07:47:09.252Z] rm-n100000 run 6/11 measured status=ok in-worker=2417.73 post=34.25 roundtrip=2452.31
+[2026-10-16T07:47:12.727Z] rm-n100000 run 7/11 measured status=ok in-worker=2431.26 post=35.48 roundtrip=2467.07
+[2026-10-16T07:47:16.208Z] rm-n100000 run 8/11 measured status=ok in-worker=2425.79 post=35.28 roundtrip=2461.38
+[2026-10-16T07:47:19.663Z] rm-n100000 run 9/11 measured status=ok in-worker=2404.34 post=34.11 roundtrip=2438.76
+[2026-10-16T07:47:23.095Z] rm-n100000 run 10/11 measured status=ok in-worker=2386.62 post=33.96 roundtrip=2420.92
+[2026-10-16T07:47:26.563Z] rm-n100000 run 11/11 measured status=ok in-worker=2421.83 post=34.05 roundtrip=2456.32
+[2026-10-16T07:47:27.053Z] cell rm-n100000 done in 41 s
+[2026-10-16T07:47:27.091Z] finished

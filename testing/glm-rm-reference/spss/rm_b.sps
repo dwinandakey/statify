@@ -1,3 +1,4 @@
+* Encoding: windows-1252.
 * Dataset (b) desain campuran, waktu 4 level x kelompok 3 grup.
 * Dibuat oleh testing/glm-rm-reference/generate.py (data identik dengan CSV di folder data/).
 * SPSS 27: buka berkas ini di Syntax Editor lalu Run > All.
@@ -43,5 +44,6 @@ GLM w1 w2 w3 w4 BY kelompok
 
 * Opsional: simpan seluruh output ke Excel agar nilai bisa dibaca lengkap.
 * Hapus tanda bintang di dua baris berikut dan sesuaikan folder tujuannya.
-* OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
-*   /XLSX DOCUMENTFILE='C:\statify-spss\rm_b.xlsx' OPERATION=CREATEFILE.
+OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
+/XLSX DOCUMENTFILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-rm-reference\spss-output\rm_b.xlsx' OPERATION=CREATEFILE.
+

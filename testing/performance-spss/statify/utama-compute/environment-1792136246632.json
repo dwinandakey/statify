@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-10-16T07:37:26.632Z",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "logicalCores": 20,
+  "totalMemGB": 23.6,
+  "freeMemGB": 11.7,
+  "node": "v20.19.0",
+  "playwright": "1.57.0",
+  "chromium": "143.0.7499.4",
+  "config": {
+    "BASE": "http://localhost:3101",
+    "PROCS": [
+      "mv1",
+      "mv2",
+      "rm"
+    ],
+    "SIZES": [
+      100000
+    ],
+    "RUNS": 11,
+    "PAYLOAD": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\statify\\utama-e2e\\payload",
+    "AFFINITY": "FFF"
+  }
+}

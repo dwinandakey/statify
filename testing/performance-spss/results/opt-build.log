@@ -1,0 +1,1014 @@
+﻿Preparing worktree (detached HEAD e48a35ce)
+Updating files:  33% (2960/8835)
+Updating files:  34% (3004/8835)
+Updating files:  35% (3093/8835)
+Updating files:  36% (3181/8835)
+Updating files:  37% (3269/8835)
+Updating files:  38% (3358/8835)
+Updating files:  39% (3446/8835)
+Updating files:  40% (3534/8835)
+Updating files:  41% (3623/8835)
+Updating files:  42% (3711/8835)
+Updating files:  43% (3800/8835)
+Updating files:  44% (3888/8835)
+Updating files:  45% (3976/8835)
+Updating files:  46% (4065/8835)
+Updating files:  47% (4153/8835)
+Updating files:  48% (4241/8835)
+Updating files:  49% (4330/8835)
+Updating files:  50% (4418/8835)
+Updating files:  51% (4506/8835)
+Updating files:  52% (4595/8835)
+Updating files:  53% (4683/8835)
+Updating files:  54% (4771/8835)
+Updating files:  55% (4860/8835)
+Updating files:  55% (4883/8835)
+Updating files:  56% (4948/8835)
+Updating files:  57% (5036/8835)
+Updating files:  58% (5125/8835)
+Updating files:  59% (5213/8835)
+Updating files:  60% (5301/8835)
+Updating files:  61% (5390/8835)
+Updating files:  62% (5478/8835)
+Updating files:  63% (5567/8835)
+Updating files:  64% (5655/8835)
+Updating files:  65% (5743/8835)
+Updating files:  66% (5832/8835)
+Updating files:  67% (5920/8835)
+Updating files:  68% (6008/8835)
+Updating files:  69% (6097/8835)
+Updating files:  70% (6185/8835)
+Updating files:  71% (6273/8835)
+Updating files:  72% (6362/8835)
+Updating files:  73% (6450/8835)
+Updating files:  74% (6538/8835)
+Updating files:  75% (6627/8835)
+Updating files:  76% (6715/8835)
+Updating files:  77% (6803/8835)
+Updating files:  78% (6892/8835)
+Updating files:  79% (6980/8835)
+Updating files:  80% (7068/8835)
+Updating files:  81% (7157/8835)
+Updating files:  82% (7245/8835)
+Updating files:  83% (7334/8835)
+Updating files:  84% (7422/8835)
+Updating files:  85% (7510/8835)
+Updating files:  86% (7599/8835)
+Updating files:  87% (7687/8835)
+Updating files:  88% (7775/8835)
+Updating files:  89% (7864/8835)
+Updating files:  89% (7939/8835)
+Updating files:  90% (7952/8835)
+Updating files:  91% (8040/8835)
+Updating files:  92% (8129/8835)
+Updating files:  93% (8217/8835)
+Updating files:  94% (8305/8835)
+Updating files:  95% (8394/8835)
+Updating files:  96% (8482/8835)
+Updating files:  97% (8570/8835)
+Updating files:  98% (8659/8835)
+Updating files:  99% (8747/8835)
+Updating files: 100% (8835/8835)
+Updating files: 100% (8835/8835), done.
+HEAD is now at e48a35ce8 chore(merge): gabungkan origin/main ke ilham
+[INFO]: Checking for the Wasm target...
+[INFO]: Compiling to Wasm...
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling wasm-bindgen-shared v0.2.118
+   Compiling serde_core v1.0.228
+   Compiling rustversion v1.0.22
+   Compiling autocfg v1.5.0
+   Compiling zmij v1.0.21
+   Compiling serde v1.0.228
+   Compiling bumpalo v3.20.2
+   Compiling serde_json v1.0.149
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.0
+   Compiling libm v0.2.16
+   Compiling cfg-if v1.0.4
+   Compiling once_cell v1.21.4
+   Compiling zerocopy v0.8.48
+   Compiling crossbeam-utils v0.8.21
+   Compiling bytemuck v1.25.0
+   Compiling paste v1.0.15
+   Compiling safe_arch v0.7.4
+   Compiling rawpointer v0.2.1
+   Compiling typenum v1.19.0
+   Compiling rayon-core v1.13.0
+   Compiling wide v0.7.33
+   Compiling either v1.15.0
+   Compiling rand_core v0.9.5
+   Compiling num-traits v0.2.19
+   Compiling matrixmultiply v0.3.10
+   Compiling itertools v0.14.0
+   Compiling rand_mt v5.0.0
+   Compiling wasm-bindgen v0.2.118
+   Compiling crossbeam-epoch v0.9.18
+   Compiling syn v2.0.117
+   Compiling crossbeam-deque v0.8.6
+   Compiling rayon v1.12.0
+   Compiling num-complex v0.4.6
+   Compiling num-integer v0.1.46
+   Compiling approx v0.5.1
+   Compiling num-rational v0.4.2
+   Compiling simba v0.9.1
+   Compiling ndarray v0.16.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling wasm-bindgen-macro-support v0.2.118
+   Compiling serde_derive v1.0.228
+   Compiling nalgebra-macros v0.2.2
+   Compiling wasm-bindgen-macro v0.2.118
+   Compiling js-sys v0.3.95
+   Compiling getrandom v0.2.17
+   Compiling web-sys v0.3.95
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling rand_core v0.6.4
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
+   Compiling rand_distr v0.4.3
+   Compiling nalgebra v0.33.3
+   Compiling statrs v0.18.0
+   Compiling wasm v0.1.0 (D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-opt\frontend\components\Modals\Analyze\general-linear-model\multivariate\rust)
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src\stats\between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused import: `f32::consts::E`
+ --> src\stats\generate_plots.rs:1:34
+  |
+1 | use std::{ collections::HashMap, f32::consts::E };
+  |                                  ^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused import: `StudentsT`
+ --> src\stats\homogeneous_subsets.rs:2:60
+  |
+2 | use statrs::distribution::{ ContinuousCDF, FisherSnedecor, StudentsT, ChiSquared };
+  |                                                            ^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `calculate_std_deviation`, `calculate_t_significance`, and `data_value_to_string`
+  --> src\stats\homogeneous_subsets.rs:10:5
+   |
+10 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+...
+14 |     calculate_std_deviation,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+15 |     calculate_t_significance,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused import: `DataValue`
+  --> src\stats\levene_test.rs:6:27
+   |
+ 6 |     data::{ AnalysisData, DataValue },
+   |                           ^^^^^^^^^
+   |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+  --> src\stats\mod.rs:14:1
+   |
+14 | pub mod levene_test;
+   | ^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src\stats\residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src\stats\sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:109:27
+    |
+109 |             for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:231:31
+    |
+231 |                 for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\between_subjects_sscp.rs:294:35
+    |
+294 |                     for (dep_idx, dep_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\between_subjects_sscp.rs:393:10
+    |
+393 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `j`
+   --> src\stats\between_subjects_sscp.rs:395:14
+    |
+395 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `level`
+   --> src\stats\between_subjects_sscp.rs:456:34
+    |
+456 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var_name`
+   --> src\stats\common.rs:673:5
+    |
+673 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `coefficients` is never read
+  --> src\stats\contrast_coefficients.rs:15:28
+   |
+15 |     let mut coefficients = Vec::new();
+   |                            ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:361:9
+    |
+361 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:431:9
+    |
+431 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:503:9
+    |
+503 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:580:9
+    |
+580 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:653:9
+    |
+653 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `p`
+   --> src\stats\homogeneous_subsets.rs:692:9
+    |
+692 |     for p in 2..=k {
+    |         ^ help: if this is intentional, prefix it with an underscore: `_p`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:724:9
+    |
+724 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `k`
+   --> src\stats\homogeneous_subsets.rs:760:9
+    |
+760 |     let k = level_means.len();
+    |         ^ help: if this is intentional, prefix it with an underscore: `_k`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `significances`
+   --> src\stats\homogeneous_subsets.rs:795:9
+    |
+795 |     let significances = calculate_subset_significances(&subsets, level_means, mse, df_error);
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_significances`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unreachable pattern
+   --> src\stats\homogeneous_subsets.rs:864:21
+    |
+853 |                     cdf => {
+    |                     --- matches any value
+...
+864 |                     _ => {
+    |                     ^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unreachable pattern
+   --> src\stats\homogeneous_subsets.rs:921:21
+    |
+910 |                     cdf => {
+    |                     --- matches any value
+...
+921 |                     _ => {
+    |                     ^ no value can reach this
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `mse`
+    --> src\stats\homogeneous_subsets.rs:1053:5
+     |
+1053 |     mse: f64,
+     |     ^^^ help: if this is intentional, prefix it with an underscore: `_mse`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `harmonic_mean`
+    --> src\stats\homogeneous_subsets.rs:1054:5
+     |
+1054 |     harmonic_mean: f64
+     |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_harmonic_mean`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factors`
+  --> src\stats\residual_sscp_matrix.rs:36:9
+   |
+36 |     let factors = config.main.fix_factor.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+  --> src\stats\residual_sscp_matrix.rs:85:10
+   |
+85 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dependent_vars`
+  --> src\stats\sscp_matrix.rs:30:9
+   |
+30 |     let dependent_vars = config.main.dep_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+  --> src\stats\sscp_matrix.rs:97:10
+   |
+97 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:367:10
+    |
+367 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:424:10
+    |
+424 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `test_entries` is never read
+  --> src\stats\univariate_tests.rs:42:32
+   |
+42 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `total_ss`
+  --> src\stats\univariate_tests.rs:86:9
+   |
+86 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:228:5
+    |
+228 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:230:5
+    |
+230 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:233:5
+    |
+233 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:234:5
+    |
+234 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:469:5
+    |
+469 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:471:5
+    |
+471 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:474:5
+    |
+474 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:475:5
+    |
+475 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+    Finished `release` profile [optimized] target(s) in 29.94s
+[INFO]: Installing wasm-bindgen...
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: :-) Done in 47.60s
+[INFO]: :-) Your wasm pkg is ready to publish at D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-opt\frontend\components\Modals\Analyze\general-linear-model\multivariate\rust\pkg.
+multivariate rebuilt: 877789 bytes
+[INFO]: Checking for the Wasm target...
+[INFO]: Compiling to Wasm...
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling wasm-bindgen-shared v0.2.120
+   Compiling serde_core v1.0.228
+   Compiling autocfg v1.5.0
+   Compiling memchr v2.8.0
+   Compiling rustversion v1.0.22
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.149
+   Compiling bumpalo v3.20.2
+   Compiling serde v1.0.228
+   Compiling itoa v1.0.18
+   Compiling libm v0.2.16
+   Compiling once_cell v1.21.4
+   Compiling pin-project-lite v0.2.17
+   Compiling slab v0.4.12
+   Compiling futures-task v0.3.32
+   Compiling cfg-if v1.0.4
+   Compiling futures-core v0.3.32
+   Compiling zerocopy v0.8.48
+   Compiling crossbeam-utils v0.8.21
+   Compiling paste v1.0.15
+   Compiling bytemuck v1.25.0
+   Compiling futures-util v0.3.32
+   Compiling rawpointer v0.2.1
+   Compiling rayon-core v1.13.0
+   Compiling typenum v1.20.0
+   Compiling either v1.15.0
+   Compiling regex-syntax v0.8.10
+   Compiling hashbrown v0.17.1
+   Compiling safe_arch v0.7.4
+   Compiling rand_core v0.9.5
+   Compiling wide v0.7.33
+   Compiling num-traits v0.2.19
+   Compiling matrixmultiply v0.3.10
+   Compiling aho-corasick v1.1.4
+   Compiling equivalent v1.0.2
+   Compiling rand_mt v5.0.0
+   Compiling itertools v0.14.0
+   Compiling crossbeam-epoch v0.9.18
+   Compiling wasm-bindgen v0.2.120
+   Compiling syn v2.0.117
+   Compiling crossbeam-deque v0.8.6
+   Compiling rayon v1.12.0
+   Compiling num-complex v0.4.6
+   Compiling num-integer v0.1.46
+   Compiling approx v0.5.1
+   Compiling regex-automata v0.4.14
+   Compiling num-rational v0.4.2
+   Compiling simba v0.9.1
+   Compiling ndarray v0.16.1
+   Compiling indexmap v2.14.2
+   Compiling ppv-lite86 v0.2.21
+   Compiling wasm-bindgen-macro-support v0.2.120
+   Compiling serde_derive v1.0.228
+   Compiling nalgebra-macros v0.2.2
+   Compiling regex v1.12.3
+   Compiling wasm-bindgen-macro v0.2.120
+   Compiling js-sys v0.3.97
+   Compiling getrandom v0.2.17
+   Compiling serde-wasm-bindgen v0.6.5
+   Compiling web-sys v0.3.97
+   Compiling rand_core v0.6.4
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.6
+   Compiling rand_distr v0.4.3
+   Compiling nalgebra v0.33.3
+   Compiling statrs v0.18.0
+   Compiling wasm v0.1.0 (D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-opt\frontend\components\Modals\Analyze\general-linear-model\repeated-measures\rust)
+warning: unused import: `crate::stats::summary_processing::*`
+  --> src\stats\core.rs:15:9
+   |
+15 | pub use crate::stats::summary_processing::*;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `build_design_matrix_and_response`, `get_factor_combinations`, `matrix_multiply`, and `matrix_transpose`
+  --> src\stats\between_subjects_sscp.rs:10:5
+   |
+10 |     build_design_matrix_and_response,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |     extract_dependent_value,
+12 |     get_factor_combinations,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+15 |     matrix_multiply,
+   |     ^^^^^^^^^^^^^^^
+16 |     matrix_transpose,
+   |     ^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused import: `crate::models::config::ContrastMethod`
+ --> src\stats\common.rs:6:5
+  |
+6 | use crate::models::config::ContrastMethod;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused import: `matrix_transpose`
+  --> src\stats\multivariate_tests.rs:21:9
+   |
+21 |         matrix_transpose,
+   |         ^^^^^^^^^^^^^^^^
+   |
+help: if this is a test module, consider adding a `#[cfg(test)]` to the containing module
+  --> src\stats\mod.rs:11:1
+   |
+11 | pub mod multivariate_tests;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `get_factor_levels`
+  --> src\stats\residual_sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+13 |     get_factor_levels,
+   |     ^^^^^^^^^^^^^^^^^
+...
+18 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused imports: `calculate_mean`, `data_value_to_string`, and `extract_dependent_value`
+  --> src\stats\sscp_matrix.rs:11:5
+   |
+11 |     calculate_mean,
+   |     ^^^^^^^^^^^^^^
+12 |     extract_dependent_value,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+...
+16 |     data_value_to_string,
+   |     ^^^^^^^^^^^^^^^^^^^^
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factor_name`
+   --> src\stats\between_subjects_effects.rs:113:10
+    |
+113 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:104:27
+    |
+104 |             for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:225:31
+    |
+225 |                 for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                               ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `sub_var`
+   --> src\stats\between_subjects_sscp.rs:288:35
+    |
+288 |                     for (dep_idx, sub_var) in dependent_vars.iter().enumerate() {
+    |                                   ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_sub_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\between_subjects_sscp.rs:387:10
+    |
+387 |     for (i, var1) in dependent_vars.iter().enumerate() {
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `j`
+   --> src\stats\between_subjects_sscp.rs:389:14
+    |
+389 |         for (j, var2) in dependent_vars.iter().enumerate() {
+    |              ^ help: if this is intentional, prefix it with an underscore: `_j`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `level`
+   --> src\stats\between_subjects_sscp.rs:450:34
+    |
+450 |                     for (factor, level) in &record_factor_levels {
+    |                                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_level`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var_name`
+   --> src\stats\common.rs:519:5
+    |
+519 |     dep_var_name: &str
+    |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factor_name`
+  --> src\stats\descriptive_statistics.rs:22:10
+   |
+22 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `data`
+  --> src\stats\estimable_function.rs:11:5
+   |
+11 |     data: &AnalysisData,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `config`
+   --> src\stats\multivariate_tests.rs:508:5
+    |
+508 |     config: &RepeatedMeasuresConfig,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_config`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:568:21
+    |
+568 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:637:25
+    |
+637 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:728:21
+    |
+728 |                 let mut record_idx = 0;
+    |                     ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: variable `record_idx` is assigned to, but never used
+   --> src\stats\multivariate_tests.rs:797:25
+    |
+797 |                     let mut record_idx = 0;
+    |                         ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_record_idx` instead
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `record`
+   --> src\stats\multivariate_tests.rs:888:25
+    |
+888 |                     for record in records {
+    |                         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_record`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:595:25
+    |
+595 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:764:25
+    |
+764 |                         record_idx += 1;
+    |                         ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `record_idx` is never read
+   --> src\stats\multivariate_tests.rs:824:29
+    |
+824 | ...                   record_idx += 1;
+    |                       ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `alpha`
+   --> src\stats\multivariate_tests.rs:961:5
+    |
+961 |     alpha: f64,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_alpha`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `det_h`
+   --> src\stats\multivariate_tests.rs:986:9
+    |
+986 |     let det_h = match matrix_determinant(h_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_h`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `det_e`
+   --> src\stats\multivariate_tests.rs:991:9
+    |
+991 |     let det_e = match matrix_determinant(e_matrix) {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_det_e`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `u`
+    --> src\stats\multivariate_tests.rs:1047:13
+     |
+1047 |         let u = ((p as f64) * hypothesis_df - 2.0) / 4.0;
+     |             ^ help: if this is intentional, prefix it with an underscore: `_u`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factor_name`
+  --> src\stats\parameter_estimates.rs:37:10
+   |
+37 |     for (factor_name, factors) in &within_factors.measures {
+   |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factor_name`
+   --> src\stats\parameter_estimates.rs:230:10
+    |
+230 |     for (factor_name, factors) in &within_factors.measures {
+    |          ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factor_name`
+  --> src\stats\parse_factors.rs:31:17
+   |
+31 |             let factor_name = captures.get(1).unwrap().as_str().to_string();
+   |                 ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factor_name`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `factors`
+  --> src\stats\residual_sscp_matrix.rs:31:9
+   |
+31 |     let factors = config.main.factors_var.as_ref().map_or(Vec::new(), |f| f.clone());
+   |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_factors`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+  --> src\stats\residual_sscp_matrix.rs:80:10
+   |
+80 |     for (i, (x_matrix, y_vector)) in design_matrices.iter().zip(y_vectors.iter()).enumerate() {
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dependent_vars`
+  --> src\stats\sscp_matrix.rs:25:9
+   |
+25 |     let dependent_vars = config.main.sub_var.as_ref().unwrap();
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dependent_vars`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+  --> src\stats\sscp_matrix.rs:92:10
+   |
+92 |     for (i, (x_matrix, y_vector)) in design_matrices
+   |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:362:10
+    |
+362 |     for (i, (x_matrix, y_vector)) in full_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `i`
+   --> src\stats\sscp_matrix.rs:419:10
+    |
+419 |     for (i, (x_matrix, y_vector)) in reduced_design_matrices
+    |          ^ help: if this is intentional, prefix it with an underscore: `_i`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: value assigned to `test_entries` is never read
+  --> src\stats\univariate_tests.rs:37:32
+   |
+37 |         let mut test_entries = Vec::new();
+   |                                ^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `total_ss`
+  --> src\stats\univariate_tests.rs:81:9
+   |
+81 |     let total_ss = values
+   |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_ss`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:223:5
+    |
+223 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:225:5
+    |
+225 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:228:5
+    |
+228 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:229:5
+    |
+229 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `data`
+   --> src\stats\univariate_tests.rs:422:5
+    |
+422 |     data: &AnalysisData,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_data`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `dep_var`
+   --> src\stats\univariate_tests.rs:424:5
+    |
+424 |     dep_var: &str,
+    |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_dep_var`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `x_matrix`
+   --> src\stats\univariate_tests.rs:427:5
+    |
+427 |     x_matrix: &[Vec<f64>],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_x_matrix`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `y_vector`
+   --> src\stats\univariate_tests.rs:428:5
+    |
+428 |     y_vector: &[f64],
+    |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_y_vector`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: unused variable: `noncentrality`
+   --> src\stats\within_subjects_effects.rs:327:9
+    |
+327 |     let noncentrality = f * df1;
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_noncentrality`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: variable `X` should have a snake case name
+   --> src\stats\between_subjects_effects.rs:192:21
+    |
+192 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+warning: variable `X` should have a snake case name
+   --> src\stats\parameter_estimates.rs:115:21
+    |
+115 |             let mut X = DMatrix::zeros(n, p + 1); // +1 for intercept
+    |                     ^ help: convert the identifier to snake case (notice the capitalization): `x`
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+    Finished `release` profile [optimized] target(s) in 30.21s
+[INFO]: Installing wasm-bindgen...
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: :-) Done in 45.13s
+[INFO]: :-) Your wasm pkg is ready to publish at D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-opt\frontend\components\Modals\Analyze\general-linear-model\repeated-measures\rust\pkg.
+repeated-measures rebuilt: 1838645 bytes
+   ▲ Next.js 15.5.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 43s
+   Skipping linting
+   Checking validity of types ...
+ ⚠ TypeScript project references are not fully supported. Attempting to build in incremental mode.
+   Collecting page data ...
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+   Generating static pages (6/12) 
+   Generating static pages (9/12) 
+ ✓ Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                      146 B         104 kB
+├ ○ /_not-found                             1 kB         105 kB
+├ ○ /dashboard                           3.46 kB         167 kB
+├ ○ /dashboard/data                        67 kB         503 kB
+├ ○ /dashboard/result                     816 kB        1.01 MB
+├ ○ /dashboard/variable                  16.3 kB         494 kB
+├ ○ /glm-perf-harness                      819 B         105 kB
+├ ○ /help                                 249 kB         402 kB
+└ ○ /landing                             53.2 kB         184 kB
++ First Load JS shared by all             104 kB
+  ├ chunks/5a9f5be3-0cce9cfe269d7c3d.js  54.2 kB
+  ├ chunks/9217-0e2e6e1089594ceb.js      45.9 kB
+  └ other shared chunks (total)          4.16 kB
+
+
+○  (Static)  prerendered as static content
+
+worktree ready: D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-opt (HEAD e48a35ce, BUILD_ID 
+hjdx8kcoQ7ewabafCpHoO)

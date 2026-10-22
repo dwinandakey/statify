@@ -1,0 +1,441 @@
+[
+ {
+  "variant": "capture",
+  "run": 1,
+  "clean": "none",
+  "e2eMs": 18708,
+  "workerMs": 18420,
+  "postMs": 185,
+  "before": {
+   "heapUsedMB": 172.6,
+   "heapTotalMB": 333.5,
+   "storageMB": 16.6
+  },
+  "after": {
+   "heapUsedMB": 77.6,
+   "heapTotalMB": 104.4,
+   "storageMB": 16.7,
+   "capturedChars": 7558248
+  },
+  "postTrace": {
+   "windowMs": 185,
+   "gcMs": 56,
+   "idbMs": 93,
+   "top": [
+    [
+     "RunTask",
+     183
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     182
+    ],
+    [
+     "v8.callFunction",
+     174
+    ],
+    [
+     "FunctionCall",
+     128
+    ],
+    [
+     "EventDispatch",
+     60
+    ],
+    [
+     "ParseAuthorStyleSheet",
+     50
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     46
+    ],
+    [
+     "Receive mojo message",
+     45
+    ],
+    [
+     "idb:IDBTransaction::onComplete",
+     41
+    ],
+    [
+     "idb:IDBTransaction::dispatchEvent",
+     41
+    ],
+    [
+     "Layout",
+     13
+    ],
+    [
+     "EvaluateScript",
+     10
+    ]
+   ]
+  }
+ },
+ {
+  "variant": "capture",
+  "run": 2,
+  "clean": "button",
+  "e2eMs": 24457,
+  "workerMs": 15445,
+  "postMs": 8877,
+  "before": {
+   "heapUsedMB": 58.9,
+   "heapTotalMB": 74.9,
+   "storageMB": 16.7
+  },
+  "after": {
+   "heapUsedMB": 55,
+   "heapTotalMB": 71.2,
+   "storageMB": 22.3
+  },
+  "postTrace": {
+   "windowMs": 8877,
+   "gcMs": 249,
+   "idbMs": 522,
+   "top": [
+    [
+     "RunTask",
+     1107
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     929
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     592
+    ],
+    [
+     "Receive mojo reply",
+     459
+    ],
+    [
+     "idb:IDBRequest::SendResult",
+     272
+    ],
+    [
+     "idb:IDBRequest::dispatchEvent",
+     197
+    ],
+    [
+     "v8.callFunction",
+     86
+    ],
+    [
+     "FunctionCall",
+     56
+    ],
+    [
+     "UpdateLayoutTree",
+     37
+    ],
+    [
+     "BlinkScheduler_PerformMicrotaskCheckpoint",
+     36
+    ],
+    [
+     "gc:MajorGC",
+     34
+    ],
+    [
+     "gc:V8.GCFinalizeMCReduceMemory",
+     34
+    ]
+   ]
+  }
+ },
+ {
+  "variant": "capture",
+  "run": 3,
+  "clean": "button",
+  "e2eMs": 15288,
+  "workerMs": 15122,
+  "postMs": 47,
+  "before": {
+   "heapUsedMB": 55.7,
+   "heapTotalMB": 68.3,
+   "storageMB": 22.3
+  },
+  "after": {
+   "heapUsedMB": 85.1,
+   "heapTotalMB": 107.7,
+   "storageMB": 22.3
+  },
+  "postTrace": {
+   "windowMs": 47,
+   "gcMs": 0,
+   "idbMs": 47,
+   "top": [
+    [
+     "v8.callFunction",
+     48
+    ],
+    [
+     "RunTask",
+     43
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     43
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     28
+    ],
+    [
+     "FunctionCall",
+     26
+    ],
+    [
+     "Receive mojo message",
+     22
+    ],
+    [
+     "idb:IDBTransaction::onComplete",
+     22
+    ],
+    [
+     "idb:IDBTransaction::dispatchEvent",
+     22
+    ],
+    [
+     "UpdateLayoutTree",
+     4
+    ],
+    [
+     "Paint",
+     3
+    ],
+    [
+     "Layout",
+     3
+    ],
+    [
+     "PrePaint",
+     1
+    ]
+   ]
+  }
+ },
+ {
+  "variant": "nocapture",
+  "run": 1,
+  "clean": "none",
+  "e2eMs": 18323,
+  "workerMs": 18082,
+  "postMs": 131,
+  "before": {
+   "heapUsedMB": 149.3,
+   "heapTotalMB": 207.2,
+   "storageMB": 17.2
+  },
+  "after": {
+   "heapUsedMB": 77.2,
+   "heapTotalMB": 97.1,
+   "storageMB": 17.3
+  },
+  "postTrace": {
+   "windowMs": 131,
+   "gcMs": 48,
+   "idbMs": 80,
+   "top": [
+    [
+     "RunTask",
+     129
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     128
+    ],
+    [
+     "v8.callFunction",
+     109
+    ],
+    [
+     "FunctionCall",
+     69
+    ],
+    [
+     "Receive mojo message",
+     39
+    ],
+    [
+     "idb:IDBTransaction::onComplete",
+     35
+    ],
+    [
+     "idb:IDBTransaction::dispatchEvent",
+     34
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     33
+    ],
+    [
+     "Layout",
+     12
+    ],
+    [
+     "UpdateLayoutTree",
+     10
+    ],
+    [
+     "EvaluateScript",
+     9
+    ],
+    [
+     "v8.run",
+     9
+    ]
+   ]
+  }
+ },
+ {
+  "variant": "nocapture",
+  "run": 2,
+  "clean": "button",
+  "e2eMs": 30825,
+  "workerMs": 15270,
+  "postMs": 15443,
+  "before": {
+   "heapUsedMB": 54.7,
+   "heapTotalMB": 66.2,
+   "storageMB": 17.3
+  },
+  "after": {
+   "heapUsedMB": 54.7,
+   "heapTotalMB": 65.7,
+   "storageMB": 24.5
+  },
+  "postTrace": {
+   "windowMs": 15443,
+   "gcMs": 361,
+   "idbMs": 542,
+   "top": [
+    [
+     "RunTask",
+     1309
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     1100
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     653
+    ],
+    [
+     "Receive mojo reply",
+     492
+    ],
+    [
+     "idb:IDBRequest::SendResult",
+     285
+    ],
+    [
+     "idb:IDBRequest::dispatchEvent",
+     204
+    ],
+    [
+     "v8.callFunction",
+     93
+    ],
+    [
+     "FunctionCall",
+     63
+    ],
+    [
+     "UpdateLayoutTree",
+     58
+    ],
+    [
+     "gc:V8.GCIncrementalMarking",
+     49
+    ],
+    [
+     "gc:V8.GC_MC_INCREMENTAL",
+     48
+    ],
+    [
+     "gc:MajorGC",
+     47
+    ]
+   ]
+  }
+ },
+ {
+  "variant": "nocapture",
+  "run": 3,
+  "clean": "button",
+  "e2eMs": 15090,
+  "workerMs": 14938,
+  "postMs": 45,
+  "before": {
+   "heapUsedMB": 54.5,
+   "heapTotalMB": 65.2,
+   "storageMB": 24.5
+  },
+  "after": {
+   "heapUsedMB": 82.2,
+   "heapTotalMB": 105.2,
+   "storageMB": 24.5
+  },
+  "postTrace": {
+   "windowMs": 45,
+   "gcMs": 0,
+   "idbMs": 43,
+   "top": [
+    [
+     "v8.callFunction",
+     46
+    ],
+    [
+     "RunTask",
+     43
+    ],
+    [
+     "ThreadControllerImpl::RunTask",
+     42
+    ],
+    [
+     "SimpleWatcher::OnHandleReady",
+     26
+    ],
+    [
+     "FunctionCall",
+     24
+    ],
+    [
+     "Receive mojo message",
+     20
+    ],
+    [
+     "idb:IDBTransaction::onComplete",
+     20
+    ],
+    [
+     "idb:IDBTransaction::dispatchEvent",
+     20
+    ],
+    [
+     "UpdateLayoutTree",
+     4
+    ],
+    [
+     "Paint",
+     3
+    ],
+    [
+     "Layout",
+     3
+    ],
+    [
+     "HandlePostMessage",
+     3
+    ]
+   ]
+  }
+ }
+]

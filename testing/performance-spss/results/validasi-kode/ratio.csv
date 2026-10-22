@@ -1,0 +1,4 @@
+proc,n,spss_median_s,statify_compute_median_s,ratio_statify_per_spss,catatan
+mv1,10000,0.0990,1.5834,15.99,
+mv2,10000,0.1600,3.4317,21.45,
+rm,10000,0.0940,0.2739,2.91,

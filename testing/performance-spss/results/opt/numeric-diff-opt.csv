@@ -1,0 +1,13 @@
+cell,numeric_values,only_in_prod,only_in_opt,identical,max_abs_diff,at,max_rel_diff,at_rel
+mv1-n100,539,0,0,520,1.074e-13,.levene_test[3].levene[2].significance,2.166e-13,.levene_test[3].levene[2].significance
+mv1-n1000,539,0,0,517,3.997e-15,.levene_test[1].levene[0].levene_statistic,1.752e-15,.levene_test[1].levene[0].levene_statistic
+mv1-n10000,539,0,0,508,3.638e-12,.levene_test[0].levene[2].df2,7.274e-12,.levene_test[1].levene[2].significance
+mv1-n100000,539,0,0,508,4.366e-11,.levene_test[2].levene[2].df2,1.020e-13,.levene_test[0].levene[1].significance
+mv2-n100,822,0,0,795,2.842e-14,.levene_test[2].levene[2].df2,1.295e-14,.levene_test[0].levene[2].significance
+mv2-n1000,822,0,0,790,3.423e-13,.levene_test[0].levene[2].significance,1.391e-12,.levene_test[0].levene[2].significance
+mv2-n10000,822,0,0,792,7.276e-12,.levene_test[2].levene[2].df2,2.574e-12,.levene_test[2].levene[2].significance
+mv2-n100000,822,0,0,789,7.276e-11,.levene_test[1].levene[2].df2,8.764e-11,.levene_test[1].levene[2].significance
+rm-n100,507,0,0,507,0.000e+00,".univariate_tests.tests.t4_(4,score)[5].sum_of_squares",0.000e+00,".univariate_tests.tests.t1_(1,score)[3].df"
+rm-n1000,507,0,0,507,0.000e+00,".univariate_tests.tests.t4_(4,score)[5].sum_of_squares",0.000e+00,".univariate_tests.tests.t1_(1,score)[3].df"
+rm-n10000,507,0,0,507,0.000e+00,".univariate_tests.tests.t4_(4,score)[5].sum_of_squares",0.000e+00,".univariate_tests.tests.t1_(1,score)[3].df"
+rm-n100000,507,0,0,507,0.000e+00,".univariate_tests.tests.t4_(4,score)[5].sum_of_squares",0.000e+00,".univariate_tests.tests.t1_(1,score)[3].df"

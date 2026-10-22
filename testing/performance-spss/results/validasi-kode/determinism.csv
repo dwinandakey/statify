@@ -1,0 +1,7 @@
+measure,cell,distinct_result_hashes,distinct_sorted_key_hashes,hashes
+statify_e2e,mv1-n10000,4,4,9c902a6bd757 cbc39851255b e9947e18bd85 ff7e54e59043
+statify_e2e,mv2-n10000,4,4,037c69cac1ff 924290e88782 b08328dd056a faf9c8fafbde
+statify_e2e,rm-n10000,1,1,be208acc9542
+statify_compute,mv1-n10000,4,4,9c902a6bd757 cbc39851255b e9947e18bd85 ff7e54e59043
+statify_compute,mv2-n10000,4,4,037c69cac1ff 924290e88782 b08328dd056a faf9c8fafbde
+statify_compute,rm-n10000,1,1,be208acc9542

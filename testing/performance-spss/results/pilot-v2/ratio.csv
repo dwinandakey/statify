@@ -1,0 +1,4 @@
+proc,n,spss_median_s,statify_compute_median_s,ratio_statify_per_spss,catatan
+mv1,100,0.0040,0.0281,7.02,di bawah resolusi pengukuran
+mv2,100,0.0070,0.0564,8.06,di bawah resolusi pengukuran
+rm,100,0.0040,0.0236,5.90,di bawah resolusi pengukuran

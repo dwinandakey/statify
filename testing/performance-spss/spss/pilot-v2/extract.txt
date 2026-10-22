@@ -1,0 +1,9 @@
+﻿mv1-n100     run  1 rows=100 elapsed=     7.0 ms (00:00:00.01) cpu=     0.0 ms
+mv1-n100     run  2 rows=100 elapsed=     4.0 ms (00:00:00.00) cpu=     0.0 ms
+mv1-n100     run  3 rows=100 elapsed=     4.0 ms (00:00:00.00) cpu=     0.0 ms
+mv2-n100     run  1 rows=100 elapsed=    10.0 ms (00:00:00.01) cpu=    15.0 ms
+mv2-n100     run  2 rows=100 elapsed=     7.0 ms (00:00:00.01) cpu=     0.0 ms
+mv2-n100     run  3 rows=100 elapsed=     7.0 ms (00:00:00.01) cpu=     0.0 ms
+rm-n100      run  1 rows=100 elapsed=     7.0 ms (00:00:00.01) cpu=    16.0 ms
+rm-n100      run  2 rows=100 elapsed=     6.0 ms (00:00:00.01) cpu=    15.0 ms
+rm-n100      run  3 rows=100 elapsed=     2.0 ms (00:00:00.00) cpu=     0.0 ms

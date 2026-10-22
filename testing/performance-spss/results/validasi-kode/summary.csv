@@ -1,0 +1,16 @@
+proc,n,measure,measure_label,runs,median,q1,q3,min,max
+mv1,10000,spss_elapsed,SPSS Elapsed Time,3,0.0990,0.0945,0.1045,0.0900,0.1100
+mv1,10000,spss_processor,SPSS Processor Time,3,0.0940,0.0860,0.1120,0.0780,0.1300
+mv1,10000,statify_compute,Statify komputasi saja (di dalam worker),3,1.5834,1.5438,1.6175,1.5043,1.6517
+mv1,10000,statify_compute_roundtrip,Statify komputasi + transfer worker,3,1.5875,1.5479,1.6217,1.5083,1.6558
+mv1,10000,statify_e2e,Statify ujung ke ujung,3,1.5425,1.5365,1.5520,1.5304,1.5614
+mv2,10000,spss_elapsed,SPSS Elapsed Time,3,0.1600,0.1550,0.1600,0.1500,0.1600
+mv2,10000,spss_processor,SPSS Processor Time,3,0.1600,0.1600,0.1650,0.1600,0.1700
+mv2,10000,statify_compute,Statify komputasi saja (di dalam worker),3,3.4317,3.4173,3.4547,3.4028,3.4777
+mv2,10000,statify_compute_roundtrip,Statify komputasi + transfer worker,3,3.4370,3.4226,3.4604,3.4083,3.4838
+mv2,10000,statify_e2e,Statify ujung ke ujung,3,3.4755,3.4677,3.4776,3.4598,3.4796
+rm,10000,spss_elapsed,SPSS Elapsed Time,3,0.0940,0.0920,0.1020,0.0900,0.1100
+rm,10000,spss_processor,SPSS Processor Time,3,0.0940,0.0940,0.1020,0.0940,0.1100
+rm,10000,statify_compute,Statify komputasi saja (di dalam worker),3,0.2739,0.2702,0.2801,0.2666,0.2863
+rm,10000,statify_compute_roundtrip,Statify komputasi + transfer worker,3,0.2777,0.2738,0.2838,0.2699,0.2900
+rm,10000,statify_e2e,Statify ujung ke ujung,3,0.3971,0.3940,0.4012,0.3910,0.4053

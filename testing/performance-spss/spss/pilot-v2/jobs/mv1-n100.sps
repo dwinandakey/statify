@@ -1,0 +1,38 @@
+* Encoding: UTF-8.
+* Uji performa Statify vs SPSS: mv1-n100, 3 run GLM (run 1 = pemanasan).
+* Dibuat oleh testing/performance-spss/spss/make_jobs.py.
+SET DECIMAL=DOT.
+OMS /SELECT TABLES /IF COMMANDS=['GLM'] SUBTYPES=['Notes']
+  /DESTINATION FORMAT=OXML OUTFILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\performance-spss\spss\pilot-v2\oms\mv1-n100-notes.xml'
+  /TAG='notes'.
+OMS /SELECT TABLES /IF COMMANDS=['GLM']
+  /DESTINATION FORMAT=OXML OUTFILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\performance-spss\spss\pilot-v2\oms\mv1-n100-full.xml'
+  /TAG='full'.
+GET DATA /TYPE=TXT /FILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\performance-spss\data\mv1-n100.csv' /ENCODING='UTF8'
+  /DELCASE=LINE /DELIMITERS="," /ARRANGEMENT=DELIMITED /FIRSTCASE=2
+  /VARIABLES=Y1 F12.6 Y2 F12.6 Y3 F12.6 Y4 F12.6 A A2.
+CACHE.
+EXECUTE.
+* Run 1 (pemanasan).
+GLM Y1 Y2 Y3 Y4 BY A
+  /METHOD=SSTYPE(3)
+  /INTERCEPT=INCLUDE
+  /PRINT=DESCRIPTIVE ETASQ OPOWER HOMOGENEITY
+  /CRITERIA=ALPHA(.05)
+  /DESIGN=A.
+OMSEND TAG=['full'].
+* Run 2.
+GLM Y1 Y2 Y3 Y4 BY A
+  /METHOD=SSTYPE(3)
+  /INTERCEPT=INCLUDE
+  /PRINT=DESCRIPTIVE ETASQ OPOWER HOMOGENEITY
+  /CRITERIA=ALPHA(.05)
+  /DESIGN=A.
+* Run 3.
+GLM Y1 Y2 Y3 Y4 BY A
+  /METHOD=SSTYPE(3)
+  /INTERCEPT=INCLUDE
+  /PRINT=DESCRIPTIVE ETASQ OPOWER HOMOGENEITY
+  /CRITERIA=ALPHA(.05)
+  /DESIGN=A.
+OMSEND.

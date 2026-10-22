@@ -31,5 +31,5 @@ GLM perlakuan1 perlakuan2 perlakuan3 perlakuan4
 
 * Opsional: simpan seluruh output ke Excel agar nilai bisa dibaca lengkap.
 * Hapus tanda bintang di dua baris berikut dan sesuaikan folder tujuannya.
-* OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
-*   /XLSX DOCUMENTFILE='C:\statify-spss\rm_gambar51.xlsx' OPERATION=CREATEFILE.
+OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
+/XLSX DOCUMENTFILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-rm-reference\spss-output\rm_gambar51.xlsx' OPERATION=CREATEFILE.

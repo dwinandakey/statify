@@ -1,0 +1,4 @@
+﻿rm-n100,2026-10-16T14:04:56.6945393+07:00,2026-10-16T14:05:07.8343691+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|0xFFF
+rm-n1000,2026-10-16T14:14:03.9000680+07:00,2026-10-16T14:14:14.5161858+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+rm-n10000,2026-10-16T14:16:14.5418171+07:00,2026-10-16T14:16:25.7256658+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+rm-n50000,2026-10-16T14:25:56.9414262+07:00,2026-10-16T14:26:12.2538807+07:00,0,spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF

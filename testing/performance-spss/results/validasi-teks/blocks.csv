@@ -1,0 +1,4 @@
+﻿label,order,n,software,start,end,seconds,result
+validasi-teks,1,10000,spss,2026-10-16T12:49:37.7692987+07:00,2026-10-16T12:50:09.9295629+07:00,32.2,mv1:0 mv2:0 rm:0
+validasi-teks,2,10000,statify-e2e,2026-10-16T12:50:39.9552473+07:00,2026-10-16T12:53:10.5891325+07:00,150.6,exit:0
+validasi-teks,phase2,10000,statify-compute,2026-10-16T12:57:45.3173802+07:00,2026-10-16T12:58:26.2160229+07:00,40.9,exit:0

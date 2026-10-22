@@ -1,0 +1,48 @@
+﻿2026-10-16T13:12:22.9250234+07:00 phase 1 'utama': sizes=100,1000,10000,100000 procs=mv1,mv2,rm runs=11 affinity=0xFFF cooldown=120s first=spss data=data\kode
+2026-10-16T13:12:23.4140597+07:00 SPSS block n=100 start
+2026-10-16T13:12:34.2618895+07:00   SPSS mv1-n100 exit=0 10.8 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:12:44.8930319+07:00   SPSS mv2-n100 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:12:55.5252157+07:00   SPSS rm-n100 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:12:55.5332996+07:00 cool-down 120s
+2026-10-16T13:14:55.5480606+07:00 Statify block n=100 start
+2026-10-16T13:20:14.3820648+07:00   Statify n=100 node exit=0
+2026-10-16T13:20:14.4955390+07:00 cool-down 120s
+2026-10-16T13:22:14.5126829+07:00 Statify block n=1000 start
+2026-10-16T13:27:39.5831959+07:00   Statify n=1000 node exit=0
+2026-10-16T13:27:39.7603998+07:00 cool-down 120s
+2026-10-16T13:29:39.7828031+07:00 SPSS block n=1000 start
+2026-10-16T13:29:50.3791705+07:00   SPSS mv1-n1000 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF
+2026-10-16T13:30:00.9671963+07:00   SPSS mv2-n1000 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF
+2026-10-16T13:30:11.5673861+07:00   SPSS rm-n1000 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:30:11.5673861+07:00 cool-down 120s
+2026-10-16T13:32:11.5823402+07:00 SPSS block n=10000 start
+2026-10-16T13:32:22.7564027+07:00   SPSS mv1-n10000 exit=0 11.2 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:32:34.5273244+07:00   SPSS mv2-n10000 exit=0 11.8 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:32:45.3053221+07:00   SPSS rm-n10000 exit=0 10.8 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T13:32:45.3060235+07:00 cool-down 120s
+2026-10-16T13:34:45.3106477+07:00 Statify block n=10000 start
+2026-10-16T13:41:04.9422744+07:00   Statify n=10000 node exit=0
+2026-10-16T13:41:05.0586238+07:00 cool-down 120s
+2026-10-16T13:43:05.0665004+07:00 Statify block n=100000 start
+2026-10-16T13:59:41.3308441+07:00   Statify n=100000 node exit=0
+2026-10-16T13:59:41.4880241+07:00 cool-down 120s
+2026-10-16T14:01:41.5046723+07:00 SPSS block n=100000 start
+2026-10-16T14:02:03.2897169+07:00   SPSS mv1-n100000 exit=0 21.8 s; spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF
+2026-10-16T14:02:33.8165575+07:00   SPSS mv2-n100000 exit=0 30.5 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T14:02:55.5909606+07:00   SPSS rm-n100000 exit=0 21.8 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T14:02:55.6729490+07:00 finished
+2026-10-16T14:02:55.8230641+07:00 keep-awake off
+2026-10-16T14:28:12.7645818+07:00 phase 2 'utama': worktree=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-perf sizes=100,1000,10000,100000 procs=mv1,mv2,rm runs=11 affinity=0xFFF
+2026-10-16T14:28:15.2131646+07:00 Statify compute block n=100 start
+2026-10-16T14:28:56.0567920+07:00   compute n=100 node exit=0
+2026-10-16T14:28:56.0582975+07:00 cool-down 120s
+2026-10-16T14:30:56.0682984+07:00 Statify compute block n=1000 start
+2026-10-16T14:31:41.9812412+07:00   compute n=1000 node exit=0
+2026-10-16T14:31:41.9812412+07:00 cool-down 120s
+2026-10-16T14:33:41.9852484+07:00 Statify compute block n=10000 start
+2026-10-16T14:35:26.1135971+07:00   compute n=10000 node exit=0
+2026-10-16T14:35:26.1135971+07:00 cool-down 120s
+2026-10-16T14:37:26.1242602+07:00 Statify compute block n=100000 start
+2026-10-16T14:47:27.1060412+07:00   compute n=100000 node exit=0
+2026-10-16T14:47:27.1060412+07:00 finished
+2026-10-16T14:47:27.2153766+07:00 server stopped, keep-awake off

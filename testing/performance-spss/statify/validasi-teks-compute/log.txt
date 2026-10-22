@@ -1,0 +1,20 @@
+[2026-10-16T05:57:45.854Z] start: chromium 143.0.7499.4; procs=mv1,mv2,rm sizes=10000 runs=4
+[2026-10-16T05:57:46.042Z] cell mv1-n10000: payload loaded (0.8 MB)
+[2026-10-16T05:57:50.007Z] mv1-n10000 run 1/4 warmup status=ok in-worker=1823.43 post=3.85 roundtrip=1836.47
+[2026-10-16T05:57:52.644Z] mv1-n10000 run 2/4 measured status=ok in-worker=1616.42 post=3.62 roundtrip=1620.44
+[2026-10-16T05:57:55.273Z] mv1-n10000 run 3/4 measured status=ok in-worker=1604.44 post=3.34 roundtrip=1608.56
+[2026-10-16T05:57:57.876Z] mv1-n10000 run 4/4 measured status=ok in-worker=1582.70 post=3.46 roundtrip=1586.46
+[2026-10-16T05:57:58.344Z] cell mv1-n10000 done in 12 s
+[2026-10-16T05:57:58.523Z] cell mv2-n10000: payload loaded (0.9 MB)
+[2026-10-16T05:58:04.444Z] mv2-n10000 run 1/4 warmup status=ok in-worker=3815.21 post=6.14 roundtrip=3829.06
+[2026-10-16T05:58:08.954Z] mv2-n10000 run 2/4 measured status=ok in-worker=3487.00 post=5.97 roundtrip=3493.50
+[2026-10-16T05:58:13.502Z] mv2-n10000 run 3/4 measured status=ok in-worker=3524.51 post=5.05 roundtrip=3529.91
+[2026-10-16T05:58:17.995Z] mv2-n10000 run 4/4 measured status=ok in-worker=3482.00 post=5.17 roundtrip=3487.59
+[2026-10-16T05:58:18.470Z] cell mv2-n10000 done in 20 s
+[2026-10-16T05:58:18.641Z] cell rm-n10000: payload loaded (1.2 MB)
+[2026-10-16T05:58:21.456Z] rm-n10000 run 1/4 warmup status=ok in-worker=678.39 post=3.68 roundtrip=689.56
+[2026-10-16T05:58:22.880Z] rm-n10000 run 2/4 measured status=ok in-worker=409.39 post=3.18 roundtrip=412.87
+[2026-10-16T05:58:24.281Z] rm-n10000 run 3/4 measured status=ok in-worker=389.91 post=2.78 roundtrip=393.00
+[2026-10-16T05:58:25.678Z] rm-n10000 run 4/4 measured status=ok in-worker=385.59 post=2.82 roundtrip=388.87
+[2026-10-16T05:58:26.170Z] cell rm-n10000 done in 8 s
+[2026-10-16T05:58:26.200Z] finished

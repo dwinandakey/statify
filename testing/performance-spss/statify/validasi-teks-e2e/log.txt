@@ -1,0 +1,26 @@
+[2026-10-16T05:50:42.639Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; procs=mv1,mv2,rm sizes=10000 runs=4
+[2026-10-16T05:50:42.692Z] cell mv1-n10000: import mv1-n10000.csv
+[2026-10-16T05:50:45.933Z] cell mv1-n10000: imported 10000 rows in 2682 ms (not timed)
+[2026-10-16T05:50:58.775Z] cell mv1-n10000: payload saved (0.8 MB, sha1 9c767df682c3), worker http://localhost:3101/_next/static/chunks/2609.a7eabd6c63404352.js
+[2026-10-16T05:50:58.779Z] mv1-n10000 run 1/4 warmup mode=worker status=ok e2e=1960.49 (prep 5.80 ser 4.19 worker 1862.55 post 87.95)
+[2026-10-16T05:51:10.536Z] mv1-n10000 run 2/4 measured mode=worker status=ok e2e=1661.52 (prep 5.81 ser 3.74 worker 1603.39 post 48.59)
+[2026-10-16T05:51:22.446Z] mv1-n10000 run 3/4 measured mode=worker status=ok e2e=1739.82 (prep 8.37 ser 4.03 worker 1670.45 post 56.97)
+[2026-10-16T05:51:34.250Z] mv1-n10000 run 4/4 measured mode=worker status=ok e2e=1711.13 (prep 8.56 ser 4.06 worker 1662.16 post 36.34)
+[2026-10-16T05:51:34.788Z] cell mv1-n10000 done in 52 s
+[2026-10-16T05:51:34.824Z] cell mv2-n10000: import mv2-n10000.csv
+[2026-10-16T05:51:38.149Z] cell mv2-n10000: imported 10000 rows in 2745 ms (not timed)
+[2026-10-16T05:51:52.632Z] cell mv2-n10000: payload saved (0.9 MB, sha1 a4de7edb48e6), worker http://localhost:3101/_next/static/chunks/2609.a7eabd6c63404352.js
+[2026-10-16T05:51:52.634Z] mv2-n10000 run 1/4 warmup mode=worker status=ok e2e=3950.75 (prep 5.95 ser 6.01 worker 3851.96 post 86.83)
+[2026-10-16T05:52:06.350Z] mv2-n10000 run 2/4 measured mode=worker status=ok e2e=3521.13 (prep 5.89 ser 5.82 worker 3463.22 post 46.20)
+[2026-10-16T05:52:19.997Z] mv2-n10000 run 3/4 measured mode=worker status=ok e2e=3516.31 (prep 5.71 ser 5.56 worker 3453.12 post 51.92)
+[2026-10-16T05:52:33.844Z] mv2-n10000 run 4/4 measured mode=worker status=ok e2e=3612.71 (prep 8.43 ser 6.01 worker 3543.47 post 54.81)
+[2026-10-16T05:52:34.324Z] cell mv2-n10000 done in 60 s
+[2026-10-16T05:52:34.362Z] cell rm-n10000: import rm-n10000.csv
+[2026-10-16T05:52:37.570Z] cell rm-n10000: imported 10000 rows in 2685 ms (not timed)
+[2026-10-16T05:52:46.634Z] cell rm-n10000: payload saved (1.2 MB, sha1 64b88ce9edfc), worker http://localhost:3101/_next/static/chunks/6745.db21a01b3700cb7d.js
+[2026-10-16T05:52:46.646Z] rm-n10000 run 1/4 warmup mode=worker status=ok e2e=879.36 (prep 6.77 ser 3.83 worker 683.10 post 185.67)
+[2026-10-16T05:52:54.472Z] rm-n10000 run 2/4 measured mode=worker status=ok e2e=544.50 (prep 6.50 ser 3.07 worker 430.94 post 104.00)
+[2026-10-16T05:53:02.224Z] rm-n10000 run 3/4 measured mode=worker status=ok e2e=530.62 (prep 6.58 ser 3.24 worker 408.54 post 112.25)
+[2026-10-16T05:53:09.905Z] rm-n10000 run 4/4 measured mode=worker status=ok e2e=542.20 (prep 8.50 ser 3.24 worker 400.57 post 129.89)
+[2026-10-16T05:53:10.383Z] cell rm-n10000 done in 36 s
+[2026-10-16T05:53:10.411Z] finished

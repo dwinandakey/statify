@@ -1,0 +1,15 @@
+﻿2026-10-16T12:33:38.2573475+07:00 phase 1 'pilot-v2': sizes=100 procs=mv1,mv2,rm runs=3 affinity=0xFFF cooldown=10s first=spss data=data
+2026-10-16T12:33:38.7867456+07:00 SPSS block n=100 start
+2026-10-16T12:33:49.5494312+07:00   SPSS mv1-n100 exit=0 10.7 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T12:34:00.2002889+07:00   SPSS mv2-n100 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T12:34:10.8339100+07:00   SPSS rm-n100 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T12:34:10.8444899+07:00 cool-down 10s
+2026-10-16T12:34:20.8511482+07:00 Statify block n=100 start
+2026-10-16T12:35:57.8873673+07:00   Statify n=100 node exit=0
+2026-10-16T12:35:58.1567949+07:00 finished
+2026-10-16T12:35:58.2858551+07:00 keep-awake off
+2026-10-16T12:35:58.6421116+07:00 phase 2 'pilot-v2': worktree=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-perf sizes=100 procs=mv1,mv2,rm runs=3 affinity=0xFFF
+2026-10-16T12:36:01.1370708+07:00 Statify compute block n=100 start
+2026-10-16T12:36:17.6212508+07:00   compute n=100 node exit=0
+2026-10-16T12:36:17.6212508+07:00 finished
+2026-10-16T12:36:17.7281234+07:00 server stopped, keep-awake off

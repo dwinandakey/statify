@@ -1,0 +1,47 @@
+[2026-10-16T06:14:58.197Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; procs=mv1,mv2,rm sizes=100 runs=11
+[2026-10-16T06:14:58.247Z] cell mv1-n100: import mv1-n100.csv
+[2026-10-16T06:15:00.778Z] cell mv1-n100: imported 100 rows in 1980 ms (not timed)
+[2026-10-16T06:15:11.115Z] cell mv1-n100: payload saved (0.0 MB, sha1 1226aae7fd03), worker http://localhost:3101/_next/static/chunks/2609.a7eabd6c63404352.js
+[2026-10-16T06:15:11.118Z] mv1-n100 run 1/11 warmup mode=worker status=ok e2e=232.08 (prep 1.37 ser 0.07 worker 146.26 post 84.38)
+[2026-10-16T06:15:21.230Z] mv1-n100 run 2/11 measured mode=worker status=ok e2e=63.55 (prep 0.21 ser 0.06 worker 28.39 post 34.88)
+[2026-10-16T06:15:31.389Z] mv1-n100 run 3/11 measured mode=worker status=ok e2e=59.50 (prep 0.26 ser 0.07 worker 25.03 post 34.14)
+[2026-10-16T06:15:41.556Z] mv1-n100 run 4/11 measured mode=worker status=ok e2e=62.00 (prep 0.19 ser 0.07 worker 25.48 post 36.26)
+[2026-10-16T06:15:51.770Z] mv1-n100 run 5/11 measured mode=worker status=ok e2e=59.91 (prep 0.22 ser 0.06 worker 21.94 post 37.68)
+[2026-10-16T06:16:01.936Z] mv1-n100 run 6/11 measured mode=worker status=ok e2e=63.08 (prep 0.19 ser 0.07 worker 22.17 post 40.65)
+[2026-10-16T06:16:12.124Z] mv1-n100 run 7/11 measured mode=worker status=ok e2e=62.19 (prep 0.22 ser 0.07 worker 21.30 post 40.60)
+[2026-10-16T06:16:22.328Z] mv1-n100 run 8/11 measured mode=worker status=ok e2e=71.89 (prep 0.18 ser 0.08 worker 22.08 post 49.55)
+[2026-10-16T06:16:32.464Z] mv1-n100 run 9/11 measured mode=worker status=ok e2e=71.92 (prep 0.21 ser 0.05 worker 20.37 post 51.28)
+[2026-10-16T06:16:42.617Z] mv1-n100 run 10/11 measured mode=worker status=ok e2e=57.67 (prep 0.19 ser 0.10 worker 20.83 post 36.54)
+[2026-10-16T06:16:52.768Z] mv1-n100 run 11/11 measured mode=worker status=ok e2e=67.84 (prep 0.20 ser 0.08 worker 20.68 post 46.89)
+[2026-10-16T06:16:53.257Z] cell mv1-n100 done in 115 s
+[2026-10-16T06:16:53.293Z] cell mv2-n100: import mv2-n100.csv
+[2026-10-16T06:16:55.765Z] cell mv2-n100: imported 100 rows in 1945 ms (not timed)
+[2026-10-16T06:17:06.426Z] cell mv2-n100: payload saved (0.0 MB, sha1 5c20d32d590c), worker http://localhost:3101/_next/static/chunks/2609.a7eabd6c63404352.js
+[2026-10-16T06:17:06.428Z] mv2-n100 run 1/11 warmup mode=worker status=ok e2e=267.01 (prep 0.80 ser 0.07 worker 178.27 post 87.86)
+[2026-10-16T06:17:16.739Z] mv2-n100 run 2/11 measured mode=worker status=ok e2e=110.32 (prep 0.24 ser 0.06 worker 54.00 post 56.02)
+[2026-10-16T06:17:27.040Z] mv2-n100 run 3/11 measured mode=worker status=ok e2e=94.08 (prep 0.89 ser 0.07 worker 49.18 post 43.93)
+[2026-10-16T06:17:37.347Z] mv2-n100 run 4/11 measured mode=worker status=ok e2e=106.28 (prep 0.24 ser 0.07 worker 46.47 post 59.50)
+[2026-10-16T06:17:47.588Z] mv2-n100 run 5/11 measured mode=worker status=ok e2e=106.67 (prep 0.20 ser 0.06 worker 45.82 post 60.58)
+[2026-10-16T06:17:57.810Z] mv2-n100 run 6/11 measured mode=worker status=ok e2e=96.82 (prep 0.24 ser 0.08 worker 44.69 post 51.80)
+[2026-10-16T06:18:07.966Z] mv2-n100 run 7/11 measured mode=worker status=ok e2e=92.27 (prep 0.20 ser 0.13 worker 43.47 post 48.48)
+[2026-10-16T06:18:18.076Z] mv2-n100 run 8/11 measured mode=worker status=ok e2e=91.59 (prep 0.20 ser 0.10 worker 46.73 post 44.56)
+[2026-10-16T06:18:28.393Z] mv2-n100 run 9/11 measured mode=worker status=ok e2e=92.18 (prep 0.22 ser 0.07 worker 45.45 post 46.45)
+[2026-10-16T06:18:38.662Z] mv2-n100 run 10/11 measured mode=worker status=ok e2e=92.68 (prep 0.21 ser 0.08 worker 47.00 post 45.39)
+[2026-10-16T06:18:48.815Z] mv2-n100 run 11/11 measured mode=worker status=ok e2e=89.17 (prep 0.16 ser 0.09 worker 45.25 post 43.66)
+[2026-10-16T06:18:49.326Z] cell mv2-n100 done in 116 s
+[2026-10-16T06:18:49.361Z] cell rm-n100: import rm-n100.csv
+[2026-10-16T06:18:51.734Z] cell rm-n100: imported 100 rows in 1844 ms (not timed)
+[2026-10-16T06:19:00.083Z] cell rm-n100: payload saved (0.0 MB, sha1 ccf249df87c7), worker http://localhost:3101/_next/static/chunks/6745.db21a01b3700cb7d.js
+[2026-10-16T06:19:00.095Z] rm-n100 run 1/11 warmup mode=worker status=ok e2e=356.95 (prep 0.92 ser 0.05 worker 197.52 post 158.46)
+[2026-10-16T06:19:07.460Z] rm-n100 run 2/11 measured mode=worker status=ok e2e=143.82 (prep 0.26 ser 0.06 worker 26.32 post 117.18)
+[2026-10-16T06:19:14.811Z] rm-n100 run 3/11 measured mode=worker status=ok e2e=136.91 (prep 0.29 ser 0.05 worker 21.30 post 115.25)
+[2026-10-16T06:19:22.240Z] rm-n100 run 4/11 measured mode=worker status=ok e2e=126.75 (prep 0.26 ser 0.05 worker 20.13 post 106.30)
+[2026-10-16T06:19:29.512Z] rm-n100 run 5/11 measured mode=worker status=ok e2e=130.93 (prep 0.21 ser 0.04 worker 17.87 post 112.81)
+[2026-10-16T06:19:36.837Z] rm-n100 run 6/11 measured mode=worker status=ok e2e=131.15 (prep 0.20 ser 0.05 worker 17.71 post 113.20)
+[2026-10-16T06:19:44.232Z] rm-n100 run 7/11 measured mode=worker status=ok e2e=119.75 (prep 0.25 ser 0.05 worker 17.04 post 102.41)
+[2026-10-16T06:19:51.652Z] rm-n100 run 8/11 measured mode=worker status=ok e2e=128.98 (prep 0.18 ser 0.06 worker 17.46 post 111.27)
+[2026-10-16T06:19:59.055Z] rm-n100 run 9/11 measured mode=worker status=ok e2e=128.21 (prep 0.21 ser 0.07 worker 15.05 post 112.87)
+[2026-10-16T06:20:06.525Z] rm-n100 run 10/11 measured mode=worker status=ok e2e=127.29 (prep 0.22 ser 0.06 worker 14.82 post 112.20)
+[2026-10-16T06:20:13.871Z] rm-n100 run 11/11 measured mode=worker status=ok e2e=138.58 (prep 0.21 ser 0.06 worker 16.51 post 121.80)
+[2026-10-16T06:20:14.347Z] cell rm-n100 done in 85 s
+[2026-10-16T06:20:14.374Z] finished

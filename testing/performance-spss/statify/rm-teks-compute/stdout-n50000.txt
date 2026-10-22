@@ -1,0 +1,15 @@
+[2026-10-16T07:56:16.964Z] start: chromium 143.0.7499.4; procs=rm sizes=50000 runs=11
+[2026-10-16T07:56:17.218Z] cell rm-n50000: payload loaded (5.9 MB)
+[2026-10-16T07:56:21.732Z] rm-n50000 run 1/11 warmup status=ok in-worker=2294.18 post=18.56 roundtrip=2321.19
+[2026-10-16T07:56:24.623Z] rm-n50000 run 2/11 measured status=ok in-worker=1862.36 post=17.71 roundtrip=1880.44
+[2026-10-16T07:56:27.507Z] rm-n50000 run 3/11 measured status=ok in-worker=1848.41 post=18.42 roundtrip=1867.13
+[2026-10-16T07:56:30.381Z] rm-n50000 run 4/11 measured status=ok in-worker=1836.97 post=17.89 roundtrip=1855.26
+[2026-10-16T07:56:33.225Z] rm-n50000 run 5/11 measured status=ok in-worker=1812.31 post=16.90 roundtrip=1829.56
+[2026-10-16T07:56:36.092Z] rm-n50000 run 6/11 measured status=ok in-worker=1839.04 post=16.35 roundtrip=1855.78
+[2026-10-16T07:56:38.927Z] rm-n50000 run 7/11 measured status=ok in-worker=1803.21 post=17.00 roundtrip=1820.54
+[2026-10-16T07:56:41.800Z] rm-n50000 run 8/11 measured status=ok in-worker=1845.08 post=16.21 roundtrip=1861.71
+[2026-10-16T07:56:44.632Z] rm-n50000 run 9/11 measured status=ok in-worker=1801.15 post=17.79 roundtrip=1819.26
+[2026-10-16T07:56:47.471Z] rm-n50000 run 10/11 measured status=ok in-worker=1816.90 post=16.51 roundtrip=1833.77
+[2026-10-16T07:56:50.344Z] rm-n50000 run 11/11 measured status=ok in-worker=1835.16 post=16.79 roundtrip=1852.33
+[2026-10-16T07:56:50.842Z] cell rm-n50000 done in 34 s
+[2026-10-16T07:56:50.874Z] finished

@@ -1,0 +1,33 @@
+build,cell,kategori,ms,pct,total_ms
+produksi,mv1-n10000,hashing & HashMap,843.7,54.6,1545.6
+produksi,mv1-n10000,alokasi memori,138.2,8.9,1545.6
+produksi,mv1-n10000,merge_records,205.4,13.3,1545.6
+produksi,mv1-n10000,format angka→teks,34.7,2.2,1545.6
+produksi,mv1-n10000,aljabar matriks (nalgebra),71.9,4.7,1545.6
+produksi,mv1-n10000,"pembuatan Error JS (serde, teks)",0.0,0.0,1545.6
+produksi,mv1-n10000,(garbage collector)/(program)/(idle),0.9,0.1,1545.6
+produksi,mv1-n10000,lainnya,250.8,16.2,1545.6
+produksi,mv2-n10000,hashing & HashMap,1889.9,53.0,3568.7
+produksi,mv2-n10000,alokasi memori,423.4,11.9,3568.7
+produksi,mv2-n10000,merge_records,396.5,11.1,3568.7
+produksi,mv2-n10000,format angka→teks,122.9,3.4,3568.7
+produksi,mv2-n10000,aljabar matriks (nalgebra),180.5,5.1,3568.7
+produksi,mv2-n10000,"pembuatan Error JS (serde, teks)",0.0,0.0,3568.7
+produksi,mv2-n10000,(garbage collector)/(program)/(idle),1.9,0.1,3568.7
+produksi,mv2-n10000,lainnya,553.6,15.5,3568.7
+teroptimasi,mv1-n10000,hashing & HashMap,151.4,36.3,417.0
+teroptimasi,mv1-n10000,alokasi memori,81.6,19.6,417.0
+teroptimasi,mv1-n10000,merge_records,50.4,12.1,417.0
+teroptimasi,mv1-n10000,format angka→teks,41.0,9.8,417.0
+teroptimasi,mv1-n10000,aljabar matriks (nalgebra),1.6,0.4,417.0
+teroptimasi,mv1-n10000,"pembuatan Error JS (serde, teks)",0.0,0.0,417.0
+teroptimasi,mv1-n10000,(garbage collector)/(program)/(idle),0.0,0.0,417.0
+teroptimasi,mv1-n10000,lainnya,91.0,21.8,417.0
+teroptimasi,mv2-n10000,hashing & HashMap,327.7,35.8,916.6
+teroptimasi,mv2-n10000,alokasi memori,157.5,17.2,916.6
+teroptimasi,mv2-n10000,merge_records,87.9,9.6,916.6
+teroptimasi,mv2-n10000,format angka→teks,128.8,14.1,916.6
+teroptimasi,mv2-n10000,aljabar matriks (nalgebra),7.0,0.8,916.6
+teroptimasi,mv2-n10000,"pembuatan Error JS (serde, teks)",0.0,0.0,916.6
+teroptimasi,mv2-n10000,(garbage collector)/(program)/(idle),0.0,0.0,916.6
+teroptimasi,mv2-n10000,lainnya,207.6,22.6,916.6

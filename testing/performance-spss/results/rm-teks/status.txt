@@ -1,0 +1,40 @@
+﻿2026-10-16T14:04:56.1465186+07:00 phase 1 'rm-teks': sizes=100,1000,10000,50000 procs=rm runs=11 affinity=0xFFF cooldown=120s first=spss data=data
+2026-10-16T14:04:56.6467693+07:00 SPSS block n=100 start
+2026-10-16T14:05:07.8343691+07:00   SPSS rm-n100 exit=0 11.1 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|0xFFF
+2026-10-16T14:05:07.8530492+07:00 cool-down 120s
+2026-10-16T14:07:07.8679412+07:00 Statify block n=100 start
+2026-10-16T14:08:35.6931283+07:00   Statify n=100 node exit=0
+2026-10-16T14:08:35.7979334+07:00 cool-down 120s
+2026-10-16T14:10:35.8026040+07:00 Statify block n=1000 start
+2026-10-16T14:12:03.7227011+07:00   Statify n=1000 node exit=0
+2026-10-16T14:12:03.8973588+07:00 cool-down 120s
+2026-10-16T14:14:03.9000680+07:00 SPSS block n=1000 start
+2026-10-16T14:14:14.5161858+07:00   SPSS rm-n1000 exit=0 10.6 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T14:14:14.5181963+07:00 cool-down 120s
+2026-10-16T14:16:14.5315342+07:00 SPSS block n=10000 start
+2026-10-16T14:16:25.7416346+07:00   SPSS rm-n10000 exit=0 11.2 s; spssengine.exe|0xFFF;stats.exe|0xFFF;conhost.exe|n/a;conhost.exe|0xFFF;tasklist.exe|n/a
+2026-10-16T14:16:25.7416346+07:00 cool-down 120s
+2026-10-16T14:18:25.7572863+07:00 Statify block n=10000 start
+2026-10-16T14:19:58.8463987+07:00   Statify n=10000 node exit=0
+2026-10-16T14:19:59.0098205+07:00 cool-down 120s
+2026-10-16T14:21:59.0143496+07:00 Statify block n=50000 start
+2026-10-16T14:23:56.7572775+07:00   Statify n=50000 node exit=0
+2026-10-16T14:23:56.9268830+07:00 cool-down 120s
+2026-10-16T14:25:56.9394173+07:00 SPSS block n=50000 start
+2026-10-16T14:26:12.2538807+07:00   SPSS rm-n50000 exit=0 15.3 s; spssengine.exe|0xFFF;stats.exe|0xFFF;tasklist.exe|0xFFF;conhost.exe|0xFFF
+2026-10-16T14:26:12.3210160+07:00 finished
+2026-10-16T14:26:12.4451272+07:00 keep-awake off
+2026-10-16T14:49:27.5048757+07:00 phase 2 'rm-teks': worktree=D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64-perf sizes=100,1000,10000,50000 procs=rm runs=11 affinity=0xFFF
+2026-10-16T14:49:30.0309965+07:00 Statify compute block n=100 start
+2026-10-16T14:49:43.9635931+07:00   compute n=100 node exit=0
+2026-10-16T14:49:43.9655995+07:00 cool-down 120s
+2026-10-16T14:51:43.9673280+07:00 Statify compute block n=1000 start
+2026-10-16T14:51:58.3233121+07:00   compute n=1000 node exit=0
+2026-10-16T14:51:58.3233121+07:00 cool-down 120s
+2026-10-16T14:53:58.3243381+07:00 Statify compute block n=10000 start
+2026-10-16T14:54:16.4227227+07:00   compute n=10000 node exit=0
+2026-10-16T14:54:16.4227227+07:00 cool-down 120s
+2026-10-16T14:56:16.4385150+07:00 Statify compute block n=50000 start
+2026-10-16T14:56:50.8695699+07:00   compute n=50000 node exit=0
+2026-10-16T14:56:50.8855581+07:00 finished
+2026-10-16T14:56:50.9968629+07:00 server stopped, keep-awake off

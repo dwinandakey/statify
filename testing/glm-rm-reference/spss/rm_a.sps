@@ -1,3 +1,4 @@
+* Encoding: windows-1252.
 * Dataset (a) within-only, dua measure x waktu 3 level.
 * Dibuat oleh testing/glm-rm-reference/generate.py (data identik dengan CSV di folder data/).
 * SPSS 27: buka berkas ini di Syntax Editor lalu Run > All.
@@ -33,5 +34,5 @@ GLM cemas1 cemas2 cemas3 stres1 stres2 stres3
 
 * Opsional: simpan seluruh output ke Excel agar nilai bisa dibaca lengkap.
 * Hapus tanda bintang di dua baris berikut dan sesuaikan folder tujuannya.
-* OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
-*   /XLSX DOCUMENTFILE='C:\statify-spss\rm_a.xlsx' OPERATION=CREATEFILE.
+OUTPUT EXPORT /CONTENTS EXPORT=ALL LAYERS=VISIBLE MODELVIEWS=PRINTSETTING
+/XLSX DOCUMENTFILE='D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\glm-rm-reference\spss-output\rm_a.xlsx' OPERATION=CREATEFILE.

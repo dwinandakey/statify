@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns="http://www.ibm.com/software/analytics/spss/xml/production" codepageSyntaxFiles="false" print="false" syntaxErrorHandling="stop" syntaxFormat="interactive" unicode="true">
+  <output outputFormat="text-utf8" outputPath="D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\performance-spss\spss\pilot-kode\oms\rm-n100000-viewer.txt"/>
+  <syntax syntaxPath="D:\0.POLTSTAT STIS\Tugas Kuliah\Skripsi\topik baru statify\statify64\testing\performance-spss\spss\pilot-kode\jobs\rm-n100000.sps"/>
+</job>

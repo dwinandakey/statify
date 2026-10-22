@@ -1,0 +1,41 @@
+kind,name,ms,pct
+total_sampled,DedicatedWorker thread,3568.7,100.0
+stage_inclusive,MultivariateAnalysis::new,3545.5,99.3
+stage_inclusive,multivariateanalysis_new,3545.5,99.3
+stage_inclusive,calculate_homogeneous_subsets,1232.1,34.5
+stage_inclusive,calculate_mean_square_error,828.8,23.2
+stage_inclusive,calculate_tests_between_subjects_effects,592.5,16.6
+stage_inclusive,calculate_multivariate_tests,513.1,14.4
+stage_inclusive,calculate_levene_test,486.1,13.6
+stage_inclusive,calculate_univariate_test_entries,235.3,6.6
+stage_inclusive,calculate_univariate_tests,235.3,6.6
+stage_inclusive,calculate_hypothesis_error_matrices,172.5,4.8
+stage_inclusive,generate_plots,164.4,4.6
+stage_inclusive,calculate_type_iii_ss,135.6,3.8
+stage_inclusive,calculate_descriptive_statistics,118.2,3.3
+stage_inclusive,calculate_box_test,47.2,1.3
+stage_inclusive,calculate_layout_for,38.5,1.1
+stage_inclusive,calculate_bartlett_test,22.4,0.6
+stage_inclusive,calculate_trimmed_mean,4.7,0.1
+stage_inclusive,calculate_median,4.2,0.1
+stage_inclusive,calculate_covariance_matrix,3.0,0.1
+stage_inclusive,calculate_mean,2.8,0.1
+stage_inclusive,calculate_observed_power_df,1.2,0.0
+stage_inclusive,calculate_observed_power,1.2,0.0
+stage_inclusive,get_formatted_results,0.6,0.0
+stage_inclusive,calculate_variance,0.5,0.0
+stage_inclusive,calculate_std_deviation,0.5,0.0
+stage_top_level,calculate_homogeneous_subsets,1232.1,34.5
+stage_top_level,calculate_tests_between_subjects_effects,592.5,16.6
+stage_top_level,calculate_multivariate_tests,513.1,14.4
+stage_top_level,calculate_levene_test,486.1,13.6
+stage_top_level,calculate_univariate_tests,235.3,6.6
+stage_top_level,generate_plots,164.4,4.6
+stage_top_level,"(no stage: input parsing, setup)",156.8,4.4
+stage_top_level,calculate_descriptive_statistics,118.2,3.3
+stage_top_level,calculate_box_test,47.2,1.3
+stage_top_level,calculate_bartlett_test,22.4,0.6
+stage_top_level,calculate_layout_for,0.6,0.0
+self,<core::hash::sip::Sip13Rounds as core::hash::sip::Sip>::d_rounds,493.5,13.8
+self,wasm::stats::common::merge_records,396.5,11.1
+self,"hashbrown::raw::RawTable<T,A>::find",234.3,6.6

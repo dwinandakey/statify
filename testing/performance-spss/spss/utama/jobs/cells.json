@@ -1,0 +1,86 @@
+[
+  {
+    "cell": "mv1-n100",
+    "proc": "mv1",
+    "n": 100,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv1-n100.spj"
+  },
+  {
+    "cell": "mv2-n100",
+    "proc": "mv2",
+    "n": 100,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv2-n100.spj"
+  },
+  {
+    "cell": "rm-n100",
+    "proc": "rm",
+    "n": 100,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\rm-n100.spj"
+  },
+  {
+    "cell": "mv1-n1000",
+    "proc": "mv1",
+    "n": 1000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv1-n1000.spj"
+  },
+  {
+    "cell": "mv2-n1000",
+    "proc": "mv2",
+    "n": 1000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv2-n1000.spj"
+  },
+  {
+    "cell": "rm-n1000",
+    "proc": "rm",
+    "n": 1000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\rm-n1000.spj"
+  },
+  {
+    "cell": "mv1-n10000",
+    "proc": "mv1",
+    "n": 10000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv1-n10000.spj"
+  },
+  {
+    "cell": "mv2-n10000",
+    "proc": "mv2",
+    "n": 10000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv2-n10000.spj"
+  },
+  {
+    "cell": "rm-n10000",
+    "proc": "rm",
+    "n": 10000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\rm-n10000.spj"
+  },
+  {
+    "cell": "mv1-n100000",
+    "proc": "mv1",
+    "n": 100000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv1-n100000.spj"
+  },
+  {
+    "cell": "mv2-n100000",
+    "proc": "mv2",
+    "n": 100000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\mv2-n100000.spj"
+  },
+  {
+    "cell": "rm-n100000",
+    "proc": "rm",
+    "n": 100000,
+    "runs": 11,
+    "spj": "D:\\0.POLTSTAT STIS\\Tugas Kuliah\\Skripsi\\topik baru statify\\statify64\\testing\\performance-spss\\spss\\utama\\jobs\\rm-n100000.spj"
+  }
+]

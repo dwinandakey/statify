@@ -1,0 +1,1015 @@
+{
+ "cell": "rm-n1000",
+ "titles": [
+  "Within-Subjects Factors",
+  "Descriptive Statistics",
+  "Descriptive Statistics",
+  "Descriptive Statistics",
+  "Descriptive Statistics",
+  "Box's Test of Equality of Covariance Matrices",
+  "Multivariate Tests",
+  "Mauchly's Test of Sphericity",
+  "Tests of Within-Subjects Effects",
+  "Tests of Within-Subjects Contrasts",
+  "Levene's Test of Equality of Error Variances",
+  "Tests of Between-Subjects Effects",
+  "Univariate Tests",
+  "Univariate Tests",
+  "Univariate Tests",
+  "Univariate Tests",
+  "Errors Logs"
+ ],
+ "results": {
+  "within_subjects_factors": {
+   "measures": {
+    "score": [
+     {
+      "factor_values": {
+       "time": "1"
+      },
+      "dependent_variable": "t1_(1,score)"
+     },
+     {
+      "factor_values": {
+       "time": "2"
+      },
+      "dependent_variable": "t2_(2,score)"
+     },
+     {
+      "factor_values": {
+       "time": "3"
+      },
+      "dependent_variable": "t3_(3,score)"
+     },
+     {
+      "factor_values": {
+       "time": "4"
+      },
+      "dependent_variable": "t4_(4,score)"
+     }
+    ]
+   }
+  },
+  "descriptive_statistics": {
+   "t1_(1,score)": {
+    "dependent_variable": "t1_(1,score)",
+    "groups": [
+     {
+      "factor_name": "group",
+      "factor_value": "1",
+      "stats": {
+       "mean": 49.27104606886228,
+       "std_deviation": 2.462564328145952,
+       "n": 334
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "2",
+      "stats": {
+       "mean": 49.88115858258265,
+       "std_deviation": 2.560082640597169,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "3",
+      "stats": {
+       "mean": 50.589074924924915,
+       "std_deviation": 2.437792707454833,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "Total",
+      "stats": {
+       "mean": 49.91311714500001,
+       "std_deviation": 2.5426354388509713,
+       "n": 1000
+      }
+     }
+    ]
+   },
+   "t2_(2,score)": {
+    "dependent_variable": "t2_(2,score)",
+    "groups": [
+     {
+      "factor_name": "group",
+      "factor_value": "1",
+      "stats": {
+       "mean": 49.651560916167675,
+       "std_deviation": 2.4407449618434747,
+       "n": 334
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "2",
+      "stats": {
+       "mean": 50.366078039039046,
+       "std_deviation": 2.46611879113004,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "3",
+      "stats": {
+       "mean": 51.33733571771769,
+       "std_deviation": 2.578400321263977,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "Total",
+      "stats": {
+       "mean": 50.450858126999954,
+       "std_deviation": 2.5873231301381137,
+       "n": 1000
+      }
+     }
+    ]
+   },
+   "t3_(3,score)": {
+    "dependent_variable": "t3_(3,score)",
+    "groups": [
+     {
+      "factor_name": "group",
+      "factor_value": "1",
+      "stats": {
+       "mean": 50.01713259281437,
+       "std_deviation": 2.454742353503129,
+       "n": 334
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "2",
+      "stats": {
+       "mean": 50.963747192192166,
+       "std_deviation": 2.460229868864036,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "3",
+      "stats": {
+       "mean": 52.03586825225225,
+       "std_deviation": 2.4343964432765235,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "Total",
+      "stats": {
+       "mean": 51.004594229000006,
+       "std_deviation": 2.5827638485804103,
+       "n": 1000
+      }
+     }
+    ]
+   },
+   "t4_(4,score)": {
+    "dependent_variable": "t4_(4,score)",
+    "groups": [
+     {
+      "factor_name": "group",
+      "factor_value": "1",
+      "stats": {
+       "mean": 50.40661895808384,
+       "std_deviation": 2.5064865598972745,
+       "n": 334
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "2",
+      "stats": {
+       "mean": 51.39873621321324,
+       "std_deviation": 2.378134409739884,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "3",
+      "stats": {
+       "mean": 52.5623823183183,
+       "std_deviation": 2.52214255748854,
+       "n": 333
+      }
+     },
+     {
+      "factor_name": "group",
+      "factor_value": "Total",
+      "stats": {
+       "mean": 51.45486320299995,
+       "std_deviation": 2.6201131995410307,
+       "n": 1000
+      }
+     }
+    ]
+   }
+  },
+  "homogeneity_tests": {
+   "box_m": {
+    "box_m": 23.654273959497004,
+    "f": 1.1759057572728324,
+    "df1": 20,
+    "df2": 3567997.0282348758,
+    "significance": 0.26407623984102124
+   },
+   "levene": {
+    "t1_(1,score)": [
+     {
+      "based_on": "Based on Mean",
+      "statistic": 0.6763173968786628,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.5087192278541706
+     },
+     {
+      "based_on": "Based on Median",
+      "statistic": 0.6228253412683955,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.536635285073581
+     },
+     {
+      "based_on": "Based on Median and with adjusted df",
+      "statistic": 0.6228253412683955,
+      "df1": 2,
+      "df2": 995.5995237499658,
+      "significance": 0.5366355782872128
+     },
+     {
+      "based_on": "Based on trimmed mean",
+      "statistic": 0.6774447177415885,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.5081468379606983
+     }
+    ],
+    "t2_(2,score)": [
+     {
+      "based_on": "Based on Mean",
+      "statistic": 0.34929823020115414,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.7052690548046701
+     },
+     {
+      "based_on": "Based on Median",
+      "statistic": 0.34530782961861545,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.7080870162497686
+     },
+     {
+      "based_on": "Based on Median and with adjusted df",
+      "statistic": 0.34530782961861545,
+      "df1": 2,
+      "df2": 990.6978155888851,
+      "significance": 0.7080875544602129
+     },
+     {
+      "based_on": "Based on trimmed mean",
+      "statistic": 0.3490322939094126,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.7054565050694737
+     }
+    ],
+    "t3_(3,score)": [
+     {
+      "based_on": "Based on Mean",
+      "statistic": 0.16022255559637613,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.8519760928349491
+     },
+     {
+      "based_on": "Based on Median",
+      "statistic": 0.15279903225389185,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.8583222912137904
+     },
+     {
+      "based_on": "Based on Median and with adjusted df",
+      "statistic": 0.15279903225389185,
+      "df1": 2,
+      "df2": 994.3541554182714,
+      "significance": 0.8583223446754111
+     },
+     {
+      "based_on": "Based on trimmed mean",
+      "statistic": 0.1578201957457481,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.8540246522076125
+     }
+    ],
+    "t4_(4,score)": [
+     {
+      "based_on": "Based on Mean",
+      "statistic": 0.39143057599961006,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.6761928399192165
+     },
+     {
+      "based_on": "Based on Median",
+      "statistic": 0.3912981828946668,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.6762822988777784
+     },
+     {
+      "based_on": "Based on Median and with adjusted df",
+      "statistic": 0.3912981828946668,
+      "df1": 2,
+      "df2": 991.5657460077772,
+      "significance": 0.6762828674839526
+     },
+     {
+      "based_on": "Based on trimmed mean",
+      "statistic": 0.38928336157536614,
+      "df1": 2,
+      "df2": 997,
+      "significance": 0.6776451923534932
+     }
+    ]
+   },
+   "design": "Intercept + group; Within Subjects Design: time"
+  },
+  "multivariate_tests": {
+   "effects": {
+    "time": {
+     "Pillai's Trace": {
+      "value": 0.3735509019667775,
+      "f": 197.77246527231395,
+      "hypothesis_df": 3,
+      "error_df": 995,
+      "significance": 0,
+      "partial_eta_squared": 0.3735509019667775,
+      "noncent_parameter": 593.3173958169418,
+      "observed_power": 1,
+      "is_exact_statistic": true
+     },
+     "Wilks' Lambda": {
+      "value": 0.6264490980332226,
+      "f": 197.77246527231387,
+      "hypothesis_df": 3,
+      "error_df": 995,
+      "significance": 0,
+      "partial_eta_squared": 0.3735509019667774,
+      "noncent_parameter": 593.3173958169416,
+      "observed_power": 1,
+      "is_exact_statistic": true
+     },
+     "Hotelling's Trace": {
+      "value": 0.5962988902682831,
+      "f": 197.7724652723139,
+      "hypothesis_df": 3,
+      "error_df": 995,
+      "significance": 0,
+      "partial_eta_squared": 0.3735509019667775,
+      "noncent_parameter": 593.3173958169417,
+      "observed_power": 1,
+      "is_exact_statistic": true
+     },
+     "Roy's Largest Root": {
+      "value": 0.596298890268283,
+      "f": 197.77246527231387,
+      "hypothesis_df": 3,
+      "error_df": 995,
+      "significance": 0,
+      "partial_eta_squared": 0.3735509019667774,
+      "noncent_parameter": 593.3173958169416,
+      "observed_power": 1,
+      "is_exact_statistic": true
+     }
+    },
+    "time * group": {
+     "Pillai's Trace": {
+      "value": 0.030449681187592607,
+      "f": 5.132793032866717,
+      "hypothesis_df": 6,
+      "error_df": 1992,
+      "significance": 0.000030327911714644884,
+      "partial_eta_squared": 0.015224840593796304,
+      "noncent_parameter": 30.7967581972003,
+      "observed_power": 0.9947247095810597,
+      "is_exact_statistic": false
+     },
+     "Wilks' Lambda": {
+      "value": 0.9695608882171989,
+      "f": 5.166060901149863,
+      "hypothesis_df": 6,
+      "error_df": 1990,
+      "significance": 0.00002782053340777413,
+      "partial_eta_squared": 0.015337170287616275,
+      "noncent_parameter": 30.99636540689918,
+      "observed_power": 0.9949759893280957,
+      "is_exact_statistic": false
+     },
+     "Hotelling's Trace": {
+      "value": 0.03138383854773764,
+      "f": 5.199255919408535,
+      "hypothesis_df": 6,
+      "error_df": 1988,
+      "significance": 0.000025523759493606413,
+      "partial_eta_squared": 0.015449487168399618,
+      "noncent_parameter": 31.19553551645121,
+      "observed_power": 0.9952153428163587,
+      "is_exact_statistic": false
+     },
+     "Roy's Largest Root": {
+      "value": 0.031032554918884573,
+      "f": 10.302808233069678,
+      "hypothesis_df": 3,
+      "error_df": 996,
+      "significance": 0.000001107706296132882,
+      "partial_eta_squared": 0.0300985209155942,
+      "noncent_parameter": 30.908424699209036,
+      "observed_power": 0.998673469981701,
+      "is_exact_statistic": false
+     }
+    }
+   },
+   "design": "Intercept + group; Within Subjects Design: time",
+   "alpha": 0.05
+  },
+  "mauchly_test": {
+   "tests": {
+    "score": {
+     "effect": "time",
+     "mauchly_w": 0.9963663764982642,
+     "chi_square": 3.62466900447841,
+     "df": 5,
+     "significance": 0.6046133511119796,
+     "greenhouse_geisser_epsilon": 0.99759617385362,
+     "huynh_feldt_epsilon": 1,
+     "lower_bound_epsilon": 0.3333333333333333
+    }
+   },
+   "design": "Intercept + group; Within Subjects Design: time",
+   "note": "Tests the null hypothesis that the error covariance matrix of the orthonormalized transformed dependent variables is proportional to an identity matrix."
+  },
+  "tests_of_within_subjects_effects": {
+   "measures": {
+    "score": {
+     "sources": [
+      {
+       "source": "time",
+       "assumption_type": "Sphericity Assumed",
+       "sum_of_squares": 1344.4479062956163,
+       "df": 3,
+       "mean_square": 448.1493020985388,
+       "f": 200.43055568661958,
+       "significance": 0,
+       "partial_eta_squared": 0.16738386600773736,
+       "noncent_parameter": 601.2916670598588,
+       "observed_power": 1
+      },
+      {
+       "source": "time",
+       "assumption_type": "Greenhouse-Geisser",
+       "sum_of_squares": 1344.4479062956163,
+       "df": 2.99278852156086,
+       "mean_square": 449.2291709253257,
+       "f": 200.43055568661958,
+       "significance": 0,
+       "partial_eta_squared": 0.16738386600773736,
+       "noncent_parameter": 599.8462664289798,
+       "observed_power": 1
+      },
+      {
+       "source": "time",
+       "assumption_type": "Huynh-Feldt",
+       "sum_of_squares": 1344.4479062956163,
+       "df": 3,
+       "mean_square": 448.1493020985388,
+       "f": 200.43055568661958,
+       "significance": 0,
+       "partial_eta_squared": 0.16738386600773736,
+       "noncent_parameter": 601.2916670598588,
+       "observed_power": 1
+      },
+      {
+       "source": "time",
+       "assumption_type": "Lower-bound",
+       "sum_of_squares": 1344.4479062956163,
+       "df": 1,
+       "mean_square": 1344.4479062956163,
+       "f": 200.43055568661958,
+       "significance": 0,
+       "partial_eta_squared": 0.16738386600773736,
+       "noncent_parameter": 200.43055568661958,
+       "observed_power": 1
+      },
+      {
+       "source": "time * group",
+       "assumption_type": "Sphericity Assumed",
+       "sum_of_squares": 70.7781243447337,
+       "df": 6,
+       "mean_square": 11.796354057455616,
+       "f": 5.275808280277244,
+       "significance": 0.000020257237262732986,
+       "partial_eta_squared": 0.010472532014363881,
+       "noncent_parameter": 31.654849681663464,
+       "observed_power": 0.9957622032217833
+      },
+      {
+       "source": "time * group",
+       "assumption_type": "Greenhouse-Geisser",
+       "sum_of_squares": 70.7781243447337,
+       "df": 5.98557704312172,
+       "mean_square": 11.824778769837712,
+       "f": 5.275808280277244,
+       "significance": 0.000020659590670324413,
+       "partial_eta_squared": 0.010472532014363881,
+       "noncent_parameter": 31.57875692633895,
+       "observed_power": 0.995702636306905
+      },
+      {
+       "source": "time * group",
+       "assumption_type": "Huynh-Feldt",
+       "sum_of_squares": 70.7781243447337,
+       "df": 6,
+       "mean_square": 11.796354057455616,
+       "f": 5.275808280277244,
+       "significance": 0.000020257237262732986,
+       "partial_eta_squared": 0.010472532014363881,
+       "noncent_parameter": 31.654849681663464,
+       "observed_power": 0.9957622032217833
+      },
+      {
+       "source": "time * group",
+       "assumption_type": "Lower-bound",
+       "sum_of_squares": 70.7781243447337,
+       "df": 2,
+       "mean_square": 35.38906217236685,
+       "f": 5.275808280277244,
+       "significance": 0.00525757281827699,
+       "partial_eta_squared": 0.010472532014363881,
+       "noncent_parameter": 10.551616560554487,
+       "observed_power": 0.8356420048961947
+      },
+      {
+       "source": "Error(time)",
+       "assumption_type": "Sphericity Assumed",
+       "sum_of_squares": 6687.6757288071185,
+       "df": 2991,
+       "mean_square": 2.235933042061892,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error(time)",
+       "assumption_type": "Greenhouse-Geisser",
+       "sum_of_squares": 6687.6757288071185,
+       "df": 2983.8101559961774,
+       "mean_square": 2.241320787573486,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error(time)",
+       "assumption_type": "Huynh-Feldt",
+       "sum_of_squares": 6687.6757288071185,
+       "df": 2991,
+       "mean_square": 2.235933042061892,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error(time)",
+       "assumption_type": "Lower-bound",
+       "sum_of_squares": 6687.6757288071185,
+       "df": 997,
+       "mean_square": 6.707799126185676,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     ]
+    }
+   }
+  },
+  "tests_of_within_subjects_contrasts": {
+   "measures": {
+    "score": {
+     "sources": [
+      {
+       "source": "time",
+       "factor_values": {
+        "time": "Linear"
+       },
+       "sum_of_squares": 1341.8153929913594,
+       "df": 1,
+       "mean_square": 1341.8153929913594,
+       "f": 591.0797152396974,
+       "significance": 0,
+       "partial_eta_squared": 0.37219776159062806,
+       "noncent_parameter": 591.0797152396974,
+       "observed_power": 1
+      },
+      {
+       "source": "time",
+       "factor_values": {
+        "time": "Quadratic"
+       },
+       "sum_of_squares": 1.9170588223031437,
+       "df": 1,
+       "mean_square": 1.9170588223031437,
+       "f": 0.843251594987068,
+       "significance": 0.35869055949530637,
+       "partial_eta_squared": 0.0008450742074360732,
+       "noncent_parameter": 0.843251594987068,
+       "observed_power": 0.1505808735254609
+      },
+      {
+       "source": "time",
+       "factor_values": {
+        "time": "Cubic"
+       },
+       "sum_of_squares": 0.7154544819641958,
+       "df": 1,
+       "mean_square": 0.7154544819641958,
+       "f": 0.3305742855072672,
+       "significance": 0.5654508422474332,
+       "partial_eta_squared": 0.0003314590909278925,
+       "noncent_parameter": 0.3305742855072672,
+       "observed_power": 0.08857293069977057
+      },
+      {
+       "source": "time * group",
+       "factor_values": {
+        "time": "Linear"
+       },
+       "sum_of_squares": 67.55940980927537,
+       "df": 2,
+       "mean_square": 33.77970490463768,
+       "f": 14.88021262850636,
+       "significance": 4.2872569405716376e-7,
+       "partial_eta_squared": 0.028984780212544,
+       "noncent_parameter": 29.76042525701272,
+       "observed_power": 0.9991395123266991
+      },
+      {
+       "source": "time * group",
+       "factor_values": {
+        "time": "Quadratic"
+       },
+       "sum_of_squares": 2.394965591482142,
+       "df": 2,
+       "mean_square": 1.197482795741071,
+       "f": 0.5267335909208505,
+       "significance": 0.5906949796614374,
+       "partial_eta_squared": 0.0010555217896455272,
+       "noncent_parameter": 1.053467181841701,
+       "observed_power": 0.1372039708978956
+      },
+      {
+       "source": "time * group",
+       "factor_values": {
+        "time": "Cubic"
+       },
+       "sum_of_squares": 0.8237489439760692,
+       "df": 2,
+       "mean_square": 0.4118744719880346,
+       "f": 0.19030576050391032,
+       "significance": 0.8267363443790245,
+       "partial_eta_squared": 0.0003816111087495346,
+       "noncent_parameter": 0.38061152100782064,
+       "observed_power": 0.07967788861819836
+      },
+      {
+       "source": "Error(time)",
+       "factor_values": {
+        "Error(time)": "Linear"
+       },
+       "sum_of_squares": 2263.2986927488764,
+       "df": 997,
+       "mean_square": 2.2701090198083014,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error(time)",
+       "factor_values": {
+        "Error(time)": "Quadratic"
+       },
+       "sum_of_squares": 2266.5923873711095,
+       "df": 997,
+       "mean_square": 2.27341262524685,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      },
+      {
+       "source": "Error(time)",
+       "factor_values": {
+        "Error(time)": "Cubic"
+       },
+       "sum_of_squares": 2157.784648687147,
+       "df": 997,
+       "mean_square": 2.1642774811305387,
+       "f": 0,
+       "significance": 0,
+       "partial_eta_squared": 0,
+       "noncent_parameter": 0,
+       "observed_power": 0
+      }
+     ]
+    }
+   }
+  },
+  "tests_of_between_subjects_effects": {
+   "effects": {
+    "score": {
+     "Intercept": {
+      "sum_of_squares": 10284668.636685813,
+      "df": 1,
+      "mean_square": 10284668.636685813,
+      "f_value": 577485.1742829637,
+      "significance": 0,
+      "partial_eta_squared": 0.9982765242485894,
+      "noncent_parameter": 577485.1742829637,
+      "observed_power": 1
+     },
+     "group": {
+      "sum_of_squares": 2153.7704733282303,
+      "df": 2,
+      "mean_square": 1076.8852366641152,
+      "f_value": 60.4672139226186,
+      "significance": 0,
+      "partial_eta_squared": 0.10817667372346002,
+      "noncent_parameter": 120.9344278452372,
+      "observed_power": 1
+     },
+     "Error": {
+      "sum_of_squares": 17755.979005880865,
+      "df": 997,
+      "mean_square": 17.809407227563554,
+      "f_value": 0,
+      "significance": null,
+      "partial_eta_squared": 0,
+      "noncent_parameter": 0,
+      "observed_power": 0
+     }
+    }
+   },
+   "r_squared": {
+    "score": 0.10817667372345985
+   },
+   "adjusted_r_squared": {
+    "score": 0.1063876600298258
+   }
+  },
+  "univariate_tests": {
+   "tests": {
+    "t1_(1,score)": [
+     {
+      "source": "Corrected Model",
+      "sum_of_squares": 290.1873690097115,
+      "df": 2,
+      "mean_square": 145.09368450485576,
+      "f": 23.451745886380532,
+      "significance": 1.1151979339985019e-10,
+      "partial_eta_squared": 0.044930869704353,
+      "noncent_parameter": 46.903491772761065,
+      "observed_power": 0.9999967413556478
+     },
+     {
+      "source": "Intercept",
+      "sum_of_squares": 2491378.4454518864,
+      "df": 1,
+      "mean_square": 2491378.4454518864,
+      "f": 402685.85368778097,
+      "significance": 0,
+      "partial_eta_squared": 0.997530239417176,
+      "noncent_parameter": 402685.85368778097,
+      "observed_power": 1
+     },
+     {
+      "source": "group",
+      "sum_of_squares": 290.1873690097115,
+      "df": 2,
+      "mean_square": 145.09368450485576,
+      "f": 23.451745886380532,
+      "significance": 1.1151979339985019e-10,
+      "partial_eta_squared": 0.044930869704353,
+      "noncent_parameter": 46.903491772761065,
+      "observed_power": 0.9999967413556478
+     },
+     {
+      "source": "Error",
+      "sum_of_squares": 6168.342610916262,
+      "df": 997,
+      "mean_square": 6.186903320878899
+     },
+     {
+      "source": "Total",
+      "sum_of_squares": 2497777.793110415,
+      "df": 1000
+     },
+     {
+      "source": "Corrected Total",
+      "sum_of_squares": 6458.52997992597,
+      "df": 999
+     }
+    ],
+    "t2_(2,score)": [
+     {
+      "source": "Corrected Model",
+      "sum_of_squares": 477.463645094672,
+      "df": 2,
+      "mean_square": 238.731822547336,
+      "f": 38.3272853985127,
+      "significance": 1.1102230246251565e-16,
+      "partial_eta_squared": 0.07139593392698085,
+      "noncent_parameter": 76.6545707970254,
+      "observed_power": 0.9999999999204271
+     },
+     {
+      "source": "Intercept",
+      "sum_of_squares": 2545364.731928424,
+      "df": 1,
+      "mean_square": 2545364.731928424,
+      "f": 408646.48660144914,
+      "significance": 0,
+      "partial_eta_squared": 0.9975661763640586,
+      "noncent_parameter": 408646.48660144914,
+      "observed_power": 1
+     },
+     {
+      "source": "group",
+      "sum_of_squares": 477.463645094672,
+      "df": 2,
+      "mean_square": 238.731822547336,
+      "f": 38.3272853985127,
+      "significance": 1.1102230246251565e-16,
+      "partial_eta_squared": 0.07139593392698085,
+      "noncent_parameter": 76.6545707970254,
+      "observed_power": 0.9999999999204271
+     },
+     {
+      "source": "Error",
+      "sum_of_squares": 6210.083093673267,
+      "df": 997,
+      "mean_square": 6.228769401878904
+     },
+     {
+      "source": "Total",
+      "sum_of_squares": 2551976.632489451,
+      "df": 1000
+     },
+     {
+      "source": "Corrected Total",
+      "sum_of_squares": 6687.546738767938,
+      "df": 999
+     }
+    ],
+    "t3_(3,score)": [
+     {
+      "source": "Corrected Model",
+      "sum_of_squares": 680.3866802545534,
+      "df": 2,
+      "mean_square": 340.1933401272767,
+      "f": 56.683617584305665,
+      "significance": 0,
+      "partial_eta_squared": 0.10209886565267419,
+      "noncent_parameter": 113.36723516861133,
+      "observed_power": 0.9999999999999999
+     },
+     {
+      "source": "Intercept",
+      "sum_of_squares": 2601564.266492117,
+      "df": 1,
+      "mean_square": 2601564.266492117,
+      "f": 433477.2513408472,
+      "significance": 0,
+      "partial_eta_squared": 0.9977052725289862,
+      "noncent_parameter": 433477.2513408472,
+      "observed_power": 1
+     },
+     {
+      "source": "group",
+      "sum_of_squares": 680.3866802545534,
+      "df": 2,
+      "mean_square": 340.1933401272767,
+      "f": 56.683617584305665,
+      "significance": 0,
+      "partial_eta_squared": 0.10209886565267419,
+      "noncent_parameter": 113.36723516861133,
+      "observed_power": 0.9999999999999999
+     },
+     {
+      "source": "Error",
+      "sum_of_squares": 5983.611748181783,
+      "df": 997,
+      "mean_square": 6.00161659797571
+     },
+     {
+      "source": "Total",
+      "sum_of_squares": 2608132.630893376,
+      "df": 1000
+     },
+     {
+      "source": "Corrected Total",
+      "sum_of_squares": 6663.998428436359,
+      "df": 999
+     }
+    ],
+    "t4_(4,score)": [
+     {
+      "source": "Corrected Model",
+      "sum_of_squares": 776.5109033140222,
+      "df": 2,
+      "mean_square": 388.2554516570111,
+      "f": 63.64930040123195,
+      "significance": 0,
+      "partial_eta_squared": 0.11322490369694047,
+      "noncent_parameter": 127.2986008024639,
+      "observed_power": 1
+     },
+     {
+      "source": "Intercept",
+      "sum_of_squares": 2647705.6407196885,
+      "df": 1,
+      "mean_square": 2647705.6407196885,
+      "f": 434056.00869470893,
+      "significance": 0,
+      "partial_eta_squared": 0.9977083252383628,
+      "noncent_parameter": 434056.00869470893,
+      "observed_power": 1
+     },
+     {
+      "source": "group",
+      "sum_of_squares": 776.5109033140222,
+      "df": 2,
+      "mean_square": 388.2554516570111,
+      "f": 63.64930040123195,
+      "significance": 0,
+      "partial_eta_squared": 0.11322490369694047,
+      "noncent_parameter": 127.2986008024639,
+      "observed_power": 1
+     },
+     {
+      "source": "Error",
+      "sum_of_squares": 6081.617281916705,
+      "df": 997,
+      "mean_square": 6.099917033015752
+     },
+     {
+      "source": "Total",
+      "sum_of_squares": 2654461.075424674,
+      "df": 1000
+     },
+     {
+      "source": "Corrected Total",
+      "sum_of_squares": 6858.1281852307275,
+      "df": 999
+     }
+    ]
+   },
+   "alpha": 0.05
+  },
+  "executed_functions": [
+   "build_rm_model",
+   "parse_within_subject_factors",
+   "calculate_descriptive_statistics",
+   "calculate_homogeneity_tests",
+   "calculate_multivariate_tests",
+   "calculate_mauchly_test",
+   "calculate_tests_within_subjects_effects",
+   "calculate_tests_within_subjects_contrasts",
+   "calculate_between_subjects_effects",
+   "calculate_univariate_tests"
+  ]
+ }
+}

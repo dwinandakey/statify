@@ -1,0 +1,17 @@
+kind,name,ms,pct
+total_sampled,DedicatedWorker thread,417.0,100.0
+stage_inclusive,multivariateanalysis_new,404.7,97.1
+stage_inclusive,calculate_hypothesis_error_matrices,15.3,3.7
+stage_inclusive,calculate_type_iii_ss,1.2,0.3
+stage_inclusive,get_formatted_results,0.6,0.1
+stage_top_level,"(no stage: input parsing, setup)",400.5,96.1
+stage_top_level,calculate_hypothesis_error_matrices,15.3,3.7
+stage_top_level,calculate_type_iii_ss,1.2,0.3
+self,core::hash::BuildHasher::hash_one,55.6,13.3
+self,wasm::stats::common::merge_records,50.4,12.1
+self,"hashbrown::map::HashMap<K,V,S,A>::insert",42.8,10.3
+self,"<hashbrown::raw::RawTable<T,A> as core::ops::drop::Drop>::drop",31.2,7.5
+self,<dlmalloc[e24a27700634d609]::dlmalloc::Dlmalloc<dlmalloc[e24a27700634d609]::sys::System>>::free,31.2,7.5
+self,<core::hash::sip::Hasher<S> as core::hash::Hasher>::write,21.0,5.0
+self,<dlmalloc[e24a27700634d609]::dlmalloc::Dlmalloc<dlmalloc[e24a27700634d609]::sys::System>>::malloc,19.6,4.7
+self,<dlmalloc[e24a27700634d609]::dlmalloc::Dlmalloc<dlmalloc[e24a27700634d609]::sys::System>>::unlink_chunk,18.2,4.4

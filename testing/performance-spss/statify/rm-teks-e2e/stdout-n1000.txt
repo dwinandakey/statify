@@ -1,0 +1,17 @@
+[2026-10-16T07:10:38.431Z] start: chromium 143.0.7499.4, node v20.19.0, playwright 1.57.0; procs=rm sizes=1000 runs=11
+[2026-10-16T07:10:38.478Z] cell rm-n1000: import rm-n1000.csv
+[2026-10-16T07:10:41.181Z] cell rm-n1000: imported 1000 rows in 2131 ms (not timed)
+[2026-10-16T07:10:49.693Z] cell rm-n1000: payload saved (0.1 MB, sha1 0ac98d666192), worker http://localhost:3101/_next/static/chunks/6745.db21a01b3700cb7d.js
+[2026-10-16T07:10:49.705Z] rm-n1000 run 1/11 warmup mode=worker status=ok e2e=426.76 (prep 1.70 ser 0.31 worker 260.55 post 164.20)
+[2026-10-16T07:10:57.035Z] rm-n1000 run 2/11 measured mode=worker status=ok e2e=189.22 (prep 1.08 ser 0.27 worker 74.05 post 113.81)
+[2026-10-16T07:11:04.302Z] rm-n1000 run 3/11 measured mode=worker status=ok e2e=176.62 (prep 1.15 ser 0.30 worker 64.71 post 110.46)
+[2026-10-16T07:11:11.650Z] rm-n1000 run 4/11 measured mode=worker status=ok e2e=177.35 (prep 0.99 ser 0.30 worker 62.90 post 113.16)
+[2026-10-16T07:11:19.081Z] rm-n1000 run 5/11 measured mode=worker status=ok e2e=167.33 (prep 1.10 ser 0.28 worker 56.16 post 109.79)
+[2026-10-16T07:11:26.403Z] rm-n1000 run 6/11 measured mode=worker status=ok e2e=166.50 (prep 1.28 ser 0.27 worker 53.79 post 111.15)
+[2026-10-16T07:11:33.822Z] rm-n1000 run 7/11 measured mode=worker status=ok e2e=163.21 (prep 1.58 ser 0.30 worker 53.21 post 108.12)
+[2026-10-16T07:11:41.117Z] rm-n1000 run 8/11 measured mode=worker status=ok e2e=166.57 (prep 1.12 ser 0.31 worker 52.13 post 113.01)
+[2026-10-16T07:11:48.485Z] rm-n1000 run 9/11 measured mode=worker status=ok e2e=163.08 (prep 1.08 ser 0.34 worker 52.60 post 109.06)
+[2026-10-16T07:11:55.848Z] rm-n1000 run 10/11 measured mode=worker status=ok e2e=162.57 (prep 1.18 ser 0.40 worker 50.65 post 110.34)
+[2026-10-16T07:12:03.216Z] rm-n1000 run 11/11 measured mode=worker status=ok e2e=160.71 (prep 1.23 ser 0.31 worker 49.75 post 109.42)
+[2026-10-16T07:12:03.688Z] cell rm-n1000 done in 85 s
+[2026-10-16T07:12:03.714Z] finished

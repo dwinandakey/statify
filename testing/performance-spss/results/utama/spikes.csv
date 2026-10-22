@@ -1,0 +1,6 @@
+source,cell,run,stage,ms,median_other_runs_ms,ratio_to_median
+statify_e2e,mv1-n100000,2,e2e_ms,31093.1,14908.7,2.1
+statify_e2e,mv1-n100000,2,post_ms,16111.2,38.8,415.6
+spss,mv2-n1000,3,processor_ms,63.0,16.0,3.9
+spss,mv2-n1000,6,processor_ms,63.0,16.0,3.9
+spss,mv2-n1000,11,processor_ms,63.0,16.0,3.9
