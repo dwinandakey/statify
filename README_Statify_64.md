@@ -19,7 +19,7 @@ Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di brow
 | 5 | Regresi logistik biner | Dwinanda Muhammad Keyzha (222212576) | [Regresi Logistik Biner](#regresi-logistik-biner) |
 | 6 | Regresi logistik ordinal | _(diisi)_ | _(diisi)_ |
 | 7 | Regresi logistik multinomial | Willy Sumbayak (222212916) | [Regresi Logistik Multinomial](#regresi-logistik-multinomial) |
-| 8 | Analisis diskriminan | _(diisi)_ | _(diisi)_ |
+| 8 | Analisis diskriminan | Muhammad Zacky Heta Warman (222212775) | [Analisis Diskriminan](#analisis-diskriminan) |
 | 9 | Nearest neighbor | _(diisi)_ | _(diisi)_ |
 | 10 | K-medoids | _(diisi)_ | _(diisi)_ |
 | 11 | Text analytics | _(diisi)_ | _(diisi)_ |
@@ -555,6 +555,186 @@ Data, sintaks SPSS, keluaran SPSS, harness, dan laporan pengujian tersimpan di f
 
 - Dokumentasi teknis (arsitektur, alur data, algoritma): [multivariate/architecture.md](frontend/components/Modals/Analyze/general-linear-model/multivariate/architecture.md) dan [repeated-measures/architecture.md](frontend/components/Modals/Analyze/general-linear-model/repeated-measures/architecture.md), serta README di masing-masing folder modul.
 - Panduan di dalam aplikasi: halaman **Help**, bagian GLM Multivariate dan GLM Repeated Measures (dwibahasa Indonesia/Inggris).
+- Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Analisis Diskriminan
+
+**Nama**             : Muhammad Zacky Heta Warman  
+**NIM**              : 222212775  
+**Judul Skripsi**    : PENGEMBANGAN MODUL ANALISIS DISKRIMINAN PADA APLIKASI STATISTIK STATIFY  
+**Dosen Pembimbing** : Firdaus, M.B.A.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan analisis diskriminan untuk satu variabel pengelompokan kategorik dan sejumlah variabel bebas numerik. Analisis membentuk fungsi diskriminan kanonik, yaitu kombinasi linear variabel bebas yang paling memisahkan kelompok. Fungsi itu dipakai untuk dua tujuan sekaligus: menjelaskan variabel mana yang membedakan kelompok, dan mengklasifikasikan kasus ke salah satu kelompok. Jumlah fungsi yang terbentuk paling banyak min(jumlah kelompok − 1, jumlah variabel bebas).
+
+Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker, jadi data tidak dikirim ke server. Keluaran mengikuti prosedur DISCRIMINANT pada SPSS, termasuk format angka dan catatan kakinya.
+
+### Cara mengakses
+
+Menu **Analyze > Classify > Discriminant...** membuka dialog dengan tab berikut:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Memilih metode (Enter independents together atau Use stepwise method), Grouping Variable beserta Define Range, Independents, dan Selection Variable (opsional) |
+| Statistics | Statistik deskriptif, koefisien fungsi, dan matriks |
+| Method | Hanya muncul pada metode stepwise. Mengatur kriteria seleksi variabel dan tampilan langkah |
+| Classify | Prior probabilities, matriks kovarians untuk klasifikasi, tabel klasifikasi, dan plot |
+| Save | Menyimpan hasil per kasus ke dataset dan mengekspor model ke XML |
+| Bootstrap | Hanya muncul pada metode Enter independents together. Mengatur bootstrap untuk koefisien terstandarisasi |
+| Assumptions | Menjalankan uji asumsi secara terpisah dari analisis utama |
+
+Ikon **?** di pojok kiri bawah dialog menjalankan tur fitur yang menyorot setiap bagian dialog secara berurutan. Pengaturan dialog tersimpan otomatis untuk pembukaan berikutnya.
+
+### Fitur
+
+- **Metode**: semua variabel bebas dimasukkan sekaligus (Together), atau seleksi bertahap (Stepwise).
+- **Kriteria stepwise**: Wilks' Lambda, Unexplained Variance, Mahalanobis Distance, Smallest F Ratio, dan Rao's V (dengan V-to-enter). Batas masuk dan keluar memakai nilai F atau probabilitas F. Opsi tampilan mencakup ringkasan langkah dan F untuk jarak antarpasangan kelompok.
+- **Statistics**:
+  - Descriptives: Means dan Univariate ANOVAs (uji kesamaan rata-rata kelompok), serta Box's M.
+  - Function Coefficients: Fisher's (fungsi klasifikasi) dan Unstandardized.
+  - Matrices: korelasi dan kovarians within-groups, kovarians separate-groups, dan kovarians total.
+- **Classify**:
+  - Prior probabilities: sama untuk semua kelompok atau dihitung dari ukuran kelompok.
+  - Matriks kovarians: within-groups (gabungan) atau separate-groups.
+  - Casewise results dengan batas jumlah kasus, summary table, dan klasifikasi *leave-one-out* (validasi silang).
+  - Plot combined-groups, separate-groups, dan territorial map.
+  - Penggantian nilai hilang dengan rata-rata.
+- **Selection Variable dan Generate Split**: fungsi diestimasi hanya dari kasus terpilih, sedangkan kasus lain tetap diklasifikasikan dan dilaporkan terpisah. Tombol **Generate Split...** membuat variabel baru 1 = training dan 0 = testing (bawaan 70% training, seed 2000000, dapat berstrata), lalu menjadikannya Selection Variable.
+- **Save**: kelompok prediksi (`Dis_1`), skor diskriminan (`Dis1_1`, …), dan probabilitas keanggotaan tiap kelompok, mengikuti penamaan `DISCRIMINANT /SAVE` di SPSS. Model juga dapat diekspor ke berkas XML yang diunduh lewat browser.
+- **Bootstrap**: jumlah sampel (bawaan 1000), seed Mersenne Twister (bawaan 2000000), selang kepercayaan Percentile atau BCa, serta sampling Simple atau Stratified. Hasilnya berupa bias, galat baku, dan selang kepercayaan untuk setiap koefisien terstandarisasi.
+- **Uji asumsi** (tombol **Run Assumption Tests**, dapat dijalankan tanpa analisis lengkap): multikolinearitas (Tolerance dan VIF, batas VIF 10), normalitas multivariat Henze-Zirkler, dan normalitas univariat Anderson-Darling per kelompok. Homogenitas matriks kovarians diuji dengan Box's M dari tab Statistics.
+- **Validasi input** sebelum data dikirim ke worker. Misalnya, Define Range wajib diisi, sama seperti `/GROUPS=var(min max)` di SPSS.
+- **Interpretasi**: setiap tabel disertai uraian singkat (`services/discriminant-interpretation.ts`).
+
+### Keluaran
+
+Tabel, plot, dan catatan kaki mengikuti format SPSS:
+
+- Analysis Case Processing Summary, Group Statistics, dan Tests of Equality of Group Means.
+- Pooled Within-Groups Covariance dan Correlation Matrix, serta Covariance Matrices (separate-groups dan total).
+- Log Determinants dan Test Results (Box's M).
+- Untuk metode stepwise: Variables Entered/Removed, Variables in the Analysis, Variables Not in the Analysis, Wilks' Lambda per langkah, dan Pairwise Group Comparisons.
+- Summary of Canonical Discriminant Functions:
+  - Eigenvalues dan Wilks' Lambda;
+  - Standardized Canonical Discriminant Function Coefficients dan Structure Matrix;
+  - Canonical Discriminant Function Coefficients dan Functions at Group Centroids.
+- Classification Statistics:
+  - Classification Processing Summary dan Prior Probabilities for Groups;
+  - Classification Function Coefficients;
+  - Casewise Statistics (kasus salah klasifikasi ditandai `**`);
+  - Classification Results, termasuk baris Cross-validated dan kasus testing bila ada Selection Variable.
+- Plot: Combined-Groups Plot, Separate-Groups Plot, dan Territorial Map. Bila hanya terbentuk satu fungsi, plot ditampilkan sebagai histogram per kelompok.
+- Hasil bootstrap koefisien terstandarisasi.
+- Uji asumsi: Assumption Checks Summary, Multicollinearity (Tolerance and VIF), Multivariate Normality within Groups (Henze-Zirkler Test), dan Univariate Normality within Groups (Anderson-Darling).
+
+### Alur kerja
+
+```
+dialogs/discriminant-main.tsx             Mengumpulkan variabel dan opsi (state di hooks/useDiscriminantState.ts)
+        |
+services/discriminant-validation.ts       Memeriksa input (Define Range, jumlah variabel, dst.)
+        |
+public/workers/Classify/Discriminant/discriminant.worker.js
+        |                                 Memuat WASM dari ./pkg lalu membuat DiscriminantAnalysis
+rust/ (crate wasm)                        Matriks SSCP, eigen, fungsi kanonik, seleksi stepwise,
+        |                                 klasifikasi, leave-one-out, Box's M, bootstrap, uji asumsi
+services/discriminant-analysis-formatter.ts
+        |                                 Menyusun tabel dan plot gaya SPSS
+services/store.ts                         Menambahkan interpretasi lalu menyimpan hasil
+        |
+IndexedDB -> halaman Result               Log, analytic, dan statistic disimpan lalu ditampilkan
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/Classify/discriminant/`
+
+```
+discriminant/
+├── constants/
+│   └── discriminant-default.ts       # Nilai bawaan setiap tab
+├── dialogs/
+│   ├── discriminant-main.tsx         # Dialog utama, tab Variables, Generate Split, orkestrasi worker
+│   ├── statistics.tsx
+│   ├── method.tsx                    # Kriteria stepwise
+│   ├── classify.tsx
+│   ├── save.tsx                      # Save dan ekspor XML
+│   ├── bootstrap.tsx
+│   └── assumptions.tsx               # Tombol Run Assumption Tests
+├── hooks/
+│   ├── useDiscriminantState.ts       # State dialog dan payload ke engine
+│   └── tourConfig.ts                 # Konfigurasi tur fitur
+├── services/
+│   ├── discriminant-analysis-formatter.ts  # Tabel dan plot gaya SPSS
+│   ├── discriminant-interpretation.ts      # Teks interpretasi tiap tabel
+│   ├── discriminant-number-format.ts       # Format angka mengikuti pivot table SPSS
+│   ├── discriminant-validation.ts          # Validasi input sebelum dikirim ke worker
+│   ├── discriminant-split.ts               # Variabel training/testing (Generate Split)
+│   ├── discriminant-save.ts                # Variabel hasil Save ke dataset
+│   ├── discriminant-xml-export.ts          # Ekspor model ke XML
+│   ├── store.ts                            # Menyimpan hasil ke halaman Result
+│   └── formatter.ts                        # Entry point formatter
+├── types/
+│   └── discriminant.ts
+├── __tests__/
+│   ├── integration/                  # Jest white-box: alur analisis, Generate Split, uji asumsi
+│   │   └── fixtures/iris.csv
+│   └── unit/                         # Test Rust white-box: eigen dan klasifikasi
+└── rust/                             # Crate Rust -> WebAssembly
+    ├── Cargo.toml
+    └── src/
+        ├── lib.rs
+        ├── models/                   # config, data, result
+        ├── stats/                    # core, basic_processing, matrix_calculation, group_statistics,
+        │                             # equality_test, box_m_test, log_determinant,
+        │                             # canonical_function, structure_matrix, classification_result,
+        │                             # casewise_statistics, prior_probabilities, separate_covariance,
+        │                             # stepwise_method, stepwise_statistics, variable_selection,
+        │                             # pairwise_comparison, statistical_test, bootstrap, assumptions
+        ├── wasm/                     # constructor.rs, function.rs (API ke JavaScript)
+        └── utils/                    # converter, error, log
+```
+
+File pendukung di luar folder modul:
+
+| File | Fungsi |
+|---|---|
+| `frontend/public/workers/Classify/Discriminant/discriminant.worker.js` | Web Worker yang memuat WASM dan menjalankan analisis |
+| `frontend/public/workers/Classify/Discriminant/pkg/` | Paket WASM hasil build yang dibaca worker |
+| `frontend/components/Modals/Analyze/Classify/ClassifyRegistry.tsx` | Mendaftarkan dialog ke sistem modal |
+| `frontend/components/Modals/Analyze/Classify/classify-menu.tsx` | Entri menu Analyze > Classify |
+| `frontend/app/help/components/statistics-guide/discriminant/` | Panduan penggunaan di halaman Help |
+
+### Build ulang WASM
+
+Lakukan hanya bila kode Rust berubah.
+
+```bash
+cd frontend/components/Modals/Analyze/Classify/discriminant/rust
+cargo test                       # unit test, termasuk test white-box di ../__tests__/unit
+wasm-pack build --target web     # menulis ke rust/pkg
+```
+
+Setelah itu salin `wasm_bg.wasm`, `wasm.js`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, dan `package.json` dari `rust/pkg` ke `frontend/public/workers/Classify/Discriminant/pkg/`. Worker hanya membaca salinan ini.
+
+### Pengujian
+
+- **Unit test Rust** (`cargo test` di folder `rust/`): 23 test, terdiri atas 2 test bootstrap di `src/`, 14 test klasifikasi, dan 7 test eigen di `__tests__/unit/`.
+- **Integrasi white-box** dengan Jest dari folder `frontend/`, memakai data `iris.csv`: 3 suite dan 17 test untuk alur analisis, Generate Split, dan uji asumsi.
+
+  ```bash
+  npx jest --runInBand Classify/discriminant
+  ```
+
+- **Mode presisi** untuk mencocokkan angka dengan SPSS melebihi digit yang ditampilkan. Jalankan `localStorage.setItem("discriminant.decimals", "10")` di console browser, maka semua statistik dicetak dengan jumlah desimal tersebut (1–15). Judul keluaran menandai mode ini supaya tidak tertukar dengan keluaran biasa.
+
+### Dokumentasi
+
+- Panduan di dalam aplikasi: halaman **Help**, bagian Discriminant Analysis (dwibahasa Indonesia/Inggris). Isinya mencakup variabel, metode stepwise, statistik, klasifikasi, save dan bootstrap, uji asumsi, serta cara membaca keluaran.
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan penggunaan modul: _(tautan menyusul)_
 
