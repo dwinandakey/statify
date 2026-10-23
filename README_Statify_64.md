@@ -554,7 +554,7 @@ Data, sintaks SPSS, keluaran SPSS, harness, dan laporan pengujian tersimpan di f
 ### Dokumentasi
 
 - Dokumentasi teknis (arsitektur, alur data, algoritma): [multivariate/architecture.md](frontend/components/Modals/Analyze/general-linear-model/multivariate/architecture.md) dan [repeated-measures/architecture.md](frontend/components/Modals/Analyze/general-linear-model/repeated-measures/architecture.md), serta README di masing-masing folder modul.
-- Panduan di dalam aplikasi: halaman **Help**, bagian GLM Multivariate dan GLM Repeated Measures (dwibahasa Indonesia/Inggris).
+- Panduan di dalam aplikasi: halaman **Help**, bagian GLM Multivariate dan GLM Repeated Measures.
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan penggunaan modul: _(tautan menyusul)_
 
@@ -734,7 +734,7 @@ Setelah itu salin `wasm_bg.wasm`, `wasm.js`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, d
 
 ### Dokumentasi
 
-- Panduan di dalam aplikasi: halaman **Help**, bagian Discriminant Analysis (dwibahasa Indonesia/Inggris). Isinya mencakup variabel, metode stepwise, statistik, klasifikasi, save dan bootstrap, uji asumsi, serta cara membaca keluaran.
+- Panduan di dalam aplikasi: halaman **Help**, bagian Discriminant Analysis. Isinya mencakup variabel, metode stepwise, statistik, klasifikasi, save dan bootstrap, uji asumsi, serta cara membaca keluaran.
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
 - Panduan penggunaan modul: _(tautan menyusul)_
 
@@ -1117,7 +1117,7 @@ Setelah itu salin `timeseries.js`, `timeseries_bg.wasm`, `timeseries.d.ts`, `tim
 ### Dokumentasi
 
 - Gambaran umum modul Time Series: [TimeSeries/README.md](frontend/components/Modals/Analyze/TimeSeries/README.md).
-- Panduan di dalam aplikasi: halaman **Help**, bagian Time Series (ARDL, ECM, Homoscedasticity Test, dan Heteroscedasticity), dwibahasa Indonesia/Inggris.
+- Panduan di dalam aplikasi: halaman **Help**, bagian Time Series (ARDL, ECM, Homoscedasticity Test, dan Heteroscedasticity).
 - Panduan penggunaan modul: _(tautan menyusul)_
 
 ---
