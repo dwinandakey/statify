@@ -4,7 +4,7 @@ Dokumen ini merangkum kontributor dan modul yang dikembangkan oleh mahasiswa **P
 
 ## Pengantar
 
-Pada siklus pengembangan tahun ini, Tim Statify mengembangkan sebelas modul secara paralel, yaitu modul uji statistik parametrik dan nonparametrik lanjutan, analisis faktor, GLM multivariate dan repeated measures, time series, regresi logistik biner, regresi logistik ordinal, regresi logistik multinomial, analisis diskriminan, nearest neighbor, K-medoids, serta text analytics.
+Pada siklus pengembangan tahun ini, Tim Statify mengembangkan sebelas modul secara paralel, yaitu modul uji statistik parametrik dan nonparametrik lanjutan, analisis faktor, GLM multivariate dan repeated measures, time series, regresi logistik biner, regresi ordinal, regresi logistik multinomial, analisis diskriminan, nearest neighbor, K-medoids, serta text analytics.
 
 Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di browser, perhitungan statistik dengan **Rust yang dikompilasi ke WebAssembly** di dalam Web Worker, dan tampilan hasil bergaya SPSS. Modul-modul tersebut digabung ke satu aplikasi Statify yang dapat diakses di https://statify-dev.student.stis.ac.id/.
 
@@ -12,17 +12,17 @@ Seluruh modul dikembangkan di atas arsitektur yang sama: antarmuka React di brow
 
 | No | Modul | Mahasiswa | Bagian |
 |---|---|---|---|
-| 1 | Uji statistik parametrik dan nonparametrik lanjutan | _(diisi)_ | _(diisi)_ |
-| 2 | Analisis faktor | _(diisi)_ | _(diisi)_ |
+| 1 | Uji statistik parametrik dan nonparametrik lanjutan | Daniel Dabra Pasongli (222212555) | [Uji Statistik Parametrik dan Nonparametrik Lanjutan](#uji-statistik-parametrik-dan-nonparametrik-lanjutan) |
+| 2 | Analisis faktor | Aura Putri Maharani (222212526) | [Analisis Faktor](#analisis-faktor) |
 | 3 | GLM multivariate dan repeated measures | Muhammad Ilham Cahyanto (222212756) | [GLM Multivariate dan Repeated Measures](#glm-multivariate-dan-repeated-measures) |
-| 4 | Time series | _(diisi)_ | _(diisi)_ |
+| 4 | Time series | Esra Yosefa Simarmata (222212585) | [Analisis Time Series Lanjutan](#analisis-time-series-lanjutan) |
 | 5 | Regresi logistik biner | Dwinanda Muhammad Keyzha (222212576) | [Regresi Logistik Biner](#regresi-logistik-biner) |
-| 6 | Regresi logistik ordinal | _(diisi)_ | _(diisi)_ |
+| 6 | Regresi ordinal | Sofia Nur Afifah Rahayu (222212887) | [Regresi Ordinal](#regresi-ordinal) |
 | 7 | Regresi logistik multinomial | Willy Sumbayak (222212916) | [Regresi Logistik Multinomial](#regresi-logistik-multinomial) |
 | 8 | Analisis diskriminan | Muhammad Zacky Heta Warman (222212775) | [Analisis Diskriminan](#analisis-diskriminan) |
-| 9 | Nearest neighbor | _(diisi)_ | _(diisi)_ |
-| 10 | K-medoids | _(diisi)_ | _(diisi)_ |
-| 11 | Text analytics | _(diisi)_ | _(diisi)_ |
+| 9 | Nearest neighbor | Louista Thania Harahap (222212707) | [Nearest Neighbor](#nearest-neighbor) |
+| 10 | K-medoids | Bela Novita Sari (222212534) | [K-Medoids](#k-medoids) |
+| 11 | Text analytics | Yedija Lewi Suryadi (222212921) | [Text Analytics](#text-analytics) |
 
 ### Cara menambahkan bagian modul
 
@@ -736,5 +736,887 @@ Setelah itu salin `wasm_bg.wasm`, `wasm.js`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, d
 
 - Panduan di dalam aplikasi: halaman **Help**, bagian Discriminant Analysis (dwibahasa Indonesia/Inggris). Isinya mencakup variabel, metode stepwise, statistik, klasifikasi, save dan bootstrap, uji asumsi, serta cara membaca keluaran.
 - Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Uji Statistik Parametrik dan Nonparametrik Lanjutan
+
+**Nama**             : Daniel Dabra Pasongli  
+**NIM**              : 222212555  
+**Judul Skripsi**    : PENGEMBANGAN STATIFY: APLIKASI ANALISIS STATISTIK MODUL UJI STATISTIK PARAMETRIK DAN NONPARAMETRIK LANJUTAN  
+**Dosen Pembimbing** : Siti Mariyah, S.S.T., M.T., Ph.D.  
+
+### Deskripsi singkat
+
+Modul ini menambahkan tiga kelompok uji ke menu yang sudah ada:
+
+- **Uji normalitas**: Shapiro-Wilk dan Kolmogorov-Smirnov dengan koreksi signifikansi Lilliefors.
+- **Uji Bartlett**: menguji homogenitas varians antarkelompok.
+- **Uji Chi-Square untuk data kategorik**: uji kebebasan, serta uji kesamaan proporsi (binomial dan multinomial).
+
+Berbeda dari sebagian besar modul lain, perhitungannya ditulis dalam JavaScript murni tanpa pustaka statistik eksternal. Perhitungan tetap berjalan di Web Worker, jadi data tidak dikirim ke server. Keluaran mengikuti format SPSS dan dilengkapi interpretasi otomatis pada setiap tabel.
+
+### Cara mengakses
+
+| Uji | Menu | Letak pengaturan |
+|---|---|---|
+| Normalitas | **Analyze > Descriptive Statistics > Explore...** | Tab Plots, centang **Normality plots with tests** |
+| Bartlett | **Analyze > Compare Means > Bartlett's Test of Homogeneity...** | Tab Variables (Test Variables dan Factor Variable) dan tab Options |
+| Chi-Square | **Analyze > Descriptive Statistics > Crosstabs...** | Tab Statistics, bagian **Chi-Square**, lalu pilih Tujuan Pengujian |
+
+Setiap dialog dilengkapi tooltip penggunaan dan tur fitur.
+
+### Fitur
+
+- **Shapiro-Wilk**: algoritma Royston AS R94 (1995) dengan posisi plot Blom, untuk n = 3 sampai 5.000 (konvensi SPSS). Rumus nilai-p dipilih menurut ukuran sampel: eksak untuk n = 3, Royston (1993) untuk n ≤ 11, dan Royston (1995) untuk n > 11.
+- **Kolmogorov-Smirnov**: dengan koreksi signifikansi Lilliefors. Nilai-p disamakan dengan R.
+- **Bartlett**:
+  - statistik khi-kuadrat dengan df = k − 1, untuk satu atau beberapa variabel uji terhadap satu faktor;
+  - syarat: minimal 2 kelompok, masing-masing minimal 2 observasi;
+  - statistik deskriptif per kelompok bersifat opsional.
+
+  Uji ini berbeda dengan Bartlett's Test of Sphericity pada analisis faktor.
+- **Chi-Square**:
+  - statistik Pearson dipakai untuk dua tujuan: **Uji Kebebasan** (hubungan dua variabel kategorik) dan **Uji Kesamaan Proporsi** (binomial untuk dua kategori hasil, multinomial untuk tiga kategori atau lebih);
+  - aturan expected count (syarat Cochran) diperiksa dan dilaporkan;
+  - kategori teks dapat dipakai langsung tanpa recode;
+  - penjumlahan memakai algoritma Neumaier supaya presisi terjaga.
+- **Interpretasi**: hipotesis, keputusan pada α, dan kesimpulan ditulis di bagian Description setiap tabel.
+
+### Keluaran
+
+- **Tests of Normality**: kolom Kolmogorov-Smirnov dan Shapiro-Wilk (Statistic, df, Sig.), dengan catatan kaki Lilliefors Significance Correction.
+- **Bartlett's Test of Homogeneity of Variances**: χ², df, dan Sig. Bila diminta, juga Descriptive Statistics per kelompok (N, Mean, Std. Deviation, Variance, Minimum, Maximum).
+- **Crosstabs**: Case Processing Summary, tabel silang, dan **Chi-Square Tests** dengan catatan expected count.
+
+### Alur kerja
+
+```
+Explore / BartlettTest / Crosstabs (React)        Mengumpulkan variabel dan opsi, memvalidasi input
+        |
+public/workers/DescriptiveStatistics/examine.worker.js    -> libs/normality/normalityTests.js
+public/workers/CompareMeans/bartlettTestWorker.js
+public/workers/DescriptiveStatistics/crosstabs.worker.js  -> libs/crosstabs/ dan libs/categoricalTests/
+        |
+utils/**/formatter.ts dan interpretation.ts       Menyusun tabel gaya SPSS dan interpretasi
+        |
+IndexedDB -> halaman Result                       Log, analytic, dan statistic disimpan lalu ditampilkan
+```
+
+### Struktur direktori
+
+Kode modul tersebar di beberapa folder karena menempel pada menu yang sudah ada:
+
+```
+frontend/components/Modals/Analyze/
+├── CompareMeans/BartlettTest/
+│   ├── index.tsx                     # Dialog utama
+│   ├── components/                   # VariablesTab, OptionsTab, BartlettInfo (tooltip)
+│   ├── hooks/                        # useBartlettAnalysis, useVariableSelection, useTestSettings, tur
+│   ├── utils/                        # formatters, interpretation, validation
+│   └── __tests__/                    # unit, white-box, black-box
+├── Descriptive/Explore/
+│   ├── components/NormalityOptions.tsx
+│   └── utils/normality/              # formatter.ts, interpretation.ts
+├── Descriptive/Crosstabs/
+│   ├── components/ChiSquareOptions.tsx
+│   └── utils/chiSquare/              # formatter.ts, interpretation.ts, validation.ts
+└── shared/statisticalOutput.ts       # Format keluaran statistik bersama
+
+frontend/public/workers/
+├── CompareMeans/bartlettTestWorker.js
+└── DescriptiveStatistics/
+    ├── examine.worker.js, crosstabs.worker.js
+    └── libs/
+        ├── normality/normalityTests.js       # Shapiro-Wilk dan Kolmogorov-Smirnov
+        ├── categoricalTests/categoricalChiSquare.js
+        └── crosstabs/crosstabs.js
+```
+
+### Build
+
+Tidak ada kode Rust. Perubahan pada berkas JavaScript di `public/workers/` langsung dipakai aplikasi tanpa langkah build.
+
+### Pengujian
+
+- **Jest** dari folder `frontend/`: 36 suite, 476 test lulus dan 3 dilewati.
+
+  ```bash
+  npx jest --runInBand components/Modals/Analyze/CompareMeans/BartlettTest components/Modals/Analyze/Descriptive/Crosstabs/__tests__/chiSquare components/Modals/Analyze/Descriptive/Explore/__tests__/normality public/workers/DescriptiveStatistics/libs/normality public/workers/DescriptiveStatistics/libs/categoricalTests public/workers/CompareMeans/__tests__
+  ```
+
+- **Validasi terhadap SPSS 28** untuk uji normalitas: toleransi |W| < 0,0001 dan |p| < 0,001, dengan keputusan pada α = 0,05 harus sama. Datanya 15 dataset acuan (normal, seragam, dan eksponensial; n = 3 sampai 500) di `libs/normality/__tests__/spss-benchmark-csv/`.
+- **Uji lain untuk normalitas**:
+  - *property-based* dengan fast-check;
+  - kinerja: n = 5.000 di bawah 500 ms;
+  - memori dan integrasi worker.
+- **White-box dan black-box** untuk Bartlett dan Chi-Square.
+
+### Dokumentasi
+
+- Uji normalitas: [README](frontend/public/workers/DescriptiveStatistics/libs/normality/README.md) dan [DEVELOPER_GUIDE](frontend/public/workers/DescriptiveStatistics/libs/normality/DEVELOPER_GUIDE.md).
+- Uji Bartlett: [README](frontend/components/Modals/Analyze/CompareMeans/BartlettTest/README.md), termasuk rumusnya.
+- Crosstabs dan Chi-Square: [README](frontend/public/workers/DescriptiveStatistics/libs/crosstabs/README.md), termasuk rumusnya.
+- Panduan di dalam aplikasi: halaman **Help**, bagian Explore dan Crosstabs.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Analisis Faktor
+
+**Nama**             : Aura Putri Maharani  
+**NIM**              : 222212526  
+**Judul Skripsi**    : PENGEMBANGAN STATIFY: APLIKASI ANALISIS STATISTIK MODUL ANALISIS FAKTOR  
+**Dosen Pembimbing** : Erna Nurmawati, S.S.T., M.T.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan analisis faktor dan analisis komponen utama (*principal component analysis*). Keduanya meringkas banyak variabel yang saling berkorelasi menjadi sejumlah kecil faktor atau komponen. Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker, dan keluarannya mengikuti prosedur FACTOR pada SPSS.
+
+### Cara mengakses
+
+Menu **Analyze > Dimension Reduction > Factor...** membuka dialog dengan tab berikut:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Memilih variabel yang dianalisis, serta Selection Variable beserta nilainya (opsional) |
+| Descriptives | Statistik deskriptif dan statistik matriks korelasi |
+| Extraction | Metode ekstraksi, matriks yang dianalisis, kriteria jumlah faktor, dan tampilan |
+| Rotation | Metode rotasi dan tampilan hasil rotasi |
+| Scores | Menyimpan skor faktor ke dataset dan menampilkan koefisien skor |
+| Options | Penanganan nilai hilang dan format tampilan koefisien |
+
+### Fitur
+
+- **Descriptives**: Univariate Descriptives dan Initial Solution. Untuk matriks korelasi tersedia Coefficients, Significance Levels (satu arah, seperti SPSS), Determinant, KMO and Bartlett's Test of Sphericity, Inverse, Reproduced, dan Anti-image.
+- **Extraction**:
+  - metode Principal Components, Unweighted Least Squares, Generalized Least Squares, Maximum Likelihood, dan Principal Axis Factoring;
+  - analisis matriks korelasi atau kovarians;
+  - jumlah faktor ditentukan dari eigenvalue di atas batas tertentu, atau ditetapkan langsung;
+  - iterasi maksimum untuk konvergensi;
+  - tampilan Unrotated Factor Solution dan Scree Plot.
+- **Rotation**: None, Varimax, Direct Oblimin (dengan delta), Quartimax, Equimax, dan Promax (dengan kappa). Tersedia tampilan Rotated Solution dan Loading Plots.
+- **Scores**: Save as variables dengan metode Regression, Bartlett, atau Anderson-Rubin. Skor disimpan sebagai `FAC1_1`, `FAC2_1`, dan seterusnya. Tersedia juga Display factor score coefficient matrix.
+- **Options**: nilai hilang (listwise, pairwise, atau diganti rata-rata) dan penyembunyian koefisien di bawah nilai mutlak tertentu.
+- **Log analisis**: setiap eksekusi mencatat sintaks bergaya SPSS (`services/factor-log-generator.ts`).
+
+### Keluaran
+
+Tabel mengikuti format SPSS:
+
+- Descriptive Statistics, Correlation atau Covariance Matrix, beserta inversnya.
+- KMO and Bartlett's Test dan Anti-image Matrices.
+- Communalities, Total Variance Explained, dan Scree Plot.
+- Component Matrix atau Factor Matrix, serta Goodness-of-fit Test untuk Maximum Likelihood dan Generalized Least Squares.
+- Reproduced Correlations atau Reproduced Covariances.
+- Rotated Component/Factor Matrix (rotasi ortogonal), atau Pattern Matrix, Structure Matrix, dan Component/Factor Correlation Matrix (rotasi oblique).
+- Component/Factor Transformation Matrix, Component/Factor Score Coefficient Matrix, dan Loading Plot.
+
+### Alur kerja
+
+```
+dialogs/factor-main.tsx                   Mengumpulkan variabel dan opsi
+        |
+services/factor-analysis.ts               Menyiapkan data dan menjalankan worker
+        |
+public/workers/FactorAnalysis/factorAnalysis.worker.js
+        |                                 Memuat WASM dari ./pkg
+rust/ (crate wasm)                        Matriks korelasi, KMO, ekstraksi, rotasi, skor faktor
+        |
+services/factor-analysis-formatter.ts     Menyusun tabel gaya SPSS
+services/factor-analysis-output.ts        Menyimpan hasil dan variabel skor faktor
+        |
+IndexedDB -> halaman Result
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/dimension-reduction/factor/`
+
+```
+factor/
+├── charts/                           # FactorLoadingChart.tsx, ScreePlot.tsx
+├── constants/                        # factor-default.ts, factor-method.ts
+├── dialogs/
+│   ├── factor-main.tsx               # Container dialog
+│   ├── dialog.tsx
+│   └── tabs/                         # Variables, Descriptives, Extraction, Rotation, Scores, Options
+├── hooks/                            # tourConfig.ts, useTourGuide.ts
+├── services/
+│   ├── factor-analysis.ts            # Menjalankan worker
+│   ├── factor-analysis-formatter.ts  # Tabel gaya SPSS
+│   ├── factor-analysis-output.ts     # Menyimpan hasil dan skor faktor
+│   ├── factor-log-generator.ts       # Sintaks bergaya SPSS
+│   └── __tests__/
+├── types/
+└── rust/
+    ├── BUILD_INSTRUCTIONS.md
+    └── src/
+        ├── stats/                    # core, prepare_data, matrix, kmo_test, factor_extraction,
+        │                             # extraction_rules, rotation, report, generate_plots
+        ├── models/, utils/, wasm/
+        └── test/                     # promax_test.rs
+```
+
+Berkas pendukung di luar folder modul: `frontend/public/workers/FactorAnalysis/` (worker dan paket WASM), `dimension-reduction/DimensionReductionRegistry.tsx` dan `dimension-reduction-menu.tsx` (registrasi dan menu), serta `frontend/app/help/components/statistics-guide/factor-analysis/` (panduan Help).
+
+### Build ulang WASM
+
+```bash
+cd frontend/components/Modals/Analyze/dimension-reduction/factor/rust
+cargo test
+wasm-pack build --target web     # menulis ke rust/pkg
+```
+
+Setelah itu salin `wasm.js`, `wasm_bg.wasm`, `wasm.d.ts`, dan `wasm_bg.wasm.d.ts` dari `rust/pkg` ke `frontend/public/workers/FactorAnalysis/pkg/`. Worker hanya membaca salinan ini.
+
+### Pengujian
+
+- **Unit test Rust** (`cargo test` di folder `rust/`): 6 test lulus, termasuk uji rotasi Promax.
+- **Jest** untuk formatter dan penyimpanan hasil, dijalankan dari folder `frontend/`:
+
+  ```bash
+  npx jest --runInBand dimension-reduction/factor
+  ```
+
+### Dokumentasi
+
+- Catatan teknis di folder modul, antara lain `BUILD_AND_TEST_GUIDE.md`, `IMPLEMENTATION_SUMMARY.md`, `PCA_IMPLEMENTATION_SUMMARY.md`, `WEB_WORKERS_REFACTORING.md`, dan `rust/BUILD_INSTRUCTIONS.md`.
+- Panduan di dalam aplikasi: halaman **Help**, bagian Factor Analysis.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Analisis Time Series Lanjutan
+
+**Nama**             : Esra Yosefa Simarmata  
+**NIM**              : 222212585  
+**Judul Skripsi**    : PENGEMBANGAN STATIFY: APLIKASI ANALISIS STATISTIK MODUL ANALISIS TIME SERIES LANJUTAN  
+**Dosen Pembimbing** : Ibnu Santoso, S.S.T., M.T.  
+
+### Deskripsi singkat
+
+Modul ini melanjutkan menu Time Series yang dikembangkan angkatan sebelumnya (Smoothing, Decomposition, Autocorrelation, Unit Root Test, dan Box-Jenkins). Ada empat analisis baru:
+
+- *Autoregressive Distributed Lag* (ARDL);
+- *Error Correction Model* (ECM);
+- uji homoskedastisitas ARCH-LM;
+- model heteroskedastisitas keluarga ARCH/GARCH.
+
+Ketiga model (ARDL, ECM, ARCH/GARCH) juga dilengkapi pembagian data training/testing dan peramalan *out-of-sample*. Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker.
+
+### Cara mengakses
+
+Menu **Analyze > Time Series**:
+
+| Menu | Tab |
+|---|---|
+| Autoregressive Distributed Lag... | Variables, Options, Time, Split Data, Save |
+| Error Correction Model... | Variables, Options, Time, Split Data |
+| Homoscedasticity Test (ARCH-LM)... | Variables, Options |
+| Heteroskedasticity Models (ARCH/GARCH)... | Variables, Options, Time, Split Data, Forecast |
+
+### Fitur
+
+- **ARDL**:
+  - orde lag ditetapkan manual (p untuk Y dan q untuk setiap X), atau dipilih otomatis sampai batas p dan q maksimum;
+  - kriteria pemilihan model: AIC (bawaan, sama dengan EViews), Schwarz (BIC/SC), atau Hannan-Quinn;
+  - keluaran mencakup koefisien jangka panjang, *bounds test*, dan bentuk ARDL-ECM jangka pendek.
+- **ECM** (Engle-Granger, tiga langkah):
+  1. regresi jangka panjang;
+  2. uji kointegrasi dengan ADF pada residual, dengan lag maksimum yang dapat diatur;
+  3. ECM jangka pendek dengan ECT(−1).
+
+  Uji asumsi klasik dijalankan pada residualnya.
+- **ARCH-LM**: menguji efek ARCH pada residual dengan jumlah lag q.
+- **Model heteroskedastisitas**:
+  - jenis model: ARCH(q), GARCH(p, q), EGARCH, TGARCH (GJR), dan IGARCH;
+  - estimasi *maximum likelihood* dengan *solver* optimasi;
+  - menghasilkan persamaan rata-rata dan varians, serta ragam bersyarat;
+  - peramalan ragam beberapa langkah ke depan.
+- **Split Data dan peramalan**:
+  - data dibagi menjadi training (*in-sample*) dan testing (*out-of-sample*);
+  - jendela standar, *rolling window* (ukuran tetap bergeser), atau *expanding window* (sampel makin membesar);
+  - akurasi peramalan dievaluasi pada data testing.
+- **Interpretasi otomatis** untuk setiap model.
+
+### Keluaran
+
+- **ARDL**:
+  - Unrestricted ARDL Equation beserta Fit & Diagnostics;
+  - persamaan jangka panjang dan Short Run ARDL-ECM;
+  - correlogram residual, plot residual, serta Actual vs Fitted.
+- **ECM**:
+  - Long Run Regression, Cointegration Test (ADF on Residuals), dan Short Run ECM;
+  - Classical Assumptions Tests;
+  - correlogram residual ECM dan Equilibrium Error.
+- **ARCH-LM**: ARCH-LM Test.
+- **ARCH/GARCH**: Mean Equation, Variance Equation, Conditional Variance, Multi-Step Conditional Variance Forecast, dan Variance Forecast Evaluation.
+- **Split Data**: Time Series Data Split Summary dan Out-of-Sample Forecast Evaluation.
+- **Model Interpretation Summary** untuk setiap model.
+
+### Alur kerja
+
+```
+<Analisis>/index.tsx, VariablesTab.tsx, OptionTab.tsx    Mengumpulkan variabel dan opsi
+Common/TimeSeriesSplitTab.tsx                            Pengaturan split data
+        |
+<Analisis>/hooks/analyzeHook.tsx                         Validasi, menyusun payload, menyusun tabel
+        |
+utils/timeseriesWorkerPool.ts -> public/workers/TimeSeries/worker.js
+        |                                                Memuat timeseries.js (kelas ARDL, ECM, GARCH)
+wasm/src/time_series/ardl, ecm, garch                    Estimasi, uji, dan peramalan
+        |
+IndexedDB -> halaman Result
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/TimeSeries/`. Bagian yang dikembangkan dalam modul ini:
+
+```
+TimeSeries/
+├── ARDL/                             # index.tsx, VariablesTab, OptionTab, hooks/, test/
+├── ECM/                              # index.tsx, VariablesTab, OptionTab, hooks/, test/
+├── HomoscedasticityTest/             # index.tsx, hooks/, test/
+├── HeteroskedasticityModels/         # index.tsx, VariablesTab, hooks/, test/
+├── Common/                           # TimeSeriesSplitTab.tsx, useTimeSeriesSplit.ts
+├── TimeSeriesMenu.tsx                # Entri menu
+└── wasm/                             # Crate Rust "timeseries"
+    └── src/time_series/
+        ├── ardl/                     # ardl, estimation, lag_generation, long_run_coef, bounds_test
+        ├── ecm/                      # ecm, long_run_regression, cointegration_test,
+        │                             # error_correction, classical_assumptions, ols_helper
+        └── garch/                    # garch, egarch, tgarch, igarch, likelihood, optimizer,
+                                      # conditional_variance, diagnostics, arch_lm_test
+```
+
+Berkas pendukung di luar folder modul: `frontend/utils/timeseriesWorkerPool.ts`, `frontend/public/workers/TimeSeries/` (worker dan paket WASM), serta `frontend/app/help/components/statistics-guide/time-series/` (panduan Help).
+
+### Build ulang WASM
+
+```bash
+cd frontend/components/Modals/Analyze/TimeSeries/wasm
+cargo test
+wasm-pack build --target web     # nama crate "timeseries", jadi berkasnya timeseries*.js/.wasm
+```
+
+Setelah itu salin `timeseries.js`, `timeseries_bg.wasm`, `timeseries.d.ts`, `timeseries_bg.wasm.d.ts`, dan `package.json` dari `wasm/pkg` ke `frontend/public/workers/TimeSeries/`. Ubah juga query `?v=` pada `WORKER_URL` di `utils/timeseriesWorkerPool.ts` supaya browser tidak memakai versi lama dari cache.
+
+### Pengujian
+
+- **Jest** dari folder `frontend/`: 5 suite dan 46 test untuk ARDL, ECM, heteroskedastisitas, homoskedastisitas, dan split data. Semuanya lulus.
+
+  ```bash
+  npx jest --runInBand TimeSeries/ARDL TimeSeries/ECM TimeSeries/Heteroskedasticity TimeSeries/Homoscedasticity TimeSeries/Common
+  ```
+
+- **Unit test Rust** (`cargo test` di folder `wasm/`): 4 test optimizer GARCH, semuanya lulus.
+
+### Dokumentasi
+
+- Gambaran umum modul Time Series: [TimeSeries/README.md](frontend/components/Modals/Analyze/TimeSeries/README.md).
+- Panduan di dalam aplikasi: halaman **Help**, bagian Time Series (ARDL, ECM, Homoscedasticity Test, dan Heteroscedasticity), dwibahasa Indonesia/Inggris.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Regresi Ordinal
+
+**Nama**             : Sofia Nur Afifah Rahayu  
+**NIM**              : 222212887  
+**Judul Skripsi**    : PENGEMBANGAN STATIFY: APLIKASI ANALISIS STATISTIK (MODUL ANALISIS REGRESI ORDINAL)  
+**Dosen Pembimbing** : Farid Ridho, S.S.T., M.T.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan regresi ordinal untuk variabel respon berperingkat (minimal tiga kategori). Modelnya adalah *cumulative link model* PLUM, sama dengan prosedur PLUM pada SPSS. Parameter diestimasi dengan Newton-Raphson/Fisher scoring yang dilengkapi *step-halving*. Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker, jadi data tidak dikirim ke server.
+
+### Cara mengakses
+
+Menu **Analyze > Regression > Ordinal...** membuka dialog dengan tab berikut:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Memilih variabel dependen, Factor(s), Covariate(s), dan fungsi link |
+| Location | Model efek utama atau model dengan suku interaksi |
+| Options | Fungsi link, kriteria konvergensi, iterasi maksimum, step-halving, dan selang kepercayaan |
+| Output | Tabel yang ditampilkan dan variabel yang disimpan ke dataset |
+
+Tab Scale sudah disiapkan untuk model skala (heteroskedastisitas), tetapi belum diaktifkan.
+
+### Fitur
+
+- **Fungsi link**: Logit (bawaan), Probit, Complementary Log-Log, Negative Log-Log, dan Cauchit.
+- **Factor** dikodekan sebagai variabel *dummy* dengan kategori tertinggi sebagai referensi, sama seperti SPSS.
+- **Location**: model efek utama atau model dengan interaksi antarvariabel.
+- **Options**:
+  - toleransi konvergensi parameter, log-likelihood, dan singularitas;
+  - iterasi maksimum (bawaan 100) dan step-halving maksimum (bawaan 5);
+  - selang kepercayaan (bawaan 95%).
+- **Output**:
+  - Goodness-of-Fit, Summary Statistics, dan Parameter Estimates;
+  - Test of Parallel Lines;
+  - matriks kovarians dan korelasi asimtotik;
+  - Cell Information dan Iteration History.
+- **Save**: Predicted Response Category (`PRE_1`), Estimated Response Probabilities (`EST1_1`, …), Predicted Category Probability (`PCP_1`), dan Actual Category Probability (`ACP_1`).
+- **Diagnostik multikolinearitas**: VIF dan GVIF.
+- **Log analisis**: setiap eksekusi mencatat sintaks bergaya SPSS (`services/syntaxGenerator.ts`).
+
+### Keluaran
+
+Tabel mengikuti format SPSS PLUM:
+
+- Case Processing Summary dan Model Fitting Information.
+- Goodness-of-Fit (Pearson dan Deviance) dan Pseudo R-Square (Cox and Snell, Nagelkerke, McFadden).
+- Parameter Estimates (Threshold dan Location).
+- Test of Parallel Lines.
+- Asymptotic Covariance/Correlation Matrix, Cell Information, dan Iteration History.
+
+### Alur kerja
+
+```
+dialogs/OrdinalMain.tsx                   Validasi input dan listwise deletion
+        |
+services/plum_design_matrix.ts            Dummy coding, interaksi, pemetaan baris
+        |
+public/workers/Regression/ordinal.worker.js
+        |
+rust/ (crate statify_ordinal)             Agregasi subpopulasi, Newton-Raphson dengan step-halving,
+        |                                 kovarians, Wald, uji garis paralel, goodness-of-fit, VIF/GVIF
+services/formatter*.ts                    Menyusun tabel gaya SPSS dan variabel yang disimpan
+        |
+IndexedDB -> halaman Result
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/Regression/Ordinal/`
+
+```
+Ordinal/
+├── Regresi_Ordinal_Statify.md        # Dokumentasi lengkap modul
+├── dialogs/                          # OrdinalMain, VariablesTab, LocationTab, OptionsTab,
+│                                     # OutputTab, ScaleTab
+├── hooks/tourConfig.ts
+├── stores/useOrdinalFormStore.ts     # State dialog yang persisten
+├── services/
+│   ├── plum_design_matrix.ts         # Design matrix dan dummy coding
+│   ├── formatter*.ts                 # Model summary, parameter, parallel lines, matrix,
+│   │                                 # iteration history, saved variables, payload
+│   ├── syntaxGenerator.ts            # Sintaks bergaya SPSS
+│   └── __tests__/
+├── types/ordinal.ts
+├── UnitTest/                         # Test dialog, store, formatter, dan payload worker
+└── rust/
+    ├── src/                          # data/, io/, model/, optimizer/, stats/, types/, utils/
+    └── tests/                        # plum_*, optimizer_test, gvif_diagnostics,
+                                      # computational_whitebox_tests
+```
+
+Berkas pendukung di luar folder modul: `frontend/public/workers/Regression/ordinal.worker.js`, `frontend/public/workers/Regression/Ordinal/pkg/` (paket WASM), dan `frontend/app/help/components/statistics-guide/ordinal-regression/` (panduan Help).
+
+### Build ulang WASM
+
+```bash
+cd frontend/components/Modals/Analyze/Regression/Ordinal/rust
+cargo test --release
+wasm-pack build --target web --out-dir pkg --release
+```
+
+Setelah itu salin `statify_ordinal_bg.wasm` dan `statify_ordinal.js` dari `rust/pkg` ke `frontend/public/workers/Regression/Ordinal/pkg/`.
+
+### Pengujian
+
+- **Unit test Rust** (`cargo test` di folder `rust/`): 42 test, semuanya lulus. Test ini mencakup lima fungsi link, model lokasi, peluang kategori, optimizer, diagnostik GVIF, dan *white-box* komputasi.
+- **Jest** dari folder `frontend/`:
+
+  ```bash
+  npx jest --runInBand Regression/Ordinal
+  ```
+
+### Dokumentasi
+
+- Dokumentasi lengkap (konsep, panduan antarmuka, arsitektur, rumus, interpretasi, pesan galat, dan panduan pengembang): [Regresi_Ordinal_Statify.md](frontend/components/Modals/Analyze/Regression/Ordinal/Regresi_Ordinal_Statify.md).
+- Panduan di dalam aplikasi: halaman **Help**, bagian Ordinal Regression.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Nearest Neighbor
+
+**Nama**             : Louista Thania Harahap  
+**NIM**              : 222212707  
+**Judul Skripsi**    : PENGEMBANGAN STATIFY: APLIKASI ANALISIS STATISTIK MODUL NEAREST NEIGHBOR  
+**Dosen Pembimbing** : Ibnu Santoso, S.S.T., M.T.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan analisis *k-nearest neighbor* (KNN), mengikuti prosedur KNN pada SPSS. Untuk target kategorik, analisis ini mengklasifikasikan kasus. Untuk target skala, analisis ini memprediksi nilai. Modul ini juga dapat memilih k dan fitur secara otomatis. Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker.
+
+### Cara mengakses
+
+Menu **Analyze > Classify > Nearest Neighbor...** membuka dialog dengan tab berikut:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Target, Features, Focal Case Identifier (opsional), dan normalisasi fitur skala |
+| Neighbors | Jumlah tetangga k dan ukuran jarak |
+| Features | Seleksi fitur |
+| Partition | Pembagian training/holdout dan validasi silang |
+| Save | Variabel hasil yang disimpan ke dataset |
+| Output | Tabel dan grafik yang ditampilkan |
+
+Setiap pengaturan dilengkapi ikon bantuan yang menjelaskan fungsinya.
+
+### Fitur
+
+- **Neighbors**:
+  - k tetap, atau dipilih otomatis dalam rentang minimum sampai maksimum;
+  - jarak Euclidean atau Manhattan (City-block);
+  - pembobotan fitur menurut tingkat kepentingannya;
+  - prediksi target skala memakai rata-rata atau median tetangga.
+- **Features**: *forward selection* dengan fitur yang dipaksa masuk. Kriteria berhentinya berupa jumlah fitur yang dipilih atau perubahan minimum.
+- **Partition**:
+  - persentase training/holdout yang diacak, atau ditentukan dari variabel partisi;
+  - validasi silang *V-fold* (jumlah fold acak atau dari variabel);
+  - seed Mersenne Twister supaya hasil dapat diulang.
+- **Save**: nilai atau kategori prediksi, probabilitas prediksi per kategori, variabel partisi, dan variabel fold. Nama variabel dapat dibuat otomatis atau ditentukan sendiri.
+- **Output**: Case Processing Summary, tabel tetangga dan jarak, *peers chart*, dan *quadrant map*.
+- **Ekspor**: tabel dapat diunduh sebagai CSV atau Excel, dan grafik sebagai gambar.
+
+### Keluaran
+
+- System Settings dan Case Processing Summary.
+- Predictor Space (grafik ruang prediktor) dan grafik pemilihan k.
+- Feature Importance.
+- Classification Table untuk target kategorik dan Error Summary.
+- Neighbor Details (tetangga dan jarak untuk kasus fokus), Peers Chart, dan Quadrant Map.
+- Interpretasi otomatis (`services/nearest-neighbor-analysis-interpretation.ts`).
+
+### Alur kerja
+
+```
+dialogs/nearest-neighbor-main.tsx         Mengumpulkan variabel dan opsi, validasi (hooks/use*Rules.ts)
+        |
+services/nearest-neighbor-analysis.ts     Menyiapkan data dan menjalankan worker
+        |
+public/workers/Classify/NearestNeighbor/nearest-neighbor.worker.js
+        |
+rust/ (crate wasm)                        Normalisasi, partisi, jarak, pemilihan k dan fitur,
+        |                                 prediksi, kepentingan prediktor
+services/nearest-neighbor-analysis-formatter.ts
+        |                                 Tabel dan grafik
+IndexedDB -> halaman Result
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/Classify/nearest-neighbor/`
+
+```
+nearest-neighbor/
+├── components/                       # Grafik: Predictor Space, Peers, pemilihan k; menu unduh
+├── constants/                        # Nilai bawaan dan daftar keluaran
+├── dialogs/                          # nearest-neighbor-main, dialog (Variables), neighbors,
+│                                     # features, partition, save, output, field-help
+├── hooks/                            # Aturan validasi untuk partition, save, output
+├── services/                         # analysis, formatter, interpretation, output,
+│                                     # error-messages, performance
+├── utils/output-export.ts            # Ekspor tabel (CSV/Excel) dan grafik (gambar)
+├── types/
+├── __tests__/                        # Unit, basis path, performa, ekspor
+└── rust/src/
+    ├── stats/                        # nearest_neighbor, distance, normalization, partition,
+    │                                 # k_selection, feature_selection, prediction,
+    │                                 # predictor_importance, predictor_space, mersenne_twister, ...
+    └── models/, utils/, wasm/
+```
+
+Berkas pendukung di luar folder modul: `frontend/public/workers/Classify/NearestNeighbor/` (worker dan paket WASM) dan `Classify/ClassifyRegistry.tsx` (registrasi dialog).
+
+### Build ulang WASM
+
+```bash
+cd frontend/components/Modals/Analyze/Classify/nearest-neighbor/rust
+cargo test
+wasm-pack build --target web     # menulis ke rust/pkg
+```
+
+Setelah itu salin `wasm.js`, `wasm_bg.wasm`, `wasm.d.ts`, dan `wasm_bg.wasm.d.ts` dari `rust/pkg` ke `frontend/public/workers/Classify/NearestNeighbor/pkg/`. Ubah juga nilai `?v=` di `nearest-neighbor.worker.js` supaya browser memuat versi baru.
+
+### Pengujian
+
+- **Jest** dari folder `frontend/`, mencakup unit, *basis path*, aturan validasi, grafik, dan ekspor keluaran: 12 suite dan 252 test, semuanya lulus. Suite performa (`*.performance.test.ts`) membutuhkan waktu lama, jadi sebaiknya dijalankan terpisah.
+
+  ```bash
+  npx jest --runInBand Classify/nearest-neighbor --testPathIgnorePatterns performance
+  npx jest --runInBand nearest-neighbor.performance     # uji performa
+  ```
+
+- **Unit test Rust** (`cargo test` di folder `rust/`): 74 test, semuanya lulus.
+
+### Dokumentasi
+
+- Bantuan di dalam dialog: ikon bantuan pada setiap pengaturan (`dialogs/field-help.tsx`).
+- Panduan penggunaan Statify (umum): [PANDUAN PENGGUNAAN STATIFY.pdf](1.%20Panduan%20Penggunaan/PANDUAN%20PENGGUNAAN%20STATIFY.pdf).
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## K-Medoids
+
+**Nama**             : Bela Novita Sari  
+**NIM**              : 222212534  
+**Judul Skripsi**    : PENGEMBANGAN MODUL K-MEDOIDS PADA APLIKASI STATIFY  
+**Dosen Pembimbing** : Dr. Achmad Syahrul Choir, S.S.T., M.Si.  
+
+### Deskripsi singkat
+
+Modul ini menyediakan analisis klaster K-Medoids dengan tiga algoritma:
+
+- **PAM**: kualitas terbaik, untuk data kecil sampai menengah;
+- **CLARA**: memakai sampling, untuk data besar;
+- **CLARANS**: pencarian acak, seimbang antara kecepatan dan kualitas.
+
+Jumlah klaster dapat dipilih otomatis dengan silhouette atau metode elbow. Perhitungan berjalan dengan Rust/WebAssembly di dalam Web Worker, dan hasilnya ditampilkan dalam tabel serta berbagai grafik.
+
+### Cara mengakses
+
+Menu **Analyze > Clustering > K-Medoids Cluster...** membuka dialog dengan tab berikut:
+
+| Tab | Fungsi |
+|---|---|
+| Variables | Variabel klaster, jumlah klaster k (tetap atau rentang), dan ukuran jarak |
+| Iterate | Algoritma beserta parameter iterasinya |
+| Results | Tabel hasil inti dan informasi tambahan |
+| Evaluation | Silhouette dan pemilihan k optimal |
+| Save | Variabel hasil yang disimpan ke dataset |
+| Options | Visualisasi, matriks jarak, dan praproses |
+
+Bila datanya terlalu besar untuk PAM, dialog menampilkan peringatan dan menyarankan CLARA.
+
+### Fitur
+
+- **Jarak**: Euclidean atau Manhattan (City-block).
+- **Iterate**:
+  - iterasi maksimum dan toleransi konvergensi;
+  - seed default, acak, atau ditentukan sendiri, serta jumlah inisialisasi;
+  - parameter CLARA: ukuran dan jumlah sampel;
+  - parameter CLARANS: jumlah *local minima* dan tetangga maksimum.
+- **Results**: algoritma konvergensi, riwayat iterasi, keanggotaan klaster, jumlah kasus per klaster, medoid tiap klaster, grafik konvergensi, dan riwayat sampling CLARA.
+- **Evaluation**: plot silhouette per objek, penilaian kualitas keseluruhan, serta grafik dan tabel k optimal (silhouette dan elbow).
+- **Save**: keanggotaan klaster dan jarak ke pusat klaster.
+- **Options**:
+  - normalisasi: tanpa normalisasi, Z-score, atau Min-Max;
+  - nilai hilang: listwise, median, atau imputasi KNN;
+  - proyeksi PCA, *scatter plot* klaster, dan distribusi ukuran klaster;
+  - matriks jarak antar-medoid, dalam bentuk grafik dan tabel.
+
+### Keluaran
+
+- Kartu ringkasan, tabel medoid, keanggotaan, dan jumlah kasus per klaster.
+- Riwayat iterasi beserta grafik konvergensi.
+- Silhouette per objek dan per k, grafik elbow, serta tabel k optimal.
+- *Scatter plot* klaster, proyeksi PCA, distribusi ukuran klaster, dan matriks jarak.
+
+### Alur kerja
+
+```
+dialogs/k-medoids-cluster-main.tsx        Mengumpulkan variabel dan opsi (services/*-guards.ts memvalidasi)
+        |
+services/k-medoids-cluster-analysis.ts    Menjalankan Web Worker (services/cluster-worker.ts)
+        |
+public/workers/Clustering/K-Medoids/wasm*  Paket WASM: PAM, CLARA, CLARANS, jarak, silhouette
+        |
+services/k-medoids-cluster-comprehensive-output.ts
+        |                                 Menyusun tabel dan grafik (components/OutputRenderer.tsx)
+IndexedDB -> halaman Result               Variabel Save ditulis lewat services/k-medoids-cluster-save.ts
+```
+
+### Struktur direktori
+
+Lokasi kode: `frontend/components/Modals/Analyze/Clustering/k-medoids-cluster/`
+
+```
+k-medoids-cluster/
+├── README.md                         # Dokumentasi algoritma dan build
+├── components/                       # OutputRenderer, SummaryCards, ElbowChart, SilhouetteKChart,
+│                                     # SilhouettePerObjectChart, ClusterScatterPlot, PCAClusterPlot,
+│                                     # ConvergenceChart, DistanceMatrix, IterationDetailsTable, ...
+├── constants/k-medoids-cluster-default.ts
+├── dialogs/                          # k-medoids-cluster-main, dialog (Variables), iterate,
+│                                     # results, evaluation, save, options
+├── services/                         # analysis, cluster-worker, comprehensive-output, guards, save
+├── formula-tests/                    # Uji rumus euclidean, manhattan, min_max
+├── __tests__/                        # ut-pre-* (praproses) dan ut-out-* (keluaran)
+└── rust/
+    ├── build.bat
+    └── src/
+        ├── algorithms/               # pam.rs, clara.rs, clarans.rs
+        ├── stats/                    # normalization, preprocessing
+        ├── utils/                    # distance, validation
+        ├── models/, wasm/
+        └── test/
+```
+
+Berkas pendukung di luar folder modul: `frontend/public/workers/Clustering/` (worker dan paket WASM), `Clustering/clustering-menu.tsx` dan `ClusteringRegistry.tsx` (menu dan registrasi), serta `frontend/app/help/components/statistics-guide/k-medoids/` (panduan Help).
+
+### Build ulang WASM
+
+```bash
+cd frontend/components/Modals/Analyze/Clustering/k-medoids-cluster/rust
+cargo test
+wasm-pack build --target web --out-dir pkg
+```
+
+Setelah itu salin `wasm.js`, `wasm_bg.wasm`, `wasm.d.ts`, `wasm_bg.wasm.d.ts`, dan `package.json` dari `rust/pkg` ke `frontend/public/workers/Clustering/K-Medoids/`.
+
+### Pengujian
+
+- **Jest** dari folder `frontend/`: 24 suite dan 42 test untuk praproses dan keluaran. Semuanya lulus.
+
+  ```bash
+  npx jest --runInBand Clustering/k-medoids-cluster
+  ```
+
+- **Unit test Rust** (`cargo test` di folder `rust/`): menurut README modul ada 33 test. Uji rumus jarak dan normalisasi ada di `formula-tests/`.
+
+### Dokumentasi
+
+- Dokumentasi algoritma, jarak, pemilihan k, kinerja, dan build: [README K-Medoids](frontend/components/Modals/Analyze/Clustering/k-medoids-cluster/README.md) dan [README paket WASM](frontend/public/workers/Clustering/K-Medoids/README.md).
+- Panduan di dalam aplikasi: halaman **Help**, bagian K-Medoids.
+- Panduan penggunaan modul: _(tautan menyusul)_
+
+---
+
+## Text Analytics
+
+**Nama**             : Yedija Lewi Suryadi  
+**NIM**              : 222212921  
+**Judul Skripsi**    : PENGEMBANGAN MODUL TEXT ANALYTICS PADA APLIKASI STATISTIK STATIFY: FITUR TEXT PREPROCESSING DAN KLASIFIKASI NAIVE BAYES  
+**Dosen Pembimbing** : Dr. Eng. Lya Hulliyyatus Suadaa, S.S.T., M.T.  
+
+### Deskripsi singkat
+
+Modul ini menambahkan analisis teks ke Statify melalui tiga menu. Ketiganya memakai satu crate Rust bersama, `statify-text-core` (CORE), sehingga praproses teksnya identik di semua menu:
+
+- **String to Word Vector**: mengubah satu kolom teks menjadi kolom-kolom angka (*bag-of-words*, TF-IDF).
+- **Naive Bayes**: melatih dan mengevaluasi model klasifikasi dengan prediktor numerik, kategorik, dan teks.
+- **Apply Model**: menerapkan model Naive Bayes yang sudah diekspor ke data baru.
+
+Seluruh perhitungan berjalan dengan Rust/WebAssembly di browser.
+
+### Cara mengakses
+
+| Menu | Tab |
+|---|---|
+| **Transform > String to Word Vector** | Variables, Options |
+| **Analyze > Classify > Naive Bayes** | Variables, Text Preprocessing, Options, Validation, Output |
+| **Analyze > Classify > Apply Model** | Model, Variables, Save, Output |
+
+Ketiga menu terbuka sebagai panel di sisi kanan.
+
+### Fitur
+
+- **Praproses teks** (String to Word Vector dan tab Text Preprocessing pada Naive Bayes):
+  - lowercase dan penghapusan stopword (Indonesia, Inggris, atau daftar sendiri);
+  - stemming Indonesia (Sastrawi, Nazief–Adriani) atau Inggris (Porter2);
+  - tokenizer kata atau n-gram 1–5, dengan delimiter yang dapat diatur;
+  - standar rumus Weka, scikit-learn, atau Custom, dengan pilihan TF, IDF, dan normalisasi;
+  - batas jumlah kata (*Words to Keep*) dan frekuensi minimum.
+- **Naive Bayes**:
+  - prediktor numerik: Gaussian, atau Gaussian dengan batas simpangan baku minimum ala Weka;
+  - prediktor kategorik: Laplace smoothing;
+  - fitur teks: Multinomial, Bernoulli, atau Complement Naive Bayes;
+  - sumber fitur teks: kolom teks mentah (*Raw Text*), yang kosakatanya di-fit ulang per split sehingga tidak bocor, atau kolom vektor kata hasil String to Word Vector;
+  - validasi holdout atau *k-fold cross-validation*, keduanya terstratifikasi, dengan seed Mersenne Twister;
+  - tabel kata paling berpengaruh per kelas;
+  - **Export Model** ke JSON.
+- **Apply Model**:
+  - sumber model: unggah berkas JSON atau ambil dari Output Viewer;
+  - pemetaan variabel otomatis berdasarkan nama;
+  - teks baru diproses dengan resep yang sama dengan saat pelatihan;
+  - prediksi dan probabilitas ditulis sebagai variabel baru;
+  - metrik evaluasi bila kelas sebenarnya tersedia.
+
+### Keluaran
+
+- **String to Word Vector**: kolom baru `VEC_<kata>` di dataset, beserta ringkasan kosakata di Output Viewer.
+- **Naive Bayes**:
+  - Case Processing Summary dan Attribute Distribution Table;
+  - Model Evaluation Metrics dan Confusion Matrix;
+  - Text Feature Table (Top-k kata per kelas);
+  - berkas model yang dapat diekspor.
+- **Apply Model**: ringkasan model dan penerapan, kolom prediksi dan probabilitas di dataset, serta metrik evaluasi dan confusion matrix bila target sebenarnya dipilih.
+
+### Alur kerja
+
+```
+StringToWordVectorModal.tsx  /  naive-bayes-main.tsx  /  apply-model-main.tsx
+        |
+Worker: stringToWord.processor.ts  /  public/workers/Classify/NaiveBayes/naive-bayes.worker.js
+        |                              /  public/workers/Classify/ApplyModel/apply-model.worker.js
+Crate WASM per menu (StringToWordVector/rust, naive-bayes/rust, apply-model/rust)
+        |
+public/workers/TextAnalytics/statify-text-core     Praproses dan vektorisasi bersama (CORE)
+        |
+Formatter -> dataset (kolom baru) dan Output Viewer
+```
+
+### Struktur direktori
+
+```
+frontend/components/Modals/Transform/StringToWordVector/
+├── DOKUMENTASI.md                    # Panduan, teori, dan dokumentasi teknis
+├── StringToWordVectorModal.tsx, VariablesTab.tsx, OptionsTab.tsx, config.ts
+├── hooks/, utils/, constants/        # stopwords, opsi vektorisasi
+├── stringToWord.processor.ts         # Worker
+└── rust/                             # Crate WASM tipis di atas CORE
+
+frontend/components/Modals/Analyze/Classify/naive-bayes/
+├── DOKUMENTASI.md
+├── dialogs/                          # naive-bayes-main, text-preprocessing, options, validation, output
+├── components/, hooks/, constants/
+└── rust/                             # Crate WASM Naive Bayes
+
+frontend/components/Modals/Analyze/Classify/apply-model/
+├── DOKUMENTASI.md
+├── dialogs/                          # apply-model-main, model-tab, variables-tab, save-tab, output-tab
+├── adapters/                         # Registry multi-algoritma (saat ini Naive Bayes)
+├── services/, hooks/, constants/
+└── rust/                             # Crate WASM Apply Model
+
+frontend/public/workers/TextAnalytics/statify-text-core/    # CORE: validator, pipeline, vectorizer
+frontend/public/workers/Classify/NaiveBayes/, ApplyModel/   # Worker dan paket WASM
+```
+
+### Build ulang WASM
+
+- **String to Word Vector**: jalankan `wasm-pack build --target web --out-dir ../wasm-output --release` dari folder `StringToWordVector/rust`. Hasilnya diimpor langsung oleh worker.
+- **Naive Bayes** dan **Apply Model**: jalankan `wasm-pack build --target web --release` dari folder `rust/` masing-masing. Setelah itu salin `wasm.js`, `wasm_bg.wasm`, `wasm.d.ts`, dan `wasm_bg.wasm.d.ts` ke `frontend/public/workers/Classify/NaiveBayes/pkg/` atau `.../ApplyModel/pkg/`. Naikkan juga konstanta versi WASM di service dan query `?v=` di worker.
+
+Langkah lengkapnya ada di bagian C pada setiap `DOKUMENTASI.md`.
+
+### Pengujian
+
+- **Jest** dari folder `frontend/` untuk ketiga menu: 1.247 test lulus dari 77 suite.
+
+  ```bash
+  npx jest --runInBand components/Modals/Analyze/Classify/naive-bayes components/Modals/Analyze/Classify/apply-model components/Modals/Transform/StringToWordVector --coverage=false
+  ```
+
+  Lima suite evaluasi integrasi (`__tests__/eval/integration.*`) membaca dataset di luar repo, misalnya `Claude outputs/pilkada_train.csv`. Suite ini hanya dapat dijalankan bila dataset tersebut tersedia.
+- **Unit test Rust** (`cargo test`), menurut catatan di `DOKUMENTASI.md`:
+  - CORE: 91 test;
+  - Naive Bayes: 203 test;
+  - Apply Model: 156 test.
+
+### Dokumentasi
+
+- [String to Word Vector](frontend/components/Modals/Transform/StringToWordVector/DOKUMENTASI.md), [Naive Bayes](frontend/components/Modals/Analyze/Classify/naive-bayes/DOKUMENTASI.md), dan [Apply Model](frontend/components/Modals/Analyze/Classify/apply-model/DOKUMENTASI.md). Setiap dokumen memuat panduan pengguna, landasan teori dan rumus, serta dokumentasi teknis.
+- CORE: [README](frontend/public/workers/TextAnalytics/statify-text-core/README.md).
+- Panduan di dalam aplikasi: halaman **Help**, bagian Text Analytics.
 - Panduan penggunaan modul: _(tautan menyusul)_
 
